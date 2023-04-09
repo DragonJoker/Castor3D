@@ -2864,7 +2864,7 @@ namespace castor3d
 
 				if ( material )
 				{
-					for ( auto submesh : *parsingContext.geometry->getMesh().lock() )
+					for ( auto & submesh : *parsingContext.geometry->getMesh().lock() )
 					{
 						parsingContext.geometry->setMaterial( *submesh, material );
 					}
@@ -2972,7 +2972,7 @@ namespace castor3d
 				{
 					if ( parsingContext.geometry->getMesh().lock()->getSubmeshCount() > params[0]->get( index ) )
 					{
-						SubmeshSPtr submesh = parsingContext.geometry->getMesh().lock()->getSubmesh( index );
+						auto submesh = parsingContext.geometry->getMesh().lock()->getSubmesh( index );
 						parsingContext.geometry->setMaterial( *submesh, material );
 					}
 					else
@@ -3153,7 +3153,7 @@ namespace castor3d
 		auto & parsingContext = getParserContext( context );
 		parsingContext.face1 = -1;
 		parsingContext.face2 = -1;
-		parsingContext.submesh.reset();
+		parsingContext.submesh = {};
 
 		if ( !parsingContext.mesh.lock() )
 		{
@@ -3269,7 +3269,7 @@ namespace castor3d
 			}
 			else if ( mesh.getSubmeshCount() == parsingContext.mesh.lock()->getSubmeshCount() )
 			{
-				for ( auto morphSubmesh : mesh )
+				for ( auto & morphSubmesh : mesh )
 				{
 					auto id = morphSubmesh->getId();
 					auto submesh = parsingContext.mesh.lock()->getSubmesh( id );
@@ -3395,7 +3395,7 @@ namespace castor3d
 
 			if ( material )
 			{
-				for ( auto submesh : *parsingContext.mesh.lock() )
+				for ( auto & submesh : *parsingContext.mesh.lock() )
 				{
 					submesh->setDefaultMaterial( material );
 				}
@@ -3488,7 +3488,7 @@ namespace castor3d
 			parsingContext.importer.reset();
 			parsingContext.mesh.reset();
 
-			for ( auto submesh : *mesh )
+			for ( auto & submesh : *mesh )
 			{
 				mesh->getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 			}
@@ -3526,7 +3526,7 @@ namespace castor3d
 			params[2]->get( targetWeight );
 			auto & animation = *parsingContext.morphAnimation;
 
-			for ( auto submesh : *mesh )
+			for ( auto & submesh : *mesh )
 			{
 				MeshAnimationSubmesh animSubmesh{ animation, *submesh };
 				animation.addChild( std::move( animSubmesh ) );
@@ -3596,7 +3596,7 @@ namespace castor3d
 			{
 				if ( parsingContext.mesh.lock()->getSubmeshCount() > params[0]->get( index ) )
 				{
-					SubmeshSPtr submesh = parsingContext.mesh.lock()->getSubmesh( index );
+					auto submesh = parsingContext.mesh.lock()->getSubmesh( index );
 					submesh->setDefaultMaterial( material );
 				}
 				else
@@ -3768,7 +3768,6 @@ namespace castor3d
 		{
 			castor::String strParams;
 			params[0]->get( strParams );
-			SubmeshSPtr submesh = parsingContext.submesh;
 
 			if ( parsingContext.vertexTex.empty() )
 			{
@@ -3812,7 +3811,6 @@ namespace castor3d
 		{
 			castor::String strParams;
 			params[0]->get( strParams );
-			SubmeshSPtr submesh = parsingContext.submesh;
 
 			if ( parsingContext.vertexTex.empty() )
 			{
@@ -3862,7 +3860,6 @@ namespace castor3d
 		{
 			castor::String strParams;
 			params[0]->get( strParams );
-			SubmeshSPtr submesh = parsingContext.submesh;
 
 			if ( parsingContext.vertexNml.empty() )
 			{
@@ -3912,7 +3909,6 @@ namespace castor3d
 		{
 			castor::String strParams;
 			params[0]->get( strParams );
-			SubmeshSPtr submesh = parsingContext.submesh;
 
 			if ( parsingContext.vertexTan.empty() )
 			{
@@ -4034,7 +4030,7 @@ namespace castor3d
 			parsingContext.vertexTex.clear();
 			parsingContext.faces.clear();
 			parsingContext.submesh->getParent().getScene()->getListener().postEvent( makeGpuInitialiseEvent( *parsingContext.submesh ) );
-			parsingContext.submesh.reset();
+			parsingContext.submesh = {};
 		}
 	}
 	CU_EndAttributePop()

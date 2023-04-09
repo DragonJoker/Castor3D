@@ -276,7 +276,7 @@ namespace castor3d
 
 	castor::Intersection Ray::intersects( GeometryRPtr geometry
 		, Face & nearestFace
-		, SubmeshSPtr & nearestSubmesh
+		, SubmeshRPtr & nearestSubmesh
 		, float & distance )const
 	{
 		auto mesh = geometry->getMesh().lock();
@@ -287,7 +287,7 @@ namespace castor3d
 
 		if ( intersects( sphere, distance ) != castor::Intersection::eOut )
 		{
-			for ( auto submesh : *mesh )
+			for ( auto & submesh : *mesh )
 			{
 				sphere.load( center, submesh->getBoundingSphere().getRadius() );
 

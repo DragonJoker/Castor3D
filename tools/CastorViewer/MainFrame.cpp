@@ -224,7 +224,7 @@ namespace CastorViewer
 		}
 	}
 
-	void MainFrame::select( castor3d::GeometryRPtr geometry, castor3d::SubmeshRPtr submesh )
+	void MainFrame::select( castor3d::GeometryRPtr geometry, castor3d::Submesh const * submesh )
 	{
 		if ( m_sceneObjects && m_sceneObjects->getList() )
 		{

@@ -100,7 +100,7 @@ namespace castor3d
 		BinaryChunk chunk;
 		uint32_t id{ 0 };
 		double time{ 0.0 };
-		SubmeshSPtr submesh;
+		SubmeshRPtr submesh{};
 		std::vector< float > weights;
 
 		while ( result && doGetSubChunk( chunk ) )
@@ -113,7 +113,7 @@ namespace castor3d
 				obj.doSetTimeIndex( castor::Milliseconds{ int64_t( time * 1000 ) } );
 				break;
 			case ChunkType::eMeshMorphTargetSubmeshID:
-				submesh = nullptr;
+				submesh = {};
 				result = doParseChunk( id, chunk );
 				checkError( result, "Couldn't parse submesh ID." );
 				if ( result )
@@ -154,7 +154,6 @@ namespace castor3d
 			v1_3::OldInterleavedVertexTArray< double > pointsd;
 			InterleavedVertexArray points;
 			BinaryChunk chunk;
-			SubmeshSPtr submesh;
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -200,7 +199,6 @@ namespace castor3d
 			v1_3::OldInterleavedVertexTArray< double > bufferd;
 			InterleavedVertexArray points;
 			BinaryChunk chunk;
-			SubmeshSPtr submesh;
 
 			while ( result && doGetSubChunk( chunk ) )
 			{

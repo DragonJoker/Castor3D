@@ -107,12 +107,6 @@ namespace castor
 
 	private:
 		castor3d::Engine & m_engine;
-		//!\~english	The loaded shared libraries map.
-		//!\~french		La map des shared libraries chargées.
-		castor3d::DynamicLibraryPtrPathMapArray m_libraries;
-		//!\~english	The mutex protecting the loaded shared libraries map.
-		//!\~french		Le mutex protégeant la map des shared libraries chargées.
-		std::recursive_mutex m_mutexLibraries;
 		//!\~english	The loaded plug-ins map.
 		//!\~french		La map des plug-ins chargés.
 		castor3d::PluginStrMapArray m_loadedPlugins;

@@ -52,7 +52,7 @@ namespace castor
 
 			auto it = std::find_if( object.begin()
 				, object.end()
-				, []( SubmeshSPtr lookup )
+				, []( SubmeshUPtr const & lookup )
 				{
 					return lookup->getDefaultMaterial() != nullptr;
 				} );

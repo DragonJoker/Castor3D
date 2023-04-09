@@ -149,8 +149,6 @@ namespace castor3d
 
 	CU_DeclareMap( castor::String, PluginUPtr, PluginStr );
 	CU_DeclareArray( PluginStrMap, PluginType::eCount, PluginStrMap );
-	CU_DeclareMap( castor::Path, castor::DynamicLibrarySPtr, DynamicLibraryPtrPath );
-	CU_DeclareArray( DynamicLibraryPtrPathMap, PluginType::eCount, DynamicLibraryPtrPathMap );
 	CU_DeclareMap( castor::Path, PluginType, PluginTypePath );
 	/**
 	*\~english

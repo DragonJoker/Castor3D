@@ -6,8 +6,8 @@ CU_ImplementCUSmartPtr( castor3d, GeneratorPlugin )
 
 namespace castor3d
 {
-	GeneratorPlugin::GeneratorPlugin( castor::DynamicLibrarySPtr library, Engine * engine )
-		: Plugin( PluginType::eGenerator, library, *engine )
+	GeneratorPlugin::GeneratorPlugin( castor::DynamicLibraryUPtr library, Engine * engine )
+		: Plugin( PluginType::eGenerator, std::move( library ), *engine )
 	{
 		load();
 	}

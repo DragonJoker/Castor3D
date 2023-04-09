@@ -29,7 +29,7 @@ namespace castor3d
 
 	void Mesh::initialise()
 	{
-		for ( auto submesh : m_submeshes )
+		for ( auto & submesh : m_submeshes )
 		{
 			submesh->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
 		}
@@ -39,7 +39,7 @@ namespace castor3d
 	{
 		Animable::cleanupAnimations();
 
-		for ( auto submesh : m_submeshes )
+		for ( auto & submesh : m_submeshes )
 		{
 			submesh->cleanup( getEngine()->getRenderSystem()->getRenderDevice() );
 		}
@@ -76,7 +76,7 @@ namespace castor3d
 	{
 		uint32_t nbFaces = 0;
 
-		for ( auto submesh : m_submeshes )
+		for ( auto & submesh : m_submeshes )
 		{
 			nbFaces += submesh->getFaceCount();
 		}
@@ -88,7 +88,7 @@ namespace castor3d
 	{
 		uint32_t nbFaces = 0;
 
-		for ( auto submesh : m_submeshes )
+		for ( auto & submesh : m_submeshes )
 		{
 			nbFaces += submesh->getPointsCount();
 		}
@@ -96,32 +96,30 @@ namespace castor3d
 		return nbFaces;
 	}
 
-	SubmeshSPtr Mesh::getSubmesh( uint32_t index )const
+	SubmeshRPtr Mesh::getSubmesh( uint32_t index )const
 	{
-		SubmeshSPtr result;
+		SubmeshRPtr result{};
 
 		if ( index < m_submeshes.size() )
 		{
-			result = m_submeshes[index];
+			result = m_submeshes[index].get();
 		}
 
 		return result;
 	}
 
-	SubmeshSPtr Mesh::createSubmesh( SubmeshFlags const & flags )
+	SubmeshRPtr Mesh::createSubmesh( SubmeshFlags const & flags )
 	{
-		auto submesh = std::make_shared< Submesh >( *this
+		return m_submeshes.emplace_back( castor::makeUnique< Submesh >( *this
 			, getSubmeshCount()
-			, flags );
-		m_submeshes.push_back( submesh );
-		return submesh;
+			, flags ) ).get();
 	}
 
 	void Mesh::deleteSubmesh( SubmeshRPtr submesh )
 	{
 		auto it = std::find_if( m_submeshes.begin()
 			, m_submeshes.end()
-			, [&submesh]( SubmeshSPtr lookup )
+			, [&submesh]( SubmeshUPtr & lookup )
 			{
 				return submesh == lookup.get();
 			} );
@@ -132,20 +130,9 @@ namespace castor3d
 		}
 	}
 
-	void Mesh::deleteSubmesh( SubmeshSPtr & submesh )
-	{
-		auto it = std::find( m_submeshes.begin(), m_submeshes.end(), submesh );
-
-		if ( it != m_submeshes.end() )
-		{
-			m_submeshes.erase( it );
-			submesh.reset();
-		}
-	}
-
 	void Mesh::computeNormals( bool reverted )
 	{
-		for ( auto submesh : m_submeshes )
+		for ( auto & submesh : m_submeshes )
 		{
 			submesh->computeNormals( reverted );
 		}

@@ -25,7 +25,7 @@ namespace castor3d
 		 *\param[in]	library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API ParticlePlugin( castor::DynamicLibrarySPtr library
+		C3D_API ParticlePlugin( castor::DynamicLibraryUPtr library
 			, Engine * engine );
 		/**
 		 *\~english

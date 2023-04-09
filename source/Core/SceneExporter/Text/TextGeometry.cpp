@@ -37,7 +37,7 @@ namespace castor
 				{
 					auto it = std::find_if( mesh->begin()
 						, mesh->end()
-						, [&geometry]( SubmeshSPtr lookup )
+						, [&geometry]( SubmeshUPtr const & lookup )
 						{
 							return geometry.getMaterial( *lookup ) != lookup->getDefaultMaterial();
 						} );
@@ -50,7 +50,7 @@ namespace castor
 						}
 						else if ( auto matsBlock{ beginBlock( file, "materials" ) } )
 						{
-							for ( auto submesh : *mesh )
+							for ( auto & submesh : *mesh )
 							{
 								auto material = geometry.getMaterial( *submesh );
 

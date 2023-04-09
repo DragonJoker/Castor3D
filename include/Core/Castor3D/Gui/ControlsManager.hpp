@@ -15,8 +15,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	class ControlsManager
-		: public std::enable_shared_from_this< ControlsManager >
-		, public UserInputListener
+		: public UserInputListener
 		, public StylesHolder
 	{
 		friend class Control;

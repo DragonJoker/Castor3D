@@ -55,12 +55,12 @@ namespace castor3d
 			CptNegatif++;
 		}
 
-		SubmeshSPtr submesh1 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh2 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh3 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh4 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh5 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		SubmeshSPtr submesh6 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto submesh1 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto submesh2 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto submesh3 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto submesh4 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto submesh5 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto submesh6 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		static castor::Point3f const zero;
 
 		// Face avant

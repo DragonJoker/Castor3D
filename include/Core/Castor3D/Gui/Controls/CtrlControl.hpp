@@ -328,7 +328,7 @@ namespace castor3d
 		/** Creates the control's overlays.
 		 *\param[in]	ctrlManager	The controls manager.
 		 */
-		C3D_API void create( ControlsManagerSPtr ctrlManager );
+		C3D_API void create( ControlsManager & ctrlManager );
 
 		/** Destroys the control's overlays.
 		 */

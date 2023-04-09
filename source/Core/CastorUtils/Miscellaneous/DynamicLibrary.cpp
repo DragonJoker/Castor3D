@@ -1,5 +1,7 @@
 #include "CastorUtils/Miscellaneous/DynamicLibrary.hpp"
 
+CU_ImplementCUSmartPtr( castor, DynamicLibrary )
+
 namespace castor
 {
 	DynamicLibrary::DynamicLibrary( Path const & pathFile )noexcept

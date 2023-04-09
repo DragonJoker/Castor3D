@@ -32,7 +32,7 @@ namespace castor3d
 		MeshPreparer::prepare( mesh, parameters );
 		mesh.computeContainers();
 
-		for ( auto submesh : mesh )
+		for ( auto & submesh : mesh )
 		{
 			mesh.getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 		}
@@ -40,7 +40,7 @@ namespace castor3d
 
 	void MeshGenerator::computeNormals( Mesh & mesh, bool reverted )
 	{
-		for ( auto submesh : mesh )
+		for ( auto & submesh : mesh )
 		{
 			submesh->computeNormals( reverted );
 		}

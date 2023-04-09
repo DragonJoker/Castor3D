@@ -38,7 +38,6 @@ namespace castor3d
 		castor::Point3f vec{};
 		castor::Quaternion quat{};
 		double time{ 0.0 };
-		SubmeshSPtr submesh;
 
 		while ( result && doGetSubChunk( chunk ) )
 		{

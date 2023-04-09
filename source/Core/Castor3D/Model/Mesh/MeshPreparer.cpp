@@ -365,7 +365,7 @@ namespace castor3d
 	{
 		return std::all_of( mesh.begin()
 			, mesh.end()
-			, [&parameters]( SubmeshSPtr const & submesh )
+			, [&parameters]( SubmeshUPtr const & submesh )
 			{
 				return prepare( *submesh, parameters );
 			} );

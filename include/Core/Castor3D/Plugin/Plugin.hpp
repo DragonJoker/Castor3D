@@ -44,7 +44,7 @@ namespace castor3d
 		 *\param[in]	library	La bibliothèque partagée contenant le plug-in
 		 *\param[in]	engine	Le moteur
 		 */
-		C3D_API Plugin( PluginType type, castor::DynamicLibrarySPtr library
+		C3D_API Plugin( PluginType type, castor::DynamicLibraryUPtr library
 			, Engine & engine );
 
 	public:
@@ -103,6 +103,9 @@ namespace castor3d
 		void unload();
 
 	protected:
+		//!\~english	The plug-in library.
+		//!\~french		La bibliothèque du plug-in.
+		castor::DynamicLibraryUPtr m_library{};
 		//!\~english	The plug-in's version checking function.
 		//!\~french		La fonction de récupération de la version requise.
 		PGetRequiredVersionFunction m_pfnGetRequiredVersion;
@@ -118,9 +121,6 @@ namespace castor3d
 		//!\~english	The plug-in type.
 		//!\~french		Le type du plug-in.
 		PluginType m_type;
-		//!\~english	The plug-in library.
-		//!\~french		La bibliothèque du plug-in.
-		castor::DynamicLibraryRPtr m_library{};
 	};
 }
 

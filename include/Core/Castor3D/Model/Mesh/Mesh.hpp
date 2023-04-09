@@ -117,7 +117,7 @@ namespace castor3d
 		 *\param[in]	index	L'indice du sous maillage voulu
 		 *\return		Le sous maillage trouvé, nullptr si non trouvé
 		 */
-		C3D_API SubmeshSPtr getSubmesh( uint32_t index )const;
+		C3D_API SubmeshRPtr getSubmesh( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Creates a submesh
@@ -126,7 +126,7 @@ namespace castor3d
 		 *\brief		Crée un sous maillage
 		 *\return		Le sous maillage créé
 		 */
-		C3D_API SubmeshSPtr createSubmesh( SubmeshFlags const & flags = SubmeshFlags{} );
+		C3D_API SubmeshRPtr createSubmesh( SubmeshFlags const & flags = SubmeshFlags{} );
 		/**
 		 *\~english
 		 *\brief		Deletes a given submesh if it is in the mesh's submeshes
@@ -136,15 +136,6 @@ namespace castor3d
 		 *\param[in]	submesh	Le submesh à supprimer
 		 */
 		C3D_API void deleteSubmesh( SubmeshRPtr submesh );
-		/**
-		 *\~english
-		 *\brief		Deletes a given submesh if it is in the mesh's submeshes
-		 *\param[in]	submesh	The submesh to delete
-		 *\~french
-		 *\brief		Supprime le submesh s'il est dans les submesh du mesh
-		 *\param[in]	submesh	Le submesh à supprimer
-		 */
-		C3D_API void deleteSubmesh( SubmeshSPtr & submesh );
 		/**
 		 *\~english
 		 *\brief		Generates normals and tangents

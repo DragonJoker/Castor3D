@@ -17,7 +17,7 @@ namespace GuiCommon
 		: public wxTreeCtrl
 	{
 	private:
-		using SubmeshIdMap = std::map< castor3d::SubmeshRPtr, wxTreeItemId >;
+		using SubmeshIdMap = std::map< castor3d::Submesh const *, wxTreeItemId >;
 		using GeometrySubmeshIdMap = std::map< castor3d::GeometryRPtr, SubmeshIdMap >;
 
 	public:
@@ -31,7 +31,7 @@ namespace GuiCommon
 			, castor3d::SceneRPtr scene );
 		void unloadScene();
 		void select( castor3d::GeometryRPtr geometry
-			, castor3d::SubmeshRPtr submesh );
+			, castor3d::Submesh const * submesh );
 
 	protected:
 		void doAddSubmesh( castor3d::GeometryRPtr geometry

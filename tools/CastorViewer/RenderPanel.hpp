@@ -92,7 +92,7 @@ namespace CastorViewer
 		int doTransformX( float x );
 		int doTransformY( float y );
 		void doUpdateSelectedGeometry( castor3d::GeometryRPtr geometry
-			, castor3d::SubmeshRPtr submesh );
+			, castor3d::Submesh const * submesh );
 		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeRPtr node
 			, bool camera );
 		void doUpdateMaxSpeed( float factor );
@@ -154,7 +154,7 @@ namespace CastorViewer
 		std::map< castor::String, GuiCommon::NodeStatePtr > m_nodesStates{};
 		GuiCommon::NodeState * m_currentState{};
 		castor3d::GeometryRPtr m_selectedGeometry{};
-		castor3d::SubmeshRPtr m_selectedSubmesh{};
+		castor3d::Submesh const * m_selectedSubmesh{};
 
 		castor3d::CameraRPtr m_camera{};
 		castor3d::SceneRPtr m_scene{};
