@@ -480,7 +480,7 @@ namespace GuiCommon
 		castor::Logger::setFileName( castor3d::Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
 		castor::Logger::logInfo( m_internalName + cuT( " - Start" ) );
 
-		m_castor = std::make_shared< castor3d::Engine >( m_internalName
+		m_castor = castor::makeUnique< castor3d::Engine >( m_internalName
 			, m_version
 			, m_config.validate
 			, !m_config.disableRandom );

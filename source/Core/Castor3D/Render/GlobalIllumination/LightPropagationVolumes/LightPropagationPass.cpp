@@ -33,7 +33,7 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
-CU_ImplementCUSmartPtr( castor3d, LightPropagationPass )
+CU_ImplementSmartPtr( castor3d, LightPropagationPass )
 
 namespace castor3d
 {

@@ -22,7 +22,7 @@
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Queue.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, Picking )
+CU_ImplementSmartPtr( castor3d, Picking )
 
 namespace castor3d
 {

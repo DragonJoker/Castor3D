@@ -33,7 +33,7 @@
 
 #include <RenderGraph/FramePassTimer.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, OpaqueRendering )
+CU_ImplementSmartPtr( castor3d, OpaqueRendering )
 
 namespace castor3d
 {

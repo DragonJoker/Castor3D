@@ -8,7 +8,8 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, MeshCache )
+CU_ImplementSmartPtr( castor3d, MeshCache )
+CU_ImplementSmartPtr( castor3d, Mesh )
 
 namespace castor3d
 {

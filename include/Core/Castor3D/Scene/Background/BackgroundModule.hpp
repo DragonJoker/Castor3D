@@ -80,7 +80,10 @@ namespace castor3d
 	*/
 	class SkyboxBackground;
 
-	CU_DeclareSmartPtr( SceneBackground );
+	CU_DeclareSmartPtr( castor3d, SceneBackground, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ColourBackground, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ImageBackground, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SkyboxBackground, C3D_API );
 
 	using BackgroundChangedFunc = std::function< void( SceneBackground const & ) >;
 	using OnBackgroundChanged = castor::SignalT< BackgroundChangedFunc >;

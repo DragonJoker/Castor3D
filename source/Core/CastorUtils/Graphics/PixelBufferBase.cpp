@@ -11,7 +11,7 @@
 #include "stb_image_resize.h"
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
-CU_ImplementCUSmartPtr( castor, PxBufferBase )
+CU_ImplementSmartPtr( castor, PxBufferBase )
 
 namespace castor
 {

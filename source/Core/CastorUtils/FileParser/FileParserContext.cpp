@@ -2,7 +2,7 @@
 
 #include "CastorUtils/FileParser/FileParser.hpp"
 
-CU_ImplementCUSmartPtr( castor, FileParserContext )
+CU_ImplementSmartPtr( castor, FileParserContext )
 
 namespace castor
 {

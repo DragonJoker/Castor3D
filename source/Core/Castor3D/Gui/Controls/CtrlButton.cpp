@@ -14,7 +14,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ButtonCtrl )
+CU_ImplementSmartPtr( castor3d, ButtonCtrl )
 
 namespace castor3d
 {
@@ -100,7 +100,7 @@ namespace castor3d
 	{
 		m_onEnable = {};
 
-		if ( auto text = m_text )
+		if ( m_text )
 		{
 			if ( m_scene )
 			{

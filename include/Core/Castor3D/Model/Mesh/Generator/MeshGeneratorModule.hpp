@@ -72,12 +72,25 @@ namespace castor3d
 	/**
 	\~english
 	\brief		The sphere primitive
-	\remark		This sphere has squared faces. It is built from a radius and a number of subsections
+	\remark		This sphere has squared faces.
+				<br />It is built from a radius and a number of subsections.
 	\~french
 	\brief		La primitive de sphère
-	\remark		Cette sphère a des faces rectangulaires. Elle est construite à partir d'un rayon et d'un nombre de subdivisions
+	\remark		Cette sphère a des faces rectangulaires.
+				<br />Elle est construite à partir d'un rayon et d'un nombre de subdivisions.
 	*/
 	class Sphere;
+	/**
+	\~english
+	\brief		Conic section of a sphere
+	\remark		The sphere side used square faces.
+				<br />It is built from a radius and a number of subsections.
+	\~french
+	\brief		La primitive de sphère
+	\remark		La portion sphérique a des faces rectangulaires.
+				<br />Elle est construite à partir d'un rayon et d'un nombre de subdivisions.
+	*/
+	class SphereSection;
 	/**
 	\~english
 	\brief		The torus representation
@@ -90,14 +103,15 @@ namespace castor3d
 	*/
 	class Torus;
 
-	CU_DeclareSmartPtr( Cone );
-	CU_DeclareSmartPtr( Cylinder );
-	CU_DeclareSmartPtr( Icosahedron );
-	CU_DeclareSmartPtr( Cube );
-	CU_DeclareSmartPtr( Plane );
-	CU_DeclareSmartPtr( Projection );
-	CU_DeclareSmartPtr( Sphere );
-	CU_DeclareSmartPtr( Torus );
+	CU_DeclareSmartPtr( castor3d, Cone, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Cube, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Cylinder, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Icosahedron, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Plane, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Projection, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Sphere, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SphereSection, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Torus, C3D_API );
 
 	//@}
 	//@}

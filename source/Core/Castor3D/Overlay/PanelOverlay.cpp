@@ -10,7 +10,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PanelOverlay )
+CU_ImplementSmartPtr( castor3d, PanelOverlay )
 
 namespace castor3d
 {

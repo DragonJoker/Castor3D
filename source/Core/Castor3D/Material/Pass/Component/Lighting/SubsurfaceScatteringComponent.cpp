@@ -14,6 +14,8 @@
 
 #include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
 
+CU_ImplementSmartPtr( castor3d, SubsurfaceScatteringComponent )
+
 namespace castor
 {
 	template<>
@@ -78,7 +80,7 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.subsurfaceScattering = std::make_unique< SubsurfaceScattering >();
+				parsingContext.subsurfaceScattering = castor::makeUnique< SubsurfaceScattering >();
 			}
 		}
 		CU_EndAttributePush( Section::eSubsurfaceScattering )
@@ -371,13 +373,14 @@ namespace castor3d
 	PassComponentUPtr SubsurfaceScatteringComponent::doClone( Pass & pass )const
 	{
 		auto & subsurfaceScattering = getSubsurfaceScattering();
-		auto result = std::make_unique< SubsurfaceScatteringComponent >( pass );
-		auto sss = std::make_unique< SubsurfaceScattering >();
+		auto sss = castor::makeUnique< SubsurfaceScattering >();
 		sss->setGaussianWidth( subsurfaceScattering.getGaussianWidth() );
 		sss->setStrength( subsurfaceScattering.getStrength() );
 		sss->setSubsurfaceRadius( subsurfaceScattering.getSubsurfaceRadius() );
+
+		auto result = castor::makeUnique< SubsurfaceScatteringComponent >( pass );
 		result->setSubsurfaceScattering( std::move( sss ) );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool SubsurfaceScatteringComponent::doWriteText( castor::String const & tabs

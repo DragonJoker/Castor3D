@@ -9,6 +9,8 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
+CU_ImplementSmartPtr( castor3d, Icosahedron )
+
 namespace castor3d
 {
 	Icosahedron::Icosahedron()
@@ -20,7 +22,7 @@ namespace castor3d
 
 	MeshGeneratorUPtr Icosahedron::create()
 	{
-		return std::make_unique< Icosahedron >();
+		return castor::makeUniqueDerived< MeshGenerator, Icosahedron >();
 	}
 
 	void Icosahedron::doGenerate( Mesh & mesh, Parameters const & parameters )

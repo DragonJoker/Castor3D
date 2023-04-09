@@ -281,9 +281,9 @@ namespace castor3d
 
 	using Parameters = ParametersT< castor::String >;
 
-	CU_DeclareCUSmartPtr( castor3d, LoadingScreen, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ProgressBar, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, StagingData, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LoadingScreen, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ProgressBar, C3D_API );
+	CU_DeclareSmartPtr( castor3d, StagingData, C3D_API );
 
 	struct RenderDevice;
 	C3D_API ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device

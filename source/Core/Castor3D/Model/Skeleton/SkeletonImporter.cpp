@@ -6,6 +6,8 @@
 #include "Castor3D/Model/Skeleton/BoneNode.hpp"
 #include "Castor3D/Scene/SceneImporter.hpp"
 
+CU_ImplementSmartPtr( castor3d, SkeletonImporter )
+
 namespace castor3d
 {
 	namespace skelimp

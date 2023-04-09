@@ -61,7 +61,6 @@ See LICENSE file in root folder
 
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
-#include <CastorUtils/Design/Collection.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>

@@ -131,6 +131,7 @@ namespace castor3d::shader
 	class BRDFHelpers;
 	class Fog;
 	class Lights;
+	class LightsBuffer;
 	class LightingModel;
 	class Materials;
 	class PassShaders;
@@ -151,7 +152,10 @@ namespace castor3d::shader
 	template< typename DataT >
 	class BufferT;
 
-	CU_DeclareCUSmartPtr( castor3d::shader, LightingModel, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, LightsBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, LightingModel, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, Shadow, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, SssTransmittance, C3D_API );
 
 	using ReflectionModelPtr = std::unique_ptr< ReflectionModel >;
 	using LightingModelCreator = std::function< LightingModelUPtr( LightingModelID lightingModelId
@@ -247,7 +251,7 @@ namespace castor3d::shader
 
 	Writer_Parameter( DerivTex );
 
-	CU_DeclareSmartPtr( Material );
+	CU_DeclareSmartPtr( castor3d::shader, Material, C3D_API );
 
 	//@}
 	//@}

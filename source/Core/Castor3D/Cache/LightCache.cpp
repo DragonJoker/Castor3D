@@ -20,7 +20,7 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, LightCache )
+CU_ImplementSmartPtr( castor3d, LightCache )
 
 namespace castor3d
 {

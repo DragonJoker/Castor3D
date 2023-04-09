@@ -675,20 +675,19 @@ namespace castor3d
 	*/
 	class Viewport;
 
-	CU_DeclareCUSmartPtr( castor3d, Frustum, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, Picking, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderDevice, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderLoop, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderPipeline, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderQueue, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderSystem, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderTarget, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderTechnique, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderTechniquePass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, RenderWindow, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, Viewport, C3D_API );
-
-	CU_DeclareSmartPtr( RenderNodesPass );
+	CU_DeclareSmartPtr( castor3d, Frustum, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Picking, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderDevice, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderLoop, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderNodesPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderPipeline, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderQueue, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderSystem, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderTarget, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderTechnique, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderTechniquePass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderWindow, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Viewport, C3D_API );
 
 	using RenderWindowPtr = std::unique_ptr< RenderWindow >;
 
@@ -738,10 +737,22 @@ namespace castor3d
 			, RenderTechnique &
 			, TechniquePasses &
 			, crg::FramePassArray ) >;
+
+		RenderPassRegisterInfo( castor::String pname
+			, Creator pcreate
+			, TechniquePassEvent pevent
+			, RenderPassTypeID pid = {} )
+			: name{ std::move( pname ) }
+			, create{ std::move( pcreate ) }
+			, event{ std::move( pevent ) }
+			, id{ std::move( pid ) }
+		{
+		}
+
 		castor::String name;
 		Creator create;
 		TechniquePassEvent event;
-		RenderPassTypeID id{};
+		RenderPassTypeID id;
 	};
 
 	struct CpuUpdater

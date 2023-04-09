@@ -15,7 +15,7 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, BillboardListCache )
+CU_ImplementSmartPtr( castor3d, BillboardListCache )
 
 namespace castor3d
 {

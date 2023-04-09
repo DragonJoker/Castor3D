@@ -8,7 +8,7 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, SubmeshRenderNode )
+CU_ImplementSmartPtr( castor3d, SubmeshRenderNode )
 
 namespace castor3d
 {

@@ -13,6 +13,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, IridescenceComponent )
+
 namespace castor
 {
 	template<>
@@ -332,9 +334,9 @@ namespace castor3d
 
 	PassComponentUPtr IridescenceComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< IridescenceComponent >( pass );
+		auto result = castor::makeUnique< IridescenceComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool IridescenceComponent::doWriteText( castor::String const & tabs

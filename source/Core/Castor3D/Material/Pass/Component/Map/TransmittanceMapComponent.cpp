@@ -14,6 +14,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, TransmittanceMapComponent )
+
 namespace castor
 {
 	template<>
@@ -219,7 +221,7 @@ namespace castor3d
 	void TransmittanceMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< TransmittanceMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, TransmittanceMapComponent >( pass ) );
 	}
 
 	void TransmittanceMapComponent::Plugin::zeroBuffer( Pass const & pass
@@ -250,7 +252,7 @@ namespace castor3d
 
 	PassComponentUPtr TransmittanceMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< TransmittanceMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, TransmittanceMapComponent >( pass );
 	}
 
 	bool TransmittanceMapComponent::doWriteText( castor::String const & tabs

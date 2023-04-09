@@ -28,7 +28,7 @@
 
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, VertexTransforming )
+CU_ImplementSmartPtr( castor3d, VertexTransforming )
 
 namespace castor3d
 {

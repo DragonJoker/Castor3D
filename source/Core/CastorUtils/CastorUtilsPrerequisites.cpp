@@ -9,8 +9,6 @@
 
 namespace castor
 {
-	DummyDtor g_dummyDtor;
-
 	Point3f operator*( Matrix4x4f const & lhs, Point3f const & rhs )
 	{
 		float const * mtx = lhs.constPtr();

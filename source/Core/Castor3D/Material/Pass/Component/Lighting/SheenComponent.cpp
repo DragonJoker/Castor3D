@@ -15,6 +15,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, SheenComponent )
+
 namespace castor
 {
 	template<>
@@ -205,9 +207,9 @@ namespace castor3d
 
 	PassComponentUPtr SheenComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< SheenComponent >( pass );
+		auto result = castor::makeUnique< SheenComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool SheenComponent::doWriteText( castor::String const & tabs

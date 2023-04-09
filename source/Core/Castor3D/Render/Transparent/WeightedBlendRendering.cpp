@@ -18,7 +18,7 @@
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, WeightedBlendRendering )
+CU_ImplementSmartPtr( castor3d, WeightedBlendRendering )
 
 namespace castor3d
 {

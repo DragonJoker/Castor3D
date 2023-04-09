@@ -15,7 +15,7 @@
 #include "Castor3D/Scene/SceneImporter.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, AnimationImporter )
+CU_ImplementSmartPtr( castor3d, AnimationImporter )
 
 namespace castor3d
 {

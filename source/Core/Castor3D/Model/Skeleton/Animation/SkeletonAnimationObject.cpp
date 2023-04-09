@@ -1,6 +1,6 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, SkeletonAnimationObject )
+CU_ImplementSmartPtr( castor3d, SkeletonAnimationObject )
 
 namespace castor3d
 {

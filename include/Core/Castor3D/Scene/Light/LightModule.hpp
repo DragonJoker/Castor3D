@@ -121,16 +121,13 @@ namespace castor3d
 	*/
 	class SpotLight;
 
-	CU_DeclareCUSmartPtr( castor3d, Light, C3D_API );
-	CU_DeclareSmartPtr( LightFactory );
-	CU_DeclareSmartPtr( LightCategory );
-	CU_DeclareSmartPtr( LightImporter );
-	CU_DeclareSmartPtr( DirectionalLight );
-	CU_DeclareSmartPtr( PointLight );
-	CU_DeclareSmartPtr( SpotLight );
-
-	class LightFactory;
-	CU_DeclareSmartPtr( LightFactory );
+	CU_DeclareSmartPtr( castor3d, Light, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightCategory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DirectionalLight, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PointLight, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SpotLight, C3D_API );
 
 	//! Array of lights
 	CU_DeclareVector( LightRPtr, Lights );
@@ -184,7 +181,7 @@ namespace castor3d
 	using LightRes = CameraCacheTraits::ElementPtrT;
 	using LightResPtr = CameraCacheTraits::ElementObsT;
 
-	CU_DeclareCUSmartPtr( castor3d, LightCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightCache, C3D_API );
 
 	//@}
 	//@}

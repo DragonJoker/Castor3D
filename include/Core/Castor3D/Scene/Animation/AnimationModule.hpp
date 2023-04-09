@@ -92,8 +92,8 @@ namespace castor3d
 	class SceneNodeAnimation;
 	class SceneNodeAnimationKeyFrame;
 
-	CU_DeclareCUSmartPtr( castor3d, SceneNodeAnimation, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SceneNodeAnimationKeyFrame, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneNodeAnimation, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneNodeAnimationKeyFrame, C3D_API );
 	//@}
 
 	struct GroupAnimation
@@ -111,16 +111,17 @@ namespace castor3d
 	using Animable = AnimableT< Engine >;
 	using Animation = AnimationT< Engine >;
 
-	CU_DeclareCUSmartPtr( castor3d, Animable, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimatedObjectGroup, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimatedMesh, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimatedObject, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimatedSceneNode, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimatedSkeleton, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimatedTexture, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, Animation, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, AnimationInstance, C3D_API );
-	CU_DeclareCUTemplateSmartPtr( castor3d, AnimableT );
+	CU_DeclareSmartPtr( castor3d, Animable, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimatedObjectGroup, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimatedMesh, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimatedObject, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimatedSceneNode, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimatedSkeleton, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimatedTexture, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Animation, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimationInstance, C3D_API );
+
+	CU_DeclareTemplateSmartPtr( castor3d, Animable );
 
 	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
 	using OnAnimatedSkeletonChange = castor::SignalT< OnAnimatedSkeletonChangeFunction >;
@@ -168,7 +169,7 @@ namespace castor3d
 	using AnimatedObjectGroupRes = AnimatedObjectGroupCacheTraits::ElementPtrT;
 	using AnimatedObjectGroupResPtr = AnimatedObjectGroupCacheTraits::ElementObsT;
 
-	CU_DeclareCUSmartPtr( castor3d, AnimatedObjectGroupCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, AnimatedObjectGroupCache, C3D_API );
 
 	//@}
 	//@}

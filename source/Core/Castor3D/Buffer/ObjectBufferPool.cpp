@@ -10,8 +10,8 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, VertexBufferPool )
-CU_ImplementCUSmartPtr( castor3d, ObjectBufferPool )
+CU_ImplementSmartPtr( castor3d, VertexBufferPool )
+CU_ImplementSmartPtr( castor3d, ObjectBufferPool )
 
 namespace castor3d
 {

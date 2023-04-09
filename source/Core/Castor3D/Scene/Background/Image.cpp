@@ -10,6 +10,8 @@
 
 #include <CastorUtils/Data/TextWriter.hpp>
 
+CU_ImplementSmartPtr( castor3d, ImageBackground )
+
 namespace castor
 {
 	using namespace castor3d;

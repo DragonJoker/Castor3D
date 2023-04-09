@@ -2,7 +2,7 @@
 
 #include "CastorUtils/Design/ArrayView.hpp"
 
-CU_ImplementCUSmartPtr( castor, BoundingBox )
+CU_ImplementSmartPtr( castor, BoundingBox )
 
 namespace castor
 {

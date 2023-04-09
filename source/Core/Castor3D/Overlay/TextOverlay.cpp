@@ -19,7 +19,7 @@
 #include <CastorUtils/Graphics/Image.hpp>
 #include <CastorUtils/Graphics/Rectangle.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, TextOverlay )
+CU_ImplementSmartPtr( castor3d, TextOverlay )
 
 #if defined( drawText )
 #	undef drawText

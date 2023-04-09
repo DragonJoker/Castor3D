@@ -38,7 +38,7 @@ namespace castor3d
 
 	LightCategoryUPtr PointLight::create( Light & light )
 	{
-		return std::unique_ptr< PointLight >( new PointLight{ light } );
+		return LightCategoryUPtr( new PointLight{ light } );
 	}
 
 	castor::Point3fArray const & PointLight::generateVertices()

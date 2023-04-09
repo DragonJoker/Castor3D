@@ -10,7 +10,6 @@ See LICENSE file in root folder
 #include "CastorUtils/Config/Macros.hpp"
 #include "CastorUtils/Config/MultiThreadConfig.hpp"
 #include "CastorUtils/Config/PlatformConfig.hpp"
-#include "CastorUtils/Config/SmartPtr.hpp"
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <chrono>

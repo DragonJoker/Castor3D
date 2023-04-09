@@ -227,7 +227,7 @@ namespace ocean_fft
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
 		, ashes::BufferBase const & output
-		, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
+		, castor3d::IsRenderPassEnabledRPtr isEnabled )
 	{
 		auto & result = graph.createPass( "GenerateDistribution" + name
 			, [&device, downsample, extent, isEnabled]( crg::FramePass const & framePass

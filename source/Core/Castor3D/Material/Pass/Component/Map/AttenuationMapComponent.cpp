@@ -15,6 +15,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, AttenuationMapComponent )
+
 namespace castor
 {
 	template<>
@@ -161,7 +163,7 @@ namespace castor3d
 	void AttenuationMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< AttenuationMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, AttenuationMapComponent >( pass ) );
 	}
 
 	bool AttenuationMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -187,7 +189,7 @@ namespace castor3d
 
 	PassComponentUPtr AttenuationMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< AttenuationMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, AttenuationMapComponent >( pass );
 	}
 
 	void AttenuationMapComponent::doFillConfig( TextureConfiguration & configuration

@@ -14,6 +14,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, MetalnessComponent )
+
 namespace castor
 {
 	template<>
@@ -209,9 +211,9 @@ namespace castor3d
 
 	PassComponentUPtr MetalnessComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< MetalnessComponent >( pass );
-		result->m_value = m_value;
-		return result;
+		auto result = castor::makeUnique< MetalnessComponent >( pass );
+		result->setData( getData() );
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool MetalnessComponent::doWriteText( castor::String const & tabs

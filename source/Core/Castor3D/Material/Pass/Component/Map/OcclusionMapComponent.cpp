@@ -14,6 +14,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, OcclusionMapComponent )
+
 namespace castor
 {
 	template<>
@@ -193,7 +195,7 @@ namespace castor3d
 	void OcclusionMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< OcclusionMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass ) );
 	}
 
 	bool OcclusionMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -215,7 +217,7 @@ namespace castor3d
 
 	PassComponentUPtr OcclusionMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< OcclusionMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, OcclusionMapComponent >( pass );
 	}
 
 	void OcclusionMapComponent::doFillConfig( TextureConfiguration & configuration

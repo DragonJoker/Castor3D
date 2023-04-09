@@ -19,7 +19,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, MaterialCache )
+CU_ImplementSmartPtr( castor3d, MaterialCache )
 
 namespace castor3d
 {

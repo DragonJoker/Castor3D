@@ -43,7 +43,7 @@
 
 #include <random>
 
-CU_ImplementCUSmartPtr( castor3d, SubsurfaceScatteringPass )
+CU_ImplementSmartPtr( castor3d, SubsurfaceScatteringPass )
 
 namespace castor3d
 {

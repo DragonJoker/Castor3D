@@ -21,7 +21,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, RenderPipeline )
+CU_ImplementSmartPtr( castor3d, RenderPipeline )
 
 namespace castor3d
 {

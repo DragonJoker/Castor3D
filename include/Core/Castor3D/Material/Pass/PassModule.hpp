@@ -19,7 +19,7 @@ namespace sdw
 namespace castor3d::shader
 {
 	class BufferBase;
-	CU_DeclareCUSmartPtr( castor3d::shader, BufferBase, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, BufferBase, C3D_API );
 }
 
 namespace castor3d
@@ -116,10 +116,9 @@ namespace castor3d
 	*/
 	class SubsurfaceScattering;
 
-	CU_DeclareCUSmartPtr( castor3d, Pass, C3D_API );
-	CU_DeclareSmartPtr( SubsurfaceScattering );
-
-	CU_DeclareCUSmartPtr( castor3d, PassFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Pass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PassFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubsurfaceScattering, C3D_API );
 
 	//! Pass array
 	CU_DeclareVector( Pass, Pass );
@@ -166,7 +165,7 @@ namespace castor3d
 		, PassFactoryEntry >;
 	using SpecificsBuffers = std::map< std::string, std::pair< SpecificsBuffer, ShaderBufferUPtr > >;
 
-	CU_DeclareCUSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderPassRegisterInfo, C3D_API );
 	//@}
 	//@}
 }

@@ -24,7 +24,7 @@
 #include <CastorUtils/Design/BlockGuard.hpp>
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, RenderLoop )
+CU_ImplementSmartPtr( castor3d, RenderLoop )
 
 namespace castor3d
 {

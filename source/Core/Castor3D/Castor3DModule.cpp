@@ -8,7 +8,7 @@
 #include <RenderGraph/FramePassTimer.hpp>
 
 CU_ImplementExportedOwnedBy( castor3d::Engine, Engine )
-CU_ImplementCUSmartPtr( castor3d, FramePassTimer )
+CU_ImplementSmartPtr( castor3d, FramePassTimer )
 
 namespace castor3d
 {

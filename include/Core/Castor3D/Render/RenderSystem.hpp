@@ -412,7 +412,7 @@ namespace castor3d
 		VkPhysicalDeviceMemoryProperties m_memoryProperties;
 		VkPhysicalDeviceProperties m_properties;
 		VkPhysicalDeviceFeatures m_features;
-		RenderDeviceSPtr m_device;
+		RenderDeviceUPtr m_device;
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;
 		ashes::BufferPtr< castor::Point4f > m_randomStorage;

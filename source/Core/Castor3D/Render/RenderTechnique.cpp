@@ -50,7 +50,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/FramePassTimer.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, RenderTechnique )
+CU_ImplementSmartPtr( castor3d, RenderTechnique )
 
 namespace castor3d
 {

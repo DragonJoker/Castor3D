@@ -216,7 +216,7 @@ namespace GuiCommon
 		ImagesLoader m_imagesLoader;
 		castor::String m_internalName;
 		castor::String m_displayName;
-		std::shared_ptr< castor3d::Engine > m_castor;
+		castor3d::EngineUPtr m_castor;
 
 	private:
 		std::unique_ptr< wxLocale > m_locale;

@@ -30,6 +30,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementSmartPtr( castor3d, SceneBackground )
+
 namespace castor3d
 {
 	//*********************************************************************************************

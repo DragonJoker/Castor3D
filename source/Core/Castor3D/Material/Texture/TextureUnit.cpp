@@ -11,8 +11,8 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, TextureUnit )
-CU_ImplementCUSmartPtr( castor3d, TextureUnitData )
+CU_ImplementSmartPtr( castor3d, TextureUnit )
+CU_ImplementSmartPtr( castor3d, TextureUnitData )
 
 namespace castor3d
 {

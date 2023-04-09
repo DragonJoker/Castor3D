@@ -17,7 +17,7 @@
 
 #include <ashespp/Buffer/Buffer.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, VisibilityReorderPass )
+CU_ImplementSmartPtr( castor3d, VisibilityReorderPass )
 
 namespace castor3d
 {

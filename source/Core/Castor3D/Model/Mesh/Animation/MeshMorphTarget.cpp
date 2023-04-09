@@ -6,7 +6,7 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, MeshMorphTarget )
+CU_ImplementSmartPtr( castor3d, MeshMorphTarget )
 
 namespace castor3d
 {

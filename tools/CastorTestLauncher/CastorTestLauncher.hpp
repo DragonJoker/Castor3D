@@ -27,7 +27,7 @@ namespace test_launcher
 
 	private:
 		bool doParseCommandLine();
-		castor3d::EngineSPtr doInitialiseCastor();
+		castor3d::EngineUPtr doInitialiseCastor();
 
 		bool OnInit() override;
 		int OnRun() override;

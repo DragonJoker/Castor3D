@@ -133,14 +133,14 @@ namespace castor3d
 	using LightPropagationVolumes = LightPropagationVolumesT< false >;
 	using LightPropagationVolumesG = LightPropagationVolumesT< true >;
 
-	CU_DeclareCUSmartPtr( castor3d, GeometryInjectionPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LayeredLightPropagationVolumes, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LayeredLightPropagationVolumesG, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LightInjectionPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LightPropagationPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LightPropagationVolumes, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LightPropagationVolumesG, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LightVolumePassResult, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GeometryInjectionPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LayeredLightPropagationVolumes, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LayeredLightPropagationVolumesG, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightInjectionPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightPropagationPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightPropagationVolumes, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightPropagationVolumesG, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightVolumePassResult, C3D_API );
 
 	using LightPropagationVolumesLightType = std::array< LightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
 	using LayeredLightPropagationVolumesLightType = std::array< LayeredLightPropagationVolumesUPtr, size_t( LightType::eCount ) >;

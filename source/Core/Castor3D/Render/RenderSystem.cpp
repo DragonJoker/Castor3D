@@ -38,7 +38,7 @@
 #	define C3D_DebugSpirV 0
 #endif
 
-CU_ImplementCUSmartPtr( castor3d, RenderSystem )
+CU_ImplementSmartPtr( castor3d, RenderSystem )
 
 #pragma warning( disable: 4191 ) // Unsafe conversion from 'PFN_vkVoidFunction' to 'PFN_vkAnyOtherFunction'
 
@@ -677,7 +677,7 @@ namespace castor3d
 			, m_features.textureCompressionBC == VK_TRUE
 			, false } );
 
-		m_device = std::make_shared< RenderDevice >( *this
+		m_device = castor::makeUnique< RenderDevice >( *this
 			, gpu
 			, m_renderer.desc
 			, std::move( pdeviceExtensions ) );

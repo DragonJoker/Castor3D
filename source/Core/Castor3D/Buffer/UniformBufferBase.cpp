@@ -11,7 +11,7 @@
 
 #include <algorithm>
 
-CU_ImplementCUSmartPtr( castor3d, UniformBufferBase )
+CU_ImplementSmartPtr( castor3d, UniformBufferBase )
 
 namespace castor3d
 {

@@ -44,7 +44,7 @@ namespace castor3d
 			, castor::Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
-		C3D_API ~ButtonCtrl()noexcept;
+		C3D_API ~ButtonCtrl()noexcept override;
 
 		/** Sets the horizontal alignment for the text.
 		*\param[in]	align	The new value.

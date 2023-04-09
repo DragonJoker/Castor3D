@@ -12,7 +12,7 @@
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PostEffect )
+CU_ImplementSmartPtr( castor3d, PostEffect )
 
 namespace castor3d
 {

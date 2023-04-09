@@ -6,12 +6,12 @@
 #include "Castor3D/Event/Frame/GpuFrameEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, CpuFrameEvent )
-CU_ImplementCUSmartPtr( castor3d, FrameListener )
-CU_ImplementCUSmartPtr( castor3d, FrameListenerCache )
-CU_ImplementCUSmartPtr( castor3d, GpuFrameEvent )
-CU_ImplementCUSmartPtr( castor3d, CpuFunctorEvent )
-CU_ImplementCUSmartPtr( castor3d, GpuFunctorEvent )
+CU_ImplementSmartPtr( castor3d, CpuFrameEvent )
+CU_ImplementSmartPtr( castor3d, FrameListener )
+CU_ImplementSmartPtr( castor3d, FrameListenerCache )
+CU_ImplementSmartPtr( castor3d, GpuFrameEvent )
+CU_ImplementSmartPtr( castor3d, CpuFunctorEvent )
+CU_ImplementSmartPtr( castor3d, GpuFunctorEvent )
 
 namespace castor3d
 {

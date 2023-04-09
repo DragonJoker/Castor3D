@@ -87,7 +87,7 @@ namespace castor
 
 	static const String cuEmptyString;
 
-	CU_DeclareCUSmartPtr( castor, DynamicLibrary, CU_API );
+	CU_DeclareSmartPtr( castor, DynamicLibrary, CU_API );
 	//@}
 }
 

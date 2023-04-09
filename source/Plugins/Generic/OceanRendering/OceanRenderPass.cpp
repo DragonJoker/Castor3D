@@ -165,12 +165,12 @@ namespace ocean
 					, VK_IMAGE_VIEW_TYPE_2D
 					, img.data->info.format
 					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, image.getLevels(), 0u, 1u } } );
-				auto buffer = image.getPixels();
 
 				engine.postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
-					, [format, dim, buffer, &img, &view, &result, &runnable]( castor3d::RenderDevice const & device
+					, [format, dim, image, &img, &view, &result, &runnable]( castor3d::RenderDevice const & device
 						, castor3d::QueueData const & queue )
 					{
+						auto buffer = image.getPixels();
 						auto staging = device->createStagingTexture( VkFormat( format )
 							, VkExtent2D{ dim.getWidth(), dim.getHeight() }
 							, buffer->getLevels() );
@@ -209,7 +209,7 @@ namespace ocean
 		, crg::ImageViewIdArray targetDepth
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
-		, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
+		, castor3d::IsRenderPassEnabledUPtr isEnabled )
 		: castor3d::RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -263,7 +263,7 @@ namespace ocean
 		, crg::FramePassArray previousPasses )
 	{
 		std::string name{ Name };
-		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
+		auto isEnabled = new castor3d::IsRenderPassEnabled{};
 		auto extent = technique.getTargetExtent();
 		auto & graph = technique.getGraph().createPassGroup( name );
 
@@ -314,7 +314,7 @@ namespace ocean
 					.llpvResult( technique.getLlpvResult() )
 					.vctFirstBounce( technique.getFirstVctBounce() )
 					.vctSecondaryBounce( technique.getSecondaryVctBounce() )
-				, isEnabled );
+				, castor3d::IsRenderPassEnabledUPtr( isEnabled ) );
 			renderPasses[size_t( Event )].push_back( res.get() );
 			device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 				, res->getTimer() );

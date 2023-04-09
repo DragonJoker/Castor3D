@@ -17,6 +17,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, LightingModelComponent )
+
 namespace castor
 {
 	template<>
@@ -153,9 +155,9 @@ namespace castor3d
 
 	PassComponentUPtr LightingModelComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< LightingModelComponent >( pass );
+		auto result = castor::makeUnique< LightingModelComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool LightingModelComponent::doWriteText( castor::String const & tabs

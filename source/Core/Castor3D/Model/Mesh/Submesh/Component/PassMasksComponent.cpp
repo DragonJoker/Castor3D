@@ -15,7 +15,7 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, PassMasksComponent )
+CU_ImplementSmartPtr( castor3d, PassMasksComponent )
 
 namespace castor3d
 {

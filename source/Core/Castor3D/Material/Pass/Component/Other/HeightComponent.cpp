@@ -11,6 +11,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, HeightComponent )
+
 namespace castor
 {
 	template<>
@@ -149,9 +151,9 @@ namespace castor3d
 
 	PassComponentUPtr HeightComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< HeightComponent >( pass );
+		auto result = castor::makeUnique< HeightComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool HeightComponent::doWriteText( castor::String const & tabs

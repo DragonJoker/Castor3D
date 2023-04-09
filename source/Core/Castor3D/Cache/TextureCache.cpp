@@ -12,7 +12,7 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, TextureUnitCache )
+CU_ImplementSmartPtr( castor3d, TextureUnitCache )
 
 namespace castor3d
 {
@@ -705,8 +705,7 @@ namespace castor3d
 		if ( ires.second )
 		{
 			it->second = castor::makeUnique< TextureUnitData >( resultSourceInfo
-				, resultPassConfig
-				, nullptr );
+				, resultPassConfig );
 			auto result = it->second.get();
 			bool lhsAllowSRGB = checkFlag( lhsPassConfig.config.textureSpace, TextureSpace::eAllowSRGB );
 			bool rhsAllowSRGB = checkFlag( rhsPassConfig.config.textureSpace, TextureSpace::eAllowSRGB );

@@ -164,7 +164,7 @@ namespace water
 		, crg::ImageViewIdArray targetDepth
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
-		, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
+		, castor3d::IsRenderPassEnabledUPtr isEnabled )
 		: castor3d::RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -217,7 +217,7 @@ namespace water
 		, crg::FramePassArray previousPasses )
 	{
 		std::string name{ Name };
-		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
+		auto isEnabled = new castor3d::IsRenderPassEnabled{};
 		auto extent = technique.getTargetExtent();
 		auto & graph = technique.getGraph().createPassGroup( name );
 
@@ -267,7 +267,7 @@ namespace water
 					.llpvResult( technique.getLlpvResult() )
 					.vctFirstBounce( technique.getFirstVctBounce() )
 					.vctSecondaryBounce( technique.getSecondaryVctBounce() )
-				, isEnabled );
+				, castor3d::IsRenderPassEnabledUPtr( isEnabled ) );
 			renderPasses[size_t( Event )].push_back( res.get() );
 			device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 				, res->getTimer() );

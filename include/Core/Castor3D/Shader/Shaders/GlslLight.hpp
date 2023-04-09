@@ -580,9 +580,9 @@ namespace castor3d::shader
 		Utils & m_utils;
 		bool m_enableVolumetric;
 		LightingModelUPtr m_lightingModel;
-		std::shared_ptr< Shadow > m_shadowModel;
-		std::shared_ptr< SssTransmittance > m_sssTransmittance;
-		std::unique_ptr< LightsBuffer > m_lightsBuffer;
+		ShadowUPtr m_shadowModel;
+		SssTransmittanceUPtr m_sssTransmittance;
+		LightsBufferUPtr m_lightsBuffer;
 		sdw::Function< sdw::Float
 			, InBlendComponents
 			, sdw::InVec3 > m_getFinalTransmission;

@@ -10,6 +10,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, BlendComponent )
+
 namespace castor
 {
 	template<>
@@ -117,9 +119,9 @@ namespace castor3d
 
 	PassComponentUPtr BlendComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< BlendComponent >( pass );
+		auto result = castor::makeUnique< BlendComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool BlendComponent::doWriteText( castor::String const & tabs

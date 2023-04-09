@@ -24,6 +24,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementSmartPtr( castor3d, EquirectangularToCube )
+
 namespace castor3d
 {
 	//*********************************************************************************************

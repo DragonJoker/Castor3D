@@ -104,16 +104,6 @@ namespace castor
 	class ChangeTrackedT;
 	/**
 	\~english
-	\brief		Element collection class
-	\remark		A collection class, allowing you to store named objects, removing, finding or adding them as you wish.
-	\~french
-	\brief		Classe de collection d'éléments
-	\remark		Une classe de collection, permettant de stocker des éléments nommés, les enlever, les rechercher.
-	*/
-	template< typename TObj, typename TKey >
-	class Collection;
-	/**
-	\~english
 	*\brief		Connection to a signal.
 	\~french
 	*\brief		Représente une connexion à un signal.
@@ -155,16 +145,12 @@ namespace castor
 	/**
 	\~english
 	\brief		Factory concept implementation
-	\remark		The classes that can be registered must implement a function of the following form :
-				<br />static std::shared_ptr< Obj > create();
 	\~french
 	\brief		Implémentation du concept de fabrique
-	\remark		Les classes pouvant être enregistrées doivent implémenter une fonction de la forme suivante :
-				<br />static std::shared_ptr< Obj > create();
 	*/
 	template< class ObjT
 		, class KeyT
-		, class PtrTypeT = std::shared_ptr< ObjT >
+		, class PtrTypeT = std::unique_ptr< ObjT >
 		, typename CreatorT = std::function< PtrTypeT() >
 		, class IdT = size_t
 		, class EntryT = FactoryEntryT< KeyT, CreatorT, IdT > >

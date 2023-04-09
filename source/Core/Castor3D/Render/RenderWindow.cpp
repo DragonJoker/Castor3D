@@ -49,7 +49,7 @@
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, RenderWindow )
+CU_ImplementSmartPtr( castor3d, RenderWindow )
 
 #define C3D_PersistLoadingScreen 1
 
@@ -1202,7 +1202,7 @@ namespace castor3d
 			return;
 		}
 
-		m_picking = std::make_shared< Picking >( m_resources
+		m_picking = castor::makeUnique< Picking >( m_resources
 			, m_device
 			, queueData
 			, target->getSize()

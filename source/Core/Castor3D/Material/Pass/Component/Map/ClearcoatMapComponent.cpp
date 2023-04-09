@@ -15,6 +15,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, ClearcoatMapComponent )
+
 namespace castor
 {
 	template<>
@@ -160,7 +162,7 @@ namespace castor3d
 	void ClearcoatMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< ClearcoatMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, ClearcoatMapComponent >( pass ) );
 	}
 
 	bool ClearcoatMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -186,7 +188,7 @@ namespace castor3d
 
 	PassComponentUPtr ClearcoatMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< ClearcoatMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, ClearcoatMapComponent >( pass );
 	}
 
 	void ClearcoatMapComponent::doFillConfig( TextureConfiguration & configuration

@@ -48,7 +48,7 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
-		C3D_API ~FrameCtrl()noexcept;
+		C3D_API ~FrameCtrl()noexcept override;
 
 		/** \return	The frame style.
 		*/

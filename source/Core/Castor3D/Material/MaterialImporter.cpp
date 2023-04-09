@@ -10,6 +10,8 @@
 
 #include <CastorUtils/Graphics/HeightMapToNormalMap.hpp>
 
+CU_ImplementSmartPtr( castor3d, MaterialImporter )
+
 namespace castor3d
 {
 	namespace matimp

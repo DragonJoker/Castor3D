@@ -23,6 +23,8 @@
 #include <ashespp/Pipeline/PipelineViewportStateCreateInfo.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 
+CU_ImplementSmartPtr( castor3d, RenderCube )
+
 namespace castor3d
 {
 	namespace rendcube

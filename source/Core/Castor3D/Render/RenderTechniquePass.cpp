@@ -43,7 +43,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, RenderTechniquePass )
+CU_ImplementSmartPtr( castor3d, RenderTechniquePass )
 
 namespace castor3d
 {

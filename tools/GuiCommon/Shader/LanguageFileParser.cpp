@@ -370,7 +370,7 @@ namespace GuiCommon
 	void LanguageFileParser::doValidate( castor::PreprocessedFile & preprocessed )
 	{
 		auto & context = getParserContext( preprocessed.getContext() );
-		m_stcContext->push_back( context.currentLanguage );
+		m_stcContext->push_back( std::move( context.currentLanguage ) );
 	}
 
 	castor::String LanguageFileParser::doGetSectionName( castor::SectionId section )const

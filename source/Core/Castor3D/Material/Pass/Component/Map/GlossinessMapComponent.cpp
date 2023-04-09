@@ -22,6 +22,8 @@
 
 //*************************************************************************************************
 
+CU_ImplementSmartPtr( castor3d, GlossinessMapComponent )
+
 namespace castor
 {
 	template<>
@@ -188,7 +190,7 @@ namespace castor3d
 	void GlossinessMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< GlossinessMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, GlossinessMapComponent >( pass ) );
 	}
 
 	bool GlossinessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -219,7 +221,7 @@ namespace castor3d
 
 	PassComponentUPtr GlossinessMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< GlossinessMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, GlossinessMapComponent >( pass );
 	}
 
 	void GlossinessMapComponent::doFillConfig( TextureConfiguration & configuration

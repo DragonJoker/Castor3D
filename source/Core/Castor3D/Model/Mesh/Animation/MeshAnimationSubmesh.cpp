@@ -3,7 +3,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, MeshAnimationSubmesh )
+CU_ImplementSmartPtr( castor3d, MeshAnimationSubmesh )
 
 namespace castor3d
 {

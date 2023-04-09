@@ -12,7 +12,7 @@
 
 #include <RenderGraph/FrameGraph.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, DownscalePass )
+CU_ImplementSmartPtr( castor3d, DownscalePass )
 
 namespace castor3d
 {

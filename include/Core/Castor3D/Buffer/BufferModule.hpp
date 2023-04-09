@@ -179,13 +179,14 @@ namespace castor3d
 	template< typename DataT >
 	class GpuLinearAllocatorT;
 
-	CU_DeclareCUSmartPtr( castor3d, GpuBufferPool, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ObjectBufferPool, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, PoolUniformBuffer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, UniformBufferBase, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, UniformBufferPool, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, VertexBufferPool, C3D_API );
-	CU_DeclareTemplateSmartPtr( UniformBuffer );
+	CU_DeclareSmartPtr( castor3d, GpuBufferPool, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ObjectBufferPool, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PoolUniformBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, UniformBufferBase, C3D_API );
+	CU_DeclareSmartPtr( castor3d, UniformBufferPool, C3D_API );
+	CU_DeclareSmartPtr( castor3d, VertexBufferPool, C3D_API );
+
+	CU_DeclareTemplateSmartPtr( castor3d, UniformBuffer );
 
 	using GpuBufferBuddyAllocator = castor::BuddyAllocatorT< GpuBufferBuddyAllocatorTraits >;
 	using GpuBufferBuddyAllocatorUPtr = std::unique_ptr< GpuBufferBuddyAllocator >;

@@ -15,6 +15,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, IridescenceMapComponent )
+
 namespace castor
 {
 	template<>
@@ -161,7 +163,7 @@ namespace castor3d
 	void IridescenceMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< IridescenceMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, IridescenceMapComponent >( pass ) );
 	}
 
 	bool IridescenceMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -187,7 +189,7 @@ namespace castor3d
 
 	PassComponentUPtr IridescenceMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< IridescenceMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, IridescenceMapComponent >( pass );
 	}
 
 	void IridescenceMapComponent::doFillConfig( TextureConfiguration & configuration

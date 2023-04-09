@@ -31,7 +31,7 @@
 
 #include <ShaderWriter/Source.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, VisibilityPass )
+CU_ImplementSmartPtr( castor3d, VisibilityPass )
 
 namespace castor3d
 {

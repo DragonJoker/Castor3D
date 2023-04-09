@@ -213,15 +213,17 @@ namespace ocean_fft
 			, castor3d::RenderTechnique & technique
 			, castor3d::TechniquePasses & renderPasses
 			, crg::FramePassArray previousPasses
-			, std::shared_ptr< OceanUbo > oceanUbo
-			, std::shared_ptr< OceanFFT > oceanFFT
-			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
+			, std::unique_ptr< OceanUbo > oceanUbo
+			, std::unique_ptr< OceanFFT > oceanFFT
+			, castor3d::IsRenderPassEnabledRPtr isEnabled )
 		{
 			auto targetResult = technique.getTargetResult();
 			auto targetDepth = technique.getTargetDepth();
 			auto extent = technique.getTargetExtent();
+			auto ocUbo = oceanUbo.release();
+			auto ocFFT = oceanFFT.release();
 			auto & result = graph.createPass( "NodesPass"
-				, [extent, targetResult, targetDepth, oceanUbo, oceanFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
+				, [extent, targetResult, targetDepth, ocUbo, ocFFT, isEnabled, &device, &technique, &renderPasses]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 			{
@@ -230,8 +232,8 @@ namespace ocean_fft
 						, context
 						, runnableGraph
 						, device
-						, std::move( oceanUbo )
-						, std::move( oceanFFT )
+						, std::unique_ptr< OceanUbo >( ocUbo )
+						, std::unique_ptr< OceanFFT >( ocFFT )
 						, targetResult
 						, targetDepth
 						, castor3d::RenderNodesPassDesc{ extent
@@ -247,7 +249,7 @@ namespace ocean_fft
 							.llpvResult( technique.getLlpvResult() )
 							.vctFirstBounce( technique.getFirstVctBounce() )
 							.vctSecondaryBounce( technique.getSecondaryVctBounce() )
-						, isEnabled );
+						, castor3d::IsRenderPassEnabledUPtr( isEnabled ) );
 					renderPasses[size_t( OceanRenderPass::Event )].push_back( res.get() );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, res->getTimer() );
@@ -259,7 +261,7 @@ namespace ocean_fft
 			result.addInOutDepthStencilView( technique.getTargetDepth() );
 			result.addInOutColourView( technique.getTargetResult() );
 #else
-			result.addDependencies( oceanFFT->getLastPasses() );
+			result.addDependencies( ocFFT->getLastPasses() );
 			result.addDependency( technique.getGetLastOpaquePass() );
 			result.addImplicitColourView( technique.getSampledIntermediate()
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -269,11 +271,11 @@ namespace ocean_fft
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitDepthView( technique.getDiffuseLightingResult().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitColourView( oceanFFT->getNormals().sampledViewId
+			result.addImplicitColourView( ocFFT->getNormals().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitColourView( oceanFFT->getHeightDisplacement().sampledViewId
+			result.addImplicitColourView( ocFFT->getHeightDisplacement().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitColourView( oceanFFT->getGradientJacobian().sampledViewId
+			result.addImplicitColourView( ocFFT->getGradientJacobian().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addInOutDepthStencilView( technique.getTargetDepth() );
 			result.addInOutColourView( technique.getTargetResult() );
@@ -294,13 +296,13 @@ namespace ocean_fft
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, std::shared_ptr< OceanUbo > oceanUbo
-		, std::shared_ptr< OceanFFT > oceanFFT
+		, std::unique_ptr< OceanUbo > oceanUbo
+		, std::unique_ptr< OceanFFT > oceanFFT
 		, crg::ImageViewIdArray targetImage
 		, crg::ImageViewIdArray targetDepth
 		, castor3d::RenderNodesPassDesc const & renderPassDesc
 		, castor3d::RenderTechniquePassDesc const & techniquePassDesc
-			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled )
+			, castor3d::IsRenderPassEnabledUPtr isEnabled )
 		: castor3d::RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -311,8 +313,8 @@ namespace ocean_fft
 			, std::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
-		, m_isEnabled{ isEnabled }
-		, m_ubo{ oceanUbo }
+		, m_isEnabled{ std::move( isEnabled ) }
+		, m_ubo{ std::move( oceanUbo ) }
 		, m_oceanFFT{ std::move( oceanFFT ) }
 		, m_linearWrapSampler{ device->createSampler( getName()
 			, VK_SAMPLER_ADDRESS_MODE_REPEAT
@@ -348,16 +350,16 @@ namespace ocean_fft
 		, castor3d::TechniquePasses & renderPasses
 		, crg::FramePassArray previousPasses )
 	{
-		auto isEnabled = std::make_shared< castor3d::IsRenderPassEnabled >();
+		auto isEnabled = new castor3d::IsRenderPassEnabled{};
 		auto & graph = technique.getGraph().createPassGroup( OceanFFT::Name );
 		auto extent = technique.getTargetExtent();
 		crg::FramePassArray passes{ previousPasses };
 
-		auto oceanUbo = std::make_shared< OceanUbo >( device );
+		auto oceanUbo = std::make_unique< OceanUbo >( device );
 #if Ocean_DebugFFTGraph
 		crg::FrameGraph fftGraph{ graph.getHandler(), OceanFFT::Name };
 		auto & group = fftGraph.createPassGroup( OceanFFT::Name );
-		auto oceanFFT = std::make_shared< OceanFFT >( device
+		auto oceanFFT = std::make_unique< OceanFFT >( device
 			, group
 			, previousPasses
 			, *oceanUbo );
@@ -370,7 +372,7 @@ namespace ocean_fft
 		auto runnable = fftGraph.compile( device.makeContext() );
 		runnable->record();
 #else
-		auto oceanFFT = std::make_shared< OceanFFT >( device
+		auto oceanFFT = std::make_unique< OceanFFT >( device
 			, technique.getResources()
 			, graph
 			, previousPasses

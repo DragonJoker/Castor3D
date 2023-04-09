@@ -46,7 +46,7 @@ namespace castor3d
 			, castor::Size const & size
 			, ControlFlagType flags = 0
 			, bool visible = true );
-		C3D_API ~EditCtrl()noexcept;
+		C3D_API ~EditCtrl()noexcept override;
 
 		/** Updates the caption
 		 *\param[in]	value		The new value

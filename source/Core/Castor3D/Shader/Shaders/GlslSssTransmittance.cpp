@@ -11,6 +11,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+CU_ImplementSmartPtr( castor3d::shader, SssTransmittance )
+
 namespace castor3d
 {
 	namespace shader

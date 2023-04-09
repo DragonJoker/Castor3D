@@ -135,10 +135,10 @@ namespace castor3d
 
 			if ( !result )
 			{
-				auto component = std::make_unique< ComponentT >( *this
+				auto component = castor::makeUnique< ComponentT >( *this
 					, std::forward< ParamsT >( params )... );
 				result = component.get();
-				this->addComponent( std::move( component ) );
+				this->addComponent( castor::ptrRefCast< PassComponent >( component ) );
 			}
 
 			return result;

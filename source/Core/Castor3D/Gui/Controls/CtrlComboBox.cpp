@@ -13,7 +13,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ComboBoxCtrl )
+CU_ImplementSmartPtr( castor3d, ComboBoxCtrl )
 
 namespace castor3d
 {
@@ -108,7 +108,7 @@ namespace castor3d
 
 	ComboBoxCtrl::~ComboBoxCtrl()noexcept
 	{
-		if ( auto text = m_text )
+		if ( m_text )
 		{
 			if ( m_scene )
 			{

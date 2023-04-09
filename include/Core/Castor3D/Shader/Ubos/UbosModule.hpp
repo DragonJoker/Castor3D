@@ -459,10 +459,10 @@ namespace castor3d
 	*/
 	struct VoxelizerUboConfiguration;
 
-	CU_DeclareCUSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LayeredLpvGridConfigUbo, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SceneUbo, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LayeredLpvGridConfigUbo, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SceneUbo, C3D_API );
 	CU_DeclareVector( LpvLightConfigUbo, LpvLightConfigUbo );
 	CU_DeclareVector( LpvGridConfigUbo, LpvGridConfigUbo );
 

@@ -53,7 +53,7 @@ namespace castor3d
 	*/
 	class ToneMappingVisitor;
 
-	CU_DeclareCUSmartPtr( castor3d, ToneMapping, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ToneMapping, C3D_API );
 	/**
 	*\~english
 	*\brief

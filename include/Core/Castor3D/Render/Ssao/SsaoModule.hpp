@@ -62,9 +62,9 @@ namespace castor3d
 	*/
 	class SsaoRawAOPass;
 
-	CU_DeclareCUSmartPtr( castor3d, SsaoBlurPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SsaoPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, SsaoRawAOPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SsaoBlurPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SsaoPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SsaoRawAOPass, C3D_API );
 
 	//@}
 	//@}

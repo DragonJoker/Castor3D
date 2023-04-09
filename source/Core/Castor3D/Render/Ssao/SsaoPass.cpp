@@ -13,7 +13,7 @@
 
 #include <RenderGraph/FrameGraph.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, SsaoPass )
+CU_ImplementSmartPtr( castor3d, SsaoPass )
 
 #define C3D_DebugRawPass 0
 

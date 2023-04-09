@@ -7,6 +7,8 @@
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
+CU_ImplementSmartPtr( castor3d, SphereSection )
+
 namespace castor3d
 {
 	SphereSection::SphereSection()
@@ -19,7 +21,7 @@ namespace castor3d
 
 	MeshGeneratorUPtr SphereSection::create()
 	{
-		return std::make_unique< SphereSection >();
+		return castor::makeUniqueDerived< MeshGenerator, SphereSection >();
 	}
 
 	void SphereSection::doGenerate( Mesh & mesh, Parameters const & parameters )

@@ -2,7 +2,7 @@
 
 #include "Castor3D/Scene/ParticleSystem/Particle.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, ParticleEmitter )
+CU_ImplementSmartPtr( castor3d, ParticleEmitter )
 
 namespace castor3d
 {

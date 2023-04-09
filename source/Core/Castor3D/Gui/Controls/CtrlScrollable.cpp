@@ -12,7 +12,7 @@
 
 #include <CastorUtils/Graphics/Font.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ScrollableCtrl )
+CU_ImplementSmartPtr( castor3d, ScrollableCtrl )
 
 namespace castor3d
 {
@@ -82,7 +82,7 @@ namespace castor3d
 
 	ScrollableCtrl::~ScrollableCtrl()noexcept
 	{
-		if ( auto overlay = m_corner )
+		if ( m_corner )
 		{
 			if ( m_target.hasScene() )
 			{

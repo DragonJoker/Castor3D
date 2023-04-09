@@ -42,7 +42,7 @@
 
 #include <random>
 
-CU_ImplementCUSmartPtr( castor3d, SsaoRawAOPass )
+CU_ImplementSmartPtr( castor3d, SsaoRawAOPass )
 
 namespace castor3d
 {

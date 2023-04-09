@@ -23,8 +23,8 @@
 
 #include <ashespp/Core/WindowHandle.hpp>
 
-CU_ImplementCUSmartPtr( CastorViewer, MouseNodeEvent )
-CU_ImplementCUSmartPtr( CastorViewer, TranslateNodeEvent )
+CU_ImplementSmartPtr( CastorViewer, MouseNodeEvent )
+CU_ImplementSmartPtr( CastorViewer, TranslateNodeEvent )
 
 namespace CastorViewer
 {

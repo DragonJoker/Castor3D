@@ -10,6 +10,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, TextureCountComponent )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -57,7 +59,7 @@ namespace castor3d
 
 	PassComponentUPtr TextureCountComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< TextureCountComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, TextureCountComponent >( pass );
 	}
 
 	void TextureCountComponent::doFillBuffer( PassBuffer & buffer )const

@@ -6,6 +6,8 @@
 #include "Castor3D/Scene/Animation/SceneNodeAnimation.hpp"
 #include "Castor3D/Scene/Animation/SceneNodeAnimationKeyFrame.hpp"
 
+CU_ImplementSmartPtr( castor3d, SceneNodeAnimationInstance )
+
 namespace castor3d
 {
 	SceneNodeAnimationInstance::SceneNodeAnimationInstance( AnimatedSceneNode & object

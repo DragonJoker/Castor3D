@@ -215,8 +215,6 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ArrayView.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/BlockGuard.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/ChangeTracked.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Collection.hpp
-		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/Collection.inl
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DataHolder.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DelayedInitialiser.hpp
 		${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Design/DesignModule.hpp

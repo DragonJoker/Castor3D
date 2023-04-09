@@ -3,8 +3,8 @@
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, ParticleFactory )
-CU_ImplementCUSmartPtr( castor3d, ParticleSystemCache )
+CU_ImplementSmartPtr( castor3d, ParticleFactory )
+CU_ImplementSmartPtr( castor3d, ParticleSystemCache )
 
 namespace castor3d
 {

@@ -121,10 +121,9 @@ namespace castor3d
 	*/
 	class MaterialImporterFactory;
 
-	CU_DeclareSmartPtr( MaterialImporter );
-
-	CU_DeclareCUSmartPtr( castor3d, Material, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, MaterialImporterFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, Material, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MaterialImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MaterialImporterFactory, C3D_API );
 
 	using PassTypeID = uint16_t;
 
@@ -165,7 +164,7 @@ namespace castor3d
 	using MaterialPtr = MaterialCacheTraits::ElementPtrT;
 	using MaterialObs = MaterialCacheTraits::ElementObsT;
 
-	CU_DeclareCUSmartPtr( castor3d, MaterialCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, MaterialCache, C3D_API );
 
 	//! Material pointer array
 	CU_DeclareVector( MaterialObs, MaterialPtr );

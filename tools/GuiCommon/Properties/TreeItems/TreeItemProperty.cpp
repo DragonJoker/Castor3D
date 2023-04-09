@@ -4,6 +4,8 @@
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Event/Frame/CpuFunctorEvent.hpp>
 
+CU_ImplementSmartPtr( GuiCommon, TreeItemProperty )
+
 namespace GuiCommon
 {
 	namespace tiprop

@@ -176,21 +176,21 @@ namespace GuiCommon
 
 		if ( m_light.getLightType() == castor3d::LightType::eDirectional )
 		{
-			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_STEPS, m_light.getCategory()->getVolumetricSteps(), m_light.getCategory().get(), &castor3d::LightCategory::setVolumetricSteps );
-			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR, m_light.getCategory()->getVolumetricScatteringFactor(), m_light.getCategory().get(), &castor3d::LightCategory::setVolumetricScatteringFactor );
+			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_STEPS, m_light.getCategory()->getVolumetricSteps(), m_light.getCategory(), &castor3d::LightCategory::setVolumetricSteps );
+			addPropertyT( shadows, PROPERTY_SHADOW_VOLUMETRIC_SCATTERING_FACTOR, m_light.getCategory()->getVolumetricScatteringFactor(), m_light.getCategory(), &castor3d::LightCategory::setVolumetricScatteringFactor );
 		}
 
 		auto raw = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_RAW );
-		addPropertyT( raw, PROPERTY_SHADOW_RAW_MIN_OFFSET, m_light.getCategory()->getShadowRawOffsets()[0], m_light.getCategory().get(), &castor3d::LightCategory::setRawMinOffset );
-		addPropertyT( raw, PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowRawOffsets()[1], m_light.getCategory().get(), &castor3d::LightCategory::setRawMaxSlopeOffset );
+		addPropertyT( raw, PROPERTY_SHADOW_RAW_MIN_OFFSET, m_light.getCategory()->getShadowRawOffsets()[0], m_light.getCategory(), &castor3d::LightCategory::setRawMinOffset );
+		addPropertyT( raw, PROPERTY_SHADOW_RAW_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowRawOffsets()[1], m_light.getCategory(), &castor3d::LightCategory::setRawMaxSlopeOffset );
 		auto pcf = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_PCF );
-		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MIN_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[0], m_light.getCategory().get(), &castor3d::LightCategory::setPcfMinOffset );
-		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[1], m_light.getCategory().get(), &castor3d::LightCategory::setPcfMaxSlopeOffset );
-		addPropertyT( pcf, PROPERTY_SHADOW_PCF_FILTER_SIZE, m_light.getCategory()->getShadowPcfFilterSize(), m_light.getCategory().get(), &castor3d::LightCategory::setPcfFilterSize );
-		addPropertyT( pcf, PROPERTY_SHADOW_PCF_SAMPLE_COUNT, m_light.getCategory()->getShadowPcfSampleCount(), m_light.getCategory().get(), &castor3d::LightCategory::setPcfSampleCount );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MIN_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[0], m_light.getCategory(), &castor3d::LightCategory::setPcfMinOffset );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_MAX_SLOPE_OFFSET, m_light.getCategory()->getShadowPcfOffsets()[1], m_light.getCategory(), &castor3d::LightCategory::setPcfMaxSlopeOffset );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_FILTER_SIZE, m_light.getCategory()->getShadowPcfFilterSize(), m_light.getCategory(), &castor3d::LightCategory::setPcfFilterSize );
+		addPropertyT( pcf, PROPERTY_SHADOW_PCF_SAMPLE_COUNT, m_light.getCategory()->getShadowPcfSampleCount(), m_light.getCategory(), &castor3d::LightCategory::setPcfSampleCount );
 		auto vsm = addProperty( shadows, PROPERTY_CATEGORY_SHADOW_VSM );
-		addPropertyT( vsm, PROPERTY_SHADOW_VSM_MIN_VARIANCE, m_light.getCategory()->getVsmMinVariance(), m_light.getCategory().get(), &castor3d::LightCategory::setVsmMinVariance );
-		addPropertyT( vsm, PROPERTY_SHADOW_VSM_LIGHT_BLEEDING_REDUCTION, m_light.getCategory()->getVsmLightBleedingReduction(), m_light.getCategory().get(), &castor3d::LightCategory::setVsmLightBleedingReduction );
+		addPropertyT( vsm, PROPERTY_SHADOW_VSM_MIN_VARIANCE, m_light.getCategory()->getVsmMinVariance(), m_light.getCategory(), &castor3d::LightCategory::setVsmMinVariance );
+		addPropertyT( vsm, PROPERTY_SHADOW_VSM_LIGHT_BLEEDING_REDUCTION, m_light.getCategory()->getVsmLightBleedingReduction(), m_light.getCategory(), &castor3d::LightCategory::setVsmLightBleedingReduction );
 
 		auto globalIllum = addProperty( shadows, PROPERTY_CATEGORY_GLOBAL_ILLUM );
 		addPropertyE( globalIllum, PROPERTY_SHADOW_GLOBAL_ILLUM_TYPE, giChoices, convert( m_light.getGlobalIlluminationType() )

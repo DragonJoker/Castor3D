@@ -22,7 +22,7 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, GeometryCache )
+CU_ImplementSmartPtr( castor3d, GeometryCache )
 
 namespace castor3d
 {
@@ -70,7 +70,7 @@ namespace castor3d
 							? static_cast< AnimatedSkeleton * >( findAnimatedObject( scene, element.getName() + cuT( "_Skeleton" ) ) )
 							: nullptr;
 
-						if ( auto comp = submesh->getComponent< PassMasksComponent >() )
+						if ( submesh->hasComponent( PassMasksComponent::Name ) )
 						{
 							if ( auto pass = material->getPass( 0u ) )
 							{

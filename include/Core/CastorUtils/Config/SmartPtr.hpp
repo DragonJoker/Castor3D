@@ -1,38 +1,17 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___Castor_shared_ptr___
-#define ___Castor_shared_ptr___
-
-#include "CastorUtils/Config/Macros.hpp"
+#ifndef ___CU_SmartPtr_HPP___
+#define ___CU_SmartPtr_HPP___
 
 #include "CastorUtils/Config/BeginExternHeaderGuard.hpp"
+#include "CastorUtils/Config/PlatformConfig.hpp"
+
 #include <memory>
 #include "CastorUtils/Config/EndExternHeaderGuard.hpp"
 
 namespace castor
 {
-	/**
-	\author		Sylvain DOREMUS
-	\version	0.6.1.0
-	\date		08/12/2011
-	\~english
-	\brief		Dummy destructor
-	\remark		Used as a parameter to shared_ptr, to make deallocation dummy (only sets pointer to nullptr)
-	\~french
-	\brief		Destructeur zombie
-	\remark		Utilisé en tant que paramètre à shared_ptr, afin d'avoir une désallocation zombie (ne fait que mettre le pointeur à nullptr, sans le désallouer)
-	*/
-	struct DummyDtor
-	{
-		template< typename T >
-		inline void operator()( T *& pointer )noexcept
-		{
-			pointer = nullptr;
-		}
-	};
-	CU_API extern DummyDtor g_dummyDtor;
-
 	template< typename TypeT >
 	struct Deleter
 	{
@@ -67,7 +46,7 @@ namespace castor
 	}
 }
 
-#define CU_DeclareCUSmartPtr( nmspc, class_name, expdecl )\
+#define CU_DeclareSmartPtr( nmspc, class_name, expdecl )\
 }\
 namespace castor\
 {\
@@ -79,12 +58,10 @@ namespace castor\
 }\
 namespace nmspc\
 {\
-	using class_name##SPtr = std::shared_ptr< class_name >;\
-	using class_name##WPtr = std::weak_ptr< class_name >;\
 	using class_name##UPtr = castor::UniquePtr< class_name >;\
 	using class_name##RPtr = class_name *
 
-#define CU_ImplementCUSmartPtr( nmspc, class_name )\
+#define CU_ImplementSmartPtr( nmspc, class_name )\
 namespace castor\
 {\
 	void Deleter< nmspc::class_name >::operator()( nmspc::class_name * pointer )noexcept\
@@ -93,14 +70,14 @@ namespace castor\
 	}\
 }
 
-#define CU_DeclareCUTemplateSmartPtr( nmspc, class_name_t )\
+#define CU_DeclareTemplateSmartPtr( nmspc, class_name )\
 }\
 namespace castor\
 {\
 	template< typename InstT >\
-	struct Deleter< nmspc::class_name_t< InstT > >\
+	struct Deleter< nmspc::class_name##T< InstT > >\
 	{\
-		void operator()( nmspc::class_name_t< InstT > * pointer )noexcept\
+		void operator()( nmspc::class_name##T< InstT > * pointer )noexcept\
 		{\
 			delete pointer;\
 		}\
@@ -109,22 +86,18 @@ namespace castor\
 namespace nmspc\
 {\
 	template< typename InstT >\
-	using class_name_t##SPtrT = std::shared_ptr< class_name_t< InstT > >;\
+	using class_name##UPtrT = castor::UniquePtr< class_name##T< InstT > >;\
 	template< typename InstT >\
-	using class_name_t##WPtrT = std::weak_ptr< class_name_t< InstT > >;\
-	template< typename InstT >\
-	using class_name_t##UPtrT = castor::UniquePtr< class_name_t< InstT > >;\
-	template< typename InstT >\
-	using class_name_t##RPtrT = class_name_t< InstT > *
+	using class_name##RPtrT = class_name##T< InstT > *
 
-#define CU_DeclareCUEnumTemplateSmartPtr( nmspc, class_name_t, enum_name_t )\
+#define CU_DeclareEnumTemplateSmartPtr( nmspc, class_name, enum_name )\
 }\
 namespace castor\
 {\
-	template< enum_name_t EnumT >\
-	struct Deleter< nmspc::class_name_t< EnumT > >\
+	template< enum_name EnumT >\
+	struct Deleter< nmspc::class_name##T< EnumT > >\
 	{\
-		void operator()( nmspc::class_name_t< EnumT > * pointer )noexcept\
+		void operator()( nmspc::class_name##T< EnumT > * pointer )noexcept\
 		{\
 			delete pointer;\
 		}\
@@ -132,13 +105,9 @@ namespace castor\
 }\
 namespace nmspc\
 {\
-	template< enum_name_t EnumT >\
-	using class_name_t##SPtrT = std::shared_ptr< class_name_t< EnumT > >;\
-	template< enum_name_t EnumT >\
-	using class_name_t##WPtrT = std::weak_ptr< class_name_t< EnumT > >;\
-	template< enum_name_t EnumT >\
-	using class_name_t##UPtrT = castor::UniquePtr< class_name_t< EnumT > >;\
-	template< enum_name_t EnumT >\
-	using class_name_t##RPtrT = class_name_t< EnumT > *
+	template< enum_name EnumT >\
+	using class_name##UPtrT = castor::UniquePtr< class_name##T< EnumT > >;\
+	template< enum_name EnumT >\
+	using class_name##RPtrT = class_name##T< EnumT > *
 
 #endif

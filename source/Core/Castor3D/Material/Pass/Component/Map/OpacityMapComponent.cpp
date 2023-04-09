@@ -17,6 +17,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, OpacityMapComponent )
+
 namespace castor
 {
 	template<>
@@ -155,7 +157,7 @@ namespace castor3d
 	void OpacityMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< OpacityMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, OpacityMapComponent >( pass ) );
 	}
 
 	bool OpacityMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -181,7 +183,7 @@ namespace castor3d
 
 	PassComponentUPtr OpacityMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< OpacityMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, OpacityMapComponent >( pass );
 	}
 
 	void OpacityMapComponent::doFillConfig( TextureConfiguration & configuration

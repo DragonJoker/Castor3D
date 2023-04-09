@@ -139,15 +139,11 @@ namespace GuiCommon
 	template< typename ListT >
 	class TreeListContainerT;
 
-	typedef std::shared_ptr< std::thread > thread_sptr;
-	typedef std::shared_ptr< LanguageInfo > LanguageInfoPtr;
-	typedef std::shared_ptr< LanguageFileContext > LanguageFileContextPtr;
-	typedef std::shared_ptr< StyleInfo > StyleInfoPtr;
+	CU_DeclareSmartPtr( GuiCommon, LanguageInfo, );
+	CU_DeclareSmartPtr( GuiCommon, TreeItemProperty, );
 
-	CU_DeclareSmartPtr( TreeItemProperty );
 	CU_DeclareMap( uint32_t, wxImage *, ImageId );
-	CU_DeclareVector( thread_sptr, ThreadPtr );
-	CU_DeclareVector( LanguageInfoPtr, LanguageInfoPtr );
+	CU_DeclareVector( LanguageInfoUPtr, LanguageInfo );
 
 	static const wxColour PANEL_BACKGROUND_COLOUR = wxColour( 30, 30, 30 );
 	static const wxColour PANEL_FOREGROUND_COLOUR = wxColour( 220, 220, 220 );

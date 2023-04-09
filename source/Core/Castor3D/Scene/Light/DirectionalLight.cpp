@@ -172,7 +172,7 @@ namespace castor3d
 
 	LightCategoryUPtr DirectionalLight::create( Light & light )
 	{
-		return std::unique_ptr< DirectionalLight >( new DirectionalLight{ light } );
+		return LightCategoryUPtr( new DirectionalLight{ light } );
 	}
 
 	void DirectionalLight::update()

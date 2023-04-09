@@ -47,7 +47,7 @@ namespace castor3d
 			, ControlFlagType flags = 0
 			, bool visible = true );
 
-		C3D_API ~SliderCtrl()noexcept;
+		C3D_API ~SliderCtrl()noexcept override;
 
 		/** sets the range
 		*\param[in]	value		The new value

@@ -15,6 +15,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, EmissiveMapComponent )
+
 namespace castor
 {
 	template<>
@@ -154,7 +156,7 @@ namespace castor3d
 	void EmissiveMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< EmissiveMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, EmissiveMapComponent >( pass ) );
 	}
 
 	bool EmissiveMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -180,7 +182,7 @@ namespace castor3d
 
 	PassComponentUPtr EmissiveMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< EmissiveMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, EmissiveMapComponent >( pass );
 	}
 
 	void EmissiveMapComponent::doFillConfig( TextureConfiguration & configuration

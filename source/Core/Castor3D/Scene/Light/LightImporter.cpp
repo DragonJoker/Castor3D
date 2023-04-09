@@ -5,6 +5,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
+CU_ImplementSmartPtr( castor3d, LightImporter )
+
 namespace castor3d
 {
 	LightImporter::LightImporter( Engine & engine )

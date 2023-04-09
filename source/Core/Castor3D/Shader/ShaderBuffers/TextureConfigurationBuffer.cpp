@@ -10,7 +10,7 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, TextureConfigurationBuffer )
+CU_ImplementSmartPtr( castor3d, TextureConfigurationBuffer )
 
 namespace castor3d
 {

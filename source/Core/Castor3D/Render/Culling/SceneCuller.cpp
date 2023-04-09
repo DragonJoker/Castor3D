@@ -30,7 +30,7 @@
 #include <CastorUtils/Miscellaneous/BlockTimer.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, SceneCuller )
+CU_ImplementSmartPtr( castor3d, SceneCuller )
 
 namespace castor3d
 {

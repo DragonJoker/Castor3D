@@ -10,6 +10,8 @@
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextRgbColour.hpp>
 
+CU_ImplementSmartPtr( castor3d, PassHeaderComponent )
+
 namespace castor
 {
 	template<>
@@ -117,9 +119,9 @@ namespace castor3d
 
 	PassComponentUPtr PassHeaderComponent::doClone( Pass & pass )const
 	{
-		auto result = std::make_unique< PassHeaderComponent >( pass );
+		auto result = castor::makeUnique< PassHeaderComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool PassHeaderComponent::doWriteText( castor::String const & tabs

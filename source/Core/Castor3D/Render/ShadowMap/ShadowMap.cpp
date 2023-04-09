@@ -18,7 +18,7 @@
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ShadowMap )
+CU_ImplementSmartPtr( castor3d, ShadowMap )
 
 namespace castor3d
 {

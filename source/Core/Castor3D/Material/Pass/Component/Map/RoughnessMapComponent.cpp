@@ -16,6 +16,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, RoughnessMapComponent )
+
 namespace castor
 {
 	template<>
@@ -155,7 +157,7 @@ namespace castor3d
 	void RoughnessMapComponent::Plugin::createMapComponent( Pass & pass
 		, std::vector< PassComponentUPtr > & result )const
 	{
-		result.push_back( std::make_unique< RoughnessMapComponent >( pass ) );
+		result.push_back( castor::makeUniqueDerived< PassComponent, RoughnessMapComponent >( pass ) );
 	}
 
 	bool RoughnessMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration
@@ -181,7 +183,7 @@ namespace castor3d
 
 	PassComponentUPtr RoughnessMapComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< RoughnessMapComponent >( pass );
+		return castor::makeUniqueDerived< PassComponent, RoughnessMapComponent >( pass );
 	}
 
 	void RoughnessMapComponent::doFillConfig( TextureConfiguration & configuration

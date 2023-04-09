@@ -10,6 +10,8 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
+CU_ImplementSmartPtr( castor3d, MeshGenerator )
+
 namespace castor3d
 {
 	MeshGenerator::MeshGenerator( castor::String const & meshType )
@@ -23,7 +25,7 @@ namespace castor3d
 
 	MeshGeneratorUPtr MeshGenerator::create()
 	{
-		return std::make_unique< MeshGenerator >( cuT( "custom" ) );
+		return castor::makeUnique< MeshGenerator >( cuT( "custom" ) );
 	}
 
 	void MeshGenerator::generate( Mesh & mesh, Parameters const & parameters )

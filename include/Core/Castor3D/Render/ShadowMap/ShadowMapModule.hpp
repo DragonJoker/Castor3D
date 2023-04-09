@@ -128,8 +128,8 @@ namespace castor3d
 	*/
 	class ShadowMapPassSpot;
 
-	CU_DeclareCUSmartPtr( castor3d, ShadowMap, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ShadowMapPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ShadowMap, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ShadowMapPass, C3D_API );
 
 	//@}
 	//@}

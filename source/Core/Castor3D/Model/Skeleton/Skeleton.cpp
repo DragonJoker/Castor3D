@@ -6,8 +6,8 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, SkeletonCache )
-CU_ImplementCUSmartPtr( castor3d, Skeleton )
+CU_ImplementSmartPtr( castor3d, SkeletonCache )
+CU_ImplementSmartPtr( castor3d, Skeleton )
 
 namespace castor3d
 {

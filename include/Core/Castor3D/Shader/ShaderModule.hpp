@@ -148,9 +148,9 @@ namespace castor3d
 	template< typename ElementTypeTraits >
 	class StructuredShaderBuffer;
 
-	CU_DeclareCUSmartPtr( castor3d, ShaderBuffer, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ShaderProgram, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LightingModelFactory, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ShaderBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ShaderProgram, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightingModelFactory, C3D_API );
 
 	//@}
 }

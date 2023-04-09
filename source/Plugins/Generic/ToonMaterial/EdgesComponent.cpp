@@ -22,6 +22,8 @@
 
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
+CU_ImplementSmartPtr( toon, EdgesComponent )
+
 namespace toon
 {
 	//*********************************************************************************************
@@ -328,9 +330,9 @@ namespace toon
 
 	castor3d::PassComponentUPtr EdgesComponent::doClone( castor3d::Pass & pass )const
 	{
-		auto result = std::make_unique< EdgesComponent >( pass );
+		auto result = castor::makeUnique< EdgesComponent >( pass );
 		result->setData( getData() );
-		return result;
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	bool EdgesComponent::doWriteText( castor::String const & tabs

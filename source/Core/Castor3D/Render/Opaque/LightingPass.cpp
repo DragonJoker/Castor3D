@@ -22,7 +22,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ImageBlit.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, LightingPass )
+CU_ImplementSmartPtr( castor3d, LightingPass )
 
 namespace castor3d
 {

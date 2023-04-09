@@ -4,7 +4,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, TransparentPassResult )
+CU_ImplementSmartPtr( castor3d, TransparentPassResult )
 
 namespace castor3d
 {

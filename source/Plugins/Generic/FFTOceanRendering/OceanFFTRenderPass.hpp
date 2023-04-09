@@ -27,13 +27,13 @@ namespace ocean_fft
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, std::shared_ptr< OceanUbo > oceanUbo
-			, std::shared_ptr< OceanFFT > oceanFFT
+			, std::unique_ptr< OceanUbo > oceanUbo
+			, std::unique_ptr< OceanFFT > oceanFFT
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
 			, castor3d::RenderNodesPassDesc const & renderPassDesc
 			, castor3d::RenderTechniquePassDesc const & techniquePassDesc
-			, std::shared_ptr< castor3d::IsRenderPassEnabled > isEnabled );
+			, castor3d::IsRenderPassEnabledUPtr isEnabled );
 		~OceanRenderPass()override;
 		static crg::FramePassArray create( castor3d::RenderDevice const & device
 			, castor3d::RenderTechnique & technique
@@ -84,9 +84,9 @@ namespace ocean_fft
 		castor3d::ShaderPtr doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const override;
 
 	private:
-		std::shared_ptr< castor3d::IsRenderPassEnabled > m_isEnabled;
-		std::shared_ptr< OceanUbo > m_ubo;
-		std::shared_ptr< OceanFFT > m_oceanFFT;
+		castor3d::IsRenderPassEnabledUPtr m_isEnabled;
+		std::unique_ptr< OceanUbo > m_ubo;
+		std::unique_ptr< OceanFFT > m_oceanFFT;
 		OceanUboConfiguration m_configuration;
 		ashes::SamplerPtr m_linearWrapSampler;
 		ashes::SamplerPtr m_pointClampSampler;

@@ -12,6 +12,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+CU_ImplementSmartPtr( castor3d, NormalComponent )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -83,7 +85,8 @@ namespace castor3d
 
 	PassComponentUPtr NormalComponent::doClone( Pass & pass )const
 	{
-		return std::make_unique< NormalComponent >( pass );
+		auto result = castor::makeUnique< NormalComponent >( pass );
+		return castor::ptrRefCast< PassComponent >( result );
 	}
 
 	//*********************************************************************************************

@@ -5,7 +5,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 
-CU_ImplementCUSmartPtr( castor3d, BoneNode )
+CU_ImplementSmartPtr( castor3d, BoneNode )
 
 namespace castor3d
 {

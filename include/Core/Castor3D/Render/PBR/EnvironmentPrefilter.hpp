@@ -50,7 +50,6 @@ namespace castor3d
 			};
 			ashes::RenderPass const & m_renderPass;
 			std::string m_prefix;
-			SamplerObs m_sampler{};
 			std::array< FrameBuffer, 6u > m_frameBuffers;
 			CommandsSemaphore m_commands;
 		};

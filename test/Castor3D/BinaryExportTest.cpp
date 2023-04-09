@@ -59,7 +59,6 @@ namespace Testing
 
 		doTestMesh( *src );
 
-		scene.removeMesh( name, true );
 		scene.cleanup();
 		m_engine.getRenderLoop().renderSyncFrame();
 	}
@@ -103,7 +102,6 @@ namespace Testing
 
 		doTestMesh( *src );
 
-		scene.removeMesh( name, true );
 		scene.cleanup();
 		m_engine.getRenderLoop().renderSyncFrame();
 	}
@@ -156,11 +154,8 @@ namespace Testing
 					dst->setSkeleton( skeleton );
 				}
 			}
-		}
 
-		for ( auto & submesh : *dst )
-		{
-			submesh->initialise( device );
+			dst->initialise();
 		}
 
 		auto & rhs = static_cast< Mesh const & >( *dst );

@@ -136,13 +136,13 @@ namespace castor3d
 	*/
 	class VisibilityResolvePass;
 
-	CU_DeclareCUSmartPtr( castor3d, DeferredRendering, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, IndirectLightingPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, LightingPass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, OpaquePassResult, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, OpaqueRendering, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, OpaqueResolvePass, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, VisibilityReorderPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DeferredRendering, C3D_API );
+	CU_DeclareSmartPtr( castor3d, IndirectLightingPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, LightingPass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, OpaquePassResult, C3D_API );
+	CU_DeclareSmartPtr( castor3d, OpaqueRendering, C3D_API );
+	CU_DeclareSmartPtr( castor3d, OpaqueResolvePass, C3D_API );
+	CU_DeclareSmartPtr( castor3d, VisibilityReorderPass, C3D_API );
 
 	//@}
 	//@}

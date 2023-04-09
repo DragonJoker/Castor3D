@@ -10,6 +10,8 @@ See LICENSE file in root folder
 #include <ashespp/Descriptor/DescriptorSet.hpp>
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
 
+CU_ImplementSmartPtr( castor3d, OverlayTextBufferPool )
+
 namespace castor3d
 {
 	//*************************************************************************

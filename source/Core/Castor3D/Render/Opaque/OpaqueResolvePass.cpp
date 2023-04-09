@@ -51,7 +51,7 @@
 
 #include <CastorUtils/Graphics/Image.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, OpaqueResolvePass )
+CU_ImplementSmartPtr( castor3d, OpaqueResolvePass )
 
 namespace castor3d
 {

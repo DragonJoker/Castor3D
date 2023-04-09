@@ -17,7 +17,7 @@
 #include <ashespp/Pipeline/ComputePipeline.hpp>
 #include <ashespp/Pipeline/PipelineLayout.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, MeshletBoundsTransformPass )
+CU_ImplementSmartPtr( castor3d, MeshletBoundsTransformPass )
 
 namespace castor3d
 {

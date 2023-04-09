@@ -2,7 +2,7 @@
 
 #include <CastorUtils/Miscellaneous/DynamicLibrary.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, ImporterPlugin )
+CU_ImplementSmartPtr( castor3d, ImporterPlugin )
 
 namespace castor3d
 {

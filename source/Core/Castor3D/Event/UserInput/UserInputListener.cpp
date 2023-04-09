@@ -11,7 +11,7 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-CU_ImplementCUSmartPtr( castor3d, UserInputListener )
+CU_ImplementSmartPtr( castor3d, UserInputListener )
 
 namespace castor3d
 {

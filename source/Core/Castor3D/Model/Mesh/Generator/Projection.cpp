@@ -3,6 +3,8 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 
+CU_ImplementSmartPtr( castor3d, Projection )
+
 namespace castor3d
 {
 	Projection::Projection()
@@ -15,7 +17,7 @@ namespace castor3d
 
 	MeshGeneratorUPtr Projection::create()
 	{
-		return std::make_unique< Projection >();
+		return castor::makeUniqueDerived< MeshGenerator, Projection >();
 	}
 
 	void Projection::setPoints( Pattern< castor::Point3f > const & pattern

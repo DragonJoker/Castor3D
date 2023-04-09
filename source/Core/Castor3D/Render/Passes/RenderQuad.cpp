@@ -34,7 +34,7 @@
 
 #include <algorithm>
 
-CU_ImplementCUSmartPtr( castor3d, RenderQuad )
+CU_ImplementSmartPtr( castor3d, RenderQuad )
 
 namespace castor3d
 {

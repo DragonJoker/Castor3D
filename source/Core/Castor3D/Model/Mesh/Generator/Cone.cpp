@@ -5,6 +5,8 @@
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 
+CU_ImplementSmartPtr( castor3d, Cone )
+
 namespace castor3d
 {
 	Cone::Cone()
@@ -17,7 +19,7 @@ namespace castor3d
 
 	MeshGeneratorUPtr Cone::create()
 	{
-		return std::make_unique< Cone >();
+		return castor::makeUniqueDerived< MeshGenerator, Cone >();
 	}
 
 	void Cone::doGenerate( Mesh & mesh

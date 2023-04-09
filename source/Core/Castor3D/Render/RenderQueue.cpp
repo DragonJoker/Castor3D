@@ -16,7 +16,7 @@
 using ashes::operator==;
 using ashes::operator!=;
 
-CU_ImplementCUSmartPtr( castor3d, RenderQueue )
+CU_ImplementSmartPtr( castor3d, RenderQueue )
 
 namespace castor3d
 {

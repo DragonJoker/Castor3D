@@ -179,9 +179,9 @@ namespace castor3d
 	class ShaderProgramCache;
 	class TextureUnitCache;
 
-	CU_DeclareCUSmartPtr( castor3d, RenderTargetCache, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, ShaderProgramCache, C3D_API );
-	CU_DeclareCUSmartPtr( castor3d, TextureUnitCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, RenderTargetCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ShaderProgramCache, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureUnitCache, C3D_API );
 	//@}
 }
 

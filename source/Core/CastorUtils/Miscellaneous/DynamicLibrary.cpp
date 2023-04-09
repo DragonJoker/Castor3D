@@ -1,6 +1,6 @@
 #include "CastorUtils/Miscellaneous/DynamicLibrary.hpp"
 
-CU_ImplementCUSmartPtr( castor, DynamicLibrary )
+CU_ImplementSmartPtr( castor, DynamicLibrary )
 
 namespace castor
 {
