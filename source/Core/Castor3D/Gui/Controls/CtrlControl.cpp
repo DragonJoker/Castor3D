@@ -277,7 +277,7 @@ namespace castor3d
 		return doGetBackground().getOverlay();
 	}
 
-	void Control::setBackgroundMaterial( MaterialRPtr value )
+	void Control::setBackgroundMaterial( MaterialObs value )
 	{
 		if ( !m_style->isBackgroundInvisible() )
 		{
@@ -295,7 +295,7 @@ namespace castor3d
 		doGetBackground().setBorderPosition( value );
 	}
 
-	void Control::setBackgroundBorderMaterial( MaterialRPtr value )
+	void Control::setBackgroundBorderMaterial( MaterialObs value )
 	{
 		if ( !m_style->isForegroundInvisible() )
 		{

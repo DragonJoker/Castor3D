@@ -17,21 +17,21 @@ namespace castor3d
 	class TextureSourceInfo
 	{
 	public:
-		C3D_API TextureSourceInfo( SamplerRes sampler
+		C3D_API TextureSourceInfo( SamplerObs sampler
 			, castor::Path folder
 			, castor::Path relative
 			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
-		C3D_API TextureSourceInfo( SamplerRes sampler
+		C3D_API TextureSourceInfo( SamplerObs sampler
 			, castor::String name
 			, castor::String type
 			, castor::ByteArray data
 			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
-		C3D_API TextureSourceInfo( SamplerRes sampler
+		C3D_API TextureSourceInfo( SamplerObs sampler
 			, RenderTargetRPtr renderTarget );
-		C3D_API TextureSourceInfo( SamplerRes sampler
+		C3D_API TextureSourceInfo( SamplerObs sampler
 			, ashes::ImageCreateInfo const & createInfo );
 
-		SamplerRes sampler()const
+		SamplerObs sampler()const
 		{
 			return m_sampler;
 		}
@@ -133,7 +133,7 @@ namespace castor3d
 		}
 
 	private:
-		SamplerRes m_sampler{};
+		SamplerObs m_sampler{};
 		// Render target mode.
 		RenderTargetRPtr m_renderTarget{};
 		// Image file mode.

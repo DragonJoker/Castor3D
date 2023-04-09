@@ -325,7 +325,7 @@ namespace castor3d
 			{
 				auto & geometry = *geomIt.second;
 				auto node = geometry.getParent();
-				auto mesh = geometry.getMesh().lock();
+				auto mesh = geometry.getMesh();
 
 				if ( node && mesh )
 				{
@@ -495,9 +495,7 @@ namespace castor3d
 
 		for ( auto & pair : *m_geometryCache )
 		{
-			auto mesh = pair.second->getMesh().lock();
-
-			if ( mesh )
+			if ( auto mesh = pair.second->getMesh() )
 			{
 				result += mesh->getVertexCount();
 			}
@@ -514,9 +512,7 @@ namespace castor3d
 
 		for ( auto & pair : *m_geometryCache )
 		{
-			auto mesh = pair.second->getMesh().lock();
-
-			if ( mesh )
+			if ( auto mesh = pair.second->getMesh() )
 			{
 				result += mesh->getFaceCount();
 			}
@@ -1085,14 +1081,15 @@ namespace castor3d
 			{
 				if ( cache.hasNoLock( matName ) )
 				{
-					auto material = cache.findNoLock( matName ).lock();
-
-					m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
-
-					for ( auto & pass : *material )
+					if ( auto material = cache.findNoLock( matName ) )
 					{
-						m_hasTransparentObjects |= pass->hasAlphaBlending();
-						m_hasOpaqueObjects |= !pass->hasOnlyAlphaBlending();
+						m_needsSubsurfaceScattering |= material->hasSubsurfaceScattering();
+
+						for ( auto & pass : *material )
+						{
+							m_hasTransparentObjects |= pass->hasAlphaBlending();
+							m_hasOpaqueObjects |= !pass->hasOnlyAlphaBlending();
+						}
 					}
 				}
 			}

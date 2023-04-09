@@ -104,7 +104,7 @@ namespace castor3d
 			auto img = engine.tryAddImage( cuT( "BRDF" )
 				, true
 				, created
-				, castor::ImageCreateParams{ imagePath, { false, false, false } } ).lock();
+				, castor::ImageCreateParams{ imagePath, { false, false, false } } );
 			auto buffer = castor::PxBufferBase::create( img->getPixels()->getDimensions()
 				, castor::PixelFormat::eR8G8B8A8_UNORM
 				, img->getPixels()->getConstPtr()
@@ -343,14 +343,14 @@ namespace castor3d
 
 		m_textureCache->initialise( m_renderSystem->getRenderDevice() );
 
-		if ( m_lightsSampler.lock() )
+		if ( m_lightsSampler )
 		{
-			postEvent( makeGpuInitialiseEvent( **m_lightsSampler.lock() ) );
+			postEvent( makeGpuInitialiseEvent( *m_lightsSampler ) );
 		}
 
-		if ( m_defaultSampler.lock() )
+		if ( m_defaultSampler )
 		{
-			postEvent( makeGpuInitialiseEvent( **m_defaultSampler.lock() ) );
+			postEvent( makeGpuInitialiseEvent( *m_defaultSampler ) );
 		}
 
 		doLoadCoreData();
@@ -396,14 +396,14 @@ namespace castor3d
 
 			postEvent( makeGpuCleanupEvent( *m_targetCache ) );
 
-			if ( m_lightsSampler.lock() )
+			if ( m_lightsSampler )
 			{
-				postEvent( makeCpuCleanupEvent( *m_lightsSampler.lock() ) );
+				postEvent( makeCpuCleanupEvent( *m_lightsSampler ) );
 			}
 
-			if ( m_defaultSampler.lock() )
+			if ( m_defaultSampler )
 			{
-				postEvent( makeCpuCleanupEvent( *m_defaultSampler.lock() ) );
+				postEvent( makeCpuCleanupEvent( *m_defaultSampler ) );
 			}
 
 			postEvent( makeCpuFunctorEvent( EventType::ePostRender
@@ -637,7 +637,7 @@ namespace castor3d
 		return m_renderLoop->getWantedFps();
 	}
 
-	castor3d::MaterialRPtr Engine::getDefaultMaterial()const
+	castor3d::MaterialObs Engine::getDefaultMaterial()const
 	{
 		return m_materialCache->getDefaultMaterial();
 	}
@@ -1072,7 +1072,7 @@ namespace castor3d
 			{
 				auto lock( castor::makeUniqueLock( getMaterialCache() ) );
 
-				for ( auto materialIt : getMaterialCache() )
+				for ( auto & materialIt : getMaterialCache() )
 				{
 					materialIt.second->setSerialisable( false );
 				}
@@ -1081,7 +1081,7 @@ namespace castor3d
 			{
 				auto lock( castor::makeUniqueLock( getFontCache() ) );
 
-				for ( auto fontIt : getFontCache() )
+				for ( auto & fontIt : getFontCache() )
 				{
 					fontIt.second->setSerialisable( false );
 				}

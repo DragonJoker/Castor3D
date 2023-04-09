@@ -80,7 +80,7 @@ namespace castor3d::exporter
 
 				for ( auto const & name : view )
 				{
-					if ( auto elem = view.find( name ).lock() )
+					if ( auto elem = view.find( name ) )
 					{
 						if ( filter( *elem ) )
 						{
@@ -125,7 +125,7 @@ namespace castor3d::exporter
 				{
 					auto name = elemIt.first;
 
-					if ( auto elem = elemIt.second )
+					if ( auto elem = elemIt.second.get() )
 					{
 						if ( filter( *elem ) )
 						{
@@ -272,7 +272,7 @@ namespace castor3d::exporter
 						, stream
 						, []( Geometry const & object )
 						{
-							auto mesh = object.getMesh().lock();
+							auto mesh = object.getMesh();
 							return mesh && mesh->isSerialisable();
 						} );
 				}
@@ -479,7 +479,7 @@ namespace castor3d::exporter
 
 						for ( auto & geomIt : options.geometries )
 						{
-							if ( geomIt.second->getMesh().lock().get() == split.mesh )
+							if ( geomIt.second->getMesh() == split.mesh )
 							{
 								hasGeometries = true;
 								auto node = geomIt.second->getParent();
@@ -811,14 +811,14 @@ namespace castor3d::exporter
 			log::info << cuT( "Scene::write - Samplers\n" );
 			castor::StringStream sceneStream;
 			castor::StringStream globalStream;
-			std::set< castor3d::SamplerSPtr > sceneSamplers;
-			std::set< castor3d::SamplerSPtr > globalSamplers;
+			std::set< castor3d::SamplerObs > sceneSamplers;
+			std::set< castor3d::SamplerObs > globalSamplers;
 
 			for ( auto & materialIt : scene.getEngine()->getMaterialCache() )
 			{
 				auto materialName = materialIt.first;
 
-				if ( auto material = materialIt.second )
+				if ( auto & material = materialIt.second )
 				{
 					if ( scene.hasMaterial( materialName ) )
 					{
@@ -826,7 +826,7 @@ namespace castor3d::exporter
 						{
 							for ( auto & unit : pass->getTextureUnits() )
 							{
-								sceneSamplers.insert( unit->getSampler().lock() );
+								sceneSamplers.insert( unit->getSampler() );
 							}
 						}
 					}
@@ -836,7 +836,7 @@ namespace castor3d::exporter
 						{
 							for ( auto & unit : pass->getTextureUnits() )
 							{
-								globalSamplers.insert( unit->getSampler().lock() );
+								globalSamplers.insert( unit->getSampler() );
 							}
 						}
 					}

@@ -49,7 +49,7 @@ namespace Testing
 		Path path{ name + cuT( ".cmsh" ) };
 		Scene scene{ cuT( "TestScene" ), m_engine };
 
-		auto src = scene.addNewMesh( name, scene ).lock();
+		auto src = scene.addNewMesh( name, scene );
 		CT_REQUIRE( src != nullptr );
 		Parameters parameters;
 		parameters.add( cuT( "width" ), cuT( "1.0" ) );
@@ -58,6 +58,10 @@ namespace Testing
 		m_engine.getMeshFactory().create( cuT( "cube" ) )->generate( *src, parameters );
 
 		doTestMesh( *src );
+
+		scene.removeMesh( name, true );
+		scene.cleanup();
+		m_engine.getRenderLoop().renderSyncFrame();
 	}
 
 	void BinaryExportTest::ImportExport()
@@ -75,7 +79,7 @@ namespace Testing
 		Path path{ name + cuT( ".cmsh" ) };
 		Scene scene{ cuT( "TestScene" ), m_engine };
 
-		auto src = scene.addNewMesh( name, scene ).lock();
+		auto src = scene.addNewMesh( name, scene );
 		CT_REQUIRE( src != nullptr );
 		{
 			BinaryFile mshfile{ m_testDataFolder / path, File::OpenMode::eRead };
@@ -98,6 +102,10 @@ namespace Testing
 		}
 
 		doTestMesh( *src );
+
+		scene.removeMesh( name, true );
+		scene.cleanup();
+		m_engine.getRenderLoop().renderSyncFrame();
 	}
 
 	void BinaryExportTest::doTestMesh( Mesh & src )
@@ -128,7 +136,7 @@ namespace Testing
 			}
 		}
 
-		auto dst = scene.addNewMesh( name + cuT( "_imp" ), scene ).lock();
+		auto dst = scene.createMesh( name + cuT( "_imp" ), scene );
 		CT_REQUIRE( dst != nullptr );
 		{
 			BinaryFile mshfile{ path, File::OpenMode::eRead };
@@ -159,11 +167,7 @@ namespace Testing
 		CT_EQUAL( src, rhs );
 		File::deleteFile( path );
 		m_engine.getRenderLoop().renderSyncFrame();
-		scene.cleanup();
-		m_engine.getRenderLoop().renderSyncFrame();
-		src.cleanup();
 		dst->cleanup();
-		dst.reset();
 		m_engine.getRenderLoop().renderSyncFrame();
 	}
 

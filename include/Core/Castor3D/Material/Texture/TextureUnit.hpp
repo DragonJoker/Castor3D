@@ -148,7 +148,7 @@ namespace castor3d
 			return m_configuration;
 		}
 
-		SamplerResPtr getSampler()const
+		SamplerObs getSampler()const
 		{
 			return m_sampler;
 		}
@@ -233,15 +233,9 @@ namespace castor3d
 			m_renderTarget = value;
 		}
 
-		void setSampler( SamplerResPtr value )
+		void setSampler( SamplerObs value )
 		{
 			m_sampler = value;
-		}
-
-		void setOwnSampler( SamplerRes value )
-		{
-			m_ownSampler = std::move( value );
-			setSampler( { m_ownSampler } );
 		}
 
 		void setId( uint32_t value )
@@ -272,8 +266,7 @@ namespace castor3d
 		castor::Matrix4x4f m_transformations;
 		TextureLayoutUPtr m_texture;
 		RenderTargetRPtr m_renderTarget{};
-		SamplerResPtr m_sampler;
-		SamplerRes m_ownSampler;
+		SamplerObs m_sampler{};
 		ashes::WriteDescriptorSet m_descriptor;
 		uint32_t m_id{ 0u };
 		mutable bool m_changed;

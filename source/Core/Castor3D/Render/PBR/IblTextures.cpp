@@ -33,13 +33,13 @@ namespace castor3d
 {
 	namespace ibltex
 	{
-		static SamplerResPtr doCreateSampler( Engine & engine
+		static SamplerObs doCreateSampler( Engine & engine
 			, RenderDevice const & device )
 		{
 			auto name = cuT( "IblTexturesBRDF" );
 			auto result = engine.tryFindSampler( name );
 
-			if ( !result.lock() )
+			if ( !result )
 			{
 				auto created = engine.createSampler( name, engine );
 				created->setMinFilter( VK_FILTER_LINEAR );
@@ -50,7 +50,7 @@ namespace castor3d
 				result = engine.addSampler( name, created, false );
 			}
 
-			result.lock()->initialise( engine.getRenderSystem()->getRenderDevice() );
+			result->initialise( engine.getRenderSystem()->getRenderDevice() );
 			return result;
 		}
 	}
@@ -61,7 +61,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, Texture const & source
 		, Texture const & brdf
-		, SamplerResPtr sampler )
+		, SamplerObs sampler )
 		: OwnedBy< Scene >{ scene }
 		, m_brdf{ brdf }
 		, m_sampler{ ibltex::doCreateSampler( *scene.getEngine(), device ) }

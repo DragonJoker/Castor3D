@@ -586,22 +586,19 @@ namespace castor3d
 		{
 			auto image = engine.tryFindImage( name );
 
-			if ( !image.lock() )
+			if ( !image )
 			{
-				auto img = engine.createImage( name
+				image = engine.addNewImage( name
 					, castor::ImageCreateParams{ folder / relative
-						, std::move( config ) } );
-				image = engine.addImage( name, img );
+						, std::move( config ) });
 			}
 
-			auto img = image.lock();
-
-			if ( !img )
+			if ( !image )
 			{
 				CU_LoaderError( "Couldn't load image." );
 			}
 
-			auto buffer = adaptBuffer( img->getPixels(), mipLevels );
+			auto buffer = adaptBuffer( image->getPixels(), mipLevels );
 
 			if ( !buffer )
 			{
@@ -609,7 +606,7 @@ namespace castor3d
 			}
 
 			srcMipLevels = buffer->getLevels();
-			castor::ImageLayout layout{ img->getLayout().type, *buffer };
+			castor::ImageLayout layout{ image->getLayout().type, *buffer };
 			return castor::Image{ name
 				, folder / relative
 				, layout

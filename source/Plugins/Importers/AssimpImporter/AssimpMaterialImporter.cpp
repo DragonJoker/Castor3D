@@ -141,7 +141,7 @@ namespace c3d_assimp
 			castor::String name;
 			uint32_t texcoordSet{};
 			aiUVTransform transform{};
-			castor3d::SamplerRes sampler;
+			castor3d::SamplerObs sampler{};
 		};
 
 		class MaterialParser
@@ -150,7 +150,7 @@ namespace c3d_assimp
 			MaterialParser( aiMaterial const & material
 				, aiScene const & scene
 				, aiShadingMode shadingMode
-				, castor3d::SamplerRes sampler
+				, castor3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
 				, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
@@ -233,7 +233,7 @@ namespace c3d_assimp
 			static void parse( aiMaterial const & material
 				, aiScene const & scene
 				, aiShadingMode shadingMode
-				, castor3d::SamplerRes sampler
+				, castor3d::SamplerObs sampler
 				, AssimpMaterialImporter const & importer
 				, float emissiveMult
 				, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > const & textureRemaps
@@ -672,7 +672,7 @@ namespace c3d_assimp
 
 			castor::Image const & loadImage( castor3d::TextureSourceInfo const & source )
 			{
-				castor::ImageSPtr result;
+				castor::ImageRPtr result{};
 
 				if ( source.isBufferImage() )
 				{
@@ -875,7 +875,7 @@ namespace c3d_assimp
 							engine.addSampler( samplerName, sampler, false );
 						}
 
-						result.sampler = cache.find( samplerName ).lock();
+						result.sampler = cache.find( samplerName );
 					}
 					else
 					{
@@ -1166,7 +1166,7 @@ namespace c3d_assimp
 		private:
 			aiMaterial const & m_material;
 			aiScene const & m_scene;
-			castor3d::SamplerRes m_sampler;
+			castor3d::SamplerObs m_sampler;
 			AssimpMaterialImporter const & m_importer;
 			float m_emissiveMult;
 			std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration > m_textureRemaps;
@@ -1298,7 +1298,7 @@ namespace c3d_assimp
 		materials::MaterialParser::parse( *it->second 
 			, file.getAiScene()
 			, shadingMode
-			, getEngine()->getDefaultSampler().lock()
+			, getEngine()->getDefaultSampler()
 			, *this
 			, emissiveMult
 			, m_textureRemaps

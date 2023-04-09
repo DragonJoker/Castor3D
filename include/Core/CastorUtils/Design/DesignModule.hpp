@@ -279,7 +279,7 @@ namespace castor
 	\brief		Pointeur sur une vue sur une ressource.
 	*/
 	template< typename ResT, typename KeyT >
-	using ResourceSPtrT = std::shared_ptr< ResourceT< ResT, KeyT > >;
+	using ResourcePtrT = castor::UniquePtr< ResourceT< ResT, KeyT > >;
 	/**
 	\~english
 	\brief		Pointer to a resource view.
@@ -287,7 +287,7 @@ namespace castor
 	\brief		Pointeur sur une vue sur une ressource.
 	*/
 	template< typename ResT, typename KeyT >
-	using ResourceWPtrT = std::weak_ptr< ResourceT< ResT, KeyT > >;
+	using ResourceObsT = ResourceT< ResT, KeyT > *;
 	/**
 	*\~english
 	*	Traits structure to specialise a cache behaviour.
@@ -395,7 +395,7 @@ namespace castor
 	template< typename ResT
 		, typename KeyT
 		, typename ... ParametersT >
-	ResourceSPtrT< ResT, KeyT > makeResource( ParametersT && ... params );
+	ResourcePtrT< ResT, KeyT > makeResource( ParametersT && ... params );
 	/**
 	*\~english
 	*	Helper structure to build a castor::ResourceCacheTraitsT.
@@ -441,8 +441,8 @@ namespace castor
 	{
 		using ElementT = ResT;
 		using ElementKeyT = KeyT;
-		using ElementPtrT = ResourceSPtrT< ElementT, ElementKeyT >;
-		using ElementObsT = ResourceWPtrT< ElementT, ElementKeyT >;
+		using ElementPtrT = ResourcePtrT< ElementT, ElementKeyT >;
+		using ElementObsT = ResourceObsT< ElementT, ElementKeyT >;
 		using ElementContT = std::unordered_map< KeyT, ElementPtrT >;
 		using ElementCacheT = ResourceCacheBaseT< ElementT, KeyT, TraitsT >;
 
@@ -463,25 +463,25 @@ namespace castor
 
 		static ElementObsT makeElementObs( ElementPtrT const & element )
 		{
-			return ElementObsT{ element };
+			return element.get();
 		}
 
 		static bool areElementsEqual( ElementObsT const & lhs
 			, ElementObsT const & rhs )
 		{
-			return lhs.lock() == rhs.lock();
+			return lhs == rhs;
 		}
 
 		static bool areElementsEqual( ElementObsT const & lhs
 			, ElementPtrT const & rhs )
 		{
-			return lhs.lock() == rhs;
+			return lhs == rhs.get();
 		}
 
 		static bool areElementsEqual( ElementPtrT const & lhs
 			, ElementObsT const & rhs )
 		{
-			return lhs == rhs.lock();
+			return lhs.get() == rhs;
 		}
 
 		static bool areElementsEqual( ElementPtrT const & lhs
@@ -492,7 +492,7 @@ namespace castor
 
 		static bool isElementObsNull( ElementObsT const & element )
 		{
-			return element.lock() == nullptr;
+			return element == nullptr;
 		}
 	};
 	/**
@@ -580,6 +580,12 @@ namespace castor
 
 	template< typename ResT, typename KeyT, typename TraitsT >
 	using ResourceCachePtrT = UniquePtr< ResourceCacheT< ResT, KeyT, TraitsT > >;
+
+	template< typename ResT, typename KeyT >
+	struct Deleter< ResourceT< ResT, KeyT > >
+	{
+		inline void operator()( ResourceT< ResT, KeyT > * pointer )noexcept;
+	};
 
 	//@}
 }

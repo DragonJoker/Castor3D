@@ -122,7 +122,7 @@ namespace castor
 		template<>
 		bool writable< Geometry >( Geometry const & object )
 		{
-			auto mesh = object.getMesh().lock();
+			auto mesh = object.getMesh();
 			return mesh && mesh->isSerialisable();
 		}
 
@@ -254,7 +254,7 @@ namespace castor
 				{
 					if ( result )
 					{
-						if ( auto pelem = view.find( name ).lock() )
+						if ( auto pelem = view.find( name ) )
 						{
 							auto & elem = static_cast< typename ViewTypeT::ElementT const & >( *pelem );
 

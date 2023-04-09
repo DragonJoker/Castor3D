@@ -308,7 +308,7 @@ namespace castor3d
 
 		Sampler const & getSampler()const
 		{
-			return *m_sampler.lock();
+			return *m_sampler;
 		}
 
 	private:
@@ -317,7 +317,7 @@ namespace castor3d
 	protected:
 		RenderSystem & m_renderSystem;
 		RenderDevice const & m_device;
-		SamplerResPtr m_sampler;
+		SamplerObs m_sampler{};
 		rq::ConfigData m_config;
 
 	private:

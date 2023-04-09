@@ -152,7 +152,7 @@ namespace castor
 	FontTextureRPtr ResourceCacheT< Overlay, String, OverlayCacheTraits >::createFontTexture( castor::FontResPtr font )
 	{
 		auto lock( makeUniqueLock( *this ) );
-		auto fontName = font.lock()->getName();
+		auto fontName = font->getName();
 		auto ires = m_fontTextures.emplace( fontName, nullptr );
 
 		if ( ires.second )

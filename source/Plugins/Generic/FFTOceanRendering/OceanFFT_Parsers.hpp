@@ -20,7 +20,7 @@ namespace ocean_fft
 		OceanUboConfiguration config{};
 		OceanFFT::Config fftConfig{};
 		castor3d::Parameters parameters;
-		std::vector< castor3d::MaterialRPtr > materials;
+		std::vector< castor3d::MaterialObs > materials;
 	};
 
 	enum class OceanSection

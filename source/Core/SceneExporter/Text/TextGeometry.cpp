@@ -19,7 +19,7 @@ namespace castor
 		, StringStream & file )
 	{
 		bool result{ true };
-		auto mesh = geometry.getMesh().lock();
+		auto mesh = geometry.getMesh();
 
 		if ( mesh )
 		{

@@ -99,11 +99,11 @@ namespace castor3d
 	*/
 	template<>
 	struct PtrCacheTraitsT< Skeleton, castor::String >
-		: CUPtrCacheTraitsBaseT< Skeleton, castor::String >
+		: PtrCacheTraitsBaseT< Skeleton, castor::String >
 	{
 		using ResT = Skeleton;
 		using KeyT = castor::String;
-		using Base = CUPtrCacheTraitsBaseT< ResT, KeyT >;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 

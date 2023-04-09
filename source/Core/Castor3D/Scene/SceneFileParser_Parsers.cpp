@@ -264,7 +264,7 @@ namespace castor3d
 		else
 		{
 			params[0]->get( parsingContext.strName );
-			parsingContext.material = parsingContext.parser->getEngine()->tryFindMaterial( parsingContext.strName ).lock().get();
+			parsingContext.material = parsingContext.parser->getEngine()->tryFindMaterial( parsingContext.strName );
 			parsingContext.passIndex = 0u;
 			parsingContext.createMaterial = parsingContext.material == nullptr;
 
@@ -292,11 +292,11 @@ namespace castor3d
 			castor::String name;
 			parsingContext.sampler = parsingContext.parser->getEngine()->tryFindSampler( params[0]->get( name ) );
 
-			if ( !parsingContext.sampler.lock() )
+			if ( !parsingContext.sampler )
 			{
 				parsingContext.ownSampler = parsingContext.parser->getEngine()->createSampler( name
 					, *parsingContext.parser->getEngine() );
-				parsingContext.sampler = parsingContext.ownSampler;
+				parsingContext.sampler = parsingContext.ownSampler.get();
 			}
 		}
 	}
@@ -786,7 +786,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
@@ -803,7 +803,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
@@ -820,7 +820,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
@@ -837,7 +837,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			float rValue = -1000;
 			params[0]->get( rValue );
@@ -862,7 +862,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			float rValue = 1000;
 			params[0]->get( rValue );
@@ -887,7 +887,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			float rValue = 1000;
 			params[0]->get( rValue );
@@ -912,7 +912,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
@@ -929,7 +929,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
@@ -946,7 +946,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
@@ -963,7 +963,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t colour;
 			params[0]->get( colour );
@@ -980,7 +980,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			bool value;
 			params[0]->get( value );
@@ -997,7 +997,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			float rValue = 1000;
 			params[0]->get( rValue );
@@ -1014,7 +1014,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t mode;
 			params[0]->get( mode );
@@ -1031,7 +1031,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto sampler = parsingContext.sampler.lock() )
+		if ( auto sampler = parsingContext.sampler )
 		{
 			uint32_t uiMode;
 			params[0]->get( uiMode );
@@ -1047,7 +1047,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserSamplerEnd )
 	{
 		auto & parsingContext = getParserContext( context );
-		auto sampler = parsingContext.sampler.lock();
+		auto sampler = parsingContext.sampler;
 
 		if ( !parsingContext.ownSampler
 			&& !sampler )
@@ -1063,7 +1063,7 @@ namespace castor3d
 					, true );
 			}
 
-			parsingContext.sampler.reset();
+			parsingContext.sampler = {};
 		}
 	}
 	CU_EndAttributePop()
@@ -1649,11 +1649,11 @@ namespace castor3d
 		{
 			parsingContext.mesh = parsingContext.scene->tryFindMesh( name );
 
-			if ( !parsingContext.mesh.lock() )
+			if ( !parsingContext.mesh )
 			{
 				parsingContext.ownMesh = parsingContext.scene->createMesh( name
 					, *parsingContext.scene );
-				parsingContext.mesh = parsingContext.ownMesh;
+				parsingContext.mesh = parsingContext.ownMesh.get();
 			}
 		}
 		else
@@ -1786,7 +1786,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = parsingContext.parser->getEngine()->tryFindMaterial( name ).lock().get();
+			auto material = parsingContext.parser->getEngine()->tryFindMaterial( name );
 
 			if ( material )
 			{
@@ -2857,14 +2857,14 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			if ( parsingContext.geometry->getMesh().lock() )
+			if ( parsingContext.geometry->getMesh() )
 			{
 				castor::String name;
-				auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[0]->get( name ) ).lock().get();
+				auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[0]->get( name ) );
 
 				if ( material )
 				{
-					for ( auto & submesh : *parsingContext.geometry->getMesh().lock() )
+					for ( auto & submesh : *parsingContext.geometry->getMesh() )
 					{
 						parsingContext.geometry->setMaterial( *submesh, material );
 					}
@@ -2962,17 +2962,17 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			if ( parsingContext.geometry->getMesh().lock() )
+			if ( parsingContext.geometry->getMesh() )
 			{
 				castor::String name;
 				uint16_t index;
-				auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[1]->get( name ) ).lock().get();
+				auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[1]->get( name ) );
 
 				if ( material )
 				{
-					if ( parsingContext.geometry->getMesh().lock()->getSubmeshCount() > params[0]->get( index ) )
+					if ( parsingContext.geometry->getMesh()->getSubmeshCount() > params[0]->get( index ) )
 					{
-						auto submesh = parsingContext.geometry->getMesh().lock()->getSubmesh( index );
+						auto submesh = parsingContext.geometry->getMesh()->getSubmesh( index );
 						parsingContext.geometry->setMaterial( *submesh, material );
 					}
 					else
@@ -3125,7 +3125,7 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No scene initialised" ) );
 		}
-		else if ( !parsingContext.mesh.lock() )
+		else if ( !parsingContext.mesh )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
@@ -3143,7 +3143,7 @@ namespace castor3d
 			}
 
 			auto & factory = parsingContext.scene->getEngine()->getMeshFactory();
-			factory.create( type )->generate( *parsingContext.mesh.lock(), parameters );
+			factory.create( type )->generate( *parsingContext.mesh, parameters );
 		}
 	}
 	CU_EndAttribute()
@@ -3155,13 +3155,13 @@ namespace castor3d
 		parsingContext.face2 = -1;
 		parsingContext.submesh = {};
 
-		if ( !parsingContext.mesh.lock() )
+		if ( !parsingContext.mesh )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 		else
 		{
-			parsingContext.submesh = parsingContext.mesh.lock()->createSubmesh();
+			parsingContext.submesh = parsingContext.mesh->createSubmesh();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eSubmesh )
@@ -3170,7 +3170,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( auto mesh = parsingContext.mesh.lock() )
+		if ( auto mesh = parsingContext.mesh )
 		{
 			castor::Path path;
 			castor::Path pathFile = context.file.getPath() / params[0]->get( path );
@@ -3189,7 +3189,7 @@ namespace castor3d
 				, true ) )
 			{
 				CU_ParsingError( cuT( "Mesh Import failed" ) );
-				parsingContext.mesh.reset();
+				parsingContext.mesh = {};
 			}
 		}
 		else
@@ -3203,7 +3203,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.mesh.lock() )
+		if ( !parsingContext.mesh )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
@@ -3241,7 +3241,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.mesh.lock() )
+		if ( !parsingContext.mesh )
 		{
 			CU_ParsingError( cuT( "No mesh initialised." ) );
 		}
@@ -3267,12 +3267,12 @@ namespace castor3d
 			{
 				CU_ParsingError( cuT( "Mesh Import failed" ) );
 			}
-			else if ( mesh.getSubmeshCount() == parsingContext.mesh.lock()->getSubmeshCount() )
+			else if ( mesh.getSubmeshCount() == parsingContext.mesh->getSubmeshCount() )
 			{
 				for ( auto & morphSubmesh : mesh )
 				{
 					auto id = morphSubmesh->getId();
-					auto submesh = parsingContext.mesh.lock()->getSubmesh( id );
+					auto submesh = parsingContext.mesh->getSubmesh( id );
 					auto submeshFlags = morphSubmesh->getSubmeshFlags( nullptr );
 					auto component = submesh->hasComponent( MorphComponent::Name )
 						? submesh->getComponent< MorphComponent >()
@@ -3384,18 +3384,18 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.mesh.lock() )
+		if ( !parsingContext.mesh )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
 		else if ( !params.empty() )
 		{
 			castor::String name;
-			auto material = parsingContext.parser->getEngine()->findMaterial( params[0]->get( name ) ).lock().get();
+			auto material = parsingContext.parser->getEngine()->findMaterial( params[0]->get( name ) );
 
 			if ( material )
 			{
-				for ( auto & submesh : *parsingContext.mesh.lock() )
+				for ( auto & submesh : *parsingContext.mesh )
 				{
 					submesh->setDefaultMaterial( material );
 				}
@@ -3421,7 +3421,7 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Scene initialised." ) );
 		}
-		else if ( auto mesh = parsingContext.mesh.lock() )
+		else if ( auto mesh = parsingContext.mesh )
 		{
 			castor::String name;
 			auto skeleton = parsingContext.scene->findSkeleton( params[0]->get( name ) );
@@ -3450,7 +3450,7 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Scene initialised." ) );
 		}
-		else if ( auto mesh = parsingContext.mesh.lock() )
+		else if ( auto mesh = parsingContext.mesh )
 		{
 			castor::String name;
 			params[0]->get( name );
@@ -3471,7 +3471,7 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Scene initialised." ) );
 		}
-		else if ( auto mesh = parsingContext.mesh.lock() )
+		else if ( auto mesh = parsingContext.mesh )
 		{
 			if ( parsingContext.ownMesh )
 			{
@@ -3486,7 +3486,7 @@ namespace castor3d
 			}
 
 			parsingContext.importer.reset();
-			parsingContext.mesh.reset();
+			parsingContext.mesh = {};
 
 			for ( auto & submesh : *mesh )
 			{
@@ -3516,7 +3516,7 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "Invalid parameters." ) );
 		}
-		else if ( auto mesh = parsingContext.mesh.lock() )
+		else if ( auto mesh = parsingContext.mesh )
 		{
 			float timeIndex{};
 			params[0]->get( timeIndex );
@@ -3567,7 +3567,7 @@ namespace castor3d
 		{
 			CU_ParsingError( cuT( "No Morph Animation initialised." ) );
 		}
-		else if ( auto mesh = parsingContext.mesh.lock() )
+		else if ( auto mesh = parsingContext.mesh )
 		{
 			mesh->addAnimation( std::move( parsingContext.morphAnimation ) );
 		}
@@ -3582,7 +3582,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 
-		if ( !parsingContext.mesh.lock() )
+		if ( !parsingContext.mesh )
 		{
 			CU_ParsingError( cuT( "No Mesh initialised." ) );
 		}
@@ -3590,13 +3590,13 @@ namespace castor3d
 		{
 			castor::String name;
 			uint16_t index;
-			auto material = parsingContext.parser->getEngine()->findMaterial( params[1]->get( name ) ).lock().get();
+			auto material = parsingContext.parser->getEngine()->findMaterial( params[1]->get( name ) );
 
 			if ( material )
 			{
-				if ( parsingContext.mesh.lock()->getSubmeshCount() > params[0]->get( index ) )
+				if ( parsingContext.mesh->getSubmeshCount() > params[0]->get( index ) )
 				{
-					auto submesh = parsingContext.mesh.lock()->getSubmesh( index );
+					auto submesh = parsingContext.mesh->getSubmesh( index );
 					submesh->setDefaultMaterial( material );
 				}
 				else
@@ -4213,14 +4213,14 @@ namespace castor3d
 			{
 				folder = context.file.getPath();
 				auto & engine = *parsingContext.parser->getEngine();
-				parsingContext.image = engine.tryFindImage( relative.getFileName() ).lock();
+				parsingContext.image = engine.tryFindImage( relative.getFileName() );
 
 				if ( !parsingContext.image )
 				{
 					auto img = engine.createImage( relative.getFileName()
 						, castor::ImageCreateParams{ folder / relative
 							, { false, false, false } } );
-					parsingContext.image = engine.addImage( relative.getFileName(), img ).lock();
+					parsingContext.image = engine.addImage( relative.getFileName(), img );
 				}
 			}
 			else if ( !castor::File::fileExists( relative ) )
@@ -4272,7 +4272,7 @@ namespace castor3d
 			castor::String name;
 			auto sampler = parsingContext.parser->getEngine()->findSampler( params[0]->get( name ) );
 
-			if ( sampler.lock() )
+			if ( sampler )
 			{
 				parsingContext.sampler = sampler;
 			}
@@ -4367,15 +4367,15 @@ namespace castor3d
 
 		if ( parsingContext.pass )
 		{
-			if ( !parsingContext.sampler.lock() )
+			if ( !parsingContext.sampler )
 			{
 				parsingContext.sampler = parsingContext.parser->getEngine()->getDefaultSampler();
 			}
 
 			TextureSourceInfo sourceInfo = ( parsingContext.textureRenderTarget
-				? TextureSourceInfo{ parsingContext.sampler.lock()
+				? TextureSourceInfo{ parsingContext.sampler
 					, parsingContext.textureRenderTarget }
-				: TextureSourceInfo{ parsingContext.sampler.lock()
+				: TextureSourceInfo{ parsingContext.sampler
 					, parsingContext.folder
 					, parsingContext.relative } );
 			parsingContext.textureConfiguration.transform = parsingContext.textureTransform;
@@ -4940,7 +4940,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			parsingContext.overlay->setMaterial( parsingContext.parser->getEngine()->findMaterial( name ).lock().get() );
+			parsingContext.overlay->setMaterial( parsingContext.parser->getEngine()->findMaterial( name ) );
 		}
 		else
 		{
@@ -5129,7 +5129,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			overlay->getBorderPanelOverlay()->setBorderMaterial( parsingContext.parser->getEngine()->findMaterial( name ).lock().get() );
+			overlay->getBorderPanelOverlay()->setBorderMaterial( parsingContext.parser->getEngine()->findMaterial( name ) );
 		}
 		else
 		{
@@ -5221,7 +5221,7 @@ namespace castor3d
 			castor::String name;
 			params[0]->get( name );
 
-			if ( cache.find( name ).lock() )
+			if ( cache.find( name ) )
 			{
 				overlay->getTextOverlay()->setFont( name );
 			}
@@ -5613,7 +5613,7 @@ namespace castor3d
 		if ( parsingContext.billboards )
 		{
 			castor::String name;
-			auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[0]->get( name ) ).lock().get();
+			auto material = parsingContext.parser->getEngine()->tryFindMaterial( params[0]->get( name ) );
 
 			if ( material )
 			{
@@ -5683,7 +5683,7 @@ namespace castor3d
 						, node->getName() );
 				}
 
-				if ( auto mesh = geometry->getMesh().lock() )
+				if ( auto mesh = geometry->getMesh() )
 				{
 					if ( mesh->hasAnimation() )
 					{
@@ -5737,7 +5737,7 @@ namespace castor3d
 		{
 			if ( auto geometry = parsingContext.scene->findGeometry( name ) )
 			{
-				if ( auto mesh = geometry->getMesh().lock() )
+				if ( auto mesh = geometry->getMesh() )
 				{
 					if ( mesh->hasAnimation() )
 					{
@@ -5773,7 +5773,7 @@ namespace castor3d
 		{
 			if ( auto geometry = parsingContext.scene->findGeometry( name ) )
 			{
-				if ( auto mesh = geometry->getMesh().lock() )
+				if ( auto mesh = geometry->getMesh() )
 				{
 					if ( auto skeleton = mesh->getSkeleton() )
 					{

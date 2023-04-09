@@ -238,7 +238,7 @@ namespace castor3d
 		m_ids[&pass] = { id, renderNode };
 	}
 
-	void BillboardBase::setMaterial( MaterialRPtr value )
+	void BillboardBase::setMaterial( MaterialObs value )
 	{
 		auto oldMaterial = getMaterial();
 

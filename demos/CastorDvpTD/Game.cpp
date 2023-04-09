@@ -78,19 +78,19 @@ namespace castortd
 			, Tower::Category::Kind kind
 			, castor3d::CacheViewT< castor3d::MaterialCache, castor3d::EventType::ePreRender > const & materials )
 		{
-			if ( auto mesh = geometry.getMesh().lock() )
+			if ( auto mesh = geometry.getMesh() )
 			{
 				switch ( kind )
 				{
 				case Tower::Category::Kind::eLongRange:
-					geometry.setMaterial( *mesh->getSubmesh( 0u ), materials.find( cuT( "splash_accessories" ) ).lock().get() );
-					geometry.setMaterial( *mesh->getSubmesh( 1u ), materials.find( cuT( "splash_accessories" ) ).lock().get() );
-					geometry.setMaterial( *mesh->getSubmesh( 2u ), materials.find( cuT( "splash_body" ) ).lock().get() );
+					geometry.setMaterial( *mesh->getSubmesh( 0u ), materials.find( cuT( "splash_accessories" ) ) );
+					geometry.setMaterial( *mesh->getSubmesh( 1u ), materials.find( cuT( "splash_accessories" ) ) );
+					geometry.setMaterial( *mesh->getSubmesh( 2u ), materials.find( cuT( "splash_body" ) ) );
 					break;
 
 				case Tower::Category::Kind::eShortRange:
-					geometry.setMaterial( *mesh->getSubmesh( 0u ), materials.find( cuT( "short_range_body" ) ).lock().get() );
-					geometry.setMaterial( *mesh->getSubmesh( 1u ), materials.find( cuT( "short_range_accessories" ) ).lock().get() );
+					geometry.setMaterial( *mesh->getSubmesh( 0u ), materials.find( cuT( "short_range_body" ) ) );
+					geometry.setMaterial( *mesh->getSubmesh( 1u ), materials.find( cuT( "short_range_accessories" ) ) );
 					break;
 				}
 			}
@@ -133,9 +133,9 @@ namespace castortd
 		m_updateTimer = castor::makeUnique< castor3d::FramePassTimer >( m_scene.getEngine()->getRenderSystem()->getRenderDevice().makeContext()
 			, "CastorDvpTD/Update" );
 		m_scene.getEngine()->registerTimer( "CastorDvpTD/Update", *m_updateTimer );
-		m_cellDimensions[0] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[0] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[0];
-		m_cellDimensions[1] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[1] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[1];
-		m_cellDimensions[2] = m_mapCubeMesh.lock()->getBoundingBox().getMax()[2] - m_mapCubeMesh.lock()->getBoundingBox().getMin()[2];
+		m_cellDimensions[0] = m_mapCubeMesh->getBoundingBox().getMax()[0] - m_mapCubeMesh->getBoundingBox().getMin()[0];
+		m_cellDimensions[1] = m_mapCubeMesh->getBoundingBox().getMax()[1] - m_mapCubeMesh->getBoundingBox().getMin()[1];
+		m_cellDimensions[2] = m_mapCubeMesh->getBoundingBox().getMax()[2] - m_mapCubeMesh->getBoundingBox().getMin()[2];
 
 		m_hud.initialise();
 		reset();
@@ -345,9 +345,9 @@ namespace castortd
 			node->setPosition( origin );
 			node->attachTo( *m_mapNode );
 
-			for ( auto & submesh : *geometry->getMesh().lock() )
+			for ( auto & submesh : *geometry->getMesh() )
 			{
-				geometry->setMaterial( *submesh, m_bulletMaterial.lock().get() );
+				geometry->setMaterial( *submesh, m_bulletMaterial );
 			}
 
 			m_scene.addGeometry( std::move( geometry ) );
@@ -378,9 +378,9 @@ namespace castortd
 			node->setPosition( origin );
 			node->attachTo( *m_mapNode );
 
-			for ( auto & submesh : *geometry->getMesh().lock() )
+			for ( auto & submesh : *geometry->getMesh() )
 			{
-				geometry->setMaterial( *submesh, m_boulderMaterial.lock().get() );
+				geometry->setMaterial( *submesh, m_boulderMaterial );
 			}
 
 			m_scene.addGeometry( std::move( geometry ) );
@@ -643,9 +643,9 @@ namespace castortd
 		node->setPosition( convert( castor::Point2i{ cell.m_x, cell.m_y } ) + castor::Point3f{ 0, m_cellDimensions[1] / 2, 0 } );
 		node->attachTo( *m_mapNode );
 
-		for ( auto & submesh : *geometry->getMesh().lock() )
+		for ( auto & submesh : *geometry->getMesh() )
 		{
-			geometry->setMaterial( *submesh, m_mapCubeMaterial.lock().get() );
+			geometry->setMaterial( *submesh, m_mapCubeMaterial );
 		}
 
 		m_lastMapCube = geometry.get();
@@ -661,7 +661,7 @@ namespace castortd
 
 	castor3d::MeshResPtr Game::doSelectMesh( Tower::Category & category )
 	{
-		castor3d::MeshResPtr result;
+		castor3d::MeshResPtr result{};
 
 		switch ( category.getKind() )
 		{
@@ -697,9 +697,9 @@ namespace castortd
 			animGroup->addObject( *node, tower->getName() );
 		}
 
-		if ( tower->getMesh().lock() )
+		if ( tower->getMesh() )
 		{
-			auto tmesh = tower->getMesh().lock();
+			auto tmesh = tower->getMesh();
 
 			if ( tmesh->hasAnimation() )
 			{

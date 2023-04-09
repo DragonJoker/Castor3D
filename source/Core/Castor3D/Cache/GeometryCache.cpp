@@ -54,7 +54,7 @@ namespace castor3d
 			, rootCameraNode
 			, [this, &scene]( ElementT & element )
 			{
-				auto mesh = element.getMesh().lock();
+				auto mesh = element.getMesh();
 
 				if ( mesh )
 				{

@@ -54,45 +54,45 @@ namespace castor3d
 		return pass.getColour();
 	}
 
-	MaterialRPtr createMaterial( Engine & engine
+	MaterialObs createMaterial( Engine & engine
 		, castor::String const & name
 		, castor::HdrRgbColour const & colour )
 	{
 		auto & cache = engine.getMaterialCache();
-		MaterialResPtr created;
+		MaterialObs created{};
 		auto result = cache.tryAdd( name
 			, true
 			, created
 			, engine
 			, engine.getDefaultLightingModel() );
 
-		if ( created.lock() == result.lock() )
+		if ( created == result )
 		{
-			result.lock()->createPass();
+			result->createPass();
 		}
 
-		setMaterialColour( *result.lock()->getPass( 0u ), colour );
-		return result.lock().get();
+		setMaterialColour( *result->getPass( 0u ), colour );
+		return result;
 	}
 
-	MaterialRPtr createMaterial( Engine & engine
+	MaterialObs createMaterial( Engine & engine
 		, castor::String const & name
 		, TextureLayoutUPtr texture )
 	{
 		auto & cache = engine.getMaterialCache();
-		MaterialResPtr created;
+		MaterialObs created{};
 		auto result = cache.tryAdd( name
 			, true
 			, created
 			, engine
 			, engine.getDefaultLightingModel() );
 
-		if ( created.lock() == result.lock() )
+		if ( created == result )
 		{
-			result.lock()->createPass();
+			result->createPass();
 		}
 
-		auto pass = result.lock()->getPass( 0u );
+		auto pass = result->getPass( 0u );
 
 		if ( pass->getTextureUnitsCount() == 0 )
 		{
@@ -110,6 +110,6 @@ namespace castor3d
 
 		auto unit = pass->getTextureUnit( 0 );
 		unit->setTexture( std::move( texture ) );
-		return result.lock().get();
+		return result;
 	}
 }

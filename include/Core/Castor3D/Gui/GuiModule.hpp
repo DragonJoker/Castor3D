@@ -486,7 +486,7 @@ namespace castor3d
 	 *\param[in]	colour	The material colour.
 	 *\return		The created material.
 	*/
-	MaterialRPtr createMaterial( Engine & engine, castor::String const & name, castor::HdrRgbColour const & colour );
+	MaterialObs createMaterial( Engine & engine, castor::String const & name, castor::HdrRgbColour const & colour );
 
 	/** Creates a texture material.
 	 *\param[in]	engine	The engine.
@@ -494,7 +494,7 @@ namespace castor3d
 	 *\param[in]	texture	The material texture.
 	 *\return		The created material.
 	*/
-	MaterialRPtr createMaterial( Engine & engine, castor::String const & name, TextureLayoutUPtr texture );
+	MaterialObs createMaterial( Engine & engine, castor::String const & name, TextureLayoutUPtr texture );
 }
 
 #endif

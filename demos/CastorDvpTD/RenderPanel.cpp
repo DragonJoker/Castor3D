@@ -175,7 +175,7 @@ namespace castortd
 									{
 										castor::Point3f position = node->getPosition();
 
-										if ( auto mesh = geometry->getMesh().lock() )
+										if ( auto mesh = geometry->getMesh() )
 										{
 											auto height = mesh->getBoundingBox().getMax()[1] - mesh->getBoundingBox().getMin()[1];
 											m_marker->setPosition( castor::Point3f{ position[0], height + 1, position[2] } );

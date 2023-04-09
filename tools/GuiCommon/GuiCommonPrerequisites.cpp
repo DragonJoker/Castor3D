@@ -422,14 +422,14 @@ namespace GuiCommon
 #endif
 	}
 
-	castor::FontSPtr make_Font( wxFont const & wxfont )
+	castor::FontUPtr make_Font( wxFont const & wxfont )
 	{
-		castor::FontSPtr font;
+		castor::FontUPtr font;
 
 		if ( wxfont.IsOk() )
 		{
 			castor::String name = make_String( wxfont.GetFaceName() ) + castor::string::toString( wxfont.GetPointSize() );
-			font = std::make_shared< castor::Font >( name, wxfont.GetPointSize() );
+			font = castor::makeUnique< castor::Font >( name, wxfont.GetPointSize() );
 			font->setGlyphLoader( std::make_unique< wxWidgetsFontImpl >( wxfont ) );
 			castor::Font::BinaryLoader{}( *font
 				, castor::Path{ castor::String{ wxfont.GetFaceName() } }

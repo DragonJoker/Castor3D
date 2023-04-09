@@ -124,6 +124,11 @@ namespace castor3d
 		{
 			return m_serialisable;
 		}
+
+		bool isInitialised()const noexcept
+		{
+			return m_initialised;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -191,6 +196,7 @@ namespace castor3d
 		std::map< PassRPtr, OnPassChangedConnection > m_passListeners;
 		RenderPassRegisterInfo * m_renderPassInfo{};
 		bool m_serialisable{ true };
+		bool m_initialised{};
 	};
 }
 

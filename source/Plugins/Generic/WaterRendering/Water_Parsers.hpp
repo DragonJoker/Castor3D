@@ -18,7 +18,7 @@ namespace water
 		castor3d::Engine * engine{ nullptr };
 		WaterUboConfiguration config;
 		castor3d::Parameters parameters;
-		std::vector< castor3d::MaterialRPtr > materials;
+		std::vector< castor3d::MaterialObs > materials;
 		uint32_t wave{};
 	};
 

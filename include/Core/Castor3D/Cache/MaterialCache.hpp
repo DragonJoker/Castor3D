@@ -225,7 +225,7 @@ namespace castor
 		C3D_API void unregisterTexture( castor3d::AnimatedTexture const & texture );
 		C3D_API uint32_t getCurrentPassTypeCount()const;
 
-		castor3d::MaterialRPtr getDefaultMaterial()const
+		castor3d::MaterialObs getDefaultMaterial()const
 		{
 			return m_defaultMaterial;
 		}
@@ -314,7 +314,7 @@ namespace castor
 
 	private:
 		castor3d::Engine & m_engine;
-		castor3d::MaterialRPtr m_defaultMaterial{};
+		castor3d::MaterialObs m_defaultMaterial{};
 		castor3d::PassBufferUPtr m_passBuffer;
 		castor3d::SssProfileBufferUPtr m_sssProfileBuffer;
 		castor3d::TextureConfigurationBufferUPtr m_texConfigBuffer;

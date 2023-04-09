@@ -373,7 +373,7 @@ namespace castor3d
 		Engine * engine = m_overlay->getEngine();
 		auto & fontCache = engine->getFontCache();
 
-		if ( auto font = fontCache.find( name ).lock() )
+		if ( auto font = fontCache.find( name ) )
 		{
 			auto fontTexture = engine->getOverlayCache().getFontTexture( font->getName() );
 

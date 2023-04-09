@@ -37,9 +37,9 @@ namespace GuiCommon
 		m_fonts = getFontsList();
 		addProperty( grid, PROPERTY_CATEGORY + wxString( style.getName() ) );
 		addMaterial( grid, engine, PROPERTY_BACKGROUND_MATERIAL, m_materials, style.getBackgroundMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setBackgroundMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setBackgroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_FOREGROUND_MATERIAL, m_materials, style.getForegroundMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setForegroundMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setForegroundMaterial( material ); } );
 
 		switch ( style.getType() )
 		{
@@ -99,28 +99,28 @@ namespace GuiCommon
 				style.setFont( name );
 			} );
 		addMaterial( grid, engine, PROPERTY_TEXT_MATERIAL, m_materials, style.getTextMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setTextMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setTextMaterial( material ); } );
 
 		addMaterial( grid, engine, PROPERTY_HL_BACKGROUND_MATERIAL, m_materials, style.getHighlightedBackgroundMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setHighlightedBackgroundMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setHighlightedBackgroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_FOREGROUND_MATERIAL, m_materials, style.getHighlightedForegroundMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setHighlightedForegroundMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setHighlightedForegroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_TEXT_MATERIAL, m_materials, style.getHighlightedTextMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setHighlightedTextMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setHighlightedTextMaterial( material ); } );
 
 		addMaterial( grid, engine, PROPERTY_HL_BACKGROUND_MATERIAL, m_materials, style.getPushedBackgroundMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setPushedBackgroundMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setPushedBackgroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_FOREGROUND_MATERIAL, m_materials, style.getPushedForegroundMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setPushedForegroundMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setPushedForegroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_TEXT_MATERIAL, m_materials, style.getPushedTextMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setPushedTextMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setPushedTextMaterial( material ); } );
 
 		addMaterial( grid, engine, PROPERTY_HL_BACKGROUND_MATERIAL, m_materials, style.getDisabledBackgroundMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setDisabledBackgroundMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setDisabledBackgroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_FOREGROUND_MATERIAL, m_materials, style.getDisabledForegroundMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setDisabledForegroundMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setDisabledForegroundMaterial( material ); } );
 		addMaterial( grid, engine, PROPERTY_HL_TEXT_MATERIAL, m_materials, style.getDisabledTextMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setDisabledTextMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setDisabledTextMaterial( material ); } );
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
@@ -152,7 +152,7 @@ namespace GuiCommon
 				style.setHeaderFont( name );
 			} );
 		addMaterial( grid, engine, PROPERTY_TEXT_MATERIAL, m_materials, style.getHeaderTextMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setHeaderTextMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setHeaderTextMaterial( material ); } );
 	}
 
 	void StyleTreeItemProperty::doCreateStyleProperties( wxPropertyGrid * grid
@@ -184,6 +184,6 @@ namespace GuiCommon
 				style.setFont( name );
 			} );
 		addMaterial( grid, engine, PROPERTY_TEXT_MATERIAL, m_materials, style.getTextMaterial()
-			, [&style]( castor3d::MaterialRPtr material ) { style.setTextMaterial( material ); } );
+			, [&style]( castor3d::MaterialObs material ) { style.setTextMaterial( material ); } );
 	}
 }

@@ -33,8 +33,8 @@ namespace GuiCommon
 			, castor::String const & colourName )
 		{
 			auto result = scene.addNewMesh( name, scene );
-			result.lock()->setSerialisable( false );
-			auto submesh = result.lock()->createSubmesh();
+			result->setSerialisable( false );
+			auto submesh = result->createSubmesh();
 			static castor::Point3fArray const vertex
 			{
 				castor::Point3f{ -1, -1, -1 },
@@ -66,7 +66,7 @@ namespace GuiCommon
 				castor3d::LineIndices{ { 3u, 7u } },
 			};
 			mapping->addLineGroup( lines );
-			castor3d::MaterialResPtr material;
+			castor3d::MaterialObs material{};
 			castor::String matName = cuT( "BBox_" ) + colourName;
 
 			if ( !scene.getEngine()->hasMaterial( matName ) )
@@ -75,7 +75,7 @@ namespace GuiCommon
 					, *scene.getEngine()
 					, scene.getDefaultLightingModel() );
 
-				if ( auto mat = material.lock() )
+				if ( auto mat = material )
 				{
 					mat->setSerialisable( false );
 
@@ -90,8 +90,8 @@ namespace GuiCommon
 				material = scene.getEngine()->findMaterial( matName );
 			}
 
-			submesh->setDefaultMaterial( material.lock().get() );
-			result.lock()->computeContainers();
+			submesh->setDefaultMaterial( material );
+			result->computeContainers();
 			scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 			return result;
 		}
@@ -134,26 +134,26 @@ namespace GuiCommon
 				m_object = &object;
 				m_submesh = &submesh;
 				m_aabbNode = doAddBB( m_aabbMesh
-					, m_aabbMesh.lock()->getName()
+					, m_aabbMesh->getName()
 					, *m_scene.getObjectRootNode()
 					, m_object->getBoundingBox() );
 				m_aabbNode->setScale( { 1.0f, 1.0f, 1.0f } );
 				m_aabbNode->setPosition( {} );
 				m_obbNode = doAddBB( m_obbMesh
-					, m_obbMesh.lock()->getName()
+					, m_obbMesh->getName()
 					, *object.getParent()
 					, m_object->getBoundingBox() );
 				m_obbSelectedSubmeshNode = doAddBB( m_obbSelectedSubmesh
-					, m_obbMesh.lock()->getName() + castor::string::toString( submesh.getId() )
+					, m_obbMesh->getName() + castor::string::toString( submesh.getId() )
 					, *object.getParent()
 					, m_object->getBoundingBox( submesh ) );
 
-				for ( auto & psubmesh : *m_object->getMesh().lock() )
+				for ( auto & psubmesh : *m_object->getMesh() )
 				{
 					if ( psubmesh.get() != m_submesh )
 					{
 						m_obbSubmeshNodes.push_back( doAddBB( m_obbSubmesh
-							, m_obbMesh.lock()->getName() + castor::string::toString( psubmesh->getId() )
+							, m_obbMesh->getName() + castor::string::toString( psubmesh->getId() )
 							, *object.getParent()
 							, m_object->getBoundingBox( *psubmesh ) ) );
 					}
@@ -174,16 +174,16 @@ namespace GuiCommon
 			, [this]()
 			{
 				m_sceneConnection.disconnect();
-				doRemoveBB( m_aabbMesh.lock()->getName(), m_aabbNode );
-				doRemoveBB( m_obbMesh.lock()->getName(), m_obbNode );
-				doRemoveBB( m_obbSelectedSubmesh.lock()->getName(), m_obbSelectedSubmeshNode );
+				doRemoveBB( m_aabbMesh->getName(), m_aabbNode );
+				doRemoveBB( m_obbMesh->getName(), m_obbNode );
+				doRemoveBB( m_obbSelectedSubmesh->getName(), m_obbSelectedSubmeshNode );
 				uint32_t i = 0u;
 
-				for ( auto & submesh : *m_object->getMesh().lock() )
+				for ( auto & submesh : *m_object->getMesh() )
 				{
 					if ( submesh.get() != m_submesh )
 					{
-						doRemoveBB( m_obbMesh.lock()->getName() + castor::string::toString( submesh->getId() )
+						doRemoveBB( m_obbMesh->getName() + castor::string::toString( submesh->getId() )
 							, m_obbSubmeshNodes[i] );
 						i++;
 					}
@@ -193,7 +193,7 @@ namespace GuiCommon
 
 				for ( auto & node : m_obbBoneNodes )
 				{
-					doRemoveBB( m_obbMesh.lock()->getName() + cuT( "_Bone_" ) + castor::string::toString( i++ )
+					doRemoveBB( m_obbMesh->getName() + cuT( "_Bone_" ) + castor::string::toString( i++ )
 						, node );
 				}
 
@@ -245,7 +245,7 @@ namespace GuiCommon
 		result->setPosition( bb.getCenter() );
 		result->setVisible( true );
 
-		for ( auto & submesh : *geometry->getMesh().lock() )
+		for ( auto & submesh : *geometry->getMesh() )
 		{
 			geometry->setMaterial( *submesh, submesh->getDefaultMaterial() );
 		}
@@ -286,7 +286,7 @@ namespace GuiCommon
 
 			uint32_t i = 0u;
 
-			for ( auto & submesh : *m_object->getMesh().lock() )
+			for ( auto & submesh : *m_object->getMesh() )
 			{
 				if ( submesh.get() != m_submesh )
 				{
@@ -300,7 +300,7 @@ namespace GuiCommon
 			auto aabb = obb.getAxisAligned( m_object->getParent()->getDerivedTransformationMatrix() );
 			auto aabbMin = aabb.getMin();
 			auto aabbMax = aabb.getMax();
-			auto aabbSubmesh = m_aabbMesh.lock()->getSubmesh( 0u );
+			auto aabbSubmesh = m_aabbMesh->getSubmesh( 0u );
 
 			if ( auto positions = aabbSubmesh->getComponent< castor3d::PositionsComponent >() )
 			{

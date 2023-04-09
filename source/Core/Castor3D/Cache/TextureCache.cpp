@@ -225,23 +225,20 @@ namespace castor3d
 		{
 			auto image = engine.tryFindImage( name );
 
-			if ( !image.lock() )
+			if ( !image )
 			{
-				auto img = engine.createImage( name
+				image = engine.addNewImage( name
 					, castor::ImageCreateParams{ type
 						, data
 						, { false, false, false } } );
-				image = engine.addImage( name, img );
 			}
 
-			auto img = image.lock();
-
-			if ( !img )
+			if ( !image )
 			{
 				CU_LoaderError( "Couldn't load image." );
 			}
 
-			return getImageBuffer( *img, allowSRGB, engine.getMaxImageSize() );
+			return getImageBuffer( *image, allowSRGB, engine.getMaxImageSize() );
 		}
 
 		static castor::PxBufferBaseUPtr getFileImage( Engine & engine
@@ -252,22 +249,19 @@ namespace castor3d
 		{
 			auto image = engine.tryFindImage( name );
 
-			if ( !image.lock() )
+			if ( !image )
 			{
-				auto img = engine.createImage( name
+				image = engine.addNewImage( name
 					, castor::ImageCreateParams{ folder / relative
 						, { false, false, false } } );
-				image = engine.addImage( name, img );
 			}
 
-			auto img = image.lock();
-
-			if ( !img )
+			if ( !image )
 			{
 				CU_LoaderError( "Couldn't load image." );
 			}
 
-			return getImageBuffer( *img, allowSRGB, engine.getMaxImageSize() );
+			return getImageBuffer( *image, allowSRGB, engine.getMaxImageSize() );
 		}
 
 		static TextureLayoutUPtr getTextureLayout( Engine & engine

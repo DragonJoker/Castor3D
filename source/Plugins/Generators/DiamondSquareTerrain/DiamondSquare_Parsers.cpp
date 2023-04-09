@@ -36,7 +36,7 @@ namespace diamond_square_terrain
 				return lhs.heightRange.getMin() < rhs.heightRange.getMin();
 			} );
 		dsgen.setBiomes( pluginContext.biomes );
-		generator->generate( *parsingContext.mesh.lock()
+		generator->generate( *parsingContext.mesh
 			, pluginContext.parameters );
 	}
 	CU_EndAttributePop()

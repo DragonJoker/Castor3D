@@ -7,7 +7,7 @@ CU_ImplementCUSmartPtr( castor3d, SamplerCache )
 
 namespace castor3d
 {
-	const castor::String ResourceCacheTraitsT< castor3d::Sampler, castor::String >::Name = cuT( "Sampler" );
+	const castor::String PtrCacheTraitsT< castor3d::Sampler, castor::String >::Name = cuT( "Sampler" );
 
 	castor::String getName( TextureSpace value )
 	{

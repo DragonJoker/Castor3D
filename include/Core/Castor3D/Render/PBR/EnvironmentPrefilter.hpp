@@ -35,7 +35,7 @@ namespace castor3d
 				, VkExtent2D const & size
 				, ashes::ImageView const & srcView
 				, Texture const & dstTexture
-				, SamplerResPtr sampler
+				, SamplerObs sampler
 				, bool isCharlie );
 			void registerFrames();
 			void render( QueueData const & queueData );
@@ -50,7 +50,7 @@ namespace castor3d
 			};
 			ashes::RenderPass const & m_renderPass;
 			std::string m_prefix;
-			SamplerResPtr m_sampler;
+			SamplerObs m_sampler{};
 			std::array< FrameBuffer, 6u > m_frameBuffers;
 			CommandsSemaphore m_commands;
 		};
@@ -78,7 +78,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, castor::Size const & size
 			, Texture const & srcTexture
-			, SamplerResPtr sampler
+			, SamplerObs sampler
 			, bool isCharlie );
 		C3D_API ~EnvironmentPrefilter();
 		/**
@@ -120,7 +120,8 @@ namespace castor3d
 
 		ashes::Sampler const & getSampler()const
 		{
-			return m_sampler.lock()->getSampler();
+			CU_Require( m_sampler != nullptr );
+			return m_sampler->getSampler();
 		}
 		/**@}*/
 
@@ -131,7 +132,7 @@ namespace castor3d
 		ashes::ImagePtr m_srcImage;
 		ashes::ImageView m_srcImageView;
 		Texture m_result;
-		SamplerResPtr m_sampler;
+		SamplerObs m_sampler{};
 		ashes::RenderPassPtr m_renderPass;
 		std::vector< std::unique_ptr< MipRenderCube > > m_renderPasses;
 	};

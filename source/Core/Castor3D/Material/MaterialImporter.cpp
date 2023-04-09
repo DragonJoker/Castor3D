@@ -111,22 +111,22 @@ namespace castor3d
 		return false;
 	}
 
-	castor::ImageSPtr MaterialImporter::loadImage( castor::String const & name
+	castor::ImageRPtr MaterialImporter::loadImage( castor::String const & name
 		, castor::ImageCreateParams const & params )const
 	{
-		castor::ImageSPtr result;
+		castor::ImageRPtr result{};
 
 		try
 		{
 			auto image = getEngine()->tryFindImage( name );
 
-			if ( !image.lock() )
+			if ( !image )
 			{
 				auto img = getEngine()->createImage( name, params );
 				image = getEngine()->addImage( name, img );
 			}
 
-			result = image.lock();
+			result = image;
 		}
 		catch ( castor::Exception & exc )
 		{
@@ -144,9 +144,9 @@ namespace castor3d
 		return result;
 	}
 
-	castor::ImageSPtr MaterialImporter::loadImage( castor::Path const & path )const
+	castor::ImageRPtr MaterialImporter::loadImage( castor::Path const & path )const
 	{
-		castor::ImageSPtr result;
+		castor::ImageRPtr result{};
 		castor::Path relative;
 		castor::Path folder;
 
@@ -160,7 +160,7 @@ namespace castor3d
 		return result;
 	}
 
-	castor::ImageSPtr MaterialImporter::loadImage( castor::String name
+	castor::ImageRPtr MaterialImporter::loadImage( castor::String name
 		, castor::String type
 		, castor::ByteArray data )const
 	{
@@ -170,7 +170,7 @@ namespace castor3d
 				, { false, false, false } } );
 	}
 
-	TextureSourceInfo MaterialImporter::loadTexture( castor3d::SamplerRes sampler
+	TextureSourceInfo MaterialImporter::loadTexture( castor3d::SamplerObs sampler
 		, castor::Path const & path
 		, TextureConfiguration const & config )const
 	{
@@ -188,7 +188,7 @@ namespace castor3d
 			, { allowCompression, true, true } };
 	}
 
-	TextureSourceInfo MaterialImporter::loadTexture( castor3d::SamplerRes sampler
+	TextureSourceInfo MaterialImporter::loadTexture( castor3d::SamplerObs sampler
 		, castor::String name
 		, castor::String type
 		, castor::ByteArray data
@@ -209,7 +209,7 @@ namespace castor3d
 			, { allowCompression, true, true } };
 	}
 
-	void MaterialImporter::loadTexture( castor3d::SamplerRes sampler
+	void MaterialImporter::loadTexture( castor3d::SamplerObs sampler
 		, castor::Path const & path
 		, PassTextureConfig const & config
 		, Pass & pass )const
@@ -225,7 +225,7 @@ namespace castor3d
 		}
 	}
 
-	void MaterialImporter::loadTexture( castor3d::SamplerRes sampler
+	void MaterialImporter::loadTexture( castor3d::SamplerObs sampler
 		, castor::String name
 		, castor::String type
 		, castor::ByteArray data

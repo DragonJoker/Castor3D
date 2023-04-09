@@ -38,7 +38,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, Texture const & source
 			, Texture const & brdf
-			, SamplerResPtr sampler );
+			, SamplerObs sampler );
 		C3D_API ~IblTextures();
 		/**
 		 *\~english
@@ -109,13 +109,14 @@ namespace castor3d
 
 		ashes::Sampler const & getPrefilteredBrdfSampler()const
 		{
-			return m_sampler.lock()->getSampler();
+			CU_Require( m_sampler != nullptr );
+			return m_sampler->getSampler();
 		}
 		/**@}*/
 
 	private:
 		Texture const & m_brdf;
-		SamplerResPtr m_sampler;
+		SamplerObs m_sampler;
 		RadianceComputer m_radianceComputer;
 		EnvironmentPrefilter m_environmentPrefilter;
 		EnvironmentPrefilter m_environmentSheenPrefilter;

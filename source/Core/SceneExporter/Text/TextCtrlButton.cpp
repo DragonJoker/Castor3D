@@ -14,7 +14,7 @@ namespace castor
 
 	namespace btnwrtr
 	{
-		static bool isWritableMaterial( MaterialRPtr material )
+		static bool isWritableMaterial( MaterialObs material )
 		{
 			if ( !material )
 			{

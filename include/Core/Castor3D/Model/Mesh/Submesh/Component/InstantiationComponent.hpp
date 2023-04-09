@@ -62,7 +62,7 @@ namespace castor3d
 		 *\param[in]	material	Le matériau pour lequel le compte est incrémenté.
 		 *\return		\p true Si le buffer d'instances a changé.
 		 */
-		C3D_API bool ref( MaterialRPtr material );
+		C3D_API bool ref( MaterialObs material );
 		/**
 		 *\~english
 		 *\brief		Decrements instance count.
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Décrémente le compte d'instances.
 		 *\param[in]	material	Le matériau pour lequel le compte est décrémenté.
 		 */
-		C3D_API void unref( MaterialRPtr material );
+		C3D_API void unref( MaterialObs material );
 		/**
 		 *\~english
 		 *\brief		Retrieves the instances count
@@ -82,7 +82,7 @@ namespace castor3d
 		 *\param[in]	material	Le matériau pour lequel le compte est récupéré
 		 *\return		La valeur
 		 */
-		C3D_API uint32_t getRefCount( MaterialRPtr material )const;
+		C3D_API uint32_t getRefCount( MaterialObs material )const;
 		/**
 		 *\~english
 		 *\param[in]	material	The material.
@@ -91,7 +91,7 @@ namespace castor3d
 		 *\param[in]	material	Le matériau.
 		 *\return		\p true si le nombre d'instances pour le matériau donné est plus grand que le seuil.
 		 */
-		C3D_API bool isInstanced( MaterialRPtr material )const;
+		C3D_API bool isInstanced( MaterialObs material )const;
 		/**
 		 *\~english
 		 *\return		\p true if the max instance count is greater than the threshold.
@@ -110,7 +110,7 @@ namespace castor3d
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
 		C3D_API void gather( PipelineFlags const & flags
-			, MaterialRPtr material
+			, MaterialObs material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts

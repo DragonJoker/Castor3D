@@ -84,7 +84,7 @@ namespace castor3d
 		 *\param[in]	params	Les paramètres de création de l'image.
 		 *\return		L'image.
 		 */
-		C3D_API castor::ImageSPtr loadImage( castor::String const & name
+		C3D_API castor::ImageRPtr loadImage( castor::String const & name
 			, castor::ImageCreateParams const & params )const;
 		/**
 		 *\~english
@@ -96,7 +96,7 @@ namespace castor3d
 		 *\param[in]	path	Le chemin vers l'image (peut être relatif ou absolu).
 		 *\return		L'image.
 		 */
-		C3D_API castor::ImageSPtr loadImage( castor::Path const & path )const;
+		C3D_API castor::ImageRPtr loadImage( castor::Path const & path )const;
 		/**
 		 *\~english
 		 *\brief		Loads a texture.
@@ -111,7 +111,7 @@ namespace castor3d
 		 *\param[in]	data	Les données de l'image.
 		 *\return		L'unité de texture.
 		 */
-		C3D_API castor::ImageSPtr loadImage( castor::String name
+		C3D_API castor::ImageRPtr loadImage( castor::String name
 			, castor::String type
 			, castor::ByteArray data )const;
 		/**
@@ -128,7 +128,7 @@ namespace castor3d
 		 *\param[in]	config	La configuration de la texture.
 		 *\return		L'unité de texture.
 		 */
-		C3D_API TextureSourceInfo loadTexture( castor3d::SamplerRes sampler
+		C3D_API TextureSourceInfo loadTexture( castor3d::SamplerObs sampler
 			, castor::Path const & path
 			, TextureConfiguration const & config )const;
 		/**
@@ -149,7 +149,7 @@ namespace castor3d
 		 *\param[in]	config	La configuration de la texture.
 		 *\return		L'unité de texture.
 		 */
-		C3D_API TextureSourceInfo loadTexture( castor3d::SamplerRes sampler
+		C3D_API TextureSourceInfo loadTexture( castor3d::SamplerObs sampler
 			, castor::String name
 			, castor::String type
 			, castor::ByteArray data
@@ -168,7 +168,7 @@ namespace castor3d
 		 *\param[in]		config	La configuration de la texture.
 		 *\param[in,out]	pass	Reçoit l'image chargée.
 		 */
-		C3D_API void loadTexture( castor3d::SamplerRes sampler
+		C3D_API void loadTexture( castor3d::SamplerObs sampler
 			, castor::Path const & path
 			, PassTextureConfig const & config
 			, Pass & pass )const;
@@ -190,7 +190,7 @@ namespace castor3d
 		 *\param[in]		config	La configuration de la texture.
 		 *\param[in,out]	pass	Reçoit l'image chargée.
 		 */
-		C3D_API void loadTexture( castor3d::SamplerRes sampler
+		C3D_API void loadTexture( castor3d::SamplerObs sampler
 			, castor::String name
 			, castor::String type
 			, castor::ByteArray data

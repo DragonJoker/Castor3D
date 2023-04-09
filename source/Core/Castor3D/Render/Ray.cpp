@@ -279,7 +279,7 @@ namespace castor3d
 		, SubmeshRPtr & nearestSubmesh
 		, float & distance )const
 	{
-		auto mesh = geometry->getMesh().lock();
+		auto mesh = geometry->getMesh();
 		castor::Point3f center{ geometry->getParent()->getDerivedPosition() };
 		castor::BoundingSphere sphere{ center, mesh->getBoundingSphere().getRadius() };
 		//castor::Matrix4x4f const & transform{ geometry->getParent()->getDerivedTransformationMatrix() };

@@ -23,7 +23,7 @@ CU_ImplementCUSmartPtr( castor3d, MaterialCache )
 
 namespace castor3d
 {
-	const castor::String ResourceCacheTraitsT< castor3d::Material, castor::String >::Name = cuT( "Material" );
+	const castor::String PtrCacheTraitsT< castor3d::Material, castor::String >::Name = cuT( "Material" );
 }
 
 namespace castor
@@ -144,21 +144,21 @@ namespace castor
 		if ( !m_passBuffer )
 		{
 			auto lock( makeUniqueLock( *this ) );
-			MaterialResPtr created;
+			MaterialObs created{};
 			auto defaultMaterial = doTryAddNoLockT( Material::DefaultMaterialName
 				, false
 				, created
 				, m_engine
 				, m_engine.getDefaultLightingModel() );
-			auto material = defaultMaterial.lock();
+			auto material = defaultMaterial;
 
-			if ( created.lock() == material )
+			if ( created == material )
 			{
 				material->createPass();
 				material->getPass( 0 )->createComponent< castor3d::TwoSidedComponent >()->setTwoSided( true );
 			}
 
-			m_defaultMaterial = material.get();
+			m_defaultMaterial = material;
 			m_passBuffer = castor::makeUnique< PassBuffer >( m_engine
 				, device
 				, MaxMaterialsCount );

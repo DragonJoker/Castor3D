@@ -34,7 +34,7 @@ namespace castor3d
 		return instantiation.getRefCount( pass->getOwner() );
 	}
 
-	MaterialRPtr SubmeshRenderNode::getMaterial()const
+	MaterialObs SubmeshRenderNode::getMaterial()const
 	{
 		return pass->getOwner();
 	}

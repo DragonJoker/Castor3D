@@ -197,7 +197,7 @@ namespace castor3d
 						mesh->setSkeleton( skelIt->second );
 					}
 
-					result.emplace( meshName, mesh );
+					result.emplace( meshName, mesh.get() );
 					scene.addMesh( meshName, mesh, true );
 				}
 			}
@@ -353,7 +353,7 @@ namespace castor3d
 		{
 			for ( auto & geometry : scene.getGeometryCache() )
 			{
-				auto & mesh = *geometry.second->getMesh().lock();
+				auto & mesh = *geometry.second->getMesh();
 				auto nodeIt = std::find( animIt.second.nodes.begin()
 					, animIt.second.nodes.end()
 					, geometry.second->getParent() );

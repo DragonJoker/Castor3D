@@ -26,7 +26,6 @@ namespace castor3d
 		, m_texture{ std::move( rhs.m_texture ) }
 		, m_renderTarget{ std::move( rhs.m_renderTarget ) }
 		, m_sampler{ std::move( rhs.m_sampler ) }
-		, m_ownSampler{ std::move( rhs.m_ownSampler ) }
 		, m_descriptor{ std::move( rhs.m_descriptor ) }
 		, m_id{ std::move( rhs.m_id ) }
 		, m_changed{ std::move( rhs.m_changed ) }
@@ -132,7 +131,7 @@ namespace castor3d
 		}
 
 		bool result = false;
-		auto sampler = getSampler().lock();
+		auto sampler = getSampler();
 		CU_Require( sampler );
 		sampler->initialise( device );
 
@@ -209,9 +208,8 @@ namespace castor3d
 		{
 			auto & device = *m_device;
 			m_device = nullptr;
-			auto sampler = getSampler().lock();
 
-			if ( sampler )
+			if ( auto sampler = getSampler() )
 			{
 				sampler->cleanup();
 			}

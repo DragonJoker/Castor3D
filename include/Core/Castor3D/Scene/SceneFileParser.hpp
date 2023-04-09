@@ -19,9 +19,12 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
 
 #include "Castor3D/Buffer/UniformBuffer.hpp"
+#include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshImporter.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
@@ -162,12 +165,12 @@ namespace castor3d
 		LightUPtr ownLight{};
 		LightRPtr light{};
 		castor::PixelFormat pixelFormat{};
-		MaterialRPtr material{};
-		MaterialRes ownMaterial{};
+		MaterialObs material{};
+		MaterialPtr ownMaterial{};
 		bool createMaterial{ true };
 		uint32_t passIndex{};
-		SamplerResPtr sampler{};
-		SamplerRes ownSampler{};
+		SamplerObs sampler{};
+		SamplerPtr ownSampler{};
 		TargetType targetType{};
 		RenderTargetRPtr renderTarget{};
 		RenderTargetRPtr textureRenderTarget{};
@@ -188,7 +191,7 @@ namespace castor3d
 		castor::PxBufferBaseUPtr buffer{};
 		castor::Path folder{};
 		castor::Path relative{};
-		castor::ImageSPtr image{};
+		castor::ImageRPtr image{};
 		VkShaderStageFlagBits shaderStage{};
 		UniformBufferBaseUPtr uniformBuffer{};
 		OverlayRPtr overlay{};

@@ -22,7 +22,7 @@ namespace castor3d
 			, m_holderName{ std::move( name ) }
 			, m_defaultFont{ engine.getFontCache().isEmpty()
 				? nullptr
-				: engine.getFontCache().begin()->second }
+				: engine.getFontCache().begin()->second.get() }
 		{
 		}
 
@@ -32,9 +32,9 @@ namespace castor3d
 		*\return
 		*	The font
 		*/
-		castor::FontRes getDefaultFont()const
+		castor::FontResPtr getDefaultFont()const
 		{
-			return m_defaultFont.lock();
+			return m_defaultFont;
 		}
 		/**
 		*\brief

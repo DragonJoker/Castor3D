@@ -308,7 +308,7 @@ namespace castor3d
 		/** Sets the background material.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundMaterial( MaterialRPtr value );
+		C3D_API void setBackgroundMaterial( MaterialObs value );
 
 		/** Sets the background size.
 		 *\param[in]	value		The new value.
@@ -323,7 +323,7 @@ namespace castor3d
 		/** Sets the background borders material.
 		 *\param[in]	value		The new value.
 		 */
-		C3D_API void setBackgroundBorderMaterial( MaterialRPtr value );
+		C3D_API void setBackgroundBorderMaterial( MaterialObs value );
 
 		/** Creates the control's overlays.
 		 *\param[in]	ctrlManager	The controls manager.
@@ -596,9 +596,9 @@ namespace castor3d
 		//! The parent control, if any
 		ControlRPtr m_parent{};
 		//! The background material
-		MaterialRPtr m_backgroundMaterial{};
+		MaterialObs m_backgroundMaterial{};
 		//! The foreground material
-		MaterialRPtr m_foregroundMaterial{};
+		MaterialObs m_foregroundMaterial{};
 		//! The control flgas.
 		ControlFlagType m_flags{};
 

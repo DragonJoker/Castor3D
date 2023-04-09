@@ -121,9 +121,9 @@ namespace castor3d
 	*/
 	class MaterialImporterFactory;
 
-	CU_DeclareSmartPtr( Material );
 	CU_DeclareSmartPtr( MaterialImporter );
 
+	CU_DeclareCUSmartPtr( castor3d, Material, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, MaterialImporterFactory, C3D_API );
 
 	using PassTypeID = uint16_t;
@@ -145,35 +145,34 @@ namespace castor3d
 	*	Spécialisation pour Material.
 	*/
 	template<>
-	struct ResourceCacheTraitsT< Material, castor::String >
-		: castor::ResourceCacheTraitsBaseT< Material, castor::String, ResourceCacheTraitsT< Material, castor::String > >
+	struct PtrCacheTraitsT< Material, castor::String >
+		: PtrCacheTraitsBaseT< Material, castor::String >
 	{
 		using ResT = Material;
 		using KeyT = castor::String;
-		using TraitsT = ResourceCacheTraitsT< ResT, KeyT >;
-		using Base = castor::ResourceCacheTraitsBaseT< ResT, KeyT, TraitsT >;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
 		C3D_API static const castor::String Name;
 	};
 
-	using MaterialCacheTraits = ResourceCacheTraitsT< Material, castor::String >;
+	using MaterialCacheTraits = PtrCacheTraitsT< Material, castor::String >;
 	using MaterialCache = castor::ResourceCacheT< Material
 		, castor::String
 		, MaterialCacheTraits >;
 
-	using MaterialRes = MaterialCacheTraits::ElementPtrT;
-	using MaterialResPtr = MaterialCacheTraits::ElementObsT;
+	using MaterialPtr = MaterialCacheTraits::ElementPtrT;
+	using MaterialObs = MaterialCacheTraits::ElementObsT;
 
 	CU_DeclareCUSmartPtr( castor3d, MaterialCache, C3D_API );
 
 	//! Material pointer array
-	CU_DeclareVector( MaterialRPtr, MaterialPtr );
+	CU_DeclareVector( MaterialObs, MaterialPtr );
 	//! Material pointer map, sorted by name
-	CU_DeclareMap( castor::String, MaterialRPtr, MaterialPtrStr );
+	CU_DeclareMap( castor::String, MaterialObs, MaterialPtrStr );
 	//! Material pointer map
-	CU_DeclareMap( uint32_t, MaterialRPtr, MaterialPtrUInt );
+	CU_DeclareMap( uint32_t, MaterialObs, MaterialPtrUInt );
 
 	struct TextureCombine
 	{

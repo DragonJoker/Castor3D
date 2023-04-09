@@ -707,7 +707,7 @@ namespace castor3d
 			auto result = textDescriptorPool->createDescriptorSet( "TextOverlays_" + std::to_string( intptr_t( &fontTexture ) ) );
 			result->createBinding( textDescriptorLayout->getBinding( 0u )
 				, fontTexture.getTexture()->getDefaultView().getSampledView()
-				, fontTexture.getSampler().lock()->getSampler() );
+				, fontTexture.getSampler()->getSampler() );
 			result->update();
 			descriptorConnection.descriptorSet = std::move( result );
 			descriptorConnection.connection = fontTexture.onResourceChanged.connect( [this, &descriptorConnection, &fontTexture]( DoubleBufferedTextureLayout const & )
@@ -1104,7 +1104,7 @@ namespace castor3d
 			if ( auto text = overlay.getTextOverlay() )
 			{
 				auto texture = text->getFontTexture();
-				node = &m_draw.getTextNode( device, renderPass, pass, *texture->getTexture(), *texture->getSampler().lock() );
+				node = &m_draw.getTextNode( device, renderPass, pass, *texture->getTexture(), *texture->getSampler() );
 				pipelineData = &m_common.textVertexBuffer->getDrawPipelineData( node->pipeline
 					, texture
 					, &m_draw.createTextDescriptorSet( *texture ) );

@@ -80,7 +80,7 @@ namespace castor3d
 	{
 	}
 
-	bool InstantiationComponent::ref( MaterialRPtr material )
+	bool InstantiationComponent::ref( MaterialObs material )
 	{
 		bool result{ false };
 		auto it = find( *material );
@@ -105,7 +105,7 @@ namespace castor3d
 		return result;
 	}
 
-	void InstantiationComponent::unref( MaterialRPtr material )
+	void InstantiationComponent::unref( MaterialObs material )
 	{
 		auto it = find( *material );
 
@@ -129,7 +129,7 @@ namespace castor3d
 		}
 	}
 
-	uint32_t InstantiationComponent::getRefCount( MaterialRPtr material )const
+	uint32_t InstantiationComponent::getRefCount( MaterialObs material )const
 	{
 		uint32_t result = 0;
 		auto it = find( *material );
@@ -142,7 +142,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool InstantiationComponent::isInstanced( MaterialRPtr material )const
+	bool InstantiationComponent::isInstanced( MaterialObs material )const
 	{
 		return !getOwner()->isDynamic()
 			&& doCheckInstanced( getRefCount( material ) );
@@ -167,7 +167,7 @@ namespace castor3d
 	}
 
 	void InstantiationComponent::gather( PipelineFlags const & flags
-		, MaterialRPtr material
+		, MaterialObs material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts

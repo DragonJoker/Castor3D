@@ -284,8 +284,8 @@ namespace Testing
 	bool C3DTestCase::compare( Geometry const & lhs, Geometry const & rhs )
 	{
 		bool result{ CT_EQUAL( static_cast< MovableObject const & >( lhs ), static_cast< MovableObject const & >( rhs ) ) };
-		result = result && CT_EQUAL( static_cast< Mesh const & >( *lhs.getMesh().lock() )
-			, static_cast< Mesh const & >( *rhs.getMesh().lock() ) );
+		result = result && CT_EQUAL( static_cast< Mesh const & >( *lhs.getMesh() )
+			, static_cast< Mesh const & >( *rhs.getMesh() ) );
 		return result;
 	}
 

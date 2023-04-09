@@ -13,8 +13,6 @@ namespace castor
 		, String const & name
 		, ImageCreateParams const & params )
 	{
-		ImageSPtr result;
-
 		if ( params.mode == ImageCreateParams::eParam )
 		{
 			return makeResource< Image, String >( name
@@ -50,9 +48,7 @@ namespace castor
 
 	PixelFormat ResourceCacheT< Image, String, ImageCacheTraits >::getImageFormat( String const & name )
 	{
-		auto img = tryFind( name );
-
-		if ( auto image = img.lock() )
+		if ( auto image = tryFind( name ) )
 		{
 			return image->getPixelFormat();
 		}

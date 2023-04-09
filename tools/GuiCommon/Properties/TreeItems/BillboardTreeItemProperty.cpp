@@ -33,7 +33,7 @@ namespace GuiCommon
 			, [this]( wxVariant const & var )
 			{
 				auto & engine = *m_billboard.getParentScene().getEngine();
-				auto material = engine.findMaterial( variantCast< castor::String >( var ) ).lock().get();
+				auto material = engine.findMaterial( variantCast< castor::String >( var ) );
 
 				if ( material )
 				{

@@ -199,7 +199,7 @@ namespace castor3d
 			return m_parent;
 		}
 
-		MaterialRPtr getMaterial()const noexcept
+		MaterialObs getMaterial()const noexcept
 		{
 			return m_category->getMaterial();
 		}
@@ -272,7 +272,7 @@ namespace castor3d
 			m_category->setVisible( val );
 		}
 
-		void setMaterial( MaterialRPtr material )
+		void setMaterial( MaterialObs material )
 		{
 			m_category->setMaterial( material );
 		}

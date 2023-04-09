@@ -30,7 +30,7 @@ namespace castor3d
 		static uint32_t constexpr MtxUboIdx = 0u;
 		static uint32_t constexpr InputImgIdx = 1u;
 
-		static SamplerResPtr doCreateSampler( RenderSystem & renderSystem
+		static SamplerObs doCreateSampler( RenderSystem & renderSystem
 			, bool nearest )
 		{
 			castor::String const name = nearest
@@ -40,13 +40,13 @@ namespace castor3d
 				? VK_FILTER_NEAREST
 				: VK_FILTER_LINEAR;
 			auto & engine = *renderSystem.getEngine();
-			SamplerResPtr result;
+			SamplerObs result{};
 
 			if ( engine.hasSampler( name ) )
 			{
 				result = engine.findSampler( name );
 			}
-			else if ( auto sampler = engine.addNewSampler( name, engine ).lock() )
+			else if ( auto sampler = engine.addNewSampler( name, engine ) )
 			{	
 				sampler->setMinFilter( filter );
 				sampler->setMagFilter( filter );
@@ -142,9 +142,9 @@ namespace castor3d
 
 	RenderCube::RenderCube( RenderDevice const & device
 		, bool nearest
-		, SamplerResPtr sampler )
+		, SamplerObs sampler )
 		: m_device{ device }
-		, m_sampler{ ( sampler.lock()
+		, m_sampler{ ( sampler
 			? std::move( sampler )
 			: rendcube::doCreateSampler( m_device.renderSystem, nearest ) ) }
 	{
@@ -180,7 +180,7 @@ namespace castor3d
 		, ashes::PipelineDepthStencilStateCreateInfo const & dsState )
 	{
 		auto queueData = m_device.graphicsData();
-		m_sampler.lock()->initialise( m_device );
+		m_sampler->initialise( m_device );
 		m_matrixUbo = rendcube::doCreateMatrixUbo( m_device
 			, *queueData->queue
 			, *queueData->commandPool
@@ -234,7 +234,7 @@ namespace castor3d
 				, 1u );
 			facePipeline.descriptorSet->createBinding( m_descriptorLayout->getBinding( 1u )
 				, view
-				, m_sampler.lock()->getSampler() );
+				, m_sampler->getSampler() );
 			doFillDescriptorSet( *m_descriptorLayout, *facePipeline.descriptorSet, face );
 			facePipeline.descriptorSet->update();
 			++face;

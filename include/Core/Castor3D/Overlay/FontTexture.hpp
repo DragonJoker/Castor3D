@@ -231,7 +231,7 @@ namespace castor3d
 		/**@{*/
 		castor::FontRPtr getFont()const
 		{
-			return &static_cast< castor::Font & >( *m_font.lock() );
+			return m_font;
 		}
 
 		FontGlyphBuffer const & getFontBuffer()const
@@ -244,7 +244,7 @@ namespace castor3d
 			return getResource().get();
 		}
 
-		SamplerResPtr getSampler()const
+		SamplerObs getSampler()const
 		{
 			return m_sampler;
 		}
@@ -272,8 +272,8 @@ namespace castor3d
 		void swapResources()override;
 
 	private:
-		castor::FontResPtr m_font;
-		SamplerResPtr m_sampler;
+		castor::FontResPtr m_font{};
+		SamplerObs m_sampler{};
 		GlyphPositionMap m_frontGlyphsPositions;
 		GlyphPositionMap m_backGlyphsPositions;
 		uint32_t m_id;

@@ -406,9 +406,8 @@ namespace castor3d
 
 		Sampler const & getSampler()const
 		{
-			auto result = m_sampler.lock();
-			CU_Require( result );
-			return *result;
+			CU_Require( m_sampler );
+			return *m_sampler;
 		}
 		/**@}*/
 
@@ -437,7 +436,7 @@ namespace castor3d
 		bool m_srgb{ false };
 		Texture m_textureId;
 		TextureLayoutUPtr m_texture;
-		SamplerResPtr m_sampler;
+		SamplerObs m_sampler{};
 		std::unique_ptr< IblTextures > m_ibl;
 		bool m_hasIBLSupport;
 	};

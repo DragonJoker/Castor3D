@@ -22,16 +22,14 @@ namespace castor3d
 	{
 		static TextureLayoutUPtr createTexture( Engine & engine, castor::FontResPtr font )
 		{
-			auto fnt = font.lock();
-
-			if ( !fnt )
+			if ( !font )
 			{
 				CU_Exception( "No Font given to FontTexture" );
 			}
 
-			uint32_t const maxWidth = fnt->getMaxWidth();
-			uint32_t const maxHeight = fnt->getMaxHeight();
-			uint32_t const count = uint32_t( std::ceil( double( std::distance( fnt->begin(), fnt->end() ) ) / 16.0 ) );
+			uint32_t const maxWidth = font->getMaxWidth();
+			uint32_t const maxHeight = font->getMaxHeight();
+			uint32_t const count = uint32_t( std::ceil( double( std::distance( font->begin(), font->end() ) ) / 16.0 ) );
 
 			ashes::ImageCreateInfo image{ 0u
 				, VK_IMAGE_TYPE_2D
@@ -45,7 +43,7 @@ namespace castor3d
 			return castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
 				, image
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "FontTexture_" ) + fnt->getFaceName() + castor::string::toString( fnt->getHeight() ) );
+				, cuT( "FontTexture_" ) + font->getFaceName() + castor::string::toString( font->getHeight() ) );
 		}
 	}
 
@@ -75,14 +73,12 @@ namespace castor3d
 			, *this
 			, MaxCharsPerBuffer ) }
 	{
-		auto fnt = m_font.lock();
-
-		if ( !fnt )
+		if ( !m_font )
 		{
 			CU_Exception( "No Font given to FontTexture" );
 		}
 
-		if ( auto sampler = getEngine()->addNewSampler( fnt->getName(), *getEngine() ).lock() )
+		if ( auto sampler = getEngine()->addNewSampler( m_font->getName(), *getEngine() ) )
 		{
 			sampler->setWrapS( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 			sampler->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
