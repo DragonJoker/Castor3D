@@ -36,7 +36,7 @@ namespace GuiCommon
 			, bool editable
 			, wxTreeItemId id
 			, uint32_t index
-			, castor3d::PassSPtr pass
+			, castor3d::Pass & pass
 			, uint32_t iconOffset );
 		static void doAddTexture( wxTreeCtrl * treeCtrl
 			, bool editable

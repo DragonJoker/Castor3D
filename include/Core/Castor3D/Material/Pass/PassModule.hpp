@@ -116,7 +116,7 @@ namespace castor3d
 	*/
 	class SubsurfaceScattering;
 
-	CU_DeclareSmartPtr( Pass );
+	CU_DeclareCUSmartPtr( castor3d, Pass, C3D_API );
 	CU_DeclareSmartPtr( SubsurfaceScattering );
 
 	CU_DeclareCUSmartPtr( castor3d, PassFactory, C3D_API );
@@ -124,7 +124,7 @@ namespace castor3d
 	//! Pass array
 	CU_DeclareVector( Pass, Pass );
 	//! Pass pointer array
-	CU_DeclareVector( PassSPtr, PassPtr );
+	CU_DeclareVector( PassUPtr, PassPtr );
 
 	using OnPassChangedFunction = std::function< void( Pass const & ) >;
 	using OnPassChanged = castor::SignalT< OnPassChangedFunction >;
@@ -147,7 +147,7 @@ namespace castor3d
 		ShaderBufferDeclarator declare;
 	};
 
-	using PassCreator = std::function< PassSPtr( LightingModelID, Material & ) >;
+	using PassCreator = std::function< PassUPtr( LightingModelID, Material & ) >;
 
 	struct PassFactoryEntry
 	{
@@ -160,7 +160,7 @@ namespace castor3d
 
 	using PassFactoryBase = castor::Factory< Pass
 		, LightingModelID
-		, PassSPtr
+		, PassUPtr
 		, PassCreator
 		, PassTypeID
 		, PassFactoryEntry >;

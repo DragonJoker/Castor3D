@@ -311,7 +311,7 @@ namespace castor3d
 	{
 		std::vector< std::pair< uint32_t, SubmeshRenderNodeUPtr > > nodes;
 
-		for ( auto pass : oldMaterial )
+		for ( auto & pass : oldMaterial )
 		{
 			auto submeshIt = m_submeshNodes.find( scnrendnd::makeNodeHash( *pass, data, instance ) );
 
@@ -392,7 +392,7 @@ namespace castor3d
 	{
 		std::vector< std::pair< uint32_t, BillboardRenderNodeUPtr > > nodes;
 
-		for ( auto pass : oldMaterial )
+		for ( auto & pass : oldMaterial )
 		{
 			auto billboardIt = m_billboardNodes.find( scnrendnd::makeNodeHash( *pass, billboard ) );
 

@@ -14,7 +14,7 @@ namespace toon
 {
 	struct ToonPbrPass
 	{
-		static castor3d::PassSPtr create( castor3d::LightingModelID lightingModelId
+		static castor3d::PassUPtr create( castor3d::LightingModelID lightingModelId
 			, castor3d::Material & parent )
 		{
 			auto result = castor3d::PbrPass::create( lightingModelId, parent );
@@ -25,7 +25,7 @@ namespace toon
 
 	struct ToonPhongPass
 	{
-		static castor3d::PassSPtr create( castor3d::LightingModelID lightingModelId
+		static castor3d::PassUPtr create( castor3d::LightingModelID lightingModelId
 			, castor3d::Material & parent )
 		{
 			auto result = castor3d::PhongPass::create( lightingModelId, parent );

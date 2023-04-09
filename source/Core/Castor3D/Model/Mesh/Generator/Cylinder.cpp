@@ -92,7 +92,6 @@ namespace castor3d
 
 			auto topCenterIndex = uint32_t( topVertex.size() );
 			auto bottomCenterIndex = uint32_t( baseVertex.size() );
-			FaceSPtr pFace;
 			topVertex.push_back( InterleavedVertex{}
 				.position( castor::Point3f{ 0.0, m_height / 2, 0.0 } )
 				.normal( castor::Point3f{ 0.0, 1.0, 0.0 } )

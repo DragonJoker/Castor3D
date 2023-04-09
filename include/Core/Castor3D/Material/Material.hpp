@@ -46,7 +46,7 @@ namespace castor3d
 		 *\param[in]	LightingModelID	L'ID du modèle d'éclairage de la passe.
 		 *\return		La passe créée.
 		 */
-		C3D_API PassSPtr createPass( LightingModelID lightingModelId );
+		C3D_API PassRPtr createPass( LightingModelID lightingModelId );
 		/**
 		 *\~english
 		 *\brief		Creates a pass.
@@ -55,7 +55,7 @@ namespace castor3d
 		 *\brief		Crée une passe.
 		 *\return		La passe créée.
 		 */
-		C3D_API PassSPtr createPass();
+		C3D_API PassRPtr createPass();
 		/**
 		 *\~english
 		 *\brief		Adds a pass, cloning the given one.
@@ -71,7 +71,7 @@ namespace castor3d
 		 *\brief		Supprime une passe externe.
 		 *\param[in]	pass	La passe.
 		 */
-		C3D_API void removePass( PassSPtr pass );
+		C3D_API void removePass( PassRPtr pass );
 		/**
 		 *\~english
 		 *\brief		Retrieves a pass and returns it.
@@ -82,7 +82,7 @@ namespace castor3d
 		 *\param[in]	index	L'index de la passe voulue.
 		 *\return		La passe récupére ou nullptr si non trouvés.
 		 */
-		C3D_API PassSPtr getPass( uint32_t index )const;
+		C3D_API PassRPtr getPass( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Destroys the pass at the given index.
@@ -188,7 +188,7 @@ namespace castor3d
 	private:
 		PassPtrArray m_passes;
 		LightingModelID m_lightingModelId;
-		std::map< PassSPtr, OnPassChangedConnection > m_passListeners;
+		std::map< PassRPtr, OnPassChangedConnection > m_passListeners;
 		RenderPassRegisterInfo * m_renderPassInfo{};
 		bool m_serialisable{ true };
 	};

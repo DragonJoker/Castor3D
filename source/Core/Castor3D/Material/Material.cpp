@@ -24,7 +24,7 @@ namespace castor3d
 	{
 		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
 
-		for ( auto pass : m_passes )
+		for ( auto & pass : m_passes )
 		{
 			pass->initialise();
 		}
@@ -32,13 +32,13 @@ namespace castor3d
 
 	void Material::cleanup()
 	{
-		for ( auto pass : m_passes )
+		for ( auto & pass : m_passes )
 		{
 			pass->cleanup();
 		}
 	}
 
-	PassSPtr Material::createPass( LightingModelID lightingModelId )
+	PassRPtr Material::createPass( LightingModelID lightingModelId )
 	{
 		if ( m_passes.size() == MaxPassLayers )
 		{
@@ -47,20 +47,21 @@ namespace castor3d
 			return nullptr;
 		}
 
-		auto result = getEngine()->getPassFactory().create( lightingModelId
-			, *this );
+		auto result = getEngine()->getPassFactory().create( *this
+			, lightingModelId );
 		CU_Require( result );
-		m_passListeners.emplace( result
+		auto ret = result.get();
+		m_passListeners.emplace( ret
 			, result->onChanged.connect( [this]( Pass const & p )
 			{
 				onPassChanged( p );
 			} ) );
-		m_passes.push_back( result );
+		m_passes.emplace_back( std::move( result ) );
 		onChanged( *this );
-		return result;
+		return ret;
 	}
 
-	PassSPtr Material::createPass()
+	PassRPtr Material::createPass()
 	{
 		return createPass( m_lightingModelId );
 	}
@@ -74,39 +75,45 @@ namespace castor3d
 			return;
 		}
 
-		auto newPass = pass.clone( *this );
+		auto newPass = getEngine()->getPassFactory().create( *this
+			, pass );
 		CU_Require( newPass );
-		m_passListeners.emplace( newPass
+		m_passListeners.emplace( newPass.get()
 			, newPass->onChanged.connect( [this]( Pass const & p )
 			{
 				onPassChanged( p );
 			} ) );
-		m_passes.push_back( newPass );
+		m_passes.emplace_back( std::move( newPass ) );
 		onChanged( *this );
 	}
 
-	void Material::removePass( PassSPtr pass )
+	void Material::removePass( PassRPtr pass )
 	{
-		auto it = std::find( m_passes.begin(), m_passes.end(), pass );
+		auto it = std::find_if( m_passes.begin()
+			, m_passes.end()
+			, [pass]( PassUPtr const & lookup )
+			{
+				return lookup.get() == pass;
+			} );
 
 		if ( it != m_passes.end() )
 		{
-			m_passListeners.erase( *it );
+			m_passListeners.erase( it->get() );
 			m_passes.erase( it );
 			onChanged( *this );
 		}
 	}
 
-	PassSPtr Material::getPass( uint32_t index )const
+	PassRPtr Material::getPass( uint32_t index )const
 	{
 		CU_Require( index < m_passes.size() );
-		return m_passes[index];
+		return m_passes[index].get();
 	}
 
 	void Material::destroyPass( uint32_t index )
 	{
 		CU_Require( index < m_passes.size() );
-		m_passListeners.erase( *( m_passes.begin() + index ) );
+		m_passListeners.erase( ( m_passes.begin() + index )->get() );
 		m_passes.erase( m_passes.begin() + index );
 		onChanged( *this );
 	}
@@ -115,7 +122,7 @@ namespace castor3d
 	{
 		return m_passes.end() == std::find_if( m_passes.begin()
 			, m_passes.end()
-			, []( PassSPtr pass )
+			, []( PassUPtr const & pass )
 			{
 				return !pass->hasAlphaBlending();
 			} );
@@ -125,7 +132,7 @@ namespace castor3d
 	{
 		return m_passes.end() != std::find_if( m_passes.begin()
 			, m_passes.end()
-			, []( PassSPtr pass )
+			, []( PassUPtr const & pass )
 			{
 				return pass->hasEnvironmentMapping();
 			} );
@@ -135,7 +142,7 @@ namespace castor3d
 	{
 		return m_passes.end() != std::find_if( m_passes.begin()
 			, m_passes.end()
-			, []( PassSPtr pass )
+			, []( PassUPtr const & pass )
 			{
 				return pass->hasSubsurfaceScattering();
 			} );

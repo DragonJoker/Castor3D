@@ -33,7 +33,7 @@ namespace castor
 				result = writeName( file, "render_pass", material.getRenderPassInfo()->name );
 			}
 
-			for ( auto pass : material )
+			for ( auto & pass : material )
 			{
 				result = result
 					&& writeSub( file, *pass, m_folder, m_subfolder );
