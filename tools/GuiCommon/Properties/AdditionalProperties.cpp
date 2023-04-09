@@ -150,7 +150,7 @@ namespace GuiCommon
 			{
 				m_image->resample( { uint32_t( rect.width ), uint32_t( rect.height ) } );
 				m_bitmap = std::make_unique< wxBitmap >();
-				createBitmapFromBuffer( m_image->getPixels()
+				createBitmapFromBuffer( *m_image->getPixels()
 					, false
 					, *m_bitmap );
 			}

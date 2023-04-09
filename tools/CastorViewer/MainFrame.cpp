@@ -100,6 +100,20 @@ namespace CastorViewer
 				}
 			}
 		}
+
+		static void addWildcard( wxString & result
+			, wxString const & name
+			, wxString const & extensions )
+		{
+			if ( !result.empty() )
+			{
+				result += wxT( "|" );
+			}
+
+			result += name
+				+ wxT( " (" ) + extensions
+				+ wxT( ")|" ) + extensions;
+		}
 	}
 
 	MainFrame::MainFrame( wxString const & title )
@@ -539,20 +553,16 @@ namespace CastorViewer
 			window.enableSaveFrame();
 			castor.getRenderLoop().renderSyncFrame();
 			auto buffer = window.getSavedFrame();
-			GuiCommon::createBitmapFromBuffer( buffer
+			GuiCommon::createBitmapFromBuffer( *buffer
 				, false
 				, bitmap );
 
-			wxString strWildcard = _( "All supported files" );
-			strWildcard += wxT( " (*.bmp;*.gif;*.png;*.jpg)|*.bmp;*.gif;*.png;*.jpg|" );
-			strWildcard += _( "BITMAP files" );
-			strWildcard += wxT( " (*.bmp)|*.bmp|" );
-			strWildcard += _( "GIF files" );
-			strWildcard += wxT( " (*.gif)|*.gif|" );
-			strWildcard += _( "JPEG files" );
-			strWildcard += wxT( " (*.jpg)|*.jpg|" );
-			strWildcard += _( "PNG files" );
-			strWildcard += wxT( " (*.png)|*.png" );
+			wxString strWildcard;
+			main::addWildcard( strWildcard, _( "All supported image types" ), wxT( "*.bmp;*.gif;*.png;*.jpg" ) );
+			main::addWildcard( strWildcard, _( "BITMAP image" ), wxT( "*.bmp" ) );
+			main::addWildcard( strWildcard, _( "GIF image" ), wxT( "*.gif" ) );
+			main::addWildcard( strWildcard, _( "JPEG image" ), wxT( "*.jpg" ) );
+			main::addWildcard( strWildcard, _( "PNG image" ), wxT( "*.png" ) );
 			wxFileDialog dialog( this, _( "Please choose an image file name" ), wxEmptyString, wxEmptyString, strWildcard, wxFD_SAVE | wxFD_OVERWRITE_PROMPT );
 
 			if ( dialog.ShowModal() == wxID_OK )

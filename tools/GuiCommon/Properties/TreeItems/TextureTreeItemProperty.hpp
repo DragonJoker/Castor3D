@@ -43,7 +43,7 @@ namespace GuiCommon
 		 */
 		TextureTreeItemProperty( bool editable
 			, castor3d::Pass & pass
-			, castor3d::TextureUnitSPtr texture );
+			, castor3d::TextureUnit & texture );
 
 	private:
 		/**

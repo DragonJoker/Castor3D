@@ -194,7 +194,7 @@ namespace GuiCommon
 	 *\param[in]	flip	Tells if the image mut be flipped.
 	 *\param[out]	bitmap	Reçoit le bitmap généré.
 	 */
-	void createBitmapFromBuffer( castor::PxBufferBaseRPtr buffer
+	void createBitmapFromBuffer( castor::PxBufferBase const & buffer
 		, bool flip
 		, wxBitmap & bitmap );
 	/**
@@ -211,7 +211,7 @@ namespace GuiCommon
 	 *\param[in]	flip	Tells if the image must be flipped.
 	 *\param[out]	bitmap	Reçoit le bitmap généré.
 	 */
-	void createBitmapFromBuffer( castor3d::TextureUnitSPtr unit
+	void createBitmapFromBuffer( castor3d::TextureUnit const & unit
 		, bool flip
 		, wxBitmap & bitmap );
 	/**

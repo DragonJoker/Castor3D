@@ -38,6 +38,7 @@ namespace castor3d
 		friend struct PassComponent;
 
 	public:
+		using UnitArray = std::vector< TextureUnitRPtr >;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -171,7 +172,7 @@ namespace castor3d
 		 *\param[in]	index	L'index voulu.
 		 *\return		\p nullptr si index était hors bornes.
 		 */
-		C3D_API TextureUnitSPtr getTextureUnit( uint32_t index )const;
+		C3D_API TextureUnitRPtr getTextureUnit( uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Adds a texture.
@@ -372,7 +373,7 @@ namespace castor3d
 		C3D_API bool hasEnvironmentMapping()const;
 		C3D_API bool hasSubsurfaceScattering()const;
 		C3D_API bool isTwoSided()const;
-		C3D_API TextureUnitPtrArray getTextureUnits()const;
+		C3D_API UnitArray getTextureUnits()const;
 		C3D_API uint32_t getTextureUnitsCount()const;
 		C3D_API TextureCombine getTexturesMask()const;
 		C3D_API bool hasLighting()const;
@@ -487,22 +488,25 @@ namespace castor3d
 			m_dirty = false;
 		}
 		/**@}*/
+		/**
+		*name
+		*	Signals.
+		*/
+		/**@{*/
+		OnPassChanged onChanged;
+		/**@}*/
 
 	protected:
 		C3D_API static void parseError( castor::String const & error );
 
+		mutable std::atomic_bool m_dirty{ true };
+
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
 		void doAddUnit( TextureUnitData & unitData
-			, TextureUnitSPtr unit
-			, TextureUnitPtrArray & result );
+			, TextureUnitRPtr unit
+			, UnitArray & result );
 		void doUpdateTextureFlags();
-
-	public:
-		OnPassChanged onChanged;
-
-	protected:
-		mutable std::atomic_bool m_dirty{ true };
 
 	private:
 		PassComponentCombine m_componentCombine;
@@ -513,7 +517,7 @@ namespace castor3d
 		std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};
 		std::atomic_bool m_texturesReduced{ false };
-		TextureUnitPtrArray m_textureUnits;
+		UnitArray m_textureUnits;
 		uint32_t m_id{ 0u };
 		bool m_implicit{ false };
 		bool m_automaticShader{ true };

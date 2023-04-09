@@ -43,7 +43,7 @@ namespace GuiCommon
 			, wxTreeItemId id
 			, uint32_t index
 			, castor3d::Pass & pass
-			, castor3d::TextureUnitSPtr texture
+			, castor3d::TextureUnit & texture
 			, uint32_t iconOffset );
 
 #pragma clang diagnostic push

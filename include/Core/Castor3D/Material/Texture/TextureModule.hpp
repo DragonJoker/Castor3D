@@ -222,10 +222,6 @@ namespace castor3d
 
 	//! TextureUnit array
 	CU_DeclareVector( TextureUnit, TextureUnit );
-	//! TextureUnit pointer array
-	CU_DeclareVector( TextureUnitSPtr, TextureUnitPtr );
-	//! TextureUnit reference array
-	CU_DeclareVector( std::reference_wrapper< TextureUnit >, DepthMap );
 	// ARGB => 4 components => 4 channels per configuration.
 	using TextureFlagConfigurations = std::array< TextureFlagConfiguration, 4u >;
 
