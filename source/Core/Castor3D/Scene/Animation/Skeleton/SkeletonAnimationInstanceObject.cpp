@@ -5,6 +5,8 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, SkeletonAnimationInstanceObject )
+
 namespace castor3d
 {
 	SkeletonAnimationInstanceObject::SkeletonAnimationInstanceObject( SkeletonAnimationInstance & animationInstance
@@ -19,21 +21,21 @@ namespace castor3d
 			{
 			case SkeletonNodeType::eNode:
 				{
-					auto instance = std::make_shared< SkeletonAnimationInstanceNode >( animationInstance
-						, *std::static_pointer_cast< SkeletonAnimationNode >( moving )
+					auto instance = castor::makeUniqueDerived< SkeletonAnimationInstanceObject, SkeletonAnimationInstanceNode >( animationInstance
+						, static_cast< SkeletonAnimationNode & >( *moving )
 						, allObjects );
-					m_children.push_back( instance );
-					allObjects.push_back( instance );
+					addChild( *instance );
+					allObjects.push_back( std::move( instance ) );
 				}
 				break;
 
 			case SkeletonNodeType::eBone:
 				{
-					auto instance = std::make_shared< SkeletonAnimationInstanceBone >( animationInstance
-						, *std::static_pointer_cast< SkeletonAnimationBone >( moving )
+					auto instance = castor::makeUniqueDerived< SkeletonAnimationInstanceObject, SkeletonAnimationInstanceBone >( animationInstance
+						, static_cast< SkeletonAnimationBone & >( *moving )
 						, allObjects );
-					m_children.push_back( instance );
-					allObjects.push_back( instance );
+					addChild( *instance );
+					allObjects.push_back( std::move( instance ) );
 				}
 				break;
 
@@ -43,9 +45,9 @@ namespace castor3d
 		}
 	}
 
-	void SkeletonAnimationInstanceObject::addChild( SkeletonAnimationInstanceObjectSPtr object )
+	void SkeletonAnimationInstanceObject::addChild( SkeletonAnimationInstanceObject & object )
 	{
-		m_children.push_back( object );
+		m_children.push_back( &object );
 	}
 
 	void SkeletonAnimationInstanceObject::update( castor::Matrix4x4f const & current )

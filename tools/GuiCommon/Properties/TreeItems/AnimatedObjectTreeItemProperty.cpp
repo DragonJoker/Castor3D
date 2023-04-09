@@ -7,23 +7,19 @@
 
 namespace GuiCommon
 {
-	namespace
-	{
-		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
-	}
-
-	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool editable, castor3d::AnimatedObjectSPtr object )
+	AnimatedObjectTreeItemProperty::AnimatedObjectTreeItemProperty( castor3d::Engine * engine
+		, bool editable
+		, castor3d::AnimatedObjectRPtr object )
 		: TreeItemProperty( engine, editable )
-		, m_object( object.get() )
+		, m_object( object )
 	{
-		PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
-
 		CreateTreeItemMenu();
 	}
 
 	void AnimatedObjectTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
+		static wxString PROPERTY_CATEGORY_ANIMATED_OBJECT = _( "Animated Object: " );
 		auto object = getObject();
 
 		if ( object )

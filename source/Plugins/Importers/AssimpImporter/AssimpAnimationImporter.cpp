@@ -128,7 +128,7 @@ namespace c3d_assimp
 
 		for ( auto & keyFrame : keyframes )
 		{
-			animation.addKeyFrame( std::move( keyFrame.second ) );
+			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
 		return true;
@@ -162,9 +162,9 @@ namespace c3d_assimp
 
 					if ( kfit == animation.end() )
 					{
-						auto keyFrame = std::make_unique< castor3d::MeshMorphTarget >( animation, timeIndex );
+						auto keyFrame = castor::makeUnique< castor3d::MeshMorphTarget >( animation, timeIndex );
 						kf = keyFrame.get();
-						animation.addKeyFrame( std::move( keyFrame ) );
+						animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame ) );
 					}
 					else
 					{
@@ -219,7 +219,7 @@ namespace c3d_assimp
 
 		for ( auto & keyFrame : keyframes )
 		{
-			animation.addKeyFrame( std::move( keyFrame.second ) );
+			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
 		return true;
@@ -243,7 +243,7 @@ namespace c3d_assimp
 			const aiNodeAnim * aiNodeAnim = anims::findSkelNodeAnim( aiAnimation
 				, nodeName );
 			auto parentSkelNode = skelNode->getParent();
-			castor3d::SkeletonAnimationObjectSPtr parent;
+			castor3d::SkeletonAnimationObjectRPtr parent{};
 
 			if ( parentSkelNode )
 			{
@@ -252,7 +252,7 @@ namespace c3d_assimp
 				CU_Require( parent );
 			}
 
-			castor3d::SkeletonAnimationObjectSPtr object;
+			castor3d::SkeletonAnimationObjectRPtr object{};
 			CU_Require( !animation.hasObject( skelNode->getType(), name ) );
 
 			if ( skelNode->getType() == castor3d::SkeletonNodeType::eBone )

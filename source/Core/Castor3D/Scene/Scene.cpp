@@ -642,7 +642,7 @@ namespace castor3d
 		return getEngine()->getLightingModelFactory().getLightingModelsID( m_background->getModelID() );
 	}
 
-	AnimatedObjectSPtr Scene::addAnimatedTexture( TextureSourceInfo const & sourceInfo
+	AnimatedObjectRPtr Scene::addAnimatedTexture( TextureSourceInfo const & sourceInfo
 		, TextureConfiguration const & config
 		, Pass & pass )
 	{

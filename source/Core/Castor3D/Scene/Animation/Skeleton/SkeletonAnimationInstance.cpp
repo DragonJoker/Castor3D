@@ -10,6 +10,8 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceBone.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceNode.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, SkeletonAnimationInstance )
+
 namespace castor3d
 {
 	//*************************************************************************************************
@@ -34,25 +36,23 @@ namespace castor3d
 		, SkeletonAnimation & animation )
 		: AnimationInstance{ object, animation }
 	{
-		for ( auto moving : animation.m_arrayMoving )
+		for ( auto moving : animation.getRootObjects() )
 		{
 			switch ( moving->getType() )
 			{
 			case SkeletonNodeType::eNode:
 				{
-					auto instance = std::make_shared< SkeletonAnimationInstanceNode >( *this
-						, *std::static_pointer_cast< SkeletonAnimationNode >( moving )
-						, m_toMove );
-					m_toMove.push_back( instance );
+					m_toMove.push_back( castor::makeUniqueDerived< SkeletonAnimationInstanceObject, SkeletonAnimationInstanceNode >( *this
+						, static_cast< SkeletonAnimationNode & >( *moving )
+						, m_toMove ) );
 				}
 				break;
 
 			case SkeletonNodeType::eBone:
 				{
-					auto instance = std::make_shared< SkeletonAnimationInstanceBone >( *this
-						, *std::static_pointer_cast< SkeletonAnimationBone >( moving )
-						, m_toMove );
-					m_toMove.push_back( instance );
+					m_toMove.push_back( castor::makeUniqueDerived< SkeletonAnimationInstanceObject, SkeletonAnimationInstanceBone >( *this
+						, static_cast< SkeletonAnimationBone & >( *moving )
+						, m_toMove ) );
 				}
 				break;
 
@@ -73,31 +73,31 @@ namespace castor3d
 			: m_keyFrames.begin();
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( BoneNode const & bone )const
+	SkeletonAnimationInstanceObjectRPtr SkeletonAnimationInstance::getObject( BoneNode const & bone )const
 	{
 		return getObject( SkeletonNodeType::eBone, bone.getName() );
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonNode const & node )const
+	SkeletonAnimationInstanceObjectRPtr SkeletonAnimationInstance::getObject( SkeletonNode const & node )const
 	{
 		return getObject( SkeletonNodeType::eNode, node.getName() );
 	}
 
-	SkeletonAnimationInstanceObjectSPtr SkeletonAnimationInstance::getObject( SkeletonNodeType type
+	SkeletonAnimationInstanceObjectRPtr SkeletonAnimationInstance::getObject( SkeletonNodeType type
 		, castor::String const & name )const
 	{
-		SkeletonAnimationInstanceObjectSPtr result;
+		SkeletonAnimationInstanceObjectRPtr result{};
 		auto fullName = sklanminst::getObjectTypeName( type ) + name;
 		auto it = std::find_if( m_toMove.begin()
 			, m_toMove.end()
-			, [&fullName]( SkeletonAnimationInstanceObjectSPtr lookup )
+			, [&fullName]( SkeletonAnimationInstanceObjectUPtr const & lookup )
 			{
 				return sklanminst::getObjectTypeName( lookup->getObject().getType() ) + lookup->getObject().getName() == fullName;
 			} );
 
 		if ( it != m_toMove.end() )
 		{
-			result = *it;
+			result = it->get();
 		}
 		else
 		{

@@ -639,7 +639,7 @@ namespace c3d_assimp
 
 	castor3d::AnimationImporterUPtr AssimpImporterFile::createAnimationImporter()
 	{
-		return std::make_unique< AssimpAnimationImporter >( *getOwner() );
+		return castor::makeUniqueDerived< castor3d::AnimationImporter, AssimpAnimationImporter >( *getOwner() );
 	}
 
 	castor3d::SkeletonImporterUPtr AssimpImporterFile::createSkeletonImporter()

@@ -21,6 +21,7 @@ namespace castor3d
 		, public castor::OwnedBy< Scene >
 	{
 	public:
+		using AnimatedObjectMap = std::map< castor::String, AnimatedObjectUPtr >;
 		/**
 		 *\~english
 		 *\brief		Specified constructor
@@ -50,7 +51,7 @@ namespace castor3d
 		 *\param[in]	node	Le SceneNode à partir duquel l'AnimatedObject est créé.
 		 *\param[in]	name	Le nom de l'instance du SceneNode.
 		 */
-		C3D_API AnimatedObjectSPtr addObject( SceneNode & node
+		C3D_API AnimatedObjectRPtr addObject( SceneNode & node
 			, castor::String const & name );
 		/**
 		 *\~english
@@ -64,7 +65,7 @@ namespace castor3d
 		 *\param[in]	geometry	La géométrie instanciant le maillage.
 		 *\param[in]	name		Le nom de l'instance du Mesh.
 		 */
-		C3D_API AnimatedObjectSPtr addObject( Mesh & mesh
+		C3D_API AnimatedObjectRPtr addObject( Mesh & mesh
 			, Geometry & geometry
 			, castor::String const & name );
 		/**
@@ -81,7 +82,7 @@ namespace castor3d
 		 *\param[in]	geometry	La géométrie instanciant le maillage.
 		 *\param[in]	name		Le nom de l'instance du Skeleton.
 		 */
-		C3D_API AnimatedObjectSPtr addObject( Skeleton & skeleton
+		C3D_API AnimatedObjectRPtr addObject( Skeleton & skeleton
 			, Mesh & mesh
 			, Geometry & geometry
 			, castor::String const & name );
@@ -97,7 +98,7 @@ namespace castor3d
 		 *\param[in]	config		La configuration de texture
 		 *\param[in]	pass		La passe instanciant la texture.
 		 */
-		C3D_API AnimatedObjectSPtr addObject( TextureSourceInfo const & sourceInfo
+		C3D_API AnimatedObjectRPtr addObject( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & config
 			, Pass & pass );
 		/**
@@ -110,7 +111,7 @@ namespace castor3d
 		 *\remarks		Cette fonction considère que l'objet a préalablement été créé afin d'être intégré à ce groupe (avec donc les bonnes scène et map d'animations)
 		 *\param[in]	object	Le AnimatedObject à ajouter
 		 */
-		C3D_API bool addObject( AnimatedObjectSPtr object );
+		C3D_API bool addObject( AnimatedObjectUPtr object );
 		/**
 		 *\~english
 		 *\brief		Find an AnimatedObject given its name.
@@ -264,7 +265,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les objets animés.
 		 */
-		AnimatedObjectPtrStrMap const & getObjects()const
+		AnimatedObjectMap const & getObjects()const
 		{
 			return m_objects;
 		}
@@ -281,7 +282,7 @@ namespace castor3d
 
 	private:
 		GroupAnimationMap m_animations;
-		AnimatedObjectPtrStrMap m_objects;
+		AnimatedObjectMap m_objects;
 		castor::PreciseTimer m_timer;
 	};
 }

@@ -13,7 +13,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
+	AnimatedObjectRPtr findAnimatedObject( Scene const & scene
 		, castor::String const & name );
 
 	size_t hash( SubmeshRenderNode const & culled );

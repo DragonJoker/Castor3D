@@ -219,10 +219,10 @@ namespace castor3d
 		FloatArray vertexTex{};
 		UInt32Array faces{};
 		AnimatedObjectGroupRPtr animGroup{};
-		AnimatedObjectSPtr animSkeleton{};
-		AnimatedObjectSPtr animMesh{};
-		AnimatedObjectSPtr animNode{};
-		AnimatedObjectSPtr animTexture{};
+		AnimatedObjectRPtr animSkeleton{};
+		AnimatedObjectRPtr animMesh{};
+		AnimatedObjectRPtr animNode{};
+		AnimatedObjectRPtr animTexture{};
 		TextureAnimationUPtr textureAnimation{};
 		MeshAnimationUPtr morphAnimation{};
 		SceneBackgroundSPtr background{};

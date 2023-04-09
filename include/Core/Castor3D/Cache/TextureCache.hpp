@@ -92,7 +92,7 @@ namespace castor3d
 		C3D_API TextureUnitRPtr getTexture( TextureUnitData & unitData );
 		C3D_API TextureUnitData & getSourceData( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config
-			, AnimationUPtr animation );
+			, TextureAnimationUPtr animation );
 		C3D_API TextureUnitData & mergeSources( TextureSourceInfo const & lhsSourceInfo
 			, PassTextureConfig const & lhsPassConfig
 			, uint32_t lhsSrcMask

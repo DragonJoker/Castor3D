@@ -3077,7 +3077,7 @@ namespace castor3d
 				{
 					for ( auto animName : file->listSkeletonAnimations( *parsingContext.skeleton ) )
 					{
-						auto animation = std::make_unique< SkeletonAnimation >( *parsingContext.skeleton
+						auto animation = castor::makeUnique< SkeletonAnimation >( *parsingContext.skeleton
 							, animName );
 
 						if ( !importer->import( *animation
@@ -3088,7 +3088,7 @@ namespace castor3d
 						}
 						else
 						{
-							parsingContext.skeleton->addAnimation( std::move( animation ) );
+							parsingContext.skeleton->addAnimation( castor::ptrRefCast< Animation >( animation ) );
 						}
 					}
 				}
@@ -3220,7 +3220,7 @@ namespace castor3d
 				scnprs::fillMeshImportParameters( context, meshParams, parameters );
 			}
 
-			auto animation = std::make_unique< MeshAnimation >( *parsingContext.mesh.lock()
+			auto animation = castor::makeUnique< MeshAnimation >( *parsingContext.mesh
 				, pathFile.getFileName() );
 
 			if ( !AnimationImporter::import( *animation
@@ -3231,7 +3231,7 @@ namespace castor3d
 			}
 			else
 			{
-				parsingContext.mesh.lock()->addAnimation( std::move( animation ) );
+				parsingContext.mesh->addAnimation( castor::ptrRefCast< Animation >( animation ) );
 			}
 		}
 	}
@@ -3454,7 +3454,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			parsingContext.morphAnimation = std::make_unique< MeshAnimation >( *mesh, name );
+			parsingContext.morphAnimation = castor::makeUnique< MeshAnimation >( *mesh, name );
 		}
 		else
 		{
@@ -3536,9 +3536,9 @@ namespace castor3d
 
 				if ( kfit == animation.end() )
 				{
-					auto keyFrame = std::make_unique< MeshMorphTarget >( animation, time );
+					auto keyFrame = castor::makeUnique< MeshMorphTarget >( animation, time );
 					kf = keyFrame.get();
-					animation.addKeyFrame( std::move( keyFrame ) );
+					animation.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 				}
 				else
 				{
@@ -3569,7 +3569,7 @@ namespace castor3d
 		}
 		else if ( auto mesh = parsingContext.mesh )
 		{
-			mesh->addAnimation( std::move( parsingContext.morphAnimation ) );
+			mesh->addAnimation( castor::ptrRefCast< Animation >( parsingContext.morphAnimation ) );
 		}
 		else
 		{
@@ -4344,7 +4344,7 @@ namespace castor3d
 
 		if ( parsingContext.pass )
 		{
-			parsingContext.textureAnimation = std::make_unique< TextureAnimation >( *parsingContext.parser->getEngine()
+			parsingContext.textureAnimation = castor::makeUnique< TextureAnimation >( *parsingContext.parser->getEngine()
 				, "Default" );
 		}
 	}

@@ -14,8 +14,8 @@ namespace castor3d
 	{
 	protected:
 		using Animation = AnimationT< AnimableHandlerT >;
-		using AnimationPtr = std::unique_ptr< Animation >;
-		using AnimationPtrStrMap = std::map< castor::String, AnimationPtr >;
+		using AnimationPtr = castor::UniquePtr< Animation >;
+		using AnimationsMap = std::map< castor::String, AnimationPtr >;
 		/**
 		 *\~english
 		 *\name Construction / Destruction.
@@ -92,7 +92,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les animations.
 		 */
-		inline AnimationPtrStrMap const & getAnimations()const
+		inline AnimationsMap const & getAnimations()const
 		{
 			return m_animations;
 		}
@@ -135,7 +135,7 @@ namespace castor3d
 	protected:
 		//!\~english	All animations.
 		//!\~french		Toutes les animations.
-		AnimationPtrStrMap m_animations;
+		AnimationsMap m_animations;
 	};
 }
 

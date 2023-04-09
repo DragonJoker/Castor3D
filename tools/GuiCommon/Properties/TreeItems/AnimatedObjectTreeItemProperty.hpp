@@ -9,9 +9,6 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.8.0
 	\~english
 	\brief		AnimatedObject helper class to communicate between Scene objects or Materials lists and PropertiesContainer.
 	\~french
@@ -26,14 +23,16 @@ namespace GuiCommon
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
 		 *\param[in]	editable	Tells if the properties are modifiable.
-		 *\param[in]	light		The target AnimatedObject.
+		 *\param[in]	object		The target AnimatedObject.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	editable	Dit si les propriétés sont modifiables.
-		 *\param[in]	light		L"AnimatedObject cible.
+		 *\param[in]	object		L"AnimatedObject cible.
 		 */
-		AnimatedObjectTreeItemProperty( castor3d::Engine * engine, bool editable, castor3d::AnimatedObjectSPtr light );
+		AnimatedObjectTreeItemProperty( castor3d::Engine * engine
+			, bool editable
+			, castor3d::AnimatedObjectRPtr object );
 		/**
 		 *\~english
 		 *\brief		Retrieves the AnimatedObject.

@@ -103,12 +103,14 @@ namespace castor3d
 				}
 				break;
 			case ChunkType::eAnimation:
-				animation = std::make_unique< SkeletonAnimation >( obj );
+				animation = castor::makeUnique< SkeletonAnimation >( obj );
 				result = createBinaryParser< Animation >().parse( *animation, chunk );
 				checkError( result, "Couldn't parse animation." );
 				if ( result )
 				{
-					obj.m_animations.insert( { animation->getName(), std::move( animation ) } );
+					auto name = animation->getName();
+					obj.m_animations.emplace( name
+						, castor::ptrRefCast< Animation >( animation ) );
 				}
 				break;
 

@@ -18,6 +18,7 @@ namespace castor3d
 		: public castor::OwnedBy< SkeletonAnimationInstance >
 	{
 	protected:
+		using ObjectArray = std::vector< SkeletonAnimationInstanceObjectRPtr >;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -62,7 +63,7 @@ namespace castor3d
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	object	L'enfant.
 		 */
-		C3D_API void addChild( SkeletonAnimationInstanceObjectSPtr object );
+		C3D_API void addChild( SkeletonAnimationInstanceObject & object );
 		/**
 		 *\~english
 		 *\brief		Updates the object, applies the transformations.
@@ -88,7 +89,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		SkeletonAnimationInstanceObjectPtrArray const & getChildren()const
+		ObjectArray const & getChildren()const
 		{
 			return m_children;
 		}
@@ -124,7 +125,7 @@ namespace castor3d
 		AnimationKeyFrameArray::const_iterator m_curr;
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
-		SkeletonAnimationInstanceObjectPtrArray m_children;
+		ObjectArray m_children;
 		//!\~english	The cumulative animation transformations.
 		//!\~french		Les transformations cumulées de l'animation.
 		castor::Matrix4x4f m_cumulativeTransform;

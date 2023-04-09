@@ -48,13 +48,13 @@ namespace castor3d
 				break;
 
 			case ChunkType::eSceneNodeAnimationKeyFrame:
-				keyFrame = std::make_unique< SceneNodeAnimationKeyFrame >( obj, 0_ms );
+				keyFrame = castor::makeUnique< SceneNodeAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< SceneNodeAnimationKeyFrame >().parse( *keyFrame, chunk );
 				checkError( result, "Couldn't parse keyframe." );
 
 				if ( result )
 				{
-					obj.addKeyFrame( std::move( keyFrame ) );
+					obj.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 				}
 
 				break;

@@ -14,6 +14,7 @@ namespace castor3d
 		: public castor::Named
 	{
 	public:
+		using AnimationInstancesMap = std::map< castor::String, AnimationInstanceUPtr >;
 		/**
 		 *\~english
 		 *name Copy / Move.
@@ -143,7 +144,7 @@ namespace castor3d
 			return m_animations.find( name ) != m_animations.end();
 		}
 
-		AnimationInstancePtrStrMap const & getAnimations()const
+		AnimationInstancesMap const & getAnimations()const
 		{
 			return m_animations;
 		}
@@ -193,7 +194,7 @@ namespace castor3d
 	protected:
 		//!\~english	All animations.
 		//!\~french		Toutes les animations.
-		AnimationInstancePtrStrMap m_animations;
+		AnimationInstancesMap m_animations;
 
 	private:
 		AnimationType m_kind;

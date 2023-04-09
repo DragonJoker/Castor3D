@@ -159,7 +159,7 @@ namespace castor3d
 
 	AnimationImporterUPtr CmshImporterFile::createAnimationImporter()
 	{
-		return std::make_unique< CmshAnimationImporter >( *getOwner() );
+		return castor::makeUniqueDerived< AnimationImporter, CmshAnimationImporter >( *getOwner() );
 	}
 
 	SkeletonImporterUPtr CmshImporterFile::createSkeletonImporter()
@@ -243,7 +243,7 @@ namespace castor3d
 
 	AnimationImporterUPtr CmshAnimationImporter::create( Engine & engine )
 	{
-		return std::make_unique< CmshAnimationImporter >( engine );
+		return castor::makeUniqueDerived< AnimationImporter, CmshAnimationImporter >( engine );
 	}
 
 	bool CmshAnimationImporter::doImportSkeleton( SkeletonAnimation & animation )

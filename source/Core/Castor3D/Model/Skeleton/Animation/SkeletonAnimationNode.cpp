@@ -2,6 +2,8 @@
 
 #include "Castor3D/Model/Skeleton/SkeletonNode.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, SkeletonAnimationNode )
+
 namespace castor3d
 {
 	SkeletonAnimationNode::SkeletonAnimationNode( SkeletonAnimation & animation )
