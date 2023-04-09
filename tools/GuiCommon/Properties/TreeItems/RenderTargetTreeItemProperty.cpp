@@ -38,7 +38,7 @@ namespace GuiCommon
 				, target.getEngine()
 				, target.getSsaoConfig() } );
 
-		for ( auto postEffect : target.getHDRPostEffects() )
+		for ( auto & postEffect : target.getHDRPostEffects() )
 		{
 			list->AppendItem( targetId
 				, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
@@ -47,7 +47,7 @@ namespace GuiCommon
 				, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
 		}
 
-		for ( auto postEffect : target.getSRGBPostEffects() )
+		for ( auto & postEffect : target.getSRGBPostEffects() )
 		{
 			list->AppendItem( targetId
 				, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )

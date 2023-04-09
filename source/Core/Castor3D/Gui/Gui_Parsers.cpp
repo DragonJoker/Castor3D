@@ -1347,7 +1347,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1373,7 +1373,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1399,7 +1399,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1425,7 +1425,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1451,7 +1451,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1477,7 +1477,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1503,7 +1503,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1529,7 +1529,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1555,7 +1555,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1581,7 +1581,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1640,7 +1640,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1666,7 +1666,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1749,7 +1749,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1789,7 +1789,7 @@ namespace castor3d
 		if ( auto style = guiContext.progressStyle )
 		{
 			auto name = params[0]->get< castor::String >();
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1861,7 +1861,7 @@ namespace castor3d
 		if ( auto style = guiContext.progressStyle )
 		{
 			auto name = params[0]->get< castor::String >();
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1928,7 +1928,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -1986,7 +1986,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -2012,7 +2012,7 @@ namespace castor3d
 		{
 			castor::String name;
 			params[0]->get( name );
-			auto material = guiContext.engine->findMaterial( name ).lock().get();
+			auto material = guiContext.engine->findMaterial( name );
 
 			if ( material )
 			{
@@ -2068,7 +2068,7 @@ namespace castor3d
 		params[0]->get( name );
 		auto font = cache.find( name );
 
-		if ( font.lock() )
+		if ( font )
 		{
 			guiContext.stylesHolder.top()->setDefaultFont( font );
 		}

@@ -282,7 +282,7 @@ namespace GuiCommon
 	*	Conversions de wxWidgets vers Castor.
 	*/
 	//@{
-	castor::FontSPtr make_Font( wxFont const & font );
+	castor::FontUPtr make_Font( wxFont const & font );
 	castor::String make_String( wxString const & value );
 	castor::U32String make_U32String( wxString const & value );
 	castor::Path make_Path( wxString const & value );

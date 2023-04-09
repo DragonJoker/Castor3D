@@ -15,7 +15,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	SamplerResPtr createSampler( Engine & engine
+	SamplerObs createSampler( Engine & engine
 		, castor::String const & baseName
 		, VkFilter filter
 		, VkImageSubresourceRange const * range );

@@ -157,7 +157,7 @@ namespace c3d_assimp
 				auto matName = file.getMaterialName( aiMesh->mMaterialIndex );
 				auto materialRes = scene.tryFindMaterial( matName );
 
-				if ( !materialRes.lock() )
+				if ( !materialRes )
 				{
 					AssimpMaterialImporter importer{ *scene.getEngine() };
 					auto mat = getOwner()->createMaterial( matName
@@ -221,15 +221,15 @@ namespace c3d_assimp
 		auto & file = static_cast< AssimpImporterFile & >( *m_file );
 		auto & scene = *mesh.getScene();
 		auto materialRes = scene.tryFindMaterial( file.getMaterialName( aiMesh.mMaterialIndex ) );
-		castor3d::MaterialRPtr material{};
+		castor3d::MaterialObs material{};
 
-		if ( !materialRes.lock() )
+		if ( !materialRes )
 		{
 			material = scene.getEngine()->getDefaultMaterial();
 		}
 		else
 		{
-			material = &( *materialRes.lock() );
+			material = materialRes;
 		}
 
 		castor3d::log::info << cuT( "  Mesh found: [" ) << file.getInternalName( aiMesh.mName ) << cuT( "]" ) << std::endl;

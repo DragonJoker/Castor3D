@@ -52,7 +52,7 @@ namespace GuiCommon
 				overlay.setPixelSize( SizeRefFromVariant( var ) );
 			} );
 		addMaterial( grid, engine, PROPERTY_OVERLAY_MATERIAL, m_materials, overlay.getMaterial()
-			, [&overlay]( castor3d::MaterialRPtr material ) { overlay.setMaterial( material ); } );
+			, [&overlay]( castor3d::MaterialObs material ) { overlay.setMaterial( material ); } );
 
 		switch ( overlay.getType() )
 		{
@@ -92,7 +92,7 @@ namespace GuiCommon
 				overlay.setPixelBorderSize( Point4uiRefFromVariant( var ) );
 			} );
 		addMaterial( grid, engine, PROPERTY_OVERLAY_BORDER_MATERIAL, m_materials, overlay.getBorderMaterial()
-			, [&overlay]( castor3d::MaterialRPtr material ) { overlay.setBorderMaterial( material ); } );
+			, [&overlay]( castor3d::MaterialObs material ) { overlay.setBorderMaterial( material ); } );
 		addPropertyT( grid, PROPERTY_OVERLAY_BORDER_INNER_UV, overlay.getBorderInnerUV(), &overlay, &castor3d::BorderPanelOverlay::setBorderInnerUV );
 		addPropertyT( grid, PROPERTY_OVERLAY_BORDER_OUTER_UV, overlay.getBorderOuterUV(), &overlay, &castor3d::BorderPanelOverlay::setBorderOuterUV );
 		addPropertyET( grid, PROPERTY_OVERLAY_BORDER_POSITION, choices, overlay.getBorderPosition(), &overlay, &castor3d::BorderPanelOverlay::setBorderPosition );
@@ -130,7 +130,7 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_OVERLAY_FONT, *overlay.getFontTexture()->getFont()
 			, [&overlay]( wxVariant const & var )
 			{
-				overlay.setFont( variantCast< castor::FontSPtr >( var )->getName() );
+				overlay.setFont( variantCast< castor::FontRPtr >( var )->getName() );
 			} );
 		addPropertyT( grid, PROPERTY_OVERLAY_CAPTION, overlay.getCaption(), &overlay, &castor3d::TextOverlay::setCaption );
 		addPropertyET( grid, PROPERTY_OVERLAY_HALIGN, haligns, overlay.getHAlign(), &overlay, &castor3d::TextOverlay::setHAlign );

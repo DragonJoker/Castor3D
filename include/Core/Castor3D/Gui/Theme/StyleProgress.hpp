@@ -29,7 +29,7 @@ namespace castor3d
 			, castor::String const & fontName )
 			: ControlStyle{ Type, name, scene, engine }
 			, m_titleFontName{ fontName }
-			, m_titleMaterial{ getEngine().findMaterial( cuT( "White" ) ).lock().get() }
+			, m_titleMaterial{ getEngine().findMaterial( cuT( "White" ) ) }
 			, m_containerStyle{ name + "/Container", scene, engine }
 			, m_progressStyle{ name + "/Progress", scene, engine }
 			, m_textFontName{ fontName }
@@ -42,7 +42,7 @@ namespace castor3d
 			return m_titleFontName;
 		}
 
-		MaterialRPtr getTitleMaterial()const
+		MaterialObs getTitleMaterial()const
 		{
 			return m_titleMaterial;
 		}
@@ -62,7 +62,7 @@ namespace castor3d
 			return m_textFontName;
 		}
 
-		MaterialRPtr getTextMaterial()const
+		MaterialObs getTextMaterial()const
 		{
 			return m_textMaterial;
 		}
@@ -72,7 +72,7 @@ namespace castor3d
 			m_titleFontName = std::move( value );
 		}
 
-		void setTitleMaterial( MaterialRPtr value )
+		void setTitleMaterial( MaterialObs value )
 		{
 			m_titleMaterial = value;
 		}
@@ -92,7 +92,7 @@ namespace castor3d
 			m_textFontName = std::move( value );
 		}
 
-		void setTextMaterial( MaterialRPtr value )
+		void setTextMaterial( MaterialObs value )
 		{
 			m_textMaterial = value;
 		}
@@ -108,11 +108,11 @@ namespace castor3d
 
 	private:
 		castor::String m_titleFontName{};
-		MaterialRPtr m_titleMaterial{};
+		MaterialObs m_titleMaterial{};
 		PanelStyle m_containerStyle;
 		PanelStyle m_progressStyle;
 		castor::String m_textFontName{};
-		MaterialRPtr m_textMaterial{};
+		MaterialObs m_textMaterial{};
 	};
 }
 

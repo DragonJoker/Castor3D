@@ -679,7 +679,7 @@ namespace castor3d
 		C3D_API PostEffectFactory const & getPostEffectFactory()const;
 		C3D_API PostEffectFactory & getPostEffectFactory();
 		C3D_API uint32_t getWantedFps()const;
-		C3D_API castor3d::MaterialRPtr getDefaultMaterial()const;
+		C3D_API castor3d::MaterialObs getDefaultMaterial()const;
 		C3D_API bool hasMeshShaders()const;
 		C3D_API uint32_t getMaxPassTypeCount()const;
 		C3D_API RenderDevice * getRenderDevice()const;
@@ -1070,8 +1070,8 @@ namespace castor3d
 		Texture m_brdf;
 		bool m_cleaned{ true };
 		bool m_threaded{ false };
-		SamplerResPtr m_defaultSampler;
-		SamplerResPtr m_lightsSampler;
+		SamplerObs m_defaultSampler{};
+		SamplerObs m_lightsSampler{};
 		castor::ImageLoader m_imageLoader;
 		castor::ImageWriter m_imageWriter;
 		DECLARE_CACHE_MEMBER_MIN( shader, ShaderProgram );

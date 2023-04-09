@@ -242,8 +242,8 @@ namespace castor3d
 		 *\param[in]	update		Dit si le composant d'instantiation doit être mis à jour.
 		 */
 		C3D_API void instantiate( Geometry const * geometry
-			, MaterialRPtr oldMaterial
-			, MaterialRPtr newMaterial
+			, MaterialObs oldMaterial
+			, MaterialObs newMaterial
 			, bool update );
 		/**
 		*\~english
@@ -281,7 +281,7 @@ namespace castor3d
 		inline void addPoints( std::vector< InterleavedVertex > const & vertices );
 		template< size_t Count >
 		inline void addPoints( std::array< InterleavedVertex, Count > const & vertices );
-		inline void setDefaultMaterial( MaterialRPtr material );
+		inline void setDefaultMaterial( MaterialObs material );
 		inline void setIndexMapping( IndexMappingUPtr mapping );
 		inline IndexMappingRPtr getIndexMapping()const;
 		template< typename ComponentT, typename ... ParamsT >
@@ -336,7 +336,7 @@ namespace castor3d
 		C3D_API VkDeviceSize getIndexOffset()const;
 		C3D_API VkDeviceSize getMeshletOffset()const;
 		inline SkeletonRPtr getSkeleton()const;
-		inline MaterialRPtr getDefaultMaterial()const;
+		inline MaterialObs getDefaultMaterial()const;
 		inline castor::BoundingBox const & getBoundingBox()const;
 		inline castor::BoundingBox & getBoundingBox();
 		inline castor::BoundingSphere const & getBoundingSphere()const;
@@ -358,7 +358,7 @@ namespace castor3d
 
 	private:
 		uint32_t m_id;
-		MaterialRPtr m_defaultMaterial;
+		MaterialObs m_defaultMaterial;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		SubmeshComponentIDMap m_components;

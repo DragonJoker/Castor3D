@@ -79,8 +79,8 @@ namespace castor3d
 		{
 
 			auto result = scene.addNewMesh( name, scene );
-			result.lock()->setSerialisable( false );
-			auto submesh = result.lock()->createSubmesh();
+			result->setSerialisable( false );
+			auto submesh = result->createSubmesh();
 			static castor3d::InterleavedVertexArray const vertex{ []()
 				{
 					castor3d::InterleavedVertexArray result;
@@ -115,7 +115,7 @@ namespace castor3d
 				castor3d::LineIndices{ { 3u, 7u } },
 			};
 			mapping->addLineGroup( lines );
-			MaterialResPtr material;
+			MaterialObs material{};
 			castor::String matName = cuT( "Frustum_" ) + colourName;
 
 			if ( !scene.getEngine()->hasMaterial( matName ) )
@@ -123,7 +123,7 @@ namespace castor3d
 				material = scene.getEngine()->addNewMaterial( matName
 					, *scene.getEngine()
 					, scene.getDefaultLightingModel() );
-				auto pass = material.lock()->createPass();
+				auto pass = material->createPass();
 				pass->enableLighting( false );
 				pass->enablePicking( false );
 				pass->setColour( colour );
@@ -133,8 +133,8 @@ namespace castor3d
 				material = scene.getEngine()->findMaterial( matName );
 			}
 
-			submesh->setDefaultMaterial( material.lock().get() );
-			result.lock()->computeContainers();
+			submesh->setDefaultMaterial( material );
+			result->computeContainers();
 			scene.getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 			return result;
 		}
@@ -188,12 +188,12 @@ namespace castor3d
 
 			if ( !scene.hasGeometry( name ) )
 			{
-				auto sceneNode = scene.addNewSceneNode( name ).lock();
+				auto sceneNode = scene.addNewSceneNode( name );
 				auto geometry = std::make_shared< Geometry >( name, scene, *sceneNode, mesh );
 				geometry->setShadowCaster( false );
 				geometry->setCullable( false );
 
-				for ( auto & submesh : *geometry->getMesh().lock() )
+				for ( auto & submesh : *geometry->getMesh() )
 				{
 					geometry->setMaterial( *submesh, submesh->getDefaultMaterial() );
 				}
@@ -557,10 +557,10 @@ namespace castor3d
 #if C3D_DebugCascadeFrustum
 				auto name = "CascadeFrustum" + std::to_string( cascade );
 				auto & scene = *light.getScene();
-				auto sceneNode = scene.tryFindGeometry( name ).lock();
+				auto sceneNode = scene.tryFindGeometry( name );
 				sceneNode->setVisible( true );
 				auto & frustum = lightCamera.getFrustum();
-				auto mesh = m_frustumMeshes[cascade].lock();
+				auto mesh = m_frustumMeshes[cascade];
 				auto submesh = mesh->getSubmesh( 0u );
 				auto & points = submesh->getPoints();
 

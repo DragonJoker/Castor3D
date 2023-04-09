@@ -40,7 +40,7 @@ namespace castor3d
 		return 6u;
 	}
 
-	void BorderPanelOverlay::setBorderMaterial( MaterialRPtr material )
+	void BorderPanelOverlay::setBorderMaterial( MaterialObs material )
 	{
 		m_borderMaterial = material;
 	}

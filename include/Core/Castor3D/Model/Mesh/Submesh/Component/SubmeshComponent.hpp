@@ -83,7 +83,7 @@ namespace castor3d
 		 *\param[in,out]	currentLocation	La position actuelle des attributs.
 		 */
 		C3D_API virtual void gather( PipelineFlags const & flags
-			, MaterialRPtr material
+			, MaterialObs material
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts

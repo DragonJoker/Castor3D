@@ -34,7 +34,7 @@ namespace castor3d
 		{
 			size_t result = node.data.isDynamic()
 				? std::hash< Geometry const * >{}( &node.instance )
-				: std::hash< MaterialRPtr >{}( node.pass->getOwner() );
+				: std::hash< MaterialObs >{}( node.pass->getOwner() );
 			result = castor::hashCombine( result, flags.m_shaderFlags.value() );
 			result = castor::hashCombine( result, flags.m_programFlags.value() );
 			result = castor::hashCombine( result, flags.m_submeshFlags.value() );
@@ -561,8 +561,8 @@ namespace castor3d
 	}
 
 	void Submesh::instantiate( Geometry const * geometry
-		, MaterialRPtr oldMaterial
-		, MaterialRPtr newMaterial
+		, MaterialObs oldMaterial
+		, MaterialObs newMaterial
 		, bool update )
 	{
 		if ( oldMaterial != newMaterial )

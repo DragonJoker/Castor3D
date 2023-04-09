@@ -229,7 +229,7 @@ namespace castor3d
 		m_firstUpdate = false;
 	}
 
-	void ParticleSystem::setMaterial( MaterialRPtr material )
+	void ParticleSystem::setMaterial( MaterialObs material )
 	{
 		m_material = material;
 
@@ -264,7 +264,7 @@ namespace castor3d
 		}
 	}
 
-	MaterialRPtr ParticleSystem::getMaterial()const
+	MaterialObs ParticleSystem::getMaterial()const
 	{
 		return m_material;
 	}

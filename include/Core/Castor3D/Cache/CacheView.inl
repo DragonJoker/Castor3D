@@ -49,11 +49,11 @@ namespace castor3d
 			, created
 			, std::forward< ParametersT >( params )... );
 
-		if ( result.lock() == created.lock() )
+		if ( ElementCacheTraitsT::areElementsEqual( result, created ) )
 		{
 			if ( m_initialise && initialise )
 			{
-				m_initialise( *result.lock() );
+				m_initialise( *result );
 			}
 
 			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
@@ -89,7 +89,7 @@ namespace castor3d
 		{
 			if ( initialise && m_initialise )
 			{
-				m_initialise( *result.lock() );
+				m_initialise( *result );
 			}
 
 			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
@@ -113,7 +113,7 @@ namespace castor3d
 		{
 			if ( initialise && m_initialise )
 			{
-				m_initialise( *result.lock() );
+				m_initialise( *result );
 			}
 
 			auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
@@ -153,7 +153,7 @@ namespace castor3d
 	{
 		auto result = tryFind( name );
 
-		if ( !result.lock() )
+		if ( ElementCacheTraitsT::isElementObsNull( result ) )
 		{
 			m_cache.reportUnknown( name );
 		}
@@ -162,7 +162,7 @@ namespace castor3d
 	}
 
 	template< typename CacheT, EventType EventT >
-	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::tryRemove( ElementKeyT const & name )
+	inline typename CacheViewT< CacheT, EventT >::ElementPtrT CacheViewT< CacheT, EventT >::tryRemove( ElementKeyT const & name )
 	{
 		auto elemsLock( castor::makeUniqueLock( m_elementsMutex ) );
 		auto lock( castor::makeUniqueLock( m_cache ) );
@@ -179,11 +179,11 @@ namespace castor3d
 	}
 
 	template< typename CacheT, EventType EventT >
-	inline typename CacheViewT< CacheT, EventT >::ElementObsT CacheViewT< CacheT, EventT >::remove( ElementKeyT const & name )
+	inline typename CacheViewT< CacheT, EventT >::ElementPtrT CacheViewT< CacheT, EventT >::remove( ElementKeyT const & name )
 	{
 		auto result = tryRemove( name );
 
-		if ( ElementCacheTraitsT::isElementObsNull( result ) )
+		if ( !result )
 		{
 			m_cache.reportUnknown( name );
 		}

@@ -387,7 +387,7 @@ namespace castor3d
 	using OnSceneNodeReparent = castor::SignalT< OnSceneNodeReparentFunction >;
 	using OnSceneNodeReparentConnection = OnSceneNodeReparent::connection;
 
-	using SubmeshMaterialMap = std::map< Submesh const *, MaterialRPtr >;
+	using SubmeshMaterialMap = std::map< Submesh const *, MaterialObs >;
 
 	C3D_API castor::LoggerInstance & getLogger( Scene const & scene );
 	C3D_API Engine & getEngine( Scene const & scene );
@@ -403,11 +403,11 @@ namespace castor3d
 	*/
 	template<>
 	struct PtrCacheTraitsT< Scene, castor::String >
-		: CUPtrCacheTraitsBaseT< Scene, castor::String >
+		: PtrCacheTraitsBaseT< Scene, castor::String >
 	{
 		using ResT = Scene;
 		using KeyT = castor::String;
-		using Base = CUPtrCacheTraitsBaseT< ResT, KeyT >;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 

@@ -52,13 +52,13 @@ namespace castor3d
 		return getParent().getSkeleton();
 	}
 
-	inline void Submesh::setDefaultMaterial( MaterialRPtr mat )
+	inline void Submesh::setDefaultMaterial( MaterialObs mat )
 	{
 		m_defaultMaterial = mat;
 		instantiate( nullptr, {}, mat, false );
 	}
 
-	inline MaterialRPtr Submesh::getDefaultMaterial()const
+	inline MaterialObs Submesh::getDefaultMaterial()const
 	{
 		return m_defaultMaterial;
 	}

@@ -34,18 +34,18 @@ namespace castor3d
 			, m_engine{ engine }
 			, m_type{ type }
 			, m_cursor{ cursor }
-			, m_backgroundMaterial{ getEngine().findMaterial( cuT( "Black" ) ).lock().get() }
-			, m_foregroundMaterial{ getEngine().findMaterial( cuT( "White" ) ).lock().get() }
+			, m_backgroundMaterial{ getEngine().findMaterial( cuT( "Black" ) ) }
+			, m_foregroundMaterial{ getEngine().findMaterial( cuT( "White" ) ) }
 		{
 		}
 
-		void setBackgroundMaterial( MaterialRPtr value )
+		void setBackgroundMaterial( MaterialObs value )
 		{
 			m_backgroundMaterial = value;
 			doUpdateBackgroundMaterial();
 		}
 
-		void setForegroundMaterial( MaterialRPtr value )
+		void setForegroundMaterial( MaterialObs value )
 		{
 			m_foregroundMaterial = value;
 			doUpdateForegroundMaterial();
@@ -76,12 +76,12 @@ namespace castor3d
 			return m_foregroundInvisible;
 		}
 
-		MaterialRPtr getBackgroundMaterial()const noexcept
+		MaterialObs getBackgroundMaterial()const noexcept
 		{
 			return m_backgroundMaterial;
 		}
 
-		MaterialRPtr getForegroundMaterial()const noexcept
+		MaterialObs getForegroundMaterial()const noexcept
 		{
 			return m_foregroundMaterial;
 		}
@@ -113,7 +113,7 @@ namespace castor3d
 		}
 
 	protected:
-		MaterialRPtr doCreateMaterial( MaterialRPtr material
+		MaterialObs doCreateMaterial( MaterialObs material
 			, float offset
 			, castor::String const & suffix )
 		{
@@ -140,8 +140,8 @@ namespace castor3d
 		Engine & m_engine;
 		ControlType m_type{};
 		MouseCursor m_cursor{};
-		MaterialRPtr m_backgroundMaterial{};
-		MaterialRPtr m_foregroundMaterial{};
+		MaterialObs m_backgroundMaterial{};
+		MaterialObs m_foregroundMaterial{};
 		bool m_backgroundInvisible{};
 		bool m_foregroundInvisible{};
 	};

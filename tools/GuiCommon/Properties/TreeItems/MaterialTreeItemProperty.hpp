@@ -52,7 +52,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::MaterialRPtr m_material{};
+		castor3d::MaterialObs m_material{};
 	};
 }
 

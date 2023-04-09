@@ -8,6 +8,14 @@ namespace castor
 	//*********************************************************************************************
 
 	template< typename ResT, typename KeyT >
+	inline void Deleter< ResourceT< ResT, KeyT > >::operator()( ResourceT< ResT, KeyT > * pointer )noexcept
+	{
+		delete pointer;
+	}
+
+	//*********************************************************************************************
+
+	template< typename ResT, typename KeyT >
 	template< typename ... ParametersT >
 	ResourceT< ResT, KeyT >::ResourceT( ParametersT && ... params )
 		: ResT{ std::forward< ParametersT >( params )... }

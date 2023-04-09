@@ -247,7 +247,7 @@ namespace castor3d
 		 *\param[in]	pass		La passe de matériau cible.
 		 *\return		La texture animée.
 		 */
-		C3D_API AnimatedObjectSPtr addAnimatedTexture( TextureSourceInfo const & sourceInfo
+		C3D_API AnimatedObjectRPtr addAnimatedTexture( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & config
 			, Pass & pass );
 		/**

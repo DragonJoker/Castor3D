@@ -39,7 +39,7 @@ namespace castor3d
 			m_fontName = value;
 		}
 
-		void setTextMaterial( MaterialRPtr value )
+		void setTextMaterial( MaterialObs value )
 		{
 			m_textMaterial = value;
 		}
@@ -49,7 +49,7 @@ namespace castor3d
 			return m_fontName;
 		}
 
-		MaterialRPtr getTextMaterial()const
+		MaterialObs getTextMaterial()const
 		{
 			return m_textMaterial;
 		}
@@ -65,7 +65,7 @@ namespace castor3d
 
 	private:
 		castor::String m_fontName{};
-		MaterialRPtr m_textMaterial{};
+		MaterialObs m_textMaterial{};
 	};
 }
 

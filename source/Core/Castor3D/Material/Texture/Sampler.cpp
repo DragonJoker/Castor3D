@@ -13,7 +13,7 @@ CU_ImplementCUSmartPtr( castor3d, Sampler )
 
 namespace castor3d
 {
-	SamplerResPtr createSampler( Engine & engine
+	SamplerObs createSampler( Engine & engine
 		, castor::String const & baseName
 		, VkFilter filter
 		, VkImageSubresourceRange const * range )
@@ -23,7 +23,7 @@ namespace castor3d
 			+ ( range
 				? cuT( "_" ) + castor::string::toString( range->baseMipLevel ) + cuT( "_" ) + castor::string::toString( range->levelCount )
 				: castor::String{} );
-		SamplerResPtr sampler;
+		SamplerObs sampler{};
 
 		if ( engine.hasSampler( name ) )
 		{
@@ -52,15 +52,15 @@ namespace castor3d
 					? float( range->baseMipLevel + range->levelCount )
 					: 1000.0f ), // maxLod
 			};
-			auto resource = castor::makeResource< Sampler, castor::String >( name
+			auto resource = engine.createSampler( name
 				, engine
 				, std::move( createInfo ) );
-			sampler = engine.addSampler( name
+			sampler = engine.addNewSampler( name
 				, resource
 				, false );
 		}
 
-		sampler.lock()->initialise( engine.getRenderSystem()->getRenderDevice() );
+		sampler->initialise( engine.getRenderSystem()->getRenderDevice() );
 		return sampler;
 	}
 

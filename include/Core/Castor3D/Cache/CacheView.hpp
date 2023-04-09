@@ -175,7 +175,7 @@ namespace castor3d
 		 *\brief		Retire un élément à partir d'un nom.
 		 *\param[in]	name	Le nom d'élément.
 		 */
-		inline ElementObsT tryRemove( ElementKeyT const & name );
+		inline ElementPtrT tryRemove( ElementKeyT const & name );
 		/**
 		 *\~english
 		 *\brief		Removes an object, given a name.
@@ -184,7 +184,7 @@ namespace castor3d
 		 *\brief		Retire un objet à partir d'un nom.
 		 *\param[in]	name	Le nom d'objet.
 		 */
-		inline ElementObsT remove( ElementKeyT const & name );
+		inline ElementPtrT remove( ElementKeyT const & name );
 		/**
 		*\~english
 		*\name Iteration.

@@ -206,8 +206,8 @@ namespace GuiCommon
 			, castor3d::Engine & engine
 			, wxString const & name
 			, wxArrayString const & choices
-			, castor3d::MaterialRPtr selected
-			, std::function< void( castor3d::MaterialRPtr ) > setter );
+			, castor3d::MaterialObs selected
+			, std::function< void( castor3d::MaterialObs ) > setter );
 
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent

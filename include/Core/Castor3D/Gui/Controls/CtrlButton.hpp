@@ -163,7 +163,7 @@ namespace castor3d
 		 *\param[in]	offset		The colour offset.
 		 *\return		The created material.
 		 */
-		MaterialRPtr doCreateMaterial( MaterialRPtr material
+		MaterialObs doCreateMaterial( MaterialObs material
 			, float offset );
 
 	private:

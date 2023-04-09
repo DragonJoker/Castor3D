@@ -231,8 +231,8 @@ namespace GuiCommon
 		, castor3d::Engine & engine
 		, wxString const & name
 		, wxArrayString const & choices
-		, castor3d::MaterialRPtr selected
-		, std::function< void( castor3d::MaterialRPtr ) > setter )
+		, castor3d::MaterialObs selected
+		, std::function< void( castor3d::MaterialObs ) > setter )
 	{
 		if ( selected )
 		{
@@ -243,9 +243,8 @@ namespace GuiCommon
 				, [&engine, &choices, setter]( wxVariant const & var )
 				{
 					auto name = make_String( choices[size_t( var.GetLong() )] );
-					auto material = engine.findMaterial( name ).lock().get();
 
-					if ( material )
+					if ( auto material = engine.findMaterial( name ) )
 					{
 						setter( material );
 					}
@@ -258,9 +257,8 @@ namespace GuiCommon
 			, [&engine, &choices, setter]( wxVariant const & var )
 			{
 				auto name = make_String( choices[size_t( var.GetLong() )] );
-				auto material = engine.findMaterial( name ).lock().get();
 
-				if ( material )
+				if ( auto material = engine.findMaterial( name ) )
 				{
 					setter( material );
 				}

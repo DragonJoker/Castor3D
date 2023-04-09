@@ -311,7 +311,7 @@ namespace castor3d
 		}
 
 		auto & engine = *device->renderSystem.getEngine();
-		SamplerResPtr c3dSampler;
+		SamplerObs c3dSampler{};
 		auto splName = getSamplerName( compareOp
 			, minFilter
 			, magFilter
@@ -345,7 +345,7 @@ namespace castor3d
 			c3dSampler = engine.addSampler( splName, created, false );
 		}
 
-		sampler = &c3dSampler.lock()->getSampler();
+		sampler = &c3dSampler->getSampler();
 	}
 
 	Texture::~Texture()

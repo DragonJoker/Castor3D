@@ -44,52 +44,52 @@ namespace castor3d
 		{
 		}
 
-		void setTextMaterial( MaterialRPtr material )
+		void setTextMaterial( MaterialObs material )
 		{
 			m_textMaterial = material;
 		}
 
-		void setHighlightedBackgroundMaterial( MaterialRPtr material )
+		void setHighlightedBackgroundMaterial( MaterialObs material )
 		{
 			m_highlightedBackgroundMaterial = material;
 		}
 
-		void setHighlightedForegroundMaterial( MaterialRPtr material )
+		void setHighlightedForegroundMaterial( MaterialObs material )
 		{
 			m_highlightedForegroundMaterial = material;
 		}
 
-		void setHighlightedTextMaterial( MaterialRPtr material )
+		void setHighlightedTextMaterial( MaterialObs material )
 		{
 			m_highlightedTextMaterial = material;
 		}
 
-		void setPushedBackgroundMaterial( MaterialRPtr material )
+		void setPushedBackgroundMaterial( MaterialObs material )
 		{
 			m_pushedBackgroundMaterial = material;
 		}
 
-		void setPushedForegroundMaterial( MaterialRPtr material )
+		void setPushedForegroundMaterial( MaterialObs material )
 		{
 			m_pushedForegroundMaterial = material;
 		}
 
-		void setPushedTextMaterial( MaterialRPtr material )
+		void setPushedTextMaterial( MaterialObs material )
 		{
 			m_pushedTextMaterial = material;
 		}
 
-		void setDisabledBackgroundMaterial( MaterialRPtr material )
+		void setDisabledBackgroundMaterial( MaterialObs material )
 		{
 			m_disabledBackgroundMaterial = material;
 		}
 
-		void setDisabledForegroundMaterial( MaterialRPtr material )
+		void setDisabledForegroundMaterial( MaterialObs material )
 		{
 			m_disabledForegroundMaterial = material;
 		}
 
-		void setDisabledTextMaterial( MaterialRPtr material )
+		void setDisabledTextMaterial( MaterialObs material )
 		{
 			m_disabledTextMaterial = material;
 		}
@@ -99,52 +99,52 @@ namespace castor3d
 			m_fontName = value;
 		}
 
-		MaterialRPtr getHighlightedBackgroundMaterial()const
+		MaterialObs getHighlightedBackgroundMaterial()const
 		{
 			return m_highlightedBackgroundMaterial;
 		}
 
-		MaterialRPtr getHighlightedForegroundMaterial()const
+		MaterialObs getHighlightedForegroundMaterial()const
 		{
 			return m_highlightedForegroundMaterial;
 		}
 
-		MaterialRPtr getHighlightedTextMaterial()const
+		MaterialObs getHighlightedTextMaterial()const
 		{
 			return m_highlightedTextMaterial;
 		}
 
-		MaterialRPtr getPushedBackgroundMaterial()const
+		MaterialObs getPushedBackgroundMaterial()const
 		{
 			return m_pushedBackgroundMaterial;
 		}
 
-		MaterialRPtr getPushedForegroundMaterial()const
+		MaterialObs getPushedForegroundMaterial()const
 		{
 			return m_pushedForegroundMaterial;
 		}
 
-		MaterialRPtr getPushedTextMaterial()const
+		MaterialObs getPushedTextMaterial()const
 		{
 			return m_pushedTextMaterial;
 		}
 
-		MaterialRPtr getDisabledBackgroundMaterial()const
+		MaterialObs getDisabledBackgroundMaterial()const
 		{
 			return m_disabledBackgroundMaterial;
 		}
 
-		MaterialRPtr getDisabledForegroundMaterial()const
+		MaterialObs getDisabledForegroundMaterial()const
 		{
 			return m_disabledForegroundMaterial;
 		}
 
-		MaterialRPtr getDisabledTextMaterial()const
+		MaterialObs getDisabledTextMaterial()const
 		{
 			return m_disabledTextMaterial;
 		}
 
-		MaterialRPtr getTextMaterial()const
+		MaterialObs getTextMaterial()const
 		{
 			return m_textMaterial;
 		}
@@ -166,16 +166,16 @@ namespace castor3d
 		}
 
 	private:
-		MaterialRPtr m_textMaterial{};
-		MaterialRPtr m_highlightedTextMaterial{};
-		MaterialRPtr m_highlightedBackgroundMaterial{};
-		MaterialRPtr m_highlightedForegroundMaterial{};
-		MaterialRPtr m_pushedTextMaterial{};
-		MaterialRPtr m_pushedBackgroundMaterial{};
-		MaterialRPtr m_pushedForegroundMaterial{};
-		MaterialRPtr m_disabledTextMaterial{};
-		MaterialRPtr m_disabledBackgroundMaterial{};
-		MaterialRPtr m_disabledForegroundMaterial{};
+		MaterialObs m_textMaterial{};
+		MaterialObs m_highlightedTextMaterial{};
+		MaterialObs m_highlightedBackgroundMaterial{};
+		MaterialObs m_highlightedForegroundMaterial{};
+		MaterialObs m_pushedTextMaterial{};
+		MaterialObs m_pushedBackgroundMaterial{};
+		MaterialObs m_pushedForegroundMaterial{};
+		MaterialObs m_disabledTextMaterial{};
+		MaterialObs m_disabledBackgroundMaterial{};
+		MaterialObs m_disabledForegroundMaterial{};
 		castor::String m_fontName{};
 	};
 }

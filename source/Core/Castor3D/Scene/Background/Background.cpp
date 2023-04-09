@@ -289,7 +289,7 @@ namespace castor3d
 			castor::String const name = cuT( "Skybox" );
 			auto sampler = getEngine()->tryFindSampler( name );
 
-			if ( !sampler.lock() )
+			if ( !sampler )
 			{
 				auto created = getEngine()->createSampler( name, *getEngine() );
 				created->setMinFilter( VK_FILTER_LINEAR );
@@ -303,11 +303,11 @@ namespace castor3d
 
 				if ( m_texture->getMipmapCount() > 1u )
 				{
-					sampler.lock()->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
+					sampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
 				}
 			}
 
-			sampler.lock()->initialise( device );
+			sampler->initialise( device );
 			m_sampler = sampler;
 
 			if ( m_initialised

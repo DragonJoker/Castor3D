@@ -8,7 +8,7 @@ namespace castor3d
 {
 	//************************************************************************************************
 
-	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
+	TextureSourceInfo::TextureSourceInfo( SamplerObs sampler
 		, castor::Path folder
 		, castor::Path relative
 		, castor::ImageLoaderConfig loadConfig )
@@ -19,7 +19,7 @@ namespace castor3d
 	{
 	}
 
-	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
+	TextureSourceInfo::TextureSourceInfo( SamplerObs sampler
 		, castor::String name
 		, castor::String type
 		, castor::ByteArray data
@@ -32,14 +32,14 @@ namespace castor3d
 	{
 	}
 
-	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
+	TextureSourceInfo::TextureSourceInfo( SamplerObs sampler
 		, RenderTargetRPtr renderTarget )
 		: m_sampler{ std::move( sampler ) }
 		, m_renderTarget{ std::move( renderTarget ) }
 	{
 	}
 
-	TextureSourceInfo::TextureSourceInfo( SamplerRes sampler
+	TextureSourceInfo::TextureSourceInfo( SamplerObs sampler
 		, ashes::ImageCreateInfo const & createInfo )
 		: m_sampler{ std::move( sampler ) }
 		, m_createInfo{ static_cast< VkImageCreateInfo  const & >( createInfo ) }
@@ -55,7 +55,7 @@ namespace castor3d
 			return std::hash< TextureSourceInfo const * >{}( &value );
 		}
 
-		auto result = std::hash< SamplerRes >{}( value.sampler() );
+		auto result = std::hash< SamplerObs >{}( value.sampler() );
 
 		if ( value.isRenderTarget() )
 		{

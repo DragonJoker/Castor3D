@@ -104,9 +104,9 @@ namespace castortd
 			return m_mapNode;
 		}
 
-		castor3d::MaterialRPtr getEnemyMaterial()const
+		castor3d::MaterialObs getEnemyMaterial()const
 		{
-			return m_enemyCubeMaterial.lock().get();
+			return m_enemyCubeMaterial;
 		}
 
 		castor3d::MeshResPtr getEnemyMesh()const
@@ -157,18 +157,18 @@ namespace castortd
 		Hud m_hud;
 		Path m_path;
 		castor::Point3f m_cellDimensions;
-		castor3d::SceneNodeRPtr m_mapNode;
-		castor3d::SceneNodeRPtr m_targetNode;
-		castor3d::MeshResPtr m_mapCubeMesh;
-		castor3d::MaterialResPtr m_mapCubeMaterial;
-		castor3d::MeshResPtr m_shortRangeTowerMesh;
-		castor3d::MeshResPtr m_longRangeTowerMesh;
-		castor3d::MeshResPtr m_enemyCubeMesh;
-		castor3d::MaterialResPtr m_enemyCubeMaterial;
-		castor3d::MeshResPtr m_bulletMesh;
-		castor3d::MaterialResPtr m_bulletMaterial;
-		castor3d::MeshResPtr m_boulderMesh;
-		castor3d::MaterialResPtr m_boulderMaterial;
+		castor3d::SceneNodeRPtr m_mapNode{};
+		castor3d::SceneNodeRPtr m_targetNode{};
+		castor3d::MeshResPtr m_mapCubeMesh{};
+		castor3d::MaterialObs m_mapCubeMaterial{};
+		castor3d::MeshResPtr m_shortRangeTowerMesh{};
+		castor3d::MeshResPtr m_longRangeTowerMesh{};
+		castor3d::MeshResPtr m_enemyCubeMesh{};
+		castor3d::MaterialObs m_enemyCubeMaterial{};
+		castor3d::MeshResPtr m_bulletMesh{};
+		castor3d::MaterialObs m_bulletMaterial{};
+		castor3d::MeshResPtr m_boulderMesh{};
+		castor3d::MaterialObs m_boulderMaterial{};
 		castor3d::FramePassTimerUPtr m_updateTimer;
 		// Varying data
 		Clock::time_point m_saved;

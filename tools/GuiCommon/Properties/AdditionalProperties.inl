@@ -359,11 +359,11 @@ namespace GuiCommon
 	//************************************************************************************************
 
 	template<>
-	struct ValueTraitsT< castor::FontSPtr >
+	struct ValueTraitsT< castor::FontRPtr >
 	{
-		using ValueT = castor::FontSPtr;
-		using ParamType = ValueT const &;
-		using RetType = ValueT;
+		using ValueT = castor::FontRPtr;
+		using ParamType = castor::FontRPtr const &;
+		using RetType = castor::FontUPtr;
 
 		static inline RetType convert( wxVariant const & var )
 		{

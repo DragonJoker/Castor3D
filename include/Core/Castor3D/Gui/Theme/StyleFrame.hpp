@@ -45,7 +45,7 @@ namespace castor3d
 			m_headerStyle.setFont( value );
 		}
 
-		void setHeaderTextMaterial( MaterialRPtr value )
+		void setHeaderTextMaterial( MaterialObs value )
 		{
 			m_headerStyle.setTextMaterial( value );
 		}
@@ -55,7 +55,7 @@ namespace castor3d
 			return m_headerStyle.getFontName();
 		}
 
-		MaterialRPtr getHeaderTextMaterial()const
+		MaterialObs getHeaderTextMaterial()const
 		{
 			return m_headerStyle.getTextMaterial();
 		}

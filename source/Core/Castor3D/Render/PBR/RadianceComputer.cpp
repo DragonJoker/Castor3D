@@ -45,13 +45,13 @@ namespace castor3d
 			return result;
 		}
 
-		static SamplerResPtr doCreateSampler( Engine & engine
+		static SamplerObs doCreateSampler( Engine & engine
 			, RenderDevice const & device )
 		{
 			auto name = cuT( "IblTexturesRadiance" );
 			auto result = engine.tryFindSampler( name );
 
-			if ( !result.lock() )
+			if ( !result )
 			{
 				auto created = engine.createSampler( name, engine );
 				created->setMinFilter( VK_FILTER_LINEAR );
@@ -62,7 +62,7 @@ namespace castor3d
 				result = engine.addSampler( name, created, false );
 			}
 
-			result.lock()->initialise( engine.getRenderSystem()->getRenderDevice() );
+			result->initialise( engine.getRenderSystem()->getRenderDevice() );
 			return result;
 		}
 
@@ -311,7 +311,7 @@ namespace castor3d
 
 	ashes::Sampler const & RadianceComputer::getSampler()const
 	{
-		return m_sampler.lock()->getSampler();
+		return m_sampler->getSampler();
 	}
 
 	//*********************************************************************************************

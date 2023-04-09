@@ -60,7 +60,7 @@ namespace castor3d
 		m_computeSize = renderer.getSize();
 	}
 
-	void OverlayCategory::setMaterial( MaterialRPtr material )
+	void OverlayCategory::setMaterial( MaterialObs material )
 	{
 		m_material = material;
 	}

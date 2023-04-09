@@ -7,6 +7,8 @@
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, Material )
+
 namespace castor3d
 {
 	const castor::String Material::DefaultMaterialName = cuT( "C3D_DefaultMaterial" );
@@ -22,16 +24,30 @@ namespace castor3d
 
 	void Material::initialise()
 	{
+		if ( m_initialised )
+		{
+			return;
+		}
+
 		log::debug << cuT( "Initialising material [" ) << getName() << cuT( "]" ) << std::endl;
 
 		for ( auto & pass : m_passes )
 		{
 			pass->initialise();
 		}
+
+		m_initialised = true;
 	}
 
 	void Material::cleanup()
 	{
+		if ( !m_initialised )
+		{
+			return;
+		}
+
+		m_initialised = false;
+
 		for ( auto & pass : m_passes )
 		{
 			pass->cleanup();

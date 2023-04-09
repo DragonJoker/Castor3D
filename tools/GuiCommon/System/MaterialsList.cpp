@@ -113,7 +113,7 @@ namespace GuiCommon
 		, castor3d::Scene & scene
 		, bool editable
 		, wxTreeItemId id
-		, castor3d::MaterialRPtr material
+		, castor3d::MaterialObs material
 		, uint32_t iconOffset )
 	{
 		wxTreeItemId materialId = treeCtrl->AppendItem( id

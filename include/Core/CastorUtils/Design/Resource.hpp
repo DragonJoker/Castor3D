@@ -168,9 +168,9 @@ namespace castor
 	template< typename ResT
 		, typename KeyT
 		, typename ... ParametersT >
-	inline ResourceSPtrT< ResT, KeyT > makeResource( ParametersT && ... params )
+	inline ResourcePtrT< ResT, KeyT > makeResource( ParametersT && ... params )
 	{
-		return std::make_shared< ResourceT< ResT, KeyT > >( std::forward< ParametersT >( params )... );
+		return castor::makeUnique< ResourceT< ResT, KeyT > >( std::forward< ParametersT >( params )... );
 	}
 }
 

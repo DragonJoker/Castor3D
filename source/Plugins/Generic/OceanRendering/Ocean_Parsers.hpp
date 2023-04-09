@@ -18,7 +18,7 @@ namespace ocean
 		castor3d::Engine * engine{ nullptr };
 		OceanUboConfiguration config;
 		castor3d::Parameters parameters;
-		std::vector< castor3d::MaterialRPtr > materials;
+		std::vector< castor3d::MaterialObs > materials;
 		uint32_t wave{};
 	};
 

@@ -245,26 +245,25 @@ namespace castor3d
 	*	Spécialisation pour Sampler.
 	*/
 	template<>
-	struct ResourceCacheTraitsT< Sampler, castor::String >
-		: castor::ResourceCacheTraitsBaseT< Sampler, castor::String, ResourceCacheTraitsT< Sampler, castor::String > >
+	struct PtrCacheTraitsT< Sampler, castor::String >
+		: PtrCacheTraitsBaseT< Sampler, castor::String >
 	{
 		using ResT = Sampler;
 		using KeyT = castor::String;
-		using TraitsT = ResourceCacheTraitsT< ResT, KeyT >;
-		using Base = castor::ResourceCacheTraitsBaseT< ResT, KeyT, TraitsT >;
+		using Base = PtrCacheTraitsBaseT< ResT, KeyT >;
 		using ElementT = typename Base::ElementT;
 		using ElementPtrT = typename Base::ElementPtrT;
 
 		C3D_API static const castor::String Name;
 	};
 
-	using SamplerCacheTraits = ResourceCacheTraitsT< Sampler, castor::String >;
+	using SamplerCacheTraits = PtrCacheTraitsT< Sampler, castor::String >;
 	using SamplerCache = castor::ResourceCacheT< Sampler
 		, castor::String
 		, SamplerCacheTraits >;
 
-	using SamplerRes = SamplerCacheTraits::ElementPtrT;
-	using SamplerResPtr = SamplerCacheTraits::ElementObsT;
+	using SamplerPtr = SamplerCacheTraits::ElementPtrT;
+	using SamplerObs = SamplerCacheTraits::ElementObsT;
 
 	CU_DeclareCUSmartPtr( castor3d, SamplerCache, C3D_API );
 

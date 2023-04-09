@@ -38,9 +38,7 @@ namespace castor3d
 	{
 		if ( !m_listCreated )
 		{
-			auto mesh = getMesh().lock();
-
-			if ( mesh )
+			if ( auto mesh = getMesh() )
 			{
 				uint32_t nbFaces = mesh->getFaceCount();
 				uint32_t nbVertex = mesh->getVertexCount();
@@ -58,8 +56,8 @@ namespace castor3d
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		doUpdateMesh();
 		doUpdateContainers();
-		bool hasEnvironmentMapping = std::any_of( mesh.lock()->begin()
-			, mesh.lock()->end()
+		bool hasEnvironmentMapping = std::any_of( mesh->begin()
+			, mesh->end()
 			, []( SubmeshUPtr const & submesh )
 			{
 				return submesh->getDefaultMaterial()
@@ -74,14 +72,14 @@ namespace castor3d
 	}
 
 	void Geometry::setMaterial( Submesh & submesh
-		, MaterialRPtr material )
+		, MaterialObs material )
 	{
-		if ( auto mesh = getMesh().lock() )
+		if ( auto mesh = getMesh() )
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			CU_Require( submesh.getId() < mesh->getSubmeshCount() );
 			bool changed = false;
-			MaterialRPtr oldMaterial{};
+			MaterialObs oldMaterial{};
 			auto itSubMat = m_submeshesMaterials.find( &submesh );
 
 			if ( itSubMat != m_submeshesMaterials.end() )
@@ -152,10 +150,10 @@ namespace castor3d
 		}
 	}
 
-	MaterialRPtr Geometry::getMaterial( Submesh const & submesh )const
+	MaterialObs Geometry::getMaterial( Submesh const & submesh )const
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
-		MaterialRPtr result{};
+		MaterialObs result{};
 		auto it = m_submeshesMaterials.find( &submesh );
 
 		if ( it != m_submeshesMaterials.end() )
@@ -271,7 +269,7 @@ namespace castor3d
 		m_submeshesBoxes.clear();
 		m_submeshesSpheres.clear();
 
-		if ( auto mesh = m_mesh.lock() )
+		if ( auto mesh = m_mesh )
 		{
 			m_meshName = mesh->getName();
 

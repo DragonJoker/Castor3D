@@ -89,7 +89,7 @@ namespace castor3d
 		using RenderPasses = std::array< RenderPass, 6 >;
 
 		Texture m_result;
-		SamplerResPtr m_sampler;
+		SamplerObs m_sampler{};
 		Texture const & m_srcView;
 		ashes::ImagePtr m_srcImage;
 		ashes::ImageView m_srcImageView;

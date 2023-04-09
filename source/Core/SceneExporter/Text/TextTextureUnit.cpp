@@ -57,9 +57,9 @@ namespace castor
 			{
 				if ( auto block{ beginBlock( file, cuT( "texture_unit" ) ) } )
 				{
-					if ( unit.getSampler().lock() && unit.getSampler().lock()->getName() != cuT( "Default" ) )
+					if ( unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
 					{
-						result = writeName( file, cuT( "sampler" ), unit.getSampler().lock()->getName() );
+						result = writeName( file, cuT( "sampler" ), unit.getSampler()->getName() );
 					}
 
 					auto dimensions = unit.getTexture()->getDimensions();

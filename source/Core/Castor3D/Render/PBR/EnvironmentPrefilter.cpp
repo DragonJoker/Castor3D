@@ -45,12 +45,12 @@ namespace castor3d
 			return result;
 		}
 
-		static SamplerResPtr doCreateSampler( Engine & engine
+		static SamplerObs doCreateSampler( Engine & engine
 			, RenderDevice const & device
 			, std::string const & prefix
 			, uint32_t maxLod )
 		{
-			SamplerResPtr result;
+			SamplerObs result{};
 			auto stream = castor::makeStringStream();
 			stream << prefix << cuT( "IblTexturesPrefiltered_" ) << maxLod;
 			auto name = stream.str();
@@ -73,7 +73,7 @@ namespace castor3d
 				result = engine.addSampler( name, created, false );
 			}
 
-			result.lock()->initialise( device );
+			result->initialise( device );
 			return result;
 		}
 
@@ -263,7 +263,7 @@ namespace castor3d
 		, VkExtent2D const & size
 		, ashes::ImageView const & srcView
 		, Texture const & dstTexture
-		, SamplerResPtr sampler
+		, SamplerObs sampler
 		, bool isCharlie )
 		: RenderCube{ device, false, std::move( sampler ) }
 		, m_renderPass{ renderPass }
@@ -348,7 +348,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::Size const & size
 		, Texture const & srcTexture
-		, SamplerResPtr sampler
+		, SamplerObs sampler
 		, bool isCharlie )
 		: m_device{ device }
 		, m_srcView{ srcTexture }

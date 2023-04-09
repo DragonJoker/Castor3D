@@ -38,7 +38,7 @@ namespace castor3d
 
 		C3D_API uint32_t getId()const;
 		C3D_API uint32_t getInstanceCount()const;
-		C3D_API MaterialRPtr getMaterial()const;
+		C3D_API MaterialObs getMaterial()const;
 		C3D_API ObjectBufferOffset const & getSourceBufferOffsets()const;
 		C3D_API ObjectBufferOffset const & getFinalBufferOffsets()const;
 		C3D_API SubmeshFlags getSubmeshFlags()const;

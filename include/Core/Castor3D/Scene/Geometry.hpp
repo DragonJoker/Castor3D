@@ -93,7 +93,7 @@ namespace castor3d
 		 *\param[in]	submesh	Le sous-maillage.
 		 *\return		Le matériau.
 		 */
-		C3D_API MaterialRPtr getMaterial( Submesh const & submesh )const;
+		C3D_API MaterialObs getMaterial( Submesh const & submesh )const;
 		/**
 		 *\~english
 		 *\brief		Defines a submesh material.
@@ -105,7 +105,7 @@ namespace castor3d
 		 *\param[in]	material	Le matériau.
 		 */
 		C3D_API void setMaterial( Submesh & submesh
-			, MaterialRPtr material );
+			, MaterialObs material );
 		/**
 		 *\~english
 		 *\brief		Computes the bounding box from the given submeshes boxes.
@@ -220,7 +220,7 @@ namespace castor3d
 		void doUpdateContainers();
 
 	private:
-		MeshResPtr m_mesh;
+		MeshResPtr m_mesh{};
 		castor::String m_meshName;
 		bool m_listCreated{ false };
 		mutable castor::SpinMutex m_mutex;

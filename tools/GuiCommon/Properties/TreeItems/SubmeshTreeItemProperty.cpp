@@ -65,7 +65,7 @@ namespace GuiCommon
 		addProperty( grid, PROPERTY_CATEGORY_SUBMESH + wxString( m_geometry.getName() ) );
 		addPropertyET( grid, PROPERTY_TOPOLOGY, choices, m_submesh.getTopology(), &m_submesh, &castor3d::Submesh::setTopology );
 		addMaterial( grid, engine, PROPERTY_SUBMESH_MATERIAL, m_materials, m_geometry.getMaterial( m_submesh )
-			, [this]( castor3d::MaterialRPtr material ) { m_geometry.setMaterial( m_submesh, material ); } );
+			, [this]( castor3d::MaterialObs material ) { m_geometry.setMaterial( m_submesh, material ); } );
 		addProperty( grid, PROPERTY_SUBMESH_SPHERE_BOX, m_submesh.getBoundingSphere(), EmptyHandler );
 		addProperty( grid, PROPERTY_SUBMESH_CUBE_BOX, m_submesh.getBoundingBox(), EmptyHandler );
 	}
