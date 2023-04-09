@@ -92,8 +92,8 @@ namespace castor3d
 	class SceneNodeAnimation;
 	class SceneNodeAnimationKeyFrame;
 
-	CU_DeclareSmartPtr( SceneNodeAnimation );
-	CU_DeclareSmartPtr( SceneNodeAnimationKeyFrame );
+	CU_DeclareCUSmartPtr( castor3d, SceneNodeAnimation, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SceneNodeAnimationKeyFrame, C3D_API );
 	//@}
 
 	struct GroupAnimation
@@ -111,23 +111,16 @@ namespace castor3d
 	using Animable = AnimableT< Engine >;
 	using Animation = AnimationT< Engine >;
 
+	CU_DeclareCUSmartPtr( castor3d, Animable, C3D_API );
 	CU_DeclareCUSmartPtr( castor3d, AnimatedObjectGroup, C3D_API );
-
-	CU_DeclareSmartPtr( Animable );
-	CU_DeclareSmartPtr( AnimatedMesh );
-	CU_DeclareSmartPtr( AnimatedObject );
-	CU_DeclareSmartPtr( AnimatedSceneNode );
-	CU_DeclareSmartPtr( AnimatedSkeleton );
-	CU_DeclareSmartPtr( AnimatedTexture );
-	CU_DeclareSmartPtr( Animation );
-	CU_DeclareSmartPtr( AnimationInstance );
-
-	//! AnimatedObject pointer map, sorted by name.
-	CU_DeclareMap( castor::String, AnimatedObjectSPtr, AnimatedObjectPtrStr );
-	//! Animation pointer map, sorted by name.
-	CU_DeclareMap( castor::String, AnimationInstanceUPtr, AnimationInstancePtrStr );
-	//! Animation pointer map, sorted by name.
-	CU_DeclareMap( castor::String, AnimationSPtr, AnimationPtrStr );
+	CU_DeclareCUSmartPtr( castor3d, AnimatedMesh, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, AnimatedObject, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, AnimatedSceneNode, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, AnimatedSkeleton, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, AnimatedTexture, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, Animation, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, AnimationInstance, C3D_API );
+	CU_DeclareCUTemplateSmartPtr( castor3d, AnimableT );
 
 	using OnAnimatedSkeletonChangeFunction = std::function< void( AnimatedObjectGroup const &, AnimatedSkeleton & ) >;
 	using OnAnimatedSkeletonChange = castor::SignalT< OnAnimatedSkeletonChangeFunction >;

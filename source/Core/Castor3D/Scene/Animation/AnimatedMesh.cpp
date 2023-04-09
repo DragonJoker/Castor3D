@@ -8,6 +8,8 @@
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Mesh/MeshAnimationInstanceSubmesh.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, AnimatedMesh )
+
 namespace castor3d
 {
 	AnimatedMesh::AnimatedMesh( castor::String const & name
@@ -92,7 +94,7 @@ namespace castor3d
 			if ( m_mesh.hasAnimation( name ) )
 			{
 				auto & animation = static_cast< MeshAnimation & >( m_mesh.getAnimation( name ) );
-				auto instance = std::make_unique< MeshAnimationInstance >( *this, animation );
+				auto instance = castor::makeUniqueDerived< AnimationInstance, MeshAnimationInstance >( *this, animation );
 				m_animations.emplace( name, std::move( instance ) );
 			}
 		}

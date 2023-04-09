@@ -94,7 +94,7 @@ namespace castor3d
 	{
 		if ( !hasAnimation() )
 		{
-			addAnimation( std::make_unique< TextureAnimation >( *getEngine(), "Default" ) );
+			addAnimation( castor::makeUniqueDerived< Animation, TextureAnimation >( *getEngine(), "Default" ) );
 			m_animated = true;
 		}
 

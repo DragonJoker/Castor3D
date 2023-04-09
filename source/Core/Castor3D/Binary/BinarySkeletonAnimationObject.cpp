@@ -55,11 +55,11 @@ namespace castor3d
 			switch ( moving->getType() )
 			{
 			case SkeletonNodeType::eNode:
-				result = result && BinaryWriter< SkeletonAnimationNode >{}.write( *std::static_pointer_cast< SkeletonAnimationNode >( moving ), m_chunk );
+				result = result && BinaryWriter< SkeletonAnimationNode >{}.write( static_cast< SkeletonAnimationNode const & >( *moving ), m_chunk );
 				break;
 
 			case SkeletonNodeType::eBone:
-				result = result && BinaryWriter< SkeletonAnimationBone >{}.write( *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_chunk );
+				result = result && BinaryWriter< SkeletonAnimationBone >{}.write( static_cast< SkeletonAnimationBone const & >( *moving ), m_chunk );
 				break;
 
 			default:
@@ -87,28 +87,30 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationBone:
 				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
-					auto bone = std::make_shared< SkeletonAnimationBone >( *obj.getOwner() );
+					auto bone = castor::makeUnique< SkeletonAnimationBone >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
 					checkError( result, "Couldn't parse animation bone." );
 
 					if ( result )
 					{
-						obj.addChild( bone );
-						obj.getOwner()->addObject( bone, obj.shared_from_this() );
+						obj.addChild( bone.get() );
+						obj.getOwner()->addObject( castor::ptrRefCast< SkeletonAnimationObject >( bone )
+							, &obj );
 					}
 				}
 				break;
 			case ChunkType::eSkeletonAnimationNode:
 				if ( m_fileVersion > Version{ 1, 5, 0 } )
 				{
-					auto node = std::make_shared< SkeletonAnimationNode >( *obj.getOwner() );
+					auto node = castor::makeUnique< SkeletonAnimationNode >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
 					checkError( result, "Couldn't parse animation node." );
 
 					if ( result )
 					{
-						obj.addChild( node );
-						obj.getOwner()->addObject( node, obj.shared_from_this() );
+						obj.addChild( node.get() );
+						obj.getOwner()->addObject( castor::ptrRefCast< SkeletonAnimationObject >( node )
+							, &obj );
 					}
 				}
 				break;
@@ -168,7 +170,7 @@ namespace castor3d
 
 						if ( it == animation.end() )
 						{
-							animation.addKeyFrame( std::make_unique< SkeletonAnimationKeyFrame >( *obj.getOwner()
+							animation.addKeyFrame( castor::makeUniqueDerived< AnimationKeyFrame, SkeletonAnimationKeyFrame >( *obj.getOwner()
 								, keyframe.m_timeIndex ) );
 							it = animation.find( keyframe.m_timeIndex );
 						}
@@ -220,38 +222,42 @@ namespace castor3d
 			case ChunkType::eSkeletonAnimationBone:
 				if ( m_fileVersion <= Version{ 1, 5, 0 } )
 				{
-					auto bone = std::make_shared< SkeletonAnimationBone >( *obj.getOwner() );
+					auto bone = castor::makeUnique< SkeletonAnimationBone >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
 					checkError( result, "Couldn't parse animation bone." );
 
 					if ( result )
 					{
-						obj.addChild( bone );
-						obj.getOwner()->addObject( bone, obj.shared_from_this() );
+						obj.addChild( bone.get() );
 
 						if ( !bone->getBone()->getParent() )
 						{
 							skeleton.setNodeParent( *bone->getBone(), *objNode );
 						}
+
+						obj.getOwner()->addObject( castor::ptrRefCast< SkeletonAnimationObject >( bone )
+							, &obj );
 					}
 				}
 				break;
 			case ChunkType::eSkeletonAnimationNode:
 				if ( m_fileVersion <= Version{ 1, 5, 0 } )
 				{
-					auto node = std::make_shared< SkeletonAnimationNode >( *obj.getOwner() );
+					auto node = castor::makeUnique< SkeletonAnimationNode >( *obj.getOwner() );
 					result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
 					checkError( result, "Couldn't parse animation node." );
 
 					if ( result )
 					{
-						obj.addChild( node );
-						obj.getOwner()->addObject( node, obj.shared_from_this() );
+						obj.addChild( node.get() );
 
 						if ( !node->getNode()->getParent() )
 						{
 							skeleton.setNodeParent( *node->getNode(), *objNode );
 						}
+
+						obj.getOwner()->addObject( castor::ptrRefCast< SkeletonAnimationObject >( node )
+							, &obj );
 					}
 				}
 				break;

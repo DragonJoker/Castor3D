@@ -230,7 +230,7 @@ namespace castor3d
 
 		if ( !hasAnimation( name ) )
 		{
-			addAnimation( std::make_unique< SceneNodeAnimation >( *this, name ) );
+			addAnimation( castor::makeUniqueDerived< Animation, SceneNodeAnimation >( *this, name ) );
 		}
 
 		return doGetAnimation< SceneNodeAnimation >( name );

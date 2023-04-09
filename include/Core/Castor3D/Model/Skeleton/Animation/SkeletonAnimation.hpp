@@ -67,8 +67,8 @@ namespace castor3d
 		 *\param[in]	node	Le noeud.
 		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr addObject( SkeletonNode & node
-			, SkeletonAnimationObjectSPtr parent );
+		C3D_API SkeletonAnimationObjectRPtr addObject( SkeletonNode & node
+			, SkeletonAnimationObjectRPtr parent );
 		/**
 		 *\~english
 		 *\brief		Creates and adds a moving bone.
@@ -79,8 +79,8 @@ namespace castor3d
 		 *\param[in]	bone	L'os.
 		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr addObject( BoneNode & bone
-			, SkeletonAnimationObjectSPtr parent );
+		C3D_API SkeletonAnimationObjectRPtr addObject( BoneNode & bone
+			, SkeletonAnimationObjectRPtr parent );
 		/**
 		 *\~english
 		 *\brief		adds an animated object.
@@ -91,8 +91,8 @@ namespace castor3d
 		 *\param[in]	object	L'objet animé.
 		 *\param[in]	parent	Le parent de l'objet déplaçable.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr addObject( SkeletonAnimationObjectSPtr object
-			, SkeletonAnimationObjectSPtr parent );
+		C3D_API SkeletonAnimationObjectRPtr addObject( SkeletonAnimationObjectUPtr object
+			, SkeletonAnimationObjectRPtr parent );
 		/**
 		 *\~english
 		 *\brief		Tells if the animation has the animated object.
@@ -113,7 +113,7 @@ namespace castor3d
 		 *\brief		Récupère un noeud animé.
 		 *\param[in]	node	Le noeud.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( SkeletonNode const & node )const;
+		C3D_API SkeletonAnimationObjectRPtr getObject( SkeletonNode const & node )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated bone.
@@ -122,7 +122,7 @@ namespace castor3d
 		 *\brief		Récupère un os animé.
 		 *\param[in]	bone	L'os.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( BoneNode const & bone )const;
+		C3D_API SkeletonAnimationObjectRPtr getObject( BoneNode const & bone )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves an animated object.
@@ -133,7 +133,7 @@ namespace castor3d
 		 *\param[in]	type	Le type d'objet.
 		 *\param[in]	name	Le nom de l'objet.
 		 */
-		C3D_API SkeletonAnimationObjectSPtr getObject( SkeletonNodeType type
+		C3D_API SkeletonAnimationObjectRPtr getObject( SkeletonNodeType type
 			, castor::String const & name )const;
 		/**
 		 *\~english
@@ -141,7 +141,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les objets mouvants.
 		 */
-		SkeletonAnimationObjectPtrStrMap const & getObjects()const
+		auto const & getObjects()const
 		{
 			return m_toMove;
 		}
@@ -152,18 +152,21 @@ namespace castor3d
 		 *\brief		Récupère le nombre d'objets mouvants
 		 *\return		Les objets mouvants racines.
 		 */
-		SkeletonAnimationObjectPtrArray const & getRootObjects()const
+		SkeletonAnimationObjectArray const & getRootObjects()const
 		{
-			return m_arrayMoving;
+			return m_rootObjects;
 		}
+
+	protected:
+		using ObjectMap = std::map< castor::String, SkeletonAnimationObjectUPtr >;
 
 	protected:
 		//!\~english	The root moving objects.
 		//!\~french		Les objets mouvants racine.
-		SkeletonAnimationObjectPtrArray m_arrayMoving;
+		SkeletonAnimationObjectArray m_rootObjects;
 		//!\~english	The moving objects.
 		//!\~french		Les objets mouvants.
-		SkeletonAnimationObjectPtrStrMap m_toMove;
+		ObjectMap m_toMove;
 
 		friend class BinaryWriter< SkeletonAnimation >;
 		friend class BinaryParser< SkeletonAnimation >;

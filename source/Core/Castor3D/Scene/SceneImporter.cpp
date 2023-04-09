@@ -286,13 +286,13 @@ namespace castor3d
 
 			for ( auto animName : m_file->listSkeletonAnimations( *skeleton ) )
 			{
-				auto animation = std::make_unique< SkeletonAnimation >( *skeleton, animName );
+				auto animation = castor::makeUnique< SkeletonAnimation >( *skeleton, animName );
 
 				if ( importer.import( *animation, m_file, emptyParams ) )
 				{
 					auto & anim = anims.emplace( animName, AnimObjects{} ).first->second;
 					anim.skeletons.push_back( skeleton.get() );
-					skeleton->addAnimation( std::move( animation ) );
+					skeleton->addAnimation( castor::ptrRefCast< Animation >( animation ) );
 				}
 			}
 		}
@@ -310,13 +310,13 @@ namespace castor3d
 
 			for ( auto animName : m_file->listMeshAnimations( *mesh ) )
 			{
-				auto animation = std::make_unique< MeshAnimation >( *mesh, animName );
+				auto animation = castor::makeUnique< MeshAnimation >( *mesh, animName );
 
 				if ( importer.import( *animation, m_file, emptyParams ) )
 				{
 					auto & anim = anims.emplace( animName, AnimObjects{} ).first->second;
 					anim.meshes.push_back( mesh.get() );
-					mesh->addAnimation( std::move( animation ) );
+					mesh->addAnimation( castor::ptrRefCast< Animation >( animation ) );
 				}
 			}
 		}
@@ -334,13 +334,13 @@ namespace castor3d
 
 			for ( auto animName : m_file->listSceneNodeAnimations( *node ) )
 			{
-				auto animation = std::make_unique< SceneNodeAnimation >( *node, animName );
+				auto animation = castor::makeUnique< SceneNodeAnimation >( *node, animName );
 
 				if ( importer.import( *animation, m_file, emptyParams ) )
 				{
 					auto & anim = anims.emplace( animName, AnimObjects{} ).first->second;
 					anim.nodes.push_back( node.get() );
-					node->addAnimation( std::move( animation ) );
+					node->addAnimation( castor::ptrRefCast< Animation >( animation ) );
 				}
 			}
 		}

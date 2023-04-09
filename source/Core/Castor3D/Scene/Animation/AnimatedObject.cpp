@@ -3,6 +3,8 @@
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, AnimatedObject )
+
 namespace castor3d
 {
 	AnimatedObject::AnimatedObject( AnimationType kind

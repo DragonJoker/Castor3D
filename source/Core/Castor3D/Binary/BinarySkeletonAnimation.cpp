@@ -16,16 +16,16 @@ namespace castor3d
 	{
 		bool result = doWriteChunk( obj.getName(), ChunkType::eName, m_chunk );
 
-		for ( auto moving : obj.m_arrayMoving )
+		for ( auto moving : obj.getRootObjects() )
 		{
 			switch ( moving->getType() )
 			{
 			case SkeletonNodeType::eNode:
-				result = result && BinaryWriter< SkeletonAnimationNode >{}.write( *std::static_pointer_cast< SkeletonAnimationNode >( moving ), m_chunk );
+				result = result && BinaryWriter< SkeletonAnimationNode >{}.write( static_cast< SkeletonAnimationNode const & >( *moving ), m_chunk );
 				break;
 
 			case SkeletonNodeType::eBone:
-				result = result && BinaryWriter< SkeletonAnimationBone >{}.write( *std::static_pointer_cast< SkeletonAnimationBone >( moving ), m_chunk );
+				result = result && BinaryWriter< SkeletonAnimationBone >{}.write( static_cast< SkeletonAnimationBone const & >( *moving ), m_chunk );
 				break;
 
 			default:
@@ -49,9 +49,8 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimation >::doParse( SkeletonAnimation & obj )
 	{
 		bool result = true;
-		SkeletonAnimationNodeSPtr node;
-		SkeletonAnimationObjectSPtr object;
-		SkeletonAnimationBoneSPtr bone;
+		SkeletonAnimationNodeUPtr node{};
+		SkeletonAnimationBoneUPtr bone{};
 		SkeletonAnimationKeyFrameUPtr keyFrame;
 		castor::String name;
 		BinaryChunk chunk;
@@ -72,37 +71,37 @@ namespace castor3d
 				break;
 
 			case ChunkType::eSkeletonAnimationNode:
-				node = std::make_shared< SkeletonAnimationNode >( obj );
+				node = castor::makeUnique< SkeletonAnimationNode >( obj );
 				result = createBinaryParser< SkeletonAnimationNode >().parse( *node, chunk );
 				checkError( result, "Couldn't parse node." );
 
 				if ( result )
 				{
-					obj.addObject( node, nullptr );
+					obj.addObject( castor::ptrRefCast< SkeletonAnimationObject >( node ), nullptr );
 				}
 
 				break;
 
 			case ChunkType::eSkeletonAnimationBone:
-				bone = std::make_shared< SkeletonAnimationBone >( obj );
+				bone = castor::makeUnique< SkeletonAnimationBone >( obj );
 				result = createBinaryParser< SkeletonAnimationBone >().parse( *bone, chunk );
 				checkError( result, "Couldn't parse bone." );
 
 				if ( result )
 				{
-					obj.addObject( bone, nullptr );
+					obj.addObject( castor::ptrRefCast< SkeletonAnimationObject >( bone ), nullptr );
 				}
 
 				break;
 
 			case ChunkType::eSkeletonAnimationKeyFrame:
-				keyFrame = std::make_unique< SkeletonAnimationKeyFrame >( obj, 0_ms );
+				keyFrame = castor::makeUnique< SkeletonAnimationKeyFrame >( obj, 0_ms );
 				result = createBinaryParser< SkeletonAnimationKeyFrame >().parse( *keyFrame, chunk );
 				checkError( result, "Couldn't parse keyframe." );
 
 				if ( result )
 				{
-					obj.addKeyFrame( std::move( keyFrame ) );
+					obj.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 				}
 
 				break;

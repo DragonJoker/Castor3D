@@ -365,10 +365,10 @@ namespace castor3d
 			if ( passIt != newMaterial.end() )
 			{
 				auto animMesh = data.hasMorphComponent()
-					? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), instance.getName() + cuT( "_Mesh" ) ) )
+					? static_cast< AnimatedMesh * >( findAnimatedObject( *getOwner(), instance.getName() + cuT( "_Mesh" ) ) )
 					: nullptr;
 				auto animSkeleton = data.hasSkinComponent()
-					? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), instance.getName() + cuT( "_Skeleton" ) ) )
+					? static_cast< AnimatedSkeleton * >( findAnimatedObject( *getOwner(), instance.getName() + cuT( "_Skeleton" ) ) )
 					: nullptr;
 
 				while ( passIt != newMaterial.end() )
@@ -378,8 +378,8 @@ namespace castor3d
 					createNode( *pass
 						, data
 						, instance
-						, animMesh.get()
-						, animSkeleton.get() );
+						, animMesh
+						, animSkeleton );
 					++passIt;
 				}
 			}
@@ -470,10 +470,10 @@ namespace castor3d
 			auto & node = nodeIt.second;
 			auto & instantiation = node->data.getInstantiation();
 			node->mesh = node->data.hasMorphComponent()
-				? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Mesh" ) ) ).get()
+				? static_cast< AnimatedMesh * >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Mesh" ) ) )
 				: nullptr;
 			node->skeleton = node->data.hasSkinComponent()
-				? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Skeleton" ) ) ).get()
+				? static_cast< AnimatedSkeleton * >( findAnimatedObject( *getOwner(), node->instance.getName() + cuT( "_Skeleton" ) ) )
 				: nullptr;
 
 			if ( instantiation.isInstanced()

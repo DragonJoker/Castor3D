@@ -23,7 +23,7 @@ namespace castor3d
 	{
 		TextureSourceInfo sourceInfo;
 		PassTextureConfig passConfig{};
-		AnimationUPtr animation{};
+		TextureAnimationUPtr animation{};
 		castor::PxBufferBaseUPtr buffer{};
 	};
 

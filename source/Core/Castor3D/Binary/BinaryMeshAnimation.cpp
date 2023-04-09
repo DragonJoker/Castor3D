@@ -48,13 +48,13 @@ namespace castor3d
 				break;
 
 			case ChunkType::eMeshMorphTarget:
-				keyFrame = std::make_unique< MeshMorphTarget >( obj, 0_ms );
+				keyFrame = castor::makeUnique< MeshMorphTarget >( obj, 0_ms );
 				result = createBinaryParser< MeshMorphTarget >().parse( *keyFrame, chunk );
 				checkError( result, "Couldn't parse keyframe." );
 
 				if ( result )
 				{
-					obj.addKeyFrame( std::move( keyFrame ) );
+					obj.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 				}
 
 				break;
@@ -99,13 +99,13 @@ namespace castor3d
 				case ChunkType::eMeshAnimationKeyFrame:
 #pragma GCC diagnostic pop
 #pragma warning( pop )
-					keyFrame = std::make_unique< MeshMorphTarget >( obj, 0_ms );
+					keyFrame = castor::makeUnique< MeshMorphTarget >( obj, 0_ms );
 					result = createBinaryParser< MeshMorphTarget >().parse( *keyFrame, chunk );
 					checkError( result, "Couldn't parse keyframe." );
 
 					if ( result )
 					{
-						obj.addKeyFrame( std::move( keyFrame ) );
+						obj.addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( keyFrame ) );
 					}
 
 					break;

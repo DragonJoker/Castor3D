@@ -73,17 +73,13 @@ namespace castor3d
 	*/
 	class SkeletonAnimationInstanceObject;
 
-	CU_DeclareSmartPtr( SkeletonAnimationInstance );
-	CU_DeclareSmartPtr( SkeletonAnimationInstanceBone );
-	CU_DeclareSmartPtr( SkeletonAnimationInstanceNode );
-	CU_DeclareSmartPtr( SkeletonAnimationInstanceObject );
+	CU_DeclareCUSmartPtr( castor3d, SkeletonAnimationInstance, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SkeletonAnimationInstanceBone, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SkeletonAnimationInstanceNode, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, SkeletonAnimationInstanceObject, C3D_API );
 
-	//! MovingObject pointer map, sorted by name.
-	CU_DeclareMap( castor::String, SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtrStr );
 	//! SkeletonAnimationInstanceObject pointer array.
-	CU_DeclareVector( SkeletonAnimationInstanceObjectSPtr, SkeletonAnimationInstanceObjectPtr );
-	//! Skeleton animation instance pointer array.
-	CU_DeclareVector( std::reference_wrapper< SkeletonAnimationInstance >, SkeletonAnimationInstance );
+	CU_DeclareVector( SkeletonAnimationInstanceObjectUPtr, SkeletonAnimationInstanceObjectPtr );
 
 	//@}
 	//@}

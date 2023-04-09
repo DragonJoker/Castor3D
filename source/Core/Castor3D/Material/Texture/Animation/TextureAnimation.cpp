@@ -5,6 +5,8 @@
 #include "Castor3D/Material/Texture/Animation/TextureAnimationKeyFrame.hpp"
 #include "Castor3D/Scene/Animation/AnimatedTexture.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, TextureAnimation )
+
 namespace castor3d
 {
 	TextureAnimation::TextureAnimation( Engine & engine
@@ -44,9 +46,9 @@ namespace castor3d
 				{
 					if ( tile < tiles )
 					{
-						auto kf = std::make_unique< TextureAnimationKeyFrame >( *this, timeIndex );
+						auto kf = castor::makeUnique< TextureAnimationKeyFrame >( *this, timeIndex );
 						kf->setTile( { x, y } );
-						addKeyFrame( std::move( kf ) );
+						addKeyFrame( castor::ptrRefCast< AnimationKeyFrame >( kf ) );
 						timeIndex += timeStep;
 					}
 

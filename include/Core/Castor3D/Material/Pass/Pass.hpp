@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponent.hpp"
 #include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
@@ -199,7 +200,7 @@ namespace castor3d
 		 */
 		C3D_API void registerTexture( TextureSourceInfo sourceInfo
 			, PassTextureConfig configuration
-			, AnimationUPtr animation );
+			, TextureAnimationUPtr animation );
 		/**
 		 *\~english
 		 *\brief		Removes a texture unit.
@@ -514,7 +515,7 @@ namespace castor3d
 		uint32_t m_index;
 		PassComponentMap m_components;
 		TextureSourceMap m_sources;
-		std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > m_animations;
+		std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};
 		std::atomic_bool m_texturesReduced{ false };
 		UnitArray m_textureUnits;

@@ -64,10 +64,10 @@ namespace castor3d
 					{
 						auto material = element.getMaterial( *submesh );
 						auto animMesh = submesh->hasMorphComponent()
-							? std::static_pointer_cast< AnimatedMesh >( findAnimatedObject( scene, element.getName() + cuT( "_Mesh" ) ) )
+							? static_cast< AnimatedMesh * >( findAnimatedObject( scene, element.getName() + cuT( "_Mesh" ) ) )
 							: nullptr;
 						auto animSkeleton = submesh->hasSkinComponent()
-							? std::static_pointer_cast< AnimatedSkeleton >( findAnimatedObject( scene, element.getName() + cuT( "_Skeleton" ) ) )
+							? static_cast< AnimatedSkeleton * >( findAnimatedObject( scene, element.getName() + cuT( "_Skeleton" ) ) )
 							: nullptr;
 
 						if ( auto comp = submesh->getComponent< PassMasksComponent >() )
@@ -77,8 +77,8 @@ namespace castor3d
 								nodes.createNode( *pass
 									, *submesh
 									, element
-									, animMesh.get()
-									, animSkeleton.get() );
+									, animMesh
+									, animSkeleton );
 							}
 						}
 						else
@@ -88,8 +88,8 @@ namespace castor3d
 								nodes.createNode( *pass
 									, *submesh
 									, element
-									, animMesh.get()
-									, animSkeleton.get() );
+									, animMesh
+									, animSkeleton );
 							}
 						}
 					}

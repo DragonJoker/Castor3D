@@ -57,7 +57,7 @@ namespace castor3d
 		 *\remarks		Les transformations de l'enfant sont affectées par celles de cet objet.
 		 *\param[in]	object	L'enfant.
 		 */
-		C3D_API void addChild( SkeletonAnimationObjectSPtr object );
+		C3D_API void addChild( SkeletonAnimationObjectRPtr object );
 		/**
 		 *\~english
 		 *\brief		Retrieves the object name.
@@ -100,7 +100,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le tableau d'enfants.
 		 */
-		SkeletonAnimationObjectPtrArray const & getChildren()const
+		SkeletonAnimationObjectArray const & getChildren()const
 		{
 			return m_children;
 		}
@@ -124,7 +124,7 @@ namespace castor3d
 		SkeletonNodeType m_type;
 		//!\~english	The objects depending on this one.
 		//!\~french		Les objets dépendant de celui-ci.
-		SkeletonAnimationObjectPtrArray m_children;
+		SkeletonAnimationObjectArray m_children;
 		//!\~english	The parent object.
 		//!\~french		L'objet parent.
 		SkeletonAnimationObjectRPtr m_parent{};

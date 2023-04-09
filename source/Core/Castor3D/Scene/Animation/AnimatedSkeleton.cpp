@@ -8,6 +8,8 @@
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstance.hpp"
 #include "Castor3D/Scene/Animation/Skeleton/SkeletonAnimationInstanceObject.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, AnimatedSkeleton )
+
 namespace castor3d
 {
 	AnimatedSkeleton::AnimatedSkeleton( castor::String const & name
@@ -25,9 +27,9 @@ namespace castor3d
 	{
 		if ( !m_playingAnimations.empty() )
 		{
-			for ( auto & animation : m_playingAnimations )
+			for ( auto animation : m_playingAnimations )
 			{
-				animation.get().update( elapsed );
+				animation->update( elapsed );
 			}
 
 			m_geometry.markDirty();
@@ -56,9 +58,9 @@ namespace castor3d
 			{
 				castor::Matrix4x4f final{ skeleton.getGlobalInverseTransform() };
 
-				for ( auto & animation : m_playingAnimations )
+				for ( auto animation : m_playingAnimations )
 				{
-					auto object = animation.get().getObject( *bone );
+					auto object = animation->getObject( *bone );
 
 					if ( object )
 					{
@@ -80,23 +82,23 @@ namespace castor3d
 		if ( it == m_animations.end() )
 		{
 			auto & animation = static_cast< SkeletonAnimation & >( m_skeleton.getAnimation( name ) );
-			auto instance = std::make_unique< SkeletonAnimationInstance >( *this, animation );
+			auto instance = castor::makeUniqueDerived< AnimationInstance, SkeletonAnimationInstance >( *this, animation );
 			m_animations.emplace( name, std::move( instance ) );
 		}
 	}
 
 	void AnimatedSkeleton::doStartAnimation( AnimationInstance & animation )
 	{
-		m_playingAnimations.emplace_back( static_cast< SkeletonAnimationInstance & >( animation ) );
+		m_playingAnimations.emplace_back( &static_cast< SkeletonAnimationInstance & >( animation ) );
 	}
 
 	void AnimatedSkeleton::doStopAnimation( AnimationInstance & animation )
 	{
 		m_playingAnimations.erase( std::find_if( m_playingAnimations.begin()
 			, m_playingAnimations.end()
-			, [&animation]( std::reference_wrapper< SkeletonAnimationInstance > & instance )
+			, [&animation]( SkeletonAnimationInstance * instance )
 			{
-				return &instance.get() == &static_cast< SkeletonAnimationInstance & >( animation );
+				return instance == &static_cast< SkeletonAnimationInstance & >( animation );
 			} ) );
 		m_reinit = m_playingAnimations.empty();
 	}

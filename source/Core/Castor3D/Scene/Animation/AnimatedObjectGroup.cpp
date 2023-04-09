@@ -21,7 +21,7 @@ namespace castor3d
 	{
 		template< typename FuncT, typename ParamT >
 		static bool applyAnimationFunc( GroupAnimationMap & animations
-			, AnimatedObjectPtrStrMap & objects
+			, AnimatedObjectGroup::AnimatedObjectMap & objects
 			, castor::String const & name
 			, FuncT func
 			, ParamT const & value
@@ -32,7 +32,7 @@ namespace castor3d
 
 			if ( result )
 			{
-				for ( auto it : objects )
+				for ( auto & it : objects )
 				{
 					if ( it.second->hasAnimation( name ) )
 					{
@@ -64,97 +64,105 @@ namespace castor3d
 		m_animations.clear();
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::addObject( SceneNode & node
+	AnimatedObjectRPtr AnimatedObjectGroup::addObject( SceneNode & node
 		, castor::String const & name )
 	{
-		auto object = std::make_shared< AnimatedSceneNode >( name + "_Node", node );
+		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedSceneNode >( name + "_Node", node );
+		auto result = object.get();
 
-		if ( !addObject( object ) )
+		if ( !addObject( std::move( object ) ) )
 		{
-			object.reset();
+			result = {};
 		}
 
-		return std::static_pointer_cast< AnimatedObject >( object );
+		return result;
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::addObject( Mesh & mesh
+	AnimatedObjectRPtr AnimatedObjectGroup::addObject( Mesh & mesh
 		, Geometry & geometry
 		, castor::String const & name )
 	{
-		auto object = std::make_shared< AnimatedMesh >( name + "_Mesh", mesh, geometry );
+		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedMesh >( name + "_Mesh", mesh, geometry );
+		auto result = object.get();
 
-		if ( !addObject( object ) )
+		if ( !addObject( std::move( object ) ) )
 		{
-			object.reset();
+			result = {};
 		}
 
-		return std::static_pointer_cast< AnimatedObject >( object );
+		return result;
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::addObject( Skeleton & skeleton
+	AnimatedObjectRPtr AnimatedObjectGroup::addObject( Skeleton & skeleton
 		, Mesh & mesh
 		, Geometry & geometry
 		, castor::String const & name )
 	{
-		auto object = std::make_shared< AnimatedSkeleton >( name + "_Skeleton", skeleton, mesh, geometry );
+		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedSkeleton >( name + "_Skeleton", skeleton, mesh, geometry );
+		auto result = object.get();
 
-		if ( !addObject( object ) )
+		if ( !addObject( std::move( object ) ) )
 		{
-			object.reset();
+			result = {};
 		}
 
-		return std::static_pointer_cast< AnimatedObject >( object );
+		return result;
 	}
 
-	AnimatedObjectSPtr AnimatedObjectGroup::addObject( TextureSourceInfo const & sourceInfo
+	AnimatedObjectRPtr AnimatedObjectGroup::addObject( TextureSourceInfo const & sourceInfo
 		, TextureConfiguration const & config
 		, Pass & pass )
 	{
-		auto object = std::make_shared< AnimatedTexture >( sourceInfo, config , pass );
+		auto object = castor::makeUniqueDerived< AnimatedObject, AnimatedTexture >( sourceInfo, config , pass );
+		auto result = object.get();
 
-		if ( !addObject( object ) )
+		if ( !addObject( std::move( object ) ) )
 		{
-			object.reset();
+			result = {};
 		}
 
-		return std::static_pointer_cast< AnimatedObject >( object );
+		return result;
 	}
 
-	bool AnimatedObjectGroup::addObject( AnimatedObjectSPtr object )
+	bool AnimatedObjectGroup::addObject( AnimatedObjectUPtr object )
 	{
-		bool result = object && m_objects.find( object->getName() ) == m_objects.end();
+		auto name = object->getName();
+		bool result = object && m_objects.find( name ) == m_objects.end();
 
-		if ( result )
+		if ( auto obj = object.get() )
 		{
-			m_objects.insert( { object->getName(), object } );
-
-			switch ( object->getKind() )
+			if ( result )
 			{
-			case AnimationType::eSceneNode:
-				onSceneNodeAdded( *this, static_cast< AnimatedSceneNode & >( *object ) );
-				break;
-			case AnimationType::eSkeleton:
-				onSkeletonAdded( *this, static_cast< AnimatedSkeleton & >( *object ) );
-				break;
-			case AnimationType::eMesh:
-				onMeshAdded( *this, static_cast< AnimatedMesh & >( *object ) );
-				break;
-			case AnimationType::eTexture:
-				onTextureAdded( *this, static_cast< AnimatedTexture & >( *object ) );
-				break;
-			default:
-				break;
-			}
-		}
+				m_objects.emplace( name, std::move( object ) );
 
-		for ( auto it : m_animations )
-		{
-			object->addAnimation( it.first );
-			auto & animation = object->getAnimation( it.first );
-			animation.setLooped( it.second.looped );
-			animation.setScale( it.second.scale );
-			animation.setStartingPoint( it.second.startingPoint );
-			animation.setStoppingPoint( it.second.stoppingPoint );
+				switch ( object->getKind() )
+				{
+				case AnimationType::eSceneNode:
+					onSceneNodeAdded( *this, static_cast< AnimatedSceneNode & >( *obj ) );
+					break;
+				case AnimationType::eSkeleton:
+					onSkeletonAdded( *this, static_cast< AnimatedSkeleton & >( *obj ) );
+					break;
+				case AnimationType::eMesh:
+					onMeshAdded( *this, static_cast< AnimatedMesh & >( *obj ) );
+					break;
+				case AnimationType::eTexture:
+					onTextureAdded( *this, static_cast< AnimatedTexture & >( *obj ) );
+					break;
+				default:
+					break;
+				}
+			}
+
+			for ( auto it : m_animations )
+			{
+				obj->addAnimation( it.first );
+				auto & animation = obj->getAnimation( it.first );
+				animation.setLooped( it.second.looped );
+				animation.setScale( it.second.scale );
+				animation.setStartingPoint( it.second.startingPoint );
+				animation.setStoppingPoint( it.second.stoppingPoint );
+			}
 		}
 
 		return result;
@@ -182,7 +190,7 @@ namespace castor3d
 			result = true;
 			m_animations.insert( { name, { name, AnimationState::eStopped, false, 1.0f } } );
 
-			for ( auto it : m_objects )
+			for ( auto & it : m_objects )
 			{
 				it.second->addAnimation( name );
 			}
@@ -260,7 +268,7 @@ namespace castor3d
 
 #endif
 
-		for ( auto it : m_objects )
+		for ( auto & it : m_objects )
 		{
 			it.second->update( tslf );
 		}
@@ -272,7 +280,7 @@ namespace castor3d
 
 		if ( itAnim != m_animations.end() )
 		{
-			for ( auto it : m_objects )
+			for ( auto & it : m_objects )
 			{
 				it.second->startAnimation( name );
 			}
@@ -287,7 +295,7 @@ namespace castor3d
 
 		if ( itAnim != m_animations.end() )
 		{
-			for ( auto it : m_objects )
+			for ( auto & it : m_objects )
 			{
 				it.second->stopAnimation( name );
 			}
@@ -302,7 +310,7 @@ namespace castor3d
 
 		if ( itAnim != m_animations.end() )
 		{
-			for ( auto it : m_objects )
+			for ( auto & it : m_objects )
 			{
 				it.second->pauseAnimation( name );
 			}
@@ -313,7 +321,7 @@ namespace castor3d
 
 	void AnimatedObjectGroup::startAllAnimations()
 	{
-		for ( auto it : m_objects )
+		for ( auto & it : m_objects )
 		{
 			it.second->startAllAnimations();
 		}
@@ -326,7 +334,7 @@ namespace castor3d
 
 	void AnimatedObjectGroup::stopAllAnimations()
 	{
-		for ( auto it : m_objects )
+		for ( auto & it : m_objects )
 		{
 			it.second->stopAllAnimations();
 		}
@@ -339,7 +347,7 @@ namespace castor3d
 
 	void AnimatedObjectGroup::pauseAllAnimations()
 	{
-		for ( auto it : m_objects )
+		for ( auto & it : m_objects )
 		{
 			it.second->pauseAllAnimations();
 		}

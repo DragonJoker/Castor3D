@@ -19,9 +19,9 @@ namespace castor3d
 	class MeshAnimationSubmesh;
 	class MeshMorphTarget;
 
-	CU_DeclareSmartPtr( MeshAnimation );
-	CU_DeclareSmartPtr( MeshAnimationSubmesh );
-	CU_DeclareSmartPtr( MeshMorphTarget );
+	CU_DeclareCUSmartPtr( castor3d, MeshAnimation, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, MeshAnimationSubmesh, C3D_API );
+	CU_DeclareCUSmartPtr( castor3d, MeshMorphTarget, C3D_API );
 
 	CU_DeclareVector( MeshAnimationSubmesh, MeshAnimationSubmesh );
 

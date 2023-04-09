@@ -2,6 +2,8 @@
 
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, MeshAnimation )
+
 namespace castor3d
 {
 	MeshAnimation::MeshAnimation( Mesh & mesh

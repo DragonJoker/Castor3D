@@ -1,5 +1,9 @@
 #include "Castor3D/Animation/AnimationModule.hpp"
 
+#include "Castor3D/Animation/AnimationKeyFrame.hpp"
+
+CU_ImplementCUSmartPtr( castor3d, AnimationKeyFrame )
+
 namespace castor3d
 {
 	castor::String getName( AnimationType value )

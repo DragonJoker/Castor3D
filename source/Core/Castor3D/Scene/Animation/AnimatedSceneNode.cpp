@@ -7,6 +7,8 @@
 #include "Castor3D/Scene/Animation/SceneNode/SceneNodeAnimationInstance.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, AnimatedSceneNode )
+
 namespace castor3d
 {
 	AnimatedSceneNode::AnimatedSceneNode( castor::String const & name
@@ -33,7 +35,7 @@ namespace castor3d
 			if ( m_node.hasAnimation( name ) )
 			{
 				auto & animation = static_cast< SceneNodeAnimation & >( m_node.getAnimation( name ) );
-				auto instance = std::make_unique< SceneNodeAnimationInstance >( *this, animation );
+				auto instance = castor::makeUniqueDerived< AnimationInstance, SceneNodeAnimationInstance >( *this, animation );
 				m_animations.emplace( name, std::move( instance ) );
 			}
 		}

@@ -263,7 +263,6 @@ namespace castor3d
 
 	private:
 		friend class MeshGenerator;
-		CU_DeclareVector( AnimationPtrStrMap, AnimationMap );
 
 		Scene * m_scene;
 		bool m_modified;

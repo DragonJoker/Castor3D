@@ -608,14 +608,14 @@ namespace c3d_assimp
 	template< typename KeyFrameT, typename AnimationT >
 	inline KeyFrameT & getKeyFrame( castor::Milliseconds const & time
 		, AnimationT & animation
-		, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes )
+		, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes )
 	{
 		auto it = keyframes.find( time );
 
 		if ( it == keyframes.end() )
 		{
 			it = keyframes.emplace( time
-				, std::make_unique< KeyFrameT >( animation, time ) ).first;
+				, castor::makeUnique< KeyFrameT >( animation, time ) ).first;
 		}
 
 		return *it->second;
@@ -695,7 +695,7 @@ namespace c3d_assimp
 		, uint32_t fps
 		, castor::Milliseconds maxTime
 		, AnimationT & animation
-		, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes
+		, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
 	{
 		castor3d::InterpolatorT< castor::Point3f, castor3d::InterpolatorType::eLinear > pointInterpolator;
@@ -725,7 +725,7 @@ namespace c3d_assimp
 		, castor::Milliseconds maxTime
 		, int64_t ticksPerSecond
 		, AnimationT & animation
-		, std::map< castor::Milliseconds, std::unique_ptr< KeyFrameT > > & keyframes
+		, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes
 		, FuncT fillKeyFrame )
 	{
 		std::set< castor::Milliseconds > times;

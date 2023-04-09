@@ -1,5 +1,7 @@
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimationObject.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, SkeletonAnimationObject )
+
 namespace castor3d
 {
 	SkeletonAnimationObject::SkeletonAnimationObject( SkeletonAnimation & animation
@@ -9,9 +11,9 @@ namespace castor3d
 	{
 	}
 
-	void SkeletonAnimationObject::addChild( SkeletonAnimationObjectSPtr object )
+	void SkeletonAnimationObject::addChild( SkeletonAnimationObjectRPtr object )
 	{
-		CU_Require( object.get() != this );
+		CU_Require( object != this );
 		object->m_parent = this;
 		m_children.push_back( object );
 	}

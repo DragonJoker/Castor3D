@@ -10,6 +10,8 @@
 #include "Castor3D/Scene/Animation/Texture/TextureAnimationInstance.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, AnimatedTexture )
+
 namespace castor3d
 {
 	namespace anmtex
@@ -112,7 +114,7 @@ namespace castor3d
 				&& m_texture->hasAnimation() )
 			{
 				auto & animation = m_texture->getAnimation();
-				auto instance = std::make_unique< TextureAnimationInstance >( *this, animation );
+				auto instance = castor::makeUniqueDerived< AnimationInstance, TextureAnimationInstance >( *this, animation );
 				m_animations.emplace( name, std::move( instance ) );
 				m_pass.getOwner()->getEngine()->getMaterialCache().registerTexture( *this );
 				startAnimation( animation.getName() );

@@ -36,10 +36,10 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	AnimatedObjectSPtr findAnimatedObject( Scene const & scene
+	AnimatedObjectRPtr findAnimatedObject( Scene const & scene
 		, castor::String const & name )
 	{
-		AnimatedObjectSPtr result;
+		AnimatedObjectRPtr result{};
 		auto & cache = scene.getAnimatedObjectGroupCache();
 		using LockType = std::unique_lock< AnimatedObjectGroupCache const >;
 		LockType lock{ castor::makeUniqueLock( cache ) };
@@ -52,7 +52,7 @@ namespace castor3d
 
 				if ( it != group.second->getObjects().end() )
 				{
-					result = it->second;
+					result = it->second.get();
 				}
 			}
 		}
@@ -373,7 +373,7 @@ namespace castor3d
 		if ( m_isStatic == std::nullopt
 			|| object.getParent()->isStatic() == m_isStatic )
 		{
-			if ( auto mesh = object.getMesh().lock() )
+			if ( auto mesh = object.getMesh() )
 			{
 				for ( auto & submesh : *mesh )
 				{

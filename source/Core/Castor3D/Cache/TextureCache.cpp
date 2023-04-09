@@ -659,7 +659,7 @@ namespace castor3d
 
 	TextureUnitData & TextureUnitCache::getSourceData( TextureSourceInfo const & sourceInfo
 		, PassTextureConfig const & passConfig
-		, AnimationUPtr animation )
+		, TextureAnimationUPtr animation )
 	{
 		auto hash = cachetex::makeHash( sourceInfo, passConfig );
 		auto ires = m_datas.emplace( hash, nullptr );

@@ -91,7 +91,7 @@ namespace castor3d
 				&& checkFlag( lhs, TextureSpace::eNormalised ) == checkFlag( rhs, TextureSpace::eNormalised );
 		}
 
-		static bool areMergeable( std::unordered_map< TextureSourceInfo, AnimationUPtr, TextureSourceInfoHasher > const & animations
+		static bool areMergeable( std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > const & animations
 			, Pass::PassTextureSource const & lhs
 			, Pass::PassTextureSource const & rhs )
 		{
@@ -207,7 +207,7 @@ namespace castor3d
 				&& it->second )
 			{
 				auto & srcAnim = static_cast< TextureAnimation const & >( *it->second );
-				auto clonedAnim = std::make_unique< TextureAnimation >( *srcAnim.getEngine()
+				auto clonedAnim = castor::makeUnique< TextureAnimation >( *srcAnim.getEngine()
 					, srcAnim.getName() );
 				clonedAnim->setRotateSpeed( srcAnim.getRotateSpeed() );
 				clonedAnim->setScaleSpeed( srcAnim.getScaleSpeed() );
@@ -369,7 +369,7 @@ namespace castor3d
 
 	void Pass::registerTexture( TextureSourceInfo sourceInfo
 		, PassTextureConfig configuration
-		, AnimationUPtr animation )
+		, TextureAnimationUPtr animation )
 	{
 		m_animations.emplace( sourceInfo
 			, std::move( animation ) );
@@ -631,7 +631,8 @@ namespace castor3d
 			? std::move( animIt->second )
 			: nullptr );
 		auto flags = getFlags( cfg.second.config );
-		result.emplace( *flags.begin(), &textureCache.getSourceData( cfg.first, cfg.second, std::move( anim ) ) );
+		result.emplace( *flags.begin()
+			, &textureCache.getSourceData( cfg.first, cfg.second, std::move( anim ) ) );
 	}
 
 	void Pass::setColour( castor::HdrRgbColour const & value )
@@ -1007,8 +1008,7 @@ namespace castor3d
 		if ( unitData.animation && !unit->hasAnimation() )
 		{
 			auto anim = unitData.animation.get();
-			
-			unit->addAnimation( std::move( unitData.animation ) );
+			unit->addAnimation( castor::ptrRefCast< Animation >( unitData.animation ) );
 			static_cast< TextureAnimation & >( *anim ).setAnimable( *unit );
 		}
 

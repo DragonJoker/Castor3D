@@ -48,7 +48,7 @@ namespace castor
 		{
 			result = true;
 
-			for ( auto it : group.getObjects() )
+			for ( auto & it : group.getObjects() )
 			{
 				auto name = it.first;
 				size_t skel = name.find( cuT( "_Skeleton" ) );
