@@ -15,6 +15,8 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, PassMasksComponent )
+
 namespace castor3d
 {
 	namespace passflags
@@ -101,11 +103,11 @@ namespace castor3d
 		m_data.insert( m_data.end(), begin, end );
 	}
 
-	SubmeshComponentSPtr PassMasksComponent::clone( Submesh & submesh )const
+	SubmeshComponentUPtr PassMasksComponent::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< PassMasksComponent >( submesh );
+		auto result = castor::makeUnique< PassMasksComponent >( submesh );
 		result->m_data = m_data;
-		return std::static_pointer_cast< SubmeshComponent >( result );
+		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	void PassMasksComponent::addDatas( std::vector< PassMasks > const & boneData )

@@ -16,6 +16,8 @@
 
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, MorphComponent )
+
 namespace castor3d
 {
 	namespace smshcompmorph
@@ -97,11 +99,11 @@ namespace castor3d
 		}
 	}
 
-	SubmeshComponentSPtr MorphComponent::clone( Submesh & submesh )const
+	SubmeshComponentUPtr MorphComponent::clone( Submesh & submesh )const
 	{
-		auto result = submesh.createComponent< MorphComponent >( m_flags );
+		auto result = castor::makeUnique< MorphComponent >( submesh, m_flags );
 		result->m_targets = m_targets;
-		return std::static_pointer_cast< SubmeshComponent >( result );
+		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	void MorphComponent::addMorphTarget( SubmeshAnimationBuffer data )

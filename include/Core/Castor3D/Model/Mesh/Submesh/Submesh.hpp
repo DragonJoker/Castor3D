@@ -34,13 +34,12 @@ namespace castor3d
 	template< typename T >
 	struct SubmeshComponentAdder
 	{
-		static inline void add( std::shared_ptr< T > component
+		static inline void add( castor::UniquePtr< T > component
 			, Submesh & submesh );
 	};
 
 	class Submesh
 		: public castor::OwnedBy< Mesh >
-		, public std::enable_shared_from_this< Submesh >
 	{
 	private:
 		CU_DeclareList( castor::ByteArray, BytePtr );
@@ -283,13 +282,13 @@ namespace castor3d
 		template< size_t Count >
 		inline void addPoints( std::array< InterleavedVertex, Count > const & vertices );
 		inline void setDefaultMaterial( MaterialRPtr material );
-		inline void setIndexMapping( IndexMappingSPtr mapping );
-		inline IndexMappingSPtr getIndexMapping()const;
+		inline void setIndexMapping( IndexMappingUPtr mapping );
+		inline IndexMappingRPtr getIndexMapping()const;
 		template< typename ComponentT, typename ... ParamsT >
-		inline std::shared_ptr< ComponentT > createComponent( ParamsT && ... params );
-		inline void addComponent( SubmeshComponentSPtr component );
+		inline ComponentT * createComponent( ParamsT && ... params );
+		inline void addComponent( SubmeshComponentUPtr component );
 		template< typename ComponentT >
-		inline void addComponent( std::shared_ptr< ComponentT > component );
+		inline void addComponent( castor::UniquePtr< ComponentT > component );
 		inline void setTopology( VkPrimitiveTopology value );
 		/**
 		*\~english
@@ -347,9 +346,9 @@ namespace castor3d
 		inline Mesh & getParent();
 		inline uint32_t getId()const;
 		inline bool hasComponent( castor::String const & name )const;
-		inline SubmeshComponentSPtr getComponent( castor::String const & name )const;
+		inline SubmeshComponentRPtr getComponent( castor::String const & name )const;
 		template< typename ComponentT >
-		inline std::shared_ptr< ComponentT > getComponent()const;
+		inline ComponentT * getComponent()const;
 		inline InstantiationComponent & getInstantiation();
 		inline InstantiationComponent const & getInstantiation()const;
 		inline SubmeshComponentIDMap const & getComponents()const;
@@ -363,8 +362,8 @@ namespace castor3d
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		SubmeshComponentIDMap m_components;
-		InstantiationComponentSPtr m_instantiation;
-		IndexMappingSPtr m_indexMapping;
+		InstantiationComponentRPtr m_instantiation{};
+		IndexMappingRPtr m_indexMapping{};
 		SubmeshFlags m_submeshFlags{ 0u };
 		bool m_generated{ false };
 		bool m_initialised{ false };

@@ -12,6 +12,8 @@
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+CU_ImplementCUSmartPtr( castor3d, MeshletComponent )
+
 namespace castor3d
 {
 #if VK_NV_mesh_shader
@@ -33,12 +35,12 @@ namespace castor3d
 	{
 	}
 
-	SubmeshComponentSPtr MeshletComponent::clone( Submesh & submesh )const
+	SubmeshComponentUPtr MeshletComponent::clone( Submesh & submesh )const
 	{
-		auto result = submesh.createComponent< MeshletComponent >();
+		auto result = castor::makeUnique< MeshletComponent >( submesh );
 		result->m_meshlets = m_meshlets;
 		result->m_cull = m_cull;
-		return std::static_pointer_cast< SubmeshComponent >( result );
+		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	void MeshletComponent::createDescriptorSet( Geometry const & geometry )

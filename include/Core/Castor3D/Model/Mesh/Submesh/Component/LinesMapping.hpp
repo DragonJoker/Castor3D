@@ -76,7 +76,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
-		C3D_API SubmeshComponentSPtr clone( Submesh & submesh )const override;
+		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
 		/**
 		 *\~english
 		 *\brief		Creates and adds lines to the submesh.

@@ -101,7 +101,7 @@ namespace castor3d
 		Submesh & m_submesh;
 		//!\~english	The bones component.
 		//!\~french		Le composant des os.
-		MorphComponentSPtr m_component;
+		MorphComponentRPtr m_component;
 
 		friend class MeshAnimationInstanceSubmesh;
 	};

@@ -142,7 +142,7 @@ namespace castor3d
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
 		, m_submeshFlags{ SubmeshFlag::eIndex | flags }
 	{
-		addComponent( std::make_shared< InstantiationComponent >( *this, 2u ) );
+		addComponent( castor::makeUnique< InstantiationComponent >( *this, 2u ) );
 
 		if ( checkFlag( flags, SubmeshFlag::ePositions ) )
 		{

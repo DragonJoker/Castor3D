@@ -1,5 +1,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 
+CU_ImplementCUSmartPtr( castor3d, IndexMapping )
+
 namespace castor3d
 {
 	IndexMapping::IndexMapping( Submesh & submesh

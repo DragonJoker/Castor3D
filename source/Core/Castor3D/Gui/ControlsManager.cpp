@@ -629,7 +629,7 @@ namespace castor3d
 
 	ControlRPtr ControlsManager::registerControl( ControlUPtr control )
 	{
-		return &static_cast< Control & >( *doAddHandler( castor::ptrCast< EventHandler >( control ) ) );
+		return &static_cast< Control & >( *doAddHandler( castor::ptrRefCast< EventHandler >( control ) ) );
 	}
 
 	void ControlsManager::unregisterControl( Control & control )

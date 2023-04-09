@@ -15,6 +15,8 @@
 
 //*************************************************************************************************
 
+CU_ImplementCUSmartPtr( castor3d, TriFaceMapping )
+
 namespace castor3d
 {
 	namespace smshcomptri
@@ -260,13 +262,13 @@ namespace castor3d
 			, *tangents );
 	}
 
-	SubmeshComponentSPtr TriFaceMapping::clone( Submesh & submesh )const
+	SubmeshComponentUPtr TriFaceMapping::clone( Submesh & submesh )const
 	{
-		auto result = std::make_shared< TriFaceMapping >( submesh );
+		auto result = castor::makeUnique< TriFaceMapping >( submesh );
 		result->m_faces = m_faces;
 		result->m_hasNormals = m_hasNormals;
 		result->m_cameraPosition = m_cameraPosition;
-		return std::static_pointer_cast< SubmeshComponent >( result );
+		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	void TriFaceMapping::doCleanup( RenderDevice const & device )
