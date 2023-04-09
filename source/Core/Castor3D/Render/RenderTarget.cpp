@@ -881,7 +881,7 @@ namespace castor3d
 		{
 			m_hdrLastPass = previousPass;
 			stepProgressBar( progress, "Creating tone mapping pass" );
-			m_toneMapping = std::make_shared< ToneMapping >( *getEngine()
+			m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
 				, device
 				, m_size
 				, m_graph
