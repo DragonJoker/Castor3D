@@ -45,8 +45,7 @@ namespace castor3d
 	*/
 	struct PostEffectSurface;
 
-	CU_DeclareSmartPtr( PostEffect );
-	CU_DeclareVector( PostEffectSPtr, PostEffectPtr );
+	CU_DeclareCUSmartPtr( castor3d, PostEffect, C3D_API );
 	/**
 	*\~english
 	*\brief
@@ -57,8 +56,8 @@ namespace castor3d
 	*/
 	using PostEffectFactory = castor::Factory< PostEffect
 		, castor::String
-		, PostEffectSPtr
-		, std::function< PostEffectSPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
+		, PostEffectUPtr
+		, std::function< PostEffectUPtr( RenderTarget &, RenderSystem &, Parameters const & ) > >;
 
 	//@}
 	//@}

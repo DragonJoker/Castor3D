@@ -43,6 +43,7 @@ namespace castor3d
 		using OnInitialisedFunc = std::function< void( RenderTarget const &, QueueData const & ) >;
 		using OnInitialised = castor::SignalT< OnInitialisedFunc >;
 		using OnInitialisedConnection = castor::ConnectionT< OnInitialised >;
+		using PostEffectArray = std::vector< PostEffectUPtr >;
 
 	public:
 		/**
@@ -225,7 +226,7 @@ namespace castor3d
 		 *\brief		Ajoute un effet post rendu à la liste.
 		 *\param[in]	name	Le nom de l'effet.
 		 */
-		C3D_API PostEffectSPtr getPostEffect( castor::String const & name )const;
+		C3D_API PostEffectRPtr getPostEffect( castor::String const & name )const;
 		C3D_API void resetSemaphore();
 		C3D_API crg::FramePass const & createVertexTransformPass( crg::FramePassGroup & graph );
 		/**
@@ -310,12 +311,12 @@ namespace castor3d
 			return m_index;
 		}
 
-		PostEffectPtrArray const & getHDRPostEffects()const
+		PostEffectArray const & getHDRPostEffects()const
 		{
 			return m_hdrPostEffects;
 		}
 
-		PostEffectPtrArray const & getSRGBPostEffects()const
+		PostEffectArray const & getSRGBPostEffects()const
 		{
 			return m_srgbPostEffects;
 		}
@@ -450,7 +451,7 @@ namespace castor3d
 		void doInitCombineProgram( ProgressBar * progress );
 		void doCleanupCombineProgram();
 		Texture const & doUpdatePostEffects( CpuUpdater & updater
-			, PostEffectPtrArray const & effects
+			, PostEffectArray const & effects
 			, std::vector< Texture const * > const & images )const;
 		crg::SemaphoreWaitArray doRender( ashes::Queue const & queue
 			, crg::SemaphoreWaitArray signalsToWait );
@@ -476,10 +477,10 @@ namespace castor3d
 		uint32_t m_index{};
 		castor::String m_name;
 		Parameters m_techniqueParameters;
-		PostEffectPtrArray m_hdrPostEffects;
+		PostEffectArray m_hdrPostEffects;
 		castor::String m_toneMappingName{ cuT( "linear" ) };
 		ToneMappingSPtr m_toneMapping;
-		PostEffectPtrArray m_srgbPostEffects;
+		PostEffectArray m_srgbPostEffects;
 		FramePassTimerUPtr m_overlaysTimer;
 		FramePassTimerUPtr m_cpuUpdateTimer;
 		FramePassTimerUPtr m_gpuUpdateTimer;
