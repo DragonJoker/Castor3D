@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
   "name": "castor3d",
   "version": "0.15.0",
-  "builtin-baseline": "648fd374b2e1d8507def23793c8af0cfa89fd0bb",
+  "builtin-baseline": "6accd15d644e93cec849ea346a147828437928b3",
   "dependencies": [
     "convectionkernels",
     "freetype",
@@ -20,8 +20,9 @@
   "vcpkg-configuration": {
     "overlay-ports": [
       "./data/vcpkg/ports/ashes",
+      "./data/vcpkg/ports/rendergraph",
       "./data/vcpkg/ports/shaderwriter",
-      "./data/vcpkg/ports/rendergraph"
+      "./data/vcpkg/ports/vkfft"
     ]
   },
   "features": {

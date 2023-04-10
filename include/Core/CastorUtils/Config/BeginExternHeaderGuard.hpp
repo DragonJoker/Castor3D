@@ -19,6 +19,7 @@ See LICENSE file in root folder
 #pragma warning( disable: 4464 )
 #pragma warning( disable: 4616 )
 #pragma warning( disable: 4619 )
+#pragma warning( disable: 4702 )
 #pragma warning( disable: 4996 )
 #pragma warning( disable: 5031 )
 #pragma warning( disable: 5054 )
