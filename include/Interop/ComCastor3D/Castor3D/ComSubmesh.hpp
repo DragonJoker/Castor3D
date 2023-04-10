@@ -19,7 +19,7 @@ namespace CastorCom
 		: public CComAtlObject< Submesh, castor3d::Submesh >
 	{
 	public:
-		COMEX_PROPERTY( IndexMapping, IIndexMapping *, m_internal, &castor3d::Submesh::getIndexMapping, &castor3d::Submesh::setIndexMapping );
+		COMEX_PROPERTY_GET( IndexMapping, IIndexMapping *, m_internal, &castor3d::Submesh::getIndexMapping );
 		COMEX_PROPERTY_GET( PointsCount, unsigned int, m_internal, &castor3d::Submesh::getPointsCount );
 
 		STDMETHOD( AddPoint )( /* [in] */ IVector3D * val );

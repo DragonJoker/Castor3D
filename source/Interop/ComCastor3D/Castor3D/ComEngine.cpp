@@ -339,7 +339,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CRenderWindow * >( *pVal )->setInternal( std::make_shared< castor3d::RenderWindow >( fromBstr( name )
+					static_cast< CRenderWindow * >( *pVal )->setInternal( castor::makeUnique< castor3d::RenderWindow >( fromBstr( name )
 						, *m_internal
 						, static_cast< CSize * >( size )->getInternal()
 						, ashes::WindowHandle{ std::make_unique< ashes::IMswWindowHandle >( ::GetModuleHandle( nullptr ), HWND( hWnd ) ) } ) );
@@ -360,9 +360,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			auto window = static_cast< CRenderWindow * >( val )->getInternal();
 			static_cast< CRenderWindow * >( val )->setInternal( nullptr );
-			window.reset();
 			hr = S_OK;
 		}
 		else
@@ -385,7 +383,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSampler * >( *pVal )->setInternal( m_internal->createSampler( fromBstr( name ), *m_internal ) );
+					static_cast< CSampler * >( *pVal )->setInternal( m_internal->addNewSampler( fromBstr( name ), *m_internal ) );
 				}
 			}
 		}
@@ -430,7 +428,6 @@ namespace CastorCom
 			if ( pTarget )
 			{
 				castor::Path fileName{ fromBstr( name ) };
-				castor3d::RenderWindowSPtr l_return;
 
 				if ( castor::File::fileExists( fileName ) )
 				{
@@ -443,7 +440,7 @@ namespace CastorCom
 
 						if ( hr == S_OK )
 						{
-							static_cast< CRenderTarget * >( *pTarget )->setInternal( desc.renderTarget.get() );
+							static_cast< CRenderTarget * >( *pTarget )->setInternal( desc.renderTarget );
 						}
 					}
 				}

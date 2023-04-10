@@ -8,7 +8,7 @@
 
 namespace CastorCom
 {
-	COM_TYPE_TRAITS_SPTR( castor3d, TextureLayout );
+	COM_TYPE_TRAITS_PTR( castor3d, TextureLayout );
 	/*!
 	\~english
 	\brief		This class defines a CTextureLayout object accessible from COM.
@@ -19,7 +19,7 @@ namespace CastorCom
 		: public CComAtlObject< TextureLayout, castor3d::TextureLayout >
 	{
 	public:
-		COMEX_PROPERTY_GET( Type, eIMAGE_TYPE, m_internal.get(), &castor3d::TextureLayout::getType );
+		COMEX_PROPERTY_GET( Type, eIMAGE_TYPE, m_internal, &castor3d::TextureLayout::getType );
 
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();

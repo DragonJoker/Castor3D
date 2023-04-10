@@ -36,7 +36,7 @@ namespace CastorCom
 
 		if ( !m_internal )
 		{
-			m_internal = castor::PxBufferBase::create( static_cast< CSize * >( size )->getInternal()
+			*m_internal = *castor::PxBufferBase::create( static_cast< CSize * >( size )->getInternal()
 				, castor::PixelFormat( format ) );
 			hr = S_OK;
 		}

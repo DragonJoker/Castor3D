@@ -26,9 +26,9 @@ namespace CastorCom
 		STDMETHOD( DeleteSubmesh )( /* [in] */ ISubmesh * val );
 
 	private:
-		castor3d::MeshRPtr getMesh()const
+		castor3d::MeshResPtr getMesh()const
 		{
-			return getInternal().lock().get();
+			return getInternal();
 		}
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object

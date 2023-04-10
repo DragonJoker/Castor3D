@@ -41,7 +41,7 @@ namespace CastorCom
 
 				auto img = l_engine->createImage( l_name
 					, castor::ImageCreateParams{ l_pathImage } );
-				m_internal = l_engine->addImage( l_name, img ).lock();
+				m_internal = l_engine->addImage( l_name, img );
 
 				if ( !m_internal )
 				{
@@ -73,7 +73,7 @@ namespace CastorCom
 				auto img = l_engine->createImage( l_name
 					, castor::ImageCreateParams{ static_cast< CSize * >( size )->getInternal()
 						, castor::PixelFormat( fmt ) } );
-				m_internal = l_engine->addImage( l_name, img ).lock();
+				m_internal = l_engine->addImage( l_name, img );
 			}
 			else
 			{
@@ -129,7 +129,7 @@ namespace CastorCom
 			if ( hr == S_OK )
 			{
 				castor::Image l_img = m_internal->flip();
-				static_cast< CImage * >( *pVal )->m_internal = std::make_shared< castor::Image >( l_img );
+				*static_cast< CImage * >( *pVal )->m_internal = l_img;
 			}
 		}
 		else

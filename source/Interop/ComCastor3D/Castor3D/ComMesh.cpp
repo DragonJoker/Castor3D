@@ -20,7 +20,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSubmesh * >( *pVal )->setInternal( getMesh()->getSubmesh( val ).get() );
+					static_cast< CSubmesh * >( *pVal )->setInternal( getMesh()->getSubmesh( val ) );
 				}
 			}
 		}
@@ -50,7 +50,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CSubmesh * >( *pVal )->setInternal( getMesh()->createSubmesh().get() );
+					static_cast< CSubmesh * >( *pVal )->setInternal( getMesh()->createSubmesh() );
 				}
 			}
 		}

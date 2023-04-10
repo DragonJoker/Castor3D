@@ -12,23 +12,6 @@ namespace CastorCom
 {
 	namespace details
 	{
-		template< typename SrcT >
-		SrcT makeMbr( SrcT src )
-		{
-			return src;
-		}
-
-		template< typename SrcT, typename KeyT >
-		castor::ResourceSPtrT< SrcT, KeyT > makeMbr( castor::ResourceWPtrT< SrcT, KeyT > src )
-		{
-			return src.lock();
-		}
-
-		template< typename SrcT >
-		std::shared_ptr< SrcT > makeMbr( std::weak_ptr< SrcT > src )
-		{
-			return src.lock();
-		}
 	}
 
 	template< typename Class, typename Object >
@@ -86,7 +69,7 @@ namespace CastorCom
 
 		inline void setInternal( SetInternal internal )
 		{
-			m_internal = details::makeMbr( internal );
+			m_internal = std::move( internal );
 		}
 	};
 
@@ -143,7 +126,7 @@ namespace CastorCom
 		using SetInternal = Internal *;\
 	}
 
-#define COM_TYPE_TRAITS_SPTR_EX( Name, Nmspc, Class )\
+#define COM_TYPE_TRAITS_UPTR_EX( Name, Nmspc, Class )\
 	class C##Name;\
 	template<>\
 	struct ComITypeTraitsT< I##Name >\
@@ -163,9 +146,34 @@ namespace CastorCom
 		static inline const CLSID iid = IID_I##Name;\
 		static inline const UINT rid = IDR_##Name;\
 		using Internal = Nmspc::Class;\
-		using InternalMbr = std::shared_ptr< Internal >;\
-		using GetInternal = std::shared_ptr< Internal >;\
-		using SetInternal = std::shared_ptr< Internal >;\
+		using InternalMbr = castor::UniquePtr< Internal >;\
+		using GetInternal = Internal *;\
+		using SetInternal = Internal *;\
+	}
+
+#define COM_TYPE_TRAITS_UUPTR_EX( Name, Nmspc, Class )\
+	class C##Name;\
+	template<>\
+	struct ComITypeTraitsT< I##Name >\
+	{\
+		static constexpr bool hasIType = true;\
+		using Type = Nmspc::Class;\
+	};\
+	template<>\
+	struct ComTypeTraitsT< Nmspc::Class >\
+	{\
+		static constexpr bool hasIType = true;\
+		static constexpr bool hasType = true;\
+		static constexpr bool hasInternalType = true;\
+		using IType = I##Name;\
+		using CType = C##Name;\
+		static inline const CLSID clsid = CLSID_##Name;\
+		static inline const CLSID iid = IID_I##Name;\
+		static inline const UINT rid = IDR_##Name;\
+		using Internal = Nmspc::Class;\
+		using InternalMbr = castor::UniquePtr< Internal >;\
+		using GetInternal = Internal *;\
+		using SetInternal = castor::UniquePtr< Internal >;\
 	}
 
 #define COM_TYPE_TRAITS_RES_EX( Name, Nmspc, Class, Key )\
@@ -190,14 +198,15 @@ namespace CastorCom
 		static inline const CLSID iid = IID_I##Name;\
 		static inline const UINT rid = IDR_##Name;\
 		using Internal = Nmspc::Class;\
-		using InternalMbr = castor::ResourceSPtrT< Internal, Key >;\
-		using GetInternal = castor::ResourceWPtrT< Internal, Key >;\
-		using SetInternal = castor::ResourceWPtrT< Internal, Key >;\
+		using InternalMbr = castor::ResourceObsT< Internal, Key >;\
+		using GetInternal = castor::ResourceObsT< Internal, Key >;\
+		using SetInternal = castor::ResourceObsT< Internal, Key >;\
 	}
 
 #define COM_TYPE_TRAITS( Nmspc, Class ) COM_TYPE_TRAITS_EX( Class, Nmspc, Class )
 #define COM_TYPE_TRAITS_PTR( Nmspc, Class ) COM_TYPE_TRAITS_PTR_EX( Class, Nmspc, Class )
-#define COM_TYPE_TRAITS_SPTR( Nmspc, Class ) COM_TYPE_TRAITS_SPTR_EX( Class, Nmspc, Class )
+#define COM_TYPE_TRAITS_UPTR( Nmspc, Class ) COM_TYPE_TRAITS_UPTR_EX( Class, Nmspc, Class )
+#define COM_TYPE_TRAITS_UUPTR( Nmspc, Class ) COM_TYPE_TRAITS_UUPTR_EX( Class, Nmspc, Class )
 #define COM_TYPE_TRAITS_RES( Nmspc, Class, Key ) COM_TYPE_TRAITS_RES_EX( Class, Nmspc, Class, Key )
 
 #define COM_PROPERTY_GET( Name, Type, Functor )\

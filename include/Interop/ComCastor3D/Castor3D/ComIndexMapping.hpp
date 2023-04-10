@@ -10,7 +10,7 @@
 
 namespace CastorCom
 {
-	COM_TYPE_TRAITS_SPTR( castor3d, IndexMapping );
+	COM_TYPE_TRAITS_PTR( castor3d, IndexMapping );
 	/*!
 	\~english
 	\brief		This class defines a CSubmesh object accessible from COM.

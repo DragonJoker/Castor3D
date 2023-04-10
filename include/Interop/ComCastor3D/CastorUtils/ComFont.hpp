@@ -32,9 +32,9 @@ namespace CastorCom
 		static inline const UINT rid = IDR_Font;
 
 		using Internal = castor::Font;
-		using InternalMbr = castor::FontSPtr;
-		using GetInternal = castor::FontSPtr;
-		using SetInternal = castor::FontSPtr;
+		using InternalMbr = castor::FontResPtr;
+		using GetInternal = castor::FontResPtr;
+		using SetInternal = castor::FontResPtr;
 	};
 	/*!
 	\~english
@@ -46,9 +46,9 @@ namespace CastorCom
 		: public CComAtlObject< Font, castor::Font >
 	{
 	public:
-		COMEX_PROPERTY_GET( Height, UINT, m_internal.get(), &castor::Font::getHeight );
-		COMEX_PROPERTY_GET( MaxHeight, UINT, m_internal.get(), &castor::Font::getMaxHeight );
-		COMEX_PROPERTY_GET( MaxWidth, UINT, m_internal.get(), &castor::Font::getMaxWidth );
+		COMEX_PROPERTY_GET( Height, UINT, m_internal, &castor::Font::getHeight );
+		COMEX_PROPERTY_GET( MaxHeight, UINT, m_internal, &castor::Font::getMaxHeight );
+		COMEX_PROPERTY_GET( MaxWidth, UINT, m_internal, &castor::Font::getMaxWidth );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR path, /* [in] */ BSTR name, /* [in] */ UINT height );
 		STDMETHOD( GetGlyph )( /* [in] */ WORD glyph, /* [out, retval] */ IGlyph ** pGlyph );

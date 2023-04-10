@@ -1222,7 +1222,6 @@ interface ITextureUnit
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [out, retval] ITextureLayout ** pVal );
-	[propput, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [in] ITextureLayout * val );
 	[propget, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [out, retval] ISampler ** pVal );
 	[propput, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [in] ISampler * val );
 	[id( 5 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
@@ -1346,7 +1345,6 @@ interface ISubmesh
 {
 	[propget, id( 1 ), helpstring( "The points count" )] HRESULT PointsCount( [out, retval] unsigned int * pVal );
 	[propget, id( 2 ), helpstring( "The index mapping" )] HRESULT IndexMapping( [out, retval] IIndexMapping ** pVal );
-	[propput, id( 2 ), helpstring( "The index mapping" )] HRESULT IndexMapping( [in] IIndexMapping * pVal );
 	[id( 3 ), helpstring( "Adds a point to the submesh" )] HRESULT AddPoint( [in] IVector3D * val );
 };
 
@@ -1461,7 +1459,6 @@ interface IScene
 	: IDispatch
 {
 	[propget, id( 1 ), helpstring( "The background" )] HRESULT Background( [out, retval] ISceneBackground ** pVal );
-	[propput, id( 1 ), helpstring( "The background" )] HRESULT Background( [in] ISceneBackground * val );
 	[propget, id( 2 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [out, retval] IRgbColour ** pVal );
 	[propput, id( 2 ), helpstring( "The background colour" )] HRESULT BackgroundColour( [in] IRgbColour * val );
 	[propget, id( 3 ), helpstring( "The scene name" )] HRESULT Name( [out, retval] BSTR * pVal );

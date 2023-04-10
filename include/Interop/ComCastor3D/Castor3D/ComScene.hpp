@@ -22,9 +22,9 @@ namespace CastorCom
 	{
 	public:
 		COMEX_PROPERTY( BackgroundColour, IRgbColour *, m_internal, &castor3d::Scene::getBackgroundColour, &castor3d::Scene::setBackgroundColour );
-		COMEX_PROPERTY( Background, ISceneBackground *, m_internal, &castor3d::Scene::getBackground, &castor3d::Scene::setBackground );
 		COMEX_PROPERTY( AmbientLight, IRgbColour *, m_internal, &castor3d::Scene::getAmbientLight, &castor3d::Scene::setAmbientLight );
 
+		COMEX_PROPERTY_GET( Background, ISceneBackground *, m_internal, &castor3d::Scene::getBackground );
 		COMEX_PROPERTY_GET( Name, BSTR, m_internal, &castor3d::Scene::getName );
 		COMEX_PROPERTY_GET( RootNode, ISceneNode *, m_internal, &castor3d::Scene::getRootNode );
 		COMEX_PROPERTY_GET( ObjectRootNode, ISceneNode *, m_internal, &castor3d::Scene::getObjectRootNode );

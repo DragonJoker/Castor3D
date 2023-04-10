@@ -11,7 +11,7 @@
 
 namespace CastorCom
 {
-	COM_TYPE_TRAITS_SPTR( castor, Image );
+	COM_TYPE_TRAITS_PTR( castor, Image );
 	/*!
 	\~english
 	\brief		This class defines a CImage object accessible from COM.
@@ -22,7 +22,7 @@ namespace CastorCom
 		: public CComAtlObject< Image, castor::Image >
 	{
 	public:
-		COMEX_PROPERTY_GET( Buffer, IPixelBuffer *, m_internal.get(), &castor::Image::getPixels );
+		COMEX_PROPERTY_GET( Buffer, IPixelBuffer *, m_internal, &castor::Image::getPixels );
 
 		STDMETHOD( LoadFromFile )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ BSTR val, /* [in] */ boolean dropAlpha );
 		STDMETHOD( LoadFromFormat )( /* [in] */ IEngine * engine, /* [in] */ BSTR name, /* [in] */ ePIXEL_FORMAT fmt, /* [in] */ ISize * size );

@@ -9,7 +9,7 @@
 
 namespace CastorCom
 {
-	COM_TYPE_TRAITS_SPTR( castor3d, RenderWindow );
+	COM_TYPE_TRAITS_UUPTR( castor3d, RenderWindow );
 	/*!
 	\~english
 	\brief		This class defines a CRenderWindow object accessible from COM.
