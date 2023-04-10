@@ -21,7 +21,9 @@ namespace CastorCom
 		: public CComAtlObject< Geometry, castor3d::Geometry >
 	{
 	public:
-		COMEX_PROPERTY( Mesh, IMesh *, m_internal, &castor3d::Geometry::getMesh, &castor3d::Geometry::setMesh );
+		COM_PROPERTY_GET( Mesh, IMesh *, makeGetter( m_internal, &castor3d::Geometry::getMesh ) );
+		COM_PROPERTY_PUT( Mesh, IMesh *, makePutter( m_internal, &castor3d::Geometry::setMesh ) );
+		//COMEX_PROPERTY( Mesh, IMesh *, m_internal, &castor3d::Geometry::getMesh, &castor3d::Geometry::setMesh );
 
 		COMEX_PROPERTY_GET( Name, BSTR, m_internal, &castor3d::MovableObject::getName );
 		COMEX_PROPERTY_GET( Type, eMOVABLE_TYPE, m_internal, &castor3d::MovableObject::getType );

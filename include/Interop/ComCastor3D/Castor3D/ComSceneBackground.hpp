@@ -8,7 +8,7 @@
 
 namespace CastorCom
 {
-	COM_TYPE_TRAITS_SPTR( castor3d, SceneBackground );
+	COM_TYPE_TRAITS_PTR( castor3d, SceneBackground );
 	/*!
 	\~english
 	\brief		This class defines a CSceneBackground object accessible from COM.
@@ -19,7 +19,7 @@ namespace CastorCom
 		: public CComAtlObject< SceneBackground, castor3d::SceneBackground >
 	{
 	public:
-		COMEX_PROPERTY_GET( Type, BSTR, m_internal.get(), &castor3d::SceneBackground::getType );
+		COMEX_PROPERTY_GET( Type, BSTR, m_internal, &castor3d::SceneBackground::getType );
 	};
 	//!\~english	Enters the ATL object into the object map, updates the registry and creates an instance of the object.
 	//\~french		Ecrit l'objet ATL dans la table d'objets, met à jour le registre et crée une instance de l'objet.

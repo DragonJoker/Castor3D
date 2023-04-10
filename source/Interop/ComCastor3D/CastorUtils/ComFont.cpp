@@ -29,7 +29,7 @@ namespace CastorCom
 				l_pathFont = l_engine->getDataDirectory() / l_path;
 			}
 
-			m_internal = l_engine->createFont( l_name, height, l_pathFont );
+			m_internal = l_engine->addNewFont( l_name, height, l_pathFont );
 
 			if ( !m_internal )
 			{

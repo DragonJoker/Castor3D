@@ -8,7 +8,7 @@
 
 namespace CastorCom
 {
-	COM_TYPE_TRAITS_RES( castor3d, Sampler, castor::String );
+	COM_TYPE_TRAITS_PTR( castor3d, Sampler );
 	/*!
 	\~english
 	\brief		This class defines a CSampler object accessible from COM.
@@ -37,7 +37,7 @@ namespace CastorCom
 	private:
 		castor3d::SamplerRPtr getSampler()const
 		{
-			return getInternal().lock().get();
+			return getInternal();
 		}
 	};
 	//!\~english Enters the ATL object into the object map, updates the registry and creates an instance of the object

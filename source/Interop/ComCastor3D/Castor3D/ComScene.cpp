@@ -84,7 +84,7 @@ namespace CastorCom
 						, *static_cast< CSceneNode * >( node )->getInternal()
 						, castor3d::MeshResPtr{} );
 					static_cast< CGeometry * >( *pVal )->setInternal( geom.get() );
-					m_internal->addGeometry( geom );
+					m_internal->addGeometry( std::move( geom ) );
 				}
 			}
 		}
@@ -212,7 +212,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					auto l_mesh = m_internal->createMesh( fromBstr( name ), *m_internal );
+					auto l_mesh = m_internal->addNewMesh( fromBstr( name ), *m_internal );
 					m_internal->getEngine()->getMeshFactory().create( fromBstr( name ) )->generate( *l_mesh, castor3d::Parameters{} );
 					static_cast< CMesh * >( *pVal )->setInternal( l_mesh );
 				}
@@ -238,9 +238,9 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					if ( auto found = m_internal->findSceneNode( fromBstr( name ) ).lock() )
+					if ( auto found = m_internal->findSceneNode( fromBstr( name ) ) )
 					{
-						static_cast< CSceneNode * >( *pVal )->setInternal( found.get() );
+						static_cast< CSceneNode * >( *pVal )->setInternal( found );
 					}
 				}
 			}
@@ -271,9 +271,9 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					if ( auto found = m_internal->findGeometry( fromBstr( name ) ).lock() )
+					if ( auto found = m_internal->findGeometry( fromBstr( name ) ) )
 					{
-						static_cast< CGeometry * >( *pVal )->setInternal( found.get() );
+						static_cast< CGeometry * >( *pVal )->setInternal( found );
 					}
 				}
 			}
@@ -304,9 +304,9 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					if ( auto found = m_internal->findLight( fromBstr( name ) ).lock() )
+					if ( auto found = m_internal->findLight( fromBstr( name ) ) )
 					{
-						static_cast< CLight * >( *pVal )->setInternal( found.get() );
+						static_cast< CLight * >( *pVal )->setInternal( found );
 					}
 				}
 			}
@@ -337,9 +337,9 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					if ( auto found = m_internal->findCamera( fromBstr( name ) ).lock() )
+					if ( auto found = m_internal->findCamera( fromBstr( name ) ) )
 					{
-						static_cast< CCamera * >( *pVal )->setInternal( found.get() );
+						static_cast< CCamera * >( *pVal )->setInternal( found );
 					}
 				}
 			}
@@ -370,7 +370,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					if ( auto found = m_internal->findMesh( fromBstr( name ) ).lock() )
+					if ( auto found = m_internal->findMesh( fromBstr( name ) ) )
 					{
 						static_cast< CMesh * >( *pVal )->setInternal( found );
 					}
@@ -507,7 +507,7 @@ namespace CastorCom
 		{
 			if ( val )
 			{
-				m_internal->getMeshCache().remove( static_cast< CMesh * >( val )->getInternal().lock()->getName() );
+				m_internal->getMeshCache().remove( static_cast< CMesh * >( val )->getInternal()->getName() );
 				static_cast< CMesh * >( val )->setInternal( {} );
 				hr = S_OK;
 			}

@@ -162,12 +162,6 @@ namespace CastorCom
 	{
 	};
 
-	template< typename TypeT, typename KeyT >
-	struct ComTypeTraitsT< castor::ResourceWPtrT< TypeT, KeyT > >
-		: ComTypeTraitsT< TypeT >
-	{
-	};
-
 	template< typename TypeT >
 	struct ComTypeTraitsT< castor::UniquePtr< TypeT > >
 		: ComTypeTraitsT< TypeT >
@@ -182,6 +176,12 @@ namespace CastorCom
 
 	template< typename TypeT >
 	struct ComTypeTraitsT< std::unique_ptr< TypeT > >
+		: ComTypeTraitsT< TypeT >
+	{
+	};
+
+	template< typename TypeT, typename KeyT >
+	struct ComTypeTraitsT< castor::ResourceObsT< TypeT, KeyT > >
 		: ComTypeTraitsT< TypeT >
 	{
 	};

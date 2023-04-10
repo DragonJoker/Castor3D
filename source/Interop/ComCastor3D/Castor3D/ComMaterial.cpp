@@ -67,7 +67,7 @@ namespace CastorCom
 
 				if ( hr == S_OK )
 				{
-					static_cast< CPass * >( *pVal )->setInternal( m_internal->createPass().get() );
+					static_cast< CPass * >( *pVal )->setInternal( m_internal->createPass() );
 				}
 			}
 		}
@@ -99,7 +99,7 @@ namespace CastorCom
 				{
 					try
 					{
-						static_cast< CPass * >( *pVal )->setInternal( m_internal->getPass( val ).get() );
+						static_cast< CPass * >( *pVal )->setInternal( m_internal->getPass( val ) );
 					}
 					catch ( std::exception & )
 					{

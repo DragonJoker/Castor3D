@@ -11,7 +11,7 @@
 
 namespace CastorCom
 {
-	COM_TYPE_TRAITS_SPTR_EX( PixelBuffer, castor, PxBufferBase );
+	COM_TYPE_TRAITS_PTR_EX( PixelBuffer, castor, PxBufferBase );
 	/*!
 	\~english
 	\brief		This class defines a CImage object accessible from COM.
@@ -22,10 +22,10 @@ namespace CastorCom
 		: public CComAtlObject< PixelBuffer, castor::PxBufferBase >
 	{
 	public:
-		COMEX_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, m_internal.get(), &castor::PxBufferBase::getFormat );
-		COMEX_PROPERTY_GET( Width, UINT, m_internal.get(), &castor::PxBufferBase::getWidth );
-		COMEX_PROPERTY_GET( Height, UINT, m_internal.get(), &castor::PxBufferBase::getHeight );
-		COMEX_PROPERTY_GET( Dimensions, ISize *, m_internal.get(), &castor::PxBufferBase::getDimensions );
+		COMEX_PROPERTY_GET( PixelFormat, ePIXEL_FORMAT, m_internal, &castor::PxBufferBase::getFormat );
+		COMEX_PROPERTY_GET( Width, UINT, m_internal, &castor::PxBufferBase::getWidth );
+		COMEX_PROPERTY_GET( Height, UINT, m_internal, &castor::PxBufferBase::getHeight );
+		COMEX_PROPERTY_GET( Dimensions, ISize *, m_internal, &castor::PxBufferBase::getDimensions );
 
 		STDMETHOD( Flip )();
 		STDMETHOD( Initialise )( /* [in] */ ISize * size, /* [in] */ ePIXEL_FORMAT format );

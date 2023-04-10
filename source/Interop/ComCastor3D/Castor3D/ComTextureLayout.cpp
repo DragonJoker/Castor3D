@@ -90,7 +90,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			m_internal->setSource( static_cast< CPixelBuffer * >( val )->getInternal(), true );
+			m_internal->setSource( static_cast< CPixelBuffer * >( val )->getInternal()->clone(), true );
 			hr = S_OK;
 		}
 		else
