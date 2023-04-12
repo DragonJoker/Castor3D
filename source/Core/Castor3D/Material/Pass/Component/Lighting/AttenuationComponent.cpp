@@ -195,18 +195,17 @@ namespace castor3d
 	castor::String const AttenuationComponent::TypeName = C3D_MakePassLightingComponentName( "attenuation" );
 
 	AttenuationComponent::AttenuationComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass, TypeName }
+		: BaseDataPassComponentT{ pass
+			, TypeName
+			, { TransmissionComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< TransmissionComponent >() )
-		{
-			pass.createComponent< TransmissionComponent >( 1.0f );
-		}
 	}
 
 	void AttenuationComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Attenuation Colour" ), m_value.colour );
-		vis.visit( cuT( "Attenuation Distance" ), m_value.distance );
+		vis.visit( cuT( "Attenuation" ) );
+		vis.visit( cuT( "Colour" ), m_value.colour );
+		vis.visit( cuT( "Distance" ), m_value.distance );
 	}
 
 	PassComponentUPtr AttenuationComponent::doClone( Pass & pass )const

@@ -162,7 +162,8 @@ namespace castor3d
 
 	void ReflectionComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Enable Reflection" ), m_value );
+		vis.visit( cuT( "Reflections" ) );
+		vis.visit( cuT( "Reflection" ), m_value );
 	}
 
 	PassComponentUPtr ReflectionComponent::doClone( Pass & pass )const

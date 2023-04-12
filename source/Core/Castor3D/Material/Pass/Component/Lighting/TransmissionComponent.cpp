@@ -177,17 +177,17 @@ namespace castor3d
 
 	TransmissionComponent::TransmissionComponent( Pass & pass
 		, float defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, defaultValue }
+		: BaseDataPassComponentT{ pass
+			, TypeName
+			, { RefractionComponent::TypeName }
+			, defaultValue }
 	{
-		if ( !pass.hasComponent< RefractionComponent >() )
-		{
-			pass.createComponent< RefractionComponent >( 1.0f );
-		}
 	}
 
 	void TransmissionComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Transmission" ), m_value );
+		vis.visit( cuT( "Transmission" ) );
+		vis.visit( cuT( "Factor" ), m_value );
 	}
 
 	PassComponentUPtr TransmissionComponent::doClone( Pass & pass )const

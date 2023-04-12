@@ -881,4 +881,54 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::PassComponentPlugin">
+		<DisplayString>PassComponentPlugin {m_id}</DisplayString>
+		<Expand>
+			<Item Name="finishComponent">finishComponent</Item>
+			<Item Name="updateComponent">updateComponent</Item>
+			<Item Name="passComponents">m_passComponents</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::PassComponent">
+		<DisplayString>{m_type}[{m_id}]</DisplayString>
+		<Expand>
+			<Item Name="pass">m_owner</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="id">m_dependencies</Item>
+			<Item Name="dependencies">m_dependencies</Item>
+			<Item Name="plugin">m_plugin</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="materialShader">m_materialShader</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::PassMapComponent">
+		<DisplayString>{m_type}[{m_id}]({m_textureFlags})</DisplayString>
+		<Expand>
+			<Item Name="pass">m_owner</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="id">m_dependencies</Item>
+      <Item Name="textureFlags">m_textureFlags</Item>
+			<Item Name="dependencies">m_dependencies</Item>
+			<Item Name="plugin">m_plugin</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="materialShader">m_materialShader</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::BaseDataPassComponent&lt;*&gt;">
+		<DisplayString>{m_type}[{m_id}]({m_textureFlags})</DisplayString>
+		<Expand>
+			<Item Name="pass">m_owner</Item>
+			<Item Name="type">m_type</Item>
+			<Item Name="id">m_dependencies</Item>
+      <Item Name="value">m_value</Item>
+			<Item Name="dependencies">m_dependencies</Item>
+			<Item Name="plugin">m_plugin</Item>
+			<Item Name="dirty">m_dirty</Item>
+			<Item Name="materialShader">m_materialShader</Item>
+		</Expand>
+	</Type>
+
 </AutoVisualizer>

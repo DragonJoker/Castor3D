@@ -226,6 +226,16 @@ namespace castor3d
 			return registerComponent( ComponentT::TypeName
 				, createPlugin( *this ) );
 		}
+
+		auto begin()const noexcept
+		{
+			return m_registered.begin();
+		}
+
+		auto end()const noexcept
+		{
+			return m_registered.end();
+		}
 		/**@}*/
 
 	private:

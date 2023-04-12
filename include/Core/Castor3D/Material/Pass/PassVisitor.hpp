@@ -50,6 +50,27 @@ namespace castor3d
 		/**
 		*\~english
 		*name
+		*	Names.
+		*\~french
+		*name
+		*	Noms.
+		**/
+		/**@{*/
+		C3D_API virtual void visit( castor::String const & name
+			, ControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
+			, AtomicControlsList controls ) = 0;
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, ControlT * control = nullptr )
+		{
+			visit( name, makeControlsList( control ) );
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
 		*	Values.
 		*\~french
 		*name
@@ -512,10 +533,29 @@ namespace castor3d
 		/**
 		*\~english
 		*name
-		*	Global post effect configuration.
+		*	Names.
 		*\~french
 		*name
-		*	Configuration globale de l'effet.
+		*	Noms.
+		**/
+		/**@{*/
+		void visit( castor::String const & name
+			, ControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, AtomicControlsList controls )override
+		{
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Values.
+		*\~french
+		*name
+		*	Valeurs.
 		**/
 		/**@{*/
 		void visit( castor::String const & name

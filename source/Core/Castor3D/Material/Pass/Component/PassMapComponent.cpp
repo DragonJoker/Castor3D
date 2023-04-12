@@ -1,5 +1,7 @@
 #include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
 
+CU_ImplementSmartPtr( castor3d, PassMapComponent )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -22,8 +24,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	PassMapComponent::PassMapComponent( Pass & pass
-		, castor::String const & type )
-		: PassComponent{ pass, type }
+		, castor::String type
+		, TextureFlags textureFlags
+		, castor::StringArray deps )
+		: PassComponent{ pass, std::move( type ), std::move( deps ) }
+		, m_textureFlags{ makeTextureFlag( getId(), textureFlags ) }
 	{
 	}
 

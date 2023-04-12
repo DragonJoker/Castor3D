@@ -183,12 +183,11 @@ namespace castor3d
 	castor::String const ClearcoatNormalMapComponent::TypeName = C3D_MakePassMapComponentName( "clearcoat_normal" );
 
 	ClearcoatNormalMapComponent::ClearcoatNormalMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, ClearcoatNormal
+			, { ClearcoatComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< ClearcoatComponent >() )
-		{
-			pass.createComponent< ClearcoatComponent >();
-		}
 	}
 
 	PassComponentUPtr ClearcoatNormalMapComponent::doClone( Pass & pass )const
@@ -199,7 +198,8 @@ namespace castor3d
 	void ClearcoatNormalMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Clearcoat Normal" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Clearcoat Normal" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
 	//*********************************************************************************************

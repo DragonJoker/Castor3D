@@ -245,7 +245,7 @@ namespace castor3d
 	castor::String const TransmittanceMapComponent::TypeName = C3D_MakePassMapComponentName( "transmittance" );
 
 	TransmittanceMapComponent::TransmittanceMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass, TypeName, Transmittance }
 		, m_transmittance{ m_dirty, 1.0f }
 	{
 	}
@@ -272,7 +272,9 @@ namespace castor3d
 	void TransmittanceMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Transmittance" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Transmittance" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Factor" ), m_transmittance );
 	}
 
 	//*********************************************************************************************

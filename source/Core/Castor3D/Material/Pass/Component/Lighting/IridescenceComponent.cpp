@@ -326,10 +326,11 @@ namespace castor3d
 
 	void IridescenceComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Iridescence Factor" ), m_value.factor );
-		vis.visit( cuT( "Iridescence IOR" ), m_value.ior );
-		vis.visit( cuT( "Iridescence Min Thickness" ), m_value.minThickness );
-		vis.visit( cuT( "Iridescence Max Thickness" ), m_value.maxThickness );
+		vis.visit( cuT( "Iridescence" ) );
+		vis.visit( cuT( "Factor" ), m_value.factor );
+		vis.visit( cuT( "IOR" ), m_value.ior );
+		vis.visit( cuT( "Min Thickness" ), m_value.minThickness );
+		vis.visit( cuT( "Max Thickness" ), m_value.maxThickness );
 	}
 
 	PassComponentUPtr IridescenceComponent::doClone( Pass & pass )const

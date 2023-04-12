@@ -139,7 +139,7 @@ namespace castor3d
 	castor::String const LightingModelComponent::TypeName = C3D_MakePassLightingComponentName( "lighting_model" );
 
 	LightingModelComponent::LightingModelComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass, TypeName, pass.getLightingModelId() }
+		: BaseDataPassComponentT{ pass, TypeName, {}, pass.getLightingModelId() }
 	{
 	}
 

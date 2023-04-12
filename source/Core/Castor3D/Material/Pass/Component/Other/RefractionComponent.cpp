@@ -158,13 +158,17 @@ namespace castor3d
 
 	RefractionComponent::RefractionComponent( Pass & pass
 		, float defaultValue )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >{ pass, TypeName, defaultValue }
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >{ pass
+			, TypeName
+			, {}
+			, defaultValue }
 	{
 	}
 
 	void RefractionComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Refraction ratio" ), m_value );
+		vis.visit( cuT( "Refraction" ) );
+		vis.visit( cuT( "IoR" ), m_value );
 	}
 
 	PassComponentUPtr RefractionComponent::doClone( Pass & pass )const

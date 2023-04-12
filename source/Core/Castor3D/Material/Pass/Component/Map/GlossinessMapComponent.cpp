@@ -206,17 +206,11 @@ namespace castor3d
 	castor::String const GlossinessMapComponent::TypeName = C3D_MakePassMapComponentName( "glossiness" );
 
 	GlossinessMapComponent::GlossinessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Glossiness
+			, { SpecularComponent::TypeName, RoughnessComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< SpecularComponent >() )
-		{
-			pass.createComponent< SpecularComponent >();
-		}
-
-		if ( !pass.hasComponent< RoughnessComponent >() )
-		{
-			pass.createComponent< RoughnessComponent >();
-		}
 	}
 
 	PassComponentUPtr GlossinessMapComponent::doClone( Pass & pass )const
@@ -227,7 +221,8 @@ namespace castor3d
 	void GlossinessMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Glossiness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Glossiness" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

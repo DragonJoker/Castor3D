@@ -70,7 +70,7 @@ namespace castor3d
 
 	castor::String const TwoSidedComponent::TypeName = C3D_MakePassBaseComponentName( "two_sided" );
 
-	TwoSidedComponent::TwoSidedComponent( Pass & pass )
+	TwoSidedComponent::TwoSidedComponent( Pass & pass)
 		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
 	{
 	}

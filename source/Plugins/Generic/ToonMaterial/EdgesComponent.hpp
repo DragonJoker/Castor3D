@@ -84,6 +84,11 @@ namespace toon
 			{
 			}
 
+			castor3d::PassComponentUPtr createComponent( castor3d::Pass & pass )const override
+			{
+				return castor::makeUniqueDerived< castor3d::PassComponent, EdgesComponent >( pass );
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, castor3d::ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( castor3d::TextureCombine const & textures

@@ -53,10 +53,6 @@ namespace castor3d
 	{
 	}
 
-	void TextureCountComponent::accept( PassVisitorBase & vis )
-	{
-	}
-
 	PassComponentUPtr TextureCountComponent::doClone( Pass & pass )const
 	{
 		return castor::makeUniqueDerived< PassComponent, TextureCountComponent >( pass );

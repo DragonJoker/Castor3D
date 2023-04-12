@@ -264,12 +264,11 @@ namespace castor3d
 	castor::String const NormalMapComponent::TypeName = C3D_MakePassMapComponentName( "normal" );
 
 	NormalMapComponent::NormalMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Normal
+			, { NormalComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< NormalComponent >() )
-		{
-			pass.createComponent< NormalComponent >();
-		}
 	}
 
 	PassComponentUPtr NormalMapComponent::doClone( Pass & pass )const
@@ -280,9 +279,10 @@ namespace castor3d
 	void NormalMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Normal" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
-		vis.visit( cuT( "Normal factor" ), configuration.normalFactor );
-		vis.visit( cuT( "Normal DirectX" ), configuration.normalGMultiplier );
+		vis.visit( cuT( "Normal" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
+		vis.visit( cuT( "Factor" ), configuration.normalFactor );
+		vis.visit( cuT( "DirectX" ), configuration.normalGMultiplier );
 	}
 
 	//*********************************************************************************************

@@ -178,12 +178,11 @@ namespace castor3d
 	castor::String const TransmissionMapComponent::TypeName = C3D_MakePassMapComponentName( "transmission" );
 
 	TransmissionMapComponent::TransmissionMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Transmission
+			, { TransmissionComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< TransmissionComponent >() )
-		{
-			pass.createComponent< TransmissionComponent >();
-		}
 	}
 
 	PassComponentUPtr TransmissionMapComponent::doClone( Pass & pass )const
@@ -194,7 +193,8 @@ namespace castor3d
 	void TransmissionMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Transmission" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Transmission" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

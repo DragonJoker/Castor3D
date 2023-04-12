@@ -88,9 +88,11 @@ namespace castor3d
 	//************************************************************************************************
 
 	PassComponent::PassComponent( Pass & pass
-		, castor::String const & type )
+		, castor::String type
+		, castor::StringArray deps )
 		: castor::OwnedBy< Pass >{ pass }
-		, m_type{ type }
+		, m_type{ std::move( type ) }
+		, m_dependencies{ std::move( deps ) }
 		, m_id{ pass.getComponentId( m_type ) }
 		, m_plugin{ pass.getComponentPlugin( m_id ) }
 		, m_dirty{ pass.m_dirty }

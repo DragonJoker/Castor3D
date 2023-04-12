@@ -185,6 +185,10 @@ namespace castor3d
 		, PassComponentTextureFlag rhs );
 	C3D_API bool hasAny( TextureFlagConfigurations const & lhs
 		, PassComponentTextureFlag rhs );
+	C3D_API void removeFlag( TextureConfiguration & config
+		, PassComponentTextureFlag rhs );
+	C3D_API void removeFlagConfiguration( TextureConfiguration & config
+		, TextureFlagConfiguration const & flagConfiguration );
 	C3D_API void addFlagConfiguration( TextureConfiguration & config
 		, TextureFlagConfiguration flagConfiguration );
 	C3D_API TextureFlagConfiguration & getFlagConfiguration( TextureConfiguration & config

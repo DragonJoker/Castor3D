@@ -183,12 +183,11 @@ namespace castor3d
 	castor::String const IridescenceThicknessMapComponent::TypeName = C3D_MakePassMapComponentName( "iridescence_thickness" );
 
 	IridescenceThicknessMapComponent::IridescenceThicknessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, IridescenceThickness
+			, { IridescenceComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< IridescenceComponent >() )
-		{
-			pass.createComponent< IridescenceComponent >();
-		}
 	}
 
 	PassComponentUPtr IridescenceThicknessMapComponent::doClone( Pass & pass )const
@@ -199,7 +198,8 @@ namespace castor3d
 	void IridescenceThicknessMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Iridescence Thickness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Iridescence Thickness" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

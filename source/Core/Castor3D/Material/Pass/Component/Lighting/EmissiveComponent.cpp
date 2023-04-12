@@ -192,8 +192,9 @@ namespace castor3d
 
 	void EmissiveComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Emissive Colour" ), m_value.colour );
-		vis.visit( cuT( "Emissive Factor" ), m_value.factor );
+		vis.visit( cuT( "Emissive" ) );
+		vis.visit( cuT( "Colour" ), m_value.colour );
+		vis.visit( cuT( "Factor" ), m_value.factor );
 	}
 
 	PassComponentUPtr EmissiveComponent::doClone( Pass & pass )const

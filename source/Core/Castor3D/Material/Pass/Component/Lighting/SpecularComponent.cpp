@@ -185,7 +185,7 @@ namespace castor3d
 
 	SpecularComponent::SpecularComponent( Pass & pass
 		, castor::RgbColour defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, castor::makeChangeTrackedT< std::atomic_bool >( defaultValue ) }
+		: BaseDataPassComponentT{ pass, TypeName, {}, castor::makeChangeTrackedT< std::atomic_bool >( defaultValue ) }
 	{
 		if ( m_value.value().value() == SpecularComponent::Default )
 		{
@@ -195,7 +195,8 @@ namespace castor3d
 
 	void SpecularComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Specular" ), m_value );
+		vis.visit( cuT( "Specular" ) );
+		vis.visit( cuT( "Colour" ), m_value );
 	}
 
 	PassComponentUPtr SpecularComponent::doClone( Pass & pass )const

@@ -173,12 +173,11 @@ namespace castor3d
 	castor::String const RoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "roughness" );
 
 	RoughnessMapComponent::RoughnessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Roughness
+			, { RoughnessComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< RoughnessComponent >() )
-		{
-			pass.createComponent< RoughnessComponent >();
-		}
 	}
 
 	PassComponentUPtr RoughnessMapComponent::doClone( Pass & pass )const
@@ -189,7 +188,8 @@ namespace castor3d
 	void RoughnessMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Roughness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Roughness" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

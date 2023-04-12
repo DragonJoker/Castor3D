@@ -70,8 +70,9 @@ namespace castor3d
 
 	castor::String const PickableComponent::TypeName = C3D_MakePassBaseComponentName( "pickable" );
 
-	PickableComponent::PickableComponent( Pass & pass, bool pickable )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName, pickable }
+	PickableComponent::PickableComponent( Pass & pass
+		, bool pickable )
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName, {}, pickable }
 	{
 	}
 

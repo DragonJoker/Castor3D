@@ -211,7 +211,9 @@ namespace castor3d
 	castor::String const OcclusionMapComponent::TypeName = C3D_MakePassMapComponentName( "occlusion" );
 
 	OcclusionMapComponent::OcclusionMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Occlusion }
 	{
 	}
 
@@ -223,7 +225,8 @@ namespace castor3d
 	void OcclusionMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Occlusion" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Occlusion" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

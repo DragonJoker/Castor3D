@@ -62,7 +62,9 @@ namespace castor3d
 		 *\param[in]	type	Le type de composant.
 		 */
 		C3D_API PassMapComponent( Pass & pass
-			, castor::String const & type );
+			, castor::String type
+			, TextureFlags textureFlags
+			, castor::StringArray deps = {} );
 		/**@}*/
 		/**
 		*\~english
@@ -73,9 +75,9 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API virtual PassComponentTextureFlag getTextureFlags()const
+		PassComponentTextureFlag getTextureFlags()const noexcept
 		{
-			return 0u;
+			return m_textureFlags;
 		}
 
 		C3D_API void fillConfig( TextureConfiguration & config
@@ -93,6 +95,9 @@ namespace castor3d
 			, PassVisitorBase & vis )const
 		{
 		}
+
+	private:
+		PassComponentTextureFlag m_textureFlags;
 	};
 }
 

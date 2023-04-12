@@ -177,12 +177,11 @@ namespace castor3d
 	castor::String const SheenMapComponent::TypeName = C3D_MakePassMapComponentName( "sheen" );
 
 	SheenMapComponent::SheenMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Sheen
+			, { SheenComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< SheenComponent >() )
-		{
-			pass.createComponent< SheenComponent >();
-		}
 	}
 
 	PassComponentUPtr SheenMapComponent::doClone( Pass & pass )const
@@ -193,7 +192,8 @@ namespace castor3d
 	void SheenMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Sheen" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
+		vis.visit( cuT( "Sheen" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
 	//*********************************************************************************************

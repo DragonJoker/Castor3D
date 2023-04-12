@@ -146,7 +146,8 @@ namespace castor3d
 
 	void HeightComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Parallax occlusion mode" ), m_value );
+		vis.visit( cuT( "Parallax Occlusion" ) );
+		vis.visit( cuT( "Mode" ), m_value );
 	}
 
 	PassComponentUPtr HeightComponent::doClone( Pass & pass )const
