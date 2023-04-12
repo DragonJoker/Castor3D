@@ -219,6 +219,30 @@ namespace castor3d
 		return it != lhs.end();
 	}
 
+	void removeFlag( TextureConfiguration & config
+		, PassComponentTextureFlag rhs )
+	{
+		auto it = checkFlag( config.components, rhs );
+
+		if ( it != config.components.end() )
+		{
+			auto nxt = std::next( it );
+
+			while ( nxt != config.components.end() )
+			{
+				*it = std::move( *nxt );
+				++it;
+				++nxt;
+			}
+		}
+	}
+
+	void removeFlagConfiguration( TextureConfiguration & config
+		, TextureFlagConfiguration const & flagConfiguration )
+	{
+		removeFlag( config, flagConfiguration.flag );
+	}
+
 	void addFlagConfiguration( TextureConfiguration & config
 		, TextureFlagConfiguration flagConfiguration )
 	{

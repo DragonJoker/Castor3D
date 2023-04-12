@@ -145,24 +145,23 @@ namespace castor3d
 			std::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			std::for_each( dirty.begin()
-				, end
-				, [this, &specifics]( Pass const * pass )
-				{
-					auto it = m_passTypeIndices.emplace( passbuf::hash( *pass )
-						, PassTypeData{ uint16_t( m_passTypeIndices.size() )
-							, pass->getComponentCombineID()
-							, pass->getTextureCombineID() } ).first;
+			for ( auto pass : castor::makeArrayView( dirty.begin(), end ) )
+			{
+				auto it = m_passTypeIndices.emplace( passbuf::hash( *pass )
+					, PassTypeData{ uint16_t( m_passTypeIndices.size() )
+						, pass->getComponentCombineID()
+						, pass->getTextureCombineID() } ).first;
 					
-					pass->fillBuffer( *this, it->second.index );
+				pass->fillBuffer( *this, it->second.index );
 
-					for ( auto & buffer : specifics )
-					{
-						buffer.second.first.update( *buffer.second.second, *pass );
-					}
+				for ( auto & buffer : specifics )
+				{
+					buffer.second.first.update( *buffer.second.second, *pass );
+				}
 
-					pass->reset();
-				} );
+				pass->reset();
+			}
+
 			m_buffer.setCount( uint32_t( m_passes.size() ) );
 			m_buffer.setSecondCount( uint32_t( m_passTypeIndices.size() ) );
 			m_buffer.upload( commandBuffer );

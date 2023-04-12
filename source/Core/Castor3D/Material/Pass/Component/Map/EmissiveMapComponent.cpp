@@ -172,12 +172,11 @@ namespace castor3d
 	castor::String const EmissiveMapComponent::TypeName = C3D_MakePassMapComponentName( "emissive" );
 
 	EmissiveMapComponent::EmissiveMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Emissive
+			, { EmissiveComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< EmissiveComponent >() )
-		{
-			pass.createComponent< EmissiveComponent >();
-		}
 	}
 
 	PassComponentUPtr EmissiveMapComponent::doClone( Pass & pass )const
@@ -188,7 +187,8 @@ namespace castor3d
 	void EmissiveMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Emissive" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
+		vis.visit( cuT( "Emissive" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
 	//*********************************************************************************************

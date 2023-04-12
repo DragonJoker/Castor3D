@@ -235,8 +235,9 @@ namespace castor3d
 
 	void ClearcoatComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Clearcoat Factor" ), m_value.factor );
-		vis.visit( cuT( "Clearcoat Roughness Factor" ), m_value.roughness );
+		vis.visit( cuT( "Clearcoat" ) );
+		vis.visit( cuT( "Factor" ), m_value.factor );
+		vis.visit( cuT( "Roughness Factor" ), m_value.roughness );
 	}
 
 	PassComponentUPtr ClearcoatComponent::doClone( Pass & pass )const

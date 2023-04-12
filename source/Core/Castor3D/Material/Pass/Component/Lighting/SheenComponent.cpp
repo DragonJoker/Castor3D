@@ -201,8 +201,9 @@ namespace castor3d
 
 	void SheenComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Sheen Colour" ), m_value.factor );
-		vis.visit( cuT( "Sheen Roughness" ), m_value.roughness );
+		vis.visit( cuT( "Sheen" ) );
+		vis.visit( cuT( "Colour" ), m_value.factor );
+		vis.visit( cuT( "Roughness" ), m_value.roughness );
 	}
 
 	PassComponentUPtr SheenComponent::doClone( Pass & pass )const

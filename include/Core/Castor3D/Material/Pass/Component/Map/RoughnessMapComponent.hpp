@@ -45,6 +45,11 @@ namespace castor3d
 			{
 			}
 
+			PassComponentUPtr createComponent( Pass & pass )const override
+			{
+				return castor::makeUniqueDerived< PassComponent, RoughnessMapComponent >( pass );
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( TextureCombine const & textures
@@ -104,12 +109,7 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit RoughnessMapComponent( Pass & pass );
-
-		PassComponentTextureFlag getTextureFlags()const override
-		{
-			return makeTextureFlag( getId(), Roughness );
-		}
+		C3D_API explicit RoughnessMapComponent( Pass & pass);
 
 		C3D_API static castor::String const TypeName;
 

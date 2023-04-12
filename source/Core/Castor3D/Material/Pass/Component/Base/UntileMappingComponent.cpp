@@ -178,6 +178,7 @@ namespace castor3d
 
 	void UntileMappingComponent::accept( PassVisitorBase & vis )
 	{
+		vis.visit( cuT( "Untiled mapping" ) );
 		vis.visit( cuT( "Untile" ), m_value );
 	}
 

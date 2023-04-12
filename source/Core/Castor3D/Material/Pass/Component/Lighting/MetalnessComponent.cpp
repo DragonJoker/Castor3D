@@ -191,22 +191,21 @@ namespace castor3d
 
 	MetalnessComponent::MetalnessComponent( Pass & pass
 		, float defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, castor::makeChangeTrackedT< std::atomic_bool >( defaultValue ) }
+		: BaseDataPassComponentT{ pass
+			, TypeName
+			, { SpecularComponent::TypeName }
+			, castor::makeChangeTrackedT< std::atomic_bool >( defaultValue ) }
 	{
 		if ( m_value.value().value() == MetalnessComponent::Default )
 		{
 			m_value->reset();
 		}
-
-		if ( !pass.hasComponent< SpecularComponent >() )
-		{
-			pass.createComponent< SpecularComponent >();
-		}
 	}
 
 	void MetalnessComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Metalness" ), m_value );
+		vis.visit( cuT( "Metalness" ) );
+		vis.visit( cuT( "Factor" ), m_value );
 	}
 
 	PassComponentUPtr MetalnessComponent::doClone( Pass & pass )const

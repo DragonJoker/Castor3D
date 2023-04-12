@@ -173,12 +173,11 @@ namespace castor3d
 	castor::String const OpacityMapComponent::TypeName = C3D_MakePassMapComponentName( "opacity" );
 
 	OpacityMapComponent::OpacityMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Opacity
+			, { OpacityComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< OpacityComponent >() )
-		{
-			pass.createComponent< OpacityComponent >();
-		}
 	}
 
 	PassComponentUPtr OpacityMapComponent::doClone( Pass & pass )const
@@ -189,7 +188,8 @@ namespace castor3d
 	void OpacityMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Opacity" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Opacity" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

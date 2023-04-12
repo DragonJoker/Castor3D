@@ -179,12 +179,11 @@ namespace castor3d
 	castor::String const IridescenceMapComponent::TypeName = C3D_MakePassMapComponentName( "iridescence" );
 
 	IridescenceMapComponent::IridescenceMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Iridescence
+			, { IridescenceComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< IridescenceComponent >() )
-		{
-			pass.createComponent< IridescenceComponent >();
-		}
 	}
 
 	PassComponentUPtr IridescenceMapComponent::doClone( Pass & pass )const
@@ -195,7 +194,8 @@ namespace castor3d
 	void IridescenceMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Iridescence" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Iridescence" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

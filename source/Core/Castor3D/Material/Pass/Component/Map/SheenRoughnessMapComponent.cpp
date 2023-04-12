@@ -177,12 +177,11 @@ namespace castor3d
 	castor::String const SheenRoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "sheen_roughness" );
 
 	SheenRoughnessMapComponent::SheenRoughnessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, SheenRoughness
+			, { SheenComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< SheenComponent >() )
-		{
-			pass.createComponent< SheenComponent >();
-		}
 	}
 
 	PassComponentUPtr SheenRoughnessMapComponent::doClone( Pass & pass )const
@@ -193,7 +192,8 @@ namespace castor3d
 	void SheenRoughnessMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Sheen Roughness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Sheen Roughness" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

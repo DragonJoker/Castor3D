@@ -192,8 +192,9 @@ namespace castor3d
 
 	void AmbientComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Ambient Colour" ), m_value.colour );
-		vis.visit( cuT( "Ambient Factor" ), m_value.factor );
+		vis.visit( cuT( "Ambient" ) );
+		vis.visit( cuT( "Colour" ), m_value.colour );
+		vis.visit( cuT( "Factor" ), m_value.factor );
 	}
 
 	PassComponentUPtr AmbientComponent::doClone( Pass & pass )const

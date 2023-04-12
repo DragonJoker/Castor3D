@@ -57,6 +57,11 @@ namespace castor3d
 			{
 			}
 
+			PassComponentUPtr createComponent( Pass & pass )const override
+			{
+				return castor::makeUniqueDerived< PassComponent, TexturesComponent >( pass );
+			}
+
 			void zeroBuffer( Pass const & pass
 				, shader::PassMaterialShader const & materialShader
 				, PassBuffer & buffer )const override;
@@ -80,8 +85,6 @@ namespace castor3d
 		}
 
 		C3D_API explicit TexturesComponent( Pass & pass );
-
-		C3D_API void accept( PassVisitorBase & vis )override;
 
 		C3D_API static castor::String const TypeName;
 

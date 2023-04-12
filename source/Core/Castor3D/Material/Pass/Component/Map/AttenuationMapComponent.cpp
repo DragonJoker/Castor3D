@@ -179,12 +179,11 @@ namespace castor3d
 	castor::String const AttenuationMapComponent::TypeName = C3D_MakePassMapComponentName( "attenuation" );
 
 	AttenuationMapComponent::AttenuationMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Attenuation
+			, { ThicknessComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< ThicknessComponent >() )
-		{
-			pass.createComponent< ThicknessComponent >();
-		}
 	}
 
 	PassComponentUPtr AttenuationMapComponent::doClone( Pass & pass )const
@@ -195,7 +194,8 @@ namespace castor3d
 	void AttenuationMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Thickness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Thickness" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

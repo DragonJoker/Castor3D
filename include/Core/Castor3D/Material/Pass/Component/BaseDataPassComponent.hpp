@@ -33,9 +33,10 @@ namespace castor3d
 		 */
 		template< typename ... ParamsT >
 		BaseDataPassComponentT( Pass & pass
-			, castor::String const & type
+			, castor::String type
+			, castor::StringArray deps = {}
 			, ParamsT && ... params )
-			: PassComponent{ pass, type }
+			: PassComponent{ pass, std::move( type ), std::move( deps ) }
 			, m_value{ m_dirty, std::forward< ParamsT >( params )... }
 		{
 		}

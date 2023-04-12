@@ -225,7 +225,8 @@ namespace castor3d
 
 	void FractalMappingComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Fractal sampling" ), m_value );
+		vis.visit( cuT( "Fractal mapping" ) );
+		vis.visit( cuT( "Fractal" ), m_value );
 	}
 
 	PassComponentUPtr FractalMappingComponent::doClone( Pass & pass )const

@@ -191,12 +191,11 @@ namespace castor3d
 	castor::String const SpecularMapComponent::TypeName = C3D_MakePassMapComponentName( "specular" );
 
 	SpecularMapComponent::SpecularMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Specular
+			, { SpecularComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< SpecularComponent >() )
-		{
-			pass.createComponent< SpecularComponent >();
-		}
 	}
 
 	PassComponentUPtr SpecularMapComponent::doClone( Pass & pass )const
@@ -207,7 +206,8 @@ namespace castor3d
 	void SpecularMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Specular" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
+		vis.visit( cuT( "Specular" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
 	//*********************************************************************************************

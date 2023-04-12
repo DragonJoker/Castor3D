@@ -98,6 +98,13 @@ namespace castor3d
 	struct PassComponent;
 	/**
 	\~english
+	\brief		Pass component base class for texture component.
+	\~french
+	\brief		Classe de base d'un composant de passe contenant une texture.
+	*/
+	struct PassMapComponent;
+	/**
+	\~english
 	\brief		Used to create a component type's shaders and data.
 	\~french
 	\brief		Utilisé pour créer les shaders et données d'un type de composant.
@@ -592,6 +599,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, PassComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassComponentRegister, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassComponentPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, PassMapComponent, C3D_API );
 
 	CU_DeclareMap( PassComponentID, PassComponentUPtr, PassComponent );
 

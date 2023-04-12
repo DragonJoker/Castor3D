@@ -188,12 +188,11 @@ namespace castor3d
 	castor::String const MetalnessMapComponent::TypeName = C3D_MakePassMapComponentName( "metalness" );
 
 	MetalnessMapComponent::MetalnessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Metalness
+			, { MetalnessComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< MetalnessComponent >() )
-		{
-			pass.createComponent< MetalnessComponent >();
-		}
 	}
 
 	PassComponentUPtr MetalnessMapComponent::doClone( Pass & pass )const
@@ -204,7 +203,8 @@ namespace castor3d
 	void MetalnessMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Metalness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Metalness" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

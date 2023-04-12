@@ -25,6 +25,11 @@ namespace castor3d
 			{
 			}
 
+			PassComponentUPtr createComponent( Pass & pass )const override
+			{
+				return castor::makeUniqueDerived< PassComponent, PickableComponent >( pass );
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 
@@ -46,7 +51,8 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit PickableComponent( Pass & pass, bool pickable = true );
+		C3D_API explicit PickableComponent( Pass & pass
+			, bool pickable = true );
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 

@@ -31,6 +31,11 @@ namespace castor3d
 			{
 			}
 
+			PassComponentUPtr createComponent( Pass & pass )const override
+			{
+				return castor::makeUniqueDerived< PassComponent, PassHeaderComponent >( pass );
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			void zeroBuffer( Pass const & pass

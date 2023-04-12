@@ -177,12 +177,11 @@ namespace castor3d
 	castor::String const ClearcoatRoughnessMapComponent::TypeName = C3D_MakePassMapComponentName( "clearcoat_roughness" );
 
 	ClearcoatRoughnessMapComponent::ClearcoatRoughnessMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, ClearcoatRoughness
+			, { ClearcoatComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< ClearcoatComponent >() )
-		{
-			pass.createComponent< ClearcoatComponent >();
-		}
 	}
 
 	PassComponentUPtr ClearcoatRoughnessMapComponent::doClone( Pass & pass )const
@@ -193,7 +192,8 @@ namespace castor3d
 	void ClearcoatRoughnessMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Clearcoat Roughness" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Clearcoat Roughness" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
 	}
 
 	//*********************************************************************************************

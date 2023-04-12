@@ -312,6 +312,8 @@ namespace castor3d
 
 	void SubsurfaceScatteringComponent::accept( PassVisitorBase & vis )
 	{
+		vis.visit( cuT( "Subsurface Scattering" ) );
+
 		if ( hasSubsurfaceScattering() )
 		{
 			m_value.value()->accept( vis );

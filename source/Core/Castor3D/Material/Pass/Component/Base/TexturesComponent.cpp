@@ -288,10 +288,6 @@ namespace castor3d
 	{
 	}
 
-	void TexturesComponent::accept( PassVisitorBase & vis )
-	{
-	}
-
 	PassComponentUPtr TexturesComponent::doClone( Pass & pass )const
 	{
 		return castor::makeUniqueDerived< PassComponent, TexturesComponent >( pass );

@@ -229,7 +229,7 @@ namespace castor3d
 
 	RoughnessComponent::RoughnessComponent( Pass & pass
 		, float defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, defaultValue }
+		: BaseDataPassComponentT{ pass, TypeName, {}, defaultValue }
 	{
 	}
 
@@ -255,7 +255,8 @@ namespace castor3d
 
 	void RoughnessComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Roughness" ), m_value );
+		vis.visit( cuT( "Roughness" ) );
+		vis.visit( cuT( "Factor" ), m_value );
 	}
 
 	PassComponentUPtr RoughnessComponent::doClone( Pass & pass )const

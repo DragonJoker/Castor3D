@@ -68,6 +68,11 @@ namespace castor3d
 			{
 			}
 
+			PassComponentUPtr createComponent( Pass & pass )const override
+			{
+				return castor::makeUniqueDerived< PassComponent, TransmittanceMapComponent >( pass );
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( TextureCombine const & textures
@@ -137,11 +142,6 @@ namespace castor3d
 
 		C3D_API explicit TransmittanceMapComponent( Pass & pass );
 
-		PassComponentTextureFlag getTextureFlags()const override
-		{
-			return makeTextureFlag( getId(), Transmittance );
-		}
-
 		C3D_API static castor::String const TypeName;
 
 		float getTransmittance()const
@@ -161,7 +161,7 @@ namespace castor3d
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
 		void doFillBuffer( PassBuffer & buffer )const override;
-		castor::AtomicGroupChangeTracked< float > m_transmittance;
+		mutable castor::AtomicGroupChangeTracked< float > m_transmittance;
 		void doFillConfig( TextureConfiguration & configuration
 			, PassVisitorBase & vis )const override;
 	};

@@ -47,6 +47,11 @@ namespace castor3d
 			{
 			}
 
+			PassComponentUPtr createComponent( Pass & pass )const override
+			{
+				return castor::makeUniqueDerived< PassComponent, AttenuationMapComponent >( pass );
+			}
+
 			void createParsers( castor::AttributeParsers & parsers
 				, ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( TextureCombine const & textures
@@ -107,11 +112,6 @@ namespace castor3d
 		}
 
 		C3D_API explicit AttenuationMapComponent( Pass & pass );
-
-		PassComponentTextureFlag getTextureFlags()const override
-		{
-			return makeTextureFlag( getId(), Attenuation );
-		}
 
 		C3D_API static castor::String const TypeName;
 

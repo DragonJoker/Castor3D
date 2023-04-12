@@ -245,7 +245,8 @@ namespace castor3d
 
 	void OpacityComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Opacity" ), m_value.opacity );
+		vis.visit( cuT( "Opacity" ) );
+		vis.visit( cuT( "Factor" ), m_value.opacity );
 		vis.visit( cuT( "Blended weighted accumulator" ), m_value.bwAccumulationOperator );
 	}
 

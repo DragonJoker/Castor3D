@@ -40,6 +40,8 @@ namespace castor3d
 
 	public:
 		using UnitArray = std::vector< TextureUnitRPtr >;
+		using PassTextureSource = std::pair< TextureSourceInfo, PassTextureConfig >;
+		using UnitDataSources = std::map< TextureUnitDataRPtr, std::vector< TextureSourceInfo > >;
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -104,7 +106,7 @@ namespace castor3d
 		C3D_API void addComponent( PassComponentUPtr component );
 		C3D_API bool hasComponent( castor::String const & name )const;
 		C3D_API PassComponent * getComponent( castor::String const & name )const;
-		C3D_API void removeComponent( castor::String const & name );
+		C3D_API std::vector< PassComponentUPtr > removeComponent( castor::String const & name );
 		C3D_API shader::PassMaterialShader * getMaterialShader( castor::String const & componentType )const;
 		C3D_API PassComponentID getComponentId( castor::String const & componentType )const;
 		C3D_API PassComponentPlugin const & getComponentPlugin( PassComponentID componentId )const;
@@ -241,14 +243,6 @@ namespace castor3d
 		 *\brief		Réduit les textures.
 		 */
 		C3D_API void prepareTextures();
-		using PassTextureSource = std::pair< TextureSourceInfo, PassTextureConfig >;
-		C3D_API void mergeImages( PassTextureSource lhs
-			, uint32_t lhsDstMask
-			, PassTextureSource rhs
-			, uint32_t rhsDstMask
-			, TextureUnitDataSet & result );
-		C3D_API void prepareImage( PassTextureSource cfg
-			, TextureUnitDataSet & result );
 		/**
 		 *\~english
 		 *\brief		Sets the basic pass colour.
@@ -504,10 +498,18 @@ namespace castor3d
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
+		void doMergeImages( PassTextureSource lhs
+			, uint32_t lhsDstMask
+			, PassTextureSource rhs
+			, uint32_t rhsDstMask
+			, UnitDataSources const & configs );
+		void doPrepareImage( PassTextureSource cfg );
 		void doAddUnit( TextureUnitData & unitData
 			, TextureUnitRPtr unit
 			, UnitArray & result );
 		void doUpdateTextureFlags();
+		std::vector< PassComponentUPtr > doRemoveDependencies( castor::String const & name );
+		void doRemoveConfiguration( PassComponentTextureFlag flag );
 
 	private:
 		PassComponentCombine m_componentCombine;
@@ -515,6 +517,7 @@ namespace castor3d
 		uint32_t m_index;
 		PassComponentMap m_components;
 		TextureSourceMap m_sources;
+		UnitDataSources m_realSources;
 		std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};
 		std::atomic_bool m_texturesReduced{ false };

@@ -644,6 +644,22 @@ namespace castor3d
 		/**@}*/
 		/**
 		*\~english
+		*	Creates a component for given pass.
+		*\remarks
+		*	Doesn't add the component to the pass.
+		*\param[in] pass
+		*	The pass.
+		*\~french
+		*\brief
+		*	Crée un composant pour la passe donnée.
+		*\remarks
+		*	N'ajoute pas le composant à la passe.
+		*\param[in] pass
+		*	La passe.
+		*/
+		C3D_API virtual PassComponentUPtr createComponent( Pass & pass )const = 0;
+		/**
+		*\~english
 		*\brief
 		*	Applies component's transformations before lighting happens.
 		*\~french
@@ -1039,7 +1055,8 @@ namespace castor3d
 		 *\param[in]	type	Le type de composant.
 		 */
 		C3D_API PassComponent( Pass & pass
-			, castor::String const & type );
+			, castor::String type
+			, castor::StringArray deps = {} );
 		C3D_API virtual ~PassComponent()noexcept = default;
 		/**
 		 *\~english
@@ -1186,6 +1203,11 @@ namespace castor3d
 			return m_type;
 		}
 
+		castor::StringArray const & getDependencies()const
+		{
+			return m_dependencies;
+		}
+
 		PassComponentPlugin const & getPlugin()const
 		{
 			return m_plugin;
@@ -1258,6 +1280,7 @@ namespace castor3d
 
 	protected:
 		castor::String m_type;
+		castor::StringArray m_dependencies;
 		PassComponentID m_id;
 		PassComponentPlugin const & m_plugin;
 		std::atomic_bool & m_dirty;

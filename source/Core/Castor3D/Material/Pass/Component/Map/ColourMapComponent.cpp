@@ -214,12 +214,11 @@ namespace castor3d
 	castor::String const ColourMapComponent::TypeName = C3D_MakePassMapComponentName( "colour" );
 
 	ColourMapComponent::ColourMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Colour
+			, { ColourComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< ColourComponent >() )
-		{
-			pass.createComponent< ColourComponent >();
-		}
 	}
 
 	PassComponentUPtr ColourMapComponent::doClone( Pass & pass )const
@@ -230,7 +229,8 @@ namespace castor3d
 	void ColourMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Colour" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
+		vis.visit( cuT( "Colour" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 	}
 
 	//*********************************************************************************************

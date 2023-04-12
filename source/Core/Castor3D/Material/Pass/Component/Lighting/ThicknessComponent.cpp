@@ -159,17 +159,16 @@ namespace castor3d
 	castor::String const ThicknessComponent::TypeName = C3D_MakePassLightingComponentName( "thickness" );
 
 	ThicknessComponent::ThicknessComponent( Pass & pass )
-		: BaseDataPassComponentT{ pass, TypeName }
+		: BaseDataPassComponentT{ pass
+			, TypeName
+			, { AttenuationComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< AttenuationComponent >() )
-		{
-			pass.createComponent< AttenuationComponent >();
-		}
 	}
 
 	void ThicknessComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Thickness Factor" ), m_value );
+		vis.visit( cuT( "Thickness" ) );
+		vis.visit( cuT( "Factor" ), m_value );
 	}
 
 	PassComponentUPtr ThicknessComponent::doClone( Pass & pass )const

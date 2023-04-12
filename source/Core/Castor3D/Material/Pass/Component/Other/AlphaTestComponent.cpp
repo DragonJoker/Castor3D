@@ -215,6 +215,7 @@ namespace castor3d
 
 	void AlphaTestComponent::accept( PassVisitorBase & vis )
 	{
+		vis.visit( cuT( "Alpha Test" ) );
 		vis.visit( cuT( "Alpha func" ), m_value.alphaFunc );
 		vis.visit( cuT( "Blend alpha func" ), m_value.blendAlphaFunc );
 		vis.visit( cuT( "Alpha ref. value" ), m_value.alphaRefValue );

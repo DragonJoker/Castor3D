@@ -569,12 +569,11 @@ namespace castor3d
 	castor::String const HeightMapComponent::TypeName = C3D_MakePassMapComponentName( "height" );
 
 	HeightMapComponent::HeightMapComponent( Pass & pass )
-		: PassMapComponent{ pass, TypeName }
+		: PassMapComponent{ pass
+			, TypeName
+			, Height
+			, { HeightComponent::TypeName } }
 	{
-		if ( !pass.hasComponent< HeightComponent >() )
-		{
-			pass.createComponent< HeightComponent >();
-		}
 	}
 
 	PassComponentUPtr HeightMapComponent::doClone( Pass & pass )const
@@ -585,8 +584,9 @@ namespace castor3d
 	void HeightMapComponent::doFillConfig( TextureConfiguration & configuration
 		, PassVisitorBase & vis )const
 	{
-		vis.visit( cuT( "Height" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
-		vis.visit( cuT( "Height factor" ), configuration.heightFactor );
+		vis.visit( cuT( "Height" ) );
+		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );
+		vis.visit( cuT( "Factor" ), configuration.heightFactor );
 	}
 
 	//*********************************************************************************************
