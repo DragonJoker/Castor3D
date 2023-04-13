@@ -54,10 +54,12 @@ namespace castor3d
 			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
 
+		using Programs = std::array< Shaders, 2u >;
+
 		class BackgroundPass
 			: public castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >
 			, public castor::DataHolderT< ashes::BufferPtr< uint16_t > >
-			, public castor::DataHolderT< Shaders >
+			, public castor::DataHolderT< Programs >
 			, public BackgroundPassBase
 			, public crg::RenderMesh
 		{
@@ -79,7 +81,7 @@ namespace castor3d
 				, crg::RenderMesh{ pass
 					, context
 					, graph
-					, crg::ru::Config{ 1u, true }
+					, crg::ru::Config{ 2u, true }
 					, crg::rm::Config{}
 						.vertexBuffer( doCreateVertexBuffer( device ) )
 						.indexBuffer( doCreateIndexBuffer( device ) )
@@ -89,8 +91,13 @@ namespace castor3d
 						.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
 						.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.getPassIndex( GetPassIndexCallback( [this]() { return m_background->getPassIndex(); } ) )
 						.renderSize( size )
-						.program( doInitialiseShader( device ) ) }
+						.programCreator( { 2u
+							, [this, &device]( uint32_t programIndex )
+							{
+								return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( doInitialiseShader( device, programIndex ) );
+							} } ) }
 			{
 			}
 
@@ -183,82 +190,91 @@ namespace castor3d
 					, { 1u, VkVertexInputBindingDescription{ 0u, sizeof( castor::Point3f ), VK_VERTEX_INPUT_RATE_VERTEX } } };
 			}
 
-			crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device )
+			crg::VkPipelineShaderStageCreateInfoArray doInitialiseShader( RenderDevice const & device
+				, uint32_t programIndex )
 			{
-				if ( castor::DataHolderT< Shaders >::getData().stages.empty() )
-				{
-					using namespace sdw;
+				auto & program = castor::DataHolderT< Programs >::getData()[programIndex];
 
-					castor::DataHolderT< Shaders >::getData().vertexShader = { VK_SHADER_STAGE_VERTEX_BIT, "Background" };
+				if ( program.stages.empty() )
+				{
+					program.vertexShader = { VK_SHADER_STAGE_VERTEX_BIT, "Background" };
 					{
-						VertexWriter writer;
+						sdw::VertexWriter writer;
 
 						// Inputs
-						auto position = writer.declInput< Vec3 >( "position", 0u );
+						auto position = writer.declInput< sdw::Vec3 >( "position", 0u );
 						C3D_Camera( writer, Bindings::eMatrix, 0u );
 						C3D_ModelData( writer, Bindings::eModel, 0u );
 
 						// Outputs
-						auto vtx_texture = writer.declOutput< Vec3 >( "vtx_texture", 0u );
+						auto vtx_texture = writer.declOutput< sdw::Vec3 >( "vtx_texture", 0u );
 
-						writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-							, VertexOut out )
+						writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+							, sdw::VertexOut out )
 							{
 								out.vtx.position = c3d_cameraData.worldToCurProj( c3d_modelData.modelToWorld( vec4( position, 1.0_f ) ) ).xyww();
 								vtx_texture = position;
 							} );
 
-						castor::DataHolderT< Shaders >::getData().vertexShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+						program.vertexShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 					}
 
-					castor::DataHolderT< Shaders >::getData().pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT, "Background" };
+					program.pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT, "Background" };
 					{
-						FragmentWriter writer;
+						sdw::FragmentWriter writer;
 
 						// Inputs
 						C3D_Scene( writer, Bindings::eScene, 0u );
 						C3D_HdrConfig( writer, Bindings::eHdrConfig, 0u );
-						auto vtx_texture = writer.declInput< Vec3 >( "vtx_texture", 0u );
-						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", Bindings::eSkybox, 0u );
+						auto vtx_texture = writer.declInput< sdw::Vec3 >( "vtx_texture", 0u, programIndex == 0u );
+						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", Bindings::eSkybox, 0u, programIndex == 0u );
 						shader::Utils utils{ writer };
 
 						// Outputs
-						auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+						auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", 0u );
 
-						writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-							, FragmentOut out )
+						writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+							, sdw::FragmentOut out )
 							{
-								IF( writer, c3d_sceneData.fogType() == UInt( uint32_t( FogType::eDisabled ) ) )
+								if ( programIndex == 0u )
 								{
-									auto colour = writer.declLocale( "colour"
-										, c3d_mapSkybox.sample( vtx_texture ) );
+									IF( writer, sdw::UInt{ programIndex } == 0_u
+										&& c3d_sceneData.fogType() == sdw::UInt( uint32_t( FogType::eDisabled ) ) )
+									{
+										auto colour = writer.declLocale( "colour"
+											, c3d_mapSkybox.sample( vtx_texture ) );
 
-									if ( !m_background->isHdr() && !m_background->isSRGB() )
-									{
-										outColour = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
+										if ( !m_background->isHdr() && !m_background->isSRGB() )
+										{
+											outColour = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
+										}
+										else
+										{
+											outColour = vec4( colour.xyz(), colour.w() );
+										}
 									}
-									else
+									ELSE
 									{
-										outColour = vec4( colour.xyz(), colour.w() );
+										outColour = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 									}
+									FI;
 								}
-								ELSE
+								else
 								{
 									outColour = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 								}
-								FI;
 							} );
-						castor::DataHolderT< Shaders >::getData().pixelShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+						program.pixelShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 					}
 
-					castor::DataHolderT< Shaders >::getData().stages =
+					program.stages =
 					{
-						makeShaderState( device, castor::DataHolderT< Shaders >::getData().vertexShader ),
-						makeShaderState( device, castor::DataHolderT< Shaders >::getData().pixelShader ),
+						makeShaderState( device, program.vertexShader ),
+						makeShaderState( device, program.pixelShader ),
 					};
 				}
 
-				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( castor::DataHolderT< Shaders >::getData().stages );
+				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( program.stages );
 			}
 		};
 	}

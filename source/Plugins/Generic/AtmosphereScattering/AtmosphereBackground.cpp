@@ -14,6 +14,8 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/Background/Visitor.hpp>
+#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <ashespp/Image/StagingTexture.hpp>
 
@@ -168,6 +170,8 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & weather
 		, crg::ImageViewIdArray const & colour
 		, crg::ImageViewId const * depthObj
+		, castor3d::HdrConfigUbo const & hdrConfigUbo
+		, castor3d::SceneUbo const & sceneUbo
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, CloudsUbo const & cloudsUbo
 		, VkExtent2D const & size
@@ -327,6 +331,10 @@ namespace atmosphere_scattering
 		pass.addDependency( cloudsResolvePass->getLastPass() );
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR };
+		hdrConfigUbo.createPassBinding( pass
+			, AtmosphereBackgroundPass::eHdrConfig );
+		sceneUbo.createPassBinding( pass
+			, AtmosphereBackgroundPass::eScene );
 		pass.addSampledView( cloudsResult.sampledViewId
 			, AtmosphereBackgroundPass::eClouds
 			, linearSampler );
@@ -633,6 +641,8 @@ namespace atmosphere_scattering
 					, m_weather.sampledViewId
 					, colour
 					, depthObj
+					, hdrConfigUbo
+					, sceneUbo
 					, *m_atmosphereUbo
 					, *m_cloudsUbo
 					, size

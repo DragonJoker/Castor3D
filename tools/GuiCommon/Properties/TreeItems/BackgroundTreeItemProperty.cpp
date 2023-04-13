@@ -40,10 +40,6 @@ namespace GuiCommon
 
 			void visit( castor3d::ColourBackground & background )override
 			{
-				static wxString PROPERTY_BACKGROUND_COLOUR_COLOUR = _( "Colour" );
-
-				m_properties.addPropertyT( &m_grid, PROPERTY_BACKGROUND_COLOUR_COLOUR, background.getScene().getBackgroundColour()
-					, &background.getScene(), &castor3d::Scene::setBackgroundColour );
 			}
 
 			void visit( castor3d::SkyboxBackground & background )override
@@ -325,6 +321,7 @@ namespace GuiCommon
 	void BackgroundTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
 		static wxString PROPERTY_CATEGORY_BACKGROUND = _( "Background: " );
+		static wxString PROPERTY_BACKGROUND_VISIBLE = _( "Visible" );
 		static wxString PROPERTY_BACKGROUND_COLOUR = _( "Colour" );
 		static wxString PROPERTY_BACKGROUND_IMAGE = _( "Image" );
 		static wxString PROPERTY_BACKGROUND_SKYBOX = _( "Skybox" );
@@ -354,7 +351,17 @@ namespace GuiCommon
 			selected = PROPERTY_BACKGROUND_ATMOSPHERE;
 		}
 
-		addProperty( grid, selected + wxT( " " ) + PROPERTY_CATEGORY_BACKGROUND );
+		setPrefix( m_background.getName() );
+		addProperty( grid
+			, selected + wxT( " " ) + PROPERTY_CATEGORY_BACKGROUND );
+		addPropertyT( grid, PROPERTY_BACKGROUND_VISIBLE
+			, m_background.isVisible()
+			, &m_background
+			, &castor3d::SceneBackground::setVisible );
+		addPropertyT( grid, PROPERTY_BACKGROUND_COLOUR
+			, m_background.getScene().getBackgroundColour()
+			, &m_background.getScene()
+			, &castor3d::Scene::setBackgroundColour );
 		BackgroundDisplayer::submit( m_background, *this, *grid );
 	}
 }

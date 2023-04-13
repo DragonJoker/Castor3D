@@ -321,19 +321,19 @@ namespace castor3d
 		 *\name Getters.
 		 **/
 		/**@{*/
-		TextureView const & getDefaultView()const
+		TextureView const & getDefaultView()const noexcept
 		{
 			CU_Require( m_defaultView.view );
 			return *m_defaultView.view;
 		}
 
-		TextureView & getDefaultView()
+		TextureView & getDefaultView()noexcept
 		{
 			CU_Require( m_defaultView.view );
 			return *m_defaultView.view;
 		}
 
-		MipView const & getDefault()const
+		MipView const & getDefault()const noexcept
 		{
 			return m_defaultView;
 		}
@@ -344,13 +344,7 @@ namespace castor3d
 		*	2D texture's mip level access.
 		**/
 		/**@{*/
-		TextureView const & getMipView( size_t level )const
-		{
-			CU_Require( getDefault().levels.size() > level );
-			return *getDefault().levels[level];
-		}
-
-		TextureView & getMipView( size_t level )
+		TextureView & getMipView( size_t level )const noexcept
 		{
 			CU_Require( getDefault().levels.size() > level );
 			return *getDefault().levels[level];
@@ -390,17 +384,17 @@ namespace castor3d
 		 *\name Getters.
 		 **/
 		/**@{*/
-		uint32_t getLayersCount()const
+		uint32_t getLayersCount()const noexcept
 		{
 			return m_info->arrayLayers;
 		}
 
-		ArrayView< MipView > const & getArray2D()const
+		ArrayView< MipView > const & getArray2D()const noexcept
 		{
 			return m_arrayView;
 		}
 
-		MipView const & getLayer2D( size_t layer )const
+		MipView const & getLayer2D( size_t layer )const noexcept
 		{
 			CU_Require( m_cubeView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -409,7 +403,7 @@ namespace castor3d
 			return m_arrayView.layers[layer];
 		}
 
-		MipView & getLayer2D( size_t layer )
+		MipView & getLayer2D( size_t layer )noexcept
 		{
 			CU_Require( m_cubeView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -418,13 +412,7 @@ namespace castor3d
 			return m_arrayView.layers[layer];
 		}
 
-		TextureView const & getLayer2DView( size_t layer )const
-		{
-			CU_Require( getLayer2D( layer ).view );
-			return *getLayer2D( layer ).view;
-		}
-
-		TextureView & getLayer2DView( size_t layer )
+		TextureView & getLayer2DView( size_t layer )const noexcept
 		{
 			CU_Require( getLayer2D( layer ).view );
 			return *getLayer2D( layer ).view;
@@ -467,12 +455,12 @@ namespace castor3d
 		 *\name 3D texture's slice access.
 		 **/
 		/**@{*/
-		SliceView< MipView > const & getSlices3D()const
+		SliceView< MipView > const & getSlices3D()const noexcept
 		{
 			return m_sliceView;
 		}
 
-		MipView const & getSlice( size_t slice )const
+		MipView const & getSlice( size_t slice )const noexcept
 		{
 			CU_Require( m_cubeView.layers.empty() );
 			CU_Require( m_arrayView.layers.empty() );
@@ -481,7 +469,7 @@ namespace castor3d
 			return m_sliceView.slices[slice];
 		}
 
-		MipView & getSlice( size_t slice )
+		MipView & getSlice( size_t slice )noexcept
 		{
 			CU_Require( m_cubeView.layers.empty() );
 			CU_Require( m_arrayView.layers.empty() );
@@ -490,13 +478,7 @@ namespace castor3d
 			return m_sliceView.slices[slice];
 		}
 
-		TextureView const & getSliceView( size_t slice )const
-		{
-			CU_Require( getSlice( slice ).view );
-			return *getSlice( slice ).view;
-		}
-
-		TextureView & getSliceView( size_t slice )
+		TextureView & getSliceView( size_t slice )const noexcept
 		{
 			CU_Require( getSlice( slice ).view );
 			return *getSlice( slice ).view;
@@ -509,19 +491,19 @@ namespace castor3d
 		*	A simple cube texture is a cube array of size 1.
 		**/
 		/**@{*/
-		uint32_t isCube()const
+		uint32_t isCube()const noexcept
 		{
 			return getLayersCount() >= 6u
 				&& ( getLayersCount() % 6u ) == 0u
 				&& ashes::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT );
 		}
 
-		ArrayView< CubeView > const & getArrayCube()const
+		ArrayView< CubeView > const & getArrayCube()const noexcept
 		{
 			return m_cubeView;
 		}
 
-		CubeView const & getLayerCube( size_t layer )const
+		CubeView const & getLayerCube( size_t layer )const noexcept
 		{
 			CU_Require( m_arrayView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -530,7 +512,7 @@ namespace castor3d
 			return m_cubeView.layers[layer];
 		}
 
-		CubeView & getLayerCube( size_t layer )
+		CubeView & getLayerCube( size_t layer )noexcept
 		{
 			CU_Require( m_arrayView.layers.empty() );
 			CU_Require( m_sliceView.slices.empty() );
@@ -539,13 +521,7 @@ namespace castor3d
 			return m_cubeView.layers[layer];
 		}
 
-		TextureView const & getLayerCubeView( size_t layer )const
-		{
-			CU_Require( getLayerCube( layer ).view.view );
-			return *getLayerCube( layer ).view.view;
-		}
-
-		TextureView & getLayerCubeView( size_t layer )
+		TextureView & getLayerCubeView( size_t layer )const noexcept
 		{
 			CU_Require( getLayerCube( layer ).view.view );
 			return *getLayerCube( layer ).view.view;
@@ -556,26 +532,19 @@ namespace castor3d
 		 **/
 		/**@{*/
 		MipView const & getLayerCubeFace( size_t layer
-			, CubeMapFace face )const
+			, CubeMapFace face )const noexcept
 		{
 			return getLayerCube( layer ).faces[size_t( face )];
 		}
 
 		MipView & getLayerCubeFace( size_t layer
-			, CubeMapFace face )
+			, CubeMapFace face )noexcept
 		{
 			return getLayerCube( layer ).faces[size_t( face )];
 		}
 
 		TextureView const & getLayerCubeFaceView( size_t layer
-			, CubeMapFace face )const
-		{
-			CU_Require( getLayerCubeFace( layer, face ).view );
-			return *getLayerCubeFace( layer, face ).view;
-		}
-
-		TextureView & getLayerCubeFaceView( size_t layer
-			, CubeMapFace face )
+			, CubeMapFace face )const noexcept
 		{
 			CU_Require( getLayerCubeFace( layer, face ).view );
 			return *getLayerCubeFace( layer, face ).view;
@@ -605,18 +574,9 @@ namespace castor3d
 		 *\name Cube array texture layer face's mip level access.
 		 **/
 		/**@{*/
-		TextureView const & getLayerCubeFaceMipView( size_t layer
-			, CubeMapFace face
-			, uint32_t level )const
-		{
-			CU_Require( getLayerCubeFace( layer, face ).levels.size() > level );
-			CU_Require( getLayerCubeFace( layer, face ).levels[level] );
-			return *getLayerCubeFace( layer, face ).levels[level];
-		}
-
 		TextureView & getLayerCubeFaceMipView( size_t layer
 			, CubeMapFace face
-			, uint32_t level )
+			, uint32_t level )const noexcept
 		{
 			CU_Require( getLayerCubeFace( layer, face ).levels.size() > level );
 			CU_Require( getLayerCubeFace( layer, face ).levels[level] );
@@ -655,68 +615,68 @@ namespace castor3d
 		C3D_API castor::Path getPath()const;
 		C3D_API bool needsYInversion()const;
 
-		bool isInitialised()const
+		bool isInitialised()const noexcept
 		{
 			return m_initialised;
 		}
 
-		bool isStatic()const
+		bool isStatic()const noexcept
 		{
 			return m_static;
 		}
 
-		VkImageType getType()const
+		VkImageType getType()const noexcept
 		{
 			return m_info->imageType;
 		}
 
-		castor::Image const & getImage()const
+		castor::Image const & getImage()const noexcept
 		{
 			return m_image;
 		}
 
-		castor::Image & getImage()
+		castor::Image & getImage()noexcept
 		{
 			return m_image;
 		}
 
-		ashes::Image const & getTexture()const
+		ashes::Image const & getTexture()const noexcept
 		{
 			CU_Require( m_texture );
 			return *m_texture;
 		}
 
-		ashes::ImageCreateInfo const & getCreateInfo()const
+		ashes::ImageCreateInfo const & getCreateInfo()const noexcept
 		{
 			return m_info;
 		}
 
-		uint32_t getWidth()const
+		uint32_t getWidth()const noexcept
 		{
 			return m_info->extent.width;
 		}
 
-		uint32_t getHeight()const
+		uint32_t getHeight()const noexcept
 		{
 			return m_info->extent.height;
 		}
 
-		uint32_t getDepth()const
+		uint32_t getDepth()const noexcept
 		{
 			return m_info->extent.depth;
 		}
 
-		uint32_t getMipmapCount()const
+		uint32_t getMipmapCount()const noexcept
 		{
 			return m_info->mipLevels;
 		}
 
-		VkExtent3D const & getDimensions()const
+		VkExtent3D const & getDimensions()const noexcept
 		{
 			return m_info->extent;
 		}
 
-		VkFormat getPixelFormat()const
+		VkFormat getPixelFormat()const noexcept
 		{
 			return m_info->format;
 		}
