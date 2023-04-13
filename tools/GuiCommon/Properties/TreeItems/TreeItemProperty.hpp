@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
+#include "GuiCommon/Properties/Math/ColourProperties.hpp"
 #include "GuiCommon/Properties/Math/MatrixProperties.hpp"
 #include "GuiCommon/Properties/Math/PointProperties.hpp"
 #include "GuiCommon/Properties/Math/PositionProperties.hpp"
@@ -28,6 +29,7 @@ See LICENSE file in root folder
 
 namespace GuiCommon
 {
+	using PropertyArray = std::vector< wxPGProperty * >;
 	/**
 	\brief		Helper class to communicate between Scene objects or Materials lists and PropertiesContainer
 	*/
