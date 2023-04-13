@@ -6,6 +6,8 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Material/Pass/Component/PassComponentRegister.hpp>
+#include <Castor3D/Material/Pass/Component/PassMapComponent.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Material/Texture/Animation/TextureAnimation.hpp>
@@ -17,9 +19,9 @@ namespace GuiCommon
 {
 	//*********************************************************************************************
 
-	namespace
+	namespace textp
 	{
-		uint32_t getMask( bool enabled
+		static uint32_t getMask( bool enabled
 			, long component
 			, uint32_t componentsCount )
 		{
@@ -45,6 +47,21 @@ namespace GuiCommon
 						break;
 					}
 				}
+				else if ( componentsCount == 2u )
+				{
+					switch ( component )
+					{
+					case 0:
+						result = 0x0000FFFF;
+						break;
+					case 1:
+						result = 0x00FFFF00;
+						break;
+					case 2:
+						result = 0xFFFF0000;
+						break;
+					}
+				}
 				else
 				{
 					switch ( component )
@@ -65,100 +82,164 @@ namespace GuiCommon
 		using onMaskChange = std::function< void ( wxVariant const & var
 				, castor3d::PassComponentTextureFlag flag
 				, uint32_t componentsCount ) >;
+		using onEnabledChange = std::function< void( wxVariant const & var
+			, castor3d::Pass & pass
+			, castor::String const & compName ) >;
 
 		class UnitTreeGatherer
 			: public castor3d::PassVisitor
 		{
 		public:
-			static std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > submit( castor3d::Pass & pass
+			static TextureTreeItemProperty::PropertiesArray submit( castor3d::Pass & pass
 				, castor3d::TextureConfiguration & config
 				, castor::PixelFormat format
 				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
+				, onEnabledChange onEnabled
 				, onMaskChange onChange )
 			{
-				std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > result;
-				UnitTreeGatherer vis{ format, properties, grid, onChange, result };
-				pass.fillConfig( config, vis );
+				TextureTreeItemProperty::PropertiesArray result;
+				UnitTreeGatherer vis{ pass, format, properties, grid, onEnabled, onChange };
+				auto & compsRegister = pass.getOwner()->getEngine()->getPassComponentsRegister();
+
+				for ( auto & componentDesc : compsRegister )
+				{
+					if ( componentDesc.plugin
+						&& componentDesc.plugin->isMapComponent() )
+					{
+						auto component = static_cast< castor3d::PassMapComponentRPtr >( pass.getComponent( componentDesc.name ) );
+						castor3d::PassMapComponentUPtr ownComponent;
+
+						if ( !component )
+						{
+							if ( ownComponent = castor::ptrCast< castor3d::PassMapComponent >( componentDesc.plugin->createComponent( pass ) ) )
+							{
+								component = ownComponent.get();
+							}
+						}
+
+						if ( component )
+						{
+							castor3d::TextureConfiguration configuration;
+							configuration.components[0].flag = component->getTextureFlags();
+							configuration.components[0].startIndex = 0u;
+							auto passCompProps = std::make_unique< TextureTreeItemProperty::Properties >( component->getTextureFlags()
+								, configuration.components[0]
+								, std::move( ownComponent )
+								, component );
+							auto compProps = passCompProps.get();
+
+							vis.m_compProps = compProps;
+							vis.m_result = &compProps->properties;
+							vis.m_enabled = pass.hasComponent( componentDesc.name )
+								&& hasAny( config.components, component->getTextureFlags() );
+
+							compProps->component->fillConfig( configuration, vis );
+							compProps->components->Enable( vis.m_enabled );
+
+							for ( auto & compProp : compProps->properties )
+							{
+								compProp->Enable( vis.m_enabled );
+							}
+
+							result.emplace_back( std::move( passCompProps ) );
+						}
+					}
+				}
+
 				return result;
 			}
 
 		private:
-			UnitTreeGatherer( castor::PixelFormat format
+			UnitTreeGatherer( castor3d::Pass & pass
+				, castor::PixelFormat format
 				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
-				, onMaskChange onChange
-				, std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > & result )
+				, onEnabledChange onEnabled
+				, onMaskChange onChange )
 				: castor3d::PassVisitor{ {} }
+				, m_pass{ pass }
 				, m_format{ format }
 				, m_properties{ properties }
 				, m_grid{ grid }
+				, m_onEnabled{ onEnabled }
 				, m_onChange{ onChange }
-				, m_result{ result }
 			{
+			}
+
+			void visit( castor::String const & name
+				, castor3d::PassVisitor::ControlsList controls )override
+			{
+				doVisit( name );
+			}
+
+			void visit( castor::String const & name
+				, castor3d::PassVisitor::AtomicControlsList controls )override
+			{
+				doVisit( name );
 			}
 
 			void visit( castor::String const & name
 				, bool & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int16_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint16_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int64_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint64_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, float & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, double & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -170,7 +251,7 @@ namespace GuiCommon
 				choices.push_back( _( "Additive" ) );
 				choices.push_back( _( "Multiplicative" ) );
 				choices.push_back( _( "Interpolative" ) );
-				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -181,7 +262,7 @@ namespace GuiCommon
 				choices.push_back( _( "None" ) );
 				choices.push_back( _( "One" ) );
 				choices.push_back( _( "Repeat" ) );
-				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -197,42 +278,42 @@ namespace GuiCommon
 				choices.push_back( _( "Not Equal" ) );
 				choices.push_back( _( "Greater Equal" ) );
 				choices.push_back( _( "Always" ) );
-				m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbColour & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbaColour & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< float > & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< int32_t > & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< uint32_t > & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) );
+				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -250,14 +331,36 @@ namespace GuiCommon
 			}
 
 		private:
+			void doVisit( wxString const & name )
+			{
+				auto onChange = m_onChange;
+				m_properties->setPrefix( make_String( name ) );
+				m_properties->addProperty( m_grid, name );
+				auto pass = &m_pass;
+				auto compName = m_compProps->component->getType();
+				auto onEnabled = m_onEnabled;
+				m_compProps->isEnabled = m_properties->addProperty( m_grid
+					, _( "Enabled" )
+					, m_enabled
+					, [onEnabled, pass, compName]( wxVariant const & value )
+					{
+						onEnabled( value, *pass, compName );
+					} );
+				m_compProps->isEnabled->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
+			}
+
+			void doUpdateProperty( castor3d::TextureFlagConfiguration const & configuration )
+			{
+				m_compProps->components->SetValue( m_compProps->choices[configuration.startIndex] );
+			}
+
 			void doAddProperty( wxString const & flagName
 				, wxString const & isName
 				, wxString const & compName
 				, castor3d::PassComponentTextureFlag flag
-				, castor3d::TextureFlagConfiguration & configuration
+				, castor3d::TextureFlagConfiguration const & configuration
 				, uint32_t componentsCount )
 			{
-				auto onChange = m_onChange;
 				static wxString PROPERTY_COMPONENT_A = wxT( "A" );
 				static wxString PROPERTY_COMPONENT_R = wxT( "R" );
 				static wxString PROPERTY_COMPONENT_G = wxT( "G" );
@@ -265,63 +368,96 @@ namespace GuiCommon
 				static wxString PROPERTY_COMPONENT_RGB = wxT( "RGB" );
 				static wxString PROPERTY_COMPONENT_GBA = wxT( "GBA" );
 
-				m_grid->Append( new wxPropertyCategory( flagName ) );
-				m_properties->addProperty( m_grid, flagName );
-				auto isProp = m_properties->addProperty( m_grid
-					, isName
-					, configuration.componentsMask != 0
-					, [onChange, flag, componentsCount]( wxVariant const & var )
-					{
-						onChange( var, flag, componentsCount );
-					} );
-				wxString name;
 				wxString selected;
-				wxArrayString choices;
 
 				if ( componentsCount == 1u )
 				{
 					if ( isABGRFormat( m_format ) )
 					{
-						choices.Add( PROPERTY_COMPONENT_A );
-						choices.Add( PROPERTY_COMPONENT_B );
-						choices.Add( PROPERTY_COMPONENT_G );
-						choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
 					}
 					else if ( isBGRAFormat( m_format ) )
 					{
-						choices.Add( PROPERTY_COMPONENT_B );
-						choices.Add( PROPERTY_COMPONENT_G );
-						choices.Add( PROPERTY_COMPONENT_R );
-						choices.Add( PROPERTY_COMPONENT_A );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 					}
 					else if ( isRGBAFormat( m_format ) )
 					{
-						choices.Add( PROPERTY_COMPONENT_R );
-						choices.Add( PROPERTY_COMPONENT_G );
-						choices.Add( PROPERTY_COMPONENT_B );
-						choices.Add( PROPERTY_COMPONENT_A );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
 					}
 					else if ( isARGBFormat( m_format ) )
 					{
-						choices.Add( PROPERTY_COMPONENT_A );
-						choices.Add( PROPERTY_COMPONENT_R );
-						choices.Add( PROPERTY_COMPONENT_G );
-						choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 					}
 					else if ( isBGRFormat( m_format ) )
 					{
-						choices.Add( PROPERTY_COMPONENT_B );
-						choices.Add( PROPERTY_COMPONENT_G );
-						choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+					}
+					else if ( isRGFormat( m_format ) )
+					{
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
 					}
 					else
 					{
-						choices.Add( PROPERTY_COMPONENT_R );
-						choices.Add( PROPERTY_COMPONENT_G );
-						choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
 					}
-
-					selected = choices[configuration.startIndex];
+				}
+				else if ( componentsCount == 2u )
+				{
+					if ( isABGRFormat( m_format ) )
+					{
+						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+					}
+					else if ( isBGRAFormat( m_format ) )
+					{
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+					}
+					else if ( isRGBAFormat( m_format ) )
+					{
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+					}
+					else if ( isARGBFormat( m_format ) )
+					{
+						m_compProps->choices.Add( PROPERTY_COMPONENT_A );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+					}
+					else if ( isBGRFormat( m_format ) )
+					{
+						m_compProps->choices.Add( PROPERTY_COMPONENT_B );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+					}
+					else if ( isRGFormat( m_format ) )
+					{
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+					}
+					else
+					{
+						m_compProps->choices.Add( PROPERTY_COMPONENT_R );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_G );
+					}
 				}
 				else
 				{
@@ -330,34 +466,38 @@ namespace GuiCommon
 						|| isARGBFormat( m_format )
 						|| isRGBAFormat( m_format ) )
 					{
-						choices.Add( PROPERTY_COMPONENT_RGB );
-						choices.Add( PROPERTY_COMPONENT_GBA );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_RGB );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_GBA );
 					}
 					else
 					{
-						choices.Add( PROPERTY_COMPONENT_RGB );
+						m_compProps->choices.Add( PROPERTY_COMPONENT_RGB );
 					}
-					selected = choices[configuration.startIndex];
 				}
 
-				auto compProp = m_properties->addProperty( m_grid
+				selected = m_compProps->choices[configuration.startIndex];
+				auto onChange = m_onChange;
+				m_compProps->componentsCount = componentsCount;
+				m_compProps->components = m_properties->addProperty( m_grid
 					, compName
-					, choices
+					, m_compProps->choices
 					, selected
 					, [onChange, flag, componentsCount]( wxVariant const & var )
 					{
 						onChange( var, flag, componentsCount );
 					} );
-				compProp->Enable( configuration.componentsMask != 0 );
-				m_result.emplace( flag, TextureTreeItemProperty::PropertyPair{ isProp, compProp, configuration } );
 			}
 
 		private:
+			castor3d::Pass & m_pass;
 			castor::PixelFormat m_format;
 			TextureTreeItemProperty * m_properties;
 			wxPropertyGrid * m_grid;
+			onEnabledChange m_onEnabled;
 			onMaskChange m_onChange;
-			std::map< castor3d::PassComponentTextureFlag, TextureTreeItemProperty::PropertyPair > & m_result;
+			PropertyArray * m_result{};
+			bool m_enabled{};
+			TextureTreeItemProperty::Properties * m_compProps{};
 		};
 	}
 
@@ -381,7 +521,11 @@ namespace GuiCommon
 		static wxString const PROPERTY_TEXTURE_TEXCOORDSET = _( "Texcoord Set" );
 
 		auto unit = &m_texture;
+		m_configuration = unit->getConfiguration();
 		grid->Append( new wxPropertyCategory( wxString{ CATEGORY_TEXTURE } << unit->getId() ) );
+		addPropertyT( grid, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet()
+			, unit
+			, &castor3d::TextureUnit::setTexcoordSet );
 
 		if ( unit->getTexture()->isStatic() )
 		{
@@ -389,22 +533,21 @@ namespace GuiCommon
 			addProperty( grid, PROPERTY_TEXTURE_IMAGE, m_path
 				, [this]( wxVariant const & var )
 				{
-					onImageChange( var );
+					auto unit = &m_texture;
+					castor::Path path{ make_String( var.GetString() ) };
+
+					// Absolute path
+					if ( castor::File::fileExists( path ) )
+					{
+						auto & sourceInfo = unit->getSourceInfo();
+						m_pass.resetTexture( sourceInfo
+							, castor3d::TextureSourceInfo{ sourceInfo.sampler()
+							, path.getPath()
+							, path.getFileName( true )
+							, sourceInfo.config() } );
+					}
 				} );
 		}
-
-		addPropertyT( grid, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet(), unit, &castor3d::TextureUnit::setTexcoordSet );
-		m_properties = UnitTreeGatherer::submit( m_pass
-			, m_configuration
-			, castor::PixelFormat( unit->getTexture()->getPixelFormat() )
-			, this
-			, grid
-			, [this]( wxVariant const & var
-				, castor3d::PassComponentTextureFlag flag
-				, uint32_t componentsCount )
-			{
-				onChange( var, flag, componentsCount );
-			} );
 
 		auto & transform = unit->getTransform();
 		m_translate->x = transform.translate->x;
@@ -460,36 +603,148 @@ namespace GuiCommon
 			addPropertyT( grid, PROPERTY_ANIMATION_ROTATE, anim.getRotateSpeed(), &anim, &castor3d::TextureAnimation::setRotateSpeed );
 			addPropertyT( grid, PROPERTY_ANIMATION_SCALE, anim.getScaleSpeed(), &anim, &castor3d::TextureAnimation::setScaleSpeed );
 		}
+
+		m_properties = textp::UnitTreeGatherer::submit( m_pass
+			, m_configuration
+			, castor::PixelFormat( unit->getTexture()->getPixelFormat() )
+			, this
+			, grid
+			, [this]( wxVariant const & value
+				, castor3d::Pass & pass
+				, castor::String const & compName )
+			{
+				auto it = std::find_if( m_properties.begin()
+					, m_properties.end()
+					, [&compName]( PropertiesPtr const & lookup )
+					{
+						return lookup->component->getType() == compName;
+					} );
+
+				if ( it == m_properties.end() )
+				{
+					return;
+				}
+
+				auto & compProps = **it;
+
+				if ( !compProps.component
+					|| compProps.isSetting )
+				{
+					return;
+				}
+
+				auto enable = value.GetBool();
+				long components = compProps.components->GetValue();
+				auto unit = &m_texture;
+				compProps.configuration.componentsMask = textp::getMask( enable, components, compProps.componentsCount );
+
+				if ( enable )
+				{
+					if ( compProps.ownComponent )
+					{
+						try
+						{
+							addFlagConfiguration( m_configuration, compProps.configuration );
+							moveComponentsToPass( castor::ptrRefCast< castor3d::PassComponent >( compProps.ownComponent ) );
+							m_pass.updateConfig( unit->getSourceInfo(), m_configuration );
+						}
+						catch ( std::exception & exc )
+						{
+							castor3d::log::error << exc.what() << std::endl;
+							enable = false;
+							compProps.isSetting = true;
+							compProps.isEnabled->SetValue( false );
+							compProps.isSetting = false;
+						}
+					}
+				}
+				else if ( pass.hasComponent( compProps.component->getType() ) )
+				{
+					auto removed = pass.removeComponent( compProps.component->getType() );
+
+					if ( !removed.empty() )
+					{
+						compProps.ownComponent = castor::ptrRefCast< castor3d::PassMapComponent >( removed.back() );
+						removeFlagConfiguration( m_configuration, compProps.configuration );
+						removed.pop_back();
+						moveComponentsToProps( std::move( removed ) );
+					}
+
+					CU_Require( compProps.ownComponent );
+				}
+
+				compProps.components->Enable( enable );
+
+				for ( auto & prop : compProps.properties )
+				{
+					prop->Enable( enable );
+				}
+
+			}
+			, [this]( wxVariant const & var
+				, castor3d::PassComponentTextureFlag flag
+				, uint32_t componentsCount )
+			{
+				auto unit = &m_texture;
+				auto it = std::find_if( m_properties.begin()
+					, m_properties.end()
+					, [&flag]( auto & lookup )
+					{
+						return lookup->flag == flag;
+					} );
+				CU_Require( it != m_properties.end() );
+				auto & props = *it;
+				bool isEnabled = props->isEnabled->GetValue();
+				long components = props->components->GetValue();
+				props->configuration.componentsMask = textp::getMask( isEnabled, components, componentsCount );
+
+				for ( auto prop : props->properties )
+				{
+					prop->Enable( isEnabled );
+				}
+
+				m_pass.updateConfig( unit->getSourceInfo(), m_configuration );
+			} );
 	}
 
-	void TextureTreeItemProperty::onChange( wxVariant const & var
-		, castor3d::PassComponentTextureFlag flag
-		, uint32_t componentsCount )
+	void TextureTreeItemProperty::moveComponentsToPass( castor3d::PassComponentUPtr component )
 	{
-		auto unit = &m_texture;
-		auto it = m_properties.find( flag );
-		CU_Require( it != m_properties.end() );
-		bool isMap = it->second.isMap->GetValue();
-		long components = it->second.components->GetValue();
-		it->second.components->Enable( isMap );
-		it->second.configuration.componentsMask = getMask( isMap, components, componentsCount );
-		m_pass.updateConfig( unit->getSourceInfo(), m_configuration );
-	}
+		auto & pass = *component->getOwner();
 
-	void TextureTreeItemProperty::onImageChange( wxVariant const & var )
-	{
-		auto unit = &m_texture;
-		castor::Path path{ make_String( var.GetString() ) };
-
-		// Absolute path
-		if ( castor::File::fileExists( path ) )
+		for ( auto dep : component->getDependencies() )
 		{
-			auto & sourceInfo = unit->getSourceInfo();
-			m_pass.resetTexture( sourceInfo
-				, castor3d::TextureSourceInfo{ sourceInfo.sampler()
-				, path.getPath()
-				, path.getFileName( true )
-				, sourceInfo.config() } );
+			auto it = std::find_if( m_properties.begin()
+				, m_properties.end()
+				, [&dep]( PropertiesPtr const & lookup )
+				{
+					return lookup->ownComponent
+						&& lookup->ownComponent->getType() == dep;
+				} );
+
+			if ( it != m_properties.end() )
+			{
+				moveComponentsToPass( castor::ptrRefCast< castor3d::PassComponent >( ( *it )->ownComponent ) );
+			}
+		}
+
+		pass.addComponent( std::move( component ) );
+	}
+
+	void TextureTreeItemProperty::moveComponentsToProps( std::vector< castor3d::PassComponentUPtr > removed )
+	{
+		for ( auto & rem : removed )
+		{
+			auto it = std::find_if( m_properties.begin()
+				, m_properties.end()
+				, [&rem]( PropertiesPtr const & lookup )
+				{
+					return lookup->component->getType() == rem->getType();
+				} );
+
+			if ( it != m_properties.end() )
+			{
+				( *it )->ownComponent = castor::ptrRefCast< castor3d::PassMapComponent >( rem );
+			}
 		}
 	}
 
