@@ -88,6 +88,7 @@ source_group( "Header Files\\Properties" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILE
 source_group( "Source Files\\Properties" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	Properties/Math/ColourProperties.cpp
 	Properties/Math/CubeBoxProperties.cpp
 	Properties/Math/MatrixProperties.cpp
 	Properties/Math/PointProperties.cpp
@@ -98,6 +99,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/Math/SphereBoxProperties.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
+	Properties/Math/ColourProperties.hpp
 	Properties/Math/CubeBoxProperties.hpp
 	Properties/Math/MatrixProperties.hpp
 	Properties/Math/MatrixProperties.inl
