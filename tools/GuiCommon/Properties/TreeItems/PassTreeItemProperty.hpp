@@ -12,9 +12,6 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.8.0
 	\~english
 	\brief		Geometry helper class to communicate between Scene objects or Materials lists and PropertiesContainer
 	\~french
@@ -24,6 +21,27 @@ namespace GuiCommon
 		: public TreeItemProperty
 		, private wxEvtHandler
 	{
+	public:
+		struct Properties
+		{
+			Properties( castor3d::PassComponentUPtr pownComponent = {}
+				, castor3d::PassComponentRPtr pcomponent = {}
+				, PropertyArray pproperties = {} )
+				: ownComponent{ std::move( pownComponent ) }
+				, component{ std::move( pcomponent ) }
+				, properties{ std::move( pproperties ) }
+
+			{
+			}
+
+			castor3d::PassComponentUPtr ownComponent;
+			castor3d::PassComponentRPtr component;
+			PropertyArray properties;
+		};
+
+		using PropertiesPtr = std::unique_ptr< Properties >;
+		using PropertiesArray = std::vector< PropertiesPtr >;
+
 	public:
 		/**
 		 *\~english
@@ -60,10 +78,14 @@ namespace GuiCommon
 		 */
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
+		void moveComponentsToPass( castor3d::PassComponentUPtr component );
+		void moveComponentsToProps( std::vector< castor3d::PassComponentUPtr > removed );
+
 	private:
 		castor3d::PassRPtr m_pass{};
 		castor3d::Scene & m_scene;
 		wxWindow * m_parent;
+		PropertiesArray m_components;
 	};
 }
 
