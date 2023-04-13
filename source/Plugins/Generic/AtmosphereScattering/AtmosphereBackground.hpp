@@ -95,102 +95,102 @@ namespace atmosphere_scattering
 		void loadAtmosphereVolume( uint32_t dimension );
 		void loadSkyView( castor::Point2ui const & dimensions );
 
-		bool hasScattering()const override
+		bool hasScattering()const noexcept override
 		{
 			return true;
 		}
 
-		bool isDepthSampled()const override
+		bool isDepthSampled()const noexcept override
 		{
 			return true;
 		}
 
-		void setSunNode( castor3d::SceneNode const & node )
+		void setSunNode( castor3d::SceneNode const & node )noexcept
 		{
 			m_sunNode = &node;
 		}
 
-		void setPlanetNode( castor3d::SceneNode const & node )
+		void setPlanetNode( castor3d::SceneNode const & node )noexcept
 		{
 			m_planetNode = &node;
 		}
 
-		auto getSunNode()const
+		auto getSunNode()const noexcept
 		{
 			return m_sunNode;
 		}
 
-		auto getPlanetNode()const
+		auto getPlanetNode()const noexcept
 		{
 			return m_planetNode;
 		}
 
-		void setAtmosphereCfg( AtmosphereScatteringConfig config )
+		void setAtmosphereCfg( AtmosphereScatteringConfig config )noexcept
 		{
 			m_atmosphereCfg = std::move( config );
 		}
 
-		auto & getAtmosphereCfg()const
+		auto & getAtmosphereCfg()const noexcept
 		{
 			return m_atmosphereCfg;
 		}
 
-		void setWeatherCfg( WeatherConfig config )
+		void setWeatherCfg( WeatherConfig config )noexcept
 		{
 			m_weatherCfg = std::move( config );
 		}
 
-		auto & getWeatherCfg()const
+		auto & getWeatherCfg()const noexcept
 		{
 			return m_weatherCfg;
 		}
 
-		void setCloudsCfg( CloudsConfig config )
+		void setCloudsCfg( CloudsConfig config )noexcept
 		{
 			m_cloudsCfg = std::move( config );
 		}
 
-		auto & getCloudsCfg()const
+		auto & getCloudsCfg()const noexcept
 		{
 			return m_cloudsCfg;
 		}
 
-		auto const & getTransmittance()const
+		auto const & getTransmittance()const noexcept
 		{
 			return m_transmittance;
 		}
 
-		auto const & getMultiScatter()const
+		auto const & getMultiScatter()const noexcept
 		{
 			return m_multiScatter;
 		}
 
-		auto const & getSkyViewResolution()const
+		auto const & getSkyViewResolution()const noexcept
 		{
 			return m_skyViewResolution;
 		}
 
-		auto const & getVolumeResolution()const
+		auto const & getVolumeResolution()const noexcept
 		{
 			return m_volumeResolution;
 		}
 
-		auto const & getWorleyResolution()const
+		auto const & getWorleyResolution()const noexcept
 		{
 			return m_worleyResolution;
 		}
 
-		auto const & getPerlinWorleyResolution()const
+		auto const & getPerlinWorleyResolution()const noexcept
 		{
 			return m_perlinWorleyResolution;
 		}
 
-		auto const & getCurlResolution()const
+		auto const & getCurlResolution()const noexcept
 		{
 			return m_curlResolution;
 		}
 
-		auto const & getWeatherResolution()const
+		auto const & getWeatherResolution()const noexcept
 		{
 			return m_weatherResolution;
 		}
@@ -250,6 +250,8 @@ namespace atmosphere_scattering
 				, crg::ImageViewId const & weather
 				, crg::ImageViewIdArray const & colour
 				, crg::ImageViewId const * depthObj
+				, castor3d::HdrConfigUbo const & hdrConfigUbo
+				, castor3d::SceneUbo const & sceneUbo
 				, AtmosphereScatteringUbo const & atmosphereUbo
 				, CloudsUbo const & cloudsUbo
 				, VkExtent2D const & size

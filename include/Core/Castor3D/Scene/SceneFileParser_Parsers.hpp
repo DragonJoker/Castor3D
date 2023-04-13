@@ -367,6 +367,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserAnimationEnd )
 
 	// Skybox parsers
+	CU_DeclareAttributeParser( parserSkyboxVisible )
 	CU_DeclareAttributeParser( parserSkyboxEqui )
 	CU_DeclareAttributeParser( parserSkyboxCross )
 	CU_DeclareAttributeParser( parserSkyboxLeft )

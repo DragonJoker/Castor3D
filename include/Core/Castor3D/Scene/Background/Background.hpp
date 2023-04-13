@@ -323,44 +323,48 @@ namespace castor3d
 		/**
 		*\~english
 		*name
+		*	Mutators.
+		*\~french
+		*name
+		*	Mutateurs.
+		*/
+		/**@{*/
+		void setVisible( bool v )noexcept
+		{
+			m_visible = v;
+			m_passIndex = v ? 0u : 1u;
+		}
+		/**@}*/
+		/**
+		*\~english
+		*name
 		*	Getters.
 		*\~french
 		*name
 		*	Accesseurs.
 		*/
 		/**@{*/
-		virtual bool isDepthSampled()const
+		virtual bool isDepthSampled()const noexcept
 		{
 			return false;
 		}
 
-		virtual bool hasScattering()const
+		virtual bool hasScattering()const noexcept
 		{
 			return false;
 		}
 
-		Scene const & getScene()const
+		Scene & getScene()const noexcept
 		{
 			return m_scene;
 		}
 
-		Scene & getScene()
-		{
-			return m_scene;
-		}
-
-		castor::String const & getType()const
+		castor::String const & getType()const noexcept
 		{
 			return m_type;
 		}
 
-		TextureLayout const & getTexture()const
-		{
-			CU_Require( m_texture );
-			return *m_texture;
-		}
-
-		TextureLayout & getTexture()
+		TextureLayout & getTexture()const noexcept
 		{
 			CU_Require( m_texture );
 			return *m_texture;
@@ -378,36 +382,46 @@ namespace castor3d
 			return m_texture->getDefaultView().getSampledView();
 		}
 
-		bool isHdr()const
+		bool isHdr()const noexcept
 		{
 			return m_hdr;
 		}
 
-		bool isSRGB()const
+		bool isSRGB()const noexcept
 		{
 			return m_srgb;
 		}
 
-		bool hasIbl()const
+		bool hasIbl()const noexcept
 		{
 			return m_ibl != nullptr;
 		}
 
-		bool isInitialised()const
+		bool isInitialised()const noexcept
 		{
 			return m_initialised;
 		}
 
-		IblTextures const & getIbl()const
+		bool isVisible()const noexcept
+		{
+			return m_visible;
+		}
+
+		IblTextures const & getIbl()const noexcept
 		{
 			CU_Require( m_ibl );
 			return *m_ibl;
 		}
 
-		Sampler const & getSampler()const
+		Sampler const & getSampler()const noexcept
 		{
 			CU_Require( m_sampler );
 			return *m_sampler;
+		}
+
+		uint32_t const & getPassIndex()const noexcept
+		{
+			return m_passIndex;
 		}
 		/**@}*/
 
@@ -439,6 +453,8 @@ namespace castor3d
 		SamplerObs m_sampler{};
 		std::unique_ptr< IblTextures > m_ibl;
 		bool m_hasIBLSupport;
+		bool m_visible{ true };
+		uint32_t m_passIndex{ 0u };
 	};
 }
 

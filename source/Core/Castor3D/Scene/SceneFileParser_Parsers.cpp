@@ -5990,6 +5990,25 @@ namespace castor3d
 	}
 	CU_EndAttributePop()
 
+	CU_ImplementAttributeParser( parserSkyboxVisible )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing parameter." ) );
+		}
+		else if ( !parsingContext.skybox )
+		{
+			CU_ParsingError( cuT( "No skybox initialised." ) );
+		}
+		else
+		{
+			parsingContext.skybox->setVisible( params[0]->get< bool >() );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserSkyboxEqui )
 	{
 		auto & parsingContext = getParserContext( context );

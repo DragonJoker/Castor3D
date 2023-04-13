@@ -7,6 +7,8 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
+#include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -36,10 +38,13 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getPixelProgram( VkExtent2D const & renderSize )
+		static castor3d::ShaderPtr getPixelProgram( VkExtent2D const & renderSize
+			, bool isVisible )
 		{
 			sdw::FragmentWriter writer;
 
+			C3D_Scene( writer, AtmosphereBackgroundPass::eScene, 0u );
+			C3D_HdrConfig( writer, AtmosphereBackgroundPass::eHdrConfig, 0u );
 			auto cloudsMap = writer.declCombinedImg< sdw::CombinedImage2DRgba32 >( "cloudsMap"
 				, uint32_t( AtmosphereBackgroundPass::eClouds )
 				, 0u );
@@ -52,9 +57,16 @@ namespace atmosphere_scattering
 				, [&]( sdw::FragmentIn in
 					, sdw::FragmentOut out )
 				{
-					auto targetSize = writer.declLocale( "targetSize"
-						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
-					outColour = cloudsMap.sample( in.fragCoord.xy() / targetSize );
+					if ( isVisible )
+					{
+						auto targetSize = writer.declLocale( "targetSize"
+							, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
+						outColour = cloudsMap.sample( in.fragCoord.xy() / targetSize );
+					}
+					else
+					{
+						outColour = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
+					}
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -79,12 +91,17 @@ namespace atmosphere_scattering
 		, crg::RenderQuad{ pass
 			, context
 			, graph
-			, crg::ru::Config{ 1u, true }
+			, crg::ru::Config{ 2u, true }
 			, crg::rq::Config{}
 				.isEnabled( IsEnabledCallback( [this](){ return castor3d::BackgroundPassBase::doIsEnabled(); } ) )
 				.renderSize( size )
 				.depthStencilState( ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } )
-				.program( doInitialiseShader( device, background, size ) ) }
+				.passIndex( &background.getPassIndex() )
+				.programCreator( { 2u
+					, [size, this, &background, &device]( uint32_t programIndex )
+					{
+						return crg::makeVkArray< VkPipelineShaderStageCreateInfo >( doInitialiseShader( device, background, size, programIndex ) );
+					} } ) }
 	{
 	}
 
@@ -97,14 +114,15 @@ namespace atmosphere_scattering
 
 	crg::VkPipelineShaderStageCreateInfoArray AtmosphereBackgroundPass::doInitialiseShader( castor3d::RenderDevice const & device
 		, AtmosphereBackground & background
-		, VkExtent2D const & size )
+		, VkExtent2D const & size
+		, uint32_t passIndex )
 	{
 		castor::DataHolderT< Shaders >::getData().vertexShader = { VK_SHADER_STAGE_VERTEX_BIT
 			, atmos::Name
 			, atmos::getVertexProgram() };
 		castor::DataHolderT< Shaders >::getData().pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT
 			, atmos::Name
-			, atmos::getPixelProgram( size ) };
+			, atmos::getPixelProgram( size, passIndex == 0u ) };
 		castor::DataHolderT< Shaders >::getData().stages =
 		{
 			makeShaderState( device, castor::DataHolderT< Shaders >::getData().vertexShader ),

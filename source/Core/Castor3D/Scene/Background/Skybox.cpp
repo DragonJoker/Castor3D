@@ -59,43 +59,35 @@ namespace castor
 			auto result = true;
 			file << ( cuT( "\n" ) + tabs() + cuT( "//Skybox\n" ) );
 
-			if ( !background.getEquiTexturePath().empty()
-				&& castor::File::fileExists( background.getEquiTexturePath() ) )
+			if ( auto block{ beginBlock( file, "skybox" ) } )
 			{
-				if ( auto block{ beginBlock( file, "skybox" ) } )
-				{
-					Path subfolder{ cuT( "Textures" ) };
-					String relative = copyFile( background.getEquiTexturePath()
-						, m_folder
-						, subfolder );
-					string::replace( relative, cuT( "\\" ), cuT( "/" ) );
-					auto & size = background.getEquiSize();
-					file << ( tabs() + cuT( "equirectangular" )
-						+ cuT( " \"" ) + relative + cuT( "\" " )
-						+ string::toString( size.getWidth() ) + cuT( "\n" ) );
-					castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
-				}
-			}
-			else if ( !background.getCrossTexturePath().empty()
-				&& castor::File::fileExists( background.getCrossTexturePath() ) )
-			{
-				result = false;
+				result = writeOpt( file, cuT( "visible" ), background.isVisible(), true );
 
-				if ( auto block{ beginBlock( file, "skybox" ) } )
+				if ( !background.getEquiTexturePath().empty()
+					&& castor::File::fileExists( background.getEquiTexturePath() ) )
+				{
+						Path subfolder{ cuT( "Textures" ) };
+						String relative = copyFile( background.getEquiTexturePath()
+							, m_folder
+							, subfolder );
+						string::replace( relative, cuT( "\\" ), cuT( "/" ) );
+						auto & size = background.getEquiSize();
+						file << ( tabs() + cuT( "equirectangular" )
+							+ cuT( " \"" ) + relative + cuT( "\" " )
+							+ string::toString( size.getWidth() ) + cuT( "\n" ) );
+						castor::TextWriter< SkyboxBackground >::checkError( result, "Skybox equi-texture" );
+				}
+				else if ( !background.getCrossTexturePath().empty()
+					&& castor::File::fileExists( background.getCrossTexturePath() ) )
 				{
 					result = writeFile( file, cuT( "cross" ), background.getCrossTexturePath(), m_folder, cuT( "Textures" ) );
 				}
-			}
-			else if ( castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 0u ) ).toString() } )
-				&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 1u ) ).toString() } )
-				&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 2u ) ).toString() } )
-				&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 3u ) ).toString() } )
-				&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 4u ) ).toString() } )
-				&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 5u ) ).toString() } ) )
-			{
-				result = false;
-
-				if ( auto block{ beginBlock( file, "skybox" ) } )
+				else if ( castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 0u ) ).toString() } )
+					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 1u ) ).toString() } )
+					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 2u ) ).toString() } )
+					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 3u ) ).toString() } )
+					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 4u ) ).toString() } )
+					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 5u ) ).toString() } ) )
 				{
 					result = true;
 

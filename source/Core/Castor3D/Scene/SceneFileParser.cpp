@@ -524,6 +524,7 @@ namespace castor3d
 		static void addSkyboxParsers( castor::AttributeParsers & result )
 		{
 			using namespace castor;
+			addParser( result, uint32_t( CSCNSection::eSkybox ), cuT( "visible" ), parserSkyboxVisible, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( result, uint32_t( CSCNSection::eSkybox ), cuT( "equirectangular" ), parserSkyboxEqui, { makeParameter< ParameterType::ePath >(), makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eSkybox ), cuT( "cross" ), parserSkyboxCross, { makeParameter< ParameterType::ePath >() } );
 			addParser( result, uint32_t( CSCNSection::eSkybox ), cuT( "left" ), parserSkyboxLeft, { makeParameter< ParameterType::ePath >() } );
