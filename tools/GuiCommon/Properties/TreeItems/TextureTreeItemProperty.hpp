@@ -11,9 +11,6 @@ See LICENSE file in root folder
 namespace GuiCommon
 {
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		24/08/2015
-	\version	0.8.0
 	\~english
 	\brief		Texture helper class to communicate between Scene objects or Materials lists and PropertiesContainer
 	\~french
@@ -23,12 +20,36 @@ namespace GuiCommon
 		: public TreeItemProperty
 	{
 	public:
-		struct PropertyPair
+		struct Properties
 		{
-			wxPGProperty * isMap;
-			wxPGProperty * components;
-			castor3d::TextureFlagConfiguration & configuration;
+			Properties( castor3d::PassComponentTextureFlag pflag
+				, castor3d::TextureFlagConfiguration pconfiguration
+				, castor3d::PassMapComponentUPtr pownComponent = {}
+				, castor3d::PassMapComponentRPtr pcomponent = {}
+				, PropertyArray pproperties = {} )
+				: flag{ std::move( pflag ) }
+				, configuration{ std::move( pconfiguration ) }
+				, ownComponent{ std::move( pownComponent ) }
+				, component{ std::move( pcomponent ) }
+				, properties{ std::move( pproperties ) }
+
+			{
+			}
+
+			wxPGProperty * isEnabled{};
+			wxPGProperty * components{};
+			castor3d::PassComponentTextureFlag flag;
+			castor3d::TextureFlagConfiguration configuration;
+			castor3d::PassMapComponentUPtr ownComponent;
+			castor3d::PassMapComponentRPtr component;
+			PropertyArray properties;
+			wxArrayString choices;
+			uint32_t componentsCount{};
+			bool isSetting{};
 		};
+
+		using PropertiesPtr = std::unique_ptr< Properties >;
+		using PropertiesArray = std::vector< PropertiesPtr >;
 
 	public:
 		/**
@@ -51,11 +72,8 @@ namespace GuiCommon
 		 */
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
-	private:
-		void onChange( wxVariant const & var
-			, castor3d::PassComponentTextureFlag flag
-			, uint32_t componentsCount );
-		void onImageChange( wxVariant const & var );
+		void moveComponentsToPass( castor3d::PassComponentUPtr component );
+		void moveComponentsToProps( std::vector< castor3d::PassComponentUPtr > removed );
 
 	private:
 		castor3d::Pass & m_pass;
@@ -64,7 +82,7 @@ namespace GuiCommon
 		castor::Point2f m_translate;
 		castor::Angle m_rotate;
 		castor::Point2f m_scale;
-		std::map< castor3d::PassComponentTextureFlag, PropertyPair > m_properties;
+		PropertiesArray m_properties;
 		castor::Path m_path;
 	};
 }
