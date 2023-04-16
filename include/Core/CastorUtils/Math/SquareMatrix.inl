@@ -435,6 +435,13 @@ namespace castor
 
 	template< typename T, uint32_t Count >
 	template< typename Type >
+	inline SquareMatrix< T, Count >::SquareMatrix( std::array< Type, Count * Count > const & rhs )
+		: matrix_type( rhs )
+	{
+	}
+
+	template< typename T, uint32_t Count >
+	template< typename Type >
 	inline SquareMatrix< T, Count >::SquareMatrix( Type const * rhs )
 		: matrix_type( rhs )
 	{

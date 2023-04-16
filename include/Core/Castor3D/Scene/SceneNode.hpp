@@ -274,6 +274,10 @@ namespace castor3d
 		 *\name Other getters.
 		**/
 		/**@{*/
+		C3D_API SceneNodeMap const & getChildren()const;
+		C3D_API SceneNodeRPtr getChild( castor::String const & name )const;
+		C3D_API MovableArray const & getObjects()const;
+
 		C3D_API bool isVisible()const;
 
 		bool isDisplayable()const
@@ -303,10 +307,8 @@ namespace castor3d
 		C3D_API void setOrientation( castor::Quaternion const & orientation );
 		C3D_API void setPosition( castor::Point3f const & position );
 		C3D_API void setScale( castor::Point3f const & scale );
+		C3D_API void setTransformationMatrix( castor::Matrix4x4f const & transform );
 		C3D_API void setVisible( bool visible );
-		C3D_API SceneNodeMap const & getChildren()const;
-		C3D_API SceneNodeRPtr getChild( castor::String const & name )const;
-		C3D_API MovableArray const & getObjects()const;
 
 		bool isStatic()const
 		{
@@ -354,6 +356,7 @@ namespace castor3d
 		castor::Quaternion m_orientation;
 		castor::Point3f m_position;
 		castor::Point3f m_scale;
+		bool m_mtxSet{ false };
 		castor::Matrix4x4f m_transform{ 1.0f };
 		bool m_mtxChanged{ true };
 		castor::Matrix4x4f m_derivedTransform{ 1.0f };

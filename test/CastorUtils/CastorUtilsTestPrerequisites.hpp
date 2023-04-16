@@ -92,6 +92,24 @@ namespace Testing
 			&& std::abs( a[2][2] - b[2][2] ) < epsilon;
 	}
 
+	template< typename T, size_t C >
+	inline bool compare( castor::Point< T, C > const & a, castor::Point< T, C > const & b )
+	{
+		float epsilon = 0.001f;
+		return std::abs( a[0] - b[0] ) < epsilon
+			&& std::abs( a[1] - b[1] ) < epsilon
+			&& std::abs( a[2] - b[2] ) < epsilon;
+	}
+
+	template< typename T, size_t C >
+	inline bool compare( castor::Coords< T, C > const & a, castor::Coords< T, C > const & b )
+	{
+		float epsilon = 0.001f;
+		return std::abs( a[0] - b[0] ) < epsilon
+			&& std::abs( a[1] - b[1] ) < epsilon
+			&& std::abs( a[2] - b[2] ) < epsilon;
+	}
+
 	//*********************************************************************************************
 
 	template< typename ValueT, uint32_t ColumnsT, uint32_t RowsT >
@@ -137,7 +155,7 @@ namespace Testing
 			return stream.str();
 		}
 	};
-	
+
 	template< typename ValueT, uint32_t CountT >
 	struct Stringifier< castor::Point< ValueT, CountT > >
 	{
@@ -147,6 +165,23 @@ namespace Testing
 			stream.precision( 10 );
 
 			for ( uint32_t i = 0; i < CountT; i++ )
+			{
+				stream << std::setw( 15 ) << std::right << value[i];
+			}
+
+			return stream.str();
+		}
+	};
+
+	template< typename ValueT >
+	struct Stringifier< castor::QuaternionT< ValueT > >
+	{
+		static std::string get( castor::QuaternionT< ValueT > const & value )
+		{
+			std::stringstream stream;
+			stream.precision( 10 );
+
+			for ( uint32_t i = 0; i < 4u; i++ )
 			{
 				stream << std::setw( 15 ) << std::right << value[i];
 			}

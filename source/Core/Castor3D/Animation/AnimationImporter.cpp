@@ -64,9 +64,9 @@ namespace castor3d
 			float y = std::copysign( 1.0f, scale->y );
 			float z = std::copysign( 1.0f, scale->z );
 
-			result.quat.x = y * z * result.quat.x;
-			result.quat.y = x * z * result.quat.y;
-			result.quat.z = x * y * result.quat.z;
+			result->x = y * z * result->x;
+			result->y = x * z * result->y;
+			result->z = x * y * result->z;
 
 			result *= rotation;
 		}

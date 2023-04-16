@@ -16,15 +16,15 @@ namespace castor
 		Matrix4x4< T > & setRotate( Matrix4x4< T > & matrix
 			, QuaternionT< U > const & orientation )
 		{
-			auto const qxx( orientation.quat.x * orientation.quat.x );
-			auto const qyy( orientation.quat.y * orientation.quat.y );
-			auto const qzz( orientation.quat.z * orientation.quat.z );
-			auto const qxz( orientation.quat.x * orientation.quat.z );
-			auto const qxy( orientation.quat.x * orientation.quat.y );
-			auto const qyz( orientation.quat.y * orientation.quat.z );
-			auto const qwx( orientation.quat.w * orientation.quat.x );
-			auto const qwy( orientation.quat.w * orientation.quat.y );
-			auto const qwz( orientation.quat.w * orientation.quat.z );
+			auto const qxx( orientation->x * orientation->x );
+			auto const qyy( orientation->y * orientation->y );
+			auto const qzz( orientation->z * orientation->z );
+			auto const qxz( orientation->x * orientation->z );
+			auto const qxy( orientation->x * orientation->y );
+			auto const qyz( orientation->y * orientation->z );
+			auto const qwx( orientation->w * orientation->x );
+			auto const qwy( orientation->w * orientation->y );
+			auto const qwz( orientation->w * orientation->z );
 
 			matrix[0][0] = T( 1 - 2 * ( qyy + qzz ) );
 			matrix[0][1] = T( 2 * ( qxy + qwz ) );
@@ -53,43 +53,43 @@ namespace castor
 		void getRotate( Matrix4x4< T > const & matrix
 			, QuaternionT< U > & orientation )
 		{
-			float t = matrix[0][0] + matrix[1][1] + matrix[2][2];
+			auto t = double( matrix[0][0] + matrix[1][1] + matrix[2][2] );
 
 			// large enough
-			if ( t > 0.0f )
+			if ( t > 0.0 )
 			{
-				float s = std::sqrt( 1 + t ) * 2.0f;
-				orientation.quat.x = ( matrix[1][2] - matrix[2][1] ) / s;
-				orientation.quat.y = ( matrix[2][0] - matrix[0][2] ) / s;
-				orientation.quat.z = ( matrix[0][1] - matrix[1][0] ) / s;
-				orientation.quat.w = 0.25f * s;
+				double s = std::sqrt( 1 + t ) * 2.0;
+				orientation->x = U( ( matrix[1][2] - matrix[2][1] ) / s );
+				orientation->y = U( ( matrix[2][0] - matrix[0][2] ) / s );
+				orientation->z = U( ( matrix[0][1] - matrix[1][0] ) / s );
+				orientation->w = U( 0.25 * s );
 			} // else we have to check several cases
 			else if ( matrix[0][0] > matrix[1][1] && matrix[0][0] > matrix[2][2] )
 			{
 				// Column 0:
-				float s = std::sqrt( 1.0f + matrix[0][0] - matrix[1][1] - matrix[2][2] ) * 2.0f;
-				orientation.quat.x = 0.25f * s;
-				orientation.quat.y = ( matrix[0][1] + matrix[1][0] ) / s;
-				orientation.quat.z = ( matrix[2][0] + matrix[0][2] ) / s;
-				orientation.quat.w = ( matrix[1][2] - matrix[2][1] ) / s;
+				double s = std::sqrt( double( 1.0 + matrix[0][0] - matrix[1][1] - matrix[2][2] ) ) * 2.0;
+				orientation->x = U( 0.25 * s );
+				orientation->y = U( ( matrix[0][1] + matrix[1][0] ) / s );
+				orientation->z = U( ( matrix[2][0] + matrix[0][2] ) / s );
+				orientation->w = U( ( matrix[1][2] - matrix[2][1] ) / s );
 			}
 			else if ( matrix[1][1] > matrix[2][2] )
 			{
 				// Column 1:
-				float s = std::sqrt( 1.0f + matrix[1][1] - matrix[0][0] - matrix[2][2] ) * 2.0f;
-				orientation.quat.x = ( matrix[0][1] + matrix[1][0] ) / s;
-				orientation.quat.y = 0.25f * s;
-				orientation.quat.z = ( matrix[1][2] + matrix[2][1] ) / s;
-				orientation.quat.w = ( matrix[2][0] - matrix[0][2] ) / s;
+				double s = std::sqrt( double( 1.0 + matrix[1][1] - matrix[0][0] - matrix[2][2] ) ) * 2.0;
+				orientation->x = U( ( matrix[0][1] + matrix[1][0] ) / s );
+				orientation->y = U( 0.25 * s );
+				orientation->z = U( ( matrix[1][2] + matrix[2][1] ) / s );
+				orientation->w = U( ( matrix[2][0] - matrix[0][2] ) / s );
 			}
 			else
 			{
 				// Column 2:
-				float s = std::sqrt( 1.0f + matrix[2][2] - matrix[0][0] - matrix[1][1] ) * 2.0f;
-				orientation.quat.x = ( matrix[2][0] + matrix[0][2] ) / s;
-				orientation.quat.y = ( matrix[1][2] + matrix[2][1] ) / s;
-				orientation.quat.z = 0.25f * s;
-				orientation.quat.w = ( matrix[0][1] - matrix[1][0] ) / s;
+				double s = std::sqrt( double( 1.0 + matrix[2][2] - matrix[0][0] - matrix[1][1] ) ) * 2.0;
+				orientation->x = U( ( matrix[2][0] + matrix[0][2] ) / s );
+				orientation->y = U( ( matrix[1][2] + matrix[2][1] ) / s );
+				orientation->z = U( 0.25 * s );
+				orientation->w = U( ( matrix[0][1] - matrix[1][0] ) / s );
 			}
 
 			point::normalise( orientation );

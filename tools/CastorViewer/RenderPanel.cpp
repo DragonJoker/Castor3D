@@ -4,6 +4,8 @@
 #include "CastorViewer/RotateNodeEvent.hpp"
 #include "CastorViewer/TranslateNodeEvent.hpp"
 
+#include <GuiCommon/System/SpaceMouseController.hpp>
+
 #include <wx/display.h>
 
 #include <Castor3D/Cache/ObjectCache.hpp>
@@ -158,10 +160,14 @@ namespace CastorViewer
 					}
 				}
 			} );
+		m_3dController = GuiCommon::I3DController::create( wxGetApp().getInternalName()
+			, listener->getFrameListener() );
 	}
 
 	RenderPanel::~RenderPanel()
 	{
+		m_3dController.reset();
+
 		for ( size_t i = 1; i <= size_t( eTIMER_ID_MOVEMENT ); i++ )
 		{
 			delete m_timers[i];
@@ -178,6 +184,13 @@ namespace CastorViewer
 		m_selectedSubmesh = {};
 		m_selectedGeometry = {};
 		m_currentState = nullptr;
+
+		if ( m_3dController )
+		{
+			m_3dController->setGeometry( nullptr );
+			m_3dController->setCamera( nullptr );
+		}
+
 		m_nodesStates.clear();
 		m_camera = {};
 		m_scene = {};
@@ -193,14 +206,12 @@ namespace CastorViewer
 	{
 		m_listener = m_renderWindow->getListener();
 		m_renderWindow->initialise( *target );
-		auto scene = target->getScene();
 
-		if ( scene )
+		if ( auto scene = target->getScene() )
 		{
 			m_cubeManager = std::make_unique< GuiCommon::CubeBoxManager >( *scene );
-			auto camera = target->getCamera();
 
-			if ( camera )
+			if ( auto camera = target->getCamera() )
 			{
 				if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 				{
@@ -211,12 +222,15 @@ namespace CastorViewer
 					m_lightsNode = scene->findSceneNode( cuT( "LightNode" ) );
 				}
 
-				auto cameraNode = camera->getParent();
-
-				if ( cameraNode )
+				if ( auto cameraNode = camera->getParent() )
 				{
 					m_currentNode = cameraNode;
 					m_currentState = &doAddNodeState( m_currentNode, true );
+
+					if ( m_3dController )
+					{
+						m_3dController->setCamera( camera );
+					}
 				}
 
 				m_renderWindow->addPickingScene( *scene );
@@ -231,11 +245,18 @@ namespace CastorViewer
 	void RenderPanel::doResetTimers()
 	{
 		doStopTimer( eTIMER_ID_COUNT );
-		m_camSpeed = panel::DEF_CAM_SPEED;
+		m_camSpeed = castor::makeRangedValue( panel::DEF_CAM_SPEED
+			, panel::MIN_CAM_SPEED
+			, panel::MAX_CAM_SPEED );
 		m_x = 0.0f;
 		m_y = 0.0f;
 		m_oldX = 0.0f;
 		m_oldY = 0.0f;
+
+		if ( m_3dController )
+		{
+			m_3dController->setSpeedFactor( doGetRealSpeed() );
+		}
 	}
 
 	void RenderPanel::doStartMovement()
@@ -276,13 +297,27 @@ namespace CastorViewer
 		}
 	}
 
+	float RenderPanel::doGetRealSpeed()const noexcept
+	{
+		return m_camSpeed.value()
+			* ( m_extraSpeed
+				? 10.0f
+				: 1.0f );
+	}
+
 	void RenderPanel::doResetNode()
 	{
 		doResetTimers();
 
 		if ( m_currentState )
 		{
-			m_currentState->reset( panel::DEF_CAM_SPEED );
+			m_currentState->reset( doGetRealSpeed() );
+
+			if ( m_currentState->isCamera() && m_3dController )
+			{
+				m_3dController->reset();
+				m_3dController->setSpeedFactor( doGetRealSpeed() );
+			}
 		}
 	}
 
@@ -344,6 +379,11 @@ namespace CastorViewer
 			m_currentNode = camera->getParent();
 			m_currentState = &doAddNodeState( m_currentNode, true );
 			m_renderWindow->setCamera( *m_camera );
+
+			if ( m_3dController )
+			{
+				m_3dController->setCamera( m_camera );
+			}
 		}
 	}
 
@@ -447,6 +487,11 @@ namespace CastorViewer
 		}
 
 		m_currentState = &doAddNodeState( m_currentNode, false );
+
+		if ( m_3dController )
+		{
+			m_3dController->setGeometry( m_selectedGeometry );
+		}
 	}
 
 	GuiCommon::NodeState & RenderPanel::doAddNodeState( castor3d::SceneNodeRPtr node
@@ -460,15 +505,22 @@ namespace CastorViewer
 				, std::make_unique< GuiCommon::NodeState >( *m_listener, node, camera ) ).first;
 		}
 
-		it->second->setMaxSpeed( m_camSpeed.value() );
+		doUpdateSpeed();
 		return *it->second;
 	}
 
-	void RenderPanel::doUpdateMaxSpeed( float factor )
+	void RenderPanel::doUpdateSpeed( float factor )
 	{
-		for ( auto & nodeState : m_nodesStates )
+		m_camSpeed *= factor;
+
+		if ( m_currentState )
 		{
-			nodeState.second->multMaxSpeed( factor );
+			m_currentState->setMaxSpeed( doGetRealSpeed() );
+		}
+
+		if ( m_3dController )
+		{
+			m_3dController->setSpeedFactor( doGetRealSpeed() );
 		}
 	}
 
@@ -512,7 +564,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			auto speed = doGetRealSpeed();
 			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, speed } );
 		}
 
@@ -523,7 +575,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			auto speed = doGetRealSpeed();
 			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, 0.0f, -speed } );
 		}
 
@@ -534,7 +586,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			auto speed = doGetRealSpeed();
 			m_currentState->addScalarVelocity( castor::Point3f{ speed, 0.0f, 0.0f } );
 		}
 
@@ -545,7 +597,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			auto speed = doGetRealSpeed();
 			m_currentState->addScalarVelocity( castor::Point3f{ -speed, 0.0f, 0.0f } );
 		}
 
@@ -556,7 +608,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			auto speed = doGetRealSpeed();
 			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, speed, 0.0f } );
 		}
 
@@ -567,7 +619,7 @@ namespace CastorViewer
 	{
 		if ( m_currentState )
 		{
-			auto speed = m_camSpeed.value() * ( m_extraSpeed ? 10.0f : 1.0f );
+			auto speed = doGetRealSpeed();
 			m_currentState->addScalarVelocity( castor::Point3f{ 0.0f, -speed, 0.0f } );
 		}
 
@@ -678,8 +730,11 @@ namespace CastorViewer
 				break;
 
 			case 'E':
-				m_extraSpeed = true;
-				doUpdateMaxSpeed( 10.0f );
+				if ( !m_extraSpeed )
+				{
+					m_extraSpeed = true;
+					doUpdateSpeed();
+				}
 				break;
 
 			case 'L':
@@ -757,8 +812,11 @@ namespace CastorViewer
 				break;
 
 			case 'E':
-				m_extraSpeed = false;
-				doUpdateMaxSpeed( 0.1f );
+				if ( m_extraSpeed )
+				{
+					m_extraSpeed = false;
+					doUpdateSpeed();
+				}
 				break;
 
 			case WXK_ESCAPE:
@@ -777,6 +835,12 @@ namespace CastorViewer
 				{
 					m_currentNode = camera->getParent();
 					m_currentState = &doAddNodeState( m_currentNode, false );
+
+					if ( m_3dController )
+					{
+						m_3dController->setCamera( camera );
+						m_3dController->setSpeedFactor( m_currentState->getMaxSpeed() );
+					}
 				}
 				break;
 			}
@@ -1007,16 +1071,11 @@ namespace CastorViewer
 		{
 			if ( wheelRotation < 0 )
 			{
-				m_camSpeed *= panel::CAM_SPEED_INC;
+				doUpdateSpeed( panel::CAM_SPEED_INC );
 			}
 			else
 			{
-				m_camSpeed /= panel::CAM_SPEED_INC;
-			}
-
-			if ( m_currentState )
-			{
-				m_currentState->setMaxSpeed( m_camSpeed.value() );
+				doUpdateSpeed( 1.0f / panel::CAM_SPEED_INC );
 			}
 		}
 

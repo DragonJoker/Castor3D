@@ -48,11 +48,6 @@ namespace GuiCommon
 		void setMaxSpeed( float speed );
 		/**
 		*\brief
-		*	Multiplie la vitesse maximale par le facteur donné.
-		*/
-		void multMaxSpeed( float factor );
-		/**
-		*\brief
 		*	Met à jour l'angle et le zoom en fonction des vitesses.
 		*\return
 		 * 	\p true s'il y a eu du mouvement.
@@ -101,6 +96,16 @@ namespace GuiCommon
 		*/
 		void yaw( castor::Angle const & value )noexcept;
 
+		bool isCamera()const noexcept
+		{
+			return m_isCamera;
+		}
+
+		float getMaxSpeed()const noexcept
+		{
+			return m_scalarVelocityX.range().getMax();
+		}
+
 	private:
 		//! Le listener qui recevra les évènements de déplacement / rotation.
 		castor3d::FrameListener & m_listener;
@@ -146,6 +151,8 @@ namespace GuiCommon
 			0.0f,
 			castor::makeRange( -MaxScalarSpeed, MaxScalarSpeed )
 		};
+		//! Si l'état est pour le noeud d'une caméra.
+		bool m_isCamera{};
 	};
 	using NodeStatePtr = std::unique_ptr< NodeState >;
 }

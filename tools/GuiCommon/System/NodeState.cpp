@@ -47,6 +47,7 @@ namespace GuiCommon
 			camera ? castor::Angle{} : m_originalOrientation.getRoll(),
 		}
 		, m_angles{ m_originalAngles }
+		, m_isCamera{ camera }
 	{
 	}
 
@@ -73,16 +74,6 @@ namespace GuiCommon
 		m_scalarVelocityX.updateRange( castor::makeRange( -speed, speed ) );
 		m_scalarVelocityY.updateRange( castor::makeRange( -speed, speed ) );
 		m_scalarVelocityZ.updateRange( castor::makeRange( -speed, speed ) );
-	}
-
-	void NodeState::multMaxSpeed( float factor )
-	{
-		auto range = m_scalarVelocityX.range();
-		m_scalarVelocityX.updateRange( castor::makeRange( range.getMin() * factor, range.getMax() * factor ) );
-		range = m_scalarVelocityY.range();
-		m_scalarVelocityY.updateRange( castor::makeRange( range.getMin() * factor, range.getMax() * factor ) );
-		range = m_scalarVelocityZ.range();
-		m_scalarVelocityZ.updateRange( castor::makeRange( range.getMin() * factor, range.getMax() * factor ) );
 	}
 
 	bool NodeState::update()

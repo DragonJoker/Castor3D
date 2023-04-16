@@ -70,9 +70,19 @@ namespace castor3d
 		points[size_t( FrustumPlane::eRight )] = w - x;
 		points[size_t( FrustumPlane::eTop )] = w - y;
 		points[size_t( FrustumPlane::eBottom )] = w + y;
+		castor::Point3f min{ points[0] };
+		castor::Point3f max{ points[0] };
 
 		for ( auto & point : points )
 		{
+			min->x = std::min( point->x, min->x );
+			min->y = std::min( point->y, min->y );
+			min->z = std::min( point->z, min->z );
+
+			max->x = std::max( point->x, max->x );
+			max->y = std::max( point->y, max->y );
+			max->z = std::max( point->z, max->z );
+
 			auto invLen = float( 1.0f / sqrt( point[0] * point[0] + point[1] * point[1] + point[2] * point[2] ) );
 			point[0] *= invLen;
 			point[1] *= invLen;
@@ -80,6 +90,7 @@ namespace castor3d
 			point[3] *= invLen;
 		}
 
+		m_boundingBox.load( min, max );
 		m_planes[size_t( FrustumPlane::eNear )].set( castor::Point3f{ points[size_t( FrustumPlane::eNear )] }, points[size_t( FrustumPlane::eNear )][3] );
 		m_planes[size_t( FrustumPlane::eFar )].set( castor::Point3f{ points[size_t( FrustumPlane::eFar )] }, points[size_t( FrustumPlane::eFar )][3] );
 		m_planes[size_t( FrustumPlane::eLeft )].set( castor::Point3f{ points[size_t( FrustumPlane::eLeft )] }, points[size_t( FrustumPlane::eLeft )][3] );
