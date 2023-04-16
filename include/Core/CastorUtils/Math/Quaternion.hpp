@@ -4,16 +4,16 @@ See LICENSE file in root folder
 #ifndef ___CASTOR_QUATERNION_H___
 #define ___CASTOR_QUATERNION_H___
 
+#include "CastorUtils/Design/DataHolder.hpp"
 #include "CastorUtils/Math/Angle.hpp"
 #include "CastorUtils/Math/Point.hpp"
 #include "CastorUtils/Math/SquareMatrix.hpp"
 
 namespace castor
 {
+	template< typename T >
+	using QuaternionDataT = PointData< T, 4u >;
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.1.0.0
-	\date		09/02/2010
 	\~english
 	\brief		Quaternion representation class
 	\remark		A quaternion is an axis and an angle, it's one of the best ways to represent orientations and rotations
@@ -23,10 +23,12 @@ namespace castor
 	*/
 	template< typename T >
 	class QuaternionT
-		: public Coords4< T >
+		: public DataHolderT< QuaternionDataT< T > >
+		, public Coords4< T >
 	{
 	private:
-		typedef Coords4< T > BaseType;
+		using DataHolder = DataHolderT< QuaternionDataT< T > >;
+		using BaseType = Coords4< T >;
 
 	private:
 		explicit QuaternionT( NoInit const & );
@@ -505,24 +507,15 @@ namespace castor
 		 */
 		inline static QuaternionT< T > null();
 
-	public:
-#pragma warning( push )
-#pragma warning( disable: 4068 )
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wnested-anon-types"
-		union
+		inline PointData< T, 4u > * operator->()
 		{
-			struct
-			{
-				T x;
-				T y;
-				T z;
-				T w;
-			} quat;
-			T buffer[4];
-		};
-#pragma clang diagnostic pop
-#pragma warning( pop )
+			return &DataHolder::getData();
+		}
+
+		inline PointData< T, 4u > const * operator->()const
+		{
+			return &DataHolder::getData();
+		}
 	};
 	/**
 	 *\~english
@@ -649,7 +642,7 @@ namespace castor
 	template< typename CharT, typename T >
 	inline std::basic_ostream< CharT > & operator<<( std::basic_ostream< CharT > & stream, QuaternionT< T > const & quat )
 	{
-		stream << quat.quat.x << ", " << quat.quat.y << ", " << quat.quat.z << ", " << quat.quat.w;
+		stream << quat->x << ", " << quat->y << ", " << quat->z << ", " << quat->w;
 		return stream;
 	}
 }

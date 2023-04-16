@@ -194,6 +194,7 @@ namespace castor3d
 			m_orientation *= orientation;
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
+			m_mtxSet = false;
 			m_scene.markDirty( *this );
 		}
 	}
@@ -207,6 +208,7 @@ namespace castor3d
 			m_position += position;
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
+			m_mtxSet = false;
 			m_scene.markDirty( *this );
 		}
 	}
@@ -220,6 +222,7 @@ namespace castor3d
 			m_scale *= scale;
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
+			m_mtxSet = false;
 			m_scene.markDirty( *this );
 		}
 	}
@@ -255,6 +258,7 @@ namespace castor3d
 			m_orientation = orientation;
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
+			m_mtxSet = false;
 			m_scene.markDirty( *this );
 		}
 	}
@@ -268,6 +272,7 @@ namespace castor3d
 			m_position = position;
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
+			m_mtxSet = false;
 			m_scene.markDirty( *this );
 		}
 	}
@@ -281,6 +286,25 @@ namespace castor3d
 			m_scale = scale;
 			doUpdateChildsDerivedTransform();
 			m_mtxChanged = true;
+			m_mtxSet = false;
+			m_scene.markDirty( *this );
+		}
+	}
+
+	void SceneNode::setTransformationMatrix( castor::Matrix4x4f const & transform )
+	{
+		CU_Require( !m_static );
+
+		if ( !m_static )
+		{
+			m_transform = transform;
+			doUpdateChildsDerivedTransform();
+			castor::matrix::decompose( m_transform
+				, m_position
+				, m_scale
+				, m_orientation );
+			m_mtxChanged = true;
+			m_mtxSet = true;
 			m_scene.markDirty( *this );
 		}
 	}
@@ -371,7 +395,12 @@ namespace castor3d
 		if ( m_mtxChanged )
 		{
 			m_derivedMtxChanged = true;
-			castor::matrix::setTransform( m_transform, m_position, m_scale, m_orientation );
+
+			if ( !m_mtxSet )
+			{
+				castor::matrix::setTransform( m_transform, m_position, m_scale, m_orientation );
+			}
+
 			m_mtxChanged = false;
 		}
 

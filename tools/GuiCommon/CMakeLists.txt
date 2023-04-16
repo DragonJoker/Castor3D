@@ -16,6 +16,8 @@ if ( CASTOR_TOOL_CASTOR_VIEWER_RECORDS )
 	find_package( FFMPEG QUIET COMPONENTS avcodec avformat avutil swscale swresample )
 endif ()
 
+find_package( TDxWare_SDK CONFIG QUIET )
+
 set( Castor3DBinsDependencies
 	${Castor3DBinsDependencies}
 	castor::${PROJECT_NAME}
@@ -251,6 +253,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	System/Recorder.cpp
 	System/RendererSelector.cpp
 	System/SceneObjectsList.cpp
+	System/SpaceMouseController.cpp
 	System/SplashScreen.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
@@ -264,6 +267,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	System/RendererSelector.hpp
 	System/SceneObjectsList.hpp
 	System/SplashScreen.hpp
+	System/SpaceMouseController.hpp
 	System/TreeListContainer.hpp
 )
 if ( APPLE )
@@ -354,6 +358,16 @@ if ( CASTOR_GUICOMMON_NEEDS_HLSL )
 	target_link_libraries( ${PROJECT_NAME}
 		PRIVATE
 			sdw::CompilerHlsl
+	)
+endif ()
+if ( TDxWare_SDK_FOUND )
+	target_compile_definitions( ${PROJECT_NAME}
+		PRIVATE
+			GC_HasSpaceMouseSDK
+	)
+	target_link_libraries( ${PROJECT_NAME}
+		PRIVATE
+			3DxWare::Navlib
 	)
 endif ()
 if ( CASTOR_C3D_NEEDS_GLSL )

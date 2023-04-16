@@ -17,61 +17,61 @@ namespace castor
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( NoInit const & )
-		: Coords4< T >( buffer )
+		: Coords4< T >{ &DataHolderT< QuaternionDataT< T > >::getData().x }
 	{
 	}
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( T x, T y, T z, T w )
-		: QuaternionT( NoInit() )
+		: QuaternionT{ NoInit{} }
 	{
-		quat.x = x;
-		quat.y = y;
-		quat.z = z;
-		quat.w = w;
+		DataHolder::getData().x = x;
+		DataHolder::getData().y = y;
+		DataHolder::getData().z = z;
+		DataHolder::getData().w = w;
 		point::normalise( *this );
 	}
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT()
-		: QuaternionT( 0, 0, 0, 1 )
+		: QuaternionT{ 0, 0, 0, 1 }
 	{
 	}
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( QuaternionT< T > const & rhs )
-		: QuaternionT( rhs.quat.x, rhs.quat.y, rhs.quat.z, rhs.quat.w )
+		: QuaternionT{ rhs->x, rhs->y, rhs->z, rhs->w }
 	{
 	}
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( QuaternionT< T > && rhs )noexcept
-		: QuaternionT( NoInit() )
+		: QuaternionT{ NoInit{} }
 	{
-		std::memmove( buffer, rhs.buffer, sizeof( buffer ) );
+		std::memmove( BaseType::ptr(), rhs.constPtr(), sizeof( QuaternionDataT< T > ) );
 	}
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( double const * rhs )
-		: QuaternionT( T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) )
+		: QuaternionT{ T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) }
 	{
 	}
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( float const * rhs )
-		: QuaternionT( T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) )
+		: QuaternionT{ T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) }
 	{
 	}
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( Point4f const & rhs )
-		: QuaternionT( T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) )
+		: QuaternionT{ T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) }
 	{
 	}
 
 	template< typename T >
 	QuaternionT< T >::QuaternionT( Point4d const & rhs )
-		: QuaternionT( T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) )
+		: QuaternionT{ T( rhs[0] ), T( rhs[1] ), T( rhs[2] ), T( rhs[3] ) }
 	{
 	}
 
@@ -83,7 +83,7 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > const & rhs )
 	{
-		std::memcpy( buffer, rhs.buffer, sizeof( buffer ) );
+		std::memcpy( BaseType::ptr(), rhs.constPtr(), sizeof( QuaternionDataT< T > ) );
 		return *this;
 	}
 
@@ -92,7 +92,7 @@ namespace castor
 	{
 		if ( this != &rhs )
 		{
-			std::memmove( buffer, rhs.buffer, sizeof( buffer ) );
+			std::memmove( BaseType::ptr(), rhs.constPtr(), sizeof( QuaternionDataT< T > ) );
 		}
 
 		return *this;
@@ -101,10 +101,10 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator+=( QuaternionT< T > const & rhs )
 	{
-		quat.x += rhs.quat.x;
-		quat.y += rhs.quat.y;
-		quat.z += rhs.quat.z;
-		quat.w += rhs.quat.w;
+		DataHolder::getData().x += rhs->x;
+		DataHolder::getData().y += rhs->y;
+		DataHolder::getData().z += rhs->z;
+		DataHolder::getData().w += rhs->w;
 		point::normalise( *this );
 		return *this;
 	}
@@ -112,10 +112,10 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator-=( QuaternionT< T > const & rhs )
 	{
-		quat.x -= rhs.quat.x;
-		quat.y -= rhs.quat.y;
-		quat.z -= rhs.quat.z;
-		quat.w -= rhs.quat.w;
+		DataHolder::getData().x -= rhs->x;
+		DataHolder::getData().y -= rhs->y;
+		DataHolder::getData().z -= rhs->z;
+		DataHolder::getData().w -= rhs->w;
 		point::normalise( *this );
 		return *this;
 	}
@@ -123,14 +123,14 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator*=( QuaternionT< T > const & rhs )
 	{
-		double const x = quat.x;
-		double const y = quat.y;
-		double const z = quat.z;
-		double const w = quat.w;
-		quat.x = T( w * rhs.quat.x + x * rhs.quat.w + y * rhs.quat.z - z * rhs.quat.y );
-		quat.y = T( w * rhs.quat.y + y * rhs.quat.w + z * rhs.quat.x - x * rhs.quat.z );
-		quat.z = T( w * rhs.quat.z + z * rhs.quat.w + x * rhs.quat.y - y * rhs.quat.x );
-		quat.w = T( w * rhs.quat.w - x * rhs.quat.x - y * rhs.quat.y - z * rhs.quat.z );
+		double const x = DataHolder::getData().x;
+		double const y = DataHolder::getData().y;
+		double const z = DataHolder::getData().z;
+		double const w = DataHolder::getData().w;
+		DataHolder::getData().x = T( w * rhs->x + x * rhs->w + y * rhs->z - z * rhs->y );
+		DataHolder::getData().y = T( w * rhs->y + y * rhs->w + z * rhs->x - x * rhs->z );
+		DataHolder::getData().z = T( w * rhs->z + z * rhs->w + x * rhs->y - y * rhs->x );
+		DataHolder::getData().w = T( w * rhs->w - x * rhs->x - y * rhs->y - z * rhs->z );
 		point::normalise( *this );
 		return *this;
 	}
@@ -138,10 +138,10 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator*=( double rhs )
 	{
-		quat.x = T( quat.x * rhs );
-		quat.y = T( quat.y * rhs );
-		quat.z = T( quat.z * rhs );
-		quat.w = T( quat.w * rhs );
+		DataHolder::getData().x = T( DataHolder::getData().x * rhs );
+		DataHolder::getData().y = T( DataHolder::getData().y * rhs );
+		DataHolder::getData().z = T( DataHolder::getData().z * rhs );
+		DataHolder::getData().w = T( DataHolder::getData().w * rhs );
 		point::normalise( *this );
 		return *this;
 	}
@@ -149,10 +149,10 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator*=( float rhs )
 	{
-		quat.x = T( quat.x * rhs );
-		quat.y = T( quat.y * rhs );
-		quat.z = T( quat.z * rhs );
-		quat.w = T( quat.w * rhs );
+		DataHolder::getData().x = T( DataHolder::getData().x * rhs );
+		DataHolder::getData().y = T( DataHolder::getData().y * rhs );
+		DataHolder::getData().z = T( DataHolder::getData().z * rhs );
+		DataHolder::getData().w = T( DataHolder::getData().w * rhs );
 		point::normalise( *this );
 		return *this;
 	}
@@ -191,10 +191,10 @@ namespace castor
 		QuaternionT< T > result;
 		Angle halfAngle = angle * 0.5f;
 		auto norm = point::getNormalised( axis ) * halfAngle.sin();
-		result.quat.x = T( norm[0] );
-		result.quat.y = T( norm[1] );
-		result.quat.z = T( norm[2] );
-		result.quat.w = T( halfAngle.cos() );
+		result->x = T( norm[0] );
+		result->y = T( norm[1] );
+		result->z = T( norm[2] );
+		result->w = T( halfAngle.cos() );
 		point::normalise( result );
 		return result;
 	}
@@ -205,10 +205,10 @@ namespace castor
 		QuaternionT< T > result;
 		Angle halfAngle = angle * 0.5;
 		auto norm = point::getNormalised( axis ) * double( halfAngle.sin() );
-		result.quat.x = T( norm[0] );
-		result.quat.y = T( norm[1] );
-		result.quat.z = T( norm[2] );
-		result.quat.w = T( halfAngle.cos() );
+		result->x = T( norm[0] );
+		result->y = T( norm[1] );
+		result->z = T( norm[2] );
+		result->w = T( halfAngle.cos() );
 		point::normalise( result );
 		return result;
 	}
@@ -249,10 +249,10 @@ namespace castor
 	template< Vector3fT PtT >
 	PtT & QuaternionT< T >::transform( PtT const & vector, PtT & result )const
 	{
-		Point3d u( quat.x, quat.y, quat.z );
+		Point3d u( DataHolder::getData().x, DataHolder::getData().y, DataHolder::getData().z );
 		Point3d uv( point::cross( u, vector ) );
 		Point3d uuv( point::cross( u, uv ) );
-		uv *= 2.0 * quat.w;
+		uv *= 2.0 * DataHolder::getData().w;
 		uuv *= 2;
 		point::setPoint( result, point::getPoint( vector ) + uv + uuv );
 		return result;
@@ -262,10 +262,10 @@ namespace castor
 	template< Vector3dT PtT >
 	PtT & QuaternionT< T >::transform( PtT const & vector, PtT & result )const
 	{
-		Point3d u( quat.x, quat.y, quat.z );
+		Point3d u( DataHolder::getData().x, DataHolder::getData().y, DataHolder::getData().z );
 		Point3d uv( point::cross( u, vector ) );
 		Point3d uuv( point::cross( u, uv ) );
-		uv *= 2 * quat.w;
+		uv *= 2 * DataHolder::getData().w;
 		uuv *= 2;
 		point::setPoint( result, point::getPoint( vector ) + uv + uuv );
 		return result;
@@ -300,10 +300,10 @@ namespace castor
 	template< typename T >
 	void QuaternionT< T >::toAxisAngle( Point3f & axis, Angle & angle )const
 	{
-		T const x = quat.x;
-		T const y = quat.y;
-		T const z = quat.z;
-		T const w = quat.w;
+		T const x = DataHolder::getData().x;
+		T const y = DataHolder::getData().y;
+		T const z = DataHolder::getData().z;
+		T const w = DataHolder::getData().w;
 		auto s = T( sqrt( T{ 1.0 } - ( w * w ) ) );
 
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
@@ -329,10 +329,10 @@ namespace castor
 	template< typename T >
 	void QuaternionT< T >::toAxisAngle( Point3d & axis, Angle & angle )const
 	{
-		T const x = quat.x;
-		T const y = quat.y;
-		T const z = quat.z;
-		T const w = quat.w;
+		T const x = DataHolder::getData().x;
+		T const y = DataHolder::getData().y;
+		T const z = DataHolder::getData().z;
+		T const w = DataHolder::getData().w;
 		auto s = T( sqrt( T{ 1.0 } - ( w * w ) ) );
 
 		if ( std::abs( s ) < std::numeric_limits< T >::epsilon() )
@@ -390,9 +390,9 @@ namespace castor
 	template< typename T >
 	void QuaternionT< T >::conjugate()
 	{
-		quat.x = -quat.x;
-		quat.y = -quat.y;
-		quat.z = -quat.z;
+		DataHolder::getData().x = -DataHolder::getData().x;
+		DataHolder::getData().y = -DataHolder::getData().y;
+		DataHolder::getData().z = -DataHolder::getData().z;
 	}
 
 	template< typename T >
@@ -455,10 +455,10 @@ namespace castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mixValues( quat.x, target.quat.x, T( factor ) ),
-				mixValues( quat.y, target.quat.y, T( factor ) ),
-				mixValues( quat.z, target.quat.z, T( factor ) ),
-				mixValues( quat.w, target.quat.w, T( factor ) ) );
+				mixValues( DataHolder::getData().x, target->x, T( factor ) ),
+				mixValues( DataHolder::getData().y, target->y, T( factor ) ),
+				mixValues( DataHolder::getData().z, target->z, T( factor ) ),
+				mixValues( DataHolder::getData().w, target->w, T( factor ) ) );
 		}
 		else
 		{
@@ -478,10 +478,10 @@ namespace castor
 		{
 			// Linear interpolation
 			return QuaternionT< T >(
-				mixValues( quat.x, target.quat.x, T( factor ) ),
-				mixValues( quat.y, target.quat.y, T( factor ) ),
-				mixValues( quat.z, target.quat.z, T( factor ) ),
-				mixValues( quat.w, target.quat.w, T( factor ) ) );
+				mixValues( DataHolder::getData().x, target->x, T( factor ) ),
+				mixValues( DataHolder::getData().y, target->y, T( factor ) ),
+				mixValues( DataHolder::getData().z, target->z, T( factor ) ),
+				mixValues( DataHolder::getData().w, target->w, T( factor ) ) );
 		}
 		else
 		{
@@ -522,10 +522,10 @@ namespace castor
 		if ( cosTheta < 0 )
 		{
 			cosTheta = -cosTheta;
-			result.quat.x = -result.quat.x;
-			result.quat.y = -result.quat.y;
-			result.quat.z = -result.quat.z;
-			result.quat.w = -result.quat.w;
+			result->x = -result->x;
+			result->y = -result->y;
+			result->z = -result->z;
+			result->w = -result->w;
 		}
 
 		// Calculate coefficients
@@ -547,10 +547,10 @@ namespace castor
 			sclq = T( factor );
 		}
 
-		result.quat.x = sclp * quat.x + sclq * result.quat.x;
-		result.quat.y = sclp * quat.y + sclq * result.quat.y;
-		result.quat.z = sclp * quat.z + sclq * result.quat.z;
-		result.quat.w = sclp * quat.w + sclq * result.quat.w;
+		result->x = sclp * DataHolder::getData().x + sclq * result->x;
+		result->y = sclp * DataHolder::getData().y + sclq * result->y;
+		result->z = sclp * DataHolder::getData().z + sclq * result->z;
+		result->w = sclp * DataHolder::getData().w + sclq * result->w;
 		return result;
 	}
 
@@ -565,10 +565,10 @@ namespace castor
 		if ( cosTheta < 0 )
 		{
 			cosTheta = -cosTheta;
-			result.quat.x = -result.quat.x;
-			result.quat.y = -result.quat.y;
-			result.quat.z = -result.quat.z;
-			result.quat.w = -result.quat.w;
+			result->x = -result->x;
+			result->y = -result->y;
+			result->z = -result->z;
+			result->w = -result->w;
 		}
 
 		// Calculate coefficients
@@ -589,10 +589,10 @@ namespace castor
 			sclq = T( factor );
 		}
 
-		result.quat.x = sclp * quat.x + sclq * result.quat.x;
-		result.quat.y = sclp * quat.y + sclq * result.quat.y;
-		result.quat.z = sclp * quat.z + sclq * result.quat.z;
-		result.quat.w = sclp * quat.w + sclq * result.quat.w;
+		result->x = sclp * DataHolder::getData().x + sclq * result->x;
+		result->y = sclp * DataHolder::getData().y + sclq * result->y;
+		result->z = sclp * DataHolder::getData().z + sclq * result->z;
+		result->w = sclp * DataHolder::getData().w + sclq * result->w;
 		return result;
 	}
 
@@ -668,7 +668,7 @@ namespace castor
 	QuaternionT< T > operator-( QuaternionT< T > const & rhs )
 	{
 		QuaternionT< T > result( rhs );
-		result.w = -result.w;
+		result->w = -result->w;
 		return result;
 	}
 }

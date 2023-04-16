@@ -10,11 +10,11 @@ namespace castor
 		, m_strFunction( string::stringCast< xchar >( szFunction ) )
 		, m_uiLine( uiLine )
 	{
-		Logger::logInfo( makeStringStream() << cuT( "BlockTracker::Entered Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );
+		Logger::logDebug( makeStringStream() << cuT( "BlockTracker::Entered Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );
 	}
 
 	BlockTracker::~BlockTracker()
 	{
-		Logger::logInfo( makeStringStream() << cuT( "BlockTracker::Exited Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );
+		Logger::logDebug( makeStringStream() << cuT( "BlockTracker::Exited Block : " ) << m_strFunction << cuT( " in " ) << m_strFile << cuT( ", line " ) << m_uiLine );
 	}
 }

@@ -25,6 +25,9 @@ namespace Testing
 		bool compare( castor::Matrix3x3d const & lhs, castor::Matrix3x3d const & rhs );
 		bool compare( castor::Matrix4x4f const & lhs, castor::Matrix4x4f const & rhs );
 		bool compare( castor::Matrix4x4d const & lhs, castor::Matrix4x4d const & rhs );
+		bool compare( castor::Point3d const & lhs, castor::Point3d const & rhs );
+		bool compare( castor::Point3f const & lhs, castor::Point3f const & rhs );
+		bool compare( castor::Quaternion const & lhs, castor::Quaternion const & rhs );
 
 #if defined( CASTOR_USE_GLM )
 
@@ -39,6 +42,7 @@ namespace Testing
 
 	private:
 		void MatrixInversion();
+		void TransformDecompose();
 
 #if defined( CASTOR_USE_GLM )
 

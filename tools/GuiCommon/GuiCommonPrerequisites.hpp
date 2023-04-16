@@ -103,6 +103,7 @@ namespace GuiCommon
 	static const int GC_IMG_SIZE = 16;
 
 	class CastorApplication;
+	class I3DController;
 
 	class PropertiesContainer;
 	class TreeItemProperty;
@@ -140,6 +141,7 @@ namespace GuiCommon
 	class TreeListContainerT;
 
 	CU_DeclareSmartPtr( GuiCommon, LanguageInfo, );
+	CU_DeclareSmartPtr( GuiCommon, I3DController, );
 	CU_DeclareSmartPtr( GuiCommon, TreeItemProperty, );
 
 	CU_DeclareMap( uint32_t, wxImage *, ImageId );

@@ -102,10 +102,16 @@ namespace castor3d
 			return m_planes;
 		}
 
+		castor::BoundingBox const & getBoundingBox()const
+		{
+			return m_boundingBox;
+		}
+
 	private:
 		Viewport * m_viewport;
 		Planes m_planes;
 		std::array< InterleavedVertex, 8u > m_points;
+		castor::BoundingBox m_boundingBox;
 	};
 }
 

@@ -47,6 +47,17 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
+	template< typename Type >
+	Matrix< T, Columns, Rows >::Matrix( std::array< Type, Columns * Rows > const & rhs )
+		: Matrix{ noInit }
+	{
+		for ( size_t i = 0; i < count; i++ )
+		{
+			m_data[i] = T( rhs[i] );
+		}
+	}
+
+	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix< T, Columns, Rows >::Matrix( Matrix< T, Columns, Rows > const & rhs )
 		: Matrix{ noInit }
 	{

@@ -43,6 +43,7 @@ namespace Testing
 	void CastorUtilsMatrixTest::doRegisterTests()
 	{
 		doRegisterTest( "MatrixInversion", std::bind( &CastorUtilsMatrixTest::MatrixInversion, this ) );
+		doRegisterTest( "TransformDecompose", std::bind( &CastorUtilsMatrixTest::TransformDecompose, this ) );
 
 #if defined( CASTOR_USE_GLM )
 
@@ -71,6 +72,21 @@ namespace Testing
 	}
 
 	bool CastorUtilsMatrixTest::compare( Matrix4x4d const & lhs, Matrix4x4d const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+	bool CastorUtilsMatrixTest::compare( castor::Point3d const & lhs, castor::Point3d const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+	bool CastorUtilsMatrixTest::compare( castor::Point3f const & lhs, castor::Point3f const & rhs )
+	{
+		return Testing::compare( lhs, rhs );
+	}
+
+	bool CastorUtilsMatrixTest::compare( castor::Quaternion const & lhs, castor::Quaternion const & rhs )
 	{
 		return Testing::compare( lhs, rhs );
 	}
@@ -134,6 +150,35 @@ namespace Testing
 		mtxRGBtoYUV[2][2] = -0.05639;
 		mtxYUVtoRGB = mtxRGBtoYUV.getInverse();
 		CT_EQUAL( mtxRGBtoYUV, mtxYUVtoRGB.getInverse() );
+	}
+
+	void CastorUtilsMatrixTest::TransformDecompose()
+	{
+		for ( int i = 0; i < 100; ++i )
+		{
+			Matrix4x4d mtxBase;
+			Point3d posBase;
+			randomInit( posBase.ptr(), 3u );
+			Point3d sclBase;
+			randomInit( sclBase.ptr(), 3u );
+			Point3d axsBase;
+			randomInit( axsBase.ptr(), 3u );
+			float degBase;
+			randomInit( &degBase, 1u );
+			Quaternion rotBase = Quaternion::fromAxisAngle( axsBase, Angle::fromDegrees( degBase ) );
+			matrix::setTransform( mtxBase, posBase, sclBase, rotBase );
+			Point3d posDecomp;
+			Point3d sclDecomp;
+			Quaternion rotDecomp;
+			matrix::decompose( mtxBase, posDecomp, sclDecomp, rotDecomp );
+			CT_EQUAL( posBase, posDecomp );
+			CT_EQUAL( sclBase, sclDecomp );
+			CT_EQUAL( rotBase, rotDecomp );
+			Matrix4x4d mtxDecomp;
+			matrix::setTransform( mtxDecomp, posDecomp, sclDecomp, rotDecomp );
+			CT_EQUAL( mtxBase, mtxDecomp );
+		}
+
 	}
 
 #if defined( CASTOR_USE_GLM )

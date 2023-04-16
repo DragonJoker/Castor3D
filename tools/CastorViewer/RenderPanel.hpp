@@ -82,6 +82,7 @@ namespace CastorViewer
 		void doStartTimer( int id );
 		void doStopMovement();
 		void doStopTimer( int id );
+		float doGetRealSpeed()const noexcept;
 		void doResetNode();
 		void doTurnCameraHoriz();
 		void doTurnCameraVertic();
@@ -95,7 +96,7 @@ namespace CastorViewer
 			, castor3d::Submesh const * submesh );
 		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeRPtr node
 			, bool camera );
-		void doUpdateMaxSpeed( float factor );
+		void doUpdateSpeed( float factor = 1.0f );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
@@ -166,6 +167,8 @@ namespace CastorViewer
 		std::promise< castor::U32String > m_clipGet{};
 		std::mutex m_mtxClipSet{};
 		castor::U32String m_clipSet{};
+
+		GuiCommon::I3DControllerUPtr m_3dController{};
 	};
 }
 

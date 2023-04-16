@@ -134,10 +134,10 @@ namespace c3d_assimp
 	inline castor::Quaternion fromAssimp( aiQuaternion const & v )
 	{
 		castor::Quaternion result;
-		result.quat.x = v.x;
-		result.quat.y = v.y;
-		result.quat.z = v.z;
-		result.quat.w = v.w;
+		result->x = v.x;
+		result->y = v.y;
+		result->z = v.z;
+		result->w = v.w;
 		return result;
 	}
 
