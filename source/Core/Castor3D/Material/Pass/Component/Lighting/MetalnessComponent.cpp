@@ -194,12 +194,8 @@ namespace castor3d
 		: BaseDataPassComponentT{ pass
 			, TypeName
 			, { SpecularComponent::TypeName }
-			, castor::makeChangeTrackedT< std::atomic_bool >( defaultValue ) }
+			, defaultValue }
 	{
-		if ( m_value.value().value() == MetalnessComponent::Default )
-		{
-			m_value->reset();
-		}
 	}
 
 	void MetalnessComponent::accept( PassVisitorBase & vis )

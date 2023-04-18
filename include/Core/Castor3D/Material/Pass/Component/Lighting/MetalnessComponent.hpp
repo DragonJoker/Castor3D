@@ -12,7 +12,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	struct MetalnessComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< castor::AtomicChangeTracked< float > > >
+		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -99,11 +99,6 @@ namespace castor3d
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		bool isValueSet()const
-		{
-			return m_value.value().isDirty();
-		}
-
 		float getMetalness()const
 		{
 			return *getData();
@@ -111,7 +106,7 @@ namespace castor3d
 
 		void setMetalness( float v )
 		{
-			setData( castor::makeChangeTrackedT< std::atomic_bool >( v ) );
+			setData( v );
 		}
 
 		C3D_API static castor::String const TypeName;

@@ -330,8 +330,6 @@ namespace castor3d
 
 		C3D_API static castor::AttributeParsers createParsers( Engine const & engine );
 
-		C3D_API static castor::RgbColour computeF0( castor::HdrRgbColour const & albedo
-			, float metalness );
 		C3D_API static float computeRoughnessFromGlossiness( float glossiness );
 		C3D_API static float computeGlossinessFromRoughness( float roughness );
 		C3D_API static float computeGlossinessFromShininess( float shininess );

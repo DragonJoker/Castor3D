@@ -78,7 +78,7 @@ namespace castor3d::shader
 		m_computeReflections( -pV
 			, pwsNormal
 			, backgroundMap
-			, components.specular
+			, components.f0
 			, components.roughness
 			, preflectedDiffuse
 			, preflectedSpecular );

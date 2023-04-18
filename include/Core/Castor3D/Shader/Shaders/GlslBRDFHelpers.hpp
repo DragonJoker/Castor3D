@@ -67,8 +67,6 @@ namespace castor3d::shader
 			, sdw::Float const & roughness );
 		sdw::RetFloat lambdaSheen( sdw::Float const & cosTheta
 			, sdw::Float const & alphaG );
-		sdw::RetFloat visibilitySchlickGGX( sdw::Float const & cosTheta
-			, sdw::Float const & roughness );
 
 	private:
 		sdw::ShaderWriter & m_writer;
@@ -83,9 +81,6 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec2
 			, sdw::InUInt
 			, sdw::InUInt > m_hammersley;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat > m_visibilitySchlickGGX;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
 			, sdw::InFloat

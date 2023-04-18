@@ -585,16 +585,14 @@ namespace castor3d::shader
 		return m_conductorFresnel3( pproduct, pf0 );
 	}
 
-	sdw::RetFloat Utils::fresnelMix( sdw::Vec3 const & pincident
-		, sdw::Vec3 const & pnormal
+	sdw::RetFloat Utils::fresnelMix( sdw::Float const & pVdotH
 		, sdw::Float const & proughness
 		, sdw::Float const & prefractionRatio )
 	{
 		if ( !m_fresnelMix )
 		{
 			m_fresnelMix = m_writer.implementFunction< sdw::Float >( "c3d_fresnelMix"
-				, [&]( sdw::Vec3 const & incident
-					, sdw::Vec3 const & normal
+				, [&]( sdw::Float const & VdotH
 					, sdw::Float const & roughness
 					, sdw::Float const & refractionRatio )
 				{
@@ -604,20 +602,27 @@ namespace castor3d::shader
 						, 1.0_f + refractionRatio );
 					auto reflectance = m_writer.declLocale( "reflectance"
 						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
-					auto product = m_writer.declLocale( "product"
-						, max( 0.0_f, dot( -incident, normal ) ) );
-					m_writer.returnStmt( sdw::fma( max( 1.0_f - roughness, reflectance ) - reflectance
-						, pow( 1.0_f - product, 5.0_f )
+					reflectance = min( reflectance, 1.0_f );
+					m_writer.returnStmt( sdw::fma( 1.0_f - reflectance
+						, pow( 1.0_f - abs( VdotH ), 5.0_f )
 						, reflectance ) );
 				}
-				, sdw::InVec3{ m_writer, "incident" }
-				, sdw::InVec3{ m_writer, "normal" }
+				, sdw::InFloat{ m_writer, "VdotH" }
 				, sdw::InFloat{ m_writer, "roughness" }
 				, sdw::InFloat{ m_writer, "refractionRatio" } );
 		}
 
-		return m_fresnelMix( pincident
-			, pnormal
+		return m_fresnelMix( pVdotH
+			, proughness
+			, prefractionRatio );
+	}
+
+	sdw::RetFloat Utils::fresnelMix( sdw::Vec3 const & incident
+		, sdw::Vec3 const & normal
+		, sdw::Float const & proughness
+		, sdw::Float const & prefractionRatio )
+	{
+		return fresnelMix( max( 0.0_f, dot( -incident, normal ) )
 			, proughness
 			, prefractionRatio );
 	}

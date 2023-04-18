@@ -297,6 +297,11 @@ namespace castor3d
 								, material
 								, surface
 								, clrCot } );
+						lightingModel->finish( passShaders
+							, surface
+							, utils
+							, c3d_cameraData.position()
+							, components );
 
 						auto directAmbient = writer.declLocale( "directAmbient"
 							, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
@@ -316,10 +321,6 @@ namespace castor3d
 						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasSpecularGi );
-						components.finish( passShaders
-							, surface
-							, utils
-							, c3d_cameraData.position() );
 						auto lightSurface = shader::LightSurface::create( writer
 							, utils
 							, "lightSurface"
@@ -328,7 +329,7 @@ namespace castor3d
 							, surface.viewPosition.xyz()
 							, surface.clipPosition
 							, surface.normal
-							, components.specular
+							, components.f0
 							, components );
 
 						auto incident = writer.declLocale( "incident"

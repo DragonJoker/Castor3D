@@ -432,6 +432,13 @@ namespace castor3d
 	struct SpecularMapComponent;
 	/**
 	\~english
+	\brief		Component holding the specular factor map.
+	\~french
+	\brief		Composant détenant la texture de facteur spéculaire.
+	*/
+	struct SpecularFactorMapComponent;
+	/**
+	\~english
 	\brief		Component holding the transmission map.
 	\~french
 	\brief		Composant détenant la texture de transmission.
@@ -462,6 +469,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, RoughnessMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SheenMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SheenRoughnessMapComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SpecularFactorMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SpecularMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TransmissionMapComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TransmittanceMapComponent, C3D_API );

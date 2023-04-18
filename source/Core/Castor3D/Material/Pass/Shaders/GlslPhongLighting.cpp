@@ -82,6 +82,11 @@ namespace castor3d::shader
 		return directSpecular * specular;
 	}
 
+	void PhongLightingModel::doFinish( BlendComponents & components )
+	{
+		components.f0 = components.specular;
+	}
+
 	sdw::Vec3 PhongLightingModel::doComputeDiffuseTerm( sdw::Vec3 const & radiance
 		, sdw::Float const & intensity
 		, BlendComponents const & components

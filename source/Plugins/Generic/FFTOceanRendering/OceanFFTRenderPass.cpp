@@ -1179,7 +1179,7 @@ namespace ocean_fft
 					, shader::BlendComponents{ materials
 						, material
 						, surface } );
-				displayDebugData( eMatSpecular, components.specular, 1.0_f );
+				displayDebugData( eMatSpecular, components.f0, 1.0_f );
 
 				if ( auto lightingModel = lights.getLightingModel() )
 				{
@@ -1219,7 +1219,7 @@ namespace ocean_fft
 					// Indirect Lighting
 					lightSurface.updateL( utils
 						, nml
-						, components.specular
+						, components.f0
 						, components );
 					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
 						, lightSurface );
@@ -1262,7 +1262,7 @@ namespace ocean_fft
 						, vec3( 0.0_f ) );
 					lightSurface.updateN( utils
 						, nml
-						, components.specular
+						, components.f0
 						, components );
 					reflections.computeReflections( components
 						, lightSurface

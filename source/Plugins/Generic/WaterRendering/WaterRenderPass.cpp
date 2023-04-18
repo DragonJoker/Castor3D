@@ -650,7 +650,7 @@ namespace water
 					, shader::BlendComponents{ materials
 						, material
 						, surface } );
-				displayDebugData( eMatSpecular, components.specular, 1.0_f );
+				displayDebugData( eMatSpecular, components.f0, 1.0_f );
 
 				if ( auto lightingModel = lights.getLightingModel() )
 				{
@@ -699,7 +699,7 @@ namespace water
 					// Indirect Lighting
 					lightSurface.updateL( utils
 						, components.normal
-						, components.specular
+						, components.f0
 						, components );
 					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
 						, lightSurface );
@@ -734,7 +734,7 @@ namespace water
 						, vec3( 0.0_f ) );
 					lightSurface.updateN( utils
 						, components.normal
-						, components.specular
+						, components.f0
 						, components );
 					reflections.computeReflections( components
 						, lightSurface

@@ -63,6 +63,7 @@
 #if !defined( AI_MATKEY_ROUGHNESS_FACTOR )
 #	include <assimp/pbrmaterial.h>
 #	define AI_MATKEY_ROUGHNESS_FACTOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR
+#	define AI_MATKEY_SPECULAR_FACTOR "$mat.specularFactor", 0, 0
 #	define AI_MATKEY_GLOSSINESS_FACTOR AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR
 #	define AI_MATKEY_METALLIC_FACTOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR
 #	define AI_MATKEY_BASE_COLOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR
@@ -86,7 +87,7 @@ namespace c3d_assimp
 	static auto constexpr TextureType_METALNESS = aiTextureType( 15 );
 	static auto constexpr TextureType_DIFFUSE_ROUGHNESS = aiTextureType( 16 );
 	static auto constexpr TextureType_AMBIENT_OCCLUSION = aiTextureType( 17 );
-	static auto constexpr TextureType_OCCLUSION_ROUGHNESS_METALNESS = aiTextureType( 18 );
+	static auto constexpr TextureType_OCCLUSION_ROUGHNESS_METALNESS = aiTextureType_UNKNOWN;
 	static auto constexpr TextureType_SHEEN = aiTextureType( 19 );
 	static auto constexpr TextureType_CLEARCOAT = aiTextureType( 20 );
 	static auto constexpr TextureType_TRANSMISSION = aiTextureType( 21 );
@@ -262,16 +263,12 @@ namespace c3d_assimp
 
 				parseComponentDataT< castor3d::MetalnessComponent, float >( AI_MATKEY_METALLIC_FACTOR );
 
-				if ( !m_isPbr )
-				{
-					parseComponentRgbData< castor3d::SpecularComponent >( AI_MATKEY_COLOR_SPECULAR );
-				}
-
 				if ( !parseComponentHdrRgbData< castor3d::ColourComponent >( AI_MATKEY_BASE_COLOR ) )
 				{
 					parseComponentHdrRgbData< castor3d::ColourComponent >( AI_MATKEY_COLOR_DIFFUSE );
 				}
 
+				parseSpecular();
 				parseEmissive();
 				parseAttenuation();
 				parseClearcoat();
@@ -559,16 +556,36 @@ namespace c3d_assimp
 				return result;
 			}
 
+			void parseSpecular()
+			{
+				aiColor3D colour = { 1, 1, 1 };
+				float factor{ 1.0f };
+				bool hasColour = m_material.Get( AI_MATKEY_COLOR_SPECULAR, colour ) == aiReturn_SUCCESS;
+				bool hasFactor = m_material.Get( AI_MATKEY_SPECULAR_FACTOR, factor ) == aiReturn_SUCCESS;
+
+				if ( hasColour || hasFactor )
+				{
+					auto component = m_result.createComponent< castor3d::SpecularComponent >();
+					component->setSpecular( castor::RgbColour{ colour.r
+						, colour.g
+						, colour.b } );
+					component->setFactor( factor );
+				}
+			}
+
 			void parseEmissive()
 			{
 				aiColor3D emissive = { 1, 1, 1 };
 
 				if ( m_material.Get( AI_MATKEY_COLOR_EMISSIVE, emissive ) == aiReturn_SUCCESS )
 				{
-					auto component = m_result.createComponent< castor3d::EmissiveComponent >();
-					component->setEmissive( castor::RgbColour{ m_emissiveMult * emissive.r
-						, m_emissiveMult * emissive.g
-						, m_emissiveMult * emissive.b } );
+					if ( emissive.r != 0 || emissive.g != 0 || emissive.b != 0 )
+					{
+						auto component = m_result.createComponent< castor3d::EmissiveComponent >();
+						component->setEmissive( castor::RgbColour{ m_emissiveMult * emissive.r
+							, m_emissiveMult * emissive.g
+							, m_emissiveMult * emissive.b } );
+					}
 				}
 			}
 

@@ -89,6 +89,9 @@ namespace castor3d::shader
 			, sdw::Float const & f0 );
 		C3D_API sdw::RetVec3 conductorFresnel( sdw::Float const & product
 			, sdw::Vec3 const & f0 );
+		C3D_API sdw::RetFloat fresnelMix( sdw::Float const & VdotH
+			, sdw::Float const & roughness
+			, sdw::Float const & refractionRatio );
 		C3D_API sdw::RetFloat fresnelMix( sdw::Vec3 const & incident
 			, sdw::Vec3 const & normal
 			, sdw::Float const & roughness
@@ -198,8 +201,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InVec3 > m_conductorFresnel3;
 		sdw::Function< sdw::Float
-			, sdw::InVec3
-			, sdw::InVec3
+			, sdw::InFloat
 			, sdw::InFloat
 			, sdw::InFloat > m_fresnelMix;
 		sdw::Function< sdw::Vec3

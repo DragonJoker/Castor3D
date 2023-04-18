@@ -41,6 +41,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & directSpecular )const override;
 
 	protected:
+		C3D_API void doFinish( BlendComponents & components )override;
 		C3D_API sdw::Vec3 doComputeDiffuseTerm( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
 			, BlendComponents const & components

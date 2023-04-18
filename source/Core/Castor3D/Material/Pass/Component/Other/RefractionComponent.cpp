@@ -27,7 +27,7 @@ namespace castor
 		bool operator()( castor3d::RefractionComponent const & object
 			, StringStream & file )override
 		{
-			return writeOpt( file, cuT( "refraction_ratio" ), object.getRefractionRatio(), 0.0f );
+			return write( file, cuT( "refraction_ratio" ), object.getRefractionRatio() );
 		}
 	};
 }
@@ -93,7 +93,7 @@ namespace castor3d
 		}
 		else
 		{
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ RefractionComponent::Default } ) );
 		}
 	}
 
@@ -121,7 +121,7 @@ namespace castor3d
 		if ( !type.hasMember( "refractionRatio" ) )
 		{
 			type.declMember( "refractionRatio", ast::type::Kind::eFloat );
-			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ RefractionComponent::Default } ) );
 		}
 	}
 
@@ -142,7 +142,7 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), 0.0f, 0u );
+		data.write( materialShader.getMaterialChunk(), RefractionComponent::Default, 0u );
 	}
 
 	bool RefractionComponent::Plugin::isComponentNeeded( TextureCombine const & textures

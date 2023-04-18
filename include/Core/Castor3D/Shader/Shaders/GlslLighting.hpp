@@ -43,6 +43,11 @@ namespace castor3d::shader
 			return m_hasIblSupport;
 		}
 
+		C3D_API void finish( PassShaders const & passShaders
+			, SurfaceBase const & surface
+			, Utils & utils
+			, sdw::Vec3 const worldEye
+			, BlendComponents & components );
 		C3D_API sdw::Vec3 combine( BlendComponents const & components
 			, sdw::Vec3 const & incident
 			, sdw::Vec3 const & directDiffuse
@@ -185,6 +190,7 @@ namespace castor3d::shader
 		C3D_API virtual sdw::Float doGetNdotH( LightSurface const & lightSurface
 			, BlendComponents const & components );
 
+		C3D_API virtual void doFinish( BlendComponents & components ) = 0;
 		C3D_API virtual sdw::Vec3 doComputeDiffuseTerm( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
 			, BlendComponents const & components

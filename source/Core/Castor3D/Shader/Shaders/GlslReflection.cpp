@@ -1144,7 +1144,7 @@ namespace castor3d::shader
 			, psceneUv
 			, prefractionRatio
 			, pcomponents.colour
-			, pcomponents.specular
+			, pcomponents.f0
 			, pcomponents.roughness
 			, pcomponents.thicknessFactor
 			, pcomponents.attenuationColour
@@ -1177,7 +1177,7 @@ namespace castor3d::shader
 				, components.roughness
 				, envMap
 				, envMapIndex
-				, components.specular );
+				, components.f0 );
 		}
 		ELSE
 		{
@@ -1252,7 +1252,7 @@ namespace castor3d::shader
 					, components.clearcoatRoughness
 					, envMap
 					, envMapIndex
-					, components.specular );
+					, components.f0 );
 			}
 			ELSE
 			{
@@ -1260,7 +1260,7 @@ namespace castor3d::shader
 				{
 					auto NdotV = m_writer.declLocale( "NdotV"
 						, dot( components.clearcoatNormal, V ) );
-					coatReflected = background.computeSpecularReflections( m_utils.conductorFresnel( NdotV, components.specular )
+					coatReflected = background.computeSpecularReflections( m_utils.conductorFresnel( NdotV, components.f0 )
 						, components.clearcoatNormal
 						, V
 						, NdotV

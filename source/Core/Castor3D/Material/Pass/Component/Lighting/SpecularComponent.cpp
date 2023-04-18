@@ -37,7 +37,8 @@ namespace castor
 		bool operator()( castor3d::SpecularComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, "specular", object.getSpecular(), castor3d::SpecularComponent::Default );
+			return writeNamedSubOpt( file, "specular", object.getSpecular(), castor3d::SpecularComponent::Default )
+				&& writeOpt( file, "specular_factor", object.getFactor(), castor3d::SpecularComponent::DefaultFactor );
 		}
 	};
 }
@@ -58,10 +59,24 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				castor::RgbColour value;
-				params[0]->get( value );
 				auto & component = getPassComponent< SpecularComponent >( parsingContext );
-				component.setSpecular( value );
+				component.setSpecular( params[0]->get< castor::RgbColour >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserPassSpecularFactor )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				auto & component = getPassComponent< SpecularComponent >( parsingContext );
+				component.setFactor( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
@@ -81,6 +96,7 @@ namespace castor3d
 		if ( !components.hasMember( "specular" ) )
 		{
 			components.declMember( "specular", sdw::type::Kind::eVec3F );
+			components.declMember( "specularFactor", sdw::type::Kind::eFloat );
 		}
 	}
 
@@ -99,10 +115,12 @@ namespace castor3d
 		if ( material )
 		{
 			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "specular" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "specularFactor" ) ) );
 		}
 		else
 		{
 			inits.emplace_back( sdw::makeExpr( sdw::vec3( SpecularComponent::DefaultComponent ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ DefaultFactor } ) );
 		}
 	}
 
@@ -112,6 +130,7 @@ namespace castor3d
 		, shader::BlendComponents const & src )const
 	{
 		res.getMember< sdw::Vec3 >( "specular", true ) += src.getMember< sdw::Vec3 >( "specular", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "specularFactor", true ) += src.getMember< sdw::Float >( "specularFactor", true ) * passMultiplier;
 	}
 
 	void SpecularComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
@@ -120,13 +139,14 @@ namespace castor3d
 		, sdw::Vec4 & colMtl
 		, sdw::Vec4 & sheen )const
 	{
-		spcRgh.rgb() = components.getMember< sdw::Vec3 >( "specular", true );
+		spcRgh.rgb() = components.getMember< sdw::Vec3 >( "specular", true )
+			* components.getMember< sdw::Float >( "specularFactor", true );
 	}
 
 	//*********************************************************************************************
 
 	SpecularComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 12u }
+		: shader::PassMaterialShader{ 16u }
 	{
 	}
 
@@ -136,7 +156,9 @@ namespace castor3d
 		if ( !type.hasMember( "specular" ) )
 		{
 			type.declMember( "specular", ast::type::Kind::eVec3F );
+			type.declMember( "specularFactor", ast::type::Kind::eFloat );
 			inits.emplace_back( sdw::makeExpr( sdw::vec3( SpecularComponent::DefaultComponent ) ) );
+			inits.emplace_back( sdw::makeExpr( sdw::Float{ DefaultFactor } ) );
 		}
 	}
 
@@ -160,6 +182,11 @@ namespace castor3d
 			, cuT( "specular" )
 			, spccmp::parserPassSpecular
 			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		castor::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "specular_factor" )
+			, spccmp::parserPassSpecularFactor
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
 	void SpecularComponent::Plugin::zeroBuffer( Pass const & pass
@@ -168,6 +195,7 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		data.write( materialShader.getMaterialChunk(), SpecularComponent::Default, 0u );
+		data.write( materialShader.getMaterialChunk(), SpecularComponent::DefaultFactor, 12u );
 	}
 
 	bool SpecularComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -180,23 +208,18 @@ namespace castor3d
 
 	castor::String const SpecularComponent::TypeName = C3D_MakePassLightingComponentName( "specular" );
 	castor::RgbColour const SpecularComponent::Default = { DefaultComponent, DefaultComponent, DefaultComponent };
-	castor::RgbColour const SpecularComponent::DefaultPhong = { DefaultPhongComponent, DefaultPhongComponent, DefaultPhongComponent };
-	castor::RgbColour const SpecularComponent::DefaultPbr = { DefaultPbrComponent, DefaultPbrComponent, DefaultPbrComponent };
 
 	SpecularComponent::SpecularComponent( Pass & pass
 		, castor::RgbColour defaultValue )
-		: BaseDataPassComponentT{ pass, TypeName, {}, castor::makeChangeTrackedT< std::atomic_bool >( defaultValue ) }
+		: BaseDataPassComponentT{ pass, TypeName, {}, defaultValue }
 	{
-		if ( m_value.value().value() == SpecularComponent::Default )
-		{
-			m_value->reset();
-		}
 	}
 
 	void SpecularComponent::accept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Specular" ) );
-		vis.visit( cuT( "Colour" ), m_value );
+		vis.visit( cuT( "Factor" ), m_value.factor );
+		vis.visit( cuT( "Colour" ), m_value.colour );
 	}
 
 	PassComponentUPtr SpecularComponent::doClone( Pass & pass )const
@@ -216,20 +239,9 @@ namespace castor3d
 
 	void SpecularComponent::doFillBuffer( PassBuffer & buffer )const
 	{
-		auto mtl = getOwner()->getComponent< MetalnessComponent >();
-		auto & spcPlugin = getOwner()->getComponentPlugin( SpecularMapComponent::TypeName );
-		auto textures = getOwner()->getTexturesMask();
-		auto specular = ( isValueSet() || hasAny( textures, spcPlugin.getTextureFlags() ) )
-			? getSpecular()
-			: Pass::computeF0( getOwner()->getColour()
-				, ( ( mtl && mtl->isValueSet() )
-					? mtl->getMetalness()
-					: ( isValueSet()
-						? float( castor::point::length( castor::Point3f{ getSpecular().constPtr() } ) )
-						: MetalnessComponent::Default ) ) );
-
 		auto data = buffer.getData( getOwner()->getId() );
-		data.write( m_materialShader->getMaterialChunk(), specular, 0u );
+		data.write( m_materialShader->getMaterialChunk(), getSpecular(), 0u );
+		data.write( m_materialShader->getMaterialChunk(), getFactor(), 12u );
 	}
 
 	//*********************************************************************************************

@@ -19,7 +19,7 @@ namespace castor3d
 			, lightingModelId );
 		result->createComponent< ColourComponent >();
 		result->createComponent< RoughnessComponent >( Pass::computeRoughnessFromShininess( 50.0f ) );
-		result->createComponent< SpecularComponent >( SpecularComponent::DefaultPhong );
+		result->createComponent< SpecularComponent >( SpecularComponent::Default );
 		return result;
 	}
 }
