@@ -149,7 +149,7 @@ namespace castor3d
 	{
 		stepProgressBar( progress, "Creating depth/visibility pass" );
 		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( "NodesPass"
+		auto & result = m_graph.createPass( "VisibilityPass"
 			, [this, progress, targetDepth]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
