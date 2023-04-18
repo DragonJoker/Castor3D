@@ -91,6 +91,23 @@ namespace castor3d::shader
 		return refraction;
 	}
 
+	void PbrLightingModel::doFinish( BlendComponents & components )
+	{
+		auto ior = m_writer.declLocale( "ior"
+			, m_writer.ternary( components.refractionRatio == 0.0_f
+				, 1.5_f
+				, sdw::Float( components.refractionRatio ) ) );
+		components.f0 = vec3( pow( ( ior - 1.0_f ) / ( ior + 1.0_f ), 2.0_f ) );
+		components.f0 = mix( components.f0, components.colour.rgb(), vec3( components.metalness ) );
+
+		if ( components.hasMember( "specular" ) )
+		{
+			auto dielectricSpecularF0 = min( components.f0 * components.specular.rgb(), vec3( 1.0_f ) );
+			components.f0 = mix( dielectricSpecularF0, components.colour.rgb(), vec3( components.metalness ) );
+			components.specular = components.f0;
+		}
+	}
+
 	sdw::Vec3 PbrLightingModel::doComputeDiffuseTerm( sdw::Vec3 const & radiance
 		, sdw::Float const & intensity
 		, BlendComponents const & components
@@ -120,7 +137,7 @@ namespace castor3d::shader
 			, doGetNdotH( lightSurface, components )
 			, lightSurface.NdotV()
 			, lightSurface.spcF()
-			, components.roughness );
+			, components.roughness * components.roughness );
 		output *= doGetNdotL( lightSurface, components );
 	}
 
@@ -182,14 +199,13 @@ namespace castor3d::shader
 		, sdw::Vec3 const & coatReflected
 		, sdw::Vec3 const & sheenReflected )
 	{
+		 // Fresnel already included in both diffuse and specular.
 		auto diffuseBrdf = m_writer.declLocale( "diffuseBrdf"
 			, components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
 				+ ( reflectedDiffuse * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion ) );
 		auto specularBrdf = m_writer.declLocale( "specularBrdf"
 			, ( reflectedSpecular * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
 			+ adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) );
-		auto metal = m_writer.declLocale( "metal"
-			, specularBrdf ); // Conductor Fresnel already included there.
 
 		IF( m_writer, components.hasTransmission )
 		{
@@ -203,14 +219,12 @@ namespace castor3d::shader
 		}
 		FI;
 
-		auto dielectric = m_writer.declLocale( "dielectric"
-			, specularBrdf + diffuseBrdf );
 		auto combineResult = m_writer.declLocale( "combineResult"
-			, mix( dielectric, metal, vec3( components.metalness ) ) );
+			, emissive + specularBrdf + diffuseBrdf );
 
 		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
 		{
-			combineResult = sheenReflected
+			combineResult = ( sheenReflected * ambientOcclusion )
 				+ ( components.colour * directSheen.x() )
 				+ combineResult * directSheen.y() * max( max( components.colour.r(), components.colour.g() ), components.colour.b() );
 		}
@@ -222,15 +236,12 @@ namespace castor3d::shader
 				, max( dot( components.clearcoatNormal, -incident ), 0.0_f ) );
 			auto clearcoatFresnel = m_writer.declLocale( "clearcoatFresnel"
 				, pow( 0.04_f + ( 1.0_f - 0.04_f ) * ( 1.0_f - clearcoatNdotV ), 5.0_f ) );
-			combineResult = mix( combineResult
-				, coatReflected + directCoatingSpecular
-				, vec3( components.clearcoatFactor * clearcoatFresnel ) );
+			combineResult = combineResult * ( 1.0_f - vec3( components.clearcoatFactor * clearcoatFresnel ) )
+				+ ( coatReflected * ambientOcclusion ) + directCoatingSpecular;
 		}
 		FI;
 
-		return combineResult
-			+ emissive
-			+ directScattering;
+		return combineResult + directScattering;
 	}
 
 	//***********************************************************************************************

@@ -86,8 +86,6 @@ namespace castor3d::shader
 			return makeType( cache, materials, material, surface, clrCot, inits );
 		}
 
-		static sdw::Vec3 computeF0( sdw::Vec3 const & albedo
-			, sdw::Float const & metalness );
 		static sdw::Float computeRoughnessFromGlossiness( sdw::Float const & glossiness );
 		static sdw::Float computeGlossinessFromRoughness( sdw::Float const & roughness );
 		static sdw::Float computeGlossinessFromShininess( sdw::Float const & shininess );
@@ -104,13 +102,14 @@ namespace castor3d::shader
 		}
 
 	public:
+		sdw::DefaultedT< sdw::Vec3 > f0;
+		sdw::DefaultedT< sdw::Vec3 > f90;
 		sdw::DefaultedT< sdw::Vec3 > normal;
 		sdw::DefaultedT< sdw::Vec3 > colour;
 		sdw::DefaultedT< sdw::Vec3 > emissiveColour;
 		sdw::DefaultedT< sdw::Float > emissiveFactor;
 		sdw::DefaultedT< sdw::Vec3 > ambientColour;
 		sdw::DefaultedT< sdw::Float > ambientFactor;
-		sdw::DefaultedT< sdw::Vec3 > specular;
 		sdw::DefaultedT< sdw::Float > transmission;
 		sdw::DefaultedT< sdw::UInt > hasTransmission;
 		sdw::DefaultedT< sdw::Float > opacity;
@@ -136,6 +135,8 @@ namespace castor3d::shader
 		sdw::DefaultedT< sdw::Vec3 > iridescenceFresnel;
 		sdw::DefaultedT< sdw::Vec3 > iridescenceF0;
 		sdw::Float const shininess;
+
+		sdw::DefaultedT< sdw::Vec3 > specular;
 
 	protected:
 		static void fillType( ast::type::BaseStruct & type

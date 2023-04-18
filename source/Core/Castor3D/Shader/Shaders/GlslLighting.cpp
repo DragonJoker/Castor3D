@@ -48,6 +48,19 @@ namespace castor3d::shader
 	{
 	}
 
+	void LightingModel::finish( PassShaders const & passShaders
+		, SurfaceBase const & surface
+		, Utils & utils
+		, sdw::Vec3 const worldEye
+		, BlendComponents & components )
+	{
+		components.finish( passShaders
+			, surface
+			, utils
+			, worldEye );
+		doFinish( components );
+	}
+
 	sdw::Vec3 LightingModel::combine( BlendComponents const & components
 		, sdw::Vec3 const & incident
 		, sdw::Vec3 const & directDiffuse
@@ -171,7 +184,7 @@ namespace castor3d::shader
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( m_utils
 						, -light.direction()
-						, components.specular
+						, components.f0
 						, components );
 					doComputeLight( light.base()
 						, components
@@ -233,7 +246,7 @@ namespace castor3d::shader
 						, vec3( 0.0_f ) );
 					lightSurface.updateL( m_utils
 						, light.position() - lightSurface.worldPosition()
-						, components.specular
+						, components.f0
 						, components );
 					doComputeLight( light.base()
 						, components
@@ -286,7 +299,7 @@ namespace castor3d::shader
 				{
 					lightSurface.updateL( m_utils
 						, light.position() - lightSurface.worldPosition()
-						, components.specular
+						, components.f0
 						, components );
 					auto spotFactor = m_writer.declLocale( "spotFactor"
 						, dot( -lightSurface.L(), light.direction() ) );

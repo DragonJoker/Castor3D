@@ -44,17 +44,17 @@ namespace castor3d::shader
 					, sdw::Vec3 const & F
 					, sdw::Float const & roughness )
 				{
-					// From https://learnopengl.com/#!PBR/Lighting
+					// GGX Specular BRDF
 					auto D = m_writer.declLocale( "D"
 						, m_brdf.distributionGGX( NdotH
 							, roughness * roughness ) );
-					auto G = m_writer.declLocale( "G"
+					auto V = m_writer.declLocale( "V"
 						, m_brdf.visibilitySmithGGXCorrelated( NdotV
 							, NdotL
 							, roughness ) );
 
 					auto numerator = m_writer.declLocale( "numerator"
-						, F * D * G );
+						, F * D * V );
 					auto denominator = m_writer.declLocale( "denominator"
 						, sdw::fma( 4.0_f
 							, NdotV * NdotL
@@ -95,13 +95,9 @@ namespace castor3d::shader
 					, sdw::Vec3 const & F
 					, sdw::Float const & metalness )
 				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto kS = m_writer.declLocale( "kS"
-						, F );
+					// Lambertian BRDF
 					auto kD = m_writer.declLocale( "kD"
-						, vec3( 1.0_f ) - kS );
-					kD *= 1.0_f - metalness;
-
+						, vec3( 1.0_f ) - F );
 					radiance = max( radiance * intensity * kD, vec3( 0.0_f ) );
 					m_writer.returnStmt( ( radiance / sdw::Float{ castor::Pi< float > } ) );
 				}

@@ -309,7 +309,7 @@ namespace castor3d
 				, components.iridescenceIor
 				, NdotV
 				, components.iridescenceThickness
-				, components.specular );
+				, components.f0 );
 			components.iridescenceF0 = utils.fresnelToF0( components.iridescenceFresnel, NdotV );
 		}
 		FI;

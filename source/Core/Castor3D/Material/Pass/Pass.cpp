@@ -776,14 +776,6 @@ namespace castor3d
 		castor::Logger::logError( stream.str() );
 	}
 
-	castor::RgbColour Pass::computeF0( castor::HdrRgbColour const & albedo
-		, float metalness )
-	{
-		return castor::RgbColour{ matpass::mix( 0.04f, albedo.red(), metalness )
-			, matpass::mix( 0.04f, albedo.green(), metalness )
-			, matpass::mix( 0.04f, albedo.blue(), metalness ) };
-	}
-
 	float Pass::computeRoughnessFromGlossiness( float glossiness )
 	{
 		return 1.0f - glossiness;

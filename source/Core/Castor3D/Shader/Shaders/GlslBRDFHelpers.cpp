@@ -51,12 +51,12 @@ namespace castor3d::shader
 					, sdw::Float const & NdotL
 					, sdw::Float const & roughness )
 				{
-					// From https://learnopengl.com/#!PBR/Lighting
+					auto alpha = m_writer.declLocale( "alpha"
+						, ( roughness * roughness ) / 2.0_f );
 					auto ggxV = m_writer.declLocale( "ggxV"
-						, visibilitySchlickGGX( NdotV, roughness ) );
+						, NdotV / ( NdotV * ( 1.0_f - alpha ) + alpha ) );
 					auto ggxL = m_writer.declLocale( "ggxL"
-						, visibilitySchlickGGX( NdotL, roughness ) );
-
+						, NdotL / ( NdotL * ( 1.0_f - alpha ) + alpha ) );
 					m_writer.returnStmt( ggxV * ggxL );
 				}
 				, sdw::InFloat( m_writer, "NdotV" )
@@ -122,11 +122,9 @@ namespace castor3d::shader
 				, [&]( sdw::Float const & NdotH
 					, sdw::Float alpha )
 				{
-					auto a = m_writer.declLocale( "a"
-						, NdotH * alpha );
-					auto k = m_writer.declLocale( "k"
-						, alpha / ( 1.0_f - NdotH * NdotH + a * a ) );
-					m_writer.returnStmt( k * k * 1.0_f / castor::Pi< float > );
+					auto f = m_writer.declLocale( "f"
+						, ( NdotH * NdotH ) * ( alpha - 1.0_f ) + 1.0_f );
+					m_writer.returnStmt( alpha / ( f * f * castor::Pi< float > ) );
 				}
 				, sdw::InFloat{ m_writer, "NdotH" }
 				, sdw::InFloat{ m_writer, "alpha" } );
@@ -354,33 +352,6 @@ namespace castor3d::shader
 		}
 
 		return m_lambdaSheen( pcosTheta, palphaG );
-	}
-
-	sdw::RetFloat BRDFHelpers::visibilitySchlickGGX( sdw::Float const & pproduct
-		, sdw::Float const & proughness )
-	{
-		if ( !m_visibilitySchlickGGX )
-		{
-			m_visibilitySchlickGGX = m_writer.implementFunction< sdw::Float >( "c3d_visibilitySchlickGGX"
-				, [&]( sdw::Float const & product
-					, sdw::Float const & roughness )
-				{
-					// From https://learnopengl.com/#!PBR/Lighting
-					auto k = m_writer.declLocale( "k"
-						, ( roughness * roughness ) / 2.0_f );
-
-					auto numerator = m_writer.declLocale( "num"
-						, product );
-					auto denominator = m_writer.declLocale( "denom"
-						, product * ( 1.0_f - k ) + k );
-
-					m_writer.returnStmt( numerator / denominator );
-				}
-				, sdw::InFloat( m_writer, "product" )
-				, sdw::InFloat( m_writer, "roughness" ) );
-		}
-
-		return m_visibilitySchlickGGX( pproduct, proughness );
 	}
 
 	//***********************************************************************************************

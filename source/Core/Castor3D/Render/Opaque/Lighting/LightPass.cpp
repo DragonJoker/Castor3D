@@ -270,10 +270,11 @@ namespace castor3d
 							, material
 							, surface
 							, clrCot } );
-					components.finish( passShaders
+					lightingModel->finish( passShaders
 						, surface
 						, utils
-						, c3d_cameraData.position() );
+						, c3d_cameraData.position()
+						, components );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
 						, c3d_cameraData.position()

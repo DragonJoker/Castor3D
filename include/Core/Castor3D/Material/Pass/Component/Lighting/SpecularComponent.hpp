@@ -12,8 +12,21 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct SpecularData
+	{
+		explicit SpecularData( std::atomic_bool & dirty
+			, castor::RgbColour defaultValue )
+			: colour{ dirty, defaultValue }
+			, factor{ dirty, 1.0f }
+		{
+		}
+
+		castor::AtomicGroupChangeTracked< castor::RgbColour > colour;
+		castor::AtomicGroupChangeTracked< float > factor;
+	};
+
 	struct SpecularComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< castor::AtomicChangeTracked< castor::RgbColour > > >
+		: public BaseDataPassComponentT< SpecularData >
 	{
 		struct ComponentsShader
 			: shader::PassComponentsShader
@@ -100,19 +113,24 @@ namespace castor3d
 
 		C3D_API void accept( PassVisitorBase & vis )override;
 
-		bool isValueSet()const
+		float getFactor()const
 		{
-			return m_value.value().isDirty();
+			return m_value.factor;
+		}
+
+		void setFactor( float v )
+		{
+			m_value.factor = v;
 		}
 
 		castor::RgbColour const & getSpecular()const
 		{
-			return *getData();
+			return m_value.colour.value();
 		}
 
 		void setSpecular( castor::RgbColour const & v )
 		{
-			setData( castor::makeChangeTrackedT< std::atomic_bool >( v ) );
+			m_value.colour = castor::makeChangeTrackedT< std::atomic_bool >( v );
 		}
 
 		void setSpecular( castor::HdrRgbColour const & v
@@ -132,12 +150,9 @@ namespace castor3d
 		}
 
 		C3D_API static castor::String const TypeName;
-		static float constexpr DefaultComponent = 0.0f;
-		static float constexpr DefaultPhongComponent = 1.0f;
-		static float constexpr DefaultPbrComponent = 0.04f;
+		static float constexpr DefaultFactor = 1.0f;
+		static float constexpr DefaultComponent = 1.0f;
 		C3D_API static castor::RgbColour const Default;
-		C3D_API static castor::RgbColour const DefaultPhong;
-		C3D_API static castor::RgbColour const DefaultPbr;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

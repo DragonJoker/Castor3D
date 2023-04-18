@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 
+#include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
+
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -14,13 +16,14 @@ namespace castor3d::shader
 		, sdw::expr::ExprPtr expr
 		, bool enabled )
 		: sdw::StructInstance{ writer, std::move( expr ), enabled }
+		, f0{ getMember( "f0", vec3( 0.04_f ) ) }
+		, f90{ getMember( "f90", vec3( 1.0_f ) ) }
 		, normal{ getMember( "normal", vec3( 0.0_f ) ) }
 		, colour{ getMember( "colour", vec3( 0.0_f ) ) }
 		, emissiveColour{ getMember( "emissiveColour", vec3( 0.0_f ) ) }
 		, emissiveFactor{ getMember( "emissiveFactor", 0.0_f ) }
 		, ambientColour{ getMember( "ambientColour", vec3( 1.0_f ) ) }
 		, ambientFactor{ getMember( "ambientFactor", 1.0_f ) }
-		, specular{ getMember( "specular", vec3( 0.0_f ) ) }
 		, transmission{ getMember( "transmission", 0.0_f ) }
 		, hasTransmission{ getMember( "hasTransmission", 0_u ) }
 		, opacity{ getMember( "opacity", 1.0_f ) }
@@ -28,7 +31,7 @@ namespace castor3d::shader
 		, alphaRef{ getMember( "alphaRef", 0.95_f ) }
 		, occlusion{ getMember( "occlusion", 1.0_f ) }
 		, transmittance{ getMember( "transmittance", 1.0_f ) }
-		, refractionRatio{ getMember( "refractionRatio", 0.0_f ) }
+		, refractionRatio{ getMember( "refractionRatio", sdw::Float{ RefractionComponent::Default } ) }
 		, hasReflection{ getMember( "hasReflection", 0_u ) }
 		, metalness{ getMember( "metalness", 0.0_f ) }
 		, roughness{ getMember( "roughness", 1.0_f ) }
@@ -46,6 +49,7 @@ namespace castor3d::shader
 		, iridescenceFresnel{ getMember( "iridescenceFresnel", vec3( 0.0_f ) ) }
 		, iridescenceF0{ getMember( "iridescenceF0", vec3( 0.0_f ) ) }
 		, shininess{ computeShininessFromRoughness( roughness ) }
+		, specular{ getMember( "specular", vec3( 0.0_f ) ) }
 	{
 	}
 
@@ -122,12 +126,6 @@ namespace castor3d::shader
 		return std::static_pointer_cast< ast::type::BaseStruct >( rhs.getType() );
 	}
 
-	sdw::Vec3 BlendComponents::computeF0( sdw::Vec3 const & albedo
-		, sdw::Float const & metalness )
-	{
-		return mix( vec3( 0.04_f ), albedo, vec3( metalness ) );
-	}
-
 	sdw::Float BlendComponents::computeRoughnessFromGlossiness( sdw::Float const & glossiness )
 	{
 		return 1.0_f - glossiness;
@@ -152,6 +150,10 @@ namespace castor3d::shader
 		, Materials const & materials
 		, sdw::expr::ExprList & inits )
 	{
+		type.declMember( "f0", sdw::type::Kind::eVec3F );
+		type.declMember( "f90", sdw::type::Kind::eVec3F );
+		inits.emplace_back( sdw::makeExpr( sdw::vec3( 0.04_f ) ) );
+		inits.emplace_back( sdw::makeExpr( sdw::vec3( 1.0_f ) ) );
 		materials.getPassShaders().fillComponents( type, materials, inits );
 	}
 
@@ -162,6 +164,10 @@ namespace castor3d::shader
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )
 	{
+		type.declMember( "f0", sdw::type::Kind::eVec3F );
+		type.declMember( "f90", sdw::type::Kind::eVec3F );
+		inits.emplace_back( sdw::makeExpr( sdw::vec3( 0.04_f ) ) );
+		inits.emplace_back( sdw::makeExpr( sdw::vec3( 1.0_f ) ) );
 		materials.getPassShaders().fillComponents( type, materials, material, surface, clrCot, inits );
 	}
 
@@ -169,6 +175,8 @@ namespace castor3d::shader
 		, Materials const & materials
 		, sdw::expr::ExprList & inits )
 	{
+		inits.emplace_back( sdw::makeExpr( sdw::vec3( 0.04_f ) ) );
+		inits.emplace_back( sdw::makeExpr( sdw::vec3( 1.0_f ) ) );
 		materials.getPassShaders().fillComponentsInits( components, materials, inits );
 	}
 
@@ -179,6 +187,8 @@ namespace castor3d::shader
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )
 	{
+		inits.emplace_back( sdw::makeExpr( sdw::vec3( 0.04_f ) ) );
+		inits.emplace_back( sdw::makeExpr( sdw::vec3( 1.0_f ) ) );
 		materials.getPassShaders().fillComponentsInits( components, materials, material, surface, clrCot, inits );
 	}
 

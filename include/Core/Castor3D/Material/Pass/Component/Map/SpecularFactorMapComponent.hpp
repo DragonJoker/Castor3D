@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_SpecularMapComponent_H___
-#define ___C3D_SpecularMapComponent_H___
+#ifndef ___C3D_SpecularFactorMapComponent_H___
+#define ___C3D_SpecularFactorMapComponent_H___
 
 #include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
 
@@ -12,7 +12,7 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct SpecularMapComponent
+	struct SpecularFactorMapComponent
 		: public PassMapComponent
 	{
 		static const TextureFlag Specular = TextureFlag( 0x01u );
@@ -49,7 +49,7 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, SpecularMapComponent >( pass );
+				return castor::makeUniqueDerived< PassComponent, SpecularFactorMapComponent >( pass );
 			}
 
 			void createParsers( castor::AttributeParsers & parsers
@@ -104,6 +104,9 @@ namespace castor3d
 				, uint32_t mask
 				, castor::String const & tabs
 				, castor::StringStream & file )const override;
+			static void doUpdateComponent( PassComponentRegister const & passComponents
+				, TextureCombine const & combine
+				, shader::BlendComponents & components );
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )
@@ -111,7 +114,7 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit SpecularMapComponent( Pass & pass );
+		C3D_API explicit SpecularFactorMapComponent( Pass & pass );
 
 		C3D_API static castor::String const TypeName;
 

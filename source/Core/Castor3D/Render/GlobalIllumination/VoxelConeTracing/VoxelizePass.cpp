@@ -601,7 +601,7 @@ namespace castor3d
 							, in.worldPosition.xyz()
 							, in.fragCoord.xyz()
 							, normalize( components.normal )
-							, components.specular
+							, components.f0
 							, components
 							, true, true, false );
 						lights.computeCombinedDif( components

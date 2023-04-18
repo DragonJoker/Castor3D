@@ -340,10 +340,11 @@ namespace castor3d
 							, in.viewPosition.xyz()
 							, in.worldPosition.xyz()
 							, normalize( components.normal ) } );
-					components.finish( passShaders
+					lightingModel->finish( passShaders
 						, surface
 						, utils
-						, c3d_cameraData.position() );
+						, c3d_cameraData.position()
+						, components );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
 						, c3d_cameraData.position()
@@ -381,7 +382,7 @@ namespace castor3d
 						, reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() ) );
 					lightSurface.updateN( utils
 						, components.normal
-						, components.specular
+						, components.f0
 						, components );
 					reflections.computeCombined( components
 						, lightSurface
@@ -401,7 +402,7 @@ namespace castor3d
 
 					lightSurface.updateL( utils
 						, components.normal
-						, components.specular
+						, components.f0
 						, components );
 					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
 						, lightSurface );
