@@ -209,9 +209,6 @@ namespace castor3d
 				"Equirectangular to cube",
 				makeFloatArray( m_device.renderSystem.getEngine()->getNextRainbowColour() ),
 			} );
-		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_view.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 
 		for ( auto & frameBuffer : m_frameBuffers )
 		{

@@ -78,7 +78,7 @@ namespace castor3d
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 
-			if ( submesh.getId() < mesh->getSubmeshCount() )
+			if ( submesh.getId() >= mesh->getSubmeshCount() )
 			{
 				CU_Failure( "Geometry::setMaterial" );
 			}

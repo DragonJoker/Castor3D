@@ -420,7 +420,7 @@ namespace castor3d
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { maxDim, maxDim, 1u }
 			, 6u
-			, 1u
+			, ashes::getMaxMipCount( { maxDim, maxDim, maxDim } )
 			, m_layerTexture[0]->getPixelFormat()
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
@@ -463,6 +463,7 @@ namespace castor3d
 				, VK_FILTER_LINEAR );
 		}
 
+		m_texture->generateMipmaps( *commandBuffer );
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, m_texture->getLayerCubeView( 0u ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
@@ -493,7 +494,7 @@ namespace castor3d
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 				, makeExtent3D( m_equiSize )
 				, 6u
-				, 1u
+				, ashes::getMaxMipCount( makeExtent3D( m_equiSize ) )
 				, m_equiTexture->getPixelFormat()
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
@@ -507,7 +508,8 @@ namespace castor3d
 				, device
 				, *m_texture };
 			equiToCube.render( queueData );
-			m_texture->generateMipmaps( queueData );
+			m_texture->generateMipmaps( queueData
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
 		m_equiTexture->cleanup();
@@ -528,7 +530,7 @@ namespace castor3d
 			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
 			, { width, width, 1u }
 			, 6u
-			, 1u
+			, ashes::getMaxMipCount( { width, width, width } )
 			, m_crossTexture->getPixelFormat()
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
@@ -604,6 +606,7 @@ namespace castor3d
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 			, m_texture->getLayerCubeView( 0u ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		m_texture->generateMipmaps( *commandBuffer );
 		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 
