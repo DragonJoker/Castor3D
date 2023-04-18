@@ -25,7 +25,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	struct SceneRenderNodes
-		: castor::OwnedBy< Scene const >
+		: castor::OwnedBy< Scene >
 	{
 	public:
 		template< typename NodeT >
@@ -39,7 +39,7 @@ namespace castor3d
 		using NodeDataArray = std::vector< NodeData >;
 
 	public:
-		C3D_API explicit SceneRenderNodes( Scene const & scene );
+		C3D_API explicit SceneRenderNodes( Scene & scene );
 		C3D_API ~SceneRenderNodes();
 
 		C3D_API void registerCuller( SceneCuller & culler );
@@ -54,6 +54,7 @@ namespace castor3d
 			, BillboardBase & instance );
 		C3D_API SubmeshRenderNode const * getSubmeshNode( uint32_t nodeId );
 		C3D_API BillboardRenderNode const * getBillboardNode( uint32_t nodeId );
+		C3D_API void reportPassChange( Pass const & pass );
 		C3D_API void reportPassChange( Submesh & data
 			, Geometry & instance
 			, Material const & oldMaterial
@@ -109,6 +110,7 @@ namespace castor3d
 		bool m_dirty{ true };
 		VertexTransformingUPtr m_vertexTransform;
 		std::map< LightingModelID, size_t > m_lightingModels;
+		std::map< Pass const *, OnPassChangedConnection > m_onPassChanged;
 	};
 }
 

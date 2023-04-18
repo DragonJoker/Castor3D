@@ -113,8 +113,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SceneRenderNodes::SceneRenderNodes( Scene const & scene )
-		: castor::OwnedBy< Scene const >{ scene }
+	SceneRenderNodes::SceneRenderNodes( Scene & scene )
+		: castor::OwnedBy< Scene >{ scene }
 		, m_device{ scene.getEngine()->getRenderSystem()->getRenderDevice() }
 		, m_modelsData{ makeBuffer< ModelBufferConfiguration >( m_device
 			, MaxObjectNodesCount
@@ -182,6 +182,7 @@ namespace castor3d
 		m_nodesData.clear();
 		m_submeshNodes.clear();
 		m_billboardNodes.clear();
+		m_onPassChanged.clear();
 	}
 
 	SubmeshRenderNode & SceneRenderNodes::createNode( Pass & pass
@@ -213,6 +214,15 @@ namespace castor3d
 				, data.getMeshletsCount()
 				, node.modelData );
 			scnrendnd::add( pass.getLightingModelId(), m_lightingModels );
+			auto ires = m_onPassChanged.emplace( &pass, OnPassChangedConnection{} );
+
+			if ( ires.second )
+			{
+				ires.first->second = pass.onChanged.connect( [this]( Pass const & pass )
+					{
+						reportPassChange( pass );
+					} );
+			}
 
 			if ( data.isDynamic() )
 			{
@@ -273,6 +283,15 @@ namespace castor3d
 				, it.first->second->modelData );
 			scnrendnd::add( pass.getLightingModelId(), m_lightingModels );
 			m_dirty = true;
+			auto ires = m_onPassChanged.emplace( &pass, OnPassChangedConnection{} );
+
+			if ( ires.second )
+			{
+				ires.first->second = pass.onChanged.connect( [this]( Pass const & pass )
+					{
+						reportPassChange( pass );
+					} );
+			}
 		}
 
 		return *it.first->second;
@@ -302,6 +321,47 @@ namespace castor3d
 		}
 
 		return nullptr;
+	}
+
+	void SceneRenderNodes::reportPassChange( Pass const & pass )
+	{
+		for ( auto & submeshIt : m_submeshNodes )
+		{
+			if ( submeshIt.second->pass == &pass )
+			{
+				for ( auto & culler : m_cullers )
+				{
+					culler->removeCulled( *submeshIt.second );
+				}
+
+				auto & data = submeshIt.second->data;
+				auto & instance = submeshIt.second->instance;
+				auto id = instance.getId( pass, data );
+				instance.setId( pass
+					, data
+					, submeshIt.second.get()
+					, id );
+				getOwner()->markDirty( instance );
+			}
+		}
+
+		for ( auto & billboardIt : m_billboardNodes )
+		{
+			if ( billboardIt.second->pass == &pass )
+			{
+				for ( auto & culler : m_cullers )
+				{
+					culler->removeCulled( *billboardIt.second );
+				}
+
+				auto & billboard = billboardIt.second->data;
+				auto id = billboard.getId( pass );
+				billboard.setId( pass
+					, billboardIt.second.get()
+					, id );
+				getOwner()->markDirty( billboard );
+			}
+		}
 	}
 
 	void SceneRenderNodes::reportPassChange( Submesh & data

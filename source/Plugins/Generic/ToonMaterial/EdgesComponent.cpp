@@ -295,6 +295,7 @@ namespace toon
 
 	void EdgesComponent::accept( castor3d::PassVisitorBase & vis )
 	{
+		vis.visit( cuT( "Toon" ) );
 		vis.visit( cuT( "Edge colour" )
 			, *m_value.edgeColour
 			, &m_value.edgeColour.control() );

@@ -82,71 +82,73 @@ namespace castor3d
 			{
 				CU_Failure( "Geometry::setMaterial" );
 			}
-
-			bool changed = false;
-			MaterialObs oldMaterial{};
-			auto itSubMat = m_submeshesMaterials.find( &submesh );
-
-			if ( itSubMat != m_submeshesMaterials.end() )
+			else
 			{
-				oldMaterial = itSubMat->second;
+				bool changed = false;
+				MaterialObs oldMaterial{};
+				auto itSubMat = m_submeshesMaterials.find( &submesh );
 
-				if ( oldMaterial != material )
+				if ( itSubMat != m_submeshesMaterials.end() )
 				{
-					itSubMat->second = material;
+					oldMaterial = itSubMat->second;
+
+					if ( oldMaterial != material )
+					{
+						itSubMat->second = material;
+						changed = true;
+					}
+				}
+				else if ( material )
+				{
+					oldMaterial = submesh.getDefaultMaterial();
+					CU_Require( &submesh.getParent() == mesh );
+					m_submeshesMaterials.emplace( &submesh, material );
 					changed = true;
 				}
-			}
-			else if ( material )
-			{
-				oldMaterial = submesh.getDefaultMaterial();
-				CU_Require( &submesh.getParent() == mesh );
-				m_submeshesMaterials.emplace( &submesh, material );
-				changed = true;
-			}
 
-			if ( changed )
-			{
-				if ( oldMaterial )
+				if ( changed )
 				{
-					getScene()->getRenderNodes().reportPassChange( submesh
-						, *this
-						, *oldMaterial
-						, *material );
-
-					submesh.instantiate( this, oldMaterial, material, true );
-
-					for ( auto & pass : *oldMaterial )
+					if ( oldMaterial )
 					{
-						auto itPass = m_ids.find( pass.get() );
+						getScene()->getRenderNodes().reportPassChange( submesh
+							, *this
+							, *oldMaterial
+							, *material );
 
-						if ( itPass != m_ids.end() )
+						submesh.instantiate( this, oldMaterial, material, true );
+
+						for ( auto & pass : *oldMaterial )
 						{
-							auto itSubmesh = itPass->second.find( submesh.getId() );
+							auto itPass = m_ids.find( pass.get() );
 
-							if ( itSubmesh != itPass->second.end() )
+							if ( itPass != m_ids.end() )
 							{
-								itPass->second.erase( itSubmesh );
+								auto itSubmesh = itPass->second.find( submesh.getId() );
 
-								if ( itPass->second.empty() )
+								if ( itSubmesh != itPass->second.end() )
 								{
-									m_ids.erase( itPass );
+									itPass->second.erase( itSubmesh );
+
+									if ( itPass->second.empty() )
+									{
+										m_ids.erase( itPass );
+									}
 								}
 							}
 						}
 					}
-				}
-				else
-				{
-					submesh.instantiate( this, oldMaterial, material, true );
-				}
+					else
+					{
+						submesh.instantiate( this, oldMaterial, material, true );
+					}
 
-				if ( material->hasEnvironmentMapping() )
-				{
-					getScene()->addEnvironmentMap( *getParent() );
-				}
+					if ( material->hasEnvironmentMapping() )
+					{
+						getScene()->addEnvironmentMap( *getParent() );
+					}
 
-				markDirty();
+					markDirty();
+				}
 			}
 		}
 		else
