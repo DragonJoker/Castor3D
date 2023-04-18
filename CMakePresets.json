@@ -70,10 +70,7 @@
 			"displayName": "Castor3D Developer Visual Studio Config",
 			"description": "Build configuration using Visual Studio, for Castor3D developers",
 			"inherits": "dev-base",
-			"generator": "Visual Studio 17 2022",
-			"cacheVariables": {
-				"CASTOR_USE_DEPS_WXWIDGETS": true
-			}
+			"generator": "Visual Studio 17 2022"
 		},
 		{
 			"name": "dev-ninja",
