@@ -6004,9 +6004,8 @@ namespace castor3d
 		}
 		else
 		{
-			castor::Path path;
-			castor::Path filePath = context.file.getPath();
-			params[0]->get( path );
+			auto path = params[0]->get< castor::Path >();
+			auto filePath = context.file.getPath();
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
@@ -6017,7 +6016,8 @@ namespace castor3d
 			else
 			{
 				parsingContext.skybox.reset();
-				CU_ParsingError( cuT( "Couldn't load the image" ) );
+				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+				CU_ParsingError( err );
 			}
 		}
 	}
@@ -6037,9 +6037,8 @@ namespace castor3d
 		}
 		else
 		{
-			castor::Path path;
-			castor::Path filePath = context.file.getPath();
-			params[0]->get( path );
+			auto path = params[0]->get< castor::Path >();
+			auto filePath = context.file.getPath();
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
@@ -6048,7 +6047,8 @@ namespace castor3d
 			else
 			{
 				parsingContext.skybox.reset();
-				CU_ParsingError( cuT( "Couldn't load the image" ) );
+				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+				CU_ParsingError( err );
 			}
 		}
 	}
@@ -6060,8 +6060,19 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			castor::Path path;
-			parsingContext.skybox->loadLeftImage( context.file.getPath(), params[0]->get( path ) );
+			auto path = params[0]->get< castor::Path >();
+			auto filePath = context.file.getPath();
+
+			if ( castor::File::fileExists( filePath / path ) )
+			{
+				parsingContext.skybox->loadLeftImage( filePath, path );
+			}
+			else
+			{
+				parsingContext.skybox.reset();
+				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+				CU_ParsingError( err );
+			}
 		}
 		else
 		{
@@ -6077,8 +6088,19 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			castor::Path path;
-			parsingContext.skybox->loadRightImage( context.file.getPath(), params[0]->get( path ) );
+			auto path = params[0]->get< castor::Path >();
+			auto filePath = context.file.getPath();
+
+			if ( castor::File::fileExists( filePath / path ) )
+			{
+				parsingContext.skybox->loadRightImage( filePath, path );
+			}
+			else
+			{
+				parsingContext.skybox.reset();
+				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+				CU_ParsingError( err );
+			}
 		}
 		else
 		{
@@ -6094,8 +6116,19 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			castor::Path path;
-			parsingContext.skybox->loadTopImage( context.file.getPath(), params[0]->get( path ) );
+			auto path = params[0]->get< castor::Path >();
+			auto filePath = context.file.getPath();
+
+			if ( castor::File::fileExists( filePath / path ) )
+			{
+				parsingContext.skybox->loadTopImage( filePath, path );
+			}
+			else
+			{
+				parsingContext.skybox.reset();
+				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+				CU_ParsingError( err );
+			}
 		}
 		else
 		{
@@ -6111,8 +6144,19 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			castor::Path path;
-			parsingContext.skybox->loadBottomImage( context.file.getPath(), params[0]->get( path ) );
+			auto path = params[0]->get< castor::Path >();
+			auto filePath = context.file.getPath();
+
+			if ( castor::File::fileExists( filePath / path ) )
+			{
+				parsingContext.skybox->loadBottomImage( filePath, path );
+			}
+			else
+			{
+				parsingContext.skybox.reset();
+				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+				CU_ParsingError( err );
+			}
 		}
 		else
 		{
@@ -6128,8 +6172,19 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			castor::Path path;
-			parsingContext.skybox->loadFrontImage( context.file.getPath(), params[0]->get( path ) );
+			auto path = params[0]->get< castor::Path >();
+			auto filePath = context.file.getPath();
+
+			if ( castor::File::fileExists( filePath / path ) )
+			{
+				parsingContext.skybox->loadFrontImage( filePath, path );
+			}
+			else
+			{
+				parsingContext.skybox.reset();
+				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+				CU_ParsingError( err );
+			}
 		}
 		else
 		{
@@ -6145,8 +6200,19 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			castor::Path path;
-			parsingContext.skybox->loadBackImage( context.file.getPath(), params[0]->get( path ) );
+			auto path = params[0]->get< castor::Path >();
+			auto filePath = context.file.getPath();
+
+			if ( castor::File::fileExists( filePath / path ) )
+			{
+				parsingContext.skybox->loadBackImage( filePath, path );
+			}
+			else
+			{
+				parsingContext.skybox.reset();
+				castor::String err = cuT( "Couldn't load the image file [" ) + path + cuT( "] (file does not exist)" );
+				CU_ParsingError( err );
+			}
 		}
 		else
 		{

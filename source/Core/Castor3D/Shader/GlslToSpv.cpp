@@ -3,6 +3,8 @@ This file belongs to Ashes.
 See LICENSE file in root folder.
 */
 #include "Castor3D/Shader/GlslToSpv.hpp"
+
+#include "Castor3D/Config.hpp"
 #include "Castor3D/RequiredVersion.hpp"
 
 #if C3D_HasGlslang

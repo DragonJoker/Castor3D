@@ -269,7 +269,8 @@ namespace castor3d
 		 *\brief		Génère les mipmaps de la texture
 		 *\param[in]	device	Le device GPU.
 		 */
-		C3D_API void generateMipmaps( RenderDevice const & device )const;
+		C3D_API void generateMipmaps( RenderDevice const & device
+			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
@@ -278,7 +279,8 @@ namespace castor3d
 		 *\brief		Génère les mipmaps de la texture
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
-		C3D_API void generateMipmaps( QueueData const & queueData )const;
+		C3D_API void generateMipmaps( QueueData const & queueData
+			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
@@ -287,7 +289,8 @@ namespace castor3d
 		 *\brief		Génère les mipmaps de la texture
 		 *\param[in]	cmd	Le command buffer recevant les commandes.
 		 */
-		C3D_API void generateMipmaps( ashes::CommandBuffer & cmd )const;
+		C3D_API void generateMipmaps( ashes::CommandBuffer & cmd
+			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
 		/**
 		 *\name Whole texture access.
 		 **/

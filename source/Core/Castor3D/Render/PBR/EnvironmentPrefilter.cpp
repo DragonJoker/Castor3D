@@ -148,8 +148,6 @@ namespace castor3d
 									: brdf.getImportanceSample( brdf.importanceSampleGGX( xi, c3d_roughness ), N ) ) );
 							auto H = writer.declLocale( "H"
 								, importanceSample.xyz() );
-							auto pdf = writer.declLocale( "pdf"
-								, importanceSample.w() );
 
 							auto L = writer.declLocale( "L"
 								, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
@@ -158,7 +156,9 @@ namespace castor3d
 
 							IF( writer, NdotL > 0.0_f )
 							{
-								auto resolution = Float{ float( size.width ) }; // resolution of source cubemap (per face)
+								auto pdf = writer.declLocale( "pdf"
+									, importanceSample.w() );
+								auto resolution = Float{ float( size.width ) };
 								auto omegaP = writer.declLocale( "omegaP"
 									, ( 4.0f * castor::Pi< float > ) / ( 6.0_f * resolution * resolution ) );
 								auto omegaS = writer.declLocale( "omegaS"

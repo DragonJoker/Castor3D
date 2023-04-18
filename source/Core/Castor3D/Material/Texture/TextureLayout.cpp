@@ -1141,7 +1141,8 @@ namespace castor3d
 		m_initialised = false;
 	}
 
-	void TextureLayout::generateMipmaps( QueueData const & queueData )const
+	void TextureLayout::generateMipmaps( QueueData const & queueData
+		, VkImageLayout srcLayout )const
 	{
 		if ( m_info->mipLevels > 1u
 			&& getDefaultView().isMipmapsGenerationNeeded() )
@@ -1151,7 +1152,8 @@ namespace castor3d
 			commandBuffer->begin();
 			commandBuffer->beginDebugBlock( { getName() + " Mipmaps Generation"
 				, makeFloatArray( getRenderSystem()->getEngine()->getNextRainbowColour() ) } );
-			generateMipmaps( *commandBuffer );
+			generateMipmaps( *commandBuffer
+				, srcLayout );
 			commandBuffer->endDebugBlock();
 			commandBuffer->end();
 			queueData.queue->submit( *commandBuffer, nullptr );
@@ -1159,15 +1161,20 @@ namespace castor3d
 		}
 	}
 
-	void TextureLayout::generateMipmaps( RenderDevice const & device )const
+	void TextureLayout::generateMipmaps( RenderDevice const & device
+		, VkImageLayout srcLayout )const
 	{
-		generateMipmaps( *device.graphicsData() );
+		generateMipmaps( *device.graphicsData()
+			, srcLayout );
 	}
 
-	void TextureLayout::generateMipmaps( ashes::CommandBuffer & cmd )const
+	void TextureLayout::generateMipmaps( ashes::CommandBuffer & cmd
+		, VkImageLayout srcLayout )const
 	{
 		CU_Require( m_texture );
 		m_texture->generateMipmaps( cmd
+			, srcLayout
+			, VK_IMAGE_LAYOUT_UNDEFINED
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 	}
 

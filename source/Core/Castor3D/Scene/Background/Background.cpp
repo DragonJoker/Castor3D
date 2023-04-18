@@ -288,7 +288,7 @@ namespace castor3d
 		if ( !m_initialised )
 		{
 			m_initialised = doInitialise( device );
-			castor::String const name = cuT( "Skybox" );
+			castor::String const name = cuT( "Skybox_" ) + castor::string::toString( m_texture->getMipmapCount() );
 			auto sampler = getEngine()->tryFindSampler( name );
 
 			if ( !sampler )

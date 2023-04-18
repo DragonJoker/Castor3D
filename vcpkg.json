@@ -51,9 +51,16 @@
         "vkfft"
       ]
     },
+    "tools": {
+      "description": "Build tools projects.",
+      "dependencies": [
+        "wxwidgets"
+      ]
+    },
     "vcpkg-deps": {
       "description": "Use vcpkg's ashes/rendergraph/shaderwriter.",
-      "dependencies": [ "ashes",
+      "dependencies": [
+        "ashes",
         "rendergraph",
         {
           "name": "shaderwriter",
