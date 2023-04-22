@@ -9,6 +9,19 @@ CU_ImplementSmartPtr( castor3d, Cone )
 
 namespace castor3d
 {
+	namespace cone
+	{
+		static void swapComponents( uint32_t lhs
+			, uint32_t rhs
+			, InterleavedVertexArray & vertices )
+		{
+			for ( auto & vtx : vertices )
+			{
+				std::swap( vtx.pos[lhs], vtx.pos[rhs] );
+			}
+		}
+	}
+
 	Cone::Cone()
 		: MeshGenerator( cuT( "cone" ) )
 		, m_nbFaces( 0 )
@@ -26,6 +39,7 @@ namespace castor3d
 		, Parameters const & parameters )
 	{
 		castor::String param;
+		uint32_t axis = 1u;
 
 		if ( parameters.get( cuT( "faces" ), param ) )
 		{
@@ -42,6 +56,18 @@ namespace castor3d
 			m_height = castor::string::toFloat( param );
 		}
 
+		if ( parameters.get( cuT( "axis" ), param ) )
+		{
+			if ( param == "x" )
+			{
+				axis = 0u;
+			}
+			else if ( param == "z" )
+			{
+				axis = 2u;
+			}
+		}
+
 		if ( m_nbFaces >= 2
 			&& m_height > std::numeric_limits< float >::epsilon()
 			&& m_radius > std::numeric_limits< float >::epsilon() )
@@ -53,6 +79,8 @@ namespace castor3d
 			uint32_t i = 0;
 			InterleavedVertexArray baseVertex;
 			InterleavedVertexArray sideVertex;
+			baseVertex.reserve( size_t( m_nbFaces ) + 1u );
+			sideVertex.reserve( ( size_t( m_nbFaces ) + 1u ) * 2u );
 
 			for ( float alpha = 0; i <= m_nbFaces; alpha += dalpha )
 			{
@@ -73,6 +101,12 @@ namespace castor3d
 					.position( castor::Point3f{ float( 0 ), m_height, float( 0 ) } )
 					.texcoord( castor::Point2f{ float( i ) / float( m_nbFaces ), float( 0.0 ) } ) );
 				i++;
+			}
+
+			if ( axis != 1u )
+			{
+				cone::swapComponents( axis, 1u, baseVertex );
+				cone::swapComponents( axis, 1u, sideVertex );
 			}
 			
 			baseVertex.push_back( InterleavedVertex{}
@@ -110,6 +144,7 @@ namespace castor3d
 			indexMappingBase->computeNormals();
 			indexMappingSide->computeNormals();
 
+			// Join the first and last edge of the cone, tangent space wise.
 			auto sideNormals = submeshSide.getComponent< NormalsComponent >();
 			auto sideTangents = submeshSide.getComponent< TangentsComponent >();
 			auto normal0Top = sideNormals->getData()[0];
