@@ -334,18 +334,10 @@ namespace CastorViewer
 	void RenderPanel::doTurnCameraVertic()
 	{
 		doResetTimers();
-		auto camera = m_camera;
 
-		if ( camera )
+		if ( m_currentState )
 		{
-			auto cameraNode = camera->getParent();
-			camera->getScene()->getListener().postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
-				, [cameraNode]()
-				{
-					castor::Quaternion orientation{ cameraNode->getOrientation() };
-					orientation *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }, 90.0_degrees );
-					cameraNode->setOrientation( orientation );
-				} ) );
+			m_currentState->pitch( 90.0_degrees );
 		}
 	}
 

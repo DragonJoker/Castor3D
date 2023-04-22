@@ -152,13 +152,27 @@ namespace GuiCommon
 
 	void NodeState::pitch( castor::Angle const & value )noexcept
 	{
-		m_angles[0] += ( value - 0.01_degrees );
-		m_angularVelocityX = 0.01_degrees;
+		m_angles[0] += value;
+		m_angularVelocityX = 0.00_degrees;
+		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			, [this, value]()
+			{
+				castor::Quaternion orientation{ m_node->getOrientation() };
+				orientation *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 1.0f, 0.0f, 0.0f }, value );
+				m_node->setOrientation( orientation );
+			} ) );
 	}
 
 	void NodeState::yaw( castor::Angle const & value )noexcept
 	{
-		m_angles[1] += ( value - 0.01_degrees );
-		m_angularVelocityY = 0.01_degrees;
+		m_angles[1] += value;
+		m_angularVelocityY = 0.00_degrees;
+		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			, [this, value]()
+			{
+				castor::Quaternion orientation{ m_node->getOrientation() };
+				orientation *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }, value );
+				m_node->setOrientation( orientation );
+			} ) );
 	}
 }
