@@ -148,6 +148,12 @@ add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
 )
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+	target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:REF>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:ICF>" )
+endif ()
 target_compile_definitions( ${PROJECT_NAME}
 	PRIVATE
 		${${PROJECT_NAME}_DEFINITIONS}
