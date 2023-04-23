@@ -277,8 +277,9 @@ namespace castor3d
 
 		if ( m_dirty.exchange( false ) )
 		{
+			auto oldComponents = m_componentCombine;
 			m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
-			onChanged( *this );
+			onChanged( *this, oldComponents.baseId, m_componentCombine.baseId );
 		}
 	}
 
@@ -1085,7 +1086,7 @@ namespace castor3d
 		{
 			prepareTextures();
 			m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
-			onChanged( *this );
+			onChanged( *this, m_componentCombine.baseId, m_componentCombine.baseId );
 
 			for ( auto & source : m_realSources )
 			{

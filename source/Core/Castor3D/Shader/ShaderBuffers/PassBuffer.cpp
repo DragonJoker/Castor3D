@@ -102,7 +102,9 @@ namespace castor3d
 			CU_Require( m_passes.size() < MaxMaterialsCount );
 			m_passes.emplace_back( &pass );
 			pass.setId( m_passID++ );
-			m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & ppass )
+			m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & ppass
+				, PassComponentCombineID CU_UnusedParam( oldCombineID )
+				, PassComponentCombineID CU_UnusedParam( newCombineID ) )
 				{
 					m_dirty.emplace_back( &ppass );
 				} ) );

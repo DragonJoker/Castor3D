@@ -8,6 +8,7 @@
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
@@ -218,9 +219,11 @@ namespace castor3d
 
 			if ( ires.second )
 			{
-				ires.first->second = pass.onChanged.connect( [this]( Pass const & pass )
+				ires.first->second = pass.onChanged.connect( [this]( Pass const & pass
+					, PassComponentCombineID oldComponents
+					, PassComponentCombineID newComponents )
 					{
-						reportPassChange( pass );
+						reportPassChange( pass, oldComponents, newComponents );
 					} );
 			}
 
@@ -287,9 +290,11 @@ namespace castor3d
 
 			if ( ires.second )
 			{
-				ires.first->second = pass.onChanged.connect( [this]( Pass const & pass )
+				ires.first->second = pass.onChanged.connect( [this]( Pass const & pass
+					, PassComponentCombineID oldComponents
+					, PassComponentCombineID newComponents )
 					{
-						reportPassChange( pass );
+						reportPassChange( pass, oldComponents, newComponents );
 					} );
 			}
 		}
@@ -323,45 +328,39 @@ namespace castor3d
 		return nullptr;
 	}
 
-	void SceneRenderNodes::reportPassChange( Pass const & pass )
+	void SceneRenderNodes::reportPassChange( Pass const & pass
+		, PassComponentCombineID oldComponents
+		, PassComponentCombineID newComponents )
 	{
-		for ( auto & submeshIt : m_submeshNodes )
+		auto & componentsReg = getOwner()->getEngine()->getPassComponentsRegister();
+		bool newHasEnvMap = componentsReg.needsEnvironmentMapping( newComponents );
+		bool oldHasEnvMap = componentsReg.needsEnvironmentMapping( oldComponents );
+		auto removeNode = [this, &pass, newHasEnvMap, oldHasEnvMap]( auto & nodes )
 		{
-			if ( submeshIt.second->pass == &pass )
+			for ( auto & nodeIt : nodes )
 			{
-				for ( auto & culler : m_cullers )
+				if ( nodeIt.second->pass == &pass )
 				{
-					culler->removeCulled( *submeshIt.second );
+					for ( auto & culler : m_cullers )
+					{
+						culler->removeCulled( *nodeIt.second );
+					}
+
+					getOwner()->markDirty( nodeIt.second->instance );
+
+					if ( newHasEnvMap && !oldHasEnvMap )
+					{
+						getScene()->addEnvironmentMap( nodeIt.second->getSceneNode() );
+					}
+					else if ( !newHasEnvMap && oldHasEnvMap )
+					{
+						getScene()->removeEnvironmentMap( nodeIt.second->getSceneNode() );
+					}
 				}
-
-				auto & data = submeshIt.second->data;
-				auto & instance = submeshIt.second->instance;
-				auto id = instance.getId( pass, data );
-				instance.setId( pass
-					, data
-					, submeshIt.second.get()
-					, id );
-				getOwner()->markDirty( instance );
 			}
-		}
-
-		for ( auto & billboardIt : m_billboardNodes )
-		{
-			if ( billboardIt.second->pass == &pass )
-			{
-				for ( auto & culler : m_cullers )
-				{
-					culler->removeCulled( *billboardIt.second );
-				}
-
-				auto & billboard = billboardIt.second->data;
-				auto id = billboard.getId( pass );
-				billboard.setId( pass
-					, billboardIt.second.get()
-					, id );
-				getOwner()->markDirty( billboard );
-			}
-		}
+		};
+		removeNode( m_submeshNodes );
+		removeNode( m_billboardNodes );
 	}
 
 	void SceneRenderNodes::reportPassChange( Submesh & data

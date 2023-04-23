@@ -111,6 +111,7 @@ namespace castor3d
 		C3D_API PassComponentCombine filterComponentFlags( ComponentModeFlags filter
 			, PassComponentCombine const & combine )const;
 		C3D_API bool hasOpacity( PipelineFlags const & flags )const;
+		C3D_API bool needsEnvironmentMapping( PassComponentCombineID combineID )const;
 
 		PassComponentFlag getAlphaBlendingFlag()const
 		{

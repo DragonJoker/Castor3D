@@ -64,6 +64,11 @@ namespace castor3d
 		return data.getProgramFlags( *getMaterial() );
 	}
 
+	VkPrimitiveTopology SubmeshRenderNode::getPrimitiveTopology()const
+	{
+		return data.getTopology();
+	}
+
 	GeometryBuffers const & SubmeshRenderNode::getGeometryBuffers( PipelineFlags const & flags )const
 	{
 		return data.getGeometryBuffers( *this
@@ -113,5 +118,15 @@ namespace castor3d
 	GpuBufferOffsetT< MeshletCullData > const & SubmeshRenderNode::getFinalMeshletsBounds()const
 	{
 		return data.getFinalMeshletsBounds( instance );
+	}
+
+	GpuBufferOffsetT< castor::Point4f > const & SubmeshRenderNode::getMorphTargets()const
+	{
+		return data.getMorphTargets();
+	}
+
+	SceneNode & SubmeshRenderNode::getSceneNode()const
+	{
+		return *instance.getParent();
 	}
 }

@@ -54,7 +54,9 @@ namespace castor3d
 			, BillboardBase & instance );
 		C3D_API SubmeshRenderNode const * getSubmeshNode( uint32_t nodeId );
 		C3D_API BillboardRenderNode const * getBillboardNode( uint32_t nodeId );
-		C3D_API void reportPassChange( Pass const & pass );
+		C3D_API void reportPassChange( Pass const & pass
+			, PassComponentCombineID oldComponents
+			, PassComponentCombineID newComponents );
 		C3D_API void reportPassChange( Submesh & data
 			, Geometry & instance
 			, Material const & oldMaterial
