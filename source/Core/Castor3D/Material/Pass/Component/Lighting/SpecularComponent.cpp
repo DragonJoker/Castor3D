@@ -37,7 +37,7 @@ namespace castor
 		bool operator()( castor3d::SpecularComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, "specular", object.getSpecular(), castor3d::SpecularComponent::Default )
+			return writeNamedSubOpt( file, "specular_colour", object.getSpecular(), castor3d::SpecularComponent::Default )
 				&& writeOpt( file, "specular_factor", object.getFactor(), castor3d::SpecularComponent::DefaultFactor );
 		}
 	};
@@ -180,6 +180,11 @@ namespace castor3d
 		castor::addParserT( parsers
 			, CSCNSection::ePass
 			, cuT( "specular" )
+			, spccmp::parserPassSpecular
+			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
+		castor::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "specular_colour" )
 			, spccmp::parserPassSpecular
 			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
 		castor::addParserT( parsers

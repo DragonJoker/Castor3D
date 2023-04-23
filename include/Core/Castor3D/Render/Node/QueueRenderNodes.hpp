@@ -21,6 +21,9 @@ namespace castor3d
 		: public castor::OwnedBy< RenderQueue const >
 	{
 	public:
+		using PipelineMap = std::unordered_map< size_t, RenderPipeline * >;
+
+	public:
 		C3D_API explicit QueueRenderNodes( RenderQueue const & queue );
 
 		C3D_API void initialise( RenderDevice const & device );
@@ -111,7 +114,7 @@ namespace castor3d
 		using PipelineNodesBuffer = ashes::BufferPtr< PipelineNodes >;
 		PipelineNodesBuffer m_pipelinesNodes;
 
-		std::unordered_map< size_t, RenderPipeline * > m_pipelines;
+		PipelineMap m_pipelines;
 
 		//!\~english	The submesh render nodes, sorted by shader program.
 		//!\~french		Les noeuds de rendu de submesh, triés par programme shader.

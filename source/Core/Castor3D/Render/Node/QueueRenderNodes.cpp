@@ -862,6 +862,58 @@ namespace castor3d
 		}
 
 #endif
+
+		static size_t makeHash( SubmeshRenderNode const & node
+			, bool frontCulled )
+		{
+			auto & submesh = node.data;
+			auto & pass = *node.pass;
+			size_t hash = std::hash< Submesh const * >{}( &submesh );
+			hash = castor::hashCombinePtr( hash, pass );
+			hash = castor::hashCombine( hash, node.getInstanceCount() );
+			hash = castor::hashCombine( hash, frontCulled );
+			return hash;
+		}
+
+		static size_t makeHash( BillboardRenderNode const & node
+			, bool frontCulled )
+		{
+			auto & billboard = node.data;
+			auto & pass = *node.pass;
+			size_t hash = std::hash< BillboardBase const * >{}( &billboard );
+			hash = castor::hashCombinePtr( hash, pass );
+			hash = castor::hashCombine( hash, node.getInstanceCount() );
+			return hash;
+		}
+
+		template< typename NodeT >
+		std::tuple< size_t, QueueRenderNodes::PipelineMap::iterator, PipelineFlags > getPipeline( RenderNodesPass const & renderPass
+			, NodeT const & node
+			, bool frontCulled
+			, QueueRenderNodes::PipelineMap & pipelines )
+		{
+			auto hash = makeHash( node, frontCulled );
+			auto it = pipelines.find( hash );
+			Pass const & pass = *node.pass;
+			auto & scene = renderPass.getCuller().getScene();
+			auto pipelineFlags = renderPass.createPipelineFlags( pass
+				, pass.getTexturesMask()
+				, node.getSubmeshFlags()
+				, node.getProgramFlags()
+				, scene.getFlags()
+				, node.getPrimitiveTopology()
+				, frontCulled
+				, node.getMorphTargets() );
+
+			if ( it != pipelines.end()
+				&& pipelineFlags != it->second->getFlags() )
+			{
+				pipelines.erase( it );
+				it = pipelines.end();
+			}
+
+			return { hash, it, pipelineFlags };
+		}
 	}
 
 	//*************************************************************************************************
@@ -1349,28 +1401,14 @@ namespace castor3d
 	RenderPipeline & QueueRenderNodes::doGetPipeline( SubmeshRenderNode const & node
 		, bool frontCulled )
 	{
-		auto & submesh = node.data;
-		auto & pass = *node.pass;
-		size_t hash = std::hash< Submesh const * >{}( &submesh );
-		hash = castor::hashCombinePtr( hash, pass );
-		hash = castor::hashCombine( hash, node.getInstanceCount() );
-		hash = castor::hashCombine( hash, frontCulled );
-		auto it = m_pipelines.find( hash );
+		auto & renderPass = *getOwner()->getOwner();
+		auto [hash, it, pipelineFlags] = queuerndnd::getPipeline( renderPass
+			, node
+			, frontCulled
+			, m_pipelines );
 
 		if ( it == m_pipelines.end() )
 		{
-			auto & renderPass = *getOwner()->getOwner();
-			auto & scene = getOwner()->getCuller().getScene();
-			auto material = pass.getOwner();
-			auto pipelineFlags = renderPass.createPipelineFlags( pass
-				, pass.getTexturesMask()
-				, submesh.getSubmeshFlags( &pass )
-				, submesh.getProgramFlags( *material )
-				, scene.getFlags()
-				, submesh.getTopology()
-				, frontCulled
-				, submesh.getMorphTargets() );
-
 			if ( pipelineFlags.usesMesh() )
 			{
 				node.createMeshletDescriptorSet();
@@ -1391,31 +1429,16 @@ namespace castor3d
 
 	RenderPipeline & QueueRenderNodes::doGetPipeline( BillboardRenderNode const & node )
 	{
-		auto & billboard = node.data;
-		auto & pass = *node.pass;
-		size_t hash = std::hash< BillboardBase const * >{}( &billboard );
-		hash = castor::hashCombinePtr( hash, pass );
-		hash = castor::hashCombine( hash, node.getInstanceCount() );
-		auto it = m_pipelines.find( hash );
+		auto & renderPass = *getOwner()->getOwner();
+		auto [hash, it, pipelineFlags] = queuerndnd::getPipeline( renderPass
+			, node
+			, false
+			, m_pipelines );
 
 		if ( it == m_pipelines.end() )
 		{
-			auto & renderPass = *getOwner()->getOwner();
-			auto & scene = getOwner()->getCuller().getScene();
-			auto submeshFlags = billboard.getSubmeshFlags();
-			auto programFlags = billboard.getProgramFlags();
-			auto sceneFlags = scene.getFlags();
-			auto textures = pass.getTexturesMask();
-			auto pipelineFlags = renderPass.createPipelineFlags( pass
-				, textures
-				, submeshFlags
-				, programFlags
-				, sceneFlags
-				, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
-				, false
-				, {} );
 			auto & result = renderPass.prepareBackPipeline( pipelineFlags
-				, billboard.getGeometryBuffers().layouts
+				, node.getGeometryBuffers( pipelineFlags ).layouts
 				, nullptr );
 			it = m_pipelines.emplace( hash, &result ).first;
 		}

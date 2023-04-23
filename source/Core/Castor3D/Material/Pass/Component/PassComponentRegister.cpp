@@ -413,6 +413,14 @@ namespace castor3d
 			|| ( hasAny( flags.components, getAlphaTestFlag() ) && ( flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) ) );
 	}
 
+	bool PassComponentRegister::needsEnvironmentMapping( PassComponentCombineID combineID )const
+	{
+		auto components = getPassComponentCombine( combineID );
+		return ( hasAny( components, getPlugin( ReflectionComponent::TypeName ).getComponentFlags() )
+			|| ( hasAny( components, getPlugin( RefractionComponent::TypeName ).getComponentFlags() )
+				&& !hasAny( components, getPlugin( TransmissionComponent::TypeName ).getComponentFlags() ) ) );
+	}
+
 	void PassComponentRegister::updateMapComponents( std::vector< TextureFlagConfiguration > const & texConfigs
 		, Pass & result )
 	{
@@ -434,7 +442,7 @@ namespace castor3d
 			}
 		}
 
-		// Then update the pass map components givent the needed ones list.
+		// Then update the pass map components given the needed ones list.
 		for ( auto & componentDesc : m_registered )
 		{
 			if ( componentDesc.plugin->isMapComponent() )

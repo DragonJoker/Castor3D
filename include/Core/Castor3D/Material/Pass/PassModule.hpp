@@ -125,7 +125,9 @@ namespace castor3d
 	//! Pass pointer array
 	CU_DeclareVector( PassUPtr, PassPtr );
 
-	using OnPassChangedFunction = std::function< void( Pass const & ) >;
+	using OnPassChangedFunction = std::function< void( Pass const & pass
+		, PassComponentCombineID oldComponents
+		, PassComponentCombineID newComponents ) >;
 	using OnPassChanged = castor::SignalT< OnPassChangedFunction >;
 	using OnPassChangedConnection = OnPassChanged::connection;
 

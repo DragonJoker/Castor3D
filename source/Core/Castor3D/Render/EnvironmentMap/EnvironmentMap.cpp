@@ -386,7 +386,7 @@ namespace castor3d
 
 		if ( it != m_reflectionNodes.end() )
 		{
-			m_reflectionNodes.insert( &node );
+			m_reflectionNodes.erase( it );
 		}
 	}
 

@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 
 CU_ImplementSmartPtr( castor3d, BillboardRenderNode )
@@ -53,8 +54,23 @@ namespace castor3d
 		return data.getProgramFlags();
 	}
 
+	VkPrimitiveTopology BillboardRenderNode::getPrimitiveTopology()const
+	{
+		return VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP;
+	}
+
 	GeometryBuffers const & BillboardRenderNode::getGeometryBuffers( PipelineFlags const & flags )const
 	{
 		return data.getGeometryBuffers();
+	}
+
+	GpuBufferOffsetT< castor::Point4f > BillboardRenderNode::getMorphTargets()const
+	{
+		return {};
+	}
+
+	SceneNode & BillboardRenderNode::getSceneNode()const
+	{
+		return *instance.getNode();
 	}
 }

@@ -68,7 +68,9 @@ namespace castor3d
 		CU_Require( result );
 		auto ret = result.get();
 		m_passListeners.emplace( ret
-			, result->onChanged.connect( [this]( Pass const & p )
+			, result->onChanged.connect( [this]( Pass const & p
+				, PassComponentCombineID CU_UnusedParam( oldCombineID )
+				, PassComponentCombineID CU_UnusedParam( newCombineID ) )
 			{
 				onPassChanged( p );
 			} ) );
@@ -95,7 +97,9 @@ namespace castor3d
 			, pass );
 		CU_Require( newPass );
 		m_passListeners.emplace( newPass.get()
-			, newPass->onChanged.connect( [this]( Pass const & p )
+			, newPass->onChanged.connect( [this]( Pass const & p
+				, PassComponentCombineID CU_UnusedParam( oldCombineID )
+				, PassComponentCombineID CU_UnusedParam( newCombineID ) )
 			{
 				onPassChanged( p );
 			} ) );

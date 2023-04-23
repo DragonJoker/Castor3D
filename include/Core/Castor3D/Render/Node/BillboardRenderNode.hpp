@@ -35,7 +35,10 @@ namespace castor3d
 		C3D_API SubmeshFlags getSubmeshFlags()const;
 		C3D_API MorphFlags getMorphFlags()const;
 		C3D_API ProgramFlags getProgramFlags()const;
+		C3D_API VkPrimitiveTopology getPrimitiveTopology()const;
 		C3D_API GeometryBuffers const & getGeometryBuffers( PipelineFlags const & flags )const;
+		C3D_API GpuBufferOffsetT< castor::Point4f > getMorphTargets()const;
+		C3D_API SceneNode & getSceneNode()const;
 
 		Pass * pass;
 		DataType & data;
