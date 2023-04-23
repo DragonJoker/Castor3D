@@ -40,6 +40,12 @@ add_target_min(
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/PrecompiledHeader.hpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/PrecompiledHeader.cpp
 )
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+	target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:REF>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:ICF>" )
+endif ()
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 		${Castor3DIncludeDirs}

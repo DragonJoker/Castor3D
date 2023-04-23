@@ -29,6 +29,12 @@ target_include_directories( ${PROJECT_NAME}
 		${CMAKE_CURRENT_SOURCE_DIR}
 		${CMAKE_CURRENT_BINARY_DIR}
 )
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+	target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:REF>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:ICF>" )
+endif ()
 target_link_libraries( ${PROJECT_NAME} PRIVATE
 	castor::Castor3D
 	castor::SceneExporter

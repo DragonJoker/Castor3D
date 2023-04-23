@@ -376,6 +376,12 @@ if ( CASTOR_C3D_NEEDS_GLSL )
 			sdw::CompilerGlsl
 	)
 endif ()
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+	target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:REF>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:ICF>" )
+endif ()
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
 	Tools

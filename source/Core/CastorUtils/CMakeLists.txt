@@ -657,6 +657,12 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 			${FREETYPE_INCLUDE_DIR_ft2build}
 			${FREETYPE_INCLUDE_DIR_freetype2}
 	)
+	if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+		target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
+		target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
+		target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:REF>" )
+		target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:ICF>" )
+	endif ()
 	target_link_libraries( ${PROJECT_NAME}
 		PUBLIC
 			ashes::ashespp

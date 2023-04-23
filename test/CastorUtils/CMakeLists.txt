@@ -118,6 +118,12 @@ if( OPENCL_FOUND )
 			OpenCL::OpenCL
 	)
 endif()
+if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+	target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:REF>" )
+	target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:ICF>" )
+endif ()
 target_compile_options( ${PROJECT_NAME}
 	PRIVATE
 		$<$<CXX_COMPILER_ID:MSVC>:/bigobj>
