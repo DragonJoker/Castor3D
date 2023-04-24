@@ -244,7 +244,8 @@ namespace castor3d
 		if ( m_savedReflectionNodes != m_reflectionNodes )
 		{
 			auto sortedNodes = envmap::sortNodes( m_reflectionNodes, *updater.camera );
-			m_count = std::min( MaxEnvironmentMapCount, uint32_t( sortedNodes.size() ) );
+			m_count = std::min( uint32_t( sortedNodes.size() )
+				, std::min( MaxEnvironmentMapCount, uint32_t( m_passes.size() ) ) );
 			m_savedReflectionNodes = m_reflectionNodes;
 			m_sortedNodes.clear();
 			auto it = sortedNodes.begin();
