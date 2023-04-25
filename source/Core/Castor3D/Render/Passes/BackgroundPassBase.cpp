@@ -19,13 +19,14 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, SceneBackground & background
-		, crg::ImageViewIdArray const & colour )
+		, crg::ImageViewIdArray const & colour
+		, bool forceVisible )
 		: m_device{ device }
 		, m_background{ &background }
 		, m_viewport{ *device.renderSystem.getEngine() }
-		, m_onBackgroundChanged{ background.onChanged.connect( [this]( SceneBackground const & bg )
+		, m_onBackgroundChanged{ background.onChanged.connect( [this, forceVisible]( SceneBackground const & bg )
 			{
-				doResetPipeline( bg.getPassIndex() );
+				doResetPipeline( bg.getPassIndex( forceVisible ) );
 			} ) }
 	{
 	}

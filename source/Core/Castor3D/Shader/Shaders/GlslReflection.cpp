@@ -150,8 +150,10 @@ namespace castor3d::shader
 						, envMap
 						, hasEnvMap
 						, background
+						, spcF
 						, V
 						, hasReflection
+						, NdotV
 						, components
 						, envMapIndex
 						, coatReflected );
@@ -300,8 +302,10 @@ namespace castor3d::shader
 						, envMap
 						, hasEnvMap
 						, background
+						, spcF
 						, V
 						, hasReflection
+						, NdotV
 						, components
 						, envMapIndex
 						, coatReflected );
@@ -930,44 +934,69 @@ namespace castor3d::shader
 			, pcsHitPoint );
 	}
 
-	sdw::RetVec3 ReflectionModel::computeSpecularReflEnvMaps( sdw::Vec3 const & pwsIncident
+	sdw::RetVec3 ReflectionModel::computeSpecularReflEnvMaps( sdw::Vec3 const & pfresnel
+		, sdw::Vec3 const & pwsIncident
 		, sdw::Vec3 const & pwsNormal
 		, sdw::Float const & proughness
-		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
 		, sdw::UInt const & penvMapIndex
-		, sdw::Vec3 const & pf0 )
+		, sdw::Vec3 const & pf0
+		, sdw::Float const & pNdotV
+		, sdw::CombinedImageCubeArrayRgba32 const & penvMap
+		, sdw::CombinedImage2DRgba32 const & pbrdfMap
+		, BackgroundModel & background )
 	{
 		if ( !m_computeSpecularReflEnvMaps )
 		{
 			m_computeSpecularReflEnvMaps = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeSpecularReflEnvMaps"
-				, [&]( sdw::Vec3 const & wsIncident
+				, [&]( sdw::Vec3 const & fresnel
+					, sdw::Vec3 const & wsIncident
 					, sdw::Vec3 const & wsNormal
-					, sdw::CombinedImageCubeArrayRgba32 const & envMap
 					, sdw::UInt const & envMapIndex
 					, sdw::Vec3 const & f0
-					, sdw::Float const & roughness )
+					, sdw::Float const & NdotV
+					, sdw::Float const & roughness
+					, sdw::CombinedImageCubeArrayRgba32 const & envMap
+					, sdw::CombinedImage2DRgba32 const & brdfMap )
 				{
 					auto reflected = m_writer.declLocale( "reflected"
 						, reflect( wsIncident, wsNormal ) );
 					auto radiance = m_writer.declLocale( "radiance"
 						, envMap.lod( vec4( reflected, m_writer.cast< sdw::Float >( envMapIndex ) )
 							, roughness * sdw::Float( float( EnvironmentMipLevels ) ) ).xyz() );
-					m_writer.returnStmt( radiance * f0 );
+
+					if ( m_hasIblSupport )
+					{
+						auto brdf = m_writer.declLocale( "brdf"
+							, background.getBrdf( brdfMap, NdotV, roughness ) );
+						m_writer.returnStmt( radiance * sdw::fma( fresnel
+							, vec3( brdf.x() )
+							, vec3( brdf.y() ) ) );
+					}
+					else
+					{
+						m_writer.returnStmt( radiance * f0 );
+					}
 				}
+				, sdw::InVec3{ m_writer, "fresnel" }
 				, sdw::InVec3{ m_writer, "wsIncident" }
 				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InVec3{ m_writer, "f0" }
-				, sdw::InFloat{ m_writer, "roughness" } );
+				, sdw::InFloat{ m_writer, "NdotV" }
+				, sdw::InFloat{ m_writer, "roughness" }
+				, sdw::InCombinedImageCubeArrayRgba32{ m_writer, "envMap" }
+				, sdw::InCombinedImage2DRgba32{ m_writer, "brdfMap" } );
 		}
 
-		return m_computeSpecularReflEnvMaps( pwsIncident
+		return m_computeSpecularReflEnvMaps( pfresnel
+			, pwsIncident
 			, pwsNormal 
-			, penvMap
 			, penvMapIndex
 			, pf0
-			, proughness );
+			, pNdotV
+			, proughness
+			, penvMap
+			, pbrdfMap );
 	}
 
 	sdw::RetVec3 ReflectionModel::computeSheenReflEnvMaps( sdw::Vec3 const & pwsIncident
@@ -1170,20 +1199,36 @@ namespace castor3d::shader
 
 		IF( writer, hasEnvMap && hasReflection != 0_u )
 		{
-			// Reflection from environment map.
-			reflectedDiffuse = vec3( 0.0_f );
-			reflectedSpecular = computeSpecularReflEnvMaps( -V
+			if ( m_hasIblSupport )
+			{
+				// Diffuse reflection from background skybox.
+				reflectedDiffuse = background.computeDiffuseReflections( components.colour
+					, wsNormal
+					, difF
+					, components.metalness );
+			}
+			else
+			{
+				reflectedDiffuse = vec3( 0.0_f );
+			}
+
+			// Specular reflection from environment map.
+			reflectedSpecular = computeSpecularReflEnvMaps( spcF
+				, -V
 				, wsNormal
 				, components.roughness
-				, envMap
 				, envMapIndex
-				, components.f0 );
+				, components.f0
+				, NdotV
+				, envMap
+				, brdf
+				, background );
 		}
 		ELSE
 		{
-			// Reflection from background skybox.
 			if ( m_hasIblSupport )
 			{
+				// Reflection from background skybox.
 				background.computeReflections( wsNormal
 					, difF
 					, spcF
@@ -1223,10 +1268,13 @@ namespace castor3d::shader
 			}
 			ELSE
 			{
-				refracted = background.computeRefractions( wsNormal
-					, V
-					, refractionRatio
-					, components );
+				if ( m_hasIblSupport )
+				{
+					refracted = background.computeRefractions( wsNormal
+						, V
+						, refractionRatio
+						, components );
+				}
 			}
 			FI;
 		}
@@ -1237,8 +1285,10 @@ namespace castor3d::shader
 		, sdw::CombinedImageCubeArrayRgba32 const & envMap
 		, sdw::Boolean const & hasEnvMap
 		, BackgroundModel & background
+		, sdw::Vec3 const & fresnel
 		, sdw::Vec3 const & V
 		, sdw::UInt const & hasReflection
+		, sdw::Float const & NdotV
 		, BlendComponents & components
 		, sdw::UInt & envMapIndex
 		, sdw::Vec3 & coatReflected )
@@ -1247,12 +1297,16 @@ namespace castor3d::shader
 		{
 			IF( m_writer, hasEnvMap && hasReflection != 0_u )
 			{
-				coatReflected = computeSpecularReflEnvMaps( -V
+				coatReflected = computeSpecularReflEnvMaps( fresnel
+					, -V
 					, components.clearcoatNormal
 					, components.clearcoatRoughness
-					, envMap
 					, envMapIndex
-					, components.f0 );
+					, components.f0
+					, NdotV
+					, envMap
+					, brdf
+					, background );
 			}
 			ELSE
 			{

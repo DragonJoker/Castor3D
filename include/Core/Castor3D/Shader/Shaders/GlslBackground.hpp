@@ -68,6 +68,10 @@ namespace castor3d::shader
 			, sdw::Vec2 const cameraPlanes
 			, sdw::Vec4 & output );
 
+		C3D_API sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
+			, sdw::Float const & NdotV
+			, sdw::Float const & roughness );
+
 		VkExtent2D const & getTargetSize()const
 		{
 			return m_targetSize;

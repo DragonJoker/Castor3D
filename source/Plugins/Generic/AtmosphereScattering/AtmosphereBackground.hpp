@@ -74,6 +74,7 @@ namespace atmosphere_scattering
 			, castor3d::HdrConfigUbo const & hdrConfigUbo
 			, castor3d::SceneUbo const & sceneUbo
 			, bool clearColour
+			, bool forceVisible
 			, castor3d::BackgroundPassBase *& backgroundPass )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::write
@@ -258,6 +259,7 @@ namespace atmosphere_scattering
 				, castor::Point2ui const & skyViewResolution
 				, uint32_t volumeResolution
 				, uint32_t index
+				, bool forceVisible
 				, castor3d::BackgroundPassBase *& backgroundPass );
 			~CameraPasses();
 

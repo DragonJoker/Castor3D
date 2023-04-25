@@ -668,6 +668,15 @@ namespace c3d_assimp
 				{
 					auto component = m_result.createComponent< castor3d::RefractionComponent >();
 					component->setRefractionRatio( ior );
+					auto transmission = m_result.getComponent< castor3d::TransmissionComponent >();
+
+					if ( !transmission )
+					{
+						transmission = m_result.createComponent< castor3d::TransmissionComponent >();
+						transmission->setTransmission( 0.0f );
+						return true;
+					}
+
 					return true;
 				}
 

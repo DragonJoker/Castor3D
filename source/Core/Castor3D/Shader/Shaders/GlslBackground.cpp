@@ -113,4 +113,14 @@ namespace castor3d::shader
 		, sdw::Vec4 & output )
 	{
 	}
+
+	sdw::Vec3 BackgroundModel::getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
+		, sdw::Float const & NdotV
+		, sdw::Float const & roughness )
+	{
+		auto brdfSamplePoint = clamp( vec2( NdotV, roughness )
+			, vec2( 0.0_f, 0.0_f )
+			, vec2( 1.0_f, 1.0_f ) );
+		return brdfMap.sample( brdfSamplePoint ).rgb();
+	}
 }

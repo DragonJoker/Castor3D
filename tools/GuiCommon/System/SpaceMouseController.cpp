@@ -663,7 +663,7 @@ namespace GuiCommon
 			mutable castor::Matrix4x4f m_cameraMatrix;
 			mutable castor::Matrix4x4f m_geometryMatrix;
 			float m_speedFactor{ 1.0f };
-			castor::Point3f m_axisScale{ 1.0, -1.0, -1.0 };
+			castor::Point3f m_axisScale{ -1.0, 1.0, -1.0 };
 		};
 	}
 

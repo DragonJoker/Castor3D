@@ -22,6 +22,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
+			, bool forceVisible
 			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj );
 
@@ -34,7 +35,8 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
-			, bool clearColour = true )
+			, bool clearColour = true
+			, bool forceVisible = false )
 			: BackgroundRenderer{ graph
 				, ( previousPass
 					? crg::FramePassArray{ previousPass }
@@ -47,6 +49,7 @@ namespace castor3d
 				, sceneUbo
 				, crg::ImageViewIdArray{ colour }
 				, clearColour
+				, forceVisible
 				, crg::ImageViewIdArray{}
 				, nullptr }
 		{
@@ -62,6 +65,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour
+			, bool forceVisible
 			, crg::ImageViewId const & depth
 			, crg::ImageViewId const * depthObj )
 			: BackgroundRenderer{ graph
@@ -76,6 +80,7 @@ namespace castor3d
 				, sceneUbo
 				, crg::ImageViewIdArray{ colour }
 				, clearColour
+				, forceVisible
 				, crg::ImageViewIdArray{ depth }
 				, depthObj }
 		{
@@ -91,6 +96,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
+			, bool forceVisible
 			, crg::ImageViewId const & depth
 			, crg::ImageViewId const * depthObj )
 			: BackgroundRenderer{ graph
@@ -103,6 +109,7 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
+				, forceVisible
 				, crg::ImageViewIdArray{ depth }
 				, depthObj }
 		{
@@ -142,6 +149,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
+			, bool forceVisible
 			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj
 			, ProgressBar * progress );

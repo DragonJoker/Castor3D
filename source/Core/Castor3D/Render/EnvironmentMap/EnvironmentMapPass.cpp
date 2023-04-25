@@ -80,7 +80,8 @@ namespace castor3d
 			, m_hdrConfigUbo
 			, m_sceneUbo
 			, m_colourView
-			, true
+			, true /*clearColour*/
+			, true /*forceVisible*/
 			, getOwner()->getDepthViewId( m_index, m_face )
 			, nullptr ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }

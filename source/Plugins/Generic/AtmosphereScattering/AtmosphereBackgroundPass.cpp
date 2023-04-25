@@ -81,13 +81,15 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, AtmosphereBackground & background
 		, VkExtent2D const & size
-		, crg::ImageViewIdArray const & colour )
+		, crg::ImageViewIdArray const & colour
+		, bool forceVisible )
 		: castor3d::BackgroundPassBase{ pass
 			, context
 			, graph
 			, device
 			, background
-			, colour }
+			, colour
+			, forceVisible }
 		, crg::RenderQuad{ pass
 			, context
 			, graph
@@ -96,7 +98,7 @@ namespace atmosphere_scattering
 				.isEnabled( IsEnabledCallback( [this](){ return castor3d::BackgroundPassBase::doIsEnabled(); } ) )
 				.renderSize( size )
 				.depthStencilState( ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } )
-				.passIndex( &background.getPassIndex() )
+				.passIndex( &background.getPassIndex( forceVisible ) )
 				.programCreator( { 2u
 					, [size, this, &background, &device]( uint32_t programIndex )
 					{

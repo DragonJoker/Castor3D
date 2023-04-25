@@ -31,6 +31,7 @@ namespace castor3d
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewIdArray const & colour
 		, bool clearColour
+		, bool forceVisible
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj )
 		: m_device{ device }
@@ -45,6 +46,7 @@ namespace castor3d
 			, sceneUbo
 			, m_colour
 			, clearColour
+			, forceVisible
 			, depth
 			, depthObj
 			, progress ) }
@@ -90,6 +92,7 @@ namespace castor3d
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewIdArray const & colour
 		, bool clearColour
+		, bool forceVisible
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
 		, ProgressBar * progress )
@@ -108,6 +111,7 @@ namespace castor3d
 			, hdrConfigUbo
 			, sceneUbo
 			, clearColour
+			, forceVisible
 			, m_backgroundPass );
 		result.addDependencies( previousPasses );
 		return result;
