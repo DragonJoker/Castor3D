@@ -43,7 +43,8 @@ namespace atmosphere_scattering
 			, castor3d::RenderDevice const & device
 			, AtmosphereBackground & background
 			, VkExtent2D const & size
-			, crg::ImageViewIdArray const & colour );
+			, crg::ImageViewIdArray const & colour
+			, bool forceVisible );
 
 	private:
 		void doResetPipeline( uint32_t index )override;

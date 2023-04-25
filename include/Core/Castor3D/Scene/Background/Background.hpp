@@ -176,6 +176,8 @@ namespace castor3d
 		*	The scene UBO.
 		*\param clearColour
 		*	\p true to clear the colour result.
+		*\param forceVisible
+		*	\p true to force display of background.
 		*\param[out] backgroundPass
 		*	Receives the background pass.
 		*\~french
@@ -205,6 +207,8 @@ namespace castor3d
 		*	L'UBO de scène.
 		*\param clearColour
 		*	\p true pour vider le résultat de couleur.
+		*\param forceVisible
+		*	\p true pour forcer l'affichage du fond.
 		*\param[out] backgroundPass
 		*	Reçoit la passe de rendu du fond.
 		*/
@@ -220,6 +224,7 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, bool clearColour
+			, bool forceVisible
 			, BackgroundPassBase *& backgroundPass );
 		/**
 		*\~english
@@ -332,7 +337,9 @@ namespace castor3d
 		void setVisible( bool v )noexcept
 		{
 			m_visible = v;
-			m_passIndex = v ? 0u : 1u;
+			m_passIndex = ( m_visible
+				? VisiblePassIndex
+				: HiddenPassIndex );
 		}
 		/**@}*/
 		/**
@@ -419,9 +426,11 @@ namespace castor3d
 			return *m_sampler;
 		}
 
-		uint32_t const & getPassIndex()const noexcept
+		uint32_t const & getPassIndex( bool forceVisible )const noexcept
 		{
-			return m_passIndex;
+			return forceVisible
+				? VisiblePassIndex
+				: m_passIndex;
 		}
 		/**@}*/
 
@@ -438,6 +447,9 @@ namespace castor3d
 		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const = 0;
+
+		static uint32_t const VisiblePassIndex = 0u;
+		static uint32_t const HiddenPassIndex = 1u;
 
 	public:
 		OnBackgroundChanged onChanged;

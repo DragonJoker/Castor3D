@@ -178,12 +178,16 @@ namespace castor3d::shader
 			, sdw::Vec3 & csHitPoint );
 
 	private:
-		sdw::RetVec3 computeSpecularReflEnvMaps( sdw::Vec3 const & wsIncident
+		sdw::RetVec3 computeSpecularReflEnvMaps( sdw::Vec3 const & fresnel
+			, sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::Float const & roughness
-			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::UInt const & envMapIndex
-			, sdw::Vec3 const & f0 );
+			, sdw::Vec3 const & f0
+			, sdw::Float const & NdotV
+			, sdw::CombinedImageCubeArrayRgba32 const & envMap
+			, sdw::CombinedImage2DRgba32 const & brdfMap
+			, BackgroundModel & background );
 		sdw::RetVec3 computeSheenReflEnvMaps( sdw::Vec3 const & wsIncident
 			, sdw::Vec3 const & wsNormal
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
@@ -237,8 +241,10 @@ namespace castor3d::shader
 			, sdw::CombinedImageCubeArrayRgba32 const & envMap
 			, sdw::Boolean const & hasEnvMap
 			, BackgroundModel & background
+			, sdw::Vec3 const & fresnel
 			, sdw::Vec3 const & V
 			, sdw::UInt const & hasReflection
+			, sdw::Float const & NdotV
 			, BlendComponents & components
 			, sdw::UInt & envMapIndex
 			, sdw::Vec3 & coatReflected );
@@ -337,10 +343,13 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3
-			, sdw::InCombinedImageCubeArrayRgba32
+			, sdw::InVec3
 			, sdw::InUInt
 			, sdw::InVec3
-			, sdw::InFloat > m_computeSpecularReflEnvMaps;
+			, sdw::InFloat
+			, sdw::InFloat
+			, sdw::InCombinedImageCubeArrayRgba32
+			, sdw::InCombinedImage2DRgba32> m_computeSpecularReflEnvMaps;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InVec3

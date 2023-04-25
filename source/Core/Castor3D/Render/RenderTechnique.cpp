@@ -768,6 +768,7 @@ namespace castor3d
 			, m_sceneUbo
 			, getTargetResult()
 			, true /*clearColour*/
+			, false /*forceVisible*/
 			, getTargetDepth()
 			, &m_prepass.getDepthObj().sampledViewId );
 

@@ -178,6 +178,7 @@ namespace atmosphere_scattering
 		, castor::Point2ui const & skyViewResolution
 		, uint32_t volumeResolution
 		, uint32_t index
+		, bool forceVisible
 		, castor3d::BackgroundPassBase *& backgroundPass )
 		: skyView{ device
 			, background.getScene().getResources()
@@ -312,7 +313,7 @@ namespace atmosphere_scattering
 		cloudsColour.create();
 		cloudsResult.create();
 		auto & pass = graph.createPass( "Background"
-			, [&background, &backgroundPass, &device, size, colour]( crg::FramePass const & framePass
+			, [&background, &backgroundPass, &device, size, colour, forceVisible]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -322,7 +323,8 @@ namespace atmosphere_scattering
 					, device
 					, background
 					, size
-					, colour );
+					, colour
+					, forceVisible );
 				backgroundPass = res.get();
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -580,6 +582,7 @@ namespace atmosphere_scattering
 		, castor3d::HdrConfigUbo const & hdrConfigUbo
 		, castor3d::SceneUbo const & sceneUbo
 		, bool clearColour
+		, bool forceVisible
 		, castor3d::BackgroundPassBase *& backgroundPass )
 	{
 		if ( !m_transmittancePass )
@@ -649,6 +652,7 @@ namespace atmosphere_scattering
 					, m_skyViewResolution
 					, m_volumeResolution
 					, uint32_t( m_cameraPasses.size() )
+					, forceVisible
 					, backgroundPass ) ).first;
 			auto & pass = *it->second->lastPass;
 			pass.addDependency( m_multiScatteringPass->getLastPass() );

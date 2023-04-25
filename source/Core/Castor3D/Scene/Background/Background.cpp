@@ -71,13 +71,15 @@ namespace castor3d
 				, SceneBackground & background
 				, VkExtent2D const & size
 				, crg::ImageViewIdArray const & colour
-				, crg::ImageViewIdArray const & depth )
+				, crg::ImageViewIdArray const & depth
+				, bool forceVisible )
 				: BackgroundPassBase{ pass
 					, context
 					, graph
 					, device
 					, background
-					, colour }
+					, colour
+					, forceVisible }
 				, crg::RenderMesh{ pass
 					, context
 					, graph
@@ -91,7 +93,7 @@ namespace castor3d
 						.getIndexType( crg::GetIndexTypeCallback( [](){ return VK_INDEX_TYPE_UINT16; } ) )
 						.getPrimitiveCount( crg::GetPrimitiveCountCallback( [](){ return 36u; } ) )
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-						.getPassIndex( GetPassIndexCallback( [this]() { return m_background->getPassIndex(); } ) )
+						.getPassIndex( GetPassIndexCallback( [this, forceVisible]() { return m_background->getPassIndex( forceVisible ); } ) )
 						.renderSize( size )
 						.programCreator( { 2u
 							, [this, &device]( uint32_t programIndex )
@@ -404,6 +406,7 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
 		, bool clearColour
+		, bool forceVisible
 		, BackgroundPassBase *& backgroundPass )
 	{
 		if ( hasIbl() )
@@ -421,7 +424,7 @@ namespace castor3d
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 
 		auto & result = graph.createPass( "Background"
-			, [this, &backgroundPass, &device, progress, size, colour, depth]( crg::FramePass const & framePass
+			, [this, &backgroundPass, &device, progress, size, colour, depth, forceVisible]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -433,7 +436,8 @@ namespace castor3d
 					, *this
 					, size
 					, colour
-					, depth );
+					, depth
+					, forceVisible );
 				backgroundPass = res.get();
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );

@@ -19,16 +19,6 @@ namespace castor3d::shader
 		{
 			return prefiltered.lod( coord, roughness * float( MaxIblReflectionLod ) ).rgb() * albedo;
 		}
-
-		static sdw::Vec3 getBrdf( sdw::CombinedImage2DRgba32 const & brdfMap
-			, sdw::Float const & NdotV
-			, sdw::Float const & roughness )
-		{
-			auto brdfSamplePoint = clamp( vec2( NdotV, roughness )
-				, vec2( 0.0_f, 0.0_f )
-				, vec2( 1.0_f, 1.0_f ) );
-			return brdfMap.sample( brdfSamplePoint ).rgb();
-		}
 	}
 
 	castor::String const IblBackgroundModel::Name = cuT( "c3d.ibl" );
@@ -129,7 +119,7 @@ namespace castor3d::shader
 					auto prefilteredColor = m_writer.declLocale( "prefilteredColor"
 						, iblbg::getPrefiltered( prefilteredEnvMap, reflection, vec3( 1.0_f ), roughness ) );
 					auto brdf = m_writer.declLocale( "brdf"
-						, iblbg::getBrdf( brdfMap, NdotV, roughness ) );
+						, getBrdf( brdfMap, NdotV, roughness ) );
 					m_writer.returnStmt( prefilteredColor * sdw::fma( F
 						, vec3( brdf.x() )
 						, vec3( brdf.y() ) ) );
@@ -179,7 +169,7 @@ namespace castor3d::shader
 							, sheenColour
 							, sheenRoughness ) );
 					auto brdf = m_writer.declLocale( "brdf"
-						, iblbg::getBrdf( brdfMap, NdotV, sheenRoughness ) );
+						, getBrdf( brdfMap, NdotV, sheenRoughness ) );
 
 					m_writer.returnStmt( prefilteredColor.rgb() * brdf.z() );
 				}
@@ -273,7 +263,7 @@ namespace castor3d::shader
 							, albedo
 							, roughness ) );
 					auto brdf = m_writer.declLocale( "brdf"
-						, iblbg::getBrdf( brdfMap, NdotV, roughness ) );
+						, getBrdf( brdfMap, NdotV, roughness ) );
 					m_writer.returnStmt( prefilteredColor * sdw::fma( F
 						, vec3( brdf.x() )
 						, vec3( brdf.y() ) ) );
