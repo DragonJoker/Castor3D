@@ -756,18 +756,21 @@ namespace castor3d
 									, v2.velocity.xyz() ) );
 							prvPosition.xyz() += velocity;
 						}
-						else if ( flags.enableNormal()
-							&& flags.enableTangentSpace() )
+						else if ( flags.enableNormal() )
 						{
 							auto curMtxModel = writer.declLocale( "curMtxModel"
 								, modelData.getModelMtx() );
-							auto prvMtxModel = writer.declLocale( "prvMtxModel"
-								, modelData.getPrvModelMtx( flags, curMtxModel ) );
-							prvPosition = prvMtxModel * curPosition;
 							auto mtxNormal = writer.declLocale( "mtxNormal"
 								, modelData.getNormalMtx( flags, curMtxModel ) );
 							normal = normalize( mtxNormal * normal );
-							tangent = normalize( mtxNormal * tangent );
+
+							if ( flags.enableTangentSpace() )
+							{
+								auto prvMtxModel = writer.declLocale( "prvMtxModel"
+									, modelData.getPrvModelMtx( flags, curMtxModel ) );
+								prvPosition = prvMtxModel * curPosition;
+								tangent = normalize( mtxNormal * tangent );
+							}
 						}
 					}
 
