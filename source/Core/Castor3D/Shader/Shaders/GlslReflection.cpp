@@ -1314,7 +1314,7 @@ namespace castor3d::shader
 				{
 					auto NdotV = m_writer.declLocale( "NdotV"
 						, dot( components.clearcoatNormal, V ) );
-					coatReflected = background.computeSpecularReflections( m_utils.conductorFresnel( NdotV, components.f0 )
+					coatReflected = background.computeSpecularReflections( m_utils.conductorFresnel( NdotV, components.f0, components.f90 )
 						, components.clearcoatNormal
 						, V
 						, NdotV

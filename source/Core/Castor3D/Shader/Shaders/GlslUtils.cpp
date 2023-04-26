@@ -544,87 +544,82 @@ namespace castor3d::shader
 	}
 
 	sdw::RetFloat Utils::conductorFresnel( sdw::Float const & pproduct
-		, sdw::Float const & pf0 )
+		, sdw::Float const & pf0
+		, sdw::Float const & pf90 )
 	{
 		if ( !m_conductorFresnel1 )
 		{
 			m_conductorFresnel1 = m_writer.implementFunction< sdw::Float >( "c3d_conductorFresnel1"
 				, [&]( sdw::Float const & product
-					, sdw::Float const & f0 )
+					, sdw::Float const & f0
+					, sdw::Float const & f90 )
 				{
-					sdw::Float f90 = clamp( 50.0_f * f0, 0.0_f, 1.0_f );
-					m_writer.returnStmt( sdw::fma( max( f90, f0 ) - f0
+					m_writer.returnStmt( sdw::fma( f90 - min( f0, f90 )
 						, pow( clamp( 1.0_f - product, 0.0_f, 1.0_f ), 5.0_f )
 						, f0 ) );
 				}
 				, sdw::InFloat{ m_writer, "product" }
-				, sdw::InFloat{ m_writer, "f0" } );
+				, sdw::InFloat{ m_writer, "f0" }
+				, sdw::InFloat{ m_writer, "f90" } );
 		}
 
-		return m_conductorFresnel1( pproduct, pf0 );
+		return m_conductorFresnel1( pproduct, pf0, pf90 );
+	}
+
+	sdw::RetFloat Utils::conductorFresnel( sdw::Float const & product
+		, sdw::Float const & f0 )
+	{
+		return conductorFresnel( product
+			, f0
+			, clamp( 50.0_f * f0, 0.0_f, 1.0_f ) );
 	}
 
 	sdw::RetVec3 Utils::conductorFresnel( sdw::Float const & pproduct
-		, sdw::Vec3 const & pf0 )
+		, sdw::Vec3 const & pf0
+		, sdw::Vec3 const & pf90 )
 	{
 		if ( !m_conductorFresnel3 )
 		{
 			m_conductorFresnel3 = m_writer.implementFunction< sdw::Vec3 >( "c3d_conductorFresnel3"
 				, [&]( sdw::Float const & product
-					, sdw::Vec3 const & f0 )
+					, sdw::Vec3 const & f0
+					, sdw::Vec3 const & f90 )
 				{
-					sdw::Float f90 = clamp( dot( f0, vec3( 50.0_f * 0.33_f ) ), 0.0_f, 1.0_f );
-					m_writer.returnStmt( sdw::fma( max( vec3( f90 ), f0 ) - f0
+					m_writer.returnStmt( sdw::fma( f90 - min( f0, f90 )
 						, vec3( pow( clamp( 1.0_f - product, 0.0_f, 1.0_f ), 5.0_f ) )
 						, f0 ) );
 				}
 				, sdw::InFloat{ m_writer, "product" }
-				, sdw::InVec3{ m_writer, "f0" } );
+				, sdw::InVec3{ m_writer, "f0" }
+				, sdw::InVec3{ m_writer, "f90" } );
 		}
 
-		return m_conductorFresnel3( pproduct, pf0 );
+		return m_conductorFresnel3( pproduct, pf0, pf90 );
 	}
 
-	sdw::RetFloat Utils::fresnelMix( sdw::Float const & pVdotH
-		, sdw::Float const & proughness
-		, sdw::Float const & prefractionRatio )
+	sdw::RetVec3 Utils::conductorFresnel( sdw::Float const & product
+		, sdw::Vec3 const & f0 )
 	{
-		if ( !m_fresnelMix )
-		{
-			m_fresnelMix = m_writer.implementFunction< sdw::Float >( "c3d_fresnelMix"
-				, [&]( sdw::Float const & VdotH
-					, sdw::Float const & roughness
-					, sdw::Float const & refractionRatio )
-				{
-					auto subRatio = m_writer.declLocale( "subRatio"
-						, 1.0_f - refractionRatio );
-					auto addRatio = m_writer.declLocale( "addRatio"
-						, 1.0_f + refractionRatio );
-					auto reflectance = m_writer.declLocale( "reflectance"
-						, ( subRatio * subRatio ) / ( addRatio * addRatio ) );
-					reflectance = min( reflectance, 1.0_f );
-					m_writer.returnStmt( sdw::fma( 1.0_f - reflectance
-						, pow( 1.0_f - abs( VdotH ), 5.0_f )
-						, reflectance ) );
-				}
-				, sdw::InFloat{ m_writer, "VdotH" }
-				, sdw::InFloat{ m_writer, "roughness" }
-				, sdw::InFloat{ m_writer, "refractionRatio" } );
-		}
+		return conductorFresnel( product
+			, f0
+			, clamp( f0 * 50.0_f, vec3( 0.0_f ), vec3( 1.0_f ) ) );
+	}
 
-		return m_fresnelMix( pVdotH
-			, proughness
-			, prefractionRatio );
+	sdw::RetFloat Utils::fresnelMix( sdw::Float const & VdotH
+		, sdw::Float const & ior )
+	{
+		return conductorFresnel( VdotH
+			, computeF0( ior )
+			, 1.0_f );
 	}
 
 	sdw::RetFloat Utils::fresnelMix( sdw::Vec3 const & incident
 		, sdw::Vec3 const & normal
-		, sdw::Float const & proughness
-		, sdw::Float const & prefractionRatio )
+		, sdw::Float const & refractionRatio )
 	{
-		return fresnelMix( max( 0.0_f, dot( -incident, normal ) )
-			, proughness
-			, prefractionRatio );
+		return conductorFresnel( dot( -incident, normal )
+			, computeF0( refractionRatio )
+			, 1.0_f );
 	}
 
 	sdw::RetVec4 Utils::clipToScreen( sdw::Vec4 const & pin )
@@ -1151,6 +1146,11 @@ namespace castor3d::shader
 		, sdw::Vec3 const & bitangent )
 	{
 		return mat3( normalize( tangent ), normalize( bitangent ), normal );
+	}
+
+	sdw::Float Utils::computeF0( sdw::Float const & ior )
+	{
+		return pow( ( ior - 1.0_f ) / ( ior + 1.0_f ), 2.0_f );
 	}
 
 	//*********************************************************************************************
