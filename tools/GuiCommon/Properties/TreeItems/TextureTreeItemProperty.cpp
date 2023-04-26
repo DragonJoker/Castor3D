@@ -95,6 +95,7 @@ namespace GuiCommon
 				, castor::PixelFormat format
 				, TextureTreeItemProperty * properties
 				, wxPropertyGrid * grid
+				, wxPGProperty * mainContainer
 				, onEnabledChange onEnabled
 				, onMaskChange onChange )
 			{
@@ -112,13 +113,17 @@ namespace GuiCommon
 
 						if ( !component )
 						{
-							if ( ownComponent = castor::ptrCast< castor3d::PassMapComponent >( componentDesc.plugin->createComponent( pass ) ) )
+							ownComponent = castor::ptrCast< castor3d::PassMapComponent >( componentDesc.plugin->createComponent( pass ) );
+
+							if ( ownComponent )
 							{
 								component = ownComponent.get();
 							}
 						}
 
-						if ( component )
+						if ( component
+							&& ( !pass.hasComponent( componentDesc.name )
+								|| hasAny( config.components, component->getTextureFlags() ) ) )
 						{
 							castor3d::TextureConfiguration configuration;
 							configuration.components[0].flag = component->getTextureFlags();
@@ -128,6 +133,7 @@ namespace GuiCommon
 								, std::move( ownComponent )
 								, component );
 							auto compProps = passCompProps.get();
+							compProps->container = mainContainer;
 
 							vis.m_compProps = compProps;
 							vis.m_result = &compProps->properties;
@@ -140,6 +146,12 @@ namespace GuiCommon
 							for ( auto & compProp : compProps->properties )
 							{
 								compProp->Enable( vis.m_enabled );
+							}
+
+							if ( compProps->container
+								&& !vis.m_enabled )
+							{
+								compProps->container->SetExpanded( false );
 							}
 
 							result.emplace_back( std::move( passCompProps ) );
@@ -183,63 +195,63 @@ namespace GuiCommon
 				, bool & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int16_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint16_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int64_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint64_t & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, float & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, double & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -251,7 +263,7 @@ namespace GuiCommon
 				choices.push_back( _( "Additive" ) );
 				choices.push_back( _( "Multiplicative" ) );
 				choices.push_back( _( "Interpolative" ) );
-				m_compProps->properties.push_back( m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -262,7 +274,7 @@ namespace GuiCommon
 				choices.push_back( _( "None" ) );
 				choices.push_back( _( "One" ) );
 				choices.push_back( _( "Repeat" ) );
-				m_compProps->properties.push_back( m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -278,42 +290,42 @@ namespace GuiCommon
 				choices.push_back( _( "Not Equal" ) );
 				choices.push_back( _( "Greater Equal" ) );
 				choices.push_back( _( "Always" ) );
-				m_compProps->properties.push_back( m_properties->addPropertyET( m_grid, name, choices, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbColour & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbaColour & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< float > & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< int32_t > & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< uint32_t > & value
 				, PassVisitor::ControlsList controls )override
 			{
-				m_compProps->properties.push_back( m_properties->addPropertyT( m_grid, name, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -333,13 +345,12 @@ namespace GuiCommon
 		private:
 			void doVisit( wxString const & name )
 			{
-				auto onChange = m_onChange;
 				m_properties->setPrefix( make_String( name ) );
-				m_properties->addProperty( m_grid, name );
+				m_compProps->container = m_properties->addProperty( m_grid, name );
 				auto pass = &m_pass;
 				auto compName = m_compProps->component->getType();
 				auto onEnabled = m_onEnabled;
-				m_compProps->isEnabled = m_properties->addProperty( m_grid
+				m_compProps->isEnabled = m_properties->addProperty( m_compProps->container
 					, _( "Enabled" )
 					, m_enabled
 					, [onEnabled, pass, compName]( wxVariant const & value )
@@ -347,11 +358,6 @@ namespace GuiCommon
 						onEnabled( value, *pass, compName );
 					} );
 				m_compProps->isEnabled->SetAttribute( wxPG_BOOL_USE_CHECKBOX, true );
-			}
-
-			void doUpdateProperty( castor3d::TextureFlagConfiguration const & configuration )
-			{
-				m_compProps->components->SetValue( m_compProps->choices[configuration.startIndex] );
 			}
 
 			void doAddProperty( wxString const & flagName
@@ -517,20 +523,22 @@ namespace GuiCommon
 	void TextureTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
 		static wxString const CATEGORY_TEXTURE = _( "Texture " );
+		static wxString const PROPERTY_TEXTURE_BASE = _( "Base" );
 		static wxString const PROPERTY_TEXTURE_IMAGE = _( "Image" );
 		static wxString const PROPERTY_TEXTURE_TEXCOORDSET = _( "Texcoord Set" );
 
 		auto unit = &m_texture;
 		m_configuration = unit->getConfiguration();
-		grid->Append( new wxPropertyCategory( wxString{ CATEGORY_TEXTURE } << unit->getId() ) );
-		addPropertyT( grid, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet()
+		addProperty( grid, wxString{ CATEGORY_TEXTURE } << unit->getId() );
+		auto mainContainer = addProperty( grid, PROPERTY_TEXTURE_BASE );
+		addPropertyT( mainContainer, PROPERTY_TEXTURE_TEXCOORDSET, unit->getTexcoordSet()
 			, unit
 			, &castor3d::TextureUnit::setTexcoordSet );
 
 		if ( unit->getTexture()->isStatic() )
 		{
 			m_path = castor::Path{ unit->getTexture()->getPath() };
-			addProperty( grid, PROPERTY_TEXTURE_IMAGE, m_path
+			addProperty( mainContainer, PROPERTY_TEXTURE_IMAGE, m_path
 				, [this]( wxVariant const & var )
 				{
 					auto unit = &m_texture;
@@ -559,8 +567,8 @@ namespace GuiCommon
 		static wxString const PROPERTY_TRANSFORM_UV_TRANSLATE = _( "UV Translate" );
 		static wxString const PROPERTY_TRANSFORM_UV_ROTATE = _( "UV Rotate" );
 		static wxString const PROPERTY_TRANSFORM_UV_SCALE = _( "UV Scale" );
-		grid->Append( new wxPropertyCategory( CATEGORY_TRANSFORM ) );
-		addProperty( grid, PROPERTY_TRANSFORM_UV_TRANSLATE
+		auto transformCont = addProperty( mainContainer, CATEGORY_TRANSFORM );
+		addProperty( transformCont, PROPERTY_TRANSFORM_UV_TRANSLATE
 			, m_translate
 			, [this]( wxVariant const & value )
 			{
@@ -570,7 +578,7 @@ namespace GuiCommon
 				transform.translate->y = m_translate->y;
 				m_texture.setTransform( transform );
 			} );
-		addProperty( grid, PROPERTY_TRANSFORM_UV_ROTATE
+		addProperty( transformCont, PROPERTY_TRANSFORM_UV_ROTATE
 			, m_rotate
 			, [this]( wxVariant const & value )
 			{
@@ -579,7 +587,7 @@ namespace GuiCommon
 				transform.rotate = m_rotate;
 				m_texture.setTransform( transform );
 			} );
-		addProperty( grid, PROPERTY_TRANSFORM_UV_SCALE
+		addProperty( transformCont, PROPERTY_TRANSFORM_UV_SCALE
 			, m_scale
 			, [this]( wxVariant const & value )
 			{
@@ -598,10 +606,10 @@ namespace GuiCommon
 			static wxString const PROPERTY_ANIMATION_SCALE = _( "Scale" );
 
 			auto & anim = unit->getAnimation();
-			grid->Append( new wxPropertyCategory( CATEGORY_ANIMATION ) );
-			addPropertyT( grid, PROPERTY_ANIMATION_TRANSLATE, anim.getTranslateSpeed(), &anim, &castor3d::TextureAnimation::setTranslateSpeed );
-			addPropertyT( grid, PROPERTY_ANIMATION_ROTATE, anim.getRotateSpeed(), &anim, &castor3d::TextureAnimation::setRotateSpeed );
-			addPropertyT( grid, PROPERTY_ANIMATION_SCALE, anim.getScaleSpeed(), &anim, &castor3d::TextureAnimation::setScaleSpeed );
+			auto animCont = addProperty( mainContainer, CATEGORY_ANIMATION );
+			addPropertyT( animCont, PROPERTY_ANIMATION_TRANSLATE, anim.getTranslateSpeed(), &anim, &castor3d::TextureAnimation::setTranslateSpeed );
+			addPropertyT( animCont, PROPERTY_ANIMATION_ROTATE, anim.getRotateSpeed(), &anim, &castor3d::TextureAnimation::setRotateSpeed );
+			addPropertyT( animCont, PROPERTY_ANIMATION_SCALE, anim.getScaleSpeed(), &anim, &castor3d::TextureAnimation::setScaleSpeed );
 		}
 
 		m_properties = textp::UnitTreeGatherer::submit( m_pass
@@ -609,6 +617,7 @@ namespace GuiCommon
 			, castor::PixelFormat( unit->getTexture()->getPixelFormat() )
 			, this
 			, grid
+			, mainContainer
 			, [this]( wxVariant const & value
 				, castor3d::Pass & pass
 				, castor::String const & compName )

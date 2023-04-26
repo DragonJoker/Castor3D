@@ -449,8 +449,8 @@ namespace castor3d
 			, uint32_t & index )const = 0;
 
 	public:
-		static uint32_t const VisiblePassIndex = 0u;
-		static uint32_t const HiddenPassIndex = 1u;
+		static inline uint32_t constexpr VisiblePassIndex = 0u;
+		static inline uint32_t constexpr HiddenPassIndex = 1u;
 
 		OnBackgroundChanged onChanged;
 

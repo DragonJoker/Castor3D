@@ -3,9 +3,9 @@ See LICENSE file in root folder
 */
 #include "GuiCommon/System/SpaceMouseController.hpp"
 
-#if defined( GC_HasSpaceMouseSDK )
-
 CU_ImplementSmartPtr( GuiCommon, I3DController )
+
+#if defined( GC_HasSpaceMouseSDK )
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <SpaceMouse/CNavigation3D.hpp>
@@ -677,7 +677,8 @@ namespace GuiCommon
 
 namespace GuiCommon
 {
-	I3DControllerUPtr I3DController::create( castor3d::FrameListener & listener )
+	I3DControllerUPtr I3DController::create( castor::String const & appName
+		, castor3d::FrameListener & listener )
 	{
 		return nullptr;
 	}
