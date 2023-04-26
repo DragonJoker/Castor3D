@@ -86,15 +86,19 @@ namespace castor3d::shader
 			, sdw::Float const & farPlane
 			, sdw::UInt const & accumulationOperator );
 		C3D_API sdw::RetFloat conductorFresnel( sdw::Float const & product
+			, sdw::Float const & f0
+			, sdw::Float const & f90 );
+		C3D_API sdw::RetFloat conductorFresnel( sdw::Float const & product
 			, sdw::Float const & f0 );
+		C3D_API sdw::RetVec3 conductorFresnel( sdw::Float const & product
+			, sdw::Vec3 const & f0
+			, sdw::Vec3 const & f90 );
 		C3D_API sdw::RetVec3 conductorFresnel( sdw::Float const & product
 			, sdw::Vec3 const & f0 );
 		C3D_API sdw::RetFloat fresnelMix( sdw::Float const & VdotH
-			, sdw::Float const & roughness
 			, sdw::Float const & refractionRatio );
 		C3D_API sdw::RetFloat fresnelMix( sdw::Vec3 const & incident
 			, sdw::Vec3 const & normal
-			, sdw::Float const & roughness
 			, sdw::Float const & refractionRatio );
 
 		C3D_API sdw::RetVec4 clipToScreen( sdw::Vec4 const & in );
@@ -159,6 +163,7 @@ namespace castor3d::shader
 		C3D_API static sdw::Mat3 getTBN( sdw::Vec3 const & normal
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
+		C3D_API static sdw::Float computeF0( sdw::Float const & ior );
 
 	private:
 		sdw::ShaderWriter & m_writer;
@@ -196,14 +201,12 @@ namespace castor3d::shader
 			, sdw::InUInt > m_computeAccumulation;
 		sdw::Function< sdw::Float
 			, sdw::InFloat
+			, sdw::InFloat
 			, sdw::InFloat > m_conductorFresnel1;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat
+			, sdw::InVec3
 			, sdw::InVec3 > m_conductorFresnel3;
-		sdw::Function< sdw::Float
-			, sdw::InFloat
-			, sdw::InFloat
-			, sdw::InFloat > m_fresnelMix;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InFloat > m_fresnelToF0;

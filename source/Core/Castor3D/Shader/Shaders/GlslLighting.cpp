@@ -86,7 +86,6 @@ namespace castor3d::shader
 			auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
 				, m_utils.fresnelMix( incident
 					, components.normal
-					, components.roughness
 					, components.refractionRatio ) );
 			reflectedDiffuse = mix( vec3( 0.0_f )
 				, reflectedDiffuse

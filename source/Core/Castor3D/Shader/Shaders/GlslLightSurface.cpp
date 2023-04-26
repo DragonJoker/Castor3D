@@ -201,7 +201,9 @@ namespace castor3d::shader
 		, BlendComponents const & components
 		, sdw::Float const & dotProduct )const
 	{
-		m_F = utils.conductorFresnel( dotProduct, f0 );
+		m_F = utils.conductorFresnel( dotProduct
+			, f0
+			, components.f90 );
 
 		if ( m_difF )
 		{

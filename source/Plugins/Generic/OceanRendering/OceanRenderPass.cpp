@@ -1313,7 +1313,6 @@ namespace ocean
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
 						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() )
 							, components.normal
-							, components.roughness
 							, c3d_oceanData.refractionRatio() ) ) );
 					displayDebugData( eFresnelFactor, vec3( fresnelFactor ), 1.0_f );
 					reflectionResult *= fresnelFactor;
