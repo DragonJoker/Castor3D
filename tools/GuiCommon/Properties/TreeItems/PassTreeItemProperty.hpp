@@ -37,6 +37,7 @@ namespace GuiCommon
 			castor3d::PassComponentUPtr ownComponent;
 			castor3d::PassComponentRPtr component;
 			PropertyArray properties;
+			wxPGProperty * container{};
 		};
 
 		using PropertiesPtr = std::unique_ptr< Properties >;
@@ -85,7 +86,7 @@ namespace GuiCommon
 		castor3d::PassRPtr m_pass{};
 		castor3d::Scene & m_scene;
 		wxWindow * m_parent;
-		PropertiesArray m_components;
+		PropertiesArray m_properties;
 	};
 }
 

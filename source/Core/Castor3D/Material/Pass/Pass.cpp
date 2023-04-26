@@ -20,6 +20,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Other/ColourComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
@@ -145,11 +146,6 @@ namespace castor3d
 				, folder
 				, castor::Path{ name + lhsName + rhsName }
 				, lhs.config() };
-		}
-
-		static float mix( float x, float y, float a )
-		{
-			return float( x * ( 1.0 - a ) + y * a );
 		}
 
 		using SortedTextureSources = std::map< PassComponentTextureFlag

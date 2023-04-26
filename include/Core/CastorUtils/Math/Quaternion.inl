@@ -83,7 +83,10 @@ namespace castor
 	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > const & rhs )
 	{
-		std::memcpy( BaseType::ptr(), rhs.constPtr(), sizeof( QuaternionDataT< T > ) );
+		DataHolder::getData().x = rhs->x;
+		DataHolder::getData().y = rhs->y;
+		DataHolder::getData().z = rhs->z;
+		DataHolder::getData().w = rhs->w;
 		return *this;
 	}
 
@@ -92,7 +95,10 @@ namespace castor
 	{
 		if ( this != &rhs )
 		{
-			std::memmove( BaseType::ptr(), rhs.constPtr(), sizeof( QuaternionDataT< T > ) );
+			DataHolder::getData().x = rhs->x;
+			DataHolder::getData().y = rhs->y;
+			DataHolder::getData().z = rhs->z;
+			DataHolder::getData().w = rhs->w;
 		}
 
 		return *this;

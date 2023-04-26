@@ -219,11 +219,11 @@ namespace castor3d
 
 			if ( ires.second )
 			{
-				ires.first->second = pass.onChanged.connect( [this]( Pass const & pass
+				ires.first->second = pass.onChanged.connect( [this]( Pass const & updatedPass
 					, PassComponentCombineID oldComponents
 					, PassComponentCombineID newComponents )
 					{
-						reportPassChange( pass, oldComponents, newComponents );
+						reportPassChange( updatedPass, oldComponents, newComponents );
 					} );
 			}
 
@@ -290,11 +290,11 @@ namespace castor3d
 
 			if ( ires.second )
 			{
-				ires.first->second = pass.onChanged.connect( [this]( Pass const & pass
+				ires.first->second = pass.onChanged.connect( [this]( Pass const & updatedPass
 					, PassComponentCombineID oldComponents
 					, PassComponentCombineID newComponents )
 					{
-						reportPassChange( pass, oldComponents, newComponents );
+						reportPassChange( updatedPass, oldComponents, newComponents );
 					} );
 			}
 		}

@@ -36,6 +36,7 @@ namespace GuiCommon
 			{
 			}
 
+			wxPGProperty * container{};
 			wxPGProperty * isEnabled{};
 			wxPGProperty * components{};
 			castor3d::PassComponentTextureFlag flag;
