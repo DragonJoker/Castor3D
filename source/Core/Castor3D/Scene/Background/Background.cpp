@@ -209,7 +209,7 @@ namespace castor3d
 						C3D_ModelData( writer, Bindings::eModel, 0u );
 
 						// Outputs
-						auto vtx_texture = writer.declOutput< sdw::Vec3 >( "vtx_texture", 0u );
+						auto vtx_texture = writer.declOutput< sdw::Vec3 >( "vtx_texture", 0u, programIndex == SceneBackground::VisiblePassIndex );
 
 						writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
 							, sdw::VertexOut out )
@@ -238,7 +238,7 @@ namespace castor3d
 						writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
 							, sdw::FragmentOut out )
 							{
-								if ( programIndex == 0u )
+								if ( programIndex == SceneBackground::VisiblePassIndex )
 								{
 									IF( writer, sdw::UInt{ programIndex } == 0_u
 										&& c3d_sceneData.fogType() == sdw::UInt( uint32_t( FogType::eDisabled ) ) )

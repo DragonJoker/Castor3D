@@ -448,10 +448,10 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const = 0;
 
+	public:
 		static uint32_t const VisiblePassIndex = 0u;
 		static uint32_t const HiddenPassIndex = 1u;
 
-	public:
 		OnBackgroundChanged onChanged;
 
 	protected:
