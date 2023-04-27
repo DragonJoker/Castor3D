@@ -164,6 +164,9 @@ namespace castor3d::shader
 			, sdw::Vec3 const & tangent
 			, sdw::Vec3 const & bitangent );
 		C3D_API static sdw::Float computeF0( sdw::Float const & ior );
+		C3D_API static sdw::Vec3 reconstructNormal( sdw::Vec2 const & normal );
+		C3D_API static sdw::Vec3 reconstructNormal( sdw::Float const & normalX
+			, sdw::Float const & normalY );
 
 	private:
 		sdw::ShaderWriter & m_writer;
@@ -263,6 +266,8 @@ namespace castor3d::shader
 			, sdw::InFloat > m_ior3ToFresnel0;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3 > m_fresnel0ToIor;
+		sdw::Function< sdw::Vec3
+			, sdw::InVec2 > m_reconstructNormal;
 	};
 }
 

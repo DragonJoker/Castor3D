@@ -33,6 +33,13 @@ namespace castor3d
 			return stream.str();
 		}
 
+		static castor::String write( castor::String const & name, bool v )
+		{
+			auto stream = castor::makeStringStream();
+			stream << name << v;
+			return stream.str();
+		}
+
 		static castor::String write( castor::String const & name, uint32_t v )
 		{
 			auto stream = castor::makeStringStream();
@@ -49,8 +56,9 @@ namespace castor3d
 			result += writeMask( cuT( "_c2" ), configuration.components[2] );
 			result += writeMask( cuT( "_c3" ), configuration.components[3] );
 			result += write( cuT( "_nf" ), configuration.normalFactor );
-			result += write( cuT( "_ng" ), configuration.normalGMultiplier );
 			result += write( cuT( "_hf" ), configuration.heightFactor );
+			result += write( cuT( "_ng" ), configuration.normalDirectX );
+			result += write( cuT( "_n2" ), configuration.normal2Channels );
 			result += write( cuT( "_yv" ), configuration.needsYInversion );
 			return result;
 		}

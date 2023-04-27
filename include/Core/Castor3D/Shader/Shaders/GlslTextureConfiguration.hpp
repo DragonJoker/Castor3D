@@ -50,12 +50,14 @@ namespace castor3d
 				, sdw::Vec4Field< "tileSet" >
 				, sdw::FloatField< "nmlGMul" >
 				, sdw::FloatField< "nmlFact" >
+				, sdw::UIntField< "nml2Chan" >
 				, sdw::FloatField< "hgtFact" >
 				, sdw::UIntField< "isTrnfAnim" >
 				, sdw::UIntField< "isTileAnim" >
 				, sdw::UIntField< "needsYI" >
 				, sdw::UIntField< "texSet" >
-				, sdw::UIntField< "componentCount" > >
+				, sdw::UIntField< "componentCount" >
+				, sdw::UIntArrayField< "pad", 3u > >
 		{
 			friend class TextureConfigurations;
 
@@ -88,6 +90,7 @@ namespace castor3d
 			auto component( uint32_t index )const { return getMember< "components" >()[index].xyz(); }
 			auto nmlFact()const { return getMember< "nmlFact" >(); }
 			auto nmlGMul()const { return getMember< "nmlGMul" >(); }
+			auto nml2Chan()const { return getMember< "nml2Chan" >(); }
 			auto hgtFact()const { return getMember< "hgtFact" >(); }
 			auto needsYI()const { return getMember< "needsYI" >(); }
 			auto isTrnfAnim()const { return getMember< "isTrnfAnim" >() != 0_u; }

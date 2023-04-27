@@ -124,9 +124,10 @@ namespace castor3d
 					data.scale = config.transform.scale;
 					data.tileSet = castor::Point4f{ config.tileSet };
 					data.normalFactor = config.normalFactor;
-					data.normalGMult = config.normalGMultiplier;
+					data.normalGMult = config.normalDirectX ? -1.0f : 1.0f;
+					data.normal2Chan = config.normal2Channels ? 1u : 0u;
 					data.heightFactor = config.heightFactor;
-					data.needsYInv = config.needsYInversion;
+					data.needsYInv = config.needsYInversion ? 1u : 0u;
 					data.isTransformAnim = unit->isTransformAnimated() ? 1u : 0u;
 					data.isTileAnim = unit->isTileAnimated() ? 1u : 0u;
 					data.texcoordSet = unit->getTexcoordSet() ? 1u : 0u;
