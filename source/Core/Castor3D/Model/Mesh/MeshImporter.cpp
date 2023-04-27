@@ -81,6 +81,20 @@ namespace castor3d
 					meshimp::transformMesh( transform, mesh );
 				}
 
+				bool invertNormals{};
+
+				if ( parameters.get( "invert_normals", invertNormals )
+					&& invertNormals )
+				{
+					for ( auto & submesh : mesh )
+					{
+						for ( auto & n : submesh->getNormals() )
+						{
+							n = -n;
+						}
+					}
+				}
+
 				bool noOptim = false;
 				auto found = parameters.get( "no_optimisations", noOptim );
 
