@@ -113,18 +113,20 @@ namespace castor3d
 			castor::Point4f tileSet;
 			float normalGMult;
 			float normalFactor;
+			uint32_t normal2Chan;
 			float heightFactor;
 			uint32_t isTransformAnim;
 			uint32_t isTileAnim;
 			uint32_t needsYInv;
 			uint32_t texcoordSet;
 			uint32_t componentsCount;
+			uint32_t pad[3];
 		};
 
 		using TextureConfigurationsData = castor::ArrayView< Data >;
 
 		static uint32_t constexpr DataSize = uint32_t( sizeof( Data ) );
-		static_assert( DataSize == 144u );
+		static_assert( DataSize == 160u );
 
 	private:
 		ShaderBuffer m_buffer;

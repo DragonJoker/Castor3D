@@ -49,7 +49,7 @@ namespace castor
 
 				if ( Path{ texture->getName() }.getExtension() != "dds" )
 				{
-					config.needsYInversion = 1u - config.needsYInversion;
+					config.needsYInversion = !config.needsYInversion;
 				}
 			}
 

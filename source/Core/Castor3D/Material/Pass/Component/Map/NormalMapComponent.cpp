@@ -37,7 +37,8 @@ namespace castor
 		{
 			return writeMask( file, cuT( "normal_mask" ), getComponentsMask( m_configuration, object.getTextureFlags() ) )
 				&& writeOpt( file, cuT( "normal_factor" ), m_configuration.normalFactor, 1.0f )
-				&& writeOpt( file, cuT( "normal_directx" ), m_configuration.normalGMultiplier != 1.0f );
+				&& writeOpt( file, cuT( "normal_directx" ), m_configuration.normalDirectX )
+				&& writeOpt( file, cuT( "normal_2channels" ), m_configuration.normal2Channels );
 		}
 
 		bool operator()( StringStream & file
@@ -45,7 +46,8 @@ namespace castor
 		{
 			return writeMask( file, cuT( "normal_mask" ), mask )
 				&& writeOpt( file, cuT( "normal_factor" ), m_configuration.normalFactor, 1.0f )
-				&& writeOpt( file, cuT( "normal_directx" ), m_configuration.normalGMultiplier != 1.0f );
+				&& writeOpt( file, cuT( "normal_directx" ), m_configuration.normalDirectX )
+				&& writeOpt( file, cuT( "normal_2channels" ), m_configuration.normal2Channels );
 		}
 
 	private:
@@ -102,12 +104,24 @@ namespace castor3d
 			}
 			else
 			{
-				bool isDirectX;
-				params[0]->get( isDirectX );
 				getPassComponent< NormalMapComponent >( parsingContext );
-				parsingContext.textureConfiguration.normalGMultiplier = isDirectX
-					? -1.0f
-					: 1.0f;
+				params[0]->get( parsingContext.textureConfiguration.normalDirectX );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserUnitNormal2Channels )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				getPassComponent< NormalMapComponent >( parsingContext );
+				params[0]->get( parsingContext.textureConfiguration.normal2Channels );
 			}
 		}
 		CU_EndAttribute()
@@ -148,11 +162,22 @@ namespace castor3d
 			}
 			else
 			{
-				bool isDirectX;
-				params[0]->get( isDirectX );
-				parsingContext.sceneImportConfig.textureRemapIt->second.normalGMultiplier = isDirectX
-					? -1.0f
-					: 1.0f;
+				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.normalDirectX );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserTexRemapNormal2Channels )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext.sceneImportConfig.textureRemapIt->second.normal2Channels );
 			}
 		}
 		CU_EndAttribute()
@@ -181,9 +206,12 @@ namespace castor3d
 			auto tbn = shader::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
 				, components.getMember< sdw::Vec3 >( "tangent" )
 				, components.getMember< sdw::Vec3 >( "bitangent" ) );
+			sampled[imgCompConfig.z() + 1u] = config.nmlGMul() * sampled[imgCompConfig.z() + 1u];
 			components.getMember< sdw::Vec3 >( "normal" ) = normalize( tbn
-				* fma( config.getVec3( sampled, imgCompConfig.z() )
-					, vec3( 2.0_f )
+				* fma( vec3( 2.0_f )
+					, writer.ternary( config.nml2Chan() != 0_u
+						, shader::Utils::reconstructNormal( sampled[imgCompConfig.z()], sampled[imgCompConfig.z() + 1u] )
+						, config.getVec3( sampled, imgCompConfig.z() ) )
 					, -vec3( 1.0_f ) ) );
 		}
 		FI;
@@ -217,6 +245,11 @@ namespace castor3d
 			, cuT( "normal_directx" )
 			, nmlcmp::parserUnitNormalDirectX
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTextureUnit
+			, cuT( "normal_2channels" )
+			, nmlcmp::parserUnitNormal2Channels
+			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureRemap
@@ -232,6 +265,11 @@ namespace castor3d
 			, CSCNSection::eTextureRemapChannel
 			, cuT( "normal_directx" )
 			, nmlcmp::parserTexRemapNormalDirectX
+			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTextureRemapChannel
+			, cuT( "normal_2channels" )
+			, nmlcmp::parserTexRemapNormal2Channels
 			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 	}
 
@@ -282,7 +320,8 @@ namespace castor3d
 		vis.visit( cuT( "Normal" ) );
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 3u );
 		vis.visit( cuT( "Factor" ), configuration.normalFactor );
-		vis.visit( cuT( "DirectX" ), configuration.normalGMultiplier );
+		vis.visit( cuT( "DirectX" ), configuration.normalDirectX );
+		vis.visit( cuT( "2 Channels" ), configuration.normal2Channels );
 	}
 
 	//*********************************************************************************************

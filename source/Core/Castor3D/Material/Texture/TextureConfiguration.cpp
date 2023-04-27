@@ -46,6 +46,12 @@ namespace castor3d
 			rhs |= lhs;
 		}
 
+		static void mergeBools( bool lhs
+			, bool & rhs )
+		{
+			rhs = lhs || rhs;
+		}
+
 		static void mergeFactors( float lhs
 			, float & rhs
 			, float ref )
@@ -106,8 +112,9 @@ namespace castor3d
 			&& lhs.components[3] == rhs.components[3]
 			&& lhs.normalFactor == rhs.normalFactor
 			&& lhs.heightFactor == rhs.heightFactor
-			&& lhs.normalGMultiplier == rhs.normalGMultiplier
+			&& lhs.normalDirectX == rhs.normalDirectX
 			&& lhs.needsYInversion == rhs.needsYInversion
+			&& lhs.normal2Channels == rhs.normal2Channels
 			&& lhs.transform.translate == rhs.transform.translate
 			&& lhs.transform.rotate == rhs.transform.rotate
 			&& lhs.transform.scale == rhs.transform.scale;
@@ -332,10 +339,13 @@ namespace castor3d
 	void mergeConfigsBase( TextureConfiguration const & lhs
 		, TextureConfiguration & rhs )
 	{
-		texconf::mergeMasks( lhs.needsYInversion, rhs.needsYInversion );
+		texconf::mergeBools( lhs.needsYInversion, rhs.needsYInversion );
+		texconf::mergeBools( lhs.normalDirectX, rhs.normalDirectX );
+		texconf::mergeBools( lhs.normal2Channels, rhs.normal2Channels );
+
 		texconf::mergeFactors( lhs.heightFactor, rhs.heightFactor, 0.1f );
 		texconf::mergeFactors( lhs.normalFactor, rhs.normalFactor, 1.0f );
-		texconf::mergeFactors( lhs.normalGMultiplier, rhs.normalGMultiplier, 1.0f );
+
 		rhs.textureSpace |= lhs.textureSpace;
 	}
 

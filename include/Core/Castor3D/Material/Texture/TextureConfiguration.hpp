@@ -120,8 +120,9 @@ namespace castor3d
 		*	Divers.
 		*/
 		/**@{*/
-		float normalGMultiplier{ 1.0f };
-		uint32_t needsYInversion{ 0u };
+		bool normalDirectX{};
+		bool normal2Channels{};
+		bool needsYInversion{};
 		TextureTransform transform;
 		castor::Point4ui tileSet;
 		uint32_t tiles{ 1u };

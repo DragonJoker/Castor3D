@@ -1141,6 +1141,19 @@ namespace castor3d::shader
 			, pshift );
 	}
 
+	sdw::Vec3 Utils::reconstructNormal( sdw::Vec2 const & normal )
+	{
+		return reconstructNormal( normal.x(), normal.y() );
+	}
+
+	sdw::Vec3 Utils::reconstructNormal( sdw::Float const & normalX
+		, sdw::Float const & normalY )
+	{
+		return normalize( vec3( normalX
+			, normalY
+			, sqrt( 1.0_f - clamp( normalX * normalX + normalY * normalY, 0.0_f, 1.0_f ) ) ) );
+	}
+
 	sdw::Mat3 Utils::getTBN( sdw::Vec3 const & normal
 		, sdw::Vec3 const & tangent
 		, sdw::Vec3 const & bitangent )
