@@ -50,13 +50,6 @@ namespace castor3d
 			return sampled[mask];
 		}
 
-		sdw::Vec2 TextureConfigData::getVec2( sdw::Vec4 const & sampled
-			, sdw::UInt const & mask )const
-		{
-			return vec2( sampled[mask]
-				, sampled[mask + 1u] );
-		}
-
 		sdw::Vec3 TextureConfigData::getVec3( sdw::Vec4 const & sampled
 			, sdw::UInt const & mask )const
 		{

@@ -41,7 +41,8 @@ namespace castor3d::shader
 		, bool enableFresnel
 		, bool enableIridescence )
 		: LightSurface{ findWriterMandat( eye, world, view, clip, normal )
-			, makeInit( makeType( findTypesCache( eye, world, view, clip, normal ), enableDotProducts, enableFresnel, enableIridescence ), eye, world, view, clip, normal
+			, makeInit( makeType( findTypesCache( eye, world, view, clip, normal ), enableDotProducts, enableFresnel, enableIridescence )
+				, eye, world, view, clip, normal
 				, enableDotProducts, enableFresnel, enableIridescence )
 			, true }
 	{
@@ -141,20 +142,8 @@ namespace castor3d::shader
 	{
 		auto result = create( writer, name, eye, world, view, clip, normal
 			, enableDotProducts, enableFresnel, enableIridescence );
-		result.updateN( utils, normal, f0, components );
+		result.doUpdateF( utils, f0, components, result.NdotV() );
 		return result;
-	}
-
-	void LightSurface::updateW( sdw::Vec3 const w )const
-	{
-		worldPosition() = w;
-		V() = normalize( eyePosition() - w );
-		lengthV() = length( eyePosition() - w );
-		H() = normalize( L() + V() );
-
-		m_NdotH = max( 0.0_f, dot( N(), H() ) );
-		m_NdotV = max( 0.0_f, dot( N(), V() ) );
-		m_HdotV = max( 0.0_f, dot( H(), V() ) );
 	}
 
 	void LightSurface::updateN( sdw::Vec3 const n )const
