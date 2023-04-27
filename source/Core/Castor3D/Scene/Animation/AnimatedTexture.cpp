@@ -16,7 +16,7 @@ namespace castor3d
 {
 	namespace anmtex
 	{
-		static castor::String writeMask( castor::String const & name
+		static castor::String write( castor::String const & name
 			, TextureFlagConfiguration const & config )
 		{
 			auto stream = castor::makeStringStream();
@@ -40,21 +40,14 @@ namespace castor3d
 			return stream.str();
 		}
 
-		static castor::String write( castor::String const & name, uint32_t v )
-		{
-			auto stream = castor::makeStringStream();
-			stream << name << v;
-			return stream.str();
-		}
-
 		static castor::String getTexName( TextureSourceInfo const & sourceInfo
 			, TextureConfiguration const & configuration )
 		{
 			castor::String result{ sourceInfo.relative() };
-			result += writeMask( cuT( "_c0" ), configuration.components[0] );
-			result += writeMask( cuT( "_c1" ), configuration.components[1] );
-			result += writeMask( cuT( "_c2" ), configuration.components[2] );
-			result += writeMask( cuT( "_c3" ), configuration.components[3] );
+			result += write( cuT( "_c0" ), configuration.components[0] );
+			result += write( cuT( "_c1" ), configuration.components[1] );
+			result += write( cuT( "_c2" ), configuration.components[2] );
+			result += write( cuT( "_c3" ), configuration.components[3] );
 			result += write( cuT( "_nf" ), configuration.normalFactor );
 			result += write( cuT( "_hf" ), configuration.heightFactor );
 			result += write( cuT( "_ng" ), configuration.normalDirectX );

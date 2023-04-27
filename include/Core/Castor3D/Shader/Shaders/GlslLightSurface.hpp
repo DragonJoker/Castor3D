@@ -65,7 +65,6 @@ namespace castor3d::shader
 			, bool enableFresnel = true
 			, bool enableIridescence = true );
 
-		C3D_API void updateW( sdw::Vec3 const W )const;
 		C3D_API void updateN( sdw::Vec3 const N )const;
 		C3D_API void updateL( sdw::Vec3 const L )const;
 

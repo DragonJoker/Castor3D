@@ -425,7 +425,7 @@ namespace castor3d
 								, lightSurface.difF()
 								, components.metalness )
 							: vec3( 0.0_f ) ) );
-
+					components.emissiveFactor *= components.opacity;
 					colour = lightingModel->combine( components
 						, incident
 						, lightDiffuse

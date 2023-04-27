@@ -40,19 +40,13 @@ namespace castor3d
 			}
 		}
 
-		static void mergeMasks( uint32_t lhs
-			, uint32_t & rhs )
-		{
-			rhs |= lhs;
-		}
-
-		static void mergeBools( bool lhs
+		static void merge( bool lhs
 			, bool & rhs )
 		{
 			rhs = lhs || rhs;
 		}
 
-		static void mergeFactors( float lhs
+		static void merge( float lhs
 			, float & rhs
 			, float ref )
 		{
@@ -339,12 +333,12 @@ namespace castor3d
 	void mergeConfigsBase( TextureConfiguration const & lhs
 		, TextureConfiguration & rhs )
 	{
-		texconf::mergeBools( lhs.needsYInversion, rhs.needsYInversion );
-		texconf::mergeBools( lhs.normalDirectX, rhs.normalDirectX );
-		texconf::mergeBools( lhs.normal2Channels, rhs.normal2Channels );
+		texconf::merge( lhs.needsYInversion, rhs.needsYInversion );
+		texconf::merge( lhs.normalDirectX, rhs.normalDirectX );
+		texconf::merge( lhs.normal2Channels, rhs.normal2Channels );
 
-		texconf::mergeFactors( lhs.heightFactor, rhs.heightFactor, 0.1f );
-		texconf::mergeFactors( lhs.normalFactor, rhs.normalFactor, 1.0f );
+		texconf::merge( lhs.heightFactor, rhs.heightFactor, 0.1f );
+		texconf::merge( lhs.normalFactor, rhs.normalFactor, 1.0f );
 
 		rhs.textureSpace |= lhs.textureSpace;
 	}
