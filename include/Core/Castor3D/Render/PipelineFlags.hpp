@@ -321,6 +321,11 @@ namespace castor3d
 			return checkFlag( m_programFlags, ProgramFlag::eBillboards );
 		}
 
+		bool isFrontCulled()const
+		{
+			return checkFlag( m_programFlags, ProgramFlag::eFrontCulled );
+		}
+
 		bool hasInvertNormals()const
 		{
 			return checkFlag( m_programFlags, ProgramFlag::eInvertNormals );

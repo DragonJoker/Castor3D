@@ -1687,6 +1687,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
+		, bool invertNormals
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
@@ -1704,6 +1705,7 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, isFrontCulled
+			, invertNormals
 			, passLayerIndex
 			, morphTargets );
 		result.m_shaderFlags = getShaderFlags();

@@ -277,6 +277,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
+		, bool invertNormals
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
@@ -299,6 +300,12 @@ namespace castor3d
 			, filtersNonStatic() };
 
 		if ( isFrontCulled )
+		{
+			invertNormals = !invertNormals;
+			addFlag( result.m_programFlags, ProgramFlag::eFrontCulled );
+		}
+
+		if ( invertNormals )
 		{
 			addFlag( result.m_programFlags, ProgramFlag::eInvertNormals );
 		}
@@ -338,6 +345,7 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, isFrontCulled
+			, pass.areNormalsInverted()
 			, pass.getIndex()
 			, morphTargets );
 	}

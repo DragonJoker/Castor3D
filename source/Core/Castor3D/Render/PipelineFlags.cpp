@@ -45,7 +45,7 @@ namespace castor3d
 			constexpr uint64_t maxSubmeshMask = ( 0x1u << uint64_t( maxSubmeshSize ) ) - 1u;
 			constexpr auto maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
 			constexpr uint64_t maxProgramMask = ( 0x1u << uint64_t( maxProgramSize ) ) - 1u;
-			constexpr auto maxLightingModelIDSize = castor::getBitSize( MaxLightingModels - 1u );
+			constexpr auto maxLightingModelIDSize = castor::getBitSize( MaxLightingModels );
 			constexpr uint64_t maxLightingModelIDMask = ( 0x1u << uint64_t( maxLightingModelIDSize ) ) - 1u;
 			constexpr auto maxPassSize = sizeof( PassComponentCombineID ) * 8u;
 			constexpr uint64_t maxPassMask = ( 0x1u << uint64_t( maxPassSize ) ) - 1u;

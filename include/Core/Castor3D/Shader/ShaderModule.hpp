@@ -83,27 +83,30 @@ namespace castor3d
 		//!\~english	Program used by billboards.
 		//!\~french		Programme utilisé par des billboards.
 		eBillboards = 0x0002,
+		//!\~english	Vertex shader inverts normals.
+		//\~french		Le vertex shader inverse les normales.
+		eInvertNormals = 0x0004,
 		//!\~english	Vertex shader inverts normals (for front culling).
 		//\~french		Le vertex shader inverse les normales (pour le front culling).
-		eInvertNormals = 0x0004,
+		eFrontCulled = 0x0008,
 		//!\~english	Render pass uses a mesh shader.
 		//\~french		La passe de rendu utilise un mesh shader.
-		eHasMesh = 0x0008,
+		eHasMesh = 0x0010,
 		//!\~english	All flags used in base pipeline flags hashing.
 		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = 0x000F,
+		eAllBase = 0x001F,
 		//!\~english	Render pass uses a task shader.
 		//\~french		La passe de rendu utilise un task shader.
-		eHasTask = 0x0010,
+		eHasTask = 0x0020,
 		//!\~english	All other flags.
 		//\~french		Tous les autres indicateurs.
-		eAllOptional = 0x0010,
+		eAllOptional = 0x0020,
 		//!\~english	All flags.
 		//\~french		Tous les indicateurs.
 		eAll = eAllBase | eAllOptional,
 		//!\~english	All flags related to visibility buffer resolve.
 		//\~french		Tous les indicateurs liés à la resolution du visibility buffer.
-		eAllVisibility = eInvertNormals | eBillboards,
+		eAllVisibility = eFrontCulled | eInvertNormals | eBillboards,
 	};
 	CU_ImplementFlags( ProgramFlag )
 	/**
