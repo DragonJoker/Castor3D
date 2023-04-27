@@ -197,6 +197,10 @@ namespace castor3d
 				{
 					parameters.add( cuT( "no_optimisations" ), true );
 				}
+				else if ( param.find( cuT( "invert_normals" ) ) == 0 )
+				{
+					parameters.add( cuT( "invert_normals" ), true );
+				}
 			}
 		}
 
