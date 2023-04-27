@@ -1193,6 +1193,11 @@ namespace castor3d
 			dummy = std::move( v );
 		}
 
+		C3D_API virtual bool areNormalsInverted()const
+		{
+			return false;
+		}
+
 		C3D_API virtual PassComponentFlag getPassFlags()const
 		{
 			return makePassComponentFlag( getId(), PassFlag::eNone );

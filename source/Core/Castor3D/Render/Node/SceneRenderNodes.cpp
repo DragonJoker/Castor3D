@@ -84,7 +84,7 @@ namespace castor3d
 
 	RenderNodeType getRenderNodeType( ProgramFlags const & programFlags )
 	{
-		bool isFrontCulled = checkFlag( programFlags, ProgramFlag::eInvertNormals );
+		bool isFrontCulled = checkFlag( programFlags, ProgramFlag::eFrontCulled );
 
 		if ( checkFlag( programFlags, ProgramFlag::eBillboards ) )
 		{

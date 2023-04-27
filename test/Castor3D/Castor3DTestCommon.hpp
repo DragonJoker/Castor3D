@@ -407,6 +407,7 @@ namespace Testing
 			{
 				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
 				{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
+				{ castor3d::ProgramFlag::eFrontCulled, "eFrontCulled" },
 				{ castor3d::ProgramFlag::eInvertNormals, "eInvertNormals" },
 				{ castor3d::ProgramFlag::eHasMesh, "eHasMesh" },
 				{ castor3d::ProgramFlag::eHasTask, "eHasTask" },

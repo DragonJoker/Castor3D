@@ -14,9 +14,9 @@ namespace castor3d
 	*/
 	//@{
 	// Maximum different lighting models.
-	static uint32_t constexpr MaxLightingModels = 64u;
+	static uint32_t constexpr MaxLightingModels = 63u;
 	// Maximum different background models.
-	static uint32_t constexpr MaxBackgroundModels = 64u;
+	static uint32_t constexpr MaxBackgroundModels = 63u;
 	// The number of vec4s in the random buffer.
 	static uint32_t constexpr RandomDataCount = 1024u;
 	//@}
@@ -28,7 +28,7 @@ namespace castor3d
 	// Maximum textures in a pass.
 	static uint32_t constexpr MaxPassTextures = 8u;
 	// Maximum passes in a material.
-	static uint32_t constexpr MaxPassLayers = 16u;
+	static uint32_t constexpr MaxPassLayers = 15u;
 	// Phong/Blinn-Phong
 	static float constexpr MaxPhongShininess = 256.0f;
 	// SSS transmittance factors count
