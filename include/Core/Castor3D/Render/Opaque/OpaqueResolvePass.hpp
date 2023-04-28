@@ -48,7 +48,7 @@ namespace castor3d
 		 *\param[in]	previousPasses			The passes this pass depends on.
 		 *\param[in]	device					The GPU device.
 		 *\param[in]	progress				The progress bar.
-		 *\param[in]	scene					The rendered scene.
+		 *\param[in]	technique				The parent technique.
 		 *\param[in]	depthObj				The depths and objects texture.
 		 *\param[in]	gp						The geometry pass result.
 		 *\param[in]	ssao					The SSAO configuration.
@@ -60,13 +60,15 @@ namespace castor3d
 		 *\param[in]	cameraUbo				The camera UBO.
 		 *\param[in]	hdrConfigUbo			The HDR UBO.
 		 *\param[in]	lightingModelId			The lighting model ID.
+		 *\param[in]	backgroundModelId		The background model ID.
+		 *\param[in]	opaquePassEnabled		The opaque pass enabled status.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph					Le render graph.
 		 *\param[in]	previousPasses			Les passes dont celle-ci dépend.
 		 *\param[in]	device					Le device GPU.
 		 *\param[in]	progress				La barre de progression.
-		 *\param[in]	scene					La scène rendue.
+		 *\param[in]	technique				La technique parente.
 		 *\param[in]	depthObj				La texture de profondeurs et d'objets.
 		 *\param[in]	gp						Le résultat de la passe géométrique.
 		 *\param[in]	ssao					La configuration du SSAO.
@@ -78,6 +80,8 @@ namespace castor3d
 		 *\param[in]	cameraUbo				L'UBO de la caméra.
 		 *\param[in]	hdrConfigUbo			L'UBO HDR.
 		 *\param[in]	lightingModelId			L'ID de modèle d'éclairage.
+		 *\param[in]	backgroundModelId		L'ID de modèle de fond.
+		 *\param[in]	opaquePassEnabled		Le statut d'activation de la passe opaque.
 		 */
 		C3D_API OpaqueResolvePass( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses

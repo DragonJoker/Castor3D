@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_VoxelSecondaryBounce_H___
@@ -31,6 +31,7 @@ namespace castor3d
 		 *\param[in]	graph			The runnable graph.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	voxelConfig		The voxelizer configuration.
+		 *\param[in]	isEnabled		The enabled status retrieval callback.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass			La frame pass parente.
@@ -38,6 +39,7 @@ namespace castor3d
 		 *\param[in]	graph			Le runnable graph.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
+		 *\param[in]	isEnabled		Le callback de récupération du statut d'activation.
 		 */
 		C3D_API VoxelSecondaryBounce( crg::FramePass const & pass
 			, crg::GraphContext & context

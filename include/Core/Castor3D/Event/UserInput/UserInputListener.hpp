@@ -27,11 +27,11 @@ namespace castor3d
 
 		/**
 		 *\~english
-		 *\~brief		Constructor.
+		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
 		 *\param[in]	name	The listener's name.
 		 *\~french
-		 *\~brief		Constructeur.
+		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	name	Le nom du listener.
 		 */
@@ -39,32 +39,32 @@ namespace castor3d
 			, castor::String const & name );
 		/**
 		 *\~english
-		 *\~brief		Destructor.
+		 *\brief		Destructor.
 		 *\~french
-		 *\~brief		Destructeur.
+		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~UserInputListener();
 		/**
 		 *\~english
-		 *\~brief		Initialises the listener.
+		 *\brief		Initialises the listener.
 		 *\return		true, hopefully :P.
 		 *\~french
-		 *\~brief		Initialise le listener.
+		 *\brief		Initialise le listener.
 		 *\return		true, espérons :P.
 		 */
 		C3D_API bool initialise();
 		/**
 		 *\~english
-		 *\~brief		Cleans up the listener.
+		 *\brief		Cleans up the listener.
 		 *\~french
-		 *\~brief		Nettoie le listener.
+		 *\brief		Nettoie le listener.
 		 */
 		C3D_API void cleanup();
 		/**
 		 *\~english
-		 *\~brief		Processes all queued events.
+		 *\brief		Processes all queued events.
 		 *\~french
-		 *\~brief		Traite tous les évènements.
+		 *\brief		Traite tous les évènements.
 		 */
 		C3D_API void processEvents();
 
@@ -98,11 +98,11 @@ namespace castor3d
 		
 		/**
 		 *\~english
-		 *\~brief		Registers a function to call when a mouse move event is raised by the given handler.
+		 *\brief		Registers a function to call when a mouse move event is raised by the given handler.
 		 *\param[in]	handler		The handler.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de déplacement de souris est lancé par le handler donné.
+		 *\brief		Enregistre une fonction à appeler lorsqu'un évènement de déplacement de souris est lancé par le handler donné.
 		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
@@ -110,11 +110,11 @@ namespace castor3d
 			, OnMouseMoveActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers a function to call when a mouse click event is raised by the given handler.
+		 *\brief		Registers a function to call when a mouse click event is raised by the given handler.
 		 *\param[in]	handler		The clicked handler.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de clic de souris est lancé par le handler donné.
+		 *\brief		Enregistre une fonction à appeler lorsqu'un évènement de clic de souris est lancé par le handler donné.
 		 *\param[in]	handler		Le handler cliqué.
 		 *\param[in]	function	La fonction.
 		 */
@@ -122,11 +122,11 @@ namespace castor3d
 			, OnClickActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers a function to call when a select event is raised by the given handler.
+		 *\brief		Registers a function to call when a select event is raised by the given handler.
 		 *\param[in]	handler		The handler.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de sélection est lancé par le handler donné.
+		 *\brief		Enregistre une fonction à appeler lorsqu'un évènement de sélection est lancé par le handler donné.
 		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
@@ -134,11 +134,11 @@ namespace castor3d
 			, OnSelectActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers a function to call when a text event is raised by the given handler.
+		 *\brief		Registers a function to call when a text event is raised by the given handler.
 		 *\param[in]	handler		The handler.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de texte est lancé par le handler donné.
+		 *\brief		Enregistre une fonction à appeler lorsqu'un évènement de texte est lancé par le handler donné.
 		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
@@ -146,11 +146,11 @@ namespace castor3d
 			, OnTextActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers a function to call when an expand event is raised by the given handler.
+		 *\brief		Registers a function to call when an expand event is raised by the given handler.
 		 *\param[in]	handler		The handler.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement d'expansion est lancé par le handler donné.
+		 *\brief		Enregistre une fonction à appeler lorsqu'un évènement d'expansion est lancé par le handler donné.
 		 *\param[in]	handler		Le handler.
 		 *\param[in]	function	La fonction.
 		 */
@@ -158,106 +158,106 @@ namespace castor3d
 			, OnExpandActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers a function to call when a mouse cursor event is raised by the given handler.
+		 *\brief		Registers a function to call when a mouse cursor event is raised by the given handler.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de curseur de souris est lancé par le handler donné.
+		 *\brief		Enregistre une fonction à appeler lorsqu'un évènement de curseur de souris est lancé par le handler donné.
 		 *\param[in]	function	La fonction.
 		 */
 		C3D_API void registerCursorAction( OnCursorActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Registers a function to call when a clipboard event is raised by the given handler.
+		 *\brief		Registers a function to call when a clipboard event is raised by the given handler.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Enregistre une fonction à appeler lorsqu'un évènement de presse-papier est lancé par le handler donné.
+		 *\brief		Enregistre une fonction à appeler lorsqu'un évènement de presse-papier est lancé par le handler donné.
 		 *\param[in]	function	La fonction.
 		 */
 		C3D_API void registerClipboardTextAction( OnClipboardTextActionFunction function );
 		/**
 		 *\~english
-		 *\~brief		Unregisters ths function to call when a mouse move event is raised by the given handler.
+		 *\brief		Unregisters ths function to call when a mouse move event is raised by the given handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de déplacement de souris est lancé par le handler donné.
+		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de déplacement de souris est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void unregisterMouseMoveAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters ths function to call when a mouse click event is raised by the given handler.
+		 *\brief		Unregisters ths function to call when a mouse click event is raised by the given handler.
 		 *\param[in]	handler	The clicked handler.
 		 *\~french
-		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de clic de souris est lancé par le handler donné.
+		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de clic de souris est lancé par le handler donné.
 		 *\param[in]	handler	Le handler cliqué.
 		 */
 		C3D_API void unregisterClickAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters ths function to call when a select event is raised by the given handler.
+		 *\brief		Unregisters ths function to call when a select event is raised by the given handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de sélection est lancé par le handler donné.
+		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de sélection est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void unregisterSelectAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters ths function to call when a text event is raised by the given handler.
+		 *\brief		Unregisters ths function to call when a text event is raised by the given handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de texte est lancé par le handler donné.
+		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de texte est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void unregisterTextAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters ths function to call when an expand event is raised by the given handler.
+		 *\brief		Unregisters ths function to call when an expand event is raised by the given handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement d'expansion est lancé par le handler donné.
+		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement d'expansion est lancé par le handler donné.
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void unregisterExpandAction( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Unregisters the function to call when mouse cursor event is raised by the given handler.
+		 *\brief		Unregisters the function to call when mouse cursor event is raised by the given handler.
 		 *\~french
-		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de curseur de souris est lancé par le handler donné.
+		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de curseur de souris est lancé par le handler donné.
 		 */
 		C3D_API void unregisterCursorAction();
 		/**
 		 *\~english
-		 *\~brief		Unregisters the function to call when a clipboard event is raised by the given handler.
+		 *\brief		Unregisters the function to call when a clipboard event is raised by the given handler.
 		 *\~french
-		 *\~brief		Désenregistre la fonction à appeler lorsqu'un évènement de presse-papier est lancé par le handler donné.
+		 *\brief		Désenregistre la fonction à appeler lorsqu'un évènement de presse-papier est lancé par le handler donné.
 		 */
 		C3D_API void unregisterClipboardTextAction();
 		/**
 		 *\~english
-		 *\~brief		Event raised by the handler when the mouse is moved over it.
+		 *\brief		Event raised by the handler when the mouse is moved over it.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Evènement lancé par le handler si la souris est déplacée au dessus de sa surface.
+		 *\brief		Evènement lancé par le handler si la souris est déplacée au dessus de sa surface.
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void onMouseMoveAction( castor::String const & handler )const;
 		/**
 		 *\~english
-		 *\~brief		Event raised by the handler when it is clicked, if it supports clicking.
+		 *\brief		Event raised by the handler when it is clicked, if it supports clicking.
 		 *\param[in]	handler	The clicked handler.
 		 *\~french
-		 *\~brief		Evènement lancé par le handler s'il est cliqué et qu'il le supporte.
+		 *\brief		Evènement lancé par le handler s'il est cliqué et qu'il le supporte.
 		 *\param[in]	handler	Le handler cliqué.
 		 */
 		C3D_API void onClickAction( castor::String const & handler )const;
 		/**
 		 *\~english
-		 *\~brief		Event raised by the handler when one of its sub elements is selected.
+		 *\brief		Event raised by the handler when one of its sub elements is selected.
 		 *\param[in]	handler	The handler.
 		 *\param[in]	index	The selection index.
 		 *\~french
-		 *\~brief		Evènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
+		 *\brief		Evènement lancé par le handler lorsqu'un de ses sous éléments est sélectionné.
 		 *\param[in]	handler	Le handler.
 		 *\param[in]	index	L'indice de la sélection.
 		 */
@@ -265,11 +265,11 @@ namespace castor3d
 			, int index )const;
 		/**
 		 *\~english
-		 *\~brief		Event raised by the handler when its caption has changed.
+		 *\brief		Event raised by the handler when its caption has changed.
 		 *\param[in]	handler	The handler.
 		 *\param[in]	text	The new text.
 		 *\~french
-		 *\~brief		Evènement lancé par le handler lorsque son texte a changé.
+		 *\brief		Evènement lancé par le handler lorsque son texte a changé.
 		 *\param[in]	handler	Le handler.
 		 *\param[in]	text	Le nouveau texte.
 		 */
@@ -277,11 +277,11 @@ namespace castor3d
 			, castor::U32String const & text )const;
 		/**
 		 *\~english
-		 *\~brief		Event raised by the handler when its expansion has changed.
+		 *\brief		Event raised by the handler when its expansion has changed.
 		 *\param[in]	handler	The handler.
 		 *\param[in]	expand	The new value.
 		 *\~french
-		 *\~brief		Evènement lancé par le handler lorsque son expansion est changée.
+		 *\brief		Evènement lancé par le handler lorsque son expansion est changée.
 		 *\param[in]	handler	Le handler.
 		 *\param[in]	expand	La nouvelle valeur.
 		 */
@@ -289,23 +289,21 @@ namespace castor3d
 			, bool expand )const;
 		/**
 		 *\~english
-		 *\~brief		Event raised when mouse cursor has changed.
-		 *\param[in]	handler	The handler.
-		 *\param[in]	expand	The new value.
+		 *\brief		Event raised when mouse cursor has changed.
+		 *\param[in]	cursor	The cursor.
 		 *\~french
-		 *\~brief		Evènement lorsque le cureur de souris est changé.
-		 *\param[in]	handler	Le handler.
-		 *\param[in]	expand	La nouvelle valeur.
+		 *\brief		Evènement lorsque le cureur de souris est changé.
+		 *\param[in]	cursor	Le curseur.
 		 */
 		C3D_API void onCursorAction( MouseCursor cursor )const;
 		/**
 		 *\~english
-		 *\~brief		Event raised interaction with the clipboard is needed.
+		 *\brief		Event raised interaction with the clipboard is needed.
 		 *\param[in]	set		\p true to define the clipboard text, \p false to retrieve it.
 		 *\param[in]	text	The value to set the clipboard text to.
 		 *\return		The clipboard text.
 		 *\~french
-		 *\~brief		Evènement lancé lorsqu'une interaction avec le presse-papier est demandée.
+		 *\brief		Evènement lancé lorsqu'une interaction avec le presse-papier est demandée.
 		 *\param[in]	set		\p true pour définir le texte du presse-papier, \p false pour le récupérer.
 		 *\param[in]	text	La valeur pour le presse-papier.
 		 *\return		Le texte du presse-papier.
@@ -314,19 +312,19 @@ namespace castor3d
 			, castor::U32String text )const;
 		/**
 		 *\~english
-		 *\~brief		Enables handler.
+		 *\brief		Enables handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Active un handler.
+		 *\brief		Active un handler.
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void enableHandler( castor::String const & handler );
 		/**
 		 *\~english
-		 *\~brief		Disables handler.
+		 *\brief		Disables handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Désactive un handler.
+		 *\brief		Désactive un handler.
 		 *\param[in]	handler	Le handler.
 		 */
 		C3D_API void disableHandler( castor::String const & handler );
@@ -337,14 +335,14 @@ namespace castor3d
 
 		/**
 		 *\~english
-		 *\~brief		Fires a mouse move event.
+		 *\brief		Fires a mouse move event.
 		 *\param[in]	position	The mouse position.
 		 *\param[in]	ctrl		Tells if the Ctrl key is down.
 		 *\param[in]	alt			Tells if the Alt key is down.
 		 *\param[in]	shift		Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
-		 *\~brief		Lance un évènement de déplacement de souris.
+		 *\brief		Lance un évènement de déplacement de souris.
 		 *\param[in]	position	La position de la souris.
 		 *\param[in]	ctrl		Dit si la touche Ctrl est enfoncée.
 		 *\param[in]	alt			Dit si la touche Alt est enfoncée.
@@ -357,14 +355,14 @@ namespace castor3d
 			, bool shift );
 		/**
 		 *\~english
-		 *\~brief		Fires a mouse pushed event.
+		 *\brief		Fires a mouse pushed event.
 		 *\param[in]	button	The mouse button.
 		 *\param[in]	ctrl	Tells if the Ctrl key is down.
 		 *\param[in]	alt		Tells if the Alt key is down.
 		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
-		 *\~brief		Lance un évènement de bouton de souris appuyé.
+		 *\brief		Lance un évènement de bouton de souris appuyé.
 		 *\param[in]	button	Le bouton de la souris.
 		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
 		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
@@ -377,14 +375,14 @@ namespace castor3d
 			, bool shift );
 		/**
 		 *\~english
-		 *\~brief		Fires a mouse released event.
+		 *\brief		Fires a mouse released event.
 		 *\param[in]	button	The mouse button.
 		 *\param[in]	ctrl	Tells if the Ctrl key is down.
 		 *\param[in]	alt		Tells if the Alt key is down.
 		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
-		 *\~brief		Lance un évènement de bouton de souris relâché.
+		 *\brief		Lance un évènement de bouton de souris relâché.
 		 *\param[in]	button	Le bouton de la souris.
 		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
 		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
@@ -397,14 +395,14 @@ namespace castor3d
 			, bool shift );
 		/**
 		 *\~english
-		 *\~brief		Fires a mouse wheel event.
+		 *\brief		Fires a mouse wheel event.
 		 *\param[in]	offsets	The mouse wheel offsets (x and y).
 		 *\param[in]	ctrl	Tells if the Ctrl key is down.
 		 *\param[in]	alt		Tells if the Alt key is down.
 		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
-		 *\~brief		Lance un évènement de molette de souris.
+		 *\brief		Lance un évènement de molette de souris.
 		 *\param[in]	offsets	Les déplacements de la molette (x et y).
 		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
 		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
@@ -422,14 +420,14 @@ namespace castor3d
 
 		/**
 		 *\~english
-		 *\~brief		Fires a keyboard key down event.
+		 *\brief		Fires a keyboard key down event.
 		 *\param[in]	key		The key code.
 		 *\param[in]	ctrl	Tells if the Ctrl key is down.
 		 *\param[in]	alt		Tells if the Alt key is down.
 		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
-		 *\~brief		Lance un évènement de touche de clavier appuyée.
+		 *\brief		Lance un évènement de touche de clavier appuyée.
 		 *\param[in]	key		Le code de la touche.
 		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
 		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
@@ -442,14 +440,14 @@ namespace castor3d
 			, bool shift );
 		/**
 		 *\~english
-		 *\~brief		Fires a keyboard key up event.
+		 *\brief		Fires a keyboard key up event.
 		 *\param[in]	key		The key code.
 		 *\param[in]	ctrl	Tells if the Ctrl key is down.
 		 *\param[in]	alt		Tells if the Alt key is down.
 		 *\param[in]	shift	Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a control.
 		 *\~french
-		 *\~brief		Lance un évènement de touche de clavier relâchée.
+		 *\brief		Lance un évènement de touche de clavier relâchée.
 		 *\param[in]	key		Le code de la touche.
 		 *\param[in]	ctrl	Dit si la touche Ctrl est enfoncée.
 		 *\param[in]	alt		Dit si la touche Alt est enfoncée.
@@ -462,12 +460,12 @@ namespace castor3d
 			, bool shift );
 		/**
 		 *\~english
-		 *\~brief		Fires a printable key event.
+		 *\brief		Fires a printable key event.
 		 *\param[in]	key	The key code.
 		 *\param[in]	c	The character coorresponding to the key, displayable as is.
 		 *\return		\p true if the event is processed by a control.
 		 *\~french
-		 *\~brief		Lance un évènement de caractère imprimable.
+		 *\brief		Lance un évènement de caractère imprimable.
 		 *\param[in]	key	Le code de la touche.
 		 *\param[in]	c	Le caractère correspondant à la touche, affichable tel quel.
 		 *\return		\p true si l'évènement est traité par un gestionnaire.
@@ -509,11 +507,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Removes a handler.
+		 *\brief		Removes a handler.
 		 *\remarks		You *MUST* call this function when adding a handler to your lists, if you want to have it updated.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Supprime un gestionnaire.
+		 *\brief		Supprime un gestionnaire.
 		 *\remarks		Vous *DEVEZ* appeler cette fonction lors de l'ajout d'un gestionnaire dans vos listes, si vous voulez qu'il soit mis à jour.
 		 *\param[in]	handler	Le gestionnaire.
 		 */
@@ -532,10 +530,10 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Removes a handler.
+		 *\brief		Removes a handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Supprime un gestionnaire.
+		 *\brief		Supprime un gestionnaire.
 		 *\param[in]	handler	Le gestionnaire.
 		 */
 		inline void doRemoveHandlerNL( EventHandler const & handler )
@@ -555,10 +553,10 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Removes a handler.
+		 *\brief		Removes a handler.
 		 *\param[in]	handler	The handler.
 		 *\~french
-		 *\~brief		Supprime un gestionnaire.
+		 *\brief		Supprime un gestionnaire.
 		 *\param[in]	handler	Le gestionnaire.
 		 */
 		inline void doRemoveHandler( EventHandler const & handler )
@@ -570,11 +568,11 @@ namespace castor3d
 	private:
 		/**
 		 *\~english
-		 *\~brief		Retrieves the first handler which can be targeted by mouse.
+		 *\brief		Retrieves the first handler which can be targeted by mouse.
 		 *\param[in]	position	The mouse position.
 		 *\return		The handler, \p nullptr if none.
 		 *\~french
-		 *\~brief		Récupère le premier gestionnaire pouvant être ciblé par la souris.
+		 *\brief		Récupère le premier gestionnaire pouvant être ciblé par la souris.
 		 *\param[in]	position	la position de la souris.
 		 *\return		Le gestionnaire, \p nullptr si aucun.
 		 */

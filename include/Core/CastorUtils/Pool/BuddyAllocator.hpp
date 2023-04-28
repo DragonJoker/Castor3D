@@ -143,21 +143,12 @@ namespace castor
 		void deallocate( PointerType pointer );
 		/**
 		 *\~english
-		 *\brief		Deallocates memory.
-		 *\param[in]	pointer	The memory chunk.
+		 *\brief		The pool total size.
 		 *\~french
-		 *\brief		Désalloue de la mémoire.
-		 *\param[in]	pointer	La zone mémoire.
+		 *\brief		La taille totale du pool.
 		 */
 		size_t getTotalSize()const;
-		/**
-		 *\~english
-		 *\brief		Deallocates memory.
-		 *\param[in]	pointer	The memory chunk.
-		 *\~french
-		 *\brief		Désalloue de la mémoire.
-		 *\param[in]	pointer	La zone mémoire.
-		 */
+
 		size_t getAlignSize()const
 		{
 			return m_minBlockSize;

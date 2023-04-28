@@ -22,7 +22,7 @@ namespace castor3d
 		C3D_API explicit LayoutBox( LayoutControl & container );
 
 		/** Sets the layout direction.
-		*\param[in]	horizontal	\p true for an horizontal layout.
+		*\param[in]	v	\p true for an horizontal layout.
 		*/
 		void setHorizontal( bool v )noexcept
 		{

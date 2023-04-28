@@ -21,7 +21,7 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( HdrRgbColourProperty )
 
 	public:
-		HdrRgbColourProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::HdrRgbColour const & value = castor::HdrRgbColour() );
+		explicit HdrRgbColourProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::HdrRgbColour const & value = castor::HdrRgbColour() );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;
@@ -37,7 +37,7 @@ namespace GuiCommon
 		WX_PG_DECLARE_PROPERTY_CLASS( HdrRgbaColourProperty )
 
 	public:
-		HdrRgbaColourProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::HdrRgbaColour const & value = castor::HdrRgbaColour() );
+		explicit HdrRgbaColourProperty( wxString const & label = wxPG_LABEL, wxString const & name = wxPG_LABEL, castor::HdrRgbaColour const & value = castor::HdrRgbaColour() );
 
 		wxVariant ChildChanged( wxVariant & thisValue, int childIndex, wxVariant & childValue )const override;
 		void RefreshChildren()override;

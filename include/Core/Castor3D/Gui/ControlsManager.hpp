@@ -47,6 +47,8 @@ namespace castor3d
 		/** Creates a theme if it doesn't exist, returns the existing one if it exists
 		*\param[in] name
 		*	The theme name
+		*\param[in] scene
+		*	The parent scene
 		*\return
 		*	The theme.
 		*/
@@ -55,6 +57,8 @@ namespace castor3d
 
 		/** \return
 		*	The theme for given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API ThemeRPtr getTheme( castor::String const & name )const;
 		
@@ -65,56 +69,78 @@ namespace castor3d
 
 		/** \return
 		*	The button style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API ButtonStyleRPtr getButtonStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The combo box style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API ComboBoxStyleRPtr getComboBoxStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The edit style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API EditStyleRPtr getEditStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The expandable panel style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API ExpandablePanelStyleRPtr getExpandablePanelStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The frame style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API FrameStyleRPtr getFrameStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The list box style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API ListBoxStyleRPtr getListBoxStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The panel style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API PanelStyleRPtr getPanelStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The progress style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API ProgressStyleRPtr getProgressStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The scrollbar style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API ScrollBarStyleRPtr getScrollBarStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The slider style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API SliderStyleRPtr getSliderStyle( castor::String const & name )const override;
 
 		/** \return
 		*	The static style with given name (\p nullptr if it doesn't exist).
+		*\param[in] name
+		*	The name
 		*/
 		C3D_API StaticStyleRPtr getStaticStyle( castor::String const & name )const override;
 

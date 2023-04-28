@@ -18,15 +18,16 @@ namespace castor3d
 	{
 	public:
 		/** Constructor.
-		 *\param[in]	name		The control name.
-		 *\param[in]	type		The type.
-		 *\param[in]	style		The control's style.
-		 *\param[in]	parent		The parent control, if any.
-		 *\param[in]	id			The control ID.
-		 *\param[in]	position	The position.
-		 *\param[in]	size		The size.
-		 *\param[in]	flags		The configuration flags
-		 *\param[in]	visible		Initial visibility status.
+		 *\param[in]	scene				The parent scene (nullptr for global).
+		 *\param[in]	name				The control name.
+		 *\param[in]	type				The type.
+		 *\param[in]	controlStyle		The control's style.
+		 *\param[in]	scrollableStyle		The scrollable's style.
+		 *\param[in]	parent				The parent control, if any.
+		 *\param[in]	position			The position.
+		 *\param[in]	size				The size.
+		 *\param[in]	flags				The configuration flags
+		 *\param[in]	visible				Initial visibility status.
 		 */
 		C3D_API LayoutControl( ControlType type
 			, SceneRPtr scene
@@ -40,7 +41,7 @@ namespace castor3d
 			, bool visible = true );
 
 		/** Sets the layout for the elements contained in this one.
-		 *\param[in]	value	The new value
+		 *\param[in]	layout	The new value
 		 */
 		C3D_API void setLayout( LayoutUPtr layout );
 
@@ -108,7 +109,7 @@ namespace castor3d
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious
-		 *\param[in]	value		The new value
+		 *\param[in]	visible		The new value
 		 */
 		void doSetVisible( bool visible )final override;
 
@@ -140,7 +141,7 @@ namespace castor3d
 
 		/** Sets the visibility
 		 *\remarks		Used for derived control specific behavious
-		 *\param[in]	value		The new value
+		 *\param[in]	visible		The new value
 		 */
 		virtual void doSubSetVisible( bool visible ) {}
 

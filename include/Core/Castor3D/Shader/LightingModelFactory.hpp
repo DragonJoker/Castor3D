@@ -32,13 +32,15 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Registers an object type
-		 *\param[in]	key		The object type
-		 *\param[in]	creator	The object creation function
+		 *\brief		Registers an object type.
+		 *\param[in]	key					The object type.
+		 *\param[in]	backgroundModelId	The background model ID.
+		 *\param[in]	create				The object creation function.
 		 *\~french
-		 *\brief		Enregistre un type d'objet
-		 *\param[in]	key		Le type d'objet
-		 *\param[in]	creator	La fonction de création d'objet
+		 *\brief		Enregistre un type d'objet.
+		 *\param[in]	key					Le type d'objet.
+		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
+		 *\param[in]	create				La fonction de création d'objet.
 		 */
 		C3D_API LightingModelID registerType( Key const & key
 			, BackgroundModelID backgroundModelId
@@ -111,13 +113,15 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates an object from an ID.
-		 *\param[in]	id		The object ID.
-		 *\param[in]	params	The creation parameters.
+		 *\param[in]	lightingModelId		The lighting model ID.
+		 *\param[in]	backgroundModelId	The background model ID.
+		 *\param[in]	params				The creation parameters.
 		 *\return		The created object.
 		 *\~french
 		 *\brief		Crée un objet à partir d'un ID.
-		 *\param[in]	id		L'ID d'objet.
-		 *\param[in]	params	Les paramètres de création.
+		 *\param[in]	lightingModelId		L'ID du modèle d'éclairage.
+		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
+		 *\param[in]	params				Les paramètres de création.
 		 *\return		L'objet créé.
 		 */
 		template< typename ... Parameters >

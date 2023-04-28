@@ -108,14 +108,14 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates the geometry injection pass result.
-		 *\param[in]	handler		The render graph resources handler.
+		 *\param[in]	resources	The render graph resources handler.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	prefix		The pass name's prefix.
 		 *\param[in]	index		The layer index.
 		 *\param[in]	gridSize	The grid dimensions.
 		 *\~french
 		 *\brief		Crée le résultat de la passe d'injection de géométries.
-		 *\param[in]	handler		Le gestionnaire de ressources du render graph.
+		 *\param[in]	resources	Le gestionnaire de ressources du render graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	prefix		Le préfixe du nom de la passe.
 		 *\param[in]	index		L'indice de la layer.

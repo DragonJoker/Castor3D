@@ -77,11 +77,13 @@ namespace castor3d
 		 *\param[in]	appName				The user application name.
 		 *\param[in]	appVersion			The user application version.
 		 *\param[in]	enableValidation	\p true to enable rendering API validation.
+		 *\param[in]	enableRandom		\p true to generate random seeds at each run.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	appName				Le nom de l'application.
 		 *\param[in]	appVersion			La version de l'application.
 		 *\param[in]	enableValidation	\p true pour activer la validation via l'API de rendu.
+		 *\param[in]	enableRandom		\p true pour générer des random seeds à chaque lancement.
 		 */
 		C3D_API Engine( castor::String const & appName
 			, Version const & appVersion
@@ -93,12 +95,14 @@ namespace castor3d
 		 *\param[in]	appName				The user application name.
 		 *\param[in]	appVersion			The user application version.
 		 *\param[in]	enableValidation	\p true to enable rendering API validation.
+		 *\param[in]	enableRandom		\p true to generate random seeds at each run.
 		 *\param[in]	logger				The logger instance.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	appName				Le nom de l'application.
 		 *\param[in]	appVersion			La version de l'application.
 		 *\param[in]	enableValidation	\p true pour activer la validation via l'API de rendu.
+		 *\param[in]	enableRandom		\p true pour générer des random seeds à chaque lancement.
 		 *\param[in]	logger				L'instance de logger.
 		 */
 		C3D_API Engine( castor::String const & appName
@@ -182,14 +186,14 @@ namespace castor3d
 		C3D_API GpuFrameEvent * postEvent( GpuFrameEventUPtr event );
 		/**
 		 *\~english
-		 *\~brief		Fires a mouse move event.
+		 *\brief		Fires a mouse move event.
 		 *\param[in]	position	The mouse position.
 		 *\param[in]	ctrl		Tells if the Ctrl key is down.
 		 *\param[in]	alt			Tells if the Alt key is down.
 		 *\param[in]	shift		Tells if the Shift key is down.
 		 *\return		\p true if the event is processed by a handler.
 		 *\~french
-		 *\~brief		Lance un évènement de déplacement de souris.
+		 *\brief		Lance un évènement de déplacement de souris.
 		 *\param[in]	position	La position de la souris.
 		 *\param[in]	ctrl		Dit si la touche Ctrl est enfoncée.
 		 *\param[in]	alt			Dit si la touche Alt est enfoncée.
@@ -313,12 +317,10 @@ namespace castor3d
 		 *\brief		Registers a render pass timer.
 		 *\param[in]	category	The timer category name.
 		 *\param[in]	timer		The timer to register.
-		 *\return		The query ID.
 		 *\~french
 		 *\brief		Enregistre un timer de passe de rendu.
 		 *\param[in]	category	Le nom de la catégorie du timer.
 		 *\param[in]	timer		Le timer à enregistrer.
-		 *\return		L'ID de la requête.
 		 */
 		C3D_API void registerTimer( castor::String const & category
 			, FramePassTimer & timer );
@@ -353,11 +355,13 @@ namespace castor3d
 			, BackgroundModelID backgroundModelId );
 		/**
 		 *\~english
-		 *\brief		Unregisters a Lighting Model.
-		 *\param[in]	lightingModelId	The model ID.
+		 *\brief		Unregisters a combination of Lighting Model and Background Model.
+		 *\param[in]	lightingModelId		The lighting model ID.
+		 *\param[in]	backgroundModelId	The bavkground model ID.
 		 *\~french
-		 *\brief		Désenregistre un Lighting Model.
-		 *\param[in]	lightingModelId	L'ID du modèle.
+		 *\brief		Désenregistre une combinaison de Lighting Model et de Background Model.
+		 *\param[in]	lightingModelId		L'ID du modèle d'éclairage.
+		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 */
 		C3D_API void unregisterLightingModel( LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId );
@@ -416,46 +420,44 @@ namespace castor3d
 		C3D_API void unregisterBuffer( ShaderBuffer const & buffer );
 		/**
 		 *\~english
-		 *\brief		Registers a material pass type.
-		 *\param[in]	type	The pass type name.
-		 *\param[in]	info	The pass creation informations.
+		 *\brief		Registers the pass info with given background model.
+		 *\param[in]	backgroundModelId	The background model.
+		 *\param[in]	info				The pass registering info.
 		 *\~french
-		 *\brief		Enregistre un type de passe de matériau.
-		 *\param[in]	type	Le nom du type de la passe.
-		 *\param[in]	info	Les informations de création de la passe.
+		 *\brief		Enregistre les informations de passe avec le modèle de fond donnés.
+		 *\param[in]	backgroundModelId	Le modèle de fond.
+		 *\param[in]	info				Les informations d'enregistrement de la passe.
 		 */
 		C3D_API void registerPassModel( BackgroundModelID backgroundModelId
 			, PassRegisterInfo info );
 		/**
 		 *\~english
-		 *\brief		Registers a material pass type.
-		 *\param[in]	type	The pass type name.
-		 *\param[in]	info	The pass creation informations.
+		 *\brief		Registers the given pass info with all background models.
+		 *\param[in]	info	The pass registering info.
 		 *\~french
-		 *\brief		Enregistre un type de passe de matériau.
-		 *\param[in]	type	Le nom du type de la passe.
-		 *\param[in]	info	Les informations de création de la passe.
+		 *\brief		Enregistre les informations de passe avec tous les modèles de fond.
+		 *\param[in]	info	Les informations d'enregistrement de la passe.
 		 */
 		C3D_API void registerPassModels( PassRegisterInfo info );
 		/**
 		 *\~english
-		 *\brief		Unregisters a material pass type.
-		 *\param[in]	type	The pass type name.
+		 *\brief		Unregisters a combination of lighting model and background model.
+		 *\param[in]	backgroundModelId	The background model.
+		 *\param[in]	lightingModelId		The lighting model.
 		 *\~french
-		 *\brief		Désenregistre un type de passe de matériau.
-		 *\param[in]	type	Le nom du type de la passe.
+		 *\brief		Désenregistre une combinaison de modèle d'éclairage et de modèle de fond.
+		 *\param[in]	backgroundModelId	Le modèle de fond.
+		 *\param[in]	lightingModelId		Le modèle d'éclairage.
 		 */
 		C3D_API void unregisterPassModel( BackgroundModelID backgroundModelId
 			, LightingModelID lightingModelId );
 		/**
 		 *\~english
-		 *\brief		Registers a material pass type.
-		 *\param[in]	type	The pass type name.
-		 *\param[in]	info	The pass creation informations.
+		 *\brief		Unregisters all combinations of given lighting model and background models.
+		 *\param[in]	type	The lighting model name.
 		 *\~french
-		 *\brief		Enregistre un type de passe de matériau.
-		 *\param[in]	type	Le nom du type de la passe.
-		 *\param[in]	info	Les informations de création de la passe.
+		 *\brief		Désenregistre toutes les combinaisons du modèle d'éclairage et des modèles de fond.
+		 *\param[in]	type	Le nom du modèle d'éclairage.
 		 */
 		C3D_API void unregisterPassModels( castor::String const & type );
 		/**

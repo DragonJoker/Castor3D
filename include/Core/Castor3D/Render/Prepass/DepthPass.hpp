@@ -22,6 +22,7 @@ namespace castor3d
 		 *\param[in]	context			The rendering context.
 		 *\param[in]	graph			The runnable graph.
 		 *\param		device			The GPU device.
+		 *\param		targetDepth		The target depth textures.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	renderPassDesc	The render pass description.
 		 *\param[in]	deferred		\p true if the opaque pass is using deferred rendering.
@@ -32,6 +33,7 @@ namespace castor3d
 		 *\param[in]	context			Le contexte de rendu.
 		 *\param[in]	graph			Le runnable graph.
 		 *\param[in]	device			Le device GPU.
+		 *\param		targetDepth		Les textures profondeur cibles.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	renderPassDesc	La description de la passe de rendu.
 		 *\param[in]	deferred		\p true si la passe opaque utilise le deferred rendering.

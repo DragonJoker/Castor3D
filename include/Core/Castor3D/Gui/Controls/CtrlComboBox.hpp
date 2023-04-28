@@ -15,10 +15,10 @@ namespace castor3d
 	{
 	public:
 		/** Constructor
+		 *\param[in]	scene	The parent scene (nullptr for global).
 		 *\param[in]	name	The control name
 		 *\param[in]	style	The control style
 		 *\param[in]	parent	The parent control, if any
-		 *\param[in]	id		The control ID
 		 */
 		C3D_API ComboBoxCtrl( SceneRPtr scene
 			, castor::String const & name
@@ -26,12 +26,12 @@ namespace castor3d
 			, ControlRPtr parent );
 
 		/** Constructor
+		 *\param[in]	scene		The parent scene (nullptr for global).
 		 *\param[in]	name		The control name
 		 *\param[in]	style		The control style
 		 *\param[in]	parent		The parent control, if any
 		 *\param[in]	values		The list value
 		 *\param[in]	selected	The selected value
-		 *\param[in]	id			The control ID
 		 *\param[in]	position	The position
 		 *\param[in]	size		The size
 		 *\param[in]	flags		The configuration flags
@@ -49,15 +49,17 @@ namespace castor3d
 			, bool visible = true );
 
 		/** Constructor
-		*\param[in]	parent		The parent control, if an
-		*\param[in]	values		The list value
-		*\param[in]	selected	The selected valu
-		*\param[in]	id			The control ID
-		*\param[in]	position	The positio
-		*\param[in]	size		The size
-		*\param[in]	flags		The configuration flags
-		*\param[in]	visible		Initial visibility statu
-		*/
+		 *\param[in]	scene		The parent scene (nullptr for global).
+		 *\param[in]	name		The control name
+		 *\param[in]	style		The control style
+		 *\param[in]	parent		The parent control, if an
+		 *\param[in]	values		The list value
+		 *\param[in]	selected	The selected valu
+		 *\param[in]	position	The positio
+		 *\param[in]	size		The size
+		 *\param[in]	flags		The configuration flags
+		 *\param[in]	visible		Initial visibility statu
+		 */
 		template< size_t N >
 		ComboBoxCtrl( SceneRPtr scene
 			, castor::String const & name
@@ -202,6 +204,7 @@ namespace castor3d
 		void onKeyDown( KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
+		*\param[in]	control		The control raising the event
 		*\param[in]	event		The keyboard event
 		*/
 		void onNcKeyDown( ControlRPtr control, KeyboardEvent const & event );

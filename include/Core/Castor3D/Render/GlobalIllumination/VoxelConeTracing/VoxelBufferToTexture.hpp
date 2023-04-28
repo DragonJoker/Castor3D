@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_VoxelBufferToTexture_H___
@@ -36,12 +36,14 @@ namespace castor3d
 		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	vctConfig	The voxelizer configuration.
+		 *\param[in]	isEnabled	The enabled status retrieval callback.
 		 *\~french
 		 *\param[in]	pass		La frame pass parente.
 		 *\param[in]	context		Le contexte de rendu.
 		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	vctConfig	La configuration du voxelizer.
+		 *\param[in]	isEnabled	Le callback de récupération du statut d'activation.
 		 */
 		C3D_API VoxelBufferToTexture( crg::FramePass const & pass
 			, crg::GraphContext & context

@@ -264,10 +264,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
-		 *\param[in]	device	The GPU device.
+		 *\param[in]	device		The GPU device.
+		 *\param[in]	srcLayout	The current layout of the image.
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
-		 *\param[in]	device	Le device GPU.
+		 *\param[in]	device		Le device GPU.
+		 *\param[in]	srcLayout	Le layout actuel de l'image.
 		 */
 		C3D_API void generateMipmaps( RenderDevice const & device
 			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
@@ -275,19 +277,23 @@ namespace castor3d
 		 *\~english
 		 *\brief		Generate texture mipmaps
 		 *\param[in]	queueData	The queue receiving the GPU commands.
+		 *\param[in]	srcLayout	The current layout of the image.
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
+		 *\param[in]	srcLayout	Le layout actuel de l'image.
 		 */
 		C3D_API void generateMipmaps( QueueData const & queueData
 			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
 		/**
 		 *\~english
 		 *\brief		Generate texture mipmaps
-		 *\param[in]	cmd	The command buffer recording the commands.
+		 *\param[in]	cmd			The command buffer recording the commands.
+		 *\param[in]	srcLayout	The current layout of the image.
 		 *\~french
 		 *\brief		Génère les mipmaps de la texture
-		 *\param[in]	cmd	Le command buffer recevant les commandes.
+		 *\param[in]	cmd			Le command buffer recevant les commandes.
+		 *\param[in]	srcLayout	Le layout actuel de l'image.
 		 */
 		C3D_API void generateMipmaps( ashes::CommandBuffer & cmd
 			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;

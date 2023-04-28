@@ -26,7 +26,7 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	handler		The graph resources handler.
+		 *\param[in]	resources	The graph resources handler.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\param[in]	size		The render area dimensions.
@@ -35,7 +35,7 @@ namespace castor3d
 		 *\param[in]	culler		The culler for this pass.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	handler		Le gestionnaire de ressources du graphe.
+		 *\param[in]	resources	Le gestionnaire de ressources du graphe.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 *\param[in]	size		Les dimensions de la zone de rendu

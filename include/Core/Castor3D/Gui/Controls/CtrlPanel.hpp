@@ -15,10 +15,10 @@ namespace castor3d
 	{
 	public:
 		/** Constructor
+		 *\param[in]	scene	The parent scene (nullptr for global).
 		 *\param[in]	name	The control name
 		 *\param[in]	style	The control style
 		 *\param[in]	parent	The parent control, if any
-		 *\param[in]	id		The control ID.
 		*/
 		C3D_API PanelCtrl( SceneRPtr scene
 			, castor::String const & name
@@ -26,6 +26,7 @@ namespace castor3d
 			, ControlRPtr parent );
 
 		/** Constructor
+		 *\param[in]	scene		The parent scene (nullptr for global).
 		 *\param[in]	name		The control name
 		 *\param[in]	style		The control style
 		 *\param[in]	parent		The parent control, if any

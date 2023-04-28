@@ -38,6 +38,7 @@ namespace castor3d
 		 *\param[in]	views				The source and destination textures.
 		 *\param[in]	intermediateView	The view receiving the intermediate blur.
 		 *\param[in]	kernelSize			The kernel coefficients count.
+		 *\param[in]	isEnabled			The enabled status retrieval callback.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph				Le render graph.
@@ -48,6 +49,7 @@ namespace castor3d
 		 *\param[in]	views				Les textures source et destination.
 		 *\param[in]	intermediateView	La texture recevant le blur intermédiaire.
 		 *\param[in]	kernelSize			Le nombre de coefficients du kernel.
+		 *\param[in]	isEnabled			Le callback de récupération du statut d'activation.
 		 */
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
@@ -61,22 +63,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	graph				The render graph.
-		 *\param[in]	previousPass		The previous frame pass.
-		 *\param[in]	device				The GPU device.
-		 *\param[in]	category			The pass category name.
-		 *\param[in]	prefix				The pass name's prefix.
-		 *\param[in]	views				The source and destination textures.
-		 *\param[in]	kernelSize			The kernel coefficients count.
+		 *\param[in]	graph			The render graph.
+		 *\param[in]	previousPass	The previous frame pass.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	category		The pass category name.
+		 *\param[in]	prefix			The pass name's prefix.
+		 *\param[in]	views			The source and destination textures.
+		 *\param[in]	kernelSize		The kernel coefficients count.
+		 *\param[in]	isEnabled		The enabled status retrieval callback.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	graph				Le render graph.
-		 *\param[in]	previousPass		La frame pass précédente.
-		 *\param[in]	device				Le device GPU.
-		 *\param[in]	category			Le nom de la catégorie de la passe.
-		 *\param[in]	prefix				Le préfixe du nom de la passe.
-		 *\param[in]	views				Les textures source et destination.
-		 *\param[in]	kernelSize			Le nombre de coefficients du kernel.
+		 *\param[in]	graph			Le render graph.
+		 *\param[in]	previousPass	La frame pass précédente.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	category		Le nom de la catégorie de la passe.
+		 *\param[in]	prefix			Le préfixe du nom de la passe.
+		 *\param[in]	views			Les textures source et destination.
+		 *\param[in]	kernelSize		Le nombre de coefficients du kernel.
+		 *\param[in]	isEnabled		Le callback de récupération du statut d'activation.
 		 */
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
@@ -89,22 +93,24 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	graph				The render graph.
-		 *\param[in]	previousPass		The previous frame pass.
-		 *\param[in]	device				The GPU device.
-		 *\param[in]	category			The pass category name.
-		 *\param[in]	prefix				The pass name's prefix.
-		 *\param[in]	view				The source and destination texture.
-		 *\param[in]	kernelSize			The kernel coefficients count.
+		 *\param[in]	graph			The render graph.
+		 *\param[in]	previousPass	The previous frame pass.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	category		The pass category name.
+		 *\param[in]	prefix			The pass name's prefix.
+		 *\param[in]	view			The source and destination texture.
+		 *\param[in]	kernelSize		The kernel coefficients count.
+		 *\param[in]	isEnabled		The enabled status retrieval callback.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	graph				Le render graph.
-		 *\param[in]	previousPass		La frame pass précédente.
-		 *\param[in]	device				Le device GPU.
-		 *\param[in]	category			Le nom de la catégorie de la passe.
-		 *\param[in]	prefix				Le préfixe du nom de la passe.
-		 *\param[in]	view				La texture source et destination.
-		 *\param[in]	kernelSize			Le nombre de coefficients du kernel.
+		 *\param[in]	graph			Le render graph.
+		 *\param[in]	previousPass	La frame pass précédente.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	category		Le nom de la catégorie de la passe.
+		 *\param[in]	prefix			Le préfixe du nom de la passe.
+		 *\param[in]	view			La texture source et destination.
+		 *\param[in]	kernelSize		Le nombre de coefficients du kernel.
+		 *\param[in]	isEnabled		Le callback de récupération du statut d'activation.
 		 */
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
@@ -125,6 +131,7 @@ namespace castor3d
 		 *\param[in]	view				The source and destination texture.
 		 *\param[in]	intermediateView	The view receiving the intermediate blur.
 		 *\param[in]	kernelSize			The kernel coefficients count.
+		 *\param[in]	isEnabled			The enabled status retrieval callback.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	graph				Le render graph.
@@ -135,6 +142,7 @@ namespace castor3d
 		 *\param[in]	view				La texture source et destination.
 		 *\param[in]	intermediateView	La texture recevant le blur intermédiaire.
 		 *\param[in]	kernelSize			Le nombre de coefficients du kernel.
+		 *\param[in]	isEnabled			Le callback de récupération du statut d'activation.
 		 */
 		C3D_API GaussianBlur( crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass

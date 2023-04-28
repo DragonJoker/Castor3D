@@ -153,9 +153,11 @@ namespace castor
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	rhs		The value.
 		 *\param[in]	range	The range to parse.
 		 *\~french
 		 *\brief		Constructor.
+		 *\param[in]	rhs		La valeur.
 		 *\param[in]	range	L'intervalle à parser.
 		 */
 		explicit ParserParameter( ValueType rhs

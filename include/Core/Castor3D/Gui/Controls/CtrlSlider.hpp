@@ -16,10 +16,10 @@ namespace castor3d
 	{
 	public:
 		/** Constructor
+		 *\param[in]	scene	The parent scene (nullptr for global).
 		 *\param[in]	name	The control name
 		 *\param[in]	style	The control style
 		 *\param[in]	parent	The parent control, if any
-		 *\param[in]	id		The control ID
 		 */
 		C3D_API SliderCtrl( SceneRPtr scene
 			, castor::String const & name
@@ -27,11 +27,11 @@ namespace castor3d
 			, ControlRPtr parent );
 
 		/** Constructor
+		 *\param[in]	scene		The parent scene (nullptr for global).
 		 *\param[in]	name		The control name
 		 *\param[in]	style		The control style
 		 *\param[in]	parent		The parent control, if any
 		 *\param[in]	value		The slider initial value, and its range
-		 *\param[in]	id			The control ID
 		 *\param[in]	position	The position
 		 *\param[in]	size		The size
 		 *\param[in]	flags		The configuration flags
@@ -127,7 +127,7 @@ namespace castor3d
 
 		/** sets the visibility
 		 *\remarks		Used for derived control specific behaviou
-		 *\param[in]	value		The new value
+		 *\param[in]	visible		The new value
 		 */
 		void doSetVisible( bool visible )override;
 
@@ -166,7 +166,7 @@ namespace castor3d
 
 		/** Event when mouse left button is released over the tick control
 		 *\param[in]	control	The tick control
-		 *\param[in]	event		The mouse event
+		 *\param[in]	event	The mouse event
 		 */
 		void onTickMouseButtonUp( ControlRPtr control
 			, MouseEvent const & event );
@@ -177,7 +177,8 @@ namespace castor3d
 		void onKeyDown( KeyboardEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
-		 *\param[in]	event		The keyboard event
+		 *\param[in]	control	The control raising the eevent
+		 *\param[in]	event	The keyboard event
 		 */
 		void onNcKeyDown( ControlRPtr control
 			, KeyboardEvent const & event );

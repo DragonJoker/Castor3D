@@ -14,10 +14,10 @@ namespace castor3d
 	{
 	public:
 		/** Constructor
-		 *\param[in]	name	The control name
-		 *\param[in]	style	The control style
-		 *\param[in]	parent	The parent control, if any
-		 *\param[in]	id		The control ID
+		 *\param[in]	scene	The parent scene (nullptr for global).
+		 *\param[in]	name	The control name.
+		 *\param[in]	style	The control style.
+		 *\param[in]	parent	The parent control, if any.
 		 */
 		C3D_API ListBoxCtrl( SceneRPtr scene
 			, castor::String const & name
@@ -25,16 +25,16 @@ namespace castor3d
 			, ControlRPtr parent );
 
 		/** Constructor
-		 *\param[in]	name		The control name
-		 *\param[in]	style		The control style
-		 *\param[in]	parent		The parent control, if any
-		 *\param[in]	values		The values list
-		 *\param[in]	selected	The selected value index (-1 for no selection)
-		 *\param[in]	id			The control ID
-		 *\param[in]	position	The position
-		 *\param[in]	size		The size
-		 *\param[in]	flags		The configuration flags
-		 *\param[in]	visible		Initial visibility status
+		 *\param[in]	scene		The parent scene (nullptr for global).
+		 *\param[in]	name		The control name.
+		 *\param[in]	style		The control style.
+		 *\param[in]	parent		The parent control, if any.
+		 *\param[in]	values		The values list.
+		 *\param[in]	selected	The selected value index (-1 for no selection).
+		 *\param[in]	position	The position.
+		 *\param[in]	size		The size.
+		 *\param[in]	flags		The configuration flags.
+		 *\param[in]	visible		Initial visibility status.
 		 */
 		C3D_API ListBoxCtrl( SceneRPtr scene
 			, castor::String const & name
@@ -48,16 +48,16 @@ namespace castor3d
 			, bool visible = true );
 
 		/** Constructor
-		 *\param[in]	name		The control name
-		 *\param[in]	style		The control style
-		 *\param[in]	parent		The parent control, if any
-		 *\param[in]	values		The values list
-		 *\param[in]	selected	The selected value index (-1 for no selection)
-		 *\param[in]	id			The control ID
-		 *\param[in]	position	The position
-		 *\param[in]	size		The size
-		 *\param[in]	style		The style
-		 *\param[in]	visible		Initial visibility status
+		 *\param[in]	scene		The parent scene (nullptr for global).
+		 *\param[in]	name		The control name.
+		 *\param[in]	style		The control style.
+		 *\param[in]	parent		The parent control, if any.
+		 *\param[in]	values		The values list.
+		 *\param[in]	selected	The selected value index (-1 for no selection).
+		 *\param[in]	position	The position.
+		 *\param[in]	size		The size.
+		 *\param[in]	flags		The configuration flags.
+		 *\param[in]	visible		Initial visibility status.
 		 */
 		template< size_t N >
 		ListBoxCtrl( SceneRPtr scene
@@ -165,6 +165,7 @@ namespace castor3d
 
 		/** Creates a sub-control
 		 *\param[in]	value		The control label
+		 *\param[in]	itemIndex	The control index
 		 *\return		The static control.
 		 */
 		StaticCtrlRPtr doCreateItemCtrl( castor::String const & value
@@ -172,6 +173,7 @@ namespace castor3d
 
 		/** Creates a sub-control, and it's Castor3D counterpart.
 		 *\param[in]	value		The control label
+		 *\param[in]	itemIndex	The control index
 		 */
 		void doCreateItem( castor::String const & value
 			, uint32_t itemIndex );
@@ -223,6 +225,7 @@ namespace castor3d
 		void onItemMouseLButtonUp( ControlRPtr control, MouseEvent const & event );
 
 		/** Event when a keyboard key is pressed on the active tick or line control
+		 *\param[in]	control		The control raising the event
 		 *\param[in]	event		The keyboard event
 		 */
 		void onItemKeyDown( ControlRPtr control, KeyboardEvent const & event );

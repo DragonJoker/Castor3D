@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PassMapComponent_H___
@@ -54,12 +54,16 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	pass	The parent pass.
-		 *\param[in]	type	The component type.
+		 *\param[in]	pass			The parent pass.
+		 *\param[in]	type			The component type.
+		 *\param[in]	textureFlags	The texture flags.
+		 *\param[in]	deps			The components this one depends on.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	pass	Le sous-maillage pass.
-		 *\param[in]	type	Le type de composant.
+		 *\param[in]	pass			Le sous-maillage pass.
+		 *\param[in]	type			Le type de composant.
+		 *\param[in]	textureFlags	Les indicateurs de texture.
+		 *\param[in]	deps			Les composants dont celui-ci dépend.
 		 */
 		C3D_API PassMapComponent( Pass & pass
 			, castor::String type

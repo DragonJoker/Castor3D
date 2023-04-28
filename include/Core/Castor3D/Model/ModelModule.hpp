@@ -21,7 +21,7 @@ namespace castor3d
 	/**
 	\~english
 	\brief		Representation of a vertex inside a submesh.
-	\~fench
+	\~french
 	\brief		Représentation d'un sommet, dans un sous-maillage.
 	*/
 	struct SubmeshVertex;

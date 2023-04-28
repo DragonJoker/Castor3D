@@ -254,7 +254,8 @@ namespace castor3d
 		 *\param[in]	graph		The runnable graph.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	typeName	The pass type name.
-		 *\param[in]	targetImage	The main image to which this pass draws to.
+		 *\param[in]	targetImage	The image this pass renders to.
+		 *\param[in]	targetDepth	The depth image this pass renders to.
 		 *\param[in]	desc		The construction data.
 		 *\~french
 		 *\brief		Constructeur.
@@ -263,7 +264,8 @@ namespace castor3d
 		 *\param[in]	graph		Le runnable graph.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	typeName	Le nom du type de la passe.
-		 *\param[in]	targetImage	L'image principale sur laquelle cette passe dessine.
+		 *\param[in]	targetImage	L'image dans laquelle cette passe fait son rendu.
+		 *\param[in]	targetDepth	L'image de profondeur dans laquelle cette passe fait son rendu.
 		 *\param[in]	desc		Les données de construction.
 		 */
 		C3D_API RenderNodesPass( crg::FramePass const & pass
@@ -408,8 +410,9 @@ namespace castor3d
 		 *\param[in]	components			The components combination.
 		 *\param[in]	colourBlendMode		The colour blending mode.
 		 *\param[in]	alphaBlendMode		The alpha blending mode.
-		 *\param[in]	renderPassTypeID	The render pass type ID.
-		 *\param[in]	passTypeID			The material pass type ID.
+		 *\param[in]	renderPassTypeId	The render pass type ID.
+		 *\param[in]	lightingModelId		The lighting model ID.
+		 *\param[in]	backgroundModelId	The background model ID.
 		 *\param[in]	alphaFunc			The alpha comparison function (for opaque nodes).
 		 *\param[in]	blendAlphaFunc		The alpha comparison function (for transparent nodes).
 		 *\param[in]	textures			The textures configuration.
@@ -418,6 +421,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags			Scene related flags.
 		 *\param[in]	topology			The render topology.
 		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
+		 *\param[in]	invertNormals		\p true to invert normals.
 		 *\param[in]	passLayerIndex		The material pass layer index.
 		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\~french
@@ -425,8 +429,9 @@ namespace castor3d
 		 *\param[in]	components			La combinaison de composants.
 		 *\param[in]	colourBlendMode		Le mode de mélange de couleurs.
 		 *\param[in]	alphaBlendMode		Le mode de mélange de l'alpha
-		 *\param[in]	renderPassTypeID	L'ID du type de render pass.
-		 *\param[in]	passTypeID			L'ID du type de passe de matériau.
+		 *\param[in]	renderPassTypeId	L'ID du type de render pass.
+		 *\param[in]	lightingModelId		L'ID du modèle d'éclairage.
+		 *\param[in]	backgroundModelId	L'ID du modèle de fond.
 		 *\param[in]	alphaFunc			La fonction de comparaison de l'alpha (pour les noeuds opaques).
 		 *\param[in]	blendAlphaFunc		La fonction de comparaison de l'alpha (pour les noeuds transparents).
 		 *\param[in]	textures			La configuration des textures.
@@ -435,6 +440,7 @@ namespace castor3d
 		 *\param[in]	sceneFlags			Les indicateurs relatifs à la scène.
 		 *\param[in]	topology			La topologie de rendu.
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
+		 *\param[in]	invertNormals		\p true pour inverser les normales.
 		 *\param[in]	passLayerIndex		L'indice de la couche de la passe de matériau.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
@@ -545,11 +551,9 @@ namespace castor3d
 		 *\~english
 		 *\brief			Registers nodes counts to given RenderInfo.
 		 *\param[in,out]	info	Receives the counts.
-		 *\return
 		 *\~french
 		 *\brief			Enregistre les comptes de noeuds dans le RenderInfo donné.
 		 *\param[in,out]	info	Reçoit les comptes.
-		 *\return
 		 */
 		C3D_API void countNodes( RenderInfo & info )const;
 		/**
@@ -683,14 +687,32 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief			Fills the render pass specific descriptor layout bindings.
+		 *\param[in]		flags		The pipeline flags.
 		 *\param[in,out]	bindings	Receives the additional bindings.
 		 *\~french
 		 *\brief			Remplit les attaches de layout de descripteurs spécifiques à une passe de rendu.
+		 *\param[in]		flags		Les indicateurs de pipeline.
 		 *\param[in,out]	bindings	Reçoit les attaches additionnelles.
 		 */
 		C3D_API virtual void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const = 0;
+		/**
+		 *\~english
+		 *\param[in]	pass	The material pass.
+		 *\return		\p true if the pass is rendered through this nodes pass.
+		 *\~french
+		 *\param[in]	pass	La passe de matériau.
+		 *\return		\p true si la passe est rendue via cette passe de noeuds.
+		 */
 		C3D_API virtual bool doIsValidPass( Pass const & pass )const;
+		/**
+		 *\~english
+		 *\param[in]	object	The rendered object.
+		 *\return		\p true if the object is rendered through this nodes pass.
+		 *\~french
+		 *\param[in]	object	L'objet rendu.
+		 *\return		\p true si l'objet est rendu via cette passe de noeuds.
+		 */
 		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const;
 		C3D_API virtual SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
@@ -730,10 +752,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates the rasterization state.
-		 *\param[in]	flags	The pipeline flags.
+		 *\param[in]	flags		The pipeline flags.
+		 *\param[in]	cullMode	The cull mode.
 		 *\~french
 		 *\brief		Crée l'état de rastérisation.
-		 *\param[in]	flags	Les indicateurs de pipeline.
+		 *\param[in]	flags		Les indicateurs de pipeline.
+		 *\param[in]	cullMode	Le mode de culling.
 		 */
 		C3D_API virtual ashes::PipelineRasterizationStateCreateInfo doCreateRasterizationState( PipelineFlags const & flags
 			, VkCullModeFlags cullMode )const;
@@ -769,11 +793,13 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief			Initialises the additional descriptor set
+		 *\brief			Initialises the additional descriptor set.
+		 *\param[in]		flags				The pipeline flags.
 		 *\param[in,out]	descriptorWrites	Receives the descriptor writes.
 		 *\param[in]		shadowMaps			The shadow maps.
 		 *\~french
 		 *\brief			Initialise l'ensemble de descripteurs additionnels.
+		 *\param[in]		flags				Les indicateurs de pipeline.
 		 *\param[in,out]	descriptorWrites	Reçoit les descriptor writes.
 		 *\param[in]		shadowMaps			Les shadow maps.
 		 */

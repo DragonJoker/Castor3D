@@ -78,7 +78,6 @@ namespace castor3d
 					, graph
 					, device
 					, background
-					, colour
 					, forceVisible }
 				, crg::RenderMesh{ pass
 					, context

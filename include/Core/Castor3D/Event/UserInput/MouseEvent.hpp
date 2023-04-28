@@ -16,12 +16,12 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\~brief		Constructor.
+		 *\brief		Constructor.
 		 *\param[in]	type		The mouse event type.
 		 *\param[in]	position	The position, of wheel or mouse, depending on the event type.
 		 *\param[in]	button		The mouse button.
 		 *\~french
-		 *\~brief		Constructeur.
+		 *\brief		Constructeur.
 		 *\param[in]	type		Le type d'évènement de souris.
 		 *\param[in]	position	La position, de la souris ou de la molette, selon le type d'évènement.
 		 *\param[in]	button		Le bouton de la souris.

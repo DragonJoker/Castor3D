@@ -1,4 +1,4 @@
-/*
+﻿/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_EventHandler_H___
@@ -69,12 +69,14 @@ namespace castor3d
 
 		/**
 		*\~english
-		*\~brief		Constructor.
-		 *\param[in]	catchMouseEvents	Defines if the event handler catches mouse event.
+		*\brief		Constructor.
+		*\param[in]	name				The handler name.
+		*\param[in]	catchMouseEvents	Defines if the event handler catches mouse event.
 		*\~french
-		*\~brief		Constructeur.
-		 *\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements ràcupàre les évènements souris.
-		 */
+		*\brief		Constructeur.
+		*\param[in]	name				Le nom du gestionnaire.
+		*\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements récupère les évènements souris.
+		*/
 		explicit EventHandler( castor::String const & name
 			, bool catchMouseEvents )
 			: castor::Named{ name }
@@ -86,9 +88,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Destructor.
+		 *\brief		Destructor.
 		 *\~french
-		 *\~brief		Destructeur.
+		 *\brief		Destructeur.
 		 */
 		virtual ~EventHandler()
 		{
@@ -98,9 +100,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Processes all queued events.
+		 *\brief		Processes all queued events.
 		 *\~french
-		 *\~brief		Traite tous les évènement dans la file.
+		 *\brief		Traite tous les évènement dans la file.
 		 */
 		void processEvents()
 		{
@@ -121,7 +123,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Sets if the control is enabled.
+		 *\brief		Sets if the control is enabled.
 		 */
 		void enable()
 		{
@@ -130,7 +132,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Sets if the control is disabled.
+		 *\brief		Sets if the control is disabled.
 		 */
 		void disable()
 		{
@@ -145,10 +147,10 @@ namespace castor3d
 
 		/**
 		 *\~english
-		 *\~brief		Adds a mouse event to the events queue.
+		 *\brief		Adds a mouse event to the events queue.
 		 *\param[in]	event	The mouse event.
 		 *\~french
-		 *\~brief		Ajoute un évènement de souris à la file.
+		 *\brief		Ajoute un évènement de souris à la file.
 		 *\param[in]	event	L'évènement.
 		 */
 		void pushEvent( MouseEvent const & event )
@@ -164,11 +166,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Connects a function to a mouse event.
+		 *\brief		Connects a function to a mouse event.
 		 *\param[in]	event		The event type.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement souris.
+		 *\brief		Connecte un fonction à un évènement souris.
 		 *\param[in]	event		Le type d'évènement.
 		 *\param[in]	function	La fonction.
 		 */
@@ -179,7 +181,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Tells if the control catches mouse events.
+		 *\brief		Tells if the control catches mouse events.
 		 *\remarks		A control catches mouse events when it is enabled, and when it explicitly catches it (enabled by default, except for static controls).
 		 *\return		false if the mouse events don't affect the control.
 		 */
@@ -189,7 +191,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Sets if the control can catch mouse events.
+		 *\brief		Sets if the control can catch mouse events.
 		 *\param[in]	value		The new value.
 		 */
 		void setCatchesMouseEvents( bool value )
@@ -203,10 +205,10 @@ namespace castor3d
 
 		/**
 		 *\~english
-		 *\~brief		Adds a keyboard event to the events queue.
+		 *\brief		Adds a keyboard event to the events queue.
 		 *\param[in]	event	The mouse event.
 		 *\~french
-		 *\~brief		Ajoute un évènement de clavier à la file.
+		 *\brief		Ajoute un évènement de clavier à la file.
 		 *\param[in]	event	L'évènement.
 		 */
 		void pushEvent( KeyboardEvent const & event )
@@ -222,11 +224,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Connects a function to a keyboard event.
+		 *\brief		Connects a function to a keyboard event.
 		 *\param[in]	event		The event type.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement clavier.
+		 *\brief		Connecte un fonction à un évènement clavier.
 		 *\param[in]	event		Le type d'évènement.
 		 *\param[in]	function	La fonction.
 		 */
@@ -237,7 +239,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Tells if the control catches 'tab' key.
+		 *\brief		Tells if the control catches 'tab' key.
 		 *\remarks		A control catches 'tab' key when it is enabled, and when it explicitly catches it (disabled by default).
 		 *\return		false if the 'tab' key doesn't affect the control.
 		 */
@@ -247,7 +249,7 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Tells if the control catches 'return' key.
+		 *\brief		Tells if the control catches 'return' key.
 		 *\remarks		A control catches 'return' key when it is enabled, and when it explicitly catches it (disabled by default).
 		 *\return		false if the 'return' key doesn't affect the control.
 		 */
@@ -262,10 +264,10 @@ namespace castor3d
 
 		/**
 		 *\~english
-		 *\~brief		Adds a handler event to the events queue.
+		 *\brief		Adds a handler event to the events queue.
 		 *\param[in]	event	The mouse event.
 		 *\~french
-		 *\~brief		Ajoute un évènement de gestionnaire à la file.
+		 *\brief		Ajoute un évènement de gestionnaire à la file.
 		 *\param[in]	event	L'évènement.
 		 */
 		void pushEvent( HandlerEvent const & event )
@@ -281,11 +283,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Connects a function to a handler event.
+		 *\brief		Connects a function to a handler event.
 		 *\param[in]	event		The event type.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement gestionnaire.
+		 *\brief		Connecte un fonction à un évènement gestionnaire.
 		 *\param[in]	event		Le type d'évènement.
 		 *\param[in]	function	La fonction.
 		 */
@@ -299,10 +301,10 @@ namespace castor3d
 	protected:
 		/**
 		 *\~english
-		 *\~brief		Mouse event processing function.
+		 *\brief		Mouse event processing function.
 		 *\param[in]	event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement souris.
+		 *\brief		Fonction de traitement d'un évènement souris.
 		 *\param[in]	event	L'évènement.
 		 */
 		void processMouseEvent( MouseEventSPtr event )
@@ -312,10 +314,10 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Keyboard event processing function.
+		 *\brief		Keyboard event processing function.
 		 *\param[in]	event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement clavier.
+		 *\brief		Fonction de traitement d'un évènement clavier.
 		 *\param[in]	event	L'évènement.
 		 */
 		void processKeyboardEvent( KeyboardEventSPtr event )
@@ -325,10 +327,10 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Handler event processing function.
+		 *\brief		Handler event processing function.
 		 *\param[in]	event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement de gestionnaire.
+		 *\brief		Fonction de traitement d'un évènement de gestionnaire.
 		 *\param[in]	event	L'évènement.
 		 */
 		void processHandlerEvent( HandlerEventSPtr event )
@@ -340,10 +342,10 @@ namespace castor3d
 	private:
 		/**
 		*\~english
-		*\~brief		Swaps this handler's queue content with an empty queue's one.
+		*\brief		Swaps this handler's queue content with an empty queue's one.
 		*\return		The content of this handler's queue.
 		*\~french
-		*\~brief		Echange le contenu de la file de ce gestionnaire avec une file vide.
+		*\brief		Echange le contenu de la file de ce gestionnaire avec une file vide.
 		*\return		Le contenu de la file de ce gestionnaire.
 		*/
 		EventQueue doSwapQueue()
@@ -356,48 +358,48 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Mouse event processing function.
+		 *\brief		Mouse event processing function.
 		 *\param[in]	event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement souris.
+		 *\brief		Fonction de traitement d'un évènement souris.
 		 *\param[in]	event	L'évènement.
 		 */
 		C3D_API virtual void doProcessMouseEvent( MouseEventSPtr event ) = 0;
 		/**
 		 *\~english
-		 *\~brief		Keyboard event processing function.
+		 *\brief		Keyboard event processing function.
 		 *\param[in]	event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement clavier.
+		 *\brief		Fonction de traitement d'un évènement clavier.
 		 *\param[in]	event	L'évènement.
 		 */
 		C3D_API virtual void doProcessKeyboardEvent( KeyboardEventSPtr event ) = 0;
 		/**
 		 *\~english
-		 *\~brief		Handler event processing function.
+		 *\brief		Handler event processing function.
 		 *\param[in]	event	The event.
 		 *\~french
-		 *\~brief		Fonction de traitement d'un évènement gestionnaire.
+		 *\brief		Fonction de traitement d'un évènement gestionnaire.
 		 *\param[in]	event	L'évènement.
 		 */
 		C3D_API virtual void doProcessHandlerEvent( HandlerEventSPtr event ) = 0;
 		/**
 		 *\~english
-		 *\~brief		Tells if the control catches mouse events.
+		 *\brief		Tells if the control catches mouse events.
 		 *\remarks		A control catches mouse events when it is  enabled, and when it explicitly catches it (enables by default, except for static controls).
 		 *\return		false if the mouse events don't affect the control.
 		 */
 		C3D_API virtual bool doCatchesMouseEvents()const = 0;
 		/**
 		 *\~english
-		 *\~brief		Tells if the control catches 'tab' key.
+		 *\brief		Tells if the control catches 'tab' key.
 		 *\remarks		A control catches 'tab' key when it is enabled, and when it explicitly catches it (disabled by default).
 		 *\return		false if the 'tab' key doesn't affect the control.
 		 */
 		C3D_API virtual bool doCatchesTabKey()const = 0;
 		/**
 		 *\~english
-		 *\~brief		Tells if the control catches 'return' key.
+		 *\brief		Tells if the control catches 'return' key.
 		 *\remarks		A control catches 'return' key when it is enabled, and when it explicitly catches it (disabled by default).
 		 *\return		false if the 'return' key doesn't affect the control.
 		 */
@@ -492,12 +494,14 @@ namespace castor3d
 
 	public:
 		/**
-		*\~english
-		*\~brief		Constructor.
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	name				The handler name.
 		 *\param[in]	catchMouseEvents	Defines if the event handler catches mouse event.
-		*\~french
-		*\~brief		Constructeur.
-		 *\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements ràcupàre les évènements souris.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	name				Le nom du gestionnaire.
+		 *\param[in]	catchMouseEvents	Dit si le gestionnaire d'évènements récupère les évènements souris.
 		 */
 		explicit NonClientEventHandler( castor::String const & name
 			, bool catchMouseEvents )
@@ -506,11 +510,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Connects a function to a non client mouse event.
+		 *\brief		Connects a function to a non client mouse event.
 		 *\param[in]	event		The event type.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement souris non client.
+		 *\brief		Connecte un fonction à un évènement souris non client.
 		 *\param[in]	event		Le type d'évènement.
 		 *\param[in]	function	La fonction.
 		 */
@@ -521,11 +525,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Connects a function to a non client keyboard event.
+		 *\brief		Connects a function to a non client keyboard event.
 		 *\param[in]	event		The event type.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement clavier non client.
+		 *\brief		Connecte un fonction à un évènement clavier non client.
 		 *\param[in]	event		Le type d'évènement.
 		 *\param[in]	function	La fonction.
 		 */
@@ -536,11 +540,11 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Connects a function to a non client handler event.
+		 *\brief		Connects a function to a non client handler event.
 		 *\param[in]	event		The event type.
 		 *\param[in]	function	The function.
 		 *\~french
-		 *\~brief		Connecte un fonction à un évènement gestionnaire non client.
+		 *\brief		Connecte un fonction à un évènement gestionnaire non client.
 		 *\param[in]	event		Le type d'évènement.
 		 *\param[in]	function	La fonction.
 		 */

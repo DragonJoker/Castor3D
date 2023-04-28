@@ -28,7 +28,6 @@ namespace castor3d
 			, castor::Position{}
 			, castor::Size{}
 			, 25u
-			, true
 			, 0u
 			, true }
 	{
@@ -41,7 +40,6 @@ namespace castor3d
 		, castor::Position const & position
 		, castor::Size const & size
 		, uint32_t headerHeight
-		, bool expanded
 		, ControlFlagType flags
 		, bool visible )
 		: Control{ Type

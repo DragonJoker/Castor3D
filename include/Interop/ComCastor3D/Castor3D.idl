@@ -1783,7 +1783,7 @@ interface IEngine
 // Castor3DLib
 [
 	uuid( AE7400FF-58CB-40F5-9D8B-3373BCC45E54 ),
-	version( 0.14 ),
+	version( 0.15 ),
 	helpstring( "Castor3D interfaces" )
 ]
 library Castor3D

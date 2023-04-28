@@ -15,6 +15,7 @@
     "assimp",
     "freeimage",
     "glsl",
+    "tools",
     "vkfft"
   ],
   "vcpkg-configuration": {

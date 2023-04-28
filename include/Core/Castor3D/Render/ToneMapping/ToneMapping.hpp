@@ -60,18 +60,22 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Initialises tone mapping shader and pipeline.
-		 *\param[in]	name		The tone mapping name.
+		 *\param[in]	name	The tone mapping name.
+		 *\param[in]	source	The initial source image.
 		 *\~french
 		 *\brief		Initialise le shader et le pipeline de mappage de tons.
-		 *\param[in]	name		Le nom du mappage de tons.
+		 *\param[in]	name	Le nom du mappage de tons.
+		 *\param[in]	source	L'image source initiale.
 		 */
 		C3D_API void initialise( castor::String const & name
 			, crg::ImageViewId const & source );
 		/**
 		 *\~english
 		 *\param[in, out]	updater	The update data.
+		 *\param[in]		source	The current source image.
 		 *\~french
 		 *\param[in, out]	updater	Les données d'update.
+		 *\param[in]		source	L'image source actuelle.
 		 */
 		C3D_API void update( CpuUpdater & updater
 			, crg::ImageViewId const & source );

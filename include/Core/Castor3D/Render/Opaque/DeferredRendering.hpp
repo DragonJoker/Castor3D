@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	device				The GPU device.
 		 *\param[in]	progress			The progress status.
 		 *\param[in]	brdf				The prefiltered BRDF map.
-		 *\param[in]	depth				The depth texture.
+		 *\param[in]	resultDepth			The depth texture.
 		 *\param[in]	depthObj			The depths and objects texture.
 		 *\param[in]	opaquePassResult	The geometry pass buffers.
 		 *\param[in]	resultTexture		The render technique texture.
@@ -45,7 +45,7 @@ namespace castor3d
 		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result.
 		 *\param[in]	ssao				The SSAO result.
 		 *\param[in]	size				The render dimensions.
-		 *\param[in]	scene				The rendered scene.
+		 *\param[in]	technique			The parent technique.
 		 *\param[in]	sceneUbo			The scene configuration UBO.
 		 *\param[in]	hdrConfigUbo		The HDR configuration UBO.
 		 *\param[in]	cameraUbo			The camera configuration UBO.
@@ -53,6 +53,7 @@ namespace castor3d
 		 *\param[in]	llpvConfigUbo		The Layered LPV configuration UBO.
 		 *\param[in]	vctConfigUbo		The VCT configuration UBO.
 		 *\param[in]	ssaoConfig			The SSAO configuration.
+		 *\param[in]	opaquePassEnabled	The opaque pass enabled status.
 		 *\~french
 		 *\brief		Initialise les données liées au deferred rendering.
 		 *\param[in]	graph				Le groupe de passes du graphe.
@@ -61,7 +62,7 @@ namespace castor3d
 		 *\param[in]	device				Le device GPU.
 		 *\param[in]	progress			Le statut de progression.
 		 *\param[in]	brdf				La texture de BRDF.
-		 *\param[in]	depth				La texture de profondeur.
+		 *\param[in]	resultDepth			La texture de profondeur.
 		 *\param[in]	depthObj			La texture de profondeurs et d'objets.
 		 *\param[in]	opaquePassResult	Le résultat de la geometry pass.
 		 *\param[in]	resultTexture		La texture de la technique de rendu.
@@ -74,7 +75,7 @@ namespace castor3d
 		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT.
 		 *\param[in]	ssao				Le résultat du SSAO.
 		 *\param[in]	size				Les dimensions du rendu.
-		 *\param[in]	scene				La scène rendue.
+		 *\param[in]	technique			La technique parente.
 		 *\param[in]	sceneUbo			L'UBO de configuration de la scène
 		 *\param[in]	hdrConfigUbo		L'UBO de configuration HDR.
 		 *\param[in]	cameraUbo			L'UBO de configuration de la caméra.
@@ -82,6 +83,7 @@ namespace castor3d
 		 *\param[in]	llpvConfigUbo		L'UBO de configuration des Layered LPV.
 		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 *\param[in]	ssaoConfig			La configuration du SSAO.
+		 *\param[in]	opaquePassEnabled	Le statut d'activation de la passe opaque.
 		 */
 		C3D_API DeferredRendering( crg::FramePassGroup & graph
 			, crg::FramePassArray const & previousPasses

@@ -14,11 +14,11 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\~brief		Constructor.
+		 *\brief		Constructor.
 		 *\param[in]	type	The handler event type.
 		 *\param[in]	handler	A handler.
 		 *\~french
-		 *\~brief		Constructeur.
+		 *\brief		Constructeur.
 		 *\param[in]	type	Le type d'évènement de gestionnaire.
 		 *\param[in]	handler	Un gestionnaire.
 		 */

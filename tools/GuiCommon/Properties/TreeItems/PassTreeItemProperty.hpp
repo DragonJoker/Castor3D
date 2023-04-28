@@ -24,7 +24,7 @@ namespace GuiCommon
 	public:
 		struct Properties
 		{
-			Properties( castor3d::PassComponentUPtr pownComponent = {}
+			explicit Properties( castor3d::PassComponentUPtr pownComponent = {}
 				, castor3d::PassComponentRPtr pcomponent = {}
 				, PropertyArray pproperties = {} )
 				: ownComponent{ std::move( pownComponent ) }

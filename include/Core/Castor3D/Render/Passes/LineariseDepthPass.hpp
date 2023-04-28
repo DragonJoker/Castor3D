@@ -28,6 +28,7 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
+		 *\param[in]	resources		The graph resources cache.
 		 *\param[in]	graph			The render graph.
 		 *\param[in]	previousPasses	The previous frame passes.
 		 *\param[in]	device			The GPU device.
@@ -35,9 +36,10 @@ namespace castor3d
 		 *\param[in]	prefix			The pass name's prefix.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	size			The render area dimensions.
-		 *\param[in]	depthBuffer		The non linearised depth buffer.
+		 *\param[in]	depthObj		The depths and objects texture.
 		 *\~french
 		 *\brief		Constructeur.
+		 *\param[in]	resources		Le cache de ressources du graphe.
 		 *\param[in]	graph			Le render graph.
 		 *\param[in]	previousPasses	Les frame passes précédentes.
 		 *\param[in]	device			Le device GPU.
@@ -45,7 +47,7 @@ namespace castor3d
 		 *\param[in]	prefix			Le préfixe du nom de la passe.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
-		 *\param[in]	depthBuffer		Le tampon de profondeur non linéarisé.
+		 *\param[in]	depthObj		La texture de profondeurs et d'objets.
 		 */
 		C3D_API LineariseDepthPass( crg::ResourcesCache & resources
 			, crg::FramePassGroup & graph

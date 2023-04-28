@@ -21,8 +21,7 @@ CU_ImplementSmartPtr( castor3d, RenderQueue )
 namespace castor3d
 {
 	RenderQueue::RenderQueue( RenderNodesPass & renderPass
-		, SceneNode const * ignored
-		, uint32_t passCount )
+		, SceneNode const * ignored )
 		: OwnedBy< RenderNodesPass >{ renderPass }
 		, m_culler{ getOwner()->getCuller() }
 		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & culler )

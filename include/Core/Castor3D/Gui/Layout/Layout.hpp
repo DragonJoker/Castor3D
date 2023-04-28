@@ -73,6 +73,8 @@ namespace castor3d
 			*	The item control.
 			*\param[in] f
 			*	The item flags.
+			*\param[in] o
+			*	The connection to the control changed signal.
 			*/
 			explicit Item( Control & c
 				, LayoutItemFlags f
@@ -200,9 +202,12 @@ namespace castor3d
 		/** Constructor
 		*\param[in] typeName
 		*	The layout type name.
+		*\param[in] container
+		*	The parent layout control.
 		*/
 		C3D_API explicit Layout( castor::String const & typeName
 			, LayoutControl & container );
+
 		/** Marks the layout as dirty.
 		*/
 		C3D_API void markDirty();

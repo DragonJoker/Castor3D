@@ -31,6 +31,8 @@ namespace castor3d
 		*	The background name.
 		*\param type
 		*	The background type.
+		*\param hasIBLSupport
+		*	Tells if the background supports IBL.
 		*\~french
 		*\brief
 		*	Constructeur.
@@ -42,6 +44,8 @@ namespace castor3d
 		*	Le nom du fond.
 		*\param type
 		*	Le type de fond.
+		*\param hasIBLSupport
+		*	Dit si le fond supporte l'IBL.
 		*/
 		C3D_API explicit SceneBackground( Engine & engine
 			, Scene & scene
@@ -78,13 +82,9 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Cleanup function.
-		*\param[in] device
-		*	The current device.
 		*\~french
 		*\brief
 		*	Fonction de nettoyage.
-		*\param[in] device
-		*	Le device actuel.
 		*/
 		C3D_API void cleanup();
 		/**
@@ -253,6 +253,8 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Adds the background specific bindings.
+		*\param	flags
+		*	The pipeline flags.
 		*\param	bindings
 		*	Receives the bindings.
 		*\param	index
@@ -260,6 +262,8 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Ajoute les bindings spécifiques au fond.
+		*\param	flags
+		*	Les indicateurs de pipeline.
 		*\param	bindings
 		*	Reçoit les bindings.
 		*\param	index
@@ -272,6 +276,8 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Adds the background specific descriptors.
+		*\param	flags
+		*	The pipeline flags.
 		*\param	descriptorWrites
 		*	Receives the descriptors.
 		*\param	targetImage
@@ -281,6 +287,8 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Ajoute les descripteurs spécifiques au fond.
+		*\param	flags
+		*	Les indicateurs de pipeline.
 		*\param	descriptorWrites
 		*	Reçoit les descripteurs.
 		*\param	targetImage
