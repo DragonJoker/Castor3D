@@ -1,17 +1,12 @@
-<map id="castor3d::GBufferBase" name="castor3d::GBufferBase">
-<area shape="rect" id="node1" title=" " alt="" coords="161,234,315,261"/>
-<area shape="rect" id="node3" href="$d5/d62/a04648.html" title=" " alt="" coords="635,195,765,236"/>
-<area shape="rect" id="node5" href="$d5/d62/a04648.html" title=" " alt="" coords="635,91,765,132"/>
-<area shape="rect" id="node7" href="$d5/d62/a04648.html" title=" " alt="" coords="635,5,765,47"/>
-<area shape="rect" id="node9" href="$d5/d62/a04648.html" title=" " alt="" coords="635,268,765,309"/>
-<area shape="rect" id="node11" href="$d5/d62/a04648.html" title=" " alt="" coords="635,351,765,392"/>
-<area shape="rect" id="node13" href="$d5/d62/a04648.html" title=" " alt="" coords="635,449,765,491"/>
-<area shape="rect" id="node15" href="$d5/d62/a04648.html" title=" " alt="" coords="364,227,495,268"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,234,112,261"/>
-<area shape="rect" id="node4" href="$da/d11/a04792.html" title=" " alt="" coords="823,202,998,229"/>
-<area shape="rect" id="node6" href="$d8/d4b/a04700.html" title=" " alt="" coords="819,91,1002,132"/>
-<area shape="rect" id="node8" href="$de/d75/a04852.html" title=" " alt="" coords="815,13,1007,39"/>
-<area shape="rect" id="node10" href="$de/dff/a05032.html" title=" " alt="" coords="828,275,993,302"/>
-<area shape="rect" id="node12" href="$da/d75/a05284.html" title=" " alt="" coords="817,358,1005,385"/>
-<area shape="rect" id="node14" href="$d8/d73/a05412.html" title=" " alt="" coords="821,449,1000,491"/>
+<map id="castor3d::InstantiationComponent::Data" name="castor3d::InstantiationComponent::Data">
+<area shape="rect" id="node1" title=" " alt="" coords="985,128,1201,168"/>
+<area shape="rect" id="node2" href="$d7/d13/a02873.html" title=" " alt="" coords="693,89,901,129"/>
+<area shape="rect" id="node3" href="$d2/d4c/a02897.html" title=" " alt="" coords="27,17,194,42"/>
+<area shape="rect" id="node5" href="$d7/d13/a02873.html" title="An offset and range of a GpuBuffer." alt="" coords="326,60,497,100"/>
+<area shape="rect" id="node4" href="$df/d7d/a02889.html" title="A memory range, in bytes." alt="" coords="37,105,184,130"/>
+<area shape="rect" id="node6" title=" " alt="" coords="725,175,869,215"/>
+<area shape="rect" id="node7" href="$d4/d88/a04637.html" title=" " alt="" coords="323,187,500,213"/>
+<area shape="rect" id="node8" href="$d5/dae/a06789.html" title="Objects ID data." alt="" coords="5,187,216,213"/>
+<area shape="rect" id="node9" title=" " alt="" coords="355,242,468,267"/>
+<area shape="rect" id="node10" title=" " alt="" coords="91,242,130,267"/>
 </map>

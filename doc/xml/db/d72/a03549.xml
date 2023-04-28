@@ -1,0 +1,333 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d72/a03549" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::IridescenceComponent::Plugin</compoundname>
+    <basecompoundref refid="d9/d35/a04053" prot="public" virt="non-virtual">castor3d::PassComponentPlugin</basecompoundref>
+    <includes local="no">IridescenceComponent.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d72/a03549_1a6ce45ba6437248561bee26bd90bcdfb1" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IridescenceComponent::Plugin::Plugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>Plugin</name>
+        <qualifiedname>castor3d::IridescenceComponent::Plugin::Plugin</qualifiedname>
+        <param>
+          <type><ref refid="d7/dfc/a04061" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="75" column="10" bodyfile="Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d72/a03549_1ae48e8485ed4d57a9e164b8d8b9c45db6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::IridescenceComponent::Plugin::createComponent</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>createComponent</name>
+        <qualifiedname>castor3d::IridescenceComponent::Plugin::createComponent</qualifiedname>
+        <reimplements refid="d9/d35/a04053_1a44a1a547e8c6bdae20b284cc75b98fcd">createComponent</reimplements>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a component for given pass. <simplesect kind="remark"><para>Doesn&apos;t add the component to the pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="80" column="19" bodyfile="Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="80" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d72/a03549_1a0cdce76f857285d1eb851db663299efa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::IridescenceComponent::Plugin::createParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;parsers, ChannelFillers &amp;channelFillers) const override</argsstring>
+        <name>createParsers</name>
+        <qualifiedname>castor3d::IridescenceComponent::Plugin::createParsers</qualifiedname>
+        <reimplements refid="d9/d35/a04053_1a03565ed4fc5d52779331284917b83f43">createParsers</reimplements>
+        <param>
+          <type>castor::AttributeParsers &amp;</type>
+          <declname>parsers</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a9b5de35c544238dd9dd2382417fa2587" kindref="member">ChannelFillers</ref> &amp;</type>
+          <declname>channelFillers</declname>
+        </param>
+        <briefdescription>
+<para>Fills the given lists with this component&apos;s parsers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">parsers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsers. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">channelFillers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the texture channels and the way to fill them. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="85" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d72/a03549_1a89846bf8c717959faa739e26870eab5f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::IridescenceComponent::Plugin::zeroBuffer</definition>
+        <argsstring>(Pass const &amp;pass, shader::PassMaterialShader const &amp;materialShader, PassBuffer &amp;buffer) const override</argsstring>
+        <name>zeroBuffer</name>
+        <qualifiedname>castor3d::IridescenceComponent::Plugin::zeroBuffer</qualifiedname>
+        <reimplements refid="d9/d35/a04053_1a34c8ea983d45a29036ad4bd72fd27652">zeroBuffer</reimplements>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dfa/a04049" kindref="compound">shader::PassMaterialShader</ref> const &amp;</type>
+          <declname>materialShader</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0d/a06341" kindref="compound">PassBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Fills the material buffer with zero values fot the component data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>To find its data in the buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">materialShader</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>To find the component&apos;s data in the pass entry into the buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="87" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d72/a03549_1a1b690585c90f7de5756f60c5791cbd52" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::IridescenceComponent::Plugin::isComponentNeeded</definition>
+        <argsstring>(TextureCombine const &amp;textures, ComponentModeFlags const &amp;filter) const override</argsstring>
+        <name>isComponentNeeded</name>
+        <qualifiedname>castor3d::IridescenceComponent::Plugin::isComponentNeeded</qualifiedname>
+        <reimplements refid="d9/d35/a04053_1ae36bd47493f7d615418cde61ed7f6717">isComponentNeeded</reimplements>
+        <param>
+          <type><ref refid="d5/d83/a03337" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>textures</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1afa74b47fdeea208a304fc7d1d8a4b1dd" kindref="member">ComponentModeFlags</ref> const &amp;</type>
+          <declname>filter</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the component&apos;s lighting shaders are needed. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">textures</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>To check from texturing viewpoint. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">filter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>To check from render pass viewpoint. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="90" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d72/a03549_1a4cf98d3dbeb632c06307af04c20ad134" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="de/d0f/a01727_1a95bc90ce5717e2d571430b21c84436dd" kindref="member">shader::PassComponentsShaderPtr</ref></type>
+        <definition>shader::PassComponentsShaderPtr castor3d::IridescenceComponent::Plugin::createComponentsShader</definition>
+        <argsstring>() const override</argsstring>
+        <name>createComponentsShader</name>
+        <qualifiedname>castor3d::IridescenceComponent::Plugin::createComponentsShader</qualifiedname>
+        <reimplements refid="d9/d35/a04053_1aa124938351f50e44e4f2d28cfdbfedbc">createComponentsShader</reimplements>
+        <briefdescription>
+<para>Creates the component&apos;s lighting shaders. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="93" column="33" bodyfile="Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="93" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d72/a03549_1a7235b38e65acf80bc6c29dcf489cb671" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="de/d0f/a01727_1ac4fa0f588a31267202da5ab1c011831c" kindref="member">shader::PassMaterialShaderPtr</ref></type>
+        <definition>shader::PassMaterialShaderPtr castor3d::IridescenceComponent::Plugin::createMaterialShader</definition>
+        <argsstring>() const override</argsstring>
+        <name>createMaterialShader</name>
+        <qualifiedname>castor3d::IridescenceComponent::Plugin::createMaterialShader</qualifiedname>
+        <reimplements refid="d9/d35/a04053_1a2e178e79ea995d0e8674559acfbc4447">createMaterialShader</reimplements>
+        <briefdescription>
+<para>Creates the component&apos;s material shaders. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="98" column="31" bodyfile="Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="98" bodyend="101"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="db/d72/a03549_1a282ad7320c771d13f285c84d707a8f37" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::IridescenceComponent::Plugin::finishComponent</definition>
+        <argsstring>(shader::SurfaceBase const &amp;surface, sdw::Vec3 const worldEye, shader::Utils &amp;utils, shader::BlendComponents &amp;components)</argsstring>
+        <name>finishComponent</name>
+        <qualifiedname>castor3d::IridescenceComponent::Plugin::finishComponent</qualifiedname>
+        <param>
+          <type><ref refid="d9/de2/a06561" kindref="compound">shader::SurfaceBase</ref> const &amp;</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>worldEye</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d0f/a06605" kindref="compound">shader::Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="104" column="13"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::IridescenceComponent::Plugin</label>
+        <link refid="db/d72/a03549"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d9/d35/a04053"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::IridescenceComponent::Plugin</label>
+        <link refid="db/d72/a03549"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d9/d35/a04053"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Lighting/IridescenceComponent.hpp" line="71" column="1" bodyfile="Material/Pass/Component/Lighting/IridescenceComponent.hpp" bodystart="73" bodyend="108"/>
+    <listofallmembers>
+      <member refid="db/d72/a03549_1ae48e8485ed4d57a9e164b8d8b9c45db6" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>createComponent</name></member>
+      <member refid="db/d72/a03549_1a4cf98d3dbeb632c06307af04c20ad134" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>createComponentsShader</name></member>
+      <member refid="d9/d35/a04053_1a1e6a85dd32f4b3ef8b5acd253712c989" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>createMapComponent</name></member>
+      <member refid="db/d72/a03549_1a7235b38e65acf80bc6c29dcf489cb671" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>createMaterialShader</name></member>
+      <member refid="db/d72/a03549_1a0cdce76f857285d1eb851db663299efa" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>createParsers</name></member>
+      <member refid="d9/d35/a04053_1a682e78ef2f8f5d7b3e292ccda2f35246" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>createSections</name></member>
+      <member refid="d9/d35/a04053_1a906cb616e5d7d7a63d3f070ca76e7a11" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>fillTextureConfiguration</name></member>
+      <member refid="d9/d35/a04053_1abc8e6df1a7fd3efc21bad6893a1faf40" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>filterComponentFlags</name></member>
+      <member refid="d9/d35/a04053_1a2024dbae92bf8babbfbaa7dad9d6c564" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>filterTextureFlags</name></member>
+      <member refid="db/d72/a03549_1a282ad7320c771d13f285c84d707a8f37" prot="private" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>finishComponent</name></member>
+      <member refid="d9/d35/a04053_1a33ade4752a210d4244a56a623e15ec5c" prot="public" virt="non-virtual" ambiguityscope="castor3d::PassComponentPlugin::"><scope>castor3d::IridescenceComponent::Plugin</scope><name>finishComponent</name></member>
+      <member refid="d9/d35/a04053_1ad3c669e54d61cc035d47d4d8e2bb31c4" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getAlphaBlendingFlag</name></member>
+      <member refid="d9/d35/a04053_1ac0444937fb369fb5027dd293be4fa094" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getAlphaTestFlag</name></member>
+      <member refid="d9/d35/a04053_1a7812f3b1ee259188bc7c8279b47d3a2b" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getBaseTextureConfiguration</name></member>
+      <member refid="d9/d35/a04053_1aee7e3af3cda6d7c8d54be36dfbb00547" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getColourMapFlags</name></member>
+      <member refid="d9/d35/a04053_1aefb50eb6d6e24464451c862ec58c6f05" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getComponentFlags</name></member>
+      <member refid="d9/d35/a04053_1a1dded831fff02eed2257ee6bb90b98ae" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getHeightMapFlags</name></member>
+      <member refid="d9/d35/a04053_1a3d4ca319e7c6e2dc3e40e81211846fee" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getId</name></member>
+      <member refid="d9/d35/a04053_1ab678401d89828bd889d148263bbee8e1" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getNormalMapFlags</name></member>
+      <member refid="d9/d35/a04053_1a360b4fe120d634b660ac783c9bac5e89" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getOcclusionMapFlags</name></member>
+      <member refid="d9/d35/a04053_1a67e7c95405499797a50911bc1b757750" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getOpacityMapFlags</name></member>
+      <member refid="d9/d35/a04053_1a10e44068acfd0a7a5954e133af2c501a" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getParallaxOcclusionMappingOneFlag</name></member>
+      <member refid="d9/d35/a04053_1aa8bb9186a42b13732f02d592d022eaf0" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getParallaxOcclusionMappingRepeatFlag</name></member>
+      <member refid="d9/d35/a04053_1a8ae21dee0e6e02f4ef142d1912a1c0da" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getRegister</name></member>
+      <member refid="d9/d35/a04053_1af4fd935719c75c665f67aff1c05e780b" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getTextureFlags</name></member>
+      <member refid="d9/d35/a04053_1af066b3208f0c2c71d7da481988aa748d" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getTextureFlagsName</name></member>
+      <member refid="d9/d35/a04053_1aec5a74b05eab81dfd6a6e68e2784c3bc" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>getTransmissionFlag</name></member>
+      <member refid="d9/d35/a04053_1a2f8e460d4e850283ba56ae0d30783240" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>hasTexcoordModif</name></member>
+      <member refid="db/d72/a03549_1a1b690585c90f7de5756f60c5791cbd52" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>isComponentNeeded</name></member>
+      <member refid="d9/d35/a04053_1ae06b854e0cc17ad1cc044d1316c1b752" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>isMapComponent</name></member>
+      <member refid="d9/d35/a04053_1a12838a9228bf978ec3f360d997e37488" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>operator=</name></member>
+      <member refid="d9/d35/a04053_1a6f5838b953671b6324c33ca78bdebf53" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>operator=</name></member>
+      <member refid="d9/d35/a04053_1aa76b0d332cde3ba881e14c7128a1686e" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="d9/d35/a04053_1a79e806f976aef2b773c0988af61fd513" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="d9/d35/a04053_1a3b414cc7a359c09a69374e6f51fe723b" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="db/d72/a03549_1a6ce45ba6437248561bee26bd90bcdfb1" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>Plugin</name></member>
+      <member refid="d9/d35/a04053_1a40b00cfb3f94741567b4836449c9eb25" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>replacesMapSampling</name></member>
+      <member refid="d9/d35/a04053_1a8af4e83de626dbaa70d30f65f8174d85" prot="public" virt="non-virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>updateComponent</name></member>
+      <member refid="d9/d35/a04053_1a48f721f6e193e5239453328aa2f89418" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>writeTextureConfig</name></member>
+      <member refid="db/d72/a03549_1a89846bf8c717959faa739e26870eab5f" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>zeroBuffer</name></member>
+      <member refid="d9/d35/a04053_1a8442a3dd6abd51dddef6e25443d573ef" prot="public" virt="virtual"><scope>castor3d::IridescenceComponent::Plugin</scope><name>~PassComponentPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

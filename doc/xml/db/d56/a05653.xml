@@ -1,0 +1,145 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d56/a05653" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMap::Passes</compoundname>
+    <includes local="no">ShadowMap.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d56/a05653_1ab805b450dd2d523648f06e691dfcaa83" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d9/d8d/a05645_1a8ee65c9a8fd7125d6648971035b5c264" kindref="member">PassDataPtr</ref> &gt;</type>
+        <definition>std::vector&lt; PassDataPtr &gt; castor3d::ShadowMap::Passes::passes</definition>
+        <argsstring></argsstring>
+        <name>passes</name>
+        <qualifiedname>castor3d::ShadowMap::Passes::passes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="68" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d56/a05653_1a3354bace7966309a92d7505f72490942" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</type>
+        <definition>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt; castor3d::ShadowMap::Passes::graphs</definition>
+        <argsstring></argsstring>
+        <name>graphs</name>
+        <qualifiedname>castor3d::ShadowMap::Passes::graphs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="69" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d56/a05653_1aac2c1746f8d4644e6521c384aa3eb2df" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; crg::RunnableGraphPtr &gt;</type>
+        <definition>std::vector&lt; crg::RunnableGraphPtr &gt; castor3d::ShadowMap::Passes::runnables</definition>
+        <argsstring></argsstring>
+        <name>runnables</name>
+        <qualifiedname>castor3d::ShadowMap::Passes::runnables</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="70" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d56/a05653_1a11a3d86dea35a9c35fcd3c71f6f62563" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; GaussianBlurUPtr &gt;</type>
+        <definition>std::vector&lt; GaussianBlurUPtr &gt; castor3d::ShadowMap::Passes::blurs</definition>
+        <argsstring></argsstring>
+        <name>blurs</name>
+        <qualifiedname>castor3d::ShadowMap::Passes::blurs</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="71" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMap::Passes</label>
+        <link refid="db/d56/a05653"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>passes</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>graphs</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>runnables</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>blurs</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::unique_ptr&lt; crg::FrameGraph &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; crg::FrameGraph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::vector&lt; GaussianBlurUPtr &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; GaussianBlurUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; PassDataPtr &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; PassDataPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; crg::RunnableGraphPtr &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; crg::RunnableGraphPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMap.hpp" line="66" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="67" bodyend="72"/>
+    <listofallmembers>
+      <member refid="db/d56/a05653_1a11a3d86dea35a9c35fcd3c71f6f62563" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::Passes</scope><name>blurs</name></member>
+      <member refid="db/d56/a05653_1a3354bace7966309a92d7505f72490942" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::Passes</scope><name>graphs</name></member>
+      <member refid="db/d56/a05653_1ab805b450dd2d523648f06e691dfcaa83" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::Passes</scope><name>passes</name></member>
+      <member refid="db/d56/a05653_1aac2c1746f8d4644e6521c384aa3eb2df" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::Passes</scope><name>runnables</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

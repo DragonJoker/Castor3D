@@ -1,0 +1,422 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="de/db9/a05778" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VertexTransformPass</compoundname>
+    <includes local="no">VertexTransformPass.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1f" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Ids</name>
+        <qualifiedname>castor3d::VertexTransformPass::Ids</qualifiedname>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faebcbc9034474250c40e47ec1aef83760" prot="public">
+          <name>eModelsData</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faad725278c195ee2097339a411418d59e" prot="public">
+          <name>eMorphTargets</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fafbcd9fed793a041a9949e10c3e6f67f4" prot="public">
+          <name>eMorphingWeights</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa992c9a89f8dee799c1a31dc3c585145e" prot="public">
+          <name>eSkinTransforms</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fae818285b363db2dfbaa9440e52edb8e1" prot="public">
+          <name>eInPosition</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa9a0026f3c467bb9a69c14f4a885f5b57" prot="public">
+          <name>eOutPosition</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fada4b50dc59b94af7c6576897b2b800c4" prot="public">
+          <name>eInNormal</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa99e372355b0fe693b75c1d9ee10cc846" prot="public">
+          <name>eOutNormal</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faad853a12e953618a0d4e36ca185920c1" prot="public">
+          <name>eInTangent</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faaca6577d66c134874ea519d0989ef124" prot="public">
+          <name>eOutTangent</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa4e957781ce49854f13e38b7d9344bd3d" prot="public">
+          <name>eInTexcoord0</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faff7545b8ad0487c1305b175be2935835" prot="public">
+          <name>eOutTexcoord0</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faf204ed7c0ebf3ef1d6ad754881b28ded" prot="public">
+          <name>eInTexcoord1</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faa82b00d3efd0dc60b90c95b0fe24713c" prot="public">
+          <name>eOutTexcoord1</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa2f4498c325041cc45e588c85ebbb37b9" prot="public">
+          <name>eInTexcoord2</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fadf446e3bcbff2bb99f62284a03223231" prot="public">
+          <name>eOutTexcoord2</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fab22fa285c2f9e8768ab44ed734249872" prot="public">
+          <name>eInTexcoord3</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fae829428b7c770d31186c06441798d250" prot="public">
+          <name>eOutTexcoord3</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa163ca41395b4ce6858ab156cddeb8127" prot="public">
+          <name>eInColour</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa938049c8e5ea718a65dd98245c4d33f5" prot="public">
+          <name>eOutColour</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fab9e2d8458ef4f276d9039a03e96c044c" prot="public">
+          <name>eInSkin</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa06c12d6f36e29b1644856515f80024d1" prot="public">
+          <name>eOutVelocity</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="21" column="1" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="22" bodyend="45"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/db9/a05778_1af7eb5eca0e841ee948800d22b46b4a75" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::VertexTransformPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="63" column="21" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/db9/a05778_1a813fdd081b47ad831e8a96b610082827" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/df9/a05758" kindref="compound">TransformPipeline</ref> const  &amp;</type>
+        <definition>TransformPipeline const&amp; castor3d::VertexTransformPass::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="64" column="26" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/db9/a05778_1a8eb78c17ec2da7f4b0418bb3d74917ce" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d1c/a02902" kindref="compound">ObjectBufferOffset</ref> const  &amp;</type>
+        <definition>ObjectBufferOffset const&amp; castor3d::VertexTransformPass::m_input</definition>
+        <argsstring></argsstring>
+        <name>m_input</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_input</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="65" column="27" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/db9/a05778_1a6d46a323b62dd448fa5af783081cb40e" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d1c/a02902" kindref="compound">ObjectBufferOffset</ref> const  &amp;</type>
+        <definition>ObjectBufferOffset const&amp; castor3d::VertexTransformPass::m_output</definition>
+        <argsstring></argsstring>
+        <name>m_output</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_output</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="66" column="27" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/db9/a05778_1a3a52adedc7cbf97fa4d7847291f14c0c" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point4f &gt; const  &amp;</type>
+        <definition>GpuBufferOffsetT&lt; castor::Point4f &gt; const&amp; castor3d::VertexTransformPass::m_morphTargets</definition>
+        <argsstring></argsstring>
+        <name>m_morphTargets</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_morphTargets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="67" column="25" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/db9/a05778_1a19117e53f55059fbb03dd5627000b47c" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="dc/df1/a06758" kindref="compound">MorphingWeightsConfiguration</ref> &gt; const  &amp;</type>
+        <definition>GpuBufferOffsetT&lt; MorphingWeightsConfiguration &gt; const&amp; castor3d::VertexTransformPass::m_morphingWeights</definition>
+        <argsstring></argsstring>
+        <name>m_morphingWeights</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_morphingWeights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="68" column="25" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/db9/a05778_1afc3553b10460c10f68681fdd651c7bde" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d4/d6c/a06782" kindref="compound">SkinningTransformsConfiguration</ref> &gt; const  &amp;</type>
+        <definition>GpuBufferOffsetT&lt; SkinningTransformsConfiguration &gt; const&amp; castor3d::VertexTransformPass::m_skinTransforms</definition>
+        <argsstring></argsstring>
+        <name>m_skinTransforms</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_skinTransforms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="69" column="25" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/db9/a05778_1a7cd7aa0c1698bef2cbe22e77489e4cc9" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/dd7/a06762" kindref="compound">ObjectIdsConfiguration</ref></type>
+        <definition>ObjectIdsConfiguration castor3d::VertexTransformPass::m_objectIds</definition>
+        <argsstring></argsstring>
+        <name>m_objectIds</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_objectIds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="70" column="24" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/db9/a05778_1a14649f41abd28581627dfe7114aef162" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::VertexTransformPass::m_descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_descriptorSet</name>
+        <qualifiedname>castor3d::VertexTransformPass::m_descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="71" column="25" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/db9/a05778_1adffdfd4a4d1bc1de34b7637d87ffb886" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexTransformPass::VertexTransformPass</definition>
+        <argsstring>(RenderDevice const &amp;device, SubmeshRenderNode const &amp;node, TransformPipeline const &amp;pipeline, ObjectBufferOffset const &amp;input, ObjectBufferOffset const &amp;output, ashes::Buffer&lt; ModelBufferConfiguration &gt; const &amp;modelsBuffer, GpuBufferOffsetT&lt; castor::Point4f &gt; const &amp;morphTargets, GpuBufferOffsetT&lt; MorphingWeightsConfiguration &gt; const &amp;morphingWeights, GpuBufferOffsetT&lt; SkinningTransformsConfiguration &gt; const &amp;skinTransforms)</argsstring>
+        <name>VertexTransformPass</name>
+        <qualifiedname>castor3d::VertexTransformPass::VertexTransformPass</qualifiedname>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dbd/a05038" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/df9/a05758" kindref="compound">TransformPipeline</ref> const &amp;</type>
+          <declname>pipeline</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d1c/a02902" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+          <declname>input</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d1c/a02902" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+          <declname>output</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; <ref refid="d8/d89/a06754" kindref="compound">ModelBufferConfiguration</ref> &gt; const &amp;</type>
+          <declname>modelsBuffer</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point4f &gt; const &amp;</type>
+          <declname>morphTargets</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="dc/df1/a06758" kindref="compound">MorphingWeightsConfiguration</ref> &gt; const &amp;</type>
+          <declname>morphingWeights</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d4/d6c/a06782" kindref="compound">SkinningTransformsConfiguration</ref> &gt; const &amp;</type>
+          <declname>skinTransforms</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="48" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="de/db9/a05778_1a79522a742d4239f761d69fee68362178" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VertexTransformPass::recordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>recordInto</name>
+        <qualifiedname>castor3d::VertexTransformPass::recordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformPass.hpp" line="58" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Transform/VertexTransformPass.hpp" line="18" column="1" bodyfile="Render/Transform/VertexTransformPass.hpp" bodystart="19" bodyend="72"/>
+    <listofallmembers>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa163ca41395b4ce6858ab156cddeb8127" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInColour</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fada4b50dc59b94af7c6576897b2b800c4" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInNormal</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fae818285b363db2dfbaa9440e52edb8e1" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInPosition</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fab9e2d8458ef4f276d9039a03e96c044c" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInSkin</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faad853a12e953618a0d4e36ca185920c1" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInTangent</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa4e957781ce49854f13e38b7d9344bd3d" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInTexcoord0</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faf204ed7c0ebf3ef1d6ad754881b28ded" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInTexcoord1</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa2f4498c325041cc45e588c85ebbb37b9" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInTexcoord2</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fab22fa285c2f9e8768ab44ed734249872" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eInTexcoord3</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faebcbc9034474250c40e47ec1aef83760" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eModelsData</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fafbcd9fed793a041a9949e10c3e6f67f4" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eMorphingWeights</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faad725278c195ee2097339a411418d59e" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eMorphTargets</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa938049c8e5ea718a65dd98245c4d33f5" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutColour</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa99e372355b0fe693b75c1d9ee10cc846" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutNormal</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa9a0026f3c467bb9a69c14f4a885f5b57" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutPosition</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faaca6577d66c134874ea519d0989ef124" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutTangent</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faff7545b8ad0487c1305b175be2935835" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutTexcoord0</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1faa82b00d3efd0dc60b90c95b0fe24713c" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutTexcoord1</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fadf446e3bcbff2bb99f62284a03223231" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutTexcoord2</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fae829428b7c770d31186c06441798d250" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutTexcoord3</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa06c12d6f36e29b1644856515f80024d1" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eOutVelocity</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1fa992c9a89f8dee799c1a31dc3c585145e" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>eSkinTransforms</name></member>
+      <member refid="de/db9/a05778_1a39cdac08535faf4b0165ef7fac546f1f" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>Ids</name></member>
+      <member refid="de/db9/a05778_1a14649f41abd28581627dfe7114aef162" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_descriptorSet</name></member>
+      <member refid="de/db9/a05778_1af7eb5eca0e841ee948800d22b46b4a75" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_device</name></member>
+      <member refid="de/db9/a05778_1a8eb78c17ec2da7f4b0418bb3d74917ce" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_input</name></member>
+      <member refid="de/db9/a05778_1a19117e53f55059fbb03dd5627000b47c" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_morphingWeights</name></member>
+      <member refid="de/db9/a05778_1a3a52adedc7cbf97fa4d7847291f14c0c" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_morphTargets</name></member>
+      <member refid="de/db9/a05778_1a7cd7aa0c1698bef2cbe22e77489e4cc9" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_objectIds</name></member>
+      <member refid="de/db9/a05778_1a6d46a323b62dd448fa5af783081cb40e" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_output</name></member>
+      <member refid="de/db9/a05778_1a813fdd081b47ad831e8a96b610082827" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_pipeline</name></member>
+      <member refid="de/db9/a05778_1afc3553b10460c10f68681fdd651c7bde" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>m_skinTransforms</name></member>
+      <member refid="de/db9/a05778_1a79522a742d4239f761d69fee68362178" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>recordInto</name></member>
+      <member refid="de/db9/a05778_1adffdfd4a4d1bc1de34b7637d87ffb886" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformPass</scope><name>VertexTransformPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

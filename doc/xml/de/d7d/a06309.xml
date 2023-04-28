@@ -1,0 +1,491 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="de/d7d/a06309" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightingModelFactory</compoundname>
+    <includes local="no">LightingModelFactory.hpp</includes>
+    <innerclass refid="d9/da2/a06313" prot="public">castor3d::LightingModelFactory::Entry</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d7d/a06309_1a10d8fdc1f8b6bb0960bed5737d3e39cd" prot="public" static="no">
+        <type><ref refid="d6/d38/a06497" kindref="compound">shader::LightingModel</ref></type>
+        <definition>using castor3d::LightingModelFactory::Obj =  shader::LightingModel</definition>
+        <argsstring></argsstring>
+        <name>Obj</name>
+        <qualifiedname>castor3d::LightingModelFactory::Obj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="17" column="1" bodyfile="Shader/LightingModelFactory.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d7d/a06309_1a3d7e246866d937f1fb64ec1636756e2c" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::LightingModelFactory::Key =  castor::String</definition>
+        <argsstring></argsstring>
+        <name>Key</name>
+        <qualifiedname>castor3d::LightingModelFactory::Key</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="18" column="1" bodyfile="Shader/LightingModelFactory.hpp" bodystart="18" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d7d/a06309_1a0825afde7449e0facb5357d458d1d8ea" prot="public" static="no">
+        <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+        <definition>using castor3d::LightingModelFactory::Id =  LightingModelID</definition>
+        <argsstring></argsstring>
+        <name>Id</name>
+        <qualifiedname>castor3d::LightingModelFactory::Id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="19" column="1" bodyfile="Shader/LightingModelFactory.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d7d/a06309_1a5d899ea185cb02f4dd16c2935e8f924d" prot="public" static="no">
+        <type>shader::LightingModelUPtr</type>
+        <definition>using castor3d::LightingModelFactory::PtrType =  shader::LightingModelUPtr</definition>
+        <argsstring></argsstring>
+        <name>PtrType</name>
+        <qualifiedname>castor3d::LightingModelFactory::PtrType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="20" column="1" bodyfile="Shader/LightingModelFactory.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d7d/a06309_1a842945ac4c2b77f7d08c1b41ea83d229" prot="public" static="no">
+        <type><ref refid="de/d0f/a01727_1a4f6fc2ab5f8136a5172d811c9b08eba8" kindref="member">shader::LightingModelCreator</ref></type>
+        <definition>using castor3d::LightingModelFactory::Creator =  shader::LightingModelCreator</definition>
+        <argsstring></argsstring>
+        <name>Creator</name>
+        <qualifiedname>castor3d::LightingModelFactory::Creator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="21" column="1" bodyfile="Shader/LightingModelFactory.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d7d/a06309_1a0b22aee96f3253cbae9b7f3ce3322d8f" prot="public" static="no">
+        <type><ref refid="de/d7d/a06309_1a5d899ea185cb02f4dd16c2935e8f924d" kindref="member">PtrType</ref></type>
+        <definition>using castor3d::LightingModelFactory::ObjPtr =  PtrType</definition>
+        <argsstring></argsstring>
+        <name>ObjPtr</name>
+        <qualifiedname>castor3d::LightingModelFactory::ObjPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="22" column="1" bodyfile="Shader/LightingModelFactory.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d7d/a06309_1ac9810e153d9186f8d6434d00ba63dbbc" prot="public" static="no">
+        <type>std::vector&lt; <ref refid="d9/da2/a06313" kindref="compound">Entry</ref> &gt;</type>
+        <definition>using castor3d::LightingModelFactory::ObjCont =  std::vector&lt; Entry &gt;</definition>
+        <argsstring></argsstring>
+        <name>ObjCont</name>
+        <qualifiedname>castor3d::LightingModelFactory::ObjCont</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="30" column="1" bodyfile="Shader/LightingModelFactory.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/d7d/a06309_1a915d6a0001754cd49d19d2d839363e92" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+        <definition>LightingModelID castor3d::LightingModelFactory::m_currentId</definition>
+        <argsstring></argsstring>
+        <name>m_currentId</name>
+        <qualifiedname>castor3d::LightingModelFactory::m_currentId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="155" column="17" bodyfile="Shader/LightingModelFactory.hpp" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d7d/a06309_1a9566cd1ba0b705d0709ceff4633ccdf5" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d7d/a06309_1ac9810e153d9186f8d6434d00ba63dbbc" kindref="member">ObjCont</ref></type>
+        <definition>ObjCont castor3d::LightingModelFactory::m_registered</definition>
+        <argsstring></argsstring>
+        <name>m_registered</name>
+        <qualifiedname>castor3d::LightingModelFactory::m_registered</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="156" column="9" bodyfile="Shader/LightingModelFactory.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d7d/a06309_1a30eb228c42a6495894220523aa0287c1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+        <definition>C3D_API LightingModelID castor3d::LightingModelFactory::registerType</definition>
+        <argsstring>(Key const &amp;key, BackgroundModelID backgroundModelId, Creator create)</argsstring>
+        <name>registerType</name>
+        <qualifiedname>castor3d::LightingModelFactory::registerType</qualifiedname>
+        <param>
+          <type><ref refid="de/d7d/a06309_1a3d7e246866d937f1fb64ec1636756e2c" kindref="member">Key</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ab7fc2caff0f0879aa902ff48258d6c94" kindref="member">BackgroundModelID</ref></type>
+          <declname>backgroundModelId</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d7d/a06309_1a842945ac4c2b77f7d08c1b41ea83d229" kindref="member">Creator</ref></type>
+          <declname>create</declname>
+        </param>
+        <briefdescription>
+<para>Registers an object type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">backgroundModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The background model ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">create</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object creation function. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="45" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7d/a06309_1a8e1b8d0d4e9899848dbc71af1b8d5158" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightingModelFactory::unregisterType</definition>
+        <argsstring>(Key const &amp;key, BackgroundModelID backgroundModelId)</argsstring>
+        <name>unregisterType</name>
+        <qualifiedname>castor3d::LightingModelFactory::unregisterType</qualifiedname>
+        <param>
+          <type><ref refid="de/d7d/a06309_1a3d7e246866d937f1fb64ec1636756e2c" kindref="member">Key</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ab7fc2caff0f0879aa902ff48258d6c94" kindref="member">BackgroundModelID</ref></type>
+          <declname>backgroundModelId</declname>
+        </param>
+        <briefdescription>
+<para>Unregisters an object type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">backgroundModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The background model ID. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="58" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7d/a06309_1acc428d70dc95a35d8c279ff7d7cb6675" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightingModelFactory::unregisterType</definition>
+        <argsstring>(LightingModelID lightingModelId, BackgroundModelID backgroundModelId)</argsstring>
+        <name>unregisterType</name>
+        <qualifiedname>castor3d::LightingModelFactory::unregisterType</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+          <declname>lightingModelId</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ab7fc2caff0f0879aa902ff48258d6c94" kindref="member">BackgroundModelID</ref></type>
+          <declname>backgroundModelId</declname>
+        </param>
+        <briefdescription>
+<para>Unregisters an object type. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lightingModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lighting model ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">backgroundModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The background model ID. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="70" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7d/a06309_1a4c72f6022fe30db59f340f816dd24899" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d7d/a06309_1a0825afde7449e0facb5357d458d1d8ea" kindref="member">Id</ref></type>
+        <definition>C3D_API Id castor3d::LightingModelFactory::getNameId</definition>
+        <argsstring>(Key const &amp;key) const</argsstring>
+        <name>getNameId</name>
+        <qualifiedname>castor3d::LightingModelFactory::getNameId</qualifiedname>
+        <param>
+          <type><ref refid="de/d7d/a06309_1a3d7e246866d937f1fb64ec1636756e2c" kindref="member">Key</ref> const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">key</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object type. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The object type ID. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="80" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7d/a06309_1a00e6a11b6c7c3d60283947b3f6a01c28" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d7d/a06309_1a3d7e246866d937f1fb64ec1636756e2c" kindref="member">Key</ref></type>
+        <definition>C3D_API Key castor3d::LightingModelFactory::getIdName</definition>
+        <argsstring>(Id const &amp;id) const</argsstring>
+        <name>getIdName</name>
+        <qualifiedname>castor3d::LightingModelFactory::getIdName</qualifiedname>
+        <param>
+          <type><ref refid="de/d7d/a06309_1a0825afde7449e0facb5357d458d1d8ea" kindref="member">Id</ref> const &amp;</type>
+          <declname>id</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">id</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object type ID. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The object type. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="89" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7d/a06309_1a174f3b7d4265868ff29aa090e7ef533f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::vector&lt; <ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref> &gt;</type>
+        <definition>C3D_API std::vector&lt; LightingModelID &gt; castor3d::LightingModelFactory::getLightingModelsID</definition>
+        <argsstring>() const</argsstring>
+        <name>getLightingModelsID</name>
+        <qualifiedname>castor3d::LightingModelFactory::getLightingModelsID</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The unique lighting models IDs. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="96" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7d/a06309_1aa2e99af2e304557bb967653da47d4b0f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::vector&lt; <ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref> &gt;</type>
+        <definition>C3D_API std::vector&lt; LightingModelID &gt; castor3d::LightingModelFactory::getLightingModelsID</definition>
+        <argsstring>(BackgroundModelID backgroundModelId) const</argsstring>
+        <name>getLightingModelsID</name>
+        <qualifiedname>castor3d::LightingModelFactory::getLightingModelsID</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ab7fc2caff0f0879aa902ff48258d6c94" kindref="member">BackgroundModelID</ref></type>
+          <declname>backgroundModelId</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">backgroundModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The background model ID. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The lighting models for given background model. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="105" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d7d/a06309_1a7d2bbf802ab6e3918d8e326a52407bde" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>Parameters</declname>
+            <defname>Parameters</defname>
+          </param>
+        </templateparamlist>
+        <type><ref refid="de/d7d/a06309_1a0b22aee96f3253cbae9b7f3ce3322d8f" kindref="member">ObjPtr</ref></type>
+        <definition>ObjPtr castor3d::LightingModelFactory::create</definition>
+        <argsstring>(LightingModelID lightingModelId, BackgroundModelID backgroundModelId, Parameters &amp;&amp;... params) const</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::LightingModelFactory::create</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+          <declname>lightingModelId</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ab7fc2caff0f0879aa902ff48258d6c94" kindref="member">BackgroundModelID</ref></type>
+          <declname>backgroundModelId</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Creates an object from an ID. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lightingModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lighting model ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">backgroundModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The background model ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The creation parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The created object. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="128" column="8" bodyfile="Shader/LightingModelFactory.hpp" bodystart="128" bodyend="152"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="de/d7d/a06309_1ad3ae41f6ddf71c74b4264503d3d85a9a" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String</type>
+        <definition>static C3D_API castor::String castor3d::LightingModelFactory::normaliseName</definition>
+        <argsstring>(castor::String name)</argsstring>
+        <name>normaliseName</name>
+        <qualifiedname>castor3d::LightingModelFactory::normaliseName</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Replaces old names with registered ones. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/LightingModelFactory.hpp" line="112" column="31"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/LightingModelFactory.hpp" line="14" column="1" bodyfile="Shader/LightingModelFactory.hpp" bodystart="15" bodyend="157"/>
+    <listofallmembers>
+      <member refid="de/d7d/a06309_1a7d2bbf802ab6e3918d8e326a52407bde" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>create</name></member>
+      <member refid="de/d7d/a06309_1a842945ac4c2b77f7d08c1b41ea83d229" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>Creator</name></member>
+      <member refid="de/d7d/a06309_1a00e6a11b6c7c3d60283947b3f6a01c28" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>getIdName</name></member>
+      <member refid="de/d7d/a06309_1a174f3b7d4265868ff29aa090e7ef533f" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>getLightingModelsID</name></member>
+      <member refid="de/d7d/a06309_1aa2e99af2e304557bb967653da47d4b0f" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>getLightingModelsID</name></member>
+      <member refid="de/d7d/a06309_1a4c72f6022fe30db59f340f816dd24899" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>getNameId</name></member>
+      <member refid="de/d7d/a06309_1a0825afde7449e0facb5357d458d1d8ea" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>Id</name></member>
+      <member refid="de/d7d/a06309_1a3d7e246866d937f1fb64ec1636756e2c" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>Key</name></member>
+      <member refid="de/d7d/a06309_1a915d6a0001754cd49d19d2d839363e92" prot="private" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>m_currentId</name></member>
+      <member refid="de/d7d/a06309_1a9566cd1ba0b705d0709ceff4633ccdf5" prot="private" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>m_registered</name></member>
+      <member refid="de/d7d/a06309_1ad3ae41f6ddf71c74b4264503d3d85a9a" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>normaliseName</name></member>
+      <member refid="de/d7d/a06309_1a10d8fdc1f8b6bb0960bed5737d3e39cd" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>Obj</name></member>
+      <member refid="de/d7d/a06309_1ac9810e153d9186f8d6434d00ba63dbbc" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>ObjCont</name></member>
+      <member refid="de/d7d/a06309_1a0b22aee96f3253cbae9b7f3ce3322d8f" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>ObjPtr</name></member>
+      <member refid="de/d7d/a06309_1a5d899ea185cb02f4dd16c2935e8f924d" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>PtrType</name></member>
+      <member refid="de/d7d/a06309_1a30eb228c42a6495894220523aa0287c1" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>registerType</name></member>
+      <member refid="de/d7d/a06309_1a8e1b8d0d4e9899848dbc71af1b8d5158" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>unregisterType</name></member>
+      <member refid="de/d7d/a06309_1acc428d70dc95a35d8c279ff7d7cb6675" prot="public" virt="non-virtual"><scope>castor3d::LightingModelFactory</scope><name>unregisterType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

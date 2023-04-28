@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d4/d04/a05453" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::QueuesData::QueueThreadData</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d04/a05453_1a7d03278b296fea39b60ac396a1c2db43" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/dce/a05441" kindref="compound">QueueData</ref> const  *</type>
+        <definition>QueueData const* castor3d::QueuesData::QueueThreadData::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::QueuesData::QueueThreadData::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="265" column="18" bodyfile="Render/RenderDevice.hpp" bodystart="265" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d04/a05453_1afb7d890355b21508c84bae766c0820c2" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::QueuesData::QueueThreadData::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>castor3d::QueuesData::QueueThreadData::count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="266" column="10" bodyfile="Render/RenderDevice.hpp" bodystart="266" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d04/a05453_1aa505cf2e3e1385c559f677e4203ceadb" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::QueuesData::QueueThreadData::callstack</definition>
+        <argsstring></argsstring>
+        <name>callstack</name>
+        <qualifiedname>castor3d::QueuesData::QueueThreadData::callstack</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderDevice.hpp" line="268" column="13" bodyfile="Render/RenderDevice.hpp" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::QueueData</label>
+        <link refid="d2/dce/a05441"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>parent</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::QueuesData</label>
+        <link refid="d9/de3/a05449"/>
+      </node>
+      <node id="1">
+        <label>castor3d::QueuesData::QueueThreadData</label>
+        <childnode refid="2" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>callstack</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::string</label>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderDevice.hpp" line="263" column="1" bodyfile="Render/RenderDevice.hpp" bodystart="264" bodyend="270"/>
+    <listofallmembers>
+      <member refid="d4/d04/a05453_1aa505cf2e3e1385c559f677e4203ceadb" prot="public" virt="non-virtual"><scope>castor3d::QueuesData::QueueThreadData</scope><name>callstack</name></member>
+      <member refid="d4/d04/a05453_1afb7d890355b21508c84bae766c0820c2" prot="public" virt="non-virtual"><scope>castor3d::QueuesData::QueueThreadData</scope><name>count</name></member>
+      <member refid="d4/d04/a05453_1a7d03278b296fea39b60ac396a1c2db43" prot="public" virt="non-virtual"><scope>castor3d::QueuesData::QueueThreadData</scope><name>data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

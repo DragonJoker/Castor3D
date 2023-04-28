@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="d3/d00/a00113" kind="file" language="C++">
     <compoundname>BinaryMorphComponent.hpp</compoundname>
     <includes refid="d4/d3e/a00116" local="yes">Castor3D/Binary/BinaryParser.hpp</includes>
     <includes refid="d7/d9a/a00152" local="yes">Castor3D/Binary/BinaryWriter.hpp</includes>
-    <includes refid="d6/d01/a13236" local="yes">Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp</includes>
+    <includes refid="de/dca/a14803" local="yes">Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp</includes>
     <incdepgraph>
       <node id="55">
         <label>Castor3D/RequiredVersion.hpp</label>
@@ -193,7 +193,7 @@
       </node>
       <node id="6">
         <label>Castor3D/Castor3DModule.hpp</label>
-        <link refid="dd/dd7/a00260"/>
+        <link refid="d9/d39/a00257"/>
         <childnode refid="7" relation="include">
         </childnode>
         <childnode refid="8" relation="include">
@@ -225,13 +225,13 @@
       </node>
       <node id="30">
         <label>Castor3D/Limits.hpp</label>
-        <link refid="d0/d39/a00314"/>
+        <link refid="df/d15/a00416"/>
         <childnode refid="17" relation="include">
         </childnode>
       </node>
       <node id="51">
         <label>Castor3D/Miscellaneous/Logger.hpp</label>
-        <link refid="dc/dae/a00563"/>
+        <link refid="da/d46/a00665"/>
         <childnode refid="52" relation="include">
         </childnode>
         <childnode refid="53" relation="include">
@@ -239,13 +239,13 @@
       </node>
       <node id="52">
         <label>MiscellaneousModule.hpp</label>
-        <link refid="d4/d9e/a00569"/>
+        <link refid="d8/d13/a00671"/>
         <childnode refid="6" relation="include">
         </childnode>
       </node>
       <node id="54">
         <label>Castor3D/Miscellaneous/Version.hpp</label>
-        <link refid="de/dde/a00587"/>
+        <link refid="d1/d87/a00689"/>
         <childnode refid="52" relation="include">
         </childnode>
         <childnode refid="55" relation="include">
@@ -253,7 +253,7 @@
       </node>
       <node id="23">
         <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
-        <link refid="d3/d8e/a00647"/>
+        <link refid="d5/de8/a00749"/>
         <childnode refid="24" relation="include">
         </childnode>
         <childnode refid="28" relation="include">
@@ -263,13 +263,13 @@
       </node>
       <node id="39">
         <label>ComponentModule.hpp</label>
-        <link refid="d6/d01/a13236"/>
+        <link refid="de/dca/a14803"/>
         <childnode refid="22" relation="include">
         </childnode>
       </node>
       <node id="38">
         <label>Castor3D/Model/Mesh/Submesh/Component/FaceIndices.hpp</label>
-        <link refid="dc/d91/a00659"/>
+        <link refid="d3/d4f/a00761"/>
         <childnode refid="39" relation="include">
         </childnode>
         <childnode refid="40" relation="include">
@@ -277,13 +277,13 @@
       </node>
       <node id="41">
         <label>Castor3D/Model/Mesh/Submesh/Component/LineIndices.hpp</label>
-        <link refid="d8/d73/a00674"/>
+        <link refid="d9/dd4/a00776"/>
         <childnode refid="39" relation="include">
         </childnode>
       </node>
       <node id="22">
         <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
-        <link refid="dd/d57/a00701"/>
+        <link refid="d5/d72/a00803"/>
         <childnode refid="23" relation="include">
         </childnode>
         <childnode refid="30" relation="include">
@@ -301,13 +301,13 @@
       </node>
       <node id="28">
         <label>Castor3D/Model/ModelModule.hpp</label>
-        <link refid="d1/d56/a00707"/>
+        <link refid="dd/d7e/a00809"/>
         <childnode refid="6" relation="include">
         </childnode>
       </node>
       <node id="32">
         <label>SkeletonModule.hpp</label>
-        <link refid="dc/dce/a00740"/>
+        <link refid="d0/d11/a00842"/>
         <childnode refid="24" relation="include">
         </childnode>
         <childnode refid="28" relation="include">
@@ -317,7 +317,7 @@
       </node>
       <node id="31">
         <label>Castor3D/Model/Skeleton/VertexBoneData.hpp</label>
-        <link refid="d4/dfa/a00746"/>
+        <link refid="d9/d30/a00848"/>
         <childnode refid="32" relation="include">
         </childnode>
         <childnode refid="30" relation="include">
@@ -325,7 +325,7 @@
       </node>
       <node id="37">
         <label>Castor3D/Model/VertexGroup.hpp</label>
-        <link refid="dd/d5c/a00752"/>
+        <link refid="d6/d2f/a00854"/>
         <childnode refid="28" relation="include">
         </childnode>
       </node>
@@ -357,10 +357,10 @@
         <label>vector</label>
       </node>
     </incdepgraph>
-    <innerclass refid="de/dec/a02524" prot="public">castor3d::ChunkTyper&lt; MorphComponent &gt;</innerclass>
-    <innerclass refid="d8/d65/a02528" prot="public">castor3d::BinaryWriter&lt; MorphComponent &gt;</innerclass>
-    <innerclass refid="d2/d08/a02532" prot="public">castor3d::BinaryParser&lt; MorphComponent &gt;</innerclass>
-    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
+    <innerclass refid="d5/d9a/a02650" prot="public">castor3d::ChunkTyper&lt; MorphComponent &gt;</innerclass>
+    <innerclass refid="db/d4d/a02654" prot="public">castor3d::BinaryWriter&lt; MorphComponent &gt;</innerclass>
+    <innerclass refid="df/d14/a02658" prot="public">castor3d::BinaryParser&lt; MorphComponent &gt;</innerclass>
+    <innernamespace refid="d5/da6/a01698">castor3d</innernamespace>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

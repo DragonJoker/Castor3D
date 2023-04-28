@@ -1,5 +1,11 @@
-<map id="castor3d::ObjectCacheTraitsT&lt; ParticleSystem, castor::String &gt;" name="castor3d::ObjectCacheTraitsT&lt; ParticleSystem, castor::String &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="14,229,201,285"/>
-<area shape="rect" id="node2" href="$d2/d02/a05836.html" title=" " alt="" coords="5,124,209,180"/>
-<area shape="rect" id="node3" href="$d2/d02/a05836.html" title=" " alt="" coords="14,5,201,47"/>
+<map id="castor3d::ShadowMap::Passes" name="castor3d::ShadowMap::Passes">
+<area shape="rect" id="node1" title=" " alt="" coords="1063,137,1213,177"/>
+<area shape="rect" id="node2" title=" " alt="" coords="773,54,953,79"/>
+<area shape="rect" id="node3" title=" " alt="" coords="112,63,251,89"/>
+<area shape="rect" id="node7" title=" " alt="" coords="425,56,564,96"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,101,44,126"/>
+<area shape="rect" id="node5" title=" " alt="" coords="438,135,551,161"/>
+<area shape="rect" id="node6" title=" " alt="" coords="774,104,953,144"/>
+<area shape="rect" id="node8" title=" " alt="" coords="776,232,951,272"/>
+<area shape="rect" id="node9" title=" " alt="" coords="777,168,949,208"/>
 </map>

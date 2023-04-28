@@ -1,0 +1,1547 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/d44/a03126" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ComboBoxCtrl</compoundname>
+    <basecompoundref refid="d5/dbf/a03130" prot="public" virt="non-virtual">castor3d::Control</basecompoundref>
+    <includes local="no">CtrlComboBox.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d9/d44/a03126_1aba2843be2a50c88c5291a2f33f1baa02" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>C3D_API ControlType constexpr castor3d::ComboBoxCtrl::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::Type</qualifiedname>
+        <initializer>{ <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725da996626b5ba32d9b7b324eab4af4b75cf" kindref="member">ControlType::eComboBox</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="149" column="38" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d44/a03126_1ae4947586d18fb57a5c6047af48577255" prot="private" static="no" mutable="no">
+        <type>TextOverlayRPtr</type>
+        <definition>TextOverlayRPtr castor3d::ComboBoxCtrl::m_text</definition>
+        <argsstring></argsstring>
+        <name>m_text</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::m_text</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="217" column="17" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d44/a03126_1a3d3d5922f3d84909adbd917e4ce117c0" prot="private" static="no" mutable="no">
+        <type>ButtonCtrlRPtr</type>
+        <definition>ButtonCtrlRPtr castor3d::ComboBoxCtrl::m_expand</definition>
+        <argsstring></argsstring>
+        <name>m_expand</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::m_expand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="218" column="16" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d44/a03126_1a94c4572b44752558ebebb13d942b3ee4" prot="private" static="no" mutable="no">
+        <type>ListBoxCtrlRPtr</type>
+        <definition>ListBoxCtrlRPtr castor3d::ComboBoxCtrl::m_choices</definition>
+        <argsstring></argsstring>
+        <name>m_choices</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::m_choices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="219" column="17" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d44/a03126_1aedf2c598153143aaf8b2598d2f51fe3f" prot="private" static="no" mutable="no">
+        <type>castor::StringArray</type>
+        <definition>castor::StringArray castor3d::ComboBoxCtrl::m_values</definition>
+        <argsstring></argsstring>
+        <name>m_values</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::m_values</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="220" column="21" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d44/a03126_1a4a7a91ecb83ac91e79046583db8d6d8a" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int castor3d::ComboBoxCtrl::m_selected</definition>
+        <argsstring></argsstring>
+        <name>m_selected</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::m_selected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="221" column="5" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d44/a03126_1a89eabcae5dc0cf285c2911a8be3f40cf" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a36b8de63e91e984d739ab0a869098c8a" kindref="member">OnComboEvent</ref></type>
+        <definition>OnComboEvent castor3d::ComboBoxCtrl::m_signals[size_t(ComboBoxEvent::eCount)]</definition>
+        <argsstring>[size_t(ComboBoxEvent::eCount)]</argsstring>
+        <name>m_signals</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::m_signals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="222" column="14" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d44/a03126_1a4165e5a16b5f74b2ce1000cc1c0950b5" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a81535c4a7ee17687c1a08208ca38f05e" kindref="member">OnButtonEventConnection</ref></type>
+        <definition>OnButtonEventConnection castor3d::ComboBoxCtrl::m_expandClickedConnection</definition>
+        <argsstring></argsstring>
+        <name>m_expandClickedConnection</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::m_expandClickedConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="223" column="25" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d44/a03126_1ae067bcac5beb46768508442171f48461" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a23d636e17d38bc710cad0a803e778ebb" kindref="member">OnListEventConnection</ref></type>
+        <definition>OnListEventConnection castor3d::ComboBoxCtrl::m_choicesSelectedConnection</definition>
+        <argsstring></argsstring>
+        <name>m_choicesSelectedConnection</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::m_choicesSelectedConnection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="224" column="23" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d44/a03126_1a3d372b8219df53639522c660cb8b4df0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ComboBoxCtrl::ComboBoxCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, ComboBoxStyle *style, ControlRPtr parent)</argsstring>
+        <name>ComboBoxCtrl</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::ComboBoxCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="df/dc9/a03230" kindref="compound">ComboBoxStyle</ref> *</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a7ec8651426c3c9c4bcdef07c7a40dc42" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ComboBoxCtrl::ComboBoxCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, ComboBoxStyle *style, ControlRPtr parent, castor::StringArray const &amp;values, int selected, castor::Position const &amp;position, castor::Size const &amp;size, ControlFlagType flags=0, bool visible=true)</argsstring>
+        <name>ComboBoxCtrl</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::ComboBoxCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="df/dc9/a03230" kindref="compound">ComboBoxStyle</ref> *</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::StringArray const &amp;</type>
+          <declname>values</declname>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>selected</declname>
+        </param>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a1b0644d82256ab79bf71eb959d8f7106" kindref="member">ControlFlagType</ref></type>
+          <declname>flags</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The list value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">selected</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The selected value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The position </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration flags </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial visibility status </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="40" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1abb682e5ef50630cdc48cbc298810ed19" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>size_t</type>
+            <declname>N</declname>
+            <defname>N</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor3d::ComboBoxCtrl::ComboBoxCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, ComboBoxStyle *style, ControlRPtr parent, castor::String const(&amp;values)[N], int selected, castor::Position const &amp;position, castor::Size const &amp;size, ControlFlagType flags=0, bool visible=true)</argsstring>
+        <name>ComboBoxCtrl</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::ComboBoxCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="df/dc9/a03230" kindref="compound">ComboBoxStyle</ref> *</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::String const(&amp;)</type>
+          <declname>values</declname>
+          <array>[N]</array>
+        </param>
+        <param>
+          <type>int</type>
+          <declname>selected</declname>
+        </param>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a1b0644d82256ab79bf71eb959d8f7106" kindref="member">ControlFlagType</ref></type>
+          <declname>flags</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if an </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">values</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The list value </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">selected</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The selected valu </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The positio </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration flags </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial visibility statu </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="64" column="1" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="64" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1ab65cf3624a6c4ed939868e2b3c0ef951" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ComboBoxCtrl::~ComboBoxCtrl</definition>
+        <argsstring>() noexcept override</argsstring>
+        <name>~ComboBoxCtrl</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::~ComboBoxCtrl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="88" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1ada422c191c3739a62e161c9b787a6e2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComboBoxCtrl::appendItem</definition>
+        <argsstring>(castor::String const &amp;value)</argsstring>
+        <name>appendItem</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::appendItem</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Appends a new item <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The item </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="93" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a67c297485c908da2d24faaba0bfe7ec5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComboBoxCtrl::removeItem</definition>
+        <argsstring>(int value)</argsstring>
+        <name>removeItem</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::removeItem</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes an item <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The item index </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="98" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a8579c00df21be2b79a1a51c31873ae39" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComboBoxCtrl::setItemText</definition>
+        <argsstring>(int index, castor::String const &amp;text)</argsstring>
+        <name>setItemText</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::setItemText</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>text</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>sets an item text <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The item index </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">text</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The item text </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="104" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a6a870526fde036ad52bdc6208e1bbf51" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComboBoxCtrl::clear</definition>
+        <argsstring>()</argsstring>
+        <name>clear</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::clear</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Clears the items </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="108" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a1fe9ef6f50283cf36998b834c1f10051" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ComboBoxCtrl::setSelected</definition>
+        <argsstring>(int value)</argsstring>
+        <name>setSelected</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::setSelected</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>sets the selected item <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="113" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1af4117dbc05d54e9899c8770b35041cfb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::StringArray const &amp;</type>
+        <definition>C3D_API castor::StringArray const  &amp; castor3d::ComboBoxCtrl::getItems</definition>
+        <argsstring>() const</argsstring>
+        <name>getItems</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::getItems</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Retrieves the items <simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="118" column="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a735b6b52e5ad215fdc0e867bc326c777" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::ComboBoxCtrl::getItemCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getItemCount</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::getItemCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Retrieves the items count <simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="123" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1aef02e811f39f9b40f57a572f95a15c45" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> int</type>
+        <definition>C3D_API int castor3d::ComboBoxCtrl::getSelected</definition>
+        <argsstring>() const</argsstring>
+        <name>getSelected</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::getSelected</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Retrieves the selected item index <simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="128" column="13"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1aafdb280ce8cd67fe2e83292582643548" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/da6/a01698_1a6d498a2d1f3b2726fb5a00619f623c7f" kindref="member">OnComboEventConnection</ref></type>
+        <definition>OnComboEventConnection castor3d::ComboBoxCtrl::connect</definition>
+        <argsstring>(ComboBoxEvent event, OnComboEventFunction function)</argsstring>
+        <name>connect</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::connect</qualifiedname>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a3bfa063154ab96cd678f76e4299fe52a" kindref="member">ComboBoxEvent</ref></type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1af2b669deae532a27fc12f3114cefc1cb" kindref="member">OnComboEventFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Connects a function to a combobox event <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The function </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The internal function index, to be able to disconnect it </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="135" column="24" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="135" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1abe8f625da8d369779b0574c14f714df2" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/dc9/a03230" kindref="compound">ComboBoxStyle</ref> const &amp;</type>
+        <definition>ComboBoxStyle const  &amp; castor3d::ComboBoxCtrl::getStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The combobox style. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="144" column="22" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="144" bodyend="147"/>
+        <references refid="d5/dbf/a03130_1a3b327c65b7d0202012a7de4ac95ff6a0" compoundref="d0/d39/a00314" startline="219" endline="222">castor3d::Control::getBaseStyle</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d44/a03126_1a2d43ea35337a44fe1647f0d70c9fe694" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/dc9/a03230" kindref="compound">ComboBoxStyle</ref> &amp;</type>
+        <definition>ComboBoxStyle &amp; castor3d::ComboBoxCtrl::getStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="152" column="16" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="152" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a8c66631e095b919659eb68a8bf8f8da1" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doCreate</definition>
+        <argsstring>() override</argsstring>
+        <name>doCreate</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doCreate</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a986e1065f7dd8744af1099234d1e42d6">doCreate</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="158" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a8edc0b814a32903eb2d628e8085dc9ba" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doDestroy</definition>
+        <argsstring>() override</argsstring>
+        <name>doDestroy</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doDestroy</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1aee5d3b26288343563b7049781cc413b8">doDestroy</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Destroys the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="162" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1ae75c345f110d4b47c2f72ca5ab153513" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doSetPosition</definition>
+        <argsstring>(castor::Position const &amp;value) override</argsstring>
+        <name>doSetPosition</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doSetPosition</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1acb1760e128b67a59ae10ee7ae2ea914d">doSetPosition</reimplements>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the position <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="166" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1aea1828ce1d3f2774ba8bfccd08ff6803" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doSetSize</definition>
+        <argsstring>(castor::Size const &amp;value) override</argsstring>
+        <name>doSetSize</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doSetSize</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a877aa0f08bd22b35959c7fa676a52073">doSetSize</reimplements>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the size <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="170" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a96a531690cab27673eaa81ae441356e2" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doSetBorderSize</definition>
+        <argsstring>(castor::Point4ui const &amp;value) override</argsstring>
+        <name>doSetBorderSize</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doSetBorderSize</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1aae4c1f90edb97e54e251666af975695b">doSetBorderSize</reimplements>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the background borders size. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="174" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a2eb9d2247950c5b63c8d79d7a56b5692" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doUpdateStyle</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateStyle</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doUpdateStyle</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a6e83636558d1e472c13108471c5634b8">doUpdateStyle</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="178" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1ab49cc4e41d7114a64b045074a60e07f5" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ComboBoxCtrl::doCatchesMouseEvents</definition>
+        <argsstring>() const override</argsstring>
+        <name>doCatchesMouseEvents</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doCatchesMouseEvents</qualifiedname>
+        <reimplements refid="d9/d74/a03082_1a88af7cdfa0a1ab72692086e6ab1820d4">doCatchesMouseEvents</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tells if the control catches mouse events <simplesect kind="remark"><para>A control catches mouse events when it is visible, enabled and when it explicitly catches it (enables by default, except for static controls. Setting both background and foreground invisible will also prevent mouse events catching. </para>
+</simplesect>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if the mouse events don&apos;t affect the control.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="182" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a2748aa9db91e28b70df6c113a71879e5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doSetVisible</definition>
+        <argsstring>(bool visible) override</argsstring>
+        <name>doSetVisible</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doSetVisible</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1af4598b2669fc48d38ce61ac174c86583">doSetVisible</reimplements>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>sets the visibility <simplesect kind="remark"><para>Used for derived control specific behavious </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="186" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a44496f817d7f74f3c828ce230a3fc906" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doUpdateZIndex</definition>
+        <argsstring>(uint32_t &amp;index) override</argsstring>
+        <name>doUpdateZIndex</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doUpdateZIndex</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a635e12c44833d89f01b9d162d0d22f92">doUpdateZIndex</reimplements>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="190" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a167c07effa181ef20c9e2505a680537b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doAdjustZIndex</definition>
+        <argsstring>(uint32_t offset) override</argsstring>
+        <name>doAdjustZIndex</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doAdjustZIndex</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1af062446be54997b2901d81c1230291fb">doAdjustZIndex</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adjusts the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="194" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a0f7c2d4e075d56292aaac606de31460e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::onSelected</definition>
+        <argsstring>(int selected)</argsstring>
+        <name>onSelected</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::onSelected</qualifiedname>
+        <param>
+          <type>int</type>
+          <declname>selected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event raised when an item is selected in the choices listbox <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">selected</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The item index </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="199" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1aa507dc369a7aff5027daba8904a38770" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::onKeyDown</definition>
+        <argsstring>(KeyboardEvent const &amp;event)</argsstring>
+        <name>onKeyDown</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::onKeyDown</qualifiedname>
+        <param>
+          <type><ref refid="d8/db1/a03098" kindref="compound">KeyboardEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when a keyboard key is pressed <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The keyboard event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="204" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1a6db04067fa92fe13f3c9c54be910cf60" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::onNcKeyDown</definition>
+        <argsstring>(ControlRPtr control, KeyboardEvent const &amp;event)</argsstring>
+        <name>onNcKeyDown</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::onNcKeyDown</qualifiedname>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/db1/a03098" kindref="compound">KeyboardEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when a keyboard key is pressed on the active tick or line control <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">control</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control raising the event </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The keyboard event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="210" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d44/a03126_1af76e11bd6894fdc6befde673589b24a8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ComboBoxCtrl::doSwitchExpand</definition>
+        <argsstring>()</argsstring>
+        <name>doSwitchExpand</name>
+        <qualifiedname>castor3d::ComboBoxCtrl::doSwitchExpand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Switch the combobox list </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlComboBox.hpp" line="214" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ComboBoxCtrl</label>
+        <link refid="d9/d44/a03126"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/dbf/a03130"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d74/a03082"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="15">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::array&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::array&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::array&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="26" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="20" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ComboBoxCtrl</label>
+        <link refid="d9/d44/a03126"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/dbf/a03130"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d74/a03082"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::vector&lt; OnNonClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::vector&lt; OnNonClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::vector&lt; OnNonClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Controls/CtrlComboBox.hpp" line="13" column="1" bodyfile="Gui/Controls/CtrlComboBox.hpp" bodystart="15" bodyend="225"/>
+    <listofallmembers>
+      <member refid="d5/dbf/a03130_1ad1bc14696782df53753d9d200bc69c90" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>addChild</name></member>
+      <member refid="d5/dbf/a03130_1a7dcec2e27704a6c45db11b132acb03a9" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>addFlag</name></member>
+      <member refid="d5/dbf/a03130_1a1f0fe6f9de5888c7d53281ddf779fe65" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>addFlag</name></member>
+      <member refid="d9/d44/a03126_1ada422c191c3739a62e161c9b787a6e2b" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>appendItem</name></member>
+      <member refid="d9/d74/a03082_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>catchesMouseEvents</name></member>
+      <member refid="d9/d74/a03082_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>catchesReturnKey</name></member>
+      <member refid="d9/d74/a03082_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>catchesTabKey</name></member>
+      <member refid="d9/d44/a03126_1a6a870526fde036ad52bdc6208e1bbf51" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>clear</name></member>
+      <member refid="d9/d5e/a03086_1a703c7cbc98f4fbc25ac04600257c7c0c" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>ClientHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1a45ffbf50f17a665404170fd665624011" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>ClientKeyboardFunction</name></member>
+      <member refid="d9/d5e/a03086_1aea92aaf9b48684355876a7c81409ccf3" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>ClientMouseFunction</name></member>
+      <member refid="d9/d44/a03126_1a3d372b8219df53639522c660cb8b4df0" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>ComboBoxCtrl</name></member>
+      <member refid="d9/d44/a03126_1a7ec8651426c3c9c4bcdef07c7a40dc42" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>ComboBoxCtrl</name></member>
+      <member refid="d9/d44/a03126_1abb682e5ef50630cdc48cbc298810ed19" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>ComboBoxCtrl</name></member>
+      <member refid="d9/d44/a03126_1aafdb280ce8cd67fe2e83292582643548" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>connect</name></member>
+      <member refid="d9/d74/a03082_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::ComboBoxCtrl</scope><name>connect</name></member>
+      <member refid="d9/d74/a03082_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::ComboBoxCtrl</scope><name>connect</name></member>
+      <member refid="d9/d74/a03082_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::ComboBoxCtrl</scope><name>connect</name></member>
+      <member refid="d9/d5e/a03086_1a7c772af5b472ac82d7a40ebe4968cfb2" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>connectNC</name></member>
+      <member refid="d9/d5e/a03086_1ab5d52b4021d688cc40caeb9fadba5458" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>connectNC</name></member>
+      <member refid="d9/d5e/a03086_1a766759743a229af558fbe4053692bade" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>connectNC</name></member>
+      <member refid="d5/dbf/a03130_1a756d46496c99d0f06558b867bee36242" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>Control</name></member>
+      <member refid="d5/dbf/a03130_1a1e213aa081ac7fc92ab88e3baa8c98cd" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>create</name></member>
+      <member refid="d9/d5e/a03086_1afb310fd4d1af5c2332bc8496354569c9" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>DerivedPtr</name></member>
+      <member refid="d5/dbf/a03130_1a3c72583b9aa9508f5d195296de491224" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>destroy</name></member>
+      <member refid="d9/d74/a03082_1ad6eda21ee30aa7316eb1b6796d3f0cb9" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>disable</name></member>
+      <member refid="d9/d44/a03126_1a167c07effa181ef20c9e2505a680537b" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doAdjustZIndex</name></member>
+      <member refid="d9/d44/a03126_1ab49cc4e41d7114a64b045074a60e07f5" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doCatchesMouseEvents</name></member>
+      <member refid="d9/d44/a03126_1a8c66631e095b919659eb68a8bf8f8da1" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doCreate</name></member>
+      <member refid="d9/d44/a03126_1a8edc0b814a32903eb2d628e8085dc9ba" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doDestroy</name></member>
+      <member refid="d9/d44/a03126_1a96a531690cab27673eaa81ae441356e2" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doSetBorderSize</name></member>
+      <member refid="d9/d44/a03126_1ae75c345f110d4b47c2f72ca5ab153513" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doSetPosition</name></member>
+      <member refid="d9/d44/a03126_1aea1828ce1d3f2774ba8bfccd08ff6803" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doSetSize</name></member>
+      <member refid="d9/d44/a03126_1a2748aa9db91e28b70df6c113a71879e5" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doSetVisible</name></member>
+      <member refid="d9/d44/a03126_1af76e11bd6894fdc6befde673589b24a8" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doSwitchExpand</name></member>
+      <member refid="d9/d44/a03126_1a2eb9d2247950c5b63c8d79d7a56b5692" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doUpdateStyle</name></member>
+      <member refid="d9/d44/a03126_1a44496f817d7f74f3c828ce230a3fc906" prot="private" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>doUpdateZIndex</name></member>
+      <member refid="d9/d74/a03082_1a261497f31a8ad918a2315af0efae6e6d" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>enable</name></member>
+      <member refid="d9/d74/a03082_1a916afcd686fc5022c05d6ff2bf18900a" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>EnableFunction</name></member>
+      <member refid="d9/d74/a03082_1ac52718713f27db870abc7268142083e1" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>EventHandler</name></member>
+      <member refid="d9/d5e/a03086_1a88c786851d42d7d9c5b4c4bb6fbd205d" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>EventHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1ad8d1623d5da2a584967c734fba483d8a" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>EventQueue</name></member>
+      <member refid="d5/dbf/a03130_1a6aab144ea536fa1981744dd0350bd9f1" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getAbsolutePosition</name></member>
+      <member refid="d5/dbf/a03130_1ac4f784eaa1bba6d3b023124dd17bcacd" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getBackgroundOverlay</name></member>
+      <member refid="d5/dbf/a03130_1a3b327c65b7d0202012a7de4ac95ff6a0" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/dbf/a03130_1acf1524781666decd143c429cf3512fe5" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/dbf/a03130_1a07e5a74ea2c29504263372e346277c7d" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getBorderInnerUV</name></member>
+      <member refid="d5/dbf/a03130_1a2970c7c7a19b28d48701987bf6b61a53" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getBorderOuterUV</name></member>
+      <member refid="d5/dbf/a03130_1aec3c1f61d93c71cb921f9e98faf49a37" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getBorderPosition</name></member>
+      <member refid="d5/dbf/a03130_1a19e84cfd0b59e70df316f6d63648041d" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1a23f6c6e05acec8910f2f653f6ff2e1ae" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getChildControl</name></member>
+      <member refid="d5/dbf/a03130_1a551248e4f8c5fe6f7b0718317469659c" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getChildren</name></member>
+      <member refid="d5/dbf/a03130_1afa9a04c734235389699a47e958050f97" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getClientOffset</name></member>
+      <member refid="d5/dbf/a03130_1a8546428f36529b0cad2d1f065af62060" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getClientRect</name></member>
+      <member refid="d5/dbf/a03130_1a8321754767d403f6fce37f126f9cbd43" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getClientSize</name></member>
+      <member refid="d5/dbf/a03130_1ac784a51c464ddec5e4d8b5a03c386c2e" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getControlsManager</name></member>
+      <member refid="d5/dbf/a03130_1a040bb1287bb106d3aa5fe0d23b04ffd7" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getCursor</name></member>
+      <member refid="d5/dbf/a03130_1ad56a9032db1992e267092b4a31ad326b" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getEngine</name></member>
+      <member refid="d5/dbf/a03130_1afb284673f9161e073a83e1ccaddb658e" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getFlags</name></member>
+      <member refid="d5/dbf/a03130_1add233ebce85fe354e398d75a1cf5d1a5" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getId</name></member>
+      <member refid="d9/d44/a03126_1a735b6b52e5ad215fdc0e867bc326c777" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getItemCount</name></member>
+      <member refid="d9/d44/a03126_1af4117dbc05d54e9899c8770b35041cfb" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getItems</name></member>
+      <member refid="d5/dbf/a03130_1a615d30ab6530d5a64bd2b505d106a252" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getParent</name></member>
+      <member refid="d5/dbf/a03130_1a66b03f48bede297f991a87089f50b89e" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getPosition</name></member>
+      <member refid="d5/dbf/a03130_1adaa29a9485c7893a860b842917960915" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getResizeBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1ab44b4219c4bee06aa148aa8bc35cb87c" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getScene</name></member>
+      <member refid="d9/d44/a03126_1aef02e811f39f9b40f57a572f95a15c45" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getSelected</name></member>
+      <member refid="d5/dbf/a03130_1ae5a5697aa0ee7d76d2d6fd31ab39900c" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getSize</name></member>
+      <member refid="d9/d44/a03126_1abe8f625da8d369779b0574c14f714df2" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getStyle</name></member>
+      <member refid="d9/d44/a03126_1a2d43ea35337a44fe1647f0d70c9fe694" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getStyle</name></member>
+      <member refid="d5/dbf/a03130_1a072e172e9fa3cf408536b15fb6b9a367" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getType</name></member>
+      <member refid="d5/dbf/a03130_1a1eda8f0ad717bbe69ad42aeb5f6128c6" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>getUV</name></member>
+      <member refid="d5/dbf/a03130_1aed68cb86a172a24cffd3bbe950134b3c" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>hasScene</name></member>
+      <member refid="d5/dbf/a03130_1ae14dacb5781b0576a20f21d8dfc1d663" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>hide</name></member>
+      <member refid="d5/dbf/a03130_1ae6d193e17e11347c6cf378f6f19d5ed7" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>isAlwaysOnTop</name></member>
+      <member refid="d5/dbf/a03130_1a6c53467fb1c4b3e85445f0c49cf4e1c7" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/dbf/a03130_1aa57ae69b3ec7fa12384a7a2e3090c018" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>isBackgroundVisible</name></member>
+      <member refid="d9/d74/a03082_1a0c72e92a8514c0959d7ad57b0b971f73" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>isEnabled</name></member>
+      <member refid="d5/dbf/a03130_1a1dbd277c9387982c0c153faa9f7070e2" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>isInResizeRange</name></member>
+      <member refid="d5/dbf/a03130_1aecf9cd988ccd639e7ecbbd1947f887ff" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>isMovable</name></member>
+      <member refid="d5/dbf/a03130_1afbb584204c8a58b4312bda40a028199d" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>isResizable</name></member>
+      <member refid="d5/dbf/a03130_1a3e1d91ad264e850c2b35f691ec19dd4d" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>isVisible</name></member>
+      <member refid="d5/dbf/a03130_1a581415951e9ae64158469104459a5040" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_backgroundMaterial</name></member>
+      <member refid="d9/d44/a03126_1a94c4572b44752558ebebb13d942b3ee4" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_choices</name></member>
+      <member refid="d9/d44/a03126_1ae067bcac5beb46768508442171f48461" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_choicesSelectedConnection</name></member>
+      <member refid="d9/d44/a03126_1a3d3d5922f3d84909adbd917e4ce117c0" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_expand</name></member>
+      <member refid="d9/d44/a03126_1a4165e5a16b5f74b2ce1000cc1c0950b5" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_expandClickedConnection</name></member>
+      <member refid="d5/dbf/a03130_1a0422d1d6b4a50fad3c6908078d3ef760" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_flags</name></member>
+      <member refid="d5/dbf/a03130_1ac23b3de83e5473a01be74f66615389c3" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_foregroundMaterial</name></member>
+      <member refid="d9/d74/a03082_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_handlerSlots</name></member>
+      <member refid="d9/d74/a03082_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_handlerSlotsConnections</name></member>
+      <member refid="d9/d74/a03082_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_keyboardSlots</name></member>
+      <member refid="d9/d74/a03082_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_keyboardSlotsConnections</name></member>
+      <member refid="d9/d74/a03082_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_mouseSlots</name></member>
+      <member refid="d9/d74/a03082_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_mouseSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1a2a710ba7566a0da8a13156abc0901b11" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_ncHandlerSlots</name></member>
+      <member refid="d9/d5e/a03086_1a368dcf33032891e0e56c1a1d8f4103aa" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_ncHandlerSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1a14951b54a3e24fe7b348613f16f50b84" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_ncKeyboardSlots</name></member>
+      <member refid="d9/d5e/a03086_1ae1d9ec7ce4715a0a9a2536955cebb60e" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_ncKeyboardSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_ncMouseSlots</name></member>
+      <member refid="d9/d5e/a03086_1af7c333a4c75f38cf11d5226e797fc653" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_ncMouseSlotsConnections</name></member>
+      <member refid="d5/dbf/a03130_1afd49a0f5f0736d462eaa2b6a6c66318b" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_parent</name></member>
+      <member refid="d5/dbf/a03130_1add3ab7fec26d47ae3b477851a7cc2ee6" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_scene</name></member>
+      <member refid="d9/d44/a03126_1a4a7a91ecb83ac91e79046583db8d6d8a" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_selected</name></member>
+      <member refid="d9/d44/a03126_1a89eabcae5dc0cf285c2911a8be3f40cf" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_signals</name></member>
+      <member refid="d9/d44/a03126_1ae4947586d18fb57a5c6047af48577255" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_text</name></member>
+      <member refid="d9/d44/a03126_1aedf2c598153143aaf8b2598d2f51fe3f" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>m_values</name></member>
+      <member refid="d9/d5e/a03086_1a1726b1c708fa09c31f8ee004b2758341" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>NonClientEventHandler</name></member>
+      <member refid="d9/d5e/a03086_1a7c5bbf295117ab0f0ebc279365426a35" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>NonClientHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1a7cc2d3c359c3bd10417813a38eb28cc2" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>NonClientKeyboardFunction</name></member>
+      <member refid="d9/d5e/a03086_1a35796ed2ebfb666605bad65eefdd2eab" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>NonClientMouseFunction</name></member>
+      <member refid="d5/dbf/a03130_1a030ff972d48a241466cef3c8082c4e5e" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>onChanged</name></member>
+      <member refid="d9/d74/a03082_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnClientHandlerEvent</name></member>
+      <member refid="d9/d74/a03082_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnClientHandlerEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnClientKeyboardEvent</name></member>
+      <member refid="d9/d74/a03082_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnClientKeyboardEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnClientMouseEvent</name></member>
+      <member refid="d9/d74/a03082_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnClientMouseEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a762d1e36d01afdb527690a27f6e6645a" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnEnable</name></member>
+      <member refid="d9/d74/a03082_1a51294359629a2fb1d22cab6d40e785e0" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>onEnable</name></member>
+      <member refid="d9/d74/a03082_1aeeec8bfb3700736547c31cc89e78ea2c" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnEnableConnection</name></member>
+      <member refid="d9/d44/a03126_1aa507dc369a7aff5027daba8904a38770" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>onKeyDown</name></member>
+      <member refid="d9/d44/a03126_1a6db04067fa92fe13f3c9c54be910cf60" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>onNcKeyDown</name></member>
+      <member refid="d9/d5e/a03086_1a8cde3553a16b17f2db9b8cb2d0457be6" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnNonClientHandlerEvent</name></member>
+      <member refid="d9/d5e/a03086_1a3cd3b709106f34e3c628df967ff0d294" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnNonClientHandlerEventConnection</name></member>
+      <member refid="d9/d5e/a03086_1ae68352453ba12818f1d870cdaf6eea40" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnNonClientKeyboardEvent</name></member>
+      <member refid="d9/d5e/a03086_1ae5b3c80ac4550412145ed53787b33d86" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnNonClientKeyboardEventConnection</name></member>
+      <member refid="d9/d5e/a03086_1acf4c10c3d5dd8fbb43d1b238d9b6de36" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnNonClientMouseEvent</name></member>
+      <member refid="d9/d5e/a03086_1aefea2351ba1c6ea3dfbe9d22ddf311a6" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>OnNonClientMouseEventConnection</name></member>
+      <member refid="d9/d44/a03126_1a0f7c2d4e075d56292aaac606de31460e" prot="private" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>onSelected</name></member>
+      <member refid="d9/d74/a03082_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>processEvents</name></member>
+      <member refid="d9/d74/a03082_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>processHandlerEvent</name></member>
+      <member refid="d9/d74/a03082_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>processKeyboardEvent</name></member>
+      <member refid="d9/d74/a03082_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>processMouseEvent</name></member>
+      <member refid="d9/d74/a03082_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d74/a03082_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d74/a03082_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>pushEvent</name></member>
+      <member refid="d5/dbf/a03130_1a9d2083e8d22c0af9f07e494f17aa84a9" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>removeChild</name></member>
+      <member refid="d5/dbf/a03130_1a76bed2932e40dfc7d10f6bc2113bc213" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>removeFlag</name></member>
+      <member refid="d5/dbf/a03130_1aa5edf92a6bf41017a281e68aeb9d7eaf" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>removeFlag</name></member>
+      <member refid="d9/d44/a03126_1a67c297485c908da2d24faaba0bfe7ec5" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>removeItem</name></member>
+      <member refid="d5/dbf/a03130_1adc6817a2b0f2bcd5dcef1fe18ce518b6" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setBackgroundBorderMaterial</name></member>
+      <member refid="d5/dbf/a03130_1a96be50155227ba273fffb7feb811ec75" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setBackgroundBorderPosition</name></member>
+      <member refid="d5/dbf/a03130_1a5591c2409137443030717673282bc227" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/dbf/a03130_1a8bf9f81d2b736d262f75aa6617f7a605" prot="protected" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setBackgroundSize</name></member>
+      <member refid="d5/dbf/a03130_1a7ed9a34492cb400424eb233adf582ca6" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setBorderInnerUV</name></member>
+      <member refid="d5/dbf/a03130_1a36f16d9f66f6e2376b888ccae589f8d6" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setBorderOuterUV</name></member>
+      <member refid="d5/dbf/a03130_1ab8c78763312333353378ceaff269722c" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1a3f413815fb5be7cb79bd8ad1545ed70f" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setCaption</name></member>
+      <member refid="d9/d74/a03082_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setCatchesMouseEvents</name></member>
+      <member refid="d9/d44/a03126_1a8579c00df21be2b79a1a51c31873ae39" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setItemText</name></member>
+      <member refid="d5/dbf/a03130_1a4e90b29a056dcbf2db96eefe6041239d" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setPosition</name></member>
+      <member refid="d9/d44/a03126_1a1fe9ef6f50283cf36998b834c1f10051" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setSelected</name></member>
+      <member refid="d5/dbf/a03130_1a21a6e38b960222e3df47cc0420176e49" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setSize</name></member>
+      <member refid="d5/dbf/a03130_1a9707c9c90e1ae4a57e520fc841332560" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setStyle</name></member>
+      <member refid="d5/dbf/a03130_1a6e4e43823e6aae177386088d85c36d69" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setUV</name></member>
+      <member refid="d5/dbf/a03130_1ab00d1832ef47986d3d110967b2697160" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>setVisible</name></member>
+      <member refid="d5/dbf/a03130_1a68a85bdad7fdc17d729cd97e199ae0f9" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>show</name></member>
+      <member refid="d9/d44/a03126_1aba2843be2a50c88c5291a2f33f1baa02" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>Type</name></member>
+      <member refid="d9/d44/a03126_1ab65cf3624a6c4ed939868e2b3c0ef951" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>~ComboBoxCtrl</name></member>
+      <member refid="d5/dbf/a03130_1a7ba50bfc701825af7c072e553b9a36bc" prot="public" virt="non-virtual"><scope>castor3d::ComboBoxCtrl</scope><name>~Control</name></member>
+      <member refid="d9/d74/a03082_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::ComboBoxCtrl</scope><name>~EventHandler</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,110 +1,613 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
-  <compounddef id="d5/d10/a01571" kind="namespace" language="Unknown">
-    <compoundname>std</compoundname>
-    <innerclass refid="da/dd5/a01580" prot="public">std::allocator</innerclass>
-    <innerclass refid="de/dc3/a02256" prot="public">std::array</innerclass>
-    <innerclass refid="dc/dd2/a01604" prot="public">std::atomic</innerclass>
-    <innerclass refid="db/dfd/a01608" prot="public">std::atomic_ref</innerclass>
-    <innerclass refid="d8/d22/a01584" prot="public">std::auto_ptr</innerclass>
-    <innerclass refid="d3/d9c/a02336" prot="public">std::bad_alloc</innerclass>
-    <innerclass refid="df/d49/a02340" prot="public">std::bad_cast</innerclass>
-    <innerclass refid="d3/d35/a02360" prot="public">std::bad_exception</innerclass>
-    <innerclass refid="d6/d71/a02344" prot="public">std::bad_typeid</innerclass>
-    <innerclass refid="d4/d26/a01700" prot="public">std::basic_fstream</innerclass>
-    <innerclass refid="da/dc4/a01692" prot="public">std::basic_ifstream</innerclass>
-    <innerclass refid="de/d3e/a01676" prot="public">std::basic_ios</innerclass>
-    <innerclass refid="d6/d53/a01688" prot="public">std::basic_iostream</innerclass>
-    <innerclass refid="d5/d83/a01680" prot="public">std::basic_istream</innerclass>
-    <innerclass refid="d0/dbc/a01704" prot="public">std::basic_istringstream</innerclass>
-    <innerclass refid="d9/d49/a01696" prot="public">std::basic_ofstream</innerclass>
-    <innerclass refid="d2/d71/a01684" prot="public">std::basic_ostream</innerclass>
-    <innerclass refid="de/d5c/a01708" prot="public">std::basic_ostringstream</innerclass>
-    <innerclass refid="d4/d77/a01788" prot="public">std::basic_string</innerclass>
-    <innerclass refid="d8/d45/a01908" prot="public">std::basic_string_view</innerclass>
-    <innerclass refid="dc/d3e/a01712" prot="public">std::basic_stringstream</innerclass>
-    <innerclass refid="d1/d99/a02032" prot="public">std::bitset</innerclass>
-    <innerclass refid="db/d68/a02028" prot="public">std::complex</innerclass>
-    <innerclass refid="d7/db2/a02036" prot="public">std::deque</innerclass>
-    <innerclass refid="d1/d8c/a02364" prot="public">std::domain_error</innerclass>
-    <innerclass refid="d6/daf/a01632" prot="public">std::error_category</innerclass>
-    <innerclass refid="dd/deb/a01628" prot="public">std::error_code</innerclass>
-    <innerclass refid="de/d14/a01640" prot="public">std::error_condition</innerclass>
-    <innerclass refid="d1/d03/a02332" prot="public">std::exception</innerclass>
-    <innerclass refid="db/d87/a02076" prot="public">std::forward_list</innerclass>
-    <innerclass refid="d5/d14/a01756" prot="public">std::fstream</innerclass>
-    <innerclass refid="df/d8f/a01740" prot="public">std::ifstream</innerclass>
-    <innerclass refid="d1/da2/a02368" prot="public">std::invalid_argument</innerclass>
-    <innerclass refid="d4/df6/a01716" prot="public">std::ios</innerclass>
-    <innerclass refid="de/df9/a01624" prot="public">std::ios_base</innerclass>
-    <innerclass refid="d3/d4c/a01724" prot="public">std::istream</innerclass>
-    <innerclass refid="dc/d51/a01764" prot="public">std::istringstream</innerclass>
-    <innerclass refid="da/ddf/a01648" prot="public">std::jthread</innerclass>
-    <innerclass refid="da/d75/a02372" prot="public">std::length_error</innerclass>
-    <innerclass refid="d9/db6/a02056" prot="public">std::list</innerclass>
-    <innerclass refid="d5/d84/a01612" prot="public">std::lock_guard</innerclass>
-    <innerclass refid="da/db4/a02348" prot="public">std::logic_error</innerclass>
-    <innerclass refid="dd/d77/a02096" prot="public">std::map</innerclass>
-    <innerclass refid="db/ddd/a02136" prot="public">std::multimap</innerclass>
-    <innerclass refid="d8/d5f/a02216" prot="public">std::multiset</innerclass>
-    <innerclass refid="d0/dc0/a01652" prot="public">std::mutex</innerclass>
-    <innerclass refid="d9/d0d/a01748" prot="public">std::ofstream</innerclass>
-    <innerclass refid="de/d25/a01732" prot="public">std::ostream</innerclass>
-    <innerclass refid="dd/d20/a01772" prot="public">std::ostringstream</innerclass>
-    <innerclass refid="df/d46/a02376" prot="public">std::out_of_range</innerclass>
-    <innerclass refid="d2/d11/a02384" prot="public">std::overflow_error</innerclass>
-    <innerclass refid="df/d2a/a02320" prot="public">std::priority_queue</innerclass>
-    <innerclass refid="d3/d01/a02316" prot="public">std::queue</innerclass>
-    <innerclass refid="d8/d30/a02380" prot="public">std::range_error</innerclass>
-    <innerclass refid="d6/d5e/a01660" prot="public">std::recursive_mutex</innerclass>
-    <innerclass refid="dc/d71/a01664" prot="public">std::recursive_timed_mutex</innerclass>
-    <innerclass refid="d6/d3a/a02356" prot="public">std::runtime_error</innerclass>
-    <innerclass refid="d6/d34/a02176" prot="public">std::set</innerclass>
-    <innerclass refid="da/df2/a01620" prot="public">std::shared_lock</innerclass>
-    <innerclass refid="d7/d47/a01668" prot="public">std::shared_mutex</innerclass>
-    <innerclass refid="dd/d70/a01596" prot="public">std::shared_ptr</innerclass>
-    <innerclass refid="d2/d7b/a01672" prot="public">std::shared_timed_mutex</innerclass>
-    <innerclass refid="d7/d71/a01588" prot="public">std::smart_ptr</innerclass>
-    <innerclass refid="d8/d9a/a02296" prot="public">std::span</innerclass>
-    <innerclass refid="dd/d6e/a02324" prot="public">std::stack</innerclass>
-    <innerclass refid="d7/d02/a01808" prot="public">std::string</innerclass>
-    <innerclass refid="d1/db0/a01928" prot="public">std::string_view</innerclass>
-    <innerclass refid="d0/dce/a01780" prot="public">std::stringstream</innerclass>
-    <innerclass refid="dd/d40/a01636" prot="public">std::system_error</innerclass>
-    <innerclass refid="d3/d3e/a01644" prot="public">std::thread</innerclass>
-    <innerclass refid="d5/d8d/a01656" prot="public">std::timed_mutex</innerclass>
-    <innerclass refid="dd/de7/a01868" prot="public">std::u16string</innerclass>
-    <innerclass refid="d5/da1/a01988" prot="public">std::u16string_view</innerclass>
-    <innerclass refid="d7/d5f/a01888" prot="public">std::u32string</innerclass>
-    <innerclass refid="d5/d6e/a02008" prot="public">std::u32string_view</innerclass>
-    <innerclass refid="da/d4b/a01848" prot="public">std::u8string</innerclass>
-    <innerclass refid="d9/d4f/a01968" prot="public">std::u8string_view</innerclass>
-    <innerclass refid="db/d3b/a02388" prot="public">std::underflow_error</innerclass>
-    <innerclass refid="db/dad/a01616" prot="public">std::unique_lock</innerclass>
-    <innerclass refid="de/d40/a01592" prot="public">std::unique_ptr</innerclass>
-    <innerclass refid="dc/d29/a02116" prot="public">std::unordered_map</innerclass>
-    <innerclass refid="dd/d3f/a02156" prot="public">std::unordered_multimap</innerclass>
-    <innerclass refid="de/d1f/a02236" prot="public">std::unordered_multiset</innerclass>
-    <innerclass refid="d8/db0/a02196" prot="public">std::unordered_set</innerclass>
-    <innerclass refid="db/d83/a02328" prot="public">std::valarray</innerclass>
-    <innerclass refid="d2/d81/a02276" prot="public">std::vector</innerclass>
-    <innerclass refid="d4/d3f/a01600" prot="public">std::weak_ptr</innerclass>
-    <innerclass refid="d0/d9d/a01760" prot="public">std::wfstream</innerclass>
-    <innerclass refid="d1/d04/a01744" prot="public">std::wifstream</innerclass>
-    <innerclass refid="da/d0e/a01720" prot="public">std::wios</innerclass>
-    <innerclass refid="df/de0/a01728" prot="public">std::wistream</innerclass>
-    <innerclass refid="de/dda/a01768" prot="public">std::wistringstream</innerclass>
-    <innerclass refid="d3/dbf/a01752" prot="public">std::wofstream</innerclass>
-    <innerclass refid="de/daf/a01736" prot="public">std::wostream</innerclass>
-    <innerclass refid="dd/d00/a01776" prot="public">std::wostringstream</innerclass>
-    <innerclass refid="dc/d79/a01828" prot="public">std::wstring</innerclass>
-    <innerclass refid="d6/db0/a01948" prot="public">std::wstring_view</innerclass>
-    <innerclass refid="d6/d3d/a01784" prot="public">std::wstringstream</innerclass>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d10/a01571" kind="file" language="C++">
+    <compoundname>TextureAnimationBuffer.hpp</compoundname>
+    <includes refid="df/d46/a14833" local="yes">Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp</includes>
+    <includes refid="dc/df2/a00656" local="yes">Castor3D/Material/Texture/TextureConfiguration.hpp</includes>
+    <includes refid="df/d7e/a14824" local="yes">Castor3D/Scene/Animation/AnimationModule.hpp</includes>
+    <includes refid="de/d2c/a01553" local="yes">Castor3D/Shader/ShaderBuffer.hpp</includes>
+    <includes local="no">CastorUtils/Design/ArrayView.hpp</includes>
+    <includes local="no">CastorUtils/Config/BeginExternHeaderGuard.hpp</includes>
+    <includes local="no">atomic</includes>
+    <includes local="no">mutex</includes>
+    <includes local="no">CastorUtils/Config/EndExternHeaderGuard.hpp</includes>
+    <incdepgraph>
+      <node id="86">
+        <label>CastorUtils/Config/BeginExternHeaderGuard.hpp</label>
+      </node>
+      <node id="89">
+        <label>CastorUtils/Config/EndExternHeaderGuard.hpp</label>
+      </node>
+      <node id="61">
+        <label>CastorUtils/Config/Macros.hpp</label>
+      </node>
+      <node id="28">
+        <label>CastorUtils/Data/TextWriter.hpp</label>
+      </node>
+      <node id="82">
+        <label>CastorUtils/Design/ArrayView.hpp</label>
+      </node>
+      <node id="62">
+        <label>CastorUtils/Design/DesignModule.hpp</label>
+      </node>
+      <node id="65">
+        <label>CastorUtils/Design/DynamicBitset.hpp</label>
+      </node>
+      <node id="38">
+        <label>CastorUtils/Design/Factory.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="24">
+        <label>CastorUtils/Design/Resource.hpp</label>
+      </node>
+      <node id="21">
+        <label>CastorUtils/Design/ResourceCache.hpp</label>
+      </node>
+      <node id="25">
+        <label>CastorUtils/Design/Signal.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="63">
+        <label>CastorUtils/FileParser/FileParserModule.hpp</label>
+      </node>
+      <node id="43">
+        <label>CastorUtils/Graphics/BoundingBox.hpp</label>
+      </node>
+      <node id="44">
+        <label>CastorUtils/Graphics/BoundingSphere.hpp</label>
+      </node>
+      <node id="11">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="12">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="29">
+        <label>CastorUtils/Math/Angle.hpp</label>
+      </node>
+      <node id="13">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="26">
+        <label>CastorUtils/Math/MathModule.hpp</label>
+      </node>
+      <node id="14">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="42">
+        <label>CastorUtils/Math/Quaternion.hpp</label>
+      </node>
+      <node id="30">
+        <label>CastorUtils/Math/SquareMatrix.hpp</label>
+      </node>
+      <node id="45">
+        <label>CastorUtils/Miscellaneous/BitSize.hpp</label>
+      </node>
+      <node id="7">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="55">
+        <label>RenderGraph/Attachment.hpp</label>
+      </node>
+      <node id="16">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="68">
+        <label>RenderGraph/GraphContext.hpp</label>
+      </node>
+      <node id="56">
+        <label>RenderGraph/ImageData.hpp</label>
+      </node>
+      <node id="57">
+        <label>RenderGraph/ImageViewData.hpp</label>
+      </node>
+      <node id="49">
+        <label>ShaderAST/Shader.hpp</label>
+      </node>
+      <node id="72">
+        <label>ShaderWriter/BaseTypes/Array.hpp</label>
+      </node>
+      <node id="73">
+        <label>ShaderWriter/BaseTypes/Boolean.hpp</label>
+      </node>
+      <node id="77">
+        <label>ShaderWriter/BaseTypes/CombinedImage.hpp</label>
+      </node>
+      <node id="74">
+        <label>ShaderWriter/BaseTypes/Double.hpp</label>
+      </node>
+      <node id="75">
+        <label>ShaderWriter/BaseTypes/Float.hpp</label>
+      </node>
+      <node id="76">
+        <label>ShaderWriter/BaseTypes/Int.hpp</label>
+      </node>
+      <node id="78">
+        <label>ShaderWriter/BaseTypes/StorageImage.hpp</label>
+      </node>
+      <node id="79">
+        <label>ShaderWriter/BaseTypes/UInt.hpp</label>
+      </node>
+      <node id="80">
+        <label>ShaderWriter/CompositeTypes/Function.hpp</label>
+      </node>
+      <node id="81">
+        <label>ShaderWriter/CompositeTypes/StructInstanceHelper.hpp</label>
+      </node>
+      <node id="64">
+        <label>ShaderWriter/ShaderWriterPrerequisites.hpp</label>
+      </node>
+      <node id="46">
+        <label>Castor3D/Animation/AnimationModule.hpp</label>
+        <link refid="d0/dc0/a14821"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Castor3D/Cache/CacheModule.hpp</label>
+        <link refid="d6/d22/a00245"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="db/dc3/a00284"/>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>Castor3D/Event/Frame/FrameEventModule.hpp</label>
+        <link refid="d0/d61/a00302"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>Castor3D/Limits.hpp</label>
+        <link refid="d0/dc4/a00443"/>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Castor3D/Material/MaterialModule.hpp</label>
+        <link refid="d1/d0b/a00452"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="60">
+        <label>Castor3D/Material/Pass/Component/ComponentModule.hpp</label>
+        <link refid="d7/d7d/a14827"/>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="61" relation="include">
+        </childnode>
+        <childnode refid="62" relation="include">
+        </childnode>
+        <childnode refid="63" relation="include">
+        </childnode>
+        <childnode refid="64" relation="include">
+        </childnode>
+      </node>
+      <node id="53">
+        <label>Castor3D/Material/Pass/PassModule.hpp</label>
+        <link refid="df/d6f/a00623"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp</label>
+        <link refid="df/d46/a14833"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="26" relation="include">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>Castor3D/Material/Texture/TextureConfiguration.hpp</label>
+        <link refid="dc/df2/a00656"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="28" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="29" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="31" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Castor3D/Material/Texture/TextureModule.hpp</label>
+        <link refid="dc/df1/a00662"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="51">
+        <label>Castor3D/Miscellaneous/MiscellaneousModule.hpp</label>
+        <link refid="df/dbb/a00698"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>Castor3D/Model/Mesh/MeshModule.hpp</label>
+        <link refid="d9/dd4/a00776"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp</label>
+        <link refid="d9/daf/a00830"/>
+        <childnode refid="36" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+        <childnode refid="40" relation="include">
+        </childnode>
+        <childnode refid="43" relation="include">
+        </childnode>
+        <childnode refid="44" relation="include">
+        </childnode>
+        <childnode refid="45" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>Castor3D/Model/ModelModule.hpp</label>
+        <link refid="d3/d13/a00836"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>SkeletonModule.hpp</label>
+        <link refid="d3/db2/a00869"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="37" relation="include">
+        </childnode>
+        <childnode refid="42" relation="include">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>Castor3D/Model/Skeleton/VertexBoneData.hpp</label>
+        <link refid="d1/d93/a00875"/>
+        <childnode refid="41" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="59">
+        <label>PipelineFlags.hpp</label>
+        <link refid="dc/dee/a01166"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="60" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="65" relation="include">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>Castor3D/Render/RenderModule.hpp</label>
+        <link refid="d5/d32/a01214"/>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+        <childnode refid="55" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+        <childnode refid="58" relation="include">
+        </childnode>
+        <childnode refid="22" relation="include">
+        </childnode>
+        <childnode refid="59" relation="include">
+        </childnode>
+        <childnode refid="66" relation="include">
+        </childnode>
+      </node>
+      <node id="70">
+        <label>Castor3D/Render/ShadowMap/ShadowMapModule.hpp</label>
+        <link refid="d3/d0b/a01253"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="66">
+        <label>Texture.hpp</label>
+        <link refid="d8/d7a/a01292"/>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="67" relation="include">
+        </childnode>
+        <childnode refid="68" relation="include">
+        </childnode>
+        <childnode refid="56" relation="include">
+        </childnode>
+        <childnode refid="57" relation="include">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>Castor3D/Scene/Animation/AnimationModule.hpp</label>
+        <link refid="df/d7e/a14824"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="46" relation="include">
+        </childnode>
+      </node>
+      <node id="54">
+        <label>Castor3D/Scene/Background/BackgroundModule.hpp</label>
+        <link refid="d4/d20/a01421"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="52">
+        <label>Castor3D/Scene/Light/LightModule.hpp</label>
+        <link refid="d7/d1d/a01475"/>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="51" relation="include">
+        </childnode>
+        <childnode refid="39" relation="include">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>Castor3D/Scene/SceneModule.hpp</label>
+        <link refid="dc/d0c/a01532"/>
+        <childnode refid="34" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="35" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="47">
+        <label>Castor3D/Shader/ShaderBuffer.hpp</label>
+        <link refid="de/d2c/a01553"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="50" relation="include">
+        </childnode>
+        <childnode refid="69" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="83" relation="include">
+        </childnode>
+        <childnode refid="84" relation="include">
+        </childnode>
+        <childnode refid="85" relation="include">
+        </childnode>
+      </node>
+      <node id="71">
+        <label>Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp</label>
+        <link refid="d6/d82/a01565"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+        <childnode refid="30" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Shader/ShaderBuffers/TextureAnimationBuffer.hpp</label>
+        <link refid="d5/d10/a01571"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="27" relation="include">
+        </childnode>
+        <childnode refid="32" relation="include">
+        </childnode>
+        <childnode refid="47" relation="include">
+        </childnode>
+        <childnode refid="82" relation="include">
+        </childnode>
+        <childnode refid="86" relation="include">
+        </childnode>
+        <childnode refid="87" relation="include">
+        </childnode>
+        <childnode refid="88" relation="include">
+        </childnode>
+        <childnode refid="89" relation="include">
+        </childnode>
+      </node>
+      <node id="48">
+        <label>ShaderModule.hpp</label>
+        <link refid="d3/daa/a01577"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="49" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+      </node>
+      <node id="69">
+        <label>Castor3D/Shader/Shaders/SdwModule.hpp</label>
+        <link refid="dd/d8d/a01667"/>
+        <childnode refid="48" relation="include">
+        </childnode>
+        <childnode refid="53" relation="include">
+        </childnode>
+        <childnode refid="70" relation="include">
+        </childnode>
+        <childnode refid="33" relation="include">
+        </childnode>
+        <childnode refid="54" relation="include">
+        </childnode>
+        <childnode refid="52" relation="include">
+        </childnode>
+        <childnode refid="71" relation="include">
+        </childnode>
+        <childnode refid="38" relation="include">
+        </childnode>
+        <childnode refid="72" relation="include">
+        </childnode>
+        <childnode refid="73" relation="include">
+        </childnode>
+        <childnode refid="74" relation="include">
+        </childnode>
+        <childnode refid="75" relation="include">
+        </childnode>
+        <childnode refid="76" relation="include">
+        </childnode>
+        <childnode refid="77" relation="include">
+        </childnode>
+        <childnode refid="78" relation="include">
+        </childnode>
+        <childnode refid="79" relation="include">
+        </childnode>
+        <childnode refid="80" relation="include">
+        </childnode>
+        <childnode refid="81" relation="include">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="83">
+        <label>ashespp/Buffer/Buffer.hpp</label>
+      </node>
+      <node id="84">
+        <label>ashespp/Buffer/BufferView.hpp</label>
+      </node>
+      <node id="85">
+        <label>ashespp/Buffer/StagingBuffer.hpp</label>
+      </node>
+      <node id="58">
+        <label>ashespp/Descriptor/WriteDescriptorSet.hpp</label>
+      </node>
+      <node id="31">
+        <label>ashespp/Image/ImageCreateInfo.hpp</label>
+      </node>
+      <node id="67">
+        <label>ashespp/Image/ImageView.hpp</label>
+      </node>
+      <node id="87">
+        <label>atomic</label>
+      </node>
+      <node id="17">
+        <label>cstdint</label>
+      </node>
+      <node id="22">
+        <label>functional</label>
+      </node>
+      <node id="18">
+        <label>memory</label>
+      </node>
+      <node id="88">
+        <label>mutex</label>
+      </node>
+      <node id="19">
+        <label>string</label>
+      </node>
+      <node id="23">
+        <label>unordered_map</label>
+      </node>
+      <node id="20">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <innerclass refid="dc/d27/a06389" prot="public">castor3d::TextureAnimationBuffer</innerclass>
+    <innernamespace refid="d3/d5e/a01725">castor3d</innernamespace>
     <briefdescription>
-<para>STL namespace. </para>
     </briefdescription>
     <detaileddescription>
     </detaileddescription>
-    <location file="[STL]" line="1" column="1"/>
+    <location file="Shader/ShaderBuffers/TextureAnimationBuffer.hpp"/>
   </compounddef>
 </doxygen>

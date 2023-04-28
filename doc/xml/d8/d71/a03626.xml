@@ -1,0 +1,392 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/d71/a03626" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ThicknessComponent</compoundname>
+    <basecompoundref refid="d1/deb/a03418" prot="public" virt="non-virtual">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;</basecompoundref>
+    <includes local="no">ThicknessComponent.hpp</includes>
+    <innerclass refid="d6/d81/a03630" prot="public">castor3d::ThicknessComponent::ComponentsShader</innerclass>
+    <innerclass refid="dc/d12/a03634" prot="public">castor3d::ThicknessComponent::MaterialShader</innerclass>
+    <innerclass refid="df/df2/a03638" prot="public">castor3d::ThicknessComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/d71/a03626_1ade1fb8492a5bac646e0871e1b4d58060" prot="public" static="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::ThicknessComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::ThicknessComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="101" column="37" bodyfile="Material/Pass/Component/Lighting/ThicknessComponent.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/d71/a03626_1a253bcbe323f0fc1199d93df0ddc44138" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::ThicknessComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::ThicknessComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d9/d85/a04034" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="82" column="32" bodyfile="Material/Pass/Component/Lighting/ThicknessComponent.hpp" bodystart="82" bodyend="85"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d71/a03626_1a46800cbf2f78fc35b8dbe241fed4cc71" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ThicknessComponent::ThicknessComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>ThicknessComponent</name>
+        <qualifiedname>castor3d::ThicknessComponent::ThicknessComponent</qualifiedname>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="87" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d71/a03626_1a2b28d72f9b612da1cc01572aef4445d1" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ThicknessComponent::accept</definition>
+        <argsstring>(PassVisitorBase &amp;vis) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ThicknessComponent::accept</qualifiedname>
+        <reimplements refid="d2/d95/a04030_1a4e315225c20ace9097adfd65e8413e4f">accept</reimplements>
+        <param>
+          <type><ref refid="d0/d18/a04070" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d7/d34/a04078" kindref="compound">PassVisitor</ref> acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="89" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d71/a03626_1aaf886a72405dc580a65e1d802a3eaf8d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>float const &amp;</type>
+        <definition>float const  &amp; castor3d::ThicknessComponent::getThicknessFactor</definition>
+        <argsstring>() const</argsstring>
+        <name>getThicknessFactor</name>
+        <qualifiedname>castor3d::ThicknessComponent::getThicknessFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="91" column="14" bodyfile="Material/Pass/Component/Lighting/ThicknessComponent.hpp" bodystart="91" bodyend="94"/>
+        <references refid="d1/deb/a03418_1a23ec881a6e2aa2e40c21e108cb6458f7" compoundref="dd/d63/a00455" startline="76" endline="79">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;::getData</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d71/a03626_1af46bd9cfc28699c4a3bbd7037ad0dc58" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ThicknessComponent::setThicknessFactor</definition>
+        <argsstring>(float v)</argsstring>
+        <name>setThicknessFactor</name>
+        <qualifiedname>castor3d::ThicknessComponent::setThicknessFactor</qualifiedname>
+        <param>
+          <type>float</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="96" column="6" bodyfile="Material/Pass/Component/Lighting/ThicknessComponent.hpp" bodystart="96" bodyend="99"/>
+        <references refid="d1/deb/a03418_1a074de9b2f9579c56a85617b514089545" compoundref="dd/d63/a00455" startline="56" endline="59">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;::setData</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/d71/a03626_1ac8c2176714107075ea900b47a85820b4" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::ThicknessComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::ThicknessComponent::doClone</qualifiedname>
+        <reimplements refid="d2/d95/a04030_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="104" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d71/a03626_1a5bd27e0f7a93fdf58313a3aca0c22055" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ThicknessComponent::doWriteText</definition>
+        <argsstring>(castor::String const &amp;tabs, castor::Path const &amp;folder, castor::String const &amp;subfolder, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteText</name>
+        <qualifiedname>castor3d::ThicknessComponent::doWriteText</qualifiedname>
+        <reimplements refid="d2/d95/a04030_1af8c7cb8f4c2e0753c0ebbb6adf802c9c">doWriteText</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Writes the component content to text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current tabulation level. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources folder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subfolder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources subfolder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output file. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="105" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d71/a03626_1a0b8c06fa20dfbfeb77209549065da0d2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ThicknessComponent::doFillBuffer</definition>
+        <argsstring>(PassBuffer &amp;buffer) const override</argsstring>
+        <name>doFillBuffer</name>
+        <qualifiedname>castor3d::ThicknessComponent::doFillBuffer</qualifiedname>
+        <reimplements refid="d2/d95/a04030_1a3b157d130e41a31b1a6313ef26cd675c">doFillBuffer</reimplements>
+        <param>
+          <type><ref refid="de/ded/a06314" kindref="compound">PassBuffer</ref> &amp;</type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+<para>Fills the pass buffer with this pass data. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">buffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass buffer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="109" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d2/d95/a04030"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ThicknessComponent</label>
+        <link refid="d8/d71/a03626"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d2/d95/a04030"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="db/df2/a04026"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ThicknessComponent</label>
+        <link refid="d8/d71/a03626"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="dc/d86/a04022"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Lighting/ThicknessComponent.hpp" line="15" column="1" bodyfile="Material/Pass/Component/Lighting/ThicknessComponent.hpp" bodystart="17" bodyend="110"/>
+    <listofallmembers>
+      <member refid="d8/d71/a03626_1a2b28d72f9b612da1cc01572aef4445d1" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>accept</name></member>
+      <member refid="d2/d95/a04030_1a2847d512604b766b3a315e4c4e9dc0ea" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>areNormalsInverted</name></member>
+      <member refid="d1/deb/a03418_1afb1743ea21712dcfe9765639815fc59d" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>BaseDataPassComponentT</name></member>
+      <member refid="d2/d95/a04030_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>clone</name></member>
+      <member refid="d8/d71/a03626_1a253bcbe323f0fc1199d93df0ddc44138" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>createPlugin</name></member>
+      <member refid="d8/d71/a03626_1ac8c2176714107075ea900b47a85820b4" prot="private" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>doClone</name></member>
+      <member refid="d8/d71/a03626_1a0b8c06fa20dfbfeb77209549065da0d2" prot="private" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>doFillBuffer</name></member>
+      <member refid="d8/d71/a03626_1a5bd27e0f7a93fdf58313a3aca0c22055" prot="private" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>doWriteText</name></member>
+      <member refid="d2/d95/a04030_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>fillBuffer</name></member>
+      <member refid="d2/d95/a04030_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>fillChannel</name></member>
+      <member refid="d2/d95/a04030_1ae53af67cd5f807b90d8e31e52d6582af" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>fillConfig</name></member>
+      <member refid="d2/d95/a04030_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>getColour</name></member>
+      <member refid="d1/deb/a03418_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>getData</name></member>
+      <member refid="d1/deb/a03418_1aa79468a338c3ff3c31682894db721fab" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>getData</name></member>
+      <member refid="d2/d95/a04030_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>getDependencies</name></member>
+      <member refid="d2/d95/a04030_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>getId</name></member>
+      <member refid="d2/d95/a04030_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>getPassFlags</name></member>
+      <member refid="d2/d95/a04030_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>getPlugin</name></member>
+      <member refid="d8/d71/a03626_1aaf886a72405dc580a65e1d802a3eaf8d" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>getThicknessFactor</name></member>
+      <member refid="d2/d95/a04030_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>getType</name></member>
+      <member refid="d2/d95/a04030_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>hasColour</name></member>
+      <member refid="d2/d95/a04030_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>m_dependencies</name></member>
+      <member refid="d2/d95/a04030_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>m_dirty</name></member>
+      <member refid="d2/d95/a04030_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>m_id</name></member>
+      <member refid="d2/d95/a04030_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>m_materialShader</name></member>
+      <member refid="d2/d95/a04030_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>m_plugin</name></member>
+      <member refid="d2/d95/a04030_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>m_type</name></member>
+      <member refid="d1/deb/a03418_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>m_value</name></member>
+      <member refid="d2/d95/a04030_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>PassComponent</name></member>
+      <member refid="d2/d95/a04030_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>setColour</name></member>
+      <member refid="d1/deb/a03418_1a074de9b2f9579c56a85617b514089545" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>setData</name></member>
+      <member refid="d1/deb/a03418_1abf51560ee823896159de61bea9326391" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>setData</name></member>
+      <member refid="d8/d71/a03626_1af46bd9cfc28699c4a3bbd7037ad0dc58" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>setThicknessFactor</name></member>
+      <member refid="d8/d71/a03626_1a46800cbf2f78fc35b8dbe241fed4cc71" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>ThicknessComponent</name></member>
+      <member refid="d8/d71/a03626_1ade1fb8492a5bac646e0871e1b4d58060" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>TypeName</name></member>
+      <member refid="d2/d95/a04030_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>update</name></member>
+      <member refid="d2/d95/a04030_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::ThicknessComponent</scope><name>writeText</name></member>
+      <member refid="d2/d95/a04030_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::ThicknessComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

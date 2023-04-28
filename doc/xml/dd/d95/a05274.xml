@@ -1,0 +1,862 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/d95/a05274" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GaussianBlur</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">GaussianBlur.hpp</includes>
+    <innerclass refid="d6/d9e/a05278" prot="public">castor3d::GaussianBlur::Configuration</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="dd/d95/a05274_1a68f253e5790c042fdd8e5a00746a68a6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::GaussianBlur::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::GaussianBlur::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="169" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="169" bodyend="173"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d95/a05274_1ad4e5e92fc3459d70640cdc903ecc179b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::GaussianBlur::Config</definition>
+        <argsstring></argsstring>
+        <name>Config</name>
+        <qualifiedname>castor3d::GaussianBlur::Config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="177" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a3ea0db3cb529a51262383c2989e1db5b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::GaussianBlur::Coefficients</definition>
+        <argsstring></argsstring>
+        <name>Coefficients</name>
+        <qualifiedname>castor3d::GaussianBlur::Coefficients</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="178" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1ad4e5e21985b62833eb4f0dbf94a7626d" prot="public" static="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::GaussianBlur::CoefficientsCount</definition>
+        <argsstring></argsstring>
+        <name>CoefficientsCount</name>
+        <qualifiedname>castor3d::GaussianBlur::CoefficientsCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="179" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1ab2202e518ace50ccc9e2d3330396db0b" prot="public" static="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::GaussianBlur::TextureSize</definition>
+        <argsstring></argsstring>
+        <name>TextureSize</name>
+        <qualifiedname>castor3d::GaussianBlur::TextureSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="180" column="37" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1af2348a695a12bfe432775545bf4838d3" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> constexpr uint32_t</type>
+        <definition>C3D_API constexpr uint32_t castor3d::GaussianBlur::MaxCoefficients</definition>
+        <argsstring></argsstring>
+        <name>MaxCoefficients</name>
+        <qualifiedname>castor3d::GaussianBlur::MaxCoefficients</qualifiedname>
+        <initializer>{ 60u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="181" column="35" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d95/a05274_1a0d61f67c0385ae9f43ef9e2afa136ae2" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewIdArray</type>
+        <definition>crg::ImageViewIdArray castor3d::GaussianBlur::m_sources</definition>
+        <argsstring></argsstring>
+        <name>m_sources</name>
+        <qualifiedname>castor3d::GaussianBlur::m_sources</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="192" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="192" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1ab30654eaf6f1313920c4e73b7f740379" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::GaussianBlur::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::GaussianBlur::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="193" column="21" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="193" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a34f37b843f71759abddfcba257c9256d" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::GaussianBlur::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::GaussianBlur::m_lastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="194" column="23" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a1913346dc6541fd391ac9c55610966c1" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GaussianBlur::m_prefix</definition>
+        <argsstring></argsstring>
+        <name>m_prefix</name>
+        <qualifiedname>castor3d::GaussianBlur::m_prefix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="195" column="16" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a4a3efe193043cbf7963ad5c8de9739e4" prot="private" static="no" mutable="no">
+        <type>VkExtent2D</type>
+        <definition>VkExtent2D castor3d::GaussianBlur::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::GaussianBlur::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="196" column="12" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="196" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a8d2b56bb09601c8fb3697b292ccbe1d0" prot="private" static="no" mutable="no">
+        <type>VkFormat</type>
+        <definition>VkFormat castor3d::GaussianBlur::m_format</definition>
+        <argsstring></argsstring>
+        <name>m_format</name>
+        <qualifiedname>castor3d::GaussianBlur::m_format</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="197" column="10" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a6253944f00d689355fa2b940e694b0b5" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::GaussianBlur::m_intermediateView</definition>
+        <argsstring></argsstring>
+        <name>m_intermediateView</name>
+        <qualifiedname>castor3d::GaussianBlur::m_intermediateView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="198" column="18" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a757e0e97a10cd6401ca91bbea7e69973" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d90/a02854" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d6/d9e/a05278" kindref="compound">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::GaussianBlur::m_blurUbo</definition>
+        <argsstring></argsstring>
+        <name>m_blurUbo</name>
+        <qualifiedname>castor3d::GaussianBlur::m_blurUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="199" column="22" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a203f1d1f86b229ade84bc64c486dbe78" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; float &gt;</type>
+        <definition>std::vector&lt; float &gt; castor3d::GaussianBlur::m_kernel</definition>
+        <argsstring></argsstring>
+        <name>m_kernel</name>
+        <qualifiedname>castor3d::GaussianBlur::m_kernel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="200" column="13" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a418fc9a816389c81981f3a078ed5af09" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dc8/a06378" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::GaussianBlur::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <qualifiedname>castor3d::GaussianBlur::m_vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="201" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a76c1c568e11817eab9b28da639250dec" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dc8/a06378" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::GaussianBlur::m_pixelShaderX</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShaderX</name>
+        <qualifiedname>castor3d::GaussianBlur::m_pixelShaderX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="202" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="202" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1abd15274041d5579021c9097389453a69" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dc8/a06378" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::GaussianBlur::m_pixelShaderY</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShaderY</name>
+        <qualifiedname>castor3d::GaussianBlur::m_pixelShaderY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="203" column="14" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="203" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a9288c9b20182e196f404d6a914fcce22" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::GaussianBlur::m_stagesX</definition>
+        <argsstring></argsstring>
+        <name>m_stagesX</name>
+        <qualifiedname>castor3d::GaussianBlur::m_stagesX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="204" column="43" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="204" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d95/a05274_1a6c304dadbb7637d55823a0b6fe1c92f0" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::GaussianBlur::m_stagesY</definition>
+        <argsstring></argsstring>
+        <name>m_stagesY</name>
+        <qualifiedname>castor3d::GaussianBlur::m_stagesY</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="205" column="43" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="205" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d95/a05274_1ab52e2e9f7684cfa1ee836f1861bc5831" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewIdArray const &amp;views, crg::ImageViewId const &amp;intermediateView, uint32_t kernelSize, crg::RunnablePass::IsEnabledCallback isEnabled=crg::RunnablePass::IsEnabledCallback([](){ return true;}))</argsstring>
+        <name>GaussianBlur</name>
+        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>views</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>intermediateView</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>kernelSize</declname>
+        </param>
+        <param>
+          <type>crg::RunnablePass::IsEnabledCallback</type>
+          <declname>isEnabled</declname>
+          <defval>crg::RunnablePass::IsEnabledCallback([](){ return true;})</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass category name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">views</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source and destination textures. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">intermediateView</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The view receiving the intermediate blur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">kernelSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The kernel coefficients count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isEnabled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The enabled status retrieval callback. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="54" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d95/a05274_1ac14cb732929920fc68bf463ca34ddd1a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewIdArray const &amp;views, uint32_t kernelSize, crg::RunnablePass::IsEnabledCallback isEnabled=crg::RunnablePass::IsEnabledCallback([]() { return true;}))</argsstring>
+        <name>GaussianBlur</name>
+        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>views</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>kernelSize</declname>
+        </param>
+        <param>
+          <type>crg::RunnablePass::IsEnabledCallback</type>
+          <declname>isEnabled</declname>
+          <defval>crg::RunnablePass::IsEnabledCallback([]() { return true;})</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass category name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">views</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source and destination textures. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">kernelSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The kernel coefficients count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isEnabled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The enabled status retrieval callback. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="85" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d95/a05274_1a3d25d5c3283f9935ca5133a52ab20271" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewId const &amp;view, uint32_t kernelSize, crg::RunnablePass::IsEnabledCallback isEnabled=crg::RunnablePass::IsEnabledCallback([]() { return true;}))</argsstring>
+        <name>GaussianBlur</name>
+        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>kernelSize</declname>
+        </param>
+        <param>
+          <type>crg::RunnablePass::IsEnabledCallback</type>
+          <declname>isEnabled</declname>
+          <defval>crg::RunnablePass::IsEnabledCallback([]() { return true;})</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass category name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source and destination texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">kernelSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The kernel coefficients count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isEnabled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The enabled status retrieval callback. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="115" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d95/a05274_1a410f9506d034cb99e2a34d466ecd057b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::GaussianBlur::GaussianBlur</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePass const &amp;previousPass, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;prefix, crg::ImageViewId const &amp;view, crg::ImageViewId const &amp;intermediateView, uint32_t kernelSize, crg::RunnablePass::IsEnabledCallback isEnabled=crg::RunnablePass::IsEnabledCallback([]() { return true;}))</argsstring>
+        <name>GaussianBlur</name>
+        <qualifiedname>castor3d::GaussianBlur::GaussianBlur</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>prefix</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>intermediateView</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>kernelSize</declname>
+        </param>
+        <param>
+          <type>crg::RunnablePass::IsEnabledCallback</type>
+          <declname>isEnabled</declname>
+          <defval>crg::RunnablePass::IsEnabledCallback([]() { return true;})</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass category name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">prefix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name&apos;s prefix. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">view</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source and destination texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">intermediateView</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The view receiving the intermediate blur. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">kernelSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The kernel coefficients count. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isEnabled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The enabled status retrieval callback. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="147" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d95/a05274_1af2e216aa9efeb3c908b1545ed2579a98" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GaussianBlur::accept</definition>
+        <argsstring>(PipelineVisitorBase &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::GaussianBlur::accept</qualifiedname>
+        <param>
+          <type><ref refid="dc/d50/a04474" kindref="compound">PipelineVisitorBase</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function.     </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor.     </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Passes/GaussianBlur.hpp" line="159" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::GaussianBlur</label>
+        <link refid="dd/d95/a05274"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::GaussianBlur</label>
+        <link refid="dd/d95/a05274"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/GaussianBlur.hpp" line="26" column="1" bodyfile="Render/Passes/GaussianBlur.hpp" bodystart="28" bodyend="206"/>
+    <listofallmembers>
+      <member refid="dd/d95/a05274_1af2e216aa9efeb3c908b1545ed2579a98" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>accept</name></member>
+      <member refid="dd/d95/a05274_1a3ea0db3cb529a51262383c2989e1db5b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>Coefficients</name></member>
+      <member refid="dd/d95/a05274_1ad4e5e21985b62833eb4f0dbf94a7626d" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>CoefficientsCount</name></member>
+      <member refid="dd/d95/a05274_1ad4e5e92fc3459d70640cdc903ecc179b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>Config</name></member>
+      <member refid="dd/d95/a05274_1ab52e2e9f7684cfa1ee836f1861bc5831" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
+      <member refid="dd/d95/a05274_1ac14cb732929920fc68bf463ca34ddd1a" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
+      <member refid="dd/d95/a05274_1a3d25d5c3283f9935ca5133a52ab20271" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
+      <member refid="dd/d95/a05274_1a410f9506d034cb99e2a34d466ecd057b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>GaussianBlur</name></member>
+      <member refid="dd/d95/a05274_1a68f253e5790c042fdd8e5a00746a68a6" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>getLastPass</name></member>
+      <member refid="dd/d95/a05274_1a757e0e97a10cd6401ca91bbea7e69973" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_blurUbo</name></member>
+      <member refid="dd/d95/a05274_1ab30654eaf6f1313920c4e73b7f740379" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_device</name></member>
+      <member refid="dd/d95/a05274_1a8d2b56bb09601c8fb3697b292ccbe1d0" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_format</name></member>
+      <member refid="dd/d95/a05274_1a6253944f00d689355fa2b940e694b0b5" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_intermediateView</name></member>
+      <member refid="dd/d95/a05274_1a203f1d1f86b229ade84bc64c486dbe78" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_kernel</name></member>
+      <member refid="dd/d95/a05274_1a34f37b843f71759abddfcba257c9256d" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_lastPass</name></member>
+      <member refid="dd/d95/a05274_1a76c1c568e11817eab9b28da639250dec" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_pixelShaderX</name></member>
+      <member refid="dd/d95/a05274_1abd15274041d5579021c9097389453a69" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_pixelShaderY</name></member>
+      <member refid="dd/d95/a05274_1a1913346dc6541fd391ac9c55610966c1" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_prefix</name></member>
+      <member refid="dd/d95/a05274_1a4a3efe193043cbf7963ad5c8de9739e4" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_size</name></member>
+      <member refid="dd/d95/a05274_1a0d61f67c0385ae9f43ef9e2afa136ae2" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_sources</name></member>
+      <member refid="dd/d95/a05274_1a9288c9b20182e196f404d6a914fcce22" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_stagesX</name></member>
+      <member refid="dd/d95/a05274_1a6c304dadbb7637d55823a0b6fe1c92f0" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_stagesY</name></member>
+      <member refid="dd/d95/a05274_1a418fc9a816389c81981f3a078ed5af09" prot="private" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>m_vertexShader</name></member>
+      <member refid="dd/d95/a05274_1af2348a695a12bfe432775545bf4838d3" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>MaxCoefficients</name></member>
+      <member refid="dd/d95/a05274_1ab2202e518ace50ccc9e2d3330396db0b" prot="public" virt="non-virtual"><scope>castor3d::GaussianBlur</scope><name>TextureSize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

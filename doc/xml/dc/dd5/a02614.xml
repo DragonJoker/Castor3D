@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dc/dd5/a02614" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; MeshMorphTarget &gt;</compoundname>
+    <includes local="no">BinaryMeshMorphTarget.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/dd5/a02614_1a720e33c2bcb0087a876100a60b8b97f9" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; MeshMorphTarget &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; MeshMorphTarget &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="d5/da6/a01698_1a742783d4e4b7354fac3e375ae107414da1a0c0435fc63ab7b463046e3ca1ff3c2" kindref="member">ChunkType::eMeshMorphTarget</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryMeshMorphTarget.hpp" line="25" column="24" bodyfile="Binary/BinaryMeshMorphTarget.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="d5/dba/a04510" kindref="compound">MeshMorphTarget</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Binary/BinaryMeshMorphTarget.hpp" line="23" column="1" bodyfile="Binary/BinaryMeshMorphTarget.hpp" bodystart="24" bodyend="26"/>
+    <listofallmembers>
+      <member refid="dc/dd5/a02614_1a720e33c2bcb0087a876100a60b8b97f9" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; MeshMorphTarget &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

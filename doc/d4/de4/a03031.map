@@ -1,4 +1,10 @@
-<map id="castor3d::MaterialImporter" name="castor3d::MaterialImporter">
-<area shape="rect" id="node1" title=" " alt="" coords="12,80,185,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,32"/>
+<map id="castor3d::ObjectCacheT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; SceneNode, castor::String, SceneNodeCacheTraits &gt;">
+<area shape="rect" id="node1" title="SceneNode cache." alt="" coords="1216,61,1407,115"/>
+<area shape="rect" id="node2" href="$d2/daa/a02997.html" title=" " alt="" coords="968,61,1167,115"/>
+<area shape="rect" id="node3" title=" " alt="" coords="228,174,411,199"/>
+<area shape="rect" id="node7" href="$d2/daa/a02997.html" title=" " alt="" coords="529,115,715,155"/>
+<area shape="rect" id="node4" title=" " alt="" coords="523,35,721,90"/>
+<area shape="rect" id="node5" href="$d4/d44/a03065.html" title=" " alt="" coords="259,29,379,54"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,29,176,54"/>
+<area shape="rect" id="node8" title=" " alt="" coords="225,105,413,145"/>
 </map>

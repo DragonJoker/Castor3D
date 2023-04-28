@@ -1,13 +1,7 @@
-<map id="castor3d::GpuBufferOffsetT&lt; DataT &gt;" name="castor3d::GpuBufferOffsetT&lt; DataT &gt;">
-<area shape="rect" id="node1" title="An offset and range of a GpuBuffer." alt="" coords="5,329,176,370"/>
-<area shape="rect" id="node2" href="$d5/d95/a02720.html" title=" " alt="" coords="471,18,642,59"/>
-<area shape="rect" id="node3" href="$d5/d95/a02720.html" title=" " alt="" coords="455,84,658,140"/>
-<area shape="rect" id="node4" href="$d5/d95/a02720.html" title=" " alt="" coords="453,165,661,206"/>
-<area shape="rect" id="node5" href="$d5/d95/a02720.html" title=" " alt="" coords="471,230,642,271"/>
-<area shape="rect" id="node6" href="$d5/d95/a02720.html" title=" " alt="" coords="471,295,642,337"/>
-<area shape="rect" id="node7" href="$d5/d95/a02720.html" title=" " alt="" coords="471,361,642,402"/>
-<area shape="rect" id="node8" href="$d5/d95/a02720.html" title=" " alt="" coords="453,426,660,467"/>
-<area shape="rect" id="node9" href="$d5/d95/a02720.html" title=" " alt="" coords="471,491,642,533"/>
-<area shape="rect" id="node10" href="$d5/d95/a02720.html" title=" " alt="" coords="413,557,700,598"/>
-<area shape="rect" id="node11" href="$d5/d95/a02720.html" title=" " alt="" coords="450,623,663,679"/>
+<map id="castor3d::BinaryParser&lt; Skeleton &gt;" name="castor3d::BinaryParser&lt; Skeleton &gt;">
+<area shape="rect" id="node1" title="Animable binary loader." alt="" coords="147,285,301,325"/>
+<area shape="rect" id="node2" href="$db/d0d/a02653.html" title=" " alt="" coords="131,196,317,236"/>
+<area shape="rect" id="node3" href="$db/d6a/a02613.html" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="node5" href="$db/d0d/a02653.html" title="Binary data chunk reader base class." alt="" coords="131,93,317,133"/>
+<area shape="rect" id="node4" href="$de/dc5/a04521.html" title=" " alt="" coords="218,5,342,31"/>
 </map>

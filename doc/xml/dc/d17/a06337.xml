@@ -1,0 +1,543 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dc/d17/a06337" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LightBuffer</compoundname>
+    <includes local="no">LightBuffer.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dc/d17/a06337_1a192723127c7f4bd9ed67fca4cb0df901" prot="public" static="no">
+        <type>castor::ArrayView&lt; castor::Point4f &gt;</type>
+        <definition>using castor3d::LightBuffer::LightsData =  castor::ArrayView&lt; castor::Point4f &gt;</definition>
+        <argsstring></argsstring>
+        <name>LightsData</name>
+        <qualifiedname>castor3d::LightBuffer::LightsData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="26" column="1" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d17/a06337_1a7630d1748c52f9b5271ca20234e03918" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dee/a06325" kindref="compound">ShaderBuffer</ref></type>
+        <definition>ShaderBuffer castor3d::LightBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::LightBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="139" column="14" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a06337_1ae3aa5adb67e912422c3c2fcadbc93bbf" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1aeff34048b6a4d55dc9fa0df40b5dd8e7" kindref="member">LightsMap</ref></type>
+        <definition>LightsMap castor3d::LightBuffer::m_typeSortedLights</definition>
+        <argsstring></argsstring>
+        <name>m_typeSortedLights</name>
+        <qualifiedname>castor3d::LightBuffer::m_typeSortedLights</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="140" column="11" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a06337_1aeda678b8f890184ba2479daa141f6760" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d9/d20/a05977" kindref="compound">Light</ref> * &gt;</type>
+        <definition>std::vector&lt; Light * &gt; castor3d::LightBuffer::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::LightBuffer::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="141" column="13" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a06337_1a622331bc1605217984e59b1a5b05a851" prot="private" static="no" mutable="no">
+        <type>std::map&lt; <ref refid="d9/d20/a05977" kindref="compound">Light</ref> *, <ref refid="d3/d5e/a01725_1a099e189b5c7efa89e27d48091a4d746a" kindref="member">OnLightChangedConnection</ref> &gt;</type>
+        <definition>std::map&lt; Light *, OnLightChangedConnection &gt; castor3d::LightBuffer::m_connections</definition>
+        <argsstring></argsstring>
+        <name>m_connections</name>
+        <qualifiedname>castor3d::LightBuffer::m_connections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="142" column="10" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a06337_1aed9d3c7149c7f035ecc03bef9b800a17" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; uint32_t &gt;</type>
+        <definition>std::vector&lt; uint32_t &gt; castor3d::LightBuffer::m_lightSizes</definition>
+        <argsstring></argsstring>
+        <name>m_lightSizes</name>
+        <qualifiedname>castor3d::LightBuffer::m_lightSizes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="143" column="13" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a06337_1aaf0178c8a83ed8fae4277a03cce47699" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d17/a06337_1a192723127c7f4bd9ed67fca4cb0df901" kindref="member">LightsData</ref></type>
+        <definition>LightsData castor3d::LightBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::LightBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="144" column="12" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a06337_1abfc900de3873a9799a4c3ee6aa5ae506" prot="private" static="no" mutable="yes">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::LightBuffer::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::LightBuffer::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="145" column="20" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="145" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d17/a06337_1a3d8f4b311863f9dd49abc0a61f75cdf4" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::LightBuffer::m_wasDirty</definition>
+        <argsstring></argsstring>
+        <name>m_wasDirty</name>
+        <qualifiedname>castor3d::LightBuffer::m_wasDirty</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="146" column="6" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d17/a06337_1a1d3dd33e8b837cfb5bc6cb1a1f6c5029" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LightBuffer::LightBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, uint32_t count)</argsstring>
+        <name>LightBuffer</name>
+        <qualifiedname>castor3d::LightBuffer::LightBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The max passes count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="41" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a04c7dc505c6b18da4066dcecca49d66c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightBuffer::addLight</definition>
+        <argsstring>(Light &amp;light)</argsstring>
+        <name>addLight</name>
+        <qualifiedname>castor3d::LightBuffer::addLight</qualifiedname>
+        <param>
+          <type><ref refid="d9/d20/a05977" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+<para>Adds a light source to the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="52" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a83ebc94ef5e293b871155c7a6d342ff0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightBuffer::removeLight</definition>
+        <argsstring>(Light &amp;light)</argsstring>
+        <name>removeLight</name>
+        <qualifiedname>castor3d::LightBuffer::removeLight</qualifiedname>
+        <param>
+          <type><ref refid="d9/d20/a05977" kindref="compound">Light</ref> &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+<para>Removes a light source from the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">light</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The light source. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="61" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a1cf304b6f9cf08a27c160b34f0838c24" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightBuffer::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::LightBuffer::update</qualifiedname>
+        <param>
+          <type><ref refid="d5/de0/a05541" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the buffer CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="70" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a2f3d4b9e3334e7739b8b5721fb0ff012" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightBuffer::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;commandBuffer)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::LightBuffer::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Uploads the buffer to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">commandBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the upload commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="79" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1aa56bc2d140bdc239937373dcb7f9816d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::LightBuffer::createLayoutBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::LightBuffer::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set layout binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="86" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1abce17fc73ec8125c7b0c3b02852bf39c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightBuffer::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::LightBuffer::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates a frame pass binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="93" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a4d0b5a3df111bece682b369c33490c2b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::LightBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::LightBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for this buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="100" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a5541937800b577aff50455cd92811283" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::LightBuffer::getSingleBinding</definition>
+        <argsstring>(uint32_t binding, VkDeviceSize offset, VkDeviceSize size) const</argsstring>
+        <name>getSingleBinding</name>
+        <qualifiedname>castor3d::LightBuffer::getSingleBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for this buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="107" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a96de013f726440335de9102d70bdebea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LightBuffer::createBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</argsstring>
+        <name>createBinding</name>
+        <qualifiedname>castor3d::LightBuffer::createBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set binding at given point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptorSet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set that receives the binding. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set layout binding. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="120" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a629c503482fc13878ce7321f2c3f91c8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor3d::LightBuffer::getPtr</definition>
+        <argsstring>()</argsstring>
+        <name>getPtr</name>
+        <qualifiedname>castor3d::LightBuffer::getPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="123" column="10" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="123" bodyend="126"/>
+        <references refid="dd/dee/a06325_1a4fcf4ffabfc41ab525819285b87fdbfe" compoundref="de/d2c/a01553" startline="133" endline="136">castor3d::ShaderBuffer::getPtr</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a0c6fa4f311463c34ef0edf72aeb37e72" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>LightsArray</type>
+        <definition>LightsArray castor3d::LightBuffer::getLights</definition>
+        <argsstring>(LightType type) const</argsstring>
+        <name>getLights</name>
+        <qualifiedname>castor3d::LightBuffer::getLights</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="128" column="13" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="128" bodyend="131"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dc/d17/a06337_1a1e096e71a68b545566480477d9f1b92e" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::LightBuffer::doGetOffset</definition>
+        <argsstring>(Light const &amp;light) const</argsstring>
+        <name>doGetOffset</name>
+        <qualifiedname>castor3d::LightBuffer::doGetOffset</qualifiedname>
+        <param>
+          <type><ref refid="d9/d20/a05977" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="134" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d17/a06337_1a5038510b2d935c18e36e0f63046b032d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LightBuffer::doMarkNextDirty</definition>
+        <argsstring>(LightType type, uint32_t index)</argsstring>
+        <name>doMarkNextDirty</name>
+        <qualifiedname>castor3d::LightBuffer::doMarkNextDirty</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a381718aa9accc88c20afd97d76c30ed8" kindref="member">LightType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="135" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/LightBuffer.hpp" line="23" column="1" bodyfile="Shader/ShaderBuffers/LightBuffer.hpp" bodystart="24" bodyend="147"/>
+    <listofallmembers>
+      <member refid="dc/d17/a06337_1a04c7dc505c6b18da4066dcecca49d66c" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>addLight</name></member>
+      <member refid="dc/d17/a06337_1a96de013f726440335de9102d70bdebea" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>createBinding</name></member>
+      <member refid="dc/d17/a06337_1aa56bc2d140bdc239937373dcb7f9816d" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="dc/d17/a06337_1abce17fc73ec8125c7b0c3b02852bf39c" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>createPassBinding</name></member>
+      <member refid="dc/d17/a06337_1a1e096e71a68b545566480477d9f1b92e" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>doGetOffset</name></member>
+      <member refid="dc/d17/a06337_1a5038510b2d935c18e36e0f63046b032d" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>doMarkNextDirty</name></member>
+      <member refid="dc/d17/a06337_1a4d0b5a3df111bece682b369c33490c2b" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>getBinding</name></member>
+      <member refid="dc/d17/a06337_1a0c6fa4f311463c34ef0edf72aeb37e72" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>getLights</name></member>
+      <member refid="dc/d17/a06337_1a629c503482fc13878ce7321f2c3f91c8" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>getPtr</name></member>
+      <member refid="dc/d17/a06337_1a5541937800b577aff50455cd92811283" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>getSingleBinding</name></member>
+      <member refid="dc/d17/a06337_1a1d3dd33e8b837cfb5bc6cb1a1f6c5029" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>LightBuffer</name></member>
+      <member refid="dc/d17/a06337_1a192723127c7f4bd9ed67fca4cb0df901" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>LightsData</name></member>
+      <member refid="dc/d17/a06337_1a7630d1748c52f9b5271ca20234e03918" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>m_buffer</name></member>
+      <member refid="dc/d17/a06337_1a622331bc1605217984e59b1a5b05a851" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>m_connections</name></member>
+      <member refid="dc/d17/a06337_1aaf0178c8a83ed8fae4277a03cce47699" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>m_data</name></member>
+      <member refid="dc/d17/a06337_1aeda678b8f890184ba2479daa141f6760" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>m_dirty</name></member>
+      <member refid="dc/d17/a06337_1aed9d3c7149c7f035ecc03bef9b800a17" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>m_lightSizes</name></member>
+      <member refid="dc/d17/a06337_1abfc900de3873a9799a4c3ee6aa5ae506" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>m_mutex</name></member>
+      <member refid="dc/d17/a06337_1ae3aa5adb67e912422c3c2fcadbc93bbf" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>m_typeSortedLights</name></member>
+      <member refid="dc/d17/a06337_1a3d8f4b311863f9dd49abc0a61f75cdf4" prot="private" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>m_wasDirty</name></member>
+      <member refid="dc/d17/a06337_1a83ebc94ef5e293b871155c7a6d342ff0" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>removeLight</name></member>
+      <member refid="dc/d17/a06337_1a1cf304b6f9cf08a27c160b34f0838c24" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>update</name></member>
+      <member refid="dc/d17/a06337_1a2f3d4b9e3334e7739b8b5721fb0ff012" prot="public" virt="non-virtual"><scope>castor3d::LightBuffer</scope><name>upload</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

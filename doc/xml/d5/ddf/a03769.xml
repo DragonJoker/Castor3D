@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/ddf/a03769" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::HeightMapComponent</compoundname>
+    <basecompoundref refid="d6/ddb/a04073" prot="public" virt="non-virtual">castor3d::PassMapComponent</basecompoundref>
+    <includes local="no">HeightMapComponent.hpp</includes>
+    <innerclass refid="dc/df3/a03773" prot="public">castor3d::HeightMapComponent::ComponentsShader</innerclass>
+    <innerclass refid="d3/d2f/a03777" prot="public">castor3d::HeightMapComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/ddf/a03769_1a105da62aed508cf21f2fa6563be37c78" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d3/d5e/a01725_1a0ab3a08edb07cc34b4574bc3799960d6" kindref="member">TextureFlag</ref></type>
+        <definition>constexpr TextureFlag castor3d::HeightMapComponent::Height</definition>
+        <argsstring></argsstring>
+        <name>Height</name>
+        <qualifiedname>castor3d::HeightMapComponent::Height</qualifiedname>
+        <initializer>= <ref refid="d3/d5e/a01725_1a0ab3a08edb07cc34b4574bc3799960d6" kindref="member">TextureFlag</ref>( 0x01u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="17" column="30" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="dc/df3/a03773_1ab6d646afc26578f9834ee9f8d4d7bd67" compoundref="dd/de6/a00548" startline="66" endline="69">castor3d::HeightMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d3/d2f/a03777_1ac8de09a567a0991625bd52ba7dd34cfe" compoundref="dd/de6/a00548" startline="136" endline="139">castor3d::HeightMapComponent::Plugin::getTextureFlags</referencedby>
+        <referencedby refid="d3/d2f/a03777_1ad4290d4c0f443e3d31c8f1d4c708dddd" compoundref="dd/de6/a00548" startline="148" endline="154">castor3d::HeightMapComponent::Plugin::getTextureFlagsName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/ddf/a03769_1ad32488946f4e3ace99513df59f4bd6bf" prot="public" static="yes" mutable="no">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::HeightMapComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::HeightMapComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="170" column="37" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/ddf/a03769_1a5c1106f7e85346317c5f0272272221d0" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::HeightMapComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::HeightMapComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d7/dfc/a04061" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="163" column="32" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="163" bodyend="166"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/ddf/a03769_1a719f0cd4923b2a23477d2ed971ef1757" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::HeightMapComponent::HeightMapComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>HeightMapComponent</name>
+        <qualifiedname>castor3d::HeightMapComponent::HeightMapComponent</qualifiedname>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="168" column="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/ddf/a03769_1af29754b1dfb7308c00c18304b543b8a9" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::HeightMapComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::HeightMapComponent::doClone</qualifiedname>
+        <reimplements refid="dc/d32/a04057_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="173" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/ddf/a03769_1ac5cb25cc239b4b51facee8a520400e75" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightMapComponent::doFillConfig</definition>
+        <argsstring>(TextureConfiguration &amp;configuration, PassVisitorBase &amp;vis) const override</argsstring>
+        <name>doFillConfig</name>
+        <qualifiedname>castor3d::HeightMapComponent::doFillConfig</qualifiedname>
+        <reimplements refid="d6/ddb/a04073_1a0a8dd2d333ff8b636230b815f79cab58">doFillConfig</reimplements>
+        <param>
+          <type><ref refid="dc/d0d/a04153" kindref="compound">TextureConfiguration</ref> &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d44/a04097" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="174" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::HeightMapComponent</label>
+        <link refid="d5/ddf/a03769"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="dc/d32/a04057"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponent</label>
+        <link refid="d6/ddb/a04073"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::HeightMapComponent</label>
+        <link refid="d5/ddf/a03769"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="dc/d32/a04057"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d9/d35/a04053"/>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponent</label>
+        <link refid="d6/ddb/a04073"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="db/dfa/a04049"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d8/de8/a04041"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="14" column="1" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="16" bodyend="176"/>
+    <listofallmembers>
+      <member refid="dc/d32/a04057_1a4e315225c20ace9097adfd65e8413e4f" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>accept</name></member>
+      <member refid="dc/d32/a04057_1a2847d512604b766b3a315e4c4e9dc0ea" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>areNormalsInverted</name></member>
+      <member refid="dc/d32/a04057_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>clone</name></member>
+      <member refid="d5/ddf/a03769_1a5c1106f7e85346317c5f0272272221d0" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>createPlugin</name></member>
+      <member refid="d5/ddf/a03769_1af29754b1dfb7308c00c18304b543b8a9" prot="private" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>doClone</name></member>
+      <member refid="d5/ddf/a03769_1ac5cb25cc239b4b51facee8a520400e75" prot="private" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>doFillConfig</name></member>
+      <member refid="dc/d32/a04057_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>fillBuffer</name></member>
+      <member refid="d6/ddb/a04073_1af6575701314218be729f8ba959e5c2ae" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>fillChannel</name></member>
+      <member refid="dc/d32/a04057_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual" ambiguityscope="castor3d::PassComponent::"><scope>castor3d::HeightMapComponent</scope><name>fillChannel</name></member>
+      <member refid="d6/ddb/a04073_1a677bc27d9d35fc36c18189826ff2b419" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>fillConfig</name></member>
+      <member refid="dc/d32/a04057_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>getColour</name></member>
+      <member refid="dc/d32/a04057_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>getDependencies</name></member>
+      <member refid="dc/d32/a04057_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>getId</name></member>
+      <member refid="dc/d32/a04057_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>getPassFlags</name></member>
+      <member refid="dc/d32/a04057_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>getPlugin</name></member>
+      <member refid="d6/ddb/a04073_1ac98f2807737ea6c3cf305ffb914e7eff" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>getTextureFlags</name></member>
+      <member refid="dc/d32/a04057_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>getType</name></member>
+      <member refid="dc/d32/a04057_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>hasColour</name></member>
+      <member refid="d5/ddf/a03769_1a105da62aed508cf21f2fa6563be37c78" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>Height</name></member>
+      <member refid="d5/ddf/a03769_1a719f0cd4923b2a23477d2ed971ef1757" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>HeightMapComponent</name></member>
+      <member refid="dc/d32/a04057_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>m_dependencies</name></member>
+      <member refid="dc/d32/a04057_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>m_dirty</name></member>
+      <member refid="dc/d32/a04057_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>m_id</name></member>
+      <member refid="dc/d32/a04057_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>m_materialShader</name></member>
+      <member refid="dc/d32/a04057_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>m_plugin</name></member>
+      <member refid="dc/d32/a04057_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>m_type</name></member>
+      <member refid="dc/d32/a04057_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>PassComponent</name></member>
+      <member refid="d6/ddb/a04073_1a0a24dbd2464fe207df6d1033924dc50e" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>PassMapComponent</name></member>
+      <member refid="dc/d32/a04057_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>setColour</name></member>
+      <member refid="d5/ddf/a03769_1ad32488946f4e3ace99513df59f4bd6bf" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>TypeName</name></member>
+      <member refid="dc/d32/a04057_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>update</name></member>
+      <member refid="dc/d32/a04057_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent</scope><name>writeText</name></member>
+      <member refid="dc/d32/a04057_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

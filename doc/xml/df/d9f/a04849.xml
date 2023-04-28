@@ -1,0 +1,155 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/d9f/a04849" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayWords</compoundname>
+    <includes local="no">OverlayModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d9f/a04849_1abad61228fa352271db38ef319da340e7" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayWords::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>castor3d::OverlayWords::count</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="333" column="10" bodyfile="Overlay/OverlayModule.hpp" bodystart="333" bodyend="-1"/>
+        <referencedby refid="df/d9f/a04849_1a69884f0bec966c2c54fc4f3220eb2382" compoundref="d5/dd3/a00902" startline="337" endline="340">getNext</referencedby>
+        <referencedby refid="d3/d24/a04873_1aeb6a9367dbde9fb516b4a13ddde2bffe" compoundref="d7/d12/a00911" startline="170" endline="173">castor3d::TextOverlay::getWordCount</referencedby>
+        <referencedby refid="df/d9f/a04849_1a98f32fb640c5e8ad8e854cb7137a6cc0" compoundref="d5/dd3/a00902" startline="342" endline="345">words</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/d9f/a04849_1a6c2420d4f2d0ad126bb0b00b347752f3" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayWords::pad</definition>
+        <argsstring></argsstring>
+        <name>pad</name>
+        <qualifiedname>castor3d::OverlayWords::pad</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="334" column="10" bodyfile="Overlay/OverlayModule.hpp" bodystart="334" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d9f/a04849_1a2d0ded82625fa61b8539f4916ea7e6df" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d6/d2e/a04845" kindref="compound">TextWord</ref>, <ref refid="d3/d5e/a01725_1a11eb09687f64450cf747737f35d83d03" kindref="member">MaxTextsContsPerOverlay</ref> &gt;</type>
+        <definition>std::array&lt; TextWord, MaxTextsContsPerOverlay &gt; castor3d::OverlayWords::elems</definition>
+        <argsstring></argsstring>
+        <name>elems</name>
+        <qualifiedname>castor3d::OverlayWords::elems</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="335" column="12" bodyfile="Overlay/OverlayModule.hpp" bodystart="335" bodyend="-1"/>
+        <referencedby refid="df/d9f/a04849_1a69884f0bec966c2c54fc4f3220eb2382" compoundref="d5/dd3/a00902" startline="337" endline="340">getNext</referencedby>
+        <referencedby refid="df/d9f/a04849_1a98f32fb640c5e8ad8e854cb7137a6cc0" compoundref="d5/dd3/a00902" startline="342" endline="345">words</referencedby>
+        <referencedby refid="d6/ddb/a04853_1ac1ec746938e9b15268787ac6cb45f8c3" compoundref="d5/dd3/a00902" startline="385" endline="388">castor3d::TextLine::words</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d9f/a04849_1a69884f0bec966c2c54fc4f3220eb2382" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::OverlayWords::getNext</definition>
+        <argsstring>()</argsstring>
+        <name>getNext</name>
+        <qualifiedname>castor3d::OverlayWords::getNext</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="337" column="7" bodyfile="Overlay/OverlayModule.hpp" bodystart="337" bodyend="340"/>
+        <references refid="df/d9f/a04849_1abad61228fa352271db38ef319da340e7" compoundref="d5/dd3/a00902" startline="333">count</references>
+        <references refid="df/d9f/a04849_1a2d0ded82625fa61b8539f4916ea7e6df" compoundref="d5/dd3/a00902" startline="335">elems</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d9f/a04849_1a98f32fb640c5e8ad8e854cb7137a6cc0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::OverlayWords::words</definition>
+        <argsstring>() const</argsstring>
+        <name>words</name>
+        <qualifiedname>castor3d::OverlayWords::words</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="342" column="6" bodyfile="Overlay/OverlayModule.hpp" bodystart="342" bodyend="345"/>
+        <references refid="df/d9f/a04849_1abad61228fa352271db38ef319da340e7" compoundref="d5/dd3/a00902" startline="333">count</references>
+        <references refid="df/d9f/a04849_1a2d0ded82625fa61b8539f4916ea7e6df" compoundref="d5/dd3/a00902" startline="335">elems</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d9f/a04849_1a4af9e4b663226aa442129883d9a43ac8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::OverlayWords::words</definition>
+        <argsstring>()</argsstring>
+        <name>words</name>
+        <qualifiedname>castor3d::OverlayWords::words</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="347" column="6" bodyfile="Overlay/OverlayModule.hpp" bodystart="347" bodyend="350"/>
+        <references refid="df/d9f/a04849_1abad61228fa352271db38ef319da340e7" compoundref="d5/dd3/a00902" startline="333">count</references>
+        <references refid="df/d9f/a04849_1a2d0ded82625fa61b8539f4916ea7e6df" compoundref="d5/dd3/a00902" startline="335">elems</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Contains the words forming the overlay. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; castor3d::TextWord, MaxTextsContsPerOverlay &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextWord, MaxTextsContsPerOverlay &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayWords</label>
+        <link refid="df/d9f/a04849"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>elems</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::TextWord</label>
+        <link refid="d6/d2e/a04845"/>
+      </node>
+      <node id="4">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/OverlayModule.hpp" line="331" column="1" bodyfile="Overlay/OverlayModule.hpp" bodystart="332" bodyend="351"/>
+    <listofallmembers>
+      <member refid="df/d9f/a04849_1abad61228fa352271db38ef319da340e7" prot="public" virt="non-virtual"><scope>castor3d::OverlayWords</scope><name>count</name></member>
+      <member refid="df/d9f/a04849_1a2d0ded82625fa61b8539f4916ea7e6df" prot="public" virt="non-virtual"><scope>castor3d::OverlayWords</scope><name>elems</name></member>
+      <member refid="df/d9f/a04849_1a69884f0bec966c2c54fc4f3220eb2382" prot="public" virt="non-virtual"><scope>castor3d::OverlayWords</scope><name>getNext</name></member>
+      <member refid="df/d9f/a04849_1a6c2420d4f2d0ad126bb0b00b347752f3" prot="public" virt="non-virtual"><scope>castor3d::OverlayWords</scope><name>pad</name></member>
+      <member refid="df/d9f/a04849_1a98f32fb640c5e8ad8e854cb7137a6cc0" prot="public" virt="non-virtual"><scope>castor3d::OverlayWords</scope><name>words</name></member>
+      <member refid="df/d9f/a04849_1a4af9e4b663226aa442129883d9a43ac8" prot="public" virt="non-virtual"><scope>castor3d::OverlayWords</scope><name>words</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

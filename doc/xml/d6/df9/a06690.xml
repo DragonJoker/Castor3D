@@ -1,0 +1,263 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d6/df9/a06690" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SceneData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_SceneData&quot;, ast::type::MemoryLayout::eStd140, sdw::Vec3Field&lt; &quot;ambientLight&quot; &gt;, sdw::UInt32Field&lt; &quot;fogType&quot; &gt;, sdw::Vec3Field&lt; &quot;backgroundColour&quot; &gt;, sdw::FloatField&lt; &quot;fogDensity&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">SceneUbo.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="d6/df9/a06690_1a9bb6aa488de293114ff892ef18876df3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct</type>
+        <definition>friend struct BillboardData</definition>
+        <argsstring></argsstring>
+        <name>BillboardData</name>
+        <qualifiedname>castor3d::shader::SceneData::BillboardData</qualifiedname>
+        <param>
+          <type><ref refid="d4/d2f/a06606" kindref="compound">BillboardData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="27" column="15" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d6/df9/a06690_1a2bf8221f37d85662fe58e1093d087032" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Fog</definition>
+        <argsstring></argsstring>
+        <name>Fog</name>
+        <qualifiedname>castor3d::shader::SceneData::Fog</qualifiedname>
+        <param>
+          <type><ref refid="d3/dc1/a06422" kindref="compound">Fog</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="28" column="14" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="d6/df9/a06690_1a19ee4d0654cd9bcc717206e25d4823a4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class CommonFog</definition>
+        <argsstring></argsstring>
+        <name>CommonFog</name>
+        <qualifiedname>castor3d::shader::SceneData::CommonFog</qualifiedname>
+        <param>
+          <type>CommonFog</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="29" column="14" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/df9/a06690_1afde88a42f68e514ac64311e116d51c9f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SceneData::SceneData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SceneData</name>
+        <qualifiedname>castor3d::shader::SceneData::SceneData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="31" column="1" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="31" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df9/a06690_1a7cfe258693a5cbf883cc617b8633a1f6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::SceneData::getBackgroundColour</definition>
+        <argsstring>(Utils &amp;utils, sdw::Float const gamma) const</argsstring>
+        <name>getBackgroundColour</name>
+        <qualifiedname>castor3d::shader::SceneData::getBackgroundColour</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Float const</type>
+          <declname>gamma</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="38" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df9/a06690_1a0aea0b3ea49c4c74a97f22250d3bf68a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::SceneData::getBackgroundColour</definition>
+        <argsstring>(HdrConfigData const &amp;hdrConfigData) const</argsstring>
+        <name>getBackgroundColour</name>
+        <qualifiedname>castor3d::shader::SceneData::getBackgroundColour</qualifiedname>
+        <param>
+          <type><ref refid="db/d03/a06618" kindref="compound">HdrConfigData</ref> const &amp;</type>
+          <declname>hdrConfigData</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="40" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df9/a06690_1ad69041f352ac053411af2848c5d6e208" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::SceneData::computeAccumulation</definition>
+        <argsstring>(Utils &amp;utils, CameraData const &amp;camera, sdw::Float const &amp;depth, sdw::Vec3 const &amp;colour, sdw::Float const &amp;alpha, sdw::UInt const &amp;accumulationOperator) const</argsstring>
+        <name>computeAccumulation</name>
+        <qualifiedname>castor3d::shader::SceneData::computeAccumulation</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type><ref refid="da/dd2/a06610" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alpha</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>accumulationOperator</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="41" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df9/a06690_1a6fea5ab6b95a69729d50557c47631f27" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SceneData::ambientLight</definition>
+        <argsstring>() const</argsstring>
+        <name>ambientLight</name>
+        <qualifiedname>castor3d::shader::SceneData::ambientLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="48" column="6" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="48" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df9/a06690_1a4d1c6052a94f0964247387dd95f84017" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SceneData::backgroundColour</definition>
+        <argsstring>() const</argsstring>
+        <name>backgroundColour</name>
+        <qualifiedname>castor3d::shader::SceneData::backgroundColour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="49" column="6" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="49" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df9/a06690_1afe3543621fd154df7f58a85201c1a0af" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SceneData::fogType</definition>
+        <argsstring>() const</argsstring>
+        <name>fogType</name>
+        <qualifiedname>castor3d::shader::SceneData::fogType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="50" column="6" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="50" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/df9/a06690_1a9a1dd35f3679dc79d195a4f5fa82fefd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SceneData::fogDensity</definition>
+        <argsstring>() const</argsstring>
+        <name>fogDensity</name>
+        <qualifiedname>castor3d::shader::SceneData::fogDensity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/SceneUbo.hpp" line="51" column="6" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="51" bodyend="51"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::SceneData</label>
+        <link refid="d6/df9/a06690"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_SceneData&quot;, ast::type::MemoryLayout::eStd140, sdw::Vec3Field&lt; &quot;ambientLight&quot; &gt;, sdw::UInt32Field&lt; &quot;fogType&quot; &gt;, sdw::Vec3Field&lt; &quot;backgroundColour&quot; &gt;, sdw::FloatField&lt; &quot;fogDensity&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::SceneData</label>
+        <link refid="d6/df9/a06690"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_SceneData&quot;, ast::type::MemoryLayout::eStd140, sdw::Vec3Field&lt; &quot;ambientLight&quot; &gt;, sdw::UInt32Field&lt; &quot;fogType&quot; &gt;, sdw::Vec3Field&lt; &quot;backgroundColour&quot; &gt;, sdw::FloatField&lt; &quot;fogDensity&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/SceneUbo.hpp" line="19" column="1" bodyfile="Shader/Ubos/SceneUbo.hpp" bodystart="26" bodyend="52"/>
+    <listofallmembers>
+      <member refid="d6/df9/a06690_1a6fea5ab6b95a69729d50557c47631f27" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>ambientLight</name></member>
+      <member refid="d6/df9/a06690_1a4d1c6052a94f0964247387dd95f84017" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>backgroundColour</name></member>
+      <member refid="d6/df9/a06690_1a9bb6aa488de293114ff892ef18876df3" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>BillboardData</name></member>
+      <member refid="d6/df9/a06690_1a19ee4d0654cd9bcc717206e25d4823a4" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>CommonFog</name></member>
+      <member refid="d6/df9/a06690_1ad69041f352ac053411af2848c5d6e208" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>computeAccumulation</name></member>
+      <member refid="d6/df9/a06690_1a2bf8221f37d85662fe58e1093d087032" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>Fog</name></member>
+      <member refid="d6/df9/a06690_1a9a1dd35f3679dc79d195a4f5fa82fefd" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>fogDensity</name></member>
+      <member refid="d6/df9/a06690_1afe3543621fd154df7f58a85201c1a0af" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>fogType</name></member>
+      <member refid="d6/df9/a06690_1a7cfe258693a5cbf883cc617b8633a1f6" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>getBackgroundColour</name></member>
+      <member refid="d6/df9/a06690_1a0aea0b3ea49c4c74a97f22250d3bf68a" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>getBackgroundColour</name></member>
+      <member refid="d6/df9/a06690_1afde88a42f68e514ac64311e116d51c9f" prot="public" virt="non-virtual"><scope>castor3d::shader::SceneData</scope><name>SceneData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

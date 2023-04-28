@@ -1,0 +1,329 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/d22/a06773" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CameraUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d22/a06773_1a6fa764536eea9a787328a45ff6837486" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Point4f, 6u &gt;</type>
+        <definition>std::array&lt; castor::Point4f, 6u &gt; castor3d::CameraUboConfiguration::frustumPlanes</definition>
+        <argsstring></argsstring>
+        <name>frustumPlanes</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::frustumPlanes</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="208" column="12" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="208" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a292b6ef5434fd83f1ebe4f97fc114617" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::projection</definition>
+        <argsstring></argsstring>
+        <name>projection</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::projection</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="209" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="209" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a234d325797e74ad2d7c978c7caa03db5" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::invProjection</definition>
+        <argsstring></argsstring>
+        <name>invProjection</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::invProjection</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="210" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="210" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1adefbfc9b7fe3ebdac56f13c7301ca332" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::curView</definition>
+        <argsstring></argsstring>
+        <name>curView</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::curView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="211" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="211" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a28285d178f6182c6214c352e23186550" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::invCurView</definition>
+        <argsstring></argsstring>
+        <name>invCurView</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::invCurView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="212" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a5cce1e842599f9e7a7dd312ce24254f7" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::prvView</definition>
+        <argsstring></argsstring>
+        <name>prvView</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::prvView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="213" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1ae1bb3717b1a90287efc36c2775750489" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::invPrvView</definition>
+        <argsstring></argsstring>
+        <name>invPrvView</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::invPrvView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="214" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="214" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a1e9702a9adfe26bd1fa4867c01b0f727" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::curViewProj</definition>
+        <argsstring></argsstring>
+        <name>curViewProj</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::curViewProj</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="215" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="215" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1afbc2bddc521566e8a78b31cf90488316" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::invCurViewProj</definition>
+        <argsstring></argsstring>
+        <name>invCurViewProj</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::invCurViewProj</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="216" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="216" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a0c4aeb7a8c9288aa6a360b7a3dc5352d" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::prvViewProj</definition>
+        <argsstring></argsstring>
+        <name>prvViewProj</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::prvViewProj</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="217" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a82cef5403bc1d035e162463f477d79b3" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::CameraUboConfiguration::invPrvViewProj</definition>
+        <argsstring></argsstring>
+        <name>invPrvViewProj</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::invPrvViewProj</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="218" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a839bceabdda949af9da18752bc829af5" prot="public" static="no" mutable="no">
+        <type>castor::Point2ui</type>
+        <definition>castor::Point2ui castor3d::CameraUboConfiguration::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::size</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="219" column="18" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a8cc82df650bd9c140496777c4fe87780" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::CameraUboConfiguration::jitter</definition>
+        <argsstring></argsstring>
+        <name>jitter</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::jitter</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="220" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a9ac9b783a827fc58b0f7e7b55cc19b9b" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::CameraUboConfiguration::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::position</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="221" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a12908446ca29cbd320567a4b0565774d" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::CameraUboConfiguration::gamma</definition>
+        <argsstring></argsstring>
+        <name>gamma</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::gamma</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="222" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="222" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1ad028d7de4c19ddb476af58a8e568d76b" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::CameraUboConfiguration::pad</definition>
+        <argsstring></argsstring>
+        <name>pad</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::pad</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="223" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="223" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1ab69df6a214750bd8ee5b2e60623c7d41" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::CameraUboConfiguration::nearPlane</definition>
+        <argsstring></argsstring>
+        <name>nearPlane</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::nearPlane</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="224" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="224" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d22/a06773_1a6e961c6cc45712ffd3b335e08e137e44" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::CameraUboConfiguration::farPlane</definition>
+        <argsstring></argsstring>
+        <name>farPlane</name>
+        <qualifiedname>castor3d::CameraUboConfiguration::farPlane</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="225" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="225" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Global matrices data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; castor::Point4f, 6u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Point4f, 6u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CameraUboConfiguration</label>
+        <link refid="dd/d22/a06773"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>frustumPlanes</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/UbosModule.hpp" line="206" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="207" bodyend="226"/>
+    <listofallmembers>
+      <member refid="dd/d22/a06773_1adefbfc9b7fe3ebdac56f13c7301ca332" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>curView</name></member>
+      <member refid="dd/d22/a06773_1a1e9702a9adfe26bd1fa4867c01b0f727" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>curViewProj</name></member>
+      <member refid="dd/d22/a06773_1a6e961c6cc45712ffd3b335e08e137e44" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>farPlane</name></member>
+      <member refid="dd/d22/a06773_1a6fa764536eea9a787328a45ff6837486" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>frustumPlanes</name></member>
+      <member refid="dd/d22/a06773_1a12908446ca29cbd320567a4b0565774d" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>gamma</name></member>
+      <member refid="dd/d22/a06773_1a28285d178f6182c6214c352e23186550" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>invCurView</name></member>
+      <member refid="dd/d22/a06773_1afbc2bddc521566e8a78b31cf90488316" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>invCurViewProj</name></member>
+      <member refid="dd/d22/a06773_1a234d325797e74ad2d7c978c7caa03db5" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>invProjection</name></member>
+      <member refid="dd/d22/a06773_1ae1bb3717b1a90287efc36c2775750489" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>invPrvView</name></member>
+      <member refid="dd/d22/a06773_1a82cef5403bc1d035e162463f477d79b3" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>invPrvViewProj</name></member>
+      <member refid="dd/d22/a06773_1a8cc82df650bd9c140496777c4fe87780" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>jitter</name></member>
+      <member refid="dd/d22/a06773_1ab69df6a214750bd8ee5b2e60623c7d41" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>nearPlane</name></member>
+      <member refid="dd/d22/a06773_1ad028d7de4c19ddb476af58a8e568d76b" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>pad</name></member>
+      <member refid="dd/d22/a06773_1a9ac9b783a827fc58b0f7e7b55cc19b9b" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>position</name></member>
+      <member refid="dd/d22/a06773_1a292b6ef5434fd83f1ebe4f97fc114617" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>projection</name></member>
+      <member refid="dd/d22/a06773_1a5cce1e842599f9e7a7dd312ce24254f7" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>prvView</name></member>
+      <member refid="dd/d22/a06773_1a0c4aeb7a8c9288aa6a360b7a3dc5352d" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>prvViewProj</name></member>
+      <member refid="dd/d22/a06773_1a839bceabdda949af9da18752bc829af5" prot="public" virt="non-virtual"><scope>castor3d::CameraUboConfiguration</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

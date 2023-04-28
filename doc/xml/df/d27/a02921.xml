@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/d27/a02921" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::GpuBufferPackedAllocator::MemChunkCompare</compoundname>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d27/a02921_1a2938eb5842f590ef250db6c86829a1f6" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::GpuBufferPackedAllocator::MemChunkCompare::operator()</definition>
+        <argsstring>(MemChunk const &amp;lhs, MemChunk const &amp;rhs) const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::GpuBufferPackedAllocator::MemChunkCompare::operator()</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>lhs</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBufferPackedAllocator.hpp" line="84" column="6" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="84" bodyend="87"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/GpuBufferPackedAllocator.hpp" line="82" column="1" bodyfile="Buffer/GpuBufferPackedAllocator.hpp" bodystart="83" bodyend="88"/>
+    <listofallmembers>
+      <member refid="df/d27/a02921_1a2938eb5842f590ef250db6c86829a1f6" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferPackedAllocator::MemChunkCompare</scope><name>operator()</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

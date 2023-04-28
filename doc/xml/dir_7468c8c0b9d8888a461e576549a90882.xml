@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_7468c8c0b9d8888a461e576549a90882" kind="dir">
     <compoundname>Animation</compoundname>
-    <innerfile refid="d0/d89/a00071">Animable.hpp</innerfile>
-    <innerfile refid="db/db6/a00074">Animation.hpp</innerfile>
-    <innerfile refid="d1/d09/a00077">AnimationImporter.hpp</innerfile>
-    <innerfile refid="da/dec/a00080">AnimationImporterFactory.hpp</innerfile>
-    <innerfile refid="d2/d1f/a00083">AnimationKeyFrame.hpp</innerfile>
-    <innerfile refid="dc/dc3/a13227">AnimationModule.hpp</innerfile>
-    <innerfile refid="db/dab/a00089">Interpolator.hpp</innerfile>
+    <innerfile refid="d1/d44/a00098">Animable.hpp</innerfile>
+    <innerfile refid="d4/d3a/a00101">Animation.hpp</innerfile>
+    <innerfile refid="d0/dc2/a00104">AnimationImporter.hpp</innerfile>
+    <innerfile refid="df/d98/a00107">AnimationImporterFactory.hpp</innerfile>
+    <innerfile refid="d4/d81/a00110">AnimationKeyFrame.hpp</innerfile>
+    <innerfile refid="d0/dc0/a14821">AnimationModule.hpp</innerfile>
+    <innerfile refid="d4/d3e/a00116">Interpolator.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

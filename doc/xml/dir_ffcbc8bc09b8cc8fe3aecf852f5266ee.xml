@@ -1,27 +1,28 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_ffcbc8bc09b8cc8fe3aecf852f5266ee" kind="dir">
     <compoundname>Material/Pass/Component/Map</compoundname>
-    <innerfile refid="d4/d27/a00392">AttenuationMapComponent.hpp</innerfile>
-    <innerfile refid="db/dbc/a00395">ClearcoatMapComponent.hpp</innerfile>
-    <innerfile refid="d9/dd1/a00398">ClearcoatNormalMapComponent.hpp</innerfile>
-    <innerfile refid="d7/d00/a00401">ClearcoatRoughnessMapComponent.hpp</innerfile>
-    <innerfile refid="d9/de6/a00404">ColourMapComponent.hpp</innerfile>
-    <innerfile refid="d1/d98/a00407">EmissiveMapComponent.hpp</innerfile>
-    <innerfile refid="d8/d91/a00410">GlossinessMapComponent.hpp</innerfile>
-    <innerfile refid="da/d9c/a00413">HeightMapComponent.hpp</innerfile>
-    <innerfile refid="df/d15/a00416">IridescenceMapComponent.hpp</innerfile>
-    <innerfile refid="d3/d29/a00419">IridescenceThicknessMapComponent.hpp</innerfile>
-    <innerfile refid="db/d43/a00422">MetalnessMapComponent.hpp</innerfile>
-    <innerfile refid="dc/d2f/a00425">NormalMapComponent.hpp</innerfile>
-    <innerfile refid="d4/dd3/a00428">OcclusionMapComponent.hpp</innerfile>
-    <innerfile refid="df/d70/a00431">OpacityMapComponent.hpp</innerfile>
-    <innerfile refid="d1/d7e/a00434">RoughnessMapComponent.hpp</innerfile>
-    <innerfile refid="d4/da8/a00437">SheenMapComponent.hpp</innerfile>
-    <innerfile refid="de/df8/a00440">SheenRoughnessMapComponent.hpp</innerfile>
-    <innerfile refid="d0/dc4/a00443">SpecularMapComponent.hpp</innerfile>
-    <innerfile refid="d3/def/a00446">TransmissionMapComponent.hpp</innerfile>
-    <innerfile refid="d9/d10/a00449">TransmittanceMapComponent.hpp</innerfile>
+    <innerfile refid="d9/d44/a00527">AttenuationMapComponent.hpp</innerfile>
+    <innerfile refid="da/d7e/a00530">ClearcoatMapComponent.hpp</innerfile>
+    <innerfile refid="db/d44/a00533">ClearcoatNormalMapComponent.hpp</innerfile>
+    <innerfile refid="d4/d33/a00536">ClearcoatRoughnessMapComponent.hpp</innerfile>
+    <innerfile refid="d3/d87/a00539">ColourMapComponent.hpp</innerfile>
+    <innerfile refid="d0/ddb/a00542">EmissiveMapComponent.hpp</innerfile>
+    <innerfile refid="d8/deb/a00545">GlossinessMapComponent.hpp</innerfile>
+    <innerfile refid="dd/de6/a00548">HeightMapComponent.hpp</innerfile>
+    <innerfile refid="d9/d87/a00551">IridescenceMapComponent.hpp</innerfile>
+    <innerfile refid="dc/df9/a00554">IridescenceThicknessMapComponent.hpp</innerfile>
+    <innerfile refid="d8/df0/a00557">MetalnessMapComponent.hpp</innerfile>
+    <innerfile refid="d9/d19/a00560">NormalMapComponent.hpp</innerfile>
+    <innerfile refid="dc/dae/a00563">OcclusionMapComponent.hpp</innerfile>
+    <innerfile refid="d0/d3e/a00566">OpacityMapComponent.hpp</innerfile>
+    <innerfile refid="d4/d9e/a00569">RoughnessMapComponent.hpp</innerfile>
+    <innerfile refid="d6/d06/a00572">SheenMapComponent.hpp</innerfile>
+    <innerfile refid="d9/d42/a00575">SheenRoughnessMapComponent.hpp</innerfile>
+    <innerfile refid="dd/d5c/a00578">SpecularFactorMapComponent.hpp</innerfile>
+    <innerfile refid="d8/dc8/a00581">SpecularMapComponent.hpp</innerfile>
+    <innerfile refid="d7/d21/a00584">TransmissionMapComponent.hpp</innerfile>
+    <innerfile refid="de/dde/a00587">TransmittanceMapComponent.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

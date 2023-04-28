@@ -1,0 +1,62 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d6c/a04478" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PipelineVisitorBase::Config</compoundname>
+    <includes local="no">PipelineVisitor.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d6c/a04478_1a26740e849dcb7faea5d4090540762a49" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineVisitorBase::Config::forceSubPassesVisit</definition>
+        <argsstring></argsstring>
+        <name>forceSubPassesVisit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::Config::forceSubPassesVisit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="30" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d6c/a04478_1af3e4f344f815da354dd14a32e162024a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineVisitorBase::Config::forceMiplevelsVisit</definition>
+        <argsstring></argsstring>
+        <name>forceMiplevelsVisit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::Config::forceMiplevelsVisit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="31" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d6c/a04478_1aaa35cd0efe79a842bc1ff57df7eb7a47" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PipelineVisitorBase::Config::allowProgramsVisit</definition>
+        <argsstring></argsstring>
+        <name>allowProgramsVisit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::Config::allowProgramsVisit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="32" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="32" bodyend="-1"/>
+        <referencedby refid="dc/d50/a04474_1a127e6422814b4aca771a2fbafa62aee7" compoundref="d4/d9b/a00680" startline="60" endline="68">castor3d::PipelineVisitorBase::visit</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/PipelineVisitor.hpp" line="28" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="29" bodyend="33"/>
+    <listofallmembers>
+      <member refid="d1/d6c/a04478_1aaa35cd0efe79a842bc1ff57df7eb7a47" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>allowProgramsVisit</name></member>
+      <member refid="d1/d6c/a04478_1af3e4f344f815da354dd14a32e162024a" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>forceMiplevelsVisit</name></member>
+      <member refid="d1/d6c/a04478_1a26740e849dcb7faea5d4090540762a49" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase::Config</scope><name>forceSubPassesVisit</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

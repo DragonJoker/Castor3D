@@ -1,0 +1,49 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/dac/a06750" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MeshInfoConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/dac/a06750_1a071b2045e8d61b98325e277d6131916d" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshInfoConfiguration::meshletCount</definition>
+        <argsstring></argsstring>
+        <name>meshletCount</name>
+        <qualifiedname>castor3d::MeshInfoConfiguration::meshletCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="237" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="237" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dac/a06750_1a2b1d41183c1797b25eb10ccc2e88c5bf" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::MeshInfoConfiguration::meshletOffset</definition>
+        <argsstring></argsstring>
+        <name>meshletOffset</name>
+        <qualifiedname>castor3d::MeshInfoConfiguration::meshletOffset</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="238" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="238" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d1/d2a/a04566" kindref="compound">Meshlet</ref> draw informations. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="235" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="236" bodyend="239"/>
+    <listofallmembers>
+      <member refid="d1/dac/a06750_1a071b2045e8d61b98325e277d6131916d" prot="public" virt="non-virtual"><scope>castor3d::MeshInfoConfiguration</scope><name>meshletCount</name></member>
+      <member refid="d1/dac/a06750_1a2b1d41183c1797b25eb10ccc2e88c5bf" prot="public" virt="non-virtual"><scope>castor3d::MeshInfoConfiguration</scope><name>meshletOffset</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

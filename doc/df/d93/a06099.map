@@ -1,6 +1,36 @@
-<map id="castor3d::shader::RasterizerSurfaceBase" name="castor3d::shader::RasterizerSurfaceBase">
-<area shape="rect" id="node1" title=" " alt="" coords="13,155,199,196"/>
-<area shape="rect" id="node4" href="$d9/d60/a06108.html" title=" " alt="" coords="7,244,205,285"/>
-<area shape="rect" id="node2" href="$d7/da0/a06092.html" title=" " alt="" coords="5,80,207,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="37,5,175,32"/>
+<map id="castor3d::SceneFileContext" name="castor3d::SceneFileContext">
+<area shape="rect" id="node1" title=" " alt="" coords="2296,319,2479,344"/>
+<area shape="rect" id="node2" href="$db/d36/a05621.html" title=" " alt="" coords="1939,5,2136,31"/>
+<area shape="rect" id="node3" href="$d9/d39/a06109.html" title=" " alt="" coords="1946,247,2129,287"/>
+<area shape="rect" id="node4" href="$d7/d3e/a06285.html" title=" " alt="" coords="1576,320,1723,345"/>
+<area shape="rect" id="node5" href="$de/d8b/a02545.html" title=" " alt="" coords="1285,320,1361,345"/>
+<area shape="rect" id="node6" title=" " alt="" coords="887,268,1077,293"/>
+<area shape="rect" id="node7" title=" " alt="" coords="508,313,675,353"/>
+<area shape="rect" id="node11" href="$de/d8b/a02545.html" title="Animable public interface." alt="" coords="907,203,1057,243"/>
+<area shape="rect" id="node8" title=" " alt="" coords="149,367,271,392"/>
+<area shape="rect" id="node34" title=" " alt="" coords="1528,390,1771,430"/>
+<area shape="rect" id="node9" title=" " alt="" coords="5,463,44,488"/>
+<area shape="rect" id="node10" title=" " alt="" coords="5,367,44,392"/>
+<area shape="rect" id="node21" title=" " alt="" coords="727,69,840,95"/>
+<area shape="rect" id="node31" title=" " alt="" coords="321,472,429,497"/>
+<area shape="rect" id="node12" title=" " alt="" coords="497,203,685,243"/>
+<area shape="rect" id="node13" title=" " alt="" coords="1270,271,1377,296"/>
+<area shape="rect" id="node14" href="$dc/d32/a04057.html" title=" " alt="" coords="1949,197,2125,223"/>
+<area shape="rect" id="node15" title=" " alt="" coords="1561,156,1737,181"/>
+<area shape="rect" id="node16" href="$d9/d35/a04053.html" title=" " alt="" coords="1543,205,1755,231"/>
+<area shape="rect" id="node17" href="$db/dfa/a04049.html" title=" " alt="" coords="1548,255,1751,295"/>
+<area shape="rect" id="node18" href="$d8/de8/a04041.html" title=" " alt="" coords="1224,221,1423,247"/>
+<area shape="rect" id="node19" href="$d4/dc7/a06113.html" title=" " alt="" coords="1558,91,1741,131"/>
+<area shape="rect" id="node20" title=" " alt="" coords="1945,55,2129,109"/>
+<area shape="rect" id="node22" href="$da/d28/a06117.html" title=" " alt="" coords="1949,560,2125,585"/>
+<area shape="rect" id="node23" title=" " alt="" coords="1556,625,1743,651"/>
+<area shape="rect" id="node24" title=" " alt="" coords="1587,527,1712,552"/>
+<area shape="rect" id="node25" title=" " alt="" coords="1599,576,1700,601"/>
+<area shape="rect" id="node26" title=" " alt="" coords="1992,376,2083,401"/>
+<area shape="rect" id="node27" href="$dd/d32/a05709.html" title=" " alt="" coords="1964,425,2111,451"/>
+<area shape="rect" id="node28" href="$dc/d0d/a04153.html" title=" " alt="" coords="1224,476,1423,501"/>
+<area shape="rect" id="node29" title=" " alt="" coords="864,469,1100,509"/>
+<area shape="rect" id="node30" href="$de/d38/a04149.html" title=" " alt="" coords="480,448,703,473"/>
+<area shape="rect" id="node32" href="$d8/dca/a04145.html" title=" " alt="" coords="892,605,1072,631"/>
+<area shape="rect" id="node33" href="$d2/d0c/a06105.html" title=" " alt="" coords="1946,311,2129,351"/>
 </map>

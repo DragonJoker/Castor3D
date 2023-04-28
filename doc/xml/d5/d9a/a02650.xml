@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d9a/a02650" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ChunkTyper&lt; MorphComponent &gt;</compoundname>
+    <includes local="no">BinaryMorphComponent.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/d9a/a02650_1a49da7f5e126dc9b10606b3aba9f7e41c" prot="public" static="yes" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a742783d4e4b7354fac3e375ae107414d" kindref="member">ChunkType</ref> const</type>
+        <definition>ChunkType const castor3d::ChunkTyper&lt; MorphComponent &gt;::Value</definition>
+        <argsstring></argsstring>
+        <name>Value</name>
+        <qualifiedname>castor3d::ChunkTyper&lt; MorphComponent &gt;::Value</qualifiedname>
+        <initializer>= <ref refid="d5/da6/a01698_1a742783d4e4b7354fac3e375ae107414daf4d8cf27a0ce77a1fe1ed8dc43f3ee97" kindref="member">ChunkType::eMorphComponent</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/BinaryMorphComponent.hpp" line="25" column="24" bodyfile="Binary/BinaryMorphComponent.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Helper structure to find ChunkType from a type. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Specialisation for <ref refid="d7/d0f/a04638" kindref="compound">MorphComponent</ref>. </para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Binary/BinaryMorphComponent.hpp" line="23" column="1" bodyfile="Binary/BinaryMorphComponent.hpp" bodystart="24" bodyend="26"/>
+    <listofallmembers>
+      <member refid="d5/d9a/a02650_1a49da7f5e126dc9b10606b3aba9f7e41c" prot="public" virt="non-virtual"><scope>castor3d::ChunkTyper&lt; MorphComponent &gt;</scope><name>Value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

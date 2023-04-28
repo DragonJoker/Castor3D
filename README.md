@@ -1,8 +1,8 @@
 # Castor3D
+
 Castor3D is a 3D engine written in C++ 20.
-It works on Windows and GNU/Linux.
-It supports Vulkan, and relies on Ashes to extend this support to Direct3D 11 and and OpenGL.
-The project itself is compilable on supported platforms using CMake (\ref build).
+It works on Windows and GNU/Linux and using Vulkan as rendering API.
+The project itself is compilable on supported platforms using CMake and vcpkg (\ref build).
 
 ## Features
 
@@ -28,6 +28,7 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - Scenes are described using a text format easily comprehensible and extensible.
 - Synchronous (user defined) or asynchronous (thread) rendering.
 - Using Mesh and Task shaders, if available.
+- GUI primitives.
 
 ## Implemented Plug-ins
 
@@ -49,7 +50,6 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - DiamondSquareTerrain: to generate terrains inside Castor3D scenes, using diamond-quare algorithm.
 
 ### Generic
-- CastorGUI: to build GUIs inside Castor3D scenes.
 - ToonMaterial: A toon material (to be combined with DrawEdges plugin).
 - FFTOceanRendering: Ocean rendering using FFT generated surfaces.
 - OceanRendering: Basic ocean rendering, specifying waves attributes.
@@ -57,12 +57,20 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - AtmosphereScattering : Sky and atmosphere rendering (using [Scalable and Production Ready Sky and Atmosphere Rendering Technique](https://sebh.github.io/publications/egsr2020.pdf)).
 
 ### ToneMappings
-- Linear
-- Haarm Pieter Duiker
-- Hejl Burgess Dawson
-- Reinhard
-- Uncharted 2
-- ACES
+- LinearToneMapping: Default tone mapping.
+- HaarmPieterDuikerToneMapping: Haarm Pieter Duiker tone mapping.
+- HejlBurgessDawsonToneMapping: Hejl Burgess Dawson tone mapping.
+- ReinhardToneMapping: Reinhard tone mapping.
+- Uncharted2ToneMapping: Uncharted 2 tone mapping.
+- ACES: ACES tone mapping.
+
+## Other applications
+
+- CastorViewer: A scene viewer based on Castor3D.
+- CastorMeshConverter: A converter from various mesh files to Castor3D mesh format.
+- CastorMeshUpgrader: Upgrades from earlier versions of Castor3D mesh format to the latest one.
+- HeightMapToNormalMap: Converts height maps to normal maps.
+- ImgConverter: Allows you to convert any image file type to XPM or ICO.
 
 ## Links
 
@@ -80,9 +88,11 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 <a href="http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV.png"><img alt="SanMiguel, PBR, LPV" src="./img/SanMiguel-PBR-SG-LPV-Small.png"></a>
 <a href="http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT.png"><img alt="Bistro, PBR, VCT" src="./img/Bistro-PBR-VCT-Small.png"></a>
 <a href="http://dragonjoker.github.io/Castor3D/img/AtmosphereScattering-Terrain-Clouds.png"><img alt="AtmosphereScattering, Terrain, Clouds" src="./img/AtmosphereScattering-Terrain-Clouds-Small.png"></a>
+<a href="http://dragonjoker.github.io/Castor3D/img/FFTOcean-Terrain.png"><img alt="AtmosphereScattering, Terrain, FFTOcean" src="./img/FFTOcean-Terrain-Small.png"></a>
 
 ## Older Versions
 
+- [v0.14.0](https://dragonjoker.github.io/Castor3D/v0.14.0/)
 - [v0.13.0](https://dragonjoker.github.io/Castor3D/v0.13.0/)
 - [v0.12.0](https://dragonjoker.github.io/Castor3D/v0.12.0/)
 - [v0.11.0](https://dragonjoker.github.io/Castor3D/v0.11.0/)

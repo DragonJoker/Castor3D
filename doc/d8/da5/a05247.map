@@ -1,7 +1,6 @@
-<map id="castor3d::ShadowMap" name="castor3d::ShadowMap">
-<area shape="rect" id="node1" title=" " alt="" coords="257,80,408,107"/>
-<area shape="rect" id="node3" href="$d3/dc5/a05260.html" title=" " alt="" coords="5,155,217,181"/>
-<area shape="rect" id="node4" href="$d5/de0/a05280.html" title=" " alt="" coords="242,155,423,181"/>
-<area shape="rect" id="node5" href="$d0/d11/a05288.html" title=" " alt="" coords="447,155,626,181"/>
-<area shape="rect" id="node2" title=" " alt="" coords="239,5,426,32"/>
+<map id="castor3d::OverlayDrawNode" name="castor3d::OverlayDrawNode">
+<area shape="rect" id="node1" title=" " alt="" coords="77,168,260,193"/>
+<area shape="rect" id="node2" href="$d5/d37/a05237.html" title=" " alt="" coords="5,80,204,105"/>
+<area shape="rect" id="node3" href="$d6/d16/a04077.html" title=" " alt="" coords="228,80,339,105"/>
+<area shape="rect" id="node4" title=" " alt="" coords="187,5,379,31"/>
 </map>

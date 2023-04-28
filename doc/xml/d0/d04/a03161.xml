@@ -1,0 +1,2083 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d0/d04/a03161" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::EditCtrl</compoundname>
+    <basecompoundref refid="d5/d27/a03157" prot="public" virt="non-virtual">castor3d::Control</basecompoundref>
+    <basecompoundref refid="d6/df4/a03201" prot="public" virt="non-virtual">castor3d::ScrollableCtrl</basecompoundref>
+    <includes local="no">CtrlEdit.hpp</includes>
+    <innerclass refid="d3/dcf/a03173" prot="private">castor3d::EditCtrl::Caret</innerclass>
+    <innerclass refid="d5/d1d/a03165" prot="private">castor3d::EditCtrl::CaretIndices</innerclass>
+    <innerclass refid="dc/d10/a03169" prot="private">castor3d::EditCtrl::Selection</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/d04/a03161_1a228cf1a8ba08d2b051914c3578845bab" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>C3D_API ControlType constexpr castor3d::EditCtrl::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::EditCtrl::Type</qualifiedname>
+        <initializer>{ <ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725da1ff2d7a9b9968f8a619f57f6c39caac0" kindref="member">ControlType::eEdit</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="91" column="38" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d04/a03161_1aa5ee2c07a081079c9ed6058a21cf5965" prot="private" static="no" mutable="no">
+        <type>castor::U32String</type>
+        <definition>castor::U32String castor3d::EditCtrl::m_caption</definition>
+        <argsstring></argsstring>
+        <name>m_caption</name>
+        <qualifiedname>castor3d::EditCtrl::m_caption</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="345" column="19" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="345" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1a0697335bc14dcd0f0e0cd9ec0662095c" prot="private" static="no" mutable="no">
+        <type>castor::TextMetrics</type>
+        <definition>castor::TextMetrics castor3d::EditCtrl::m_metrics</definition>
+        <argsstring></argsstring>
+        <name>m_metrics</name>
+        <qualifiedname>castor3d::EditCtrl::m_metrics</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="346" column="21" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="346" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1a528720ed52b51052be4fe9c591200262" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EditCtrl::m_active</definition>
+        <argsstring></argsstring>
+        <name>m_active</name>
+        <qualifiedname>castor3d::EditCtrl::m_active</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="347" column="6" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="347" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1a5c8613ab844235a294ea25ef2358425f" prot="private" static="no" mutable="no">
+        <type>TextOverlayRPtr</type>
+        <definition>TextOverlayRPtr castor3d::EditCtrl::m_text</definition>
+        <argsstring></argsstring>
+        <name>m_text</name>
+        <qualifiedname>castor3d::EditCtrl::m_text</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="348" column="17" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="348" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1a6796077ac17bb08be552d25a7deac13f" prot="private" static="no" mutable="no">
+        <type>Caret</type>
+        <definition>Caret castor3d::EditCtrl::m_caret</definition>
+        <argsstring></argsstring>
+        <name>m_caret</name>
+        <qualifiedname>castor3d::EditCtrl::m_caret</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="349" column="7" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="349" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1ae4b722455cc1364642abef2834c94f2d" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1abd2fa146645dcf5e154fef649d86f46b" kindref="member">OnEditEvent</ref></type>
+        <definition>OnEditEvent castor3d::EditCtrl::m_signals[size_t(EditEvent::eCount)]</definition>
+        <argsstring>[size_t(EditEvent::eCount)]</argsstring>
+        <name>m_signals</name>
+        <qualifiedname>castor3d::EditCtrl::m_signals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="350" column="13" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="350" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1af159594b5ab59b714d59469384ae0f5f" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EditCtrl::m_hasSelection</definition>
+        <argsstring></argsstring>
+        <name>m_hasSelection</name>
+        <qualifiedname>castor3d::EditCtrl::m_hasSelection</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="351" column="6" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="351" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1adb3d66e72396a702121ee7eabedae2e4" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::EditCtrl::m_isMouseSelecting</definition>
+        <argsstring></argsstring>
+        <name>m_isMouseSelecting</name>
+        <qualifiedname>castor3d::EditCtrl::m_isMouseSelecting</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="352" column="6" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="352" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1a2d18badae688ea2a055f1f228f603e8c" prot="private" static="no" mutable="no">
+        <type>Selection</type>
+        <definition>Selection castor3d::EditCtrl::m_selection</definition>
+        <argsstring></argsstring>
+        <name>m_selection</name>
+        <qualifiedname>castor3d::EditCtrl::m_selection</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="353" column="11" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="353" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1a1bce4ebbb2bc7516900d10e72136720d" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; PanelOverlayRPtr &gt;</type>
+        <definition>std::vector&lt; PanelOverlayRPtr &gt; castor3d::EditCtrl::m_selections</definition>
+        <argsstring></argsstring>
+        <name>m_selections</name>
+        <qualifiedname>castor3d::EditCtrl::m_selections</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="354" column="13" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="354" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1ad33511194f5e99961a4a26211b35b0e1" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/df4/a03201_1a125fdf16def9bcdf059bd8d67cf898db" kindref="member">OnScrollContentConnection</ref></type>
+        <definition>OnScrollContentConnection castor3d::EditCtrl::m_onScrollContent</definition>
+        <argsstring></argsstring>
+        <name>m_onScrollContent</name>
+        <qualifiedname>castor3d::EditCtrl::m_onScrollContent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="355" column="27" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="355" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d04/a03161_1a0360c3fd2b55a4fbf413367a594e06b2" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::EditCtrl::m_panelsZIndex</definition>
+        <argsstring></argsstring>
+        <name>m_panelsZIndex</name>
+        <qualifiedname>castor3d::EditCtrl::m_panelsZIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="356" column="10" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="356" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d04/a03161_1a454157053fac08271a179c72ffe9a587" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::EditCtrl::EditCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, EditStyleRPtr style, ControlRPtr parent)</argsstring>
+        <name>EditCtrl</name>
+        <qualifiedname>castor3d::EditCtrl::EditCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>EditStyleRPtr</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a5e03f1e85e5d2fc21818aae7f4f0573a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::EditCtrl::EditCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, EditStyleRPtr style, ControlRPtr parent, castor::String const &amp;caption, castor::Position const &amp;position, castor::Size const &amp;size, ControlFlagType flags=0, bool visible=true)</argsstring>
+        <name>EditCtrl</name>
+        <qualifiedname>castor3d::EditCtrl::EditCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>EditStyleRPtr</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>caption</declname>
+        </param>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a1b0644d82256ab79bf71eb959d8f7106" kindref="member">ControlFlagType</ref></type>
+          <declname>flags</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">caption</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The caption </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The position </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration flags </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial visibility status </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="40" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a16bd1b5ff9f7967c9e9bfebe1c0c5cef" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::EditCtrl::~EditCtrl</definition>
+        <argsstring>() noexcept override</argsstring>
+        <name>~EditCtrl</name>
+        <qualifiedname>castor3d::EditCtrl::~EditCtrl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="49" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1afe7cfe36e1e9965e7fcdba3e9416d56a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::EditCtrl::updateCaption</definition>
+        <argsstring>(castor::String const &amp;value)</argsstring>
+        <name>updateCaption</name>
+        <qualifiedname>castor3d::EditCtrl::updateCaption</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the caption <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="54" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a053019eae2b992f8a566a5d3ab120d13" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::U32String const &amp;</type>
+        <definition>castor::U32String const  &amp; castor3d::EditCtrl::getCaption</definition>
+        <argsstring>() const</argsstring>
+        <name>getCaption</name>
+        <qualifiedname>castor3d::EditCtrl::getCaption</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Retrieves the caption <simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="59" column="26" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="59" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a7cf6aab9bc951f71e74c8e0ee1491b8b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a01725_1a4b9baf48c7759b9f4e03bc7199331dbe" kindref="member">OnEditEventConnection</ref></type>
+        <definition>OnEditEventConnection castor3d::EditCtrl::connect</definition>
+        <argsstring>(EditEvent event, OnEditEventFunction function)</argsstring>
+        <name>connect</name>
+        <qualifiedname>castor3d::EditCtrl::connect</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1aedabd0a7bad1ed751c4562357fd8e52f" kindref="member">EditEvent</ref></type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a2b5f05b5371dca6b8ec228f1b476a6d1" kindref="member">OnEditEventFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Connects a function to an edit event <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The function </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The internal function index, to be able to disconnect it </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="69" column="23" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="69" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1adba23f7b86fdfd05b62982ce016e2b37" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::EditCtrl::isMultiLine</definition>
+        <argsstring>() const</argsstring>
+        <name>isMultiLine</name>
+        <qualifiedname>castor3d::EditCtrl::isMultiLine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Retreves the multiline status of the edit. <simplesect kind="return"><para>The value. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="78" column="6" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="78" bodyend="81"/>
+        <references refid="d3/d5e/a01725_1afee9f0f464e87d3da0f6d6094c25a361adfb1cbe779099eb5510b42f8109307ce">castor3d::eMultiline</references>
+        <references refid="d5/d27/a03157_1afb284673f9161e073a83e1ccaddb658e" compoundref="d3/d93/a00341" startline="179" endline="182">castor3d::Control::getFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1ad7df8d5c67aec1c42366158d24dfcfbc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/d81/a03265" kindref="compound">EditStyle</ref> const &amp;</type>
+        <definition>EditStyle const  &amp; castor3d::EditCtrl::getStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::EditCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The edit style. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="86" column="18" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="86" bodyend="89"/>
+        <references refid="d5/d27/a03157_1a3b327c65b7d0202012a7de4ac95ff6a0" compoundref="d3/d93/a00341" startline="219" endline="222">castor3d::Control::getBaseStyle</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d04/a03161_1aecbe2689f33b8763b0420e32b8c20357" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/d81/a03265" kindref="compound">EditStyle</ref> &amp;</type>
+        <definition>EditStyle &amp; castor3d::EditCtrl::getStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::EditCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="127" column="12" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="127" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a21235359cd529e31ddc015afb4999188" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doCreate</definition>
+        <argsstring>() override</argsstring>
+        <name>doCreate</name>
+        <qualifiedname>castor3d::EditCtrl::doCreate</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a986e1065f7dd8744af1099234d1e42d6">doCreate</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="133" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a886e5ec49c9968e8a8cad2f9e3f972fa" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doDestroy</definition>
+        <argsstring>() override</argsstring>
+        <name>doDestroy</name>
+        <qualifiedname>castor3d::EditCtrl::doDestroy</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1aee5d3b26288343563b7049781cc413b8">doDestroy</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Destroys the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="137" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1aadb6f0569e2b103c1a799e1a4334e504" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doAddChild</definition>
+        <argsstring>(ControlRPtr control) override</argsstring>
+        <name>doAddChild</name>
+        <qualifiedname>castor3d::EditCtrl::doAddChild</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a00c223ada8c22e232f9eb9258af4f8f5">doAddChild</reimplements>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds a child control.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="141" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1ac9130811306e0069c39ee0adfca82ac7" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doRemoveChild</definition>
+        <argsstring>(ControlRPtr control) override</argsstring>
+        <name>doRemoveChild</name>
+        <qualifiedname>castor3d::EditCtrl::doRemoveChild</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a44d1fa6aa901299938fc152aca0a7071">doRemoveChild</reimplements>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes a child control.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="145" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1aa894faf2e5b20e9c79ad28377ff3a76a" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::EditCtrl::doUpdateClientRect</definition>
+        <argsstring>(castor::Point4ui const &amp;clientRect) override</argsstring>
+        <name>doUpdateClientRect</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateClientRect</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1afb4d12707d751faa848f5999d5f5e597">doUpdateClientRect</reimplements>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>clientRect</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the area where sub-controls can be draw.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="149" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1aaa7e6dc113bd1c24a013504942f79d4a" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doSetPosition</definition>
+        <argsstring>(castor::Position const &amp;value) override</argsstring>
+        <name>doSetPosition</name>
+        <qualifiedname>castor3d::EditCtrl::doSetPosition</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1acb1760e128b67a59ae10ee7ae2ea914d">doSetPosition</reimplements>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the position <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="153" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a6ed54cd26615caef6824394600ad695d" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doSetSize</definition>
+        <argsstring>(castor::Size const &amp;value) override</argsstring>
+        <name>doSetSize</name>
+        <qualifiedname>castor3d::EditCtrl::doSetSize</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a877aa0f08bd22b35959c7fa676a52073">doSetSize</reimplements>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the size <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="157" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a3ffd688b666c28725d07d128e90383b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doSetBorderSize</definition>
+        <argsstring>(castor::Point4ui const &amp;value) override</argsstring>
+        <name>doSetBorderSize</name>
+        <qualifiedname>castor3d::EditCtrl::doSetBorderSize</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1aae4c1f90edb97e54e251666af975695b">doSetBorderSize</reimplements>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the background borders size. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="161" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1abd9483956799395e6a4bb1d07fa408fe" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateStyle</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateStyle</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateStyle</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a6e83636558d1e472c13108471c5634b8">doUpdateStyle</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="165" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a411eac5405ed7c60123a884ee2d253c3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doSetCaption</definition>
+        <argsstring>(castor::U32String const &amp;caption) override</argsstring>
+        <name>doSetCaption</name>
+        <qualifiedname>castor3d::EditCtrl::doSetCaption</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a64665e2e8a8fd85a9d2de2adc64cbca2">doSetCaption</reimplements>
+        <param>
+          <type>castor::U32String const &amp;</type>
+          <declname>caption</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>sets the caption. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">caption</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="169" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a4b695c2f5f7cfb972a70e9becb78a08e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doSetVisible</definition>
+        <argsstring>(bool visible) override</argsstring>
+        <name>doSetVisible</name>
+        <qualifiedname>castor3d::EditCtrl::doSetVisible</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1af4598b2669fc48d38ce61ac174c86583">doSetVisible</reimplements>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>sets the visibility <simplesect kind="remark"><para>Used for derived control specific behavious </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="173" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1ad42d86428c8dbf13d78459afad4a77d9" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateFlags</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateFlags</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateFlags</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a875d8d63815f41b613d8c93ee847b4c7">doUpdateFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style relative stuff.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="177" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a310a036a874f7d677ed13f9fce031671" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateZIndex</definition>
+        <argsstring>(uint32_t &amp;index) override</argsstring>
+        <name>doUpdateZIndex</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateZIndex</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a635e12c44833d89f01b9d162d0d22f92">doUpdateZIndex</reimplements>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="181" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a1913700af53dcb8831fff868ad62a7d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doAdjustZIndex</definition>
+        <argsstring>(uint32_t offset) override</argsstring>
+        <name>doAdjustZIndex</name>
+        <qualifiedname>castor3d::EditCtrl::doAdjustZIndex</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1af062446be54997b2901d81c1230291fb">doAdjustZIndex</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adjusts the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="185" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a618f126e2d466fb554a12c52a50187e3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::onActivate</definition>
+        <argsstring>(HandlerEvent const &amp;event)</argsstring>
+        <name>onActivate</name>
+        <qualifiedname>castor3d::EditCtrl::onActivate</qualifiedname>
+        <param>
+          <type><ref refid="d5/dcb/a03121" kindref="compound">HandlerEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when the control is activated <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="190" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1aede198e04253cfe5df9a4998f5e9dd98" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::onDeactivate</definition>
+        <argsstring>(HandlerEvent const &amp;event)</argsstring>
+        <name>onDeactivate</name>
+        <qualifiedname>castor3d::EditCtrl::onDeactivate</qualifiedname>
+        <param>
+          <type><ref refid="d5/dcb/a03121" kindref="compound">HandlerEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when the control is deactivated <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="195" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a74a0f1a2b71908dc82c351404093b4fb" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doOnMouseMove</definition>
+        <argsstring>(MouseEvent const &amp;event) override</argsstring>
+        <name>doOnMouseMove</name>
+        <qualifiedname>castor3d::EditCtrl::doOnMouseMove</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a04bf34e1c9ba7877904cc446d579be0f">doOnMouseMove</reimplements>
+        <param>
+          <type><ref refid="dc/ddf/a03129" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse is moving over the control. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="199" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a6d5a91e1dccb4256da4000435a2bafbb" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doOnMouseButtonDown</definition>
+        <argsstring>(MouseEvent const &amp;event) override</argsstring>
+        <name>doOnMouseButtonDown</name>
+        <qualifiedname>castor3d::EditCtrl::doOnMouseButtonDown</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a1f032f3770ef9a98bb371b2a7ece9ca1">doOnMouseButtonDown</reimplements>
+        <param>
+          <type><ref refid="dc/ddf/a03129" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse left button is pressed. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="203" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a325e09a33063f0214460e3c432322c5f" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doOnMouseButtonUp</definition>
+        <argsstring>(MouseEvent const &amp;event) override</argsstring>
+        <name>doOnMouseButtonUp</name>
+        <qualifiedname>castor3d::EditCtrl::doOnMouseButtonUp</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a58a589060c1c7de472da6b90766d2e6a">doOnMouseButtonUp</reimplements>
+        <param>
+          <type><ref refid="dc/ddf/a03129" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse left button is released. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="207" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a1ec599aa2075e30784d53976194a3f02" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::onChar</definition>
+        <argsstring>(KeyboardEvent const &amp;event)</argsstring>
+        <name>onChar</name>
+        <qualifiedname>castor3d::EditCtrl::onChar</qualifiedname>
+        <param>
+          <type><ref refid="dc/d0a/a03125" kindref="compound">KeyboardEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when a printable key is pressed <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="212" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a4b174a40e6ef9e705d7d16d79c8fc291" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::onKeyDown</definition>
+        <argsstring>(KeyboardEvent const &amp;event)</argsstring>
+        <name>onKeyDown</name>
+        <qualifiedname>castor3d::EditCtrl::onKeyDown</qualifiedname>
+        <param>
+          <type><ref refid="dc/d0a/a03125" kindref="compound">KeyboardEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when a keyboard key is pressed <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="217" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a3deec9b96a7ff9283e7d3494d589647e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::onKeyUp</definition>
+        <argsstring>(KeyboardEvent const &amp;event)</argsstring>
+        <name>onKeyUp</name>
+        <qualifiedname>castor3d::EditCtrl::onKeyUp</qualifiedname>
+        <param>
+          <type><ref refid="dc/d0a/a03125" kindref="compound">KeyboardEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when a keyboard key is pressed <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="222" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1ad431e33bc72f1dfa11c2e75f86f0a5c5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doAddCharAtCaret</definition>
+        <argsstring>(castor::String const &amp;c)</argsstring>
+        <name>doAddCharAtCaret</name>
+        <qualifiedname>castor3d::EditCtrl::doAddCharAtCaret</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>c</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>adds a character at caret index </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="226" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1aae35edaac54c0a61600356a1048fa797" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doDeleteCharAtCaret</definition>
+        <argsstring>(bool isCtrlDown)</argsstring>
+        <name>doDeleteCharAtCaret</name>
+        <qualifiedname>castor3d::EditCtrl::doDeleteCharAtCaret</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes a character at caret index </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="230" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1aba9e894334e21964d61dc3c25ddef4da" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doDeleteCharBeforeCaret</definition>
+        <argsstring>(bool isCtrlDown)</argsstring>
+        <name>doDeleteCharBeforeCaret</name>
+        <qualifiedname>castor3d::EditCtrl::doDeleteCharBeforeCaret</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes a character before caret index (backspace) </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="234" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a9fd48ad7548dbb7dd93f736bec0eb899" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doMoveCaretLeft</definition>
+        <argsstring>(bool isShiftDown, bool isCtrlDown)</argsstring>
+        <name>doMoveCaretLeft</name>
+        <qualifiedname>castor3d::EditCtrl::doMoveCaretLeft</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isShiftDown</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Moves the caret to the left. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="238" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a24429cb4b94c70bcc2a0f37917a3b418" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doMoveCaretRight</definition>
+        <argsstring>(bool isShiftDown, bool isCtrlDown)</argsstring>
+        <name>doMoveCaretRight</name>
+        <qualifiedname>castor3d::EditCtrl::doMoveCaretRight</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isShiftDown</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Moves the caret to the right. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="243" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a33cc176ab2092ebe5248ed8607626a95" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doMoveCaretUp</definition>
+        <argsstring>(bool isShiftDown, bool isCtrlDown)</argsstring>
+        <name>doMoveCaretUp</name>
+        <qualifiedname>castor3d::EditCtrl::doMoveCaretUp</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isShiftDown</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Moves the caret one line up. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="248" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a28b04c4f99ae0f6a43b3ce19a27e09cf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doMoveCaretDown</definition>
+        <argsstring>(bool isShiftDown, bool isCtrlDown)</argsstring>
+        <name>doMoveCaretDown</name>
+        <qualifiedname>castor3d::EditCtrl::doMoveCaretDown</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isShiftDown</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Moves the caret one line down. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="253" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1ac400d693315a794998439da0b634a4d3" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doMoveCaretHome</definition>
+        <argsstring>(bool isShiftDown, bool isCtrlDown)</argsstring>
+        <name>doMoveCaretHome</name>
+        <qualifiedname>castor3d::EditCtrl::doMoveCaretHome</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isShiftDown</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Moves the caret at the beginning of the line or text. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="258" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1aa0beed1337edbe2d890827b5da11f1cf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doMoveCaretEnd</definition>
+        <argsstring>(bool isShiftDown, bool isCtrlDown)</argsstring>
+        <name>doMoveCaretEnd</name>
+        <qualifiedname>castor3d::EditCtrl::doMoveCaretEnd</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isShiftDown</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Moves the caret at the end of the line or text. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="263" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a0a63dbf35f97266015d9455c3fb87a07" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateCaretPosition</definition>
+        <argsstring>(castor::Position const &amp;position, CaretIndices &amp;indices)</argsstring>
+        <name>doUpdateCaretPosition</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateCaretPosition</qualifiedname>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>CaretIndices &amp;</type>
+          <declname>indices</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the input caret from given position. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="268" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1adc71627fff5ab1278f3d6b8f8485c9ff" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdate</definition>
+        <argsstring>(CaretIndices &amp;indices)</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdate</qualifiedname>
+        <param>
+          <type>CaretIndices &amp;</type>
+          <declname>indices</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the input caret indices. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="273" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1af7e51b731ad538654cae2bc8a60f1429" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateCaretIndices</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateCaretIndices</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateCaretIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the input caret indices. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="277" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1ae9f1cabb7c0ea7a2bd8e636417dbec97" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateCaret</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateCaret</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateCaret</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the input caret. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="281" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a059413882710960777699e455bb2c3f1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateMetrics</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateMetrics</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateMetrics</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the text metrics. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="285" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a4b250d473d5f0e2bb628acf7c7cb2fa9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateCaption</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateCaption</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateCaption</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the caption and text overlay </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="289" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1ad2690d6e2f3469de186e0c2f474a538a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doBeginSelection</definition>
+        <argsstring>(CaretIndices begin)</argsstring>
+        <name>doBeginSelection</name>
+        <qualifiedname>castor3d::EditCtrl::doBeginSelection</qualifiedname>
+        <param>
+          <type>CaretIndices</type>
+          <declname>begin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Begins the selection. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="293" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a9370150d43c40c70f2f6f1c1bd165a31" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doUpdateSelection</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateSelection</name>
+        <qualifiedname>castor3d::EditCtrl::doUpdateSelection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the selection overlays. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="297" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a3ba0bffcd04b25d0ef681fc7805c9712" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doClearSelection</definition>
+        <argsstring>()</argsstring>
+        <name>doClearSelection</name>
+        <qualifiedname>castor3d::EditCtrl::doClearSelection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Clears selection. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="301" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a5f2ffbd655f861189660144a1c7dd510" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Selection</type>
+        <definition>Selection castor3d::EditCtrl::doGetNormalisedSelection</definition>
+        <argsstring>()</argsstring>
+        <name>doGetNormalisedSelection</name>
+        <qualifiedname>castor3d::EditCtrl::doGetNormalisedSelection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Normalises selection. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="305" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a000934b69d2347b0b90d1fe51172dad5" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::EditCtrl::doDeleteSelection</definition>
+        <argsstring>(bool isCtrlDown)</argsstring>
+        <name>doDeleteSelection</name>
+        <qualifiedname>castor3d::EditCtrl::doDeleteSelection</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>isCtrlDown</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Deletes selected text. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="309" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a3e0fe5abdda8fd777a7441d6d0891db1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doSelectAllText</definition>
+        <argsstring>()</argsstring>
+        <name>doSelectAllText</name>
+        <qualifiedname>castor3d::EditCtrl::doSelectAllText</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Select all text. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="313" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a416fb676141869f18f72c69d97694c18" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doCopyText</definition>
+        <argsstring>()</argsstring>
+        <name>doCopyText</name>
+        <qualifiedname>castor3d::EditCtrl::doCopyText</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Copies selected text. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="317" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1aa007e82d081589c5ae6a4bc1bbdc44a6" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doCutText</definition>
+        <argsstring>()</argsstring>
+        <name>doCutText</name>
+        <qualifiedname>castor3d::EditCtrl::doCutText</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Cuts selected text. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="321" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a228e0f2cf75afb1d3c38b7b47622ca37" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doPasteText</definition>
+        <argsstring>()</argsstring>
+        <name>doPasteText</name>
+        <qualifiedname>castor3d::EditCtrl::doPasteText</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Pastes text at current caret position. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="325" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a08250e6f0c42ac7d8aa78160496503c9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doAdjustTextPosition</definition>
+        <argsstring>()</argsstring>
+        <name>doAdjustTextPosition</name>
+        <qualifiedname>castor3d::EditCtrl::doAdjustTextPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Scrolls the text (if needed) to make the caret visible. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="329" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a7a733fe0d819ec68dc28df1882888918" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::doScrollContent</definition>
+        <argsstring>(castor::Position const &amp;position)</argsstring>
+        <name>doScrollContent</name>
+        <qualifiedname>castor3d::EditCtrl::doScrollContent</qualifiedname>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="331" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d04/a03161_1a5ef0e28678564632622cea9fc9a32e4d" prot="private" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::EditCtrl::hasSelection</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasSelection</name>
+        <qualifiedname>castor3d::EditCtrl::hasSelection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="333" column="6" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="333" bodyend="336"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/d27/a03157"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EditCtrl</label>
+        <link refid="d0/d04/a03161"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d5f/a03109"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d6/df4/a03201"/>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="15">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::array&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::array&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::array&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="26" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="20" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/d27/a03157"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EditCtrl</label>
+        <link refid="d0/d04/a03161"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d5f/a03109"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d6/df4/a03201"/>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::vector&lt; OnNonClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::vector&lt; OnNonClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::vector&lt; OnNonClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Controls/CtrlEdit.hpp" line="13" column="1" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="16" bodyend="357"/>
+    <listofallmembers>
+      <member refid="d5/d27/a03157_1ad1bc14696782df53753d9d200bc69c90" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>addChild</name></member>
+      <member refid="d5/d27/a03157_1a7dcec2e27704a6c45db11b132acb03a9" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>addFlag</name></member>
+      <member refid="d5/d27/a03157_1a1f0fe6f9de5888c7d53281ddf779fe65" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>addFlag</name></member>
+      <member refid="d6/df4/a03201_1ab329229a538e3f9286b051be73b29ba4" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>adjustScrollZIndex</name></member>
+      <member refid="d9/d5f/a03109_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>catchesMouseEvents</name></member>
+      <member refid="d9/d5f/a03109_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>catchesReturnKey</name></member>
+      <member refid="d9/d5f/a03109_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>catchesTabKey</name></member>
+      <member refid="d6/df4/a03201_1a21b246acaf9295c15cdf17d92acbc01f" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>checkScrollBarFlags</name></member>
+      <member refid="d0/dcd/a03113_1a703c7cbc98f4fbc25ac04600257c7c0c" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>ClientHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1a45ffbf50f17a665404170fd665624011" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>ClientKeyboardFunction</name></member>
+      <member refid="d0/dcd/a03113_1aea92aaf9b48684355876a7c81409ccf3" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>ClientMouseFunction</name></member>
+      <member refid="d0/d04/a03161_1a7cf6aab9bc951f71e74c8e0ee1491b8b" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>connect</name></member>
+      <member refid="d9/d5f/a03109_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::EditCtrl</scope><name>connect</name></member>
+      <member refid="d9/d5f/a03109_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::EditCtrl</scope><name>connect</name></member>
+      <member refid="d9/d5f/a03109_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::EditCtrl</scope><name>connect</name></member>
+      <member refid="d0/dcd/a03113_1a7c772af5b472ac82d7a40ebe4968cfb2" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>connectNC</name></member>
+      <member refid="d0/dcd/a03113_1ab5d52b4021d688cc40caeb9fadba5458" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>connectNC</name></member>
+      <member refid="d0/dcd/a03113_1a766759743a229af558fbe4053692bade" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>connectNC</name></member>
+      <member refid="d5/d27/a03157_1a756d46496c99d0f06558b867bee36242" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>Control</name></member>
+      <member refid="d5/d27/a03157_1a1e213aa081ac7fc92ab88e3baa8c98cd" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>create</name></member>
+      <member refid="d6/df4/a03201_1a3b1291cf4701121926054695a1f3f3c6" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>createScrollBars</name></member>
+      <member refid="d0/dcd/a03113_1afb310fd4d1af5c2332bc8496354569c9" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>DerivedPtr</name></member>
+      <member refid="d5/d27/a03157_1a3c72583b9aa9508f5d195296de491224" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>destroy</name></member>
+      <member refid="d6/df4/a03201_1a6bc2f9dcb648cca21b67d5408702b455" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>destroyScrollBars</name></member>
+      <member refid="d9/d5f/a03109_1ad6eda21ee30aa7316eb1b6796d3f0cb9" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>disable</name></member>
+      <member refid="d0/d04/a03161_1ad431e33bc72f1dfa11c2e75f86f0a5c5" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doAddCharAtCaret</name></member>
+      <member refid="d0/d04/a03161_1aadb6f0569e2b103c1a799e1a4334e504" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doAddChild</name></member>
+      <member refid="d0/d04/a03161_1a08250e6f0c42ac7d8aa78160496503c9" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doAdjustTextPosition</name></member>
+      <member refid="d0/d04/a03161_1a1913700af53dcb8831fff868ad62a7d3" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doAdjustZIndex</name></member>
+      <member refid="d0/d04/a03161_1ad2690d6e2f3469de186e0c2f474a538a" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doBeginSelection</name></member>
+      <member refid="d0/d04/a03161_1a3ba0bffcd04b25d0ef681fc7805c9712" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doClearSelection</name></member>
+      <member refid="d0/d04/a03161_1a416fb676141869f18f72c69d97694c18" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doCopyText</name></member>
+      <member refid="d0/d04/a03161_1a21235359cd529e31ddc015afb4999188" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doCreate</name></member>
+      <member refid="d0/d04/a03161_1aa007e82d081589c5ae6a4bc1bbdc44a6" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doCutText</name></member>
+      <member refid="d0/d04/a03161_1aae35edaac54c0a61600356a1048fa797" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doDeleteCharAtCaret</name></member>
+      <member refid="d0/d04/a03161_1aba9e894334e21964d61dc3c25ddef4da" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doDeleteCharBeforeCaret</name></member>
+      <member refid="d0/d04/a03161_1a000934b69d2347b0b90d1fe51172dad5" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doDeleteSelection</name></member>
+      <member refid="d0/d04/a03161_1a886e5ec49c9968e8a8cad2f9e3f972fa" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doDestroy</name></member>
+      <member refid="d0/d04/a03161_1a5f2ffbd655f861189660144a1c7dd510" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doGetNormalisedSelection</name></member>
+      <member refid="d0/d04/a03161_1a28b04c4f99ae0f6a43b3ce19a27e09cf" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doMoveCaretDown</name></member>
+      <member refid="d0/d04/a03161_1aa0beed1337edbe2d890827b5da11f1cf" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doMoveCaretEnd</name></member>
+      <member refid="d0/d04/a03161_1ac400d693315a794998439da0b634a4d3" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doMoveCaretHome</name></member>
+      <member refid="d0/d04/a03161_1a9fd48ad7548dbb7dd93f736bec0eb899" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doMoveCaretLeft</name></member>
+      <member refid="d0/d04/a03161_1a24429cb4b94c70bcc2a0f37917a3b418" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doMoveCaretRight</name></member>
+      <member refid="d0/d04/a03161_1a33cc176ab2092ebe5248ed8607626a95" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doMoveCaretUp</name></member>
+      <member refid="d0/d04/a03161_1a6d5a91e1dccb4256da4000435a2bafbb" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doOnMouseButtonDown</name></member>
+      <member refid="d0/d04/a03161_1a325e09a33063f0214460e3c432322c5f" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doOnMouseButtonUp</name></member>
+      <member refid="d0/d04/a03161_1a74a0f1a2b71908dc82c351404093b4fb" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doOnMouseMove</name></member>
+      <member refid="d0/d04/a03161_1a228e0f2cf75afb1d3c38b7b47622ca37" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doPasteText</name></member>
+      <member refid="d0/d04/a03161_1ac9130811306e0069c39ee0adfca82ac7" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doRemoveChild</name></member>
+      <member refid="d0/d04/a03161_1a7a733fe0d819ec68dc28df1882888918" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doScrollContent</name></member>
+      <member refid="d0/d04/a03161_1a3e0fe5abdda8fd777a7441d6d0891db1" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doSelectAllText</name></member>
+      <member refid="d0/d04/a03161_1a3ffd688b666c28725d07d128e90383b2" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doSetBorderSize</name></member>
+      <member refid="d0/d04/a03161_1a411eac5405ed7c60123a884ee2d253c3" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doSetCaption</name></member>
+      <member refid="d0/d04/a03161_1aaa7e6dc113bd1c24a013504942f79d4a" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doSetPosition</name></member>
+      <member refid="d0/d04/a03161_1a6ed54cd26615caef6824394600ad695d" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doSetSize</name></member>
+      <member refid="d0/d04/a03161_1a4b695c2f5f7cfb972a70e9becb78a08e" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doSetVisible</name></member>
+      <member refid="d0/d04/a03161_1adc71627fff5ab1278f3d6b8f8485c9ff" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doUpdate</name></member>
+      <member refid="d0/d04/a03161_1a4b250d473d5f0e2bb628acf7c7cb2fa9" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateCaption</name></member>
+      <member refid="d0/d04/a03161_1ae9f1cabb7c0ea7a2bd8e636417dbec97" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateCaret</name></member>
+      <member refid="d0/d04/a03161_1af7e51b731ad538654cae2bc8a60f1429" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateCaretIndices</name></member>
+      <member refid="d0/d04/a03161_1a0a63dbf35f97266015d9455c3fb87a07" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateCaretPosition</name></member>
+      <member refid="d0/d04/a03161_1aa894faf2e5b20e9c79ad28377ff3a76a" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateClientRect</name></member>
+      <member refid="d0/d04/a03161_1ad42d86428c8dbf13d78459afad4a77d9" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateFlags</name></member>
+      <member refid="d0/d04/a03161_1a059413882710960777699e455bb2c3f1" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateMetrics</name></member>
+      <member refid="d0/d04/a03161_1a9370150d43c40c70f2f6f1c1bd165a31" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateSelection</name></member>
+      <member refid="d0/d04/a03161_1abd9483956799395e6a4bb1d07fa408fe" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateStyle</name></member>
+      <member refid="d0/d04/a03161_1a310a036a874f7d677ed13f9fce031671" prot="private" virt="virtual"><scope>castor3d::EditCtrl</scope><name>doUpdateZIndex</name></member>
+      <member refid="d0/d04/a03161_1a454157053fac08271a179c72ffe9a587" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>EditCtrl</name></member>
+      <member refid="d0/d04/a03161_1a5e03f1e85e5d2fc21818aae7f4f0573a" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>EditCtrl</name></member>
+      <member refid="d9/d5f/a03109_1a261497f31a8ad918a2315af0efae6e6d" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>enable</name></member>
+      <member refid="d9/d5f/a03109_1a916afcd686fc5022c05d6ff2bf18900a" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>EnableFunction</name></member>
+      <member refid="d9/d5f/a03109_1ac52718713f27db870abc7268142083e1" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>EventHandler</name></member>
+      <member refid="d0/dcd/a03113_1a88c786851d42d7d9c5b4c4bb6fbd205d" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>EventHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1ad8d1623d5da2a584967c734fba483d8a" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>EventQueue</name></member>
+      <member refid="d5/d27/a03157_1a6aab144ea536fa1981744dd0350bd9f1" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getAbsolutePosition</name></member>
+      <member refid="d5/d27/a03157_1ac4f784eaa1bba6d3b023124dd17bcacd" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getBackgroundOverlay</name></member>
+      <member refid="d5/d27/a03157_1a3b327c65b7d0202012a7de4ac95ff6a0" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/d27/a03157_1acf1524781666decd143c429cf3512fe5" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/d27/a03157_1a07e5a74ea2c29504263372e346277c7d" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getBorderInnerUV</name></member>
+      <member refid="d5/d27/a03157_1a2970c7c7a19b28d48701987bf6b61a53" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getBorderOuterUV</name></member>
+      <member refid="d5/d27/a03157_1aec3c1f61d93c71cb921f9e98faf49a37" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getBorderPosition</name></member>
+      <member refid="d5/d27/a03157_1a19e84cfd0b59e70df316f6d63648041d" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getBorderSize</name></member>
+      <member refid="d0/d04/a03161_1a053019eae2b992f8a566a5d3ab120d13" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getCaption</name></member>
+      <member refid="d5/d27/a03157_1a23f6c6e05acec8910f2f653f6ff2e1ae" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getChildControl</name></member>
+      <member refid="d5/d27/a03157_1a551248e4f8c5fe6f7b0718317469659c" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getChildren</name></member>
+      <member refid="d5/d27/a03157_1afa9a04c734235389699a47e958050f97" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getClientOffset</name></member>
+      <member refid="d5/d27/a03157_1a8546428f36529b0cad2d1f065af62060" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getClientRect</name></member>
+      <member refid="d5/d27/a03157_1a8321754767d403f6fce37f126f9cbd43" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getClientSize</name></member>
+      <member refid="d5/d27/a03157_1ac784a51c464ddec5e4d8b5a03c386c2e" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getControlsManager</name></member>
+      <member refid="d5/d27/a03157_1a040bb1287bb106d3aa5fe0d23b04ffd7" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getCursor</name></member>
+      <member refid="d5/d27/a03157_1ad56a9032db1992e267092b4a31ad326b" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getEngine</name></member>
+      <member refid="d5/d27/a03157_1afb284673f9161e073a83e1ccaddb658e" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getFlags</name></member>
+      <member refid="d5/d27/a03157_1add233ebce85fe354e398d75a1cf5d1a5" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getId</name></member>
+      <member refid="d5/d27/a03157_1a615d30ab6530d5a64bd2b505d106a252" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getParent</name></member>
+      <member refid="d5/d27/a03157_1a66b03f48bede297f991a87089f50b89e" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getPosition</name></member>
+      <member refid="d5/d27/a03157_1adaa29a9485c7893a860b842917960915" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getResizeBorderSize</name></member>
+      <member refid="d5/d27/a03157_1ab44b4219c4bee06aa148aa8bc35cb87c" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getScene</name></member>
+      <member refid="d6/df4/a03201_1a772267b983302f045bdd634a402a1396" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getScrollPosition</name></member>
+      <member refid="d5/d27/a03157_1ae5a5697aa0ee7d76d2d6fd31ab39900c" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getSize</name></member>
+      <member refid="d0/d04/a03161_1ad7df8d5c67aec1c42366158d24dfcfbc" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getStyle</name></member>
+      <member refid="d0/d04/a03161_1aecbe2689f33b8763b0420e32b8c20357" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getStyle</name></member>
+      <member refid="d5/d27/a03157_1a072e172e9fa3cf408536b15fb6b9a367" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getType</name></member>
+      <member refid="d5/d27/a03157_1a1eda8f0ad717bbe69ad42aeb5f6128c6" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>getUV</name></member>
+      <member refid="d6/df4/a03201_1af885061793d951a3694562d68510bea6" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>hasHorizontalScrollBar</name></member>
+      <member refid="d5/d27/a03157_1aed68cb86a172a24cffd3bbe950134b3c" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>hasScene</name></member>
+      <member refid="d0/d04/a03161_1a5ef0e28678564632622cea9fc9a32e4d" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>hasSelection</name></member>
+      <member refid="d6/df4/a03201_1a84bb253e368bb590f1b3dcfdfaaf54f6" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>hasVerticalScrollBar</name></member>
+      <member refid="d5/d27/a03157_1ae14dacb5781b0576a20f21d8dfc1d663" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>hide</name></member>
+      <member refid="d5/d27/a03157_1ae6d193e17e11347c6cf378f6f19d5ed7" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isAlwaysOnTop</name></member>
+      <member refid="d5/d27/a03157_1a6c53467fb1c4b3e85445f0c49cf4e1c7" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/d27/a03157_1aa57ae69b3ec7fa12384a7a2e3090c018" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isBackgroundVisible</name></member>
+      <member refid="d9/d5f/a03109_1a0c72e92a8514c0959d7ad57b0b971f73" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isEnabled</name></member>
+      <member refid="d5/d27/a03157_1a1dbd277c9387982c0c153faa9f7070e2" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isInResizeRange</name></member>
+      <member refid="d5/d27/a03157_1aecf9cd988ccd639e7ecbbd1947f887ff" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isMovable</name></member>
+      <member refid="d0/d04/a03161_1adba23f7b86fdfd05b62982ce016e2b37" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isMultiLine</name></member>
+      <member refid="d5/d27/a03157_1afbb584204c8a58b4312bda40a028199d" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isResizable</name></member>
+      <member refid="d5/d27/a03157_1a3e1d91ad264e850c2b35f691ec19dd4d" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>isVisible</name></member>
+      <member refid="d0/d04/a03161_1a528720ed52b51052be4fe9c591200262" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_active</name></member>
+      <member refid="d5/d27/a03157_1a581415951e9ae64158469104459a5040" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_backgroundMaterial</name></member>
+      <member refid="d0/d04/a03161_1aa5ee2c07a081079c9ed6058a21cf5965" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_caption</name></member>
+      <member refid="d0/d04/a03161_1a6796077ac17bb08be552d25a7deac13f" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_caret</name></member>
+      <member refid="d5/d27/a03157_1a0422d1d6b4a50fad3c6908078d3ef760" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_flags</name></member>
+      <member refid="d5/d27/a03157_1ac23b3de83e5473a01be74f66615389c3" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_foregroundMaterial</name></member>
+      <member refid="d9/d5f/a03109_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_handlerSlots</name></member>
+      <member refid="d9/d5f/a03109_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_handlerSlotsConnections</name></member>
+      <member refid="d0/d04/a03161_1af159594b5ab59b714d59469384ae0f5f" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_hasSelection</name></member>
+      <member refid="d0/d04/a03161_1adb3d66e72396a702121ee7eabedae2e4" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_isMouseSelecting</name></member>
+      <member refid="d9/d5f/a03109_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_keyboardSlots</name></member>
+      <member refid="d9/d5f/a03109_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_keyboardSlotsConnections</name></member>
+      <member refid="d0/d04/a03161_1a0697335bc14dcd0f0e0cd9ec0662095c" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_metrics</name></member>
+      <member refid="d9/d5f/a03109_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_mouseSlots</name></member>
+      <member refid="d9/d5f/a03109_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_mouseSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1a2a710ba7566a0da8a13156abc0901b11" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_ncHandlerSlots</name></member>
+      <member refid="d0/dcd/a03113_1a368dcf33032891e0e56c1a1d8f4103aa" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_ncHandlerSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1a14951b54a3e24fe7b348613f16f50b84" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_ncKeyboardSlots</name></member>
+      <member refid="d0/dcd/a03113_1ae1d9ec7ce4715a0a9a2536955cebb60e" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_ncKeyboardSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_ncMouseSlots</name></member>
+      <member refid="d0/dcd/a03113_1af7c333a4c75f38cf11d5226e797fc653" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_ncMouseSlotsConnections</name></member>
+      <member refid="d0/d04/a03161_1ad33511194f5e99961a4a26211b35b0e1" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_onScrollContent</name></member>
+      <member refid="d0/d04/a03161_1a0360c3fd2b55a4fbf413367a594e06b2" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_panelsZIndex</name></member>
+      <member refid="d5/d27/a03157_1afd49a0f5f0736d462eaa2b6a6c66318b" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_parent</name></member>
+      <member refid="d5/d27/a03157_1add3ab7fec26d47ae3b477851a7cc2ee6" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_scene</name></member>
+      <member refid="d0/d04/a03161_1a2d18badae688ea2a055f1f228f603e8c" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_selection</name></member>
+      <member refid="d0/d04/a03161_1a1bce4ebbb2bc7516900d10e72136720d" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_selections</name></member>
+      <member refid="d0/d04/a03161_1ae4b722455cc1364642abef2834c94f2d" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_signals</name></member>
+      <member refid="d0/d04/a03161_1a5c8613ab844235a294ea25ef2358425f" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>m_text</name></member>
+      <member refid="d0/dcd/a03113_1a1726b1c708fa09c31f8ee004b2758341" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>NonClientEventHandler</name></member>
+      <member refid="d0/dcd/a03113_1a7c5bbf295117ab0f0ebc279365426a35" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>NonClientHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1a7cc2d3c359c3bd10417813a38eb28cc2" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>NonClientKeyboardFunction</name></member>
+      <member refid="d0/dcd/a03113_1a35796ed2ebfb666605bad65eefdd2eab" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>NonClientMouseFunction</name></member>
+      <member refid="d0/d04/a03161_1a618f126e2d466fb554a12c52a50187e3" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>onActivate</name></member>
+      <member refid="d5/d27/a03157_1a030ff972d48a241466cef3c8082c4e5e" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>onChanged</name></member>
+      <member refid="d0/d04/a03161_1a1ec599aa2075e30784d53976194a3f02" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>onChar</name></member>
+      <member refid="d9/d5f/a03109_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnClientHandlerEvent</name></member>
+      <member refid="d9/d5f/a03109_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnClientHandlerEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnClientKeyboardEvent</name></member>
+      <member refid="d9/d5f/a03109_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnClientKeyboardEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnClientMouseEvent</name></member>
+      <member refid="d9/d5f/a03109_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnClientMouseEventConnection</name></member>
+      <member refid="d0/d04/a03161_1aede198e04253cfe5df9a4998f5e9dd98" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>onDeactivate</name></member>
+      <member refid="d9/d5f/a03109_1a762d1e36d01afdb527690a27f6e6645a" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnEnable</name></member>
+      <member refid="d9/d5f/a03109_1a51294359629a2fb1d22cab6d40e785e0" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>onEnable</name></member>
+      <member refid="d9/d5f/a03109_1aeeec8bfb3700736547c31cc89e78ea2c" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnEnableConnection</name></member>
+      <member refid="d0/d04/a03161_1a4b174a40e6ef9e705d7d16d79c8fc291" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>onKeyDown</name></member>
+      <member refid="d0/d04/a03161_1a3deec9b96a7ff9283e7d3494d589647e" prot="private" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>onKeyUp</name></member>
+      <member refid="d0/dcd/a03113_1a8cde3553a16b17f2db9b8cb2d0457be6" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnNonClientHandlerEvent</name></member>
+      <member refid="d0/dcd/a03113_1a3cd3b709106f34e3c628df967ff0d294" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnNonClientHandlerEventConnection</name></member>
+      <member refid="d0/dcd/a03113_1ae68352453ba12818f1d870cdaf6eea40" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnNonClientKeyboardEvent</name></member>
+      <member refid="d0/dcd/a03113_1ae5b3c80ac4550412145ed53787b33d86" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnNonClientKeyboardEventConnection</name></member>
+      <member refid="d0/dcd/a03113_1acf4c10c3d5dd8fbb43d1b238d9b6de36" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnNonClientMouseEvent</name></member>
+      <member refid="d0/dcd/a03113_1aefea2351ba1c6ea3dfbe9d22ddf311a6" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnNonClientMouseEventConnection</name></member>
+      <member refid="d6/df4/a03201_1a01dc4891a4d1278caadde993fce3a478" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>onScrollContent</name></member>
+      <member refid="d6/df4/a03201_1a090f038e310dcf9e5d52e9341580d447" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnScrollContent</name></member>
+      <member refid="d6/df4/a03201_1a125fdf16def9bcdf059bd8d67cf898db" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnScrollContentConnection</name></member>
+      <member refid="d6/df4/a03201_1a08a4ff8bee21cc10a17bad2ee694e585" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>OnScrollContentFunction</name></member>
+      <member refid="d9/d5f/a03109_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>processEvents</name></member>
+      <member refid="d9/d5f/a03109_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>processHandlerEvent</name></member>
+      <member refid="d9/d5f/a03109_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>processKeyboardEvent</name></member>
+      <member refid="d9/d5f/a03109_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>processMouseEvent</name></member>
+      <member refid="d9/d5f/a03109_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d5f/a03109_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d5f/a03109_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>pushEvent</name></member>
+      <member refid="d6/df4/a03201_1a1f1ad6fc05bfc1536f1d45535df5bdd3" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>registerControl</name></member>
+      <member refid="d5/d27/a03157_1a9d2083e8d22c0af9f07e494f17aa84a9" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>removeChild</name></member>
+      <member refid="d5/d27/a03157_1a76bed2932e40dfc7d10f6bc2113bc213" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>removeFlag</name></member>
+      <member refid="d5/d27/a03157_1aa5edf92a6bf41017a281e68aeb9d7eaf" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>removeFlag</name></member>
+      <member refid="d6/df4/a03201_1a13273723954d21bca4ac100ce4b52118" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>ScrollableCtrl</name></member>
+      <member refid="d5/d27/a03157_1adc6817a2b0f2bcd5dcef1fe18ce518b6" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setBackgroundBorderMaterial</name></member>
+      <member refid="d5/d27/a03157_1a96be50155227ba273fffb7feb811ec75" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setBackgroundBorderPosition</name></member>
+      <member refid="d5/d27/a03157_1a5591c2409137443030717673282bc227" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/d27/a03157_1a8bf9f81d2b736d262f75aa6617f7a605" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setBackgroundSize</name></member>
+      <member refid="d5/d27/a03157_1a7ed9a34492cb400424eb233adf582ca6" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setBorderInnerUV</name></member>
+      <member refid="d5/d27/a03157_1a36f16d9f66f6e2376b888ccae589f8d6" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setBorderOuterUV</name></member>
+      <member refid="d5/d27/a03157_1ab8c78763312333353378ceaff269722c" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setBorderSize</name></member>
+      <member refid="d5/d27/a03157_1a3f413815fb5be7cb79bd8ad1545ed70f" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setCaption</name></member>
+      <member refid="d9/d5f/a03109_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setCatchesMouseEvents</name></member>
+      <member refid="d5/d27/a03157_1a4e90b29a056dcbf2db96eefe6041239d" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setPosition</name></member>
+      <member refid="d6/df4/a03201_1a9e36c2dba225280c164d7d5727a092e7" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setScrollBarsVisible</name></member>
+      <member refid="d5/d27/a03157_1a21a6e38b960222e3df47cc0420176e49" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setSize</name></member>
+      <member refid="d5/d27/a03157_1a9707c9c90e1ae4a57e520fc841332560" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setStyle</name></member>
+      <member refid="d5/d27/a03157_1a6e4e43823e6aae177386088d85c36d69" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setUV</name></member>
+      <member refid="d5/d27/a03157_1ab00d1832ef47986d3d110967b2697160" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>setVisible</name></member>
+      <member refid="d5/d27/a03157_1a68a85bdad7fdc17d729cd97e199ae0f9" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>show</name></member>
+      <member refid="d0/d04/a03161_1a228cf1a8ba08d2b051914c3578845bab" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>Type</name></member>
+      <member refid="d6/df4/a03201_1abfdacade72fa1de2749d784b26dee3bf" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>unregisterControl</name></member>
+      <member refid="d0/d04/a03161_1afe7cfe36e1e9965e7fcdba3e9416d56a" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>updateCaption</name></member>
+      <member refid="d6/df4/a03201_1a41cf04107eb7cc29062fad7f8886d682" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>updateScrollableClientRect</name></member>
+      <member refid="d6/df4/a03201_1aaf2a785346233c77031cc67362f635f7" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>updateScrollBars</name></member>
+      <member refid="d6/df4/a03201_1a38842d6560f9bbb329607a1da6ed6643" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>updateScrollBarsStyle</name></member>
+      <member refid="d6/df4/a03201_1a27b29c675906ed68bbc6e21c2ab63418" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>updateScrollBarsThumb</name></member>
+      <member refid="d6/df4/a03201_1a635cd61e301e0c8143cb2fc6ada9966c" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>updateScrollZIndex</name></member>
+      <member refid="d6/df4/a03201_1aa2e25f2b5147066e2be098ec80f304f3" prot="protected" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>updateTotalSize</name></member>
+      <member refid="d5/d27/a03157_1a7ba50bfc701825af7c072e553b9a36bc" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>~Control</name></member>
+      <member refid="d0/d04/a03161_1a16bd1b5ff9f7967c9e9bfebe1c0c5cef" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl</scope><name>~EditCtrl</name></member>
+      <member refid="d9/d5f/a03109_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::EditCtrl</scope><name>~EventHandler</name></member>
+      <member refid="d6/df4/a03201_1a68afd97e16432c424a2a04eb6faa4da9" prot="public" virt="virtual"><scope>castor3d::EditCtrl</scope><name>~ScrollableCtrl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

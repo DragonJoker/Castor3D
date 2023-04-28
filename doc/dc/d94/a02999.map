@@ -1,6 +1,8 @@
-<map id="castor3d::UserInputEvent" name="castor3d::UserInputEvent">
-<area shape="rect" id="node1" title="Description of a user input event." alt="" coords="185,5,352,32"/>
-<area shape="rect" id="node2" href="$d8/d7d/a02988.html" title=" " alt="" coords="5,80,161,107"/>
-<area shape="rect" id="node3" href="$d6/d5d/a02992.html" title=" " alt="" coords="185,80,352,107"/>
-<area shape="rect" id="node4" href="$d3/d8b/a02996.html" title=" " alt="" coords="376,80,527,107"/>
+<map id="castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;" name="castor3d::ObjectCacheT&lt; ObjT, KeyT, TraitsT &gt;">
+<area shape="rect" id="node1" title=" " alt="" coords="757,55,920,95"/>
+<area shape="rect" id="node2" href="$d2/daa/a02997.html" title=" " alt="" coords="523,55,708,95"/>
+<area shape="rect" id="node3" title=" " alt="" coords="228,5,411,31"/>
+<area shape="rect" id="node4" title=" " alt="" coords="225,55,413,95"/>
+<area shape="rect" id="node5" href="$d4/d44/a03065.html" title=" " alt="" coords="259,120,379,145"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,120,176,145"/>
 </map>

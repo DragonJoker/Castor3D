@@ -1,0 +1,470 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/dfa/a03285" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ProgressStyle</compoundname>
+    <basecompoundref refid="dc/df1/a03261" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <includes local="no">StyleProgress.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/dfa/a03285_1aaa1f3f5272870d0415285dc98e41d801" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::ProgressStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::ProgressStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725da0b8b2ddcd8f77e4a92fa1b84f24b9565" kindref="member">ControlType::eProgress</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="17" column="30" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/dfa/a03285_1ac9b3e2418b5f2c954654b6341b5eda43" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ProgressStyle::m_titleFontName</definition>
+        <argsstring></argsstring>
+        <name>m_titleFontName</name>
+        <qualifiedname>castor3d::ProgressStyle::m_titleFontName</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="110" column="16" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfa/a03285_1a8658aab2fa5f6891b1c498579faba952" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::ProgressStyle::m_titleMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_titleMaterial</name>
+        <qualifiedname>castor3d::ProgressStyle::m_titleMaterial</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="111" column="13" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfa/a03285_1a3a9a09bcb7a534db64df44048feb53d7" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d84/a03281" kindref="compound">PanelStyle</ref></type>
+        <definition>PanelStyle castor3d::ProgressStyle::m_containerStyle</definition>
+        <argsstring></argsstring>
+        <name>m_containerStyle</name>
+        <qualifiedname>castor3d::ProgressStyle::m_containerStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="112" column="12" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfa/a03285_1aaeb8a56e0746371f79630f432de93f2e" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d84/a03281" kindref="compound">PanelStyle</ref></type>
+        <definition>PanelStyle castor3d::ProgressStyle::m_progressStyle</definition>
+        <argsstring></argsstring>
+        <name>m_progressStyle</name>
+        <qualifiedname>castor3d::ProgressStyle::m_progressStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="113" column="12" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfa/a03285_1a4ff848791e69cbb4cbeab3346748135a" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ProgressStyle::m_textFontName</definition>
+        <argsstring></argsstring>
+        <name>m_textFontName</name>
+        <qualifiedname>castor3d::ProgressStyle::m_textFontName</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="114" column="16" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/dfa/a03285_1a62b6b67185df6d22007699ba847633ff" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::ProgressStyle::m_textMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_textMaterial</name>
+        <qualifiedname>castor3d::ProgressStyle::m_textMaterial</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="115" column="13" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/dfa/a03285_1ae4e980d7a5794511fb61efbac2787f64" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ProgressStyle::ProgressStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ProgressStyle</name>
+        <qualifiedname>castor3d::ProgressStyle::ProgressStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="19" column="1" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="19" bodyend="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1a8274c0baf63094bd7082c93d069bdd0a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ProgressStyle::ProgressStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ProgressStyle</name>
+        <qualifiedname>castor3d::ProgressStyle::ProgressStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="26" column="1" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="26" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1a9ba81d353bc164a1f05df65f0336a6f0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::ProgressStyle::getTitleFontName</definition>
+        <argsstring>() const</argsstring>
+        <name>getTitleFontName</name>
+        <qualifiedname>castor3d::ProgressStyle::getTitleFontName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="40" column="23" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="40" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1a4dde222bda536107f8074c435bbaf911" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a01725_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::ProgressStyle::getTitleMaterial</definition>
+        <argsstring>() const</argsstring>
+        <name>getTitleMaterial</name>
+        <qualifiedname>castor3d::ProgressStyle::getTitleMaterial</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="45" column="13" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="45" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1ae7d3f2f3688746ad011adec9dcda98c8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d84/a03281" kindref="compound">PanelStyle</ref> const &amp;</type>
+        <definition>PanelStyle const  &amp; castor3d::ProgressStyle::getContainerStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getContainerStyle</name>
+        <qualifiedname>castor3d::ProgressStyle::getContainerStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="50" column="19" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1af000d6a6aa78f5e10b923c4c0c64faad" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d84/a03281" kindref="compound">PanelStyle</ref> const &amp;</type>
+        <definition>PanelStyle const  &amp; castor3d::ProgressStyle::getProgressStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getProgressStyle</name>
+        <qualifiedname>castor3d::ProgressStyle::getProgressStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="55" column="19" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="55" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1adc8ccb8fb2713e94484b129f12fee2b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::ProgressStyle::getTextFontName</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextFontName</name>
+        <qualifiedname>castor3d::ProgressStyle::getTextFontName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="60" column="23" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1a00dfde0c3cc42e1d89ff96001ec635fa" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a01725_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::ProgressStyle::getTextMaterial</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextMaterial</name>
+        <qualifiedname>castor3d::ProgressStyle::getTextMaterial</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="65" column="13" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1afa3187b6080ad848960e91d66aa3001e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressStyle::setTitleFontName</definition>
+        <argsstring>(castor::String value)</argsstring>
+        <name>setTitleFontName</name>
+        <qualifiedname>castor3d::ProgressStyle::setTitleFontName</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="70" column="6" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="70" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1aaeac590c73ec95f0b16f03a339524b6b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressStyle::setTitleMaterial</definition>
+        <argsstring>(MaterialObs value)</argsstring>
+        <name>setTitleMaterial</name>
+        <qualifiedname>castor3d::ProgressStyle::setTitleMaterial</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="75" column="6" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1a8b1f2848e387415f120743214fe285df" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d84/a03281" kindref="compound">PanelStyle</ref> &amp;</type>
+        <definition>PanelStyle &amp; castor3d::ProgressStyle::getContainerStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getContainerStyle</name>
+        <qualifiedname>castor3d::ProgressStyle::getContainerStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="80" column="13" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="80" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1a95eb2e4a5c17c7235822406b3fe47cc9" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d84/a03281" kindref="compound">PanelStyle</ref> &amp;</type>
+        <definition>PanelStyle &amp; castor3d::ProgressStyle::getProgressStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getProgressStyle</name>
+        <qualifiedname>castor3d::ProgressStyle::getProgressStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="85" column="13" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1a33fffb8e18f6f7f932c8f3f17f3f7561" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressStyle::setTextFontName</definition>
+        <argsstring>(castor::String value)</argsstring>
+        <name>setTextFontName</name>
+        <qualifiedname>castor3d::ProgressStyle::setTextFontName</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="90" column="6" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1ac76f099631cdd45ebbfc131b1c5bea96" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressStyle::setTextMaterial</definition>
+        <argsstring>(MaterialObs value)</argsstring>
+        <name>setTextMaterial</name>
+        <qualifiedname>castor3d::ProgressStyle::setTextMaterial</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="95" column="6" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="95" bodyend="98"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/dfa/a03285_1a1233de4568a0baaa567542aafe6b7bf1" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::ProgressStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="dc/df1/a03261_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="101" column="6" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="101" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/dfa/a03285_1ac45f61a1383b8d73a2f80f57ec314773" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::ProgressStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="dc/df1/a03261_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleProgress.hpp" line="105" column="6" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="105" bodyend="107"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="dc/df1/a03261"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ProgressStyle</label>
+        <link refid="d2/dfa/a03285"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="dc/df1/a03261"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ProgressStyle</label>
+        <link refid="d2/dfa/a03285"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Theme/StyleProgress.hpp" line="13" column="1" bodyfile="Gui/Theme/StyleProgress.hpp" bodystart="15" bodyend="116"/>
+    <listofallmembers>
+      <member refid="dc/df1/a03261_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>ControlStyle</name></member>
+      <member refid="dc/df1/a03261_1aeda2101fba70a69cd4bf8256f22d8c16" prot="protected" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="d2/dfa/a03285_1a1233de4568a0baaa567542aafe6b7bf1" prot="private" virt="virtual"><scope>castor3d::ProgressStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="d2/dfa/a03285_1ac45f61a1383b8d73a2f80f57ec314773" prot="private" virt="virtual"><scope>castor3d::ProgressStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="dc/df1/a03261_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="d2/dfa/a03285_1ae7d3f2f3688746ad011adec9dcda98c8" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getContainerStyle</name></member>
+      <member refid="d2/dfa/a03285_1a8b1f2848e387415f120743214fe285df" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getContainerStyle</name></member>
+      <member refid="dc/df1/a03261_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getCursor</name></member>
+      <member refid="dc/df1/a03261_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getEngine</name></member>
+      <member refid="dc/df1/a03261_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="d2/dfa/a03285_1af000d6a6aa78f5e10b923c4c0c64faad" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getProgressStyle</name></member>
+      <member refid="d2/dfa/a03285_1a95eb2e4a5c17c7235822406b3fe47cc9" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getProgressStyle</name></member>
+      <member refid="dc/df1/a03261_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getScene</name></member>
+      <member refid="d2/dfa/a03285_1adc8ccb8fb2713e94484b129f12fee2b5" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getTextFontName</name></member>
+      <member refid="d2/dfa/a03285_1a00dfde0c3cc42e1d89ff96001ec635fa" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getTextMaterial</name></member>
+      <member refid="d2/dfa/a03285_1a9ba81d353bc164a1f05df65f0336a6f0" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getTitleFontName</name></member>
+      <member refid="d2/dfa/a03285_1a4dde222bda536107f8074c435bbaf911" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getTitleMaterial</name></member>
+      <member refid="dc/df1/a03261_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>getType</name></member>
+      <member refid="dc/df1/a03261_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>hasScene</name></member>
+      <member refid="dc/df1/a03261_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="d2/dfa/a03285_1a3a9a09bcb7a534db64df44048feb53d7" prot="private" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>m_containerStyle</name></member>
+      <member refid="d2/dfa/a03285_1aaeb8a56e0746371f79630f432de93f2e" prot="private" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>m_progressStyle</name></member>
+      <member refid="d2/dfa/a03285_1a4ff848791e69cbb4cbeab3346748135a" prot="private" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>m_textFontName</name></member>
+      <member refid="d2/dfa/a03285_1a62b6b67185df6d22007699ba847633ff" prot="private" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>m_textMaterial</name></member>
+      <member refid="d2/dfa/a03285_1ac9b3e2418b5f2c954654b6341b5eda43" prot="private" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>m_titleFontName</name></member>
+      <member refid="d2/dfa/a03285_1a8658aab2fa5f6891b1c498579faba952" prot="private" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>m_titleMaterial</name></member>
+      <member refid="d2/dfa/a03285_1ae4e980d7a5794511fb61efbac2787f64" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>ProgressStyle</name></member>
+      <member refid="d2/dfa/a03285_1a8274c0baf63094bd7082c93d069bdd0a" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>ProgressStyle</name></member>
+      <member refid="dc/df1/a03261_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="dc/df1/a03261_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setCursor</name></member>
+      <member refid="dc/df1/a03261_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="d2/dfa/a03285_1a33fffb8e18f6f7f932c8f3f17f3f7561" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setTextFontName</name></member>
+      <member refid="d2/dfa/a03285_1ac76f099631cdd45ebbfc131b1c5bea96" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setTextMaterial</name></member>
+      <member refid="d2/dfa/a03285_1afa3187b6080ad848960e91d66aa3001e" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setTitleFontName</name></member>
+      <member refid="d2/dfa/a03285_1aaeac590c73ec95f0b16f03a339524b6b" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>setTitleMaterial</name></member>
+      <member refid="d2/dfa/a03285_1aaa1f3f5272870d0415285dc98e41d801" prot="public" virt="non-virtual"><scope>castor3d::ProgressStyle</scope><name>Type</name></member>
+      <member refid="dc/df1/a03261_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::ProgressStyle</scope><name>~ControlStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

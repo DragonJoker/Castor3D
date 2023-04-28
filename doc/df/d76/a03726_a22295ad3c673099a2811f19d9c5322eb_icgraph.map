@@ -1,0 +1,5 @@
+<map id="castor3d::EmissiveMapComponent::Plugin::getTextureFlags" name="castor3d::EmissiveMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="276,37,499,77"/>
+<area shape="rect" id="node2" href="$df/d76/a03726.html#a31473b1d6673c519b8b495386b7758b6" title="Fills the texture configuration for use with this component." alt="" coords="5,5,228,45"/>
+<area shape="rect" id="node3" href="$df/d76/a03726.html#a76b28c49e4090e34bcbffed93c7f2bff" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,69,228,109"/>
+</map>

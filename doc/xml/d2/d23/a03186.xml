@@ -1,0 +1,1423 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d23/a03186" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SliderCtrl</compoundname>
+    <basecompoundref refid="d5/dbf/a03130" prot="public" virt="non-virtual">castor3d::Control</basecompoundref>
+    <includes local="no">CtrlSlider.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/d23/a03186_1a338b45ac6d3fe565f0e6ae5a5b776bdf" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>C3D_API ControlType constexpr castor3d::SliderCtrl::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::SliderCtrl::Type</qualifiedname>
+        <initializer>{ <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725da1a423f9c2defe48f86dca05363f079eb" kindref="member">ControlType::eSlider</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="97" column="38" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d23/a03186_1a8a63afc792e04146cb7c592f0b90785b" prot="private" static="no" mutable="no">
+        <type>castor::RangedValue&lt; int32_t &gt;</type>
+        <definition>castor::RangedValue&lt; int32_t &gt; castor3d::SliderCtrl::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor3d::SliderCtrl::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="197" column="21" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d23/a03186_1a1a507474b3014c33149e1cf1c902138b" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SliderCtrl::m_scrolling</definition>
+        <argsstring></argsstring>
+        <name>m_scrolling</name>
+        <qualifiedname>castor3d::SliderCtrl::m_scrolling</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="198" column="6" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d23/a03186_1a7da86736b32150261316fa1d5b9b6a05" prot="private" static="no" mutable="no">
+        <type>castor::Position</type>
+        <definition>castor::Position castor3d::SliderCtrl::m_mouse</definition>
+        <argsstring></argsstring>
+        <name>m_mouse</name>
+        <qualifiedname>castor3d::SliderCtrl::m_mouse</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="199" column="18" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d23/a03186_1ac9a3002f3809991f31fd9e1a53cd7ce7" prot="private" static="no" mutable="no">
+        <type>StaticCtrlRPtr</type>
+        <definition>StaticCtrlRPtr castor3d::SliderCtrl::m_line</definition>
+        <argsstring></argsstring>
+        <name>m_line</name>
+        <qualifiedname>castor3d::SliderCtrl::m_line</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="200" column="16" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d23/a03186_1a78f1a37e40d15e7b49b122fb5a7f2ec6" prot="private" static="no" mutable="no">
+        <type>StaticCtrlRPtr</type>
+        <definition>StaticCtrlRPtr castor3d::SliderCtrl::m_tick</definition>
+        <argsstring></argsstring>
+        <name>m_tick</name>
+        <qualifiedname>castor3d::SliderCtrl::m_tick</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="201" column="16" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="201" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d23/a03186_1a16dee5b83ec78d94bbdaadb0c36c5fbf" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1aacacc72cec9e6dac51126ed8b199c01c" kindref="member">OnSliderEvent</ref></type>
+        <definition>OnSliderEvent castor3d::SliderCtrl::m_signals[size_t(SliderEvent::eCount)]</definition>
+        <argsstring>[size_t(SliderEvent::eCount)]</argsstring>
+        <name>m_signals</name>
+        <qualifiedname>castor3d::SliderCtrl::m_signals</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="202" column="15" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="202" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d23/a03186_1a78e24cee957705bd380b1f2622507d12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SliderCtrl::SliderCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, SliderStyleRPtr style, ControlRPtr parent)</argsstring>
+        <name>SliderCtrl</name>
+        <qualifiedname>castor3d::SliderCtrl::SliderCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>SliderStyleRPtr</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a8f610213fc095a3a9f24a741e94fa94c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SliderCtrl::SliderCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, SliderStyleRPtr style, ControlRPtr parent, castor::RangedValue&lt; int32_t &gt; const &amp;value, castor::Position const &amp;position, castor::Size const &amp;size, ControlFlagType flags=0, bool visible=true)</argsstring>
+        <name>SliderCtrl</name>
+        <qualifiedname>castor3d::SliderCtrl::SliderCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>SliderStyleRPtr</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a1b0644d82256ab79bf71eb959d8f7106" kindref="member">ControlFlagType</ref></type>
+          <declname>flags</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The slider initial value, and its range </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The position </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration flags </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial visibility status </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="40" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a748822c25b75050cdd70c67f543b5acc" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SliderCtrl::~SliderCtrl</definition>
+        <argsstring>() noexcept override</argsstring>
+        <name>~SliderCtrl</name>
+        <qualifiedname>castor3d::SliderCtrl::~SliderCtrl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a9eab1061f2e4767a692409371a60ad6f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SliderCtrl::setRange</definition>
+        <argsstring>(castor::Range&lt; int32_t &gt; const &amp;value)</argsstring>
+        <name>setRange</name>
+        <qualifiedname>castor3d::SliderCtrl::setRange</qualifiedname>
+        <param>
+          <type>castor::Range&lt; int32_t &gt; const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>sets the range <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="55" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1acdcd1ec58ec8ee0adb148a24f86a33c2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SliderCtrl::setValue</definition>
+        <argsstring>(int32_t value)</argsstring>
+        <name>setValue</name>
+        <qualifiedname>castor3d::SliderCtrl::setValue</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>sets the caption <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="60" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a88e001c410fe94e754f8957624057d00" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Range&lt; int32_t &gt; const &amp;</type>
+        <definition>castor::Range&lt; int32_t &gt; const  &amp; castor3d::SliderCtrl::getRange</definition>
+        <argsstring>() const</argsstring>
+        <name>getRange</name>
+        <qualifiedname>castor3d::SliderCtrl::getRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Retrieves the range <simplesect kind="return"><para>The value </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="65" column="22" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1aef7e72c4852177294c12f4ddb96e424b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::SliderCtrl::getValue</definition>
+        <argsstring>() const</argsstring>
+        <name>getValue</name>
+        <qualifiedname>castor3d::SliderCtrl::getValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Retrieves the caption <simplesect kind="return"><para>The valu </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="73" column="9" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="73" bodyend="76"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1aee563d9f3c34e4b1d595785b4519e120" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/da6/a01698_1a32fbd8753143f8a065f9f3ab44e405b8" kindref="member">OnSliderEventConnection</ref></type>
+        <definition>OnSliderEventConnection castor3d::SliderCtrl::connect</definition>
+        <argsstring>(SliderEvent event, OnSliderEventFunction function)</argsstring>
+        <name>connect</name>
+        <qualifiedname>castor3d::SliderCtrl::connect</qualifiedname>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a4d50d4f07a37ea832df58fa6a8069b43" kindref="member">SliderEvent</ref></type>
+          <declname>event</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1aa65e6f2dbd150cfeae2c9e5bd111f6ff" kindref="member">OnSliderEventFunction</ref></type>
+          <declname>function</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Connects a function to a slider event <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The event type </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">function</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The function </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The internal function index, to be able to disconnect it </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="83" column="25" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="83" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a9778f799b1fd4bef2907b0a6121e72d1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/deb/a03274" kindref="compound">SliderStyle</ref> const &amp;</type>
+        <definition>SliderStyle const  &amp; castor3d::SliderCtrl::getStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::SliderCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The slider style. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="92" column="20" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="92" bodyend="95"/>
+        <references refid="d5/dbf/a03130_1a3b327c65b7d0202012a7de4ac95ff6a0" compoundref="d0/d39/a00314" startline="219" endline="222">castor3d::Control::getBaseStyle</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d23/a03186_1afbb6ceb82002445e8fc291cddccc92a9" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="da/deb/a03274" kindref="compound">SliderStyle</ref> &amp;</type>
+        <definition>SliderStyle &amp; castor3d::SliderCtrl::getStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::SliderCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="100" column="14" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="100" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a14925ad46e792badaab091b0ce1722db" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doUpdateLineAndTick</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateLineAndTick</name>
+        <qualifiedname>castor3d::SliderCtrl::doUpdateLineAndTick</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the line and tick position and size </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="106" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1ae489c665534d71ac68251326a9256b2e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doCreate</definition>
+        <argsstring>() override</argsstring>
+        <name>doCreate</name>
+        <qualifiedname>castor3d::SliderCtrl::doCreate</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a986e1065f7dd8744af1099234d1e42d6">doCreate</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="110" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a0450000b49827fe02c9f31b8fc7433af" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doDestroy</definition>
+        <argsstring>() override</argsstring>
+        <name>doDestroy</name>
+        <qualifiedname>castor3d::SliderCtrl::doDestroy</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1aee5d3b26288343563b7049781cc413b8">doDestroy</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Destroys the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="114" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a278834588442bdb7334abb85e915d7aa" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doSetPosition</definition>
+        <argsstring>(castor::Position const &amp;value) override</argsstring>
+        <name>doSetPosition</name>
+        <qualifiedname>castor3d::SliderCtrl::doSetPosition</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1acb1760e128b67a59ae10ee7ae2ea914d">doSetPosition</reimplements>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the position <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="118" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1aecf3477bc5727a8f75955a0d20ad4324" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doSetSize</definition>
+        <argsstring>(castor::Size const &amp;value) override</argsstring>
+        <name>doSetSize</name>
+        <qualifiedname>castor3d::SliderCtrl::doSetSize</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a877aa0f08bd22b35959c7fa676a52073">doSetSize</reimplements>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the size <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="122" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1aee6cd30ac649f2b38936009b3b05b700" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doUpdateStyle</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateStyle</name>
+        <qualifiedname>castor3d::SliderCtrl::doUpdateStyle</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a6e83636558d1e472c13108471c5634b8">doUpdateStyle</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="126" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a97ef817306b2ff4fc53378b77b57b38a" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doSetVisible</definition>
+        <argsstring>(bool visible) override</argsstring>
+        <name>doSetVisible</name>
+        <qualifiedname>castor3d::SliderCtrl::doSetVisible</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1af4598b2669fc48d38ce61ac174c86583">doSetVisible</reimplements>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>sets the visibility <simplesect kind="remark"><para>Used for derived control specific behaviou </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="132" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a127267c6343fbd98988955c0d3544f8e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doUpdateFlags</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateFlags</name>
+        <qualifiedname>castor3d::SliderCtrl::doUpdateFlags</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a875d8d63815f41b613d8c93ee847b4c7">doUpdateFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style relative stuff.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="136" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a620894be26e937f959f001581a88ae85" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doOnMouseMove</definition>
+        <argsstring>(MouseEvent const &amp;event) override</argsstring>
+        <name>doOnMouseMove</name>
+        <qualifiedname>castor3d::SliderCtrl::doOnMouseMove</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a04bf34e1c9ba7877904cc446d579be0f">doOnMouseMove</reimplements>
+        <param>
+          <type><ref refid="d8/d4f/a03102" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse moves over the control <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="141" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1aa8e83d83974add408a3f2c1e10841fbb" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doOnMouseLeave</definition>
+        <argsstring>(MouseEvent const &amp;event) override</argsstring>
+        <name>doOnMouseLeave</name>
+        <qualifiedname>castor3d::SliderCtrl::doOnMouseLeave</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1aa9dfacaac91349b1877947c326a384b1">doOnMouseLeave</reimplements>
+        <param>
+          <type><ref refid="d8/d4f/a03102" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse leaves the control <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="146" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1ae0c7a5ac515373b66ec643908795f5e3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doOnMouseButtonUp</definition>
+        <argsstring>(MouseEvent const &amp;event) override</argsstring>
+        <name>doOnMouseButtonUp</name>
+        <qualifiedname>castor3d::SliderCtrl::doOnMouseButtonUp</qualifiedname>
+        <reimplements refid="d5/dbf/a03130_1a58a589060c1c7de472da6b90766d2e6a">doOnMouseButtonUp</reimplements>
+        <param>
+          <type><ref refid="d8/d4f/a03102" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse left button is released over the control <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="151" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1aa871ec7152bdbb54e67161e93af0ff71" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::onTickMouseMove</definition>
+        <argsstring>(ControlRPtr control, MouseEvent const &amp;event)</argsstring>
+        <name>onTickMouseMove</name>
+        <qualifiedname>castor3d::SliderCtrl::onTickMouseMove</qualifiedname>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03102" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse moves over the tick control <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">control</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The tick control </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="157" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1adba882f014e987f07b5ee65b154e6b45" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::onTickMouseButtonDown</definition>
+        <argsstring>(ControlRPtr control, MouseEvent const &amp;event)</argsstring>
+        <name>onTickMouseButtonDown</name>
+        <qualifiedname>castor3d::SliderCtrl::onTickMouseButtonDown</qualifiedname>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03102" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse left button is released over the tick control <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">control</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The tick control </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="164" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a74ea07897d1d495268d8a52b29922df2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::onTickMouseButtonUp</definition>
+        <argsstring>(ControlRPtr control, MouseEvent const &amp;event)</argsstring>
+        <name>onTickMouseButtonUp</name>
+        <qualifiedname>castor3d::SliderCtrl::onTickMouseButtonUp</qualifiedname>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d4f/a03102" kindref="compound">MouseEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when mouse left button is released over the tick control <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">control</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The tick control </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mouse event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="171" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1ac57eba26179efecd4143fc8858860927" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::onKeyDown</definition>
+        <argsstring>(KeyboardEvent const &amp;event)</argsstring>
+        <name>onKeyDown</name>
+        <qualifiedname>castor3d::SliderCtrl::onKeyDown</qualifiedname>
+        <param>
+          <type><ref refid="d8/db1/a03098" kindref="compound">KeyboardEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when a keyboard key is pressed <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The keyboard event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="177" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a6ddae09f90385858e21e5089fbc4956b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::onNcKeyDown</definition>
+        <argsstring>(ControlRPtr control, KeyboardEvent const &amp;event)</argsstring>
+        <name>onNcKeyDown</name>
+        <qualifiedname>castor3d::SliderCtrl::onNcKeyDown</qualifiedname>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/db1/a03098" kindref="compound">KeyboardEvent</ref> const &amp;</type>
+          <declname>event</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Event when a keyboard key is pressed on the active tick or line control <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">control</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control raising the eevent </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">event</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The keyboard event </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="183" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a6533c9e5cc982997f7329593ac11ebab" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doUpdateTick</definition>
+        <argsstring>(castor::Position const &amp;delta)</argsstring>
+        <name>doUpdateTick</name>
+        <qualifiedname>castor3d::SliderCtrl::doUpdateTick</qualifiedname>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>delta</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the tick position <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">delta</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The position delta </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="189" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d23/a03186_1a10cd9cbaa2f0a01cc0068305fabb13d1" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderCtrl::doMoveMouse</definition>
+        <argsstring>(castor::Position const &amp;mouse)</argsstring>
+        <name>doMoveMouse</name>
+        <qualifiedname>castor3d::SliderCtrl::doMoveMouse</qualifiedname>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>mouse</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the mouse position <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">mouse</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new mouse position </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlSlider.hpp" line="194" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/dbf/a03130"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d74/a03082"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SliderCtrl</label>
+        <link refid="d2/d23/a03186"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="15">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::array&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::array&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::array&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="26" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="20" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/dbf/a03130"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d74/a03082"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SliderCtrl</label>
+        <link refid="d2/d23/a03186"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::vector&lt; OnNonClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::vector&lt; OnNonClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::vector&lt; OnNonClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Controls/CtrlSlider.hpp" line="14" column="1" bodyfile="Gui/Controls/CtrlSlider.hpp" bodystart="16" bodyend="203"/>
+    <listofallmembers>
+      <member refid="d5/dbf/a03130_1ad1bc14696782df53753d9d200bc69c90" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>addChild</name></member>
+      <member refid="d5/dbf/a03130_1a7dcec2e27704a6c45db11b132acb03a9" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>addFlag</name></member>
+      <member refid="d5/dbf/a03130_1a1f0fe6f9de5888c7d53281ddf779fe65" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>addFlag</name></member>
+      <member refid="d9/d74/a03082_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>catchesMouseEvents</name></member>
+      <member refid="d9/d74/a03082_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>catchesReturnKey</name></member>
+      <member refid="d9/d74/a03082_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>catchesTabKey</name></member>
+      <member refid="d9/d5e/a03086_1a703c7cbc98f4fbc25ac04600257c7c0c" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>ClientHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1a45ffbf50f17a665404170fd665624011" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>ClientKeyboardFunction</name></member>
+      <member refid="d9/d5e/a03086_1aea92aaf9b48684355876a7c81409ccf3" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>ClientMouseFunction</name></member>
+      <member refid="d2/d23/a03186_1aee563d9f3c34e4b1d595785b4519e120" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>connect</name></member>
+      <member refid="d9/d74/a03082_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::SliderCtrl</scope><name>connect</name></member>
+      <member refid="d9/d74/a03082_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::SliderCtrl</scope><name>connect</name></member>
+      <member refid="d9/d74/a03082_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual" ambiguityscope="castor3d::Control::"><scope>castor3d::SliderCtrl</scope><name>connect</name></member>
+      <member refid="d9/d5e/a03086_1a7c772af5b472ac82d7a40ebe4968cfb2" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>connectNC</name></member>
+      <member refid="d9/d5e/a03086_1ab5d52b4021d688cc40caeb9fadba5458" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>connectNC</name></member>
+      <member refid="d9/d5e/a03086_1a766759743a229af558fbe4053692bade" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>connectNC</name></member>
+      <member refid="d5/dbf/a03130_1a756d46496c99d0f06558b867bee36242" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>Control</name></member>
+      <member refid="d5/dbf/a03130_1a1e213aa081ac7fc92ab88e3baa8c98cd" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>create</name></member>
+      <member refid="d9/d5e/a03086_1afb310fd4d1af5c2332bc8496354569c9" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>DerivedPtr</name></member>
+      <member refid="d5/dbf/a03130_1a3c72583b9aa9508f5d195296de491224" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>destroy</name></member>
+      <member refid="d9/d74/a03082_1ad6eda21ee30aa7316eb1b6796d3f0cb9" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>disable</name></member>
+      <member refid="d2/d23/a03186_1ae489c665534d71ac68251326a9256b2e" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doCreate</name></member>
+      <member refid="d2/d23/a03186_1a0450000b49827fe02c9f31b8fc7433af" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doDestroy</name></member>
+      <member refid="d2/d23/a03186_1a10cd9cbaa2f0a01cc0068305fabb13d1" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>doMoveMouse</name></member>
+      <member refid="d2/d23/a03186_1ae0c7a5ac515373b66ec643908795f5e3" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doOnMouseButtonUp</name></member>
+      <member refid="d2/d23/a03186_1aa8e83d83974add408a3f2c1e10841fbb" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doOnMouseLeave</name></member>
+      <member refid="d2/d23/a03186_1a620894be26e937f959f001581a88ae85" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doOnMouseMove</name></member>
+      <member refid="d2/d23/a03186_1a278834588442bdb7334abb85e915d7aa" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doSetPosition</name></member>
+      <member refid="d2/d23/a03186_1aecf3477bc5727a8f75955a0d20ad4324" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doSetSize</name></member>
+      <member refid="d2/d23/a03186_1a97ef817306b2ff4fc53378b77b57b38a" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doSetVisible</name></member>
+      <member refid="d2/d23/a03186_1a127267c6343fbd98988955c0d3544f8e" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doUpdateFlags</name></member>
+      <member refid="d2/d23/a03186_1a14925ad46e792badaab091b0ce1722db" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>doUpdateLineAndTick</name></member>
+      <member refid="d2/d23/a03186_1aee6cd30ac649f2b38936009b3b05b700" prot="private" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>doUpdateStyle</name></member>
+      <member refid="d2/d23/a03186_1a6533c9e5cc982997f7329593ac11ebab" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>doUpdateTick</name></member>
+      <member refid="d9/d74/a03082_1a261497f31a8ad918a2315af0efae6e6d" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>enable</name></member>
+      <member refid="d9/d74/a03082_1a916afcd686fc5022c05d6ff2bf18900a" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>EnableFunction</name></member>
+      <member refid="d9/d74/a03082_1ac52718713f27db870abc7268142083e1" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>EventHandler</name></member>
+      <member refid="d9/d5e/a03086_1a88c786851d42d7d9c5b4c4bb6fbd205d" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>EventHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1ad8d1623d5da2a584967c734fba483d8a" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>EventQueue</name></member>
+      <member refid="d5/dbf/a03130_1a6aab144ea536fa1981744dd0350bd9f1" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getAbsolutePosition</name></member>
+      <member refid="d5/dbf/a03130_1ac4f784eaa1bba6d3b023124dd17bcacd" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getBackgroundOverlay</name></member>
+      <member refid="d5/dbf/a03130_1a3b327c65b7d0202012a7de4ac95ff6a0" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/dbf/a03130_1acf1524781666decd143c429cf3512fe5" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/dbf/a03130_1a07e5a74ea2c29504263372e346277c7d" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getBorderInnerUV</name></member>
+      <member refid="d5/dbf/a03130_1a2970c7c7a19b28d48701987bf6b61a53" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getBorderOuterUV</name></member>
+      <member refid="d5/dbf/a03130_1aec3c1f61d93c71cb921f9e98faf49a37" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getBorderPosition</name></member>
+      <member refid="d5/dbf/a03130_1a19e84cfd0b59e70df316f6d63648041d" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1a23f6c6e05acec8910f2f653f6ff2e1ae" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getChildControl</name></member>
+      <member refid="d5/dbf/a03130_1a551248e4f8c5fe6f7b0718317469659c" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getChildren</name></member>
+      <member refid="d5/dbf/a03130_1afa9a04c734235389699a47e958050f97" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getClientOffset</name></member>
+      <member refid="d5/dbf/a03130_1a8546428f36529b0cad2d1f065af62060" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getClientRect</name></member>
+      <member refid="d5/dbf/a03130_1a8321754767d403f6fce37f126f9cbd43" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getClientSize</name></member>
+      <member refid="d5/dbf/a03130_1ac784a51c464ddec5e4d8b5a03c386c2e" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getControlsManager</name></member>
+      <member refid="d5/dbf/a03130_1a040bb1287bb106d3aa5fe0d23b04ffd7" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getCursor</name></member>
+      <member refid="d5/dbf/a03130_1ad56a9032db1992e267092b4a31ad326b" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getEngine</name></member>
+      <member refid="d5/dbf/a03130_1afb284673f9161e073a83e1ccaddb658e" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getFlags</name></member>
+      <member refid="d5/dbf/a03130_1add233ebce85fe354e398d75a1cf5d1a5" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getId</name></member>
+      <member refid="d5/dbf/a03130_1a615d30ab6530d5a64bd2b505d106a252" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getParent</name></member>
+      <member refid="d5/dbf/a03130_1a66b03f48bede297f991a87089f50b89e" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getPosition</name></member>
+      <member refid="d2/d23/a03186_1a88e001c410fe94e754f8957624057d00" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getRange</name></member>
+      <member refid="d5/dbf/a03130_1adaa29a9485c7893a860b842917960915" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getResizeBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1ab44b4219c4bee06aa148aa8bc35cb87c" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getScene</name></member>
+      <member refid="d5/dbf/a03130_1ae5a5697aa0ee7d76d2d6fd31ab39900c" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getSize</name></member>
+      <member refid="d2/d23/a03186_1a9778f799b1fd4bef2907b0a6121e72d1" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getStyle</name></member>
+      <member refid="d2/d23/a03186_1afbb6ceb82002445e8fc291cddccc92a9" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getStyle</name></member>
+      <member refid="d5/dbf/a03130_1a072e172e9fa3cf408536b15fb6b9a367" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getType</name></member>
+      <member refid="d5/dbf/a03130_1a1eda8f0ad717bbe69ad42aeb5f6128c6" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getUV</name></member>
+      <member refid="d2/d23/a03186_1aef7e72c4852177294c12f4ddb96e424b" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>getValue</name></member>
+      <member refid="d5/dbf/a03130_1aed68cb86a172a24cffd3bbe950134b3c" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>hasScene</name></member>
+      <member refid="d5/dbf/a03130_1ae14dacb5781b0576a20f21d8dfc1d663" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>hide</name></member>
+      <member refid="d5/dbf/a03130_1ae6d193e17e11347c6cf378f6f19d5ed7" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>isAlwaysOnTop</name></member>
+      <member refid="d5/dbf/a03130_1a6c53467fb1c4b3e85445f0c49cf4e1c7" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/dbf/a03130_1aa57ae69b3ec7fa12384a7a2e3090c018" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>isBackgroundVisible</name></member>
+      <member refid="d9/d74/a03082_1a0c72e92a8514c0959d7ad57b0b971f73" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>isEnabled</name></member>
+      <member refid="d5/dbf/a03130_1a1dbd277c9387982c0c153faa9f7070e2" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>isInResizeRange</name></member>
+      <member refid="d5/dbf/a03130_1aecf9cd988ccd639e7ecbbd1947f887ff" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>isMovable</name></member>
+      <member refid="d5/dbf/a03130_1afbb584204c8a58b4312bda40a028199d" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>isResizable</name></member>
+      <member refid="d5/dbf/a03130_1a3e1d91ad264e850c2b35f691ec19dd4d" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>isVisible</name></member>
+      <member refid="d5/dbf/a03130_1a581415951e9ae64158469104459a5040" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_backgroundMaterial</name></member>
+      <member refid="d5/dbf/a03130_1a0422d1d6b4a50fad3c6908078d3ef760" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_flags</name></member>
+      <member refid="d5/dbf/a03130_1ac23b3de83e5473a01be74f66615389c3" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_foregroundMaterial</name></member>
+      <member refid="d9/d74/a03082_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_handlerSlots</name></member>
+      <member refid="d9/d74/a03082_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_handlerSlotsConnections</name></member>
+      <member refid="d9/d74/a03082_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_keyboardSlots</name></member>
+      <member refid="d9/d74/a03082_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_keyboardSlotsConnections</name></member>
+      <member refid="d2/d23/a03186_1ac9a3002f3809991f31fd9e1a53cd7ce7" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_line</name></member>
+      <member refid="d2/d23/a03186_1a7da86736b32150261316fa1d5b9b6a05" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_mouse</name></member>
+      <member refid="d9/d74/a03082_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_mouseSlots</name></member>
+      <member refid="d9/d74/a03082_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_mouseSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1a2a710ba7566a0da8a13156abc0901b11" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_ncHandlerSlots</name></member>
+      <member refid="d9/d5e/a03086_1a368dcf33032891e0e56c1a1d8f4103aa" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_ncHandlerSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1a14951b54a3e24fe7b348613f16f50b84" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_ncKeyboardSlots</name></member>
+      <member refid="d9/d5e/a03086_1ae1d9ec7ce4715a0a9a2536955cebb60e" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_ncKeyboardSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_ncMouseSlots</name></member>
+      <member refid="d9/d5e/a03086_1af7c333a4c75f38cf11d5226e797fc653" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_ncMouseSlotsConnections</name></member>
+      <member refid="d5/dbf/a03130_1afd49a0f5f0736d462eaa2b6a6c66318b" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_parent</name></member>
+      <member refid="d5/dbf/a03130_1add3ab7fec26d47ae3b477851a7cc2ee6" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_scene</name></member>
+      <member refid="d2/d23/a03186_1a1a507474b3014c33149e1cf1c902138b" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_scrolling</name></member>
+      <member refid="d2/d23/a03186_1a16dee5b83ec78d94bbdaadb0c36c5fbf" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_signals</name></member>
+      <member refid="d2/d23/a03186_1a78f1a37e40d15e7b49b122fb5a7f2ec6" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_tick</name></member>
+      <member refid="d2/d23/a03186_1a8a63afc792e04146cb7c592f0b90785b" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>m_value</name></member>
+      <member refid="d9/d5e/a03086_1a1726b1c708fa09c31f8ee004b2758341" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>NonClientEventHandler</name></member>
+      <member refid="d9/d5e/a03086_1a7c5bbf295117ab0f0ebc279365426a35" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>NonClientHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1a7cc2d3c359c3bd10417813a38eb28cc2" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>NonClientKeyboardFunction</name></member>
+      <member refid="d9/d5e/a03086_1a35796ed2ebfb666605bad65eefdd2eab" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>NonClientMouseFunction</name></member>
+      <member refid="d5/dbf/a03130_1a030ff972d48a241466cef3c8082c4e5e" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>onChanged</name></member>
+      <member refid="d9/d74/a03082_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnClientHandlerEvent</name></member>
+      <member refid="d9/d74/a03082_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnClientHandlerEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnClientKeyboardEvent</name></member>
+      <member refid="d9/d74/a03082_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnClientKeyboardEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnClientMouseEvent</name></member>
+      <member refid="d9/d74/a03082_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnClientMouseEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a51294359629a2fb1d22cab6d40e785e0" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>onEnable</name></member>
+      <member refid="d9/d74/a03082_1a762d1e36d01afdb527690a27f6e6645a" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnEnable</name></member>
+      <member refid="d9/d74/a03082_1aeeec8bfb3700736547c31cc89e78ea2c" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnEnableConnection</name></member>
+      <member refid="d2/d23/a03186_1ac57eba26179efecd4143fc8858860927" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>onKeyDown</name></member>
+      <member refid="d2/d23/a03186_1a6ddae09f90385858e21e5089fbc4956b" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>onNcKeyDown</name></member>
+      <member refid="d9/d5e/a03086_1a8cde3553a16b17f2db9b8cb2d0457be6" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnNonClientHandlerEvent</name></member>
+      <member refid="d9/d5e/a03086_1a3cd3b709106f34e3c628df967ff0d294" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnNonClientHandlerEventConnection</name></member>
+      <member refid="d9/d5e/a03086_1ae68352453ba12818f1d870cdaf6eea40" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnNonClientKeyboardEvent</name></member>
+      <member refid="d9/d5e/a03086_1ae5b3c80ac4550412145ed53787b33d86" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnNonClientKeyboardEventConnection</name></member>
+      <member refid="d9/d5e/a03086_1acf4c10c3d5dd8fbb43d1b238d9b6de36" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnNonClientMouseEvent</name></member>
+      <member refid="d9/d5e/a03086_1aefea2351ba1c6ea3dfbe9d22ddf311a6" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>OnNonClientMouseEventConnection</name></member>
+      <member refid="d2/d23/a03186_1adba882f014e987f07b5ee65b154e6b45" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>onTickMouseButtonDown</name></member>
+      <member refid="d2/d23/a03186_1a74ea07897d1d495268d8a52b29922df2" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>onTickMouseButtonUp</name></member>
+      <member refid="d2/d23/a03186_1aa871ec7152bdbb54e67161e93af0ff71" prot="private" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>onTickMouseMove</name></member>
+      <member refid="d9/d74/a03082_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>processEvents</name></member>
+      <member refid="d9/d74/a03082_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>processHandlerEvent</name></member>
+      <member refid="d9/d74/a03082_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>processKeyboardEvent</name></member>
+      <member refid="d9/d74/a03082_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>processMouseEvent</name></member>
+      <member refid="d9/d74/a03082_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d74/a03082_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d74/a03082_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>pushEvent</name></member>
+      <member refid="d5/dbf/a03130_1a9d2083e8d22c0af9f07e494f17aa84a9" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>removeChild</name></member>
+      <member refid="d5/dbf/a03130_1a76bed2932e40dfc7d10f6bc2113bc213" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>removeFlag</name></member>
+      <member refid="d5/dbf/a03130_1aa5edf92a6bf41017a281e68aeb9d7eaf" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>removeFlag</name></member>
+      <member refid="d5/dbf/a03130_1adc6817a2b0f2bcd5dcef1fe18ce518b6" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setBackgroundBorderMaterial</name></member>
+      <member refid="d5/dbf/a03130_1a96be50155227ba273fffb7feb811ec75" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setBackgroundBorderPosition</name></member>
+      <member refid="d5/dbf/a03130_1a5591c2409137443030717673282bc227" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/dbf/a03130_1a8bf9f81d2b736d262f75aa6617f7a605" prot="protected" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setBackgroundSize</name></member>
+      <member refid="d5/dbf/a03130_1a7ed9a34492cb400424eb233adf582ca6" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setBorderInnerUV</name></member>
+      <member refid="d5/dbf/a03130_1a36f16d9f66f6e2376b888ccae589f8d6" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setBorderOuterUV</name></member>
+      <member refid="d5/dbf/a03130_1ab8c78763312333353378ceaff269722c" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1a3f413815fb5be7cb79bd8ad1545ed70f" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setCaption</name></member>
+      <member refid="d9/d74/a03082_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setCatchesMouseEvents</name></member>
+      <member refid="d5/dbf/a03130_1a4e90b29a056dcbf2db96eefe6041239d" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setPosition</name></member>
+      <member refid="d2/d23/a03186_1a9eab1061f2e4767a692409371a60ad6f" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setRange</name></member>
+      <member refid="d5/dbf/a03130_1a21a6e38b960222e3df47cc0420176e49" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setSize</name></member>
+      <member refid="d5/dbf/a03130_1a9707c9c90e1ae4a57e520fc841332560" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setStyle</name></member>
+      <member refid="d5/dbf/a03130_1a6e4e43823e6aae177386088d85c36d69" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setUV</name></member>
+      <member refid="d2/d23/a03186_1acdcd1ec58ec8ee0adb148a24f86a33c2" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setValue</name></member>
+      <member refid="d5/dbf/a03130_1ab00d1832ef47986d3d110967b2697160" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>setVisible</name></member>
+      <member refid="d5/dbf/a03130_1a68a85bdad7fdc17d729cd97e199ae0f9" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>show</name></member>
+      <member refid="d2/d23/a03186_1a78e24cee957705bd380b1f2622507d12" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>SliderCtrl</name></member>
+      <member refid="d2/d23/a03186_1a8f610213fc095a3a9f24a741e94fa94c" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>SliderCtrl</name></member>
+      <member refid="d2/d23/a03186_1a338b45ac6d3fe565f0e6ae5a5b776bdf" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>Type</name></member>
+      <member refid="d5/dbf/a03130_1a7ba50bfc701825af7c072e553b9a36bc" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>~Control</name></member>
+      <member refid="d9/d74/a03082_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::SliderCtrl</scope><name>~EventHandler</name></member>
+      <member refid="d2/d23/a03186_1a748822c25b75050cdd70c67f543b5acc" prot="public" virt="non-virtual"><scope>castor3d::SliderCtrl</scope><name>~SliderCtrl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_07d6c2a09270206a3b07dccb646a5319" kind="dir">
     <compoundname>Event/Frame</compoundname>
-    <innerfile refid="d9/dd6/a00272">CpuFrameEvent.hpp</innerfile>
-    <innerfile refid="d3/d5e/a00275">CpuFunctorEvent.hpp</innerfile>
-    <innerfile refid="dc/d5d/a00278">FrameEventModule.hpp</innerfile>
-    <innerfile refid="d2/d04/a00281">FrameListener.hpp</innerfile>
-    <innerfile refid="db/dc3/a00284">GpuFrameEvent.hpp</innerfile>
-    <innerfile refid="d6/d7f/a00287">GpuFunctorEvent.hpp</innerfile>
+    <innerfile refid="db/d7b/a00296">CpuFrameEvent.hpp</innerfile>
+    <innerfile refid="df/d95/a00299">CpuFunctorEvent.hpp</innerfile>
+    <innerfile refid="d0/d61/a00302">FrameEventModule.hpp</innerfile>
+    <innerfile refid="d3/d07/a00305">FrameListener.hpp</innerfile>
+    <innerfile refid="d5/d0f/a00308">GpuFrameEvent.hpp</innerfile>
+    <innerfile refid="d1/d5d/a00311">GpuFunctorEvent.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

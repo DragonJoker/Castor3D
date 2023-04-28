@@ -1,0 +1,306 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d66/a03954" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::HeightComponent::ComponentsShader</compoundname>
+    <basecompoundref refid="d7/d1d/a04018" prot="public" virt="non-virtual">castor3d::shader::PassComponentsShader</basecompoundref>
+    <includes local="no">HeightComponent.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d66/a03954_1a39fadd32f77d8e3941eb16cfe3888f63" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::HeightComponent::ComponentsShader::ComponentsShader</definition>
+        <argsstring>(PassComponentPlugin const &amp;plugin)</argsstring>
+        <name>ComponentsShader</name>
+        <qualifiedname>castor3d::HeightComponent::ComponentsShader::ComponentsShader</qualifiedname>
+        <param>
+          <type><ref refid="db/df2/a04026" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+          <declname>plugin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="24" column="10" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1a1375f020ce63b2ab7dca075ea440c6c6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightComponent::ComponentsShader::fillComponents</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;components, shader::Materials const &amp;materials, sdw::StructInstance const *surface) const override</argsstring>
+        <name>fillComponents</name>
+        <qualifiedname>castor3d::HeightComponent::ComponentsShader::fillComponents</qualifiedname>
+        <reimplements refid="d7/d1d/a04018_1a23dbc602d3b0621c9df19b77038ae79e">fillComponents</reimplements>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d35/a06482" kindref="compound">shader::Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const *</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+<para>Fills the components shader struct with the members provided by this component. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the struct members. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the current render pass needs this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">surface</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the surface supports needed data for this component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="29" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1a1ddd83561d7b14483536c138d24b1e22" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightComponent::ComponentsShader::fillComponentsInits</definition>
+        <argsstring>(sdw::type::BaseStruct const &amp;components, shader::Materials const &amp;materials, shader::Material const *material, sdw::StructInstance const *surface, sdw::Vec4 const *clrCot, sdw::expr::ExprList &amp;inits) const override</argsstring>
+        <name>fillComponentsInits</name>
+        <qualifiedname>castor3d::HeightComponent::ComponentsShader::fillComponentsInits</qualifiedname>
+        <reimplements refid="d7/d1d/a04018_1a80a16a96d3e5d71cb6b631a77c73217f">fillComponentsInits</reimplements>
+        <param>
+          <type>sdw::type::BaseStruct const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d35/a06482" kindref="compound">shader::Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d55/a06478" kindref="compound">shader::Material</ref> const *</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const *</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const *</type>
+          <declname>clrCot</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+<para>Fills the components shader struct members initialiser with the ones provided by this component. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>The initialisers order and count must match the ones in fillComponent. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the struct members. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the current render pass needs this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to retrieve needed data for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">surface</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to retrieve needed data for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">clrCot</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to retrieve needed data for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">inits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the initialisers. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="32" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d66/a03954_1adeb6384c51c57b9349916e21f49c50dd" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::HeightComponent::ComponentsShader::blendComponents</definition>
+        <argsstring>(shader::Materials const &amp;materials, sdw::Float const &amp;passMultiplier, shader::BlendComponents &amp;res, shader::BlendComponents const &amp;src) const override</argsstring>
+        <name>blendComponents</name>
+        <qualifiedname>castor3d::HeightComponent::ComponentsShader::blendComponents</qualifiedname>
+        <reimplements refid="d7/d1d/a04018_1a277de8d6d8fa8c0e3d50edb51fe2157c">blendComponents</reimplements>
+        <param>
+          <type><ref refid="d4/d35/a06482" kindref="compound">shader::Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>passMultiplier</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>res</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">shader::BlendComponents</ref> const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <briefdescription>
+<para>Used to mix components when multiple passes are blended together. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the current render pass needs this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passMultiplier</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The factor for the current pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">res</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the blending result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current pass data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="38" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::HeightComponent::ComponentsShader</label>
+        <link refid="d3/d66/a03954"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d7/d1d/a04018"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::HeightComponent::ComponentsShader</label>
+        <link refid="d3/d66/a03954"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d7/d1d/a04018"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Other/HeightComponent.hpp" line="21" column="1" bodyfile="Material/Pass/Component/Other/HeightComponent.hpp" bodystart="23" bodyend="42"/>
+    <listofallmembers>
+      <member refid="d7/d1d/a04018_1ab25c5779aec7c1abcf7f275e8ac032e3" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>applyComponents</name></member>
+      <member refid="d7/d1d/a04018_1a616999e78117d42a2aa12e8e1c09a7fe" prot="protected" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d7/d1d/a04018_1a5b84ef8cb9fbdeac8fce698fe02b04e8" prot="protected" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d3/d66/a03954_1adeb6384c51c57b9349916e21f49c50dd" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>blendComponents</name></member>
+      <member refid="d3/d66/a03954_1a39fadd32f77d8e3941eb16cfe3888f63" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>ComponentsShader</name></member>
+      <member refid="d7/d1d/a04018_1a088ad8fd801823896872e5a749657065" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>computeTexcoord</name></member>
+      <member refid="d7/d1d/a04018_1a3d431198b1bf91e0d49b84d1950249b5" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>computeTexcoord</name></member>
+      <member refid="d3/d66/a03954_1a1375f020ce63b2ab7dca075ea440c6c6" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>fillComponents</name></member>
+      <member refid="d3/d66/a03954_1a1ddd83561d7b14483536c138d24b1e22" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>fillComponentsInits</name></member>
+      <member refid="d7/d1d/a04018_1a846afb362f8cdb6bd2dc1a3f98db9f64" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>getId</name></member>
+      <member refid="d7/d1d/a04018_1a1727bca64233903f00c27aacd146429b" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>getPlugin</name></member>
+      <member refid="d7/d1d/a04018_1ae6acbd6edb3df14dcecccd2598bed038" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>isMapSampling</name></member>
+      <member refid="d0/dee/a04014_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d0/dee/a04014_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>operator=</name></member>
+      <member refid="d7/d1d/a04018_1a4a8895df635a573d33aee3fdd42385b2" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>PassComponentsShader</name></member>
+      <member refid="d0/dee/a04014_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d0/dee/a04014_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d0/dee/a04014_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d7/d1d/a04018_1adae1f04a5d2866590f4f3204b233dd99" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d7/d1d/a04018_1a226e2c05d6cff43678f171ef5f413887" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d7/d1d/a04018_1a7ce76843425ffd3e570eaa9ddd7b059e" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>updateComponent</name></member>
+      <member refid="d0/dee/a04014_1a2bdc8907317b8a1f12d3b60ab767f9c6" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>updateOutputs</name></member>
+      <member refid="d0/dee/a04014_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::HeightComponent::ComponentsShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

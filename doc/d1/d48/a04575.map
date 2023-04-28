@@ -1,5 +1,12 @@
-<map id="castor3d::GeneratorPlugin" name="castor3d::GeneratorPlugin">
-<area shape="rect" id="node1" title=" " alt="" coords="12,155,185,181"/>
-<area shape="rect" id="node2" href="$da/d34/a04592.html" title=" " alt="" coords="41,80,157,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,5,192,32"/>
+<map id="castor3d::Mesh" name="castor3d::Mesh">
+<area shape="rect" id="node1" title=" " alt="" coords="1265,35,1377,60"/>
+<area shape="rect" id="node2" title=" " alt="" coords="1109,13,1216,39"/>
+<area shape="rect" id="node3" href="$de/d8b/a02545.html" title=" " alt="" coords="1125,63,1201,88"/>
+<area shape="rect" id="node4" title=" " alt="" coords="801,5,992,31"/>
+<area shape="rect" id="node5" title=" " alt="" coords="491,107,657,147"/>
+<area shape="rect" id="node9" href="$de/d8b/a02545.html" title="Animable public interface." alt="" coords="821,55,972,95"/>
+<area shape="rect" id="node6" title=" " alt="" coords="149,115,271,140"/>
+<area shape="rect" id="node7" title=" " alt="" coords="5,89,44,115"/>
+<area shape="rect" id="node8" title=" " alt="" coords="5,139,44,164"/>
+<area shape="rect" id="node10" title=" " alt="" coords="480,35,668,75"/>
 </map>

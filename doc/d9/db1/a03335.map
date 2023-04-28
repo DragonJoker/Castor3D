@@ -1,7 +1,6 @@
-<map id="castor3d::TransmissionComponent" name="castor3d::TransmissionComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="19,381,242,408"/>
-<area shape="rect" id="node2" href="$d0/dcc/a03148.html" title=" " alt="" coords="5,276,256,332"/>
-<area shape="rect" id="node3" href="$d8/d23/a03712.html" title=" " alt="" coords="9,81,185,108"/>
-<area shape="rect" id="node5" href="$d0/dcc/a03148.html" title="Pass component holding base pass data." alt="" coords="119,157,353,199"/>
-<area shape="rect" id="node4" title=" " alt="" coords="9,5,185,32"/>
+<map id="castor3d::TextureCombine" name="castor3d::TextureCombine">
+<area shape="rect" id="node1" title=" " alt="" coords="27,284,201,309"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,181,223,221"/>
+<area shape="rect" id="node3" title=" " alt="" coords="65,93,163,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="95,5,133,31"/>
 </map>

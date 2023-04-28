@@ -1,4 +1,6 @@
-<map id="castor3d::SceneRenderNodes" name="castor3d::SceneRenderNodes">
-<area shape="rect" id="node1" title=" " alt="" coords="5,95,200,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="17,5,188,47"/>
+<map id="castor3d::VertexBoneData::Ids" name="castor3d::VertexBoneData::Ids">
+<area shape="rect" id="node1" title=" " alt="" coords="5,284,205,309"/>
+<area shape="rect" id="node2" title=" " alt="" coords="19,181,192,221"/>
+<area shape="rect" id="node3" title=" " alt="" coords="51,93,159,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="86,5,125,31"/>
 </map>

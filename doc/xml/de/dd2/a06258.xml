@@ -1,0 +1,1725 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="de/dd2/a06258" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SceneNode</compoundname>
+    <basecompoundref refid="d6/de1/a02518" prot="public" virt="non-virtual">castor3d::AnimableT&lt; Engine &gt;</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <includes local="no">SceneNode.hpp</includes>
+      <sectiondef kind="user-defined">
+      <header>Attached objects management.</header>
+      <memberdef kind="function" id="de/dd2/a06258_1a1dd4a168d6a13cf4bb036b778c92af4f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::attachObject</definition>
+        <argsstring>(MovableObject &amp;object)</argsstring>
+        <name>attachObject</name>
+        <qualifiedname>castor3d::SceneNode::attachObject</qualifiedname>
+        <param>
+          <type><ref refid="dd/d5d/a05998" kindref="compound">MovableObject</ref> &amp;</type>
+          <declname>object</declname>
+        </param>
+        <briefdescription>
+<para>Attaches a <ref refid="dd/d5d/a05998" kindref="compound">MovableObject</ref> to the node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">object</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to attach </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="96" column="14"/>
+        <referencedby refid="dc/dd4/a06006_1a836066ee23c753c445615f8b40c808a1" compoundref="da/df7/a01457" startline="164" endline="171">castor3d::MovableAttacherT&lt; CacheT &gt;::operator()</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1abacdab9f13388f16930c34bb0b9b084f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::detachObject</definition>
+        <argsstring>(MovableObject &amp;object)</argsstring>
+        <name>detachObject</name>
+        <qualifiedname>castor3d::SceneNode::detachObject</qualifiedname>
+        <param>
+          <type><ref refid="dd/d5d/a05998" kindref="compound">MovableObject</ref> &amp;</type>
+          <declname>object</declname>
+        </param>
+        <briefdescription>
+<para>Detaches a <ref refid="dd/d5d/a05998" kindref="compound">MovableObject</ref> from the node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">object</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object to detach </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="105" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Children management.</header>
+      <memberdef kind="function" id="de/dd2/a06258_1ab35e18173e866c2b1fae60ffbd6c7abd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::attachTo</definition>
+        <argsstring>(SceneNode &amp;parent)</argsstring>
+        <name>attachTo</name>
+        <qualifiedname>castor3d::SceneNode::attachTo</qualifiedname>
+        <param>
+          <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+<para>Sets the parent node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new parent </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="119" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aaa0bef45d9ac091c2de30972d7a31754" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::detach</definition>
+        <argsstring>(bool cleanup)</argsstring>
+        <name>detach</name>
+        <qualifiedname>castor3d::SceneNode::detach</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>cleanup</declname>
+        </param>
+        <briefdescription>
+<para>Detaches the node from it&apos;s parent. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="126" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a89f25fc998f6c961588bca313ce0f726" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::SceneNode::hasChild</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>hasChild</name>
+        <qualifiedname>castor3d::SceneNode::hasChild</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the node </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>true</computeroutput> if one of my child has the given name </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="135" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a80dcad8075d1590de5e8b16f73338d92" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::addChild</definition>
+        <argsstring>(SceneNode &amp;child)</argsstring>
+        <name>addChild</name>
+        <qualifiedname>castor3d::SceneNode::addChild</qualifiedname>
+        <param>
+          <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>child</declname>
+        </param>
+        <briefdescription>
+<para>add the given node to my childs if it isn&apos;t already </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">child</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node to add </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="144" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1ab38482bd104cc206887772ac637088ce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::detachChild</definition>
+        <argsstring>(SceneNode &amp;child)</argsstring>
+        <name>detachChild</name>
+        <qualifiedname>castor3d::SceneNode::detachChild</qualifiedname>
+        <param>
+          <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>child</declname>
+        </param>
+        <briefdescription>
+<para>Detaches a child from my child&apos;s list, if it is one of my childs. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">child</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The child to detach </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="153" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a8b8599178f61950605414279118c5b01" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::detachChild</definition>
+        <argsstring>(castor::String const &amp;childName)</argsstring>
+        <name>detachChild</name>
+        <qualifiedname>castor3d::SceneNode::detachChild</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>childName</declname>
+        </param>
+        <briefdescription>
+<para>Detaches a child from my child&apos;s list, if it is one of my childs. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">childName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The name of the child to detach </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="162" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a0ea13f429521861e4ce58ec5343b9558" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::detachChildren</definition>
+        <argsstring>(bool cleanup)</argsstring>
+        <name>detachChildren</name>
+        <qualifiedname>castor3d::SceneNode::detachChildren</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>cleanup</declname>
+        </param>
+        <briefdescription>
+<para>Detaches all my childs. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="169" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Local transformations.</header>
+      <memberdef kind="function" id="de/dd2/a06258_1a65988602cd539e898204c6782ffe4105" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::yaw</definition>
+        <argsstring>(castor::Angle const &amp;angle)</argsstring>
+        <name>yaw</name>
+        <qualifiedname>castor3d::SceneNode::yaw</qualifiedname>
+        <param>
+          <type>castor::Angle const &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Rotates around Y axis. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rotation angle </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="183" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a17527a2183f7826cfcda52330fa96fa0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::pitch</definition>
+        <argsstring>(castor::Angle const &amp;angle)</argsstring>
+        <name>pitch</name>
+        <qualifiedname>castor3d::SceneNode::pitch</qualifiedname>
+        <param>
+          <type>castor::Angle const &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Rotates around Z axis. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rotation angle </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="192" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a838858f96a34ff436fc34ca16f137875" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::roll</definition>
+        <argsstring>(castor::Angle const &amp;angle)</argsstring>
+        <name>roll</name>
+        <qualifiedname>castor3d::SceneNode::roll</qualifiedname>
+        <param>
+          <type>castor::Angle const &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+<para>Rotates around X axis. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">angle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rotation angle </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="201" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aba03dfa8151020460e42a6fe7718ebb9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::rotate</definition>
+        <argsstring>(castor::Quaternion const &amp;quat)</argsstring>
+        <name>rotate</name>
+        <qualifiedname>castor3d::SceneNode::rotate</qualifiedname>
+        <param>
+          <type>castor::Quaternion const &amp;</type>
+          <declname>quat</declname>
+        </param>
+        <briefdescription>
+<para>Rotate the node with the given orientation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">quat</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The orientation to add to current one </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="210" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aab7b823683cf1a24b2c911e924cf7aee" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::translate</definition>
+        <argsstring>(castor::Point3f const &amp;t)</argsstring>
+        <name>translate</name>
+        <qualifiedname>castor3d::SceneNode::translate</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+<para>Translates the node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">t</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The translation value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="219" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1af9241e4c1fc060ba6445b7d159e24801" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::scale</definition>
+        <argsstring>(castor::Point3f const &amp;s)</argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::SceneNode::scale</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+<para>Scales the node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scale value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="228" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a86d0b37ba3414a311a8c60a1922d784a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="da/d81/a05850" kindref="compound">SceneNodeAnimation</ref> &amp;</type>
+        <definition>C3D_API SceneNodeAnimation &amp; castor3d::SceneNode::createAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>createAnimation</name>
+        <qualifiedname>castor3d::SceneNode::createAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Creates an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The animation </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="239" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a273419e698d74e32d4d67c538cba995b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::removeAnimation</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>removeAnimation</name>
+        <qualifiedname>castor3d::SceneNode::removeAnimation</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Removes an animation. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The animation name </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="248" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Absolute value getters.</header>
+      <memberdef kind="function" id="de/dd2/a06258_1abcbe420410abfafdf3ab6a785c921bfb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point3f</type>
+        <definition>C3D_API castor::Point3f castor3d::SceneNode::getDerivedPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getDerivedPosition</name>
+        <qualifiedname>castor3d::SceneNode::getDerivedPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="254" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1af09b4e9893a5c9efad520d9d01eed1b7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Quaternion</type>
+        <definition>C3D_API castor::Quaternion castor3d::SceneNode::getDerivedOrientation</definition>
+        <argsstring>() const</argsstring>
+        <name>getDerivedOrientation</name>
+        <qualifiedname>castor3d::SceneNode::getDerivedOrientation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="255" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aa78ad9bbff095a15e6d4beef4440bc42" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point3f</type>
+        <definition>C3D_API castor::Point3f castor3d::SceneNode::getDerivedScale</definition>
+        <argsstring>() const</argsstring>
+        <name>getDerivedScale</name>
+        <qualifiedname>castor3d::SceneNode::getDerivedScale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="256" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a7ca3301f4f4eba9e9295bbc6926062f2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Matrix4x4f const &amp;</type>
+        <definition>C3D_API castor::Matrix4x4f const  &amp; castor3d::SceneNode::getTransformationMatrix</definition>
+        <argsstring>() const</argsstring>
+        <name>getTransformationMatrix</name>
+        <qualifiedname>castor3d::SceneNode::getTransformationMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="257" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a11a26c63c895a827d6dba95144708708" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Matrix4x4f const &amp;</type>
+        <definition>C3D_API castor::Matrix4x4f const  &amp; castor3d::SceneNode::getDerivedTransformationMatrix</definition>
+        <argsstring>() const</argsstring>
+        <name>getDerivedTransformationMatrix</name>
+        <qualifiedname>castor3d::SceneNode::getDerivedTransformationMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="258" column="35"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Local value getters.</header>
+      <memberdef kind="function" id="de/dd2/a06258_1aa814e7d9e348b013f1f2dd565612474d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const &amp;</type>
+        <definition>castor::Point3f const  &amp; castor3d::SceneNode::getPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>getPosition</name>
+        <qualifiedname>castor3d::SceneNode::getPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="263" column="24" bodyfile="Scene/SceneNode.hpp" bodystart="263" bodyend="266"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a3355a4973617918f50f7247cf3cfea06" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Quaternion const &amp;</type>
+        <definition>castor::Quaternion const  &amp; castor3d::SceneNode::getOrientation</definition>
+        <argsstring>() const</argsstring>
+        <name>getOrientation</name>
+        <qualifiedname>castor3d::SceneNode::getOrientation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="268" column="27" bodyfile="Scene/SceneNode.hpp" bodystart="268" bodyend="271"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aba058ef71d4f4b8646e7fe423d4186d1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::Point3f const &amp;</type>
+        <definition>castor::Point3f const  &amp; castor3d::SceneNode::getScale</definition>
+        <argsstring>() const</argsstring>
+        <name>getScale</name>
+        <qualifiedname>castor3d::SceneNode::getScale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="273" column="24" bodyfile="Scene/SceneNode.hpp" bodystart="273" bodyend="276"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a55f4c11837ba24cd0da48dbd5efb6e5f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::getAxisAngle</definition>
+        <argsstring>(castor::Point3f &amp;axis, castor::Angle &amp;angle) const</argsstring>
+        <name>getAxisAngle</name>
+        <qualifiedname>castor3d::SceneNode::getAxisAngle</qualifiedname>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>axis</declname>
+        </param>
+        <param>
+          <type>castor::Angle &amp;</type>
+          <declname>angle</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="278" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="278" bodyend="281"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Other getters.</header>
+      <memberdef kind="function" id="de/dd2/a06258_1a16aa3199224d152121b8820033641f81" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/dd2/a06258_1a44e0a6766293a524d9209c1cd158f5af" kindref="member">SceneNodeMap</ref> const &amp;</type>
+        <definition>C3D_API SceneNodeMap const  &amp; castor3d::SceneNode::getChildren</definition>
+        <argsstring>() const</argsstring>
+        <name>getChildren</name>
+        <qualifiedname>castor3d::SceneNode::getChildren</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="287" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aec6b7961111af199607ab09f54b7cb5a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SceneNodeRPtr</type>
+        <definition>C3D_API SceneNodeRPtr castor3d::SceneNode::getChild</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getChild</name>
+        <qualifiedname>castor3d::SceneNode::getChild</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="288" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1adce548e6630a30009b9801089432185e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/dd2/a06258_1a558ed32faed587ae7d41fc058df3a8de" kindref="member">MovableArray</ref> const &amp;</type>
+        <definition>C3D_API MovableArray const  &amp; castor3d::SceneNode::getObjects</definition>
+        <argsstring>() const</argsstring>
+        <name>getObjects</name>
+        <qualifiedname>castor3d::SceneNode::getObjects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="289" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a3e8788cdb953bd7fb1c2ace9bd7f68ca" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::SceneNode::isVisible</definition>
+        <argsstring>() const</argsstring>
+        <name>isVisible</name>
+        <qualifiedname>castor3d::SceneNode::isVisible</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="291" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a7b0bda9b442bde9e2e13e7b3982b0aa8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::isDisplayable</definition>
+        <argsstring>() const</argsstring>
+        <name>isDisplayable</name>
+        <qualifiedname>castor3d::SceneNode::isDisplayable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="293" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="293" bodyend="296"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a591c4ce3248c69070c6fcc8d2cb2fec9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> *</type>
+        <definition>SceneNode * castor3d::SceneNode::getParent</definition>
+        <argsstring>() const</argsstring>
+        <name>getParent</name>
+        <qualifiedname>castor3d::SceneNode::getParent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="298" column="12" bodyfile="Scene/SceneNode.hpp" bodystart="298" bodyend="301"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a543efd048bb4c3c1b3f42223ea009661" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> *</type>
+        <definition>Scene * castor3d::SceneNode::getScene</definition>
+        <argsstring>() const</argsstring>
+        <name>getScene</name>
+        <qualifiedname>castor3d::SceneNode::getScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="303" column="8" bodyfile="Scene/SceneNode.hpp" bodystart="303" bodyend="306"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a1a9cbcbbd9c5ba3cf245b36a4406417b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::isSerialisable</definition>
+        <argsstring>() const</argsstring>
+        <name>isSerialisable</name>
+        <qualifiedname>castor3d::SceneNode::isSerialisable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="308" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="308" bodyend="311"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <header>Setters.</header>
+      <memberdef kind="function" id="de/dd2/a06258_1a8d7a34239fd5667b32e9db5041acf6ec" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::setOrientation</definition>
+        <argsstring>(castor::Quaternion const &amp;orientation)</argsstring>
+        <name>setOrientation</name>
+        <qualifiedname>castor3d::SceneNode::setOrientation</qualifiedname>
+        <param>
+          <type>castor::Quaternion const &amp;</type>
+          <declname>orientation</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="317" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aa1f1a9ac6fb75ffeb3aadd3da4619830" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::setPosition</definition>
+        <argsstring>(castor::Point3f const &amp;position)</argsstring>
+        <name>setPosition</name>
+        <qualifiedname>castor3d::SceneNode::setPosition</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="318" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a5b885e1f9687b49d4cfdd160ac020802" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::setScale</definition>
+        <argsstring>(castor::Point3f const &amp;scale)</argsstring>
+        <name>setScale</name>
+        <qualifiedname>castor3d::SceneNode::setScale</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>scale</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="319" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1ac3b3bc7565251f95197fcbdcd56b1325" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::setTransformationMatrix</definition>
+        <argsstring>(castor::Matrix4x4f const &amp;transform)</argsstring>
+        <name>setTransformationMatrix</name>
+        <qualifiedname>castor3d::SceneNode::setTransformationMatrix</qualifiedname>
+        <param>
+          <type>castor::Matrix4x4f const &amp;</type>
+          <declname>transform</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="320" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a26bb8a174d85c97049b3c942b2cd43e1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::setVisible</definition>
+        <argsstring>(bool visible)</argsstring>
+        <name>setVisible</name>
+        <qualifiedname>castor3d::SceneNode::setVisible</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="321" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a13dd30b3e164723c0cc8bf81c0dd9915" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::isStatic</definition>
+        <argsstring>() const</argsstring>
+        <name>isStatic</name>
+        <qualifiedname>castor3d::SceneNode::isStatic</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="323" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="323" bodyend="326"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aece8f32410831077b0dfd98de9e7e07d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::isModified</definition>
+        <argsstring>() const</argsstring>
+        <name>isModified</name>
+        <qualifiedname>castor3d::SceneNode::isModified</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="328" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="328" bodyend="331"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a4eb7b4cea670714a582af69d36f1d56a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::SceneNode::getId</definition>
+        <argsstring>() const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::SceneNode::getId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="333" column="10" bodyfile="Scene/SceneNode.hpp" bodystart="333" bodyend="336"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1aa2f9c84cc707a8046c548e10eca4c697" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::setSerialisable</definition>
+        <argsstring>(bool value)</argsstring>
+        <name>setSerialisable</name>
+        <qualifiedname>castor3d::SceneNode::setSerialisable</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="338" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="338" bodyend="341"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/dd2/a06258_1a44e0a6766293a524d9209c1cd158f5af" prot="public" static="no">
+        <type>std::map&lt; castor::String, SceneNodeRPtr &gt;</type>
+        <definition>using castor3d::SceneNode::SceneNodeMap =  std::map&lt; castor::String, SceneNodeRPtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>SceneNodeMap</name>
+        <qualifiedname>castor3d::SceneNode::SceneNodeMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="27" column="1" bodyfile="Scene/SceneNode.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/dd2/a06258_1a558ed32faed587ae7d41fc058df3a8de" prot="public" static="no">
+        <type>std::list&lt; std::reference_wrapper&lt; <ref refid="dd/d5d/a05998" kindref="compound">MovableObject</ref> &gt; &gt;</type>
+        <definition>using castor3d::SceneNode::MovableArray =  std::list&lt; std::reference_wrapper&lt; MovableObject &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>MovableArray</name>
+        <qualifiedname>castor3d::SceneNode::MovableArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="28" column="1" bodyfile="Scene/SceneNode.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="de/dd2/a06258_1ae0114da6c0d65908c72928c61cc2c440" prot="public" static="yes" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::SceneNode::Count</definition>
+        <argsstring></argsstring>
+        <name>Count</name>
+        <qualifiedname>castor3d::SceneNode::Count</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The total number of scene nodes. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="26" column="17" bodyfile="Scene/SceneNode.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/dd2/a06258_1aeaf401982425c9d2f0aff54e34d4f9f9" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a3693afe106b0234d34caa0a736ab47a8" kindref="member">OnSceneNodeReparent</ref></type>
+        <definition>OnSceneNodeReparent castor3d::SceneNode::onParentChanged</definition>
+        <argsstring></argsstring>
+        <name>onParentChanged</name>
+        <qualifiedname>castor3d::SceneNode::onParentChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Signal used to notify that the node has been attached to another one. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="356" column="21" bodyfile="Scene/SceneNode.hpp" bodystart="356" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="de/dd2/a06258_1a6426e4d7b529c2ebe980e36e84fb2927" prot="private" static="yes" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::SceneNode::CurrentId</definition>
+        <argsstring></argsstring>
+        <name>CurrentId</name>
+        <qualifiedname>castor3d::SceneNode::CurrentId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="359" column="17" bodyfile="Scene/SceneNode.hpp" bodystart="359" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/dd2/a06258_1a2c5e2ce744705a143214e0e3a2c29ffe" prot="private" static="no" mutable="no">
+        <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> &amp;</type>
+        <definition>Scene&amp; castor3d::SceneNode::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::SceneNode::m_scene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="360" column="8" bodyfile="Scene/SceneNode.hpp" bodystart="360" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a1e45dd2b922f9690e780a2ffa3ce16a0" prot="private" static="no" mutable="no">
+        <type>uint64_t</type>
+        <definition>uint64_t castor3d::SceneNode::m_id</definition>
+        <argsstring></argsstring>
+        <name>m_id</name>
+        <qualifiedname>castor3d::SceneNode::m_id</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="361" column="10" bodyfile="Scene/SceneNode.hpp" bodystart="361" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a7afe33d2d0fa8f8814f9999a3c431df5" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::m_static</definition>
+        <argsstring></argsstring>
+        <name>m_static</name>
+        <qualifiedname>castor3d::SceneNode::m_static</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="362" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="362" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1ac5b4204138c11a73c481d802d60aefce" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::m_displayable</definition>
+        <argsstring></argsstring>
+        <name>m_displayable</name>
+        <qualifiedname>castor3d::SceneNode::m_displayable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="363" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="363" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1ab54bb860c1f486472ee5c5c7be9b9b23" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::m_visible</definition>
+        <argsstring></argsstring>
+        <name>m_visible</name>
+        <qualifiedname>castor3d::SceneNode::m_visible</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="364" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="364" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a5282bdbfd9892e7c5223bb3f337edc31" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::m_serialisable</definition>
+        <argsstring></argsstring>
+        <name>m_serialisable</name>
+        <qualifiedname>castor3d::SceneNode::m_serialisable</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="365" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="365" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1ad422743d61df49072a383fee4ea06366" prot="private" static="no" mutable="no">
+        <type>castor::Quaternion</type>
+        <definition>castor::Quaternion castor3d::SceneNode::m_orientation</definition>
+        <argsstring></argsstring>
+        <name>m_orientation</name>
+        <qualifiedname>castor3d::SceneNode::m_orientation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="366" column="20" bodyfile="Scene/SceneNode.hpp" bodystart="366" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a1a7e1f8c8d2fa16fe9492674ab082c7b" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SceneNode::m_position</definition>
+        <argsstring></argsstring>
+        <name>m_position</name>
+        <qualifiedname>castor3d::SceneNode::m_position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="367" column="17" bodyfile="Scene/SceneNode.hpp" bodystart="367" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1aaedfb121d83178dc08b755eff503f6ca" prot="private" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SceneNode::m_scale</definition>
+        <argsstring></argsstring>
+        <name>m_scale</name>
+        <qualifiedname>castor3d::SceneNode::m_scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="368" column="17" bodyfile="Scene/SceneNode.hpp" bodystart="368" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a9ec623e3924b3f2df6cc35736d909b70" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::m_mtxSet</definition>
+        <argsstring></argsstring>
+        <name>m_mtxSet</name>
+        <qualifiedname>castor3d::SceneNode::m_mtxSet</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="369" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="369" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1af6d779929a7d917eab3a35baadeb7857" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::SceneNode::m_transform</definition>
+        <argsstring></argsstring>
+        <name>m_transform</name>
+        <qualifiedname>castor3d::SceneNode::m_transform</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="370" column="20" bodyfile="Scene/SceneNode.hpp" bodystart="370" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a10cf7171a6269ef58b5d03eb6ff606d8" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::m_mtxChanged</definition>
+        <argsstring></argsstring>
+        <name>m_mtxChanged</name>
+        <qualifiedname>castor3d::SceneNode::m_mtxChanged</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="371" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="371" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a8418ad4110f698684f134098070b1e21" prot="private" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::SceneNode::m_derivedTransform</definition>
+        <argsstring></argsstring>
+        <name>m_derivedTransform</name>
+        <qualifiedname>castor3d::SceneNode::m_derivedTransform</qualifiedname>
+        <initializer>{ 1.0f }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="372" column="20" bodyfile="Scene/SceneNode.hpp" bodystart="372" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a89a2ed75e81ee7c18bbf37ad8af9f536" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::SceneNode::m_derivedMtxChanged</definition>
+        <argsstring></argsstring>
+        <name>m_derivedMtxChanged</name>
+        <qualifiedname>castor3d::SceneNode::m_derivedMtxChanged</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="373" column="6" bodyfile="Scene/SceneNode.hpp" bodystart="373" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a52091423e836daef1648266a4b1d9b4b" prot="private" static="no" mutable="no">
+        <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> *</type>
+        <definition>SceneNode* castor3d::SceneNode::m_parent</definition>
+        <argsstring></argsstring>
+        <name>m_parent</name>
+        <qualifiedname>castor3d::SceneNode::m_parent</qualifiedname>
+        <initializer>{ nullptr }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="374" column="12" bodyfile="Scene/SceneNode.hpp" bodystart="374" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1a8e90729e96e3701df493da5e461b1e5a" prot="private" static="no" mutable="no">
+        <type><ref refid="de/dd2/a06258_1a44e0a6766293a524d9209c1cd158f5af" kindref="member">SceneNodeMap</ref></type>
+        <definition>SceneNodeMap castor3d::SceneNode::m_children</definition>
+        <argsstring></argsstring>
+        <name>m_children</name>
+        <qualifiedname>castor3d::SceneNode::m_children</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="375" column="14" bodyfile="Scene/SceneNode.hpp" bodystart="375" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/dd2/a06258_1ab077848e514e128b7205f2339db51b15" prot="private" static="no" mutable="no">
+        <type><ref refid="de/dd2/a06258_1a558ed32faed587ae7d41fc058df3a8de" kindref="member">MovableArray</ref></type>
+        <definition>MovableArray castor3d::SceneNode::m_objects</definition>
+        <argsstring></argsstring>
+        <name>m_objects</name>
+        <qualifiedname>castor3d::SceneNode::m_objects</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="376" column="14" bodyfile="Scene/SceneNode.hpp" bodystart="376" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/dd2/a06258_1aefe0e218584c8c9a6e74bbcd41cc7f12" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneNode::SceneNode</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene, SceneNode *parent, castor::Point3f position, castor::Quaternion orientation, castor::Point3f scale, bool isStatic=true)</argsstring>
+        <name>SceneNode</name>
+        <qualifiedname>castor3d::SceneNode::SceneNode</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> *</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::Point3f</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Quaternion</type>
+          <declname>orientation</declname>
+        </param>
+        <param>
+          <type>castor::Point3f</type>
+          <declname>scale</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isStatic</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node&apos;s name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The initial position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">orientation</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The initial orientation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scale</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The initial scale. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isStatic</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> for a static node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="51" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a17897d09974e155741bd043e4ef86ca5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneNode::SceneNode</definition>
+        <argsstring>(castor::String const &amp;name, Scene &amp;scene)</argsstring>
+        <name>SceneNode</name>
+        <qualifiedname>castor3d::SceneNode::SceneNode</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node&apos;s name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="68" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a6d7bd25d7b9df21ef864718d7adb36f0" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SceneNode::~SceneNode</definition>
+        <argsstring>() override</argsstring>
+        <name>~SceneNode</name>
+        <qualifiedname>castor3d::SceneNode::~SceneNode</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="76" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1af198a9ea927ef55738b5b03b0113b339" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SceneNode::update</definition>
+        <argsstring>()</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SceneNode::update</qualifiedname>
+        <briefdescription>
+<para>Updates the scene node matrices. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="83" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/dd2/a06258_1abd66ffbd23659e745cc709e2f5c23282" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::doComputeMatrix</definition>
+        <argsstring>()</argsstring>
+        <name>doComputeMatrix</name>
+        <qualifiedname>castor3d::SceneNode::doComputeMatrix</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="345" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a0e21865297f077197eef83a596354589" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::doUpdateChildsDerivedTransform</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateChildsDerivedTransform</name>
+        <qualifiedname>castor3d::SceneNode::doUpdateChildsDerivedTransform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="346" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a6e497f4694e7ca67666d1eedb4c5618a" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::doAttachTo</definition>
+        <argsstring>(SceneNode &amp;node)</argsstring>
+        <name>doAttachTo</name>
+        <qualifiedname>castor3d::SceneNode::doAttachTo</qualifiedname>
+        <param>
+          <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="347" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a2135e567ca7e262f9262c56198a9e8ee" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::doDetach</definition>
+        <argsstring>()</argsstring>
+        <name>doDetach</name>
+        <qualifiedname>castor3d::SceneNode::doDetach</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="348" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a7da76f0e7695b586251ffdb0fdb8f6ac" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::doAddChild</definition>
+        <argsstring>(SceneNode &amp;child)</argsstring>
+        <name>doAddChild</name>
+        <qualifiedname>castor3d::SceneNode::doAddChild</qualifiedname>
+        <param>
+          <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> &amp;</type>
+          <declname>child</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="349" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a55b519ba9695e9adbae6258f91cee97c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::doDetachChild</definition>
+        <argsstring>(castor::String const &amp;childName)</argsstring>
+        <name>doDetachChild</name>
+        <qualifiedname>castor3d::SceneNode::doDetachChild</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>childName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="350" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/dd2/a06258_1a7404dc2a4c009045005bffcee02d88ab" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SceneNode::doDetachChildren</definition>
+        <argsstring>(bool cleanup)</argsstring>
+        <name>doDetachChildren</name>
+        <qualifiedname>castor3d::SceneNode::doDetachChildren</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>cleanup</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneNode.hpp" line="351" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>Animable</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneNode</label>
+        <link refid="de/dd2/a06258"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>Animable</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>K</label>
+      </node>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="8">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneNode</label>
+        <link refid="de/dd2/a06258"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor::Named</label>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="4">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneNode.hpp" line="19" column="1" bodyfile="Scene/SceneNode.hpp" bodystart="22" bodyend="377"/>
+    <listofallmembers>
+      <member refid="d6/de1/a02518_1af537797cc01d440454c256b7d93134a7" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>addAnimation</name></member>
+      <member refid="de/dd2/a06258_1a80dcad8075d1590de5e8b16f73338d92" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>addChild</name></member>
+      <member refid="d6/de1/a02518_1acce1c5516d8c2b672521f796eca097f6" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>AnimableT</name></member>
+      <member refid="d6/de1/a02518_1afe54e724ce1c5fd9741352a83cc15310" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>AnimableT</name></member>
+      <member refid="d6/de1/a02518_1aa7d1ea320b354786c4d88e06999ce873" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>AnimableT</name></member>
+      <member refid="d6/de1/a02518_1a29ec9b70c2d5c178be151157abb4caa4" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>Animation</name></member>
+      <member refid="d6/de1/a02518_1a93a60b9605417569c09c31e9a51fd9e3" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>AnimationPtr</name></member>
+      <member refid="d6/de1/a02518_1adf22dc23ec502379503a3dee8b01310f" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>AnimationsMap</name></member>
+      <member refid="de/dd2/a06258_1a1dd4a168d6a13cf4bb036b778c92af4f" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>attachObject</name></member>
+      <member refid="de/dd2/a06258_1ab35e18173e866c2b1fae60ffbd6c7abd" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>attachTo</name></member>
+      <member refid="d6/de1/a02518_1a54363c138d022e02a6da2881e8cfcea2" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>cleanupAnimations</name></member>
+      <member refid="de/dd2/a06258_1ae0114da6c0d65908c72928c61cc2c440" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>Count</name></member>
+      <member refid="de/dd2/a06258_1a86d0b37ba3414a311a8c60a1922d784a" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>createAnimation</name></member>
+      <member refid="de/dd2/a06258_1a6426e4d7b529c2ebe980e36e84fb2927" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>CurrentId</name></member>
+      <member refid="de/dd2/a06258_1aaa0bef45d9ac091c2de30972d7a31754" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>detach</name></member>
+      <member refid="de/dd2/a06258_1ab38482bd104cc206887772ac637088ce" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>detachChild</name></member>
+      <member refid="de/dd2/a06258_1a8b8599178f61950605414279118c5b01" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>detachChild</name></member>
+      <member refid="de/dd2/a06258_1a0ea13f429521861e4ce58ec5343b9558" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>detachChildren</name></member>
+      <member refid="de/dd2/a06258_1abacdab9f13388f16930c34bb0b9b084f" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>detachObject</name></member>
+      <member refid="de/dd2/a06258_1a7da76f0e7695b586251ffdb0fdb8f6ac" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doAddChild</name></member>
+      <member refid="de/dd2/a06258_1a6e497f4694e7ca67666d1eedb4c5618a" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doAttachTo</name></member>
+      <member refid="de/dd2/a06258_1abd66ffbd23659e745cc709e2f5c23282" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doComputeMatrix</name></member>
+      <member refid="de/dd2/a06258_1a2135e567ca7e262f9262c56198a9e8ee" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doDetach</name></member>
+      <member refid="de/dd2/a06258_1a55b519ba9695e9adbae6258f91cee97c" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doDetachChild</name></member>
+      <member refid="de/dd2/a06258_1a7404dc2a4c009045005bffcee02d88ab" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doDetachChildren</name></member>
+      <member refid="d6/de1/a02518_1a1bebab2a91849a6d03743a60742855d2" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doGetAnimation</name></member>
+      <member refid="d6/de1/a02518_1ab0befd7350748e1d432232aef30bf3af" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doGetAnimation</name></member>
+      <member refid="d6/de1/a02518_1a5c0a28cfebad1a69862d34d5f15f9341" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doRemoveAnimation</name></member>
+      <member refid="de/dd2/a06258_1a0e21865297f077197eef83a596354589" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>doUpdateChildsDerivedTransform</name></member>
+      <member refid="d6/de1/a02518_1ab4eee25a3c5fa4b3ac239c9d94e41aed" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getAnimation</name></member>
+      <member refid="d6/de1/a02518_1a9a19c79051ae04d61170004d981d72c3" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getAnimation</name></member>
+      <member refid="d6/de1/a02518_1a7b34275f160a799db83c8d4fed06aed2" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getAnimations</name></member>
+      <member refid="de/dd2/a06258_1a55f4c11837ba24cd0da48dbd5efb6e5f" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getAxisAngle</name></member>
+      <member refid="de/dd2/a06258_1aec6b7961111af199607ab09f54b7cb5a" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getChild</name></member>
+      <member refid="de/dd2/a06258_1a16aa3199224d152121b8820033641f81" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getChildren</name></member>
+      <member refid="de/dd2/a06258_1af09b4e9893a5c9efad520d9d01eed1b7" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getDerivedOrientation</name></member>
+      <member refid="de/dd2/a06258_1abcbe420410abfafdf3ab6a785c921bfb" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getDerivedPosition</name></member>
+      <member refid="de/dd2/a06258_1aa78ad9bbff095a15e6d4beef4440bc42" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getDerivedScale</name></member>
+      <member refid="de/dd2/a06258_1a11a26c63c895a827d6dba95144708708" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getDerivedTransformationMatrix</name></member>
+      <member refid="de/dd2/a06258_1a4eb7b4cea670714a582af69d36f1d56a" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getId</name></member>
+      <member refid="de/dd2/a06258_1adce548e6630a30009b9801089432185e" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getObjects</name></member>
+      <member refid="de/dd2/a06258_1a3355a4973617918f50f7247cf3cfea06" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getOrientation</name></member>
+      <member refid="de/dd2/a06258_1a591c4ce3248c69070c6fcc8d2cb2fec9" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getParent</name></member>
+      <member refid="de/dd2/a06258_1aa814e7d9e348b013f1f2dd565612474d" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getPosition</name></member>
+      <member refid="de/dd2/a06258_1aba058ef71d4f4b8646e7fe423d4186d1" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getScale</name></member>
+      <member refid="de/dd2/a06258_1a543efd048bb4c3c1b3f42223ea009661" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getScene</name></member>
+      <member refid="de/dd2/a06258_1a7ca3301f4f4eba9e9295bbc6926062f2" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>getTransformationMatrix</name></member>
+      <member refid="d6/de1/a02518_1ab96f3e18b0d1e54dccfa3fa9078f773f" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>hasAnimation</name></member>
+      <member refid="d6/de1/a02518_1ad49b8e50e5ed96d16d9c50c3854e0a22" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>hasAnimation</name></member>
+      <member refid="de/dd2/a06258_1a89f25fc998f6c961588bca313ce0f726" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>hasChild</name></member>
+      <member refid="de/dd2/a06258_1a7b0bda9b442bde9e2e13e7b3982b0aa8" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>isDisplayable</name></member>
+      <member refid="de/dd2/a06258_1aece8f32410831077b0dfd98de9e7e07d" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>isModified</name></member>
+      <member refid="de/dd2/a06258_1a1a9cbcbbd9c5ba3cf245b36a4406417b" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>isSerialisable</name></member>
+      <member refid="de/dd2/a06258_1a13dd30b3e164723c0cc8bf81c0dd9915" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>isStatic</name></member>
+      <member refid="de/dd2/a06258_1a3e8788cdb953bd7fb1c2ace9bd7f68ca" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>isVisible</name></member>
+      <member refid="d6/de1/a02518_1a854b611cc40d0a6fd1f4855c2bfac744" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_animations</name></member>
+      <member refid="de/dd2/a06258_1a8e90729e96e3701df493da5e461b1e5a" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_children</name></member>
+      <member refid="de/dd2/a06258_1a89a2ed75e81ee7c18bbf37ad8af9f536" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_derivedMtxChanged</name></member>
+      <member refid="de/dd2/a06258_1a8418ad4110f698684f134098070b1e21" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_derivedTransform</name></member>
+      <member refid="de/dd2/a06258_1ac5b4204138c11a73c481d802d60aefce" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_displayable</name></member>
+      <member refid="de/dd2/a06258_1a1e45dd2b922f9690e780a2ffa3ce16a0" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_id</name></member>
+      <member refid="de/dd2/a06258_1a10cf7171a6269ef58b5d03eb6ff606d8" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_mtxChanged</name></member>
+      <member refid="de/dd2/a06258_1a9ec623e3924b3f2df6cc35736d909b70" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_mtxSet</name></member>
+      <member refid="de/dd2/a06258_1ab077848e514e128b7205f2339db51b15" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_objects</name></member>
+      <member refid="de/dd2/a06258_1ad422743d61df49072a383fee4ea06366" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_orientation</name></member>
+      <member refid="de/dd2/a06258_1a52091423e836daef1648266a4b1d9b4b" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_parent</name></member>
+      <member refid="de/dd2/a06258_1a1a7e1f8c8d2fa16fe9492674ab082c7b" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_position</name></member>
+      <member refid="de/dd2/a06258_1aaedfb121d83178dc08b755eff503f6ca" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_scale</name></member>
+      <member refid="de/dd2/a06258_1a2c5e2ce744705a143214e0e3a2c29ffe" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_scene</name></member>
+      <member refid="de/dd2/a06258_1a5282bdbfd9892e7c5223bb3f337edc31" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_serialisable</name></member>
+      <member refid="de/dd2/a06258_1a7afe33d2d0fa8f8814f9999a3c431df5" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_static</name></member>
+      <member refid="de/dd2/a06258_1af6d779929a7d917eab3a35baadeb7857" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_transform</name></member>
+      <member refid="de/dd2/a06258_1ab54bb860c1f486472ee5c5c7be9b9b23" prot="private" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>m_visible</name></member>
+      <member refid="de/dd2/a06258_1a558ed32faed587ae7d41fc058df3a8de" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>MovableArray</name></member>
+      <member refid="de/dd2/a06258_1aeaf401982425c9d2f0aff54e34d4f9f9" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>onParentChanged</name></member>
+      <member refid="d6/de1/a02518_1a317d10f31a3f138315e2a18a41f37b80" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>operator=</name></member>
+      <member refid="d6/de1/a02518_1a207720462d3a7e48b69b6ae188e4414b" prot="protected" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>operator=</name></member>
+      <member refid="de/dd2/a06258_1a17527a2183f7826cfcda52330fa96fa0" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>pitch</name></member>
+      <member refid="de/dd2/a06258_1a273419e698d74e32d4d67c538cba995b" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>removeAnimation</name></member>
+      <member refid="de/dd2/a06258_1a838858f96a34ff436fc34ca16f137875" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>roll</name></member>
+      <member refid="de/dd2/a06258_1aba03dfa8151020460e42a6fe7718ebb9" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>rotate</name></member>
+      <member refid="de/dd2/a06258_1af9241e4c1fc060ba6445b7d159e24801" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>scale</name></member>
+      <member refid="de/dd2/a06258_1aefe0e218584c8c9a6e74bbcd41cc7f12" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>SceneNode</name></member>
+      <member refid="de/dd2/a06258_1a17897d09974e155741bd043e4ef86ca5" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>SceneNode</name></member>
+      <member refid="de/dd2/a06258_1a44e0a6766293a524d9209c1cd158f5af" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>SceneNodeMap</name></member>
+      <member refid="de/dd2/a06258_1a8d7a34239fd5667b32e9db5041acf6ec" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>setOrientation</name></member>
+      <member refid="de/dd2/a06258_1aa1f1a9ac6fb75ffeb3aadd3da4619830" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>setPosition</name></member>
+      <member refid="de/dd2/a06258_1a5b885e1f9687b49d4cfdd160ac020802" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>setScale</name></member>
+      <member refid="de/dd2/a06258_1aa2f9c84cc707a8046c548e10eca4c697" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>setSerialisable</name></member>
+      <member refid="de/dd2/a06258_1ac3b3bc7565251f95197fcbdcd56b1325" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>setTransformationMatrix</name></member>
+      <member refid="de/dd2/a06258_1a26bb8a174d85c97049b3c942b2cd43e1" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>setVisible</name></member>
+      <member refid="de/dd2/a06258_1aab7b823683cf1a24b2c911e924cf7aee" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>translate</name></member>
+      <member refid="de/dd2/a06258_1af198a9ea927ef55738b5b03b0113b339" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>update</name></member>
+      <member refid="de/dd2/a06258_1a65988602cd539e898204c6782ffe4105" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>yaw</name></member>
+      <member refid="d6/de1/a02518_1ad8c43c6eb51ab1fa4bff4b1ade280e71" prot="public" virt="virtual"><scope>castor3d::SceneNode</scope><name>~AnimableT</name></member>
+      <member refid="de/dd2/a06258_1a6d7bd25d7b9df21ef864718d7adb36f0" prot="public" virt="non-virtual"><scope>castor3d::SceneNode</scope><name>~SceneNode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

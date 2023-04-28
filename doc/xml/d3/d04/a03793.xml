@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d04/a03793" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::IridescenceThicknessMapComponent</compoundname>
+    <basecompoundref refid="d6/ddb/a04073" prot="public" virt="non-virtual">castor3d::PassMapComponent</basecompoundref>
+    <includes local="no">IridescenceThicknessMapComponent.hpp</includes>
+    <innerclass refid="d2/d11/a03797" prot="public">castor3d::IridescenceThicknessMapComponent::ComponentsShader</innerclass>
+    <innerclass refid="dc/d0c/a03801" prot="public">castor3d::IridescenceThicknessMapComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/d04/a03793_1ad935da921cd1bc12dd9eb6fde9bbee2e" prot="public" static="yes" mutable="no">
+        <type>const <ref refid="d3/d5e/a01725_1a0ab3a08edb07cc34b4574bc3799960d6" kindref="member">TextureFlag</ref></type>
+        <definition>const TextureFlag castor3d::IridescenceThicknessMapComponent::IridescenceThickness</definition>
+        <argsstring></argsstring>
+        <name>IridescenceThickness</name>
+        <qualifiedname>castor3d::IridescenceThicknessMapComponent::IridescenceThickness</qualifiedname>
+        <initializer>= <ref refid="d3/d5e/a01725_1a0ab3a08edb07cc34b4574bc3799960d6" kindref="member">TextureFlag</ref>( 0x01u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" line="18" column="26" bodyfile="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="d2/d11/a03797_1ae3046305b0607812ae1de837325ce1c9" compoundref="dc/df9/a00554" startline="35" endline="38">castor3d::IridescenceThicknessMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="dc/d0c/a03801_1ac0c2e1208eda2349e7288814554dae37" compoundref="dc/df9/a00554" startline="82" endline="85">castor3d::IridescenceThicknessMapComponent::Plugin::getTextureFlags</referencedby>
+        <referencedby refid="dc/d0c/a03801_1ab6276335b197232708cfbf513d0a110f" compoundref="dc/df9/a00554" startline="94" endline="100">castor3d::IridescenceThicknessMapComponent::Plugin::getTextureFlagsName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d04/a03793_1ad3ff73e4d168b333b23092cde329517d" prot="public" static="yes" mutable="no">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::IridescenceThicknessMapComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::IridescenceThicknessMapComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" line="116" column="37" bodyfile="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/d04/a03793_1a2572ad9d7229a31960c4bb7a1ef1052b" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::IridescenceThicknessMapComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::IridescenceThicknessMapComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d7/dfc/a04061" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" line="109" column="32" bodyfile="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" bodystart="109" bodyend="112"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d04/a03793_1ad91c0cfc1e6cf86f3a7daf6b73448084" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::IridescenceThicknessMapComponent::IridescenceThicknessMapComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>IridescenceThicknessMapComponent</name>
+        <qualifiedname>castor3d::IridescenceThicknessMapComponent::IridescenceThicknessMapComponent</qualifiedname>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" line="114" column="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/d04/a03793_1a15a5417fa924642035bf55fb6a9d52bf" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::IridescenceThicknessMapComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::IridescenceThicknessMapComponent::doClone</qualifiedname>
+        <reimplements refid="dc/d32/a04057_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" line="119" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d04/a03793_1a91055c13b79af93e1f5c41218575b290" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::IridescenceThicknessMapComponent::doFillConfig</definition>
+        <argsstring>(TextureConfiguration &amp;configuration, PassVisitorBase &amp;vis) const override</argsstring>
+        <name>doFillConfig</name>
+        <qualifiedname>castor3d::IridescenceThicknessMapComponent::doFillConfig</qualifiedname>
+        <reimplements refid="d6/ddb/a04073_1a0a8dd2d333ff8b636230b815f79cab58">doFillConfig</reimplements>
+        <param>
+          <type><ref refid="dc/d0d/a04153" kindref="compound">TextureConfiguration</ref> &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d44/a04097" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" line="120" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::IridescenceThicknessMapComponent</label>
+        <link refid="d3/d04/a03793"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="dc/d32/a04057"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponent</label>
+        <link refid="d6/ddb/a04073"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::IridescenceThicknessMapComponent</label>
+        <link refid="d3/d04/a03793"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="dc/d32/a04057"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d9/d35/a04053"/>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponent</label>
+        <link refid="d6/ddb/a04073"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="db/dfa/a04049"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d8/de8/a04041"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" line="15" column="1" bodyfile="Material/Pass/Component/Map/IridescenceThicknessMapComponent.hpp" bodystart="17" bodyend="122"/>
+    <listofallmembers>
+      <member refid="dc/d32/a04057_1a4e315225c20ace9097adfd65e8413e4f" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>accept</name></member>
+      <member refid="dc/d32/a04057_1a2847d512604b766b3a315e4c4e9dc0ea" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>areNormalsInverted</name></member>
+      <member refid="dc/d32/a04057_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>clone</name></member>
+      <member refid="d3/d04/a03793_1a2572ad9d7229a31960c4bb7a1ef1052b" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>createPlugin</name></member>
+      <member refid="d3/d04/a03793_1a15a5417fa924642035bf55fb6a9d52bf" prot="private" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>doClone</name></member>
+      <member refid="d3/d04/a03793_1a91055c13b79af93e1f5c41218575b290" prot="private" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>doFillConfig</name></member>
+      <member refid="dc/d32/a04057_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>fillBuffer</name></member>
+      <member refid="d6/ddb/a04073_1af6575701314218be729f8ba959e5c2ae" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>fillChannel</name></member>
+      <member refid="dc/d32/a04057_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual" ambiguityscope="castor3d::PassComponent::"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>fillChannel</name></member>
+      <member refid="d6/ddb/a04073_1a677bc27d9d35fc36c18189826ff2b419" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>fillConfig</name></member>
+      <member refid="dc/d32/a04057_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>getColour</name></member>
+      <member refid="dc/d32/a04057_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>getDependencies</name></member>
+      <member refid="dc/d32/a04057_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>getId</name></member>
+      <member refid="dc/d32/a04057_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>getPassFlags</name></member>
+      <member refid="dc/d32/a04057_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>getPlugin</name></member>
+      <member refid="d6/ddb/a04073_1ac98f2807737ea6c3cf305ffb914e7eff" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>getTextureFlags</name></member>
+      <member refid="dc/d32/a04057_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>getType</name></member>
+      <member refid="dc/d32/a04057_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>hasColour</name></member>
+      <member refid="d3/d04/a03793_1ad935da921cd1bc12dd9eb6fde9bbee2e" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>IridescenceThickness</name></member>
+      <member refid="d3/d04/a03793_1ad91c0cfc1e6cf86f3a7daf6b73448084" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>IridescenceThicknessMapComponent</name></member>
+      <member refid="dc/d32/a04057_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>m_dependencies</name></member>
+      <member refid="dc/d32/a04057_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>m_dirty</name></member>
+      <member refid="dc/d32/a04057_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>m_id</name></member>
+      <member refid="dc/d32/a04057_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>m_materialShader</name></member>
+      <member refid="dc/d32/a04057_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>m_plugin</name></member>
+      <member refid="dc/d32/a04057_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>m_type</name></member>
+      <member refid="dc/d32/a04057_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>PassComponent</name></member>
+      <member refid="d6/ddb/a04073_1a0a24dbd2464fe207df6d1033924dc50e" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>PassMapComponent</name></member>
+      <member refid="dc/d32/a04057_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>setColour</name></member>
+      <member refid="d3/d04/a03793_1ad3ff73e4d168b333b23092cde329517d" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>TypeName</name></member>
+      <member refid="dc/d32/a04057_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>update</name></member>
+      <member refid="dc/d32/a04057_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>writeText</name></member>
+      <member refid="dc/d32/a04057_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::IridescenceThicknessMapComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

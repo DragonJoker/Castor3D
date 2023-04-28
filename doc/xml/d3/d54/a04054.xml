@@ -1,0 +1,76 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d54/a04054" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassRegisterInfo</compoundname>
+    <includes local="no">PassFactory.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d54/a04054_1aff2b0987c95b9f234daa456cf073d37b" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::PassRegisterInfo::lightingModel</definition>
+        <argsstring></argsstring>
+        <name>lightingModel</name>
+        <qualifiedname>castor3d::PassRegisterInfo::lightingModel</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="22" column="16" bodyfile="Material/Pass/PassFactory.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d54/a04054_1a01c66ae22cbfa76405c381012ccd0dae" prot="public" static="no" mutable="no">
+        <type>PassFactoryBase::Creator</type>
+        <definition>PassFactoryBase::Creator castor3d::PassRegisterInfo::passCreator</definition>
+        <argsstring></argsstring>
+        <name>passCreator</name>
+        <qualifiedname>castor3d::PassRegisterInfo::passCreator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="23" column="26" bodyfile="Material/Pass/PassFactory.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d54/a04054_1a6674ee6e3c5dbb15210aeb3e1b19ba96" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d26/a01700_1a4f6fc2ab5f8136a5172d811c9b08eba8" kindref="member">shader::LightingModelCreator</ref></type>
+        <definition>shader::LightingModelCreator castor3d::PassRegisterInfo::lightingModelCreator</definition>
+        <argsstring></argsstring>
+        <name>lightingModelCreator</name>
+        <qualifiedname>castor3d::PassRegisterInfo::lightingModelCreator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="24" column="30" bodyfile="Material/Pass/PassFactory.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d54/a04054_1ab922fd6bb619d45a1f59eccdf79d90e0" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PassRegisterInfo::hasIBLSupport</definition>
+        <argsstring></argsstring>
+        <name>hasIBLSupport</name>
+        <qualifiedname>castor3d::PassRegisterInfo::hasIBLSupport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassFactory.hpp" line="25" column="6" bodyfile="Material/Pass/PassFactory.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/PassFactory.hpp" line="20" column="1" bodyfile="Material/Pass/PassFactory.hpp" bodystart="21" bodyend="26"/>
+    <listofallmembers>
+      <member refid="d3/d54/a04054_1ab922fd6bb619d45a1f59eccdf79d90e0" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>hasIBLSupport</name></member>
+      <member refid="d3/d54/a04054_1aff2b0987c95b9f234daa456cf073d37b" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>lightingModel</name></member>
+      <member refid="d3/d54/a04054_1a6674ee6e3c5dbb15210aeb3e1b19ba96" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>lightingModelCreator</name></member>
+      <member refid="d3/d54/a04054_1a01c66ae22cbfa76405c381012ccd0dae" prot="public" virt="non-virtual"><scope>castor3d::PassRegisterInfo</scope><name>passCreator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

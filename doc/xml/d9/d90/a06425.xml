@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/d90/a06425" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::MicrofacetDistributionSample</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_MicrofacetDistributionSample&quot;, sdw::type::MemoryLayout::eC, sdw::FloatField&lt; &quot;pdf&quot; &gt;, sdw::FloatField&lt; &quot;cosTheta&quot; &gt;, sdw::FloatField&lt; &quot;sinTheta&quot; &gt;, sdw::FloatField&lt; &quot;phi&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslBRDFHelpers.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d90/a06425_1a6c25b5c94857d1d0e9dc62dc259ad47e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::MicrofacetDistributionSample::MicrofacetDistributionSample</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled=true)</argsstring>
+        <name>MicrofacetDistributionSample</name>
+        <qualifiedname>castor3d::shader::MicrofacetDistributionSample::MicrofacetDistributionSample</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="21" column="1" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="21" bodyend="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d90/a06425_1af40e3d0ea332139c8debef262147023d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::MicrofacetDistributionSample::pdf</definition>
+        <argsstring>() const</argsstring>
+        <name>pdf</name>
+        <qualifiedname>castor3d::shader::MicrofacetDistributionSample::pdf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="28" column="6" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="28" bodyend="28"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d90/a06425_1a3a82261e76a84a84043c63346ceb9d33" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::MicrofacetDistributionSample::cosTheta</definition>
+        <argsstring>() const</argsstring>
+        <name>cosTheta</name>
+        <qualifiedname>castor3d::shader::MicrofacetDistributionSample::cosTheta</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="29" column="6" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="29" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d90/a06425_1a2c325f93507c93099b96df2f878cc99c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::MicrofacetDistributionSample::sinTheta</definition>
+        <argsstring>() const</argsstring>
+        <name>sinTheta</name>
+        <qualifiedname>castor3d::shader::MicrofacetDistributionSample::sinTheta</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="30" column="6" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="30" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d90/a06425_1a684209502dc7d52c7fcd20f072a7ac72" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::MicrofacetDistributionSample::phi</definition>
+        <argsstring>() const</argsstring>
+        <name>phi</name>
+        <qualifiedname>castor3d::shader::MicrofacetDistributionSample::phi</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="31" column="6" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::MicrofacetDistributionSample</label>
+        <link refid="d9/d90/a06425"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_MicrofacetDistributionSample&quot;, sdw::type::MemoryLayout::eC, sdw::FloatField&lt; &quot;pdf&quot; &gt;, sdw::FloatField&lt; &quot;cosTheta&quot; &gt;, sdw::FloatField&lt; &quot;sinTheta&quot; &gt;, sdw::FloatField&lt; &quot;phi&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::MicrofacetDistributionSample</label>
+        <link refid="d9/d90/a06425"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_MicrofacetDistributionSample&quot;, sdw::type::MemoryLayout::eC, sdw::FloatField&lt; &quot;pdf&quot; &gt;, sdw::FloatField&lt; &quot;cosTheta&quot; &gt;, sdw::FloatField&lt; &quot;sinTheta&quot; &gt;, sdw::FloatField&lt; &quot;phi&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="13" column="1" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="20" bodyend="32"/>
+    <listofallmembers>
+      <member refid="d9/d90/a06425_1a3a82261e76a84a84043c63346ceb9d33" prot="public" virt="non-virtual"><scope>castor3d::shader::MicrofacetDistributionSample</scope><name>cosTheta</name></member>
+      <member refid="d9/d90/a06425_1a6c25b5c94857d1d0e9dc62dc259ad47e" prot="public" virt="non-virtual"><scope>castor3d::shader::MicrofacetDistributionSample</scope><name>MicrofacetDistributionSample</name></member>
+      <member refid="d9/d90/a06425_1af40e3d0ea332139c8debef262147023d" prot="public" virt="non-virtual"><scope>castor3d::shader::MicrofacetDistributionSample</scope><name>pdf</name></member>
+      <member refid="d9/d90/a06425_1a684209502dc7d52c7fcd20f072a7ac72" prot="public" virt="non-virtual"><scope>castor3d::shader::MicrofacetDistributionSample</scope><name>phi</name></member>
+      <member refid="d9/d90/a06425_1a2c325f93507c93099b96df2f878cc99c" prot="public" virt="non-virtual"><scope>castor3d::shader::MicrofacetDistributionSample</scope><name>sinTheta</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

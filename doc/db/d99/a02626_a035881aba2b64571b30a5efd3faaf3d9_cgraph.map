@@ -1,0 +1,16 @@
+<map id="castor3d::BinaryParserBase::doParseHeader" name="castor3d::BinaryParserBase::doParseHeader">
+<area shape="rect" id="node1" title="Parses the header chunk." alt="" coords="5,291,191,331"/>
+<area shape="rect" id="node2" href="$df/d44/a02586.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="922,43,1077,83"/>
+<area shape="rect" id="node3" href="$db/d99/a02626.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,99,424,139"/>
+<area shape="rect" id="node4" href="$db/d99/a02626.html#a0e1aa917e3bf897fab03a32d20890062" title="Retrieves a value array from a chunk." alt="" coords="239,163,424,203"/>
+<area shape="rect" id="node9" href="$df/d44/a02586.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,227,409,267"/>
+<area shape="rect" id="node10" href="$df/d44/a02586.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,291,409,331"/>
+<area shape="rect" id="node11" href="$d5/da6/a01698.html#a7f5dee29f8589db515b5267b84c9ac5e" title=" " alt="" coords="249,356,413,381"/>
+<area shape="rect" id="node12" href="$d5/da6/a01698.html#a55001a89450107aff1d25db30844947e" title=" " alt="" coords="249,405,413,430"/>
+<area shape="rect" id="node13" href="$d5/da6/a01698.html#aab8661e5d664e92f493a8f6c8272e264" title=" " alt="" coords="241,454,421,480"/>
+<area shape="rect" id="node14" href="$df/d44/a02586.html#ab3148d763e8fca01e746ec01991db22b" title="Retrieves a subchunk." alt="" coords="254,504,409,544"/>
+<area shape="rect" id="node5" href="$d9/da4/a02798.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="472,162,627,202"/>
+<area shape="rect" id="node6" href="$d0/dc9/a02794.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="675,102,861,142"/>
+<area shape="rect" id="node8" href="$d5/da6/a01698.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="675,169,861,194"/>
+<area shape="rect" id="node7" href="$df/d44/a02586.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="909,109,1089,134"/>
+</map>

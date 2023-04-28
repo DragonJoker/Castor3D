@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_e89de1a874a39a885a1106a5b958574f" kind="dir">
     <compoundname>Material/Pass/Component/Other</compoundname>
-    <innerfile refid="d1/d0b/a00452">AlphaTestComponent.hpp</innerfile>
-    <innerfile refid="dd/d63/a00455">ColourComponent.hpp</innerfile>
-    <innerfile refid="da/d65/a00458">HeightComponent.hpp</innerfile>
-    <innerfile refid="d5/d5f/a00461">OpacityComponent.hpp</innerfile>
-    <innerfile refid="d2/d9d/a00464">ReflectionComponent.hpp</innerfile>
-    <innerfile refid="d7/d5e/a00467">RefractionComponent.hpp</innerfile>
+    <innerfile refid="d7/db1/a00590">AlphaTestComponent.hpp</innerfile>
+    <innerfile refid="d2/da3/a00593">ColourComponent.hpp</innerfile>
+    <innerfile refid="dc/d25/a00596">HeightComponent.hpp</innerfile>
+    <innerfile refid="d5/d8a/a00599">OpacityComponent.hpp</innerfile>
+    <innerfile refid="d5/d0a/a00602">ReflectionComponent.hpp</innerfile>
+    <innerfile refid="d0/d1c/a00605">RefractionComponent.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

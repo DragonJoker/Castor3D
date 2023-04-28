@@ -1,0 +1,284 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d3b/a02910" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VertexBufferPool</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderSystem &gt;</basecompoundref>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+    <innerclass refid="d7/da7/a02914" prot="public">castor3d::VertexBufferPool::ModelBuffers</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d3/d3b/a02910_1a2db0eebd114b765f577d0598663e4261" prot="public" static="no">
+        <type>std::vector&lt; <ref refid="d7/da7/a02914" kindref="compound">ModelBuffers</ref> &gt;</type>
+        <definition>using castor3d::VertexBufferPool::BufferArray =  std::vector&lt; ModelBuffers &gt;</definition>
+        <argsstring></argsstring>
+        <name>BufferArray</name>
+        <qualifiedname>castor3d::VertexBufferPool::BufferArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="31" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d3b/a02910_1aa53c5d10dd360cd49639f52d5199576b" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::VertexBufferPool::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::VertexBufferPool::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="89" column="21" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d3b/a02910_1a90327daba0b6c1d709061c39c188646f" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::VertexBufferPool::m_debugName</definition>
+        <argsstring></argsstring>
+        <name>m_debugName</name>
+        <qualifiedname>castor3d::VertexBufferPool::m_debugName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="90" column="16" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d3b/a02910_1af660d9f7be302d03c4d9309444d9a35d" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d3b/a02910_1a2db0eebd114b765f577d0598663e4261" kindref="member">BufferArray</ref></type>
+        <definition>BufferArray castor3d::VertexBufferPool::m_buffers</definition>
+        <argsstring></argsstring>
+        <name>m_buffers</name>
+        <qualifiedname>castor3d::VertexBufferPool::m_buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="91" column="13" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d3b/a02910_1a2187e5f9d54ce11c516484737be7ab09" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VertexBufferPool::VertexBufferPool</definition>
+        <argsstring>(RenderDevice const &amp;device, castor::String debugName)</argsstring>
+        <name>VertexBufferPool</name>
+        <qualifiedname>castor3d::VertexBufferPool::VertexBufferPool</qualifiedname>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>debugName</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">debugName</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The debug name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="44" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d3b/a02910_1a36f53006ad04358a2bdb417665f0967c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VertexBufferPool::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::VertexBufferPool::cleanup</qualifiedname>
+        <briefdescription>
+<para>Cleans up all GPU buffers. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="52" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d3b/a02910_1a1d6db49873c867956eda7f99b6004878" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VertexBufferPool::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::VertexBufferPool::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+<para>Uploads all GPU buffers to VRAM. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">cb</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The command buffer on which transfer commands are recorded. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="61" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d3b/a02910_1afe52952de162c864c29351e3b275be45" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename VertexT</type>
+          </param>
+        </templateparamlist>
+        <type><ref refid="d5/d1c/a02902" kindref="compound">ObjectBufferOffset</ref></type>
+        <definition>ObjectBufferOffset castor3d::VertexBufferPool::getBuffer</definition>
+        <argsstring>(VkDeviceSize vertexCount)</argsstring>
+        <name>getBuffer</name>
+        <qualifiedname>castor3d::VertexBufferPool::getBuffer</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>vertexCount</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a GPU buffer with the given size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">vertexCount</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The wanted buffer element count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The GPU buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="73" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d3b/a02910_1a3c71affbf981e3697491d9f29b001bf3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VertexBufferPool::putBuffer</definition>
+        <argsstring>(ObjectBufferOffset const &amp;bufferOffset)</argsstring>
+        <name>putBuffer</name>
+        <qualifiedname>castor3d::VertexBufferPool::putBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d5/d1c/a02902" kindref="compound">ObjectBufferOffset</ref> const &amp;</type>
+          <declname>bufferOffset</declname>
+        </param>
+        <briefdescription>
+<para>Releases a GPU buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">bufferOffset</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffer offset to release. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="82" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/d3b/a02910_1a3a7ff459e62ca003ee9c3d2b15a69695" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> BufferArray::iterator</type>
+        <definition>C3D_API BufferArray::iterator castor3d::VertexBufferPool::doFindBuffer</definition>
+        <argsstring>(VkDeviceSize size, BufferArray &amp;array)</argsstring>
+        <name>doFindBuffer</name>
+        <qualifiedname>castor3d::VertexBufferPool::doFindBuffer</qualifiedname>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d3b/a02910_1a2db0eebd114b765f577d0598663e4261" kindref="member">BufferArray</ref> &amp;</type>
+          <declname>array</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="85" column="31"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::VertexBufferPool</label>
+        <link refid="d3/d3b/a02910"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::VertexBufferPool</label>
+        <link refid="d3/d3b/a02910"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderSystem &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/ObjectBufferPool.hpp" line="18" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="20" bodyend="92"/>
+    <listofallmembers>
+      <member refid="d3/d3b/a02910_1a2db0eebd114b765f577d0598663e4261" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>BufferArray</name></member>
+      <member refid="d3/d3b/a02910_1a36f53006ad04358a2bdb417665f0967c" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>cleanup</name></member>
+      <member refid="d3/d3b/a02910_1a3a7ff459e62ca003ee9c3d2b15a69695" prot="private" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>doFindBuffer</name></member>
+      <member refid="d3/d3b/a02910_1afe52952de162c864c29351e3b275be45" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>getBuffer</name></member>
+      <member refid="d3/d3b/a02910_1af660d9f7be302d03c4d9309444d9a35d" prot="private" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>m_buffers</name></member>
+      <member refid="d3/d3b/a02910_1a90327daba0b6c1d709061c39c188646f" prot="private" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>m_debugName</name></member>
+      <member refid="d3/d3b/a02910_1aa53c5d10dd360cd49639f52d5199576b" prot="private" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>m_device</name></member>
+      <member refid="d3/d3b/a02910_1a3c71affbf981e3697491d9f29b001bf3" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>putBuffer</name></member>
+      <member refid="d3/d3b/a02910_1a1d6db49873c867956eda7f99b6004878" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>upload</name></member>
+      <member refid="d3/d3b/a02910_1a2187e5f9d54ce11c516484737be7ab09" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool</scope><name>VertexBufferPool</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

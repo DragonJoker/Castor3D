@@ -1,0 +1,7 @@
+<map id="castor3d::BinaryParserBase::parse" name="castor3d::BinaryParserBase::parse">
+<area shape="rect" id="node1" title="From chunk reader function." alt="" coords="5,101,191,141"/>
+<area shape="rect" id="node2" href="$db/d99/a02626.html#ad1fbebf70ad5b1caae1a7eb57c2f82e4" title=" " alt="" coords="239,5,424,45"/>
+<area shape="rect" id="node3" href="$df/d44/a02586.html#a08e242acd79584a8c061b89c14f68452" title="Retrieves the chunk data size." alt="" coords="254,69,409,109"/>
+<area shape="rect" id="node4" href="$df/d44/a02586.html#a4b542ea9ab36cf0aaa73e9f1fed8967b" title="Retrieves the chunk type." alt="" coords="254,133,409,173"/>
+<area shape="rect" id="node5" href="$df/d44/a02586.html#a7a755e5c70676c80e150d61574442c2c" title="Resets the chunk, to be able to reparse it." alt="" coords="254,197,409,237"/>
+</map>

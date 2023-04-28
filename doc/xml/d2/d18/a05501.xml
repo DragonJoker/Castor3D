@@ -1,0 +1,45 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d18/a05501" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::NonTexturedCube::Quad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="d1/d13/a05505" prot="public">castor3d::NonTexturedCube::Quad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d18/a05501_1a17607e11f60ddbee68e73512dfcd8d3f" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d13/a05505" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::NonTexturedCube::Quad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::NonTexturedCube::Quad::vertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="85" column="8" bodyfile="Render/RenderModule.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::NonTexturedCube::Quad</label>
+        <link refid="d2/d18/a05501"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::NonTexturedCube::Quad::Vertex</label>
+        <link refid="d1/d13/a05505"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="78" column="1" bodyfile="Render/RenderModule.hpp" bodystart="79" bodyend="86"/>
+    <listofallmembers>
+      <member refid="d2/d18/a05501_1a17607e11f60ddbee68e73512dfcd8d3f" prot="public" virt="non-virtual"><scope>castor3d::NonTexturedCube::Quad</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

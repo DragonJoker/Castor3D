@@ -1,0 +1,235 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d6/d1b/a06469" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ShadowData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_ShadowData&quot;, sdw::type::MemoryLayout::eC, sdw::IntField&lt; &quot;shadowMapIndex&quot; &gt;, sdw::UIntField&lt; &quot;shadowType&quot; &gt;, sdw::FloatField&lt; &quot;pcfFilterSize&quot; &gt;, sdw::UIntField&lt; &quot;pcfSampleCount&quot; &gt;, sdw::Vec2Field&lt; &quot;rawShadowOffsets&quot; &gt;, sdw::Vec2Field&lt; &quot;pcfShadowOffsets&quot; &gt;, sdw::FloatField&lt; &quot;vsmMinVariance&quot; &gt;, sdw::FloatField&lt; &quot;vsmLightBleedingReduction&quot; &gt;, sdw::UIntField&lt; &quot;volumetricSteps&quot; &gt;, sdw::FloatField&lt; &quot;volumetricScattering&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d1b/a06469_1a37b645ed48e96d76fe424d8527e35524" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::ShadowData::ShadowData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>ShadowData</name>
+        <qualifiedname>castor3d::shader::ShadowData::ShadowData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="48" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="48" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1ab4cb641cafdfff8f6b01c50a80d808bd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::shadowMapIndex</definition>
+        <argsstring>() const</argsstring>
+        <name>shadowMapIndex</name>
+        <qualifiedname>castor3d::shader::ShadowData::shadowMapIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="55" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="55" bodyend="55"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1a2edb411d503bf65a0c8418ee437ab0d1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::shadowType</definition>
+        <argsstring>() const</argsstring>
+        <name>shadowType</name>
+        <qualifiedname>castor3d::shader::ShadowData::shadowType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="56" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="56" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1a09a37cf0feae14874e2a5762e6c16d2c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::pcfFilterSize</definition>
+        <argsstring>() const</argsstring>
+        <name>pcfFilterSize</name>
+        <qualifiedname>castor3d::shader::ShadowData::pcfFilterSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="57" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="57" bodyend="57"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1a18e05c8a96bf1cc4a259db7b944a752d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::pcfSampleCount</definition>
+        <argsstring>() const</argsstring>
+        <name>pcfSampleCount</name>
+        <qualifiedname>castor3d::shader::ShadowData::pcfSampleCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="58" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="58" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1a27c8e8f744545ea948ef83ac526b44ed" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::rawShadowOffsets</definition>
+        <argsstring>() const</argsstring>
+        <name>rawShadowOffsets</name>
+        <qualifiedname>castor3d::shader::ShadowData::rawShadowOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="59" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="59" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1aeaf9d576846615e3aee5796c6ddad6f3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::pcfShadowOffsets</definition>
+        <argsstring>() const</argsstring>
+        <name>pcfShadowOffsets</name>
+        <qualifiedname>castor3d::shader::ShadowData::pcfShadowOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="60" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="60" bodyend="60"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1a3d4ef5ab0fde805b75d67a72d75c3473" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::vsmMinVariance</definition>
+        <argsstring>() const</argsstring>
+        <name>vsmMinVariance</name>
+        <qualifiedname>castor3d::shader::ShadowData::vsmMinVariance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="61" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="61" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1a42411bc1912f88272260d7619c339ca5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::vsmLightBleedingReduction</definition>
+        <argsstring>() const</argsstring>
+        <name>vsmLightBleedingReduction</name>
+        <qualifiedname>castor3d::shader::ShadowData::vsmLightBleedingReduction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="62" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="62" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1aa615e56639c54ae7a9e77789e822820a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::volumetricSteps</definition>
+        <argsstring>() const</argsstring>
+        <name>volumetricSteps</name>
+        <qualifiedname>castor3d::shader::ShadowData::volumetricSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="63" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="63" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1a4766f01ed49787ff0887aea65f14f150" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowData::volumetricScattering</definition>
+        <argsstring>() const</argsstring>
+        <name>volumetricScattering</name>
+        <qualifiedname>castor3d::shader::ShadowData::volumetricScattering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="64" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="64" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d1b/a06469_1a472d55896555f7fd1f272a17dc6380a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ShadowData::updateShadowType</definition>
+        <argsstring>(ShadowType type)</argsstring>
+        <name>updateShadowType</name>
+        <qualifiedname>castor3d::shader::ShadowData::updateShadowType</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="66" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::ShadowData</label>
+        <link refid="d6/d1b/a06469"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_ShadowData&quot;, sdw::type::MemoryLayout::eC, sdw::IntField&lt; &quot;shadowMapIndex&quot; &gt;, sdw::UIntField&lt; &quot;shadowType&quot; &gt;, sdw::FloatField&lt; &quot;pcfFilterSize&quot; &gt;, sdw::UIntField&lt; &quot;pcfSampleCount&quot; &gt;, sdw::Vec2Field&lt; &quot;rawShadowOffsets&quot; &gt;, sdw::Vec2Field&lt; &quot;pcfShadowOffsets&quot; &gt;, sdw::FloatField&lt; &quot;vsmMinVariance&quot; &gt;, sdw::FloatField&lt; &quot;vsmLightBleedingReduction&quot; &gt;, sdw::UIntField&lt; &quot;volumetricSteps&quot; &gt;, sdw::FloatField&lt; &quot;volumetricScattering&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::ShadowData</label>
+        <link refid="d6/d1b/a06469"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_ShadowData&quot;, sdw::type::MemoryLayout::eC, sdw::IntField&lt; &quot;shadowMapIndex&quot; &gt;, sdw::UIntField&lt; &quot;shadowType&quot; &gt;, sdw::FloatField&lt; &quot;pcfFilterSize&quot; &gt;, sdw::UIntField&lt; &quot;pcfSampleCount&quot; &gt;, sdw::Vec2Field&lt; &quot;rawShadowOffsets&quot; &gt;, sdw::Vec2Field&lt; &quot;pcfShadowOffsets&quot; &gt;, sdw::FloatField&lt; &quot;vsmMinVariance&quot; &gt;, sdw::FloatField&lt; &quot;vsmLightBleedingReduction&quot; &gt;, sdw::UIntField&lt; &quot;volumetricSteps&quot; &gt;, sdw::FloatField&lt; &quot;volumetricScattering&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="34" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="47" bodyend="67"/>
+    <listofallmembers>
+      <member refid="d6/d1b/a06469_1a09a37cf0feae14874e2a5762e6c16d2c" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>pcfFilterSize</name></member>
+      <member refid="d6/d1b/a06469_1a18e05c8a96bf1cc4a259db7b944a752d" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>pcfSampleCount</name></member>
+      <member refid="d6/d1b/a06469_1aeaf9d576846615e3aee5796c6ddad6f3" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>pcfShadowOffsets</name></member>
+      <member refid="d6/d1b/a06469_1a27c8e8f744545ea948ef83ac526b44ed" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>rawShadowOffsets</name></member>
+      <member refid="d6/d1b/a06469_1a37b645ed48e96d76fe424d8527e35524" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>ShadowData</name></member>
+      <member refid="d6/d1b/a06469_1ab4cb641cafdfff8f6b01c50a80d808bd" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>shadowMapIndex</name></member>
+      <member refid="d6/d1b/a06469_1a2edb411d503bf65a0c8418ee437ab0d1" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>shadowType</name></member>
+      <member refid="d6/d1b/a06469_1a472d55896555f7fd1f272a17dc6380a3" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>updateShadowType</name></member>
+      <member refid="d6/d1b/a06469_1a4766f01ed49787ff0887aea65f14f150" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>volumetricScattering</name></member>
+      <member refid="d6/d1b/a06469_1aa615e56639c54ae7a9e77789e822820a" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>volumetricSteps</name></member>
+      <member refid="d6/d1b/a06469_1a42411bc1912f88272260d7619c339ca5" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>vsmLightBleedingReduction</name></member>
+      <member refid="d6/d1b/a06469_1a3d4ef5ab0fde805b75d67a72d75c3473" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowData</scope><name>vsmMinVariance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

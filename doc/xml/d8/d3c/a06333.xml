@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/d3c/a06333" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::FontGlyphBuffer::FontGlyphData</compoundname>
+    <basecompoundref refid="db/de4/a06353" prot="public" virt="non-virtual">castor3d::ShaderBufferTypes</basecompoundref>
+    <includes local="no">FontGlyphBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d3c/a06333_1a86b0870b07e697a8ba278e6d80acb230" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d97/a06357" kindref="compound">Float2</ref></type>
+        <definition>Float2 castor3d::FontGlyphBuffer::FontGlyphData::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::FontGlyphData::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="121" column="8" bodyfile="Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3c/a06333_1a96194dd82a4acdab80372314e03dc68d" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d97/a06357" kindref="compound">Float2</ref></type>
+        <definition>Float2 castor3d::FontGlyphBuffer::FontGlyphData::bearing</definition>
+        <argsstring></argsstring>
+        <name>bearing</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::FontGlyphData::bearing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="122" column="8" bodyfile="Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3c/a06333_1ac46b0e68575ac0a5b7cd96911744f508" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d97/a06357" kindref="compound">Float2</ref></type>
+        <definition>Float2 castor3d::FontGlyphBuffer::FontGlyphData::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::FontGlyphData::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="123" column="8" bodyfile="Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3c/a06333_1aeca5d5514e18a0192208a6986f7780b0" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::FontGlyphBuffer::FontGlyphData::advance</definition>
+        <argsstring></argsstring>
+        <name>advance</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::FontGlyphData::advance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="124" column="8" bodyfile="Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="124" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3c/a06333_1a3e2b3f58624817ee412be7ab12bbf839" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::FontGlyphBuffer::FontGlyphData::pad</definition>
+        <argsstring></argsstring>
+        <name>pad</name>
+        <qualifiedname>castor3d::FontGlyphBuffer::FontGlyphData::pad</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="125" column="8" bodyfile="Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="125" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::FontGlyphBuffer::FontGlyphData</label>
+        <link refid="d8/d3c/a06333"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="db/de4/a06353"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::FontGlyphBuffer::FontGlyphData</label>
+        <link refid="d8/d3c/a06333"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="db/de4/a06353"/>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/FontGlyphBuffer.hpp" line="118" column="1" bodyfile="Shader/ShaderBuffers/FontGlyphBuffer.hpp" bodystart="120" bodyend="126"/>
+    <listofallmembers>
+      <member refid="d8/d3c/a06333_1aeca5d5514e18a0192208a6986f7780b0" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer::FontGlyphData</scope><name>advance</name></member>
+      <member refid="d8/d3c/a06333_1a96194dd82a4acdab80372314e03dc68d" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer::FontGlyphData</scope><name>bearing</name></member>
+      <member refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer::FontGlyphData</scope><name>Float1</name></member>
+      <member refid="d8/d3c/a06333_1a3e2b3f58624817ee412be7ab12bbf839" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer::FontGlyphData</scope><name>pad</name></member>
+      <member refid="d8/d3c/a06333_1ac46b0e68575ac0a5b7cd96911744f508" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer::FontGlyphData</scope><name>position</name></member>
+      <member refid="d8/d3c/a06333_1a86b0870b07e697a8ba278e6d80acb230" prot="public" virt="non-virtual"><scope>castor3d::FontGlyphBuffer::FontGlyphData</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

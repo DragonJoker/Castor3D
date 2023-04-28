@@ -1,0 +1,767 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d3f/a05069" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::DeferredRendering</compoundname>
+    <includes local="no">DeferredRendering.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d3f/a05069_1ad0f3cf107241c26366185bab90694f54" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::DeferredRendering::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::DeferredRendering::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="176" column="21" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1a09eb9ba7c0bec5e3eace35158860a101" prot="private" static="no" mutable="no">
+        <type><ref refid="d1/df0/a05157" kindref="compound">OpaquePassResult</ref> const  &amp;</type>
+        <definition>OpaquePassResult const&amp; castor3d::DeferredRendering::m_opaquePassResult</definition>
+        <argsstring></argsstring>
+        <name>m_opaquePassResult</name>
+        <qualifiedname>castor3d::DeferredRendering::m_opaquePassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="177" column="25" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1a700bdf984d31b4b922518a0f66a3c84b" prot="private" static="no" mutable="no">
+        <type><ref refid="de/dc2/a05601" kindref="compound">RenderTechnique</ref> const  &amp;</type>
+        <definition>RenderTechnique const&amp; castor3d::DeferredRendering::m_technique</definition>
+        <argsstring></argsstring>
+        <name>m_technique</name>
+        <qualifiedname>castor3d::DeferredRendering::m_technique</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="178" column="24" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1adc3691f5e67cf3fa0c761c9fd65bd669" prot="private" static="no" mutable="no">
+        <type>crg::FramePass const  *</type>
+        <definition>crg::FramePass const* castor3d::DeferredRendering::m_lastPass</definition>
+        <argsstring></argsstring>
+        <name>m_lastPass</name>
+        <qualifiedname>castor3d::DeferredRendering::m_lastPass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="179" column="23" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1a7cae6e79b6203cf6790e4bca8d091b37" prot="private" static="no" mutable="no">
+        <type>castor::Size</type>
+        <definition>castor::Size castor3d::DeferredRendering::m_size</definition>
+        <argsstring></argsstring>
+        <name>m_size</name>
+        <qualifiedname>castor3d::DeferredRendering::m_size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="180" column="14" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="180" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1ac4a9dc46a309817f54e892ce1a94ff86" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/df5/a05093" kindref="compound">LightPassResult</ref></type>
+        <definition>LightPassResult castor3d::DeferredRendering::m_lightPassResult</definition>
+        <argsstring></argsstring>
+        <name>m_lightPassResult</name>
+        <qualifiedname>castor3d::DeferredRendering::m_lightPassResult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="181" column="17" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="181" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1a2c32de4927d0478caa6bf22a10ef4cdd" prot="private" static="no" mutable="no">
+        <type>LightingPassUPtr</type>
+        <definition>LightingPassUPtr castor3d::DeferredRendering::m_lightingPass</definition>
+        <argsstring></argsstring>
+        <name>m_lightingPass</name>
+        <qualifiedname>castor3d::DeferredRendering::m_lightingPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="182" column="18" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="182" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1ae8d76e442a8ef64cc9c196aaa7bcc19a" prot="private" static="no" mutable="no">
+        <type>IndirectLightingPassUPtr</type>
+        <definition>IndirectLightingPassUPtr castor3d::DeferredRendering::m_indirectLightingPass</definition>
+        <argsstring></argsstring>
+        <name>m_indirectLightingPass</name>
+        <qualifiedname>castor3d::DeferredRendering::m_indirectLightingPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="183" column="26" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="183" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1afbe553fb05f48bd150db759210e1d695" prot="private" static="no" mutable="no">
+        <type>SubsurfaceScatteringPassUPtr</type>
+        <definition>SubsurfaceScatteringPassUPtr castor3d::DeferredRendering::m_subsurfaceScattering</definition>
+        <argsstring></argsstring>
+        <name>m_subsurfaceScattering</name>
+        <qualifiedname>castor3d::DeferredRendering::m_subsurfaceScattering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="184" column="30" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="184" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1af70e6bfec8cb2db58b6aa0db7eaf02ec" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; OpaqueResolvePassUPtr &gt;</type>
+        <definition>std::vector&lt; OpaqueResolvePassUPtr &gt; castor3d::DeferredRendering::m_resolves</definition>
+        <argsstring></argsstring>
+        <name>m_resolves</name>
+        <qualifiedname>castor3d::DeferredRendering::m_resolves</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="185" column="13" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="185" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1ac8d2ec67d387c43041e10a59fa40259c" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DeferredRendering::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::DeferredRendering::m_index</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="186" column="10" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3f/a05069_1a4e0e8615dec8ddee9460abf6c519aea6" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; ashes::ImagePtr &gt;</type>
+        <definition>std::vector&lt; ashes::ImagePtr &gt; castor3d::DeferredRendering::m_results</definition>
+        <argsstring></argsstring>
+        <name>m_results</name>
+        <qualifiedname>castor3d::DeferredRendering::m_results</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="187" column="13" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d3f/a05069_1a64c53261a57a9cdbf65ba795ac754885" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::DeferredRendering::DeferredRendering</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray const &amp;previousPasses, crg::FramePass const &amp;ssaoPass, RenderDevice const &amp;device, ProgressBar *progress, Texture const &amp;brdf, crg::ImageViewIdArray const &amp;resultDepth, Texture const &amp;depthObj, OpaquePassResult const &amp;opaquePassResult, crg::ImageViewIdArray resultTexture, ShadowMapResult const &amp;smDirectionalResult, ShadowMapResult const &amp;smPointResult, ShadowMapResult const &amp;smSpotResult, LightVolumePassResult const &amp;lpvResult, LightVolumePassResultArray const &amp;llpvResult, Texture const &amp;vctFirstBounce, Texture const &amp;vctSecondaryBounce, Texture const &amp;ssao, castor::Size const &amp;size, RenderTechnique const &amp;technique, CameraUbo const &amp;cameraUbo, SceneUbo const &amp;sceneUbo, HdrConfigUbo const &amp;hdrConfigUbo, LpvGridConfigUbo const &amp;lpvConfigUbo, LayeredLpvGridConfigUbo const &amp;llpvConfigUbo, VoxelizerUbo const &amp;vctConfigUbo, SsaoConfig &amp;ssaoConfig, crg::RunnablePass::IsEnabledCallback const &amp;opaquePassEnabled)</argsstring>
+        <name>DeferredRendering</name>
+        <qualifiedname>castor3d::DeferredRendering::DeferredRendering</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>ssaoPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d13/a04513" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>resultDepth</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>depthObj</declname>
+        </param>
+        <param>
+          <type><ref refid="d1/df0/a05157" kindref="compound">OpaquePassResult</ref> const &amp;</type>
+          <declname>opaquePassResult</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray</type>
+          <declname>resultTexture</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d6d/a05685" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smDirectionalResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d6d/a05685" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smPointResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d6d/a05685" kindref="compound">ShadowMapResult</ref> const &amp;</type>
+          <declname>smSpotResult</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/dd1/a05001" kindref="compound">LightVolumePassResult</ref> const &amp;</type>
+          <declname>lpvResult</declname>
+        </param>
+        <param>
+          <type>LightVolumePassResultArray const &amp;</type>
+          <declname>llpvResult</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>vctFirstBounce</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>vctSecondaryBounce</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>ssao</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="de/dc2/a05601" kindref="compound">RenderTechnique</ref> const &amp;</type>
+          <declname>technique</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d2f/a06641" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>cameraUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d53/a06721" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d4d/a06649" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="df/daa/a06665" kindref="compound">LpvGridConfigUbo</ref> const &amp;</type>
+          <declname>lpvConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d95/a06657" kindref="compound">LayeredLpvGridConfigUbo</ref> const &amp;</type>
+          <declname>llpvConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d88/a06821" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
+          <declname>vctConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d32/a05709" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>ssaoConfig</declname>
+        </param>
+        <param>
+          <type>crg::RunnablePass::IsEnabledCallback const &amp;</type>
+          <declname>opaquePassEnabled</declname>
+        </param>
+        <briefdescription>
+<para>Initialises deferred rendering related stuff. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The graph passes group. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPasses</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame passes this pass depends on. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress status. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">brdf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The prefiltered BRDF map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">resultDepth</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">depthObj</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depths and objects texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opaquePassResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The geometry pass buffers. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">resultTexture</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render technique texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smDirectionalResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The directional lights shadow map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smPointResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The point lights shadow map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">smSpotResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The spot lights shadow map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpvResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The LPV result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">llpvResult</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The Layered LPV result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctFirstBounce</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The VCT first bounce result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctSecondaryBounce</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The VCT secondary bounce result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssao</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">technique</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent technique. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hdrConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The HDR configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">cameraUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The camera configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lpvConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The LPV configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">llpvConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The Layered LPV configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">vctConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The VCT configuration UBO. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">ssaoConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The SSAO configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">opaquePassEnabled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The opaque pass enabled status. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="88" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d3f/a05069_1a959554b22dc56456b29a76817a8ab97f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::DeferredRendering::update</definition>
+        <argsstring>(CpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::DeferredRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="d5/de0/a05541" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="124" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d3f/a05069_1a00d78cd64b4eb1e8c3871c3a0df21b55" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::DeferredRendering::update</definition>
+        <argsstring>(GpuUpdater &amp;updater)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::DeferredRendering::update</qualifiedname>
+        <param>
+          <type><ref refid="d1/da9/a05549" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, GPU wise. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="133" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d3f/a05069_1a458211a355f0e3c9e4a4918835d0abeb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::DeferredRendering::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::DeferredRendering::accept</qualifiedname>
+        <param>
+          <type><ref refid="d1/df2/a05617" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="142" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d3f/a05069_1a96b9a37e881ac07517686be0dd4d31ef" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::DeferredRendering::getLightDiffuse</definition>
+        <argsstring>()</argsstring>
+        <name>getLightDiffuse</name>
+        <qualifiedname>castor3d::DeferredRendering::getLightDiffuse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="144" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d3f/a05069_1abb992611372703f84fb91d563999f9b2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>C3D_API Texture const  &amp; castor3d::DeferredRendering::getLightScattering</definition>
+        <argsstring>()</argsstring>
+        <name>getLightScattering</name>
+        <qualifiedname>castor3d::DeferredRendering::getLightScattering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="145" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d3f/a05069_1a7b9a2c9d8e02473bb171d67099176516" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::DeferredRendering::getLastPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getLastPass</name>
+        <qualifiedname>castor3d::DeferredRendering::getLastPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="147" column="23" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="147" bodyend="150"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d3f/a05069_1a2fe018006ea84866260529924ae1ffbb" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>static uint32_t castor3d::DeferredRendering::countInitialisationSteps</definition>
+        <argsstring>()</argsstring>
+        <name>countInitialisationSteps</name>
+        <qualifiedname>castor3d::DeferredRendering::countInitialisationSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="152" column="17" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="152" bodyend="160"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d3f/a05069_1a00ec1d6b2af641bf30d65729b86fd547" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::DeferredRendering::doCreateResolvePasses</definition>
+        <argsstring>(crg::FramePassGroup &amp;graph, crg::FramePassArray previousPasses, ProgressBar *progress, Texture const &amp;depthObj, crg::ImageViewIdArray resultTexture, Texture const &amp;ssao, CameraUbo const &amp;cameraUbo, SceneUbo const &amp;sceneUbo, HdrConfigUbo const &amp;hdrConfigUbo, SsaoConfig &amp;ssaoConfig, crg::RunnablePass::IsEnabledCallback const &amp;opaquePassEnabled)</argsstring>
+        <name>doCreateResolvePasses</name>
+        <qualifiedname>castor3d::DeferredRendering::doCreateResolvePasses</qualifiedname>
+        <param>
+          <type>crg::FramePassGroup &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d13/a04513" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>depthObj</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray</type>
+          <declname>resultTexture</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>ssao</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d2f/a06641" kindref="compound">CameraUbo</ref> const &amp;</type>
+          <declname>cameraUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d53/a06721" kindref="compound">SceneUbo</ref> const &amp;</type>
+          <declname>sceneUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d4d/a06649" kindref="compound">HdrConfigUbo</ref> const &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d32/a05709" kindref="compound">SsaoConfig</ref> &amp;</type>
+          <declname>ssaoConfig</declname>
+        </param>
+        <param>
+          <type>crg::RunnablePass::IsEnabledCallback const &amp;</type>
+          <declname>opaquePassEnabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/DeferredRendering.hpp" line="163" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Opaque/DeferredRendering.hpp" line="23" column="1" bodyfile="Render/Opaque/DeferredRendering.hpp" bodystart="24" bodyend="188"/>
+    <listofallmembers>
+      <member refid="d2/d3f/a05069_1a458211a355f0e3c9e4a4918835d0abeb" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>accept</name></member>
+      <member refid="d2/d3f/a05069_1a2fe018006ea84866260529924ae1ffbb" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>countInitialisationSteps</name></member>
+      <member refid="d2/d3f/a05069_1a64c53261a57a9cdbf65ba795ac754885" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>DeferredRendering</name></member>
+      <member refid="d2/d3f/a05069_1a00ec1d6b2af641bf30d65729b86fd547" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>doCreateResolvePasses</name></member>
+      <member refid="d2/d3f/a05069_1a7b9a2c9d8e02473bb171d67099176516" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>getLastPass</name></member>
+      <member refid="d2/d3f/a05069_1a96b9a37e881ac07517686be0dd4d31ef" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>getLightDiffuse</name></member>
+      <member refid="d2/d3f/a05069_1abb992611372703f84fb91d563999f9b2" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>getLightScattering</name></member>
+      <member refid="d2/d3f/a05069_1ad0f3cf107241c26366185bab90694f54" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_device</name></member>
+      <member refid="d2/d3f/a05069_1ac8d2ec67d387c43041e10a59fa40259c" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_index</name></member>
+      <member refid="d2/d3f/a05069_1ae8d76e442a8ef64cc9c196aaa7bcc19a" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_indirectLightingPass</name></member>
+      <member refid="d2/d3f/a05069_1adc3691f5e67cf3fa0c761c9fd65bd669" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_lastPass</name></member>
+      <member refid="d2/d3f/a05069_1a2c32de4927d0478caa6bf22a10ef4cdd" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_lightingPass</name></member>
+      <member refid="d2/d3f/a05069_1ac4a9dc46a309817f54e892ce1a94ff86" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_lightPassResult</name></member>
+      <member refid="d2/d3f/a05069_1a09eb9ba7c0bec5e3eace35158860a101" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_opaquePassResult</name></member>
+      <member refid="d2/d3f/a05069_1af70e6bfec8cb2db58b6aa0db7eaf02ec" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_resolves</name></member>
+      <member refid="d2/d3f/a05069_1a4e0e8615dec8ddee9460abf6c519aea6" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_results</name></member>
+      <member refid="d2/d3f/a05069_1a7cae6e79b6203cf6790e4bca8d091b37" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_size</name></member>
+      <member refid="d2/d3f/a05069_1afbe553fb05f48bd150db759210e1d695" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_subsurfaceScattering</name></member>
+      <member refid="d2/d3f/a05069_1a700bdf984d31b4b922518a0f66a3c84b" prot="private" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>m_technique</name></member>
+      <member refid="d2/d3f/a05069_1a959554b22dc56456b29a76817a8ab97f" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>update</name></member>
+      <member refid="d2/d3f/a05069_1a00d78cd64b4eb1e8c3871c3a0df21b55" prot="public" virt="non-virtual"><scope>castor3d::DeferredRendering</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

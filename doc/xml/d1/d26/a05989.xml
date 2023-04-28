@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d26/a05989" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightCategory::LightData</compoundname>
+    <basecompoundref refid="db/de4/a06353" prot="public" virt="non-virtual">castor3d::ShaderBufferTypes</basecompoundref>
+    <derivedcompoundref refid="d2/d3c/a05973" prot="public" virt="non-virtual">castor3d::DirectionalLight::LightData</derivedcompoundref>
+    <derivedcompoundref refid="db/db0/a06013" prot="public" virt="non-virtual">castor3d::PointLight::LightData</derivedcompoundref>
+    <derivedcompoundref refid="d6/dc2/a06021" prot="public" virt="non-virtual">castor3d::SpotLight::LightData</derivedcompoundref>
+    <includes local="no">LightCategory.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d26/a05989_1a5e00322b1a0bf4bc06a5ce9873b810f4" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d3e/a06361" kindref="compound">Float3</ref></type>
+        <definition>Float3 castor3d::LightCategory::LightData::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::LightCategory::LightData::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="53" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d26/a05989_1ab261755a700a6bb39207655cf7a263e6" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::LightData::farPlane</definition>
+        <argsstring></argsstring>
+        <name>farPlane</name>
+        <qualifiedname>castor3d::LightCategory::LightData::farPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="54" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d26/a05989_1ad3fde27984234899fa7032e37901179d" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d97/a06357" kindref="compound">Float2</ref></type>
+        <definition>Float2 castor3d::LightCategory::LightData::intensity</definition>
+        <argsstring></argsstring>
+        <name>intensity</name>
+        <qualifiedname>castor3d::LightCategory::LightData::intensity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="55" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d26/a05989_1af8bfcefb6357aeb30e93462bf4718a24" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d97/a06357" kindref="compound">Float2</ref></type>
+        <definition>Float2 castor3d::LightCategory::LightData::pad0</definition>
+        <argsstring></argsstring>
+        <name>pad0</name>
+        <qualifiedname>castor3d::LightCategory::LightData::pad0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="56" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="56" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d26/a05989_1aab7bb7c4ea0fc301a39a5c1dfbaafa69" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d05/a05985" kindref="compound">ShadowData</ref></type>
+        <definition>ShadowData castor3d::LightCategory::LightData::shadows</definition>
+        <argsstring></argsstring>
+        <name>shadows</name>
+        <qualifiedname>castor3d::LightCategory::LightData::shadows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="57" column="12" bodyfile="Scene/Light/LightCategory.hpp" bodystart="57" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::DirectionalLight::LightData</label>
+        <link refid="d2/d3c/a05973"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d1/d26/a05989"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::PointLight::LightData</label>
+        <link refid="db/db0/a06013"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="db/de4/a06353"/>
+      </node>
+      <node id="5">
+        <label>castor3d::SpotLight::LightData</label>
+        <link refid="d6/dc2/a06021"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d1/d26/a05989"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>shadows</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::LightCategory::ShadowData</label>
+        <link refid="d7/d05/a05985"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="db/de4/a06353"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Light/LightCategory.hpp" line="50" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="52" bodyend="58"/>
+    <listofallmembers>
+      <member refid="d1/d26/a05989_1a5e00322b1a0bf4bc06a5ce9873b810f4" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::LightData</scope><name>colour</name></member>
+      <member refid="d1/d26/a05989_1ab261755a700a6bb39207655cf7a263e6" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::LightData</scope><name>farPlane</name></member>
+      <member refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::LightData</scope><name>Float1</name></member>
+      <member refid="d1/d26/a05989_1ad3fde27984234899fa7032e37901179d" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::LightData</scope><name>intensity</name></member>
+      <member refid="d1/d26/a05989_1af8bfcefb6357aeb30e93462bf4718a24" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::LightData</scope><name>pad0</name></member>
+      <member refid="d1/d26/a05989_1aab7bb7c4ea0fc301a39a5c1dfbaafa69" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::LightData</scope><name>shadows</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

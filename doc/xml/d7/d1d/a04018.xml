@@ -1,0 +1,1293 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/d1d/a04018" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PassComponentsShader</compoundname>
+    <basecompoundref refid="d0/dee/a04014" prot="public" virt="non-virtual">castor3d::shader::PassShader</basecompoundref>
+    <derivedcompoundref refid="d9/d8b/a03922" prot="public" virt="non-virtual">castor3d::AlphaTestComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d5/d85/a03434" prot="public" virt="non-virtual">castor3d::AmbientComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d5/d35/a03454" prot="public" virt="non-virtual">castor3d::AttenuationComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d4/d2b/a03662" prot="public" virt="non-virtual">castor3d::AttenuationMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d7/da0/a03474" prot="public" virt="non-virtual">castor3d::ClearcoatComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d0/d1e/a03674" prot="public" virt="non-virtual">castor3d::ClearcoatMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d4/d5e/a03686" prot="public" virt="non-virtual">castor3d::ClearcoatNormalMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d3/d94/a03698" prot="public" virt="non-virtual">castor3d::ClearcoatRoughnessMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d4/dc4/a03938" prot="public" virt="non-virtual">castor3d::ColourComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d5/d46/a03710" prot="public" virt="non-virtual">castor3d::ColourMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="df/d5f/a03494" prot="public" virt="non-virtual">castor3d::EmissiveComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="db/db0/a03722" prot="public" virt="non-virtual">castor3d::EmissiveMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="de/d93/a03330" prot="public" virt="non-virtual">castor3d::FractalMappingComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="dd/d2e/a03734" prot="public" virt="non-virtual">castor3d::GlossinessMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d3/d66/a03954" prot="public" virt="non-virtual">castor3d::HeightComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d7/d4f/a03746" prot="public" virt="non-virtual">castor3d::HeightMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="dd/db6/a03514" prot="public" virt="non-virtual">castor3d::IridescenceComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="da/d85/a03758" prot="public" virt="non-virtual">castor3d::IridescenceMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d2/d33/a03770" prot="public" virt="non-virtual">castor3d::IridescenceThicknessMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d4/d5e/a03542" prot="public" virt="non-virtual">castor3d::MetalnessComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d9/df0/a03782" prot="public" virt="non-virtual">castor3d::MetalnessMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="dd/dc8/a03342" prot="public" virt="non-virtual">castor3d::NormalComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d6/da7/a03794" prot="public" virt="non-virtual">castor3d::NormalMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="dc/d19/a03806" prot="public" virt="non-virtual">castor3d::OcclusionMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="dd/d59/a03970" prot="public" virt="non-virtual">castor3d::OpacityComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d4/d5e/a03818" prot="public" virt="non-virtual">castor3d::OpacityMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d7/df2/a03986" prot="public" virt="non-virtual">castor3d::ReflectionComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d2/dce/a04002" prot="public" virt="non-virtual">castor3d::RefractionComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d0/d31/a03558" prot="public" virt="non-virtual">castor3d::RoughnessComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d5/de2/a03830" prot="public" virt="non-virtual">castor3d::RoughnessMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d9/d65/a03578" prot="public" virt="non-virtual">castor3d::SheenComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="dd/d51/a03842" prot="public" virt="non-virtual">castor3d::SheenMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d3/d83/a03854" prot="public" virt="non-virtual">castor3d::SheenRoughnessMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d9/df0/a03598" prot="public" virt="non-virtual">castor3d::SpecularComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="db/d06/a03866" prot="public" virt="non-virtual">castor3d::SpecularFactorMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d0/d60/a03878" prot="public" virt="non-virtual">castor3d::SpecularMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d3/df2/a03614" prot="public" virt="non-virtual">castor3d::SubsurfaceScatteringComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d9/dc1/a03390" prot="public" virt="non-virtual">castor3d::TexturesComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d6/d81/a03630" prot="public" virt="non-virtual">castor3d::ThicknessComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d2/db1/a03646" prot="public" virt="non-virtual">castor3d::TransmissionComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d2/df3/a03890" prot="public" virt="non-virtual">castor3d::TransmissionMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="d9/d7a/a03902" prot="public" virt="non-virtual">castor3d::TransmittanceMapComponent::ComponentsShader</derivedcompoundref>
+    <derivedcompoundref refid="df/de2/a03410" prot="public" virt="non-virtual">castor3d::UntileMappingComponent::ComponentsShader</derivedcompoundref>
+    <includes local="no">PassComponent.hpp</includes>
+      <sectiondef kind="user-defined">
+      <description><para>Getters. </para>
+</description>
+      <memberdef kind="function" id="d7/d1d/a04018_1a846afb362f8cdb6bd2dc1a3f98db9f64" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/da6/a01698_1a5f413b599b618d042e26d27d4a0ee1ca" kindref="member">PassComponentID</ref></type>
+        <definition>C3D_API PassComponentID castor3d::shader::PassComponentsShader::getId</definition>
+        <argsstring>() const</argsstring>
+        <name>getId</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::getId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="385" column="25"/>
+        <referencedby refid="d4/d2b/a03662_1a1fa1d6c3f0a09ab0d66f6c6c0aead093" compoundref="de/d4e/a00500" startline="35" endline="38">castor3d::AttenuationMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d0/d1e/a03674_1ac640fd9062d45d6733b640faf023c555" compoundref="d4/de5/a00503" startline="35" endline="38">castor3d::ClearcoatMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d4/d5e/a03686_1aae4bea33f60b52924eeafe7ce7bcabf2" compoundref="d4/d1f/a00506" startline="35" endline="38">castor3d::ClearcoatNormalMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d3/d94/a03698_1a022daac0f6d1ce96b1f19330f9a32cec" compoundref="df/db6/a00509" startline="35" endline="38">castor3d::ClearcoatRoughnessMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d5/d46/a03710_1aea3f1ac49c700a53080ce30a0597da62" compoundref="d4/dfb/a00512" startline="35" endline="38">castor3d::ColourMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="db/db0/a03722_1a0c511d4515891c8f835ec2ccd7ca6b34" compoundref="dc/d19/a00515" startline="35" endline="38">castor3d::EmissiveMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="dd/d2e/a03734_1a4223f2e9c1e8b81c4a7db21cd9a090bd" compoundref="d5/dee/a00518" startline="34" endline="37">castor3d::GlossinessMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d7/d4f/a03746_1ab6d646afc26578f9834ee9f8d4d7bd67" compoundref="d7/def/a00521" startline="66" endline="69">castor3d::HeightMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="da/d85/a03758_1a7d249946ffd85a44113fc8e8aadafeb6" compoundref="d9/d24/a00524" startline="35" endline="38">castor3d::IridescenceMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d2/d33/a03770_1ae3046305b0607812ae1de837325ce1c9" compoundref="d9/d44/a00527" startline="35" endline="38">castor3d::IridescenceThicknessMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d9/df0/a03782_1a555dbbb62949564e3e2f79a9064ed75d" compoundref="da/d7e/a00530" startline="34" endline="37">castor3d::MetalnessMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d6/da7/a03794_1aef159db7288eeb46e047b4f6a455543d" compoundref="db/d44/a00533" startline="34" endline="37">castor3d::NormalMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="dc/d19/a03806_1ac715d28bb1286131af2af221982b28f1" compoundref="d4/d33/a00536" startline="46" endline="49">castor3d::OcclusionMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d4/d5e/a03818_1a19bf1aa7ee7f66674f530e0b83b6da44" compoundref="d3/d87/a00539" startline="35" endline="38">castor3d::OpacityMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d5/de2/a03830_1a9dda2284c03cb4b6b6a616df2bd866f0" compoundref="d0/ddb/a00542" startline="33" endline="36">castor3d::RoughnessMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="dd/d51/a03842_1a4b07c0f19a1e7ecd859dad890306fdb0" compoundref="d8/deb/a00545" startline="35" endline="38">castor3d::SheenMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d3/d83/a03854_1ad3d03b1bd52b2e924414d221dcc15618" compoundref="dd/de6/a00548" startline="35" endline="38">castor3d::SheenRoughnessMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="db/d06/a03866_1a99035153b5b480bba175b52fda2c9073" compoundref="d9/d87/a00551" startline="35" endline="38">castor3d::SpecularFactorMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d0/d60/a03878_1ac61c7dcce414dea159abf9470e4a4a51" compoundref="dc/df9/a00554" startline="35" endline="38">castor3d::SpecularMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d2/df3/a03890_1aa7f8a7a50b6a352d6f2f0ec87f70f286" compoundref="d8/df0/a00557" startline="35" endline="38">castor3d::TransmissionMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="d9/d7a/a03902_1a181b59c12ec46bdda9cc9e3d877100f1" compoundref="d9/d19/a00560" startline="48" endline="51">castor3d::TransmittanceMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="de/d93/a03330_1a8cff249962763369c8252f68c385cf27" compoundref="df/d70/a00431" startline="43" endline="47">castor3d::FractalMappingComponent::ComponentsShader::isMapSampling</referencedby>
+        <referencedby refid="df/de2/a03410_1a349ad4e72c7b10b320e768c663a9a501" compoundref="d1/d0b/a00452" startline="34" endline="38">castor3d::UntileMappingComponent::ComponentsShader::isMapSampling</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a1727bca64233903f00c27aacd146429b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/df2/a04026" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+        <definition>PassComponentPlugin const  &amp; castor3d::shader::PassComponentsShader::getPlugin</definition>
+        <argsstring>() const</argsstring>
+        <name>getPlugin</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::getPlugin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="387" column="28" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="387" bodyend="390"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/d1d/a04018_1a561c9b7692036d0a95849259e57251ba" prot="private" static="no" mutable="no">
+        <type><ref refid="db/df2/a04026" kindref="compound">PassComponentPlugin</ref> const  &amp;</type>
+        <definition>PassComponentPlugin const&amp; castor3d::shader::PassComponentsShader::m_plugin</definition>
+        <argsstring></argsstring>
+        <name>m_plugin</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::m_plugin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="408" column="28" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="408" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d1d/a04018_1a4a8895df635a573d33aee3fdd42385b2" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PassComponentsShader::PassComponentsShader</definition>
+        <argsstring>(PassComponentPlugin const &amp;plugin)</argsstring>
+        <name>PassComponentsShader</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::PassComponentsShader</qualifiedname>
+        <param>
+          <type><ref refid="db/df2/a04026" kindref="compound">PassComponentPlugin</ref> const &amp;</type>
+          <declname>plugin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="75" column="10" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="75" bodyend="78"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a23dbc602d3b0621c9df19b77038ae79e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassComponentsShader::fillComponents</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;components, Materials const &amp;materials, sdw::StructInstance const *surface) const</argsstring>
+        <name>fillComponents</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::fillComponents</qualifiedname>
+        <reimplementedby refid="de/d93/a03330_1ad388c417979e210deafb135301b3751d">fillComponents</reimplementedby>
+        <reimplementedby refid="dd/dc8/a03342_1a770578e789db2d63595b9235481cf38f">fillComponents</reimplementedby>
+        <reimplementedby refid="d9/dc1/a03390_1abbb256024cc83ee7a102326890947301">fillComponents</reimplementedby>
+        <reimplementedby refid="d5/d85/a03434_1a6039dc2add6b310dff70a2741f8bfbea">fillComponents</reimplementedby>
+        <reimplementedby refid="d5/d35/a03454_1ac4aeb28ea3cdb0e89c5d222e3d6e8ded">fillComponents</reimplementedby>
+        <reimplementedby refid="d7/da0/a03474_1aa6c89bfcaa5c9404c4efdcc7e3fdbc24">fillComponents</reimplementedby>
+        <reimplementedby refid="df/d5f/a03494_1a52f5cddd30d19601e376f5ab310c1ccc">fillComponents</reimplementedby>
+        <reimplementedby refid="dd/db6/a03514_1a362b8f5d3a0972d694370b6fce884878">fillComponents</reimplementedby>
+        <reimplementedby refid="d4/d5e/a03542_1a1ae3c8804b120576cb45ca66e82a2a08">fillComponents</reimplementedby>
+        <reimplementedby refid="d0/d31/a03558_1a862a2487194d3414e3dee25bed2ca8a2">fillComponents</reimplementedby>
+        <reimplementedby refid="d9/d65/a03578_1a4c784f82bfd4b1bae48aa4c94d0d2983">fillComponents</reimplementedby>
+        <reimplementedby refid="d9/df0/a03598_1a23a8076836b9bd2b6c8fc35d6d25120b">fillComponents</reimplementedby>
+        <reimplementedby refid="d3/df2/a03614_1a844ffe6b63d44ad0ca1793897550c938">fillComponents</reimplementedby>
+        <reimplementedby refid="d6/d81/a03630_1acc0dd03c7713d0c0a4e36963e56988a3">fillComponents</reimplementedby>
+        <reimplementedby refid="d2/db1/a03646_1a13ff74d7c499c69671f84d99c29e0635">fillComponents</reimplementedby>
+        <reimplementedby refid="dc/d19/a03806_1ab39e23bad452a7356c4b62639512809a">fillComponents</reimplementedby>
+        <reimplementedby refid="d9/d7a/a03902_1a6d43bc6c15363ebc121a0ef787b6b8c9">fillComponents</reimplementedby>
+        <reimplementedby refid="d9/d8b/a03922_1a6566717b800c685be3e36607f72ab640">fillComponents</reimplementedby>
+        <reimplementedby refid="d4/dc4/a03938_1a6b88b4e6a5973935babe9c38e669bc7e">fillComponents</reimplementedby>
+        <reimplementedby refid="d3/d66/a03954_1a1375f020ce63b2ab7dca075ea440c6c6">fillComponents</reimplementedby>
+        <reimplementedby refid="dd/d59/a03970_1a47f9b0e04d8e77aea4eee6772609ad17">fillComponents</reimplementedby>
+        <reimplementedby refid="d7/df2/a03986_1ac9cde5528fa1988261456c9c898cd03b">fillComponents</reimplementedby>
+        <reimplementedby refid="d2/dce/a04002_1a1033856b8f651cb289fd4ac0f2dbf964">fillComponents</reimplementedby>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d35/a06482" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const *</type>
+          <declname>surface</declname>
+        </param>
+        <briefdescription>
+<para>Fills the components shader struct with the members provided by this component. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the struct members. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the current render pass needs this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">surface</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the surface supports needed data for this component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="99" column="22" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="99" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a80a16a96d3e5d71cb6b631a77c73217f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassComponentsShader::fillComponentsInits</definition>
+        <argsstring>(sdw::type::BaseStruct const &amp;components, Materials const &amp;materials, Material const *material, sdw::StructInstance const *surface, sdw::Vec4 const *clrCot, sdw::expr::ExprList &amp;inits) const</argsstring>
+        <name>fillComponentsInits</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::fillComponentsInits</qualifiedname>
+        <reimplementedby refid="de/d93/a03330_1a5a228c1f9c56e93d789b94933b1715b5">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="dd/dc8/a03342_1a5bb497a8ab155baf5ef6865b30359e8d">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d9/dc1/a03390_1a1511d5218b9873a040464efd891fea98">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d5/d85/a03434_1a2ad216bce76c2f24331c1435359571f4">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d5/d35/a03454_1a6936f9606ee7960b15250a98c8b46caf">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d7/da0/a03474_1a07c9b7aaa4d64c80b260080eb39fe3a4">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="df/d5f/a03494_1aa1653572b48c38e0edebe96ab67c6560">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="dd/db6/a03514_1aebdaba3704127ac977ac19ffdb457a9e">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d4/d5e/a03542_1ab0b2ba44bdef374b6ceceac9f0080218">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d0/d31/a03558_1a851716764d81d00e920e738b9301088d">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d9/d65/a03578_1ac3d2f6fca15bb4f527cf76461367dc51">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d9/df0/a03598_1a087a2fbd0c4b21be6fa5c573df327405">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d3/df2/a03614_1a31bafb70cd35848ee0c4fe14b49f5310">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d6/d81/a03630_1ad1f2b82caa5cdc21a1297d5952d3fac1">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d2/db1/a03646_1a7936ea4a9174a84c954be04bba7adc11">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="dc/d19/a03806_1a3f49ac77d2d09c721c34ec654f5c60be">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d9/d7a/a03902_1a9d2b66036fba3be3e3f8f07a9e02b219">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d9/d8b/a03922_1ad556e4c1d14b1404aceaac3bbed25ee8">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d4/dc4/a03938_1aa894fdad67f8a3502dc56fc4fa44de29">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d3/d66/a03954_1a1ddd83561d7b14483536c138d24b1e22">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="dd/d59/a03970_1a9f0790cbdc89de0c5001418eb630fc0b">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d7/df2/a03986_1aa880698cf7da1f47eb673d99327d09d9">fillComponentsInits</reimplementedby>
+        <reimplementedby refid="d2/dce/a04002_1aa0da2dac03c3e0e80e87de4bb1c6dee4">fillComponentsInits</reimplementedby>
+        <param>
+          <type>sdw::type::BaseStruct const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d35/a06482" kindref="compound">Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d55/a06478" kindref="compound">Material</ref> const *</type>
+          <declname>material</declname>
+        </param>
+        <param>
+          <type>sdw::StructInstance const *</type>
+          <declname>surface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const *</type>
+          <declname>clrCot</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+<para>Fills the components shader struct members initialiser with the ones provided by this component. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="remark"><para>The initialisers order and count must match the ones in fillComponent. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the struct members. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the current render pass needs this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to retrieve needed data for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">surface</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to retrieve needed data for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">clrCot</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to retrieve needed data for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">inits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the initialisers. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="140" column="22" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="140" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a088ad8fd801823896872e5a749657065" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassComponentsShader::computeTexcoord</definition>
+        <argsstring>(PipelineFlags const &amp;flags, TextureConfigData const &amp;config, sdw::U32Vec3 const &amp;imgCompConfig, sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec3 &amp;texCoords, sdw::Vec2 &amp;texCoord, BlendComponents &amp;components) const</argsstring>
+        <name>computeTexcoord</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::computeTexcoord</qualifiedname>
+        <reimplementedby refid="d7/d4f/a03746_1a1a1acabad33091e8c8cdf35565e6a7f8">computeTexcoord</reimplementedby>
+        <param>
+          <type><ref refid="d8/d1d/a05370" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dc3/a06570" kindref="compound">TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::U32Vec3 const &amp;</type>
+          <declname>imgCompConfig</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Use this component ta alter texture coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the render pass is configured so the component is usable. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to say if the texture has the needed configuration for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">imgCompConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current image component(s) to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">map</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texCoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 3D texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texCoord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 2D texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the component members. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="184" column="22" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="184" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a3d431198b1bf91e0d49b84d1950249b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassComponentsShader::computeTexcoord</definition>
+        <argsstring>(PipelineFlags const &amp;flags, TextureConfigData const &amp;config, sdw::U32Vec3 const &amp;imgCompConfig, sdw::CombinedImage2DRgba32 const &amp;map, DerivTex &amp;texCoords, DerivTex &amp;texCoord, BlendComponents &amp;components) const</argsstring>
+        <name>computeTexcoord</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::computeTexcoord</qualifiedname>
+        <reimplementedby refid="d7/d4f/a03746_1a8d0c7c949eb319a55544a25191cb18e8">computeTexcoord</reimplementedby>
+        <param>
+          <type><ref refid="d8/d1d/a05370" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dc3/a06570" kindref="compound">TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::U32Vec3 const &amp;</type>
+          <declname>imgCompConfig</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d58/a06598" kindref="compound">DerivTex</ref> &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d58/a06598" kindref="compound">DerivTex</ref> &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Use this component ta alter texture coordinates. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the render pass is configured so the component is usable. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to say if the texture has the needed configuration for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">imgCompConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current image component(s) to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">map</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texCoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 3D texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texCoord</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The 2D texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the component members. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="229" column="22" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="229" bodyend="237"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1ab25c5779aec7c1abcf7f275e8ac032e3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassComponentsShader::applyComponents</definition>
+        <argsstring>(TextureCombine const &amp;combine, PipelineFlags const *flags, shader::TextureConfigData const &amp;config, sdw::U32Vec3 const &amp;imgCompConfig, sdw::Vec4 const &amp;sampled, BlendComponents &amp;components) const</argsstring>
+        <name>applyComponents</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::applyComponents</qualifiedname>
+        <reimplementedby refid="d4/d2b/a03662_1a8ef180bd7b081103607bfaed3bda7f5e">applyComponents</reimplementedby>
+        <reimplementedby refid="d0/d1e/a03674_1a6eabd35fc923ad10878a5185c88c3dad">applyComponents</reimplementedby>
+        <reimplementedby refid="d4/d5e/a03686_1ae979e66768e8d691e1f198d8bcf805b2">applyComponents</reimplementedby>
+        <reimplementedby refid="d3/d94/a03698_1ab362207e6c7a2345ac1f0ecdf70bdcee">applyComponents</reimplementedby>
+        <reimplementedby refid="d5/d46/a03710_1a8db6bfaf117a2953ad7d27d79d16aab4">applyComponents</reimplementedby>
+        <reimplementedby refid="db/db0/a03722_1a0d2becb3fb450a66f8c735585711c17c">applyComponents</reimplementedby>
+        <reimplementedby refid="dd/d2e/a03734_1a218ae897224dbe22af9380d1ab59addc">applyComponents</reimplementedby>
+        <reimplementedby refid="da/d85/a03758_1aa0fe8ea2f8678c751bdcce06698bcdf3">applyComponents</reimplementedby>
+        <reimplementedby refid="d2/d33/a03770_1a65697da1e0dddca143a077ea961cb51b">applyComponents</reimplementedby>
+        <reimplementedby refid="d9/df0/a03782_1a03c6bf4719533b9b80d302a11ec0e909">applyComponents</reimplementedby>
+        <reimplementedby refid="d6/da7/a03794_1aaecf584374b580d9d1ee1ef5f8dc9913">applyComponents</reimplementedby>
+        <reimplementedby refid="dc/d19/a03806_1ac8f55ee83b92565b216e5a72a253481c">applyComponents</reimplementedby>
+        <reimplementedby refid="d4/d5e/a03818_1adfc0e410cc62458dc5dcd2c71037fe5d">applyComponents</reimplementedby>
+        <reimplementedby refid="d5/de2/a03830_1a31e1c6468c73f6bbc0b1b9dc3c7c5f5e">applyComponents</reimplementedby>
+        <reimplementedby refid="dd/d51/a03842_1ae2489b2b6695f47db47c31c693f4ef10">applyComponents</reimplementedby>
+        <reimplementedby refid="d3/d83/a03854_1ab949d3bad6b86ee1a9911a0be880517a">applyComponents</reimplementedby>
+        <reimplementedby refid="db/d06/a03866_1a55ccf57be458ab30ae7adbfad0ac9d4f">applyComponents</reimplementedby>
+        <reimplementedby refid="d0/d60/a03878_1affc13f8c07c1be22887a3fd497506e85">applyComponents</reimplementedby>
+        <reimplementedby refid="d2/df3/a03890_1a5bbc267374a4a78a4c0d6f3e93367783">applyComponents</reimplementedby>
+        <reimplementedby refid="d9/d7a/a03902_1a5f182f0aedcd88e78b7e66b1e4141f1b">applyComponents</reimplementedby>
+        <param>
+          <type><ref refid="d7/d2e/a03310" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1d/a05370" kindref="compound">PipelineFlags</ref> const *</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dc3/a06570" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::U32Vec3 const &amp;</type>
+          <declname>imgCompConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+<para>Fills this component&apos;s values with the data retrieved from a texture. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">combine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the component&apos;s textures are enabled. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the render pass is configured so the component is usable. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">config</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to say if the texture has the needed configuration for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">imgCompConfig</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current image component(s) to use. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The data retrieved from the texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the component members. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="270" column="22" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="270" bodyend="277"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a277de8d6d8fa8c0e3d50edb51fe2157c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassComponentsShader::blendComponents</definition>
+        <argsstring>(shader::Materials const &amp;materials, sdw::Float const &amp;passMultiplier, BlendComponents &amp;res, BlendComponents const &amp;src) const</argsstring>
+        <name>blendComponents</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::blendComponents</qualifiedname>
+        <reimplementedby refid="dd/dc8/a03342_1ac79abcb60e38098a79a00dbf81e99c1a">blendComponents</reimplementedby>
+        <reimplementedby refid="d9/dc1/a03390_1af6968c02978fb79eb56fa75e6ffc5bc4">blendComponents</reimplementedby>
+        <reimplementedby refid="d5/d85/a03434_1ade5af5d8d2357207f3d9568886b8a5cc">blendComponents</reimplementedby>
+        <reimplementedby refid="d5/d35/a03454_1a8e4e85253b1421b872cda04c56b38be0">blendComponents</reimplementedby>
+        <reimplementedby refid="d7/da0/a03474_1afcdee5dcf3ef2a629de9cd39187ab602">blendComponents</reimplementedby>
+        <reimplementedby refid="df/d5f/a03494_1abab8d64cc53bebe4030cda289726ffae">blendComponents</reimplementedby>
+        <reimplementedby refid="dd/db6/a03514_1a872c865a3fc3bbf0490e32829732b16d">blendComponents</reimplementedby>
+        <reimplementedby refid="d4/d5e/a03542_1af61f1559bc270021c2bdcee6c3489da1">blendComponents</reimplementedby>
+        <reimplementedby refid="d0/d31/a03558_1aabd1d9c6dad9ffe964af55ec67bf3305">blendComponents</reimplementedby>
+        <reimplementedby refid="d9/d65/a03578_1ae31176615d8ddc6ca9d257349a5976da">blendComponents</reimplementedby>
+        <reimplementedby refid="d9/df0/a03598_1aadbd09084b31355183b4e5e907d05225">blendComponents</reimplementedby>
+        <reimplementedby refid="d3/df2/a03614_1a08a2d69244c280045ec8cea668e06122">blendComponents</reimplementedby>
+        <reimplementedby refid="d6/d81/a03630_1a6d377953ecc68f0d2af3e7a95d87b3ff">blendComponents</reimplementedby>
+        <reimplementedby refid="d2/db1/a03646_1a02431471b5cfc3a5abdf739d6f1b5b61">blendComponents</reimplementedby>
+        <reimplementedby refid="dc/d19/a03806_1a6097ef350ef0ce5bedc20c040f513233">blendComponents</reimplementedby>
+        <reimplementedby refid="d9/d7a/a03902_1aa781593a056ba2f74cf9162fa26a341b">blendComponents</reimplementedby>
+        <reimplementedby refid="d9/d8b/a03922_1affd9765541d2da399f1a801d78e495a4">blendComponents</reimplementedby>
+        <reimplementedby refid="d4/dc4/a03938_1a6541a5d6841f1bf72c18906d5ef3ff91">blendComponents</reimplementedby>
+        <reimplementedby refid="d3/d66/a03954_1adeb6384c51c57b9349916e21f49c50dd">blendComponents</reimplementedby>
+        <reimplementedby refid="dd/d59/a03970_1ad9b22f6e394eed4aae2cc28731144e11">blendComponents</reimplementedby>
+        <reimplementedby refid="d7/df2/a03986_1accee002fa8f0d61a0c529fb2348d187b">blendComponents</reimplementedby>
+        <reimplementedby refid="d2/dce/a04002_1a3224034aacbeb85fdaefa3e61216b7bd">blendComponents</reimplementedby>
+        <param>
+          <type><ref refid="d4/d35/a06482" kindref="compound">shader::Materials</ref> const &amp;</type>
+          <declname>materials</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>passMultiplier</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>res</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <briefdescription>
+<para>Used to mix components when multiple passes are blended together. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">materials</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the current render pass needs this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passMultiplier</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The factor for the current pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">res</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the blending result. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current pass data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="302" column="22" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="302" bodyend="307"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a7ce76843425ffd3e570eaa9ddd7b059e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::shader::PassComponentsShader::updateComponent</definition>
+        <argsstring>(TextureCombine const &amp;combine, shader::BlendComponents &amp;components) const</argsstring>
+        <name>updateComponent</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::updateComponent</qualifiedname>
+        <param>
+          <type><ref refid="d7/d2e/a03310" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>combine</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adjusts the component data after textures have been parsed. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">combine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Used to check if the component&apos;s textures are enabled. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the component members. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="322" column="22" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="322" bodyend="325"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1adae1f04a5d2866590f4f3204b233dd99" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>virtual C3D_API sdw::Vec4 castor3d::shader::PassComponentsShader::sampleMap</definition>
+        <argsstring>(sdw::CombinedImage2DRgba32 const &amp;map, sdw::Vec3 const &amp;texCoords, shader::BlendComponents const &amp;components) const</argsstring>
+        <name>sampleMap</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::sampleMap</qualifiedname>
+        <reimplementedby refid="de/d93/a03330_1af00e5ba49c53edd8fea6c74d7bcc6d4d">sampleMap</reimplementedby>
+        <reimplementedby refid="df/de2/a03410_1aa8ea26b412ab19bbfd1025afe328456e">sampleMap</reimplementedby>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">shader::BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Lets the component sample the map. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">map</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texCoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the component members. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="344" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a226e2c05d6cff43678f171ef5f413887" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>virtual C3D_API sdw::Vec4 castor3d::shader::PassComponentsShader::sampleMap</definition>
+        <argsstring>(sdw::CombinedImage2DRgba32 const &amp;map, shader::DerivTex const &amp;texCoords, shader::BlendComponents const &amp;components) const</argsstring>
+        <name>sampleMap</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::sampleMap</qualifiedname>
+        <reimplementedby refid="de/d93/a03330_1abd3e2876df260860acc287236574348d">sampleMap</reimplementedby>
+        <reimplementedby refid="df/de2/a03410_1aca0cf2b0ee4b3b58afe12bf4dd2158ea">sampleMap</reimplementedby>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>map</declname>
+        </param>
+        <param>
+          <type><ref refid="da/d58/a06598" kindref="compound">shader::DerivTex</ref> const &amp;</type>
+          <declname>texCoords</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">shader::BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Lets the component sample the map. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">map</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">texCoords</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture coordinates. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Contains the component members. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="365" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1ae6acbd6edb3df14dcecccd2598bed038" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::shader::PassComponentsShader::isMapSampling</definition>
+        <argsstring>(PipelineFlags const &amp;flags) const</argsstring>
+        <name>isMapSampling</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::isMapSampling</qualifiedname>
+        <reimplementedby refid="de/d93/a03330_1a8cff249962763369c8252f68c385cf27">isMapSampling</reimplementedby>
+        <reimplementedby refid="df/de2/a03410_1a349ad4e72c7b10b320e768c663a9a501">isMapSampling</reimplementedby>
+        <param>
+          <type><ref refid="d8/d1d/a05370" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if the component map sampling is usable with given <computeroutput>flags</computeroutput>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="376" column="22" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="376" bodyend="379"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d7/d1d/a04018_1a616999e78117d42a2aa12e8e1c09a7fe" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PassComponentsShader::applyFloatComponent</definition>
+        <argsstring>(std::string const &amp;name, PassComponentTextureFlag flag, shader::TextureConfigData const &amp;config, sdw::U32Vec3 const &amp;imgCompConfig, sdw::Vec4 const &amp;sampled, shader::BlendComponents &amp;components) const</argsstring>
+        <name>applyFloatComponent</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::applyFloatComponent</qualifiedname>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a21f6621faaf5293fd7452f7fa0cd4136" kindref="member">PassComponentTextureFlag</ref></type>
+          <declname>flag</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dc3/a06570" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::U32Vec3 const &amp;</type>
+          <declname>imgCompConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="394" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d1d/a04018_1a5b84ef8cb9fbdeac8fce698fe02b04e8" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::PassComponentsShader::applyVec3Component</definition>
+        <argsstring>(std::string const &amp;name, PassComponentTextureFlag flag, shader::TextureConfigData const &amp;config, sdw::U32Vec3 const &amp;imgCompConfig, sdw::Vec4 const &amp;sampled, shader::BlendComponents &amp;components) const</argsstring>
+        <name>applyVec3Component</name>
+        <qualifiedname>castor3d::shader::PassComponentsShader::applyVec3Component</qualifiedname>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a21f6621faaf5293fd7452f7fa0cd4136" kindref="member">PassComponentTextureFlag</ref></type>
+          <declname>flag</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dc3/a06570" kindref="compound">shader::TextureConfigData</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <param>
+          <type>sdw::U32Vec3 const &amp;</type>
+          <declname>imgCompConfig</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sampled</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d59/a06394" kindref="compound">shader::BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassComponent.hpp" line="400" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::AlphaTestComponent::ComponentsShader</label>
+        <link refid="d9/d8b/a03922"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::AmbientComponent::ComponentsShader</label>
+        <link refid="d5/d85/a03434"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::AttenuationComponent::ComponentsShader</label>
+        <link refid="d5/d35/a03454"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::AttenuationMapComponent::ComponentsShader</label>
+        <link refid="d4/d2b/a03662"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ClearcoatComponent::ComponentsShader</label>
+        <link refid="d7/da0/a03474"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::ClearcoatMapComponent::ComponentsShader</label>
+        <link refid="d0/d1e/a03674"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::ClearcoatNormalMapComponent::ComponentsShader</label>
+        <link refid="d4/d5e/a03686"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::ClearcoatRoughnessMapComponent::ComponentsShader</label>
+        <link refid="d3/d94/a03698"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::ColourComponent::ComponentsShader</label>
+        <link refid="d4/dc4/a03938"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ColourMapComponent::ComponentsShader</label>
+        <link refid="d5/d46/a03710"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::EmissiveComponent::ComponentsShader</label>
+        <link refid="df/d5f/a03494"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::EmissiveMapComponent::ComponentsShader</label>
+        <link refid="db/db0/a03722"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::FractalMappingComponent::ComponentsShader</label>
+        <link refid="de/d93/a03330"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::GlossinessMapComponent::ComponentsShader</label>
+        <link refid="dd/d2e/a03734"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::HeightComponent::ComponentsShader</label>
+        <link refid="d3/d66/a03954"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::HeightMapComponent::ComponentsShader</label>
+        <link refid="d7/d4f/a03746"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::IridescenceComponent::ComponentsShader</label>
+        <link refid="dd/db6/a03514"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::IridescenceMapComponent::ComponentsShader</label>
+        <link refid="da/d85/a03758"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::IridescenceThicknessMapComponent::ComponentsShader</label>
+        <link refid="d2/d33/a03770"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::MetalnessComponent::ComponentsShader</label>
+        <link refid="d4/d5e/a03542"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::MetalnessMapComponent::ComponentsShader</label>
+        <link refid="d9/df0/a03782"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::NormalComponent::ComponentsShader</label>
+        <link refid="dd/dc8/a03342"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::NormalMapComponent::ComponentsShader</label>
+        <link refid="d6/da7/a03794"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::OcclusionMapComponent::ComponentsShader</label>
+        <link refid="dc/d19/a03806"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::OpacityComponent::ComponentsShader</label>
+        <link refid="dd/d59/a03970"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::OpacityMapComponent::ComponentsShader</label>
+        <link refid="d4/d5e/a03818"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::ReflectionComponent::ComponentsShader</label>
+        <link refid="d7/df2/a03986"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::RefractionComponent::ComponentsShader</label>
+        <link refid="d2/dce/a04002"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::RoughnessComponent::ComponentsShader</label>
+        <link refid="d0/d31/a03558"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor3d::RoughnessMapComponent::ComponentsShader</label>
+        <link refid="d5/de2/a03830"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>castor3d::SheenComponent::ComponentsShader</label>
+        <link refid="d9/d65/a03578"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor3d::SheenMapComponent::ComponentsShader</label>
+        <link refid="dd/d51/a03842"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>castor3d::SheenRoughnessMapComponent::ComponentsShader</label>
+        <link refid="d3/d83/a03854"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>castor3d::SpecularComponent::ComponentsShader</label>
+        <link refid="d9/df0/a03598"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>castor3d::SpecularFactorMapComponent::ComponentsShader</label>
+        <link refid="db/d06/a03866"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="38">
+        <label>castor3d::SpecularMapComponent::ComponentsShader</label>
+        <link refid="d0/d60/a03878"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>castor3d::SubsurfaceScatteringComponent::ComponentsShader</label>
+        <link refid="d3/df2/a03614"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="40">
+        <label>castor3d::TexturesComponent::ComponentsShader</label>
+        <link refid="d9/dc1/a03390"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>castor3d::ThicknessComponent::ComponentsShader</label>
+        <link refid="d6/d81/a03630"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="42">
+        <label>castor3d::TransmissionComponent::ComponentsShader</label>
+        <link refid="d2/db1/a03646"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor3d::TransmissionMapComponent::ComponentsShader</label>
+        <link refid="d2/df3/a03890"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="44">
+        <label>castor3d::TransmittanceMapComponent::ComponentsShader</label>
+        <link refid="d9/d7a/a03902"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>castor3d::UntileMappingComponent::ComponentsShader</label>
+        <link refid="df/de2/a03410"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d7/d1d/a04018"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PassComponentsShader</label>
+        <link refid="d7/d1d/a04018"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/PassComponent.hpp" line="72" column="1" bodyfile="Material/Pass/Component/PassComponent.hpp" bodystart="74" bodyend="409"/>
+    <listofallmembers>
+      <member refid="d7/d1d/a04018_1ab25c5779aec7c1abcf7f275e8ac032e3" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>applyComponents</name></member>
+      <member refid="d7/d1d/a04018_1a616999e78117d42a2aa12e8e1c09a7fe" prot="protected" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>applyFloatComponent</name></member>
+      <member refid="d7/d1d/a04018_1a5b84ef8cb9fbdeac8fce698fe02b04e8" prot="protected" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>applyVec3Component</name></member>
+      <member refid="d7/d1d/a04018_1a277de8d6d8fa8c0e3d50edb51fe2157c" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>blendComponents</name></member>
+      <member refid="d7/d1d/a04018_1a088ad8fd801823896872e5a749657065" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>computeTexcoord</name></member>
+      <member refid="d7/d1d/a04018_1a3d431198b1bf91e0d49b84d1950249b5" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>computeTexcoord</name></member>
+      <member refid="d7/d1d/a04018_1a23dbc602d3b0621c9df19b77038ae79e" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>fillComponents</name></member>
+      <member refid="d7/d1d/a04018_1a80a16a96d3e5d71cb6b631a77c73217f" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>fillComponentsInits</name></member>
+      <member refid="d7/d1d/a04018_1a846afb362f8cdb6bd2dc1a3f98db9f64" prot="public" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>getId</name></member>
+      <member refid="d7/d1d/a04018_1a1727bca64233903f00c27aacd146429b" prot="public" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>getPlugin</name></member>
+      <member refid="d7/d1d/a04018_1ae6acbd6edb3df14dcecccd2598bed038" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>isMapSampling</name></member>
+      <member refid="d7/d1d/a04018_1a561c9b7692036d0a95849259e57251ba" prot="private" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>m_plugin</name></member>
+      <member refid="d0/dee/a04014_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>operator=</name></member>
+      <member refid="d0/dee/a04014_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>operator=</name></member>
+      <member refid="d7/d1d/a04018_1a4a8895df635a573d33aee3fdd42385b2" prot="public" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>PassComponentsShader</name></member>
+      <member refid="d0/dee/a04014_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d0/dee/a04014_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d0/dee/a04014_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>PassShader</name></member>
+      <member refid="d7/d1d/a04018_1adae1f04a5d2866590f4f3204b233dd99" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d7/d1d/a04018_1a226e2c05d6cff43678f171ef5f413887" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>sampleMap</name></member>
+      <member refid="d7/d1d/a04018_1a7ce76843425ffd3e570eaa9ddd7b059e" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>updateComponent</name></member>
+      <member refid="d0/dee/a04014_1a2bdc8907317b8a1f12d3b60ab767f9c6" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>updateOutputs</name></member>
+      <member refid="d0/dee/a04014_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::shader::PassComponentsShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

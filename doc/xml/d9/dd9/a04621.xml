@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/dd9/a04621" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::FaceIndices</compoundname>
+    <includes local="no">FaceIndices.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/dd9/a04621_1adf8426df8bab8f2e89269aad090a1d01" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint32_t, 3 &gt;</type>
+        <definition>std::array&lt; uint32_t, 3 &gt; castor3d::FaceIndices::m_index</definition>
+        <argsstring></argsstring>
+        <name>m_index</name>
+        <qualifiedname>castor3d::FaceIndices::m_index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The indices. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Component/FaceIndices.hpp" line="17" column="12" bodyfile="Model/Mesh/Submesh/Component/FaceIndices.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="d3/de5/a04617_1a9cb88044b9e6b72a03447be779de0347" compoundref="d3/d00/a00785" startline="36" endline="39">castor3d::Face::data</referencedby>
+        <referencedby refid="d3/de5/a04617_1abbea1edaaae27b3a1ce63fb3060aa107" compoundref="d3/d00/a00785" startline="24" endline="28">castor3d::Face::operator[]</referencedby>
+        <referencedby refid="d3/d5e/a01725_1a4bf10f2f11fde3269c70845bbc572fbf" compoundref="d7/d25/a00182" startline="1289" endline="1297">castor3d::prepareChunkData</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; uint32_t, 3 &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 3 &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::FaceIndices</label>
+        <link refid="d9/dd9/a04621"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_index</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/Component/FaceIndices.hpp" line="13" column="1" bodyfile="Model/Mesh/Submesh/Component/FaceIndices.hpp" bodystart="14" bodyend="18"/>
+    <listofallmembers>
+      <member refid="d9/dd9/a04621_1adf8426df8bab8f2e89269aad090a1d01" prot="public" virt="non-virtual"><scope>castor3d::FaceIndices</scope><name>m_index</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

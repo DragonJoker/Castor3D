@@ -1,0 +1,79 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/ddd/a05594" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderWindowDesc</compoundname>
+    <includes local="no">RenderWindow.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/ddd/a05594_1a7f84f415a603250474656c7a4f1e27b3" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::RenderWindowDesc::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::RenderWindowDesc::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="39" column="16" bodyfile="Render/RenderWindow.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddd/a05594_1a4731f5885a97089a8f2512b438149128" prot="public" static="no" mutable="no">
+        <type>RenderTargetRPtr</type>
+        <definition>RenderTargetRPtr castor3d::RenderWindowDesc::renderTarget</definition>
+        <argsstring></argsstring>
+        <name>renderTarget</name>
+        <qualifiedname>castor3d::RenderWindowDesc::renderTarget</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="40" column="18" bodyfile="Render/RenderWindow.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddd/a05594_1a962046e9382c5c9eba20c22dae2d56dc" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderWindowDesc::enableVSync</definition>
+        <argsstring></argsstring>
+        <name>enableVSync</name>
+        <qualifiedname>castor3d::RenderWindowDesc::enableVSync</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="41" column="6" bodyfile="Render/RenderWindow.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/ddd/a05594_1abb366356c5f5de8e057a4738894a5324" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderWindowDesc::fullscreen</definition>
+        <argsstring></argsstring>
+        <name>fullscreen</name>
+        <qualifiedname>castor3d::RenderWindowDesc::fullscreen</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderWindow.hpp" line="42" column="6" bodyfile="Render/RenderWindow.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderWindow.hpp" line="37" column="1" bodyfile="Render/RenderWindow.hpp" bodystart="38" bodyend="43"/>
+    <listofallmembers>
+      <member refid="d3/ddd/a05594_1a962046e9382c5c9eba20c22dae2d56dc" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>enableVSync</name></member>
+      <member refid="d3/ddd/a05594_1abb366356c5f5de8e057a4738894a5324" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>fullscreen</name></member>
+      <member refid="d3/ddd/a05594_1a7f84f415a603250474656c7a4f1e27b3" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>name</name></member>
+      <member refid="d3/ddd/a05594_1a4731f5885a97089a8f2512b438149128" prot="public" virt="non-virtual"><scope>castor3d::RenderWindowDesc</scope><name>renderTarget</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

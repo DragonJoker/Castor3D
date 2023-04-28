@@ -1,0 +1,147 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d89/a06454" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::PointLight</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_PointLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;pad0&quot; &gt;, sdw::Vec3Field&lt; &quot;attenuation&quot; &gt;, sdw::FloatField&lt; &quot;pad1&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d89/a06454_1a97f7acd350d03cb41395b2079408e063" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::PointLight::PointLight</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>PointLight</name>
+        <qualifiedname>castor3d::shader::PointLight::PointLight</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="128" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="128" bodyend="133"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d89/a06454_1a6fdbdfaaac002828e8a8cb8a810e66ce" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::PointLight::getAttenuationFactor</definition>
+        <argsstring>(sdw::Float const &amp;distance) const</argsstring>
+        <name>getAttenuationFactor</name>
+        <qualifiedname>castor3d::shader::PointLight::getAttenuationFactor</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>distance</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="135" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d89/a06454_1ab397d850d762e5a0cf7e0fce0dc71284" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PointLight::base</definition>
+        <argsstring>() const</argsstring>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::PointLight::base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="138" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="138" bodyend="138"/>
+        <referencedby refid="d3/d89/a06454_1a699d9a20e99f2bb639a7f5e3afba611f" compoundref="da/dd5/a01580" startline="141" endline="141">shadows</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d89/a06454_1a11772100da7da4b77f49be20a224d33d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PointLight::position</definition>
+        <argsstring>() const</argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::PointLight::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="139" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="139" bodyend="139"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d89/a06454_1af39ac45269092d746b59cc4f55d946ab" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PointLight::attenuation</definition>
+        <argsstring>() const</argsstring>
+        <name>attenuation</name>
+        <qualifiedname>castor3d::shader::PointLight::attenuation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="140" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="140" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d89/a06454_1a699d9a20e99f2bb639a7f5e3afba611f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::PointLight::shadows</definition>
+        <argsstring>() const</argsstring>
+        <name>shadows</name>
+        <qualifiedname>castor3d::shader::PointLight::shadows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="141" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="141" bodyend="141"/>
+        <references refid="d3/d89/a06454_1ab397d850d762e5a0cf7e0fce0dc71284" compoundref="da/dd5/a01580" startline="138" endline="138">base</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::PointLight</label>
+        <link refid="d3/d89/a06454"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_PointLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;pad0&quot; &gt;, sdw::Vec3Field&lt; &quot;attenuation&quot; &gt;, sdw::FloatField&lt; &quot;pad1&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::PointLight</label>
+        <link refid="d3/d89/a06454"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_PointLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;pad0&quot; &gt;, sdw::Vec3Field&lt; &quot;attenuation&quot; &gt;, sdw::FloatField&lt; &quot;pad1&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="119" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="127" bodyend="142"/>
+    <listofallmembers>
+      <member refid="d3/d89/a06454_1af39ac45269092d746b59cc4f55d946ab" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>attenuation</name></member>
+      <member refid="d3/d89/a06454_1ab397d850d762e5a0cf7e0fce0dc71284" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>base</name></member>
+      <member refid="d3/d89/a06454_1a6fdbdfaaac002828e8a8cb8a810e66ce" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>getAttenuationFactor</name></member>
+      <member refid="d3/d89/a06454_1a97f7acd350d03cb41395b2079408e063" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>PointLight</name></member>
+      <member refid="d3/d89/a06454_1a11772100da7da4b77f49be20a224d33d" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>position</name></member>
+      <member refid="d3/d89/a06454_1a699d9a20e99f2bb639a7f5e3afba611f" prot="public" virt="non-virtual"><scope>castor3d::shader::PointLight</scope><name>shadows</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

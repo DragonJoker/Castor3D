@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/d68/a02885" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::GpuLinearAllocatorT</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename DataT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/BufferModule.hpp" line="180" column="1" bodyfile="Buffer/BufferModule.hpp" bodystart="180" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

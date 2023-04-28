@@ -1,0 +1,270 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d24/a03301" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SliderStyle</compoundname>
+    <basecompoundref refid="dc/df1/a03261" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <includes local="no">StyleSlider.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d1/d24/a03301_1ab04d514a9f26a0e1cb575ec8cee47b7b" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::SliderStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::SliderStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725da1a423f9c2defe48f86dca05363f079eb" kindref="member">ControlType::eSlider</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="17" column="30" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d24/a03301_1a972035c56c076120a4e68314be4e3f7f" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref></type>
+        <definition>StaticStyle castor3d::SliderStyle::m_lineStyle</definition>
+        <argsstring></argsstring>
+        <name>m_lineStyle</name>
+        <qualifiedname>castor3d::SliderStyle::m_lineStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="71" column="13" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d24/a03301_1a43ce30634bb44ba213677dd6b1cde4cc" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref></type>
+        <definition>StaticStyle castor3d::SliderStyle::m_tickStyle</definition>
+        <argsstring></argsstring>
+        <name>m_tickStyle</name>
+        <qualifiedname>castor3d::SliderStyle::m_tickStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="72" column="13" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d24/a03301_1a8d26a5a161bdc95c531376feee360be7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SliderStyle::SliderStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>SliderStyle</name>
+        <qualifiedname>castor3d::SliderStyle::SliderStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="19" column="1" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="19" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03301_1af50f9b6ed16621fee9985d7e420eb122" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SliderStyle::SliderStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>SliderStyle</name>
+        <qualifiedname>castor3d::SliderStyle::SliderStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="32" column="1" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="32" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03301_1a0619ab9ef04af55d1ab0295e4bc6e416" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> const &amp;</type>
+        <definition>StaticStyle const  &amp; castor3d::SliderStyle::getLineStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getLineStyle</name>
+        <qualifiedname>castor3d::SliderStyle::getLineStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="39" column="20" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="39" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03301_1a1ed43835858d727888b27f309c9f9439" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> const &amp;</type>
+        <definition>StaticStyle const  &amp; castor3d::SliderStyle::getTickStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getTickStyle</name>
+        <qualifiedname>castor3d::SliderStyle::getTickStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="44" column="20" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="44" bodyend="47"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03301_1a4da92a450a13cdb167ac9969940cead4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> &amp;</type>
+        <definition>StaticStyle &amp; castor3d::SliderStyle::getLineStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getLineStyle</name>
+        <qualifiedname>castor3d::SliderStyle::getLineStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="49" column="14" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="49" bodyend="52"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03301_1a1036c9db052644b271bd769788865349" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> &amp;</type>
+        <definition>StaticStyle &amp; castor3d::SliderStyle::getTickStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getTickStyle</name>
+        <qualifiedname>castor3d::SliderStyle::getTickStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="54" column="14" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="54" bodyend="57"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d24/a03301_1ac4f05dde460dd18bdbf4d00699c85e8e" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::SliderStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="dc/df1/a03261_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="60" column="6" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="60" bodyend="62"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d24/a03301_1aa26b81e2a1216db71056c2e8de5e69e0" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::SliderStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::SliderStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="dc/df1/a03261_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleSlider.hpp" line="64" column="6" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="64" bodyend="68"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="dc/df1/a03261"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SliderStyle</label>
+        <link refid="d1/d24/a03301"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="dc/df1/a03261"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SliderStyle</label>
+        <link refid="d1/d24/a03301"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Theme/StyleSlider.hpp" line="13" column="1" bodyfile="Gui/Theme/StyleSlider.hpp" bodystart="15" bodyend="73"/>
+    <listofallmembers>
+      <member refid="dc/df1/a03261_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>ControlStyle</name></member>
+      <member refid="dc/df1/a03261_1aeda2101fba70a69cd4bf8256f22d8c16" prot="protected" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="d1/d24/a03301_1ac4f05dde460dd18bdbf4d00699c85e8e" prot="private" virt="virtual"><scope>castor3d::SliderStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="d1/d24/a03301_1aa26b81e2a1216db71056c2e8de5e69e0" prot="private" virt="virtual"><scope>castor3d::SliderStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="dc/df1/a03261_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="dc/df1/a03261_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getCursor</name></member>
+      <member refid="dc/df1/a03261_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getEngine</name></member>
+      <member refid="dc/df1/a03261_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="d1/d24/a03301_1a0619ab9ef04af55d1ab0295e4bc6e416" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getLineStyle</name></member>
+      <member refid="d1/d24/a03301_1a4da92a450a13cdb167ac9969940cead4" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getLineStyle</name></member>
+      <member refid="dc/df1/a03261_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getScene</name></member>
+      <member refid="d1/d24/a03301_1a1ed43835858d727888b27f309c9f9439" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getTickStyle</name></member>
+      <member refid="d1/d24/a03301_1a1036c9db052644b271bd769788865349" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getTickStyle</name></member>
+      <member refid="dc/df1/a03261_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>getType</name></member>
+      <member refid="dc/df1/a03261_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>hasScene</name></member>
+      <member refid="dc/df1/a03261_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="d1/d24/a03301_1a972035c56c076120a4e68314be4e3f7f" prot="private" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>m_lineStyle</name></member>
+      <member refid="d1/d24/a03301_1a43ce30634bb44ba213677dd6b1cde4cc" prot="private" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>m_tickStyle</name></member>
+      <member refid="dc/df1/a03261_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="dc/df1/a03261_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>setCursor</name></member>
+      <member refid="dc/df1/a03261_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="d1/d24/a03301_1a8d26a5a161bdc95c531376feee360be7" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>SliderStyle</name></member>
+      <member refid="d1/d24/a03301_1af50f9b6ed16621fee9985d7e420eb122" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>SliderStyle</name></member>
+      <member refid="d1/d24/a03301_1ab04d514a9f26a0e1cb575ec8cee47b7b" prot="public" virt="non-virtual"><scope>castor3d::SliderStyle</scope><name>Type</name></member>
+      <member refid="dc/df1/a03261_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::SliderStyle</scope><name>~ControlStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

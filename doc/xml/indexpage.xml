@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="indexpage" kind="page">
     <compoundname>index</compoundname>
     <title>Castor3D</title>
@@ -10,8 +10,8 @@
 <para>Castor3D is a 3D engine written in C++ 20.</para>
 <para>It works on Windows and GNU/Linux.</para>
 <para>It relies on Vulkan as a rendering API.</para>
-<para>The project itself is compilable on supported platforms using CMake (cf. <ref refid="dc/dc4/a13222" kindref="compound">build</ref>).</para>
-<sect1 id="index_1autotoc_md216">
+<para>The project itself is compilable on supported platforms using CMake and vcpkg (cf. <ref refid="d1/d99/a14816" kindref="compound">build</ref>).</para>
+<sect1 id="index_1autotoc_md209">
 <title>Features</title>
 <para><itemizedlist>
 <listitem><para>Deferred rendering for opaque objects.</para>
@@ -33,22 +33,22 @@
 </listitem><listitem><para>Modular architecture through plug-ins.</para>
 </listitem><listitem><para>Shaders are generated automatically from pipeline configuration.</para>
 </listitem><listitem><para>Shaders are writable directly from C++ code.</para>
-</listitem><listitem><para>Scenes are described using a text format easily comprehensible and extensible. (<ref refid="db/dcf/a13225" kindref="compound">Scene File</ref>)</para>
+</listitem><listitem><para>Scenes are described using a text format easily comprehensible and extensible. (<ref refid="dc/d50/a14819" kindref="compound">Scene File</ref>)</para>
 </listitem><listitem><para>Synchronous (user defined) or asynchronous (thread) rendering.</para>
 </listitem><listitem><para>Using Mesh and Task shaders, if available.</para>
 </listitem></itemizedlist>
 </para>
 </sect1>
-<sect1 id="index_1autotoc_md217">
+<sect1 id="index_1autotoc_md210">
 <title>Implemented Plug-ins</title>
-<sect2 id="index_1autotoc_md218">
+<sect2 id="index_1autotoc_md211">
 <title>Importers</title>
 <para><itemizedlist>
 <listitem><para>ASSIMP: Multiple format mesh importer.</para>
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md219">
+<sect2 id="index_1autotoc_md212">
 <title>PostEffects</title>
 <para><itemizedlist>
 <listitem><para>Bloom : HDR Bloom implementation.</para>
@@ -63,14 +63,14 @@
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md220">
+<sect2 id="index_1autotoc_md213">
 <title>Generators</title>
 <para><itemizedlist>
 <listitem><para>DiamondSquareTerrain : to generate terrains inside Castor3D scenes, using diamond-quare algorithm.</para>
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md221">
+<sect2 id="index_1autotoc_md214">
 <title>Generic</title>
 <para><itemizedlist>
 <listitem><para>CastorGUI: to build GUIs inside Castor3D scenes.</para>
@@ -82,7 +82,7 @@
 </listitem></itemizedlist>
 </para>
 </sect2>
-<sect2 id="index_1autotoc_md222">
+<sect2 id="index_1autotoc_md215">
 <title>ToneMappings</title>
 <para><itemizedlist>
 <listitem><para>Linear.</para>
@@ -95,7 +95,7 @@
 </para>
 </sect2>
 </sect1>
-<sect1 id="index_1autotoc_md223">
+<sect1 id="index_1autotoc_md216">
 <title>Other applications</title>
 <para><itemizedlist>
 <listitem><para>CastorViewer: A scene viewer based on Castor3D.</para>
@@ -105,7 +105,7 @@
 </listitem></itemizedlist>
 </para>
 </sect1>
-<sect1 id="index_1autotoc_md224">
+<sect1 id="index_1autotoc_md217">
 <title>Screenshots</title>
 <para><image type="html" name="http://dragonjoker.github.io/Castor3D/img/Sponza-PBR-VCT-Small.png" alt="Sponza, VCT" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/Cerberus-PBR-Small.png" alt="Cerberus" inline="yes"></image>
@@ -114,8 +114,9 @@
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png" alt="SanMiguel, PBR" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png" alt="SanMiguel, PBR, LPV" inline="yes"></image>
  <image type="html" name="http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT-Small.png" alt="Bistro, PBR, VCT" inline="yes"></image>
+ <image type="html" name="http://dragonjoker.github.io/Castor3D/img/FFTOcean-Terrain-Small.png" alt="FFTOcean, Terrain" inline="yes"></image>
 </para>
-<para>See <ref refid="d5/d35/a13223_1md_Z__Projets_C___Castor3D_doc_Castor3D_ChangeLog_English" kindref="member">full changelog</ref> for more details. </para>
+<para>See <ref refid="df/d0b/a14817_1md_Z__Projets_C___Castor3D_doc_Castor3D_ChangeLog_English" kindref="member">full changelog</ref> for more details. </para>
 </sect1>
     </detaileddescription>
     <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/DocMainPage-English.md"/>

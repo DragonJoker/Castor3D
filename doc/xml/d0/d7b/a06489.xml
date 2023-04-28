@@ -1,0 +1,353 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d0/d7b/a06489" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::LightsBuffer</compoundname>
+    <basecompoundref refid="de/d20/a06437" prot="public" virt="non-virtual">castor3d::shader::BufferT&lt; LightData &gt;</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/d7b/a06489_1a5854eb21ff8c4bf0e5879812939811af" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="df/dcb/a06477" kindref="compound">shader::DirectionalLight</ref>, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; shader::DirectionalLight , sdw::InUInt &gt; castor3d::shader::LightsBuffer::m_getDirectionalLight</definition>
+        <argsstring></argsstring>
+        <name>m_getDirectionalLight</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::m_getDirectionalLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="217" column="2" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7b/a06489_1ae81519e27fcce56c6045eed4d699e4d2" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="dc/ddb/a06481" kindref="compound">shader::PointLight</ref>, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; shader::PointLight , sdw::InUInt &gt; castor3d::shader::LightsBuffer::m_getPointLight</definition>
+        <argsstring></argsstring>
+        <name>m_getPointLight</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::m_getPointLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="219" column="2" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7b/a06489_1aa71c40a5e369dd5dcc6cc8e936fd9b95" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="df/d98/a06485" kindref="compound">shader::SpotLight</ref>, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; shader::SpotLight , sdw::InUInt &gt; castor3d::shader::LightsBuffer::m_getSpotLight</definition>
+        <argsstring></argsstring>
+        <name>m_getSpotLight</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::m_getSpotLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="221" column="2" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="221" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d7b/a06489_1ad1e7bd84ba7472ec501eca7523ec3878" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LightsBuffer::LightsBuffer</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enable=true)</argsstring>
+        <name>LightsBuffer</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::LightsBuffer</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enable</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="183" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7b/a06489_1ae48c508e66c285faa0b4c031352521c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/dcb/a06477" kindref="compound">DirectionalLight</ref></type>
+        <definition>C3D_API DirectionalLight castor3d::shader::LightsBuffer::getDirectionalLight</definition>
+        <argsstring>(sdw::UInt const &amp;offset)</argsstring>
+        <name>getDirectionalLight</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::getDirectionalLight</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="188" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7b/a06489_1a3d8cb007916cf1e68adac70e9c2fe6cc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/ddb/a06481" kindref="compound">PointLight</ref></type>
+        <definition>C3D_API PointLight castor3d::shader::LightsBuffer::getPointLight</definition>
+        <argsstring>(sdw::UInt const &amp;offset)</argsstring>
+        <name>getPointLight</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::getPointLight</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="189" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7b/a06489_1abfa8c3a9f534f1baf27208fb27430cd3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/d98/a06485" kindref="compound">SpotLight</ref></type>
+        <definition>C3D_API SpotLight castor3d::shader::LightsBuffer::getSpotLight</definition>
+        <argsstring>(sdw::UInt const &amp;offset)</argsstring>
+        <name>getSpotLight</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::getSpotLight</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="190" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7b/a06489_1a0ca6cd325c6c3defd47fb11012cd1b8c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::LightsBuffer::getDirectionalsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>getDirectionalsEnd</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::getDirectionalsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="192" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="192" bodyend="195"/>
+        <references refid="dc/d99/a06433_1af00addb76247551b7afa557e5b366580" compoundref="d7/d29/a01589" startline="39" endline="44">castor3d::shader::BufferBase::getFirstCount</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7b/a06489_1a44215fb96a8a5fa293565072b1a78165" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::LightsBuffer::getPointsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>getPointsEnd</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::getPointsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="197" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="197" bodyend="200"/>
+        <references refid="dc/d99/a06433_1adb02316d9ef1fd07d4c12df96e79de6d" compoundref="d7/d29/a01589" startline="46" endline="51">castor3d::shader::BufferBase::getSecondCount</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7b/a06489_1a535993c5c5afcf01734d7cfb7718570f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::LightsBuffer::getSpotsEnd</definition>
+        <argsstring>() const</argsstring>
+        <name>getSpotsEnd</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::getSpotsEnd</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="202" column="11" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="202" bodyend="205"/>
+        <references refid="dc/d99/a06433_1adc3bec1abc05499dc522dcb7b1288a12" compoundref="d7/d29/a01589" startline="53" endline="58">castor3d::shader::BufferBase::getThirdCount</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d7b/a06489_1a73231125a67d89cf5d0bd0b5d65aa2d9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::LightsBuffer::getShadows</definition>
+        <argsstring>(sdw::Vec4 &amp;lightData, ShadowData shadows, sdw::UInt &amp;offset)</argsstring>
+        <name>getShadows</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::getShadows</qualifiedname>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>lightData</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d1b/a06469" kindref="compound">ShadowData</ref></type>
+          <declname>shadows</declname>
+        </param>
+        <param>
+          <type>sdw::UInt &amp;</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="208" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7b/a06489_1a06cf11af698d5236ea77a86382b21bfc" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::LightsBuffer::getBaseLight</definition>
+        <argsstring>(sdw::Vec4 &amp;lightData, Light light, sdw::UInt &amp;offset)</argsstring>
+        <name>getBaseLight</name>
+        <qualifiedname>castor3d::shader::LightsBuffer::getBaseLight</qualifiedname>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>lightData</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/d8c/a06473" kindref="compound">Light</ref></type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type>sdw::UInt &amp;</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="211" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::BufferT&lt; LightData &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; LightData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="dc/d99/a06433"/>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::LightsBuffer</label>
+        <link refid="d0/d7b/a06489"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::BufferT&lt; LightData &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; LightData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="dc/d99/a06433"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::LightsBuffer</label>
+        <link refid="d0/d7b/a06489"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::string</label>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::unique_ptr&lt; sdw::StorageBuffer &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; sdw::StorageBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="179" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="181" bodyend="222"/>
+    <listofallmembers>
+      <member refid="dc/d99/a06433_1a4625e7c6c7426433390143ef91de516d" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>BufferBase</name></member>
+      <member refid="de/d20/a06437_1a3121cc6273753a4bda1b99bf8313ac8e" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>BufferT</name></member>
+      <member refid="d0/d7b/a06489_1a06cf11af698d5236ea77a86382b21bfc" prot="private" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getBaseLight</name></member>
+      <member refid="dc/d99/a06433_1ac39085e1f563915a9270c99d3837a6b7" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getCount</name></member>
+      <member refid="de/d20/a06437_1a7fed7db7c6ddd5ec43d4b243a608ee8a" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getData</name></member>
+      <member refid="d0/d7b/a06489_1ae48c508e66c285faa0b4c031352521c9" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getDirectionalLight</name></member>
+      <member refid="d0/d7b/a06489_1a0ca6cd325c6c3defd47fb11012cd1b8c" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getDirectionalsEnd</name></member>
+      <member refid="dc/d99/a06433_1af00addb76247551b7afa557e5b366580" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getFirstCount</name></member>
+      <member refid="dc/d99/a06433_1ae7c2ff75adb43ff14450a561fe3ea5cd" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getFourthCount</name></member>
+      <member refid="d0/d7b/a06489_1a3d8cb007916cf1e68adac70e9c2fe6cc" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getPointLight</name></member>
+      <member refid="d0/d7b/a06489_1a44215fb96a8a5fa293565072b1a78165" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getPointsEnd</name></member>
+      <member refid="dc/d99/a06433_1adb02316d9ef1fd07d4c12df96e79de6d" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getSecondCount</name></member>
+      <member refid="d0/d7b/a06489_1a73231125a67d89cf5d0bd0b5d65aa2d9" prot="private" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getShadows</name></member>
+      <member refid="d0/d7b/a06489_1abfa8c3a9f534f1baf27208fb27430cd3" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getSpotLight</name></member>
+      <member refid="d0/d7b/a06489_1a535993c5c5afcf01734d7cfb7718570f" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getSpotsEnd</name></member>
+      <member refid="dc/d99/a06433_1adc3bec1abc05499dc522dcb7b1288a12" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getThirdCount</name></member>
+      <member refid="dc/d99/a06433_1a30e5f486cf48f99e981f62c0eaf4c4f2" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>getWriter</name></member>
+      <member refid="dc/d99/a06433_1a17f3f731aeca6327e611dd45636d0760" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>isEnabled</name></member>
+      <member refid="d0/d7b/a06489_1ad1e7bd84ba7472ec501eca7523ec3878" prot="public" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>LightsBuffer</name></member>
+      <member refid="d0/d7b/a06489_1a5854eb21ff8c4bf0e5879812939811af" prot="private" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>m_getDirectionalLight</name></member>
+      <member refid="d0/d7b/a06489_1ae81519e27fcce56c6045eed4d699e4d2" prot="private" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>m_getPointLight</name></member>
+      <member refid="d0/d7b/a06489_1aa71c40a5e369dd5dcc6cc8e936fd9b95" prot="private" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>m_getSpotLight</name></member>
+      <member refid="dc/d99/a06433_1a5d932674ed8f6e0d34a71affbc88bca8" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>m_ssbo</name></member>
+      <member refid="dc/d99/a06433_1aae02f484169333d895df1f92ab6db2a3" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>m_variableName</name></member>
+      <member refid="dc/d99/a06433_1a8094a884d182023869e7b4a9be80c93e" prot="protected" virt="non-virtual"><scope>castor3d::shader::LightsBuffer</scope><name>m_writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

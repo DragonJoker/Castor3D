@@ -1,0 +1,5 @@
+<map id="castor3d::ClearcoatNormalMapComponent::Plugin::getTextureFlags" name="castor3d::ClearcoatNormalMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="317,49,576,89"/>
+<area shape="rect" id="node2" href="$d3/d23/a03717.html#ae701045e6ae93ed34ccca79fe0c7946a" title="Fills the texture configuration for use with this component." alt="" coords="27,5,247,60"/>
+<area shape="rect" id="node3" href="$d3/d23/a03717.html#a375e02f8031e98bad334c9c82f0c9e0f" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,85,269,125"/>
+</map>

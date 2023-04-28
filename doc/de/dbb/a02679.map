@@ -1,4 +1,6 @@
-<map id="castor3d::ChunkParser&lt; castor::Path &gt;" name="castor3d::ChunkParser&lt; castor::Path &gt;">
-<area shape="rect" id="node1" title="ChunkParser specialisation for castor::Path." alt="" coords="21,80,175,121"/>
-<area shape="rect" id="node2" href="$d9/d5b/a02668.html" title=" " alt="" coords="5,5,191,32"/>
+<map id="castor3d::BinaryWriter&lt; MorphComponent &gt;" name="castor3d::BinaryWriter&lt; MorphComponent &gt;">
+<area shape="rect" id="node1" title="MorphComponent loader." alt="" coords="21,285,173,325"/>
+<area shape="rect" id="node2" href="$d8/d69/a02661.html" title=" " alt="" coords="5,196,188,236"/>
+<area shape="rect" id="node3" href="$db/d6a/a02613.html" title=" " alt="" coords="51,5,206,31"/>
+<area shape="rect" id="node4" href="$d8/d69/a02661.html" title="Binary data chunk writer base class." alt="" coords="157,93,340,133"/>
 </map>

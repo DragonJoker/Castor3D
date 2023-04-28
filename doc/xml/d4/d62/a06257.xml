@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d4/d62/a06257" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BillboardVertex</compoundname>
+    <includes local="no">SceneModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d62/a06257_1aa75a955162e672dd28a5e9f547bebf52" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::BillboardVertex::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::BillboardVertex::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="24" column="17" bodyfile="Scene/SceneModule.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d62/a06257_1ae6e71bd86f621d0580b3f310edf7ddd5" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::BillboardVertex::uv</definition>
+        <argsstring></argsstring>
+        <name>uv</name>
+        <qualifiedname>castor3d::BillboardVertex::uv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneModule.hpp" line="25" column="17" bodyfile="Scene/SceneModule.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/SceneModule.hpp" line="22" column="1" bodyfile="Scene/SceneModule.hpp" bodystart="23" bodyend="26"/>
+    <listofallmembers>
+      <member refid="d4/d62/a06257_1aa75a955162e672dd28a5e9f547bebf52" prot="public" virt="non-virtual"><scope>castor3d::BillboardVertex</scope><name>position</name></member>
+      <member refid="d4/d62/a06257_1ae6e71bd86f621d0580b3f310edf7ddd5" prot="public" virt="non-virtual"><scope>castor3d::BillboardVertex</scope><name>uv</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

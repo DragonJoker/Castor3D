@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/dc5/a06522" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::SssProfile</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_SssProfile&quot;, sdw::type::MemoryLayout::eStd140, sdw::IntField&lt; &quot;transmittanceProfileSize&quot; &gt;, sdw::FloatField&lt; &quot;gaussianWidth&quot; &gt;, sdw::FloatField&lt; &quot;subsurfaceScatteringStrength&quot; &gt;, sdw::FloatField&lt; &quot;pad&quot; &gt;, sdw::Vec4ArrayField&lt; &quot;transmittanceProfile&quot;, TransmittanceProfileSize &gt; &gt;</basecompoundref>
+    <includes local="no">GlslSssProfile.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/dc5/a06522_1a14110d7c900b7ebbd0be97b647d94571" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::SssProfile::SssProfile</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>SssProfile</name>
+        <qualifiedname>castor3d::shader::SssProfile::SssProfile</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssProfile.hpp" line="26" column="8" bodyfile="Shader/Shaders/GlslSssProfile.hpp" bodystart="26" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc5/a06522_1a5647c756706f7e482d7fefa6cdffcfef" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SssProfile::transmittanceProfileSize</definition>
+        <argsstring>() const</argsstring>
+        <name>transmittanceProfileSize</name>
+        <qualifiedname>castor3d::shader::SssProfile::transmittanceProfileSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssProfile.hpp" line="33" column="6" bodyfile="Shader/Shaders/GlslSssProfile.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc5/a06522_1a93987acaa881624d5ad957c693c2dda0" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SssProfile::gaussianWidth</definition>
+        <argsstring>() const</argsstring>
+        <name>gaussianWidth</name>
+        <qualifiedname>castor3d::shader::SssProfile::gaussianWidth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssProfile.hpp" line="34" column="6" bodyfile="Shader/Shaders/GlslSssProfile.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc5/a06522_1a3227c59f4117e70a20037ef65169a9f4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SssProfile::subsurfaceScatteringStrength</definition>
+        <argsstring>() const</argsstring>
+        <name>subsurfaceScatteringStrength</name>
+        <qualifiedname>castor3d::shader::SssProfile::subsurfaceScatteringStrength</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssProfile.hpp" line="35" column="6" bodyfile="Shader/Shaders/GlslSssProfile.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="db/dc5/a06522_1a8272bd38a3a97c027b28df69b562b86c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::SssProfile::transmittanceProfile</definition>
+        <argsstring>() const</argsstring>
+        <name>transmittanceProfile</name>
+        <qualifiedname>castor3d::shader::SssProfile::transmittanceProfile</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSssProfile.hpp" line="36" column="6" bodyfile="Shader/Shaders/GlslSssProfile.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::SssProfile</label>
+        <link refid="db/dc5/a06522"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_SssProfile&quot;, sdw::type::MemoryLayout::eStd140, sdw::IntField&lt; &quot;transmittanceProfileSize&quot; &gt;, sdw::FloatField&lt; &quot;gaussianWidth&quot; &gt;, sdw::FloatField&lt; &quot;subsurfaceScatteringStrength&quot; &gt;, sdw::FloatField&lt; &quot;pad&quot; &gt;, sdw::Vec4ArrayField&lt; &quot;transmittanceProfile&quot;, TransmittanceProfileSize &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::SssProfile</label>
+        <link refid="db/dc5/a06522"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_SssProfile&quot;, sdw::type::MemoryLayout::eStd140, sdw::IntField&lt; &quot;transmittanceProfileSize&quot; &gt;, sdw::FloatField&lt; &quot;gaussianWidth&quot; &gt;, sdw::FloatField&lt; &quot;subsurfaceScatteringStrength&quot; &gt;, sdw::FloatField&lt; &quot;pad&quot; &gt;, sdw::Vec4ArrayField&lt; &quot;transmittanceProfile&quot;, TransmittanceProfileSize &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslSssProfile.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslSssProfile.hpp" bodystart="25" bodyend="37"/>
+    <listofallmembers>
+      <member refid="db/dc5/a06522_1a93987acaa881624d5ad957c693c2dda0" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfile</scope><name>gaussianWidth</name></member>
+      <member refid="db/dc5/a06522_1a14110d7c900b7ebbd0be97b647d94571" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfile</scope><name>SssProfile</name></member>
+      <member refid="db/dc5/a06522_1a3227c59f4117e70a20037ef65169a9f4" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfile</scope><name>subsurfaceScatteringStrength</name></member>
+      <member refid="db/dc5/a06522_1a8272bd38a3a97c027b28df69b562b86c" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfile</scope><name>transmittanceProfile</name></member>
+      <member refid="db/dc5/a06522_1a5647c756706f7e482d7fefa6cdffcfef" prot="public" virt="non-virtual"><scope>castor3d::shader::SssProfile</scope><name>transmittanceProfileSize</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

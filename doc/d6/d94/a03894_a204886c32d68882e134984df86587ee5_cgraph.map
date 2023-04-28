@@ -1,0 +1,8 @@
+<map id="castor3d::TransmissionMapComponent::Plugin::filterTextureFlags" name="castor3d::TransmissionMapComponent::Plugin::filterTextureFlags">
+<area shape="rect" id="node1" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,55,244,95"/>
+<area shape="rect" id="node2" href="$d5/da6/a01698.html#aff53303d5484577f7e5e747a6a602c2f" title=" " alt="" coords="339,5,479,31"/>
+<area shape="rect" id="node3" href="$d6/d94/a03894.html#ad9959b02e355190d604012c49a400028" title=" " alt="" coords="292,55,525,95"/>
+<area shape="rect" id="node6" href="$d5/da6/a01698.html#ad3d63b41dd70de2c73275db13818a77d" title=" " alt="" coords="341,120,476,145"/>
+<area shape="rect" id="node4" href="$db/df2/a04026.html#a3d4ca319e7c6e2dc3e40e81211846fee" title=" " alt="" coords="573,26,785,66"/>
+<area shape="rect" id="node5" href="$d5/da6/a01698.html#ad3ac6fb5275f7db88138f87aa2f270d8" title=" " alt="" coords="589,91,769,116"/>
+</map>

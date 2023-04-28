@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/d17/a05469" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::RenderLoop::UploadResources</compoundname>
+    <includes local="no">RenderLoop.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d17/a05469_1a3256790fc4ca73c472ea54741399c8f1" prot="public" static="no" mutable="no">
+        <type><ref refid="da/dd7/a05285" kindref="compound">CommandsSemaphore</ref></type>
+        <definition>CommandsSemaphore castor3d::RenderLoop::UploadResources::commands</definition>
+        <argsstring></argsstring>
+        <name>commands</name>
+        <qualifiedname>castor3d::RenderLoop::UploadResources::commands</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The command buffer and semaphore used for UBO uploads. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="258" column="19" bodyfile="Render/RenderLoop.hpp" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d17/a05469_1a393a05e19e5313dc0158a20344363ee6" prot="public" static="no" mutable="no">
+        <type>ashes::FencePtr</type>
+        <definition>ashes::FencePtr castor3d::RenderLoop::UploadResources::fence</definition>
+        <argsstring></argsstring>
+        <name>fence</name>
+        <qualifiedname>castor3d::RenderLoop::UploadResources::fence</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The fence and semaphore used for UBO uploads. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="261" column="17" bodyfile="Render/RenderLoop.hpp" bodystart="261" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d17/a05469_1a2a1639d9bfa8d7307c95fb3fa691bff3" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::RenderLoop::UploadResources::used</definition>
+        <argsstring></argsstring>
+        <name>used</name>
+        <qualifiedname>castor3d::RenderLoop::UploadResources::used</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tells if the smaphore has been used in previous frame. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="264" column="6" bodyfile="Render/RenderLoop.hpp" bodystart="264" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d17/a05469_1a9936e1d854fc3579b90def92d4b58405" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RenderLoop::UploadResources::waitCount</definition>
+        <argsstring></argsstring>
+        <name>waitCount</name>
+        <qualifiedname>castor3d::RenderLoop::UploadResources::waitCount</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderLoop.hpp" line="265" column="10" bodyfile="Render/RenderLoop.hpp" bodystart="265" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::CommandsSemaphore</label>
+        <link refid="da/dd7/a05285"/>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderLoop::UploadResources</label>
+        <link refid="df/d17/a05469"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>commands</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderLoop.hpp" line="254" column="1" bodyfile="Render/RenderLoop.hpp" bodystart="255" bodyend="266"/>
+    <listofallmembers>
+      <member refid="df/d17/a05469_1a3256790fc4ca73c472ea54741399c8f1" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>commands</name></member>
+      <member refid="df/d17/a05469_1a393a05e19e5313dc0158a20344363ee6" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>fence</name></member>
+      <member refid="df/d17/a05469_1a2a1639d9bfa8d7307c95fb3fa691bff3" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>used</name></member>
+      <member refid="df/d17/a05469_1a9936e1d854fc3579b90def92d4b58405" prot="public" virt="non-virtual"><scope>castor3d::RenderLoop::UploadResources</scope><name>waitCount</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

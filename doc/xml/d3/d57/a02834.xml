@@ -1,0 +1,194 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d57/a02834" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::CmshSkeletonImporter</compoundname>
+    <basecompoundref refid="d0/d51/a04710" prot="public" virt="non-virtual">castor3d::SkeletonImporter</basecompoundref>
+    <includes local="no">CmshImporter.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/d57/a02834_1adefd10396d167820b01fa8ff81d804e8" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::CmshSkeletonImporter::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::CmshSkeletonImporter::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/CmshImporter.hpp" line="115" column="29" bodyfile="Binary/CmshImporter.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d57/a02834_1a293cb1d0b5df5acb03bac1d3ef764619" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::CmshSkeletonImporter::CmshSkeletonImporter</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>CmshSkeletonImporter</name>
+        <qualifiedname>castor3d::CmshSkeletonImporter::CmshSkeletonImporter</qualifiedname>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The core engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/CmshImporter.hpp" line="97" column="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/d57/a02834_1a862f73c7b4b9ced2edffc83bf0a46577" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>SkeletonImporterUPtr</type>
+        <definition>static SkeletonImporterUPtr castor3d::CmshSkeletonImporter::create</definition>
+        <argsstring>(Engine &amp;engine)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::CmshSkeletonImporter::create</qualifiedname>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+<para>Creator function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The core engine. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/CmshImporter.hpp" line="106" column="29"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="d3/d57/a02834_1a7dde711b51d09d98cf5c7e6d73ef9530" prot="protected" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::CmshSkeletonImporter::doImportSkeleton</definition>
+        <argsstring>(Skeleton &amp;skeleton) override</argsstring>
+        <name>doImportSkeleton</name>
+        <qualifiedname>castor3d::CmshSkeletonImporter::doImportSkeleton</qualifiedname>
+        <reimplements refid="d0/d51/a04710_1ae1ae1d2106c7fe26fb54974179f038a8">doImportSkeleton</reimplements>
+        <param>
+          <type><ref refid="d4/dc3/a04706" kindref="compound">Skeleton</ref> &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d4/dc3/a04706" kindref="compound">Skeleton</ref> import Function.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the imported data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured.   </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Binary/CmshImporter.hpp" line="112" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::CmshSkeletonImporter</label>
+        <link refid="d3/d57/a02834"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SkeletonImporter</label>
+        <link refid="d0/d51/a04710"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>castor3d::ParametersT&lt; castor::String &gt;</label>
+        <link refid="dd/d3c/a04466"/>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor::String &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::CmshSkeletonImporter</label>
+        <link refid="d3/d57/a02834"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ImporterFile</label>
+        <link refid="da/d1b/a03286"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ParametersT&lt; KeyT &gt;</label>
+        <link refid="dd/d3c/a04466"/>
+      </node>
+      <node id="2">
+        <label>castor3d::SkeletonImporter</label>
+        <link refid="d0/d51/a04710"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_file</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_parameters</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Binary/CmshImporter.hpp" line="85" column="1" bodyfile="Binary/CmshImporter.hpp" bodystart="87" bodyend="116"/>
+    <listofallmembers>
+      <member refid="d3/d57/a02834_1a293cb1d0b5df5acb03bac1d3ef764619" prot="public" virt="non-virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>CmshSkeletonImporter</name></member>
+      <member refid="d3/d57/a02834_1a862f73c7b4b9ced2edffc83bf0a46577" prot="public" virt="non-virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>create</name></member>
+      <member refid="d3/d57/a02834_1a7dde711b51d09d98cf5c7e6d73ef9530" prot="protected" virt="virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>doImportSkeleton</name></member>
+      <member refid="d0/d51/a04710_1ae12c85629697108d344b083f416daa5c" prot="public" virt="non-virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>import</name></member>
+      <member refid="d0/d51/a04710_1a436abbd6d47125a8009eea5d63cc5ae2" prot="public" virt="non-virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>import</name></member>
+      <member refid="d0/d51/a04710_1ae382958ac772872399b57face2edeb1f" prot="protected" virt="non-virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>m_file</name></member>
+      <member refid="d0/d51/a04710_1ac998ad960402083e090814afa9efa5f4" prot="protected" virt="non-virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>m_parameters</name></member>
+      <member refid="d0/d51/a04710_1a95b03383858d84607fcfb67f0817b630" prot="public" virt="non-virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>SkeletonImporter</name></member>
+      <member refid="d3/d57/a02834_1adefd10396d167820b01fa8ff81d804e8" prot="public" virt="non-virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>Type</name></member>
+      <member refid="d0/d51/a04710_1a80cb5d27de72cb18a116a6d080cea6b7" prot="public" virt="virtual"><scope>castor3d::CmshSkeletonImporter</scope><name>~SkeletonImporter</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

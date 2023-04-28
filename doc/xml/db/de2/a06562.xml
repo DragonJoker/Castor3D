@@ -1,0 +1,161 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/de2/a06562" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::TextureAnimData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_TextureAnimData&quot;, ast::type::MemoryLayout::eStd430, sdw::Vec3Field&lt; &quot;translate&quot; &gt;, sdw::FloatField&lt; &quot;rotateU&quot; &gt;, sdw::Vec3Field&lt; &quot;scale&quot; &gt;, sdw::FloatField&lt; &quot;rotateV&quot; &gt;, sdw::Vec4Field&lt; &quot;tileSet&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslTextureAnimation.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="db/de2/a06562_1acdef04b2da9e72180d6572c921abb811" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class TextureAnimations</definition>
+        <argsstring></argsstring>
+        <name>TextureAnimations</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::TextureAnimations</qualifiedname>
+        <param>
+          <type><ref refid="de/d3f/a06566" kindref="compound">TextureAnimations</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="25" column="14" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/de2/a06562_1af86e08076add7666592cba7cdf18c5c4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::TextureAnimData::TextureAnimData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>TextureAnimData</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::TextureAnimData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="28" column="1" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="28" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de2/a06562_1a65136b225c061a4a96c2aa2e326f3c38" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureAnimData::translate</definition>
+        <argsstring>() const</argsstring>
+        <name>translate</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::translate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="35" column="6" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="35" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de2/a06562_1a95aa656cd66ba21c99d99954ba9ebab7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureAnimData::rotateU</definition>
+        <argsstring>() const</argsstring>
+        <name>rotateU</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::rotateU</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="36" column="6" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="36" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de2/a06562_1a759a43a0c7d27b4e1ce1a6c66d2fa4ca" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureAnimData::rotateV</definition>
+        <argsstring>() const</argsstring>
+        <name>rotateV</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::rotateV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="37" column="6" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="37" bodyend="37"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de2/a06562_1a1f84f7a02ebe3a209c33c23a3da5f4b5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureAnimData::scale</definition>
+        <argsstring>() const</argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="38" column="6" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="38" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="db/de2/a06562_1a84d2f19c538d8727d80088ec085a203c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::TextureAnimData::tileSet</definition>
+        <argsstring>() const</argsstring>
+        <name>tileSet</name>
+        <qualifiedname>castor3d::shader::TextureAnimData::tileSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="39" column="6" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="39" bodyend="39"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::TextureAnimData</label>
+        <link refid="db/de2/a06562"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_TextureAnimData&quot;, ast::type::MemoryLayout::eStd430, sdw::Vec3Field&lt; &quot;translate&quot; &gt;, sdw::FloatField&lt; &quot;rotateU&quot; &gt;, sdw::Vec3Field&lt; &quot;scale&quot; &gt;, sdw::FloatField&lt; &quot;rotateV&quot; &gt;, sdw::Vec4Field&lt; &quot;tileSet&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::TextureAnimData</label>
+        <link refid="db/de2/a06562"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_TextureAnimData&quot;, ast::type::MemoryLayout::eStd430, sdw::Vec3Field&lt; &quot;translate&quot; &gt;, sdw::FloatField&lt; &quot;rotateU&quot; &gt;, sdw::Vec3Field&lt; &quot;scale&quot; &gt;, sdw::FloatField&lt; &quot;rotateV&quot; &gt;, sdw::Vec4Field&lt; &quot;tileSet&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslTextureAnimation.hpp" line="16" column="1" bodyfile="Shader/Shaders/GlslTextureAnimation.hpp" bodystart="24" bodyend="40"/>
+    <listofallmembers>
+      <member refid="db/de2/a06562_1a95aa656cd66ba21c99d99954ba9ebab7" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>rotateU</name></member>
+      <member refid="db/de2/a06562_1a759a43a0c7d27b4e1ce1a6c66d2fa4ca" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>rotateV</name></member>
+      <member refid="db/de2/a06562_1a1f84f7a02ebe3a209c33c23a3da5f4b5" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>scale</name></member>
+      <member refid="db/de2/a06562_1acdef04b2da9e72180d6572c921abb811" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>TextureAnimations</name></member>
+      <member refid="db/de2/a06562_1af86e08076add7666592cba7cdf18c5c4" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>TextureAnimData</name></member>
+      <member refid="db/de2/a06562_1a84d2f19c538d8727d80088ec085a203c" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>tileSet</name></member>
+      <member refid="db/de2/a06562_1a65136b225c061a4a96c2aa2e326f3c38" prot="public" virt="non-virtual"><scope>castor3d::shader::TextureAnimData</scope><name>translate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

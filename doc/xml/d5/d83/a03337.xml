@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d83/a03337" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureCombine</compoundname>
+    <includes local="no">MaterialModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d83/a03337_1a8a41a8dbcd14d11a64aedcac27ecaf52" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureCombine::configCount</definition>
+        <argsstring></argsstring>
+        <name>configCount</name>
+        <qualifiedname>castor3d::TextureCombine::configCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/MaterialModule.hpp" line="178" column="10" bodyfile="Material/MaterialModule.hpp" bodystart="178" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d83/a03337_1a6468938b2c6db32a476972426c50027a" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1af52575802ae4c7004b8ec4b049ef50d5" kindref="member">TextureFlagsSet</ref></type>
+        <definition>TextureFlagsSet castor3d::TextureCombine::flags</definition>
+        <argsstring></argsstring>
+        <name>flags</name>
+        <qualifiedname>castor3d::TextureCombine::flags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/MaterialModule.hpp" line="179" column="17" bodyfile="Material/MaterialModule.hpp" bodystart="179" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>K</label>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureCombine</label>
+        <link refid="d5/d83/a03337"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>flags</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::set&lt; PassComponentTextureFlag &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; PassComponentTextureFlag &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::set&lt; K &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/MaterialModule.hpp" line="176" column="1" bodyfile="Material/MaterialModule.hpp" bodystart="177" bodyend="180"/>
+    <listofallmembers>
+      <member refid="d5/d83/a03337_1a8a41a8dbcd14d11a64aedcac27ecaf52" prot="public" virt="non-virtual"><scope>castor3d::TextureCombine</scope><name>configCount</name></member>
+      <member refid="d5/d83/a03337_1a6468938b2c6db32a476972426c50027a" prot="public" virt="non-virtual"><scope>castor3d::TextureCombine</scope><name>flags</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

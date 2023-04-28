@@ -1,0 +1,10 @@
+<map id="castor3d::BinaryChunk::get" name="castor3d::BinaryChunk::get">
+<area shape="rect" id="node1" title="Retrieves data from the chunk." alt="" coords="1151,77,1331,102"/>
+<area shape="rect" id="node2" href="$db/de9/a02821.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="917,69,1103,109"/>
+<area shape="rect" id="node3" href="$d0/d2b/a02833.html#ab3e16eea9051bc679aff2782279aafea" title="Retrieves a value from a chunk." alt="" coords="709,5,866,45"/>
+<area shape="rect" id="node4" href="$db/d4f/a02829.html#acf5c3a4513e23e175339295361d35119" title="Retrieves a value from a chunk." alt="" coords="705,69,869,109"/>
+<area shape="rect" id="node5" href="$df/d7d/a02825.html#a51aa9cc211a27e96cdfbdb431808cc8f" title="Retrieves a value array from a chunk." alt="" coords="710,133,865,173"/>
+<area shape="rect" id="node6" href="$db/d0d/a02653.html#a0e1aa917e3bf897fab03a32d20890062" title="Retrieves a value array from a chunk." alt="" coords="472,133,657,173"/>
+<area shape="rect" id="node7" href="$db/d0d/a02653.html#a035881aba2b64571b30a5efd3faaf3d9" title="Parses the header chunk." alt="" coords="239,133,424,173"/>
+<area shape="rect" id="node8" href="$db/d0d/a02653.html#a5db83668684ca219f67de3a381898e64" title="From file reader function." alt="" coords="5,133,191,173"/>
+</map>

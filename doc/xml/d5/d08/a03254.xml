@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d08/a03254" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PanelStyle</compoundname>
+    <basecompoundref refid="d5/de7/a03234" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <basecompoundref refid="dc/d77/a03270" prot="public" virt="non-virtual">castor3d::StylesHolder</basecompoundref>
+    <basecompoundref refid="dc/dbb/a03262" prot="public" virt="non-virtual">castor3d::ScrollableStyle</basecompoundref>
+    <includes local="no">StylePanel.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d5/d08/a03254_1a12d9064d024c762faa78abcec8672444" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::PanelStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::PanelStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725da82eeda867c147d65f843c022b81b76fb" kindref="member">ControlType::ePanel</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylePanel.hpp" line="19" column="30" bodyfile="Gui/Theme/StylePanel.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d08/a03254_1a64ec8e6f3859dc629d4413cb4174f885" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PanelStyle::PanelStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine)</argsstring>
+        <name>PanelStyle</name>
+        <qualifiedname>castor3d::PanelStyle::PanelStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylePanel.hpp" line="21" column="1" bodyfile="Gui/Theme/StylePanel.hpp" bodystart="21" bodyend="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d08/a03254_1a7b1f2711a41e9bd36455948097be0b89" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PanelStyle::PanelStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine)</argsstring>
+        <name>PanelStyle</name>
+        <qualifiedname>castor3d::PanelStyle::PanelStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylePanel.hpp" line="27" column="1" bodyfile="Gui/Theme/StylePanel.hpp" bodystart="27" bodyend="33"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/d08/a03254_1a31725e5958ba57a745b1668aec7f7498" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PanelStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::PanelStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="d5/de7/a03234_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylePanel.hpp" line="36" column="6" bodyfile="Gui/Theme/StylePanel.hpp" bodystart="36" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d08/a03254_1a74b4a7d1aadbeb4f19083bb55b1c4183" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::PanelStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::PanelStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="d5/de7/a03234_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylePanel.hpp" line="40" column="6" bodyfile="Gui/Theme/StylePanel.hpp" bodystart="40" bodyend="42"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d5/de7/a03234"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PanelStyle</label>
+        <link refid="d5/d08/a03254"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ScrollableStyle</label>
+        <link refid="dc/dbb/a03262"/>
+      </node>
+      <node id="4">
+        <label>castor3d::StylesHolder</label>
+        <link refid="dc/d77/a03270"/>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d5/de7/a03234"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PanelStyle</label>
+        <link refid="d5/d08/a03254"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ScrollableStyle</label>
+        <link refid="dc/dbb/a03262"/>
+      </node>
+      <node id="4">
+        <label>castor3d::StylesHolder</label>
+        <link refid="dc/d77/a03270"/>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Theme/StylePanel.hpp" line="13" column="1" bodyfile="Gui/Theme/StylePanel.hpp" bodystart="17" bodyend="43"/>
+    <listofallmembers>
+      <member refid="dc/d77/a03270_1ad18f29747a8e2d17d9e40a9671fcc37f" prot="protected" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>cleanupStyles</name></member>
+      <member refid="d5/de7/a03234_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>ControlStyle</name></member>
+      <member refid="dc/d77/a03270_1a2f5bc7bf725291cf767d14428c3dba86" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createButtonStyle</name></member>
+      <member refid="dc/d77/a03270_1a6e536c3f522da5d568eacd6d49f58627" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createComboBoxStyle</name></member>
+      <member refid="dc/d77/a03270_1a6a52bc77a20359dc1cf9d2f4a5199cea" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createEditStyle</name></member>
+      <member refid="dc/d77/a03270_1a9d5873d94c21339d853e30442835e036" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createExpandablePanelStyle</name></member>
+      <member refid="dc/d77/a03270_1ac67e69129a666233d19ad989ab55e0bd" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createFrameStyle</name></member>
+      <member refid="dc/d77/a03270_1a663bcf813ca146011ff5ff75904c7dce" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createListBoxStyle</name></member>
+      <member refid="dc/d77/a03270_1a87415019df0bb03e77317a92468b9070" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createPanelStyle</name></member>
+      <member refid="dc/d77/a03270_1a5c276714649585aa130bc62558c6de19" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createProgressStyle</name></member>
+      <member refid="dc/d77/a03270_1a8df6f9668b7f0070940b3bbc64fd89e7" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createScrollBarStyle</name></member>
+      <member refid="dc/d77/a03270_1a825054201cef1361d7fa33ff3afa68d9" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createSliderStyle</name></member>
+      <member refid="dc/d77/a03270_1ad182412093bc39782668b4d25ab3915f" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>createStaticStyle</name></member>
+      <member refid="d5/de7/a03234_1aeda2101fba70a69cd4bf8256f22d8c16" prot="protected" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="d5/d08/a03254_1a31725e5958ba57a745b1668aec7f7498" prot="private" virt="virtual"><scope>castor3d::PanelStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="d5/d08/a03254_1a74b4a7d1aadbeb4f19083bb55b1c4183" prot="private" virt="virtual"><scope>castor3d::PanelStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="d5/de7/a03234_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="dc/d77/a03270_1a791fb7f01b135a8ef6d2802ecbb78ee6" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getButtonStyle</name></member>
+      <member refid="dc/d77/a03270_1af845fd211c570003ff8a097d11d19773" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getButtonStyles</name></member>
+      <member refid="dc/d77/a03270_1a39fa30924d341be7a6f214c6db2a9af0" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getComboBoxStyle</name></member>
+      <member refid="dc/d77/a03270_1a0363dd0ae75b6c42d3b73b026d1c46b7" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getComboBoxStyles</name></member>
+      <member refid="d5/de7/a03234_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getCursor</name></member>
+      <member refid="dc/d77/a03270_1afc5588e7629d715ad7c17f02ed8653af" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getDefaultFont</name></member>
+      <member refid="dc/d77/a03270_1aa7253d044219ad2290dac778b781be49" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getEditStyle</name></member>
+      <member refid="dc/d77/a03270_1a98b3cb3fe298f8ef9c6361075ead2520" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getEditStyles</name></member>
+      <member refid="d5/de7/a03234_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getEngine</name></member>
+      <member refid="dc/d77/a03270_1a5af7b0bcf0763270e79030328ce66678" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getExpandablePanelStyle</name></member>
+      <member refid="dc/d77/a03270_1a22db77c4bf62f610753830b1a649893a" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getExpandablePanelStyles</name></member>
+      <member refid="d5/de7/a03234_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="dc/d77/a03270_1aa7976b5651a171b1cdd3438ecac89012" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getFrameStyle</name></member>
+      <member refid="dc/d77/a03270_1a7bbd7a04e646f78d3a5999bdf2621973" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getFrameStyles</name></member>
+      <member refid="dc/d77/a03270_1a0601ec35dc481eff061081c6dc7ef639" prot="protected" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getHolderName</name></member>
+      <member refid="dc/dbb/a03262_1ad2df1abfcaddd463a811c9024eb8aeca" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getHorizontalStyle</name></member>
+      <member refid="dc/d77/a03270_1ac737ec7bfe648aa616c99ebeed786392" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getListBoxStyle</name></member>
+      <member refid="dc/d77/a03270_1ac380f39e28ffe3f8ffdab39a3b969ef7" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getListBoxStyles</name></member>
+      <member refid="dc/d77/a03270_1a893b542eea1ceb10ddf3a7be2dfc608c" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getPanelStyle</name></member>
+      <member refid="dc/d77/a03270_1a179248d75f720b72cb9dec20d0cc164f" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getPanelStyles</name></member>
+      <member refid="dc/d77/a03270_1ad5fbbe317ab48dfe01394406f32f9a34" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getProgressStyle</name></member>
+      <member refid="dc/d77/a03270_1a37b676a53dfc05f15848021b0725cf1d" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getProgressStyles</name></member>
+      <member refid="d5/de7/a03234_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getScene</name></member>
+      <member refid="dc/d77/a03270_1a05dfd2911f8413d4f704d55bffa90ea8" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getScrollBarStyle</name></member>
+      <member refid="dc/d77/a03270_1adece0de101ddd9eb70b29de9ad07f862" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getScrollBarStyles</name></member>
+      <member refid="dc/d77/a03270_1a6f47141f5a22342f279a8421bda1f956" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getSliderStyle</name></member>
+      <member refid="dc/d77/a03270_1a57205953caeb9bb98acd7da5c58785ba" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getSliderStyles</name></member>
+      <member refid="dc/d77/a03270_1a0de6e2cbae0a027c0417b520ae3a999d" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>getStaticStyle</name></member>
+      <member refid="dc/d77/a03270_1af2aa59807ebc5fb2dfe54c2e424d59db" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getStaticStyles</name></member>
+      <member refid="dc/d77/a03270_1a7699c20040acd264f3715db347ec9935" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getStyle</name></member>
+      <member refid="d5/de7/a03234_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getType</name></member>
+      <member refid="dc/dbb/a03262_1af510aff1757fc8fc4b83f4f1d5333862" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>getVerticalStyle</name></member>
+      <member refid="dc/dbb/a03262_1a52885966ca4bb0b8158c8736a00f5fba" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>hasHorizontalStyle</name></member>
+      <member refid="d5/de7/a03234_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>hasScene</name></member>
+      <member refid="dc/dbb/a03262_1aefab1d527c69ec092b9bda7a205c2234" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>hasVerticalStyle</name></member>
+      <member refid="d5/de7/a03234_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="d5/d08/a03254_1a64ec8e6f3859dc629d4413cb4174f885" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>PanelStyle</name></member>
+      <member refid="d5/d08/a03254_1a7b1f2711a41e9bd36455948097be0b89" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>PanelStyle</name></member>
+      <member refid="d5/de7/a03234_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/de7/a03234_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>setCursor</name></member>
+      <member refid="dc/d77/a03270_1ae257278e9515f5a84e4adb2c34a08723" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>setDefaultFont</name></member>
+      <member refid="d5/de7/a03234_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="dc/dbb/a03262_1ae6169d62a4dcdcd78b5b9fbb3d87a7f0" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>setHorizontalStyle</name></member>
+      <member refid="dc/dbb/a03262_1acf0f32a376a660ca819705dc4d144f2a" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>setVerticalStyle</name></member>
+      <member refid="dc/d77/a03270_1a170e30cf0d2391f48062783ad76ed3de" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>StylesHolder</name></member>
+      <member refid="d5/d08/a03254_1a12d9064d024c762faa78abcec8672444" prot="public" virt="non-virtual"><scope>castor3d::PanelStyle</scope><name>Type</name></member>
+      <member refid="d5/de7/a03234_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>~ControlStyle</name></member>
+      <member refid="dc/d77/a03270_1a3f7d9ff25cae709fbdc0d75551bd68d5" prot="public" virt="virtual"><scope>castor3d::PanelStyle</scope><name>~StylesHolder</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

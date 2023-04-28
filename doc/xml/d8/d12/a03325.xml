@@ -1,0 +1,692 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/d12/a03325" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Material</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">Material.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d8/d12/a03325_1ad7e34981d8e011d2c77659e15b1de4ce" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Material::hasAlphaBlending</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAlphaBlending</name>
+        <qualifiedname>castor3d::Material::hasAlphaBlending</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="104" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a66f46543912ad98b0c39b8970e0f91de" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Material::hasEnvironmentMapping</definition>
+        <argsstring>() const</argsstring>
+        <name>hasEnvironmentMapping</name>
+        <qualifiedname>castor3d::Material::hasEnvironmentMapping</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="105" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a0a2623fe84f04fc8706a4982ae8d82f6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::Material::hasSubsurfaceScattering</definition>
+        <argsstring>() const</argsstring>
+        <name>hasSubsurfaceScattering</name>
+        <qualifiedname>castor3d::Material::hasSubsurfaceScattering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="106" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1ab0fd75870e26c64cc70be92590c00d53" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+        <definition>LightingModelID castor3d::Material::getLightingModelId</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getLightingModelId</name>
+        <qualifiedname>castor3d::Material::getLightingModelId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="108" column="17" bodyfile="Material/Material.hpp" bodystart="108" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a4ca11d2102e8df7d693da8d9e4b30c8f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Material::getPassCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getPassCount</name>
+        <qualifiedname>castor3d::Material::getPassCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="113" column="10" bodyfile="Material/Material.hpp" bodystart="113" bodyend="116"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a40e986c8165f5bda7ff9f3d2d9270e0d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d0/d8e/a05537" kindref="compound">RenderPassRegisterInfo</ref> *</type>
+        <definition>RenderPassRegisterInfo * castor3d::Material::getRenderPassInfo</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRenderPassInfo</name>
+        <qualifiedname>castor3d::Material::getRenderPassInfo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="118" column="25" bodyfile="Material/Material.hpp" bodystart="118" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a32eec358b02ad16314d81347ee773da2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Material::isSerialisable</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isSerialisable</name>
+        <qualifiedname>castor3d::Material::isSerialisable</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="123" column="6" bodyfile="Material/Material.hpp" bodystart="123" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1ad16d074ca8c3eaec6e1a369e9e32a27c" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Material::isInitialised</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isInitialised</name>
+        <qualifiedname>castor3d::Material::isInitialised</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="128" column="6" bodyfile="Material/Material.hpp" bodystart="128" bodyend="131"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d8/d12/a03325_1a9cd0250e758f345c4f3e5355e0bcf2e5" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassPtrArrayConstIt</type>
+        <definition>PassPtrArrayConstIt castor3d::Material::begin</definition>
+        <argsstring>() const</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::Material::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Passes iteration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="142" column="21" bodyfile="Material/Material.hpp" bodystart="142" bodyend="145"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1ae70e8598bfcd4189f5dd68c02df9e733" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassPtrArrayIt</type>
+        <definition>PassPtrArrayIt castor3d::Material::begin</definition>
+        <argsstring>()</argsstring>
+        <name>begin</name>
+        <qualifiedname>castor3d::Material::begin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="147" column="16" bodyfile="Material/Material.hpp" bodystart="147" bodyend="150"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a23ce55302b43e77123cd7492acf36857" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassPtrArrayConstIt</type>
+        <definition>PassPtrArrayConstIt castor3d::Material::end</definition>
+        <argsstring>() const</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::Material::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="152" column="21" bodyfile="Material/Material.hpp" bodystart="152" bodyend="155"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1aaaf660dda33451c486be40b2fbea3a83" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassPtrArrayIt</type>
+        <definition>PassPtrArrayIt castor3d::Material::end</definition>
+        <argsstring>()</argsstring>
+        <name>end</name>
+        <qualifiedname>castor3d::Material::end</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="157" column="16" bodyfile="Material/Material.hpp" bodystart="157" bodyend="160"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d8/d12/a03325_1a45cfb5d9b915c402fa1d96b536d0c14e" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Material::setRenderPassInfo</definition>
+        <argsstring>(RenderPassRegisterInfo *renderPassInfo) noexcept</argsstring>
+        <name>setRenderPassInfo</name>
+        <qualifiedname>castor3d::Material::setRenderPassInfo</qualifiedname>
+        <param>
+          <type><ref refid="d0/d8e/a05537" kindref="compound">RenderPassRegisterInfo</ref> *</type>
+          <declname>renderPassInfo</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutators. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="171" column="6" bodyfile="Material/Material.hpp" bodystart="171" bodyend="174"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1ad0ba05a2db88de424526d985b32a1729" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Material::setSerialisable</definition>
+        <argsstring>(bool v) noexcept</argsstring>
+        <name>setSerialisable</name>
+        <qualifiedname>castor3d::Material::setSerialisable</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="176" column="6" bodyfile="Material/Material.hpp" bodystart="176" bodyend="179"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d12/a03325_1a8aaba373cf1a62ef931fa12dc240120d" prot="public" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1ab2eb8068c1803048c3cd88dc6d191c5c" kindref="member">OnMaterialChanged</ref></type>
+        <definition>OnMaterialChanged castor3d::Material::onChanged</definition>
+        <argsstring></argsstring>
+        <name>onChanged</name>
+        <qualifiedname>castor3d::Material::onChanged</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The signal raised when the material has changed. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="188" column="19" bodyfile="Material/Material.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d8/d12/a03325_1aa36c9553aa9623526b0c475336523e9e" prot="public" static="yes" mutable="no">
+        <type>const castor::String</type>
+        <definition>const castor::String castor3d::Material::DefaultMaterialName</definition>
+        <argsstring></argsstring>
+        <name>DefaultMaterialName</name>
+        <qualifiedname>castor3d::Material::DefaultMaterialName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The default material name. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="191" column="29" bodyfile="Material/Material.hpp" bodystart="191" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d12/a03325_1a0306bd7823ed37cc6a2e1f719889d010" prot="private" static="no" mutable="no">
+        <type>PassPtrArray</type>
+        <definition>PassPtrArray castor3d::Material::m_passes</definition>
+        <argsstring></argsstring>
+        <name>m_passes</name>
+        <qualifiedname>castor3d::Material::m_passes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="194" column="14" bodyfile="Material/Material.hpp" bodystart="194" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a03325_1a76d5e17f0af92e2809574e1e93000a68" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+        <definition>LightingModelID castor3d::Material::m_lightingModelId</definition>
+        <argsstring></argsstring>
+        <name>m_lightingModelId</name>
+        <qualifiedname>castor3d::Material::m_lightingModelId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="195" column="17" bodyfile="Material/Material.hpp" bodystart="195" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a03325_1ad2cb20faae7b7015eb6a96fc181cd431" prot="private" static="no" mutable="no">
+        <type>std::map&lt; PassRPtr, <ref refid="d3/d5e/a01725_1a53125ebeccd59c39556a280b619e42cc" kindref="member">OnPassChangedConnection</ref> &gt;</type>
+        <definition>std::map&lt; PassRPtr, OnPassChangedConnection &gt; castor3d::Material::m_passListeners</definition>
+        <argsstring></argsstring>
+        <name>m_passListeners</name>
+        <qualifiedname>castor3d::Material::m_passListeners</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="196" column="10" bodyfile="Material/Material.hpp" bodystart="196" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a03325_1a48a1a5460c029e85293fe2c00e796e35" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d8e/a05537" kindref="compound">RenderPassRegisterInfo</ref> *</type>
+        <definition>RenderPassRegisterInfo* castor3d::Material::m_renderPassInfo</definition>
+        <argsstring></argsstring>
+        <name>m_renderPassInfo</name>
+        <qualifiedname>castor3d::Material::m_renderPassInfo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="197" column="25" bodyfile="Material/Material.hpp" bodystart="197" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a03325_1a3b61443bf9aca4c119335fd47bb21b9e" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Material::m_serialisable</definition>
+        <argsstring></argsstring>
+        <name>m_serialisable</name>
+        <qualifiedname>castor3d::Material::m_serialisable</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="198" column="6" bodyfile="Material/Material.hpp" bodystart="198" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d12/a03325_1a3c6db0b4fa43491e278e32637ded5f4d" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::Material::m_initialised</definition>
+        <argsstring></argsstring>
+        <name>m_initialised</name>
+        <qualifiedname>castor3d::Material::m_initialised</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="199" column="6" bodyfile="Material/Material.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d12/a03325_1a2f94b20a3451a49fcdd98ba66016b697" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::Material::Material</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, LightingModelID lightingModelId)</argsstring>
+        <name>Material</name>
+        <qualifiedname>castor3d::Material::Material</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+          <declname>lightingModelId</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The material name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The core engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightingModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The material&apos;s lighting model ID. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="32" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a1512ba9c999c0d8694d44103a40a035e" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::Material::~Material</definition>
+        <argsstring>()=default</argsstring>
+        <name>~Material</name>
+        <qualifiedname>castor3d::Material::~Material</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="35" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a4b107e835413457602f0668090245380" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Material::initialise</definition>
+        <argsstring>()</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::Material::initialise</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="37" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a3f87e00d4d4b1a6d138b4ab1f712923c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Material::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::Material::cleanup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="38" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a60bfe646cc476df2e0b65271779267f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassRPtr</type>
+        <definition>C3D_API PassRPtr castor3d::Material::createPass</definition>
+        <argsstring>(LightingModelID lightingModelId)</argsstring>
+        <name>createPass</name>
+        <qualifiedname>castor3d::Material::createPass</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+          <declname>lightingModelId</declname>
+        </param>
+        <briefdescription>
+<para>Creates a pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">lightingModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass&apos; lighting model ID. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The created pass. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="49" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a390ecd6d516030717c09d06ebab0b73c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassRPtr</type>
+        <definition>C3D_API PassRPtr castor3d::Material::createPass</definition>
+        <argsstring>()</argsstring>
+        <name>createPass</name>
+        <qualifiedname>castor3d::Material::createPass</qualifiedname>
+        <briefdescription>
+<para>Creates a pass. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The created pass. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="58" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a26360cea591de2de36d3432014946e2e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Material::addPass</definition>
+        <argsstring>(Pass const &amp;pass)</argsstring>
+        <name>addPass</name>
+        <qualifiedname>castor3d::Material::addPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Adds a pass, cloning the given one. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="65" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a6647b4659372b21c5b095bce33692164" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Material::removePass</definition>
+        <argsstring>(PassRPtr pass)</argsstring>
+        <name>removePass</name>
+        <qualifiedname>castor3d::Material::removePass</qualifiedname>
+        <param>
+          <type>PassRPtr</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Removes an external pass to rhe material. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="74" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a7b75bca3ab9df5804296d59974f64667" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PassRPtr</type>
+        <definition>C3D_API PassRPtr castor3d::Material::getPass</definition>
+        <argsstring>(uint32_t index) const</argsstring>
+        <name>getPass</name>
+        <qualifiedname>castor3d::Material::getPass</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves a pass and returns it. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The index of the wanted pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The retrieved pass or nullptr if not found. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="85" column="18"/>
+        <referencedby refid="dc/df1/a03261_1aeda2101fba70a69cd4bf8256f22d8c16" compoundref="d7/d00/a00401" startline="116" endline="132">castor3d::ControlStyle::doCreateMaterial</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d12/a03325_1a1eb8959bd3743ecef6526a92b4836ec7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::Material::destroyPass</definition>
+        <argsstring>(uint32_t index)</argsstring>
+        <name>destroyPass</name>
+        <qualifiedname>castor3d::Material::destroyPass</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+<para>Destroys the pass at the given index. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">index</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass index. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="94" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d8/d12/a03325_1aed2cd18d4356cb11f8fb95d3382ad23d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::Material::onPassChanged</definition>
+        <argsstring>(Pass const &amp;pass)</argsstring>
+        <name>onPassChanged</name>
+        <qualifiedname>castor3d::Material::onPassChanged</qualifiedname>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Material.hpp" line="183" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::Material</label>
+        <link refid="d8/d12/a03325"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::Material</label>
+        <link refid="d8/d12/a03325"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Material.hpp" line="15" column="1" bodyfile="Material/Material.hpp" bodystart="18" bodyend="200"/>
+    <listofallmembers>
+      <member refid="d8/d12/a03325_1a26360cea591de2de36d3432014946e2e" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>addPass</name></member>
+      <member refid="d8/d12/a03325_1a9cd0250e758f345c4f3e5355e0bcf2e5" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>begin</name></member>
+      <member refid="d8/d12/a03325_1ae70e8598bfcd4189f5dd68c02df9e733" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>begin</name></member>
+      <member refid="d8/d12/a03325_1a3f87e00d4d4b1a6d138b4ab1f712923c" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>cleanup</name></member>
+      <member refid="d8/d12/a03325_1a60bfe646cc476df2e0b65271779267f4" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>createPass</name></member>
+      <member refid="d8/d12/a03325_1a390ecd6d516030717c09d06ebab0b73c" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>createPass</name></member>
+      <member refid="d8/d12/a03325_1aa36c9553aa9623526b0c475336523e9e" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>DefaultMaterialName</name></member>
+      <member refid="d8/d12/a03325_1a1eb8959bd3743ecef6526a92b4836ec7" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>destroyPass</name></member>
+      <member refid="d8/d12/a03325_1a23ce55302b43e77123cd7492acf36857" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>end</name></member>
+      <member refid="d8/d12/a03325_1aaaf660dda33451c486be40b2fbea3a83" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>end</name></member>
+      <member refid="d8/d12/a03325_1ab0fd75870e26c64cc70be92590c00d53" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>getLightingModelId</name></member>
+      <member refid="d8/d12/a03325_1a7b75bca3ab9df5804296d59974f64667" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>getPass</name></member>
+      <member refid="d8/d12/a03325_1a4ca11d2102e8df7d693da8d9e4b30c8f" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>getPassCount</name></member>
+      <member refid="d8/d12/a03325_1a40e986c8165f5bda7ff9f3d2d9270e0d" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>getRenderPassInfo</name></member>
+      <member refid="d8/d12/a03325_1ad7e34981d8e011d2c77659e15b1de4ce" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>hasAlphaBlending</name></member>
+      <member refid="d8/d12/a03325_1a66f46543912ad98b0c39b8970e0f91de" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>hasEnvironmentMapping</name></member>
+      <member refid="d8/d12/a03325_1a0a2623fe84f04fc8706a4982ae8d82f6" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>hasSubsurfaceScattering</name></member>
+      <member refid="d8/d12/a03325_1a4b107e835413457602f0668090245380" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>initialise</name></member>
+      <member refid="d8/d12/a03325_1ad16d074ca8c3eaec6e1a369e9e32a27c" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>isInitialised</name></member>
+      <member refid="d8/d12/a03325_1a32eec358b02ad16314d81347ee773da2" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>isSerialisable</name></member>
+      <member refid="d8/d12/a03325_1a3c6db0b4fa43491e278e32637ded5f4d" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_initialised</name></member>
+      <member refid="d8/d12/a03325_1a76d5e17f0af92e2809574e1e93000a68" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_lightingModelId</name></member>
+      <member refid="d8/d12/a03325_1a0306bd7823ed37cc6a2e1f719889d010" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_passes</name></member>
+      <member refid="d8/d12/a03325_1ad2cb20faae7b7015eb6a96fc181cd431" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_passListeners</name></member>
+      <member refid="d8/d12/a03325_1a48a1a5460c029e85293fe2c00e796e35" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_renderPassInfo</name></member>
+      <member refid="d8/d12/a03325_1a3b61443bf9aca4c119335fd47bb21b9e" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>m_serialisable</name></member>
+      <member refid="d8/d12/a03325_1a2f94b20a3451a49fcdd98ba66016b697" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>Material</name></member>
+      <member refid="d8/d12/a03325_1a8aaba373cf1a62ef931fa12dc240120d" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>onChanged</name></member>
+      <member refid="d8/d12/a03325_1aed2cd18d4356cb11f8fb95d3382ad23d" prot="private" virt="non-virtual"><scope>castor3d::Material</scope><name>onPassChanged</name></member>
+      <member refid="d8/d12/a03325_1a6647b4659372b21c5b095bce33692164" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>removePass</name></member>
+      <member refid="d8/d12/a03325_1a45cfb5d9b915c402fa1d96b536d0c14e" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>setRenderPassInfo</name></member>
+      <member refid="d8/d12/a03325_1ad0ba05a2db88de424526d985b32a1729" prot="public" virt="non-virtual"><scope>castor3d::Material</scope><name>setSerialisable</name></member>
+      <member refid="d8/d12/a03325_1a1512ba9c999c0d8694d44103a40a035e" prot="public" virt="virtual"><scope>castor3d::Material</scope><name>~Material</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

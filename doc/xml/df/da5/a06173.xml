@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/da5/a06173" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/da5/a06173_1a6653775e07e1356d62ef98178689c29f" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;PrimitiveType&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="483" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="483" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/da5/a06173_1a24df17b41780aa9315de39592cd0ac6f" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result[ashes::getName( VK_PRIMITIVE_TOPOLOGY_POINT_LIST )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
+			result[ashes::getName( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_LINE_STRIP );
+			result[ashes::getName( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP )] = uint32_t( VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP );
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="484" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="484" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;</label>
+        <link refid="df/da5/a06173"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="481" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="482" bodyend="492"/>
+    <listofallmembers>
+      <member refid="df/da5/a06173_1a6653775e07e1356d62ef98178689c29f" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;</scope><name>Name</name></member>
+      <member refid="df/da5/a06173_1a24df17b41780aa9315de39592cd0ac6f" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::LimitedType&lt; VkPrimitiveTopology &gt; &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

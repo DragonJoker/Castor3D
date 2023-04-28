@@ -1,0 +1,1122 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/d0a/a03297" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::StylesHolder</compoundname>
+    <derivedcompoundref refid="d1/da3/a03221" prot="public" virt="non-virtual">castor3d::ControlsManager</derivedcompoundref>
+    <derivedcompoundref refid="d0/d84/a03281" prot="public" virt="non-virtual">castor3d::PanelStyle</derivedcompoundref>
+    <derivedcompoundref refid="d8/d1e/a03309" prot="public" virt="non-virtual">castor3d::Theme</derivedcompoundref>
+    <includes local="no">StylesHolder.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d0a/a03297_1a0aae308762a9618da49e21957cf5a945" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::StylesHolder::m_engine</definition>
+        <argsstring></argsstring>
+        <name>m_engine</name>
+        <qualifiedname>castor3d::StylesHolder::m_engine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="226" column="9" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="226" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1afb427682407b575b152c80526178d87c" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::StylesHolder::m_holderName</definition>
+        <argsstring></argsstring>
+        <name>m_holderName</name>
+        <qualifiedname>castor3d::StylesHolder::m_holderName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="227" column="16" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="227" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a42ed361ad44732826775445cf0cd4425" prot="private" static="no" mutable="no">
+        <type>castor::FontResPtr</type>
+        <definition>castor::FontResPtr castor3d::StylesHolder::m_defaultFont</definition>
+        <argsstring></argsstring>
+        <name>m_defaultFont</name>
+        <qualifiedname>castor3d::StylesHolder::m_defaultFont</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="228" column="20" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="228" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a04eb45a4050409f42e0612937be892ef" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, ButtonStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, ButtonStyleUPtr &gt; castor3d::StylesHolder::m_buttonStyles</definition>
+        <argsstring></argsstring>
+        <name>m_buttonStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_buttonStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="229" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="229" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1ab352046b708848371d1aa9c93df0d888" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, ComboBoxStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, ComboBoxStyleUPtr &gt; castor3d::StylesHolder::m_comboBoxStyles</definition>
+        <argsstring></argsstring>
+        <name>m_comboBoxStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_comboBoxStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="230" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="230" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a217c694a4955e718b95b5e21637cc7d9" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, EditStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, EditStyleUPtr &gt; castor3d::StylesHolder::m_editStyles</definition>
+        <argsstring></argsstring>
+        <name>m_editStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_editStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="231" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="231" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a72275574b2aa8156b9df9c79cb5ad6d3" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, ExpandablePanelStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, ExpandablePanelStyleUPtr &gt; castor3d::StylesHolder::m_expandablePanelStyles</definition>
+        <argsstring></argsstring>
+        <name>m_expandablePanelStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_expandablePanelStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="232" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="232" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1ada96fd33473b09f1e2169619d224395a" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, FrameStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, FrameStyleUPtr &gt; castor3d::StylesHolder::m_frameStyles</definition>
+        <argsstring></argsstring>
+        <name>m_frameStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_frameStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="233" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="233" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a99ed339b5a29039d30b0a3995f765466" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, ListBoxStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, ListBoxStyleUPtr &gt; castor3d::StylesHolder::m_listBoxStyles</definition>
+        <argsstring></argsstring>
+        <name>m_listBoxStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_listBoxStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="234" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="234" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a5145a2751ba6b80d6b7d4759b3b54ab5" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, PanelStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, PanelStyleUPtr &gt; castor3d::StylesHolder::m_panelStyles</definition>
+        <argsstring></argsstring>
+        <name>m_panelStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_panelStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="235" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="235" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1ace0569cd41f0f33e3a75124355d148d5" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, ProgressStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, ProgressStyleUPtr &gt; castor3d::StylesHolder::m_progressStyles</definition>
+        <argsstring></argsstring>
+        <name>m_progressStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_progressStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="236" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="236" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a2cf23b688520a63a563af18eafdd1740" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, ScrollBarStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, ScrollBarStyleUPtr &gt; castor3d::StylesHolder::m_scrollBarStyles</definition>
+        <argsstring></argsstring>
+        <name>m_scrollBarStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_scrollBarStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="237" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="237" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a60ca7d5497dc3b8e1e162ac91e84f542" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, SliderStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, SliderStyleUPtr &gt; castor3d::StylesHolder::m_sliderStyles</definition>
+        <argsstring></argsstring>
+        <name>m_sliderStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_sliderStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="238" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="238" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d0a/a03297_1a5f7cbb1badf01747f69179c21328f871" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, StaticStyleUPtr &gt;</type>
+        <definition>std::map&lt; castor::String, StaticStyleUPtr &gt; castor3d::StylesHolder::m_staticStyles</definition>
+        <argsstring></argsstring>
+        <name>m_staticStyles</name>
+        <qualifiedname>castor3d::StylesHolder::m_staticStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="239" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="239" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d0a/a03297_1a3f7d9ff25cae709fbdc0d75551bd68d5" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::StylesHolder::~StylesHolder</definition>
+        <argsstring>() noexcept=default</argsstring>
+        <name>~StylesHolder</name>
+        <qualifiedname>castor3d::StylesHolder::~StylesHolder</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="17" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a170e30cf0d2391f48062783ad76ed3de" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::StylesHolder::StylesHolder</definition>
+        <argsstring>(castor::String name, Engine &amp;engine)</argsstring>
+        <name>StylesHolder</name>
+        <qualifiedname>castor3d::StylesHolder::StylesHolder</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="19" column="10" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="19" bodyend="27"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1afc5588e7629d715ad7c17f02ed8653af" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::FontResPtr</type>
+        <definition>castor::FontResPtr castor3d::StylesHolder::getDefaultFont</definition>
+        <argsstring>() const</argsstring>
+        <name>getDefaultFont</name>
+        <qualifiedname>castor3d::StylesHolder::getDefaultFont</qualifiedname>
+        <briefdescription>
+<para>Retrieves the default font used by controls. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The font </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="35" column="20" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="35" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1ae257278e9515f5a84e4adb2c34a08723" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::StylesHolder::setDefaultFont</definition>
+        <argsstring>(castor::FontResPtr font)</argsstring>
+        <name>setDefaultFont</name>
+        <qualifiedname>castor3d::StylesHolder::setDefaultFont</qualifiedname>
+        <param>
+          <type>castor::FontResPtr</type>
+          <declname>font</declname>
+        </param>
+        <briefdescription>
+<para>sets the default font used by controls </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">font</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The font </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="45" column="6" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="45" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a2f5bc7bf725291cf767d14428c3dba86" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ButtonStyleRPtr</type>
+        <definition>C3D_API ButtonStyleRPtr castor3d::StylesHolder::createButtonStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createButtonStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createButtonStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="50" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a6e536c3f522da5d568eacd6d49f58627" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ComboBoxStyleRPtr</type>
+        <definition>C3D_API ComboBoxStyleRPtr castor3d::StylesHolder::createComboBoxStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createComboBoxStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createComboBoxStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="52" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a6a52bc77a20359dc1cf9d2f4a5199cea" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> EditStyleRPtr</type>
+        <definition>C3D_API EditStyleRPtr castor3d::StylesHolder::createEditStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createEditStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createEditStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="54" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a9d5873d94c21339d853e30442835e036" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ExpandablePanelStyleRPtr</type>
+        <definition>C3D_API ExpandablePanelStyleRPtr castor3d::StylesHolder::createExpandablePanelStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createExpandablePanelStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createExpandablePanelStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="56" column="34"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1ac67e69129a666233d19ad989ab55e0bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> FrameStyleRPtr</type>
+        <definition>C3D_API FrameStyleRPtr castor3d::StylesHolder::createFrameStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createFrameStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createFrameStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="58" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a663bcf813ca146011ff5ff75904c7dce" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ListBoxStyleRPtr</type>
+        <definition>C3D_API ListBoxStyleRPtr castor3d::StylesHolder::createListBoxStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createListBoxStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createListBoxStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="60" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a87415019df0bb03e77317a92468b9070" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PanelStyleRPtr</type>
+        <definition>C3D_API PanelStyleRPtr castor3d::StylesHolder::createPanelStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createPanelStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createPanelStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="62" column="24"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a5c276714649585aa130bc62558c6de19" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ProgressStyleRPtr</type>
+        <definition>C3D_API ProgressStyleRPtr castor3d::StylesHolder::createProgressStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createProgressStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createProgressStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="64" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a8df6f9668b7f0070940b3bbc64fd89e7" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ScrollBarStyleRPtr</type>
+        <definition>C3D_API ScrollBarStyleRPtr castor3d::StylesHolder::createScrollBarStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createScrollBarStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createScrollBarStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="66" column="28"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a825054201cef1361d7fa33ff3afa68d9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SliderStyleRPtr</type>
+        <definition>C3D_API SliderStyleRPtr castor3d::StylesHolder::createSliderStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createSliderStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createSliderStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="68" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1ad182412093bc39782668b4d25ab3915f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> StaticStyleRPtr</type>
+        <definition>C3D_API StaticStyleRPtr castor3d::StylesHolder::createStaticStyle</definition>
+        <argsstring>(castor::String name, Scene *scene)</argsstring>
+        <name>createStaticStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createStaticStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="70" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a791fb7f01b135a8ef6d2802ecbb78ee6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ButtonStyleRPtr</type>
+        <definition>virtual C3D_API ButtonStyleRPtr castor3d::StylesHolder::getButtonStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getButtonStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getButtonStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1a89ad259ccbe01f2d7b57ed837eae8b0a">getButtonStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="73" column="33"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a39fa30924d341be7a6f214c6db2a9af0" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ComboBoxStyleRPtr</type>
+        <definition>virtual C3D_API ComboBoxStyleRPtr castor3d::StylesHolder::getComboBoxStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getComboBoxStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getComboBoxStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1a86d19509cc4bb99130d528e8af30dc6d">getComboBoxStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="74" column="35"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1aa7253d044219ad2290dac778b781be49" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> EditStyleRPtr</type>
+        <definition>virtual C3D_API EditStyleRPtr castor3d::StylesHolder::getEditStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getEditStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getEditStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1a055cc7ae9e29999ca3c0e39d3a1f1c4a">getEditStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="75" column="31"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a5af7b0bcf0763270e79030328ce66678" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ExpandablePanelStyleRPtr</type>
+        <definition>virtual C3D_API ExpandablePanelStyleRPtr castor3d::StylesHolder::getExpandablePanelStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getExpandablePanelStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getExpandablePanelStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1af967b7d6e529f0a0717b0c70d091dc03">getExpandablePanelStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="76" column="42"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1aa7976b5651a171b1cdd3438ecac89012" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> FrameStyleRPtr</type>
+        <definition>virtual C3D_API FrameStyleRPtr castor3d::StylesHolder::getFrameStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getFrameStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getFrameStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1a20a99ad7d99d415aa403f0fc13865876">getFrameStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="77" column="32"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1ac737ec7bfe648aa616c99ebeed786392" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ListBoxStyleRPtr</type>
+        <definition>virtual C3D_API ListBoxStyleRPtr castor3d::StylesHolder::getListBoxStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getListBoxStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getListBoxStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1a1b49058b1a80fd62bdbb9309d2daf2dd">getListBoxStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="78" column="34"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a893b542eea1ceb10ddf3a7be2dfc608c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> PanelStyleRPtr</type>
+        <definition>virtual C3D_API PanelStyleRPtr castor3d::StylesHolder::getPanelStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getPanelStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getPanelStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1a47563249de59656794ef191acee57c0e">getPanelStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="79" column="32"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1ad5fbbe317ab48dfe01394406f32f9a34" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ProgressStyleRPtr</type>
+        <definition>virtual C3D_API ProgressStyleRPtr castor3d::StylesHolder::getProgressStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getProgressStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getProgressStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1ad0415564a85815b691477b7a5b7a097b">getProgressStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="80" column="35"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a05dfd2911f8413d4f704d55bffa90ea8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ScrollBarStyleRPtr</type>
+        <definition>virtual C3D_API ScrollBarStyleRPtr castor3d::StylesHolder::getScrollBarStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getScrollBarStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getScrollBarStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1af5a1da395345523566c03c53ec51ae98">getScrollBarStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="81" column="36"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a6f47141f5a22342f279a8421bda1f956" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> SliderStyleRPtr</type>
+        <definition>virtual C3D_API SliderStyleRPtr castor3d::StylesHolder::getSliderStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getSliderStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getSliderStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1a72fd72e64f7de6a5e3b8facacd091060">getSliderStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="82" column="33"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a0de6e2cbae0a027c0417b520ae3a999d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> StaticStyleRPtr</type>
+        <definition>virtual C3D_API StaticStyleRPtr castor3d::StylesHolder::getStaticStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getStaticStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getStaticStyle</qualifiedname>
+        <reimplementedby refid="d1/da3/a03221_1a732daaf51bf3adb40ac400b16c5295a1">getStaticStyle</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="83" column="33"/>
+        <referencedby refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" compoundref="d4/dd3/a00428" startline="86" endline="137">getStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StyleT</type>
+          </param>
+        </templateparamlist>
+        <type>StyleT *</type>
+        <definition>StyleT * castor3d::StylesHolder::getStyle</definition>
+        <argsstring>(castor::String const &amp;name) const</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="86" column="9" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="86" bodyend="137"/>
+        <references refid="dd/d57/a04233_1aa59b94a4fd876453e5d3d04da799b209" compoundref="d0/db6/a00692" startline="29">castor3d::log::error</references>
+        <references refid="da/d0a/a03297_1a791fb7f01b135a8ef6d2802ecbb78ee6">getButtonStyle</references>
+        <references refid="da/d0a/a03297_1a39fa30924d341be7a6f214c6db2a9af0">getComboBoxStyle</references>
+        <references refid="da/d0a/a03297_1aa7253d044219ad2290dac778b781be49">getEditStyle</references>
+        <references refid="da/d0a/a03297_1a5af7b0bcf0763270e79030328ce66678">getExpandablePanelStyle</references>
+        <references refid="da/d0a/a03297_1aa7976b5651a171b1cdd3438ecac89012">getFrameStyle</references>
+        <references refid="da/d0a/a03297_1ac737ec7bfe648aa616c99ebeed786392">getListBoxStyle</references>
+        <references refid="da/d0a/a03297_1a893b542eea1ceb10ddf3a7be2dfc608c">getPanelStyle</references>
+        <references refid="da/d0a/a03297_1ad5fbbe317ab48dfe01394406f32f9a34">getProgressStyle</references>
+        <references refid="da/d0a/a03297_1a05dfd2911f8413d4f704d55bffa90ea8">getScrollBarStyle</references>
+        <references refid="da/d0a/a03297_1a6f47141f5a22342f279a8421bda1f956">getSliderStyle</references>
+        <references refid="da/d0a/a03297_1a0de6e2cbae0a027c0417b520ae3a999d">getStaticStyle</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1af845fd211c570003ff8a097d11d19773" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getButtonStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getButtonStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getButtonStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="139" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="139" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a0363dd0ae75b6c42d3b73b026d1c46b7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getComboBoxStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getComboBoxStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getComboBoxStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="144" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="144" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a98b3cb3fe298f8ef9c6361075ead2520" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getEditStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getEditStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getEditStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="149" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="149" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a22db77c4bf62f610753830b1a649893a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getExpandablePanelStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getExpandablePanelStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getExpandablePanelStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="154" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="154" bodyend="157"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a7bbd7a04e646f78d3a5999bdf2621973" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getFrameStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getFrameStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getFrameStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="159" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="159" bodyend="162"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1ac380f39e28ffe3f8ffdab39a3b969ef7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getListBoxStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getListBoxStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getListBoxStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="164" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="164" bodyend="167"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a179248d75f720b72cb9dec20d0cc164f" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getPanelStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPanelStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getPanelStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="169" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="169" bodyend="172"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a37b676a53dfc05f15848021b0725cf1d" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getProgressStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getProgressStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getProgressStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="174" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="174" bodyend="177"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1adece0de101ddd9eb70b29de9ad07f862" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getScrollBarStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getScrollBarStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getScrollBarStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="179" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="179" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1a57205953caeb9bb98acd7da5c58785ba" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getSliderStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSliderStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getSliderStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="184" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="184" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1af2aa59807ebc5fb2dfe54c2e424d59db" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getStaticStyles</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getStaticStyles</name>
+        <qualifiedname>castor3d::StylesHolder::getStaticStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="189" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="189" bodyend="192"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="da/d0a/a03297_1a0601ec35dc481eff061081c6dc7ef639" prot="protected" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::StylesHolder::getHolderName</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getHolderName</name>
+        <qualifiedname>castor3d::StylesHolder::getHolderName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="195" column="7" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="195" bodyend="198"/>
+        <referencedby refid="d8/d1e/a03309_1a3ebb8de9b4f2616405b29d7cb2332023" compoundref="d4/da8/a00437" startline="43" endline="46">castor3d::Theme::getName</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1ad18f29747a8e2d17d9e40a9671fcc37f" prot="protected" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::StylesHolder::cleanupStyles</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>cleanupStyles</name>
+        <qualifiedname>castor3d::StylesHolder::cleanupStyles</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="200" column="6" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="200" bodyend="213"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d0a/a03297_1a5e1384c9e691b7a59bac9b7156a35c3c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StyleT</type>
+          </param>
+        </templateparamlist>
+        <type>StyleT *</type>
+        <definition>StyleT * castor3d::StylesHolder::createControlStyle</definition>
+        <argsstring>(castor::String name, Scene *scene, std::map&lt; castor::String, castor::UniquePtr&lt; StyleT &gt; &gt; &amp;controls)</argsstring>
+        <name>createControlStyle</name>
+        <qualifiedname>castor3d::StylesHolder::createControlStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>std::map&lt; castor::String, castor::UniquePtr&lt; StyleT &gt; &gt; &amp;</type>
+          <declname>controls</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="217" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d0a/a03297_1ae2bbea8619669d143b380731f7303881" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StyleT</type>
+          </param>
+        </templateparamlist>
+        <type>StyleT *</type>
+        <definition>StyleT * castor3d::StylesHolder::getControlStyle</definition>
+        <argsstring>(castor::String name, std::map&lt; castor::String, castor::UniquePtr&lt; StyleT &gt; &gt; const &amp;controls) const</argsstring>
+        <name>getControlStyle</name>
+        <qualifiedname>castor3d::StylesHolder::getControlStyle</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>std::map&lt; castor::String, castor::UniquePtr&lt; StyleT &gt; &gt; const &amp;</type>
+          <declname>controls</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StylesHolder.hpp" line="222" column="9"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlsManager</label>
+        <link refid="d1/da3/a03221"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PanelStyle</label>
+        <link refid="d0/d84/a03281"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::StylesHolder</label>
+        <link refid="da/d0a/a03297"/>
+      </node>
+      <node id="4">
+        <label>castor3d::Theme</label>
+        <link refid="d8/d1e/a03309"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <location file="Gui/Theme/StylesHolder.hpp" line="14" column="1" bodyfile="Gui/Theme/StylesHolder.hpp" bodystart="15" bodyend="240"/>
+    <listofallmembers>
+      <member refid="da/d0a/a03297_1ad18f29747a8e2d17d9e40a9671fcc37f" prot="protected" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>cleanupStyles</name></member>
+      <member refid="da/d0a/a03297_1a2f5bc7bf725291cf767d14428c3dba86" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createButtonStyle</name></member>
+      <member refid="da/d0a/a03297_1a6e536c3f522da5d568eacd6d49f58627" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createComboBoxStyle</name></member>
+      <member refid="da/d0a/a03297_1a5e1384c9e691b7a59bac9b7156a35c3c" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createControlStyle</name></member>
+      <member refid="da/d0a/a03297_1a6a52bc77a20359dc1cf9d2f4a5199cea" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createEditStyle</name></member>
+      <member refid="da/d0a/a03297_1a9d5873d94c21339d853e30442835e036" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createExpandablePanelStyle</name></member>
+      <member refid="da/d0a/a03297_1ac67e69129a666233d19ad989ab55e0bd" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createFrameStyle</name></member>
+      <member refid="da/d0a/a03297_1a663bcf813ca146011ff5ff75904c7dce" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createListBoxStyle</name></member>
+      <member refid="da/d0a/a03297_1a87415019df0bb03e77317a92468b9070" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createPanelStyle</name></member>
+      <member refid="da/d0a/a03297_1a5c276714649585aa130bc62558c6de19" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createProgressStyle</name></member>
+      <member refid="da/d0a/a03297_1a8df6f9668b7f0070940b3bbc64fd89e7" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createScrollBarStyle</name></member>
+      <member refid="da/d0a/a03297_1a825054201cef1361d7fa33ff3afa68d9" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createSliderStyle</name></member>
+      <member refid="da/d0a/a03297_1ad182412093bc39782668b4d25ab3915f" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>createStaticStyle</name></member>
+      <member refid="da/d0a/a03297_1a791fb7f01b135a8ef6d2802ecbb78ee6" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getButtonStyle</name></member>
+      <member refid="da/d0a/a03297_1af845fd211c570003ff8a097d11d19773" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getButtonStyles</name></member>
+      <member refid="da/d0a/a03297_1a39fa30924d341be7a6f214c6db2a9af0" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getComboBoxStyle</name></member>
+      <member refid="da/d0a/a03297_1a0363dd0ae75b6c42d3b73b026d1c46b7" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getComboBoxStyles</name></member>
+      <member refid="da/d0a/a03297_1ae2bbea8619669d143b380731f7303881" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getControlStyle</name></member>
+      <member refid="da/d0a/a03297_1afc5588e7629d715ad7c17f02ed8653af" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getDefaultFont</name></member>
+      <member refid="da/d0a/a03297_1aa7253d044219ad2290dac778b781be49" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getEditStyle</name></member>
+      <member refid="da/d0a/a03297_1a98b3cb3fe298f8ef9c6361075ead2520" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getEditStyles</name></member>
+      <member refid="da/d0a/a03297_1a5af7b0bcf0763270e79030328ce66678" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getExpandablePanelStyle</name></member>
+      <member refid="da/d0a/a03297_1a22db77c4bf62f610753830b1a649893a" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getExpandablePanelStyles</name></member>
+      <member refid="da/d0a/a03297_1aa7976b5651a171b1cdd3438ecac89012" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getFrameStyle</name></member>
+      <member refid="da/d0a/a03297_1a7bbd7a04e646f78d3a5999bdf2621973" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getFrameStyles</name></member>
+      <member refid="da/d0a/a03297_1a0601ec35dc481eff061081c6dc7ef639" prot="protected" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getHolderName</name></member>
+      <member refid="da/d0a/a03297_1ac737ec7bfe648aa616c99ebeed786392" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getListBoxStyle</name></member>
+      <member refid="da/d0a/a03297_1ac380f39e28ffe3f8ffdab39a3b969ef7" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getListBoxStyles</name></member>
+      <member refid="da/d0a/a03297_1a893b542eea1ceb10ddf3a7be2dfc608c" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getPanelStyle</name></member>
+      <member refid="da/d0a/a03297_1a179248d75f720b72cb9dec20d0cc164f" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getPanelStyles</name></member>
+      <member refid="da/d0a/a03297_1ad5fbbe317ab48dfe01394406f32f9a34" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getProgressStyle</name></member>
+      <member refid="da/d0a/a03297_1a37b676a53dfc05f15848021b0725cf1d" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getProgressStyles</name></member>
+      <member refid="da/d0a/a03297_1a05dfd2911f8413d4f704d55bffa90ea8" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getScrollBarStyle</name></member>
+      <member refid="da/d0a/a03297_1adece0de101ddd9eb70b29de9ad07f862" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getScrollBarStyles</name></member>
+      <member refid="da/d0a/a03297_1a6f47141f5a22342f279a8421bda1f956" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getSliderStyle</name></member>
+      <member refid="da/d0a/a03297_1a57205953caeb9bb98acd7da5c58785ba" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getSliderStyles</name></member>
+      <member refid="da/d0a/a03297_1a0de6e2cbae0a027c0417b520ae3a999d" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>getStaticStyle</name></member>
+      <member refid="da/d0a/a03297_1af2aa59807ebc5fb2dfe54c2e424d59db" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getStaticStyles</name></member>
+      <member refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>getStyle</name></member>
+      <member refid="da/d0a/a03297_1a04eb45a4050409f42e0612937be892ef" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_buttonStyles</name></member>
+      <member refid="da/d0a/a03297_1ab352046b708848371d1aa9c93df0d888" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_comboBoxStyles</name></member>
+      <member refid="da/d0a/a03297_1a42ed361ad44732826775445cf0cd4425" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_defaultFont</name></member>
+      <member refid="da/d0a/a03297_1a217c694a4955e718b95b5e21637cc7d9" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_editStyles</name></member>
+      <member refid="da/d0a/a03297_1a0aae308762a9618da49e21957cf5a945" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_engine</name></member>
+      <member refid="da/d0a/a03297_1a72275574b2aa8156b9df9c79cb5ad6d3" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_expandablePanelStyles</name></member>
+      <member refid="da/d0a/a03297_1ada96fd33473b09f1e2169619d224395a" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_frameStyles</name></member>
+      <member refid="da/d0a/a03297_1afb427682407b575b152c80526178d87c" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_holderName</name></member>
+      <member refid="da/d0a/a03297_1a99ed339b5a29039d30b0a3995f765466" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_listBoxStyles</name></member>
+      <member refid="da/d0a/a03297_1a5145a2751ba6b80d6b7d4759b3b54ab5" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_panelStyles</name></member>
+      <member refid="da/d0a/a03297_1ace0569cd41f0f33e3a75124355d148d5" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_progressStyles</name></member>
+      <member refid="da/d0a/a03297_1a2cf23b688520a63a563af18eafdd1740" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_scrollBarStyles</name></member>
+      <member refid="da/d0a/a03297_1a60ca7d5497dc3b8e1e162ac91e84f542" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_sliderStyles</name></member>
+      <member refid="da/d0a/a03297_1a5f7cbb1badf01747f69179c21328f871" prot="private" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>m_staticStyles</name></member>
+      <member refid="da/d0a/a03297_1ae257278e9515f5a84e4adb2c34a08723" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>setDefaultFont</name></member>
+      <member refid="da/d0a/a03297_1a170e30cf0d2391f48062783ad76ed3de" prot="public" virt="non-virtual"><scope>castor3d::StylesHolder</scope><name>StylesHolder</name></member>
+      <member refid="da/d0a/a03297_1a3f7d9ff25cae709fbdc0d75551bd68d5" prot="public" virt="virtual"><scope>castor3d::StylesHolder</scope><name>~StylesHolder</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

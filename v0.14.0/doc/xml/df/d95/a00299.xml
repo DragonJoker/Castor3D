@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="df/d95/a00299" kind="file" language="C++">
+    <compoundname>MouseEvent.hpp</compoundname>
+    <includes refid="d0/d61/a00302" local="yes">Castor3D/Event/UserInput/UserInputEvent.hpp</includes>
+    <includes local="no">CastorUtils/Graphics/Position.hpp</includes>
+    <includedby refid="de/d25/a00290" local="yes">Event/UserInput/EventHandler.hpp</includedby>
+    <incdepgraph>
+      <node id="6">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="7">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="19">
+        <label>CastorUtils/Graphics/Position.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="11">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="12">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="5">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="14">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="4">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="dd/dd7/a00260"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Event/UserInput/MouseEvent.hpp</label>
+        <link refid="df/d95/a00299"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>Castor3D/Event/UserInput/UserInputEvent.hpp</label>
+        <link refid="d0/d61/a00302"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UserInputEventModule.hpp</label>
+        <link refid="d3/d07/a00305"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="19" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>array</label>
+      </node>
+      <node id="13">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="15">
+        <label>cstdint</label>
+      </node>
+      <node id="16">
+        <label>memory</label>
+      </node>
+      <node id="17">
+        <label>string</label>
+      </node>
+      <node id="18">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>Event/UserInput/EventHandler.hpp</label>
+        <link refid="de/d25/a00290"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Event/UserInput/MouseEvent.hpp</label>
+        <link refid="df/d95/a00299"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>Event/UserInput/UserInputListener.hpp</label>
+        <link refid="d5/d0f/a00308"/>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Render/RenderWindow.hpp</label>
+        <link refid="d9/d10/a01103"/>
+        <childnode refid="5" relation="include">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>Scene/SceneFileParser.hpp</label>
+        <link refid="de/d9d/a01382"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Scene/SceneFileParser_Parsers.hpp</label>
+        <link refid="df/d68/a01385"/>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="d3/d8b/a02996" prot="public">castor3d::MouseEvent</innerclass>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Event/UserInput/MouseEvent.hpp"/>
+  </compounddef>
+</doxygen>

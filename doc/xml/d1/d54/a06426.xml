@@ -1,0 +1,126 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d54/a06426" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::FontGlyph</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_FontGlyph&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec2Field&lt; &quot;size&quot; &gt;, sdw::Vec2Field&lt; &quot;bearing&quot; &gt;, sdw::Vec2Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;advance&quot; &gt;, sdw::FloatField&lt; &quot;pad&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslFont.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d54/a06426_1ae666b96d47eacf096f9bcf5075e7cf38" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::FontGlyph::FontGlyph</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>FontGlyph</name>
+        <qualifiedname>castor3d::shader::FontGlyph::FontGlyph</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="24" column="1" bodyfile="Shader/Shaders/GlslFont.hpp" bodystart="24" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d54/a06426_1ace50ffbcd82e1bbb6444e39011e10a63" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::FontGlyph::size</definition>
+        <argsstring>() const</argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::shader::FontGlyph::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="31" column="6" bodyfile="Shader/Shaders/GlslFont.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d54/a06426_1a4e7a16f3f4674ac1fa0de1e7d7a1fc4c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::FontGlyph::bearing</definition>
+        <argsstring>() const</argsstring>
+        <name>bearing</name>
+        <qualifiedname>castor3d::shader::FontGlyph::bearing</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="32" column="6" bodyfile="Shader/Shaders/GlslFont.hpp" bodystart="32" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d54/a06426_1a55ed05bdef552db2e039209e7457d2cc" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::FontGlyph::position</definition>
+        <argsstring>() const</argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::FontGlyph::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="33" column="6" bodyfile="Shader/Shaders/GlslFont.hpp" bodystart="33" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d54/a06426_1aa0b5583bbb3db97d3ee1fa429450442e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::FontGlyph::advance</definition>
+        <argsstring>() const</argsstring>
+        <name>advance</name>
+        <qualifiedname>castor3d::shader::FontGlyph::advance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="34" column="6" bodyfile="Shader/Shaders/GlslFont.hpp" bodystart="34" bodyend="34"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::FontGlyph</label>
+        <link refid="d1/d54/a06426"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_FontGlyph&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec2Field&lt; &quot;size&quot; &gt;, sdw::Vec2Field&lt; &quot;bearing&quot; &gt;, sdw::Vec2Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;advance&quot; &gt;, sdw::FloatField&lt; &quot;pad&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::FontGlyph</label>
+        <link refid="d1/d54/a06426"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_FontGlyph&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec2Field&lt; &quot;size&quot; &gt;, sdw::Vec2Field&lt; &quot;bearing&quot; &gt;, sdw::Vec2Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;advance&quot; &gt;, sdw::FloatField&lt; &quot;pad&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslFont.hpp" line="14" column="1" bodyfile="Shader/Shaders/GlslFont.hpp" bodystart="22" bodyend="35"/>
+    <listofallmembers>
+      <member refid="d1/d54/a06426_1aa0b5583bbb3db97d3ee1fa429450442e" prot="public" virt="non-virtual"><scope>castor3d::shader::FontGlyph</scope><name>advance</name></member>
+      <member refid="d1/d54/a06426_1a4e7a16f3f4674ac1fa0de1e7d7a1fc4c" prot="public" virt="non-virtual"><scope>castor3d::shader::FontGlyph</scope><name>bearing</name></member>
+      <member refid="d1/d54/a06426_1ae666b96d47eacf096f9bcf5075e7cf38" prot="public" virt="non-virtual"><scope>castor3d::shader::FontGlyph</scope><name>FontGlyph</name></member>
+      <member refid="d1/d54/a06426_1a55ed05bdef552db2e039209e7457d2cc" prot="public" virt="non-virtual"><scope>castor3d::shader::FontGlyph</scope><name>position</name></member>
+      <member refid="d1/d54/a06426_1ace50ffbcd82e1bbb6444e39011e10a63" prot="public" virt="non-virtual"><scope>castor3d::shader::FontGlyph</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

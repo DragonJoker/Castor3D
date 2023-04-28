@@ -1,0 +1,1071 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d6c/a04754" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::BorderPanelOverlay</compoundname>
+    <basecompoundref refid="dc/d6d/a04802" prot="public" virt="non-virtual">castor3d::OverlayCategory</basecompoundref>
+    <includes local="no">BorderPanelOverlay.hpp</includes>
+      <sectiondef kind="user-defined">
+      <description><para>Getters. </para>
+</description>
+      <memberdef kind="function" id="d2/d6c/a04754_1abcc66eedcbe912dfb45d80af388b0fc2" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BorderPanelOverlay::isChanged</definition>
+        <argsstring>() const noexcept override</argsstring>
+        <name>isChanged</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::isChanged</qualifiedname>
+        <reimplements refid="dc/d6d/a04802_1a97899a65ee4d1444f31517f690da22b3">isChanged</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="114" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="114" bodyend="117"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a1a34740d5a75c07966b4c7f4a3298ccd" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor3d::BorderPanelOverlay::getRelativeLeftBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRelativeLeftBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getRelativeLeftBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="119" column="8" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="119" bodyend="122"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a53ae0568aa4cb3dbdee962001845c0fd" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor3d::BorderPanelOverlay::getRelativeTopBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRelativeTopBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getRelativeTopBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="124" column="8" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="124" bodyend="127"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a8134e64d2e29114bd223ca0d7ed48331" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor3d::BorderPanelOverlay::getRelativeRightBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRelativeRightBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getRelativeRightBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="129" column="8" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="129" bodyend="132"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a762ae07046ffcb6aaa6b0ade468854c3" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>double</type>
+        <definition>double castor3d::BorderPanelOverlay::getRelativeBottomBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRelativeBottomBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getRelativeBottomBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="134" column="8" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="134" bodyend="137"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a51c6607bdf10f977e137cd6778258d1e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Point4d const &amp;</type>
+        <definition>castor::Point4d const  &amp; castor3d::BorderPanelOverlay::getRelativeBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRelativeBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getRelativeBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="139" column="24" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="139" bodyend="142"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a96c4680e26c2d9ac2491869483666c55" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::BorderPanelOverlay::hasPixelBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasPixelBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::hasPixelBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="144" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="144" bodyend="147"/>
+        <referencedby refid="d2/d6c/a04754_1a5771858d2323e5dc9f2399d78dc83838" compoundref="d0/d82/a00857" startline="173" endline="177">getPixelBorderSize</referencedby>
+        <referencedby refid="d2/d6c/a04754_1a98d099fa0d38dbe8574bafbe1960b516" compoundref="d0/d82/a00857" startline="167" endline="171">getPixelBottomBorderSize</referencedby>
+        <referencedby refid="d2/d6c/a04754_1a11e9c3f0754f671cf13a9f642c742697" compoundref="d0/d82/a00857" startline="149" endline="153">getPixelLeftBorderSize</referencedby>
+        <referencedby refid="d2/d6c/a04754_1a9070ace612d1ec3cadc9a0ebc7b1a795" compoundref="d0/d82/a00857" startline="161" endline="165">getPixelRightBorderSize</referencedby>
+        <referencedby refid="d2/d6c/a04754_1aa2283bddf63a0fdf3bf63c9b51920bef" compoundref="d0/d82/a00857" startline="155" endline="159">getPixelTopBorderSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a11e9c3f0754f671cf13a9f642c742697" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::BorderPanelOverlay::getPixelLeftBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixelLeftBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getPixelLeftBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="149" column="10" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="149" bodyend="153"/>
+        <references refid="d2/d6c/a04754_1a5771858d2323e5dc9f2399d78dc83838" compoundref="d0/d82/a00857" startline="173" endline="177">getPixelBorderSize</references>
+        <references refid="d2/d6c/a04754_1a96c4680e26c2d9ac2491869483666c55" compoundref="d0/d82/a00857" startline="144" endline="147">hasPixelBorderSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1aa2283bddf63a0fdf3bf63c9b51920bef" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::BorderPanelOverlay::getPixelTopBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixelTopBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getPixelTopBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="155" column="10" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="155" bodyend="159"/>
+        <references refid="d2/d6c/a04754_1a5771858d2323e5dc9f2399d78dc83838" compoundref="d0/d82/a00857" startline="173" endline="177">getPixelBorderSize</references>
+        <references refid="d2/d6c/a04754_1a96c4680e26c2d9ac2491869483666c55" compoundref="d0/d82/a00857" startline="144" endline="147">hasPixelBorderSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a9070ace612d1ec3cadc9a0ebc7b1a795" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::BorderPanelOverlay::getPixelRightBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixelRightBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getPixelRightBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="161" column="10" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="161" bodyend="165"/>
+        <references refid="d2/d6c/a04754_1a5771858d2323e5dc9f2399d78dc83838" compoundref="d0/d82/a00857" startline="173" endline="177">getPixelBorderSize</references>
+        <references refid="d2/d6c/a04754_1a96c4680e26c2d9ac2491869483666c55" compoundref="d0/d82/a00857" startline="144" endline="147">hasPixelBorderSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a98d099fa0d38dbe8574bafbe1960b516" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::BorderPanelOverlay::getPixelBottomBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixelBottomBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getPixelBottomBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="167" column="10" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="167" bodyend="171"/>
+        <references refid="d2/d6c/a04754_1a5771858d2323e5dc9f2399d78dc83838" compoundref="d0/d82/a00857" startline="173" endline="177">getPixelBorderSize</references>
+        <references refid="d2/d6c/a04754_1a96c4680e26c2d9ac2491869483666c55" compoundref="d0/d82/a00857" startline="144" endline="147">hasPixelBorderSize</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a5771858d2323e5dc9f2399d78dc83838" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Point4ui const &amp;</type>
+        <definition>castor::Point4ui const  &amp; castor3d::BorderPanelOverlay::getPixelBorderSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPixelBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getPixelBorderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="173" column="25" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="173" bodyend="177"/>
+        <references refid="d2/d6c/a04754_1a96c4680e26c2d9ac2491869483666c55" compoundref="d0/d82/a00857" startline="144" endline="147">hasPixelBorderSize</references>
+        <referencedby refid="d2/d6c/a04754_1a98d099fa0d38dbe8574bafbe1960b516" compoundref="d0/d82/a00857" startline="167" endline="171">getPixelBottomBorderSize</referencedby>
+        <referencedby refid="d2/d6c/a04754_1a11e9c3f0754f671cf13a9f642c742697" compoundref="d0/d82/a00857" startline="149" endline="153">getPixelLeftBorderSize</referencedby>
+        <referencedby refid="d2/d6c/a04754_1a9070ace612d1ec3cadc9a0ebc7b1a795" compoundref="d0/d82/a00857" startline="161" endline="165">getPixelRightBorderSize</referencedby>
+        <referencedby refid="d2/d6c/a04754_1aa2283bddf63a0fdf3bf63c9b51920bef" compoundref="d0/d82/a00857" startline="155" endline="159">getPixelTopBorderSize</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a68e6649ee705c35aa37197c425335b24" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::BorderPanelOverlay::getBorderMaterial</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getBorderMaterial</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getBorderMaterial</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="179" column="13" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="179" bodyend="182"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a43f81ec4d93285e735c249836940ade5" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/da6/a01698_1afef993d7e09be06482361f88ef4e3bf3" kindref="member">BorderPosition</ref></type>
+        <definition>BorderPosition castor3d::BorderPanelOverlay::getBorderPosition</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getBorderPosition</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getBorderPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="184" column="16" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="184" bodyend="187"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1ab739b8e89ed7263d425f915bd902a173" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Point4d const &amp;</type>
+        <definition>castor::Point4d const  &amp; castor3d::BorderPanelOverlay::getBorderOuterUV</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getBorderOuterUV</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getBorderOuterUV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="189" column="24" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="189" bodyend="192"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1ab25736fdd19ea4b8e1202561dbd8dcf8" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Point4d const &amp;</type>
+        <definition>castor::Point4d const  &amp; castor3d::BorderPanelOverlay::getBorderInnerUV</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getBorderInnerUV</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getBorderInnerUV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="194" column="24" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="194" bodyend="197"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Mutators. </para>
+</description>
+      <memberdef kind="function" id="d2/d6c/a04754_1aa7e55c6c9224185fd012472d21ce2b38" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setRelativeLeftBorderSize</definition>
+        <argsstring>(double size) noexcept</argsstring>
+        <name>setRelativeLeftBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setRelativeLeftBorderSize</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="208" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="208" bodyend="213"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a91db789f58abd968317de7ef89decced" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setRelativeTopBorderSize</definition>
+        <argsstring>(double size) noexcept</argsstring>
+        <name>setRelativeTopBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setRelativeTopBorderSize</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="215" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="215" bodyend="220"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a1b2cbb9f4b1a465d5cd3ad48531e48c0" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setRelativeRightBorderSize</definition>
+        <argsstring>(double size) noexcept</argsstring>
+        <name>setRelativeRightBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setRelativeRightBorderSize</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="222" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="222" bodyend="227"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1ab81702fd3161538dc9ce81ed7665ab92" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setRelativeBottomBorderSize</definition>
+        <argsstring>(double size) noexcept</argsstring>
+        <name>setRelativeBottomBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setRelativeBottomBorderSize</qualifiedname>
+        <param>
+          <type>double</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="229" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="229" bodyend="234"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a1987196cfec68c3042db4aa8b5428ecc" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setRelativeBorderSize</definition>
+        <argsstring>(castor::Point4d const &amp;size) noexcept</argsstring>
+        <name>setRelativeBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setRelativeBorderSize</qualifiedname>
+        <param>
+          <type>castor::Point4d const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="236" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="236" bodyend="244"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1abb413457810259fe44db6c057c28fcd4" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setPixelLeftBorderSize</definition>
+        <argsstring>(uint32_t size) noexcept</argsstring>
+        <name>setPixelLeftBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setPixelLeftBorderSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="246" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="246" bodyend="256"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a4a02b2cc5ca49a3ce0dce6708b3f94d4" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setPixelRightBorderSize</definition>
+        <argsstring>(uint32_t size) noexcept</argsstring>
+        <name>setPixelRightBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setPixelRightBorderSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="258" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="258" bodyend="268"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1ab8408beb81573a6fff1a0dc12fe5de16" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setPixelTopBorderSize</definition>
+        <argsstring>(uint32_t size) noexcept</argsstring>
+        <name>setPixelTopBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setPixelTopBorderSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="270" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="270" bodyend="280"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1ade01bd5231d8092172b4f39fdf9638e1" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setPixelBottomBorderSize</definition>
+        <argsstring>(uint32_t size) noexcept</argsstring>
+        <name>setPixelBottomBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setPixelBottomBorderSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="282" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="282" bodyend="292"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a90194c828306df779ceeff3ce9c932a5" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setPixelBorderSize</definition>
+        <argsstring>(castor::Point4ui const &amp;size) noexcept</argsstring>
+        <name>setPixelBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setPixelBorderSize</qualifiedname>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="294" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="294" bodyend="299"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a21e72a2ccac6c12f63c9fe900137c9c1" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setBorderPosition</definition>
+        <argsstring>(BorderPosition position) noexcept</argsstring>
+        <name>setBorderPosition</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setBorderPosition</qualifiedname>
+        <param>
+          <type><ref refid="d5/da6/a01698_1afef993d7e09be06482361f88ef4e3bf3" kindref="member">BorderPosition</ref></type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="301" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="301" bodyend="306"/>
+        <references refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" compoundref="d3/db2/a00869" startline="466">castor3d::OverlayCategory::m_sizeChanged</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a87a3622c2685c2f195f0f7a0873dbc82" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setBorderOuterUV</definition>
+        <argsstring>(castor::Point4d const &amp;value) noexcept</argsstring>
+        <name>setBorderOuterUV</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setBorderOuterUV</qualifiedname>
+        <param>
+          <type>castor::Point4d const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="308" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="308" bodyend="312"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a6368b108418923a042918ff9abb9fb3b" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::setBorderInnerUV</definition>
+        <argsstring>(castor::Point4d const &amp;value) noexcept</argsstring>
+        <name>setBorderInnerUV</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setBorderInnerUV</qualifiedname>
+        <param>
+          <type>castor::Point4d const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="314" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="314" bodyend="318"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d2/d6c/a04754_1ad97cb36ffa890fabf6a535d8796f6249" prot="public" static="no" strong="yes">
+        <type></type>
+        <name>ComputeBindingIdx</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::ComputeBindingIdx</qualifiedname>
+        <enumvalue id="d2/d6c/a04754_1ad97cb36ffa890fabf6a535d8796f6249a14bd73738591c6e560d81b0724e96322" prot="public">
+          <name>eCamera</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d6c/a04754_1ad97cb36ffa890fabf6a535d8796f6249ad3dc994a6000d87b420fb2062d39c079" prot="public">
+          <name>eOverlays</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d2/d6c/a04754_1ad97cb36ffa890fabf6a535d8796f6249ab1824726e740f774caa68bcd14ac7374" prot="public">
+          <name>eVertex</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="21" column="1" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="22" bodyend="26"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d6c/a04754_1a7addab116987248f7cfdd672f50d4cf7" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::BorderPanelOverlay::m_borderMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_borderMaterial</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::m_borderMaterial</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The border material. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="338" column="13" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="338" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d6c/a04754_1a7e2997dd42fc43d10a78f71202dc6754" prot="private" static="no" mutable="no">
+        <type>castor::Point4d</type>
+        <definition>castor::Point4d castor3d::BorderPanelOverlay::m_relBorderSize</definition>
+        <argsstring></argsstring>
+        <name>m_relBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::m_relBorderSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The border size, relative to parent dimensions. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="341" column="17" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="341" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d6c/a04754_1a03eb16d581bf23c2d0efdea6266fe914" prot="private" static="no" mutable="no">
+        <type>std::optional&lt; castor::Point4ui &gt;</type>
+        <definition>std::optional&lt; castor::Point4ui &gt; castor3d::BorderPanelOverlay::m_pxBorderSize</definition>
+        <argsstring></argsstring>
+        <name>m_pxBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::m_pxBorderSize</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The absolute border size, in pixels. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="344" column="15" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="344" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d6c/a04754_1a62f160edc9cd81ea6af8c953e1f4dc11" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1afef993d7e09be06482361f88ef4e3bf3" kindref="member">BorderPosition</ref></type>
+        <definition>BorderPosition castor3d::BorderPanelOverlay::m_borderPosition</definition>
+        <argsstring></argsstring>
+        <name>m_borderPosition</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::m_borderPosition</qualifiedname>
+        <initializer>{ <ref refid="d5/da6/a01698_1afef993d7e09be06482361f88ef4e3bf3a1d6f3cc9dc70728ba67b45b7cf3ce20d" kindref="member">BorderPosition::eInternal</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The border material name. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="347" column="16" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="347" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d6c/a04754_1a76074422ff11065cfd4ebf9b754fc0fc" prot="private" static="no" mutable="no">
+        <type>castor::Point4d</type>
+        <definition>castor::Point4d castor3d::BorderPanelOverlay::m_borderOuterUv</definition>
+        <argsstring></argsstring>
+        <name>m_borderOuterUv</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::m_borderOuterUv</qualifiedname>
+        <initializer>{ 0, 0, 1, 1 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The UV for the outer part of the border. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="350" column="17" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="350" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d6c/a04754_1a7feef51561e1a76c1c489972b21a4787" prot="private" static="no" mutable="no">
+        <type>castor::Point4d</type>
+        <definition>castor::Point4d castor3d::BorderPanelOverlay::m_borderInnerUv</definition>
+        <argsstring></argsstring>
+        <name>m_borderInnerUv</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::m_borderInnerUv</qualifiedname>
+        <initializer>{ 0.33, 0.33, 0.66, 0.66 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The UV for the inner part of the border. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="353" column="17" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="353" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d6c/a04754_1add26e15e56ccbbfd909da4a497c55d1c" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::BorderPanelOverlay::m_borderChanged</definition>
+        <argsstring></argsstring>
+        <name>m_borderChanged</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::m_borderChanged</qualifiedname>
+        <initializer>{ true }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Tells if the border has changed, in any way. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="356" column="6" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="356" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d6c/a04754_1a5d173e4815a43d2e8990761c82bbb895" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::BorderPanelOverlay::BorderPanelOverlay</definition>
+        <argsstring>()</argsstring>
+        <name>BorderPanelOverlay</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::BorderPanelOverlay</qualifiedname>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="35" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1abd3e568924c4059b615c5d7acb7c3d33" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BorderPanelOverlay::accept</definition>
+        <argsstring>(OverlayVisitor &amp;visitor) const override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::accept</qualifiedname>
+        <reimplements refid="dc/d6d/a04802_1a1cfb21cc1b6e4ac7a46dc7f3e424bbd3">accept</reimplements>
+        <param>
+          <type><ref refid="da/d67/a04838" kindref="compound">OverlayVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Draws the overlay.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="48" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a97d03c26ea6a8c022437dda304d68e30" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::BorderPanelOverlay::getCount</definition>
+        <argsstring>(bool borders) const</argsstring>
+        <name>getCount</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getCount</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>borders</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">borders</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> for borders, <computeroutput>false</computeroutput> for center. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The vertex count needed for this overlay. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="57" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a05e819a649b78df792c95c6f9ac3c0ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::BorderPanelOverlay::setBorderMaterial</definition>
+        <argsstring>(MaterialObs material)</argsstring>
+        <name>setBorderMaterial</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::setBorderMaterial</qualifiedname>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+<para>Sets the border material. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="66" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1ac25f9d33af1cc115285d0c7df69e8a8a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point4ui</type>
+        <definition>C3D_API castor::Point4ui castor3d::BorderPanelOverlay::getAbsoluteBorderSize</definition>
+        <argsstring>(castor::Size const &amp;size) const</argsstring>
+        <name>getAbsoluteBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getAbsoluteBorderSize</qualifiedname>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <briefdescription>
+<para>Retrieves the absolute overlay borders size, in pixels. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The screen size </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The size </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="77" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a502fcf6e6ed12c4b5453b678f8d50ec8" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point4d</type>
+        <definition>C3D_API castor::Point4d castor3d::BorderPanelOverlay::getAbsoluteBorderSize</definition>
+        <argsstring>() const</argsstring>
+        <name>getAbsoluteBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::getAbsoluteBorderSize</qualifiedname>
+        <briefdescription>
+<para>Retrieves the absolute overlay borders size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The size </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="86" column="25"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a9e792b740f2894417a85436d7a0d8647" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Point4ui</type>
+        <definition>C3D_API castor::Point4ui castor3d::BorderPanelOverlay::computePixelBorderSize</definition>
+        <argsstring>() const</argsstring>
+        <name>computePixelBorderSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::computePixelBorderSize</qualifiedname>
+        <briefdescription>
+<para>Retrieves the absolute overlay borders size. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The size </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="95" column="26"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d2/d6c/a04754_1a7dac897ee412d4e07a3e772a6557d228" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> OverlayCategoryUPtr</type>
+        <definition>static C3D_API OverlayCategoryUPtr castor3d::BorderPanelOverlay::create</definition>
+        <argsstring>()</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::create</qualifiedname>
+        <briefdescription>
+<para>Creation function, used by the factory. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>An overlay </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="44" column="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a84a57685f348b9eec70af9ce3ce2fe44" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::PipelineShaderStageCreateInfo</type>
+        <definition>static C3D_API ashes::PipelineShaderStageCreateInfo castor3d::BorderPanelOverlay::createProgram</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>createProgram</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::createProgram</qualifiedname>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Creates the shader program used to compute the overlay&apos;s vertices. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The program. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="104" column="53"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d6c/a04754_1a366b968680b121876bb6de531025ad39" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::doUpdateSize</definition>
+        <argsstring>(OverlayRenderer const &amp;renderer) override</argsstring>
+        <name>doUpdateSize</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::doUpdateSize</qualifiedname>
+        <reimplements refid="dc/d6d/a04802_1acba79349220c84700bad09bc829ed123">doUpdateSize</reimplements>
+        <param>
+          <type><ref refid="d3/d14/a05174" kindref="compound">OverlayRenderer</ref> const &amp;</type>
+          <declname>renderer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the overlay size, taking care of wanted pixel size.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="325" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a8a335836f8645bc73284617a50538e4c" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::doUpdateClientArea</definition>
+        <argsstring>(castor::Point4d &amp;clientArea) const override</argsstring>
+        <name>doUpdateClientArea</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::doUpdateClientArea</qualifiedname>
+        <reimplements refid="dc/d6d/a04802_1a220bf8e6d632fb8c0b2920fe26cf5252">doUpdateClientArea</reimplements>
+        <param>
+          <type>castor::Point4d &amp;</type>
+          <declname>clientArea</declname>
+        </param>
+        <briefdescription>
+<para>Updates the overlay size, taking care of wanted pixel size.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="329" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d6c/a04754_1a88530bce29bc25b9715ebcf18d116d85" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::BorderPanelOverlay::doReset</definition>
+        <argsstring>() override</argsstring>
+        <name>doReset</name>
+        <qualifiedname>castor3d::BorderPanelOverlay::doReset</qualifiedname>
+        <reimplements refid="dc/d6d/a04802_1adcb9431ff4ed9f29cbe53183cfa77744">doReset</reimplements>
+        <briefdescription>
+<para>Marks this cetegory as clean.   </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/BorderPanelOverlay.hpp" line="333" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::BorderPanelOverlay</label>
+        <link refid="d2/d6c/a04754"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayCategory</label>
+        <link refid="dc/d6d/a04802"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BorderPanelOverlay</label>
+        <link refid="d2/d6c/a04754"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Overlay</label>
+        <link refid="d3/d1a/a04798"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayCategory</label>
+        <link refid="dc/d6d/a04802"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_overlay</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Overlay/BorderPanelOverlay.hpp" line="17" column="1" bodyfile="Overlay/BorderPanelOverlay.hpp" bodystart="19" bodyend="357"/>
+    <listofallmembers>
+      <member refid="d2/d6c/a04754_1abd3e568924c4059b615c5d7acb7c3d33" prot="public" virt="virtual"><scope>castor3d::BorderPanelOverlay</scope><name>accept</name></member>
+      <member refid="d2/d6c/a04754_1a5d173e4815a43d2e8990761c82bbb895" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>BorderPanelOverlay</name></member>
+      <member refid="d2/d6c/a04754_1ad97cb36ffa890fabf6a535d8796f6249" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>ComputeBindingIdx</name></member>
+      <member refid="d2/d6c/a04754_1a9e792b740f2894417a85436d7a0d8647" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>computePixelBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1ac24fccd388b241f090738d91fca35093" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>computePixelPosition</name></member>
+      <member refid="dc/d6d/a04802_1aa3d5aff69f33a84e285e2ff89369a74a" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>computePixelSize</name></member>
+      <member refid="dc/d6d/a04802_1ac4bbcf06edbc5598c3d9f32dfcca1452" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>computeScissorRect</name></member>
+      <member refid="d2/d6c/a04754_1a7dac897ee412d4e07a3e772a6557d228" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>create</name></member>
+      <member refid="d2/d6c/a04754_1a84a57685f348b9eec70af9ce3ce2fe44" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>createProgram</name></member>
+      <member refid="dc/d6d/a04802_1af30a39d84244e6f097d7b245d75e16f4" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>CU_DeclareVector</name></member>
+      <member refid="d2/d6c/a04754_1a88530bce29bc25b9715ebcf18d116d85" prot="private" virt="virtual"><scope>castor3d::BorderPanelOverlay</scope><name>doReset</name></member>
+      <member refid="d2/d6c/a04754_1a8a335836f8645bc73284617a50538e4c" prot="private" virt="virtual"><scope>castor3d::BorderPanelOverlay</scope><name>doUpdateClientArea</name></member>
+      <member refid="d2/d6c/a04754_1a366b968680b121876bb6de531025ad39" prot="private" virt="virtual"><scope>castor3d::BorderPanelOverlay</scope><name>doUpdateSize</name></member>
+      <member refid="d2/d6c/a04754_1ac25f9d33af1cc115285d0c7df69e8a8a" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getAbsoluteBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1a502fcf6e6ed12c4b5453b678f8d50ec8" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getAbsoluteBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1aaf4f2b38dd87a7bcdba59feff70cfe5c" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getAbsolutePosition</name></member>
+      <member refid="dc/d6d/a04802_1a0e18c7032ece1f9fabb21621f54f27c7" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getAbsolutePosition</name></member>
+      <member refid="dc/d6d/a04802_1a096401b552723c3e5527045193451b2a" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getAbsoluteSize</name></member>
+      <member refid="dc/d6d/a04802_1af5c16e73f89fa5f438bf2df8f9eb56fc" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getAbsoluteSize</name></member>
+      <member refid="d2/d6c/a04754_1ab25736fdd19ea4b8e1202561dbd8dcf8" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getBorderInnerUV</name></member>
+      <member refid="d2/d6c/a04754_1a68e6649ee705c35aa37197c425335b24" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getBorderMaterial</name></member>
+      <member refid="d2/d6c/a04754_1ab739b8e89ed7263d425f915bd902a173" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getBorderOuterUV</name></member>
+      <member refid="d2/d6c/a04754_1a43f81ec4d93285e735c249836940ade5" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getBorderPosition</name></member>
+      <member refid="d2/d6c/a04754_1a97d03c26ea6a8c022437dda304d68e30" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getCount</name></member>
+      <member refid="dc/d6d/a04802_1a885e0278c42a3c04d7d21a808333a06d" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getDisplayRect</name></member>
+      <member refid="dc/d6d/a04802_1a71f195ba52a956c1da1cd9f14e887689" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getIndex</name></member>
+      <member refid="dc/d6d/a04802_1ab41b7d9524e7641d12b6afdcdb7d3ef2" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getLevel</name></member>
+      <member refid="dc/d6d/a04802_1a78e6e5d1a3c1b80da3b6559a26f928a1" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getMaterial</name></member>
+      <member refid="dc/d6d/a04802_1a50b8ba3b06625d9095231d4eb44837ad" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getOverlay</name></member>
+      <member refid="dc/d6d/a04802_1a34a6a3926dc89fe4197ebde1dbcefa47" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getOverlay</name></member>
+      <member refid="dc/d6d/a04802_1a44be8f4402ee3ce13d9cb63b1b729ea2" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getOverlayName</name></member>
+      <member refid="dc/d6d/a04802_1af5129191d31d1b6ef7cb7a2d7ff0603b" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getParentSize</name></member>
+      <member refid="d2/d6c/a04754_1a5771858d2323e5dc9f2399d78dc83838" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getPixelBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1a98d099fa0d38dbe8574bafbe1960b516" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getPixelBottomBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1a11e9c3f0754f671cf13a9f642c742697" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getPixelLeftBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1acd08d298868f4100b0920d42892c304b" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getPixelPosition</name></member>
+      <member refid="d2/d6c/a04754_1a9070ace612d1ec3cadc9a0ebc7b1a795" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getPixelRightBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1a97500cbad8b3c235389f75a1a658f449" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getPixelSize</name></member>
+      <member refid="d2/d6c/a04754_1aa2283bddf63a0fdf3bf63c9b51920bef" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getPixelTopBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1a51c6607bdf10f977e137cd6778258d1e" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getRelativeBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1a762ae07046ffcb6aaa6b0ade468854c3" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getRelativeBottomBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1a1a34740d5a75c07966b4c7f4a3298ccd" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getRelativeLeftBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1a0898109f9b811c7f50cb1bf70b830079" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getRelativePosition</name></member>
+      <member refid="d2/d6c/a04754_1a8134e64d2e29114bd223ca0d7ed48331" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getRelativeRightBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1af07376160317878aae2cb9bd00ff1afd" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getRelativeSize</name></member>
+      <member refid="d2/d6c/a04754_1a53ae0568aa4cb3dbdee962001845c0fd" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getRelativeTopBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1a4e317a855e25038facba0c09e6e3c119" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getRenderRatio</name></member>
+      <member refid="dc/d6d/a04802_1a3e20a602f14dfce79e4b87f9a47262f5" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getType</name></member>
+      <member refid="dc/d6d/a04802_1aa5a96f5284a2b501fc377e5afe1fede3" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>getUV</name></member>
+      <member refid="dc/d6d/a04802_1a977e3a2bd37181e79b5edb2f74e0b0b3" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>hasAnyChange</name></member>
+      <member refid="d2/d6c/a04754_1a96c4680e26c2d9ac2491869483666c55" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>hasPixelBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1aac4d61513eefeb8aaea43cd0786279b7" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>hasPixelPosition</name></member>
+      <member refid="dc/d6d/a04802_1ac3e3729bd8d46acd08c4ed27da2f16b2" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>hasPixelSize</name></member>
+      <member refid="d2/d6c/a04754_1abcc66eedcbe912dfb45d80af388b0fc2" prot="public" virt="virtual"><scope>castor3d::BorderPanelOverlay</scope><name>isChanged</name></member>
+      <member refid="dc/d6d/a04802_1afa5e12d755d436c3d8b1fefa9955d1c3" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>isDisplayable</name></member>
+      <member refid="dc/d6d/a04802_1ac3889dbfa8505d9f2490ff62e3827623" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>isFullyCropped</name></member>
+      <member refid="dc/d6d/a04802_1a0836f09c4f8ffbd2b185863e150196b4" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>isPositionChanged</name></member>
+      <member refid="dc/d6d/a04802_1a5a5577d603b35fc1dae496989669d598" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>isSizeChanged</name></member>
+      <member refid="dc/d6d/a04802_1a1dda3744da86dd14d494528b56f0f195" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>isVisible</name></member>
+      <member refid="d2/d6c/a04754_1add26e15e56ccbbfd909da4a497c55d1c" prot="private" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_borderChanged</name></member>
+      <member refid="d2/d6c/a04754_1a7feef51561e1a76c1c489972b21a4787" prot="private" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_borderInnerUv</name></member>
+      <member refid="d2/d6c/a04754_1a7addab116987248f7cfdd672f50d4cf7" prot="private" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_borderMaterial</name></member>
+      <member refid="d2/d6c/a04754_1a76074422ff11065cfd4ebf9b754fc0fc" prot="private" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_borderOuterUv</name></member>
+      <member refid="d2/d6c/a04754_1a62f160edc9cd81ea6af8c953e1f4dc11" prot="private" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_borderPosition</name></member>
+      <member refid="dc/d6d/a04802_1a3f0ea9ec842763a39d5baa2e78889b8c" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_computeSize</name></member>
+      <member refid="dc/d6d/a04802_1a0a32f5aeae4f0ed9fba58f89da60e99d" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_displayable</name></member>
+      <member refid="dc/d6d/a04802_1ab3e85b15669da0ef830ef39f0129f620" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_displayRect</name></member>
+      <member refid="dc/d6d/a04802_1aeac5bf77102c8c7e4d358b8ffe8469c3" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_index</name></member>
+      <member refid="dc/d6d/a04802_1ad1503d11b7254aa335e50fd94a92e6ab" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_level</name></member>
+      <member refid="dc/d6d/a04802_1a124f0e04a88598a20d48da7b62da39e3" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_material</name></member>
+      <member refid="dc/d6d/a04802_1af65c5988580f6c277a586a287bfeaef6" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_overlay</name></member>
+      <member refid="dc/d6d/a04802_1aa9411ea45aa6e5eeeb85943f33f8b6f7" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_positionChanged</name></member>
+      <member refid="d2/d6c/a04754_1a03eb16d581bf23c2d0efdea6266fe914" prot="private" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_pxBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1a4cccbda4e4866c341cb90b725512ab99" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_pxPosition</name></member>
+      <member refid="dc/d6d/a04802_1a9c50db22f5385ad1896062696a94fe8a" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_pxSize</name></member>
+      <member refid="d2/d6c/a04754_1a7e2997dd42fc43d10a78f71202dc6754" prot="private" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_relBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1a88aa722ee50a505c0a6165294ff7d0d6" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_relPosition</name></member>
+      <member refid="dc/d6d/a04802_1a6e4d5e75e37a1b4be6ce7c1c29fb8c19" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_relSize</name></member>
+      <member refid="dc/d6d/a04802_1aada69d0c8319feb51d6f7f91feacceb1" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_sizeChanged</name></member>
+      <member refid="dc/d6d/a04802_1a4fcedc67c26ae5608270bfd6e0704549" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_type</name></member>
+      <member refid="dc/d6d/a04802_1a13ff69997c85e2e77149138667bf3766" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_uv</name></member>
+      <member refid="dc/d6d/a04802_1ab598ebcee12614789e36336d1253e5bb" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>m_visible</name></member>
+      <member refid="dc/d6d/a04802_1ae996131002acbaaf6d020d250450bd33" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>OverlayCategory</name></member>
+      <member refid="dc/d6d/a04802_1a2c67dae4169ea619c4f8a6520b4bd4f6" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>reset</name></member>
+      <member refid="d2/d6c/a04754_1a6368b108418923a042918ff9abb9fb3b" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setBorderInnerUV</name></member>
+      <member refid="d2/d6c/a04754_1a05e819a649b78df792c95c6f9ac3c0ff" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setBorderMaterial</name></member>
+      <member refid="d2/d6c/a04754_1a87a3622c2685c2f195f0f7a0873dbc82" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setBorderOuterUV</name></member>
+      <member refid="d2/d6c/a04754_1a21e72a2ccac6c12f63c9fe900137c9c1" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setBorderPosition</name></member>
+      <member refid="dc/d6d/a04802_1a3ac8a7a249ceb8893997aa883657fb60" prot="public" virt="virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setMaterial</name></member>
+      <member refid="dc/d6d/a04802_1adefd2d398a0c74ac740dc51657630bfa" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setOrder</name></member>
+      <member refid="dc/d6d/a04802_1a6c219a03b5fa245ab9daef479b21e7b3" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setOverlay</name></member>
+      <member refid="d2/d6c/a04754_1a90194c828306df779ceeff3ce9c932a5" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setPixelBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1ade01bd5231d8092172b4f39fdf9638e1" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setPixelBottomBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1abb413457810259fe44db6c057c28fcd4" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setPixelLeftBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1aa385f27a8e2bdec999d904c0e09923e1" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setPixelPosition</name></member>
+      <member refid="d2/d6c/a04754_1a4a02b2cc5ca49a3ce0dce6708b3f94d4" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setPixelRightBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1aefc4d7c0588b04ad441f00bed2adc8ab" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setPixelSize</name></member>
+      <member refid="d2/d6c/a04754_1ab8408beb81573a6fff1a0dc12fe5de16" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setPixelTopBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1a1987196cfec68c3042db4aa8b5428ecc" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setRelativeBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1ab81702fd3161538dc9ce81ed7665ab92" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setRelativeBottomBorderSize</name></member>
+      <member refid="d2/d6c/a04754_1aa7e55c6c9224185fd012472d21ce2b38" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setRelativeLeftBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1a24a760cf9df0d2346e1226c5850b9bae" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setRelativePosition</name></member>
+      <member refid="d2/d6c/a04754_1a1b2cbb9f4b1a465d5cd3ad48531e48c0" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setRelativeRightBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1a4101ce71eab7d4e2f6230435a6253d21" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setRelativeSize</name></member>
+      <member refid="d2/d6c/a04754_1a91db789f58abd968317de7ef89decced" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setRelativeTopBorderSize</name></member>
+      <member refid="dc/d6d/a04802_1a63ef23f715545cfe15bea893eb20a97a" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setUV</name></member>
+      <member refid="dc/d6d/a04802_1a196849184c7e196b19527f6b4b4b9d67" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>setVisible</name></member>
+      <member refid="dc/d6d/a04802_1aa45f9642c8fd544e189c4427efc43fe8" prot="public" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>update</name></member>
+      <member refid="dc/d6d/a04802_1a7362615c64c340582ae49a63e4e7bf1d" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>updateClientArea</name></member>
+      <member refid="dc/d6d/a04802_1adf13117b5516fd46dcaef51e78f3e88b" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>updatePosition</name></member>
+      <member refid="dc/d6d/a04802_1ae20f6310c599625c300d555f8bc97bd6" prot="protected" virt="non-virtual"><scope>castor3d::BorderPanelOverlay</scope><name>updateSize</name></member>
+      <member refid="dc/d6d/a04802_1aff0ea758ff18dd648a7e1c9aa6cf8689" prot="public" virt="virtual"><scope>castor3d::BorderPanelOverlay</scope><name>~OverlayCategory</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

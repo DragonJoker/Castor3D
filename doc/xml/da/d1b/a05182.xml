@@ -1,0 +1,177 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/d1b/a05182" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayRenderer::TextComputePipelineDescriptor</compoundname>
+    <includes local="no">OverlayRenderer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d1b/a05182_1a33d82351c4074f0eeddb6ae77118a364" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::OverlayRenderer::TextComputePipelineDescriptor::descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>descriptorSet</name>
+        <qualifiedname>castor3d::OverlayRenderer::TextComputePipelineDescriptor::descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayRenderer.hpp" line="43" column="25" bodyfile="Render/Overlays/OverlayRenderer.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d1b/a05182_1a0f4188e37b119baab96b84a74bc8571c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlayRenderer::TextComputePipelineDescriptor::count</definition>
+        <argsstring></argsstring>
+        <name>count</name>
+        <qualifiedname>castor3d::OverlayRenderer::TextComputePipelineDescriptor::count</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayRenderer.hpp" line="44" column="10" bodyfile="Render/Overlays/OverlayRenderer.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d1b/a05182_1a4f9a4df26be4a44205ea6ea5d57c18fa" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d66/a05238" kindref="compound">OverlayTextBuffer</ref> const  *</type>
+        <definition>OverlayTextBuffer const* castor3d::OverlayRenderer::TextComputePipelineDescriptor::textBuffer</definition>
+        <argsstring></argsstring>
+        <name>textBuffer</name>
+        <qualifiedname>castor3d::OverlayRenderer::TextComputePipelineDescriptor::textBuffer</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayRenderer.hpp" line="45" column="26" bodyfile="Render/Overlays/OverlayRenderer.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="14">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextChar &gt;</label>
+        <link refid="d6/d63/a05242"/>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextChar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextLine &gt;</label>
+        <link refid="d6/d63/a05242"/>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextLine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextWord &gt;</label>
+        <link refid="d6/d63/a05242"/>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextWord &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d23/a03038"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayRenderer::TextComputePipelineDescriptor</label>
+        <link refid="da/d1b/a05182"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>textBuffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::OverlayTextBuffer</label>
+        <link refid="d6/d66/a05238"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>charsBuffer</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>wordsBuffer</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>linesBuffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; DataT &gt;</label>
+        <link refid="d6/d63/a05242"/>
+      </node>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="da/d27/a05422"/>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/de8/a05430"/>
+        <childnode refid="6" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderSystem</label>
+        <link refid="da/d7e/a05558"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="13">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="12">
+        <label>std::string</label>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Overlays/OverlayRenderer.hpp" line="41" column="1" bodyfile="Render/Overlays/OverlayRenderer.hpp" bodystart="42" bodyend="46"/>
+    <listofallmembers>
+      <member refid="da/d1b/a05182_1a0f4188e37b119baab96b84a74bc8571c" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::TextComputePipelineDescriptor</scope><name>count</name></member>
+      <member refid="da/d1b/a05182_1a33d82351c4074f0eeddb6ae77118a364" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::TextComputePipelineDescriptor</scope><name>descriptorSet</name></member>
+      <member refid="da/d1b/a05182_1a4f9a4df26be4a44205ea6ea5d57c18fa" prot="public" virt="non-virtual"><scope>castor3d::OverlayRenderer::TextComputePipelineDescriptor</scope><name>textBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

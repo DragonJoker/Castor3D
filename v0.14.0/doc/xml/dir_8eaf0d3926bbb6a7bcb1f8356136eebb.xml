@@ -1,0 +1,26 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_8eaf0d3926bbb6a7bcb1f8356136eebb" kind="dir">
+    <compoundname>Miscellaneous</compoundname>
+    <innerfile refid="dd/de6/a00548">DebugCallbacks.hpp</innerfile>
+    <innerfile refid="d9/d87/a00551">DebugName.hpp</innerfile>
+    <innerfile refid="dc/df9/a00554">GpuInformations.hpp</innerfile>
+    <innerfile refid="d8/df0/a00557">GpuObjectTracker.hpp</innerfile>
+    <innerfile refid="d9/d19/a00560">LoadingScreen.hpp</innerfile>
+    <innerfile refid="dc/dae/a00563">Logger.hpp</innerfile>
+    <innerfile refid="d0/d3e/a00566">makeVkType.hpp</innerfile>
+    <innerfile refid="d4/d9e/a00569">MiscellaneousModule.hpp</innerfile>
+    <innerfile refid="d6/d06/a00572">Parameter.hpp</innerfile>
+    <innerfile refid="d9/d42/a00575">Pattern.hpp</innerfile>
+    <innerfile refid="dd/d5c/a00578">PipelineVisitor.hpp</innerfile>
+    <innerfile refid="d8/dc8/a00581">ProgressBar.hpp</innerfile>
+    <innerfile refid="d7/d21/a00584">StagingData.hpp</innerfile>
+    <innerfile refid="de/dde/a00587">Version.hpp</innerfile>
+    <innerfile refid="d7/db1/a00590">VersionException.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/"/>
+  </compounddef>
+</doxygen>

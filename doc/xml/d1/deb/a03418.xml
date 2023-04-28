@@ -1,0 +1,560 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/deb/a03418" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BaseDataPassComponentT</compoundname>
+    <basecompoundref refid="d2/d95/a04030" prot="public" virt="non-virtual">castor3d::PassComponent</basecompoundref>
+    <includes local="no">BaseDataPassComponent.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename DataT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="user-defined">
+      <description><para>Construction / Destruction. </para>
+</description>
+      <memberdef kind="function" id="d1/deb/a03418_1afb1743ea21712dcfe9765639815fc59d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor3d::BaseDataPassComponentT&lt; DataT &gt;::BaseDataPassComponentT</definition>
+        <argsstring>(Pass &amp;pass, castor::String type, castor::StringArray deps={}, ParamsT &amp;&amp;... params)</argsstring>
+        <name>BaseDataPassComponentT</name>
+        <qualifiedname>castor3d::BaseDataPassComponentT::BaseDataPassComponentT</qualifiedname>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::StringArray</type>
+          <declname>deps</declname>
+          <defval>{}</defval>
+        </param>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The component type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">deps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components this one depends on. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">params</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The component data construction params. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/BaseDataPassComponent.hpp" line="37" column="1" bodyfile="Material/Pass/Component/BaseDataPassComponent.hpp" bodystart="37" bodyend="44"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Mutators. </para>
+</description>
+      <memberdef kind="function" id="d1/deb/a03418_1a074de9b2f9579c56a85617b514089545" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataU</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::BaseDataPassComponentT&lt; DataT &gt;::setData</definition>
+        <argsstring>(DataU const &amp;data)</argsstring>
+        <name>setData</name>
+        <qualifiedname>castor3d::BaseDataPassComponentT::setData</qualifiedname>
+        <param>
+          <type>DataU const &amp;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/BaseDataPassComponent.hpp" line="56" column="6" bodyfile="Material/Pass/Component/BaseDataPassComponent.hpp" bodystart="56" bodyend="59"/>
+        <references refid="d1/deb/a03418_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="dd/d63/a00455" startline="88">castor3d::BaseDataPassComponentT&lt; DataT &gt;::m_value</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/deb/a03418_1abf51560ee823896159de61bea9326391" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::BaseDataPassComponentT&lt; DataT &gt;::setData</definition>
+        <argsstring>(ParamsT &amp;&amp;... params)</argsstring>
+        <name>setData</name>
+        <qualifiedname>castor3d::BaseDataPassComponentT::setData</qualifiedname>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/BaseDataPassComponent.hpp" line="62" column="6" bodyfile="Material/Pass/Component/BaseDataPassComponent.hpp" bodystart="62" bodyend="65"/>
+        <references refid="d2/d95/a04030_1a01ecec7d563666b63d7d888061e84ab1" compoundref="d8/dc8/a00581" startline="1293">castor3d::PassComponent::m_dirty</references>
+        <references refid="d1/deb/a03418_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="dd/d63/a00455" startline="88">castor3d::BaseDataPassComponentT&lt; DataT &gt;::m_value</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Getters. </para>
+</description>
+      <memberdef kind="function" id="d1/deb/a03418_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>DataT &amp;</type>
+        <definition>DataT &amp; castor3d::BaseDataPassComponentT&lt; DataT &gt;::getData</definition>
+        <argsstring>()</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::BaseDataPassComponentT::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/BaseDataPassComponent.hpp" line="76" column="8" bodyfile="Material/Pass/Component/BaseDataPassComponent.hpp" bodystart="76" bodyend="79"/>
+        <references refid="d1/deb/a03418_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="dd/d63/a00455" startline="88">castor3d::BaseDataPassComponentT&lt; DataT &gt;::m_value</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/deb/a03418_1aa79468a338c3ff3c31682894db721fab" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>DataT const &amp;</type>
+        <definition>DataT const  &amp; castor3d::BaseDataPassComponentT&lt; DataT &gt;::getData</definition>
+        <argsstring>() const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::BaseDataPassComponentT::getData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/BaseDataPassComponent.hpp" line="81" column="14" bodyfile="Material/Pass/Component/BaseDataPassComponent.hpp" bodystart="81" bodyend="84"/>
+        <references refid="d1/deb/a03418_1aa297ac5faf886e6b766533f5fc0b25d1" compoundref="dd/d63/a00455" startline="88">castor3d::BaseDataPassComponentT&lt; DataT &gt;::m_value</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d1/deb/a03418_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" static="no" mutable="no">
+        <type>DataT</type>
+        <definition>DataT castor3d::BaseDataPassComponentT&lt; DataT &gt;::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor3d::BaseDataPassComponentT::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/BaseDataPassComponent.hpp" line="88" column="7" bodyfile="Material/Pass/Component/BaseDataPassComponent.hpp" bodystart="88" bodyend="-1"/>
+        <referencedby refid="d1/deb/a03418_1a23ec881a6e2aa2e40c21e108cb6458f7" compoundref="dd/d63/a00455" startline="76" endline="79">castor3d::BaseDataPassComponentT&lt; DataT &gt;::getData</referencedby>
+        <referencedby refid="d1/deb/a03418_1a074de9b2f9579c56a85617b514089545" compoundref="dd/d63/a00455" startline="56" endline="59">castor3d::BaseDataPassComponentT&lt; DataT &gt;::setData</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> component holding base pass data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor3d::BaseDataPassComponentT&lt; AlphaTestData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; AlphaTestData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::BaseDataPassComponentT&lt; AmbientData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; AmbientData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::BaseDataPassComponentT&lt; AttenuationData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; AttenuationData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::BaseDataPassComponentT&lt; BlendData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; BlendData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::BaseDataPassComponentT&lt; ClearcoatData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; ClearcoatData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::BaseDataPassComponentT&lt; EmissiveData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; EmissiveData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::BaseDataPassComponentT&lt; IridescenceData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; IridescenceData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="38">
+        <label>castor3d::BaseDataPassComponentT&lt; OpacityData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; OpacityData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="40">
+        <label>castor3d::BaseDataPassComponentT&lt; SheenData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SheenData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="42">
+        <label>castor3d::BaseDataPassComponentT&lt; SpecularData &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SpecularData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; ParallaxOcclusionMode &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="44">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; SubsurfaceScatteringUPtr &gt; &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; SubsurfaceScatteringUPtr &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; castor::HdrRgbColour &gt; &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; castor::HdrRgbColour &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; float &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; uint32_t &gt; &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; uint32_t &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::AlphaTestComponent</label>
+        <link refid="d8/d6b/a03918"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::AmbientComponent</label>
+        <link refid="d7/d46/a03430"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::AttenuationComponent</label>
+        <link refid="d1/d82/a03450"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::BlendComponent</label>
+        <link refid="d0/d7c/a03318"/>
+        <childnode refid="10" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::ClearcoatComponent</label>
+        <link refid="df/d5c/a03470"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::ColourComponent</label>
+        <link refid="de/d08/a03934"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::EmissiveComponent</label>
+        <link refid="d3/d87/a03490"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::FractalMappingComponent</label>
+        <link refid="dc/de3/a03326"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::HeightComponent</label>
+        <link refid="dc/d61/a03950"/>
+        <childnode refid="25" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::IridescenceComponent</label>
+        <link refid="d6/d61/a03510"/>
+        <childnode refid="27" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::LightingModelComponent</label>
+        <link refid="d1/d19/a03526"/>
+        <childnode refid="29" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="33">
+        <label>castor3d::MetalnessComponent</label>
+        <link refid="d4/d8b/a03538"/>
+        <childnode refid="32" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::NormalComponent</label>
+        <link refid="db/dee/a03338"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="39">
+        <label>castor3d::OpacityComponent</label>
+        <link refid="df/de5/a03966"/>
+        <childnode refid="38" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassComponent</label>
+        <link refid="d2/d95/a04030"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="31">
+        <label>castor3d::PassHeaderComponent</label>
+        <link refid="d6/d18/a03350"/>
+        <childnode refid="29" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::PickableComponent</label>
+        <link refid="de/dce/a03362"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::ReflectionComponent</label>
+        <link refid="d8/d56/a03982"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor3d::RefractionComponent</label>
+        <link refid="df/d58/a03998"/>
+        <childnode refid="32" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="35">
+        <label>castor3d::RoughnessComponent</label>
+        <link refid="d6/d76/a03554"/>
+        <childnode refid="32" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="41">
+        <label>castor3d::SheenComponent</label>
+        <link refid="db/d52/a03574"/>
+        <childnode refid="40" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor3d::SpecularComponent</label>
+        <link refid="da/d0f/a03594"/>
+        <childnode refid="42" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="45">
+        <label>castor3d::SubsurfaceScatteringComponent</label>
+        <link refid="df/d0b/a03610"/>
+        <childnode refid="44" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="36">
+        <label>castor3d::ThicknessComponent</label>
+        <link refid="d8/d71/a03626"/>
+        <childnode refid="32" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="37">
+        <label>castor3d::TransmissionComponent</label>
+        <link refid="dc/dd9/a03642"/>
+        <childnode refid="32" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::TwoSidedComponent</label>
+        <link refid="d1/d35/a03398"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::UntileMappingComponent</label>
+        <link refid="d6/d15/a03406"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d1/deb/a03418"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassComponent</label>
+        <link refid="d2/d95/a04030"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="db/df2/a04026"/>
+      </node>
+      <node id="5">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="dc/d86/a04022"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/BaseDataPassComponent.hpp" line="14" column="1" bodyfile="Material/Pass/Component/BaseDataPassComponent.hpp" bodystart="16" bodyend="89"/>
+    <listofallmembers>
+      <member refid="d2/d95/a04030_1a4e315225c20ace9097adfd65e8413e4f" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>accept</name></member>
+      <member refid="d2/d95/a04030_1a2847d512604b766b3a315e4c4e9dc0ea" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>areNormalsInverted</name></member>
+      <member refid="d1/deb/a03418_1afb1743ea21712dcfe9765639815fc59d" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>BaseDataPassComponentT</name></member>
+      <member refid="d2/d95/a04030_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>clone</name></member>
+      <member refid="d2/d95/a04030_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>fillBuffer</name></member>
+      <member refid="d2/d95/a04030_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>fillChannel</name></member>
+      <member refid="d2/d95/a04030_1ae53af67cd5f807b90d8e31e52d6582af" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>fillConfig</name></member>
+      <member refid="d2/d95/a04030_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>getColour</name></member>
+      <member refid="d1/deb/a03418_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>getData</name></member>
+      <member refid="d1/deb/a03418_1aa79468a338c3ff3c31682894db721fab" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>getData</name></member>
+      <member refid="d2/d95/a04030_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>getDependencies</name></member>
+      <member refid="d2/d95/a04030_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>getId</name></member>
+      <member refid="d2/d95/a04030_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>getPassFlags</name></member>
+      <member refid="d2/d95/a04030_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>getPlugin</name></member>
+      <member refid="d2/d95/a04030_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>getType</name></member>
+      <member refid="d2/d95/a04030_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>hasColour</name></member>
+      <member refid="d2/d95/a04030_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>m_dependencies</name></member>
+      <member refid="d2/d95/a04030_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>m_dirty</name></member>
+      <member refid="d2/d95/a04030_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>m_id</name></member>
+      <member refid="d2/d95/a04030_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>m_materialShader</name></member>
+      <member refid="d2/d95/a04030_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>m_plugin</name></member>
+      <member refid="d2/d95/a04030_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>m_type</name></member>
+      <member refid="d1/deb/a03418_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>m_value</name></member>
+      <member refid="d2/d95/a04030_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>PassComponent</name></member>
+      <member refid="d2/d95/a04030_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>setColour</name></member>
+      <member refid="d1/deb/a03418_1a074de9b2f9579c56a85617b514089545" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>setData</name></member>
+      <member refid="d1/deb/a03418_1abf51560ee823896159de61bea9326391" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>setData</name></member>
+      <member refid="d2/d95/a04030_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>update</name></member>
+      <member refid="d2/d95/a04030_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>writeText</name></member>
+      <member refid="d2/d95/a04030_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::BaseDataPassComponentT</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/dd0/a06486" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::Meshlet</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslMeshlet.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/dd0/a06486_1a0159326573daeb0f6cdec810705bf2cb" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::UInt &gt;</type>
+        <definition>sdw::Array&lt; sdw::UInt &gt; castor3d::shader::Meshlet::vertices</definition>
+        <argsstring></argsstring>
+        <name>vertices</name>
+        <qualifiedname>castor3d::shader::Meshlet::vertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMeshlet.hpp" line="29" column="12" bodyfile="Shader/Shaders/GlslMeshlet.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dd0/a06486_1a1827cce3326188aba8b700e56da5b5cb" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::UInt8 &gt;</type>
+        <definition>sdw::Array&lt; sdw::UInt8 &gt; castor3d::shader::Meshlet::indices</definition>
+        <argsstring></argsstring>
+        <name>indices</name>
+        <qualifiedname>castor3d::shader::Meshlet::indices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMeshlet.hpp" line="30" column="12" bodyfile="Shader/Shaders/GlslMeshlet.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dd0/a06486_1aee30b89661532ed2fdaa675873a8f696" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Meshlet::vertexCount</definition>
+        <argsstring></argsstring>
+        <name>vertexCount</name>
+        <qualifiedname>castor3d::shader::Meshlet::vertexCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMeshlet.hpp" line="36" column="11" bodyfile="Shader/Shaders/GlslMeshlet.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dd0/a06486_1a759a89f7aa0bd19675f9798ca9c7f856" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::Meshlet::triangleCount</definition>
+        <argsstring></argsstring>
+        <name>triangleCount</name>
+        <qualifiedname>castor3d::shader::Meshlet::triangleCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMeshlet.hpp" line="37" column="11" bodyfile="Shader/Shaders/GlslMeshlet.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/dd0/a06486_1a1352002acf69d4253289981fd6a0a59c" prot="private" static="no" mutable="no">
+        <type>sdw::UVec4</type>
+        <definition>sdw::UVec4 castor3d::shader::Meshlet::m_counts</definition>
+        <argsstring></argsstring>
+        <name>m_counts</name>
+        <qualifiedname>castor3d::shader::Meshlet::m_counts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMeshlet.hpp" line="33" column="12" bodyfile="Shader/Shaders/GlslMeshlet.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/dd0/a06486_1a521fc6db1531016a3fd4ebfaf392caf8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Meshlet::Meshlet</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled=true)</argsstring>
+        <name>Meshlet</name>
+        <qualifiedname>castor3d::shader::Meshlet::Meshlet</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMeshlet.hpp" line="21" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/dd0/a06486_1ad02c078322cc0c0090315c691fe8436b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::Meshlet::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, Meshlet)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::Meshlet::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="d8/dd0/a06486" kindref="compound">Meshlet</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMeshlet.hpp" line="25" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d8/dd0/a06486_1ac9810f0245ac41af2bf56a4374118b13" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::type::BaseStructPtr</type>
+        <definition>static C3D_API sdw::type::BaseStructPtr castor3d::shader::Meshlet::makeType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::Meshlet::makeType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslMeshlet.hpp" line="27" column="41"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::Meshlet</label>
+        <link refid="d8/dd0/a06486"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::Meshlet</label>
+        <link refid="d8/dd0/a06486"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslMeshlet.hpp" line="18" column="1" bodyfile="Shader/Shaders/GlslMeshlet.hpp" bodystart="20" bodyend="38"/>
+    <listofallmembers>
+      <member refid="d8/dd0/a06486_1a1827cce3326188aba8b700e56da5b5cb" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>indices</name></member>
+      <member refid="d8/dd0/a06486_1a1352002acf69d4253289981fd6a0a59c" prot="private" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>m_counts</name></member>
+      <member refid="d8/dd0/a06486_1ac9810f0245ac41af2bf56a4374118b13" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>makeType</name></member>
+      <member refid="d8/dd0/a06486_1a521fc6db1531016a3fd4ebfaf392caf8" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>Meshlet</name></member>
+      <member refid="d8/dd0/a06486_1ad02c078322cc0c0090315c691fe8436b" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="d8/dd0/a06486_1a759a89f7aa0bd19675f9798ca9c7f856" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>triangleCount</name></member>
+      <member refid="d8/dd0/a06486_1aee30b89661532ed2fdaa675873a8f696" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>vertexCount</name></member>
+      <member refid="d8/dd0/a06486_1a0159326573daeb0f6cdec810705bf2cb" prot="public" virt="non-virtual"><scope>castor3d::shader::Meshlet</scope><name>vertices</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

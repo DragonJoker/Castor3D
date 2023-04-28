@@ -1,5 +1,7 @@
-<map id="castor3d::BinaryWriter&lt; SceneNodeAnimationKeyFrame &gt;" name="castor3d::BinaryWriter&lt; SceneNodeAnimationKeyFrame &gt;">
-<area shape="rect" id="node1" title="SceneNodeAnimationKeyFrame binary loader." alt="" coords="5,200,236,241"/>
-<area shape="rect" id="node2" href="$d9/de2/a02508.html" title=" " alt="" coords="5,109,236,151"/>
-<area shape="rect" id="node3" href="$d9/de2/a02508.html" title="Binary data chunk writer base class." alt="" coords="29,5,212,47"/>
+<map id="castor3d::AnimationImporter" name="castor3d::AnimationImporter">
+<area shape="rect" id="node1" title=" " alt="" coords="637,39,823,64"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,31"/>
+<area shape="rect" id="node3" href="$d8/dde/a03313.html" title=" " alt="" coords="350,39,498,64"/>
+<area shape="rect" id="node4" href="$d7/df7/a04493.html" title=" " alt="" coords="347,89,501,129"/>
+<area shape="rect" id="node5" href="$d7/df7/a04493.html" title="Configuration parameters." alt="" coords="21,89,176,129"/>
 </map>

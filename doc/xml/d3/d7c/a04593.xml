@@ -1,0 +1,125 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d7c/a04593" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::Meshlet</compoundname>
+    <includes local="no">MeshModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d7c/a04593_1ab75b3b6813f313e8237e14536860537a" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint32_t, 64u &gt;</type>
+        <definition>std::array&lt; uint32_t, 64u &gt; castor3d::Meshlet::vertices</definition>
+        <argsstring></argsstring>
+        <name>vertices</name>
+        <qualifiedname>castor3d::Meshlet::vertices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="92" column="12" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7c/a04593_1a265bacb370595fb8be2eabf5bf593d18" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint8_t, 128u *3u &gt;</type>
+        <definition>std::array&lt; uint8_t, 128u * 3u &gt; castor3d::Meshlet::primitives</definition>
+        <argsstring></argsstring>
+        <name>primitives</name>
+        <qualifiedname>castor3d::Meshlet::primitives</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="94" column="12" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7c/a04593_1a21aaf6b9870ffba9d39b0c3e38d038f3" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Meshlet::vertexCount</definition>
+        <argsstring></argsstring>
+        <name>vertexCount</name>
+        <qualifiedname>castor3d::Meshlet::vertexCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="96" column="10" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7c/a04593_1a3fa1f13cff4b6d3cfb4df9ab1350acc7" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Meshlet::triangleCount</definition>
+        <argsstring></argsstring>
+        <name>triangleCount</name>
+        <qualifiedname>castor3d::Meshlet::triangleCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="98" column="10" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d7c/a04593_1a3d9af1b5695da55c0dc7ac278185d008" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Meshlet::dummy[2]</definition>
+        <argsstring>[2]</argsstring>
+        <name>dummy</name>
+        <qualifiedname>castor3d::Meshlet::dummy</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshModule.hpp" line="99" column="10" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Data for one meshlet. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; uint32_t, 64u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint32_t, 64u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::array&lt; uint8_t, 128u *3u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint8_t, 128u *3u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::Meshlet</label>
+        <link refid="d3/d7c/a04593"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertices</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>primitives</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/MeshModule.hpp" line="89" column="1" bodyfile="Model/Mesh/MeshModule.hpp" bodystart="90" bodyend="100"/>
+    <listofallmembers>
+      <member refid="d3/d7c/a04593_1a3d9af1b5695da55c0dc7ac278185d008" prot="public" virt="non-virtual"><scope>castor3d::Meshlet</scope><name>dummy</name></member>
+      <member refid="d3/d7c/a04593_1a265bacb370595fb8be2eabf5bf593d18" prot="public" virt="non-virtual"><scope>castor3d::Meshlet</scope><name>primitives</name></member>
+      <member refid="d3/d7c/a04593_1a3fa1f13cff4b6d3cfb4df9ab1350acc7" prot="public" virt="non-virtual"><scope>castor3d::Meshlet</scope><name>triangleCount</name></member>
+      <member refid="d3/d7c/a04593_1a21aaf6b9870ffba9d39b0c3e38d038f3" prot="public" virt="non-virtual"><scope>castor3d::Meshlet</scope><name>vertexCount</name></member>
+      <member refid="d3/d7c/a04593_1ab75b3b6813f313e8237e14536860537a" prot="public" virt="non-virtual"><scope>castor3d::Meshlet</scope><name>vertices</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

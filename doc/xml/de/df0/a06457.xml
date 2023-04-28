@@ -1,0 +1,210 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="de/df0/a06457" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::FontData</compoundname>
+    <basecompoundref refid="de/d20/a06437" prot="public" virt="non-virtual">castor3d::shader::BufferT&lt; FontGlyph &gt;</basecompoundref>
+    <includes local="no">GlslFont.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/df0/a06457_1a9f98a43313f71ce331b75968540805fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::FontData::FontData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set, bool enabled=true)</argsstring>
+        <name>FontData</name>
+        <qualifiedname>castor3d::shader::FontData::FontData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="41" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df0/a06457_1af148e8e2c64a35eaaabc3b231df7b924" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::FontData::imgWidth</definition>
+        <argsstring>() const</argsstring>
+        <name>imgWidth</name>
+        <qualifiedname>castor3d::shader::FontData::imgWidth</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="46" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df0/a06457_1a583c2712ba51197a4ceff666d7c41bed" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::FontData::imgHeight</definition>
+        <argsstring>() const</argsstring>
+        <name>imgHeight</name>
+        <qualifiedname>castor3d::shader::FontData::imgHeight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="47" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df0/a06457_1ae381504a473e4c25cd73cc4e35dc9268" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::FontData::maxHeight</definition>
+        <argsstring>() const</argsstring>
+        <name>maxHeight</name>
+        <qualifiedname>castor3d::shader::FontData::maxHeight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="48" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="de/df0/a06457_1aabb9dbbba02776f6b0b094f9b52d08d8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::FontData::operator[]</definition>
+        <argsstring>(sdw::UInt const &amp;index) const</argsstring>
+        <name>operator[]</name>
+        <qualifiedname>castor3d::shader::FontData::operator[]</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslFont.hpp" line="50" column="6" bodyfile="Shader/Shaders/GlslFont.hpp" bodystart="50" bodyend="53"/>
+        <references refid="de/d20/a06437_1a7fed7db7c6ddd5ec43d4b243a608ee8a" compoundref="d7/d29/a01589" startline="116" endline="122">castor3d::shader::BufferT&lt; FontGlyph &gt;::getData</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::BufferT&lt; FontGlyph &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; FontGlyph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="dc/d99/a06433"/>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::FontData</label>
+        <link refid="de/df0/a06457"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::BufferT&lt; FontGlyph &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; FontGlyph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="dc/d99/a06433"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::FontData</label>
+        <link refid="de/df0/a06457"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::string</label>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::unique_ptr&lt; sdw::StorageBuffer &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; sdw::StorageBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslFont.hpp" line="37" column="1" bodyfile="Shader/Shaders/GlslFont.hpp" bodystart="39" bodyend="54"/>
+    <listofallmembers>
+      <member refid="dc/d99/a06433_1a4625e7c6c7426433390143ef91de516d" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>BufferBase</name></member>
+      <member refid="de/d20/a06437_1a3121cc6273753a4bda1b99bf8313ac8e" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>BufferT</name></member>
+      <member refid="de/df0/a06457_1a9f98a43313f71ce331b75968540805fb" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>FontData</name></member>
+      <member refid="dc/d99/a06433_1ac39085e1f563915a9270c99d3837a6b7" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>getCount</name></member>
+      <member refid="de/d20/a06437_1a7fed7db7c6ddd5ec43d4b243a608ee8a" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>getData</name></member>
+      <member refid="dc/d99/a06433_1af00addb76247551b7afa557e5b366580" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>getFirstCount</name></member>
+      <member refid="dc/d99/a06433_1ae7c2ff75adb43ff14450a561fe3ea5cd" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>getFourthCount</name></member>
+      <member refid="dc/d99/a06433_1adb02316d9ef1fd07d4c12df96e79de6d" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>getSecondCount</name></member>
+      <member refid="dc/d99/a06433_1adc3bec1abc05499dc522dcb7b1288a12" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>getThirdCount</name></member>
+      <member refid="dc/d99/a06433_1a30e5f486cf48f99e981f62c0eaf4c4f2" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>getWriter</name></member>
+      <member refid="de/df0/a06457_1a583c2712ba51197a4ceff666d7c41bed" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>imgHeight</name></member>
+      <member refid="de/df0/a06457_1af148e8e2c64a35eaaabc3b231df7b924" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>imgWidth</name></member>
+      <member refid="dc/d99/a06433_1a17f3f731aeca6327e611dd45636d0760" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>isEnabled</name></member>
+      <member refid="dc/d99/a06433_1a5d932674ed8f6e0d34a71affbc88bca8" prot="protected" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>m_ssbo</name></member>
+      <member refid="dc/d99/a06433_1aae02f484169333d895df1f92ab6db2a3" prot="protected" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>m_variableName</name></member>
+      <member refid="dc/d99/a06433_1a8094a884d182023869e7b4a9be80c93e" prot="protected" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>m_writer</name></member>
+      <member refid="de/df0/a06457_1ae381504a473e4c25cd73cc4e35dc9268" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>maxHeight</name></member>
+      <member refid="de/df0/a06457_1aabb9dbbba02776f6b0b094f9b52d08d8" prot="public" virt="non-virtual"><scope>castor3d::shader::FontData</scope><name>operator[]</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

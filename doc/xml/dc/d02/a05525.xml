@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dc/d02/a05525" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderNodesT</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename NodeType</type>
+      </param>
+      <param>
+        <type>typename MapType</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>The render nodes for a specific scene. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderModule.hpp" line="551" column="1" bodyfile="Render/RenderModule.hpp" bodystart="551" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

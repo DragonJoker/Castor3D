@@ -1,0 +1,480 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/da1/a06569" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::RasterizerSurfaceBase</compoundname>
+    <basecompoundref refid="d9/de2/a06561" prot="public" virt="non-virtual">castor3d::shader::SurfaceBase</basecompoundref>
+    <derivedcompoundref refid="d7/d02/a06577" prot="public" virt="non-virtual">castor3d::shader::RasterizerSurfaceT&lt; TexcoordT, FlagT &gt;</derivedcompoundref>
+    <includes local="no">GlslSurface.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/da1/a06569_1aad43269b8fb301589d4027dbb2c6d597" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::RasterizerSurfaceBase::curPosition</definition>
+        <argsstring></argsstring>
+        <name>curPosition</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::curPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="135" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1ae7ff0a143a1620ac9caa7b2fd9aa1d25" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::RasterizerSurfaceBase::prvPosition</definition>
+        <argsstring></argsstring>
+        <name>prvPosition</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::prvPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="136" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1ae3ab063fc8e53073ca48b0cc4d1b1b6d" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::RasterizerSurfaceBase::tangentSpaceFragPosition</definition>
+        <argsstring></argsstring>
+        <name>tangentSpaceFragPosition</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::tangentSpaceFragPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="137" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1a2d22d13988b15c5314f512ad54e5b1e4" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::RasterizerSurfaceBase::tangentSpaceViewPosition</definition>
+        <argsstring></argsstring>
+        <name>tangentSpaceViewPosition</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::tangentSpaceViewPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="138" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1a48b9ce7eae9aedfcd2854bcaf95ba848" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::RasterizerSurfaceBase::tangent</definition>
+        <argsstring></argsstring>
+        <name>tangent</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::tangent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="139" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1ac7762887b763522871c84cbf823a27e8" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::RasterizerSurfaceBase::bitangent</definition>
+        <argsstring></argsstring>
+        <name>bitangent</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::bitangent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="140" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1ae7e24f7a83a27b1d102c14126d39d539" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::RasterizerSurfaceBase::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="141" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1a59b53d3ad5dbacb9426f67306bece058" prot="public" static="no" mutable="no">
+        <type>sdw::Array&lt; sdw::Vec4 &gt;</type>
+        <definition>sdw::Array&lt; sdw::Vec4 &gt; castor3d::shader::RasterizerSurfaceBase::passMultipliers</definition>
+        <argsstring></argsstring>
+        <name>passMultipliers</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::passMultipliers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="142" column="12" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1a4aeb073d743347ad192cc8e49e113f46" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::RasterizerSurfaceBase::nodeId</definition>
+        <argsstring></argsstring>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::nodeId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="143" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="143" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/da1/a06569_1aa5ef3be78683949c27b3183d4496fed8" prot="public" static="no" mutable="no">
+        <type>sdw::UInt</type>
+        <definition>sdw::UInt castor3d::shader::RasterizerSurfaceBase::vertexId</definition>
+        <argsstring></argsstring>
+        <name>vertexId</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::vertexId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="144" column="11" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/da1/a06569_1a49ecbee8a3922b4ac28a7d820eec0550" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::RasterizerSurfaceBase::RasterizerSurfaceBase</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>RasterizerSurfaceBase</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::RasterizerSurfaceBase</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="106" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a06569_1ad959ec71af095acc8758e311759a3368" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::RasterizerSurfaceBase::computeVelocity</definition>
+        <argsstring>(CameraData const &amp;cameraData, sdw::Vec4 &amp;curPos, sdw::Vec4 &amp;prvPos)</argsstring>
+        <name>computeVelocity</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::computeVelocity</qualifiedname>
+        <param>
+          <type><ref refid="d0/d54/a06637" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>cameraData</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>curPos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>prvPos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="111" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a06569_1a778abeeb2381927165f10229cf7a13a9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::RasterizerSurfaceBase::computeTangentSpace</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Vec3 const &amp;cameraPosition, sdw::Vec3 const &amp;worldPos, sdw::Vec3 const &amp;nml, sdw::Vec3 const &amp;tan)</argsstring>
+        <name>computeTangentSpace</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::computeTangentSpace</qualifiedname>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="114" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a06569_1aa208a3e83026a00fe9d6e99def794248" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::RasterizerSurfaceBase::computeTangentSpace</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Vec3 const &amp;cameraPosition, sdw::Vec3 const &amp;worldPos, sdw::Mat3 const &amp;mtx, sdw::Vec3 const &amp;nml, sdw::Vec3 const &amp;tan)</argsstring>
+        <name>computeTangentSpace</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::computeTangentSpace</qualifiedname>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPos</declname>
+        </param>
+        <param>
+          <type>sdw::Mat3 const &amp;</type>
+          <declname>mtx</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="119" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a06569_1a93423706264b401039392639160240d8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::RasterizerSurfaceBase::computeTangentSpace</definition>
+        <argsstring>(PipelineFlags const &amp;flags, sdw::Vec3 const &amp;cameraPosition, sdw::Vec3 const &amp;worldPos, sdw::Vec3 const &amp;nml, sdw::Vec3 const &amp;tan, sdw::Vec3 const &amp;bin)</argsstring>
+        <name>computeTangentSpace</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::computeTangentSpace</qualifiedname>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>cameraPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldPos</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>nml</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>tan</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>bin</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="125" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a06569_1adf37d524f6d47ba9001d1b8c2c37d0ba" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::RasterizerSurfaceBase::getVelocity</definition>
+        <argsstring>() const</argsstring>
+        <name>getVelocity</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::getVelocity</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="133" column="19"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-static-func">
+      <memberdef kind="function" id="d7/da1/a06569_1a5f376b763522c8210f8167b474f7063e" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::shader::RasterizerSurfaceBase::fillIOType</definition>
+        <argsstring>(sdw::type::IOStruct &amp;type, PassShaders const &amp;shaders, PipelineFlags const &amp;flags, uint32_t &amp;index)</argsstring>
+        <name>fillIOType</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::fillIOType</qualifiedname>
+        <param>
+          <type>sdw::type::IOStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de4/a06525" kindref="compound">PassShaders</ref> const &amp;</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="147" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a06569_1a1c06ff27194d150d7930eac817cd181c" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::shader::RasterizerSurfaceBase::fillType</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;type, PassShaders const &amp;shaders, PipelineFlags const &amp;flags)</argsstring>
+        <name>fillType</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::fillType</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type><ref refid="da/de4/a06525" kindref="compound">PassShaders</ref> const &amp;</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="151" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/da1/a06569_1ae780b7761ab3e4b5f4c3296d352dc739" prot="protected" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>static C3D_API void castor3d::shader::RasterizerSurfaceBase::fillType</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;type)</argsstring>
+        <name>fillType</name>
+        <qualifiedname>castor3d::shader::RasterizerSurfaceBase::fillType</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSurface.hpp" line="154" column="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::RasterizerSurfaceBase</label>
+        <link refid="d7/da1/a06569"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::RasterizerSurfaceT&lt; TexcoordT, FlagT &gt;</label>
+        <link refid="d7/d02/a06577"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::SurfaceBase</label>
+        <link refid="d9/de2/a06561"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::RasterizerSurfaceBase</label>
+        <link refid="d7/da1/a06569"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::SurfaceBase</label>
+        <link refid="d9/de2/a06561"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslSurface.hpp" line="103" column="1" bodyfile="Shader/Shaders/GlslSurface.hpp" bodystart="105" bodyend="155"/>
+    <listofallmembers>
+      <member refid="d7/da1/a06569_1ac7762887b763522871c84cbf823a27e8" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>bitangent</name></member>
+      <member refid="d9/de2/a06561_1a30ed99b6598407031d872f6f193b9a8b" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>clipPosition</name></member>
+      <member refid="d7/da1/a06569_1ae7e24f7a83a27b1d102c14126d39d539" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>colour</name></member>
+      <member refid="d7/da1/a06569_1a778abeeb2381927165f10229cf7a13a9" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>computeTangentSpace</name></member>
+      <member refid="d7/da1/a06569_1aa208a3e83026a00fe9d6e99def794248" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>computeTangentSpace</name></member>
+      <member refid="d7/da1/a06569_1a93423706264b401039392639160240d8" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>computeTangentSpace</name></member>
+      <member refid="d7/da1/a06569_1ad959ec71af095acc8758e311759a3368" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>computeVelocity</name></member>
+      <member refid="d7/da1/a06569_1aad43269b8fb301589d4027dbb2c6d597" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>curPosition</name></member>
+      <member refid="d9/de2/a06561_1a67806ae0e7c4266f601f1242b0da0d28" prot="protected" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>fillInit</name></member>
+      <member refid="d9/de2/a06561_1a114217f67594554ff934db7550efa3da" prot="protected" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>fillInit</name></member>
+      <member refid="d7/da1/a06569_1a5f376b763522c8210f8167b474f7063e" prot="protected" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>fillIOType</name></member>
+      <member refid="d9/de2/a06561_1af6ca7cbf5dd3dbbbd3af4c443e8002f5" prot="protected" virt="non-virtual" ambiguityscope="castor3d::shader::SurfaceBase::"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>fillIOType</name></member>
+      <member refid="d7/da1/a06569_1a1c06ff27194d150d7930eac817cd181c" prot="protected" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>fillType</name></member>
+      <member refid="d7/da1/a06569_1ae780b7761ab3e4b5f4c3296d352dc739" prot="protected" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>fillType</name></member>
+      <member refid="d9/de2/a06561_1a4e3537c72ebc2ef7d9c38ced95b0baaa" prot="protected" virt="non-virtual" ambiguityscope="castor3d::shader::SurfaceBase::"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>fillType</name></member>
+      <member refid="d7/da1/a06569_1adf37d524f6d47ba9001d1b8c2c37d0ba" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>getVelocity</name></member>
+      <member refid="d7/da1/a06569_1a4aeb073d743347ad192cc8e49e113f46" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>nodeId</name></member>
+      <member refid="d9/de2/a06561_1acf420dd8cfde9daee41e9875fee66aec" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>normal</name></member>
+      <member refid="d7/da1/a06569_1a59b53d3ad5dbacb9426f67306bece058" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>passMultipliers</name></member>
+      <member refid="d7/da1/a06569_1ae7ff0a143a1620ac9caa7b2fd9aa1d25" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>prvPosition</name></member>
+      <member refid="d7/da1/a06569_1a49ecbee8a3922b4ac28a7d820eec0550" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>RasterizerSurfaceBase</name></member>
+      <member refid="d9/de2/a06561_1adbce10b697015259dbafab0a44712c09" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>SurfaceBase</name></member>
+      <member refid="d7/da1/a06569_1a48b9ce7eae9aedfcd2854bcaf95ba848" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>tangent</name></member>
+      <member refid="d7/da1/a06569_1ae3ab063fc8e53073ca48b0cc4d1b1b6d" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>tangentSpaceFragPosition</name></member>
+      <member refid="d7/da1/a06569_1a2d22d13988b15c5314f512ad54e5b1e4" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>tangentSpaceViewPosition</name></member>
+      <member refid="d7/da1/a06569_1aa5ef3be78683949c27b3183d4496fed8" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>vertexId</name></member>
+      <member refid="d9/de2/a06561_1aa692353372a33e2f8053da9e965c884b" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>viewPosition</name></member>
+      <member refid="d9/de2/a06561_1acfe343a6ffd7ddb714a63497b11cb50d" prot="public" virt="non-virtual"><scope>castor3d::shader::RasterizerSurfaceBase</scope><name>worldPosition</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

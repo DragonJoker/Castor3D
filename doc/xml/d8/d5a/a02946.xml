@@ -1,0 +1,273 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/d5a/a02946" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::SkeletonPoolsEntry</compoundname>
+    <includes local="no">AnimatedObjectGroupCache.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d5a/a02946_1ad408ddd7a9e759429e15a77cd54f9a50" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d5c/a05810" kindref="compound">castor3d::AnimatedObjectGroup</ref> const  &amp;</type>
+        <definition>castor3d::AnimatedObjectGroup const&amp; castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::SkeletonPoolsEntry::group</definition>
+        <argsstring></argsstring>
+        <name>group</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::SkeletonPoolsEntry::group</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/AnimatedObjectGroupCache.hpp" line="37" column="38" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d5a/a02946_1a0dde46d3137aedf348cd965fddd62ce0" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d03/a05818" kindref="compound">castor3d::AnimatedSkeleton</ref> const  &amp;</type>
+        <definition>castor3d::AnimatedSkeleton const&amp; castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::SkeletonPoolsEntry::skeleton</definition>
+        <argsstring></argsstring>
+        <name>skeleton</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::SkeletonPoolsEntry::skeleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/AnimatedObjectGroupCache.hpp" line="38" column="35" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="12">
+        <label>Animable</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>K</label>
+      </node>
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="15">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::AnimatedObject</label>
+        <link refid="dd/d3e/a05806"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::AnimatedObjectGroup</label>
+        <link refid="dc/d5c/a05810"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::AnimatedSkeleton</label>
+        <link refid="dc/d03/a05818"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_skeleton</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_mesh</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_geometry</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_playingAnimations</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>castor3d::AnimationInstance</label>
+        <link refid="d7/d6f/a05826"/>
+        <childnode refid="25" relation="public-inheritance">
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_animation</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::AnimationT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d7/da8/a02522"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>m_keyframes</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::Geometry</label>
+        <link refid="da/d76/a05934"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="21" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::Mesh</label>
+        <link refid="d2/df8/a04550"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::MovableObject</label>
+        <link refid="dd/d5d/a05998"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d9/de2/a06062"/>
+      </node>
+      <node id="20">
+        <label>castor3d::SceneNode</label>
+        <link refid="de/dd2/a06258"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::Skeleton</label>
+        <link refid="d4/dc3/a04706"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::SkeletonAnimationInstance</label>
+        <link refid="db/d7c/a05858"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>m_keyFrames</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::SkeletonAnimationInstanceKeyFrame</label>
+        <link refid="d1/d9a/a05866"/>
+        <childnode refid="31" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="25">
+        <label>castor::OwnedBy&lt; AnimatedObject &gt;</label>
+      </node>
+      <node id="13">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="31">
+        <label>castor::OwnedBy&lt; SkeletonAnimationInstance &gt;</label>
+      </node>
+      <node id="1">
+        <label>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::SkeletonPoolsEntry</label>
+        <link refid="d8/d5a/a02946"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>group</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>skeleton</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::map&lt; castor::String, AnimationInstanceUPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationInstanceUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>std::vector&lt; AnimationKeyFrameUPtr &gt;</label>
+        <childnode refid="28" relation="template-instance">
+          <edgelabel>&lt; AnimationKeyFrameUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::vector&lt; SkeletonAnimationInstance * &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationInstance * &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>std::vector&lt; SkeletonAnimationInstanceKeyFrame &gt;</label>
+        <childnode refid="30" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="template-instance">
+          <edgelabel>&lt; SkeletonAnimationInstanceKeyFrame &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/AnimatedObjectGroupCache.hpp" line="35" column="1" bodyfile="Cache/AnimatedObjectGroupCache.hpp" bodystart="36" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d8/d5a/a02946_1ad408ddd7a9e759429e15a77cd54f9a50" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::SkeletonPoolsEntry</scope><name>group</name></member>
+      <member refid="d8/d5a/a02946_1a0dde46d3137aedf348cd965fddd62ce0" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::AnimatedObjectGroup, String, castor3d::AnimatedObjectGroupCacheTraits &gt;::SkeletonPoolsEntry</scope><name>skeleton</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

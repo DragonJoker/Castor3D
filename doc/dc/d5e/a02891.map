@@ -1,4 +1,11 @@
-<map id="castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;" name="castor::ResourceCacheT&lt; castor3d::Overlay, String, castor3d::OverlayCacheTraits &gt;">
-<area shape="rect" id="node1" title="Overlay collection, with additional add and remove functions to manage Z&#45;Index." alt="" coords="261,5,469,61"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,213,61"/>
+<map id="castor3d::GeometryBuffers" name="castor3d::GeometryBuffers">
+<area shape="rect" id="node1" title=" " alt="" coords="1501,97,1679,122"/>
+<area shape="rect" id="node2" href="$df/d5c/a02933.html" title=" " alt="" coords="473,105,659,145"/>
+<area shape="rect" id="node7" title=" " alt="" coords="897,27,1081,96"/>
+<area shape="rect" id="node3" href="$d4/d69/a02869.html" title="A GPU buffer pool, that uses an allocator to allocate sub&#45;buffers." alt="" coords="223,91,367,131"/>
+<area shape="rect" id="node4" href="$d2/d4c/a02897.html" title=" " alt="" coords="5,98,172,123"/>
+<area shape="rect" id="node5" href="$df/d7d/a02889.html" title="A memory range, in bytes." alt="" coords="221,155,368,181"/>
+<area shape="rect" id="node6" href="$dd/d0d/a02929.html" title=" " alt="" coords="1199,65,1384,90"/>
+<area shape="rect" id="node8" title=" " alt="" coords="512,31,620,57"/>
+<area shape="rect" id="node9" title=" " alt="" coords="275,31,314,57"/>
 </map>

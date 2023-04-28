@@ -1,0 +1,5 @@
+<map id="castor3d::IridescenceThicknessMapComponent::Plugin::getTextureFlags" name="castor3d::IridescenceThicknessMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="317,49,576,89"/>
+<area shape="rect" id="node2" href="$dc/d0c/a03801.html#a42b0fdde0a511ae128d93495feb0ae72" title="Fills the texture configuration for use with this component." alt="" coords="27,5,247,60"/>
+<area shape="rect" id="node3" href="$dc/d0c/a03801.html#a26c0aec8fa5de90c9bfef7b40a5c0821" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,85,269,125"/>
+</map>

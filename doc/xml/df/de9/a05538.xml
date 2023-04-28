@@ -1,0 +1,275 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/de9/a05538" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::IsRenderPassEnabled</compoundname>
+    <includes local="no">RenderNodesPass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/de9/a05538_1a93d4c275d281980eb17579ac4a44632b" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d9c/a05530" kindref="compound">RenderNodesPass</ref> const  *</type>
+        <definition>RenderNodesPass const* castor3d::IsRenderPassEnabled::m_pass</definition>
+        <argsstring></argsstring>
+        <name>m_pass</name>
+        <qualifiedname>castor3d::IsRenderPassEnabled::m_pass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="948" column="24" bodyfile="Render/RenderNodesPass.hpp" bodystart="948" bodyend="-1"/>
+        <referencedby refid="df/de9/a05538_1af6d7cf508be0eae5981c6e9b32e31b5a" compoundref="dc/d19/a01190" startline="942" endline="946">operator()</referencedby>
+        <referencedby refid="df/de9/a05538_1adb3469aceb551674c71ae8f2b25a2c64" compoundref="dc/d19/a01190" startline="937" endline="940">setPass</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/de9/a05538_1a157073bab25630d7b5d56086a4e5c60f" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IsRenderPassEnabled::IsRenderPassEnabled</definition>
+        <argsstring>(RenderNodesPass const &amp;pass)</argsstring>
+        <name>IsRenderPassEnabled</name>
+        <qualifiedname>castor3d::IsRenderPassEnabled::IsRenderPassEnabled</qualifiedname>
+        <param>
+          <type><ref refid="dd/d9c/a05530" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="929" column="10" bodyfile="Render/RenderNodesPass.hpp" bodystart="929" bodyend="931"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1ad2485f7e9ff2858513385632088d9b54" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IsRenderPassEnabled::IsRenderPassEnabled</definition>
+        <argsstring>()</argsstring>
+        <name>IsRenderPassEnabled</name>
+        <qualifiedname>castor3d::IsRenderPassEnabled::IsRenderPassEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="933" column="1" bodyfile="Render/RenderNodesPass.hpp" bodystart="933" bodyend="935"/>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1adb3469aceb551674c71ae8f2b25a2c64" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::IsRenderPassEnabled::setPass</definition>
+        <argsstring>(RenderNodesPass const &amp;pass)</argsstring>
+        <name>setPass</name>
+        <qualifiedname>castor3d::IsRenderPassEnabled::setPass</qualifiedname>
+        <param>
+          <type><ref refid="dd/d9c/a05530" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="937" column="6" bodyfile="Render/RenderNodesPass.hpp" bodystart="937" bodyend="940"/>
+        <references refid="df/de9/a05538_1a93d4c275d281980eb17579ac4a44632b" compoundref="dc/d19/a01190" startline="948">m_pass</references>
+      </memberdef>
+      <memberdef kind="function" id="df/de9/a05538_1af6d7cf508be0eae5981c6e9b32e31b5a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::IsRenderPassEnabled::operator()</definition>
+        <argsstring>() const</argsstring>
+        <name>operator()</name>
+        <qualifiedname>castor3d::IsRenderPassEnabled::operator()</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderNodesPass.hpp" line="942" column="6" bodyfile="Render/RenderNodesPass.hpp" bodystart="942" bodyend="946"/>
+        <references refid="dd/d9c/a05530_1a522f05b7c23934de29e7d98a1d71b03b">castor3d::RenderNodesPass::isPassEnabled</references>
+        <references refid="df/de9/a05538_1a93d4c275d281980eb17579ac4a44632b" compoundref="dc/d19/a01190" startline="948">m_pass</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="18">
+        <label>Animable</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>K</label>
+      </node>
+      <node id="11">
+        <label>T</label>
+      </node>
+      <node id="23">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="24" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::Camera</label>
+        <link refid="de/d4c/a05926"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::CameraUbo</label>
+        <link refid="de/df4/a06614"/>
+      </node>
+      <node id="1">
+        <label>castor3d::IsRenderPassEnabled</label>
+        <link refid="df/de9/a05538"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_pass</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::MovableObject</label>
+        <link refid="dd/d5d/a05998"/>
+        <childnode refid="16" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::QueuesData</label>
+        <link refid="da/d27/a05422"/>
+      </node>
+      <node id="6">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/de8/a05430"/>
+        <childnode refid="7" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="dd/d9c/a05530"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_cameraUbo</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::RenderSystem</label>
+        <link refid="da/d7e/a05558"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::SceneCuller</label>
+        <link refid="d8/de5/a04902"/>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::SceneNode</label>
+        <link refid="de/dd2/a06258"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::SceneUbo</label>
+        <link refid="da/d8b/a06694"/>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="24">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="19">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="16">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="20">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="21" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="22" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderNodesPass.hpp" line="927" column="1" bodyfile="Render/RenderNodesPass.hpp" bodystart="928" bodyend="949"/>
+    <listofallmembers>
+      <member refid="df/de9/a05538_1a157073bab25630d7b5d56086a4e5c60f" prot="public" virt="non-virtual"><scope>castor3d::IsRenderPassEnabled</scope><name>IsRenderPassEnabled</name></member>
+      <member refid="df/de9/a05538_1ad2485f7e9ff2858513385632088d9b54" prot="public" virt="non-virtual"><scope>castor3d::IsRenderPassEnabled</scope><name>IsRenderPassEnabled</name></member>
+      <member refid="df/de9/a05538_1a93d4c275d281980eb17579ac4a44632b" prot="public" virt="non-virtual"><scope>castor3d::IsRenderPassEnabled</scope><name>m_pass</name></member>
+      <member refid="df/de9/a05538_1af6d7cf508be0eae5981c6e9b32e31b5a" prot="public" virt="non-virtual"><scope>castor3d::IsRenderPassEnabled</scope><name>operator()</name></member>
+      <member refid="df/de9/a05538_1adb3469aceb551674c71ae8f2b25a2c64" prot="public" virt="non-virtual"><scope>castor3d::IsRenderPassEnabled</scope><name>setPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

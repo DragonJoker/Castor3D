@@ -1,0 +1,902 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d72/a05569" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderPipeline</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; RenderNodesPass &gt;</basecompoundref>
+    <includes local="no">RenderPipeline.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/d72/a05569_1adb6607a8a7343e5c65f06468dd264d31" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderPipeline::setVertexLayouts</definition>
+        <argsstring>(ashes::PipelineVertexInputStateCreateInfoCRefArray const &amp;layouts)</argsstring>
+        <name>setVertexLayouts</name>
+        <qualifiedname>castor3d::RenderPipeline::setVertexLayouts</qualifiedname>
+        <param>
+          <type>ashes::PipelineVertexInputStateCreateInfoCRefArray const &amp;</type>
+          <declname>layouts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Mutators. <simplesect kind="remark"><para>They must be called before any call to <ref refid="d3/d72/a05569_1ad0c4d4b4ae7f1dd307ee8d5a409f2730" kindref="member">initialise()</ref>. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="141" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a8ade23790d714de56ca9b59873226184" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderPipeline::setAdditionalDescriptorSetLayout</definition>
+        <argsstring>(ashes::DescriptorSetLayout const &amp;layout)</argsstring>
+        <name>setAdditionalDescriptorSetLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::setAdditionalDescriptorSetLayout</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSetLayout const &amp;</type>
+          <declname>layout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="143" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="143" bodyend="147"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a7620b1f8e1bcfc1ab660d694b9cf1890" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderPipeline::setAdditionalDescriptorSet</definition>
+        <argsstring>(ashes::DescriptorSet const &amp;descriptorSet)</argsstring>
+        <name>setAdditionalDescriptorSet</name>
+        <qualifiedname>castor3d::RenderPipeline::setAdditionalDescriptorSet</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet const &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="149" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="149" bodyend="152"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a8f01a9e6e5814368a88c1a72ccda48b6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderPipeline::setMeshletDescriptorSetLayout</definition>
+        <argsstring>(ashes::DescriptorSetLayout const &amp;layout)</argsstring>
+        <name>setMeshletDescriptorSetLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::setMeshletDescriptorSetLayout</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSetLayout const &amp;</type>
+          <declname>layout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="154" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="154" bodyend="158"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a0b532ce350871f32251ddaead753f981" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderPipeline::setVertexLayouts</definition>
+        <argsstring>(std::vector&lt; ashes::PipelineVertexInputStateCreateInfo &gt; layouts)</argsstring>
+        <name>setVertexLayouts</name>
+        <qualifiedname>castor3d::RenderPipeline::setVertexLayouts</qualifiedname>
+        <param>
+          <type>std::vector&lt; ashes::PipelineVertexInputStateCreateInfo &gt;</type>
+          <declname>layouts</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="160" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="160" bodyend="164"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a217df8e359992b946fa999bebf87a900" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderPipeline::setPushConstantRanges</definition>
+        <argsstring>(ashes::VkPushConstantRangeArray const &amp;pushConstantRanges)</argsstring>
+        <name>setPushConstantRanges</name>
+        <qualifiedname>castor3d::RenderPipeline::setPushConstantRanges</qualifiedname>
+        <param>
+          <type>ashes::VkPushConstantRangeArray const &amp;</type>
+          <declname>pushConstantRanges</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="166" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="166" bodyend="170"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1acdcab9d3c0a07e9142ec098ed9055a1b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderPipeline::setViewport</definition>
+        <argsstring>(VkViewport const &amp;viewport)</argsstring>
+        <name>setViewport</name>
+        <qualifiedname>castor3d::RenderPipeline::setViewport</qualifiedname>
+        <param>
+          <type>VkViewport const &amp;</type>
+          <declname>viewport</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="172" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="172" bodyend="176"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a6575bd0a98f07f7b791f8f7bea00a959" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::RenderPipeline::setScissor</definition>
+        <argsstring>(VkRect2D const &amp;scissor)</argsstring>
+        <name>setScissor</name>
+        <qualifiedname>castor3d::RenderPipeline::setScissor</qualifiedname>
+        <param>
+          <type>VkRect2D const &amp;</type>
+          <declname>scissor</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="178" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="178" bodyend="182"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d3/d72/a05569_1a1e0cf6f3a4fc998ab1d793eb0bd33819" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::DescriptorSet const &amp;</type>
+        <definition>ashes::DescriptorSet const  &amp; castor3d::RenderPipeline::getAdditionalDescriptorSet</definition>
+        <argsstring>() const</argsstring>
+        <name>getAdditionalDescriptorSet</name>
+        <qualifiedname>castor3d::RenderPipeline::getAdditionalDescriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="193" column="29" bodyfile="Render/RenderPipeline.hpp" bodystart="193" bodyend="197"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a0915c7216f463dac36888ab428d8fae9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+        <definition>PipelineFlags const  &amp; castor3d::RenderPipeline::getFlags</definition>
+        <argsstring>() const</argsstring>
+        <name>getFlags</name>
+        <qualifiedname>castor3d::RenderPipeline::getFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="199" column="22" bodyfile="Render/RenderPipeline.hpp" bodystart="199" bodyend="202"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a322a5aefdc90d6076f61007282aa8705" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d0/d61/a05385" kindref="compound">PipelineBaseHash</ref> const &amp;</type>
+        <definition>PipelineBaseHash const  &amp; castor3d::RenderPipeline::getFlagsHash</definition>
+        <argsstring>() const</argsstring>
+        <name>getFlagsHash</name>
+        <qualifiedname>castor3d::RenderPipeline::getFlagsHash</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="204" column="25" bodyfile="Render/RenderPipeline.hpp" bodystart="204" bodyend="207"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1aa936edd51ea880d50140d64b8294b23c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderPipeline::hasPipeline</definition>
+        <argsstring>() const</argsstring>
+        <name>hasPipeline</name>
+        <qualifiedname>castor3d::RenderPipeline::hasPipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="209" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="209" bodyend="212"/>
+        <referencedby refid="d3/d72/a05569_1a97ee029559cbe0d0359b7d119fdd77ee" compoundref="db/d42/a01220" startline="214" endline="218">getPipeline</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a97ee029559cbe0d0359b7d119fdd77ee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::GraphicsPipeline const &amp;</type>
+        <definition>ashes::GraphicsPipeline const  &amp; castor3d::RenderPipeline::getPipeline</definition>
+        <argsstring>() const</argsstring>
+        <name>getPipeline</name>
+        <qualifiedname>castor3d::RenderPipeline::getPipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="214" column="32" bodyfile="Render/RenderPipeline.hpp" bodystart="214" bodyend="218"/>
+        <references refid="d3/d72/a05569_1aa936edd51ea880d50140d64b8294b23c" compoundref="db/d42/a01220" startline="209" endline="212">hasPipeline</references>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a3e3ad8ac32a292b6654e5897fa4f0c76" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::PipelineLayout const &amp;</type>
+        <definition>ashes::PipelineLayout const  &amp; castor3d::RenderPipeline::getPipelineLayout</definition>
+        <argsstring>() const</argsstring>
+        <name>getPipelineLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::getPipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="220" column="30" bodyfile="Render/RenderPipeline.hpp" bodystart="220" bodyend="224"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1af3a1a70f66583ce7f3baa0f4b4957f21" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::DescriptorSetLayout const &amp;</type>
+        <definition>ashes::DescriptorSetLayout const  &amp; castor3d::RenderPipeline::getAdditionalDescriptorSetLayout</definition>
+        <argsstring>() const</argsstring>
+        <name>getAdditionalDescriptorSetLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::getAdditionalDescriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="226" column="35" bodyfile="Render/RenderPipeline.hpp" bodystart="226" bodyend="230"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a12484a08514ee866ab60bf73de1d275b" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderPipeline::hasAdditionalDescriptorSetLayout</definition>
+        <argsstring>() const</argsstring>
+        <name>hasAdditionalDescriptorSetLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::hasAdditionalDescriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="232" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="232" bodyend="235"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1ab27fc7e4cbea086559e302816bdf8557" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::DescriptorSetLayout const &amp;</type>
+        <definition>ashes::DescriptorSetLayout const  &amp; castor3d::RenderPipeline::getMeshletDescriptorSetLayout</definition>
+        <argsstring>() const</argsstring>
+        <name>getMeshletDescriptorSetLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::getMeshletDescriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="237" column="35" bodyfile="Render/RenderPipeline.hpp" bodystart="237" bodyend="241"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a8d2d416ed3d078899e8c4f7112d82338" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::RenderPipeline::hasMeshletDescriptorSetLayout</definition>
+        <argsstring>() const</argsstring>
+        <name>hasMeshletDescriptorSetLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::hasMeshletDescriptorSetLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="243" column="6" bodyfile="Render/RenderPipeline.hpp" bodystart="243" bodyend="246"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1adb16ba0255cfab120c88ccdc5fe0a8ee" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d99/a05585" kindref="compound">RenderSystem</ref> &amp;</type>
+        <definition>RenderSystem &amp; castor3d::RenderPipeline::getRenderSystem</definition>
+        <argsstring>() const</argsstring>
+        <name>getRenderSystem</name>
+        <qualifiedname>castor3d::RenderPipeline::getRenderSystem</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="248" column="15" bodyfile="Render/RenderPipeline.hpp" bodystart="248" bodyend="251"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0c" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Descriptor</name>
+        <qualifiedname>castor3d::RenderPipeline::Descriptor</qualifiedname>
+        <enumvalue id="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca54630823eb5c2dfd6d8edc25841d11c3" prot="public">
+          <name>eTextures</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca4dc1431c2dfe3a7b602cb256a4bf2013" prot="public">
+          <name>eBuffers</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca36ef76111962cf76118cdf633f20074b" prot="public">
+          <name>eMeshBuffers</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca9a1f7764bfcecde938f5ec618aca1bf3" prot="public">
+          <name>eVertexBuffers</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0caa905f7c2a077e8be8bf249409f153e6b" prot="public">
+          <name>Descriptor_COUNT</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca7c98a435bd4dbb9bf1e8beb62ad2e2a5" prot="public">
+          <name>Descriptor_MIN</name>
+          <initializer>=  eTextures</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca79906ff97c727aef01c6ce8fc86b5949" prot="public">
+          <name>Descriptor_MAX</name>
+          <initializer>=  Descriptor_COUNT-1</initializer>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="27" column="1" bodyfile="Render/RenderPipeline.hpp" bodystart="28" bodyend="37"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/d72/a05569_1ae34d215d9971c3e185882c8bfbf7821a" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d99/a05585" kindref="compound">RenderSystem</ref> &amp;</type>
+        <definition>RenderSystem&amp; castor3d::RenderPipeline::m_renderSystem</definition>
+        <argsstring></argsstring>
+        <name>m_renderSystem</name>
+        <qualifiedname>castor3d::RenderPipeline::m_renderSystem</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="255" column="15" bodyfile="Render/RenderPipeline.hpp" bodystart="255" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1a14b0eb4022422025efd31197a30218b0" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineDepthStencilStateCreateInfo</type>
+        <definition>ashes::PipelineDepthStencilStateCreateInfo castor3d::RenderPipeline::m_dsState</definition>
+        <argsstring></argsstring>
+        <name>m_dsState</name>
+        <qualifiedname>castor3d::RenderPipeline::m_dsState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="256" column="44" bodyfile="Render/RenderPipeline.hpp" bodystart="256" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1a6c32c1d4531f4eedcafe1265e5f85e45" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineRasterizationStateCreateInfo</type>
+        <definition>ashes::PipelineRasterizationStateCreateInfo castor3d::RenderPipeline::m_rsState</definition>
+        <argsstring></argsstring>
+        <name>m_rsState</name>
+        <qualifiedname>castor3d::RenderPipeline::m_rsState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="257" column="45" bodyfile="Render/RenderPipeline.hpp" bodystart="257" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1adc2a325bd85b712ac15f22a832abdf35" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineColorBlendStateCreateInfo</type>
+        <definition>ashes::PipelineColorBlendStateCreateInfo castor3d::RenderPipeline::m_blState</definition>
+        <argsstring></argsstring>
+        <name>m_blState</name>
+        <qualifiedname>castor3d::RenderPipeline::m_blState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="258" column="42" bodyfile="Render/RenderPipeline.hpp" bodystart="258" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1ae06eaf5bd89651a916d9b84c55893b0a" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineMultisampleStateCreateInfo</type>
+        <definition>ashes::PipelineMultisampleStateCreateInfo castor3d::RenderPipeline::m_msState</definition>
+        <argsstring></argsstring>
+        <name>m_msState</name>
+        <qualifiedname>castor3d::RenderPipeline::m_msState</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="259" column="43" bodyfile="Render/RenderPipeline.hpp" bodystart="259" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1a6bc863c9ecb7e286969cd61d416636e5" prot="private" static="no" mutable="no">
+        <type>ShaderProgramRPtr</type>
+        <definition>ShaderProgramRPtr castor3d::RenderPipeline::m_program</definition>
+        <argsstring></argsstring>
+        <name>m_program</name>
+        <qualifiedname>castor3d::RenderPipeline::m_program</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="260" column="19" bodyfile="Render/RenderPipeline.hpp" bodystart="260" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1aeed0cb5a44d47b3f53cbc52ab36e8c5e" prot="private" static="no" mutable="no">
+        <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref></type>
+        <definition>PipelineFlags castor3d::RenderPipeline::m_flags</definition>
+        <argsstring></argsstring>
+        <name>m_flags</name>
+        <qualifiedname>castor3d::RenderPipeline::m_flags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="261" column="15" bodyfile="Render/RenderPipeline.hpp" bodystart="261" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1a45f0ec8a41434c714943ae78a83099f2" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d61/a05385" kindref="compound">PipelineBaseHash</ref></type>
+        <definition>PipelineBaseHash castor3d::RenderPipeline::m_flagsHash</definition>
+        <argsstring></argsstring>
+        <name>m_flagsHash</name>
+        <qualifiedname>castor3d::RenderPipeline::m_flagsHash</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="262" column="18" bodyfile="Render/RenderPipeline.hpp" bodystart="262" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1acbe26869b9aa9b59fa7bb51f86b1892f" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; ashes::PipelineVertexInputStateCreateInfo &gt;</type>
+        <definition>std::vector&lt; ashes::PipelineVertexInputStateCreateInfo &gt; castor3d::RenderPipeline::m_vertexLayouts</definition>
+        <argsstring></argsstring>
+        <name>m_vertexLayouts</name>
+        <qualifiedname>castor3d::RenderPipeline::m_vertexLayouts</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="263" column="13" bodyfile="Render/RenderPipeline.hpp" bodystart="263" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1a4a3fb02b44d97127758544d98ebd38d1" prot="private" static="no" mutable="no">
+        <type>ashes::VkPushConstantRangeArray</type>
+        <definition>ashes::VkPushConstantRangeArray castor3d::RenderPipeline::m_pushConstantRanges</definition>
+        <argsstring></argsstring>
+        <name>m_pushConstantRanges</name>
+        <qualifiedname>castor3d::RenderPipeline::m_pushConstantRanges</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="264" column="33" bodyfile="Render/RenderPipeline.hpp" bodystart="264" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1a759e714301438c0556946ae2f0e0da2a" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; VkViewport &gt;</type>
+        <definition>std::unique_ptr&lt; VkViewport &gt; castor3d::RenderPipeline::m_viewport</definition>
+        <argsstring></argsstring>
+        <name>m_viewport</name>
+        <qualifiedname>castor3d::RenderPipeline::m_viewport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="265" column="17" bodyfile="Render/RenderPipeline.hpp" bodystart="265" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1ac128e9fd138d9718f372de88dbdda78a" prot="private" static="no" mutable="no">
+        <type>std::unique_ptr&lt; VkRect2D &gt;</type>
+        <definition>std::unique_ptr&lt; VkRect2D &gt; castor3d::RenderPipeline::m_scissor</definition>
+        <argsstring></argsstring>
+        <name>m_scissor</name>
+        <qualifiedname>castor3d::RenderPipeline::m_scissor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="266" column="17" bodyfile="Render/RenderPipeline.hpp" bodystart="266" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1a6be1b75163c68511639d91a49a144a26" prot="private" static="no" mutable="no">
+        <type>ashes::PipelineLayoutPtr</type>
+        <definition>ashes::PipelineLayoutPtr castor3d::RenderPipeline::m_pipelineLayout</definition>
+        <argsstring></argsstring>
+        <name>m_pipelineLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::m_pipelineLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="267" column="26" bodyfile="Render/RenderPipeline.hpp" bodystart="267" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1af27e66b0cae182f4d5a5f5dbc1808e1f" prot="private" static="no" mutable="no">
+        <type>ashes::GraphicsPipelinePtr</type>
+        <definition>ashes::GraphicsPipelinePtr castor3d::RenderPipeline::m_pipeline</definition>
+        <argsstring></argsstring>
+        <name>m_pipeline</name>
+        <qualifiedname>castor3d::RenderPipeline::m_pipeline</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="268" column="28" bodyfile="Render/RenderPipeline.hpp" bodystart="268" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1a5b147628a55655c20433de7a1231dbad" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayout const  *</type>
+        <definition>ashes::DescriptorSetLayout const* castor3d::RenderPipeline::m_addDescriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>m_addDescriptorLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::m_addDescriptorLayout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="269" column="35" bodyfile="Render/RenderPipeline.hpp" bodystart="269" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1ac92c9dda2f789f745b2d382d8b00c338" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSet const  *</type>
+        <definition>ashes::DescriptorSet const* castor3d::RenderPipeline::m_addDescriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_addDescriptorSet</name>
+        <qualifiedname>castor3d::RenderPipeline::m_addDescriptorSet</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="270" column="29" bodyfile="Render/RenderPipeline.hpp" bodystart="270" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d72/a05569_1aec7bc46b6c6f627775f1b97b9614c3e6" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayout const  *</type>
+        <definition>ashes::DescriptorSetLayout const* castor3d::RenderPipeline::m_meshletDescriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>m_meshletDescriptorLayout</name>
+        <qualifiedname>castor3d::RenderPipeline::m_meshletDescriptorLayout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="271" column="35" bodyfile="Render/RenderPipeline.hpp" bodystart="271" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d72/a05569_1a7d4d895658355e876a27144e79a192e2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderPipeline::RenderPipeline</definition>
+        <argsstring>(RenderNodesPass &amp;owner, RenderSystem &amp;renderSystem, ashes::PipelineDepthStencilStateCreateInfo dsState, ashes::PipelineRasterizationStateCreateInfo rsState, ashes::PipelineColorBlendStateCreateInfo blState, ashes::PipelineMultisampleStateCreateInfo msState, ShaderProgramRPtr program, PipelineFlags const &amp;flags)</argsstring>
+        <name>RenderPipeline</name>
+        <qualifiedname>castor3d::RenderPipeline::RenderPipeline</qualifiedname>
+        <param>
+          <type><ref refid="d9/ddf/a05557" kindref="compound">RenderNodesPass</ref> &amp;</type>
+          <declname>owner</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d99/a05585" kindref="compound">RenderSystem</ref> &amp;</type>
+          <declname>renderSystem</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineDepthStencilStateCreateInfo</type>
+          <declname>dsState</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineRasterizationStateCreateInfo</type>
+          <declname>rsState</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineColorBlendStateCreateInfo</type>
+          <declname>blState</declname>
+        </param>
+        <param>
+          <type>ashes::PipelineMultisampleStateCreateInfo</type>
+          <declname>msState</declname>
+        </param>
+        <param>
+          <type>ShaderProgramRPtr</type>
+          <declname>program</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">owner</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The owning render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderSystem</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The <ref refid="d3/d99/a05585" kindref="compound">RenderSystem</ref>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dsState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth stencil state. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rsState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rateriser state. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">blState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The blend state. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">msState</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The multisample state. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">program</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The shader program. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The creation flags. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="80" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a4cf7218c68c3d453d2022a775fe44161" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::RenderPipeline::~RenderPipeline</definition>
+        <argsstring>()</argsstring>
+        <name>~RenderPipeline</name>
+        <qualifiedname>castor3d::RenderPipeline::~RenderPipeline</qualifiedname>
+        <briefdescription>
+<para>Denstructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="96" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1ad0c4d4b4ae7f1dd307ee8d5a409f2730" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderPipeline::initialise</definition>
+        <argsstring>(RenderDevice const &amp;device, VkRenderPass renderPass)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::RenderPipeline::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>VkRenderPass</type>
+          <declname>renderPass</declname>
+        </param>
+        <briefdescription>
+<para>Initialises the pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass to which this pipeline is bound. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="113" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/d72/a05569_1a200fe69bdbff144f5ef1170d7adcd4dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::RenderPipeline::cleanup</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::RenderPipeline::cleanup</qualifiedname>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+<para>Cleans up the pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderPipeline.hpp" line="127" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::RenderPipeline</label>
+        <link refid="d3/d72/a05569"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderNodesPass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::RenderPipeline</label>
+        <link refid="d3/d72/a05569"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; RenderNodesPass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderPipeline.hpp" line="23" column="1" bodyfile="Render/RenderPipeline.hpp" bodystart="25" bodyend="272"/>
+    <listofallmembers>
+      <member refid="d3/d72/a05569_1a200fe69bdbff144f5ef1170d7adcd4dc" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>cleanup</name></member>
+      <member refid="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0c" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>Descriptor</name></member>
+      <member refid="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0caa905f7c2a077e8be8bf249409f153e6b" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>Descriptor_COUNT</name></member>
+      <member refid="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca79906ff97c727aef01c6ce8fc86b5949" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>Descriptor_MAX</name></member>
+      <member refid="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca7c98a435bd4dbb9bf1e8beb62ad2e2a5" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>Descriptor_MIN</name></member>
+      <member refid="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca4dc1431c2dfe3a7b602cb256a4bf2013" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>eBuffers</name></member>
+      <member refid="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca36ef76111962cf76118cdf633f20074b" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>eMeshBuffers</name></member>
+      <member refid="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca54630823eb5c2dfd6d8edc25841d11c3" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>eTextures</name></member>
+      <member refid="d3/d72/a05569_1a3cabd078aad9276eb347d708ecadcf0ca9a1f7764bfcecde938f5ec618aca1bf3" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>eVertexBuffers</name></member>
+      <member refid="d3/d72/a05569_1a1e0cf6f3a4fc998ab1d793eb0bd33819" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>getAdditionalDescriptorSet</name></member>
+      <member refid="d3/d72/a05569_1af3a1a70f66583ce7f3baa0f4b4957f21" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>getAdditionalDescriptorSetLayout</name></member>
+      <member refid="d3/d72/a05569_1a0915c7216f463dac36888ab428d8fae9" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>getFlags</name></member>
+      <member refid="d3/d72/a05569_1a322a5aefdc90d6076f61007282aa8705" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>getFlagsHash</name></member>
+      <member refid="d3/d72/a05569_1ab27fc7e4cbea086559e302816bdf8557" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>getMeshletDescriptorSetLayout</name></member>
+      <member refid="d3/d72/a05569_1a97ee029559cbe0d0359b7d119fdd77ee" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>getPipeline</name></member>
+      <member refid="d3/d72/a05569_1a3e3ad8ac32a292b6654e5897fa4f0c76" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>getPipelineLayout</name></member>
+      <member refid="d3/d72/a05569_1adb16ba0255cfab120c88ccdc5fe0a8ee" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>getRenderSystem</name></member>
+      <member refid="d3/d72/a05569_1a12484a08514ee866ab60bf73de1d275b" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>hasAdditionalDescriptorSetLayout</name></member>
+      <member refid="d3/d72/a05569_1a8d2d416ed3d078899e8c4f7112d82338" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>hasMeshletDescriptorSetLayout</name></member>
+      <member refid="d3/d72/a05569_1aa936edd51ea880d50140d64b8294b23c" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>hasPipeline</name></member>
+      <member refid="d3/d72/a05569_1ad0c4d4b4ae7f1dd307ee8d5a409f2730" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>initialise</name></member>
+      <member refid="d3/d72/a05569_1a5b147628a55655c20433de7a1231dbad" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_addDescriptorLayout</name></member>
+      <member refid="d3/d72/a05569_1ac92c9dda2f789f745b2d382d8b00c338" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_addDescriptorSet</name></member>
+      <member refid="d3/d72/a05569_1adc2a325bd85b712ac15f22a832abdf35" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_blState</name></member>
+      <member refid="d3/d72/a05569_1a14b0eb4022422025efd31197a30218b0" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_dsState</name></member>
+      <member refid="d3/d72/a05569_1aeed0cb5a44d47b3f53cbc52ab36e8c5e" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_flags</name></member>
+      <member refid="d3/d72/a05569_1a45f0ec8a41434c714943ae78a83099f2" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_flagsHash</name></member>
+      <member refid="d3/d72/a05569_1aec7bc46b6c6f627775f1b97b9614c3e6" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_meshletDescriptorLayout</name></member>
+      <member refid="d3/d72/a05569_1ae06eaf5bd89651a916d9b84c55893b0a" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_msState</name></member>
+      <member refid="d3/d72/a05569_1af27e66b0cae182f4d5a5f5dbc1808e1f" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_pipeline</name></member>
+      <member refid="d3/d72/a05569_1a6be1b75163c68511639d91a49a144a26" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_pipelineLayout</name></member>
+      <member refid="d3/d72/a05569_1a6bc863c9ecb7e286969cd61d416636e5" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_program</name></member>
+      <member refid="d3/d72/a05569_1a4a3fb02b44d97127758544d98ebd38d1" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_pushConstantRanges</name></member>
+      <member refid="d3/d72/a05569_1ae34d215d9971c3e185882c8bfbf7821a" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_renderSystem</name></member>
+      <member refid="d3/d72/a05569_1a6c32c1d4531f4eedcafe1265e5f85e45" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_rsState</name></member>
+      <member refid="d3/d72/a05569_1ac128e9fd138d9718f372de88dbdda78a" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_scissor</name></member>
+      <member refid="d3/d72/a05569_1acbe26869b9aa9b59fa7bb51f86b1892f" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_vertexLayouts</name></member>
+      <member refid="d3/d72/a05569_1a759e714301438c0556946ae2f0e0da2a" prot="private" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>m_viewport</name></member>
+      <member refid="d3/d72/a05569_1a7d4d895658355e876a27144e79a192e2" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>RenderPipeline</name></member>
+      <member refid="d3/d72/a05569_1a7620b1f8e1bcfc1ab660d694b9cf1890" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>setAdditionalDescriptorSet</name></member>
+      <member refid="d3/d72/a05569_1a8ade23790d714de56ca9b59873226184" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>setAdditionalDescriptorSetLayout</name></member>
+      <member refid="d3/d72/a05569_1a8f01a9e6e5814368a88c1a72ccda48b6" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>setMeshletDescriptorSetLayout</name></member>
+      <member refid="d3/d72/a05569_1a217df8e359992b946fa999bebf87a900" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>setPushConstantRanges</name></member>
+      <member refid="d3/d72/a05569_1a6575bd0a98f07f7b791f8f7bea00a959" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>setScissor</name></member>
+      <member refid="d3/d72/a05569_1adb6607a8a7343e5c65f06468dd264d31" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>setVertexLayouts</name></member>
+      <member refid="d3/d72/a05569_1a0b532ce350871f32251ddaead753f981" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>setVertexLayouts</name></member>
+      <member refid="d3/d72/a05569_1acdcab9d3c0a07e9142ec098ed9055a1b" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>setViewport</name></member>
+      <member refid="d3/d72/a05569_1a4cf7218c68c3d453d2022a775fe44161" prot="public" virt="non-virtual"><scope>castor3d::RenderPipeline</scope><name>~RenderPipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

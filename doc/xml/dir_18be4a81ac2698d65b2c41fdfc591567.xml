@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_18be4a81ac2698d65b2c41fdfc591567" kind="dir">
     <compoundname>Material/Texture</compoundname>
     <innerdir refid="dir_83dd0b6e9a230a71a17985a017af57f9">Material/Texture/Animation</innerdir>
-    <innerfile refid="d9/d24/a00524">Sampler.hpp</innerfile>
-    <innerfile refid="d9/d44/a00527">TextureConfiguration.hpp</innerfile>
-    <innerfile refid="da/d7e/a00530">TextureLayout.hpp</innerfile>
-    <innerfile refid="db/d44/a00533">TextureModule.hpp</innerfile>
-    <innerfile refid="d4/d33/a00536">TextureSource.hpp</innerfile>
-    <innerfile refid="d3/d87/a00539">TextureSourceInfo.hpp</innerfile>
-    <innerfile refid="d0/ddb/a00542">TextureUnit.hpp</innerfile>
-    <innerfile refid="d8/deb/a00545">TextureView.hpp</innerfile>
+    <innerfile refid="de/ddd/a00653">Sampler.hpp</innerfile>
+    <innerfile refid="dc/df2/a00656">TextureConfiguration.hpp</innerfile>
+    <innerfile refid="dc/d91/a00659">TextureLayout.hpp</innerfile>
+    <innerfile refid="dc/df1/a00662">TextureModule.hpp</innerfile>
+    <innerfile refid="da/d46/a00665">TextureSource.hpp</innerfile>
+    <innerfile refid="d0/d5c/a00668">TextureSourceInfo.hpp</innerfile>
+    <innerfile refid="d8/d13/a00671">TextureUnit.hpp</innerfile>
+    <innerfile refid="d8/d73/a00674">TextureView.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

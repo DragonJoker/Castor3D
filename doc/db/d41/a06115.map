@@ -1,4 +1,6 @@
-<map id="castor3d::shader::PayloadT&lt; FlagT &gt;" name="castor3d::shader::PayloadT&lt; FlagT &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,80,180,121"/>
-<area shape="rect" id="node2" title=" " alt="" coords="24,5,161,32"/>
+<map id="castor3d::SceneFileParser" name="castor3d::SceneFileParser">
+<area shape="rect" id="node1" title=" " alt="" coords="191,93,367,119"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,31"/>
+<area shape="rect" id="node3" title=" " alt="" coords="216,5,341,31"/>
+<area shape="rect" id="node4" title=" " alt="" coords="365,5,467,31"/>
 </map>

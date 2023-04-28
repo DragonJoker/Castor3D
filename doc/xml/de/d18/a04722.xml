@@ -1,0 +1,472 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="de/d18/a04722" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SkeletonNode</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <derivedcompoundref refid="df/dd9/a04702" prot="public" virt="non-virtual">castor3d::BoneNode</derivedcompoundref>
+    <includes local="no">SkeletonNode.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="de/d18/a04722_1a6a11291b70c2cbded85d321ce539c62f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class Skeleton</definition>
+        <argsstring></argsstring>
+        <name>Skeleton</name>
+        <qualifiedname>castor3d::SkeletonNode::Skeleton</qualifiedname>
+        <param>
+          <type><ref refid="d4/dc3/a04706" kindref="compound">Skeleton</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="20" column="14" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="20" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="de/d18/a04722_1a6c4c77063a8d1c17ab151f6fb10e8092" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; SkeletonNode &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; SkeletonNode &gt;</name>
+        <qualifiedname>castor3d::SkeletonNode::BinaryWriter&lt; SkeletonNode &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d8/dab/a02638" kindref="compound">BinaryWriter</ref>&lt; <ref refid="de/d18/a04722" kindref="compound">SkeletonNode</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="20" column="14" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="de/d18/a04722_1a19a77718e5ba43cc046d77ac1e63f605" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; SkeletonNode &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; SkeletonNode &gt;</name>
+        <qualifiedname>castor3d::SkeletonNode::BinaryParser&lt; SkeletonNode &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d0/d3f/a02630" kindref="compound">BinaryParser</ref>&lt; <ref refid="de/d18/a04722" kindref="compound">SkeletonNode</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="20" column="14" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="de/d18/a04722_1afefe6f7170c06de7946b069de18cab51" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryWriter&lt; BoneNode &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryWriter&lt; BoneNode &gt;</name>
+        <qualifiedname>castor3d::SkeletonNode::BinaryWriter&lt; BoneNode &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d8/dab/a02638" kindref="compound">BinaryWriter</ref>&lt; <ref refid="df/dd9/a04702" kindref="compound">BoneNode</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="20" column="14" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="friend" id="de/d18/a04722_1ae7b61f3234d7ebb1eae7245a2934d2c0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>class</type>
+        <definition>friend class BinaryParser&lt; BoneNode &gt;</definition>
+        <argsstring></argsstring>
+        <name>BinaryParser&lt; BoneNode &gt;</name>
+        <qualifiedname>castor3d::SkeletonNode::BinaryParser&lt; BoneNode &gt;</qualifiedname>
+        <param>
+          <type><ref refid="d0/d3f/a02630" kindref="compound">BinaryParser</ref>&lt; <ref refid="df/dd9/a04702" kindref="compound">BoneNode</ref> &gt;</type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="20" column="14" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/d18/a04722_1ab63d540e683c297315d0be0c7dc8029b" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a09c7d68a62b6c5ec4372e60c38fb8ef0" kindref="member">SkeletonNodeType</ref></type>
+        <definition>SkeletonNodeType castor3d::SkeletonNode::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor3d::SkeletonNode::m_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="110" column="18" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d18/a04722_1a02f5281fb99033ee19566d028de990d9" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/dc3/a04706" kindref="compound">Skeleton</ref> &amp;</type>
+        <definition>Skeleton&amp; castor3d::SkeletonNode::m_skeleton</definition>
+        <argsstring></argsstring>
+        <name>m_skeleton</name>
+        <qualifiedname>castor3d::SkeletonNode::m_skeleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="111" column="11" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d18/a04722_1abca9c71668d73c285e7c1a8a27564bf2" prot="private" static="no" mutable="no">
+        <type><ref refid="de/d18/a04722" kindref="compound">SkeletonNode</ref> *</type>
+        <definition>SkeletonNode* castor3d::SkeletonNode::m_parent</definition>
+        <argsstring></argsstring>
+        <name>m_parent</name>
+        <qualifiedname>castor3d::SkeletonNode::m_parent</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="112" column="15" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d18/a04722_1abc57f4427054f3049ef75dd2a0a76979" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d82/a04718" kindref="compound">NodeTransform</ref></type>
+        <definition>NodeTransform castor3d::SkeletonNode::m_transform</definition>
+        <argsstring></argsstring>
+        <name>m_transform</name>
+        <qualifiedname>castor3d::SkeletonNode::m_transform</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="113" column="15" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d18/a04722_1a16712f6584dccf3ab238407646cdacca" prot="private" static="no" mutable="no">
+        <type>std::map&lt; castor::String, <ref refid="de/d18/a04722" kindref="compound">SkeletonNode</ref> * &gt;</type>
+        <definition>std::map&lt; castor::String, SkeletonNode * &gt; castor3d::SkeletonNode::m_children</definition>
+        <argsstring></argsstring>
+        <name>m_children</name>
+        <qualifiedname>castor3d::SkeletonNode::m_children</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="114" column="10" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="de/d18/a04722_1a9441726175355b2606a71ea31956b999" prot="protected" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SkeletonNode::SkeletonNode</definition>
+        <argsstring>(SkeletonNodeType type, castor::String name, Skeleton &amp;skeleton)</argsstring>
+        <name>SkeletonNode</name>
+        <qualifiedname>castor3d::SkeletonNode::SkeletonNode</qualifiedname>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a09c7d68a62b6c5ec4372e60c38fb8ef0" kindref="member">SkeletonNodeType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dc3/a04706" kindref="compound">Skeleton</ref> &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent skeleton. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="39" column="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d18/a04722_1a5e4bf4327428b8789226e3a021ea24b1" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SkeletonNode::SkeletonNode</definition>
+        <argsstring>(castor::String name, Skeleton &amp;skeleton)</argsstring>
+        <name>SkeletonNode</name>
+        <qualifiedname>castor3d::SkeletonNode::SkeletonNode</qualifiedname>
+        <param>
+          <type>castor::String</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dc3/a04706" kindref="compound">Skeleton</ref> &amp;</type>
+          <declname>skeleton</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">skeleton</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent skeleton. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="54" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d18/a04722_1afa67ec180560a7805b495cac55ca5c85" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::SkeletonNode::~SkeletonNode</definition>
+        <argsstring>()=default</argsstring>
+        <name>~SkeletonNode</name>
+        <qualifiedname>castor3d::SkeletonNode::~SkeletonNode</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="62" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d18/a04722_1abbef4fe7304cb777f086bc50d66ec79b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>const <ref refid="d4/dc3/a04706" kindref="compound">Skeleton</ref> &amp;</type>
+        <definition>const Skeleton &amp; castor3d::SkeletonNode::getSkeleton</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getSkeleton</name>
+        <qualifiedname>castor3d::SkeletonNode::getSkeleton</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="64" column="17" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="64" bodyend="67"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d18/a04722_1a34e1b1b33efca61ddb9fa52093a6edaf" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/d18/a04722" kindref="compound">SkeletonNode</ref> *</type>
+        <definition>SkeletonNode * castor3d::SkeletonNode::getParent</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getParent</name>
+        <qualifiedname>castor3d::SkeletonNode::getParent</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="69" column="15" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="69" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d18/a04722_1a23bc122fd6b07988ecdfe026a3016a97" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d5/da6/a01698_1a09c7d68a62b6c5ec4372e60c38fb8ef0" kindref="member">SkeletonNodeType</ref></type>
+        <definition>SkeletonNodeType castor3d::SkeletonNode::getType</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getType</name>
+        <qualifiedname>castor3d::SkeletonNode::getType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="74" column="18" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="74" bodyend="77"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d18/a04722_1a3e0c6c9ff5d5d785e4dbc7ce36676c8a" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="d9/d82/a04718" kindref="compound">NodeTransform</ref> const &amp;</type>
+        <definition>NodeTransform const  &amp; castor3d::SkeletonNode::getTransform</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getTransform</name>
+        <qualifiedname>castor3d::SkeletonNode::getTransform</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="79" column="22" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="79" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d18/a04722_1a78d41788dc217303b4f013256c4d0e34" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SkeletonNode::setTransform</definition>
+        <argsstring>(NodeTransform tranform) noexcept</argsstring>
+        <name>setTransform</name>
+        <qualifiedname>castor3d::SkeletonNode::setTransform</qualifiedname>
+        <param>
+          <type><ref refid="d9/d82/a04718" kindref="compound">NodeTransform</ref></type>
+          <declname>tranform</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="84" column="6" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="84" bodyend="87"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/d18/a04722_1a0ac3b823b91644027a56b74e01926c3d" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SkeletonNode::addChild</definition>
+        <argsstring>(SkeletonNode &amp;node)</argsstring>
+        <name>addChild</name>
+        <qualifiedname>castor3d::SkeletonNode::addChild</qualifiedname>
+        <param>
+          <type><ref refid="de/d18/a04722" kindref="compound">SkeletonNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Adds a child node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="98" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d18/a04722_1a4743e5c19bd14e3a665f8ffad3d3ef03" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::SkeletonNode::setParent</definition>
+        <argsstring>(SkeletonNode &amp;node)</argsstring>
+        <name>setParent</name>
+        <qualifiedname>castor3d::SkeletonNode::setParent</qualifiedname>
+        <param>
+          <type><ref refid="de/d18/a04722" kindref="compound">SkeletonNode</ref> &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+<para>Sets the parent node. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">node</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonNode.hpp" line="107" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::BoneNode</label>
+        <link refid="df/dd9/a04702"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SkeletonNode</label>
+        <link refid="de/d18/a04722"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::SkeletonNode</label>
+        <link refid="de/d18/a04722"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Skeleton/SkeletonNode.hpp" line="17" column="1" bodyfile="Model/Skeleton/SkeletonNode.hpp" bodystart="19" bodyend="115"/>
+    <listofallmembers>
+      <member refid="de/d18/a04722_1a0ac3b823b91644027a56b74e01926c3d" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>addChild</name></member>
+      <member refid="de/d18/a04722_1ae7b61f3234d7ebb1eae7245a2934d2c0" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>BinaryParser&lt; BoneNode &gt;</name></member>
+      <member refid="de/d18/a04722_1a19a77718e5ba43cc046d77ac1e63f605" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>BinaryParser&lt; SkeletonNode &gt;</name></member>
+      <member refid="de/d18/a04722_1afefe6f7170c06de7946b069de18cab51" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>BinaryWriter&lt; BoneNode &gt;</name></member>
+      <member refid="de/d18/a04722_1a6c4c77063a8d1c17ab151f6fb10e8092" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>BinaryWriter&lt; SkeletonNode &gt;</name></member>
+      <member refid="de/d18/a04722_1a34e1b1b33efca61ddb9fa52093a6edaf" prot="public" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>getParent</name></member>
+      <member refid="de/d18/a04722_1abbef4fe7304cb777f086bc50d66ec79b" prot="public" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>getSkeleton</name></member>
+      <member refid="de/d18/a04722_1a3e0c6c9ff5d5d785e4dbc7ce36676c8a" prot="public" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>getTransform</name></member>
+      <member refid="de/d18/a04722_1a23bc122fd6b07988ecdfe026a3016a97" prot="public" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>getType</name></member>
+      <member refid="de/d18/a04722_1a16712f6584dccf3ab238407646cdacca" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>m_children</name></member>
+      <member refid="de/d18/a04722_1abca9c71668d73c285e7c1a8a27564bf2" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>m_parent</name></member>
+      <member refid="de/d18/a04722_1a02f5281fb99033ee19566d028de990d9" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>m_skeleton</name></member>
+      <member refid="de/d18/a04722_1abc57f4427054f3049ef75dd2a0a76979" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>m_transform</name></member>
+      <member refid="de/d18/a04722_1ab63d540e683c297315d0be0c7dc8029b" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>m_type</name></member>
+      <member refid="de/d18/a04722_1a4743e5c19bd14e3a665f8ffad3d3ef03" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>setParent</name></member>
+      <member refid="de/d18/a04722_1a78d41788dc217303b4f013256c4d0e34" prot="public" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>setTransform</name></member>
+      <member refid="de/d18/a04722_1a6a11291b70c2cbded85d321ce539c62f" prot="private" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>Skeleton</name></member>
+      <member refid="de/d18/a04722_1a9441726175355b2606a71ea31956b999" prot="protected" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>SkeletonNode</name></member>
+      <member refid="de/d18/a04722_1a5e4bf4327428b8789226e3a021ea24b1" prot="public" virt="non-virtual"><scope>castor3d::SkeletonNode</scope><name>SkeletonNode</name></member>
+      <member refid="de/d18/a04722_1afa67ec180560a7805b495cac55ca5c85" prot="public" virt="virtual"><scope>castor3d::SkeletonNode</scope><name>~SkeletonNode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

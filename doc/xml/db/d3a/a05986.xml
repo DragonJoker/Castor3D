@@ -1,0 +1,127 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d3a/a05986" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PointLight::LightData</compoundname>
+    <basecompoundref refid="d9/dd6/a05962" prot="public" virt="non-virtual">castor3d::LightCategory::LightData</basecompoundref>
+    <includes local="no">PointLight.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d3a/a05986_1a84dd6739c53f684d1ae788ce61cf35d8" prot="public" static="no" mutable="no">
+        <type><ref refid="df/de8/a06334" kindref="compound">Float3</ref></type>
+        <definition>Float3 castor3d::PointLight::LightData::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::PointLight::LightData::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/PointLight.hpp" line="22" column="8" bodyfile="Scene/Light/PointLight.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d3a/a05986_1a701dc9051ab5f16abd878af781f9d9ee" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::PointLight::LightData::pad0</definition>
+        <argsstring></argsstring>
+        <name>pad0</name>
+        <qualifiedname>castor3d::PointLight::LightData::pad0</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/PointLight.hpp" line="23" column="8" bodyfile="Scene/Light/PointLight.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d3a/a05986_1ab3ab1ebcd7203fc37ef916066970657c" prot="public" static="no" mutable="no">
+        <type><ref refid="df/de8/a06334" kindref="compound">Float3</ref></type>
+        <definition>Float3 castor3d::PointLight::LightData::attenuation</definition>
+        <argsstring></argsstring>
+        <name>attenuation</name>
+        <qualifiedname>castor3d::PointLight::LightData::attenuation</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/PointLight.hpp" line="24" column="8" bodyfile="Scene/Light/PointLight.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d3a/a05986_1a7114bc9bb9536ffdf43e2d4bdbac13b6" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::PointLight::LightData::pad1</definition>
+        <argsstring></argsstring>
+        <name>pad1</name>
+        <qualifiedname>castor3d::PointLight::LightData::pad1</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/PointLight.hpp" line="25" column="8" bodyfile="Scene/Light/PointLight.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d9/dd6/a05962"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PointLight::LightData</label>
+        <link refid="db/d3a/a05986"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="d1/d1b/a06326"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d9/dd6/a05962"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>shadows</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::LightCategory::ShadowData</label>
+        <link refid="d9/d69/a05958"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PointLight::LightData</label>
+        <link refid="db/d3a/a05986"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="d1/d1b/a06326"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Light/PointLight.hpp" line="19" column="1" bodyfile="Scene/Light/PointLight.hpp" bodystart="21" bodyend="26"/>
+    <listofallmembers>
+      <member refid="db/d3a/a05986_1ab3ab1ebcd7203fc37ef916066970657c" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>attenuation</name></member>
+      <member refid="d9/dd6/a05962_1a5e00322b1a0bf4bc06a5ce9873b810f4" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>colour</name></member>
+      <member refid="d9/dd6/a05962_1ab261755a700a6bb39207655cf7a263e6" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>farPlane</name></member>
+      <member refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>Float1</name></member>
+      <member refid="d9/dd6/a05962_1ad3fde27984234899fa7032e37901179d" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>intensity</name></member>
+      <member refid="db/d3a/a05986_1a701dc9051ab5f16abd878af781f9d9ee" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>pad0</name></member>
+      <member refid="db/d3a/a05986_1a7114bc9bb9536ffdf43e2d4bdbac13b6" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>pad1</name></member>
+      <member refid="db/d3a/a05986_1a84dd6739c53f684d1ae788ce61cf35d8" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>position</name></member>
+      <member refid="d9/dd6/a05962_1aab7bb7c4ea0fc301a39a5c1dfbaafa69" prot="public" virt="non-virtual"><scope>castor3d::PointLight::LightData</scope><name>shadows</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

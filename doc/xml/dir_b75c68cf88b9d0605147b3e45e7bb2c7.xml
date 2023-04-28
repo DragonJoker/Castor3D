@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_b75c68cf88b9d0605147b3e45e7bb2c7" kind="dir">
+    <compoundname>Gui/Controls</compoundname>
+    <innerfile refid="df/d91/a00335">CtrlButton.hpp</innerfile>
+    <innerfile refid="dc/d84/a00338">CtrlComboBox.hpp</innerfile>
+    <innerfile refid="d3/d93/a00341">CtrlControl.hpp</innerfile>
+    <innerfile refid="d8/d8e/a00344">CtrlEdit.hpp</innerfile>
+    <innerfile refid="d1/dc6/a00347">CtrlExpandablePanel.hpp</innerfile>
+    <innerfile refid="db/d10/a00350">CtrlFrame.hpp</innerfile>
+    <innerfile refid="db/ddc/a00353">CtrlLayoutControl.hpp</innerfile>
+    <innerfile refid="d6/de1/a00356">CtrlListBox.hpp</innerfile>
+    <innerfile refid="d4/def/a00359">CtrlPanel.hpp</innerfile>
+    <innerfile refid="de/dd7/a00362">CtrlProgress.hpp</innerfile>
+    <innerfile refid="dd/db5/a00365">CtrlScrollable.hpp</innerfile>
+    <innerfile refid="d8/d21/a00368">CtrlScrollBar.hpp</innerfile>
+    <innerfile refid="d6/d80/a00371">CtrlSlider.hpp</innerfile>
+    <innerfile refid="d5/db5/a00374">CtrlStatic.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Gui/Controls/"/>
+  </compounddef>
+</doxygen>

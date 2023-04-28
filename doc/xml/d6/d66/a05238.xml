@@ -1,0 +1,325 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d6/d66/a05238" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlayTextBuffer</compoundname>
+    <includes local="no">OverlayTextBufferPool.hpp</includes>
+    <innerclass refid="d6/d63/a05242" prot="public">castor3d::OverlayTextBuffer::DataBufferT</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d6/d66/a05238_1ace762352b3c1fc8d326a493beab39f11" prot="public" static="no">
+        <type><ref refid="d6/d11/a05226" kindref="compound">OverlayTextBufferIndex</ref></type>
+        <definition>using castor3d::OverlayTextBuffer::MyBufferIndex =  OverlayTextBufferIndex</definition>
+        <argsstring></argsstring>
+        <name>MyBufferIndex</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::MyBufferIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="22" column="1" bodyfile="Render/Overlays/OverlayTextBufferPool.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/d66/a05238_1a0a99d46576fc65e0ecea5c6774b073ff" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+        <definition>Engine&amp; castor3d::OverlayTextBuffer::engine</definition>
+        <argsstring></argsstring>
+        <name>engine</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::engine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="34" column="9" bodyfile="Render/Overlays/OverlayTextBufferPool.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d66/a05238_1ae68b4efd729ca1ecbd4b554a39ce0965" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::OverlayTextBuffer::device</definition>
+        <argsstring></argsstring>
+        <name>device</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="35" column="21" bodyfile="Render/Overlays/OverlayTextBufferPool.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d66/a05238_1adf97af7baf3ce95eb75a9fcf8c0b024b" prot="public" static="no" mutable="no">
+        <type>std::string</type>
+        <definition>std::string castor3d::OverlayTextBuffer::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="36" column="13" bodyfile="Render/Overlays/OverlayTextBufferPool.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d66/a05238_1a52e349c54806779909dd05971521333f" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d63/a05242" kindref="compound">DataBufferT</ref>&lt; <ref refid="d0/de6/a04814" kindref="compound">TextChar</ref> &gt;</type>
+        <definition>DataBufferT&lt; TextChar &gt; castor3d::OverlayTextBuffer::charsBuffer</definition>
+        <argsstring></argsstring>
+        <name>charsBuffer</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::charsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="45" column="13" bodyfile="Render/Overlays/OverlayTextBufferPool.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d66/a05238_1ad74cac50bbf1b42c394ec5ec512db398" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d63/a05242" kindref="compound">DataBufferT</ref>&lt; <ref refid="d5/dac/a04818" kindref="compound">TextWord</ref> &gt;</type>
+        <definition>DataBufferT&lt; TextWord &gt; castor3d::OverlayTextBuffer::wordsBuffer</definition>
+        <argsstring></argsstring>
+        <name>wordsBuffer</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::wordsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="46" column="13" bodyfile="Render/Overlays/OverlayTextBufferPool.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d66/a05238_1a782a2f062616039ac17502c531ea116c" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d63/a05242" kindref="compound">DataBufferT</ref>&lt; <ref refid="d6/df5/a04826" kindref="compound">TextLine</ref> &gt;</type>
+        <definition>DataBufferT&lt; TextLine &gt; castor3d::OverlayTextBuffer::linesBuffer</definition>
+        <argsstring></argsstring>
+        <name>linesBuffer</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::linesBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="47" column="13" bodyfile="Render/Overlays/OverlayTextBufferPool.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d66/a05238_1af114967c43916d08d0f73141c0a3925c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::OverlayTextBuffer::OverlayTextBuffer</definition>
+        <argsstring>(Engine &amp;engine, std::string const &amp;debugName, RenderDevice const &amp;device)</argsstring>
+        <name>OverlayTextBuffer</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::OverlayTextBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>debugName</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="24" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d66/a05238_1a141b5e5bdd0530c413d746ff22fd3ed5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d6/d11/a05226" kindref="compound">OverlayTextBufferIndex</ref></type>
+        <definition>C3D_API OverlayTextBufferIndex castor3d::OverlayTextBuffer::fill</definition>
+        <argsstring>(uint32_t overlayIndex, TextOverlay const &amp;overlay)</argsstring>
+        <name>fill</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::fill</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>overlayIndex</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d25/a04846" kindref="compound">TextOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="28" column="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d66/a05238_1ad7c8df66ecfc6c5783e9ba841fa2a79e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OverlayTextBuffer::fillDescriptorSet</definition>
+        <argsstring>(ashes::DescriptorSetLayout const &amp;descriptorLayout, ashes::DescriptorSet &amp;descriptorSet)</argsstring>
+        <name>fillDescriptorSet</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::fillDescriptorSet</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSetLayout const &amp;</type>
+          <declname>descriptorLayout</declname>
+        </param>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="30" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d66/a05238_1a20799b9f67646d7d9c6d06c4e962f412" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::OverlayTextBuffer::upload</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;cb)</argsstring>
+        <name>upload</name>
+        <qualifiedname>castor3d::OverlayTextBuffer::upload</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="32" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="13">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextChar &gt;</label>
+        <link refid="d6/d63/a05242"/>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextChar &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextLine &gt;</label>
+        <link refid="d6/d63/a05242"/>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextLine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; castor3d::TextWord &gt;</label>
+        <link refid="d6/d63/a05242"/>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; castor3d::TextWord &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d23/a03038"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::OverlayTextBuffer</label>
+        <link refid="d6/d66/a05238"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>device</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>name</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>charsBuffer</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>wordsBuffer</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>linesBuffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::OverlayTextBuffer::DataBufferT&lt; DataT &gt;</label>
+        <link refid="d6/d63/a05242"/>
+      </node>
+      <node id="8">
+        <label>castor3d::QueuesData</label>
+        <link refid="da/d27/a05422"/>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d4/de8/a05430"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderSystem</label>
+        <link refid="da/d7e/a05558"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="12">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="11">
+        <label>std::string</label>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Overlays/OverlayTextBufferPool.hpp" line="20" column="1" bodyfile="Render/Overlays/OverlayTextBufferPool.hpp" bodystart="21" bodyend="48"/>
+    <listofallmembers>
+      <member refid="d6/d66/a05238_1a52e349c54806779909dd05971521333f" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>charsBuffer</name></member>
+      <member refid="d6/d66/a05238_1ae68b4efd729ca1ecbd4b554a39ce0965" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>device</name></member>
+      <member refid="d6/d66/a05238_1a0a99d46576fc65e0ecea5c6774b073ff" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>engine</name></member>
+      <member refid="d6/d66/a05238_1a141b5e5bdd0530c413d746ff22fd3ed5" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>fill</name></member>
+      <member refid="d6/d66/a05238_1ad7c8df66ecfc6c5783e9ba841fa2a79e" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>fillDescriptorSet</name></member>
+      <member refid="d6/d66/a05238_1a782a2f062616039ac17502c531ea116c" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>linesBuffer</name></member>
+      <member refid="d6/d66/a05238_1ace762352b3c1fc8d326a493beab39f11" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>MyBufferIndex</name></member>
+      <member refid="d6/d66/a05238_1adf97af7baf3ce95eb75a9fcf8c0b024b" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>name</name></member>
+      <member refid="d6/d66/a05238_1af114967c43916d08d0f73141c0a3925c" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>OverlayTextBuffer</name></member>
+      <member refid="d6/d66/a05238_1a20799b9f67646d7d9c6d06c4e962f412" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>upload</name></member>
+      <member refid="d6/d66/a05238_1ad74cac50bbf1b42c394ec5ec512db398" prot="public" virt="non-virtual"><scope>castor3d::OverlayTextBuffer</scope><name>wordsBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,251 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d76/a03021" kind="class" language="C++" prot="private">
+    <compoundname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</compoundname>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="user-defined">
+      <description><para>Initialisation / Update. </para>
+</description>
+      <memberdef kind="function" id="d2/d76/a03021_1adee7a1ca5e9218695f47a9c5f33133b4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::initialise</definition>
+        <argsstring>(castor3d::RenderDevice const &amp;device)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::initialise</qualifiedname>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">castor3d::RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="269" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d76/a03021_1a514ae916b744a8b23f279f7ac404814c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::cleanup</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="270" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d76/a03021_1a3475d24b704dfd640127c63e8d9a330a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::update</definition>
+        <argsstring>(castor3d::PassBuffer &amp;passBuffer, ashes::CommandBuffer const &amp;cb) const</argsstring>
+        <name>update</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::update</qualifiedname>
+        <param>
+          <type><ref refid="de/d0d/a06341" kindref="compound">castor3d::PassBuffer</ref> &amp;</type>
+          <declname>passBuffer</declname>
+        </param>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>cb</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="271" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Registration. </para>
+</description>
+      <memberdef kind="function" id="d2/d76/a03021_1a5f8bf9f9650bb8711b57067c8bf75219" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::registerBuffer</definition>
+        <argsstring>(std::string const &amp;name, castor3d::SpecificsBuffer buffer)</argsstring>
+        <name>registerBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::registerBuffer</qualifiedname>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="df/d65/a04089" kindref="compound">castor3d::SpecificsBuffer</ref></type>
+          <declname>buffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="283" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d76/a03021_1af874cbeea91749faadf698620fc8d48c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::unregisterBuffer</definition>
+        <argsstring>(std::string const &amp;name)</argsstring>
+        <name>unregisterBuffer</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::unregisterBuffer</qualifiedname>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="285" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Descriptor layout / set. </para>
+</description>
+      <memberdef kind="function" id="d2/d76/a03021_1a483668545be8f20a07461320189cd9a6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::addBindings</definition>
+        <argsstring>(ashes::VkDescriptorSetLayoutBindingArray &amp;bindings, VkShaderStageFlags shaderStages, uint32_t &amp;index) const</argsstring>
+        <name>addBindings</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::addBindings</qualifiedname>
+        <param>
+          <type>ashes::VkDescriptorSetLayoutBindingArray &amp;</type>
+          <declname>bindings</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaderStages</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="292" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d76/a03021_1a0d9a3eceb15ffd71f1931dc5c9729de3" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::addDescriptors</definition>
+        <argsstring>(ashes::WriteDescriptorSetArray &amp;descriptorWrites, uint32_t &amp;index) const</argsstring>
+        <name>addDescriptors</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::addDescriptors</qualifiedname>
+        <param>
+          <type>ashes::WriteDescriptorSetArray &amp;</type>
+          <declname>descriptorWrites</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="295" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d76/a03021_1aa086ab5867179dd2eeb17e37c56ca3a7" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::createPassBindings</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t &amp;index) const</argsstring>
+        <name>createPassBindings</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::createPassBindings</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="297" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <description><para>Shader declarations. </para>
+</description>
+      <memberdef kind="function" id="d2/d76/a03021_1ac93847af02d14bf435ba9e4c742b68eb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::declareShaderBuffers</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, std::map&lt; std::string, castor3d::shader::BufferBaseUPtr &gt; &amp;buffers, uint32_t &amp;binding, uint32_t set) const</argsstring>
+        <name>declareShaderBuffers</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::declareShaderBuffers</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>std::map&lt; std::string, castor3d::shader::BufferBaseUPtr &gt; &amp;</type>
+          <declname>buffers</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="305" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d2/d76/a03021_1a7ac5c0d0e5345614b78e589b375dfa39" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1ad1267c6eb1256aa93c43eaf49382612a" kindref="member">castor3d::SpecificsBuffers</ref></type>
+        <definition>castor3d::SpecificsBuffers castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::m_buffers</definition>
+        <argsstring></argsstring>
+        <name>m_buffers</name>
+        <qualifiedname>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers::m_buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/MaterialCache.hpp" line="312" column="28" bodyfile="Cache/MaterialCache.hpp" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Cache/MaterialCache.hpp" line="261" column="1" bodyfile="Cache/MaterialCache.hpp" bodystart="262" bodyend="313"/>
+    <listofallmembers>
+      <member refid="d2/d76/a03021_1a483668545be8f20a07461320189cd9a6" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>addBindings</name></member>
+      <member refid="d2/d76/a03021_1a0d9a3eceb15ffd71f1931dc5c9729de3" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>addDescriptors</name></member>
+      <member refid="d2/d76/a03021_1a514ae916b744a8b23f279f7ac404814c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>cleanup</name></member>
+      <member refid="d2/d76/a03021_1aa086ab5867179dd2eeb17e37c56ca3a7" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>createPassBindings</name></member>
+      <member refid="d2/d76/a03021_1ac93847af02d14bf435ba9e4c742b68eb" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>declareShaderBuffers</name></member>
+      <member refid="d2/d76/a03021_1adee7a1ca5e9218695f47a9c5f33133b4" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>initialise</name></member>
+      <member refid="d2/d76/a03021_1a7ac5c0d0e5345614b78e589b375dfa39" prot="private" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>m_buffers</name></member>
+      <member refid="d2/d76/a03021_1a5f8bf9f9650bb8711b57067c8bf75219" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>registerBuffer</name></member>
+      <member refid="d2/d76/a03021_1af874cbeea91749faadf698620fc8d48c" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>unregisterBuffer</name></member>
+      <member refid="d2/d76/a03021_1a3475d24b704dfd640127c63e8d9a330a" prot="public" virt="non-virtual"><scope>castor::ResourceCacheT&lt; castor3d::Material, String, castor3d::MaterialCacheTraits &gt;::PassDataBuffers</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

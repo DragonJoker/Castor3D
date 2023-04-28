@@ -1,0 +1,439 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d0/dde/a02978" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</compoundname>
+    <basecompoundref refid="dd/d8f/a02970" prot="public" virt="non-virtual">castor3d::ObjectCacheBaseT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</basecompoundref>
+    <includes local="no">GeometryCache.hpp</includes>
+    <innerclass refid="d2/d34/a02982" prot="public">castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::PoolsEntry</innerclass>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d0/dde/a02978_1add67cecad6d00b770a7de8cf3e6c4cb1" prot="public" static="no">
+        <type><ref refid="da/d76/a05934" kindref="compound">Geometry</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementT =  Geometry</definition>
+        <argsstring></argsstring>
+        <name>ElementT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="39" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1ac9683e252dd28425cfc40bbdf115dccf" prot="public" static="no">
+        <type>castor::String</type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementKeyT =  castor::String</definition>
+        <argsstring></argsstring>
+        <name>ElementKeyT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementKeyT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="40" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1abc99a646fa4bea896493ccbdcb1da823" prot="public" static="no">
+        <type><ref refid="d5/da6/a01698_1a22d0bdde1b73fac9d31403c9631034b9" kindref="member">GeometryCacheTraits</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementCacheTraitsT =  GeometryCacheTraits</definition>
+        <argsstring></argsstring>
+        <name>ElementCacheTraitsT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementCacheTraitsT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="41" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1a3b5774c62f1d06ce6ddcaa718509b41e" prot="public" static="no">
+        <type><ref refid="dd/d8f/a02970" kindref="compound">ObjectCacheBaseT</ref>&lt; <ref refid="d0/dde/a02978_1add67cecad6d00b770a7de8cf3e6c4cb1" kindref="member">ElementT</ref>, <ref refid="d0/dde/a02978_1ac9683e252dd28425cfc40bbdf115dccf" kindref="member">ElementKeyT</ref>, <ref refid="d0/dde/a02978_1abc99a646fa4bea896493ccbdcb1da823" kindref="member">ElementCacheTraitsT</ref> &gt;</type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementObjectCacheT =  ObjectCacheBaseT&lt; ElementT, ElementKeyT, ElementCacheTraitsT &gt;</definition>
+        <argsstring></argsstring>
+        <name>ElementObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementObjectCacheT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="42" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1a28c3578b389d1d7a1d22b1ddc3aec6ff" prot="public" static="no">
+        <type>typename <ref refid="dd/d8f/a02970_1ac64abf5d5b1d54b7309db409911089e8" kindref="member">ElementObjectCacheT::ElementPtrT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementPtrT =  typename ElementObjectCacheT::ElementPtrT</definition>
+        <argsstring></argsstring>
+        <name>ElementPtrT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementPtrT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="43" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1a0758b971a814dadf2886a25236ad1602" prot="public" static="no">
+        <type>typename <ref refid="dd/d8f/a02970_1a5f6c89792190f153d2304470edab28b6" kindref="member">ElementObjectCacheT::ElementContT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementContT =  typename ElementObjectCacheT::ElementContT</definition>
+        <argsstring></argsstring>
+        <name>ElementContT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementContT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="44" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1a0b61e7923b912fdecb057d099d13b309" prot="public" static="no">
+        <type>typename <ref refid="dd/d8f/a02970_1ae9dcfec2c1a41e5ac0b9f0cbb0b4254c" kindref="member">ElementObjectCacheT::ElementInitialiserT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementInitialiserT =  typename ElementObjectCacheT::ElementInitialiserT</definition>
+        <argsstring></argsstring>
+        <name>ElementInitialiserT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementInitialiserT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="45" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1aacf611921b123e95cf9e4070ddb11dee" prot="public" static="no">
+        <type>typename <ref refid="dd/d8f/a02970_1a0b96fa488b8fdd4fbcbc7f144ecbbb7e" kindref="member">ElementObjectCacheT::ElementCleanerT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementCleanerT =  typename ElementObjectCacheT::ElementCleanerT</definition>
+        <argsstring></argsstring>
+        <name>ElementCleanerT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementCleanerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="46" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1ad4eef919fd0dc06d4e71d4713a81a31c" prot="public" static="no">
+        <type>typename <ref refid="dd/d8f/a02970_1a120add2fe6c6efc840f052d926e609d6" kindref="member">ElementObjectCacheT::ElementMergerT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementMergerT =  typename ElementObjectCacheT::ElementMergerT</definition>
+        <argsstring></argsstring>
+        <name>ElementMergerT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementMergerT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="47" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1a894bc0109da3c389b58089bce45598e4" prot="public" static="no">
+        <type>typename <ref refid="dd/d8f/a02970_1adadbb9ff475d6a6bf903139dad6ccb40" kindref="member">ElementObjectCacheT::ElementAttacherT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementAttacherT =  typename ElementObjectCacheT::ElementAttacherT</definition>
+        <argsstring></argsstring>
+        <name>ElementAttacherT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementAttacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="48" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d0/dde/a02978_1a531fcf0a1b11fd64515536d0a2b00dc8" prot="public" static="no">
+        <type>typename <ref refid="dd/d8f/a02970_1a3df1a58591b34493630c7ddce56d47a4" kindref="member">ElementObjectCacheT::ElementDetacherT</ref></type>
+        <definition>using castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementDetacherT =  typename ElementObjectCacheT::ElementDetacherT</definition>
+        <argsstring></argsstring>
+        <name>ElementDetacherT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ElementDetacherT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="49" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/dde/a02978_1afa6ede381995e6aa749c08961832f70b" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::m_faceCount</definition>
+        <argsstring></argsstring>
+        <name>m_faceCount</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::m_faceCount</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="89" column="10" bodyfile="Cache/GeometryCache.hpp" bodystart="89" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/dde/a02978_1aef859d570426f05c5a0d0472319a2591" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::m_vertexCount</definition>
+        <argsstring></argsstring>
+        <name>m_vertexCount</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::m_vertexCount</qualifiedname>
+        <initializer>{ 0 }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="90" column="10" bodyfile="Cache/GeometryCache.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/dde/a02978_1a0664ad3200c785dcc2584c443abc06bb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ObjectCacheT</definition>
+        <argsstring>(Scene &amp;scene, SceneNodeRPtr rootNode, SceneNodeRPtr rootCameraNode, SceneNodeRPtr rootObjectNode)</argsstring>
+        <name>ObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::ObjectCacheT</qualifiedname>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>SceneNodeRPtr</type>
+          <declname>rootNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeRPtr</type>
+          <declname>rootCameraNode</declname>
+        </param>
+        <param>
+          <type>SceneNodeRPtr</type>
+          <declname>rootObjectNode</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The root node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootCameraNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The cameras root node. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">rootObjectNode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The objects root node. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="64" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dde/a02978_1a999be8f150797f45b75227aaec0fbdf5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::~ObjectCacheT</definition>
+        <argsstring>() override=default</argsstring>
+        <name>~ObjectCacheT</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::~ObjectCacheT</qualifiedname>
+        <briefdescription>
+<para>Destructor. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="74" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/dde/a02978_1a23995aa3ebc85d519cc1c1497db9f136" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::add</definition>
+        <argsstring>(ElementPtrT element)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;::add</qualifiedname>
+        <param>
+          <type><ref refid="d0/dde/a02978_1a28c3578b389d1d7a1d22b1ddc3aec6ff" kindref="member">ElementPtrT</ref></type>
+          <declname>element</declname>
+        </param>
+        <briefdescription>
+<para>Adds an object. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">element</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The object. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Cache/GeometryCache.hpp" line="83" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="da/d76/a05934" kindref="compound">Geometry</ref> cache. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+        <link refid="dd/d8f/a02970"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; Geometry, castor::String, GeometryCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="dd/d8f/a02970"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+        <link refid="d0/dde/a02978"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::ResourceCacheBaseT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ObjectCacheBaseT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+        <link refid="dd/d8f/a02970"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Geometry, castor::String, GeometryCacheTraits &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Engine</label>
+        <link refid="d8/d23/a03038"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ObjectCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+        <link refid="dd/d8f/a02970"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_engine</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+        <link refid="d0/dde/a02978"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::ResourceCacheBaseT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::ResourceCacheBaseT&lt; ObjT, KeyT, TraitsT &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Cache/GeometryCache.hpp" line="28" column="1" bodyfile="Cache/GeometryCache.hpp" bodystart="30" bodyend="91"/>
+    <listofallmembers>
+      <member refid="d0/dde/a02978_1a23995aa3ebc85d519cc1c1497db9f136" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>add</name></member>
+      <member refid="d0/dde/a02978_1a894bc0109da3c389b58089bce45598e4" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementAttacherT</name></member>
+      <member refid="dd/d8f/a02970_1a833dc232271e526d2fff8e95be226a47" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementCacheBaseT</name></member>
+      <member refid="dd/d8f/a02970_1a8b2d0e83f5e04699b979b93e711dd38f" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementCacheT</name></member>
+      <member refid="d0/dde/a02978_1abc99a646fa4bea896493ccbdcb1da823" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementCacheTraitsT</name></member>
+      <member refid="d0/dde/a02978_1aacf611921b123e95cf9e4070ddb11dee" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementCleanerT</name></member>
+      <member refid="d0/dde/a02978_1a0758b971a814dadf2886a25236ad1602" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementContT</name></member>
+      <member refid="d0/dde/a02978_1a531fcf0a1b11fd64515536d0a2b00dc8" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementDetacherT</name></member>
+      <member refid="d0/dde/a02978_1a0b61e7923b912fdecb057d099d13b309" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementInitialiserT</name></member>
+      <member refid="d0/dde/a02978_1ac9683e252dd28425cfc40bbdf115dccf" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementKeyT</name></member>
+      <member refid="d0/dde/a02978_1ad4eef919fd0dc06d4e71d4713a81a31c" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementMergerT</name></member>
+      <member refid="d0/dde/a02978_1a3b5774c62f1d06ce6ddcaa718509b41e" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementObjectCacheT</name></member>
+      <member refid="dd/d8f/a02970_1a20564c6d1c8d37fa00fe04e267b1b8fa" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementObsT</name></member>
+      <member refid="d0/dde/a02978_1a28c3578b389d1d7a1d22b1ddc3aec6ff" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementPtrT</name></member>
+      <member refid="d0/dde/a02978_1add67cecad6d00b770a7de8cf3e6c4cb1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ElementT</name></member>
+      <member refid="dd/d8f/a02970_1a9880998d44d2a4753ebaa66045f53e40" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>getEngine</name></member>
+      <member refid="dd/d8f/a02970_1a53a7f1aca80a90ee48dbd7f0d2525d5f" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>getObjectTypeName</name></member>
+      <member refid="dd/d8f/a02970_1ab163121f8e7748ad2d7bf093dd25e943" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_attach</name></member>
+      <member refid="dd/d8f/a02970_1adb2cd25d360c2c9fefca61d26273e3ce" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_detach</name></member>
+      <member refid="dd/d8f/a02970_1ad2d2ec81317e6a6424228ed476c38651" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_engine</name></member>
+      <member refid="d0/dde/a02978_1afa6ede381995e6aa749c08961832f70b" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_faceCount</name></member>
+      <member refid="dd/d8f/a02970_1a4a7fda17cfa540fdf1ef120f49b23478" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_merge</name></member>
+      <member refid="dd/d8f/a02970_1ae9a623acdbaee056cd58f353af8c7c5d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_rootCameraNode</name></member>
+      <member refid="dd/d8f/a02970_1a653080e81b3ea235e344ac564ca4719d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_rootNode</name></member>
+      <member refid="dd/d8f/a02970_1a290a406a2ed5d96fe7a5bb28d5a2aac2" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_rootObjectNode</name></member>
+      <member refid="d0/dde/a02978_1aef859d570426f05c5a0d0472319a2591" prot="private" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>m_vertexCount</name></member>
+      <member refid="dd/d8f/a02970_1ac2d02c45ec20d264310c39258cf8ce50" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>mergeInto</name></member>
+      <member refid="dd/d8f/a02970_1a2c5a94f06997db2f8ce2e1252776fdd2" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ObjectCacheBaseT</name></member>
+      <member refid="d0/dde/a02978_1a0664ad3200c785dcc2584c443abc06bb" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>ObjectCacheT</name></member>
+      <member refid="dd/d8f/a02970_1a53f214ce6eab35501fb5509c504d4df1" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>OnChanged</name></member>
+      <member refid="dd/d8f/a02970_1a91d72169bf2d52687170aeefc90f3dcd" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>onChanged</name></member>
+      <member refid="dd/d8f/a02970_1abb32a9817ed3199de78a9e80ee634a44" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>OnChangedFunction</name></member>
+      <member refid="dd/d8f/a02970_1a191560dbae86cc9fb8d7f3b3e9ac7d8d" prot="protected" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>~ObjectCacheBaseT</name></member>
+      <member refid="d0/dde/a02978_1a999be8f150797f45b75227aaec0fbdf5" prot="public" virt="non-virtual"><scope>castor3d::ObjectCacheT&lt; Geometry, castor::String, GeometryCacheTraits &gt;</scope><name>~ObjectCacheT</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

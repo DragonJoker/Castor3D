@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_2c41ff29478658f0cfd430537048a0a3" kind="dir">
     <compoundname>Model/Mesh/Generator</compoundname>
-    <innerfile refid="d0/d1c/a00605">Cone.hpp</innerfile>
-    <innerfile refid="d4/d14/a00608">Cube.hpp</innerfile>
-    <innerfile refid="dd/dc0/a00611">Cylinder.hpp</innerfile>
-    <innerfile refid="d7/d80/a00614">Icosahedron.hpp</innerfile>
-    <innerfile refid="d4/dc4/a00617">MeshGeneratorModule.hpp</innerfile>
-    <innerfile refid="dc/d4d/a00620">Plane.hpp</innerfile>
-    <innerfile refid="df/d6f/a00623">Projection.hpp</innerfile>
-    <innerfile refid="d6/dfa/a00626">Sphere.hpp</innerfile>
-    <innerfile refid="da/dd1/a00629">SphereSection.hpp</innerfile>
-    <innerfile refid="d4/d2a/a00632">Torus.hpp</innerfile>
+    <innerfile refid="d6/dc0/a00734">Cone.hpp</innerfile>
+    <innerfile refid="dd/db2/a00737">Cube.hpp</innerfile>
+    <innerfile refid="dc/dce/a00740">Cylinder.hpp</innerfile>
+    <innerfile refid="d0/d0a/a00743">Icosahedron.hpp</innerfile>
+    <innerfile refid="d4/dfa/a00746">MeshGeneratorModule.hpp</innerfile>
+    <innerfile refid="d5/de8/a00749">Plane.hpp</innerfile>
+    <innerfile refid="dd/d5c/a00752">Projection.hpp</innerfile>
+    <innerfile refid="d2/ddd/a00755">Sphere.hpp</innerfile>
+    <innerfile refid="d2/d4a/a00758">SphereSection.hpp</innerfile>
+    <innerfile refid="d3/d4f/a00761">Torus.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

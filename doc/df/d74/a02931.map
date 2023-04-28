@@ -1,4 +1,6 @@
-<map id="castor3d::Engine" name="castor3d::Engine">
-<area shape="rect" id="node1" title=" " alt="" coords="31,80,151,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,176,32"/>
+<map id="castor3d::ObjectBufferOffset::GpuBufferChunk" name="castor3d::ObjectBufferOffset::GpuBufferChunk">
+<area shape="rect" id="node1" title=" " alt="" coords="123,183,308,223"/>
+<area shape="rect" id="node2" href="$d4/d69/a02869.html" title="A GPU buffer pool, that uses an allocator to allocate sub&#45;buffers." alt="" coords="17,80,161,120"/>
+<area shape="rect" id="node3" href="$d2/d4c/a02897.html" title=" " alt="" coords="5,5,172,31"/>
+<area shape="rect" id="node4" href="$df/d7d/a02889.html" title="A memory range, in bytes." alt="" coords="185,87,331,113"/>
 </map>

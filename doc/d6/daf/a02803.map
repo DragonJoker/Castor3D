@@ -1,4 +1,7 @@
-<map id="castor3d::UniformBufferBase" name="castor3d::UniformBufferBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node2" href="$d7/deb/a02724.html" title="A uniform typed buffer, than can contain multiple sub&#45;buffers." alt="" coords="17,80,181,121"/>
+<map id="castor3d::BinaryParser&lt; SkinComponent &gt;" name="castor3d::BinaryParser&lt; SkinComponent &gt;">
+<area shape="rect" id="node1" title="SkinComponent loader." alt="" coords="147,285,301,325"/>
+<area shape="rect" id="node2" href="$db/d0d/a02653.html" title=" " alt="" coords="131,196,317,236"/>
+<area shape="rect" id="node3" href="$db/d6a/a02613.html" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="node5" href="$db/d0d/a02653.html" title="Binary data chunk reader base class." alt="" coords="131,93,317,133"/>
+<area shape="rect" id="node4" href="$de/dc5/a04521.html" title=" " alt="" coords="218,5,342,31"/>
 </map>

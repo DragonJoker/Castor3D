@@ -1,0 +1,172 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dc/d1b/a06365" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShaderBufferTypes::Float4</compoundname>
+    <includes local="no">ShaderBuffersModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/d1b/a06365_1a698c416f8616f8240503c56b593cd60c" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::ShaderBufferTypes::Float4::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4::x</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="171" column="8" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="171" bodyend="-1"/>
+        <referencedby refid="dc/d1b/a06365_1a8727da008cb9bb001ca43060b7c00d07" compoundref="d6/d82/a01565" startline="141" endline="145">operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1b/a06365_1add4658c1158fe887018d2dd384c5e7de" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::ShaderBufferTypes::Float4::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4::y</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="172" column="8" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="172" bodyend="-1"/>
+        <referencedby refid="dc/d1b/a06365_1aba68ec2786c190df048ccc5c9176d5ee" compoundref="d6/d82/a01565" startline="147" endline="152">operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1b/a06365_1a6c4fa63d02e7d521511e4b4ccf4c895a" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::ShaderBufferTypes::Float4::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4::z</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="173" column="8" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="173" bodyend="-1"/>
+        <referencedby refid="dc/d1b/a06365_1aa8a6c3465a5623b439644b90ed3863f5" compoundref="d6/d82/a01565" startline="154" endline="160">operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d1b/a06365_1ad3bba0b4870ffb83c79b59ceb92833de" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::ShaderBufferTypes::Float4::w</definition>
+        <argsstring></argsstring>
+        <name>w</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4::w</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="174" column="8" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="174" bodyend="-1"/>
+        <referencedby refid="dc/d1b/a06365_1ac3f580f082d20a6bf9b99209ef040d63" compoundref="d6/d82/a01565" startline="162" endline="169">operator=</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d1b/a06365_1a8727da008cb9bb001ca43060b7c00d07" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d1b/a06365" kindref="compound">Float4</ref> &amp;</type>
+        <definition>Float4 &amp; castor3d::ShaderBufferTypes::Float4::operator=</definition>
+        <argsstring>(Float1 rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4::operator=</qualifiedname>
+        <param>
+          <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="141" column="9" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="141" bodyend="145"/>
+        <references refid="dc/d1b/a06365_1a698c416f8616f8240503c56b593cd60c" compoundref="d6/d82/a01565" startline="171">x</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1b/a06365_1aba68ec2786c190df048ccc5c9176d5ee" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d1b/a06365" kindref="compound">Float4</ref> &amp;</type>
+        <definition>Float4 &amp; castor3d::ShaderBufferTypes::Float4::operator=</definition>
+        <argsstring>(castor::Point2f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4::operator=</qualifiedname>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="147" column="9" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="147" bodyend="152"/>
+        <references refid="dc/d1b/a06365_1a698c416f8616f8240503c56b593cd60c" compoundref="d6/d82/a01565" startline="171">x</references>
+        <references refid="dc/d1b/a06365_1add4658c1158fe887018d2dd384c5e7de" compoundref="d6/d82/a01565" startline="172">y</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1b/a06365_1aa8a6c3465a5623b439644b90ed3863f5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d1b/a06365" kindref="compound">Float4</ref> &amp;</type>
+        <definition>Float4 &amp; castor3d::ShaderBufferTypes::Float4::operator=</definition>
+        <argsstring>(castor::Point3f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4::operator=</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="154" column="9" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="154" bodyend="160"/>
+        <references refid="dc/d1b/a06365_1a698c416f8616f8240503c56b593cd60c" compoundref="d6/d82/a01565" startline="171">x</references>
+        <references refid="dc/d1b/a06365_1add4658c1158fe887018d2dd384c5e7de" compoundref="d6/d82/a01565" startline="172">y</references>
+        <references refid="dc/d1b/a06365_1a6c4fa63d02e7d521511e4b4ccf4c895a" compoundref="d6/d82/a01565" startline="173">z</references>
+      </memberdef>
+      <memberdef kind="function" id="dc/d1b/a06365_1ac3f580f082d20a6bf9b99209ef040d63" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d1b/a06365" kindref="compound">Float4</ref> &amp;</type>
+        <definition>Float4 &amp; castor3d::ShaderBufferTypes::Float4::operator=</definition>
+        <argsstring>(castor::Point4f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float4::operator=</qualifiedname>
+        <param>
+          <type>castor::Point4f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="162" column="9" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="162" bodyend="169"/>
+        <references refid="dc/d1b/a06365_1ad3bba0b4870ffb83c79b59ceb92833de" compoundref="d6/d82/a01565" startline="174">w</references>
+        <references refid="dc/d1b/a06365_1a698c416f8616f8240503c56b593cd60c" compoundref="d6/d82/a01565" startline="171">x</references>
+        <references refid="dc/d1b/a06365_1add4658c1158fe887018d2dd384c5e7de" compoundref="d6/d82/a01565" startline="172">y</references>
+        <references refid="dc/d1b/a06365_1a6c4fa63d02e7d521511e4b4ccf4c895a" compoundref="d6/d82/a01565" startline="173">z</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="139" column="1" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="140" bodyend="175"/>
+    <listofallmembers>
+      <member refid="dc/d1b/a06365_1a8727da008cb9bb001ca43060b7c00d07" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float4</scope><name>operator=</name></member>
+      <member refid="dc/d1b/a06365_1aba68ec2786c190df048ccc5c9176d5ee" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float4</scope><name>operator=</name></member>
+      <member refid="dc/d1b/a06365_1aa8a6c3465a5623b439644b90ed3863f5" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float4</scope><name>operator=</name></member>
+      <member refid="dc/d1b/a06365_1ac3f580f082d20a6bf9b99209ef040d63" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float4</scope><name>operator=</name></member>
+      <member refid="dc/d1b/a06365_1ad3bba0b4870ffb83c79b59ceb92833de" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float4</scope><name>w</name></member>
+      <member refid="dc/d1b/a06365_1a698c416f8616f8240503c56b593cd60c" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float4</scope><name>x</name></member>
+      <member refid="dc/d1b/a06365_1add4658c1158fe887018d2dd384c5e7de" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float4</scope><name>y</name></member>
+      <member refid="dc/d1b/a06365_1a6c4fa63d02e7d521511e4b4ccf4c895a" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float4</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

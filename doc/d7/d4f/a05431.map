@@ -1,8 +1,6 @@
-<map id="castor3d::AnimatedObject" name="castor3d::AnimatedObject">
-<area shape="rect" id="node1" title=" " alt="" coords="160,81,333,108"/>
-<area shape="rect" id="node3" href="$d4/d98/a05428.html" title=" " alt="" coords="399,5,566,32"/>
-<area shape="rect" id="node4" href="$d3/d72/a05440.html" title=" " alt="" coords="381,56,584,83"/>
-<area shape="rect" id="node5" href="$d4/ddf/a05444.html" title=" " alt="" coords="389,107,576,133"/>
-<area shape="rect" id="node6" href="$d9/d21/a05448.html" title=" " alt="" coords="393,157,572,184"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,81,112,108"/>
+<map id="castor3d::ExtensionStruct" name="castor3d::ExtensionStruct">
+<area shape="rect" id="node1" title=" " alt="" coords="50,183,223,208"/>
+<area shape="rect" id="node2" title=" " alt="" coords="29,95,109,120"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,5,132,45"/>
+<area shape="rect" id="node4" href="$d8/d5e/a05429.html" title=" " alt="" coords="133,95,282,120"/>
 </map>

@@ -1,0 +1,5 @@
+<map id="castor3d::SheenRoughnessMapComponent::Plugin::getTextureFlags" name="castor3d::SheenRoughnessMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="236,45,419,100"/>
+<area shape="rect" id="node2" href="$d0/d61/a03858.html#a10397c78f69865886f94a1cafac567df" title="Fills the texture configuration for use with this component." alt="" coords="5,5,188,60"/>
+<area shape="rect" id="node3" href="$d0/d61/a03858.html#a9f3bdb1ca521516958db1ad0b7a73f6a" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,84,188,139"/>
+</map>

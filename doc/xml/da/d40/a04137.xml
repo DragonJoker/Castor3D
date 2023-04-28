@@ -1,0 +1,91 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/d40/a04137" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureAnimationData</compoundname>
+    <includes local="no">TextureAnimationModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d40/a04137_1afd6ed3d966dd8c4bf7625293877ea93a" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TextureAnimationData::translate</definition>
+        <argsstring></argsstring>
+        <name>translate</name>
+        <qualifiedname>castor3d::TextureAnimationData::translate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="22" column="17" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d40/a04137_1a0b507dd8c69c08f67e8a170df1c8fff0" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureAnimationData::rotateU</definition>
+        <argsstring></argsstring>
+        <name>rotateU</name>
+        <qualifiedname>castor3d::TextureAnimationData::rotateU</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="23" column="7" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d40/a04137_1a2806df53027bbaa8e47db4eb79f653f3" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TextureAnimationData::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::TextureAnimationData::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="24" column="17" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d40/a04137_1afe8ad8096ac95405ffe65eaa59e3120f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureAnimationData::rotateV</definition>
+        <argsstring></argsstring>
+        <name>rotateV</name>
+        <qualifiedname>castor3d::TextureAnimationData::rotateV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="25" column="7" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d40/a04137_1a5e518117fd0e7f18bf212cdbf94c02e2" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureAnimationData::tileSet</definition>
+        <argsstring></argsstring>
+        <name>tileSet</name>
+        <qualifiedname>castor3d::TextureAnimationData::tileSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="26" column="17" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Texture/Animation/TextureAnimationModule.hpp" line="20" column="1" bodyfile="Material/Texture/Animation/TextureAnimationModule.hpp" bodystart="21" bodyend="27"/>
+    <listofallmembers>
+      <member refid="da/d40/a04137_1a0b507dd8c69c08f67e8a170df1c8fff0" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>rotateU</name></member>
+      <member refid="da/d40/a04137_1afe8ad8096ac95405ffe65eaa59e3120f" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>rotateV</name></member>
+      <member refid="da/d40/a04137_1a2806df53027bbaa8e47db4eb79f653f3" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>scale</name></member>
+      <member refid="da/d40/a04137_1a5e518117fd0e7f18bf212cdbf94c02e2" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>tileSet</name></member>
+      <member refid="da/d40/a04137_1afd6ed3d966dd8c4bf7625293877ea93a" prot="public" virt="non-virtual"><scope>castor3d::TextureAnimationData</scope><name>translate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

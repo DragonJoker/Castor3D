@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/dab/a06210" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/dab/a06210_1aae7592daf9d00c7ef9664fff4d202f7b" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;ShadowType&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="677" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="677" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dab/a06210_1af6df4c50c0e23e8d35a41e64503c067f" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result = <ref refid="d5/da6/a01698_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d5/da6/a01698_1a90275671c44e791e9556c4bed9033935" kindref="member">castor3d::ShadowType</ref> &gt;();
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="678" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="678" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;</label>
+        <link refid="dd/dab/a06210"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="675" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="676" bodyend="684"/>
+    <listofallmembers>
+      <member refid="dd/dab/a06210_1aae7592daf9d00c7ef9664fff4d202f7b" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;</scope><name>Name</name></member>
+      <member refid="dd/dab/a06210_1af6df4c50c0e23e8d35a41e64503c067f" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::ShadowType &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

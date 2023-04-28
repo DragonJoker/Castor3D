@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/d82/a04718" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::NodeTransform</compoundname>
+    <includes local="no">SkeletonModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d82/a04718_1ac0bee8f5d27ecb457e2e1164b5349b6e" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::NodeTransform::translate</definition>
+        <argsstring></argsstring>
+        <name>translate</name>
+        <qualifiedname>castor3d::NodeTransform::translate</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonModule.hpp" line="135" column="17" bodyfile="Model/Skeleton/SkeletonModule.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d82/a04718_1a1565f18014183c1281fdc3f930c590a6" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::NodeTransform::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::NodeTransform::scale</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonModule.hpp" line="136" column="17" bodyfile="Model/Skeleton/SkeletonModule.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d82/a04718_1ae0718a295870c656c67387109ca9c8a9" prot="public" static="no" mutable="no">
+        <type>castor::Quaternion</type>
+        <definition>castor::Quaternion castor3d::NodeTransform::rotate</definition>
+        <argsstring></argsstring>
+        <name>rotate</name>
+        <qualifiedname>castor3d::NodeTransform::rotate</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Skeleton/SkeletonModule.hpp" line="137" column="20" bodyfile="Model/Skeleton/SkeletonModule.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Skeleton/SkeletonModule.hpp" line="133" column="1" bodyfile="Model/Skeleton/SkeletonModule.hpp" bodystart="134" bodyend="138"/>
+    <listofallmembers>
+      <member refid="d9/d82/a04718_1ae0718a295870c656c67387109ca9c8a9" prot="public" virt="non-virtual"><scope>castor3d::NodeTransform</scope><name>rotate</name></member>
+      <member refid="d9/d82/a04718_1a1565f18014183c1281fdc3f930c590a6" prot="public" virt="non-virtual"><scope>castor3d::NodeTransform</scope><name>scale</name></member>
+      <member refid="d9/d82/a04718_1ac0bee8f5d27ecb457e2e1164b5349b6e" prot="public" virt="non-virtual"><scope>castor3d::NodeTransform</scope><name>translate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

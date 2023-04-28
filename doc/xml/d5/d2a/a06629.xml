@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d2a/a06629" kind="struct" language="C++" prot="public">
+    <compoundname>sdw::ParamTranslater&lt; castor3d::shader::OutputComponents &gt;</compoundname>
+    <includes local="no">SdwModule.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d5/d2a/a06629_1a81bff4b6dc501d9230949a30f87f0557" prot="public" static="no">
+        <type><ref refid="de/dda/a06517" kindref="compound">castor3d::shader::OutputComponents</ref> &amp;</type>
+        <definition>using sdw::ParamTranslater&lt; castor3d::shader::OutputComponents &gt;::Type =  castor3d::shader::OutputComponents &amp;</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>sdw::ParamTranslater&lt; castor3d::shader::OutputComponents &gt;::Type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/SdwModule.hpp" line="265" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="265" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/SdwModule.hpp" line="263" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="264" bodyend="266"/>
+    <listofallmembers>
+      <member refid="d5/d2a/a06629_1a81bff4b6dc501d9230949a30f87f0557" prot="public" virt="non-virtual"><scope>sdw::ParamTranslater&lt; castor3d::shader::OutputComponents &gt;</scope><name>Type</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

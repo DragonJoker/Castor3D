@@ -1,0 +1,8 @@
+<map id="castor3d::BinaryWriterBase::doWriteChunk" name="castor3d::BinaryWriterBase::doWriteChunk">
+<area shape="rect" id="node1" title="Writes a subchunk value into a chunk." alt="" coords="5,27,188,67"/>
+<area shape="rect" id="node2" href="$d7/d1c/a02841.html#ac4cf51584e348def2f360b81e6ec7a9a" title="Writes a subchunk value into a chunk." alt="" coords="236,27,388,67"/>
+<area shape="rect" id="node3" href="$d3/d5e/a01725.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="436,5,623,31"/>
+<area shape="rect" id="node4" href="$dc/dfd/a02837.html#a6d5639d69c83f6b59094817e85f17398" title="Writes a subchunk value into a chunk." alt="" coords="438,55,621,95"/>
+<area shape="rect" id="node5" href="$db/d6a/a02613.html#a05ffb50a92f97be91612f8f91ceeed8e" title="Writes a subchunk into a chunk." alt="" coords="671,23,825,63"/>
+<area shape="rect" id="node6" href="$db/d6a/a02613.html#aa21722c40ca9e697b02b6612e81e41c9" title="Sets the chunk&#39;s data." alt="" coords="671,87,825,127"/>
+</map>

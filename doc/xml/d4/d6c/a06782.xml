@@ -1,0 +1,57 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d4/d6c/a06782" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SkinningTransformsConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d6c/a06782_1a7eb30f7f84d274d3b40065a81c83aae7" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Matrix4x4f, <ref refid="d5/da6/a01698_1ace710aa8241d782d15b0e5b275b46c62" kindref="member">MaxBonesCount</ref> &gt;</type>
+        <definition>std::array&lt; castor::Matrix4x4f, MaxBonesCount &gt; castor3d::SkinningTransformsConfiguration::bonesMatrix</definition>
+        <argsstring></argsstring>
+        <name>bonesMatrix</name>
+        <qualifiedname>castor3d::SkinningTransformsConfiguration::bonesMatrix</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="441" column="12" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="441" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Skinning data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; castor::Matrix4x4f, MaxBonesCount &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Matrix4x4f, MaxBonesCount &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SkinningTransformsConfiguration</label>
+        <link refid="d4/d6c/a06782"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>bonesMatrix</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/UbosModule.hpp" line="439" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="440" bodyend="442"/>
+    <listofallmembers>
+      <member refid="d4/d6c/a06782_1a7eb30f7f84d274d3b40065a81c83aae7" prot="public" virt="non-virtual"><scope>castor3d::SkinningTransformsConfiguration</scope><name>bonesMatrix</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

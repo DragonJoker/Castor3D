@@ -1,10 +1,19 @@
-<map id="castor3d::RenderTechniquePass" name="castor3d::RenderTechniquePass">
-<area shape="rect" id="node1" title=" " alt="" coords="5,136,216,163"/>
-<area shape="rect" id="node2" href="$d4/d61/a05212.html" title=" " alt="" coords="276,99,456,141"/>
-<area shape="rect" id="node8" href="$de/d6f/a04872.html" title=" " alt="" coords="264,165,468,192"/>
-<area shape="rect" id="node3" href="$d7/d17/a05024.html" title=" " alt="" coords="572,5,716,32"/>
-<area shape="rect" id="node4" href="$da/db8/a04908.html" title=" " alt="" coords="516,56,772,83"/>
-<area shape="rect" id="node5" href="$db/d08/a04848.html" title=" " alt="" coords="567,107,721,133"/>
-<area shape="rect" id="node6" href="$da/df4/a05408.html" title=" " alt="" coords="555,157,733,184"/>
-<area shape="rect" id="node7" href="$d8/d09/a05036.html" title=" " alt="" coords="565,208,723,235"/>
+<map id="castor3d::OverlayRenderer::TextComputePipelineDescriptor" name="castor3d::OverlayRenderer::TextComputePipelineDescriptor">
+<area shape="rect" id="node1" title=" " alt="" coords="1448,147,1660,187"/>
+<area shape="rect" id="node2" href="$de/daf/a05265.html" title=" " alt="" coords="1159,155,1340,180"/>
+<area shape="rect" id="node3" href="$d4/d44/a03065.html" title=" " alt="" coords="888,5,1008,31"/>
+<area shape="rect" id="node4" title=" " alt="" coords="491,5,661,31"/>
+<area shape="rect" id="node5" href="$d6/d0f/a05457.html" title=" " alt="" coords="869,71,1027,96"/>
+<area shape="rect" id="node6" href="$d3/d99/a05585.html" title=" " alt="" coords="493,55,659,80"/>
+<area shape="rect" id="node7" title=" " alt="" coords="149,55,336,80"/>
+<area shape="rect" id="node8" title=" " alt="" coords="487,104,665,129"/>
+<area shape="rect" id="node9" href="$d9/de3/a05449.html" title=" " alt="" coords="167,104,319,129"/>
+<area shape="rect" id="node10" title=" " alt="" coords="186,153,299,179"/>
+<area shape="rect" id="node11" title=" " alt="" coords="5,153,44,179"/>
+<area shape="rect" id="node12" title=" " alt="" coords="908,120,988,145"/>
+<area shape="rect" id="node13" title=" " alt="" coords="513,154,639,194"/>
+<area shape="rect" id="node14" href="$dd/d68/a05269.html" title=" " alt="" coords="857,169,1039,224"/>
+<area shape="rect" id="node15" href="$dd/d68/a05269.html" title=" " alt="" coords="485,255,667,295"/>
+<area shape="rect" id="node16" href="$dd/d68/a05269.html" title=" " alt="" coords="857,248,1039,303"/>
+<area shape="rect" id="node17" href="$dd/d68/a05269.html" title=" " alt="" coords="857,327,1039,381"/>
 </map>

@@ -1,0 +1,150 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d09/a05054" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::IndirectLightingPass::Program</compoundname>
+    <includes local="no">IndirectLightingPass.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d09/a05054_1a6a4525c42da79573212732acf61491b9" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/dc8/a06378" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::IndirectLightingPass::Program::vertexShader</definition>
+        <argsstring></argsstring>
+        <name>vertexShader</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Program::vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="84" column="14" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d09/a05054_1aabdd81d48f5d747d56d39492c7f8c746" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/dc8/a06378" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::IndirectLightingPass::Program::pixelShader</definition>
+        <argsstring></argsstring>
+        <name>pixelShader</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Program::pixelShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="85" column="14" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d09/a05054_1a4c97405cd64c3c36621ac811e2c0afab" prot="public" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::IndirectLightingPass::Program::stages</definition>
+        <argsstring></argsstring>
+        <name>stages</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Program::stages</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="86" column="43" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d09/a05054_1a4e3ce6ba9e5dbc8d7db7e8ba21396cbb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::IndirectLightingPass::Program::Program</definition>
+        <argsstring>(RenderDevice const &amp;device, Scene const &amp;scene, Config const &amp;config)</argsstring>
+        <name>Program</name>
+        <qualifiedname>castor3d::IndirectLightingPass::Program::Program</qualifiedname>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> const &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="da/df4/a05050" kindref="compound">Config</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/IndirectLightingPass.hpp" line="80" column="1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::IndirectLightingPass::Program</label>
+        <link refid="d1/d09/a05054"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pixelShader</edgelabel>
+          <edgelabel>vertexShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderModule</label>
+        <link refid="dd/dc8/a06378"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>compiled</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::SpirVShader</label>
+        <link refid="da/d02/a06374"/>
+        <childnode refid="9" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>UInt32Array</label>
+      </node>
+      <node id="4">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="3">
+        <label>std::string</label>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Opaque/IndirectLightingPass.hpp" line="78" column="1" bodyfile="Render/Opaque/IndirectLightingPass.hpp" bodystart="79" bodyend="87"/>
+    <listofallmembers>
+      <member refid="d1/d09/a05054_1aabdd81d48f5d747d56d39492c7f8c746" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Program</scope><name>pixelShader</name></member>
+      <member refid="d1/d09/a05054_1a4e3ce6ba9e5dbc8d7db7e8ba21396cbb" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Program</scope><name>Program</name></member>
+      <member refid="d1/d09/a05054_1a4c97405cd64c3c36621ac811e2c0afab" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Program</scope><name>stages</name></member>
+      <member refid="d1/d09/a05054_1a6a4525c42da79573212732acf61491b9" prot="public" virt="non-virtual"><scope>castor3d::IndirectLightingPass::Program</scope><name>vertexShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,148 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d20/a05034" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneRenderNodes::NodeData</compoundname>
+    <includes local="no">SceneRenderNodes.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d20/a05034_1a5b247c75e0d353b95971c3e5512a7fb5" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> const  *</type>
+        <definition>Pass const* castor3d::SceneRenderNodes::NodeData::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodeData::pass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="35" column="13" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d20/a05034_1adb9544fb53a964c6413318cfb76bbe78" prot="public" static="no" mutable="no">
+        <type><ref refid="de/dd2/a06258" kindref="compound">SceneNode</ref> const  *</type>
+        <definition>SceneNode const* castor3d::SceneRenderNodes::NodeData::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodeData::node</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="36" column="18" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d20/a05034_1a1a1d840e81084066e48d7d5410741081" prot="public" static="no" mutable="no">
+        <type><ref refid="d9/de2/a06062" kindref="compound">RenderedObject</ref> const  *</type>
+        <definition>RenderedObject const* castor3d::SceneRenderNodes::NodeData::object</definition>
+        <argsstring></argsstring>
+        <name>object</name>
+        <qualifiedname>castor3d::SceneRenderNodes::NodeData::object</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/SceneRenderNodes.hpp" line="37" column="23" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="5">
+        <label>Animable</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>K</label>
+      </node>
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="11">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="12" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Pass</label>
+        <link refid="dd/daf/a04050"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::RenderedObject</label>
+        <link refid="d9/de2/a06062"/>
+      </node>
+      <node id="4">
+        <label>castor3d::SceneNode</label>
+        <link refid="de/dd2/a06258"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::SceneRenderNodes::NodeData</label>
+        <link refid="db/d20/a05034"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>node</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>object</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor::Named</label>
+      </node>
+      <node id="12">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="6">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Material &gt;</label>
+      </node>
+      <node id="7">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Node/SceneRenderNodes.hpp" line="33" column="1" bodyfile="Render/Node/SceneRenderNodes.hpp" bodystart="34" bodyend="38"/>
+    <listofallmembers>
+      <member refid="db/d20/a05034_1adb9544fb53a964c6413318cfb76bbe78" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes::NodeData</scope><name>node</name></member>
+      <member refid="db/d20/a05034_1a1a1d840e81084066e48d7d5410741081" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes::NodeData</scope><name>object</name></member>
+      <member refid="db/d20/a05034_1a5b247c75e0d353b95971c3e5512a7fb5" prot="public" virt="non-virtual"><scope>castor3d::SceneRenderNodes::NodeData</scope><name>pass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

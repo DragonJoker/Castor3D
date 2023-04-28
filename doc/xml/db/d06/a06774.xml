@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d06/a06774" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d06/a06774_1a84f35b40a675640c0991254639650289" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SceneUboConfiguration::ambientLight</definition>
+        <argsstring></argsstring>
+        <name>ambientLight</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::ambientLight</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="393" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="393" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d06/a06774_1ad5cdd752d6589edf3b2f60a6e69178ef" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SceneUboConfiguration::fogType</definition>
+        <argsstring></argsstring>
+        <name>fogType</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::fogType</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="394" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="394" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d06/a06774_1a51a55fdd2175564576e3d070b1ac8b4e" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::SceneUboConfiguration::backgroundColour</definition>
+        <argsstring></argsstring>
+        <name>backgroundColour</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::backgroundColour</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="395" column="17" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="395" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d06/a06774_1ada49a0963b79114630a3a8e5769296a2" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::SceneUboConfiguration::fogDensity</definition>
+        <argsstring></argsstring>
+        <name>fogDensity</name>
+        <qualifiedname>castor3d::SceneUboConfiguration::fogDensity</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="396" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="396" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="391" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="392" bodyend="397"/>
+    <listofallmembers>
+      <member refid="db/d06/a06774_1a84f35b40a675640c0991254639650289" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>ambientLight</name></member>
+      <member refid="db/d06/a06774_1a51a55fdd2175564576e3d070b1ac8b4e" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>backgroundColour</name></member>
+      <member refid="db/d06/a06774_1ada49a0963b79114630a3a8e5769296a2" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>fogDensity</name></member>
+      <member refid="db/d06/a06774_1ad5cdd752d6589edf3b2f60a6e69178ef" prot="public" virt="non-virtual"><scope>castor3d::SceneUboConfiguration</scope><name>fogType</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

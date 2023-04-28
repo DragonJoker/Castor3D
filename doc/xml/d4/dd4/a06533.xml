@@ -1,0 +1,186 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d4/dd4/a06533" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::Ray</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;Ray&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;origin&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslRay.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/dd4/a06533_1afc6c080c35dfce2fd1a8432b1fe56ef0" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::Ray::origin</definition>
+        <argsstring></argsstring>
+        <name>origin</name>
+        <qualifiedname>castor3d::shader::Ray::origin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslRay.hpp" line="83" column="11" bodyfile="Shader/Shaders/GlslRay.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dd4/a06533_1a194d663bcd6ad50dd1a8a521f5d2804e" prot="public" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::Ray::direction</definition>
+        <argsstring></argsstring>
+        <name>direction</name>
+        <qualifiedname>castor3d::shader::Ray::direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslRay.hpp" line="84" column="11" bodyfile="Shader/Shaders/GlslRay.hpp" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/dd4/a06533_1abf18552df0a8b2ef917d2cdba438c372" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Ray::Ray</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>Ray</name>
+        <qualifiedname>castor3d::shader::Ray::Ray</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslRay.hpp" line="65" column="9" bodyfile="Shader/Shaders/GlslRay.hpp" bodystart="65" bodyend="72"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd4/a06533_1a2f690f70299255bdc41dbdee7e52c705" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Ray::Ray</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>Ray</name>
+        <qualifiedname>castor3d::shader::Ray::Ray</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslRay.hpp" line="74" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd4/a06533_1abdc8d239d9a8a8c2e69cfddcaefa7644" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Ray::Ray</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::Vec3 const &amp;o)</argsstring>
+        <name>Ray</name>
+        <qualifiedname>castor3d::shader::Ray::Ray</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslRay.hpp" line="75" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd4/a06533_1abeb317272c136feba801ba38ebff8bab" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::Ray::Ray</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::Vec3 const &amp;o, sdw::Vec3 const &amp;d)</argsstring>
+        <name>Ray</name>
+        <qualifiedname>castor3d::shader::Ray::Ray</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>o</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>d</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslRay.hpp" line="77" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/dd4/a06533_1abeb6e9ed008092a7cf3a4f7a2c56b1c4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::Ray::step</definition>
+        <argsstring>(sdw::Float const &amp;t) const</argsstring>
+        <name>step</name>
+        <qualifiedname>castor3d::shader::Ray::step</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>t</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslRay.hpp" line="81" column="19"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::Ray</label>
+        <link refid="d4/dd4/a06533"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;Ray&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;origin&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::Ray</label>
+        <link refid="d4/dd4/a06533"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;Ray&quot;, sdw::type::MemoryLayout::eC, sdw::Vec3Field&lt; &quot;origin&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslRay.hpp" line="59" column="1" bodyfile="Shader/Shaders/GlslRay.hpp" bodystart="64" bodyend="85"/>
+    <listofallmembers>
+      <member refid="d4/dd4/a06533_1a194d663bcd6ad50dd1a8a521f5d2804e" prot="public" virt="non-virtual"><scope>castor3d::shader::Ray</scope><name>direction</name></member>
+      <member refid="d4/dd4/a06533_1afc6c080c35dfce2fd1a8432b1fe56ef0" prot="public" virt="non-virtual"><scope>castor3d::shader::Ray</scope><name>origin</name></member>
+      <member refid="d4/dd4/a06533_1abf18552df0a8b2ef917d2cdba438c372" prot="public" virt="non-virtual"><scope>castor3d::shader::Ray</scope><name>Ray</name></member>
+      <member refid="d4/dd4/a06533_1a2f690f70299255bdc41dbdee7e52c705" prot="public" virt="non-virtual"><scope>castor3d::shader::Ray</scope><name>Ray</name></member>
+      <member refid="d4/dd4/a06533_1abdc8d239d9a8a8c2e69cfddcaefa7644" prot="public" virt="non-virtual"><scope>castor3d::shader::Ray</scope><name>Ray</name></member>
+      <member refid="d4/dd4/a06533_1abeb317272c136feba801ba38ebff8bab" prot="public" virt="non-virtual"><scope>castor3d::shader::Ray</scope><name>Ray</name></member>
+      <member refid="d4/dd4/a06533_1abeb6e9ed008092a7cf3a4f7a2c56b1c4" prot="public" virt="non-virtual"><scope>castor3d::shader::Ray</scope><name>step</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

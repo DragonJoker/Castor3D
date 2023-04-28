@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d44/a06130" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; VkBorderColor &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d2/d44/a06130_1ad6b219b4286e37fb14ab4762b5f0afbf" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; VkBorderColor &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; VkBorderColor &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;BorderColor&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="434" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="434" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d44/a06130_1a2952a42eb8fa391c48ca74bf8f3f2ea4" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; VkBorderColor &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; VkBorderColor &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result = <ref refid="d5/da6/a01698_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>( VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK, VK_BORDER_COLOR_INT_OPAQUE_WHITE );
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="435" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="435" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; VkBorderColor &gt;</label>
+        <link refid="d2/d44/a06130"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="432" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="433" bodyend="441"/>
+    <listofallmembers>
+      <member refid="d2/d44/a06130_1ad6b219b4286e37fb14ab4762b5f0afbf" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; VkBorderColor &gt;</scope><name>Name</name></member>
+      <member refid="d2/d44/a06130_1a2952a42eb8fa391c48ca74bf8f3f2ea4" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; VkBorderColor &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

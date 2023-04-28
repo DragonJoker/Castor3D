@@ -1,0 +1,278 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="d3/ddc/a01142" kind="file" language="C++">
+    <compoundname>SsaoModule.hpp</compoundname>
+    <includes refid="dd/dd7/a00260" local="yes">Castor3D/Castor3DModule.hpp</includes>
+    <includes local="no">CastorUtils/CastorUtilsPrerequisites.hpp</includes>
+    <includes local="no">CastorUtils/Config/SmartPtr.hpp</includes>
+    <includedby refid="d5/d35/a00266" local="yes">Castor3DPrerequisites.hpp</includedby>
+    <includedby refid="d7/d12/a00911" local="yes">Render/Opaque/DeferredRendering.hpp</includedby>
+    <includedby refid="df/d88/a00962" local="yes">Render/Opaque/OpaqueResolvePass.hpp</includedby>
+    <includedby refid="d7/d76/a00992" local="yes">Render/Passes/LineariseDepthPass.hpp</includedby>
+    <includedby refid="d6/dea/a01094" local="yes">Render/RenderTechnique.hpp</includedby>
+    <includedby refid="d1/dae/a01136" local="yes">Render/Ssao/SsaoBlurPass.hpp</includedby>
+    <includedby refid="d5/d3e/a01139" local="yes">Render/Ssao/SsaoConfig.hpp</includedby>
+    <includedby refid="d9/d65/a01145" local="yes">Render/Ssao/SsaoPass.hpp</includedby>
+    <includedby refid="db/d17/a01148" local="yes">Render/Ssao/SsaoRawAOPass.hpp</includedby>
+    <includedby refid="d1/d34/a01211" local="yes">Render/Transparent/TransparentRendering.hpp</includedby>
+    <includedby refid="d2/dc1/a01562" local="yes">Shader/Ubos/SsaoConfigUbo.hpp</includedby>
+    <incdepgraph>
+      <node id="17">
+        <label>CastorUtils/CastorUtilsPrerequisites.hpp</label>
+      </node>
+      <node id="18">
+        <label>CastorUtils/Config/SmartPtr.hpp</label>
+      </node>
+      <node id="4">
+        <label>CastorUtils/Design/FlagCombination.hpp</label>
+      </node>
+      <node id="5">
+        <label>CastorUtils/Design/OwnedBy.hpp</label>
+      </node>
+      <node id="6">
+        <label>CastorUtils/Exception/Assertion.hpp</label>
+      </node>
+      <node id="7">
+        <label>CastorUtils/Graphics/GraphicsModule.hpp</label>
+      </node>
+      <node id="8">
+        <label>CastorUtils/Graphics/Size.hpp</label>
+      </node>
+      <node id="9">
+        <label>CastorUtils/Math/Coords.hpp</label>
+      </node>
+      <node id="10">
+        <label>CastorUtils/Math/Point.hpp</label>
+      </node>
+      <node id="3">
+        <label>CastorUtils/Multithreading/MultithreadingModule.hpp</label>
+      </node>
+      <node id="12">
+        <label>RenderGraph/FrameGraphPrerequisites.hpp</label>
+      </node>
+      <node id="2">
+        <label>Castor3D/Castor3DModule.hpp</label>
+        <link refid="dd/dd7/a00260"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="11" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Render/Ssao/SsaoModule.hpp</label>
+        <link refid="d3/ddc/a01142"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>ashespp/AshesPPPrerequisites.hpp</label>
+      </node>
+      <node id="13">
+        <label>cstdint</label>
+      </node>
+      <node id="14">
+        <label>memory</label>
+      </node>
+      <node id="15">
+        <label>string</label>
+      </node>
+      <node id="16">
+        <label>vector</label>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>Castor3DPrerequisites.hpp</label>
+        <link refid="d5/d35/a00266"/>
+      </node>
+      <node id="3">
+        <label>Render/Opaque/DeferredRendering.hpp</label>
+        <link refid="d7/d12/a00911"/>
+      </node>
+      <node id="13">
+        <label>Render/Opaque/OpaquePass.hpp</label>
+        <link refid="d5/da3/a00953"/>
+      </node>
+      <node id="9">
+        <label>Render/Opaque/OpaqueRendering.hpp</label>
+        <link refid="db/d40/a00959"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>Render/Opaque/OpaqueResolvePass.hpp</label>
+        <link refid="df/d88/a00962"/>
+      </node>
+      <node id="14">
+        <label>Render/Opaque/VisibilityResolvePass.hpp</label>
+        <link refid="d7/dd4/a00968"/>
+      </node>
+      <node id="15">
+        <label>Render/Passes/ForwardRenderTechniquePass.hpp</label>
+        <link refid="d3/d7b/a00986"/>
+      </node>
+      <node id="5">
+        <label>Render/Passes/LineariseDepthPass.hpp</label>
+        <link refid="d7/d76/a00992"/>
+      </node>
+      <node id="11">
+        <label>Render/PostEffect/PostEffect.hpp</label>
+        <link refid="db/d08/a01028"/>
+      </node>
+      <node id="16">
+        <label>Render/Prepass/DepthPass.hpp</label>
+        <link refid="db/d14/a01040"/>
+      </node>
+      <node id="17">
+        <label>Render/Prepass/VisibilityPass.hpp</label>
+        <link refid="d9/dce/a01052"/>
+      </node>
+      <node id="10">
+        <label>Render/RenderTarget.hpp</label>
+        <link refid="d6/d0d/a01091"/>
+        <childnode refid="11" relation="include">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>Render/RenderTechnique.hpp</label>
+        <link refid="d6/dea/a01094"/>
+      </node>
+      <node id="12">
+        <label>Render/RenderTechniquePass.hpp</label>
+        <link refid="d1/dfa/a01097"/>
+        <childnode refid="13" relation="include">
+        </childnode>
+        <childnode refid="14" relation="include">
+        </childnode>
+        <childnode refid="15" relation="include">
+        </childnode>
+        <childnode refid="16" relation="include">
+        </childnode>
+        <childnode refid="17" relation="include">
+        </childnode>
+        <childnode refid="18" relation="include">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>Render/Ssao/SsaoBlurPass.hpp</label>
+        <link refid="d1/dae/a01136"/>
+      </node>
+      <node id="8">
+        <label>Render/Ssao/SsaoConfig.hpp</label>
+        <link refid="d5/d3e/a01139"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+        <childnode refid="10" relation="include">
+        </childnode>
+        <childnode refid="12" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="21" relation="include">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>Render/Ssao/SsaoModule.hpp</label>
+        <link refid="d3/ddc/a01142"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="3" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+        <childnode refid="5" relation="include">
+        </childnode>
+        <childnode refid="6" relation="include">
+        </childnode>
+        <childnode refid="7" relation="include">
+        </childnode>
+        <childnode refid="8" relation="include">
+        </childnode>
+        <childnode refid="23" relation="include">
+        </childnode>
+        <childnode refid="20" relation="include">
+        </childnode>
+        <childnode refid="24" relation="include">
+        </childnode>
+        <childnode refid="25" relation="include">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>Render/Ssao/SsaoPass.hpp</label>
+        <link refid="d9/d65/a01145"/>
+        <childnode refid="9" relation="include">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>Render/Ssao/SsaoRawAOPass.hpp</label>
+        <link refid="db/d17/a01148"/>
+      </node>
+      <node id="18">
+        <label>Render/Transparent/TransparentPass.hpp</label>
+        <link refid="de/d61/a01205"/>
+        <childnode refid="19" relation="include">
+        </childnode>
+      </node>
+      <node id="24">
+        <label>Render/Transparent/TransparentRendering.hpp</label>
+        <link refid="d1/d34/a01211"/>
+        <childnode refid="6" relation="include">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>Render/Transparent/WeightedBlendRendering.hpp</label>
+        <link refid="d5/d32/a01214"/>
+      </node>
+      <node id="21">
+        <label>Scene/SceneFileParser.hpp</label>
+        <link refid="de/d9d/a01382"/>
+        <childnode refid="22" relation="include">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>Scene/SceneFileParser_Parsers.hpp</label>
+        <link refid="df/d68/a01385"/>
+      </node>
+      <node id="25">
+        <label>Shader/Ubos/SsaoConfigUbo.hpp</label>
+        <link refid="d2/dc1/a01562"/>
+        <childnode refid="23" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innernamespace refid="d3/d22/a01572">castor3d</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Ssao/SsaoModule.hpp"/>
+  </compounddef>
+</doxygen>

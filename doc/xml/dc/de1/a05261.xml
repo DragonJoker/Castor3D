@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dc/de1/a05261" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::OverlaysCounts</compoundname>
+    <includes local="no">OverlaysModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dc/de1/a05261_1a058857698ed509de362eb9989a300417" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlaysCounts::overlays</definition>
+        <argsstring></argsstring>
+        <name>overlays</name>
+        <qualifiedname>castor3d::OverlaysCounts::overlays</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlaysModule.hpp" line="173" column="10" bodyfile="Render/Overlays/OverlaysModule.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/de1/a05261_1ae702d9e1b015630e85e79a71e008663c" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlaysCounts::quads</definition>
+        <argsstring></argsstring>
+        <name>quads</name>
+        <qualifiedname>castor3d::OverlaysCounts::quads</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlaysModule.hpp" line="174" column="10" bodyfile="Render/Overlays/OverlaysModule.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/de1/a05261_1ac13aebe41f6a735590e4574d9a9e2aa0" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::OverlaysCounts::drawCalls</definition>
+        <argsstring></argsstring>
+        <name>drawCalls</name>
+        <qualifiedname>castor3d::OverlaysCounts::drawCalls</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Overlays/OverlaysModule.hpp" line="175" column="10" bodyfile="Render/Overlays/OverlaysModule.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Overlays/OverlaysModule.hpp" line="171" column="1" bodyfile="Render/Overlays/OverlaysModule.hpp" bodystart="172" bodyend="176"/>
+    <listofallmembers>
+      <member refid="dc/de1/a05261_1ac13aebe41f6a735590e4574d9a9e2aa0" prot="public" virt="non-virtual"><scope>castor3d::OverlaysCounts</scope><name>drawCalls</name></member>
+      <member refid="dc/de1/a05261_1a058857698ed509de362eb9989a300417" prot="public" virt="non-virtual"><scope>castor3d::OverlaysCounts</scope><name>overlays</name></member>
+      <member refid="dc/de1/a05261_1ae702d9e1b015630e85e79a71e008663c" prot="public" virt="non-virtual"><scope>castor3d::OverlaysCounts</scope><name>quads</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

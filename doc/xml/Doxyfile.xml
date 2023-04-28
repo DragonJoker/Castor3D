@@ -1,12 +1,13 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxyfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="doxyfile.xsd" version="1.9.3" xml:lang="en-US">
+<doxyfile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="doxyfile.xsd" version="1.9.6" xml:lang="en-US">
   <option  id='DOXYFILE_ENCODING' default='yes' type='string'><value><![CDATA[UTF-8]]></value></option>
   <option  id='PROJECT_NAME' default='no' type='string'><value><![CDATA[Castor3D]]></value></option>
-  <option  id='PROJECT_NUMBER' default='no' type='string'><value><![CDATA[0.14.0]]></value></option>
+  <option  id='PROJECT_NUMBER' default='no' type='string'><value><![CDATA[0.15.0]]></value></option>
   <option  id='PROJECT_BRIEF' default='no' type='string'><value><![CDATA["Multiplatform 3D engine"]]></value></option>
   <option  id='PROJECT_LOGO' default='no' type='string'><value><![CDATA[Z:/Projets/C++/Castor3D/data/Images/castor-small.png]]></value></option>
   <option  id='OUTPUT_DIRECTORY' default='no' type='string'><value><![CDATA[Z:/Projets/C++/Castor3D/doc]]></value></option>
   <option  id='CREATE_SUBDIRS' default='no' type='bool'><value>YES</value></option>
+  <option  id='CREATE_SUBDIRS_LEVEL' default='yes' type='int'><value>8</value></option>
   <option  id='ALLOW_UNICODE_NAMES' default='yes' type='bool'><value>NO</value></option>
   <option  id='OUTPUT_LANGUAGE' default='yes' type='string'><value>English</value></option>
   <option  id='BRIEF_MEMBER_DESC' default='yes' type='bool'><value>YES</value></option>
@@ -79,7 +80,7 @@
   <option  id='HIDE_FRIEND_COMPOUNDS' default='yes' type='bool'><value>NO</value></option>
   <option  id='HIDE_IN_BODY_DOCS' default='yes' type='bool'><value>NO</value></option>
   <option  id='INTERNAL_DOCS' default='yes' type='bool'><value>NO</value></option>
-  <option  id='CASE_SENSE_NAMES' default='no' type='bool'><value>YES</value></option>
+  <option  id='CASE_SENSE_NAMES' default='no' type='string'><value>YES</value></option>
   <option  id='HIDE_SCOPE_NAMES' default='yes' type='bool'><value>NO</value></option>
   <option  id='HIDE_COMPOUND_REFERENCE' default='yes' type='bool'><value>NO</value></option>
   <option  id='SHOW_HEADERFILE' default='yes' type='bool'><value>YES</value></option>
@@ -113,8 +114,10 @@
   <option  id='WARN_IF_DOC_ERROR' default='yes' type='bool'><value>YES</value></option>
   <option  id='WARN_IF_INCOMPLETE_DOC' default='yes' type='bool'><value>YES</value></option>
   <option  id='WARN_NO_PARAMDOC' default='no' type='bool'><value>YES</value></option>
+  <option  id='WARN_IF_UNDOC_ENUM_VAL' default='yes' type='bool'><value>NO</value></option>
   <option  id='WARN_AS_ERROR' default='yes' type='string'><value>NO</value></option>
   <option  id='WARN_FORMAT' default='no' type='string'><value><![CDATA["@@$file:$line: $text"]]></value></option>
+  <option  id='WARN_LINE_FORMAT' default='yes' type='string'><value><![CDATA["at line $line of file $file"]]></value></option>
   <option  id='WARN_LOGFILE' default='no' type='string'><value><![CDATA[Z:/Projets/C++/Castor3D/build/msvc/source/Core/Castor3D/Doxygen_Castor3D_English.log]]></value></option>
   <option  id='INPUT' default='no' type='stringlist'>
     <value><![CDATA[Z:/Projets/C++/Castor3D/doc/Castor3D/Build-English.md]]></value>
@@ -125,6 +128,8 @@
     <value><![CDATA[Z:/Projets/C++/Castor3D/include/Core/Castor3D]]></value>
   </option>
   <option  id='INPUT_ENCODING' default='yes' type='string'><value><![CDATA[UTF-8]]></value></option>
+  <option  id='INPUT_FILE_ENCODING' default='yes' type='stringlist'>
+  </option>
   <option  id='FILE_PATTERNS' default='no' type='stringlist'>
     <value><![CDATA[*.h]]></value>
     <value><![CDATA[*.hpp]]></value>
@@ -153,6 +158,7 @@
   <option  id='FILTER_SOURCE_PATTERNS' default='yes' type='stringlist'>
   </option>
   <option  id='USE_MDFILE_AS_MAINPAGE' default='yes' type='string'><value><![CDATA[]]></value></option>
+  <option  id='FORTRAN_COMMENT_AFTER' default='yes' type='int'><value>72</value></option>
   <option  id='SOURCE_BROWSER' default='yes' type='bool'><value>NO</value></option>
   <option  id='INLINE_SOURCES' default='yes' type='bool'><value>NO</value></option>
   <option  id='STRIP_CODE_COMMENTS' default='yes' type='bool'><value>YES</value></option>
@@ -171,7 +177,7 @@
   <option  id='IGNORE_PREFIX' default='yes' type='stringlist'>
   </option>
   <option  id='GENERATE_HTML' default='yes' type='bool'><value>YES</value></option>
-  <option  id='HTML_OUTPUT' default='no' type='string'><value><![CDATA[Z:/Projets/C++/Castor3D/doc/Castor3D/EN/v0.14.0]]></value></option>
+  <option  id='HTML_OUTPUT' default='no' type='string'><value><![CDATA[Z:/Projets/C++/Castor3D/doc/Castor3D/EN/v0.15.0]]></value></option>
   <option  id='HTML_FILE_EXTENSION' default='yes' type='string'><value><![CDATA[.html]]></value></option>
   <option  id='HTML_HEADER' default='yes' type='string'><value><![CDATA[]]></value></option>
   <option  id='HTML_FOOTER' default='yes' type='string'><value><![CDATA[]]></value></option>
@@ -181,11 +187,12 @@
   </option>
   <option  id='HTML_EXTRA_FILES' default='yes' type='stringlist'>
   </option>
+  <option  id='HTML_COLORSTYLE' default='no' type='string'><value>DARK</value></option>
   <option  id='HTML_COLORSTYLE_HUE' default='yes' type='int'><value>220</value></option>
   <option  id='HTML_COLORSTYLE_SAT' default='yes' type='int'><value>100</value></option>
   <option  id='HTML_COLORSTYLE_GAMMA' default='yes' type='int'><value>80</value></option>
   <option  id='HTML_TIMESTAMP' default='no' type='bool'><value>YES</value></option>
-  <option  id='HTML_DYNAMIC_MENUS' default='yes' type='bool'><value>YES</value></option>
+  <option  id='HTML_DYNAMIC_MENUS' default='no' type='bool'><value>NO</value></option>
   <option  id='HTML_DYNAMIC_SECTIONS' default='yes' type='bool'><value>NO</value></option>
   <option  id='HTML_INDEX_NUM_ENTRIES' default='yes' type='int'><value>100</value></option>
   <option  id='GENERATE_DOCSET' default='yes' type='bool'><value>NO</value></option>
@@ -196,7 +203,7 @@
   <option  id='DOCSET_PUBLISHER_NAME' default='yes' type='string'><value><![CDATA[Publisher]]></value></option>
   <option  id='GENERATE_HTMLHELP' default='no' type='bool'><value>YES</value></option>
   <option  id='CHM_FILE' default='no' type='string'><value><![CDATA[Castor3D-English.chm]]></value></option>
-  <option  id='HHC_LOCATION' default='no' type='string'><value><![CDATA["Z:/Tools/HTML Help Workshop/hhc.exe"]]></value></option>
+  <option  id='HHC_LOCATION' default='no' type='string'><value><![CDATA["C:/Program Files (x86)/HTML Help Workshop/hhc.exe"]]></value></option>
   <option  id='GENERATE_CHI' default='yes' type='bool'><value>NO</value></option>
   <option  id='CHM_INDEX_ENCODING' default='yes' type='string'><value><![CDATA[]]></value></option>
   <option  id='BINARY_TOC' default='yes' type='bool'><value>NO</value></option>
@@ -220,7 +227,6 @@
   <option  id='OBFUSCATE_EMAILS' default='yes' type='bool'><value>YES</value></option>
   <option  id='HTML_FORMULA_FORMAT' default='yes' type='string'><value>png</value></option>
   <option  id='FORMULA_FONTSIZE' default='yes' type='int'><value>10</value></option>
-  <option  id='FORMULA_TRANSPARENT' default='yes' type='bool'><value>YES</value></option>
   <option  id='FORMULA_MACROFILE' default='yes' type='string'><value><![CDATA[]]></value></option>
   <option  id='USE_MATHJAX' default='yes' type='bool'><value>NO</value></option>
   <option  id='MATHJAX_VERSION' default='yes' type='string'><value>MathJax_2</value></option>
@@ -271,7 +277,7 @@
   <option  id='MAN_SUBDIR' default='yes' type='string'><value><![CDATA[]]></value></option>
   <option  id='MAN_LINKS' default='no' type='bool'><value>YES</value></option>
   <option  id='GENERATE_XML' default='no' type='bool'><value>YES</value></option>
-  <option  id='XML_OUTPUT' default='no' type='string'><value><![CDATA[Z:/Projets/C++/Castor3D/doc/Castor3D/EN/v0.14.0/xml]]></value></option>
+  <option  id='XML_OUTPUT' default='no' type='string'><value><![CDATA[Z:/Projets/C++/Castor3D/doc/Castor3D/EN/v0.15.0/xml]]></value></option>
   <option  id='XML_PROGRAMLISTING' default='no' type='bool'><value>NO</value></option>
   <option  id='XML_NS_MEMB_FILE_SCOPE' default='yes' type='bool'><value>NO</value></option>
   <option  id='GENERATE_DOCBOOK' default='yes' type='bool'><value>NO</value></option>
@@ -304,12 +310,13 @@
   <option  id='ALLEXTERNALS' default='yes' type='bool'><value>NO</value></option>
   <option  id='EXTERNAL_GROUPS' default='yes' type='bool'><value>YES</value></option>
   <option  id='EXTERNAL_PAGES' default='yes' type='bool'><value>YES</value></option>
-  <option  id='DIA_PATH' default='no' type='string'><value><![CDATA[Z:\Tools\Dia\bin]]></value></option>
+  <option  id='DIA_PATH' default='no' type='string'><value><![CDATA[Y:\Dia\bin]]></value></option>
   <option  id='HIDE_UNDOC_RELATIONS' default='yes' type='bool'><value>YES</value></option>
   <option  id='HAVE_DOT' default='no' type='bool'><value>YES</value></option>
   <option  id='DOT_NUM_THREADS' default='yes' type='int'><value>0</value></option>
-  <option  id='DOT_FONTNAME' default='yes' type='string'><value><![CDATA[Helvetica]]></value></option>
-  <option  id='DOT_FONTSIZE' default='yes' type='int'><value>10</value></option>
+  <option  id='DOT_COMMON_ATTR' default='yes' type='string'><value><![CDATA["fontname=Helvetica,fontsize=10"]]></value></option>
+  <option  id='DOT_EDGE_ATTR' default='yes' type='string'><value><![CDATA["labelfontname=Helvetica,labelfontsize=10"]]></value></option>
+  <option  id='DOT_NODE_ATTR' default='yes' type='string'><value><![CDATA["shape=box,height=0.2,width=0.4"]]></value></option>
   <option  id='DOT_FONTPATH' default='yes' type='string'><value><![CDATA[]]></value></option>
   <option  id='CLASS_GRAPH' default='yes' type='string'><value>YES</value></option>
   <option  id='COLLABORATION_GRAPH' default='yes' type='bool'><value>YES</value></option>
@@ -328,7 +335,7 @@
   <option  id='DIR_GRAPH_MAX_DEPTH' default='yes' type='int'><value>1</value></option>
   <option  id='DOT_IMAGE_FORMAT' default='yes' type='string'><value>png</value></option>
   <option  id='INTERACTIVE_SVG' default='yes' type='bool'><value>NO</value></option>
-  <option  id='DOT_PATH' default='no' type='string'><value><![CDATA[Z:\Tools\GraphViz\bin]]></value></option>
+  <option  id='DOT_PATH' default='no' type='string'><value><![CDATA[G:\Tools\GraphViz\bin]]></value></option>
   <option  id='DOTFILE_DIRS' default='yes' type='stringlist'>
   </option>
   <option  id='MSCFILE_DIRS' default='yes' type='stringlist'>
@@ -341,7 +348,6 @@
   </option>
   <option  id='DOT_GRAPH_MAX_NODES' default='no' type='int'><value>500</value></option>
   <option  id='MAX_DOT_GRAPH_DEPTH' default='yes' type='int'><value>0</value></option>
-  <option  id='DOT_TRANSPARENT' default='yes' type='bool'><value>NO</value></option>
   <option  id='DOT_MULTI_TARGETS' default='yes' type='bool'><value>NO</value></option>
   <option  id='GENERATE_LEGEND' default='yes' type='bool'><value>YES</value></option>
   <option  id='DOT_CLEANUP' default='yes' type='bool'><value>YES</value></option>

@@ -1,5 +1,9 @@
-<map id="castor3d::ObjectCacheTraitsT&lt; BillboardList, castor::String &gt;" name="castor3d::ObjectCacheTraitsT&lt; BillboardList, castor::String &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="5,229,192,285"/>
-<area shape="rect" id="node2" href="$d2/d02/a05836.html" title=" " alt="" coords="5,124,192,180"/>
-<area shape="rect" id="node3" href="$d2/d02/a05836.html" title=" " alt="" coords="5,5,192,47"/>
+<map id="castor3d::AnimatedSceneNode" name="castor3d::AnimatedSceneNode">
+<area shape="rect" id="node1" title=" " alt="" coords="8,373,211,399"/>
+<area shape="rect" id="node2" href="$d5/de0/a05833.html" title=" " alt="" coords="23,299,196,324"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,203,112,229"/>
+<area shape="rect" id="node4" title=" " alt="" coords="136,196,307,236"/>
+<area shape="rect" id="node5" title=" " alt="" coords="161,93,282,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="170,5,209,31"/>
+<area shape="rect" id="node7" title=" " alt="" coords="234,5,273,31"/>
 </map>

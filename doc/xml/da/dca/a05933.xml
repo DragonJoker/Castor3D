@@ -1,0 +1,274 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/dca/a05933" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::NoIblBackgroundModel</compoundname>
+    <basecompoundref refid="d5/d7e/a06413" prot="public" virt="non-virtual">castor3d::shader::BackgroundModel</basecompoundref>
+    <includes local="no">GlslNoIblBackground.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/dca/a05933_1abe89811e67deaec64fdccbfef11e1fb6" prot="public" static="yes" mutable="no">
+        <type>castor::String const</type>
+        <definition>castor::String const castor3d::shader::NoIblBackgroundModel::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor3d::shader::NoIblBackgroundModel::Name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslNoIblBackground.hpp" line="44" column="29" bodyfile="Scene/Background/Shaders/GlslNoIblBackground.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/dca/a05933_1a145d8c65d5a504d91d4b46e8b3f1545b" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InVec3, sdw::InFloat, sdw::OutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InVec3 , sdw::InFloat , sdw::OutVec3 , sdw::OutVec3 &gt; castor3d::shader::NoIblBackgroundModel::m_computeReflections</definition>
+        <argsstring></argsstring>
+        <name>m_computeReflections</name>
+        <qualifiedname>castor3d::shader::NoIblBackgroundModel::m_computeReflections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslNoIblBackground.hpp" line="54" column="2" bodyfile="Scene/Background/Shaders/GlslNoIblBackground.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/dca/a05933_1a425e81f5ce29221006da1a31032a757f" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeRgba32, sdw::InFloat, sdw::InOutVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeRgba32 , sdw::InFloat , sdw::InOutVec3 , sdw::InFloat &gt; castor3d::shader::NoIblBackgroundModel::m_computeRefractions</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefractions</name>
+        <qualifiedname>castor3d::shader::NoIblBackgroundModel::m_computeRefractions</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslNoIblBackground.hpp" line="61" column="2" bodyfile="Scene/Background/Shaders/GlslNoIblBackground.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dca/a05933_1a40a7761286d80fdfa6358529e14bdf13" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::NoIblBackgroundModel::NoIblBackgroundModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, VkExtent2D targetSize, uint32_t &amp;binding, uint32_t set)</argsstring>
+        <name>NoIblBackgroundModel</name>
+        <qualifiedname>castor3d::shader::NoIblBackgroundModel::NoIblBackgroundModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d0f/a06605" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>VkExtent2D</type>
+          <declname>targetSize</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslNoIblBackground.hpp" line="15" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dca/a05933_1a65322d1b3be0d78b47f965ca60b78f70" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::NoIblBackgroundModel::computeReflections</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;difF, sdw::Vec3 const &amp;spcF, sdw::Vec3 const &amp;V, sdw::Float const &amp;NdotV, BlendComponents &amp;components, sdw::CombinedImage2DRgba32 const &amp;brdf, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular) override</argsstring>
+        <name>computeReflections</name>
+        <qualifiedname>castor3d::shader::NoIblBackgroundModel::computeReflections</qualifiedname>
+        <reimplements refid="d5/d7e/a06413_1a97af89a31c220d9b07d6896db4afa9f5">computeReflections</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>difF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>spcF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslNoIblBackground.hpp" line="29" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dca/a05933_1a4c09cb7f64b4b814ae65fdfa7c9dc1ad" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec3</type>
+        <definition>C3D_API sdw::RetVec3 castor3d::shader::NoIblBackgroundModel::computeRefractions</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;V, sdw::Float const &amp;refractionRatio, BlendComponents &amp;components) override</argsstring>
+        <name>computeRefractions</name>
+        <qualifiedname>castor3d::shader::NoIblBackgroundModel::computeRefractions</qualifiedname>
+        <reimplements refid="d5/d7e/a06413_1a0794a0948600af9a8c9799e6cbd2e07f">computeRefractions</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslNoIblBackground.hpp" line="38" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/dca/a05933_1a78dbe1338b8486215b0c1de6741d36ff" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="de/d0f/a01727_1a2660230d5a6d243f34ddd9ddaf49ca34" kindref="member">BackgroundModelPtr</ref></type>
+        <definition>static C3D_API BackgroundModelPtr castor3d::shader::NoIblBackgroundModel::create</definition>
+        <argsstring>(Engine const &amp;engine, sdw::ShaderWriter &amp;writer, Utils &amp;utils, VkExtent2D targetSize, bool needsForeground, uint32_t &amp;binding, uint32_t set)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::NoIblBackgroundModel::create</qualifiedname>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> const &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d0f/a06605" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>VkExtent2D</type>
+          <declname>targetSize</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>needsForeground</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Background/Shaders/GlslNoIblBackground.hpp" line="21" column="35"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::shader::BackgroundModel</label>
+        <link refid="d5/d7e/a06413"/>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::NoIblBackgroundModel</label>
+        <link refid="da/dca/a05933"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::shader::BackgroundModel</label>
+        <link refid="d5/d7e/a06413"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_utils</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::NoIblBackgroundModel</label>
+        <link refid="da/dca/a05933"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::Utils</label>
+        <link refid="dd/d0f/a06605"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Background/Shaders/GlslNoIblBackground.hpp" line="11" column="1" bodyfile="Scene/Background/Shaders/GlslNoIblBackground.hpp" bodystart="13" bodyend="62"/>
+    <listofallmembers>
+      <member refid="d5/d7e/a06413_1adf4d6bd8fb5dfdbb4ef98fc9b2f8cb21" prot="public" virt="virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>applyVolume</name></member>
+      <member refid="d5/d7e/a06413_1a639f543ce81e3aff3b6ec97b994b295b" prot="public" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>BackgroundModel</name></member>
+      <member refid="d5/d7e/a06413_1a886d1018402cd37b096633c705050533" prot="public" virt="virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>computeDiffuseReflections</name></member>
+      <member refid="da/dca/a05933_1a65322d1b3be0d78b47f965ca60b78f70" prot="public" virt="virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>computeReflections</name></member>
+      <member refid="da/dca/a05933_1a4c09cb7f64b4b814ae65fdfa7c9dc1ad" prot="public" virt="virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>computeRefractions</name></member>
+      <member refid="d5/d7e/a06413_1ae8406dd2f259619eb02bb9a24b127fa3" prot="public" virt="virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>computeSheenReflections</name></member>
+      <member refid="d5/d7e/a06413_1a2da9feba93add925e7619781f86cde66" prot="public" virt="virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>computeSpecularReflections</name></member>
+      <member refid="d5/d7e/a06413_1a2436dc07619cb0407fde76ef47c4eb79" prot="public" virt="virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>computeSpecularRefractions</name></member>
+      <member refid="da/dca/a05933_1a78dbe1338b8486215b0c1de6741d36ff" prot="public" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>create</name></member>
+      <member refid="d5/d7e/a06413_1a26c25b3ab56964bba559119ecfe301b3" prot="public" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>createModel</name></member>
+      <member refid="d5/d7e/a06413_1a5d49942b92f2e3947fe7338bb5b26d5e" prot="public" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>getBrdf</name></member>
+      <member refid="d5/d7e/a06413_1a9d1380bd9e91ae5a75c041bb706ba02c" prot="public" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>getTargetSize</name></member>
+      <member refid="da/dca/a05933_1a145d8c65d5a504d91d4b46e8b3f1545b" prot="private" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>m_computeReflections</name></member>
+      <member refid="da/dca/a05933_1a425e81f5ce29221006da1a31032a757f" prot="private" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>m_computeRefractions</name></member>
+      <member refid="d5/d7e/a06413_1a0fd1043112df7879bc6953db8be49328" prot="protected" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>m_targetSize</name></member>
+      <member refid="d5/d7e/a06413_1a37da18fc5b76f0cb1bc71dc6e3f520f0" prot="protected" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>m_utils</name></member>
+      <member refid="d5/d7e/a06413_1a8f41ed56bb77baa66ea1e21fc35545da" prot="protected" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>m_writer</name></member>
+      <member refid="da/dca/a05933_1abe89811e67deaec64fdccbfef11e1fb6" prot="public" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>Name</name></member>
+      <member refid="da/dca/a05933_1a40a7761286d80fdfa6358529e14bdf13" prot="public" virt="non-virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>NoIblBackgroundModel</name></member>
+      <member refid="d5/d7e/a06413_1ac68016721d3f75fc1f1e4bde1f4c788e" prot="public" virt="virtual"><scope>castor3d::shader::NoIblBackgroundModel</scope><name>~BackgroundModel</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

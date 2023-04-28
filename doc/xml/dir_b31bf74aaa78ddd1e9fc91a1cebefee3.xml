@@ -1,16 +1,16 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_b31bf74aaa78ddd1e9fc91a1cebefee3" kind="dir">
     <compoundname>Material/Pass/Component/Base</compoundname>
-    <innerfile refid="d8/d23/a00326">BlendComponent.hpp</innerfile>
-    <innerfile refid="dd/d4e/a00329">FractalMappingComponent.hpp</innerfile>
-    <innerfile refid="dc/d50/a00332">NormalComponent.hpp</innerfile>
-    <innerfile refid="df/d91/a00335">PassHeaderComponent.hpp</innerfile>
-    <innerfile refid="dc/d84/a00338">PickableComponent.hpp</innerfile>
-    <innerfile refid="d3/d93/a00341">TextureCountComponent.hpp</innerfile>
-    <innerfile refid="d8/d8e/a00344">TexturesComponent.hpp</innerfile>
-    <innerfile refid="d1/dc6/a00347">TwoSidedComponent.hpp</innerfile>
-    <innerfile refid="db/d10/a00350">UntileMappingComponent.hpp</innerfile>
+    <innerfile refid="dd/d63/a00455">BlendComponent.hpp</innerfile>
+    <innerfile refid="da/d65/a00458">FractalMappingComponent.hpp</innerfile>
+    <innerfile refid="d5/d5f/a00461">NormalComponent.hpp</innerfile>
+    <innerfile refid="d2/d9d/a00464">PassHeaderComponent.hpp</innerfile>
+    <innerfile refid="d7/d5e/a00467">PickableComponent.hpp</innerfile>
+    <innerfile refid="d0/d29/a00470">TextureCountComponent.hpp</innerfile>
+    <innerfile refid="dc/d8e/a00473">TexturesComponent.hpp</innerfile>
+    <innerfile refid="d9/d34/a00476">TwoSidedComponent.hpp</innerfile>
+    <innerfile refid="d9/d4a/a00479">UntileMappingComponent.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

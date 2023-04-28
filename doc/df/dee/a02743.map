@@ -1,4 +1,7 @@
-<map id="castor3d::GpuBufferBase" name="castor3d::GpuBufferBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,5,172,32"/>
-<area shape="rect" id="node2" href="$db/d1d/a02716.html" title="A GPU buffer, that uses a buddy allocator to allocate sub&#45;buffers." alt="" coords="17,80,161,121"/>
+<map id="castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;" name="castor3d::BinaryParser&lt; SkeletonAnimationBone &gt;">
+<area shape="rect" id="node1" title="MovingBone binary loader." alt="" coords="85,285,270,325"/>
+<area shape="rect" id="node2" href="$db/d0d/a02653.html" title=" " alt="" coords="85,196,270,236"/>
+<area shape="rect" id="node3" href="$db/d6a/a02613.html" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="node5" href="$db/d0d/a02653.html" title="Binary data chunk reader base class." alt="" coords="131,93,317,133"/>
+<area shape="rect" id="node4" href="$de/dc5/a04521.html" title=" " alt="" coords="218,5,342,31"/>
 </map>

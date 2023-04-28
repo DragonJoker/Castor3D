@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/d53/a06418" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::CullData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslCullData.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d53/a06418_1ab92855c1229a1e16188d173a159ed345" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::CullData::sphere</definition>
+        <argsstring></argsstring>
+        <name>sphere</name>
+        <qualifiedname>castor3d::shader::CullData::sphere</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslCullData.hpp" line="29" column="11" bodyfile="Shader/Shaders/GlslCullData.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d53/a06418_1a26e339379609ff0eedf4ff36bcf8b07c" prot="public" static="no" mutable="no">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::CullData::cone</definition>
+        <argsstring></argsstring>
+        <name>cone</name>
+        <qualifiedname>castor3d::shader::CullData::cone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslCullData.hpp" line="30" column="11" bodyfile="Shader/Shaders/GlslCullData.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/d53/a06418_1adc56315abf8d5098cc529a9e4ef3aed8" prot="private" static="no" mutable="yes">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InInt &gt; castor3d::shader::CullData::m_unpackCone</definition>
+        <argsstring></argsstring>
+        <name>m_unpackCone</name>
+        <qualifiedname>castor3d::shader::CullData::m_unpackCone</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslCullData.hpp" line="34" column="2" bodyfile="Shader/Shaders/GlslCullData.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d53/a06418_1a4de87d7ac2a57add196089b0e1eabb75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::CullData::CullData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled=true)</argsstring>
+        <name>CullData</name>
+        <qualifiedname>castor3d::shader::CullData::CullData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslCullData.hpp" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d53/a06418_1aea9e64cfae2eba53ca044a1bbfb61f64" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::CullData::SDW_DeclStructInstance</definition>
+        <argsstring>(C3D_API, CullData)</argsstring>
+        <name>SDW_DeclStructInstance</name>
+        <qualifiedname>castor3d::shader::CullData::SDW_DeclStructInstance</qualifiedname>
+        <param>
+          <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        </param>
+        <param>
+          <type><ref refid="df/d53/a06418" kindref="compound">CullData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslCullData.hpp" line="24" column="1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="df/d53/a06418_1ae16455a303e1ea5cae7ad2ed11451637" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::type::BaseStructPtr</type>
+        <definition>static C3D_API sdw::type::BaseStructPtr castor3d::shader::CullData::makeType</definition>
+        <argsstring>(sdw::type::TypesCache &amp;cache)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::CullData::makeType</qualifiedname>
+        <param>
+          <type>sdw::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslCullData.hpp" line="26" column="41"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::CullData</label>
+        <link refid="df/d53/a06418"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::CullData</label>
+        <link refid="df/d53/a06418"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslCullData.hpp" line="17" column="1" bodyfile="Shader/Shaders/GlslCullData.hpp" bodystart="19" bodyend="35"/>
+    <listofallmembers>
+      <member refid="df/d53/a06418_1a26e339379609ff0eedf4ff36bcf8b07c" prot="public" virt="non-virtual"><scope>castor3d::shader::CullData</scope><name>cone</name></member>
+      <member refid="df/d53/a06418_1a4de87d7ac2a57add196089b0e1eabb75" prot="public" virt="non-virtual"><scope>castor3d::shader::CullData</scope><name>CullData</name></member>
+      <member refid="df/d53/a06418_1adc56315abf8d5098cc529a9e4ef3aed8" prot="private" virt="non-virtual"><scope>castor3d::shader::CullData</scope><name>m_unpackCone</name></member>
+      <member refid="df/d53/a06418_1ae16455a303e1ea5cae7ad2ed11451637" prot="public" virt="non-virtual"><scope>castor3d::shader::CullData</scope><name>makeType</name></member>
+      <member refid="df/d53/a06418_1aea9e64cfae2eba53ca044a1bbfb61f64" prot="public" virt="non-virtual"><scope>castor3d::shader::CullData</scope><name>SDW_DeclStructInstance</name></member>
+      <member refid="df/d53/a06418_1ab92855c1229a1e16188d173a159ed345" prot="public" virt="non-virtual"><scope>castor3d::shader::CullData</scope><name>sphere</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

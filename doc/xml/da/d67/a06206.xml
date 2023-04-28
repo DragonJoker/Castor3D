@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/d67/a06206" kind="struct" language="C++" prot="public">
+    <compoundname>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/d67/a06206_1ada9202ad4b686f57076f2f94c0469907" prot="public" static="yes" mutable="no">
+        <type>xchar const  *const</type>
+        <definition>xchar const* const castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;::Name</definition>
+        <argsstring></argsstring>
+        <name>Name</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;::Name</qualifiedname>
+        <initializer>= cuT( &quot;TextLineSpacingMode&quot; )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="665" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="665" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d67/a06206_1a95fed6824fcc906bc011cc44f2c9b0be" prot="public" static="yes" mutable="no">
+        <type>UInt32StrMap const</type>
+        <definition>UInt32StrMap const castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;::Values</definition>
+        <argsstring></argsstring>
+        <name>Values</name>
+        <qualifiedname>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;::Values</qualifiedname>
+        <initializer>= []()
+		{
+			UInt32StrMap result;
+			result = <ref refid="d5/da6/a01698_1a89ee8e4edb4c883ef7c66b8dc60cc430" kindref="member">castor3d::getEnumMapT</ref>&lt; <ref refid="d5/da6/a01698_1abd7f1f735abf0b76cd2014b1c184fabe" kindref="member">castor3d::TextLineSpacingMode</ref> &gt;();
+			return result;
+		}( )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="666" column="34" bodyfile="Scene/SceneFileParser.hpp" bodystart="666" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</label>
+        <link refid="da/d67/a06206"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>Name</edgelabel>
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>Values</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>UInt32StrMap</label>
+      </node>
+      <node id="2">
+        <label>xchar</label>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/SceneFileParser.hpp" line="663" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="664" bodyend="672"/>
+    <listofallmembers>
+      <member refid="da/d67/a06206_1ada9202ad4b686f57076f2f94c0469907" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</scope><name>Name</name></member>
+      <member refid="da/d67/a06206_1a95fed6824fcc906bc011cc44f2c9b0be" prot="public" virt="non-virtual"><scope>castor::ParserEnumTraits&lt; castor3d::TextLineSpacingMode &gt;</scope><name>Values</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

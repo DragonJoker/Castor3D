@@ -1,0 +1,997 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/dd2/a06610" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::CameraData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_CameraData&quot;, sdw::type::MemoryLayout::eStd140, sdw::Vec4ArrayField&lt; &quot;frustumPlanes&quot;, 6u &gt;, sdw::Mat4x4Field&lt; &quot;projection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invProjection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;curView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invCurView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;prvView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invPrvView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;curViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invCurViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;prvViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invPrvViewProj&quot; &gt;, sdw::U32Vec2Field&lt; &quot;renderSize&quot; &gt;, sdw::Vec2Field&lt; &quot;jitter&quot; &gt;, sdw::Vec3Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;gamma&quot; &gt;, sdw::Vec2Field&lt; &quot;pad&quot; &gt;, sdw::FloatField&lt; &quot;nearPlane&quot; &gt;, sdw::FloatField&lt; &quot;farPlane&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">CameraUbo.hpp</includes>
+      <sectiondef kind="friend">
+      <memberdef kind="friend" id="da/dd2/a06610_1a9bb6aa488de293114ff892ef18876df3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>struct</type>
+        <definition>friend struct BillboardData</definition>
+        <argsstring></argsstring>
+        <name>BillboardData</name>
+        <qualifiedname>castor3d::shader::CameraData::BillboardData</qualifiedname>
+        <param>
+          <type><ref refid="d4/d2f/a06606" kindref="compound">BillboardData</ref></type>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="43" column="15" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/dd2/a06610_1afd6fc54a8499e23e8e9dc771835c3c09" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::CameraData::CameraData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>CameraData</name>
+        <qualifiedname>castor3d::shader::CameraData::CameraData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="45" column="1" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="45" bodyend="50"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a86bde8771274474862146c57b2bcf451" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::projToView</definition>
+        <argsstring>(sdw::Vec4 const &amp;psPosition) const</argsstring>
+        <name>projToView</name>
+        <qualifiedname>castor3d::shader::CameraData::projToView</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>psPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="52" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a8b29fd785899dc0ae2fc200f752d8e98" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::viewToProj</definition>
+        <argsstring>(sdw::Vec4 const &amp;vsPosition) const</argsstring>
+        <name>viewToProj</name>
+        <qualifiedname>castor3d::shader::CameraData::viewToProj</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>vsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="53" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a6935bc5a5937bd87ae40bc117f245c5a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::worldToCurView</definition>
+        <argsstring>(sdw::Vec4 const &amp;wsPosition) const</argsstring>
+        <name>worldToCurView</name>
+        <qualifiedname>castor3d::shader::CameraData::worldToCurView</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="54" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a90f44446faeebe401f86edab79665732" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::worldToPrvView</definition>
+        <argsstring>(sdw::Vec4 const &amp;wsPosition) const</argsstring>
+        <name>worldToPrvView</name>
+        <qualifiedname>castor3d::shader::CameraData::worldToPrvView</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="55" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ae3a58cc1ed040dc604d7274454d72564" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::curViewToWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;vsPosition) const</argsstring>
+        <name>curViewToWorld</name>
+        <qualifiedname>castor3d::shader::CameraData::curViewToWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>vsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="56" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1af5fe78558ce13843c2da00b75366385a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::prvViewToWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;vsPosition) const</argsstring>
+        <name>prvViewToWorld</name>
+        <qualifiedname>castor3d::shader::CameraData::prvViewToWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>vsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="57" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a91021e0818e7bf97eb067ab26c4f2942" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::worldToCurProj</definition>
+        <argsstring>(sdw::Vec4 const &amp;wsPosition) const</argsstring>
+        <name>worldToCurProj</name>
+        <qualifiedname>castor3d::shader::CameraData::worldToCurProj</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="58" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a0294235284b2068911ad6dbfcf61922e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::worldToPrvProj</definition>
+        <argsstring>(sdw::Vec4 const &amp;wsPosition) const</argsstring>
+        <name>worldToPrvProj</name>
+        <qualifiedname>castor3d::shader::CameraData::worldToPrvProj</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="59" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a7c0ff5c64ffbcebe041ebe2fd9f325a2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::CameraData::viewToScreenUV</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec4 vsPosition) const</argsstring>
+        <name>viewToScreenUV</name>
+        <qualifiedname>castor3d::shader::CameraData::viewToScreenUV</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4</type>
+          <declname>vsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="60" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ae1b474454dca94a638364438447a695a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::CameraData::worldToCurScreenUV</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec4 wsPosition) const</argsstring>
+        <name>worldToCurScreenUV</name>
+        <qualifiedname>castor3d::shader::CameraData::worldToCurScreenUV</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="62" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a445d2772d3bbffda681f1e336021a501" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::CameraData::worldToPrvScreenUV</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec4 wsPosition) const</argsstring>
+        <name>worldToPrvScreenUV</name>
+        <qualifiedname>castor3d::shader::CameraData::worldToPrvScreenUV</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4</type>
+          <declname>wsPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="64" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a51f80d0879bbfc572ee468e3f943f63a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::projToView</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>projToView</name>
+        <qualifiedname>castor3d::shader::CameraData::projToView</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="66" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a91f47280bebd7ffe3f920d08e90ba32e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::curViewToWorld</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>curViewToWorld</name>
+        <qualifiedname>castor3d::shader::CameraData::curViewToWorld</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="69" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ad82ccb12dd2167d6b8060cf0ef0e6058" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::CameraData::curProjToWorld</definition>
+        <argsstring>(sdw::Vec4 const &amp;position) const</argsstring>
+        <name>curProjToWorld</name>
+        <qualifiedname>castor3d::shader::CameraData::curProjToWorld</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="72" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a5c490c47b1ba56970ee8a41a43d67640" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::curProjToWorld</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>curProjToWorld</name>
+        <qualifiedname>castor3d::shader::CameraData::curProjToWorld</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="73" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a4dccb6d2030e62bc4090ae7f6e59bc3d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::prvProjToWorld</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;texCoord, sdw::Float const &amp;depth) const</argsstring>
+        <name>prvProjToWorld</name>
+        <qualifiedname>castor3d::shader::CameraData::prvProjToWorld</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texCoord</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>depth</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="76" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ab8236be219771ca9298b683600b9d5f1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::getCurViewRight</definition>
+        <argsstring>() const</argsstring>
+        <name>getCurViewRight</name>
+        <qualifiedname>castor3d::shader::CameraData::getCurViewRight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="79" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1af32a8e3df4a97c6c8d2e4c6ff630c697" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::getPrvViewRight</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrvViewRight</name>
+        <qualifiedname>castor3d::shader::CameraData::getPrvViewRight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="80" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a6a8354a0840386b5392969ef62ee960c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::getCurViewUp</definition>
+        <argsstring>() const</argsstring>
+        <name>getCurViewUp</name>
+        <qualifiedname>castor3d::shader::CameraData::getCurViewUp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="81" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ac73ad9118b5b805ec5cf7c5410311686" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::getPrvViewUp</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrvViewUp</name>
+        <qualifiedname>castor3d::shader::CameraData::getPrvViewUp</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="82" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ad925fc8b8a4148606f5e1abf7ab69180" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::getCurViewCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>getCurViewCenter</name>
+        <qualifiedname>castor3d::shader::CameraData::getCurViewCenter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="83" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a59f1fe7fef49509f650a04519d2e372f" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::getPrvViewCenter</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrvViewCenter</name>
+        <qualifiedname>castor3d::shader::CameraData::getPrvViewCenter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="84" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1aca84fde8070c6edc5438e1ce7a160f9e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Mat4</type>
+        <definition>C3D_API sdw::Mat4 castor3d::shader::CameraData::getInvViewProjMtx</definition>
+        <argsstring>() const</argsstring>
+        <name>getInvViewProjMtx</name>
+        <qualifiedname>castor3d::shader::CameraData::getInvViewProjMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="85" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ad8c1f4c0a8897d22e6f9167296179e1a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::CameraData::jitter</definition>
+        <argsstring>(sdw::Vec4 &amp;csPosition) const</argsstring>
+        <name>jitter</name>
+        <qualifiedname>castor3d::shader::CameraData::jitter</qualifiedname>
+        <param>
+          <type>sdw::Vec4 &amp;</type>
+          <declname>csPosition</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="86" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a5301a4a2c8294672c573db62a6778ab2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::transformCamera</definition>
+        <argsstring>(sdw::Mat3 const &amp;transform) const</argsstring>
+        <name>transformCamera</name>
+        <qualifiedname>castor3d::shader::CameraData::transformCamera</qualifiedname>
+        <param>
+          <type>sdw::Mat3 const &amp;</type>
+          <declname>transform</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="87" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a904450794bcb12989673a38df4fae5b1" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::getPosToCamera</definition>
+        <argsstring>(sdw::Vec3 const &amp;position) const</argsstring>
+        <name>getPosToCamera</name>
+        <qualifiedname>castor3d::shader::CameraData::getPosToCamera</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="88" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a9d8a93cc0d3544609b01805f146cfe74" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::getCameraToPos</definition>
+        <argsstring>(sdw::Vec3 const &amp;position) const</argsstring>
+        <name>getCameraToPos</name>
+        <qualifiedname>castor3d::shader::CameraData::getCameraToPos</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="89" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a787f8f80e9bbab67b09dc721acfdae73" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::CameraData::depthPlanes</definition>
+        <argsstring>() const</argsstring>
+        <name>depthPlanes</name>
+        <qualifiedname>castor3d::shader::CameraData::depthPlanes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="90" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ace56bd3a4d1f5d7d1855c4e4ae68f50a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec2</type>
+        <definition>C3D_API sdw::Vec2 castor3d::shader::CameraData::calcTexCoord</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec2 const &amp;fragCoord) const</argsstring>
+        <name>calcTexCoord</name>
+        <qualifiedname>castor3d::shader::CameraData::calcTexCoord</qualifiedname>
+        <param>
+          <type><ref refid="dd/d05/a06578" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>fragCoord</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="91" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ad3e971d61703eabfa3a3e6488b247f77" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::readNormal</definition>
+        <argsstring>(sdw::Vec3 const &amp;input) const</argsstring>
+        <name>readNormal</name>
+        <qualifiedname>castor3d::shader::CameraData::readNormal</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>input</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="93" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a8a700fe5c822c84aacfdc5c0166acf31" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::CameraData::writeNormal</definition>
+        <argsstring>(sdw::Vec3 const &amp;input) const</argsstring>
+        <name>writeNormal</name>
+        <qualifiedname>castor3d::shader::CameraData::writeNormal</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>input</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="94" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a3ec8109b64624a7a70d6fe2fa96d6f8f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::renderSize</definition>
+        <argsstring>() const</argsstring>
+        <name>renderSize</name>
+        <qualifiedname>castor3d::shader::CameraData::renderSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="96" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="96" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1aaeef5ab42c6fc7a5f6a86ac290fbb557" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::nearPlane</definition>
+        <argsstring>() const</argsstring>
+        <name>nearPlane</name>
+        <qualifiedname>castor3d::shader::CameraData::nearPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="97" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="97" bodyend="97"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a9b0fd7577595c3119157c347c9109f4e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::farPlane</definition>
+        <argsstring>() const</argsstring>
+        <name>farPlane</name>
+        <qualifiedname>castor3d::shader::CameraData::farPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="98" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="98" bodyend="98"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ab529bad7a249640c4feaf02631aa744c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::position</definition>
+        <argsstring>() const</argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::shader::CameraData::position</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="99" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="99" bodyend="99"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1af9bc2dc0b5a265fee43b564ca685e508" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::gamma</definition>
+        <argsstring>() const</argsstring>
+        <name>gamma</name>
+        <qualifiedname>castor3d::shader::CameraData::gamma</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="100" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="100" bodyend="100"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a8002314a940548d001828f47dd66c76c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Mat4x4</type>
+        <definition>sdw::Mat4x4 castor3d::shader::CameraData::getInvProjMtx</definition>
+        <argsstring>() const</argsstring>
+        <name>getInvProjMtx</name>
+        <qualifiedname>castor3d::shader::CameraData::getInvProjMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="117" column="13" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="117" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a644304ee44ac090d391669ba40caea2d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Mat4x4</type>
+        <definition>sdw::Mat4x4 castor3d::shader::CameraData::getProjMtx</definition>
+        <argsstring>() const</argsstring>
+        <name>getProjMtx</name>
+        <qualifiedname>castor3d::shader::CameraData::getProjMtx</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="122" column="13" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="122" bodyend="125"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a38d2562a790fbebaff9781fc774290fb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Vec4</type>
+        <definition>sdw::Vec4 castor3d::shader::CameraData::getFrustumPlane</definition>
+        <argsstring>(sdw::UInt index) const</argsstring>
+        <name>getFrustumPlane</name>
+        <qualifiedname>castor3d::shader::CameraData::getFrustumPlane</qualifiedname>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="127" column="11" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="127" bodyend="130"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/dd2/a06610_1ab920f307fd49b033524379f267996e87" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::projection</definition>
+        <argsstring>() const</argsstring>
+        <name>projection</name>
+        <qualifiedname>castor3d::shader::CameraData::projection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="103" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="103" bodyend="103"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a1b051f9530d24eb2609d61ff5b7f4e76" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::invProjection</definition>
+        <argsstring>() const</argsstring>
+        <name>invProjection</name>
+        <qualifiedname>castor3d::shader::CameraData::invProjection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="104" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="104" bodyend="104"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ac2d1d84f7fb7e9bedcf1a1f20f075ada" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::curView</definition>
+        <argsstring>() const</argsstring>
+        <name>curView</name>
+        <qualifiedname>castor3d::shader::CameraData::curView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="105" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="105" bodyend="105"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1abb0f17cc0e0b65a2d4ec6a78daa1a93c" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::invCurView</definition>
+        <argsstring>() const</argsstring>
+        <name>invCurView</name>
+        <qualifiedname>castor3d::shader::CameraData::invCurView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="106" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="106" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a8388d11d119e9083d4fb16ca88172ea1" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::prvView</definition>
+        <argsstring>() const</argsstring>
+        <name>prvView</name>
+        <qualifiedname>castor3d::shader::CameraData::prvView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="107" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="107" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1aedda5cdc7ac5ed505b08400c9402322f" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::invPrvView</definition>
+        <argsstring>() const</argsstring>
+        <name>invPrvView</name>
+        <qualifiedname>castor3d::shader::CameraData::invPrvView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="108" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="108" bodyend="108"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1ad6ae2f143eba7e1c8c0d3eabf920885a" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::curViewProj</definition>
+        <argsstring>() const</argsstring>
+        <name>curViewProj</name>
+        <qualifiedname>castor3d::shader::CameraData::curViewProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="109" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="109" bodyend="109"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a82da61c1980e4c418addb18756289202" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::invCurViewProj</definition>
+        <argsstring>() const</argsstring>
+        <name>invCurViewProj</name>
+        <qualifiedname>castor3d::shader::CameraData::invCurViewProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="110" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="110" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a9c94b2c745476d01be8a855d77e7e472" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::prvViewProj</definition>
+        <argsstring>() const</argsstring>
+        <name>prvViewProj</name>
+        <qualifiedname>castor3d::shader::CameraData::prvViewProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="111" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="111" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1aa2c28de27e4b248c37b9d11f170755e8" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::invPrvViewProj</definition>
+        <argsstring>() const</argsstring>
+        <name>invPrvViewProj</name>
+        <qualifiedname>castor3d::shader::CameraData::invPrvViewProj</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="112" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="112" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a9941939133294e695c3fc67883210615" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::jitter</definition>
+        <argsstring>() const</argsstring>
+        <name>jitter</name>
+        <qualifiedname>castor3d::shader::CameraData::jitter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="113" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="da/dd2/a06610_1a1b4568ea690228399fe8668fb0f12eba" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::CameraData::frustumPlanes</definition>
+        <argsstring>() const</argsstring>
+        <name>frustumPlanes</name>
+        <qualifiedname>castor3d::shader::CameraData::frustumPlanes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/CameraUbo.hpp" line="114" column="6" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="114" bodyend="114"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::CameraData</label>
+        <link refid="da/dd2/a06610"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_CameraData&quot;, sdw::type::MemoryLayout::eStd140, sdw::Vec4ArrayField&lt; &quot;frustumPlanes&quot;, 6u &gt;, sdw::Mat4x4Field&lt; &quot;projection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invProjection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;curView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invCurView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;prvView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invPrvView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;curViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invCurViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;prvViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invPrvViewProj&quot; &gt;, sdw::U32Vec2Field&lt; &quot;renderSize&quot; &gt;, sdw::Vec2Field&lt; &quot;jitter&quot; &gt;, sdw::Vec3Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;gamma&quot; &gt;, sdw::Vec2Field&lt; &quot;pad&quot; &gt;, sdw::FloatField&lt; &quot;nearPlane&quot; &gt;, sdw::FloatField&lt; &quot;farPlane&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::CameraData</label>
+        <link refid="da/dd2/a06610"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_CameraData&quot;, sdw::type::MemoryLayout::eStd140, sdw::Vec4ArrayField&lt; &quot;frustumPlanes&quot;, 6u &gt;, sdw::Mat4x4Field&lt; &quot;projection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invProjection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;curView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invCurView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;prvView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invPrvView&quot; &gt;, sdw::Mat4x4Field&lt; &quot;curViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invCurViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;prvViewProj&quot; &gt;, sdw::Mat4x4Field&lt; &quot;invPrvViewProj&quot; &gt;, sdw::U32Vec2Field&lt; &quot;renderSize&quot; &gt;, sdw::Vec2Field&lt; &quot;jitter&quot; &gt;, sdw::Vec3Field&lt; &quot;position&quot; &gt;, sdw::FloatField&lt; &quot;gamma&quot; &gt;, sdw::Vec2Field&lt; &quot;pad&quot; &gt;, sdw::FloatField&lt; &quot;nearPlane&quot; &gt;, sdw::FloatField&lt; &quot;farPlane&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/CameraUbo.hpp" line="21" column="1" bodyfile="Shader/Ubos/CameraUbo.hpp" bodystart="42" bodyend="131"/>
+    <listofallmembers>
+      <member refid="da/dd2/a06610_1a9bb6aa488de293114ff892ef18876df3" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>BillboardData</name></member>
+      <member refid="da/dd2/a06610_1ace56bd3a4d1f5d7d1855c4e4ae68f50a" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>calcTexCoord</name></member>
+      <member refid="da/dd2/a06610_1afd6fc54a8499e23e8e9dc771835c3c09" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>CameraData</name></member>
+      <member refid="da/dd2/a06610_1ad82ccb12dd2167d6b8060cf0ef0e6058" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>curProjToWorld</name></member>
+      <member refid="da/dd2/a06610_1a5c490c47b1ba56970ee8a41a43d67640" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>curProjToWorld</name></member>
+      <member refid="da/dd2/a06610_1ac2d1d84f7fb7e9bedcf1a1f20f075ada" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>curView</name></member>
+      <member refid="da/dd2/a06610_1ad6ae2f143eba7e1c8c0d3eabf920885a" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>curViewProj</name></member>
+      <member refid="da/dd2/a06610_1ae3a58cc1ed040dc604d7274454d72564" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>curViewToWorld</name></member>
+      <member refid="da/dd2/a06610_1a91f47280bebd7ffe3f920d08e90ba32e" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>curViewToWorld</name></member>
+      <member refid="da/dd2/a06610_1a787f8f80e9bbab67b09dc721acfdae73" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>depthPlanes</name></member>
+      <member refid="da/dd2/a06610_1a9b0fd7577595c3119157c347c9109f4e" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>farPlane</name></member>
+      <member refid="da/dd2/a06610_1a1b4568ea690228399fe8668fb0f12eba" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>frustumPlanes</name></member>
+      <member refid="da/dd2/a06610_1af9bc2dc0b5a265fee43b564ca685e508" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>gamma</name></member>
+      <member refid="da/dd2/a06610_1a9d8a93cc0d3544609b01805f146cfe74" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getCameraToPos</name></member>
+      <member refid="da/dd2/a06610_1ad925fc8b8a4148606f5e1abf7ab69180" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getCurViewCenter</name></member>
+      <member refid="da/dd2/a06610_1ab8236be219771ca9298b683600b9d5f1" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getCurViewRight</name></member>
+      <member refid="da/dd2/a06610_1a6a8354a0840386b5392969ef62ee960c" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getCurViewUp</name></member>
+      <member refid="da/dd2/a06610_1a38d2562a790fbebaff9781fc774290fb" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getFrustumPlane</name></member>
+      <member refid="da/dd2/a06610_1a8002314a940548d001828f47dd66c76c" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getInvProjMtx</name></member>
+      <member refid="da/dd2/a06610_1aca84fde8070c6edc5438e1ce7a160f9e" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getInvViewProjMtx</name></member>
+      <member refid="da/dd2/a06610_1a904450794bcb12989673a38df4fae5b1" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getPosToCamera</name></member>
+      <member refid="da/dd2/a06610_1a644304ee44ac090d391669ba40caea2d" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getProjMtx</name></member>
+      <member refid="da/dd2/a06610_1a59f1fe7fef49509f650a04519d2e372f" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getPrvViewCenter</name></member>
+      <member refid="da/dd2/a06610_1af32a8e3df4a97c6c8d2e4c6ff630c697" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getPrvViewRight</name></member>
+      <member refid="da/dd2/a06610_1ac73ad9118b5b805ec5cf7c5410311686" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>getPrvViewUp</name></member>
+      <member refid="da/dd2/a06610_1abb0f17cc0e0b65a2d4ec6a78daa1a93c" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>invCurView</name></member>
+      <member refid="da/dd2/a06610_1a82da61c1980e4c418addb18756289202" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>invCurViewProj</name></member>
+      <member refid="da/dd2/a06610_1a1b051f9530d24eb2609d61ff5b7f4e76" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>invProjection</name></member>
+      <member refid="da/dd2/a06610_1aedda5cdc7ac5ed505b08400c9402322f" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>invPrvView</name></member>
+      <member refid="da/dd2/a06610_1aa2c28de27e4b248c37b9d11f170755e8" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>invPrvViewProj</name></member>
+      <member refid="da/dd2/a06610_1ad8c1f4c0a8897d22e6f9167296179e1a" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>jitter</name></member>
+      <member refid="da/dd2/a06610_1a9941939133294e695c3fc67883210615" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>jitter</name></member>
+      <member refid="da/dd2/a06610_1aaeef5ab42c6fc7a5f6a86ac290fbb557" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>nearPlane</name></member>
+      <member refid="da/dd2/a06610_1ab529bad7a249640c4feaf02631aa744c" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>position</name></member>
+      <member refid="da/dd2/a06610_1ab920f307fd49b033524379f267996e87" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>projection</name></member>
+      <member refid="da/dd2/a06610_1a86bde8771274474862146c57b2bcf451" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>projToView</name></member>
+      <member refid="da/dd2/a06610_1a51f80d0879bbfc572ee468e3f943f63a" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>projToView</name></member>
+      <member refid="da/dd2/a06610_1a4dccb6d2030e62bc4090ae7f6e59bc3d" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>prvProjToWorld</name></member>
+      <member refid="da/dd2/a06610_1a8388d11d119e9083d4fb16ca88172ea1" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>prvView</name></member>
+      <member refid="da/dd2/a06610_1a9c94b2c745476d01be8a855d77e7e472" prot="private" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>prvViewProj</name></member>
+      <member refid="da/dd2/a06610_1af5fe78558ce13843c2da00b75366385a" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>prvViewToWorld</name></member>
+      <member refid="da/dd2/a06610_1ad3e971d61703eabfa3a3e6488b247f77" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>readNormal</name></member>
+      <member refid="da/dd2/a06610_1a3ec8109b64624a7a70d6fe2fa96d6f8f" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>renderSize</name></member>
+      <member refid="da/dd2/a06610_1a5301a4a2c8294672c573db62a6778ab2" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>transformCamera</name></member>
+      <member refid="da/dd2/a06610_1a8b29fd785899dc0ae2fc200f752d8e98" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>viewToProj</name></member>
+      <member refid="da/dd2/a06610_1a7c0ff5c64ffbcebe041ebe2fd9f325a2" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>viewToScreenUV</name></member>
+      <member refid="da/dd2/a06610_1a91021e0818e7bf97eb067ab26c4f2942" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>worldToCurProj</name></member>
+      <member refid="da/dd2/a06610_1ae1b474454dca94a638364438447a695a" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>worldToCurScreenUV</name></member>
+      <member refid="da/dd2/a06610_1a6935bc5a5937bd87ae40bc117f245c5a" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>worldToCurView</name></member>
+      <member refid="da/dd2/a06610_1a0294235284b2068911ad6dbfcf61922e" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>worldToPrvProj</name></member>
+      <member refid="da/dd2/a06610_1a445d2772d3bbffda681f1e336021a501" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>worldToPrvScreenUV</name></member>
+      <member refid="da/dd2/a06610_1a90f44446faeebe401f86edab79665732" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>worldToPrvView</name></member>
+      <member refid="da/dd2/a06610_1a8a700fe5c822c84aacfdc5c0166acf31" prot="public" virt="non-virtual"><scope>castor3d::shader::CameraData</scope><name>writeNormal</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

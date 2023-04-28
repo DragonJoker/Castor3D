@@ -1,0 +1,1149 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d30/a03185" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LayoutControl</compoundname>
+    <basecompoundref refid="d5/d27/a03157" prot="public" virt="non-virtual">castor3d::Control</basecompoundref>
+    <basecompoundref refid="d6/df4/a03201" prot="public" virt="non-virtual">castor3d::ScrollableCtrl</basecompoundref>
+    <derivedcompoundref refid="d6/d04/a03193" prot="public" virt="non-virtual">castor3d::PanelCtrl</derivedcompoundref>
+    <includes local="no">CtrlLayoutControl.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d1/d30/a03185_1a5e13b98807962cff158f463cfbf5e1fa" prot="private" static="no" mutable="no">
+        <type>LayoutUPtr</type>
+        <definition>LayoutUPtr castor3d::LayoutControl::m_layout</definition>
+        <argsstring></argsstring>
+        <name>m_layout</name>
+        <qualifiedname>castor3d::LayoutControl::m_layout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="149" column="12" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d30/a03185_1ab2e7e94745c12c4de4c22e0477010d35" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayoutControl::LayoutControl</definition>
+        <argsstring>(ControlType type, SceneRPtr scene, castor::String const &amp;name, ControlStyleRPtr controlStyle, ScrollableStyleRPtr scrollableStyle, ControlRPtr parent, castor::Position const &amp;position, castor::Size const &amp;size, ControlFlagType flags=0, bool visible=true)</argsstring>
+        <name>LayoutControl</name>
+        <qualifiedname>castor3d::LayoutControl::LayoutControl</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref></type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>ControlStyleRPtr</type>
+          <declname>controlStyle</declname>
+        </param>
+        <param>
+          <type>ScrollableStyleRPtr</type>
+          <declname>scrollableStyle</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a1b0644d82256ab79bf71eb959d8f7106" kindref="member">ControlFlagType</ref></type>
+          <declname>flags</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The type. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">controlStyle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control&apos;s style. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scrollableStyle</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scrollable&apos;s style. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The position. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The size. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration flags </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial visibility status. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="32" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a2fd27bf77aee89108f90bc789d309b6d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::LayoutControl::setLayout</definition>
+        <argsstring>(LayoutUPtr layout)</argsstring>
+        <name>setLayout</name>
+        <qualifiedname>castor3d::LayoutControl::setLayout</qualifiedname>
+        <param>
+          <type>LayoutUPtr</type>
+          <declname>layout</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the layout for the elements contained in this one. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">layout</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="46" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a51059737ed7071c07458c2f0d9ff0d7e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::LayoutControl::getLayout</definition>
+        <argsstring>() const</argsstring>
+        <name>getLayout</name>
+        <qualifiedname>castor3d::LayoutControl::getLayout</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="48" column="6" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="48" bodyend="51"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d30/a03185_1a075b4defa492e19e2b7116ffdff3cfbc" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doCreate</definition>
+        <argsstring>() override</argsstring>
+        <name>doCreate</name>
+        <qualifiedname>castor3d::LayoutControl::doCreate</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a986e1065f7dd8744af1099234d1e42d6">doCreate</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="56" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1aa4adde9f8dcf254746d0ea56e67817b0" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doDestroy</definition>
+        <argsstring>() override</argsstring>
+        <name>doDestroy</name>
+        <qualifiedname>castor3d::LayoutControl::doDestroy</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1aee5d3b26288343563b7049781cc413b8">doDestroy</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Destroys the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="60" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a17d518062f3bba905a92e7288c738af2" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doAddChild</definition>
+        <argsstring>(ControlRPtr control) override</argsstring>
+        <name>doAddChild</name>
+        <qualifiedname>castor3d::LayoutControl::doAddChild</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a00c223ada8c22e232f9eb9258af4f8f5">doAddChild</reimplements>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adds a child control.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="64" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1af3f4bede6524aa9a51fc6d4494d5e24b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doRemoveChild</definition>
+        <argsstring>(ControlRPtr control) override</argsstring>
+        <name>doRemoveChild</name>
+        <qualifiedname>castor3d::LayoutControl::doRemoveChild</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a44d1fa6aa901299938fc152aca0a7071">doRemoveChild</reimplements>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>control</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Removes a child control.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="68" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1ab23575a89fd637d998af70427b7fe8e5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doUpdateStyle</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateStyle</name>
+        <qualifiedname>castor3d::LayoutControl::doUpdateStyle</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a6e83636558d1e472c13108471c5634b8">doUpdateStyle</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="72" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a533bbd2a33c26c987a155d1d953a4ddf" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doUpdateFlags</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateFlags</name>
+        <qualifiedname>castor3d::LayoutControl::doUpdateFlags</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a875d8d63815f41b613d8c93ee847b4c7">doUpdateFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style relative stuff.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="76" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a4f3c4c5c546f67abd3b80699f6b087c8" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doUpdateZIndex</definition>
+        <argsstring>(uint32_t &amp;index) override</argsstring>
+        <name>doUpdateZIndex</name>
+        <qualifiedname>castor3d::LayoutControl::doUpdateZIndex</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a635e12c44833d89f01b9d162d0d22f92">doUpdateZIndex</reimplements>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="80" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a67ef1d6ae5002dd2c16f1fff6754dd3e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doAdjustZIndex</definition>
+        <argsstring>(uint32_t offset) override</argsstring>
+        <name>doAdjustZIndex</name>
+        <qualifiedname>castor3d::LayoutControl::doAdjustZIndex</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1af062446be54997b2901d81c1230291fb">doAdjustZIndex</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adjusts the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="84" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a37eb7225a6629a8fc678ed45cc0ee164" prot="private" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>castor::Point4ui</type>
+        <definition>castor::Point4ui castor3d::LayoutControl::doUpdateClientRect</definition>
+        <argsstring>(castor::Point4ui const &amp;clientRect) final override</argsstring>
+        <name>doUpdateClientRect</name>
+        <qualifiedname>castor3d::LayoutControl::doUpdateClientRect</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1afb4d12707d751faa848f5999d5f5e597">doUpdateClientRect</reimplements>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>clientRect</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the area where sub-controls can be draw.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="88" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a3cc1c36d621ede3fdfa70e6aca1a108f" prot="private" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doSetBorderSize</definition>
+        <argsstring>(castor::Point4ui const &amp;value) final override</argsstring>
+        <name>doSetBorderSize</name>
+        <qualifiedname>castor3d::LayoutControl::doSetBorderSize</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1aae4c1f90edb97e54e251666af975695b">doSetBorderSize</reimplements>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the background borders size. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="93" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1ac9cf0de5c92c5ec2fbd6d71edd09da77" prot="private" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doSetPosition</definition>
+        <argsstring>(castor::Position const &amp;value) final override</argsstring>
+        <name>doSetPosition</name>
+        <qualifiedname>castor3d::LayoutControl::doSetPosition</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1acb1760e128b67a59ae10ee7ae2ea914d">doSetPosition</reimplements>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the position <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="98" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a886e5d11831b8e8df835787894df1d27" prot="private" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doSetSize</definition>
+        <argsstring>(castor::Size const &amp;value) final override</argsstring>
+        <name>doSetSize</name>
+        <qualifiedname>castor3d::LayoutControl::doSetSize</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a877aa0f08bd22b35959c7fa676a52073">doSetSize</reimplements>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the size <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="103" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a899217ac0a9fd34daf39b1eaab6dfc32" prot="private" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doSetCaption</definition>
+        <argsstring>(castor::U32String const &amp;caption) final override</argsstring>
+        <name>doSetCaption</name>
+        <qualifiedname>castor3d::LayoutControl::doSetCaption</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a64665e2e8a8fd85a9d2de2adc64cbca2">doSetCaption</reimplements>
+        <param>
+          <type>castor::U32String const &amp;</type>
+          <declname>caption</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the caption. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">caption</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="108" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a6537cb3f41ab560901aa0dce553079d4" prot="private" static="no" const="no" explicit="no" inline="no" final="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutControl::doSetVisible</definition>
+        <argsstring>(bool visible) final override</argsstring>
+        <name>doSetVisible</name>
+        <qualifiedname>castor3d::LayoutControl::doSetVisible</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1af4598b2669fc48d38ce61ac174c86583">doSetVisible</reimplements>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the visibility <simplesect kind="remark"><para>Used for derived control specific behavious </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="114" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a3e0a8085f5fbca5682ae3ebde0e608e9" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>castor::Point4ui</type>
+        <definition>virtual castor::Point4ui castor3d::LayoutControl::doSubUpdateClientRect</definition>
+        <argsstring>(castor::Point4ui const &amp;clientRect)</argsstring>
+        <name>doSubUpdateClientRect</name>
+        <qualifiedname>castor3d::LayoutControl::doSubUpdateClientRect</qualifiedname>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>clientRect</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the area where sub-controls can be draw.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="118" column="26" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="118" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1ae7567ee32619bd846617ecb41876b80b" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::LayoutControl::doSubSetBorderSize</definition>
+        <argsstring>(castor::Point4ui const &amp;value)</argsstring>
+        <name>doSubSetBorderSize</name>
+        <qualifiedname>castor3d::LayoutControl::doSubSetBorderSize</qualifiedname>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the background borders size. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="126" column="14" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="126" bodyend="126"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1aed2f55856f18e7ad8dd95129e95a881c" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::LayoutControl::doSubSetPosition</definition>
+        <argsstring>(castor::Position const &amp;value)</argsstring>
+        <name>doSubSetPosition</name>
+        <qualifiedname>castor3d::LayoutControl::doSubSetPosition</qualifiedname>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the position <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="130" column="14" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="130" bodyend="130"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1ae5d3e55f4e38d5a8a130297005212dbf" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::LayoutControl::doSubSetSize</definition>
+        <argsstring>(castor::Size const &amp;value)</argsstring>
+        <name>doSubSetSize</name>
+        <qualifiedname>castor3d::LayoutControl::doSubSetSize</qualifiedname>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the size <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="135" column="14" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="135" bodyend="135"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a7d77e42977a2163f973f82fa70b3997a" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::LayoutControl::doSubSetCaption</definition>
+        <argsstring>(castor::U32String const &amp;caption)</argsstring>
+        <name>doSubSetCaption</name>
+        <qualifiedname>castor3d::LayoutControl::doSubSetCaption</qualifiedname>
+        <param>
+          <type>castor::U32String const &amp;</type>
+          <declname>caption</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the caption. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">caption</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="140" column="14" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="140" bodyend="140"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d30/a03185_1a2ba6756eb7aeafefe5db7357433c80f5" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>virtual void castor3d::LayoutControl::doSubSetVisible</definition>
+        <argsstring>(bool visible)</argsstring>
+        <name>doSubSetVisible</name>
+        <qualifiedname>castor3d::LayoutControl::doSubSetVisible</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the visibility <simplesect kind="remark"><para>Used for derived control specific behavious </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlLayoutControl.hpp" line="146" column="14" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="146" bodyend="146"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/d27/a03157"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d5f/a03109"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LayoutControl</label>
+        <link refid="d1/d30/a03185"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::PanelCtrl</label>
+        <link refid="d6/d04/a03193"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d6/df4/a03201"/>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="15">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::array&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::array&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::array&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="26" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="20" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/d27/a03157"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d5f/a03109"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LayoutControl</label>
+        <link refid="d1/d30/a03185"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="28" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d6/df4/a03201"/>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::vector&lt; OnNonClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::vector&lt; OnNonClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::vector&lt; OnNonClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Controls/CtrlLayoutControl.hpp" line="15" column="1" bodyfile="Gui/Controls/CtrlLayoutControl.hpp" bodystart="18" bodyend="150"/>
+    <listofallmembers>
+      <member refid="d5/d27/a03157_1ad1bc14696782df53753d9d200bc69c90" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>addChild</name></member>
+      <member refid="d5/d27/a03157_1a7dcec2e27704a6c45db11b132acb03a9" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>addFlag</name></member>
+      <member refid="d5/d27/a03157_1a1f0fe6f9de5888c7d53281ddf779fe65" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>addFlag</name></member>
+      <member refid="d6/df4/a03201_1ab329229a538e3f9286b051be73b29ba4" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>adjustScrollZIndex</name></member>
+      <member refid="d9/d5f/a03109_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>catchesMouseEvents</name></member>
+      <member refid="d9/d5f/a03109_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>catchesReturnKey</name></member>
+      <member refid="d9/d5f/a03109_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>catchesTabKey</name></member>
+      <member refid="d6/df4/a03201_1a21b246acaf9295c15cdf17d92acbc01f" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>checkScrollBarFlags</name></member>
+      <member refid="d0/dcd/a03113_1a703c7cbc98f4fbc25ac04600257c7c0c" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>ClientHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1a45ffbf50f17a665404170fd665624011" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>ClientKeyboardFunction</name></member>
+      <member refid="d0/dcd/a03113_1aea92aaf9b48684355876a7c81409ccf3" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>ClientMouseFunction</name></member>
+      <member refid="d9/d5f/a03109_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>connect</name></member>
+      <member refid="d9/d5f/a03109_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>connect</name></member>
+      <member refid="d9/d5f/a03109_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>connect</name></member>
+      <member refid="d0/dcd/a03113_1a7c772af5b472ac82d7a40ebe4968cfb2" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>connectNC</name></member>
+      <member refid="d0/dcd/a03113_1ab5d52b4021d688cc40caeb9fadba5458" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>connectNC</name></member>
+      <member refid="d0/dcd/a03113_1a766759743a229af558fbe4053692bade" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>connectNC</name></member>
+      <member refid="d5/d27/a03157_1a756d46496c99d0f06558b867bee36242" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>Control</name></member>
+      <member refid="d5/d27/a03157_1a1e213aa081ac7fc92ab88e3baa8c98cd" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>create</name></member>
+      <member refid="d6/df4/a03201_1a3b1291cf4701121926054695a1f3f3c6" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>createScrollBars</name></member>
+      <member refid="d0/dcd/a03113_1afb310fd4d1af5c2332bc8496354569c9" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>DerivedPtr</name></member>
+      <member refid="d5/d27/a03157_1a3c72583b9aa9508f5d195296de491224" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>destroy</name></member>
+      <member refid="d6/df4/a03201_1a6bc2f9dcb648cca21b67d5408702b455" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>destroyScrollBars</name></member>
+      <member refid="d9/d5f/a03109_1ad6eda21ee30aa7316eb1b6796d3f0cb9" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>disable</name></member>
+      <member refid="d1/d30/a03185_1a17d518062f3bba905a92e7288c738af2" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doAddChild</name></member>
+      <member refid="d1/d30/a03185_1a67ef1d6ae5002dd2c16f1fff6754dd3e" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doAdjustZIndex</name></member>
+      <member refid="d1/d30/a03185_1a075b4defa492e19e2b7116ffdff3cfbc" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doCreate</name></member>
+      <member refid="d1/d30/a03185_1aa4adde9f8dcf254746d0ea56e67817b0" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doDestroy</name></member>
+      <member refid="d1/d30/a03185_1af3f4bede6524aa9a51fc6d4494d5e24b" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doRemoveChild</name></member>
+      <member refid="d1/d30/a03185_1a3cc1c36d621ede3fdfa70e6aca1a108f" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSetBorderSize</name></member>
+      <member refid="d1/d30/a03185_1a899217ac0a9fd34daf39b1eaab6dfc32" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSetCaption</name></member>
+      <member refid="d1/d30/a03185_1ac9cf0de5c92c5ec2fbd6d71edd09da77" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSetPosition</name></member>
+      <member refid="d1/d30/a03185_1a886e5d11831b8e8df835787894df1d27" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSetSize</name></member>
+      <member refid="d1/d30/a03185_1a6537cb3f41ab560901aa0dce553079d4" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSetVisible</name></member>
+      <member refid="d1/d30/a03185_1ae7567ee32619bd846617ecb41876b80b" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSubSetBorderSize</name></member>
+      <member refid="d1/d30/a03185_1a7d77e42977a2163f973f82fa70b3997a" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSubSetCaption</name></member>
+      <member refid="d1/d30/a03185_1aed2f55856f18e7ad8dd95129e95a881c" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSubSetPosition</name></member>
+      <member refid="d1/d30/a03185_1ae5d3e55f4e38d5a8a130297005212dbf" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSubSetSize</name></member>
+      <member refid="d1/d30/a03185_1a2ba6756eb7aeafefe5db7357433c80f5" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSubSetVisible</name></member>
+      <member refid="d1/d30/a03185_1a3e0a8085f5fbca5682ae3ebde0e608e9" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doSubUpdateClientRect</name></member>
+      <member refid="d1/d30/a03185_1a37eb7225a6629a8fc678ed45cc0ee164" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doUpdateClientRect</name></member>
+      <member refid="d1/d30/a03185_1a533bbd2a33c26c987a155d1d953a4ddf" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doUpdateFlags</name></member>
+      <member refid="d1/d30/a03185_1ab23575a89fd637d998af70427b7fe8e5" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doUpdateStyle</name></member>
+      <member refid="d1/d30/a03185_1a4f3c4c5c546f67abd3b80699f6b087c8" prot="private" virt="virtual"><scope>castor3d::LayoutControl</scope><name>doUpdateZIndex</name></member>
+      <member refid="d9/d5f/a03109_1a261497f31a8ad918a2315af0efae6e6d" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>enable</name></member>
+      <member refid="d9/d5f/a03109_1a916afcd686fc5022c05d6ff2bf18900a" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>EnableFunction</name></member>
+      <member refid="d9/d5f/a03109_1ac52718713f27db870abc7268142083e1" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>EventHandler</name></member>
+      <member refid="d0/dcd/a03113_1a88c786851d42d7d9c5b4c4bb6fbd205d" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>EventHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1ad8d1623d5da2a584967c734fba483d8a" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>EventQueue</name></member>
+      <member refid="d5/d27/a03157_1a6aab144ea536fa1981744dd0350bd9f1" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getAbsolutePosition</name></member>
+      <member refid="d5/d27/a03157_1ac4f784eaa1bba6d3b023124dd17bcacd" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getBackgroundOverlay</name></member>
+      <member refid="d5/d27/a03157_1a3b327c65b7d0202012a7de4ac95ff6a0" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/d27/a03157_1acf1524781666decd143c429cf3512fe5" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/d27/a03157_1a07e5a74ea2c29504263372e346277c7d" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getBorderInnerUV</name></member>
+      <member refid="d5/d27/a03157_1a2970c7c7a19b28d48701987bf6b61a53" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getBorderOuterUV</name></member>
+      <member refid="d5/d27/a03157_1aec3c1f61d93c71cb921f9e98faf49a37" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getBorderPosition</name></member>
+      <member refid="d5/d27/a03157_1a19e84cfd0b59e70df316f6d63648041d" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getBorderSize</name></member>
+      <member refid="d5/d27/a03157_1a23f6c6e05acec8910f2f653f6ff2e1ae" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getChildControl</name></member>
+      <member refid="d5/d27/a03157_1a551248e4f8c5fe6f7b0718317469659c" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getChildren</name></member>
+      <member refid="d5/d27/a03157_1afa9a04c734235389699a47e958050f97" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getClientOffset</name></member>
+      <member refid="d5/d27/a03157_1a8546428f36529b0cad2d1f065af62060" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getClientRect</name></member>
+      <member refid="d5/d27/a03157_1a8321754767d403f6fce37f126f9cbd43" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getClientSize</name></member>
+      <member refid="d5/d27/a03157_1ac784a51c464ddec5e4d8b5a03c386c2e" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getControlsManager</name></member>
+      <member refid="d5/d27/a03157_1a040bb1287bb106d3aa5fe0d23b04ffd7" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getCursor</name></member>
+      <member refid="d5/d27/a03157_1ad56a9032db1992e267092b4a31ad326b" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getEngine</name></member>
+      <member refid="d5/d27/a03157_1afb284673f9161e073a83e1ccaddb658e" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getFlags</name></member>
+      <member refid="d5/d27/a03157_1add233ebce85fe354e398d75a1cf5d1a5" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getId</name></member>
+      <member refid="d1/d30/a03185_1a51059737ed7071c07458c2f0d9ff0d7e" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getLayout</name></member>
+      <member refid="d5/d27/a03157_1a615d30ab6530d5a64bd2b505d106a252" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getParent</name></member>
+      <member refid="d5/d27/a03157_1a66b03f48bede297f991a87089f50b89e" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getPosition</name></member>
+      <member refid="d5/d27/a03157_1adaa29a9485c7893a860b842917960915" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getResizeBorderSize</name></member>
+      <member refid="d5/d27/a03157_1ab44b4219c4bee06aa148aa8bc35cb87c" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getScene</name></member>
+      <member refid="d6/df4/a03201_1a772267b983302f045bdd634a402a1396" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getScrollPosition</name></member>
+      <member refid="d5/d27/a03157_1ae5a5697aa0ee7d76d2d6fd31ab39900c" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getSize</name></member>
+      <member refid="d6/df4/a03201_1ae770e0ca821440bc3564e495ed6f9b14" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getStyle</name></member>
+      <member refid="d5/d27/a03157_1a072e172e9fa3cf408536b15fb6b9a367" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getType</name></member>
+      <member refid="d5/d27/a03157_1a1eda8f0ad717bbe69ad42aeb5f6128c6" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>getUV</name></member>
+      <member refid="d6/df4/a03201_1af885061793d951a3694562d68510bea6" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>hasHorizontalScrollBar</name></member>
+      <member refid="d5/d27/a03157_1aed68cb86a172a24cffd3bbe950134b3c" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>hasScene</name></member>
+      <member refid="d6/df4/a03201_1a84bb253e368bb590f1b3dcfdfaaf54f6" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>hasVerticalScrollBar</name></member>
+      <member refid="d5/d27/a03157_1ae14dacb5781b0576a20f21d8dfc1d663" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>hide</name></member>
+      <member refid="d5/d27/a03157_1ae6d193e17e11347c6cf378f6f19d5ed7" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>isAlwaysOnTop</name></member>
+      <member refid="d5/d27/a03157_1a6c53467fb1c4b3e85445f0c49cf4e1c7" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/d27/a03157_1aa57ae69b3ec7fa12384a7a2e3090c018" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>isBackgroundVisible</name></member>
+      <member refid="d9/d5f/a03109_1a0c72e92a8514c0959d7ad57b0b971f73" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>isEnabled</name></member>
+      <member refid="d5/d27/a03157_1a1dbd277c9387982c0c153faa9f7070e2" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>isInResizeRange</name></member>
+      <member refid="d5/d27/a03157_1aecf9cd988ccd639e7ecbbd1947f887ff" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>isMovable</name></member>
+      <member refid="d5/d27/a03157_1afbb584204c8a58b4312bda40a028199d" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>isResizable</name></member>
+      <member refid="d5/d27/a03157_1a3e1d91ad264e850c2b35f691ec19dd4d" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>isVisible</name></member>
+      <member refid="d1/d30/a03185_1ab2e7e94745c12c4de4c22e0477010d35" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>LayoutControl</name></member>
+      <member refid="d5/d27/a03157_1a581415951e9ae64158469104459a5040" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_backgroundMaterial</name></member>
+      <member refid="d5/d27/a03157_1a0422d1d6b4a50fad3c6908078d3ef760" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_flags</name></member>
+      <member refid="d5/d27/a03157_1ac23b3de83e5473a01be74f66615389c3" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_foregroundMaterial</name></member>
+      <member refid="d9/d5f/a03109_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_handlerSlots</name></member>
+      <member refid="d9/d5f/a03109_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_handlerSlotsConnections</name></member>
+      <member refid="d9/d5f/a03109_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_keyboardSlots</name></member>
+      <member refid="d9/d5f/a03109_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_keyboardSlotsConnections</name></member>
+      <member refid="d1/d30/a03185_1a5e13b98807962cff158f463cfbf5e1fa" prot="private" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_layout</name></member>
+      <member refid="d9/d5f/a03109_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_mouseSlots</name></member>
+      <member refid="d9/d5f/a03109_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_mouseSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1a2a710ba7566a0da8a13156abc0901b11" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_ncHandlerSlots</name></member>
+      <member refid="d0/dcd/a03113_1a368dcf33032891e0e56c1a1d8f4103aa" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_ncHandlerSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1a14951b54a3e24fe7b348613f16f50b84" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_ncKeyboardSlots</name></member>
+      <member refid="d0/dcd/a03113_1ae1d9ec7ce4715a0a9a2536955cebb60e" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_ncKeyboardSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_ncMouseSlots</name></member>
+      <member refid="d0/dcd/a03113_1af7c333a4c75f38cf11d5226e797fc653" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_ncMouseSlotsConnections</name></member>
+      <member refid="d5/d27/a03157_1afd49a0f5f0736d462eaa2b6a6c66318b" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_parent</name></member>
+      <member refid="d5/d27/a03157_1add3ab7fec26d47ae3b477851a7cc2ee6" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>m_scene</name></member>
+      <member refid="d0/dcd/a03113_1a1726b1c708fa09c31f8ee004b2758341" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>NonClientEventHandler</name></member>
+      <member refid="d0/dcd/a03113_1a7c5bbf295117ab0f0ebc279365426a35" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>NonClientHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1a7cc2d3c359c3bd10417813a38eb28cc2" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>NonClientKeyboardFunction</name></member>
+      <member refid="d0/dcd/a03113_1a35796ed2ebfb666605bad65eefdd2eab" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>NonClientMouseFunction</name></member>
+      <member refid="d5/d27/a03157_1a030ff972d48a241466cef3c8082c4e5e" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>onChanged</name></member>
+      <member refid="d9/d5f/a03109_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnClientHandlerEvent</name></member>
+      <member refid="d9/d5f/a03109_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnClientHandlerEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnClientKeyboardEvent</name></member>
+      <member refid="d9/d5f/a03109_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnClientKeyboardEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnClientMouseEvent</name></member>
+      <member refid="d9/d5f/a03109_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnClientMouseEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a762d1e36d01afdb527690a27f6e6645a" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnEnable</name></member>
+      <member refid="d9/d5f/a03109_1a51294359629a2fb1d22cab6d40e785e0" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>onEnable</name></member>
+      <member refid="d9/d5f/a03109_1aeeec8bfb3700736547c31cc89e78ea2c" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnEnableConnection</name></member>
+      <member refid="d0/dcd/a03113_1a8cde3553a16b17f2db9b8cb2d0457be6" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnNonClientHandlerEvent</name></member>
+      <member refid="d0/dcd/a03113_1a3cd3b709106f34e3c628df967ff0d294" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnNonClientHandlerEventConnection</name></member>
+      <member refid="d0/dcd/a03113_1ae68352453ba12818f1d870cdaf6eea40" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnNonClientKeyboardEvent</name></member>
+      <member refid="d0/dcd/a03113_1ae5b3c80ac4550412145ed53787b33d86" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnNonClientKeyboardEventConnection</name></member>
+      <member refid="d0/dcd/a03113_1acf4c10c3d5dd8fbb43d1b238d9b6de36" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnNonClientMouseEvent</name></member>
+      <member refid="d0/dcd/a03113_1aefea2351ba1c6ea3dfbe9d22ddf311a6" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnNonClientMouseEventConnection</name></member>
+      <member refid="d6/df4/a03201_1a01dc4891a4d1278caadde993fce3a478" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>onScrollContent</name></member>
+      <member refid="d6/df4/a03201_1a090f038e310dcf9e5d52e9341580d447" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnScrollContent</name></member>
+      <member refid="d6/df4/a03201_1a125fdf16def9bcdf059bd8d67cf898db" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnScrollContentConnection</name></member>
+      <member refid="d6/df4/a03201_1a08a4ff8bee21cc10a17bad2ee694e585" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>OnScrollContentFunction</name></member>
+      <member refid="d9/d5f/a03109_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>processEvents</name></member>
+      <member refid="d9/d5f/a03109_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>processHandlerEvent</name></member>
+      <member refid="d9/d5f/a03109_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>processKeyboardEvent</name></member>
+      <member refid="d9/d5f/a03109_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>processMouseEvent</name></member>
+      <member refid="d9/d5f/a03109_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>pushEvent</name></member>
+      <member refid="d9/d5f/a03109_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>pushEvent</name></member>
+      <member refid="d9/d5f/a03109_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>pushEvent</name></member>
+      <member refid="d6/df4/a03201_1a1f1ad6fc05bfc1536f1d45535df5bdd3" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>registerControl</name></member>
+      <member refid="d5/d27/a03157_1a9d2083e8d22c0af9f07e494f17aa84a9" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>removeChild</name></member>
+      <member refid="d5/d27/a03157_1a76bed2932e40dfc7d10f6bc2113bc213" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>removeFlag</name></member>
+      <member refid="d5/d27/a03157_1aa5edf92a6bf41017a281e68aeb9d7eaf" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>removeFlag</name></member>
+      <member refid="d6/df4/a03201_1a13273723954d21bca4ac100ce4b52118" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>ScrollableCtrl</name></member>
+      <member refid="d5/d27/a03157_1adc6817a2b0f2bcd5dcef1fe18ce518b6" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setBackgroundBorderMaterial</name></member>
+      <member refid="d5/d27/a03157_1a96be50155227ba273fffb7feb811ec75" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setBackgroundBorderPosition</name></member>
+      <member refid="d5/d27/a03157_1a5591c2409137443030717673282bc227" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/d27/a03157_1a8bf9f81d2b736d262f75aa6617f7a605" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setBackgroundSize</name></member>
+      <member refid="d5/d27/a03157_1a7ed9a34492cb400424eb233adf582ca6" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setBorderInnerUV</name></member>
+      <member refid="d5/d27/a03157_1a36f16d9f66f6e2376b888ccae589f8d6" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setBorderOuterUV</name></member>
+      <member refid="d5/d27/a03157_1ab8c78763312333353378ceaff269722c" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setBorderSize</name></member>
+      <member refid="d5/d27/a03157_1a3f413815fb5be7cb79bd8ad1545ed70f" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setCaption</name></member>
+      <member refid="d9/d5f/a03109_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setCatchesMouseEvents</name></member>
+      <member refid="d1/d30/a03185_1a2fd27bf77aee89108f90bc789d309b6d" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setLayout</name></member>
+      <member refid="d5/d27/a03157_1a4e90b29a056dcbf2db96eefe6041239d" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setPosition</name></member>
+      <member refid="d6/df4/a03201_1a9e36c2dba225280c164d7d5727a092e7" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setScrollBarsVisible</name></member>
+      <member refid="d5/d27/a03157_1a21a6e38b960222e3df47cc0420176e49" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setSize</name></member>
+      <member refid="d5/d27/a03157_1a9707c9c90e1ae4a57e520fc841332560" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setStyle</name></member>
+      <member refid="d5/d27/a03157_1a6e4e43823e6aae177386088d85c36d69" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setUV</name></member>
+      <member refid="d5/d27/a03157_1ab00d1832ef47986d3d110967b2697160" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>setVisible</name></member>
+      <member refid="d5/d27/a03157_1a68a85bdad7fdc17d729cd97e199ae0f9" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>show</name></member>
+      <member refid="d6/df4/a03201_1abfdacade72fa1de2749d784b26dee3bf" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>unregisterControl</name></member>
+      <member refid="d6/df4/a03201_1a41cf04107eb7cc29062fad7f8886d682" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>updateScrollableClientRect</name></member>
+      <member refid="d6/df4/a03201_1aaf2a785346233c77031cc67362f635f7" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>updateScrollBars</name></member>
+      <member refid="d6/df4/a03201_1a38842d6560f9bbb329607a1da6ed6643" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>updateScrollBarsStyle</name></member>
+      <member refid="d6/df4/a03201_1a27b29c675906ed68bbc6e21c2ab63418" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>updateScrollBarsThumb</name></member>
+      <member refid="d6/df4/a03201_1a635cd61e301e0c8143cb2fc6ada9966c" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>updateScrollZIndex</name></member>
+      <member refid="d6/df4/a03201_1aa2e25f2b5147066e2be098ec80f304f3" prot="protected" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>updateTotalSize</name></member>
+      <member refid="d5/d27/a03157_1a7ba50bfc701825af7c072e553b9a36bc" prot="public" virt="non-virtual"><scope>castor3d::LayoutControl</scope><name>~Control</name></member>
+      <member refid="d9/d5f/a03109_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::LayoutControl</scope><name>~EventHandler</name></member>
+      <member refid="d6/df4/a03201_1a68afd97e16432c424a2a04eb6faa4da9" prot="public" virt="virtual"><scope>castor3d::LayoutControl</scope><name>~ScrollableCtrl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

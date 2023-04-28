@@ -1,0 +1,22 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_bfd6c3ec76afce51786bb17a92b28154" kind="dir">
+    <compoundname>Material/Pass/Component/Lighting</compoundname>
+    <innerfile refid="d4/def/a00359">AttenuationComponent.hpp</innerfile>
+    <innerfile refid="de/dd7/a00362">ClearcoatComponent.hpp</innerfile>
+    <innerfile refid="dd/db5/a00365">EmissiveComponent.hpp</innerfile>
+    <innerfile refid="d8/d21/a00368">IridescenceComponent.hpp</innerfile>
+    <innerfile refid="d6/d80/a00371">MetalnessComponent.hpp</innerfile>
+    <innerfile refid="d5/db5/a00374">RoughnessComponent.hpp</innerfile>
+    <innerfile refid="d4/d13/a00377">SheenComponent.hpp</innerfile>
+    <innerfile refid="d8/ddd/a00380">SpecularComponent.hpp</innerfile>
+    <innerfile refid="da/dee/a00383">SubsurfaceScatteringComponent.hpp</innerfile>
+    <innerfile refid="dd/df5/a00386">ThicknessComponent.hpp</innerfile>
+    <innerfile refid="dc/dc9/a00389">TransmissionComponent.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/Lighting/"/>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_cb6750fd0f63fd8f29108a0684eccd46" kind="dir">
+    <compoundname>Scene/Animation</compoundname>
+    <innerdir refid="dir_445e4ddf266ed225b822af9f80cf11e7">Scene/Animation/Mesh</innerdir>
+    <innerdir refid="dir_adca96594a9f2b1f8e20f892db14748e">Scene/Animation/SceneNode</innerdir>
+    <innerdir refid="dir_7ae9340dfd2e99071768353d974fafa4">Scene/Animation/Skeleton</innerdir>
+    <innerdir refid="dir_bf7d606a9e146adc3707e5329f55d213">Scene/Animation/Texture</innerdir>
+    <innerfile refid="db/d42/a01220">AnimatedMesh.hpp</innerfile>
+    <innerfile refid="d7/ddd/a01223">AnimatedObject.hpp</innerfile>
+    <innerfile refid="dd/d9e/a01226">AnimatedObjectGroup.hpp</innerfile>
+    <innerfile refid="db/d1c/a01229">AnimatedSceneNode.hpp</innerfile>
+    <innerfile refid="d0/d67/a01232">AnimatedSkeleton.hpp</innerfile>
+    <innerfile refid="dd/dad/a01235">AnimatedTexture.hpp</innerfile>
+    <innerfile refid="d8/ddf/a01238">AnimationInstance.hpp</innerfile>
+    <innerfile refid="d6/d6b/a13230">AnimationModule.hpp</innerfile>
+    <innerfile refid="d3/d0b/a01253">SceneNodeAnimation.hpp</innerfile>
+    <innerfile refid="d6/d0f/a01256">SceneNodeAnimationKeyFrame.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/Animation/"/>
+  </compounddef>
+</doxygen>

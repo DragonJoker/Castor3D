@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d62/a06322" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassBuffer::PassTypeData</compoundname>
+    <includes local="no">PassBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d62/a06322_1a49c30f616ecd4285b64946caaa0e1a13" prot="public" static="no" mutable="no">
+        <type>uint16_t</type>
+        <definition>uint16_t castor3d::PassBuffer::PassTypeData::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::PassBuffer::PassTypeData::index</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="313" column="10" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="313" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d62/a06322_1adf517e16dedcefa045fd5ef53d060007" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1af6093e41bb1d28fdaa187df3ec768e3f" kindref="member">PassComponentCombineID</ref></type>
+        <definition>PassComponentCombineID castor3d::PassBuffer::PassTypeData::componentCombine</definition>
+        <argsstring></argsstring>
+        <name>componentCombine</name>
+        <qualifiedname>castor3d::PassBuffer::PassTypeData::componentCombine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="314" column="24" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="314" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/d62/a06322_1a6f612e8600809da5092c448fec825514" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a4066afb0085e0658496b8bd7324d2e82" kindref="member">TextureCombineID</ref></type>
+        <definition>TextureCombineID castor3d::PassBuffer::PassTypeData::textureCombine</definition>
+        <argsstring></argsstring>
+        <name>textureCombine</name>
+        <qualifiedname>castor3d::PassBuffer::PassTypeData::textureCombine</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="315" column="18" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="315" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="311" column="1" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="312" bodyend="316"/>
+    <listofallmembers>
+      <member refid="d5/d62/a06322_1adf517e16dedcefa045fd5ef53d060007" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassTypeData</scope><name>componentCombine</name></member>
+      <member refid="d5/d62/a06322_1a49c30f616ecd4285b64946caaa0e1a13" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassTypeData</scope><name>index</name></member>
+      <member refid="d5/d62/a06322_1a6f612e8600809da5092c448fec825514" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassTypeData</scope><name>textureCombine</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

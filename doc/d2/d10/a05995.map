@@ -1,12 +1,7 @@
-<map id="castor3d::shader::BufferT&lt; DataT &gt;" name="castor3d::shader::BufferT&lt; DataT &gt;">
-<area shape="rect" id="node1" title=" " alt="" coords="245,108,405,149"/>
-<area shape="rect" id="node3" href="$d5/d2a/a05996.html" title=" " alt="" coords="588,5,748,47"/>
-<area shape="rect" id="node5" href="$d5/d2a/a05996.html" title=" " alt="" coords="588,71,748,112"/>
-<area shape="rect" id="node7" href="$d5/d2a/a05996.html" title=" " alt="" coords="588,136,748,177"/>
-<area shape="rect" id="node9" href="$d5/d2a/a05996.html" title=" " alt="" coords="588,201,748,243"/>
-<area shape="rect" id="node2" href="$d4/dc4/a05992.html" title=" " alt="" coords="5,115,196,142"/>
-<area shape="rect" id="node4" href="$d1/dc9/a06044.html" title=" " alt="" coords="804,13,984,39"/>
-<area shape="rect" id="node6" href="$dc/d0a/a06084.html" title=" " alt="" coords="797,78,991,105"/>
-<area shape="rect" id="node8" href="$dc/d15/a06124.html" title=" " alt="" coords="809,136,979,177"/>
-<area shape="rect" id="node10" href="$d0/d80/a06132.html" title=" " alt="" coords="809,201,979,243"/>
+<map id="castor3d::LightImporter" name="castor3d::LightImporter">
+<area shape="rect" id="node1" title=" " alt="" coords="637,39,792,64"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,5,192,31"/>
+<area shape="rect" id="node3" href="$d8/dde/a03313.html" title=" " alt="" coords="350,39,498,64"/>
+<area shape="rect" id="node4" href="$d7/df7/a04493.html" title=" " alt="" coords="347,89,501,129"/>
+<area shape="rect" id="node5" href="$d7/df7/a04493.html" title="Configuration parameters." alt="" coords="21,89,176,129"/>
 </map>

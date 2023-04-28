@@ -1,0 +1,187 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/dbf/a05657" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMap::AllPasses</compoundname>
+    <includes local="no">ShadowMap.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/dbf/a05657_1a524d1dd84a5adeb97400b72d0b865520" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; std::unique_ptr&lt; <ref refid="df/d2f/a06641" kindref="compound">CameraUbo</ref> &gt; &gt;</type>
+        <definition>std::vector&lt; std::unique_ptr&lt; CameraUbo &gt; &gt; castor3d::ShadowMap::AllPasses::cameraUbos</definition>
+        <argsstring></argsstring>
+        <name>cameraUbos</name>
+        <qualifiedname>castor3d::ShadowMap::AllPasses::cameraUbos</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="76" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dbf/a05657_1a8f00c2ebaa6a2f9eaa9692912b0edc28" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; CameraUPtr &gt;</type>
+        <definition>std::vector&lt; CameraUPtr &gt; castor3d::ShadowMap::AllPasses::cameras</definition>
+        <argsstring></argsstring>
+        <name>cameras</name>
+        <qualifiedname>castor3d::ShadowMap::AllPasses::cameras</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="77" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dbf/a05657_1a1ab32add2999caa01535aec77e9b9464" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d56/a05653" kindref="compound">Passes</ref></type>
+        <definition>Passes castor3d::ShadowMap::AllPasses::staticNodes</definition>
+        <argsstring></argsstring>
+        <name>staticNodes</name>
+        <qualifiedname>castor3d::ShadowMap::AllPasses::staticNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="78" column="8" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dbf/a05657_1a04192141737614c5171acb84c2a0b513" prot="public" static="no" mutable="no">
+        <type><ref refid="db/d56/a05653" kindref="compound">Passes</ref></type>
+        <definition>Passes castor3d::ShadowMap::AllPasses::otherNodes</definition>
+        <argsstring></argsstring>
+        <name>otherNodes</name>
+        <qualifiedname>castor3d::ShadowMap::AllPasses::otherNodes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="79" column="8" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>castor3d::CameraUbo</label>
+        <link refid="df/d2f/a06641"/>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMap::AllPasses</label>
+        <link refid="db/dbf/a05657"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>cameraUbos</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>cameras</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>otherNodes</edgelabel>
+          <edgelabel>staticNodes</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::ShadowMap::Passes</label>
+        <link refid="db/d56/a05653"/>
+        <childnode refid="10" relation="usage">
+          <edgelabel>passes</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>graphs</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>runnables</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>blurs</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::unique_ptr&lt; castor3d::CameraUbo &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor3d::CameraUbo &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::unique_ptr&lt; crg::FrameGraph &gt;</label>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; crg::FrameGraph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; CameraUPtr &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; CameraUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::vector&lt; GaussianBlurUPtr &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; GaussianBlurUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; PassDataPtr &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; PassDataPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::vector&lt; crg::RunnableGraphPtr &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; crg::RunnableGraphPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; std::unique_ptr&lt; castor3d::CameraUbo &gt; &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; castor3d::CameraUbo &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMap.hpp" line="74" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="75" bodyend="80"/>
+    <listofallmembers>
+      <member refid="db/dbf/a05657_1a8f00c2ebaa6a2f9eaa9692912b0edc28" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::AllPasses</scope><name>cameras</name></member>
+      <member refid="db/dbf/a05657_1a524d1dd84a5adeb97400b72d0b865520" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::AllPasses</scope><name>cameraUbos</name></member>
+      <member refid="db/dbf/a05657_1a04192141737614c5171acb84c2a0b513" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::AllPasses</scope><name>otherNodes</name></member>
+      <member refid="db/dbf/a05657_1a1ab32add2999caa01535aec77e9b9464" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::AllPasses</scope><name>staticNodes</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

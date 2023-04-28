@@ -1,0 +1,280 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d1a/a06397" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextureConfigurationBuffer::Data</compoundname>
+    <includes local="no">TextureConfigurationBuffer.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/d1a/a06397_1a69525cef199340b0b5b13a795db3aab4" prot="public" static="no" mutable="no">
+        <type>std::array&lt; castor::Point4ui, 4u &gt;</type>
+        <definition>std::array&lt; castor::Point4ui, 4u &gt; castor3d::TextureConfigurationBuffer::Data::components</definition>
+        <argsstring></argsstring>
+        <name>components</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::components</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="108" column="12" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a76396563e8155de02b4f832905a553c5" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TextureConfigurationBuffer::Data::translate</definition>
+        <argsstring></argsstring>
+        <name>translate</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::translate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="109" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a7677f9862952b9b4d1bc6c1fd04e4220" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureConfigurationBuffer::Data::rotateU</definition>
+        <argsstring></argsstring>
+        <name>rotateU</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::rotateU</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="110" column="7" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1aa1dddbf0a0b1dadf848582e539f451a2" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::TextureConfigurationBuffer::Data::scale</definition>
+        <argsstring></argsstring>
+        <name>scale</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::scale</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="111" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1af6f3ee496eed04b6e5dd2ee4d61cf904" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureConfigurationBuffer::Data::rotateV</definition>
+        <argsstring></argsstring>
+        <name>rotateV</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::rotateV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="112" column="7" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a0d9fdb379c7f7b3d7a75351b06bce678" prot="public" static="no" mutable="no">
+        <type>castor::Point4f</type>
+        <definition>castor::Point4f castor3d::TextureConfigurationBuffer::Data::tileSet</definition>
+        <argsstring></argsstring>
+        <name>tileSet</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::tileSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="113" column="17" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a7919c6615c90f0eb377082fef4413db1" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureConfigurationBuffer::Data::normalGMult</definition>
+        <argsstring></argsstring>
+        <name>normalGMult</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::normalGMult</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="114" column="7" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a102497abace96e89cbb48d2826753423" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureConfigurationBuffer::Data::normalFactor</definition>
+        <argsstring></argsstring>
+        <name>normalFactor</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::normalFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="115" column="7" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="115" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a44936adda4f4989c27d48f6f6ebd8cc1" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfigurationBuffer::Data::normal2Chan</definition>
+        <argsstring></argsstring>
+        <name>normal2Chan</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::normal2Chan</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="116" column="10" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1aba61298c37419c451b6264283aa27eca" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextureConfigurationBuffer::Data::heightFactor</definition>
+        <argsstring></argsstring>
+        <name>heightFactor</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::heightFactor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="117" column="7" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1ae76348fa54b48487b64d2a21df527fd1" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfigurationBuffer::Data::isTransformAnim</definition>
+        <argsstring></argsstring>
+        <name>isTransformAnim</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::isTransformAnim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="118" column="10" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1aa482710c1d3b758488298d832624a083" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfigurationBuffer::Data::isTileAnim</definition>
+        <argsstring></argsstring>
+        <name>isTileAnim</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::isTileAnim</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="119" column="10" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a3a742772307ab65066c878667873dd34" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfigurationBuffer::Data::needsYInv</definition>
+        <argsstring></argsstring>
+        <name>needsYInv</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::needsYInv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="120" column="10" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1af6a6cd5eeaa1d7ea839a0f9c887951cc" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfigurationBuffer::Data::texcoordSet</definition>
+        <argsstring></argsstring>
+        <name>texcoordSet</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::texcoordSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="121" column="10" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a76dc495eae44db112298cc9174c3a7cd" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfigurationBuffer::Data::componentsCount</definition>
+        <argsstring></argsstring>
+        <name>componentsCount</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::componentsCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="122" column="10" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d1a/a06397_1a9ce0c220c47af7d589b64926fb8d0b38" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextureConfigurationBuffer::Data::pad[3]</definition>
+        <argsstring>[3]</argsstring>
+        <name>pad</name>
+        <qualifiedname>castor3d::TextureConfigurationBuffer::Data::pad</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="123" column="10" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; castor::Point4ui, 4u &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Point4ui, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::TextureConfigurationBuffer::Data</label>
+        <link refid="db/d1a/a06397"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>components</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" line="106" column="1" bodyfile="Shader/ShaderBuffers/TextureConfigurationBuffer.hpp" bodystart="107" bodyend="124"/>
+    <listofallmembers>
+      <member refid="db/d1a/a06397_1a69525cef199340b0b5b13a795db3aab4" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>components</name></member>
+      <member refid="db/d1a/a06397_1a76dc495eae44db112298cc9174c3a7cd" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>componentsCount</name></member>
+      <member refid="db/d1a/a06397_1aba61298c37419c451b6264283aa27eca" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>heightFactor</name></member>
+      <member refid="db/d1a/a06397_1aa482710c1d3b758488298d832624a083" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>isTileAnim</name></member>
+      <member refid="db/d1a/a06397_1ae76348fa54b48487b64d2a21df527fd1" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>isTransformAnim</name></member>
+      <member refid="db/d1a/a06397_1a3a742772307ab65066c878667873dd34" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>needsYInv</name></member>
+      <member refid="db/d1a/a06397_1a44936adda4f4989c27d48f6f6ebd8cc1" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>normal2Chan</name></member>
+      <member refid="db/d1a/a06397_1a102497abace96e89cbb48d2826753423" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>normalFactor</name></member>
+      <member refid="db/d1a/a06397_1a7919c6615c90f0eb377082fef4413db1" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>normalGMult</name></member>
+      <member refid="db/d1a/a06397_1a9ce0c220c47af7d589b64926fb8d0b38" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>pad</name></member>
+      <member refid="db/d1a/a06397_1a7677f9862952b9b4d1bc6c1fd04e4220" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>rotateU</name></member>
+      <member refid="db/d1a/a06397_1af6f3ee496eed04b6e5dd2ee4d61cf904" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>rotateV</name></member>
+      <member refid="db/d1a/a06397_1aa1dddbf0a0b1dadf848582e539f451a2" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>scale</name></member>
+      <member refid="db/d1a/a06397_1af6a6cd5eeaa1d7ea839a0f9c887951cc" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>texcoordSet</name></member>
+      <member refid="db/d1a/a06397_1a0d9fdb379c7f7b3d7a75351b06bce678" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>tileSet</name></member>
+      <member refid="db/d1a/a06397_1a76396563e8155de02b4f832905a553c5" prot="public" virt="non-virtual"><scope>castor3d::TextureConfigurationBuffer::Data</scope><name>translate</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

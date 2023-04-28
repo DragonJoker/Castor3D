@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dir_bc5d8233c26a470289e79521f10c511e" kind="dir">
+    <compoundname>Gui</compoundname>
+    <innerdir refid="dir_b75c68cf88b9d0605147b3e45e7bb2c7">Gui/Controls</innerdir>
+    <innerdir refid="dir_c0142d9049866904f99328f8ccaa94c1">Gui/Layout</innerdir>
+    <innerdir refid="dir_35457c071cb011022340bc8ab70dfd4c">Gui/Theme</innerdir>
+    <innerfile refid="d4/d13/a00377">ControlsManager.hpp</innerfile>
+    <innerfile refid="da/dee/a00383">Gui_Parsers.hpp</innerfile>
+    <innerfile refid="d8/ddd/a00380">GuiModule.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Gui/"/>
+  </compounddef>
+</doxygen>

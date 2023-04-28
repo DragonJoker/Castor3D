@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/d7b/a03486" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::EmissiveData</compoundname>
+    <includes local="no">EmissiveComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d7b/a03486_1a3d430b5ed354fe02b89910f058c870ca" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; castor::RgbColour &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; castor::RgbColour &gt; castor3d::EmissiveData::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::EmissiveData::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/EmissiveComponent.hpp" line="23" column="34" bodyfile="Material/Pass/Component/Lighting/EmissiveComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="d3/d87/a03490_1af411041ea55405c840908898119b8698" compoundref="d0/d29/a00470" startline="103" endline="106">castor3d::EmissiveComponent::getEmissiveColour</referencedby>
+        <referencedby refid="d3/d87/a03490_1a7f78bbdf345fb6f83a5153c24094c0f3" compoundref="d0/d29/a00470" startline="113" endline="116">castor3d::EmissiveComponent::setEmissive</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a03486_1a2d0daed41aac87caaf8077b003d4dce0" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::EmissiveData::factor</definition>
+        <argsstring></argsstring>
+        <name>factor</name>
+        <qualifiedname>castor3d::EmissiveData::factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/EmissiveComponent.hpp" line="24" column="34" bodyfile="Material/Pass/Component/Lighting/EmissiveComponent.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="d3/d87/a03490_1a2b4f1fc270bfbf60e2aa1b8298efc2b3" compoundref="d0/d29/a00470" startline="108" endline="111">castor3d::EmissiveComponent::getEmissiveFactor</referencedby>
+        <referencedby refid="d3/d87/a03490_1ad8b18cb56defe0ffb1fc972765660d2d" compoundref="d0/d29/a00470" startline="118" endline="121">castor3d::EmissiveComponent::setEmissiveFactor</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d7b/a03486_1abbb8eec196d0fa244369df948fc2ab7c" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EmissiveData::EmissiveData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>EmissiveData</name>
+        <qualifiedname>castor3d::EmissiveData::EmissiveData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/EmissiveComponent.hpp" line="17" column="10" bodyfile="Material/Pass/Component/Lighting/EmissiveComponent.hpp" bodystart="17" bodyend="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/Lighting/EmissiveComponent.hpp" line="15" column="1" bodyfile="Material/Pass/Component/Lighting/EmissiveComponent.hpp" bodystart="16" bodyend="25"/>
+    <listofallmembers>
+      <member refid="d8/d7b/a03486_1a3d430b5ed354fe02b89910f058c870ca" prot="public" virt="non-virtual"><scope>castor3d::EmissiveData</scope><name>colour</name></member>
+      <member refid="d8/d7b/a03486_1abbb8eec196d0fa244369df948fc2ab7c" prot="public" virt="non-virtual"><scope>castor3d::EmissiveData</scope><name>EmissiveData</name></member>
+      <member refid="d8/d7b/a03486_1a2d0daed41aac87caaf8077b003d4dce0" prot="public" virt="non-virtual"><scope>castor3d::EmissiveData</scope><name>factor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,249 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/d35/a03682" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ClearcoatNormalMapComponent</compoundname>
+    <basecompoundref refid="d3/d14/a04046" prot="public" virt="non-virtual">castor3d::PassMapComponent</basecompoundref>
+    <includes local="no">ClearcoatNormalMapComponent.hpp</includes>
+    <innerclass refid="d4/d5e/a03686" prot="public">castor3d::ClearcoatNormalMapComponent::ComponentsShader</innerclass>
+    <innerclass refid="df/d6d/a03690" prot="public">castor3d::ClearcoatNormalMapComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/d35/a03682_1a3c9b736cebee08f431e89a5f1768ba8f" prot="public" static="yes" mutable="no">
+        <type>const <ref refid="d5/da6/a01698_1a0ab3a08edb07cc34b4574bc3799960d6" kindref="member">TextureFlag</ref></type>
+        <definition>const TextureFlag castor3d::ClearcoatNormalMapComponent::ClearcoatNormal</definition>
+        <argsstring></argsstring>
+        <name>ClearcoatNormal</name>
+        <qualifiedname>castor3d::ClearcoatNormalMapComponent::ClearcoatNormal</qualifiedname>
+        <initializer>= <ref refid="d5/da6/a01698_1a0ab3a08edb07cc34b4574bc3799960d6" kindref="member">TextureFlag</ref>( 0x01u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" line="18" column="26" bodyfile="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" bodystart="18" bodyend="-1"/>
+        <referencedby refid="d4/d5e/a03686_1aae4bea33f60b52924eeafe7ce7bcabf2" compoundref="d4/d1f/a00506" startline="35" endline="38">castor3d::ClearcoatNormalMapComponent::ComponentsShader::getTextureFlags</referencedby>
+        <referencedby refid="df/d6d/a03690_1a2aec116e216bb0162baaef5f6d35293f" compoundref="d4/d1f/a00506" startline="81" endline="84">castor3d::ClearcoatNormalMapComponent::Plugin::getTextureFlags</referencedby>
+        <referencedby refid="df/d6d/a03690_1a24b2c015e9c0179ad4f5064a24462e46" compoundref="d4/d1f/a00506" startline="94" endline="100">castor3d::ClearcoatNormalMapComponent::Plugin::getTextureFlagsName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="da/d35/a03682_1a64c09848697e53bff914c30fba21f4d6" prot="public" static="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::ClearcoatNormalMapComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::ClearcoatNormalMapComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" line="116" column="37" bodyfile="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="da/d35/a03682_1a051c50841358da9f5c6e6466d5af92fe" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::ClearcoatNormalMapComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::ClearcoatNormalMapComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d9/d85/a04034" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" line="109" column="32" bodyfile="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" bodystart="109" bodyend="112"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d35/a03682_1adcdcb369f62eb17251d60e959c7977ea" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ClearcoatNormalMapComponent::ClearcoatNormalMapComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>ClearcoatNormalMapComponent</name>
+        <qualifiedname>castor3d::ClearcoatNormalMapComponent::ClearcoatNormalMapComponent</qualifiedname>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" line="114" column="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="da/d35/a03682_1ac116c3875e83f8fc83c23f2acb21fc5d" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::ClearcoatNormalMapComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::ClearcoatNormalMapComponent::doClone</qualifiedname>
+        <reimplements refid="d2/d95/a04030_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" line="119" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d35/a03682_1a9e8797086cac8c2e5db180f216b599f1" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ClearcoatNormalMapComponent::doFillConfig</definition>
+        <argsstring>(TextureConfiguration &amp;configuration, PassVisitorBase &amp;vis) const override</argsstring>
+        <name>doFillConfig</name>
+        <qualifiedname>castor3d::ClearcoatNormalMapComponent::doFillConfig</qualifiedname>
+        <reimplements refid="d3/d14/a04046_1a0a8dd2d333ff8b636230b815f79cab58">doFillConfig</reimplements>
+        <param>
+          <type><ref refid="d7/d60/a04126" kindref="compound">TextureConfiguration</ref> &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d18/a04070" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" line="120" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ClearcoatNormalMapComponent</label>
+        <link refid="da/d35/a03682"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d2/d95/a04030"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponent</label>
+        <link refid="d3/d14/a04046"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ClearcoatNormalMapComponent</label>
+        <link refid="da/d35/a03682"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="d2/d95/a04030"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="db/df2/a04026"/>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponent</label>
+        <link refid="d3/d14/a04046"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="dc/d86/a04022"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" line="15" column="1" bodyfile="Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp" bodystart="17" bodyend="122"/>
+    <listofallmembers>
+      <member refid="d2/d95/a04030_1a4e315225c20ace9097adfd65e8413e4f" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>accept</name></member>
+      <member refid="d2/d95/a04030_1a2847d512604b766b3a315e4c4e9dc0ea" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>areNormalsInverted</name></member>
+      <member refid="da/d35/a03682_1a3c9b736cebee08f431e89a5f1768ba8f" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>ClearcoatNormal</name></member>
+      <member refid="da/d35/a03682_1adcdcb369f62eb17251d60e959c7977ea" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>ClearcoatNormalMapComponent</name></member>
+      <member refid="d2/d95/a04030_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>clone</name></member>
+      <member refid="da/d35/a03682_1a051c50841358da9f5c6e6466d5af92fe" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>createPlugin</name></member>
+      <member refid="da/d35/a03682_1ac116c3875e83f8fc83c23f2acb21fc5d" prot="private" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>doClone</name></member>
+      <member refid="da/d35/a03682_1a9e8797086cac8c2e5db180f216b599f1" prot="private" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>doFillConfig</name></member>
+      <member refid="d2/d95/a04030_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>fillBuffer</name></member>
+      <member refid="d3/d14/a04046_1af6575701314218be729f8ba959e5c2ae" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>fillChannel</name></member>
+      <member refid="d2/d95/a04030_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual" ambiguityscope="castor3d::PassComponent::"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>fillChannel</name></member>
+      <member refid="d3/d14/a04046_1a677bc27d9d35fc36c18189826ff2b419" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>fillConfig</name></member>
+      <member refid="d2/d95/a04030_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>getColour</name></member>
+      <member refid="d2/d95/a04030_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>getDependencies</name></member>
+      <member refid="d2/d95/a04030_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>getId</name></member>
+      <member refid="d2/d95/a04030_1af015484800f32c718d067a80b76709e9" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>getPassFlags</name></member>
+      <member refid="d2/d95/a04030_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>getPlugin</name></member>
+      <member refid="d3/d14/a04046_1ac98f2807737ea6c3cf305ffb914e7eff" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>getTextureFlags</name></member>
+      <member refid="d2/d95/a04030_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>getType</name></member>
+      <member refid="d2/d95/a04030_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>hasColour</name></member>
+      <member refid="d2/d95/a04030_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>m_dependencies</name></member>
+      <member refid="d2/d95/a04030_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>m_dirty</name></member>
+      <member refid="d2/d95/a04030_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>m_id</name></member>
+      <member refid="d2/d95/a04030_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>m_materialShader</name></member>
+      <member refid="d2/d95/a04030_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>m_plugin</name></member>
+      <member refid="d2/d95/a04030_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>m_type</name></member>
+      <member refid="d2/d95/a04030_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>PassComponent</name></member>
+      <member refid="d3/d14/a04046_1a0a24dbd2464fe207df6d1033924dc50e" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>PassMapComponent</name></member>
+      <member refid="d2/d95/a04030_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>setColour</name></member>
+      <member refid="d2/d95/a04030_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>setColour</name></member>
+      <member refid="da/d35/a03682_1a64c09848697e53bff914c30fba21f4d6" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>TypeName</name></member>
+      <member refid="d2/d95/a04030_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>update</name></member>
+      <member refid="d2/d95/a04030_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>writeText</name></member>
+      <member refid="d2/d95/a04030_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::ClearcoatNormalMapComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

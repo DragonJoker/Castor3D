@@ -1,0 +1,48 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d4/dc7/a06113" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SceneFileContext::OverlayPtr</compoundname>
+    <includes local="no">SceneFileParser.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/dc7/a06113_1aca699559bb9c0fb2ff82b16712f8a3e2" prot="public" static="no" mutable="no">
+        <type>OverlayUPtr</type>
+        <definition>OverlayUPtr castor3d::SceneFileContext::OverlayPtr::uptr</definition>
+        <argsstring></argsstring>
+        <name>uptr</name>
+        <qualifiedname>castor3d::SceneFileContext::OverlayPtr::uptr</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="199" column="13" bodyfile="Scene/SceneFileParser.hpp" bodystart="199" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/dc7/a06113_1a2ca587e93efb1b76001d36c814238d9e" prot="public" static="no" mutable="no">
+        <type>OverlayRPtr</type>
+        <definition>OverlayRPtr castor3d::SceneFileContext::OverlayPtr::rptr</definition>
+        <argsstring></argsstring>
+        <name>rptr</name>
+        <qualifiedname>castor3d::SceneFileContext::OverlayPtr::rptr</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/SceneFileParser.hpp" line="200" column="13" bodyfile="Scene/SceneFileParser.hpp" bodystart="200" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Scene/SceneFileParser.hpp" line="197" column="1" bodyfile="Scene/SceneFileParser.hpp" bodystart="198" bodyend="201"/>
+    <listofallmembers>
+      <member refid="d4/dc7/a06113_1a2ca587e93efb1b76001d36c814238d9e" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::OverlayPtr</scope><name>rptr</name></member>
+      <member refid="d4/dc7/a06113_1aca699559bb9c0fb2ff82b16712f8a3e2" prot="public" virt="non-virtual"><scope>castor3d::SceneFileContext::OverlayPtr</scope><name>uptr</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

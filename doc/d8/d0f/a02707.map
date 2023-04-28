@@ -1,5 +1,7 @@
-<map id="castor3d::CmshSkeletonImporter" name="castor3d::CmshSkeletonImporter">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,217,181"/>
-<area shape="rect" id="node2" href="$d8/dab/a04404.html" title=" " alt="" coords="22,80,201,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="18,5,205,32"/>
+<map id="castor3d::BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;" name="castor3d::BinaryParser&lt; SceneNodeAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="SceneNodeAnimationKeyFrame binary loader." alt="" coords="17,285,247,325"/>
+<area shape="rect" id="node2" href="$db/d0d/a02653.html" title=" " alt="" coords="17,196,247,236"/>
+<area shape="rect" id="node3" href="$db/d6a/a02613.html" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="node5" href="$db/d0d/a02653.html" title="Binary data chunk reader base class." alt="" coords="131,93,317,133"/>
+<area shape="rect" id="node4" href="$de/dc5/a04521.html" title=" " alt="" coords="218,5,342,31"/>
 </map>

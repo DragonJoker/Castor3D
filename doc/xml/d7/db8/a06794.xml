@@ -1,0 +1,291 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/db8/a06794" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VoxelizerUbo</compoundname>
+    <includes local="no">VoxelizerUbo.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d7/db8/a06794_1a2657e71a252ebe78bf33bcd4b93a0cb8" prot="public" static="no">
+        <type><ref refid="d8/d27/a06790" kindref="compound">VoxelizerUboConfiguration</ref></type>
+        <definition>using castor3d::VoxelizerUbo::Configuration =  VoxelizerUboConfiguration</definition>
+        <argsstring></argsstring>
+        <name>Configuration</name>
+        <qualifiedname>castor3d::VoxelizerUbo::Configuration</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="102" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d7/db8/a06794_1ac585c4e278bd105d6b059cf614b16ff8" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::VoxelizerUbo::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::VoxelizerUbo::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="141" column="21" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/db8/a06794_1a892a688bb647cd0d6d66509dfa925979" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d90/a02854" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d7/db8/a06794_1a2657e71a252ebe78bf33bcd4b93a0cb8" kindref="member">Configuration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; castor3d::VoxelizerUbo::m_ubo</definition>
+        <argsstring></argsstring>
+        <name>m_ubo</name>
+        <qualifiedname>castor3d::VoxelizerUbo::m_ubo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="142" column="22" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="142" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/db8/a06794_1a6ebc01a03fb7dd4cc56a93be33caacc4" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VoxelizerUbo::VoxelizerUbo</definition>
+        <argsstring>(VoxelizerUbo const &amp;rhs)=delete</argsstring>
+        <name>VoxelizerUbo</name>
+        <qualifiedname>castor3d::VoxelizerUbo::VoxelizerUbo</qualifiedname>
+        <param>
+          <type><ref refid="d7/db8/a06794" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="105" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1ac1c8c00a1076121b3ffa2fd0df89e21c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/db8/a06794" kindref="compound">VoxelizerUbo</ref> &amp;</type>
+        <definition>C3D_API VoxelizerUbo &amp; castor3d::VoxelizerUbo::operator=</definition>
+        <argsstring>(VoxelizerUbo const &amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::VoxelizerUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/db8/a06794" kindref="compound">VoxelizerUbo</ref> const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="106" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1ae862340feca1aabfb754e3143b027b0c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VoxelizerUbo::VoxelizerUbo</definition>
+        <argsstring>(VoxelizerUbo &amp;&amp;rhs)=default</argsstring>
+        <name>VoxelizerUbo</name>
+        <qualifiedname>castor3d::VoxelizerUbo::VoxelizerUbo</qualifiedname>
+        <param>
+          <type><ref refid="d7/db8/a06794" kindref="compound">VoxelizerUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="107" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1ad04b04a1d4ffa39089dffc152f072d53" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d7/db8/a06794" kindref="compound">VoxelizerUbo</ref> &amp;</type>
+        <definition>C3D_API VoxelizerUbo &amp; castor3d::VoxelizerUbo::operator=</definition>
+        <argsstring>(VoxelizerUbo &amp;&amp;rhs)=delete</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::VoxelizerUbo::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d7/db8/a06794" kindref="compound">VoxelizerUbo</ref> &amp;&amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="108" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1a03b2b0962996260a3ad6fe04be326a1e" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VoxelizerUbo::VoxelizerUbo</definition>
+        <argsstring>(RenderDevice const &amp;device)</argsstring>
+        <name>VoxelizerUbo</name>
+        <qualifiedname>castor3d::VoxelizerUbo::VoxelizerUbo</qualifiedname>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="109" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1a8e91f7aaccb211766e3d892a410e3ce5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VoxelizerUbo::~VoxelizerUbo</definition>
+        <argsstring>()</argsstring>
+        <name>~VoxelizerUbo</name>
+        <qualifiedname>castor3d::VoxelizerUbo::~VoxelizerUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="110" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1a7a93780c1cdf101e7d09c57146c09fc9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VoxelizerUbo::cpuUpdate</definition>
+        <argsstring>(VoxelSceneData const &amp;voxelConfig, float worldToGrid, uint32_t voxelGridSize)</argsstring>
+        <name>cpuUpdate</name>
+        <qualifiedname>castor3d::VoxelizerUbo::cpuUpdate</qualifiedname>
+        <param>
+          <type><ref refid="d7/daf/a05002" kindref="compound">VoxelSceneData</ref> const &amp;</type>
+          <declname>voxelConfig</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>worldToGrid</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>voxelGridSize</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="112" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1a691ef728d7970bf24d2efa9f08da1968" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VoxelizerUbo::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::VoxelizerUbo::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="116" column="6" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="116" bodyend="120"/>
+        <references refid="dc/d90/a02854_1ae2c055477d81767157b9832b18baa027" compoundref="d5/df1/a00206" startline="86" endline="94">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createPassBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1ac12f32dda8736e904642f50f0d6be562" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VoxelizerUbo::createSizedBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;layoutBinding) const</argsstring>
+        <name>createSizedBinding</name>
+        <qualifiedname>castor3d::VoxelizerUbo::createSizedBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>layoutBinding</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="122" column="6" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="122" bodyend="126"/>
+        <references refid="dc/d90/a02854_1a2c6ad146d4910651544564c25ca7dccd" compoundref="d5/df1/a00206" startline="96" endline="105">castor3d::UniformBufferOffsetT&lt; DataT &gt;::createSizedBinding</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1a7183186f335e2d45d790998b42f8c0fe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::WriteDescriptorSet</type>
+        <definition>ashes::WriteDescriptorSet castor3d::VoxelizerUbo::getDescriptorWrite</definition>
+        <argsstring>(uint32_t dstBinding, uint32_t dstArrayElement=0u) const</argsstring>
+        <name>getDescriptorWrite</name>
+        <qualifiedname>castor3d::VoxelizerUbo::getDescriptorWrite</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>dstArrayElement</declname>
+          <defval>0u</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="128" column="27" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="128" bodyend="132"/>
+        <references refid="dc/d90/a02854_1ad7dcad7c96a620540d10eb85f3d4586b" compoundref="d5/df1/a00206" startline="107" endline="120">castor3d::UniformBufferOffsetT&lt; DataT &gt;::getDescriptorWrite</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/db8/a06794_1a5a61788976cffeacc0c8b34a79c519f3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dc/d90/a02854" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d7/db8/a06794_1a2657e71a252ebe78bf33bcd4b93a0cb8" kindref="member">Configuration</ref> &gt; const &amp;</type>
+        <definition>UniformBufferOffsetT&lt; Configuration &gt; const  &amp; castor3d::VoxelizerUbo::getUbo</definition>
+        <argsstring>() const</argsstring>
+        <name>getUbo</name>
+        <qualifiedname>castor3d::VoxelizerUbo::getUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="134" column="29" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="134" bodyend="137"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/VoxelizerUbo.hpp" line="99" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="100" bodyend="143"/>
+    <listofallmembers>
+      <member refid="d7/db8/a06794_1a2657e71a252ebe78bf33bcd4b93a0cb8" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>Configuration</name></member>
+      <member refid="d7/db8/a06794_1a7a93780c1cdf101e7d09c57146c09fc9" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>cpuUpdate</name></member>
+      <member refid="d7/db8/a06794_1a691ef728d7970bf24d2efa9f08da1968" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>createPassBinding</name></member>
+      <member refid="d7/db8/a06794_1ac12f32dda8736e904642f50f0d6be562" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>createSizedBinding</name></member>
+      <member refid="d7/db8/a06794_1a7183186f335e2d45d790998b42f8c0fe" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>getDescriptorWrite</name></member>
+      <member refid="d7/db8/a06794_1a5a61788976cffeacc0c8b34a79c519f3" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>getUbo</name></member>
+      <member refid="d7/db8/a06794_1ac585c4e278bd105d6b059cf614b16ff8" prot="private" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>m_device</name></member>
+      <member refid="d7/db8/a06794_1a892a688bb647cd0d6d66509dfa925979" prot="private" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>m_ubo</name></member>
+      <member refid="d7/db8/a06794_1ac1c8c00a1076121b3ffa2fd0df89e21c" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>operator=</name></member>
+      <member refid="d7/db8/a06794_1ad04b04a1d4ffa39089dffc152f072d53" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>operator=</name></member>
+      <member refid="d7/db8/a06794_1a6ebc01a03fb7dd4cc56a93be33caacc4" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>VoxelizerUbo</name></member>
+      <member refid="d7/db8/a06794_1ae862340feca1aabfb754e3143b027b0c" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>VoxelizerUbo</name></member>
+      <member refid="d7/db8/a06794_1a03b2b0962996260a3ad6fe04be326a1e" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>VoxelizerUbo</name></member>
+      <member refid="d7/db8/a06794_1a8e91f7aaccb211766e3d892a410e3ce5" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUbo</scope><name>~VoxelizerUbo</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

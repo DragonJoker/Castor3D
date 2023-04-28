@@ -1,0 +1,5 @@
+<map id="castor3d::TransmissionMapComponent::Plugin::getTextureFlags" name="castor3d::TransmissionMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="292,49,525,89"/>
+<area shape="rect" id="node2" href="$d6/d94/a03894.html#a886e08d85a14ec8fce80de9664f0875a" title="Fills the texture configuration for use with this component." alt="" coords="27,5,222,60"/>
+<area shape="rect" id="node3" href="$d6/d94/a03894.html#a204886c32d68882e134984df86587ee5" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,85,244,125"/>
+</map>

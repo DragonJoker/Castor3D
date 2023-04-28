@@ -1,0 +1,334 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d4/d46/a03277" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ListBoxStyle</compoundname>
+    <basecompoundref refid="dc/df1/a03261" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <includes local="no">StyleListBox.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d4/d46/a03277_1a024d55e9d68f85834960fe823c4b677a" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::ListBoxStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::ListBoxStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725da94248feb04c57dd153dbabddf57edb8b" kindref="member">ControlType::eListBox</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="15" column="30" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="15" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d4/d46/a03277_1a6da7cf2b0d0708db4cbf7e26755e85f2" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref></type>
+        <definition>StaticStyle castor3d::ListBoxStyle::m_itemStyle</definition>
+        <argsstring></argsstring>
+        <name>m_itemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::m_itemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="91" column="13" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d46/a03277_1a1ef9d2a626f0c2636c15a196d61cfc4e" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref></type>
+        <definition>StaticStyle castor3d::ListBoxStyle::m_selectedItemStyle</definition>
+        <argsstring></argsstring>
+        <name>m_selectedItemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::m_selectedItemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="92" column="13" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d46/a03277_1a8bbdeba7445690ce8bb5f7e79a7623cd" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref></type>
+        <definition>StaticStyle castor3d::ListBoxStyle::m_highlightedItemStyle</definition>
+        <argsstring></argsstring>
+        <name>m_highlightedItemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::m_highlightedItemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="93" column="13" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d4/d46/a03277_1aac1a1aea00cf33090f4d5eed6224c617" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ListBoxStyle::ListBoxStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ListBoxStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::ListBoxStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="17" column="1" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="17" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1af1bd2be35c6baf65ca7a2581baa25f90" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ListBoxStyle::ListBoxStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ListBoxStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::ListBoxStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="31" column="1" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="31" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1abb0d0051917ef29236c15f3074778804" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> const &amp;</type>
+        <definition>StaticStyle const  &amp; castor3d::ListBoxStyle::getItemStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getItemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::getItemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="38" column="20" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="38" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1adbf07b1c0b0310635fe3c40f8e704964" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> const &amp;</type>
+        <definition>StaticStyle const  &amp; castor3d::ListBoxStyle::getSelectedItemStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getSelectedItemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::getSelectedItemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="43" column="20" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="43" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1a6e109e3bd2e63650eae9a81ba06823dd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> const &amp;</type>
+        <definition>StaticStyle const  &amp; castor3d::ListBoxStyle::getHighlightedItemStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getHighlightedItemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::getHighlightedItemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="48" column="20" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="48" bodyend="51"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1a23eccd473c6621f3bbc2035eabee6a1d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> &amp;</type>
+        <definition>StaticStyle &amp; castor3d::ListBoxStyle::getItemStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getItemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::getItemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="53" column="14" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="53" bodyend="56"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1a500ef36c44b19d17e3ec46582e1bd6b8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> &amp;</type>
+        <definition>StaticStyle &amp; castor3d::ListBoxStyle::getSelectedItemStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getSelectedItemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::getSelectedItemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="58" column="14" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="58" bodyend="61"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1ad0adc3540f87c0f6dc5f550e6432b2d7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d3/d34/a03305" kindref="compound">StaticStyle</ref> &amp;</type>
+        <definition>StaticStyle &amp; castor3d::ListBoxStyle::getHighlightedItemStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getHighlightedItemStyle</name>
+        <qualifiedname>castor3d::ListBoxStyle::getHighlightedItemStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="63" column="14" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="63" bodyend="66"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d4/d46/a03277_1a94afdce7c6206828c3f7bd2d253431ac" prot="private" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::HdrRgbColour</type>
+        <definition>castor::HdrRgbColour castor3d::ListBoxStyle::doGetHighlightedColour</definition>
+        <argsstring>(castor::HdrRgbColour colour)</argsstring>
+        <name>doGetHighlightedColour</name>
+        <qualifiedname>castor3d::ListBoxStyle::doGetHighlightedColour</qualifiedname>
+        <param>
+          <type>castor::HdrRgbColour</type>
+          <declname>colour</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="69" column="22" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="69" bodyend="75"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1ab5b02196bb65f602b5222cba82a484fd" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ListBoxStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::ListBoxStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="dc/df1/a03261_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="77" column="6" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="77" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="d4/d46/a03277_1a68fa05a0122a60efc8f3b717fd458233" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ListBoxStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::ListBoxStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="dc/df1/a03261_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleListBox.hpp" line="85" column="6" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="85" bodyend="88"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="dc/df1/a03261"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ListBoxStyle</label>
+        <link refid="d4/d46/a03277"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="dc/df1/a03261"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ListBoxStyle</label>
+        <link refid="d4/d46/a03277"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Theme/StyleListBox.hpp" line="11" column="1" bodyfile="Gui/Theme/StyleListBox.hpp" bodystart="13" bodyend="94"/>
+    <listofallmembers>
+      <member refid="dc/df1/a03261_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>ControlStyle</name></member>
+      <member refid="dc/df1/a03261_1aeda2101fba70a69cd4bf8256f22d8c16" prot="protected" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="d4/d46/a03277_1a94afdce7c6206828c3f7bd2d253431ac" prot="private" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>doGetHighlightedColour</name></member>
+      <member refid="d4/d46/a03277_1ab5b02196bb65f602b5222cba82a484fd" prot="private" virt="virtual"><scope>castor3d::ListBoxStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="d4/d46/a03277_1a68fa05a0122a60efc8f3b717fd458233" prot="private" virt="virtual"><scope>castor3d::ListBoxStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="dc/df1/a03261_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="dc/df1/a03261_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getCursor</name></member>
+      <member refid="dc/df1/a03261_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getEngine</name></member>
+      <member refid="dc/df1/a03261_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="d4/d46/a03277_1a6e109e3bd2e63650eae9a81ba06823dd" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getHighlightedItemStyle</name></member>
+      <member refid="d4/d46/a03277_1ad0adc3540f87c0f6dc5f550e6432b2d7" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getHighlightedItemStyle</name></member>
+      <member refid="d4/d46/a03277_1abb0d0051917ef29236c15f3074778804" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getItemStyle</name></member>
+      <member refid="d4/d46/a03277_1a23eccd473c6621f3bbc2035eabee6a1d" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getItemStyle</name></member>
+      <member refid="dc/df1/a03261_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getScene</name></member>
+      <member refid="d4/d46/a03277_1adbf07b1c0b0310635fe3c40f8e704964" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getSelectedItemStyle</name></member>
+      <member refid="d4/d46/a03277_1a500ef36c44b19d17e3ec46582e1bd6b8" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getSelectedItemStyle</name></member>
+      <member refid="dc/df1/a03261_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>getType</name></member>
+      <member refid="dc/df1/a03261_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>hasScene</name></member>
+      <member refid="dc/df1/a03261_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="d4/d46/a03277_1aac1a1aea00cf33090f4d5eed6224c617" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>ListBoxStyle</name></member>
+      <member refid="d4/d46/a03277_1af1bd2be35c6baf65ca7a2581baa25f90" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>ListBoxStyle</name></member>
+      <member refid="d4/d46/a03277_1a8bbdeba7445690ce8bb5f7e79a7623cd" prot="private" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>m_highlightedItemStyle</name></member>
+      <member refid="d4/d46/a03277_1a6da7cf2b0d0708db4cbf7e26755e85f2" prot="private" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>m_itemStyle</name></member>
+      <member refid="d4/d46/a03277_1a1ef9d2a626f0c2636c15a196d61cfc4e" prot="private" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>m_selectedItemStyle</name></member>
+      <member refid="dc/df1/a03261_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="dc/df1/a03261_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>setCursor</name></member>
+      <member refid="dc/df1/a03261_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="dc/df1/a03261_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="d4/d46/a03277_1a024d55e9d68f85834960fe823c4b677a" prot="public" virt="non-virtual"><scope>castor3d::ListBoxStyle</scope><name>Type</name></member>
+      <member refid="dc/df1/a03261_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::ListBoxStyle</scope><name>~ControlStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

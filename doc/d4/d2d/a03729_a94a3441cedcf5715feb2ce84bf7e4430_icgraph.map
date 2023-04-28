@@ -1,0 +1,5 @@
+<map id="castor3d::ClearcoatRoughnessMapComponent::Plugin::getTextureFlags" name="castor3d::ClearcoatRoughnessMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="317,49,576,89"/>
+<area shape="rect" id="node2" href="$d4/d2d/a03729.html#a3386934ccc373a1ea82223226172f76c" title="Fills the texture configuration for use with this component." alt="" coords="27,5,247,60"/>
+<area shape="rect" id="node3" href="$d4/d2d/a03729.html#a19c1ffe50f34cd99390d785a4c66b537" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,85,269,125"/>
+</map>

@@ -1,0 +1,707 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/da4/a03225" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::GuiParserContext</compoundname>
+    <includes local="no">Gui_Parsers.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/da4/a03225_1ae24ab70f10aac08b330edbaf47f4a61e" prot="public" static="no" mutable="no">
+        <type>std::stack&lt; ControlRPtr &gt;</type>
+        <definition>std::stack&lt; ControlRPtr &gt; castor3d::GuiParserContext::parents</definition>
+        <argsstring></argsstring>
+        <name>parents</name>
+        <qualifiedname>castor3d::GuiParserContext::parents</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="19" column="12" bodyfile="Gui/Gui_Parsers.hpp" bodystart="19" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a49860a333922d5cb03502331e757d1d0" prot="public" static="no" mutable="no">
+        <type>std::stack&lt; ControlStyleRPtr &gt;</type>
+        <definition>std::stack&lt; ControlStyleRPtr &gt; castor3d::GuiParserContext::styles</definition>
+        <argsstring></argsstring>
+        <name>styles</name>
+        <qualifiedname>castor3d::GuiParserContext::styles</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="20" column="12" bodyfile="Gui/Gui_Parsers.hpp" bodystart="20" bodyend="-1"/>
+        <referencedby refid="d5/da4/a03225_1a810e8e6b6809f6615a23a2f3227af3c5" compoundref="da/dee/a00383" startline="59" endline="74">pushStyle</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1aa9c80f1c737c5037f8055549e23a8e6c" prot="public" static="no" mutable="no">
+        <type>std::stack&lt; StylesHolderRPtr &gt;</type>
+        <definition>std::stack&lt; StylesHolderRPtr &gt; castor3d::GuiParserContext::stylesHolder</definition>
+        <argsstring></argsstring>
+        <name>stylesHolder</name>
+        <qualifiedname>castor3d::GuiParserContext::stylesHolder</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="21" column="12" bodyfile="Gui/Gui_Parsers.hpp" bodystart="21" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a5a084b093555a5360aa7ff25ce1b915b" prot="public" static="no" mutable="no">
+        <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> *</type>
+        <definition>Engine* castor3d::GuiParserContext::engine</definition>
+        <argsstring></argsstring>
+        <name>engine</name>
+        <qualifiedname>castor3d::GuiParserContext::engine</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="22" column="9" bodyfile="Gui/Gui_Parsers.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a096ac7dd25a420945eacc387a4aa0668" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::GuiParserContext::controlName</definition>
+        <argsstring></argsstring>
+        <name>controlName</name>
+        <qualifiedname>castor3d::GuiParserContext::controlName</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="23" column="16" bodyfile="Gui/Gui_Parsers.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1abb8c0aff11504b17121dc5e61b1c61b9" prot="public" static="no" mutable="no">
+        <type>ButtonCtrlRPtr</type>
+        <definition>ButtonCtrlRPtr castor3d::GuiParserContext::button</definition>
+        <argsstring></argsstring>
+        <name>button</name>
+        <qualifiedname>castor3d::GuiParserContext::button</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="24" column="16" bodyfile="Gui/Gui_Parsers.hpp" bodystart="24" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a4d21fed2d27a31b1c4656f2c11ddf6f7" prot="public" static="no" mutable="no">
+        <type>ComboBoxCtrlRPtr</type>
+        <definition>ComboBoxCtrlRPtr castor3d::GuiParserContext::combo</definition>
+        <argsstring></argsstring>
+        <name>combo</name>
+        <qualifiedname>castor3d::GuiParserContext::combo</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="25" column="18" bodyfile="Gui/Gui_Parsers.hpp" bodystart="25" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a0697fe12a741f158972a7050d2755c9d" prot="public" static="no" mutable="no">
+        <type>EditCtrlRPtr</type>
+        <definition>EditCtrlRPtr castor3d::GuiParserContext::edit</definition>
+        <argsstring></argsstring>
+        <name>edit</name>
+        <qualifiedname>castor3d::GuiParserContext::edit</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="26" column="14" bodyfile="Gui/Gui_Parsers.hpp" bodystart="26" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1ade5c0f794ba950ae80bb71c612519147" prot="public" static="no" mutable="no">
+        <type>ListBoxCtrlRPtr</type>
+        <definition>ListBoxCtrlRPtr castor3d::GuiParserContext::listbox</definition>
+        <argsstring></argsstring>
+        <name>listbox</name>
+        <qualifiedname>castor3d::GuiParserContext::listbox</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="27" column="17" bodyfile="Gui/Gui_Parsers.hpp" bodystart="27" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a9830fb889bc2dd0b2526b49ef9c6bb73" prot="public" static="no" mutable="no">
+        <type>SliderCtrlRPtr</type>
+        <definition>SliderCtrlRPtr castor3d::GuiParserContext::slider</definition>
+        <argsstring></argsstring>
+        <name>slider</name>
+        <qualifiedname>castor3d::GuiParserContext::slider</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="28" column="16" bodyfile="Gui/Gui_Parsers.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1ab51bcde44e39a180e18260eb0a660dd9" prot="public" static="no" mutable="no">
+        <type>StaticCtrlRPtr</type>
+        <definition>StaticCtrlRPtr castor3d::GuiParserContext::staticTxt</definition>
+        <argsstring></argsstring>
+        <name>staticTxt</name>
+        <qualifiedname>castor3d::GuiParserContext::staticTxt</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="29" column="16" bodyfile="Gui/Gui_Parsers.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1aa32d3e5d6f8d265813c78ed2afa98ddc" prot="public" static="no" mutable="no">
+        <type>PanelCtrlRPtr</type>
+        <definition>PanelCtrlRPtr castor3d::GuiParserContext::panel</definition>
+        <argsstring></argsstring>
+        <name>panel</name>
+        <qualifiedname>castor3d::GuiParserContext::panel</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="30" column="15" bodyfile="Gui/Gui_Parsers.hpp" bodystart="30" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a4c8cc830bd48ab19ec0e4b9357755d1c" prot="public" static="no" mutable="no">
+        <type>ProgressCtrlRPtr</type>
+        <definition>ProgressCtrlRPtr castor3d::GuiParserContext::progress</definition>
+        <argsstring></argsstring>
+        <name>progress</name>
+        <qualifiedname>castor3d::GuiParserContext::progress</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="31" column="18" bodyfile="Gui/Gui_Parsers.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a8fef25033a9cf71d56e6a839a6478e91" prot="public" static="no" mutable="no">
+        <type>ExpandablePanelCtrlRPtr</type>
+        <definition>ExpandablePanelCtrlRPtr castor3d::GuiParserContext::expandablePanel</definition>
+        <argsstring></argsstring>
+        <name>expandablePanel</name>
+        <qualifiedname>castor3d::GuiParserContext::expandablePanel</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="32" column="25" bodyfile="Gui/Gui_Parsers.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a009a4333d629bed6bbdfa5a93027fb15" prot="public" static="no" mutable="no">
+        <type>FrameCtrlRPtr</type>
+        <definition>FrameCtrlRPtr castor3d::GuiParserContext::frame</definition>
+        <argsstring></argsstring>
+        <name>frame</name>
+        <qualifiedname>castor3d::GuiParserContext::frame</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="33" column="15" bodyfile="Gui/Gui_Parsers.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a16e874b8623dc254498cb6abe354ee9d" prot="public" static="no" mutable="no">
+        <type>ScrollableCtrlRPtr</type>
+        <definition>ScrollableCtrlRPtr castor3d::GuiParserContext::scrollable</definition>
+        <argsstring></argsstring>
+        <name>scrollable</name>
+        <qualifiedname>castor3d::GuiParserContext::scrollable</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="34" column="20" bodyfile="Gui/Gui_Parsers.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a66dc9b4c3f975af0ff118996240d5b5f" prot="public" static="no" mutable="no">
+        <type>ThemeRPtr</type>
+        <definition>ThemeRPtr castor3d::GuiParserContext::theme</definition>
+        <argsstring></argsstring>
+        <name>theme</name>
+        <qualifiedname>castor3d::GuiParserContext::theme</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="35" column="11" bodyfile="Gui/Gui_Parsers.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a1a33e97195ed111be142b4842a93caa8" prot="public" static="no" mutable="no">
+        <type>ButtonStyleRPtr</type>
+        <definition>ButtonStyleRPtr castor3d::GuiParserContext::buttonStyle</definition>
+        <argsstring></argsstring>
+        <name>buttonStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::buttonStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="36" column="17" bodyfile="Gui/Gui_Parsers.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a966e4fcc973ae84a1f95795bf2a80ef8" prot="public" static="no" mutable="no">
+        <type>ComboBoxStyleRPtr</type>
+        <definition>ComboBoxStyleRPtr castor3d::GuiParserContext::comboStyle</definition>
+        <argsstring></argsstring>
+        <name>comboStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::comboStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="37" column="19" bodyfile="Gui/Gui_Parsers.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a2d5edadb6d2260460de4592ee3478ba2" prot="public" static="no" mutable="no">
+        <type>EditStyleRPtr</type>
+        <definition>EditStyleRPtr castor3d::GuiParserContext::editStyle</definition>
+        <argsstring></argsstring>
+        <name>editStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::editStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="38" column="15" bodyfile="Gui/Gui_Parsers.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a314effc07662b9ebc46d00753c34c935" prot="public" static="no" mutable="no">
+        <type>ListBoxStyleRPtr</type>
+        <definition>ListBoxStyleRPtr castor3d::GuiParserContext::listboxStyle</definition>
+        <argsstring></argsstring>
+        <name>listboxStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::listboxStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="39" column="18" bodyfile="Gui/Gui_Parsers.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a49e8ebb9b553af4ba35848909a99814b" prot="public" static="no" mutable="no">
+        <type>SliderStyleRPtr</type>
+        <definition>SliderStyleRPtr castor3d::GuiParserContext::sliderStyle</definition>
+        <argsstring></argsstring>
+        <name>sliderStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::sliderStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="40" column="17" bodyfile="Gui/Gui_Parsers.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1aa1e5dec347ac76a3d226f468bcc19287" prot="public" static="no" mutable="no">
+        <type>StaticStyleRPtr</type>
+        <definition>StaticStyleRPtr castor3d::GuiParserContext::staticStyle</definition>
+        <argsstring></argsstring>
+        <name>staticStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::staticStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="41" column="17" bodyfile="Gui/Gui_Parsers.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a34dc7c95fed524510f6d229d8bc25eb9" prot="public" static="no" mutable="no">
+        <type>PanelStyleRPtr</type>
+        <definition>PanelStyleRPtr castor3d::GuiParserContext::panelStyle</definition>
+        <argsstring></argsstring>
+        <name>panelStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::panelStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="42" column="16" bodyfile="Gui/Gui_Parsers.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1ac719d2e769e55ed83659c95eca0e24f0" prot="public" static="no" mutable="no">
+        <type>ProgressStyleRPtr</type>
+        <definition>ProgressStyleRPtr castor3d::GuiParserContext::progressStyle</definition>
+        <argsstring></argsstring>
+        <name>progressStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::progressStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="43" column="19" bodyfile="Gui/Gui_Parsers.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a55eb000686c5743036f360cd914c7272" prot="public" static="no" mutable="no">
+        <type>ExpandablePanelStyleRPtr</type>
+        <definition>ExpandablePanelStyleRPtr castor3d::GuiParserContext::expandablePanelStyle</definition>
+        <argsstring></argsstring>
+        <name>expandablePanelStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::expandablePanelStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="44" column="26" bodyfile="Gui/Gui_Parsers.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a6be4cbd26e9a7404c04a6ea99181dbcc" prot="public" static="no" mutable="no">
+        <type>FrameStyleRPtr</type>
+        <definition>FrameStyleRPtr castor3d::GuiParserContext::frameStyle</definition>
+        <argsstring></argsstring>
+        <name>frameStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::frameStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="45" column="16" bodyfile="Gui/Gui_Parsers.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a711149531dc307b9681f89940c06a98f" prot="public" static="no" mutable="no">
+        <type>ScrollBarStyleRPtr</type>
+        <definition>ScrollBarStyleRPtr castor3d::GuiParserContext::scrollBarStyle</definition>
+        <argsstring></argsstring>
+        <name>scrollBarStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::scrollBarStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="46" column="20" bodyfile="Gui/Gui_Parsers.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a26f6eb1a86ee175dfc9e63ffd974b440" prot="public" static="no" mutable="no">
+        <type>ScrollableStyleRPtr</type>
+        <definition>ScrollableStyleRPtr castor3d::GuiParserContext::scrollableStyle</definition>
+        <argsstring></argsstring>
+        <name>scrollableStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::scrollableStyle</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="47" column="21" bodyfile="Gui/Gui_Parsers.hpp" bodystart="47" bodyend="-1"/>
+        <referencedby refid="d5/da4/a03225_1a810e8e6b6809f6615a23a2f3227af3c5" compoundref="da/dee/a00383" startline="59" endline="74">pushStyle</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1a15586e754949f0985fed5b6f2f3006a0" prot="public" static="no" mutable="no">
+        <type>LayoutUPtr</type>
+        <definition>LayoutUPtr castor3d::GuiParserContext::layout</definition>
+        <argsstring></argsstring>
+        <name>layout</name>
+        <qualifiedname>castor3d::GuiParserContext::layout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="48" column="12" bodyfile="Gui/Gui_Parsers.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/da4/a03225_1aaf8afa7a2803e551f10fbec30dc8ad87" prot="public" static="no" mutable="no">
+        <type><ref refid="d6/d24/a03249" kindref="compound">LayoutItemFlags</ref></type>
+        <definition>LayoutItemFlags castor3d::GuiParserContext::layoutCtrlFlags</definition>
+        <argsstring></argsstring>
+        <name>layoutCtrlFlags</name>
+        <qualifiedname>castor3d::GuiParserContext::layoutCtrlFlags</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="49" column="17" bodyfile="Gui/Gui_Parsers.hpp" bodystart="49" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/da4/a03225_1ae97b26250bced60479d8a5afdc4ece92" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ControlRPtr</type>
+        <definition>C3D_API ControlRPtr castor3d::GuiParserContext::getTopControl</definition>
+        <argsstring>() const</argsstring>
+        <name>getTopControl</name>
+        <qualifiedname>castor3d::GuiParserContext::getTopControl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="51" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/da4/a03225_1ab92e28d3d2d976d99517ed23af7920bd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GuiParserContext::popControl</definition>
+        <argsstring>()</argsstring>
+        <name>popControl</name>
+        <qualifiedname>castor3d::GuiParserContext::popControl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="52" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/da4/a03225_1a061ac6a63e86e201cd6ab70c265fae43" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GuiParserContext::pushStylesHolder</definition>
+        <argsstring>(StylesHolder *style)</argsstring>
+        <name>pushStylesHolder</name>
+        <qualifiedname>castor3d::GuiParserContext::pushStylesHolder</qualifiedname>
+        <param>
+          <type><ref refid="da/d0a/a03297" kindref="compound">StylesHolder</ref> *</type>
+          <declname>style</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="53" column="14"/>
+        <referencedby refid="d5/da4/a03225_1a810e8e6b6809f6615a23a2f3227af3c5" compoundref="da/dee/a00383" startline="59" endline="74">pushStyle</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/da4/a03225_1a2bd89002f2ce0cb2a3e8d4744fc603b3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GuiParserContext::popStylesHolder</definition>
+        <argsstring>(StylesHolder const *style)</argsstring>
+        <name>popStylesHolder</name>
+        <qualifiedname>castor3d::GuiParserContext::popStylesHolder</qualifiedname>
+        <param>
+          <type><ref refid="da/d0a/a03297" kindref="compound">StylesHolder</ref> const *</type>
+          <declname>style</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="54" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/da4/a03225_1a47f4776bfb00d5c24e50d29fddb5f43d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ControlStyleRPtr</type>
+        <definition>C3D_API ControlStyleRPtr castor3d::GuiParserContext::getTopStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getTopStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::getTopStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="55" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/da4/a03225_1a5a3ebcd5b7143c1f25ea7aa9f740eaff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::GuiParserContext::popStyle</definition>
+        <argsstring>()</argsstring>
+        <name>popStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::popStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="56" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/da4/a03225_1a810e8e6b6809f6615a23a2f3227af3c5" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename StyleT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::GuiParserContext::pushStyle</definition>
+        <argsstring>(StyleT *style, StyleT *&amp;result)</argsstring>
+        <name>pushStyle</name>
+        <qualifiedname>castor3d::GuiParserContext::pushStyle</qualifiedname>
+        <param>
+          <type>StyleT *</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>StyleT *&amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Gui_Parsers.hpp" line="59" column="6" bodyfile="Gui/Gui_Parsers.hpp" bodystart="59" bodyend="74"/>
+        <references refid="d5/da4/a03225_1a061ac6a63e86e201cd6ab70c265fae43">pushStylesHolder</references>
+        <references refid="d5/da4/a03225_1a26f6eb1a86ee175dfc9e63ffd974b440" compoundref="da/dee/a00383" startline="47">scrollableStyle</references>
+        <references refid="d5/da4/a03225_1a49860a333922d5cb03502331e757d1d0" compoundref="da/dee/a00383" startline="20">styles</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="7">
+        <label>castor3d::Engine</label>
+        <link refid="d4/d44/a03065"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::GuiParserContext</label>
+        <link refid="d5/da4/a03225"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>parents</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>styles</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>stylesHolder</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>engine</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>layoutCtrlFlags</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::LayoutItemFlags</label>
+        <link refid="d6/d24/a03249"/>
+      </node>
+      <node id="8">
+        <label>castor::Unique&lt; Engine &gt;</label>
+      </node>
+      <node id="2">
+        <label>std::stack&lt; ControlRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; ControlRPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::stack&lt; ControlStyleRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; ControlStyleRPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::stack&lt; StylesHolderRPtr &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; StylesHolderRPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::stack&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Gui_Parsers.hpp" line="17" column="1" bodyfile="Gui/Gui_Parsers.hpp" bodystart="18" bodyend="75"/>
+    <listofallmembers>
+      <member refid="d5/da4/a03225_1abb8c0aff11504b17121dc5e61b1c61b9" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>button</name></member>
+      <member refid="d5/da4/a03225_1a1a33e97195ed111be142b4842a93caa8" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>buttonStyle</name></member>
+      <member refid="d5/da4/a03225_1a4d21fed2d27a31b1c4656f2c11ddf6f7" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>combo</name></member>
+      <member refid="d5/da4/a03225_1a966e4fcc973ae84a1f95795bf2a80ef8" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>comboStyle</name></member>
+      <member refid="d5/da4/a03225_1a096ac7dd25a420945eacc387a4aa0668" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>controlName</name></member>
+      <member refid="d5/da4/a03225_1a0697fe12a741f158972a7050d2755c9d" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>edit</name></member>
+      <member refid="d5/da4/a03225_1a2d5edadb6d2260460de4592ee3478ba2" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>editStyle</name></member>
+      <member refid="d5/da4/a03225_1a5a084b093555a5360aa7ff25ce1b915b" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>engine</name></member>
+      <member refid="d5/da4/a03225_1a8fef25033a9cf71d56e6a839a6478e91" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>expandablePanel</name></member>
+      <member refid="d5/da4/a03225_1a55eb000686c5743036f360cd914c7272" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>expandablePanelStyle</name></member>
+      <member refid="d5/da4/a03225_1a009a4333d629bed6bbdfa5a93027fb15" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>frame</name></member>
+      <member refid="d5/da4/a03225_1a6be4cbd26e9a7404c04a6ea99181dbcc" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>frameStyle</name></member>
+      <member refid="d5/da4/a03225_1ae97b26250bced60479d8a5afdc4ece92" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>getTopControl</name></member>
+      <member refid="d5/da4/a03225_1a47f4776bfb00d5c24e50d29fddb5f43d" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>getTopStyle</name></member>
+      <member refid="d5/da4/a03225_1a15586e754949f0985fed5b6f2f3006a0" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>layout</name></member>
+      <member refid="d5/da4/a03225_1aaf8afa7a2803e551f10fbec30dc8ad87" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>layoutCtrlFlags</name></member>
+      <member refid="d5/da4/a03225_1ade5c0f794ba950ae80bb71c612519147" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>listbox</name></member>
+      <member refid="d5/da4/a03225_1a314effc07662b9ebc46d00753c34c935" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>listboxStyle</name></member>
+      <member refid="d5/da4/a03225_1aa32d3e5d6f8d265813c78ed2afa98ddc" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>panel</name></member>
+      <member refid="d5/da4/a03225_1a34dc7c95fed524510f6d229d8bc25eb9" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>panelStyle</name></member>
+      <member refid="d5/da4/a03225_1ae24ab70f10aac08b330edbaf47f4a61e" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>parents</name></member>
+      <member refid="d5/da4/a03225_1ab92e28d3d2d976d99517ed23af7920bd" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>popControl</name></member>
+      <member refid="d5/da4/a03225_1a5a3ebcd5b7143c1f25ea7aa9f740eaff" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>popStyle</name></member>
+      <member refid="d5/da4/a03225_1a2bd89002f2ce0cb2a3e8d4744fc603b3" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>popStylesHolder</name></member>
+      <member refid="d5/da4/a03225_1a4c8cc830bd48ab19ec0e4b9357755d1c" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>progress</name></member>
+      <member refid="d5/da4/a03225_1ac719d2e769e55ed83659c95eca0e24f0" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>progressStyle</name></member>
+      <member refid="d5/da4/a03225_1a810e8e6b6809f6615a23a2f3227af3c5" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>pushStyle</name></member>
+      <member refid="d5/da4/a03225_1a061ac6a63e86e201cd6ab70c265fae43" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>pushStylesHolder</name></member>
+      <member refid="d5/da4/a03225_1a16e874b8623dc254498cb6abe354ee9d" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>scrollable</name></member>
+      <member refid="d5/da4/a03225_1a26f6eb1a86ee175dfc9e63ffd974b440" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>scrollableStyle</name></member>
+      <member refid="d5/da4/a03225_1a711149531dc307b9681f89940c06a98f" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>scrollBarStyle</name></member>
+      <member refid="d5/da4/a03225_1a9830fb889bc2dd0b2526b49ef9c6bb73" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>slider</name></member>
+      <member refid="d5/da4/a03225_1a49e8ebb9b553af4ba35848909a99814b" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>sliderStyle</name></member>
+      <member refid="d5/da4/a03225_1aa1e5dec347ac76a3d226f468bcc19287" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>staticStyle</name></member>
+      <member refid="d5/da4/a03225_1ab51bcde44e39a180e18260eb0a660dd9" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>staticTxt</name></member>
+      <member refid="d5/da4/a03225_1a49860a333922d5cb03502331e757d1d0" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>styles</name></member>
+      <member refid="d5/da4/a03225_1aa9c80f1c737c5037f8055549e23a8e6c" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>stylesHolder</name></member>
+      <member refid="d5/da4/a03225_1a66dc9b4c3f975af0ff118996240d5b5f" prot="public" virt="non-virtual"><scope>castor3d::GuiParserContext</scope><name>theme</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/d2e/a03294" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ImporterFileFactory</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Factory&lt; ImporterFile, castor::String, ImporterFileUPtr, std::function&lt; ImporterFileUPtr(Engine &amp;, Scene *, castor::Path const &amp;, Parameters const &amp;) &gt; &gt;</basecompoundref>
+    <includes local="no">ImporterFile.hpp</includes>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="df/d2e/a03294_1a945f47c44b6617203c69d52fe84c7685" prot="private" static="no">
+        <type>castor::Factory&lt; <ref refid="da/d1b/a03286" kindref="compound">ImporterFile</ref>, castor::String, ImporterFileUPtr, std::function&lt; ImporterFileUPtr(<ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;, <ref refid="db/dd3/a06070" kindref="compound">Scene</ref> *, castor::Path const &amp;, <ref refid="d5/da6/a01698_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;) &gt; &gt;</type>
+        <definition>using castor3d::ImporterFileFactory::MyFactory =  castor::Factory&lt; ImporterFile , castor::String , ImporterFileUPtr , std::function&lt; ImporterFileUPtr( Engine &amp;, Scene *, castor::Path const &amp;, Parameters const &amp; ) &gt; &gt;</definition>
+        <argsstring></argsstring>
+        <name>MyFactory</name>
+        <qualifiedname>castor3d::ImporterFileFactory::MyFactory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="ImporterFile.hpp" line="133" column="1" bodyfile="ImporterFile.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d2e/a03294_1acc0d8896bf810793e7e18eb5953bc1fe" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ImporterFileFactory::ImporterFileFactory</definition>
+        <argsstring>()</argsstring>
+        <name>ImporterFileFactory</name>
+        <qualifiedname>castor3d::ImporterFileFactory::ImporterFileFactory</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="ImporterFile.hpp" line="139" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03294_1ad4ab0a9ec74a861abb398de4a81f71c8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ImporterFileUPtr</type>
+        <definition>C3D_API ImporterFileUPtr castor3d::ImporterFileFactory::create</definition>
+        <argsstring>(castor::String const &amp;key, Engine &amp;engine, castor::Path const &amp;file, Parameters const &amp;parameters)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::ImporterFileFactory::create</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="ImporterFile.hpp" line="141" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="df/d2e/a03294_1ac13e6e079816d8f1f2957c3f741d802f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ImporterFileUPtr</type>
+        <definition>C3D_API ImporterFileUPtr castor3d::ImporterFileFactory::create</definition>
+        <argsstring>(castor::String const &amp;key, Scene &amp;scene, castor::Path const &amp;file, Parameters const &amp;parameters)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::ImporterFileFactory::create</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>key</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>file</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="ImporterFile.hpp" line="145" column="26"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ImporterFileFactory</label>
+        <link refid="df/d2e/a03294"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; ImporterFile, castor::String, ImporterFileUPtr, std::function&lt; ImporterFileUPtr(Engine &amp;, Scene *, castor::Path const &amp;, Parameters const &amp;) &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::ImporterFileFactory</label>
+        <link refid="df/d2e/a03294"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Factory&lt; ImporterFile, castor::String, ImporterFileUPtr, std::function&lt; ImporterFileUPtr(Engine &amp;, Scene *, castor::Path const &amp;, Parameters const &amp;) &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="ImporterFile.hpp" line="127" column="1" bodyfile="ImporterFile.hpp" bodystart="132" bodyend="149"/>
+    <listofallmembers>
+      <member refid="df/d2e/a03294_1ad4ab0a9ec74a861abb398de4a81f71c8" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>create</name></member>
+      <member refid="df/d2e/a03294_1ac13e6e079816d8f1f2957c3f741d802f" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>create</name></member>
+      <member refid="df/d2e/a03294_1acc0d8896bf810793e7e18eb5953bc1fe" prot="public" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>ImporterFileFactory</name></member>
+      <member refid="df/d2e/a03294_1a945f47c44b6617203c69d52fe84c7685" prot="private" virt="non-virtual"><scope>castor3d::ImporterFileFactory</scope><name>MyFactory</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/d45/a04693" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassMasks</compoundname>
+    <includes local="no">SubmeshModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d45/a04693_1a70d35c5f38e39084fe474da9177f7f07" prot="public" static="no" mutable="no">
+        <type>std::array&lt; uint8_t, <ref refid="d3/d5e/a01725_1a3cfbf16033082e4a90d13af2f909d575" kindref="member">MaxPassLayers</ref> &gt;</type>
+        <definition>std::array&lt; uint8_t, MaxPassLayers &gt; castor3d::PassMasks::data</definition>
+        <argsstring></argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::PassMasks::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/SubmeshModule.hpp" line="29" column="12" bodyfile="Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; uint8_t, MaxPassLayers &gt;</label>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; uint8_t, MaxPassLayers &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PassMasks</label>
+        <link refid="d9/d45/a04693"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>data</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Model/Mesh/Submesh/SubmeshModule.hpp" line="27" column="1" bodyfile="Model/Mesh/Submesh/SubmeshModule.hpp" bodystart="28" bodyend="30"/>
+    <listofallmembers>
+      <member refid="d9/d45/a04693_1a70d35c5f38e39084fe474da9177f7f07" prot="public" virt="non-virtual"><scope>castor3d::PassMasks</scope><name>data</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

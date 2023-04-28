@@ -1,5 +1,6 @@
-<map id="castor3d::UntileMappingComponent::ComponentsShader" name="castor3d::UntileMappingComponent::ComponentsShader">
-<area shape="rect" id="node1" title=" " alt="" coords="7,169,235,211"/>
-<area shape="rect" id="node2" href="$d4/d43/a03700.html" title=" " alt="" coords="5,80,236,121"/>
-<area shape="rect" id="node3" href="$df/d9f/a03696.html" title=" " alt="" coords="21,5,220,32"/>
+<map id="castor3d::MouseState" name="castor3d::MouseState">
+<area shape="rect" id="node1" title="Mouse state." alt="" coords="19,299,170,324"/>
+<area shape="rect" id="node2" title=" " alt="" coords="5,196,184,236"/>
+<area shape="rect" id="node3" title=" " alt="" coords="41,93,149,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="75,5,114,31"/>
 </map>

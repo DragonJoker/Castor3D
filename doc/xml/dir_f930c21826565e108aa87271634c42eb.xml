@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_f930c21826565e108aa87271634c42eb" kind="dir">
     <compoundname>Render/Prepass</compoundname>
-    <innerfile refid="db/d14/a01040">DepthPass.hpp</innerfile>
-    <innerfile refid="d8/d27/a01043">PrepassModule.hpp</innerfile>
-    <innerfile refid="da/d17/a01046">PrepassRendering.hpp</innerfile>
-    <innerfile refid="d0/d22/a01049">PrepassResult.hpp</innerfile>
-    <innerfile refid="d9/dce/a01052">VisibilityPass.hpp</innerfile>
+    <innerfile refid="de/db5/a01181">DepthPass.hpp</innerfile>
+    <innerfile refid="d1/d35/a01184">PrepassModule.hpp</innerfile>
+    <innerfile refid="dc/d70/a01187">PrepassRendering.hpp</innerfile>
+    <innerfile refid="dc/d19/a01190">PrepassResult.hpp</innerfile>
+    <innerfile refid="dd/d43/a01193">VisibilityPass.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

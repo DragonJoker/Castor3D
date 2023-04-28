@@ -1,0 +1,694 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/d19/a03166" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PanelCtrl</compoundname>
+    <basecompoundref refid="da/d8d/a03158" prot="public" virt="non-virtual">castor3d::LayoutControl</basecompoundref>
+    <includes local="no">CtrlPanel.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d7/d19/a03166_1a7d606511e93a79151575b3707b363341" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>C3D_API ControlType constexpr castor3d::PanelCtrl::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::PanelCtrl::Type</qualifiedname>
+        <initializer>{ <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725da82eeda867c147d65f843c022b81b76fb" kindref="member">ControlType::ePanel</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlPanel.hpp" line="55" column="38" bodyfile="Gui/Controls/CtrlPanel.hpp" bodystart="55" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d19/a03166_1a74a6b7d5d0758bd22242c28beac6b380" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PanelCtrl::PanelCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, PanelStyle *style, ControlRPtr parent)</argsstring>
+        <name>PanelCtrl</name>
+        <qualifiedname>castor3d::PanelCtrl::PanelCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> *</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlPanel.hpp" line="23" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d19/a03166_1ad2f548ecc0fcc1ea77ced786cc76539b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PanelCtrl::PanelCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, PanelStyle *style, ControlRPtr parent, castor::Position const &amp;position, castor::Size const &amp;size, ControlFlagType flags=0, bool visible=true)</argsstring>
+        <name>PanelCtrl</name>
+        <qualifiedname>castor3d::PanelCtrl::PanelCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> *</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a1b0644d82256ab79bf71eb959d8f7106" kindref="member">ControlFlagType</ref></type>
+          <declname>flags</declname>
+          <defval>0</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">position</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control position </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control size </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">flags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration flags </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Initial visibility status </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlPanel.hpp" line="38" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d19/a03166_1a69c0108c43db2d238cf86a3fc05e27b1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> const &amp;</type>
+        <definition>PanelStyle const  &amp; castor3d::PanelCtrl::getStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::PanelCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The panel style. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlPanel.hpp" line="50" column="19" bodyfile="Gui/Controls/CtrlPanel.hpp" bodystart="50" bodyend="53"/>
+        <references refid="d5/dbf/a03130_1a3b327c65b7d0202012a7de4ac95ff6a0" compoundref="d0/d39/a00314" startline="219" endline="222">castor3d::Control::getBaseStyle</references>
+      </memberdef>
+      <memberdef kind="function" id="d7/d19/a03166_1a3ef73b866029d9295f7dadc902d65099" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> &amp;</type>
+        <definition>PanelStyle &amp; castor3d::PanelCtrl::getStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::PanelCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlPanel.hpp" line="57" column="13" bodyfile="Gui/Controls/CtrlPanel.hpp" bodystart="57" bodyend="60"/>
+        <references refid="d5/dbf/a03130_1a3b327c65b7d0202012a7de4ac95ff6a0" compoundref="d0/d39/a00314" startline="219" endline="222">castor3d::Control::getBaseStyle</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Control</label>
+        <link refid="d5/dbf/a03130"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d74/a03082"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LayoutControl</label>
+        <link refid="da/d8d/a03158"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PanelCtrl</label>
+        <link refid="d7/d19/a03166"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d1/db4/a03174"/>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>T</label>
+      </node>
+      <node id="16">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::array&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::array&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::array&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="18" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="15" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="27" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="24" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="21" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Control</label>
+        <link refid="d5/dbf/a03130"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d74/a03082"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LayoutControl</label>
+        <link refid="da/d8d/a03158"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="29" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d9/d5e/a03086"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PanelCtrl</label>
+        <link refid="d7/d19/a03166"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d1/db4/a03174"/>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+      </node>
+      <node id="8">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>std::vector&lt; OnNonClientHandlerEventConnection &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::vector&lt; OnNonClientKeyboardEventConnection &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::vector&lt; OnNonClientMouseEventConnection &gt;</label>
+        <childnode refid="12" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Controls/CtrlPanel.hpp" line="13" column="1" bodyfile="Gui/Controls/CtrlPanel.hpp" bodystart="15" bodyend="61"/>
+    <listofallmembers>
+      <member refid="d5/dbf/a03130_1ad1bc14696782df53753d9d200bc69c90" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>addChild</name></member>
+      <member refid="d5/dbf/a03130_1a7dcec2e27704a6c45db11b132acb03a9" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>addFlag</name></member>
+      <member refid="d5/dbf/a03130_1a1f0fe6f9de5888c7d53281ddf779fe65" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>addFlag</name></member>
+      <member refid="d1/db4/a03174_1ab329229a538e3f9286b051be73b29ba4" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>adjustScrollZIndex</name></member>
+      <member refid="d9/d74/a03082_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>catchesMouseEvents</name></member>
+      <member refid="d9/d74/a03082_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>catchesReturnKey</name></member>
+      <member refid="d9/d74/a03082_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>catchesTabKey</name></member>
+      <member refid="d1/db4/a03174_1a21b246acaf9295c15cdf17d92acbc01f" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>checkScrollBarFlags</name></member>
+      <member refid="d9/d5e/a03086_1a703c7cbc98f4fbc25ac04600257c7c0c" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>ClientHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1a45ffbf50f17a665404170fd665624011" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>ClientKeyboardFunction</name></member>
+      <member refid="d9/d5e/a03086_1aea92aaf9b48684355876a7c81409ccf3" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>ClientMouseFunction</name></member>
+      <member refid="d9/d74/a03082_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>connect</name></member>
+      <member refid="d9/d74/a03082_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>connect</name></member>
+      <member refid="d9/d74/a03082_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>connect</name></member>
+      <member refid="d9/d5e/a03086_1a7c772af5b472ac82d7a40ebe4968cfb2" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>connectNC</name></member>
+      <member refid="d9/d5e/a03086_1ab5d52b4021d688cc40caeb9fadba5458" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>connectNC</name></member>
+      <member refid="d9/d5e/a03086_1a766759743a229af558fbe4053692bade" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>connectNC</name></member>
+      <member refid="d5/dbf/a03130_1a756d46496c99d0f06558b867bee36242" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>Control</name></member>
+      <member refid="d5/dbf/a03130_1a1e213aa081ac7fc92ab88e3baa8c98cd" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>create</name></member>
+      <member refid="d1/db4/a03174_1a3b1291cf4701121926054695a1f3f3c6" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>createScrollBars</name></member>
+      <member refid="d9/d5e/a03086_1afb310fd4d1af5c2332bc8496354569c9" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>DerivedPtr</name></member>
+      <member refid="d5/dbf/a03130_1a3c72583b9aa9508f5d195296de491224" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>destroy</name></member>
+      <member refid="d1/db4/a03174_1a6bc2f9dcb648cca21b67d5408702b455" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>destroyScrollBars</name></member>
+      <member refid="d9/d74/a03082_1ad6eda21ee30aa7316eb1b6796d3f0cb9" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>disable</name></member>
+      <member refid="d9/d74/a03082_1a261497f31a8ad918a2315af0efae6e6d" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>enable</name></member>
+      <member refid="d9/d74/a03082_1a916afcd686fc5022c05d6ff2bf18900a" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>EnableFunction</name></member>
+      <member refid="d9/d74/a03082_1ac52718713f27db870abc7268142083e1" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>EventHandler</name></member>
+      <member refid="d9/d5e/a03086_1a88c786851d42d7d9c5b4c4bb6fbd205d" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>EventHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1ad8d1623d5da2a584967c734fba483d8a" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>EventQueue</name></member>
+      <member refid="d5/dbf/a03130_1a6aab144ea536fa1981744dd0350bd9f1" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getAbsolutePosition</name></member>
+      <member refid="d5/dbf/a03130_1ac4f784eaa1bba6d3b023124dd17bcacd" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getBackgroundOverlay</name></member>
+      <member refid="d5/dbf/a03130_1a3b327c65b7d0202012a7de4ac95ff6a0" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/dbf/a03130_1acf1524781666decd143c429cf3512fe5" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/dbf/a03130_1a07e5a74ea2c29504263372e346277c7d" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getBorderInnerUV</name></member>
+      <member refid="d5/dbf/a03130_1a2970c7c7a19b28d48701987bf6b61a53" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getBorderOuterUV</name></member>
+      <member refid="d5/dbf/a03130_1aec3c1f61d93c71cb921f9e98faf49a37" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getBorderPosition</name></member>
+      <member refid="d5/dbf/a03130_1a19e84cfd0b59e70df316f6d63648041d" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1a23f6c6e05acec8910f2f653f6ff2e1ae" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getChildControl</name></member>
+      <member refid="d5/dbf/a03130_1a551248e4f8c5fe6f7b0718317469659c" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getChildren</name></member>
+      <member refid="d5/dbf/a03130_1afa9a04c734235389699a47e958050f97" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getClientOffset</name></member>
+      <member refid="d5/dbf/a03130_1a8546428f36529b0cad2d1f065af62060" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getClientRect</name></member>
+      <member refid="d5/dbf/a03130_1a8321754767d403f6fce37f126f9cbd43" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getClientSize</name></member>
+      <member refid="d5/dbf/a03130_1ac784a51c464ddec5e4d8b5a03c386c2e" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getControlsManager</name></member>
+      <member refid="d5/dbf/a03130_1a040bb1287bb106d3aa5fe0d23b04ffd7" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getCursor</name></member>
+      <member refid="d5/dbf/a03130_1ad56a9032db1992e267092b4a31ad326b" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getEngine</name></member>
+      <member refid="d5/dbf/a03130_1afb284673f9161e073a83e1ccaddb658e" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getFlags</name></member>
+      <member refid="d5/dbf/a03130_1add233ebce85fe354e398d75a1cf5d1a5" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getId</name></member>
+      <member refid="da/d8d/a03158_1a51059737ed7071c07458c2f0d9ff0d7e" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getLayout</name></member>
+      <member refid="d5/dbf/a03130_1a615d30ab6530d5a64bd2b505d106a252" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getParent</name></member>
+      <member refid="d5/dbf/a03130_1a66b03f48bede297f991a87089f50b89e" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getPosition</name></member>
+      <member refid="d5/dbf/a03130_1adaa29a9485c7893a860b842917960915" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getResizeBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1ab44b4219c4bee06aa148aa8bc35cb87c" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getScene</name></member>
+      <member refid="d1/db4/a03174_1a772267b983302f045bdd634a402a1396" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getScrollPosition</name></member>
+      <member refid="d5/dbf/a03130_1ae5a5697aa0ee7d76d2d6fd31ab39900c" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getSize</name></member>
+      <member refid="d7/d19/a03166_1a69c0108c43db2d238cf86a3fc05e27b1" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getStyle</name></member>
+      <member refid="d7/d19/a03166_1a3ef73b866029d9295f7dadc902d65099" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getStyle</name></member>
+      <member refid="d5/dbf/a03130_1a072e172e9fa3cf408536b15fb6b9a367" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getType</name></member>
+      <member refid="d5/dbf/a03130_1a1eda8f0ad717bbe69ad42aeb5f6128c6" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>getUV</name></member>
+      <member refid="d1/db4/a03174_1af885061793d951a3694562d68510bea6" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>hasHorizontalScrollBar</name></member>
+      <member refid="d5/dbf/a03130_1aed68cb86a172a24cffd3bbe950134b3c" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>hasScene</name></member>
+      <member refid="d1/db4/a03174_1a84bb253e368bb590f1b3dcfdfaaf54f6" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>hasVerticalScrollBar</name></member>
+      <member refid="d5/dbf/a03130_1ae14dacb5781b0576a20f21d8dfc1d663" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>hide</name></member>
+      <member refid="d5/dbf/a03130_1ae6d193e17e11347c6cf378f6f19d5ed7" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>isAlwaysOnTop</name></member>
+      <member refid="d5/dbf/a03130_1a6c53467fb1c4b3e85445f0c49cf4e1c7" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/dbf/a03130_1aa57ae69b3ec7fa12384a7a2e3090c018" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>isBackgroundVisible</name></member>
+      <member refid="d9/d74/a03082_1a0c72e92a8514c0959d7ad57b0b971f73" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>isEnabled</name></member>
+      <member refid="d5/dbf/a03130_1a1dbd277c9387982c0c153faa9f7070e2" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>isInResizeRange</name></member>
+      <member refid="d5/dbf/a03130_1aecf9cd988ccd639e7ecbbd1947f887ff" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>isMovable</name></member>
+      <member refid="d5/dbf/a03130_1afbb584204c8a58b4312bda40a028199d" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>isResizable</name></member>
+      <member refid="d5/dbf/a03130_1a3e1d91ad264e850c2b35f691ec19dd4d" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>isVisible</name></member>
+      <member refid="da/d8d/a03158_1ab2e7e94745c12c4de4c22e0477010d35" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>LayoutControl</name></member>
+      <member refid="d5/dbf/a03130_1a581415951e9ae64158469104459a5040" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_backgroundMaterial</name></member>
+      <member refid="d5/dbf/a03130_1a0422d1d6b4a50fad3c6908078d3ef760" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_flags</name></member>
+      <member refid="d5/dbf/a03130_1ac23b3de83e5473a01be74f66615389c3" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_foregroundMaterial</name></member>
+      <member refid="d9/d74/a03082_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_handlerSlots</name></member>
+      <member refid="d9/d74/a03082_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_handlerSlotsConnections</name></member>
+      <member refid="d9/d74/a03082_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_keyboardSlots</name></member>
+      <member refid="d9/d74/a03082_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_keyboardSlotsConnections</name></member>
+      <member refid="d9/d74/a03082_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_mouseSlots</name></member>
+      <member refid="d9/d74/a03082_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_mouseSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1a2a710ba7566a0da8a13156abc0901b11" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_ncHandlerSlots</name></member>
+      <member refid="d9/d5e/a03086_1a368dcf33032891e0e56c1a1d8f4103aa" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_ncHandlerSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1a14951b54a3e24fe7b348613f16f50b84" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_ncKeyboardSlots</name></member>
+      <member refid="d9/d5e/a03086_1ae1d9ec7ce4715a0a9a2536955cebb60e" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_ncKeyboardSlotsConnections</name></member>
+      <member refid="d9/d5e/a03086_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_ncMouseSlots</name></member>
+      <member refid="d9/d5e/a03086_1af7c333a4c75f38cf11d5226e797fc653" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_ncMouseSlotsConnections</name></member>
+      <member refid="d5/dbf/a03130_1afd49a0f5f0736d462eaa2b6a6c66318b" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_parent</name></member>
+      <member refid="d5/dbf/a03130_1add3ab7fec26d47ae3b477851a7cc2ee6" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>m_scene</name></member>
+      <member refid="d9/d5e/a03086_1a1726b1c708fa09c31f8ee004b2758341" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>NonClientEventHandler</name></member>
+      <member refid="d9/d5e/a03086_1a7c5bbf295117ab0f0ebc279365426a35" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>NonClientHandlerFunction</name></member>
+      <member refid="d9/d5e/a03086_1a7cc2d3c359c3bd10417813a38eb28cc2" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>NonClientKeyboardFunction</name></member>
+      <member refid="d9/d5e/a03086_1a35796ed2ebfb666605bad65eefdd2eab" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>NonClientMouseFunction</name></member>
+      <member refid="d5/dbf/a03130_1a030ff972d48a241466cef3c8082c4e5e" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>onChanged</name></member>
+      <member refid="d9/d74/a03082_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnClientHandlerEvent</name></member>
+      <member refid="d9/d74/a03082_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnClientHandlerEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnClientKeyboardEvent</name></member>
+      <member refid="d9/d74/a03082_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnClientKeyboardEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnClientMouseEvent</name></member>
+      <member refid="d9/d74/a03082_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnClientMouseEventConnection</name></member>
+      <member refid="d9/d74/a03082_1a762d1e36d01afdb527690a27f6e6645a" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnEnable</name></member>
+      <member refid="d9/d74/a03082_1a51294359629a2fb1d22cab6d40e785e0" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>onEnable</name></member>
+      <member refid="d9/d74/a03082_1aeeec8bfb3700736547c31cc89e78ea2c" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnEnableConnection</name></member>
+      <member refid="d9/d5e/a03086_1a8cde3553a16b17f2db9b8cb2d0457be6" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnNonClientHandlerEvent</name></member>
+      <member refid="d9/d5e/a03086_1a3cd3b709106f34e3c628df967ff0d294" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnNonClientHandlerEventConnection</name></member>
+      <member refid="d9/d5e/a03086_1ae68352453ba12818f1d870cdaf6eea40" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnNonClientKeyboardEvent</name></member>
+      <member refid="d9/d5e/a03086_1ae5b3c80ac4550412145ed53787b33d86" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnNonClientKeyboardEventConnection</name></member>
+      <member refid="d9/d5e/a03086_1acf4c10c3d5dd8fbb43d1b238d9b6de36" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnNonClientMouseEvent</name></member>
+      <member refid="d9/d5e/a03086_1aefea2351ba1c6ea3dfbe9d22ddf311a6" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnNonClientMouseEventConnection</name></member>
+      <member refid="d1/db4/a03174_1a090f038e310dcf9e5d52e9341580d447" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnScrollContent</name></member>
+      <member refid="d1/db4/a03174_1a01dc4891a4d1278caadde993fce3a478" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>onScrollContent</name></member>
+      <member refid="d1/db4/a03174_1a125fdf16def9bcdf059bd8d67cf898db" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnScrollContentConnection</name></member>
+      <member refid="d1/db4/a03174_1a08a4ff8bee21cc10a17bad2ee694e585" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>OnScrollContentFunction</name></member>
+      <member refid="d7/d19/a03166_1a74a6b7d5d0758bd22242c28beac6b380" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>PanelCtrl</name></member>
+      <member refid="d7/d19/a03166_1ad2f548ecc0fcc1ea77ced786cc76539b" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>PanelCtrl</name></member>
+      <member refid="d9/d74/a03082_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>processEvents</name></member>
+      <member refid="d9/d74/a03082_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>processHandlerEvent</name></member>
+      <member refid="d9/d74/a03082_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>processKeyboardEvent</name></member>
+      <member refid="d9/d74/a03082_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>processMouseEvent</name></member>
+      <member refid="d9/d74/a03082_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d74/a03082_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d74/a03082_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>pushEvent</name></member>
+      <member refid="d1/db4/a03174_1a1f1ad6fc05bfc1536f1d45535df5bdd3" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>registerControl</name></member>
+      <member refid="d5/dbf/a03130_1a9d2083e8d22c0af9f07e494f17aa84a9" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>removeChild</name></member>
+      <member refid="d5/dbf/a03130_1a76bed2932e40dfc7d10f6bc2113bc213" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>removeFlag</name></member>
+      <member refid="d5/dbf/a03130_1aa5edf92a6bf41017a281e68aeb9d7eaf" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>removeFlag</name></member>
+      <member refid="d1/db4/a03174_1a13273723954d21bca4ac100ce4b52118" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>ScrollableCtrl</name></member>
+      <member refid="d5/dbf/a03130_1adc6817a2b0f2bcd5dcef1fe18ce518b6" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setBackgroundBorderMaterial</name></member>
+      <member refid="d5/dbf/a03130_1a96be50155227ba273fffb7feb811ec75" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setBackgroundBorderPosition</name></member>
+      <member refid="d5/dbf/a03130_1a5591c2409137443030717673282bc227" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/dbf/a03130_1a8bf9f81d2b736d262f75aa6617f7a605" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setBackgroundSize</name></member>
+      <member refid="d5/dbf/a03130_1a7ed9a34492cb400424eb233adf582ca6" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setBorderInnerUV</name></member>
+      <member refid="d5/dbf/a03130_1a36f16d9f66f6e2376b888ccae589f8d6" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setBorderOuterUV</name></member>
+      <member refid="d5/dbf/a03130_1ab8c78763312333353378ceaff269722c" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setBorderSize</name></member>
+      <member refid="d5/dbf/a03130_1a3f413815fb5be7cb79bd8ad1545ed70f" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setCaption</name></member>
+      <member refid="d9/d74/a03082_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setCatchesMouseEvents</name></member>
+      <member refid="da/d8d/a03158_1a2fd27bf77aee89108f90bc789d309b6d" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setLayout</name></member>
+      <member refid="d5/dbf/a03130_1a4e90b29a056dcbf2db96eefe6041239d" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setPosition</name></member>
+      <member refid="d1/db4/a03174_1a9e36c2dba225280c164d7d5727a092e7" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setScrollBarsVisible</name></member>
+      <member refid="d5/dbf/a03130_1a21a6e38b960222e3df47cc0420176e49" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setSize</name></member>
+      <member refid="d5/dbf/a03130_1a9707c9c90e1ae4a57e520fc841332560" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setStyle</name></member>
+      <member refid="d5/dbf/a03130_1a6e4e43823e6aae177386088d85c36d69" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setUV</name></member>
+      <member refid="d5/dbf/a03130_1ab00d1832ef47986d3d110967b2697160" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>setVisible</name></member>
+      <member refid="d5/dbf/a03130_1a68a85bdad7fdc17d729cd97e199ae0f9" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>show</name></member>
+      <member refid="d7/d19/a03166_1a7d606511e93a79151575b3707b363341" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>Type</name></member>
+      <member refid="d1/db4/a03174_1abfdacade72fa1de2749d784b26dee3bf" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>unregisterControl</name></member>
+      <member refid="d1/db4/a03174_1a41cf04107eb7cc29062fad7f8886d682" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>updateScrollableClientRect</name></member>
+      <member refid="d1/db4/a03174_1aaf2a785346233c77031cc67362f635f7" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>updateScrollBars</name></member>
+      <member refid="d1/db4/a03174_1a38842d6560f9bbb329607a1da6ed6643" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>updateScrollBarsStyle</name></member>
+      <member refid="d1/db4/a03174_1a27b29c675906ed68bbc6e21c2ab63418" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>updateScrollBarsThumb</name></member>
+      <member refid="d1/db4/a03174_1a635cd61e301e0c8143cb2fc6ada9966c" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>updateScrollZIndex</name></member>
+      <member refid="d1/db4/a03174_1aa2e25f2b5147066e2be098ec80f304f3" prot="protected" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>updateTotalSize</name></member>
+      <member refid="d5/dbf/a03130_1a7ba50bfc701825af7c072e553b9a36bc" prot="public" virt="non-virtual"><scope>castor3d::PanelCtrl</scope><name>~Control</name></member>
+      <member refid="d9/d74/a03082_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::PanelCtrl</scope><name>~EventHandler</name></member>
+      <member refid="d1/db4/a03174_1a68afd97e16432c424a2a04eb6faa4da9" prot="public" virt="virtual"><scope>castor3d::PanelCtrl</scope><name>~ScrollableCtrl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

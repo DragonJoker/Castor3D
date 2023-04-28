@@ -1,0 +1,242 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d96/a06725" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::ShadowMapData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_ShadowMapData&quot;, sdw::type::MemoryLayout::eStd140, sdw::Mat4x4Field&lt; &quot;lightProjection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;lightView&quot; &gt;, sdw::Vec4Field&lt; &quot;lightPosFarPlane&quot; &gt;, sdw::UIntField&lt; &quot;lightOffset&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">ShadowMapUbo.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d96/a06725_1aca779ebfda70fb1086e6dbd9ce95254a" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ShadowMapData::ShadowMapData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>ShadowMapData</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::ShadowMapData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="27" column="9" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="27" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1a45ae60b22d907d7215eff9a9fa36aba9" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::ShadowMapData::worldToView</definition>
+        <argsstring>(sdw::Vec4 const &amp;pos) const</argsstring>
+        <name>worldToView</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::worldToView</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="34" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1a07c6a795a5558d54c1ca30b08755a0f4" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::ShadowMapData::viewToProj</definition>
+        <argsstring>(sdw::Vec4 const &amp;pos) const</argsstring>
+        <name>viewToProj</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::viewToProj</qualifiedname>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="35" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1a06c849c12e1d9161a1c35bb1a67135a2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Float</type>
+        <definition>C3D_API sdw::Float castor3d::shader::ShadowMapData::getNormalisedDepth</definition>
+        <argsstring>(sdw::Vec3 const &amp;pos) const</argsstring>
+        <name>getNormalisedDepth</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::getNormalisedDepth</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>pos</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="36" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1a2b85119743cde59667f280c09bc60e9e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/dcb/a06477" kindref="compound">DirectionalLight</ref></type>
+        <definition>C3D_API DirectionalLight castor3d::shader::ShadowMapData::getDirectionalLight</definition>
+        <argsstring>(Lights &amp;lights) const</argsstring>
+        <name>getDirectionalLight</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::getDirectionalLight</qualifiedname>
+        <param>
+          <type><ref refid="d9/df7/a06493" kindref="compound">Lights</ref> &amp;</type>
+          <declname>lights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="37" column="26"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1acd1437b7de8d901337e2cf216c794353" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="dc/ddb/a06481" kindref="compound">PointLight</ref></type>
+        <definition>C3D_API PointLight castor3d::shader::ShadowMapData::getPointLight</definition>
+        <argsstring>(Lights &amp;lights) const</argsstring>
+        <name>getPointLight</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::getPointLight</qualifiedname>
+        <param>
+          <type><ref refid="d9/df7/a06493" kindref="compound">Lights</ref> &amp;</type>
+          <declname>lights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="38" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1a419a3cee2c57a1aedf609acdc577d90d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="df/d98/a06485" kindref="compound">SpotLight</ref></type>
+        <definition>C3D_API SpotLight castor3d::shader::ShadowMapData::getSpotLight</definition>
+        <argsstring>(Lights &amp;lights) const</argsstring>
+        <name>getSpotLight</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::getSpotLight</qualifiedname>
+        <param>
+          <type><ref refid="d9/df7/a06493" kindref="compound">Lights</ref> &amp;</type>
+          <declname>lights</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="39" column="19"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d96/a06725_1ae6369fdd3cbaa585646e6df8f420199b" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowMapData::lightProjection</definition>
+        <argsstring>() const</argsstring>
+        <name>lightProjection</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::lightProjection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="42" column="6" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="42" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1a7b4303e283ce15179e7e9501fa5dd78d" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowMapData::lightView</definition>
+        <argsstring>() const</argsstring>
+        <name>lightView</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::lightView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="43" column="6" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="43" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1a281597e11f5f8658700b6d1b7b84c241" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowMapData::lightPosFarPlane</definition>
+        <argsstring>() const</argsstring>
+        <name>lightPosFarPlane</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::lightPosFarPlane</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="44" column="6" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="44" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d96/a06725_1a9c418cbdc6e3e125452ee840a29d2192" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::ShadowMapData::lightOffset</definition>
+        <argsstring>() const</argsstring>
+        <name>lightOffset</name>
+        <qualifiedname>castor3d::shader::ShadowMapData::lightOffset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/ShadowMapUbo.hpp" line="45" column="6" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="45" bodyend="45"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::ShadowMapData</label>
+        <link refid="db/d96/a06725"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_ShadowMapData&quot;, sdw::type::MemoryLayout::eStd140, sdw::Mat4x4Field&lt; &quot;lightProjection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;lightView&quot; &gt;, sdw::Vec4Field&lt; &quot;lightPosFarPlane&quot; &gt;, sdw::UIntField&lt; &quot;lightOffset&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::ShadowMapData</label>
+        <link refid="db/d96/a06725"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_ShadowMapData&quot;, sdw::type::MemoryLayout::eStd140, sdw::Mat4x4Field&lt; &quot;lightProjection&quot; &gt;, sdw::Mat4x4Field&lt; &quot;lightView&quot; &gt;, sdw::Vec4Field&lt; &quot;lightPosFarPlane&quot; &gt;, sdw::UIntField&lt; &quot;lightOffset&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Ubos/ShadowMapUbo.hpp" line="19" column="1" bodyfile="Shader/Ubos/ShadowMapUbo.hpp" bodystart="26" bodyend="46"/>
+    <listofallmembers>
+      <member refid="db/d96/a06725_1a2b85119743cde59667f280c09bc60e9e" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>getDirectionalLight</name></member>
+      <member refid="db/d96/a06725_1a06c849c12e1d9161a1c35bb1a67135a2" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>getNormalisedDepth</name></member>
+      <member refid="db/d96/a06725_1acd1437b7de8d901337e2cf216c794353" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>getPointLight</name></member>
+      <member refid="db/d96/a06725_1a419a3cee2c57a1aedf609acdc577d90d" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>getSpotLight</name></member>
+      <member refid="db/d96/a06725_1a9c418cbdc6e3e125452ee840a29d2192" prot="private" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>lightOffset</name></member>
+      <member refid="db/d96/a06725_1a281597e11f5f8658700b6d1b7b84c241" prot="private" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>lightPosFarPlane</name></member>
+      <member refid="db/d96/a06725_1ae6369fdd3cbaa585646e6df8f420199b" prot="private" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>lightProjection</name></member>
+      <member refid="db/d96/a06725_1a7b4303e283ce15179e7e9501fa5dd78d" prot="private" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>lightView</name></member>
+      <member refid="db/d96/a06725_1aca779ebfda70fb1086e6dbd9ce95254a" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>ShadowMapData</name></member>
+      <member refid="db/d96/a06725_1a07c6a795a5558d54c1ca30b08755a0f4" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>viewToProj</name></member>
+      <member refid="db/d96/a06725_1a45ae60b22d907d7215eff9a9fa36aba9" prot="public" virt="non-virtual"><scope>castor3d::shader::ShadowMapData</scope><name>worldToView</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

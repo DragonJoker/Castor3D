@@ -1,0 +1,359 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d6d/a04069" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PassMapComponentPlugin</compoundname>
+    <basecompoundref refid="d9/d35/a04053" prot="public" virt="non-virtual">castor3d::PassComponentPlugin</basecompoundref>
+    <derivedcompoundref refid="d1/ddd/a03693" prot="public" virt="non-virtual">castor3d::AttenuationMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d2/d47/a03705" prot="public" virt="non-virtual">castor3d::ClearcoatMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d3/d23/a03717" prot="public" virt="non-virtual">castor3d::ClearcoatNormalMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d4/d2d/a03729" prot="public" virt="non-virtual">castor3d::ClearcoatRoughnessMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d0/d52/a03741" prot="public" virt="non-virtual">castor3d::ColourMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d1/ddb/a03753" prot="public" virt="non-virtual">castor3d::EmissiveMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="da/d93/a03765" prot="public" virt="non-virtual">castor3d::GlossinessMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d3/d2f/a03777" prot="public" virt="non-virtual">castor3d::HeightMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d8/d11/a03789" prot="public" virt="non-virtual">castor3d::IridescenceMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="dc/d0c/a03801" prot="public" virt="non-virtual">castor3d::IridescenceThicknessMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="df/d63/a03813" prot="public" virt="non-virtual">castor3d::MetalnessMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="da/dfc/a03825" prot="public" virt="non-virtual">castor3d::NormalMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d9/d94/a03837" prot="public" virt="non-virtual">castor3d::OcclusionMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="db/d1a/a03849" prot="public" virt="non-virtual">castor3d::OpacityMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d2/de0/a03861" prot="public" virt="non-virtual">castor3d::RoughnessMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="de/d6c/a03873" prot="public" virt="non-virtual">castor3d::SheenMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d7/d0d/a03885" prot="public" virt="non-virtual">castor3d::SheenRoughnessMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="db/dda/a03897" prot="public" virt="non-virtual">castor3d::SpecularFactorMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d7/d9a/a03909" prot="public" virt="non-virtual">castor3d::SpecularMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d5/df8/a03921" prot="public" virt="non-virtual">castor3d::TransmissionMapComponent::Plugin</derivedcompoundref>
+    <derivedcompoundref refid="d2/d9d/a03937" prot="public" virt="non-virtual">castor3d::TransmittanceMapComponent::Plugin</derivedcompoundref>
+    <includes local="no">PassMapComponent.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d6d/a04069_1af5aa1892cb84b50774ebc18ba1515718" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassMapComponentPlugin::PassMapComponentPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent, UpdateComponent pupdateComponent=nullptr)</argsstring>
+        <name>PassMapComponentPlugin</name>
+        <qualifiedname>castor3d::PassMapComponentPlugin::PassMapComponentPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d7/dfc/a04061" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a0ebb0d29e39be4b305a1378ba1e913d0" kindref="member">UpdateComponent</ref></type>
+          <declname>pupdateComponent</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassMapComponent.hpp" line="26" column="18" bodyfile="Material/Pass/Component/PassMapComponent.hpp" bodystart="26" bodyend="30"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d6d/a04069_1a1b7bdc11daaaa9909eade69909f66a49" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::PassMapComponentPlugin::writeTextureConfig</definition>
+        <argsstring>(TextureConfiguration const &amp;configuration, castor::String const &amp;tabs, castor::StringStream &amp;file) const override</argsstring>
+        <name>writeTextureConfig</name>
+        <qualifiedname>castor3d::PassMapComponentPlugin::writeTextureConfig</qualifiedname>
+        <reimplements refid="d9/d35/a04053_1a48f721f6e193e5239453328aa2f89418">writeTextureConfig</reimplements>
+        <param>
+          <type><ref refid="dc/d0d/a04153" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Writes the texture configuration for this component in a scene file. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">configuration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Holds the texture configuration data for this component. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current indentation in the output file. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output file. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassMapComponent.hpp" line="32" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d6d/a04069_1ac1ff251cb68902e01abfc29d7094e8f5" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>virtual bool castor3d::PassMapComponentPlugin::doWriteTextureConfig</definition>
+        <argsstring>(TextureConfiguration const &amp;configuration, uint32_t mask, castor::String const &amp;tabs, castor::StringStream &amp;file) const</argsstring>
+        <name>doWriteTextureConfig</name>
+        <qualifiedname>castor3d::PassMapComponentPlugin::doWriteTextureConfig</qualifiedname>
+        <reimplementedby refid="d1/ddd/a03693_1a04303a986b47eaa8f53772ea41486943">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d2/d47/a03705_1a3ae80678464d5dce84dac3387c0b47f3">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d3/d23/a03717_1ac4b26b55afa819d00fb2a5386dc5e37e">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d4/d2d/a03729_1a62de18d042101cc885a4fbe2f46e9d4d">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d0/d52/a03741_1a9246c7c9002a44b89343a5ac01b43c95">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d1/ddb/a03753_1af53b6017ce33662a08ce90a6d9b2872b">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="da/d93/a03765_1a72f399180bbe1132c82e52c61b173a80">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d3/d2f/a03777_1aee685df2345b59ac48a30584fbdb5324">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d8/d11/a03789_1ab63161c87b16d85480e3f710ddf88b8d">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="dc/d0c/a03801_1af52fba5459c3e95ffd6a32645e6eb7c5">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="df/d63/a03813_1a79c026eb07ecf5ee1d493e9b0dc4fe82">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="da/dfc/a03825_1ae85d9dbbd49e359f217d0c0868443de0">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d9/d94/a03837_1acec1acbea18abd2a7a4dac72a807f33e">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="db/d1a/a03849_1a9788790895bf681889703261c0096d4a">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d2/de0/a03861_1ac1380b969f9a8c310ffbb86c87a8fbeb">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="de/d6c/a03873_1a16c9d774a7a0dc40b776ca9fbe338015">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d7/d0d/a03885_1ac245f3022c80c320a4a6c63c7e831247">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="db/dda/a03897_1ab468f08a7fe43833c5b440057bb11f12">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d7/d9a/a03909_1a9bf2413a59fe657a2cea8b17d2003435">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d5/df8/a03921_1a3d7fa784b8fec1bf1635c08f276fff0b">doWriteTextureConfig</reimplementedby>
+        <reimplementedby refid="d2/d9d/a03937_1a6df8814fd296d915a351ebc490485ea0">doWriteTextureConfig</reimplementedby>
+        <param>
+          <type><ref refid="dc/d0d/a04153" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mask</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/PassMapComponent.hpp" line="37" column="14" bodyfile="Material/Pass/Component/PassMapComponent.hpp" bodystart="37" bodyend="43"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::AttenuationMapComponent::Plugin</label>
+        <link refid="d1/ddd/a03693"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ClearcoatMapComponent::Plugin</label>
+        <link refid="d2/d47/a03705"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::ClearcoatNormalMapComponent::Plugin</label>
+        <link refid="d3/d23/a03717"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ClearcoatRoughnessMapComponent::Plugin</label>
+        <link refid="d4/d2d/a03729"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::ColourMapComponent::Plugin</label>
+        <link refid="d0/d52/a03741"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::EmissiveMapComponent::Plugin</label>
+        <link refid="d1/ddb/a03753"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::GlossinessMapComponent::Plugin</label>
+        <link refid="da/d93/a03765"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::HeightMapComponent::Plugin</label>
+        <link refid="d3/d2f/a03777"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::IridescenceMapComponent::Plugin</label>
+        <link refid="d8/d11/a03789"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::IridescenceThicknessMapComponent::Plugin</label>
+        <link refid="dc/d0c/a03801"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::MetalnessMapComponent::Plugin</label>
+        <link refid="df/d63/a03813"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::NormalMapComponent::Plugin</label>
+        <link refid="da/dfc/a03825"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::OcclusionMapComponent::Plugin</label>
+        <link refid="d9/d94/a03837"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::OpacityMapComponent::Plugin</label>
+        <link refid="db/d1a/a03849"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d9/d35/a04053"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PassMapComponentPlugin</label>
+        <link refid="d1/d6d/a04069"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::RoughnessMapComponent::Plugin</label>
+        <link refid="d2/de0/a03861"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="18">
+        <label>castor3d::SheenMapComponent::Plugin</label>
+        <link refid="de/d6c/a03873"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="19">
+        <label>castor3d::SheenRoughnessMapComponent::Plugin</label>
+        <link refid="d7/d0d/a03885"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::SpecularFactorMapComponent::Plugin</label>
+        <link refid="db/dda/a03897"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::SpecularMapComponent::Plugin</label>
+        <link refid="d7/d9a/a03909"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::TransmissionMapComponent::Plugin</label>
+        <link refid="d5/df8/a03921"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::TransmittanceMapComponent::Plugin</label>
+        <link refid="d2/d9d/a03937"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d9/d35/a04053"/>
+      </node>
+      <node id="1">
+        <label>castor3d::PassMapComponentPlugin</label>
+        <link refid="d1/d6d/a04069"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/PassMapComponent.hpp" line="22" column="1" bodyfile="Material/Pass/Component/PassMapComponent.hpp" bodystart="24" bodyend="44"/>
+    <listofallmembers>
+      <member refid="d9/d35/a04053_1a44a1a547e8c6bdae20b284cc75b98fcd" prot="public" virt="pure-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>createComponent</name></member>
+      <member refid="d9/d35/a04053_1aa124938351f50e44e4f2d28cfdbfedbc" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>createComponentsShader</name></member>
+      <member refid="d9/d35/a04053_1a1e6a85dd32f4b3ef8b5acd253712c989" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>createMapComponent</name></member>
+      <member refid="d9/d35/a04053_1a2e178e79ea995d0e8674559acfbc4447" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>createMaterialShader</name></member>
+      <member refid="d9/d35/a04053_1a03565ed4fc5d52779331284917b83f43" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>createParsers</name></member>
+      <member refid="d9/d35/a04053_1a682e78ef2f8f5d7b3e292ccda2f35246" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>createSections</name></member>
+      <member refid="d1/d6d/a04069_1ac1ff251cb68902e01abfc29d7094e8f5" prot="private" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>doWriteTextureConfig</name></member>
+      <member refid="d9/d35/a04053_1a906cb616e5d7d7a63d3f070ca76e7a11" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>fillTextureConfiguration</name></member>
+      <member refid="d9/d35/a04053_1abc8e6df1a7fd3efc21bad6893a1faf40" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>filterComponentFlags</name></member>
+      <member refid="d9/d35/a04053_1a2024dbae92bf8babbfbaa7dad9d6c564" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>filterTextureFlags</name></member>
+      <member refid="d9/d35/a04053_1a33ade4752a210d4244a56a623e15ec5c" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>finishComponent</name></member>
+      <member refid="d9/d35/a04053_1ad3c669e54d61cc035d47d4d8e2bb31c4" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getAlphaBlendingFlag</name></member>
+      <member refid="d9/d35/a04053_1ac0444937fb369fb5027dd293be4fa094" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getAlphaTestFlag</name></member>
+      <member refid="d9/d35/a04053_1a7812f3b1ee259188bc7c8279b47d3a2b" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getBaseTextureConfiguration</name></member>
+      <member refid="d9/d35/a04053_1aee7e3af3cda6d7c8d54be36dfbb00547" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getColourMapFlags</name></member>
+      <member refid="d9/d35/a04053_1aefb50eb6d6e24464451c862ec58c6f05" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getComponentFlags</name></member>
+      <member refid="d9/d35/a04053_1a1dded831fff02eed2257ee6bb90b98ae" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getHeightMapFlags</name></member>
+      <member refid="d9/d35/a04053_1a3d4ca319e7c6e2dc3e40e81211846fee" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getId</name></member>
+      <member refid="d9/d35/a04053_1ab678401d89828bd889d148263bbee8e1" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getNormalMapFlags</name></member>
+      <member refid="d9/d35/a04053_1a360b4fe120d634b660ac783c9bac5e89" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getOcclusionMapFlags</name></member>
+      <member refid="d9/d35/a04053_1a67e7c95405499797a50911bc1b757750" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getOpacityMapFlags</name></member>
+      <member refid="d9/d35/a04053_1a10e44068acfd0a7a5954e133af2c501a" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getParallaxOcclusionMappingOneFlag</name></member>
+      <member refid="d9/d35/a04053_1aa8bb9186a42b13732f02d592d022eaf0" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getParallaxOcclusionMappingRepeatFlag</name></member>
+      <member refid="d9/d35/a04053_1a8ae21dee0e6e02f4ef142d1912a1c0da" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getRegister</name></member>
+      <member refid="d9/d35/a04053_1af4fd935719c75c665f67aff1c05e780b" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getTextureFlags</name></member>
+      <member refid="d9/d35/a04053_1af066b3208f0c2c71d7da481988aa748d" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getTextureFlagsName</name></member>
+      <member refid="d9/d35/a04053_1aec5a74b05eab81dfd6a6e68e2784c3bc" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>getTransmissionFlag</name></member>
+      <member refid="d9/d35/a04053_1a2f8e460d4e850283ba56ae0d30783240" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>hasTexcoordModif</name></member>
+      <member refid="d9/d35/a04053_1ae36bd47493f7d615418cde61ed7f6717" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>isComponentNeeded</name></member>
+      <member refid="d9/d35/a04053_1ae06b854e0cc17ad1cc044d1316c1b752" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>isMapComponent</name></member>
+      <member refid="d9/d35/a04053_1a12838a9228bf978ec3f360d997e37488" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>operator=</name></member>
+      <member refid="d9/d35/a04053_1a6f5838b953671b6324c33ca78bdebf53" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>operator=</name></member>
+      <member refid="d9/d35/a04053_1aa76b0d332cde3ba881e14c7128a1686e" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="d9/d35/a04053_1a79e806f976aef2b773c0988af61fd513" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="d9/d35/a04053_1a3b414cc7a359c09a69374e6f51fe723b" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="d1/d6d/a04069_1af5aa1892cb84b50774ebc18ba1515718" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>PassMapComponentPlugin</name></member>
+      <member refid="d9/d35/a04053_1a40b00cfb3f94741567b4836449c9eb25" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>replacesMapSampling</name></member>
+      <member refid="d9/d35/a04053_1a8af4e83de626dbaa70d30f65f8174d85" prot="public" virt="non-virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>updateComponent</name></member>
+      <member refid="d1/d6d/a04069_1a1b7bdc11daaaa9909eade69909f66a49" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>writeTextureConfig</name></member>
+      <member refid="d9/d35/a04053_1a34c8ea983d45a29036ad4bd72fd27652" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>zeroBuffer</name></member>
+      <member refid="d9/d35/a04053_1a8442a3dd6abd51dddef6e25443d573ef" prot="public" virt="virtual"><scope>castor3d::PassMapComponentPlugin</scope><name>~PassComponentPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

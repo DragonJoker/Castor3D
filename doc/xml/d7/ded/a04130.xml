@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/ded/a04130" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassTextureConfig</compoundname>
+    <includes local="no">TextureConfiguration.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/ded/a04130_1a983d82098084566d7e1fcad725280b7d" prot="public" static="no" mutable="no">
+        <type>ashes::ImageCreateInfo</type>
+        <definition>ashes::ImageCreateInfo castor3d::PassTextureConfig::imageInfo</definition>
+        <argsstring></argsstring>
+        <name>imageInfo</name>
+        <qualifiedname>castor3d::PassTextureConfig::imageInfo</qualifiedname>
+        <initializer>{ {} }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="212" column="24" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="212" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ded/a04130_1a8dfe8fc397add4ea8eeba10075892f55" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d60/a04126" kindref="compound">TextureConfiguration</ref></type>
+        <definition>TextureConfiguration castor3d::PassTextureConfig::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>castor3d::PassTextureConfig::config</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="213" column="22" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="213" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d7/ded/a04130_1ac99ddf5e088c5868b65a8f4c8b8e8680" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PassTextureConfig::texcoordSet</definition>
+        <argsstring></argsstring>
+        <name>texcoordSet</name>
+        <qualifiedname>castor3d::PassTextureConfig::texcoordSet</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Texture/TextureConfiguration.hpp" line="214" column="10" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="214" bodyend="-1"/>
+        <referencedby refid="d8/d93/a04174_1a51b608f1f70761704ff404cdc270815a" compoundref="d9/d0f/a00644" startline="213" endline="216">castor3d::TextureUnit::getTexcoordSet</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>std::array&lt; TextureFlagConfiguration, 4u &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; TextureFlagConfiguration, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PassTextureConfig</label>
+        <link refid="d7/ded/a04130"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TextureConfiguration</label>
+        <link refid="d7/d60/a04126"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>components</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>transform</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::TextureFlagConfiguration</label>
+        <link refid="d9/db9/a04122"/>
+      </node>
+      <node id="7">
+        <label>castor3d::TextureTransform</label>
+        <link refid="d4/ddb/a04118"/>
+      </node>
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Texture/TextureConfiguration.hpp" line="210" column="1" bodyfile="Material/Texture/TextureConfiguration.hpp" bodystart="211" bodyend="215"/>
+    <listofallmembers>
+      <member refid="d7/ded/a04130_1a8dfe8fc397add4ea8eeba10075892f55" prot="public" virt="non-virtual"><scope>castor3d::PassTextureConfig</scope><name>config</name></member>
+      <member refid="d7/ded/a04130_1a983d82098084566d7e1fcad725280b7d" prot="public" virt="non-virtual"><scope>castor3d::PassTextureConfig</scope><name>imageInfo</name></member>
+      <member refid="d7/ded/a04130_1ac99ddf5e088c5868b65a8f4c8b8e8680" prot="public" virt="non-virtual"><scope>castor3d::PassTextureConfig</scope><name>texcoordSet</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

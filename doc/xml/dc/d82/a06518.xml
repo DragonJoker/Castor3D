@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dc/d82/a06518" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::SheenBRDF</compoundname>
+    <includes local="no">GlslSheenBRDF.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dc/d82/a06518_1a342fe0314ea3c91b4f6036a25fc5187f" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::SheenBRDF::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::SheenBRDF::m_writer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSheenBRDF.hpp" line="22" column="20" bodyfile="Shader/Shaders/GlslSheenBRDF.hpp" bodystart="22" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d82/a06518_1a318480a9f91f46ca1f950c27edc5e8a2" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/de7/a06402" kindref="compound">BRDFHelpers</ref> &amp;</type>
+        <definition>BRDFHelpers&amp; castor3d::shader::SheenBRDF::m_brdf</definition>
+        <argsstring></argsstring>
+        <name>m_brdf</name>
+        <qualifiedname>castor3d::shader::SheenBRDF::m_brdf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSheenBRDF.hpp" line="23" column="14" bodyfile="Shader/Shaders/GlslSheenBRDF.hpp" bodystart="23" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dc/d82/a06518_1a0a97e164badd53e0e9404c24e4ea983b" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec2, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec2 , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::SheenBRDF::m_computeSheen</definition>
+        <argsstring></argsstring>
+        <name>m_computeSheen</name>
+        <qualifiedname>castor3d::shader::SheenBRDF::m_computeSheen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSheenBRDF.hpp" line="28" column="2" bodyfile="Shader/Shaders/GlslSheenBRDF.hpp" bodystart="28" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dc/d82/a06518_1a180e3ecdc3f31b6edf53e15fcd436255" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::SheenBRDF::SheenBRDF</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, BRDFHelpers &amp;brdf)</argsstring>
+        <name>SheenBRDF</name>
+        <qualifiedname>castor3d::shader::SheenBRDF::SheenBRDF</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/de7/a06402" kindref="compound">BRDFHelpers</ref> &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSheenBRDF.hpp" line="14" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="dc/d82/a06518_1a0f5e81f63dc85bd8b2bfbee940fd2d5a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec2</type>
+        <definition>C3D_API sdw::RetVec2 castor3d::shader::SheenBRDF::compute</definition>
+        <argsstring>(LightSurface const &amp;lightSurface, sdw::Float const &amp;NdotL, sdw::Float const &amp;NdotH, sdw::Float const &amp;roughness)</argsstring>
+        <name>compute</name>
+        <qualifiedname>castor3d::shader::SheenBRDF::compute</qualifiedname>
+        <param>
+          <type><ref refid="dd/d80/a06474" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotL</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotH</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslSheenBRDF.hpp" line="16" column="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/GlslSheenBRDF.hpp" line="11" column="1" bodyfile="Shader/Shaders/GlslSheenBRDF.hpp" bodystart="12" bodyend="29"/>
+    <listofallmembers>
+      <member refid="dc/d82/a06518_1a0f5e81f63dc85bd8b2bfbee940fd2d5a" prot="public" virt="non-virtual"><scope>castor3d::shader::SheenBRDF</scope><name>compute</name></member>
+      <member refid="dc/d82/a06518_1a318480a9f91f46ca1f950c27edc5e8a2" prot="private" virt="non-virtual"><scope>castor3d::shader::SheenBRDF</scope><name>m_brdf</name></member>
+      <member refid="dc/d82/a06518_1a0a97e164badd53e0e9404c24e4ea983b" prot="private" virt="non-virtual"><scope>castor3d::shader::SheenBRDF</scope><name>m_computeSheen</name></member>
+      <member refid="dc/d82/a06518_1a342fe0314ea3c91b4f6036a25fc5187f" prot="private" virt="non-virtual"><scope>castor3d::shader::SheenBRDF</scope><name>m_writer</name></member>
+      <member refid="dc/d82/a06518_1a180e3ecdc3f31b6edf53e15fcd436255" prot="public" virt="non-virtual"><scope>castor3d::shader::SheenBRDF</scope><name>SheenBRDF</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

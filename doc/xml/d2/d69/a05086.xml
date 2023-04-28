@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d69/a05086" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightDescriptors</compoundname>
+    <includes local="no">LightPipeline.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d69/a05086_1aff06f37bf2b8586a75626f2c33c86f66" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/de1/a05950" kindref="compound">Light</ref> const  &amp;</type>
+        <definition>Light const&amp; castor3d::LightDescriptors::light</definition>
+        <argsstring></argsstring>
+        <name>light</name>
+        <qualifiedname>castor3d::LightDescriptors::light</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="66" column="14" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d69/a05086_1a16ae0aaeb7be8cb9f1ca48c2a8f47fb5" prot="public" static="no" mutable="no">
+        <type><ref refid="de/df4/a06614" kindref="compound">CameraUbo</ref></type>
+        <definition>CameraUbo castor3d::LightDescriptors::cameraUbo</definition>
+        <argsstring></argsstring>
+        <name>cameraUbo</name>
+        <qualifiedname>castor3d::LightDescriptors::cameraUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="67" column="11" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d69/a05086_1a39c6cf8b067cc13c0ed690cf57391b58" prot="public" static="no" mutable="no">
+        <type><ref refid="dc/d90/a02854" kindref="compound">UniformBufferOffsetT</ref>&lt; <ref refid="d8/d89/a06754" kindref="compound">ModelBufferConfiguration</ref> &gt;</type>
+        <definition>UniformBufferOffsetT&lt; ModelBufferConfiguration &gt; castor3d::LightDescriptors::modelMatrixUbo</definition>
+        <argsstring></argsstring>
+        <name>modelMatrixUbo</name>
+        <qualifiedname>castor3d::LightDescriptors::modelMatrixUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="68" column="22" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d69/a05086_1ad2355676335649ca22df64cd1fd9c5a7" prot="public" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::LightDescriptors::descriptorSet</definition>
+        <argsstring></argsstring>
+        <name>descriptorSet</name>
+        <qualifiedname>castor3d::LightDescriptors::descriptorSet</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="69" column="25" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d69/a05086_1ab1a85745a5eb5863a632fa29a4f811c0" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; float &gt;</type>
+        <definition>GpuBufferOffsetT&lt; float &gt; castor3d::LightDescriptors::vertexBuffer</definition>
+        <argsstring></argsstring>
+        <name>vertexBuffer</name>
+        <qualifiedname>castor3d::LightDescriptors::vertexBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="70" column="18" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d69/a05086_1ab1485ffcd0477b306fcf560ed0b49823" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::LightDescriptors::angle</definition>
+        <argsstring></argsstring>
+        <name>angle</name>
+        <qualifiedname>castor3d::LightDescriptors::angle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="71" column="10" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d69/a05086_1acd08f4c4e112d47a78c51de4c14d5361" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::LightDescriptors::LightDescriptors</definition>
+        <argsstring>(Light const &amp;light, RenderDevice const &amp;device)</argsstring>
+        <name>LightDescriptors</name>
+        <qualifiedname>castor3d::LightDescriptors::LightDescriptors</qualifiedname>
+        <param>
+          <type><ref refid="d1/de1/a05950" kindref="compound">Light</ref> const &amp;</type>
+          <declname>light</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="63" column="10"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="7">
+        <label>Animable</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::GpuBufferOffsetT&lt; float &gt;</label>
+        <link refid="d5/d4c/a02846"/>
+        <childnode refid="24" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="template-instance">
+          <edgelabel>&lt; float &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>K</label>
+      </node>
+      <node id="12">
+        <label>T</label>
+      </node>
+      <node id="21">
+        <label>castor3d::UniformBufferOffsetT&lt; castor3d::ModelBufferConfiguration &gt;</label>
+        <link refid="dc/d90/a02854"/>
+        <childnode refid="22" relation="template-instance">
+          <edgelabel>&lt; castor3d::ModelBufferConfiguration &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::atomic&lt; GlobalIlluminationType &gt;</label>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; GlobalIlluminationType &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="d6/de1/a02518"/>
+        <childnode refid="14" relation="public-inheritance">
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>castor3d::CameraUbo</label>
+        <link refid="de/df4/a06614"/>
+      </node>
+      <node id="24">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d0/dee/a02870"/>
+      </node>
+      <node id="26">
+        <label>castor3d::GpuBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="d5/d4c/a02846"/>
+        <childnode refid="24" relation="usage">
+          <edgelabel>buffer</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>chunk</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Light</label>
+        <link refid="d1/de1/a05950"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_shadows</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_currentGlobalIllumination</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LightDescriptors</label>
+        <link refid="d2/d69/a05086"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>light</edgelabel>
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>cameraUbo</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>modelMatrixUbo</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>vertexBuffer</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::LpvConfig</label>
+        <link refid="d5/df8/a04978"/>
+      </node>
+      <node id="25">
+        <label>castor3d::MemChunk</label>
+        <link refid="d3/dee/a02862"/>
+      </node>
+      <node id="3">
+        <label>castor3d::MovableObject</label>
+        <link refid="dd/d5d/a05998"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::RsmConfig</label>
+        <link refid="d2/d2f/a05974"/>
+      </node>
+      <node id="6">
+        <label>castor3d::SceneNode</label>
+        <link refid="de/dd2/a06258"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="15">
+        <label>castor3d::ShadowConfig</label>
+        <link refid="d3/da1/a06278"/>
+        <childnode refid="16" relation="usage">
+          <edgelabel>rsmConfig</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>lpvConfig</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::UniformBufferOffsetT&lt; DataT &gt;</label>
+        <link refid="dc/d90/a02854"/>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="14">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="8">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="9">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="10" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::atomic&lt; T &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="11" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="61" column="1" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="62" bodyend="72"/>
+    <listofallmembers>
+      <member refid="d2/d69/a05086_1ab1485ffcd0477b306fcf560ed0b49823" prot="public" virt="non-virtual"><scope>castor3d::LightDescriptors</scope><name>angle</name></member>
+      <member refid="d2/d69/a05086_1a16ae0aaeb7be8cb9f1ca48c2a8f47fb5" prot="public" virt="non-virtual"><scope>castor3d::LightDescriptors</scope><name>cameraUbo</name></member>
+      <member refid="d2/d69/a05086_1ad2355676335649ca22df64cd1fd9c5a7" prot="public" virt="non-virtual"><scope>castor3d::LightDescriptors</scope><name>descriptorSet</name></member>
+      <member refid="d2/d69/a05086_1aff06f37bf2b8586a75626f2c33c86f66" prot="public" virt="non-virtual"><scope>castor3d::LightDescriptors</scope><name>light</name></member>
+      <member refid="d2/d69/a05086_1acd08f4c4e112d47a78c51de4c14d5361" prot="public" virt="non-virtual"><scope>castor3d::LightDescriptors</scope><name>LightDescriptors</name></member>
+      <member refid="d2/d69/a05086_1a39c6cf8b067cc13c0ed690cf57391b58" prot="public" virt="non-virtual"><scope>castor3d::LightDescriptors</scope><name>modelMatrixUbo</name></member>
+      <member refid="d2/d69/a05086_1ab1a85745a5eb5863a632fa29a4f811c0" prot="public" virt="non-virtual"><scope>castor3d::LightDescriptors</scope><name>vertexBuffer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

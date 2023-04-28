@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+  <compounddef id="dir_7108b733bb1fee5c7687037800af29fb" kind="dir">
+    <compoundname>Render/GlobalIllumination/LightPropagationVolumes</compoundname>
+    <innerfile refid="df/d4c/a00851">GeometryInjectionPass.hpp</innerfile>
+    <innerfile refid="d6/d2f/a00854">LayeredLightPropagationVolumes.hpp</innerfile>
+    <innerfile refid="d0/d82/a00857">LightInjectionPass.hpp</innerfile>
+    <innerfile refid="d2/d5e/a00860">LightPropagationPass.hpp</innerfile>
+    <innerfile refid="d7/d49/a00863">LightPropagationVolumes.hpp</innerfile>
+    <innerfile refid="dd/db2/a00866">LightPropagationVolumesModule.hpp</innerfile>
+    <innerfile refid="d3/db2/a00869">LightVolumePassResult.hpp</innerfile>
+    <innerfile refid="dc/d17/a00872">LpvConfig.hpp</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/GlobalIllumination/LightPropagationVolumes/"/>
+  </compounddef>
+</doxygen>

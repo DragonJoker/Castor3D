@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/d96/a03546" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::MetalnessComponent::MaterialShader</compoundname>
+    <basecompoundref refid="dc/d86/a04022" prot="public" virt="non-virtual">castor3d::shader::PassMaterialShader</basecompoundref>
+    <includes local="no">MetalnessComponent.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/d96/a03546_1a5cf87f084a293f5ffb74bef67152fdcd" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::MetalnessComponent::MaterialShader::MaterialShader</definition>
+        <argsstring>()</argsstring>
+        <name>MaterialShader</name>
+        <qualifiedname>castor3d::MetalnessComponent::MaterialShader::MaterialShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="48" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d96/a03546_1afea0e2278474a1f209b24226f010f834" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetalnessComponent::MaterialShader::fillMaterialType</definition>
+        <argsstring>(sdw::type::BaseStruct &amp;type, sdw::expr::ExprList &amp;inits) const override</argsstring>
+        <name>fillMaterialType</name>
+        <qualifiedname>castor3d::MetalnessComponent::MaterialShader::fillMaterialType</qualifiedname>
+        <reimplements refid="dc/d86/a04022_1a2c3f9d590baea77d2602f7e9e205318f">fillMaterialType</reimplements>
+        <param>
+          <type>sdw::type::BaseStruct &amp;</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprList &amp;</type>
+          <declname>inits</declname>
+        </param>
+        <briefdescription>
+<para>Fills the material shader struct with the members provided by this component, and their initialisers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">type</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the members. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">inits</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the members initialisers. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="49" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d7/d96/a03546_1a58c429419d2b608686ef158260e30607" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::MetalnessComponent::MaterialShader::updateMaterial</definition>
+        <argsstring>(sdw::Vec3 const &amp;albedo, sdw::Vec4 const &amp;spcRgh, sdw::Vec4 const &amp;colMtl, sdw::Vec4 const &amp;crTsIr, sdw::Vec4 const &amp;sheen, shader::Material &amp;material) const override</argsstring>
+        <name>updateMaterial</name>
+        <qualifiedname>castor3d::MetalnessComponent::MaterialShader::updateMaterial</qualifiedname>
+        <reimplements refid="dc/d86/a04022_1a548e0944e46480ee30b85e8418dfcef7">updateMaterial</reimplements>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>colour</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>spcRgh</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>colMtl</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>crTsIr</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>sheen</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d55/a06478" kindref="compound">shader::Material</ref> &amp;</type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+<para>Updates the material from values needed for lighting (specular, metalness, roughness and colour). </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">colour</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The material colour. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">spcRgh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Specular (RGB) and Roughness (A). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colMtl</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Colour (RGB) and Metalness (A). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">crTsIr</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Clearcoat Roughness (R), Transmission (G), Iridescence Factor (B) and Iridescence Thickness (A). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sheen</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Sheen Specular (RGB) and Sheen Roughness (A). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="out">material</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the values necessary for this component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="51" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::MetalnessComponent::MaterialShader</label>
+        <link refid="d7/d96/a03546"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="dc/d86/a04022"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::MetalnessComponent::MaterialShader</label>
+        <link refid="d7/d96/a03546"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="dc/d86/a04022"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d0/dee/a04014"/>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Lighting/MetalnessComponent.hpp" line="45" column="1" bodyfile="Material/Pass/Component/Lighting/MetalnessComponent.hpp" bodystart="47" bodyend="57"/>
+    <listofallmembers>
+      <member refid="d7/d96/a03546_1afea0e2278474a1f209b24226f010f834" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>fillMaterialType</name></member>
+      <member refid="dc/d86/a04022_1a2730417bcf60c1824af2c13e705a5cc4" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>getMaterialChunk</name></member>
+      <member refid="d7/d96/a03546_1a5cf87f084a293f5ffb74bef67152fdcd" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>MaterialShader</name></member>
+      <member refid="d0/dee/a04014_1a06fad613f64fa717de3e8032393fdbd7" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>operator=</name></member>
+      <member refid="d0/dee/a04014_1a0e5c7fea4f6928009d6da51c4d78a9df" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>operator=</name></member>
+      <member refid="dc/d86/a04022_1ae753c888953191f89fe24d9ebc8e9dd6" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>PassMaterialShader</name></member>
+      <member refid="d0/dee/a04014_1ab439edbbb2da660939e0209d9bfba3b0" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>PassShader</name></member>
+      <member refid="d0/dee/a04014_1ae0263dc410ae3d05ddea8cc9ad7eac73" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>PassShader</name></member>
+      <member refid="d0/dee/a04014_1aee18e0dfda227ed54fb966d7d75a1ea5" prot="public" virt="non-virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>PassShader</name></member>
+      <member refid="d7/d96/a03546_1a58c429419d2b608686ef158260e30607" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>updateMaterial</name></member>
+      <member refid="d0/dee/a04014_1a2bdc8907317b8a1f12d3b60ab767f9c6" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>updateOutputs</name></member>
+      <member refid="d0/dee/a04014_1a56338db0aed5f44427291aa6c631872b" prot="public" virt="virtual"><scope>castor3d::MetalnessComponent::MaterialShader</scope><name>~PassShader</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

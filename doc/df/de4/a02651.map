@@ -1,5 +1,5 @@
-<map id="castor3d::BinaryParser&lt; SkinComponent &gt;" name="castor3d::BinaryParser&lt; SkinComponent &gt;">
-<area shape="rect" id="node1" title="SkinComponent loader." alt="" coords="21,200,175,241"/>
-<area shape="rect" id="node2" href="$d4/dad/a02500.html" title=" " alt="" coords="5,109,191,151"/>
-<area shape="rect" id="node3" href="$d4/dad/a02500.html" title="Binary data chunk reader base class." alt="" coords="5,5,191,47"/>
+<map id="castor3d::BinaryParserBase&lt; TParsed &gt;" name="castor3d::BinaryParserBase&lt; TParsed &gt;">
+<area shape="rect" id="node1" title="Binary data chunk reader base class." alt="" coords="71,93,257,133"/>
+<area shape="rect" id="node2" href="$db/d6a/a02613.html" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="node3" href="$de/dc5/a04521.html" title=" " alt="" coords="185,5,309,31"/>
 </map>

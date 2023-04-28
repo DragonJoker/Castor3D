@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d4/d32/a06621" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::BackgroundModelEntry</compoundname>
+    <includes local="no">SdwModule.hpp</includes>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/SdwModule.hpp" line="170" column="1" bodyfile="Shader/Shaders/SdwModule.hpp" bodystart="171" bodyend="172"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

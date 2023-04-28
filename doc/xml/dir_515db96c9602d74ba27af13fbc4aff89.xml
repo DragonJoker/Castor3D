@@ -1,15 +1,15 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_515db96c9602d74ba27af13fbc4aff89" kind="dir">
     <compoundname>Scene/Light</compoundname>
-    <innerfile refid="d1/d72/a01319">DirectionalLight.hpp</innerfile>
-    <innerfile refid="d5/df4/a01322">Light.hpp</innerfile>
-    <innerfile refid="dd/d5d/a01325">LightCategory.hpp</innerfile>
-    <innerfile refid="dc/dd9/a01328">LightFactory.hpp</innerfile>
-    <innerfile refid="dc/d8e/a01331">LightImporter.hpp</innerfile>
-    <innerfile refid="d4/dd1/a01334">LightModule.hpp</innerfile>
-    <innerfile refid="db/dec/a01337">PointLight.hpp</innerfile>
-    <innerfile refid="d7/d51/a01340">SpotLight.hpp</innerfile>
+    <innerfile refid="d2/d2f/a01460">DirectionalLight.hpp</innerfile>
+    <innerfile refid="d7/d42/a01463">Light.hpp</innerfile>
+    <innerfile refid="d5/d67/a01466">LightCategory.hpp</innerfile>
+    <innerfile refid="d9/d8b/a01469">LightFactory.hpp</innerfile>
+    <innerfile refid="d2/d48/a01472">LightImporter.hpp</innerfile>
+    <innerfile refid="d7/d1d/a01475">LightModule.hpp</innerfile>
+    <innerfile refid="d8/d7b/a01478">PointLight.hpp</innerfile>
+    <innerfile refid="d1/de4/a01481">SpotLight.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

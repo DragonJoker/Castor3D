@@ -1,7 +1,10 @@
-<map id="castor3d::IridescenceComponent" name="castor3d::IridescenceComponent">
-<area shape="rect" id="node1" title=" " alt="" coords="21,352,233,379"/>
-<area shape="rect" id="node2" href="$d0/dcc/a03148.html" title=" " alt="" coords="10,261,243,303"/>
-<area shape="rect" id="node3" href="$d8/d23/a03712.html" title=" " alt="" coords="5,81,181,108"/>
-<area shape="rect" id="node5" href="$d0/dcc/a03148.html" title="Pass component holding base pass data." alt="" coords="115,157,349,199"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,181,32"/>
+<map id="castor3d::ControlsManager" name="castor3d::ControlsManager">
+<area shape="rect" id="node1" title=" " alt="" coords="313,359,492,384"/>
+<area shape="rect" id="node2" href="$dd/d02/a03145.html" title=" " alt="" coords="168,284,349,309"/>
+<area shape="rect" id="node3" title=" " alt="" coords="5,189,192,214"/>
+<area shape="rect" id="node4" title=" " alt="" coords="217,189,301,214"/>
+<area shape="rect" id="node5" title=" " alt="" coords="325,181,496,221"/>
+<area shape="rect" id="node6" title=" " alt="" coords="354,93,467,119"/>
+<area shape="rect" id="node7" title=" " alt="" coords="391,5,430,31"/>
+<area shape="rect" id="node8" href="$da/d0a/a03297.html" title=" " alt="" coords="373,284,528,309"/>
 </map>

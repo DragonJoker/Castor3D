@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/de9/a03590" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SpecularData</compoundname>
+    <includes local="no">SpecularComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/de9/a03590_1acdc924d4473f0940a5e83abbb2e4d58e" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; castor::RgbColour &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; castor::RgbColour &gt; castor3d::SpecularData::colour</definition>
+        <argsstring></argsstring>
+        <name>colour</name>
+        <qualifiedname>castor3d::SpecularData::colour</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/SpecularComponent.hpp" line="24" column="34" bodyfile="Material/Pass/Component/Lighting/SpecularComponent.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="da/d0f/a03594_1a9315847cf0772f3e0ad76a3f7d19b6f0" compoundref="d4/ddf/a00488" startline="126" endline="129">castor3d::SpecularComponent::getSpecular</referencedby>
+        <referencedby refid="da/d0f/a03594_1a6149af1fdbe6ca4eda7e14ac960758c2" compoundref="d4/ddf/a00488" startline="131" endline="134">castor3d::SpecularComponent::setSpecular</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="dd/de9/a03590_1a1ae31e6707bf95efb7329ba21c37ad15" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::SpecularData::factor</definition>
+        <argsstring></argsstring>
+        <name>factor</name>
+        <qualifiedname>castor3d::SpecularData::factor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/SpecularComponent.hpp" line="25" column="34" bodyfile="Material/Pass/Component/Lighting/SpecularComponent.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="da/d0f/a03594_1a58bd818a748ee61f1e067e87fd3202eb" compoundref="d4/ddf/a00488" startline="116" endline="119">castor3d::SpecularComponent::getFactor</referencedby>
+        <referencedby refid="da/d0f/a03594_1a94bba7adf638dc33a8149251e4879cac" compoundref="d4/ddf/a00488" startline="121" endline="124">castor3d::SpecularComponent::setFactor</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/de9/a03590_1a0c029a3f04509db06b39b71dc1af5be3" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::SpecularData::SpecularData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty, castor::RgbColour defaultValue)</argsstring>
+        <name>SpecularData</name>
+        <qualifiedname>castor3d::SpecularData::SpecularData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <param>
+          <type>castor::RgbColour</type>
+          <declname>defaultValue</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Lighting/SpecularComponent.hpp" line="17" column="10" bodyfile="Material/Pass/Component/Lighting/SpecularComponent.hpp" bodystart="17" bodyend="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/Lighting/SpecularComponent.hpp" line="15" column="1" bodyfile="Material/Pass/Component/Lighting/SpecularComponent.hpp" bodystart="16" bodyend="26"/>
+    <listofallmembers>
+      <member refid="dd/de9/a03590_1acdc924d4473f0940a5e83abbb2e4d58e" prot="public" virt="non-virtual"><scope>castor3d::SpecularData</scope><name>colour</name></member>
+      <member refid="dd/de9/a03590_1a1ae31e6707bf95efb7329ba21c37ad15" prot="public" virt="non-virtual"><scope>castor3d::SpecularData</scope><name>factor</name></member>
+      <member refid="dd/de9/a03590_1a0c029a3f04509db06b39b71dc1af5be3" prot="public" virt="non-virtual"><scope>castor3d::SpecularData</scope><name>SpecularData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

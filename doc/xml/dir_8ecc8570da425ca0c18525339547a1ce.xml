@@ -1,13 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_8ecc8570da425ca0c18525339547a1ce" kind="dir">
     <compoundname>Shader/ShaderBuffers</compoundname>
-    <innerfile refid="dc/d10/a01412">LightBuffer.hpp</innerfile>
-    <innerfile refid="de/d70/a01415">PassBuffer.hpp</innerfile>
-    <innerfile refid="d4/d3c/a01418">ShaderBuffersModule.hpp</innerfile>
-    <innerfile refid="d4/d20/a01421">SssProfileBuffer.hpp</innerfile>
-    <innerfile refid="d5/da5/a01424">TextureAnimationBuffer.hpp</innerfile>
-    <innerfile refid="db/d78/a01427">TextureConfigurationBuffer.hpp</innerfile>
+    <innerfile refid="d7/db6/a01556">FontGlyphBuffer.hpp</innerfile>
+    <innerfile refid="de/d1a/a01559">LightBuffer.hpp</innerfile>
+    <innerfile refid="d2/dc1/a01562">PassBuffer.hpp</innerfile>
+    <innerfile refid="d6/d82/a01565">ShaderBuffersModule.hpp</innerfile>
+    <innerfile refid="da/daf/a01568">SssProfileBuffer.hpp</innerfile>
+    <innerfile refid="d5/d10/a01571">TextureAnimationBuffer.hpp</innerfile>
+    <innerfile refid="d9/df5/a01574">TextureConfigurationBuffer.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

@@ -1,6 +1,11 @@
-<map id="castor3d::ShaderProgram" name="castor3d::ShaderProgram">
-<area shape="rect" id="node1" title=" " alt="" coords="285,56,456,83"/>
-<area shape="rect" id="node2" title=" " alt="" coords="68,5,175,32"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,56,237,83"/>
-<area shape="rect" id="node4" title=" " alt="" coords="23,107,219,149"/>
+<map id="castor3d::EquirectangularToCube" name="castor3d::EquirectangularToCube">
+<area shape="rect" id="node1" title=" " alt="" coords="121,432,292,472"/>
+<area shape="rect" id="node2" href="$db/da0/a05757.html" title=" " alt="" coords="131,357,282,383"/>
+<area shape="rect" id="node3" href="$d6/d0f/a05457.html" title=" " alt="" coords="127,269,286,295"/>
+<area shape="rect" id="node4" href="$d3/d99/a05585.html" title=" " alt="" coords="15,181,182,207"/>
+<area shape="rect" id="node5" title=" " alt="" coords="5,93,192,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="207,181,385,207"/>
+<area shape="rect" id="node7" href="$d9/de3/a05449.html" title=" " alt="" coords="217,93,369,119"/>
+<area shape="rect" id="node8" title=" " alt="" coords="394,93,507,119"/>
+<area shape="rect" id="node9" title=" " alt="" coords="431,5,470,31"/>
 </map>

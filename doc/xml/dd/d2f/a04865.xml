@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/d2f/a04865" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::OverlayVisitor</compoundname>
+    <includes local="no">OverlayVisitor.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d2f/a04865_1ab177d0be7b6eb0efc27240c929ee9c90" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::OverlayVisitor::~OverlayVisitor</definition>
+        <argsstring>()=default</argsstring>
+        <name>~OverlayVisitor</name>
+        <qualifiedname>castor3d::OverlayVisitor::~OverlayVisitor</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="14" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d2f/a04865_1ae2d7c4f7df14a0ed05e5cc4f5870e701" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(PanelOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayVisitor::visit</qualifiedname>
+        <param>
+          <type><ref refid="d7/dd0/a04869" kindref="compound">PanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="15" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d2f/a04865_1a5d126de418a8ae350b89dfface6aac4c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(BorderPanelOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayVisitor::visit</qualifiedname>
+        <param>
+          <type><ref refid="d4/dcf/a04781" kindref="compound">BorderPanelOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="16" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d2f/a04865_1a7adc92b8b93307b1ba2b5a784488e918" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::OverlayVisitor::visit</definition>
+        <argsstring>(TextOverlay const &amp;overlay)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::OverlayVisitor::visit</qualifiedname>
+        <param>
+          <type><ref refid="d3/d24/a04873" kindref="compound">TextOverlay</ref> const &amp;</type>
+          <declname>overlay</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayVisitor.hpp" line="17" column="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/OverlayVisitor.hpp" line="11" column="1" bodyfile="Overlay/OverlayVisitor.hpp" bodystart="12" bodyend="18"/>
+    <listofallmembers>
+      <member refid="dd/d2f/a04865_1ae2d7c4f7df14a0ed05e5cc4f5870e701" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+      <member refid="dd/d2f/a04865_1a5d126de418a8ae350b89dfface6aac4c" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+      <member refid="dd/d2f/a04865_1a7adc92b8b93307b1ba2b5a784488e918" prot="public" virt="pure-virtual"><scope>castor3d::OverlayVisitor</scope><name>visit</name></member>
+      <member refid="dd/d2f/a04865_1ab177d0be7b6eb0efc27240c929ee9c90" prot="public" virt="virtual"><scope>castor3d::OverlayVisitor</scope><name>~OverlayVisitor</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

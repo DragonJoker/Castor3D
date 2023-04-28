@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/dfc/a02901" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::GpuBufferBase::MemoryRange</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/dfc/a02901_1aae8dd5449c4ae7766ebd8f9120c6fe7b" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::GpuBufferBase::MemoryRange::offset</definition>
+        <argsstring></argsstring>
+        <name>offset</name>
+        <qualifiedname>castor3d::GpuBufferBase::MemoryRange::offset</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="217" column="14" bodyfile="Buffer/GpuBuffer.hpp" bodystart="217" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dfc/a02901_1a3b5dae8f6d0d0aa0435efe23c24633e5" prot="public" static="no" mutable="no">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::GpuBufferBase::MemoryRange::size</definition>
+        <argsstring></argsstring>
+        <name>size</name>
+        <qualifiedname>castor3d::GpuBufferBase::MemoryRange::size</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="218" column="14" bodyfile="Buffer/GpuBuffer.hpp" bodystart="218" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dfc/a02901_1a5f7daa91d594a0beaf8dc87a47df3d3c" prot="public" static="no" mutable="no">
+        <type>VkAccessFlags</type>
+        <definition>VkAccessFlags castor3d::GpuBufferBase::MemoryRange::dstAccessFlags</definition>
+        <argsstring></argsstring>
+        <name>dstAccessFlags</name>
+        <qualifiedname>castor3d::GpuBufferBase::MemoryRange::dstAccessFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="219" column="15" bodyfile="Buffer/GpuBuffer.hpp" bodystart="219" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/dfc/a02901_1a51f93e66f2e4b162af5913df7fd1e625" prot="public" static="no" mutable="no">
+        <type>VkPipelineStageFlags</type>
+        <definition>VkPipelineStageFlags castor3d::GpuBufferBase::MemoryRange::dstPipelineFlags</definition>
+        <argsstring></argsstring>
+        <name>dstPipelineFlags</name>
+        <qualifiedname>castor3d::GpuBufferBase::MemoryRange::dstPipelineFlags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/GpuBuffer.hpp" line="220" column="22" bodyfile="Buffer/GpuBuffer.hpp" bodystart="220" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Buffer/GpuBuffer.hpp" line="215" column="1" bodyfile="Buffer/GpuBuffer.hpp" bodystart="216" bodyend="221"/>
+    <listofallmembers>
+      <member refid="d1/dfc/a02901_1a5f7daa91d594a0beaf8dc87a47df3d3c" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase::MemoryRange</scope><name>dstAccessFlags</name></member>
+      <member refid="d1/dfc/a02901_1a51f93e66f2e4b162af5913df7fd1e625" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase::MemoryRange</scope><name>dstPipelineFlags</name></member>
+      <member refid="d1/dfc/a02901_1aae8dd5449c4ae7766ebd8f9120c6fe7b" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase::MemoryRange</scope><name>offset</name></member>
+      <member refid="d1/dfc/a02901_1a3b5dae8f6d0d0aa0435efe23c24633e5" prot="public" virt="non-virtual"><scope>castor3d::GpuBufferBase::MemoryRange</scope><name>size</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,31 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/df3/a05058" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::DirectionalLightPass</compoundname>
+    <includes local="no">DirectionalLightPass.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/df3/a05058_1a1809280aedad393716787e0caeda67a5" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d5/da6/a01698_1aec4f86dd5fea51ba4c7a8a10c7f503c7" kindref="member">ShaderPtr</ref></type>
+        <definition>static ShaderPtr castor3d::DirectionalLightPass::getVertexShaderSource</definition>
+        <argsstring>()</argsstring>
+        <name>getVertexShaderSource</name>
+        <qualifiedname>castor3d::DirectionalLightPass::getVertexShaderSource</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/DirectionalLightPass.hpp" line="14" column="18"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Opaque/Lighting/DirectionalLightPass.hpp" line="11" column="1" bodyfile="Render/Opaque/Lighting/DirectionalLightPass.hpp" bodystart="12" bodyend="15"/>
+    <listofallmembers>
+      <member refid="d3/df3/a05058_1a1809280aedad393716787e0caeda67a5" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLightPass</scope><name>getVertexShaderSource</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

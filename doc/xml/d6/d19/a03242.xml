@@ -1,0 +1,315 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d6/d19/a03242" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ExpandablePanelStyle</compoundname>
+    <basecompoundref refid="d5/de7/a03234" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <includes local="no">StyleExpandablePanel.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/d19/a03242_1aa5dc808d4100cf57039be30271f54408" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::ExpandablePanelStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725dae59bcd5f7d1aafd0079a52d884dbe5e5" kindref="member">ControlType::eExpandablePanel</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="17" column="30" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d19/a03242_1a1a21d912e10ca4d9774fcfbdac4f31d2" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref></type>
+        <definition>PanelStyle castor3d::ExpandablePanelStyle::m_headerStyle</definition>
+        <argsstring></argsstring>
+        <name>m_headerStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::m_headerStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="80" column="12" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d19/a03242_1ae6e63e20b18169a888a657c40348589b" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref></type>
+        <definition>ButtonStyle castor3d::ExpandablePanelStyle::m_expandStyle</definition>
+        <argsstring></argsstring>
+        <name>m_expandStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::m_expandStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="81" column="13" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d19/a03242_1a42c16c6ac96b477568902151716c740c" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref></type>
+        <definition>PanelStyle castor3d::ExpandablePanelStyle::m_contentStyle</definition>
+        <argsstring></argsstring>
+        <name>m_contentStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::m_contentStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="82" column="12" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d19/a03242_1a5205282ae028f722d0e98cc98554fa71" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ExpandablePanelStyle::ExpandablePanelStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ExpandablePanelStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::ExpandablePanelStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="19" column="1" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="19" bodyend="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d19/a03242_1a9f645d90f128bdb98af2ff32ab834537" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ExpandablePanelStyle::ExpandablePanelStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ExpandablePanelStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::ExpandablePanelStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="33" column="1" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="33" bodyend="38"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d19/a03242_1a36d69885ea13a3edac573fd45147232a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> const &amp;</type>
+        <definition>PanelStyle const  &amp; castor3d::ExpandablePanelStyle::getHeaderStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getHeaderStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::getHeaderStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="40" column="19" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="40" bodyend="43"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d19/a03242_1a1f164530ee7fce3e42a267a75d7a873c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref> const &amp;</type>
+        <definition>ButtonStyle const  &amp; castor3d::ExpandablePanelStyle::getExpandStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getExpandStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::getExpandStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="45" column="20" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="45" bodyend="48"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d19/a03242_1ae5faa2fb0397d783d5b10b25f912c874" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> const &amp;</type>
+        <definition>PanelStyle const  &amp; castor3d::ExpandablePanelStyle::getContentStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getContentStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::getContentStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="50" column="19" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="50" bodyend="53"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d19/a03242_1a3923cdab232a8ab0391a13403b6203a6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> &amp;</type>
+        <definition>PanelStyle &amp; castor3d::ExpandablePanelStyle::getHeaderStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getHeaderStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::getHeaderStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="55" column="13" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="55" bodyend="58"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d19/a03242_1a1dccb3eca2c5516f1490cc45608a5e61" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref> &amp;</type>
+        <definition>ButtonStyle &amp; castor3d::ExpandablePanelStyle::getExpandStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getExpandStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::getExpandStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="60" column="14" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d19/a03242_1af37ee781728c674414294950d958d7a2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> &amp;</type>
+        <definition>PanelStyle &amp; castor3d::ExpandablePanelStyle::getContentStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getContentStyle</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::getContentStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="65" column="13" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="65" bodyend="68"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d19/a03242_1a8b80c7c9ef8c031ffe5deae95f3eca10" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ExpandablePanelStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="d5/de7/a03234_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="71" column="6" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="71" bodyend="73"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d19/a03242_1ae8f2f6697197cc53fdff0b82fb1cbea0" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ExpandablePanelStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::ExpandablePanelStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="d5/de7/a03234_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleExpandablePanel.hpp" line="75" column="6" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="75" bodyend="77"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d5/de7/a03234"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ExpandablePanelStyle</label>
+        <link refid="d6/d19/a03242"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d5/de7/a03234"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ExpandablePanelStyle</label>
+        <link refid="d6/d19/a03242"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Theme/StyleExpandablePanel.hpp" line="13" column="1" bodyfile="Gui/Theme/StyleExpandablePanel.hpp" bodystart="15" bodyend="83"/>
+    <listofallmembers>
+      <member refid="d5/de7/a03234_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>ControlStyle</name></member>
+      <member refid="d5/de7/a03234_1aeda2101fba70a69cd4bf8256f22d8c16" prot="protected" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="d6/d19/a03242_1a8b80c7c9ef8c031ffe5deae95f3eca10" prot="private" virt="virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="d6/d19/a03242_1ae8f2f6697197cc53fdff0b82fb1cbea0" prot="private" virt="virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="d6/d19/a03242_1a5205282ae028f722d0e98cc98554fa71" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>ExpandablePanelStyle</name></member>
+      <member refid="d6/d19/a03242_1a9f645d90f128bdb98af2ff32ab834537" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>ExpandablePanelStyle</name></member>
+      <member refid="d5/de7/a03234_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="d6/d19/a03242_1ae5faa2fb0397d783d5b10b25f912c874" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getContentStyle</name></member>
+      <member refid="d6/d19/a03242_1af37ee781728c674414294950d958d7a2" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getContentStyle</name></member>
+      <member refid="d5/de7/a03234_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getCursor</name></member>
+      <member refid="d5/de7/a03234_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getEngine</name></member>
+      <member refid="d6/d19/a03242_1a1f164530ee7fce3e42a267a75d7a873c" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getExpandStyle</name></member>
+      <member refid="d6/d19/a03242_1a1dccb3eca2c5516f1490cc45608a5e61" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getExpandStyle</name></member>
+      <member refid="d5/de7/a03234_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="d6/d19/a03242_1a36d69885ea13a3edac573fd45147232a" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getHeaderStyle</name></member>
+      <member refid="d6/d19/a03242_1a3923cdab232a8ab0391a13403b6203a6" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getHeaderStyle</name></member>
+      <member refid="d5/de7/a03234_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getScene</name></member>
+      <member refid="d5/de7/a03234_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>getType</name></member>
+      <member refid="d5/de7/a03234_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>hasScene</name></member>
+      <member refid="d5/de7/a03234_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="d6/d19/a03242_1a42c16c6ac96b477568902151716c740c" prot="private" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>m_contentStyle</name></member>
+      <member refid="d6/d19/a03242_1ae6e63e20b18169a888a657c40348589b" prot="private" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>m_expandStyle</name></member>
+      <member refid="d6/d19/a03242_1a1a21d912e10ca4d9774fcfbdac4f31d2" prot="private" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>m_headerStyle</name></member>
+      <member refid="d5/de7/a03234_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/de7/a03234_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>setCursor</name></member>
+      <member refid="d5/de7/a03234_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="d6/d19/a03242_1aa5dc808d4100cf57039be30271f54408" prot="public" virt="non-virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>Type</name></member>
+      <member refid="d5/de7/a03234_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::ExpandablePanelStyle</scope><name>~ControlStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

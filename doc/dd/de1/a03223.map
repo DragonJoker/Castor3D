@@ -1,5 +1,11 @@
-<map id="castor3d::IridescenceComponent::ComponentsShader" name="castor3d::IridescenceComponent::ComponentsShader">
-<area shape="rect" id="node1" title=" " alt="" coords="15,169,227,211"/>
-<area shape="rect" id="node2" href="$d4/d43/a03700.html" title=" " alt="" coords="5,80,236,121"/>
-<area shape="rect" id="node3" href="$df/d9f/a03696.html" title=" " alt="" coords="21,5,220,32"/>
+<map id="castor3d::GuiParserContext" name="castor3d::GuiParserContext">
+<area shape="rect" id="node1" title=" " alt="" coords="813,127,996,152"/>
+<area shape="rect" id="node2" title=" " alt="" coords="500,5,671,31"/>
+<area shape="rect" id="node3" title=" " alt="" coords="179,63,290,88"/>
+<area shape="rect" id="node5" title=" " alt="" coords="504,55,667,95"/>
+<area shape="rect" id="node6" title=" " alt="" coords="502,119,669,159"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,63,44,88"/>
+<area shape="rect" id="node7" href="$d4/d44/a03065.html" title=" " alt="" coords="525,184,645,209"/>
+<area shape="rect" id="node8" title=" " alt="" coords="149,184,320,209"/>
+<area shape="rect" id="node9" href="$d6/d24/a03249.html" title=" " alt="" coords="497,233,673,259"/>
 </map>

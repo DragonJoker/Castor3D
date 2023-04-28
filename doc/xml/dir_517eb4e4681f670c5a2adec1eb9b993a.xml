@@ -1,23 +1,23 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_517eb4e4681f670c5a2adec1eb9b993a" kind="dir">
     <compoundname>Model/Mesh/Submesh/Component</compoundname>
-    <innerfile refid="de/ddd/a00653">BaseDataComponent.hpp</innerfile>
-    <innerfile refid="d6/d01/a13236">ComponentModule.hpp</innerfile>
-    <innerfile refid="dc/df2/a00656">Face.hpp</innerfile>
-    <innerfile refid="dc/d91/a00659">FaceIndices.hpp</innerfile>
-    <innerfile refid="dc/df1/a00662">FaceInfos.hpp</innerfile>
-    <innerfile refid="da/d46/a00665">IndexMapping.hpp</innerfile>
-    <innerfile refid="d0/d5c/a00668">InstantiationComponent.hpp</innerfile>
-    <innerfile refid="d8/d13/a00671">Line.hpp</innerfile>
-    <innerfile refid="d8/d73/a00674">LineIndices.hpp</innerfile>
-    <innerfile refid="dc/de4/a00677">LinesMapping.hpp</innerfile>
-    <innerfile refid="d4/d9b/a00680">MeshletComponent.hpp</innerfile>
-    <innerfile refid="db/d77/a00683">MorphComponent.hpp</innerfile>
-    <innerfile refid="df/d9e/a00686">PassMasksComponent.hpp</innerfile>
-    <innerfile refid="d1/d87/a00689">SkinComponent.hpp</innerfile>
-    <innerfile refid="d0/db6/a00692">SubmeshComponent.hpp</innerfile>
-    <innerfile refid="d5/d5b/a00695">TriFaceMapping.hpp</innerfile>
+    <innerfile refid="da/d96/a00782">BaseDataComponent.hpp</innerfile>
+    <innerfile refid="db/d05/a14830">ComponentModule.hpp</innerfile>
+    <innerfile refid="d3/d00/a00785">Face.hpp</innerfile>
+    <innerfile refid="df/d0c/a00788">FaceIndices.hpp</innerfile>
+    <innerfile refid="d4/d45/a00791">FaceInfos.hpp</innerfile>
+    <innerfile refid="d5/d12/a00794">IndexMapping.hpp</innerfile>
+    <innerfile refid="da/db8/a00797">InstantiationComponent.hpp</innerfile>
+    <innerfile refid="df/d0e/a00800">Line.hpp</innerfile>
+    <innerfile refid="d5/d72/a00803">LineIndices.hpp</innerfile>
+    <innerfile refid="d0/dad/a00806">LinesMapping.hpp</innerfile>
+    <innerfile refid="dd/d7e/a00809">MeshletComponent.hpp</innerfile>
+    <innerfile refid="d8/db7/a00812">MorphComponent.hpp</innerfile>
+    <innerfile refid="d8/d2d/a00815">PassMasksComponent.hpp</innerfile>
+    <innerfile refid="d3/d60/a00818">SkinComponent.hpp</innerfile>
+    <innerfile refid="d6/d8b/a00821">SubmeshComponent.hpp</innerfile>
+    <innerfile refid="d8/d1c/a00824">TriFaceMapping.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

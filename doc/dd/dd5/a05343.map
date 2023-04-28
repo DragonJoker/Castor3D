@@ -1,5 +1,11 @@
-<map id="castor3d::ToneMappingVisitor" name="castor3d::ToneMappingVisitor">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,200,181"/>
-<area shape="rect" id="node2" href="$d2/d38/a04176.html" title=" " alt="" coords="21,80,184,107"/>
-<area shape="rect" id="node3" href="$dc/d85/a04168.html" title=" " alt="" coords="6,5,199,32"/>
+<map id="castor3d::RenderQuad" name="castor3d::RenderQuad">
+<area shape="rect" id="node1" title=" " alt="" coords="236,357,388,383"/>
+<area shape="rect" id="node2" title=" " alt="" coords="101,269,208,295"/>
+<area shape="rect" id="node3" href="$d3/d99/a05585.html" title=" " alt="" coords="342,181,509,207"/>
+<area shape="rect" id="node5" href="$d6/d0f/a05457.html" title=" " alt="" coords="233,269,391,295"/>
+<area shape="rect" id="node4" title=" " alt="" coords="332,93,519,119"/>
+<area shape="rect" id="node6" title=" " alt="" coords="125,181,304,207"/>
+<area shape="rect" id="node7" href="$d9/de3/a05449.html" title=" " alt="" coords="5,93,157,119"/>
+<area shape="rect" id="node8" title=" " alt="" coords="182,93,295,119"/>
+<area shape="rect" id="node9" title=" " alt="" coords="219,5,258,31"/>
 </map>

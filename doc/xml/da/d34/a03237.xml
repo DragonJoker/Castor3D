@@ -1,0 +1,438 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/d34/a03237" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::Layout::Item</compoundname>
+    <includes local="no">Layout.hpp</includes>
+    <innerclass refid="dc/dc7/a03241" prot="public">castor3d::Layout::Item::Value</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="enum" id="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992" prot="public" static="no" strong="no">
+        <type></type>
+        <name>Type</name>
+        <qualifiedname>castor3d::Layout::Item::Type</qualifiedname>
+        <enumvalue id="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992a3cce60f817dfb46f9ae56288655db689" prot="public">
+          <name>eControl</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <enumvalue id="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992a516efbc2cec3abe2d5cf63444523f192" prot="public">
+          <name>eSpacer</name>
+          <briefdescription>
+          </briefdescription>
+          <detaileddescription>
+          </detaileddescription>
+        </enumvalue>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="59" column="1" bodyfile="Gui/Layout/Layout.hpp" bodystart="60" bodyend="63"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="da/d34/a03237_1a04f8fcc73115eef17c3ae5838806977b" prot="private" static="no" mutable="no">
+        <type><ref refid="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992" kindref="member">Type</ref></type>
+        <definition>Type castor3d::Layout::Item::m_type</definition>
+        <argsstring></argsstring>
+        <name>m_type</name>
+        <qualifiedname>castor3d::Layout::Item::m_type</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="186" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="186" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a03237_1a55c4c0c0bd07d05bac896e465c4fc58c" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/dc7/a03241" kindref="compound">Value</ref></type>
+        <definition>Value castor3d::Layout::Item::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor3d::Layout::Item::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="187" column="7" bodyfile="Gui/Layout/Layout.hpp" bodystart="187" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a03237_1aa4a8fdc1f6bb4b71acd68c06cad862d0" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d24/a03249" kindref="compound">LayoutItemFlags</ref></type>
+        <definition>LayoutItemFlags castor3d::Layout::Item::m_flags</definition>
+        <argsstring></argsstring>
+        <name>m_flags</name>
+        <qualifiedname>castor3d::Layout::Item::m_flags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="188" column="17" bodyfile="Gui/Layout/Layout.hpp" bodystart="188" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d34/a03237_1a4ff8815db2b4d19082f547148ed5c3eb" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1a51e3ddb9a704c48a413420e2054ea0d7" kindref="member">OnControlChangedConnection</ref></type>
+        <definition>OnControlChangedConnection castor3d::Layout::Item::m_connection</definition>
+        <argsstring></argsstring>
+        <name>m_connection</name>
+        <qualifiedname>castor3d::Layout::Item::m_connection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="189" column="28" bodyfile="Gui/Layout/Layout.hpp" bodystart="189" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="da/d34/a03237_1a85cc8b0c3b91b9a87fc7c0f447d0ffbe" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Layout::Item::Item</definition>
+        <argsstring>(Control &amp;c, LayoutItemFlags f, OnControlChangedConnection o) noexcept</argsstring>
+        <name>Item</name>
+        <qualifiedname>castor3d::Layout::Item::Item</qualifiedname>
+        <param>
+          <type><ref refid="d5/d27/a03157" kindref="compound">Control</ref> &amp;</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d24/a03249" kindref="compound">LayoutItemFlags</ref></type>
+          <declname>f</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a51e3ddb9a704c48a413420e2054ea0d7" kindref="member">OnControlChangedConnection</ref></type>
+          <declname>o</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a control item. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">c</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The item control. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">f</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The item flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">o</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The connection to the control changed signal. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="79" column="10" bodyfile="Gui/Layout/Layout.hpp" bodystart="79" bodyend="87"/>
+        <references refid="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992a3cce60f817dfb46f9ae56288655db689" compoundref="dd/df5/a00386" startline="61">eControl</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1a2f414859c3f0ab0fd877e71c6b31a9a4" prot="public" static="no" const="no" explicit="yes" inline="yes" noexcept="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Layout::Item::Item</definition>
+        <argsstring>(Spacer &amp;s) noexcept</argsstring>
+        <name>Item</name>
+        <qualifiedname>castor3d::Layout::Item::Item</qualifiedname>
+        <param>
+          <type><ref refid="da/d0c/a03229" kindref="compound">Spacer</ref> &amp;</type>
+          <declname>s</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a spacer item. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">s</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The item spacer. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="93" column="10" bodyfile="Gui/Layout/Layout.hpp" bodystart="93" bodyend="98"/>
+        <references refid="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992a516efbc2cec3abe2d5cf63444523f192" compoundref="dd/df5/a00386" startline="62">eSpacer</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1a609ea563f1343a51e8fa318f299695aa" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::isControl</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isControl</name>
+        <qualifiedname>castor3d::Layout::Item::isControl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this item is a control, <computeroutput>nullptr</computeroutput> if not. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="102" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="102" bodyend="105"/>
+        <references refid="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992a3cce60f817dfb46f9ae56288655db689" compoundref="dd/df5/a00386" startline="61">eControl</references>
+        <referencedby refid="da/d34/a03237_1a5511b93396ab3e6d8e86e1e8d10a9e39" compoundref="dd/df5/a00386" startline="109" endline="114">control</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1a5511b93396ab3e6d8e86e1e8d10a9e39" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::control</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>control</name>
+        <qualifiedname>castor3d::Layout::Item::control</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The control if this item is a control, <computeroutput>nullptr</computeroutput> if not. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="109" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="109" bodyend="114"/>
+        <references refid="dc/dc7/a03241_1aff07da0ec433a9f8068a70713f119e50" compoundref="dd/df5/a00386" startline="67">castor3d::Layout::Item::Value::control</references>
+        <references refid="da/d34/a03237_1a609ea563f1343a51e8fa318f299695aa" compoundref="dd/df5/a00386" startline="102" endline="105">isControl</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1a5c33f6f3f8d318e226ddbf98cb14da43" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::flags</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>flags</name>
+        <qualifiedname>castor3d::Layout::Item::flags</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The item flags. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="118" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="118" bodyend="121"/>
+        <referencedby refid="da/d34/a03237_1abc3f3964b4397eaacbe712d9b21801eb" compoundref="dd/df5/a00386" startline="159" endline="162">expand</referencedby>
+        <referencedby refid="da/d34/a03237_1a7ab1ee960fe18adeb9452a8c9cad8181" compoundref="dd/df5/a00386" startline="145" endline="148">hAlign</referencedby>
+        <referencedby refid="da/d34/a03237_1abb8de4cd084787c9aa8230980a7217c7" compoundref="dd/df5/a00386" startline="173" endline="176">padding</referencedby>
+        <referencedby refid="da/d34/a03237_1a9740dbc3d2729dd1471c4ca1077af564" compoundref="dd/df5/a00386" startline="180" endline="183">paddingSize</referencedby>
+        <referencedby refid="da/d34/a03237_1aad79a5386cbc71e3ff701f93ecc14645" compoundref="dd/df5/a00386" startline="166" endline="169">reserveSpaceIfHidden</referencedby>
+        <referencedby refid="da/d34/a03237_1ab0e79c0ba6166db29b7fb28e6583aa72" compoundref="dd/df5/a00386" startline="152" endline="155">vAlign</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1a698e9d35f62925d649140d91cf3fadd0" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::isSpacer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isSpacer</name>
+        <qualifiedname>castor3d::Layout::Item::isSpacer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this item is a spacer, <computeroutput>nullptr</computeroutput> if not. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="125" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="125" bodyend="128"/>
+        <references refid="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992a516efbc2cec3abe2d5cf63444523f192" compoundref="dd/df5/a00386" startline="62">eSpacer</references>
+        <referencedby refid="da/d34/a03237_1ad584fe6acf246e26e5aafcf71a02e24b" compoundref="dd/df5/a00386" startline="132" endline="137">spacer</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1ad584fe6acf246e26e5aafcf71a02e24b" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::spacer</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>spacer</name>
+        <qualifiedname>castor3d::Layout::Item::spacer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The spacer if this item is a spacer, <computeroutput>nullptr</computeroutput> if not. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="132" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="132" bodyend="137"/>
+        <references refid="da/d34/a03237_1a698e9d35f62925d649140d91cf3fadd0" compoundref="dd/df5/a00386" startline="125" endline="128">isSpacer</references>
+        <references refid="dc/dc7/a03241_1a4c3d95d955aeed182897ba9567d26296" compoundref="dd/df5/a00386" startline="68">castor3d::Layout::Item::Value::spacer</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1af44a4f13a042276068b5c3c2f4e8b71c" prot="public" static="no" const="yes" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::Size</type>
+        <definition>C3D_API castor::Size castor3d::Layout::Item::getPaddedSize</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getPaddedSize</name>
+        <qualifiedname>castor3d::Layout::Item::getPaddedSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The size including padding. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="141" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1a7ab1ee960fe18adeb9452a8c9cad8181" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::hAlign</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hAlign</name>
+        <qualifiedname>castor3d::Layout::Item::hAlign</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The item horizontal alignment. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="145" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="145" bodyend="148"/>
+        <references refid="da/d34/a03237_1a5c33f6f3f8d318e226ddbf98cb14da43" compoundref="dd/df5/a00386" startline="118" endline="121">flags</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1ab0e79c0ba6166db29b7fb28e6583aa72" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::vAlign</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>vAlign</name>
+        <qualifiedname>castor3d::Layout::Item::vAlign</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The item vertical alignment. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="152" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="152" bodyend="155"/>
+        <references refid="da/d34/a03237_1a5c33f6f3f8d318e226ddbf98cb14da43" compoundref="dd/df5/a00386" startline="118" endline="121">flags</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1abc3f3964b4397eaacbe712d9b21801eb" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::expand</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>expand</name>
+        <qualifiedname>castor3d::Layout::Item::expand</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The item expand status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="159" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="159" bodyend="162"/>
+        <references refid="da/d34/a03237_1a5c33f6f3f8d318e226ddbf98cb14da43" compoundref="dd/df5/a00386" startline="118" endline="121">flags</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1aad79a5386cbc71e3ff701f93ecc14645" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::Layout::Item::reserveSpaceIfHidden</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>reserveSpaceIfHidden</name>
+        <qualifiedname>castor3d::Layout::Item::reserveSpaceIfHidden</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The item reserve space if hidden status. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="166" column="6" bodyfile="Gui/Layout/Layout.hpp" bodystart="166" bodyend="169"/>
+        <references refid="da/d34/a03237_1a5c33f6f3f8d318e226ddbf98cb14da43" compoundref="dd/df5/a00386" startline="118" endline="121">flags</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1abb8de4cd084787c9aa8230980a7217c7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Layout::Item::padding</definition>
+        <argsstring>(uint32_t i) const noexcept</argsstring>
+        <name>padding</name>
+        <qualifiedname>castor3d::Layout::Item::padding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The padding value at given index. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="173" column="10" bodyfile="Gui/Layout/Layout.hpp" bodystart="173" bodyend="176"/>
+        <references refid="da/d34/a03237_1a5c33f6f3f8d318e226ddbf98cb14da43" compoundref="dd/df5/a00386" startline="118" endline="121">flags</references>
+      </memberdef>
+      <memberdef kind="function" id="da/d34/a03237_1a9740dbc3d2729dd1471c4ca1077af564" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::Layout::Item::paddingSize</definition>
+        <argsstring>(uint32_t i) const noexcept</argsstring>
+        <name>paddingSize</name>
+        <qualifiedname>castor3d::Layout::Item::paddingSize</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>i</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The padding size at given index. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/Layout.hpp" line="180" column="10" bodyfile="Gui/Layout/Layout.hpp" bodystart="180" bodyend="183"/>
+        <references refid="da/d34/a03237_1a5c33f6f3f8d318e226ddbf98cb14da43" compoundref="dd/df5/a00386" startline="118" endline="121">flags</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Gui/Layout/Layout.hpp" line="57" column="1" bodyfile="Gui/Layout/Layout.hpp" bodystart="58" bodyend="190"/>
+    <listofallmembers>
+      <member refid="da/d34/a03237_1a5511b93396ab3e6d8e86e1e8d10a9e39" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>control</name></member>
+      <member refid="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992a3cce60f817dfb46f9ae56288655db689" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>eControl</name></member>
+      <member refid="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992a516efbc2cec3abe2d5cf63444523f192" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>eSpacer</name></member>
+      <member refid="da/d34/a03237_1abc3f3964b4397eaacbe712d9b21801eb" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>expand</name></member>
+      <member refid="da/d34/a03237_1a5c33f6f3f8d318e226ddbf98cb14da43" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>flags</name></member>
+      <member refid="da/d34/a03237_1af44a4f13a042276068b5c3c2f4e8b71c" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>getPaddedSize</name></member>
+      <member refid="da/d34/a03237_1a7ab1ee960fe18adeb9452a8c9cad8181" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>hAlign</name></member>
+      <member refid="da/d34/a03237_1a609ea563f1343a51e8fa318f299695aa" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>isControl</name></member>
+      <member refid="da/d34/a03237_1a698e9d35f62925d649140d91cf3fadd0" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>isSpacer</name></member>
+      <member refid="da/d34/a03237_1a85cc8b0c3b91b9a87fc7c0f447d0ffbe" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>Item</name></member>
+      <member refid="da/d34/a03237_1a2f414859c3f0ab0fd877e71c6b31a9a4" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>Item</name></member>
+      <member refid="da/d34/a03237_1a4ff8815db2b4d19082f547148ed5c3eb" prot="private" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>m_connection</name></member>
+      <member refid="da/d34/a03237_1aa4a8fdc1f6bb4b71acd68c06cad862d0" prot="private" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>m_flags</name></member>
+      <member refid="da/d34/a03237_1a04f8fcc73115eef17c3ae5838806977b" prot="private" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>m_type</name></member>
+      <member refid="da/d34/a03237_1a55c4c0c0bd07d05bac896e465c4fc58c" prot="private" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>m_value</name></member>
+      <member refid="da/d34/a03237_1abb8de4cd084787c9aa8230980a7217c7" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>padding</name></member>
+      <member refid="da/d34/a03237_1a9740dbc3d2729dd1471c4ca1077af564" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>paddingSize</name></member>
+      <member refid="da/d34/a03237_1aad79a5386cbc71e3ff701f93ecc14645" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>reserveSpaceIfHidden</name></member>
+      <member refid="da/d34/a03237_1ad584fe6acf246e26e5aafcf71a02e24b" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>spacer</name></member>
+      <member refid="da/d34/a03237_1ac646309edb181897f5fb81a6cf982992" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>Type</name></member>
+      <member refid="da/d34/a03237_1ab0e79c0ba6166db29b7fb28e6583aa72" prot="public" virt="non-virtual"><scope>castor3d::Layout::Item</scope><name>vAlign</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,110 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/dfb/a05101" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightRenderPass</compoundname>
+    <includes local="no">LightPipeline.hpp</includes>
+    <innerclass refid="dc/db7/a05105" prot="public">castor3d::LightRenderPass::Entry</innerclass>
+    <innerclass refid="db/d83/a05109" prot="public">castor3d::LightRenderPass::Framebuffer</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="db/dfb/a05101_1a5eee08b48c1d68236ba58985e1b173e5" prot="public" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::LightRenderPass::renderPass</definition>
+        <argsstring></argsstring>
+        <name>renderPass</name>
+        <qualifiedname>castor3d::LightRenderPass::renderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="52" column="22" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="52" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dfb/a05101_1a7bfee736975178a31454c7957806149e" prot="public" static="no" mutable="no">
+        <type>ashes::VkClearValueArray</type>
+        <definition>ashes::VkClearValueArray castor3d::LightRenderPass::clearValues</definition>
+        <argsstring></argsstring>
+        <name>clearValues</name>
+        <qualifiedname>castor3d::LightRenderPass::clearValues</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="53" column="26" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="53" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/dfb/a05101_1a1ef7fa14f9b151ebae75e5fad79b8d9d" prot="public" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="db/d83/a05109" kindref="compound">Framebuffer</ref> &gt;</type>
+        <definition>std::vector&lt; Framebuffer &gt; castor3d::LightRenderPass::framebuffers</definition>
+        <argsstring></argsstring>
+        <name>framebuffers</name>
+        <qualifiedname>castor3d::LightRenderPass::framebuffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="54" column="13" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="54" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="1">
+        <label>castor3d::LightRenderPass</label>
+        <link refid="db/dfb/a05101"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>framebuffers</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::LightRenderPass::Entry</label>
+        <link refid="dc/db7/a05105"/>
+      </node>
+      <node id="3">
+        <label>castor3d::LightRenderPass::Framebuffer</label>
+        <link refid="db/d83/a05109"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>attaches</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::vector&lt; castor3d::LightRenderPass::Entry &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor3d::LightRenderPass::Entry &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::vector&lt; castor3d::LightRenderPass::Framebuffer &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; castor3d::LightRenderPass::Framebuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="37" column="1" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="38" bodyend="55"/>
+    <listofallmembers>
+      <member refid="db/dfb/a05101_1a7bfee736975178a31454c7957806149e" prot="public" virt="non-virtual"><scope>castor3d::LightRenderPass</scope><name>clearValues</name></member>
+      <member refid="db/dfb/a05101_1a1ef7fa14f9b151ebae75e5fad79b8d9d" prot="public" virt="non-virtual"><scope>castor3d::LightRenderPass</scope><name>framebuffers</name></member>
+      <member refid="db/dfb/a05101_1a5eee08b48c1d68236ba58985e1b173e5" prot="public" virt="non-virtual"><scope>castor3d::LightRenderPass</scope><name>renderPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

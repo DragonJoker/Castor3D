@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d6/d58/a02993" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectCacheTraitsT</compoundname>
+    <templateparamlist>
+      <param>
+        <type>typename ElementT</type>
+      </param>
+      <param>
+        <type>typename KeyT</type>
+      </param>
+    </templateparamlist>
+    <briefdescription>
+<para>Helper structure to specialise a scene objects cache behaviour. </para>
+    </briefdescription>
+    <detaileddescription>
+<para><simplesect kind="remark"><para>Must hold: <itemizedlist>
+<listitem>
+<para>Name: The element type name. </para>
+</listitem>
+<listitem>
+<para>ElementT: The resource type. </para>
+</listitem>
+<listitem>
+<para>ElementPtrT: The resource pointer type. </para>
+</listitem>
+<listitem>
+<para>ElementObjT: The resource observer type. </para>
+</listitem>
+<listitem>
+<para>ElementContT: The resource container type. </para>
+</listitem>
+<listitem>
+<para>ElementCacheT: The resource base cache type. </para>
+</listitem>
+<listitem>
+<para>ElementInitialiserT: The prototype of the function use to initialise a resource. </para>
+</listitem>
+<listitem>
+<para>ElementCleanerT: The prototype of the function use to cleanup a resource. </para>
+</listitem>
+<listitem>
+<para>ElementMergerT: The prototype of the function use to merge a cache element into another cache. </para>
+</listitem>
+<listitem>
+<para>ElementAttacherT: The prototype of the function use to attach a cache element to a scene node. </para>
+</listitem>
+<listitem>
+<para>ElementDetacherT: The prototype of the function use to detach a cache element from a scene node. </para>
+</listitem>
+<listitem>
+<para>static ElementPtrT makeElement( ElementKeyT const &amp;, ParametersT &amp;&amp; ... ): The element creation function. </para>
+</listitem>
+</itemizedlist>
+</para>
+</simplesect>
+</para>
+    </detaileddescription>
+    <location file="Cache/CacheModule.hpp" line="134" column="1" bodyfile="Cache/CacheModule.hpp" bodystart="134" bodyend="-1"/>
+    <listofallmembers>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

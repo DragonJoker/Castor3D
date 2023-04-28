@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d1f/a05078" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightRenderPass::Entry</compoundname>
+    <includes local="no">LightPipeline.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d1/d1f/a05078_1aad64c208efc57054127c107e3ea759bd" prot="public" static="no" mutable="no">
+        <type>crg::ImageViewIdArray</type>
+        <definition>crg::ImageViewIdArray castor3d::LightRenderPass::Entry::view</definition>
+        <argsstring></argsstring>
+        <name>view</name>
+        <qualifiedname>castor3d::LightRenderPass::Entry::view</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="41" column="23" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05078_1a98036b2485de087f1c1c21fe34a58369" prot="public" static="no" mutable="no">
+        <type>VkImageLayout</type>
+        <definition>VkImageLayout castor3d::LightRenderPass::Entry::input</definition>
+        <argsstring></argsstring>
+        <name>input</name>
+        <qualifiedname>castor3d::LightRenderPass::Entry::input</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="42" column="15" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d1f/a05078_1ab4e61b0215d94554e6504bd38e511448" prot="public" static="no" mutable="no">
+        <type>VkImageLayout</type>
+        <definition>VkImageLayout castor3d::LightRenderPass::Entry::output</definition>
+        <argsstring></argsstring>
+        <name>output</name>
+        <qualifiedname>castor3d::LightRenderPass::Entry::output</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="43" column="15" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Opaque/Lighting/LightPipeline.hpp" line="39" column="1" bodyfile="Render/Opaque/Lighting/LightPipeline.hpp" bodystart="40" bodyend="44"/>
+    <listofallmembers>
+      <member refid="d1/d1f/a05078_1a98036b2485de087f1c1c21fe34a58369" prot="public" virt="non-virtual"><scope>castor3d::LightRenderPass::Entry</scope><name>input</name></member>
+      <member refid="d1/d1f/a05078_1ab4e61b0215d94554e6504bd38e511448" prot="public" virt="non-virtual"><scope>castor3d::LightRenderPass::Entry</scope><name>output</name></member>
+      <member refid="d1/d1f/a05078_1aad64c208efc57054127c107e3ea759bd" prot="public" virt="non-virtual"><scope>castor3d::LightRenderPass::Entry</scope><name>view</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

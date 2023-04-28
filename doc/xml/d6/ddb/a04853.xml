@@ -1,0 +1,201 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d6/ddb/a04853" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TextLine</compoundname>
+    <includes local="no">OverlayModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d6/ddb/a04853_1afc6f49934145f132acbf3280cd44914e" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TextLine::position</definition>
+        <argsstring></argsstring>
+        <name>position</name>
+        <qualifiedname>castor3d::TextLine::position</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The line position. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="362" column="17" bodyfile="Overlay/OverlayModule.hpp" bodystart="362" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/ddb/a04853_1aacfd7a3413eda44eaf13d5189d54c07c" prot="public" static="no" mutable="no">
+        <type>castor::Point2f</type>
+        <definition>castor::Point2f castor3d::TextLine::range</definition>
+        <argsstring></argsstring>
+        <name>range</name>
+        <qualifiedname>castor3d::TextLine::range</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The y range, relative to bearing. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="365" column="17" bodyfile="Overlay/OverlayModule.hpp" bodystart="365" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/ddb/a04853_1a703d6b96234f84031e571956907eefb0" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::TextLine::width</definition>
+        <argsstring></argsstring>
+        <name>width</name>
+        <qualifiedname>castor3d::TextLine::width</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The line width. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="368" column="7" bodyfile="Overlay/OverlayModule.hpp" bodystart="368" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/ddb/a04853_1a3c587738d9b7d75f7b7c21a1b05f03da" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextLine::wordBegin</definition>
+        <argsstring></argsstring>
+        <name>wordBegin</name>
+        <qualifiedname>castor3d::TextLine::wordBegin</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The index of the beginning of the line. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="371" column="10" bodyfile="Overlay/OverlayModule.hpp" bodystart="371" bodyend="-1"/>
+        <referencedby refid="d6/ddb/a04853_1ac1ec746938e9b15268787ac6cb45f8c3" compoundref="d5/dd3/a00902" startline="385" endline="388">words</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/ddb/a04853_1ac251eb8158915e8742d43d1bd7ace2be" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextLine::wordEnd</definition>
+        <argsstring></argsstring>
+        <name>wordEnd</name>
+        <qualifiedname>castor3d::TextLine::wordEnd</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The index of the end of the line. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="374" column="10" bodyfile="Overlay/OverlayModule.hpp" bodystart="374" bodyend="-1"/>
+        <referencedby refid="d6/ddb/a04853_1ac1ec746938e9b15268787ac6cb45f8c3" compoundref="d5/dd3/a00902" startline="385" endline="388">words</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/ddb/a04853_1a1c4cccb4f371ac8b83991295e76d16ef" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextLine::charBegin</definition>
+        <argsstring></argsstring>
+        <name>charBegin</name>
+        <qualifiedname>castor3d::TextLine::charBegin</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The index of the beginning of the line. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="377" column="10" bodyfile="Overlay/OverlayModule.hpp" bodystart="377" bodyend="-1"/>
+        <referencedby refid="d6/ddb/a04853_1ac176f559d5c81d46a5e3781d24fe7dbc" compoundref="d5/dd3/a00902" startline="390" endline="393">chars</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/ddb/a04853_1a55c4fed17331902648ff662b8ec8d300" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextLine::charEnd</definition>
+        <argsstring></argsstring>
+        <name>charEnd</name>
+        <qualifiedname>castor3d::TextLine::charEnd</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>The index of the end of the line. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="380" column="10" bodyfile="Overlay/OverlayModule.hpp" bodystart="380" bodyend="-1"/>
+        <referencedby refid="d6/ddb/a04853_1ac176f559d5c81d46a5e3781d24fe7dbc" compoundref="d5/dd3/a00902" startline="390" endline="393">chars</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d6/ddb/a04853_1ad09fff8068639853fe61eeb0e71a09d2" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::TextLine::pad</definition>
+        <argsstring></argsstring>
+        <name>pad</name>
+        <qualifiedname>castor3d::TextLine::pad</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="383" column="10" bodyfile="Overlay/OverlayModule.hpp" bodystart="383" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/ddb/a04853_1ac1ec746938e9b15268787ac6cb45f8c3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::TextLine::words</definition>
+        <argsstring>(OverlayWords &amp;cont)</argsstring>
+        <name>words</name>
+        <qualifiedname>castor3d::TextLine::words</qualifiedname>
+        <param>
+          <type><ref refid="df/d9f/a04849" kindref="compound">OverlayWords</ref> &amp;</type>
+          <declname>cont</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="385" column="6" bodyfile="Overlay/OverlayModule.hpp" bodystart="385" bodyend="388"/>
+        <references refid="df/d9f/a04849_1a2d0ded82625fa61b8539f4916ea7e6df" compoundref="d5/dd3/a00902" startline="335">castor3d::OverlayWords::elems</references>
+        <references refid="d6/ddb/a04853_1a3c587738d9b7d75f7b7c21a1b05f03da" compoundref="d5/dd3/a00902" startline="371">wordBegin</references>
+        <references refid="d6/ddb/a04853_1ac251eb8158915e8742d43d1bd7ace2be" compoundref="d5/dd3/a00902" startline="374">wordEnd</references>
+      </memberdef>
+      <memberdef kind="function" id="d6/ddb/a04853_1ac176f559d5c81d46a5e3781d24fe7dbc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::TextLine::chars</definition>
+        <argsstring>(std::array&lt; TextChar, MaxCharsPerOverlay &gt; &amp;cont)</argsstring>
+        <name>chars</name>
+        <qualifiedname>castor3d::TextLine::chars</qualifiedname>
+        <param>
+          <type>std::array&lt; <ref refid="d4/d72/a04841" kindref="compound">TextChar</ref>, <ref refid="d3/d5e/a01725_1a7b589d921bc08a49678ab3a3af0801fd" kindref="member">MaxCharsPerOverlay</ref> &gt; &amp;</type>
+          <declname>cont</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/OverlayModule.hpp" line="390" column="6" bodyfile="Overlay/OverlayModule.hpp" bodystart="390" bodyend="393"/>
+        <references refid="d6/ddb/a04853_1a1c4cccb4f371ac8b83991295e76d16ef" compoundref="d5/dd3/a00902" startline="377">charBegin</references>
+        <references refid="d6/ddb/a04853_1a55c4fed17331902648ff662b8ec8d300" compoundref="d5/dd3/a00902" startline="380">charEnd</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A text chars container, along with its size and position. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/OverlayModule.hpp" line="358" column="1" bodyfile="Overlay/OverlayModule.hpp" bodystart="359" bodyend="394"/>
+    <listofallmembers>
+      <member refid="d6/ddb/a04853_1a1c4cccb4f371ac8b83991295e76d16ef" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>charBegin</name></member>
+      <member refid="d6/ddb/a04853_1a55c4fed17331902648ff662b8ec8d300" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>charEnd</name></member>
+      <member refid="d6/ddb/a04853_1ac176f559d5c81d46a5e3781d24fe7dbc" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>chars</name></member>
+      <member refid="d6/ddb/a04853_1ad09fff8068639853fe61eeb0e71a09d2" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>pad</name></member>
+      <member refid="d6/ddb/a04853_1afc6f49934145f132acbf3280cd44914e" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>position</name></member>
+      <member refid="d6/ddb/a04853_1aacfd7a3413eda44eaf13d5189d54c07c" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>range</name></member>
+      <member refid="d6/ddb/a04853_1a703d6b96234f84031e571956907eefb0" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>width</name></member>
+      <member refid="d6/ddb/a04853_1a3c587738d9b7d75f7b7c21a1b05f03da" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>wordBegin</name></member>
+      <member refid="d6/ddb/a04853_1ac251eb8158915e8742d43d1bd7ace2be" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>wordEnd</name></member>
+      <member refid="d6/ddb/a04853_1ac1ec746938e9b15268787ac6cb45f8c3" prot="public" virt="non-virtual"><scope>castor3d::TextLine</scope><name>words</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/d65/a04089" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SpecificsBuffer</compoundname>
+    <includes local="no">PassModule.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="df/d65/a04089_1a4727d46bac97509e722c563dc444179f" prot="public" static="no">
+        <type>std::function&lt; ShaderBufferUPtr(<ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::SpecificsBuffer::ShaderBufferCreator =  std::function&lt; ShaderBufferUPtr( RenderDevice const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ShaderBufferCreator</name>
+        <qualifiedname>castor3d::SpecificsBuffer::ShaderBufferCreator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassModule.hpp" line="139" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="139" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="df/d65/a04089_1a117b28a6820e3b743a4d21402d6d2ce9" prot="public" static="no">
+        <type>std::function&lt; void(<ref refid="dd/dee/a06325" kindref="compound">ShaderBuffer</ref> &amp;, <ref refid="d6/d16/a04077" kindref="compound">Pass</ref> const &amp;) &gt;</type>
+        <definition>using castor3d::SpecificsBuffer::ShaderBufferUpdater =  std::function&lt; void( ShaderBuffer &amp; , Pass const &amp; ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ShaderBufferUpdater</name>
+        <qualifiedname>castor3d::SpecificsBuffer::ShaderBufferUpdater</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassModule.hpp" line="140" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="df/d65/a04089_1a9c9a4cc2d13fc36313ac42b7a67dc8d7" prot="public" static="no">
+        <type>std::function&lt; shader::BufferBaseUPtr(sdw::ShaderWriter &amp;writer, uint32_t binding, uint32_t set) &gt;</type>
+        <definition>using castor3d::SpecificsBuffer::ShaderBufferDeclarator =  std::function&lt; shader::BufferBaseUPtr( sdw::ShaderWriter &amp; writer , uint32_t binding , uint32_t set ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>ShaderBufferDeclarator</name>
+        <qualifiedname>castor3d::SpecificsBuffer::ShaderBufferDeclarator</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassModule.hpp" line="142" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/d65/a04089_1a04bc99749d44c404d7bb92a11cf02835" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d65/a04089_1a4727d46bac97509e722c563dc444179f" kindref="member">ShaderBufferCreator</ref></type>
+        <definition>ShaderBufferCreator castor3d::SpecificsBuffer::create</definition>
+        <argsstring></argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::SpecificsBuffer::create</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassModule.hpp" line="146" column="21" bodyfile="Material/Pass/PassModule.hpp" bodystart="146" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d65/a04089_1ac25ff8230ef2ee5b0fc8caaf51efda74" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d65/a04089_1a117b28a6820e3b743a4d21402d6d2ce9" kindref="member">ShaderBufferUpdater</ref></type>
+        <definition>ShaderBufferUpdater castor3d::SpecificsBuffer::update</definition>
+        <argsstring></argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SpecificsBuffer::update</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassModule.hpp" line="147" column="21" bodyfile="Material/Pass/PassModule.hpp" bodystart="147" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/d65/a04089_1a1eb5267368060a5bb43b75049b3dbb08" prot="public" static="no" mutable="no">
+        <type><ref refid="df/d65/a04089_1a9c9a4cc2d13fc36313ac42b7a67dc8d7" kindref="member">ShaderBufferDeclarator</ref></type>
+        <definition>ShaderBufferDeclarator castor3d::SpecificsBuffer::declare</definition>
+        <argsstring></argsstring>
+        <name>declare</name>
+        <qualifiedname>castor3d::SpecificsBuffer::declare</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassModule.hpp" line="148" column="24" bodyfile="Material/Pass/PassModule.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/PassModule.hpp" line="137" column="1" bodyfile="Material/Pass/PassModule.hpp" bodystart="138" bodyend="149"/>
+    <listofallmembers>
+      <member refid="df/d65/a04089_1a04bc99749d44c404d7bb92a11cf02835" prot="public" virt="non-virtual"><scope>castor3d::SpecificsBuffer</scope><name>create</name></member>
+      <member refid="df/d65/a04089_1a1eb5267368060a5bb43b75049b3dbb08" prot="public" virt="non-virtual"><scope>castor3d::SpecificsBuffer</scope><name>declare</name></member>
+      <member refid="df/d65/a04089_1a4727d46bac97509e722c563dc444179f" prot="public" virt="non-virtual"><scope>castor3d::SpecificsBuffer</scope><name>ShaderBufferCreator</name></member>
+      <member refid="df/d65/a04089_1a9c9a4cc2d13fc36313ac42b7a67dc8d7" prot="public" virt="non-virtual"><scope>castor3d::SpecificsBuffer</scope><name>ShaderBufferDeclarator</name></member>
+      <member refid="df/d65/a04089_1a117b28a6820e3b743a4d21402d6d2ce9" prot="public" virt="non-virtual"><scope>castor3d::SpecificsBuffer</scope><name>ShaderBufferUpdater</name></member>
+      <member refid="df/d65/a04089_1ac25ff8230ef2ee5b0fc8caaf51efda74" prot="public" virt="non-virtual"><scope>castor3d::SpecificsBuffer</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

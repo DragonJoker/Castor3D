@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/da7/a02914" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VertexBufferPool::ModelBuffers</compoundname>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/da7/a02914_1a1f519cac5a8b5d944d6c6a1f750e4aa9" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a683bd798faa71e3065a0fb8ccc821927" kindref="member">GpuPackedBufferPtr</ref></type>
+        <definition>GpuPackedBufferPtr castor3d::VertexBufferPool::ModelBuffers::vertex</definition>
+        <argsstring></argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::VertexBufferPool::ModelBuffers::vertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="29" column="20" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/da7/a02914_1ad26d77fd8d4e874bd177637f52a3f2ea" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexBufferPool::ModelBuffers::ModelBuffers</definition>
+        <argsstring>(GpuPackedBufferPtr vtx)</argsstring>
+        <name>ModelBuffers</name>
+        <qualifiedname>castor3d::VertexBufferPool::ModelBuffers::ModelBuffers</qualifiedname>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a683bd798faa71e3065a0fb8ccc821927" kindref="member">GpuPackedBufferPtr</ref></type>
+          <declname>vtx</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="24" column="10" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="24" bodyend="27"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="6">
+        <label>T</label>
+      </node>
+      <node id="4">
+        <label>castor3d::GpuBufferBase</label>
+        <link refid="d0/dee/a02870"/>
+      </node>
+      <node id="3">
+        <label>castor3d::GpuBufferT&lt; AllocatorT &gt;</label>
+        <link refid="dd/dd1/a02842"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VertexBufferPool::ModelBuffers</label>
+        <link refid="d7/da7/a02914"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="6" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>std::unique_ptr&lt; GpuPackedBuffer &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; GpuPackedBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/ObjectBufferPool.hpp" line="22" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="23" bodyend="30"/>
+    <listofallmembers>
+      <member refid="d7/da7/a02914_1ad26d77fd8d4e874bd177637f52a3f2ea" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool::ModelBuffers</scope><name>ModelBuffers</name></member>
+      <member refid="d7/da7/a02914_1a1f519cac5a8b5d944d6c6a1f750e4aa9" prot="public" virt="non-virtual"><scope>castor3d::VertexBufferPool::ModelBuffers</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,463 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d7b/a06345" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassBuffer::PassDataPtr</compoundname>
+    <includes local="no">PassBuffer.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/d7b/a06345_1a9cc51c74354b69b3eb488037169a57ce" prot="private" static="no" mutable="no">
+        <type>castor::ArrayView&lt; uint8_t &gt;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; castor3d::PassBuffer::PassDataPtr::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="173" column="19" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d7b/a06345_1a84171e12b4c62d1abe14b60787383d99" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassBuffer::PassDataPtr::PassDataPtr</definition>
+        <argsstring>(castor::ArrayView&lt; uint8_t &gt; data)</argsstring>
+        <name>PassDataPtr</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::PassDataPtr</qualifiedname>
+        <param>
+          <type>castor::ArrayView&lt; uint8_t &gt;</type>
+          <declname>data</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="29" column="18" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="29" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDeviceSize</type>
+        <definition>C3D_API VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, uint32_t v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="34" column="22"/>
+        <referencedby refid="d5/d7b/a06345_1af63408da6ccd5f312b536d59bd12627f" compoundref="d2/dc1/a01562" startline="45" endline="54">write</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1a0ed61a439772fc515a5e568b0be9d532" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDeviceSize</type>
+        <definition>C3D_API VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, int32_t v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>int32_t</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="37" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1a5c319c2208266076aa5c1df24256aacf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDeviceSize</type>
+        <definition>C3D_API VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, float v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="40" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1af63408da6ccd5f312b536d59bd12627f" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataA</type>
+          </param>
+          <param>
+            <type>typename DataB</type>
+          </param>
+        </templateparamlist>
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, DataA a, DataB b, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>DataA</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>DataB</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="45" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="45" bodyend="54"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1ad3057bc493b70b08fcb3ddc4a7300650" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataA</type>
+          </param>
+          <param>
+            <type>typename DataB</type>
+          </param>
+          <param>
+            <type>typename DataC</type>
+          </param>
+        </templateparamlist>
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, DataA a, DataB b, DataC c, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>DataA</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>DataB</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>DataC</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="57" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="57" bodyend="68"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1a57bf4fd3acb05be044738f82f1c41019" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataA</type>
+          </param>
+          <param>
+            <type>typename DataB</type>
+          </param>
+          <param>
+            <type>typename DataC</type>
+          </param>
+          <param>
+            <type>typename DataD</type>
+          </param>
+        </templateparamlist>
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, DataA a, DataB b, DataC c, DataD d, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>DataA</type>
+          <declname>a</declname>
+        </param>
+        <param>
+          <type>DataB</type>
+          <declname>b</declname>
+        </param>
+        <param>
+          <type>DataC</type>
+          <declname>c</declname>
+        </param>
+        <param>
+          <type>DataD</type>
+          <declname>d</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="71" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="71" bodyend="84"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1a02ec31548b97e04b2768b647ce792b66" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+          <param>
+            <type>size_t</type>
+            <declname>SizeT</declname>
+            <defname>SizeT</defname>
+          </param>
+        </templateparamlist>
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, std::array&lt; DataT, SizeT &gt; const &amp;v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>std::array&lt; DataT, SizeT &gt; const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="87" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="87" bodyend="99"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1a7a8863946cf9dde727d68713ab0dd014" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename DataT</type>
+          </param>
+          <param>
+            <type>uint32_t</type>
+            <declname>CountT</declname>
+            <defname>CountT</defname>
+          </param>
+        </templateparamlist>
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, castor::Point&lt; DataT, CountT &gt; const &amp;v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>castor::Point&lt; DataT, CountT &gt; const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="102" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="102" bodyend="114"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1a8d8320a00ad5953fe4c9eb5dc3ec37ad" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, castor::RgbColour const &amp;v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>castor::RgbColour const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="116" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="116" bodyend="128"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1a3d4d2dc76cd294fcdbb467d22611398b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, castor::HdrRgbColour const &amp;v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbColour const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="130" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="130" bodyend="142"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1ab325a9d6d5a8c428634e13d6288b2046" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, castor::RgbaColour const &amp;v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>castor::RgbaColour const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="144" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="144" bodyend="156"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      <memberdef kind="function" id="d5/d7b/a06345_1a9264ab5ebfcade856bab035154187d55" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>VkDeviceSize</type>
+        <definition>VkDeviceSize castor3d::PassBuffer::PassDataPtr::write</definition>
+        <argsstring>(MemChunk const &amp;chunk, castor::HdrRgbaColour const &amp;v, VkDeviceSize offset)</argsstring>
+        <name>write</name>
+        <qualifiedname>castor3d::PassBuffer::PassDataPtr::write</qualifiedname>
+        <param>
+          <type><ref refid="df/d7d/a02889" kindref="compound">MemChunk</ref> const &amp;</type>
+          <declname>chunk</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbaColour const &amp;</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>VkDeviceSize</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="158" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="158" bodyend="170"/>
+        <references refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78">write</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="27" column="1" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="28" bodyend="174"/>
+    <listofallmembers>
+      <member refid="d5/d7b/a06345_1a9cc51c74354b69b3eb488037169a57ce" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>m_data</name></member>
+      <member refid="d5/d7b/a06345_1a84171e12b4c62d1abe14b60787383d99" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>PassDataPtr</name></member>
+      <member refid="d5/d7b/a06345_1af171692198a4d0226ef7734e0470ed78" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1a0ed61a439772fc515a5e568b0be9d532" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1a5c319c2208266076aa5c1df24256aacf" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1af63408da6ccd5f312b536d59bd12627f" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1ad3057bc493b70b08fcb3ddc4a7300650" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1a57bf4fd3acb05be044738f82f1c41019" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1a02ec31548b97e04b2768b647ce792b66" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1a7a8863946cf9dde727d68713ab0dd014" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1a8d8320a00ad5953fe4c9eb5dc3ec37ad" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1a3d4d2dc76cd294fcdbb467d22611398b" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1ab325a9d6d5a8c428634e13d6288b2046" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+      <member refid="d5/d7b/a06345_1a9264ab5ebfcade856bab035154187d55" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer::PassDataPtr</scope><name>write</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,79 @@
+<map id="castor3d::checkFlag" name="castor3d::checkFlag">
+<area shape="rect" id="node1" title=" " alt="" coords="771,2274,911,2299"/>
+<area shape="rect" id="node2" href="$da/d5b/a03322.html#a8f97b5e0da2a440dc2466f23d6728cad" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="491,5,687,45"/>
+<area shape="rect" id="node3" href="$de/d78/a03622.html#a8e4e3e156caa34cb414a3ad5808ca929" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="458,69,721,109"/>
+<area shape="rect" id="node4" href="$d8/d3a/a03930.html#acf1d29f482c0d41d61dbcff5bec0340e" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="487,133,691,173"/>
+<area shape="rect" id="node5" href="$de/d88/a03958.html#a4d408f375ce5708cef6fcaab91620a2d" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="491,197,687,237"/>
+<area shape="rect" id="node6" href="$d6/de6/a03666.html#ae98cfef8d0427d443befaa8c6463aeac" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="470,261,709,301"/>
+<area shape="rect" id="node7" href="$d4/db1/a03678.html#aaac2837a287d96b782e6090dac0cd903" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="476,325,703,365"/>
+<area shape="rect" id="node8" href="$df/d6d/a03690.html#a375e02f8031e98bad334c9c82f0c9e0f" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="457,389,721,429"/>
+<area shape="rect" id="node9" href="$d4/d7d/a03702.html#a19c1ffe50f34cd99390d785a4c66b537" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="457,453,721,493"/>
+<area shape="rect" id="node10" href="$d1/d78/a03714.html#a91998f08be0045ec30ca15eeb70b4f69" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="485,517,693,557"/>
+<area shape="rect" id="node11" href="$df/d76/a03726.html#a76b28c49e4090e34bcbffed93c7f2bff" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="478,581,701,621"/>
+<area shape="rect" id="node12" href="$dd/ddd/a03738.html#addf4a880a2f53bbeaa42d64595ebe3dc" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="471,645,707,685"/>
+<area shape="rect" id="node13" href="$d2/d17/a03750.html#a9ba5185ae251da2cbc634bb68f211470" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="485,709,693,749"/>
+<area shape="rect" id="node14" href="$dc/d6d/a03762.html#a591eae2f78cce10dbd717dd632926a6a" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="470,773,709,813"/>
+<area shape="rect" id="node15" href="$d7/d82/a03774.html#a26c0aec8fa5de90c9bfef7b40a5c0821" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="457,837,721,877"/>
+<area shape="rect" id="node16" href="$da/d38/a03786.html#a743ececcdbc9bf0766f47848f2b807c5" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="474,901,705,941"/>
+<area shape="rect" id="node17" href="$d3/d30/a03798.html#a906232be317cc886ca77c915b97e5ff2" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="483,965,695,1005"/>
+<area shape="rect" id="node18" href="$d2/d29/a03810.html#a81ee034b4e490cfe21c03efef7467c9d" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="475,1029,704,1069"/>
+<area shape="rect" id="node19" href="$d0/db2/a03822.html#aad081faad248bbb4a7c0cbeddbf554b3" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="481,1093,697,1133"/>
+<area shape="rect" id="node20" href="$d1/d69/a03834.html#a69559426e4240419f835c785119b7ff1" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="471,1157,707,1197"/>
+<area shape="rect" id="node21" href="$d7/db3/a03846.html#ad6546fa03dcb98ec38a75fd9b0e1a409" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="485,1221,693,1261"/>
+<area shape="rect" id="node22" href="$d0/d61/a03858.html#a9f3bdb1ca521516958db1ad0b7a73f6a" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="498,1286,681,1341"/>
+<area shape="rect" id="node23" href="$dc/db8/a03870.html#a382a30d5ce653e7ff6600b99776bec31" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="505,1365,673,1419"/>
+<area shape="rect" id="node24" href="$dd/d94/a03882.html#ac5c4d3a7c5b9fb6f3b2b6749e57b9839" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="478,1444,701,1484"/>
+<area shape="rect" id="node25" href="$d6/d94/a03894.html#a204886c32d68882e134984df86587ee5" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="470,1508,709,1548"/>
+<area shape="rect" id="node26" href="$d0/d0b/a03910.html#a4c2c795f68ee428c863f9bc271c97810" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="470,1572,709,1612"/>
+<area shape="rect" id="node27" href="$d8/d1d/a05370.html#aa92fdf599f942761918262d5f4379386" title=" " alt="" coords="510,1636,669,1676"/>
+<area shape="rect" id="node28" href="$d6/de6/a03666.html#a06014b43d2f15929682eb2f902b83af8" title=" " alt="" coords="489,1701,690,1755"/>
+<area shape="rect" id="node29" href="$d4/db1/a03678.html#aa6f1905270519f7e93d43f2b9cb8a20b" title=" " alt="" coords="476,1780,703,1820"/>
+<area shape="rect" id="node30" href="$df/d6d/a03690.html#a24b2c015e9c0179ad4f5064a24462e46" title=" " alt="" coords="476,1845,703,1899"/>
+<area shape="rect" id="node31" href="$d4/d7d/a03702.html#ae073ccfe2de9cf2344658735e86e1f0a" title=" " alt="" coords="476,1923,703,1978"/>
+<area shape="rect" id="node32" href="$d1/d78/a03714.html#a80af82926ef119f459dc63fa5346bc60" title=" " alt="" coords="485,2003,693,2043"/>
+<area shape="rect" id="node33" href="$df/d76/a03726.html#a3a0ae9bd6686203abd0f441b71728a73" title=" " alt="" coords="478,2067,701,2107"/>
+<area shape="rect" id="node34" href="$dd/ddd/a03738.html#a8f4e6de4f666daaa3a65e05a4ebf93fc" title=" " alt="" coords="471,2131,707,2171"/>
+<area shape="rect" id="node35" href="$d2/d17/a03750.html#ad4290d4c0f443e3d31c8f1d4c708dddd" title=" " alt="" coords="485,2195,693,2235"/>
+<area shape="rect" id="node36" href="$dc/d6d/a03762.html#aae385cf62ff3c81588cf03267eb28fc6" title=" " alt="" coords="489,2259,690,2314"/>
+<area shape="rect" id="node37" href="$d7/d82/a03774.html#ab6276335b197232708cfbf513d0a110f" title=" " alt="" coords="476,2338,703,2393"/>
+<area shape="rect" id="node38" href="$da/d38/a03786.html#adcaa6a8a77ed38c510c6bda23c1a0404" title=" " alt="" coords="474,2417,705,2457"/>
+<area shape="rect" id="node39" href="$d3/d30/a03798.html#a10993fd0cf2386f99ce391e6089c4220" title=" " alt="" coords="483,2481,695,2521"/>
+<area shape="rect" id="node40" href="$d2/d29/a03810.html#a78eb62975a31beec70fa4f322cc30048" title=" " alt="" coords="475,2545,704,2585"/>
+<area shape="rect" id="node41" href="$d0/db2/a03822.html#a5a97dda27ab131f15c15e0b7419e3b06" title=" " alt="" coords="481,2609,697,2649"/>
+<area shape="rect" id="node42" href="$d1/d69/a03834.html#afc2e85ed25ba835c72049fb40be89c5e" title=" " alt="" coords="471,2673,707,2713"/>
+<area shape="rect" id="node43" href="$d7/db3/a03846.html#a4e5447299c9596925ce971b31338b845" title=" " alt="" coords="485,2737,693,2777"/>
+<area shape="rect" id="node44" href="$d0/d61/a03858.html#a36d120dc624746e381b2274e9826aac5" title=" " alt="" coords="498,2802,681,2857"/>
+<area shape="rect" id="node45" href="$dc/db8/a03870.html#acae11d350daa1cdeb51a70e0b57f2569" title=" " alt="" coords="505,2881,673,2935"/>
+<area shape="rect" id="node46" href="$dd/d94/a03882.html#a55062ffaa0ab3b1bdce71a94821f372f" title=" " alt="" coords="478,2960,701,3000"/>
+<area shape="rect" id="node47" href="$d6/d94/a03894.html#af5fd876c2eb70084093560b06ddd577f" title=" " alt="" coords="456,3024,723,3064"/>
+<area shape="rect" id="node48" href="$d0/d0b/a03910.html#ad8d2ba502b825f5d28b38b0fa9c39587" title=" " alt="" coords="456,3088,723,3128"/>
+<area shape="rect" id="node49" href="$dd/d6d/a04186.html#a77ad12ba88030c8938bf7c5a76d8f733" title="Tells if the feature is supported supports stereo." alt="" coords="502,3152,677,3192"/>
+<area shape="rect" id="node55" href="$d8/d1d/a05370.html#aced74e5bafd87c8d16f3cdf6d904c8fa" title=" " alt="" coords="510,3216,669,3256"/>
+<area shape="rect" id="node56" href="$d8/d1d/a05370.html#a52d54f489ec8545671d6ff6a2ae39e4e" title=" " alt="" coords="510,3280,669,3320"/>
+<area shape="rect" id="node59" href="$d8/d1d/a05370.html#a150b8f0e9f123261814672ebeba612de" title=" " alt="" coords="510,3344,669,3384"/>
+<area shape="rect" id="node60" href="$d6/d1c/a03346.html#adf9c1be81e3fbf2f802385de2a0ea31d" title="Tells if the component&#39;s lighting shaders are needed." alt="" coords="492,3408,687,3448"/>
+<area shape="rect" id="node61" href="$d8/d1d/a05370.html#a3c009ebf028a007378026f8f62bda085" title=" " alt="" coords="510,3472,669,3512"/>
+<area shape="rect" id="node62" href="$d8/d1d/a05370.html#ab473bf637e917d885d5b787f55f33b38" title=" " alt="" coords="510,3536,669,3576"/>
+<area shape="rect" id="node63" href="$d8/d1d/a05370.html#ab2508e03cecb0fde81186df83ead3c47" title=" " alt="" coords="510,3600,669,3640"/>
+<area shape="rect" id="node64" href="$d8/d1d/a05370.html#af3684ae5cc6d57d11d5f5a2804789379" title=" " alt="" coords="510,3664,669,3704"/>
+<area shape="rect" id="node65" href="$d8/d1d/a05370.html#a178a4151e9f0021a58024b5b63158171" title=" " alt="" coords="510,3728,669,3768"/>
+<area shape="rect" id="node66" href="$d8/d1d/a05370.html#a946e8b61a4b98d17536c74cae50b93b7" title=" " alt="" coords="510,3792,669,3832"/>
+<area shape="rect" id="node67" href="$d8/d1d/a05370.html#ab2a066c7947a505a36410a7ba259cc65" title=" " alt="" coords="510,3856,669,3896"/>
+<area shape="rect" id="node68" href="$d8/d1d/a05370.html#aee50d56db636b1aa1db5a4ef625bd737" title=" " alt="" coords="510,3920,669,3960"/>
+<area shape="rect" id="node69" href="$d8/d1d/a05370.html#a451505ae797dd5838163f8802edb4a71" title=" " alt="" coords="510,3984,669,4024"/>
+<area shape="rect" id="node70" href="$d8/d1d/a05370.html#adb94e6454a259773115bcf5fca3c7670" title=" " alt="" coords="510,4048,669,4088"/>
+<area shape="rect" id="node71" href="$d8/d1d/a05370.html#a4e9d74a5d8b45061e29ab64dfc45e02e" title=" " alt="" coords="510,4112,669,4152"/>
+<area shape="rect" id="node72" href="$d8/d1d/a05370.html#a2cc7249e990cc287925f51dd2fc9b568" title=" " alt="" coords="510,4176,669,4216"/>
+<area shape="rect" id="node73" href="$d8/d1d/a05370.html#a6f66e212153662075dfb531535a1ab97" title=" " alt="" coords="510,4240,669,4280"/>
+<area shape="rect" id="node74" href="$d8/d1d/a05370.html#aa2ea4fdd23b2f04fcf25b837cacbc779" title=" " alt="" coords="510,4304,669,4344"/>
+<area shape="rect" id="node75" href="$d8/d1d/a05370.html#a9b3f56d5aff60c0810e0b68ceca2abe0" title=" " alt="" coords="510,4368,669,4408"/>
+<area shape="rect" id="node76" href="$d8/d1d/a05370.html#ae1107a13e68031773c41436c3b93bd2e" title=" " alt="" coords="510,4432,669,4472"/>
+<area shape="rect" id="node77" href="$d8/d1d/a05370.html#a15562da594bdeda18286af08250d8b7a" title=" " alt="" coords="510,4496,669,4536"/>
+<area shape="rect" id="node50" href="$da/d7e/a05558.html#a5e7bb337b3ae054bad81c4530ce242d8" title=" " alt="" coords="236,3088,403,3128"/>
+<area shape="rect" id="node51" href="$dd/d6d/a04186.html#ac1dce053c9680a03f15630687fe8ea21" title=" " alt="" coords="231,3152,408,3192"/>
+<area shape="rect" id="node53" href="$dd/d6d/a04186.html#a27fd0413c1d5302ecb4df383919385b1" title=" " alt="" coords="232,3216,407,3256"/>
+<area shape="rect" id="node52" href="$da/d7e/a05558.html#aee080c20f74dd4ade431cdc90e42c903" title=" " alt="" coords="5,3152,183,3192"/>
+<area shape="rect" id="node54" href="$da/d7e/a05558.html#a6f95b21027a131700c8d7fe5d3f9b2fd" title=" " alt="" coords="11,3216,177,3256"/>
+<area shape="rect" id="node57" href="$d8/d1d/a05370.html#acd8b91d6e450dcd43e44372e1cf2660b" title=" " alt="" coords="240,3280,399,3320"/>
+<area shape="rect" id="node58" href="$d8/d1d/a05370.html#a77b97a0fd7228432acdb5e748333bd54" title=" " alt="" coords="240,3344,399,3384"/>
+</map>

@@ -1,0 +1,1209 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/d61/a03197" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ProgressCtrl</compoundname>
+    <basecompoundref refid="d5/d27/a03157" prot="public" virt="non-virtual">castor3d::Control</basecompoundref>
+    <includes local="no">CtrlProgress.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dd/d61/a03197_1a7b90e066e175ff858ffa305218dadf4d" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>C3D_API ControlType constexpr castor3d::ProgressCtrl::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::ProgressCtrl::Type</qualifiedname>
+        <initializer>{ <ref refid="d3/d5e/a01725_1ac80f9441f3591ef5f0b85f0608c7725da0b8b2ddcd8f77e4a92fa1b84f24b9565" kindref="member">ControlType::eProgress</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="91" column="38" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="dd/d61/a03197_1ae93a7f585cacf3abb3c1d593b5af8a67" prot="private" static="no" mutable="no">
+        <type>TextOverlayRPtr</type>
+        <definition>TextOverlayRPtr castor3d::ProgressCtrl::m_title</definition>
+        <argsstring></argsstring>
+        <name>m_title</name>
+        <qualifiedname>castor3d::ProgressCtrl::m_title</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="149" column="17" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d61/a03197_1a5c047acae6183ad9c088d397296bbc0e" prot="private" static="no" mutable="no">
+        <type>PanelCtrlRPtr</type>
+        <definition>PanelCtrlRPtr castor3d::ProgressCtrl::m_container</definition>
+        <argsstring></argsstring>
+        <name>m_container</name>
+        <qualifiedname>castor3d::ProgressCtrl::m_container</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="150" column="15" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d61/a03197_1a26a02278b042acf7f50041c5851a583c" prot="private" static="no" mutable="no">
+        <type>PanelCtrlRPtr</type>
+        <definition>PanelCtrlRPtr castor3d::ProgressCtrl::m_progress</definition>
+        <argsstring></argsstring>
+        <name>m_progress</name>
+        <qualifiedname>castor3d::ProgressCtrl::m_progress</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="151" column="15" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d61/a03197_1aba66d712ecf3e2ba8cc9df148d2cda0d" prot="private" static="no" mutable="no">
+        <type>TextOverlayRPtr</type>
+        <definition>TextOverlayRPtr castor3d::ProgressCtrl::m_text</definition>
+        <argsstring></argsstring>
+        <name>m_text</name>
+        <qualifiedname>castor3d::ProgressCtrl::m_text</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="152" column="17" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d61/a03197_1a2e23f03bd77bf46635eabc80a90e092e" prot="private" static="no" mutable="no">
+        <type>castor::RangedValue&lt; int32_t &gt;</type>
+        <definition>castor::RangedValue&lt; int32_t &gt; castor3d::ProgressCtrl::m_value</definition>
+        <argsstring></argsstring>
+        <name>m_value</name>
+        <qualifiedname>castor3d::ProgressCtrl::m_value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="153" column="21" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="dd/d61/a03197_1ae48caacbeeb5d3f63baafef334a358d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ProgressCtrl::ProgressCtrl</definition>
+        <argsstring>(SceneRPtr scene, castor::String const &amp;name, ProgressStyle *style, ControlRPtr parent)</argsstring>
+        <name>ProgressCtrl</name>
+        <qualifiedname>castor3d::ProgressCtrl::ProgressCtrl</qualifiedname>
+        <param>
+          <type>SceneRPtr</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d2/dfa/a03285" kindref="compound">ProgressStyle</ref> *</type>
+          <declname>style</declname>
+        </param>
+        <param>
+          <type>ControlRPtr</type>
+          <declname>parent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent scene (nullptr for global). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control name </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">style</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control style </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent control, if any </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="22" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1aaf0246138fb809d918bef324354376ce" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ProgressCtrl::~ProgressCtrl</definition>
+        <argsstring>() noexcept override</argsstring>
+        <name>~ProgressCtrl</name>
+        <qualifiedname>castor3d::ProgressCtrl::~ProgressCtrl</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="26" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1ac8423ab953c3f2427a3a765e652fe5fb" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setTitle</definition>
+        <argsstring>(castor::U32String value)</argsstring>
+        <name>setTitle</name>
+        <qualifiedname>castor3d::ProgressCtrl::setTitle</qualifiedname>
+        <param>
+          <type>castor::U32String</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="28" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a4cca0b6f6bd7976452f4a577b1f329b6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setRange</definition>
+        <argsstring>(castor::Range&lt; int32_t &gt; const &amp;value)</argsstring>
+        <name>setRange</name>
+        <qualifiedname>castor3d::ProgressCtrl::setRange</qualifiedname>
+        <param>
+          <type>castor::Range&lt; int32_t &gt; const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="29" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a10c50ddfb5a81476d761f5bb1dd5abe8" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setProgress</definition>
+        <argsstring>(int32_t value)</argsstring>
+        <name>setProgress</name>
+        <qualifiedname>castor3d::ProgressCtrl::setProgress</qualifiedname>
+        <param>
+          <type>int32_t</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="30" column="14"/>
+        <referencedby refid="dd/d61/a03197_1a4d5396f1aa7b55ca390e8fb14bb19dc2" compoundref="de/dd7/a00362" startline="48" endline="51">incProgress</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a4478788ea277c7cce21f8657c5cdfb5b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setContainerBorderSize</definition>
+        <argsstring>(castor::Point4ui value)</argsstring>
+        <name>setContainerBorderSize</name>
+        <qualifiedname>castor3d::ProgressCtrl::setContainerBorderSize</qualifiedname>
+        <param>
+          <type>castor::Point4ui</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="31" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a902209b0b90d0bfc9e1631f05e4db797" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setBarBorderSize</definition>
+        <argsstring>(castor::Point4ui value)</argsstring>
+        <name>setBarBorderSize</name>
+        <qualifiedname>castor3d::ProgressCtrl::setBarBorderSize</qualifiedname>
+        <param>
+          <type>castor::Point4ui</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="32" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1af1d68fefae1c187bd75ced2cb236c9f7" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setLeftToRight</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>setLeftToRight</name>
+        <qualifiedname>castor3d::ProgressCtrl::setLeftToRight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="33" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a8701689f232053de959c80e4a75bca45" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setRightToLeft</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>setRightToLeft</name>
+        <qualifiedname>castor3d::ProgressCtrl::setRightToLeft</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="34" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a42b73697666954bdc4b5f46441a4c8e3" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setTopToBottom</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>setTopToBottom</name>
+        <qualifiedname>castor3d::ProgressCtrl::setTopToBottom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="35" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a18df1cd0cf586fb0272f901716146d52" prot="public" static="no" const="no" explicit="no" inline="no" noexcept="yes" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ProgressCtrl::setBottomToTop</definition>
+        <argsstring>() noexcept</argsstring>
+        <name>setBottomToTop</name>
+        <qualifiedname>castor3d::ProgressCtrl::setBottomToTop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="36" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a93cc5b8b8a6dec5a5a4a246cdcb0d990" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>castor::Range&lt; int32_t &gt; const &amp;</type>
+        <definition>castor::Range&lt; int32_t &gt; const  &amp; castor3d::ProgressCtrl::getRange</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getRange</name>
+        <qualifiedname>castor3d::ProgressCtrl::getRange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="38" column="22" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="38" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a7c7a1ceb9bd9a9ce4dc14709b0ab6c81" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>int32_t</type>
+        <definition>int32_t castor3d::ProgressCtrl::getProgress</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getProgress</name>
+        <qualifiedname>castor3d::ProgressCtrl::getProgress</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="43" column="9" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="43" bodyend="46"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a4d5396f1aa7b55ca390e8fb14bb19dc2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::incProgress</definition>
+        <argsstring>()</argsstring>
+        <name>incProgress</name>
+        <qualifiedname>castor3d::ProgressCtrl::incProgress</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="48" column="6" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="48" bodyend="51"/>
+        <references refid="dd/d61/a03197_1a10c50ddfb5a81476d761f5bb1dd5abe8">setProgress</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1adf262960457046e6e117d81c42528427" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ProgressCtrl::isLeftToRight</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isLeftToRight</name>
+        <qualifiedname>castor3d::ProgressCtrl::isLeftToRight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="53" column="6" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="53" bodyend="56"/>
+        <references refid="d3/d5e/a01725_1a3b9a91b83e751fa53ac8fbcfa8445c06aa2ff5a27bac01edd9f110d0e70c5f76b">castor3d::eLeftRight</references>
+        <references refid="d5/d27/a03157_1afb284673f9161e073a83e1ccaddb658e" compoundref="d3/d93/a00341" startline="179" endline="182">castor3d::Control::getFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a37d97e303cdf33a032e7f489044d04ee" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ProgressCtrl::isRightToLeft</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isRightToLeft</name>
+        <qualifiedname>castor3d::ProgressCtrl::isRightToLeft</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="58" column="6" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="58" bodyend="61"/>
+        <references refid="d3/d5e/a01725_1a3b9a91b83e751fa53ac8fbcfa8445c06a3cc28aae049064348ed15cb05483dd7c">castor3d::eRightLeft</references>
+        <references refid="d5/d27/a03157_1afb284673f9161e073a83e1ccaddb658e" compoundref="d3/d93/a00341" startline="179" endline="182">castor3d::Control::getFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a1209a9b9b9facc612b090a0477442335" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ProgressCtrl::isTopToBottom</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isTopToBottom</name>
+        <qualifiedname>castor3d::ProgressCtrl::isTopToBottom</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="63" column="6" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="63" bodyend="66"/>
+        <references refid="d3/d5e/a01725_1a3b9a91b83e751fa53ac8fbcfa8445c06a984e77601e5ac7c518af1f33944a7fcd">castor3d::eTopBottom</references>
+        <references refid="d5/d27/a03157_1afb284673f9161e073a83e1ccaddb658e" compoundref="d3/d93/a00341" startline="179" endline="182">castor3d::Control::getFlags</references>
+        <referencedby refid="dd/d61/a03197_1a12623c538c8bf527efe2f420b19cc92e" compoundref="de/dd7/a00362" startline="73" endline="76">isVertical</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a8ddf40c5029350e3f85d8b795d8bd9ad" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ProgressCtrl::isBottomToTop</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isBottomToTop</name>
+        <qualifiedname>castor3d::ProgressCtrl::isBottomToTop</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="68" column="6" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="68" bodyend="71"/>
+        <references refid="d3/d5e/a01725_1a3b9a91b83e751fa53ac8fbcfa8445c06ac684f42a3ea07922007ea0671c5d0cdf">castor3d::eBottomTop</references>
+        <references refid="d5/d27/a03157_1afb284673f9161e073a83e1ccaddb658e" compoundref="d3/d93/a00341" startline="179" endline="182">castor3d::Control::getFlags</references>
+        <referencedby refid="dd/d61/a03197_1a12623c538c8bf527efe2f420b19cc92e" compoundref="de/dd7/a00362" startline="73" endline="76">isVertical</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a12623c538c8bf527efe2f420b19cc92e" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ProgressCtrl::isVertical</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isVertical</name>
+        <qualifiedname>castor3d::ProgressCtrl::isVertical</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="73" column="6" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="73" bodyend="76"/>
+        <references refid="dd/d61/a03197_1a8ddf40c5029350e3f85d8b795d8bd9ad" compoundref="de/dd7/a00362" startline="68" endline="71">isBottomToTop</references>
+        <references refid="dd/d61/a03197_1a1209a9b9b9facc612b090a0477442335" compoundref="de/dd7/a00362" startline="63" endline="66">isTopToBottom</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a5c8a09e9a473c1e65e8363f9bf69d018" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dfa/a03285" kindref="compound">ProgressStyle</ref> const &amp;</type>
+        <definition>ProgressStyle const  &amp; castor3d::ProgressCtrl::getStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::ProgressCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The progress style. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="81" column="22" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="81" bodyend="84"/>
+        <references refid="d5/d27/a03157_1a3b327c65b7d0202012a7de4ac95ff6a0" compoundref="d3/d93/a00341" startline="219" endline="222">castor3d::Control::getBaseStyle</references>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a55f7a6ed3c793ccbc79fc4f3a42205ac" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d2/dfa/a03285" kindref="compound">ProgressStyle</ref> &amp;</type>
+        <definition>ProgressStyle &amp; castor3d::ProgressCtrl::getStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getStyle</name>
+        <qualifiedname>castor3d::ProgressCtrl::getStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="86" column="16" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="86" bodyend="89"/>
+        <references refid="d5/d27/a03157_1a3b327c65b7d0202012a7de4ac95ff6a0" compoundref="d3/d93/a00341" startline="219" endline="222">castor3d::Control::getBaseStyle</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="dd/d61/a03197_1a3a3f5c1ba37ace457d6603f67452d04b" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doCreate</definition>
+        <argsstring>() override</argsstring>
+        <name>doCreate</name>
+        <qualifiedname>castor3d::ProgressCtrl::doCreate</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a986e1065f7dd8744af1099234d1e42d6">doCreate</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="96" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1ac9085845c1bf5d1e7fa16922fb08c7d2" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doDestroy</definition>
+        <argsstring>() override</argsstring>
+        <name>doDestroy</name>
+        <qualifiedname>castor3d::ProgressCtrl::doDestroy</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1aee5d3b26288343563b7049781cc413b8">doDestroy</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Destroys the control&apos;s overlays and sub-controls   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="100" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a008a1d13dc2b76447d975dbe8c65db82" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doUpdateStyle</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateStyle</name>
+        <qualifiedname>castor3d::ProgressCtrl::doUpdateStyle</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a6e83636558d1e472c13108471c5634b8">doUpdateStyle</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="104" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1ade48b41c1f15764455ed52871fce9815" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doUpdateFlags</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateFlags</name>
+        <qualifiedname>castor3d::ProgressCtrl::doUpdateFlags</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a875d8d63815f41b613d8c93ee847b4c7">doUpdateFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the style relative stuff.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="108" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1ab0b24420eaad6df3ada933e3a90b836e" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doUpdateZIndex</definition>
+        <argsstring>(uint32_t &amp;index) override</argsstring>
+        <name>doUpdateZIndex</name>
+        <qualifiedname>castor3d::ProgressCtrl::doUpdateZIndex</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a635e12c44833d89f01b9d162d0d22f92">doUpdateZIndex</reimplements>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="112" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a08f5420044fc7c0de1f3ca05212e1e77" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doAdjustZIndex</definition>
+        <argsstring>(uint32_t offset) override</argsstring>
+        <name>doAdjustZIndex</name>
+        <qualifiedname>castor3d::ProgressCtrl::doAdjustZIndex</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1af062446be54997b2901d81c1230291fb">doAdjustZIndex</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>offset</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Adjusts the overlays Z index.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="116" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a16498d4d9cd5fc1399192d1bf326228d" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doSetBorderSize</definition>
+        <argsstring>(castor::Point4ui const &amp;value) override</argsstring>
+        <name>doSetBorderSize</name>
+        <qualifiedname>castor3d::ProgressCtrl::doSetBorderSize</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1aae4c1f90edb97e54e251666af975695b">doSetBorderSize</reimplements>
+        <param>
+          <type>castor::Point4ui const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the background borders size. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="121" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a621458fd8683ce64b5fa14c9f0461506" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doSetPosition</definition>
+        <argsstring>(castor::Position const &amp;value) override</argsstring>
+        <name>doSetPosition</name>
+        <qualifiedname>castor3d::ProgressCtrl::doSetPosition</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1acb1760e128b67a59ae10ee7ae2ea914d">doSetPosition</reimplements>
+        <param>
+          <type>castor::Position const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the position <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="126" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1acfbd00b025a1bf3218b3fd9160890eb5" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doSetSize</definition>
+        <argsstring>(castor::Size const &amp;value) override</argsstring>
+        <name>doSetSize</name>
+        <qualifiedname>castor3d::ProgressCtrl::doSetSize</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a877aa0f08bd22b35959c7fa676a52073">doSetSize</reimplements>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the size <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">value</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="131" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a825fbb6a2fc0a4f32651ab5eb777515c" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doSetCaption</definition>
+        <argsstring>(castor::U32String const &amp;caption) override</argsstring>
+        <name>doSetCaption</name>
+        <qualifiedname>castor3d::ProgressCtrl::doSetCaption</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1a64665e2e8a8fd85a9d2de2adc64cbca2">doSetCaption</reimplements>
+        <param>
+          <type>castor::U32String const &amp;</type>
+          <declname>caption</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the caption. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">caption</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="136" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a1698d8b15f92572aa214613241411ef4" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doSetVisible</definition>
+        <argsstring>(bool visible) override</argsstring>
+        <name>doSetVisible</name>
+        <qualifiedname>castor3d::ProgressCtrl::doSetVisible</qualifiedname>
+        <reimplements refid="d5/d27/a03157_1af4598b2669fc48d38ce61ac174c86583">doSetVisible</reimplements>
+        <param>
+          <type>bool</type>
+          <declname>visible</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the visibility <simplesect kind="remark"><para>Used for derived control specific behavious </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">visible</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The new value </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="142" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1a6923e600d1a863782385feefec78ef2c" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doUpdatePosSize</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdatePosSize</name>
+        <qualifiedname>castor3d::ProgressCtrl::doUpdatePosSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="145" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="dd/d61/a03197_1acbd6037189672b66e88354680253fba9" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ProgressCtrl::doUpdateProgress</definition>
+        <argsstring>()</argsstring>
+        <name>doUpdateProgress</name>
+        <qualifiedname>castor3d::ProgressCtrl::doUpdateProgress</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlProgress.hpp" line="146" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/d27/a03157"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d5f/a03109"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ProgressCtrl</label>
+        <link refid="dd/d61/a03197"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="3">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>T</label>
+      </node>
+      <node id="15">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::array&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::array&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::array&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="17" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="14" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="26" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="20" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Control</label>
+        <link refid="d5/d27/a03157"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d5f/a03109"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="19" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ProgressCtrl</label>
+        <link refid="dd/d61/a03197"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor::Named</label>
+      </node>
+      <node id="7">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="8" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::vector&lt; OnNonClientHandlerEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::vector&lt; OnNonClientKeyboardEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::vector&lt; OnNonClientMouseEventConnection &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Controls/CtrlProgress.hpp" line="12" column="1" bodyfile="Gui/Controls/CtrlProgress.hpp" bodystart="14" bodyend="154"/>
+    <listofallmembers>
+      <member refid="d5/d27/a03157_1ad1bc14696782df53753d9d200bc69c90" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>addChild</name></member>
+      <member refid="d5/d27/a03157_1a7dcec2e27704a6c45db11b132acb03a9" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>addFlag</name></member>
+      <member refid="d5/d27/a03157_1a1f0fe6f9de5888c7d53281ddf779fe65" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>addFlag</name></member>
+      <member refid="d9/d5f/a03109_1af9b127733fe059b464db3d7857142075" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>catchesMouseEvents</name></member>
+      <member refid="d9/d5f/a03109_1a3941edcde2e8ac2ed205548386e1bf46" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>catchesReturnKey</name></member>
+      <member refid="d9/d5f/a03109_1a312bd6454656d77b7906ac620216b84d" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>catchesTabKey</name></member>
+      <member refid="d0/dcd/a03113_1a703c7cbc98f4fbc25ac04600257c7c0c" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>ClientHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1a45ffbf50f17a665404170fd665624011" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>ClientKeyboardFunction</name></member>
+      <member refid="d0/dcd/a03113_1aea92aaf9b48684355876a7c81409ccf3" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>ClientMouseFunction</name></member>
+      <member refid="d9/d5f/a03109_1a6f95a70a6d584295f3d3ccfec0cb17fd" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>connect</name></member>
+      <member refid="d9/d5f/a03109_1a072131ef43a320ea20a8177f64db0199" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>connect</name></member>
+      <member refid="d9/d5f/a03109_1a27234b5982660ef259a8e869da4e6da0" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>connect</name></member>
+      <member refid="d0/dcd/a03113_1a7c772af5b472ac82d7a40ebe4968cfb2" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>connectNC</name></member>
+      <member refid="d0/dcd/a03113_1ab5d52b4021d688cc40caeb9fadba5458" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>connectNC</name></member>
+      <member refid="d0/dcd/a03113_1a766759743a229af558fbe4053692bade" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>connectNC</name></member>
+      <member refid="d5/d27/a03157_1a756d46496c99d0f06558b867bee36242" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>Control</name></member>
+      <member refid="d5/d27/a03157_1a1e213aa081ac7fc92ab88e3baa8c98cd" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>create</name></member>
+      <member refid="d0/dcd/a03113_1afb310fd4d1af5c2332bc8496354569c9" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>DerivedPtr</name></member>
+      <member refid="d5/d27/a03157_1a3c72583b9aa9508f5d195296de491224" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>destroy</name></member>
+      <member refid="d9/d5f/a03109_1ad6eda21ee30aa7316eb1b6796d3f0cb9" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>disable</name></member>
+      <member refid="dd/d61/a03197_1a08f5420044fc7c0de1f3ca05212e1e77" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doAdjustZIndex</name></member>
+      <member refid="dd/d61/a03197_1a3a3f5c1ba37ace457d6603f67452d04b" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doCreate</name></member>
+      <member refid="dd/d61/a03197_1ac9085845c1bf5d1e7fa16922fb08c7d2" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doDestroy</name></member>
+      <member refid="dd/d61/a03197_1a16498d4d9cd5fc1399192d1bf326228d" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doSetBorderSize</name></member>
+      <member refid="dd/d61/a03197_1a825fbb6a2fc0a4f32651ab5eb777515c" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doSetCaption</name></member>
+      <member refid="dd/d61/a03197_1a621458fd8683ce64b5fa14c9f0461506" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doSetPosition</name></member>
+      <member refid="dd/d61/a03197_1acfbd00b025a1bf3218b3fd9160890eb5" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doSetSize</name></member>
+      <member refid="dd/d61/a03197_1a1698d8b15f92572aa214613241411ef4" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doSetVisible</name></member>
+      <member refid="dd/d61/a03197_1ade48b41c1f15764455ed52871fce9815" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doUpdateFlags</name></member>
+      <member refid="dd/d61/a03197_1a6923e600d1a863782385feefec78ef2c" prot="private" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>doUpdatePosSize</name></member>
+      <member refid="dd/d61/a03197_1acbd6037189672b66e88354680253fba9" prot="private" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>doUpdateProgress</name></member>
+      <member refid="dd/d61/a03197_1a008a1d13dc2b76447d975dbe8c65db82" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doUpdateStyle</name></member>
+      <member refid="dd/d61/a03197_1ab0b24420eaad6df3ada933e3a90b836e" prot="private" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>doUpdateZIndex</name></member>
+      <member refid="d9/d5f/a03109_1a261497f31a8ad918a2315af0efae6e6d" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>enable</name></member>
+      <member refid="d9/d5f/a03109_1a916afcd686fc5022c05d6ff2bf18900a" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>EnableFunction</name></member>
+      <member refid="d9/d5f/a03109_1ac52718713f27db870abc7268142083e1" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>EventHandler</name></member>
+      <member refid="d0/dcd/a03113_1a88c786851d42d7d9c5b4c4bb6fbd205d" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>EventHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1ad8d1623d5da2a584967c734fba483d8a" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>EventQueue</name></member>
+      <member refid="d5/d27/a03157_1a6aab144ea536fa1981744dd0350bd9f1" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getAbsolutePosition</name></member>
+      <member refid="d5/d27/a03157_1ac4f784eaa1bba6d3b023124dd17bcacd" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getBackgroundOverlay</name></member>
+      <member refid="d5/d27/a03157_1a3b327c65b7d0202012a7de4ac95ff6a0" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/d27/a03157_1acf1524781666decd143c429cf3512fe5" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getBaseStyle</name></member>
+      <member refid="d5/d27/a03157_1a07e5a74ea2c29504263372e346277c7d" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getBorderInnerUV</name></member>
+      <member refid="d5/d27/a03157_1a2970c7c7a19b28d48701987bf6b61a53" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getBorderOuterUV</name></member>
+      <member refid="d5/d27/a03157_1aec3c1f61d93c71cb921f9e98faf49a37" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getBorderPosition</name></member>
+      <member refid="d5/d27/a03157_1a19e84cfd0b59e70df316f6d63648041d" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getBorderSize</name></member>
+      <member refid="d5/d27/a03157_1a23f6c6e05acec8910f2f653f6ff2e1ae" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getChildControl</name></member>
+      <member refid="d5/d27/a03157_1a551248e4f8c5fe6f7b0718317469659c" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getChildren</name></member>
+      <member refid="d5/d27/a03157_1afa9a04c734235389699a47e958050f97" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getClientOffset</name></member>
+      <member refid="d5/d27/a03157_1a8546428f36529b0cad2d1f065af62060" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getClientRect</name></member>
+      <member refid="d5/d27/a03157_1a8321754767d403f6fce37f126f9cbd43" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getClientSize</name></member>
+      <member refid="d5/d27/a03157_1ac784a51c464ddec5e4d8b5a03c386c2e" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getControlsManager</name></member>
+      <member refid="d5/d27/a03157_1a040bb1287bb106d3aa5fe0d23b04ffd7" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getCursor</name></member>
+      <member refid="d5/d27/a03157_1ad56a9032db1992e267092b4a31ad326b" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getEngine</name></member>
+      <member refid="d5/d27/a03157_1afb284673f9161e073a83e1ccaddb658e" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getFlags</name></member>
+      <member refid="d5/d27/a03157_1add233ebce85fe354e398d75a1cf5d1a5" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getId</name></member>
+      <member refid="d5/d27/a03157_1a615d30ab6530d5a64bd2b505d106a252" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getParent</name></member>
+      <member refid="d5/d27/a03157_1a66b03f48bede297f991a87089f50b89e" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getPosition</name></member>
+      <member refid="dd/d61/a03197_1a7c7a1ceb9bd9a9ce4dc14709b0ab6c81" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getProgress</name></member>
+      <member refid="dd/d61/a03197_1a93cc5b8b8a6dec5a5a4a246cdcb0d990" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getRange</name></member>
+      <member refid="d5/d27/a03157_1adaa29a9485c7893a860b842917960915" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getResizeBorderSize</name></member>
+      <member refid="d5/d27/a03157_1ab44b4219c4bee06aa148aa8bc35cb87c" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getScene</name></member>
+      <member refid="d5/d27/a03157_1ae5a5697aa0ee7d76d2d6fd31ab39900c" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getSize</name></member>
+      <member refid="dd/d61/a03197_1a5c8a09e9a473c1e65e8363f9bf69d018" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getStyle</name></member>
+      <member refid="dd/d61/a03197_1a55f7a6ed3c793ccbc79fc4f3a42205ac" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getStyle</name></member>
+      <member refid="d5/d27/a03157_1a072e172e9fa3cf408536b15fb6b9a367" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getType</name></member>
+      <member refid="d5/d27/a03157_1a1eda8f0ad717bbe69ad42aeb5f6128c6" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>getUV</name></member>
+      <member refid="d5/d27/a03157_1aed68cb86a172a24cffd3bbe950134b3c" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>hasScene</name></member>
+      <member refid="d5/d27/a03157_1ae14dacb5781b0576a20f21d8dfc1d663" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>hide</name></member>
+      <member refid="dd/d61/a03197_1a4d5396f1aa7b55ca390e8fb14bb19dc2" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>incProgress</name></member>
+      <member refid="d5/d27/a03157_1ae6d193e17e11347c6cf378f6f19d5ed7" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isAlwaysOnTop</name></member>
+      <member refid="d5/d27/a03157_1a6c53467fb1c4b3e85445f0c49cf4e1c7" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/d27/a03157_1aa57ae69b3ec7fa12384a7a2e3090c018" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isBackgroundVisible</name></member>
+      <member refid="dd/d61/a03197_1a8ddf40c5029350e3f85d8b795d8bd9ad" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isBottomToTop</name></member>
+      <member refid="d9/d5f/a03109_1a0c72e92a8514c0959d7ad57b0b971f73" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isEnabled</name></member>
+      <member refid="d5/d27/a03157_1a1dbd277c9387982c0c153faa9f7070e2" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isInResizeRange</name></member>
+      <member refid="dd/d61/a03197_1adf262960457046e6e117d81c42528427" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isLeftToRight</name></member>
+      <member refid="d5/d27/a03157_1aecf9cd988ccd639e7ecbbd1947f887ff" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isMovable</name></member>
+      <member refid="d5/d27/a03157_1afbb584204c8a58b4312bda40a028199d" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isResizable</name></member>
+      <member refid="dd/d61/a03197_1a37d97e303cdf33a032e7f489044d04ee" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isRightToLeft</name></member>
+      <member refid="dd/d61/a03197_1a1209a9b9b9facc612b090a0477442335" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isTopToBottom</name></member>
+      <member refid="dd/d61/a03197_1a12623c538c8bf527efe2f420b19cc92e" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isVertical</name></member>
+      <member refid="d5/d27/a03157_1a3e1d91ad264e850c2b35f691ec19dd4d" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>isVisible</name></member>
+      <member refid="d5/d27/a03157_1a581415951e9ae64158469104459a5040" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_backgroundMaterial</name></member>
+      <member refid="dd/d61/a03197_1a5c047acae6183ad9c088d397296bbc0e" prot="private" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_container</name></member>
+      <member refid="d5/d27/a03157_1a0422d1d6b4a50fad3c6908078d3ef760" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_flags</name></member>
+      <member refid="d5/d27/a03157_1ac23b3de83e5473a01be74f66615389c3" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_foregroundMaterial</name></member>
+      <member refid="d9/d5f/a03109_1a9ed160c89e5f742d420f00215b7c1d7b" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_handlerSlots</name></member>
+      <member refid="d9/d5f/a03109_1a5e84dac1e70311d98ec5d815d81e4fe0" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_handlerSlotsConnections</name></member>
+      <member refid="d9/d5f/a03109_1aac73eda577b38c43edf34b595cff8b59" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_keyboardSlots</name></member>
+      <member refid="d9/d5f/a03109_1a66f89c17f733ba4033afc5771e7a827c" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_keyboardSlotsConnections</name></member>
+      <member refid="d9/d5f/a03109_1a187f36449604532ccf230440b8e446c9" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_mouseSlots</name></member>
+      <member refid="d9/d5f/a03109_1a4f97f319d54b0d877d7b105cca6cc965" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_mouseSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1a2a710ba7566a0da8a13156abc0901b11" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_ncHandlerSlots</name></member>
+      <member refid="d0/dcd/a03113_1a368dcf33032891e0e56c1a1d8f4103aa" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_ncHandlerSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1a14951b54a3e24fe7b348613f16f50b84" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_ncKeyboardSlots</name></member>
+      <member refid="d0/dcd/a03113_1ae1d9ec7ce4715a0a9a2536955cebb60e" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_ncKeyboardSlotsConnections</name></member>
+      <member refid="d0/dcd/a03113_1aed8e1e5a6ecefc8810126ae8c7ddfb0c" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_ncMouseSlots</name></member>
+      <member refid="d0/dcd/a03113_1af7c333a4c75f38cf11d5226e797fc653" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_ncMouseSlotsConnections</name></member>
+      <member refid="d5/d27/a03157_1afd49a0f5f0736d462eaa2b6a6c66318b" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_parent</name></member>
+      <member refid="dd/d61/a03197_1a26a02278b042acf7f50041c5851a583c" prot="private" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_progress</name></member>
+      <member refid="d5/d27/a03157_1add3ab7fec26d47ae3b477851a7cc2ee6" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_scene</name></member>
+      <member refid="dd/d61/a03197_1aba66d712ecf3e2ba8cc9df148d2cda0d" prot="private" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_text</name></member>
+      <member refid="dd/d61/a03197_1ae93a7f585cacf3abb3c1d593b5af8a67" prot="private" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_title</name></member>
+      <member refid="dd/d61/a03197_1a2e23f03bd77bf46635eabc80a90e092e" prot="private" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>m_value</name></member>
+      <member refid="d0/dcd/a03113_1a1726b1c708fa09c31f8ee004b2758341" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>NonClientEventHandler</name></member>
+      <member refid="d0/dcd/a03113_1a7c5bbf295117ab0f0ebc279365426a35" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>NonClientHandlerFunction</name></member>
+      <member refid="d0/dcd/a03113_1a7cc2d3c359c3bd10417813a38eb28cc2" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>NonClientKeyboardFunction</name></member>
+      <member refid="d0/dcd/a03113_1a35796ed2ebfb666605bad65eefdd2eab" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>NonClientMouseFunction</name></member>
+      <member refid="d5/d27/a03157_1a030ff972d48a241466cef3c8082c4e5e" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>onChanged</name></member>
+      <member refid="d9/d5f/a03109_1a03b0c5def88fd068283f5de7ddb165ae" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnClientHandlerEvent</name></member>
+      <member refid="d9/d5f/a03109_1a2653d4d0452400e29c14ed60898ca603" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnClientHandlerEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a377a0f15c155e02ba27203acc311e6cf" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnClientKeyboardEvent</name></member>
+      <member refid="d9/d5f/a03109_1ac4b2cfd7995c7d2d49025aead38eec7b" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnClientKeyboardEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a071f4627b0ab9424a4ea58bff380c291" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnClientMouseEvent</name></member>
+      <member refid="d9/d5f/a03109_1a677bb241c46644f4dc5774e5f9951cd1" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnClientMouseEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a762d1e36d01afdb527690a27f6e6645a" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnEnable</name></member>
+      <member refid="d9/d5f/a03109_1a51294359629a2fb1d22cab6d40e785e0" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>onEnable</name></member>
+      <member refid="d9/d5f/a03109_1aeeec8bfb3700736547c31cc89e78ea2c" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnEnableConnection</name></member>
+      <member refid="d0/dcd/a03113_1a8cde3553a16b17f2db9b8cb2d0457be6" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnNonClientHandlerEvent</name></member>
+      <member refid="d0/dcd/a03113_1a3cd3b709106f34e3c628df967ff0d294" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnNonClientHandlerEventConnection</name></member>
+      <member refid="d0/dcd/a03113_1ae68352453ba12818f1d870cdaf6eea40" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnNonClientKeyboardEvent</name></member>
+      <member refid="d0/dcd/a03113_1ae5b3c80ac4550412145ed53787b33d86" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnNonClientKeyboardEventConnection</name></member>
+      <member refid="d0/dcd/a03113_1acf4c10c3d5dd8fbb43d1b238d9b6de36" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnNonClientMouseEvent</name></member>
+      <member refid="d0/dcd/a03113_1aefea2351ba1c6ea3dfbe9d22ddf311a6" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>OnNonClientMouseEventConnection</name></member>
+      <member refid="d9/d5f/a03109_1a0da445b1ae561fcaf1d226ea46116a29" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>processEvents</name></member>
+      <member refid="d9/d5f/a03109_1a6f5e82d7f867ea1c015027b0ea61291d" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>processHandlerEvent</name></member>
+      <member refid="d9/d5f/a03109_1a7e1a8377cb8e9ef612c4b7a73f189ee7" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>processKeyboardEvent</name></member>
+      <member refid="d9/d5f/a03109_1a7384ac0af4155b281bc24ec8c2ff4010" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>processMouseEvent</name></member>
+      <member refid="dd/d61/a03197_1ae48caacbeeb5d3f63baafef334a358d3" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>ProgressCtrl</name></member>
+      <member refid="d9/d5f/a03109_1a16401c9f0cb928edaab9f56c5ebcbc08" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d5f/a03109_1afc92e893bf044425b1e80c3113cb3cca" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>pushEvent</name></member>
+      <member refid="d9/d5f/a03109_1a278a37b0923a7b266c684251d37961cb" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>pushEvent</name></member>
+      <member refid="d5/d27/a03157_1a9d2083e8d22c0af9f07e494f17aa84a9" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>removeChild</name></member>
+      <member refid="d5/d27/a03157_1a76bed2932e40dfc7d10f6bc2113bc213" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>removeFlag</name></member>
+      <member refid="d5/d27/a03157_1aa5edf92a6bf41017a281e68aeb9d7eaf" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>removeFlag</name></member>
+      <member refid="d5/d27/a03157_1adc6817a2b0f2bcd5dcef1fe18ce518b6" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBackgroundBorderMaterial</name></member>
+      <member refid="d5/d27/a03157_1a96be50155227ba273fffb7feb811ec75" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBackgroundBorderPosition</name></member>
+      <member refid="d5/d27/a03157_1a5591c2409137443030717673282bc227" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/d27/a03157_1a8bf9f81d2b736d262f75aa6617f7a605" prot="protected" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBackgroundSize</name></member>
+      <member refid="dd/d61/a03197_1a902209b0b90d0bfc9e1631f05e4db797" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBarBorderSize</name></member>
+      <member refid="d5/d27/a03157_1a7ed9a34492cb400424eb233adf582ca6" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBorderInnerUV</name></member>
+      <member refid="d5/d27/a03157_1a36f16d9f66f6e2376b888ccae589f8d6" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBorderOuterUV</name></member>
+      <member refid="d5/d27/a03157_1ab8c78763312333353378ceaff269722c" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBorderSize</name></member>
+      <member refid="dd/d61/a03197_1a18df1cd0cf586fb0272f901716146d52" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setBottomToTop</name></member>
+      <member refid="d5/d27/a03157_1a3f413815fb5be7cb79bd8ad1545ed70f" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setCaption</name></member>
+      <member refid="d9/d5f/a03109_1a4d1cc6560e55cec04ae727c8d2b5f106" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setCatchesMouseEvents</name></member>
+      <member refid="dd/d61/a03197_1a4478788ea277c7cce21f8657c5cdfb5b" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setContainerBorderSize</name></member>
+      <member refid="dd/d61/a03197_1af1d68fefae1c187bd75ced2cb236c9f7" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setLeftToRight</name></member>
+      <member refid="d5/d27/a03157_1a4e90b29a056dcbf2db96eefe6041239d" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setPosition</name></member>
+      <member refid="dd/d61/a03197_1a10c50ddfb5a81476d761f5bb1dd5abe8" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setProgress</name></member>
+      <member refid="dd/d61/a03197_1a4cca0b6f6bd7976452f4a577b1f329b6" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setRange</name></member>
+      <member refid="dd/d61/a03197_1a8701689f232053de959c80e4a75bca45" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setRightToLeft</name></member>
+      <member refid="d5/d27/a03157_1a21a6e38b960222e3df47cc0420176e49" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setSize</name></member>
+      <member refid="d5/d27/a03157_1a9707c9c90e1ae4a57e520fc841332560" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setStyle</name></member>
+      <member refid="dd/d61/a03197_1ac8423ab953c3f2427a3a765e652fe5fb" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setTitle</name></member>
+      <member refid="dd/d61/a03197_1a42b73697666954bdc4b5f46441a4c8e3" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setTopToBottom</name></member>
+      <member refid="d5/d27/a03157_1a6e4e43823e6aae177386088d85c36d69" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setUV</name></member>
+      <member refid="d5/d27/a03157_1ab00d1832ef47986d3d110967b2697160" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>setVisible</name></member>
+      <member refid="d5/d27/a03157_1a68a85bdad7fdc17d729cd97e199ae0f9" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>show</name></member>
+      <member refid="dd/d61/a03197_1a7b90e066e175ff858ffa305218dadf4d" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>Type</name></member>
+      <member refid="d5/d27/a03157_1a7ba50bfc701825af7c072e553b9a36bc" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>~Control</name></member>
+      <member refid="d9/d5f/a03109_1ad34a3c576978d4afac873aac492d3e03" prot="public" virt="virtual"><scope>castor3d::ProgressCtrl</scope><name>~EventHandler</name></member>
+      <member refid="dd/d61/a03197_1aaf0246138fb809d918bef324354376ce" prot="public" virt="non-virtual"><scope>castor3d::ProgressCtrl</scope><name>~ProgressCtrl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

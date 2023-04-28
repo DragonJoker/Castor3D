@@ -1,0 +1,197 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/d1e/a03309" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::Theme</compoundname>
+    <basecompoundref refid="da/d0a/a03297" prot="public" virt="non-virtual">castor3d::StylesHolder</basecompoundref>
+    <includes local="no">Theme.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d8/d1e/a03309_1ae581d644cad2a40846c7859c808ebef7" prot="private" static="no" mutable="no">
+        <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+        <definition>Scene* castor3d::Theme::m_scene</definition>
+        <argsstring></argsstring>
+        <name>m_scene</name>
+        <qualifiedname>castor3d::Theme::m_scene</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/Theme.hpp" line="60" column="8" bodyfile="Gui/Theme/Theme.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d1e/a03309_1abc8ab53f72b48df804719eca88665dba" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Theme::Theme</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine)</argsstring>
+        <name>Theme</name>
+        <qualifiedname>castor3d::Theme::Theme</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/Theme.hpp" line="29" column="1" bodyfile="Gui/Theme/Theme.hpp" bodystart="29" bodyend="35"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d1e/a03309_1a1b83961090180bdbea86b2f26fbaec87" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::Theme::Theme</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine)</argsstring>
+        <name>Theme</name>
+        <qualifiedname>castor3d::Theme::Theme</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/Theme.hpp" line="37" column="1" bodyfile="Gui/Theme/Theme.hpp" bodystart="37" bodyend="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d1e/a03309_1a3ebb8de9b4f2616405b29d7cb2332023" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>auto &amp;</type>
+        <definition>auto &amp; castor3d::Theme::getName</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::Theme::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/Theme.hpp" line="43" column="7" bodyfile="Gui/Theme/Theme.hpp" bodystart="43" bodyend="46"/>
+        <references refid="da/d0a/a03297_1a0601ec35dc481eff061081c6dc7ef639" compoundref="d4/dd3/a00428" startline="195" endline="198">castor3d::StylesHolder::getHolderName</references>
+      </memberdef>
+      <memberdef kind="function" id="d8/d1e/a03309_1adf1769cb74e5905ddc3c310aa0a438b7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::Theme::hasScene</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>hasScene</name>
+        <qualifiedname>castor3d::Theme::hasScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/Theme.hpp" line="48" column="6" bodyfile="Gui/Theme/Theme.hpp" bodystart="48" bodyend="51"/>
+        <referencedby refid="d8/d1e/a03309_1a5c2cd8ffffc6f75749c1368d52d287ed" compoundref="d4/da8/a00437" startline="53" endline="57">getScene</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d8/d1e/a03309_1a5c2cd8ffffc6f75749c1368d52d287ed" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> &amp;</type>
+        <definition>Scene &amp; castor3d::Theme::getScene</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>getScene</name>
+        <qualifiedname>castor3d::Theme::getScene</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/Theme.hpp" line="53" column="8" bodyfile="Gui/Theme/Theme.hpp" bodystart="53" bodyend="57"/>
+        <references refid="d8/d1e/a03309_1adf1769cb74e5905ddc3c310aa0a438b7" compoundref="d4/da8/a00437" startline="48" endline="51">hasScene</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::StylesHolder</label>
+        <link refid="da/d0a/a03297"/>
+      </node>
+      <node id="1">
+        <label>castor3d::Theme</label>
+        <link refid="d8/d1e/a03309"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::StylesHolder</label>
+        <link refid="da/d0a/a03297"/>
+      </node>
+      <node id="1">
+        <label>castor3d::Theme</label>
+        <link refid="d8/d1e/a03309"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Theme/Theme.hpp" line="25" column="1" bodyfile="Gui/Theme/Theme.hpp" bodystart="27" bodyend="61"/>
+    <listofallmembers>
+      <member refid="da/d0a/a03297_1ad18f29747a8e2d17d9e40a9671fcc37f" prot="protected" virt="non-virtual"><scope>castor3d::Theme</scope><name>cleanupStyles</name></member>
+      <member refid="da/d0a/a03297_1a2f5bc7bf725291cf767d14428c3dba86" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createButtonStyle</name></member>
+      <member refid="da/d0a/a03297_1a6e536c3f522da5d568eacd6d49f58627" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createComboBoxStyle</name></member>
+      <member refid="da/d0a/a03297_1a6a52bc77a20359dc1cf9d2f4a5199cea" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createEditStyle</name></member>
+      <member refid="da/d0a/a03297_1a9d5873d94c21339d853e30442835e036" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createExpandablePanelStyle</name></member>
+      <member refid="da/d0a/a03297_1ac67e69129a666233d19ad989ab55e0bd" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createFrameStyle</name></member>
+      <member refid="da/d0a/a03297_1a663bcf813ca146011ff5ff75904c7dce" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createListBoxStyle</name></member>
+      <member refid="da/d0a/a03297_1a87415019df0bb03e77317a92468b9070" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createPanelStyle</name></member>
+      <member refid="da/d0a/a03297_1a5c276714649585aa130bc62558c6de19" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createProgressStyle</name></member>
+      <member refid="da/d0a/a03297_1a8df6f9668b7f0070940b3bbc64fd89e7" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createScrollBarStyle</name></member>
+      <member refid="da/d0a/a03297_1a825054201cef1361d7fa33ff3afa68d9" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createSliderStyle</name></member>
+      <member refid="da/d0a/a03297_1ad182412093bc39782668b4d25ab3915f" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>createStaticStyle</name></member>
+      <member refid="da/d0a/a03297_1a791fb7f01b135a8ef6d2802ecbb78ee6" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getButtonStyle</name></member>
+      <member refid="da/d0a/a03297_1af845fd211c570003ff8a097d11d19773" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getButtonStyles</name></member>
+      <member refid="da/d0a/a03297_1a39fa30924d341be7a6f214c6db2a9af0" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getComboBoxStyle</name></member>
+      <member refid="da/d0a/a03297_1a0363dd0ae75b6c42d3b73b026d1c46b7" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getComboBoxStyles</name></member>
+      <member refid="da/d0a/a03297_1afc5588e7629d715ad7c17f02ed8653af" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getDefaultFont</name></member>
+      <member refid="da/d0a/a03297_1aa7253d044219ad2290dac778b781be49" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getEditStyle</name></member>
+      <member refid="da/d0a/a03297_1a98b3cb3fe298f8ef9c6361075ead2520" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getEditStyles</name></member>
+      <member refid="da/d0a/a03297_1a5af7b0bcf0763270e79030328ce66678" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getExpandablePanelStyle</name></member>
+      <member refid="da/d0a/a03297_1a22db77c4bf62f610753830b1a649893a" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getExpandablePanelStyles</name></member>
+      <member refid="da/d0a/a03297_1aa7976b5651a171b1cdd3438ecac89012" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getFrameStyle</name></member>
+      <member refid="da/d0a/a03297_1a7bbd7a04e646f78d3a5999bdf2621973" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getFrameStyles</name></member>
+      <member refid="da/d0a/a03297_1a0601ec35dc481eff061081c6dc7ef639" prot="protected" virt="non-virtual"><scope>castor3d::Theme</scope><name>getHolderName</name></member>
+      <member refid="da/d0a/a03297_1ac737ec7bfe648aa616c99ebeed786392" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getListBoxStyle</name></member>
+      <member refid="da/d0a/a03297_1ac380f39e28ffe3f8ffdab39a3b969ef7" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getListBoxStyles</name></member>
+      <member refid="d8/d1e/a03309_1a3ebb8de9b4f2616405b29d7cb2332023" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getName</name></member>
+      <member refid="da/d0a/a03297_1a893b542eea1ceb10ddf3a7be2dfc608c" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getPanelStyle</name></member>
+      <member refid="da/d0a/a03297_1a179248d75f720b72cb9dec20d0cc164f" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getPanelStyles</name></member>
+      <member refid="da/d0a/a03297_1ad5fbbe317ab48dfe01394406f32f9a34" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getProgressStyle</name></member>
+      <member refid="da/d0a/a03297_1a37b676a53dfc05f15848021b0725cf1d" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getProgressStyles</name></member>
+      <member refid="d8/d1e/a03309_1a5c2cd8ffffc6f75749c1368d52d287ed" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getScene</name></member>
+      <member refid="da/d0a/a03297_1a05dfd2911f8413d4f704d55bffa90ea8" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getScrollBarStyle</name></member>
+      <member refid="da/d0a/a03297_1adece0de101ddd9eb70b29de9ad07f862" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getScrollBarStyles</name></member>
+      <member refid="da/d0a/a03297_1a6f47141f5a22342f279a8421bda1f956" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getSliderStyle</name></member>
+      <member refid="da/d0a/a03297_1a57205953caeb9bb98acd7da5c58785ba" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getSliderStyles</name></member>
+      <member refid="da/d0a/a03297_1a0de6e2cbae0a027c0417b520ae3a999d" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>getStaticStyle</name></member>
+      <member refid="da/d0a/a03297_1af2aa59807ebc5fb2dfe54c2e424d59db" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getStaticStyles</name></member>
+      <member refid="da/d0a/a03297_1a7699c20040acd264f3715db347ec9935" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>getStyle</name></member>
+      <member refid="d8/d1e/a03309_1adf1769cb74e5905ddc3c310aa0a438b7" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>hasScene</name></member>
+      <member refid="d8/d1e/a03309_1ae581d644cad2a40846c7859c808ebef7" prot="private" virt="non-virtual"><scope>castor3d::Theme</scope><name>m_scene</name></member>
+      <member refid="da/d0a/a03297_1ae257278e9515f5a84e4adb2c34a08723" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>setDefaultFont</name></member>
+      <member refid="da/d0a/a03297_1a170e30cf0d2391f48062783ad76ed3de" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>StylesHolder</name></member>
+      <member refid="d8/d1e/a03309_1abc8ab53f72b48df804719eca88665dba" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>Theme</name></member>
+      <member refid="d8/d1e/a03309_1a1b83961090180bdbea86b2f26fbaec87" prot="public" virt="non-virtual"><scope>castor3d::Theme</scope><name>Theme</name></member>
+      <member refid="da/d0a/a03297_1a3f7d9ff25cae709fbdc0d75551bd68d5" prot="public" virt="virtual"><scope>castor3d::Theme</scope><name>~StylesHolder</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

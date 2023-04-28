@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/d67/a05349" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::RenderQuadBuilder</compoundname>
+    <basecompoundref refid="d8/d16/a05321" prot="public" virt="non-virtual">castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</basecompoundref>
+    <includes local="no">RenderQuad.hpp</includes>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
+        <link refid="d8/d16/a05321"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderQuadBuilder</label>
+        <link refid="d9/d67/a05349"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d8/d16/a05321"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::RenderQuadBuilderT&lt; rq::Config, RenderQuadBuilder &gt;</label>
+        <link refid="d8/d16/a05321"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_config</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; rq::Config, RenderQuadBuilder &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::RenderQuadBuilder</label>
+        <link refid="d9/d67/a05349"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderQuadBuilderT&lt; ConfigT, BuilderT &gt;</label>
+        <link refid="d8/d16/a05321"/>
+      </node>
+      <node id="3">
+        <label>castor3d::rq::ConfigT&lt; WrapperT &gt;</label>
+        <link refid="d4/db2/a05337"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Passes/RenderQuad.hpp" line="513" column="1" bodyfile="Render/Passes/RenderQuad.hpp" bodystart="515" bodyend="516"/>
+    <listofallmembers>
+      <member refid="d8/d16/a05321_1a2d157c5fa13f40f5fae84a33c6f26365" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d8/d16/a05321_1a4c77483c0d73db74aae5fe59e03a6d54" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d8/d16/a05321_1ac1edfedf55abf1b02776b6ee9719482c" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>binding</name></member>
+      <member refid="d8/d16/a05321_1a970a0bf93dfb36ba6f349bd07725e521" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>bindings</name></member>
+      <member refid="d8/d16/a05321_1a062561625f7ff24ed0cfa65f3bfc8688" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>blendMode</name></member>
+      <member refid="d8/d16/a05321_1a4a58abd503ed0bff1600be8605477258" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>build</name></member>
+      <member refid="d8/d16/a05321_1aa7fc146147deb53c51c646122d66eef6" prot="protected" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>m_config</name></member>
+      <member refid="d8/d16/a05321_1a2b7159354bb4ab5f87da28299e2e21da" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>range</name></member>
+      <member refid="d8/d16/a05321_1a13037f2937494dc1ab0f713225aeedd6" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>RenderQuadBuilderT</name></member>
+      <member refid="d8/d16/a05321_1a4a4f339fd319b5c843eb831cbe6ca153" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>tex3DResult</name></member>
+      <member refid="d8/d16/a05321_1a12f59a1dbb62bd1cc2fc3d26db8b1897" prot="public" virt="non-virtual"><scope>castor3d::RenderQuadBuilder</scope><name>texcoordConfig</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

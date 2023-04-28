@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/ddd/a03317" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ImporterFile::GeometryData</compoundname>
+    <includes local="no">ImporterFile.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/ddd/a03317_1a47b838206310f4fc2de2cf073be57012" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ImporterFile::GeometryData::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::ImporterFile::GeometryData::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="ImporterFile.hpp" line="33" column="16" bodyfile="ImporterFile.hpp" bodystart="33" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/ddd/a03317_1ab813e7852a40e3da8e2cf613447157db" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ImporterFile::GeometryData::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <qualifiedname>castor3d::ImporterFile::GeometryData::node</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="ImporterFile.hpp" line="34" column="16" bodyfile="ImporterFile.hpp" bodystart="34" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/ddd/a03317_1ad89f173c10a528e1ca8de988453a2df6" prot="public" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ImporterFile::GeometryData::mesh</definition>
+        <argsstring></argsstring>
+        <name>mesh</name>
+        <qualifiedname>castor3d::ImporterFile::GeometryData::mesh</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="ImporterFile.hpp" line="35" column="16" bodyfile="ImporterFile.hpp" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="ImporterFile.hpp" line="31" column="1" bodyfile="ImporterFile.hpp" bodystart="32" bodyend="36"/>
+    <listofallmembers>
+      <member refid="d8/ddd/a03317_1ad89f173c10a528e1ca8de988453a2df6" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::GeometryData</scope><name>mesh</name></member>
+      <member refid="d8/ddd/a03317_1a47b838206310f4fc2de2cf073be57012" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::GeometryData</scope><name>name</name></member>
+      <member refid="d8/ddd/a03317_1ab813e7852a40e3da8e2cf613447157db" prot="public" virt="non-virtual"><scope>castor3d::ImporterFile::GeometryData</scope><name>node</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

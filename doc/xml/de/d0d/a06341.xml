@@ -1,0 +1,561 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="de/d0d/a06341" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::PassBuffer</compoundname>
+    <includes local="no">PassBuffer.hpp</includes>
+    <innerclass refid="d5/d7b/a06345" prot="public">castor3d::PassBuffer::PassDataPtr</innerclass>
+    <innerclass refid="d2/d13/a06349" prot="public">castor3d::PassBuffer::PassTypeData</innerclass>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="de/d0d/a06341_1a406fc939d586da2a0e3f74e2c7e34c17" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PassBuffer::m_stride</definition>
+        <argsstring></argsstring>
+        <name>m_stride</name>
+        <qualifiedname>castor3d::PassBuffer::m_stride</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="319" column="10" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="319" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d0d/a06341_1a6215a010f4ac16f1127824adbc40bd41" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dee/a06325" kindref="compound">ShaderBuffer</ref></type>
+        <definition>ShaderBuffer castor3d::PassBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::PassBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="320" column="14" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="320" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d0d/a06341_1ac642ab69ba92e0c5c7369d1a5d241d5c" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d6/d16/a04077" kindref="compound">Pass</ref> * &gt;</type>
+        <definition>std::vector&lt; Pass * &gt; castor3d::PassBuffer::m_passes</definition>
+        <argsstring></argsstring>
+        <name>m_passes</name>
+        <qualifiedname>castor3d::PassBuffer::m_passes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="321" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="321" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d0d/a06341_1a3eabab4ec6c2eeea336d861c325f84df" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d6/d16/a04077" kindref="compound">Pass</ref> const * &gt;</type>
+        <definition>std::vector&lt; Pass const * &gt; castor3d::PassBuffer::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::PassBuffer::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="322" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="322" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d0d/a06341_1a5cc82dd8af9f574ec2948422b5952092" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d3/d5e/a01725_1a53125ebeccd59c39556a280b619e42cc" kindref="member">OnPassChangedConnection</ref> &gt;</type>
+        <definition>std::vector&lt; OnPassChangedConnection &gt; castor3d::PassBuffer::m_connections</definition>
+        <argsstring></argsstring>
+        <name>m_connections</name>
+        <qualifiedname>castor3d::PassBuffer::m_connections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="323" column="13" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="323" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d0d/a06341_1af1f6e6865313d7bb7e78e436969029b7" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PassBuffer::m_passID</definition>
+        <argsstring></argsstring>
+        <name>m_passID</name>
+        <qualifiedname>castor3d::PassBuffer::m_passID</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="324" column="10" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="324" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d0d/a06341_1a8a435de4f2b7607bc5a180f4b06f5058" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; uint32_t, <ref refid="d2/d13/a06349" kindref="compound">PassTypeData</ref> &gt;</type>
+        <definition>std::unordered_map&lt; uint32_t, PassTypeData &gt; castor3d::PassBuffer::m_passTypeIndices</definition>
+        <argsstring></argsstring>
+        <name>m_passTypeIndices</name>
+        <qualifiedname>castor3d::PassBuffer::m_passTypeIndices</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="325" column="20" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="325" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d0d/a06341_1ab4770288b218128a820d5417416a4075" prot="private" static="no" mutable="no">
+        <type>castor::ArrayView&lt; uint8_t &gt;</type>
+        <definition>castor::ArrayView&lt; uint8_t &gt; castor3d::PassBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::PassBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="326" column="19" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="326" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="de/d0d/a06341_1a284d697c472d9be9023c1788aa10e187" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::PassBuffer::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::PassBuffer::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="327" column="12" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="327" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d0d/a06341_1ab4834da8dc9dcc6b0fed799b16e59e75" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::PassBuffer::PassBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, uint32_t count)</argsstring>
+        <name>PassBuffer</name>
+        <qualifiedname>castor3d::PassBuffer::PassBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d4/d44/a03065" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The max passes count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="187" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a9a44c3cc681d3b4ec0c62084b171f386" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::PassBuffer::addPass</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>addPass</name>
+        <qualifiedname>castor3d::PassBuffer::addPass</qualifiedname>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Adds a pass to the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="198" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a04fd2c6473c7b87ca15163a84afadc77" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassBuffer::removePass</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>removePass</name>
+        <qualifiedname>castor3d::PassBuffer::removePass</qualifiedname>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+<para>Removes a pass from the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="207" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1addfb7ae53fd4410e46fc2a4b41add456" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassBuffer::update</definition>
+        <argsstring>(SpecificsBuffers const &amp;specifics, ashes::CommandBuffer const &amp;commandBuffer)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::PassBuffer::update</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ad1267c6eb1256aa93c43eaf49382612a" kindref="member">SpecificsBuffers</ref> const &amp;</type>
+          <declname>specifics</declname>
+        </param>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the passes buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">specifics</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The buffers specific to pass components. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">commandBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the update commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="218" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a21fa22b928c6b7c8891dad7d636c7929" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassBuffer::cleanup</definition>
+        <argsstring>()</argsstring>
+        <name>cleanup</name>
+        <qualifiedname>castor3d::PassBuffer::cleanup</qualifiedname>
+        <briefdescription>
+<para>Clears the dirty passes container. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="226" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a55d53eeed3483c43167979d99ab6f51b" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::PassBuffer::createLayoutBinding</definition>
+        <argsstring>(uint32_t binding, VkShaderStageFlags stages=(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::PassBuffer::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stages</declname>
+          <defval>(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)</defval>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set layout binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="233" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a6ca20db469175ea8b75c16024524d2e2" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassBuffer::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::PassBuffer::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates a frame pass binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="245" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a44e0a22fb6b99b7791b1abcdb6bacc7d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::PassBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::PassBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for this buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="252" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a6170481289ab367b47234ae0eb0b67b6" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::PassBuffer::createBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</argsstring>
+        <name>createBinding</name>
+        <qualifiedname>castor3d::PassBuffer::createBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set binding at given point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptorSet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set that receives the binding. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set layout binding. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="263" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1af9bd53b74918284c350e2ffbdbd43312" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/d7b/a06345" kindref="compound">PassDataPtr</ref></type>
+        <definition>C3D_API PassDataPtr castor3d::PassBuffer::getData</definition>
+        <argsstring>(uint32_t passID)</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::PassBuffer::getData</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>passID</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pointer to the data for given pass ID. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="271" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a29cce6176e5f138e301d5e699d6dcd39" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::PassBuffer::getMaxPassTypeCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getMaxPassTypeCount</name>
+        <qualifiedname>castor3d::PassBuffer::getMaxPassTypeCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The maximum pass types count (for visibility buffer use). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="278" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a8398cb229dfe029b63366a38aba08132" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::PassBuffer::getPassTypeIndex</definition>
+        <argsstring>(PassComponentCombineID passType, TextureCombineID textureCombine) const</argsstring>
+        <name>getPassTypeIndex</name>
+        <qualifiedname>castor3d::PassBuffer::getPassTypeIndex</qualifiedname>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1af6093e41bb1d28fdaa187df3ec768e3f" kindref="member">PassComponentCombineID</ref></type>
+          <declname>passType</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a4066afb0085e0658496b8bd7324d2e82" kindref="member">TextureCombineID</ref></type>
+          <declname>textureCombine</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pass type index (for visibility buffer use). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="285" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a0a137a4195e7b2154650d373dc958bdb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> std::tuple&lt; <ref refid="d3/d5e/a01725_1af6093e41bb1d28fdaa187df3ec768e3f" kindref="member">PassComponentCombineID</ref>, <ref refid="d3/d5e/a01725_1a4066afb0085e0658496b8bd7324d2e82" kindref="member">TextureCombineID</ref> &gt;</type>
+        <definition>C3D_API std::tuple&lt; PassComponentCombineID, TextureCombineID &gt; castor3d::PassBuffer::getPassTypeDetails</definition>
+        <argsstring>(uint32_t passTypeIndex) const</argsstring>
+        <name>getPassTypeDetails</name>
+        <qualifiedname>castor3d::PassBuffer::getPassTypeDetails</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>passTypeIndex</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pass type details for given pass type index (for visibility buffer use). </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="293" column="20"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1a637b892b348055fbd6954b027bfb97d2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor3d::PassBuffer::getPtr</definition>
+        <argsstring>()</argsstring>
+        <name>getPtr</name>
+        <qualifiedname>castor3d::PassBuffer::getPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pointer to the buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="300" column="10" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="300" bodyend="303"/>
+        <references refid="dd/dee/a06325_1a4fcf4ffabfc41ab525819285b87fdbfe" compoundref="de/d2c/a01553" startline="133" endline="136">castor3d::ShaderBuffer::getPtr</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d0d/a06341_1ac2f7fc74a083ad8864a906592eca4817" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::PassBuffer::getCurrentPassTypeCount</definition>
+        <argsstring>() const</argsstring>
+        <name>getCurrentPassTypeCount</name>
+        <qualifiedname>castor3d::PassBuffer::getCurrentPassTypeCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="305" column="10" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="305" bodyend="308"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/PassBuffer.hpp" line="24" column="1" bodyfile="Shader/ShaderBuffers/PassBuffer.hpp" bodystart="25" bodyend="328"/>
+    <listofallmembers>
+      <member refid="de/d0d/a06341_1a9a44c3cc681d3b4ec0c62084b171f386" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>addPass</name></member>
+      <member refid="de/d0d/a06341_1a21fa22b928c6b7c8891dad7d636c7929" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>cleanup</name></member>
+      <member refid="de/d0d/a06341_1a6170481289ab367b47234ae0eb0b67b6" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>createBinding</name></member>
+      <member refid="de/d0d/a06341_1a55d53eeed3483c43167979d99ab6f51b" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="de/d0d/a06341_1a6ca20db469175ea8b75c16024524d2e2" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>createPassBinding</name></member>
+      <member refid="de/d0d/a06341_1a44e0a22fb6b99b7791b1abcdb6bacc7d" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>getBinding</name></member>
+      <member refid="de/d0d/a06341_1ac2f7fc74a083ad8864a906592eca4817" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>getCurrentPassTypeCount</name></member>
+      <member refid="de/d0d/a06341_1af9bd53b74918284c350e2ffbdbd43312" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>getData</name></member>
+      <member refid="de/d0d/a06341_1a29cce6176e5f138e301d5e699d6dcd39" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>getMaxPassTypeCount</name></member>
+      <member refid="de/d0d/a06341_1a0a137a4195e7b2154650d373dc958bdb" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>getPassTypeDetails</name></member>
+      <member refid="de/d0d/a06341_1a8398cb229dfe029b63366a38aba08132" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>getPassTypeIndex</name></member>
+      <member refid="de/d0d/a06341_1a637b892b348055fbd6954b027bfb97d2" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>getPtr</name></member>
+      <member refid="de/d0d/a06341_1a6215a010f4ac16f1127824adbc40bd41" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_buffer</name></member>
+      <member refid="de/d0d/a06341_1a5cc82dd8af9f574ec2948422b5952092" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_connections</name></member>
+      <member refid="de/d0d/a06341_1ab4770288b218128a820d5417416a4075" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_data</name></member>
+      <member refid="de/d0d/a06341_1a3eabab4ec6c2eeea336d861c325f84df" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_dirty</name></member>
+      <member refid="de/d0d/a06341_1a284d697c472d9be9023c1788aa10e187" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_mutex</name></member>
+      <member refid="de/d0d/a06341_1ac642ab69ba92e0c5c7369d1a5d241d5c" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_passes</name></member>
+      <member refid="de/d0d/a06341_1af1f6e6865313d7bb7e78e436969029b7" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_passID</name></member>
+      <member refid="de/d0d/a06341_1a8a435de4f2b7607bc5a180f4b06f5058" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_passTypeIndices</name></member>
+      <member refid="de/d0d/a06341_1a406fc939d586da2a0e3f74e2c7e34c17" prot="private" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>m_stride</name></member>
+      <member refid="de/d0d/a06341_1ab4834da8dc9dcc6b0fed799b16e59e75" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>PassBuffer</name></member>
+      <member refid="de/d0d/a06341_1a04fd2c6473c7b87ca15163a84afadc77" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>removePass</name></member>
+      <member refid="de/d0d/a06341_1addfb7ae53fd4410e46fc2a4b41add456" prot="public" virt="non-virtual"><scope>castor3d::PassBuffer</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

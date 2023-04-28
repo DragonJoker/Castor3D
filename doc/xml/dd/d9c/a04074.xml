@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/d9c/a04074" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::PassVisitorBase::Config</compoundname>
+    <includes local="no">PassVisitor.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/d9c/a04074_1a39d594ca0635247e1c7db34e37fcfb85" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PassVisitorBase::Config::forceSubPassesVisit</definition>
+        <argsstring></argsstring>
+        <name>forceSubPassesVisit</name>
+        <qualifiedname>castor3d::PassVisitorBase::Config::forceSubPassesVisit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="38" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/d9c/a04074_1ad77a396b7bfe98f0275397343ebb2761" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::PassVisitorBase::Config::forceMiplevelsVisit</definition>
+        <argsstring></argsstring>
+        <name>forceMiplevelsVisit</name>
+        <qualifiedname>castor3d::PassVisitorBase::Config::forceMiplevelsVisit</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/PassVisitor.hpp" line="39" column="6" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/PassVisitor.hpp" line="36" column="1" bodyfile="Material/Pass/PassVisitor.hpp" bodystart="37" bodyend="40"/>
+    <listofallmembers>
+      <member refid="dd/d9c/a04074_1ad77a396b7bfe98f0275397343ebb2761" prot="public" virt="non-virtual"><scope>castor3d::PassVisitorBase::Config</scope><name>forceMiplevelsVisit</name></member>
+      <member refid="dd/d9c/a04074_1a39d594ca0635247e1c7db34e37fcfb85" prot="public" virt="non-virtual"><scope>castor3d::PassVisitorBase::Config</scope><name>forceSubPassesVisit</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

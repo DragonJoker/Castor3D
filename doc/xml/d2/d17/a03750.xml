@@ -1,0 +1,506 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d17/a03750" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::HeightMapComponent::Plugin</compoundname>
+    <basecompoundref refid="d9/d2c/a04042" prot="public" virt="non-virtual">castor3d::PassMapComponentPlugin</basecompoundref>
+    <includes local="no">HeightMapComponent.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d2/d17/a03750_1a145693a837aa7b56cdff750918a9d1b6" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::HeightMapComponent::Plugin::Plugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>Plugin</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::Plugin</qualifiedname>
+        <param>
+          <type><ref refid="d9/d85/a04034" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="93" column="10" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="93" bodyend="96"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1a8201a7106d8493a2f666d6089af2dee4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::HeightMapComponent::Plugin::createComponent</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>createComponent</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::createComponent</qualifiedname>
+        <reimplements refid="db/df2/a04026_1a44a1a547e8c6bdae20b284cc75b98fcd">createComponent</reimplements>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Creates a component for given pass. <simplesect kind="remark"><para>Doesn&apos;t add the component to the pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="98" column="19" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="98" bodyend="101"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1a89382281e8aa2eb31c384ed61b7283b5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightMapComponent::Plugin::createParsers</definition>
+        <argsstring>(castor::AttributeParsers &amp;parsers, ChannelFillers &amp;channelFillers) const override</argsstring>
+        <name>createParsers</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::createParsers</qualifiedname>
+        <reimplements refid="db/df2/a04026_1a03565ed4fc5d52779331284917b83f43">createParsers</reimplements>
+        <param>
+          <type>castor::AttributeParsers &amp;</type>
+          <declname>parsers</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a9b5de35c544238dd9dd2382417fa2587" kindref="member">ChannelFillers</ref> &amp;</type>
+          <declname>channelFillers</declname>
+        </param>
+        <briefdescription>
+<para>Fills the given lists with this component&apos;s parsers. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">parsers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the parsers. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">channelFillers</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the texture channels and the way to fill them. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="103" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1a82fb1fd7ea4995f182d988cb1734e7d5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::HeightMapComponent::Plugin::isComponentNeeded</definition>
+        <argsstring>(TextureCombine const &amp;textures, ComponentModeFlags const &amp;filter) const override</argsstring>
+        <name>isComponentNeeded</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::isComponentNeeded</qualifiedname>
+        <reimplements refid="db/df2/a04026_1ae36bd47493f7d615418cde61ed7f6717">isComponentNeeded</reimplements>
+        <param>
+          <type><ref refid="d7/d2e/a03310" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>textures</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1afa74b47fdeea208a304fc7d1d8a4b1dd" kindref="member">ComponentModeFlags</ref> const &amp;</type>
+          <declname>filter</declname>
+        </param>
+        <briefdescription>
+<para>Tells if the component&apos;s lighting shaders are needed. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">textures</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>To check from texturing viewpoint. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">filter</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>To check from render pass viewpoint. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="105" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1a8c4d76b7e3f6b048cc8bcade8f41e0d5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightMapComponent::Plugin::createMapComponent</definition>
+        <argsstring>(Pass &amp;pass, std::vector&lt; PassComponentUPtr &gt; &amp;result) const override</argsstring>
+        <name>createMapComponent</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::createMapComponent</qualifiedname>
+        <reimplements refid="db/df2/a04026_1a1e6a85dd32f4b3ef8b5acd253712c989">createMapComponent</reimplements>
+        <param>
+          <type><ref refid="dd/daf/a04050" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>std::vector&lt; PassComponentUPtr &gt; &amp;</type>
+          <declname>result</declname>
+        </param>
+        <briefdescription>
+<para>Creates the map component. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>To check if the configuration for the component is there. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">result</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the created component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="107" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1a51eb03ab8f59ed45779fdb96cf04ab76" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::HeightMapComponent::Plugin::hasTexcoordModif</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponents, PipelineFlags const *flags) const override</argsstring>
+        <name>hasTexcoordModif</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::hasTexcoordModif</qualifiedname>
+        <reimplements refid="db/df2/a04026_1a2f8e460d4e850283ba56ae0d30783240">hasTexcoordModif</reimplements>
+        <param>
+          <type><ref refid="d9/d85/a04034" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponents</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d1d/a05370" kindref="compound">PipelineFlags</ref> const *</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this component modifies texture coordinates. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="109" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1a3d01c2db8fb09ef138e3538812f9af27" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::HeightMapComponent::Plugin::isMapComponent</definition>
+        <argsstring>() const override</argsstring>
+        <name>isMapComponent</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::isMapComponent</qualifiedname>
+        <reimplements refid="db/df2/a04026_1ae06b854e0cc17ad1cc044d1316c1b752">isMapComponent</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para><computeroutput>true</computeroutput> if this component processes texture data. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="112" column="6" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="112" bodyend="115"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1af98f26d94ce9d48e64396d40ec55084e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d4/d26/a01700_1a95bc90ce5717e2d571430b21c84436dd" kindref="member">shader::PassComponentsShaderPtr</ref></type>
+        <definition>shader::PassComponentsShaderPtr castor3d::HeightMapComponent::Plugin::createComponentsShader</definition>
+        <argsstring>() const override</argsstring>
+        <name>createComponentsShader</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::createComponentsShader</qualifiedname>
+        <reimplements refid="db/df2/a04026_1aa124938351f50e44e4f2d28cfdbfedbc">createComponentsShader</reimplements>
+        <briefdescription>
+<para>Creates the component&apos;s lighting shaders. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="117" column="33" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="117" bodyend="120"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1a454433e52763a3eb67679a2f7d2f2c2f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d5/da6/a01698_1a21f6621faaf5293fd7452f7fa0cd4136" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>PassComponentTextureFlag castor3d::HeightMapComponent::Plugin::getHeightMapFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getHeightMapFlags</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::getHeightMapFlags</qualifiedname>
+        <reimplements refid="db/df2/a04026_1a1dded831fff02eed2257ee6bb90b98ae">getHeightMapFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The flags for the height map. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="122" column="26" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="122" bodyend="125"/>
+        <references refid="d2/d17/a03750_1ac8de09a567a0991625bd52ba7dd34cfe" compoundref="d7/def/a00521" startline="136" endline="139">getTextureFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1a9ba5185ae251da2cbc634bb68f211470" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightMapComponent::Plugin::filterTextureFlags</definition>
+        <argsstring>(ComponentModeFlags filter, TextureCombine &amp;texturesFlags) const override</argsstring>
+        <name>filterTextureFlags</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::filterTextureFlags</qualifiedname>
+        <reimplements refid="db/df2/a04026_1a2024dbae92bf8babbfbaa7dad9d6c564">filterTextureFlags</reimplements>
+        <param>
+          <type><ref refid="d5/da6/a01698_1afa74b47fdeea208a304fc7d1d8a4b1dd" kindref="member">ComponentModeFlags</ref></type>
+          <declname>filter</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d2e/a03310" kindref="compound">TextureCombine</ref> &amp;</type>
+          <declname>texturesFlags</declname>
+        </param>
+        <briefdescription>
+<para>Removes from given texture flags the ones that are useless given the provided filter. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="127" column="6" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="127" bodyend="134"/>
+        <references refid="d5/da6/a01698_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="d5/da6/a01698_1a5a21f743634dd3f3fbe545a01fd7c536a602580dcfaed9d9ddf07cad7276c3103">castor3d::eGeometry</references>
+        <references refid="d2/d17/a03750_1ac8de09a567a0991625bd52ba7dd34cfe" compoundref="d7/def/a00521" startline="136" endline="139">getTextureFlags</references>
+        <references refid="d5/da6/a01698_1ad3d63b41dd70de2c73275db13818a77d">castor3d::remFlags</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1ac8de09a567a0991625bd52ba7dd34cfe" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="d5/da6/a01698_1a21f6621faaf5293fd7452f7fa0cd4136" kindref="member">PassComponentTextureFlag</ref></type>
+        <definition>PassComponentTextureFlag castor3d::HeightMapComponent::Plugin::getTextureFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getTextureFlags</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::getTextureFlags</qualifiedname>
+        <reimplements refid="db/df2/a04026_1af4fd935719c75c665f67aff1c05e780b">getTextureFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The texture flags for this component. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="136" column="26" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="136" bodyend="139"/>
+        <references refid="db/df2/a04026_1a3d4ca319e7c6e2dc3e40e81211846fee" compoundref="d8/dc8/a00581" startline="1016" endline="1019">castor3d::PassComponentPlugin::getId</references>
+        <references refid="dd/da0/a03742_1a105da62aed508cf21f2fa6563be37c78" compoundref="d7/def/a00521" startline="17">castor3d::HeightMapComponent::Height</references>
+        <references refid="d5/da6/a01698_1ad3ac6fb5275f7db88138f87aa2f270d8" compoundref="dc/d2f/a00425" startline="41" endline="46">castor3d::makeTextureFlag</references>
+        <referencedby refid="d2/d17/a03750_1ac0894db0f7c9fe0aeddcb700148566f1" compoundref="d7/def/a00521" startline="141" endline="146">fillTextureConfiguration</referencedby>
+        <referencedby refid="d2/d17/a03750_1a9ba5185ae251da2cbc634bb68f211470" compoundref="d7/def/a00521" startline="127" endline="134">filterTextureFlags</referencedby>
+        <referencedby refid="d2/d17/a03750_1a454433e52763a3eb67679a2f7d2f2c2f" compoundref="d7/def/a00521" startline="122" endline="125">getHeightMapFlags</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1ac0894db0f7c9fe0aeddcb700148566f1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::HeightMapComponent::Plugin::fillTextureConfiguration</definition>
+        <argsstring>(TextureConfiguration &amp;result, uint32_t mask) const override</argsstring>
+        <name>fillTextureConfiguration</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::fillTextureConfiguration</qualifiedname>
+        <reimplements refid="db/df2/a04026_1a906cb616e5d7d7a63d3f070ca76e7a11">fillTextureConfiguration</reimplements>
+        <param>
+          <type><ref refid="d7/d60/a04126" kindref="compound">TextureConfiguration</ref> &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mask</declname>
+        </param>
+        <briefdescription>
+<para>Fills the texture configuration for use with this component. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>configuration</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The texture configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>mask</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mask value. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="141" column="6" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="141" bodyend="146"/>
+        <references refid="d5/da6/a01698_1aca9266480e6d0378e87f784f76d6994d">castor3d::addFlagConfiguration</references>
+        <references refid="d5/da6/a01698_1a25bb1f0235e1c248f89ec5430ef066faa191d0b2eb45d7d9a428f016bd34a7912">castor3d::eNormalised</references>
+        <references refid="d2/d17/a03750_1ac8de09a567a0991625bd52ba7dd34cfe" compoundref="d7/def/a00521" startline="136" endline="139">getTextureFlags</references>
+        <references refid="d7/d60/a04126_1aa57d19a64f0cbeee91ca2e27cfe02432" compoundref="da/dd1/a00629" startline="129">castor3d::TextureConfiguration::textureSpace</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/d17/a03750_1ad4290d4c0f443e3d31c8f1d4c708dddd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::HeightMapComponent::Plugin::getTextureFlagsName</definition>
+        <argsstring>(PassComponentTextureFlag const &amp;flags) const override</argsstring>
+        <name>getTextureFlagsName</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::getTextureFlagsName</qualifiedname>
+        <reimplements refid="db/df2/a04026_1af066b3208f0c2c71d7da481988aa748d">getTextureFlagsName</reimplements>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a21f6621faaf5293fd7452f7fa0cd4136" kindref="member">PassComponentTextureFlag</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The texture flags concatenated names. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="148" column="16" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="148" bodyend="154"/>
+        <references refid="d5/da6/a01698_1aff53303d5484577f7e5e747a6a602c2f">castor3d::checkFlag</references>
+        <references refid="db/df2/a04026_1a3d4ca319e7c6e2dc3e40e81211846fee" compoundref="d8/dc8/a00581" startline="1016" endline="1019">castor3d::PassComponentPlugin::getId</references>
+        <references refid="dd/da0/a03742_1a105da62aed508cf21f2fa6563be37c78" compoundref="d7/def/a00521" startline="17">castor3d::HeightMapComponent::Height</references>
+        <references refid="d5/da6/a01698_1a5ee736123bd6a0412d8deeffaf5b75f4" compoundref="dc/d2f/a00425" startline="48" endline="52">castor3d::splitTextureFlag</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d2/d17/a03750_1aee685df2345b59ac48a30584fbdb5324" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::HeightMapComponent::Plugin::doWriteTextureConfig</definition>
+        <argsstring>(TextureConfiguration const &amp;configuration, uint32_t mask, castor::String const &amp;tabs, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteTextureConfig</name>
+        <qualifiedname>castor3d::HeightMapComponent::Plugin::doWriteTextureConfig</qualifiedname>
+        <reimplements refid="d9/d2c/a04042_1ac1ff251cb68902e01abfc29d7094e8f5">doWriteTextureConfig</reimplements>
+        <param>
+          <type><ref refid="d7/d60/a04126" kindref="compound">TextureConfiguration</ref> const &amp;</type>
+          <declname>configuration</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>mask</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="157" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::HeightMapComponent::Plugin</label>
+        <link refid="d2/d17/a03750"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="db/df2/a04026"/>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponentPlugin</label>
+        <link refid="d9/d2c/a04042"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::HeightMapComponent::Plugin</label>
+        <link refid="d2/d17/a03750"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="db/df2/a04026"/>
+      </node>
+      <node id="2">
+        <label>castor3d::PassMapComponentPlugin</label>
+        <link refid="d9/d2c/a04042"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Map/HeightMapComponent.hpp" line="89" column="1" bodyfile="Material/Pass/Component/Map/HeightMapComponent.hpp" bodystart="91" bodyend="161"/>
+    <listofallmembers>
+      <member refid="d2/d17/a03750_1a8201a7106d8493a2f666d6089af2dee4" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>createComponent</name></member>
+      <member refid="d2/d17/a03750_1af98f26d94ce9d48e64396d40ec55084e" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>createComponentsShader</name></member>
+      <member refid="d2/d17/a03750_1a8c4d76b7e3f6b048cc8bcade8f41e0d5" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>createMapComponent</name></member>
+      <member refid="db/df2/a04026_1a2e178e79ea995d0e8674559acfbc4447" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>createMaterialShader</name></member>
+      <member refid="d2/d17/a03750_1a89382281e8aa2eb31c384ed61b7283b5" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>createParsers</name></member>
+      <member refid="db/df2/a04026_1a682e78ef2f8f5d7b3e292ccda2f35246" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>createSections</name></member>
+      <member refid="d2/d17/a03750_1aee685df2345b59ac48a30584fbdb5324" prot="private" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>doWriteTextureConfig</name></member>
+      <member refid="d2/d17/a03750_1ac0894db0f7c9fe0aeddcb700148566f1" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>fillTextureConfiguration</name></member>
+      <member refid="db/df2/a04026_1abc8e6df1a7fd3efc21bad6893a1faf40" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>filterComponentFlags</name></member>
+      <member refid="d2/d17/a03750_1a9ba5185ae251da2cbc634bb68f211470" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>filterTextureFlags</name></member>
+      <member refid="db/df2/a04026_1a33ade4752a210d4244a56a623e15ec5c" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>finishComponent</name></member>
+      <member refid="db/df2/a04026_1ad3c669e54d61cc035d47d4d8e2bb31c4" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getAlphaBlendingFlag</name></member>
+      <member refid="db/df2/a04026_1ac0444937fb369fb5027dd293be4fa094" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getAlphaTestFlag</name></member>
+      <member refid="db/df2/a04026_1a7812f3b1ee259188bc7c8279b47d3a2b" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getBaseTextureConfiguration</name></member>
+      <member refid="db/df2/a04026_1aee7e3af3cda6d7c8d54be36dfbb00547" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getColourMapFlags</name></member>
+      <member refid="db/df2/a04026_1aefb50eb6d6e24464451c862ec58c6f05" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getComponentFlags</name></member>
+      <member refid="d2/d17/a03750_1a454433e52763a3eb67679a2f7d2f2c2f" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getHeightMapFlags</name></member>
+      <member refid="db/df2/a04026_1a3d4ca319e7c6e2dc3e40e81211846fee" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getId</name></member>
+      <member refid="db/df2/a04026_1ab678401d89828bd889d148263bbee8e1" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getNormalMapFlags</name></member>
+      <member refid="db/df2/a04026_1a360b4fe120d634b660ac783c9bac5e89" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getOcclusionMapFlags</name></member>
+      <member refid="db/df2/a04026_1a67e7c95405499797a50911bc1b757750" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getOpacityMapFlags</name></member>
+      <member refid="db/df2/a04026_1a10e44068acfd0a7a5954e133af2c501a" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getParallaxOcclusionMappingOneFlag</name></member>
+      <member refid="db/df2/a04026_1aa8bb9186a42b13732f02d592d022eaf0" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getParallaxOcclusionMappingRepeatFlag</name></member>
+      <member refid="db/df2/a04026_1a8ae21dee0e6e02f4ef142d1912a1c0da" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getRegister</name></member>
+      <member refid="d2/d17/a03750_1ac8de09a567a0991625bd52ba7dd34cfe" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getTextureFlags</name></member>
+      <member refid="d2/d17/a03750_1ad4290d4c0f443e3d31c8f1d4c708dddd" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getTextureFlagsName</name></member>
+      <member refid="db/df2/a04026_1aec5a74b05eab81dfd6a6e68e2784c3bc" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>getTransmissionFlag</name></member>
+      <member refid="d2/d17/a03750_1a51eb03ab8f59ed45779fdb96cf04ab76" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>hasTexcoordModif</name></member>
+      <member refid="d2/d17/a03750_1a82fb1fd7ea4995f182d988cb1734e7d5" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>isComponentNeeded</name></member>
+      <member refid="d2/d17/a03750_1a3d01c2db8fb09ef138e3538812f9af27" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>isMapComponent</name></member>
+      <member refid="db/df2/a04026_1a12838a9228bf978ec3f360d997e37488" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>operator=</name></member>
+      <member refid="db/df2/a04026_1a6f5838b953671b6324c33ca78bdebf53" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>operator=</name></member>
+      <member refid="db/df2/a04026_1aa76b0d332cde3ba881e14c7128a1686e" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="db/df2/a04026_1a79e806f976aef2b773c0988af61fd513" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="db/df2/a04026_1a3b414cc7a359c09a69374e6f51fe723b" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>PassComponentPlugin</name></member>
+      <member refid="d9/d2c/a04042_1af5aa1892cb84b50774ebc18ba1515718" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>PassMapComponentPlugin</name></member>
+      <member refid="d2/d17/a03750_1a145693a837aa7b56cdff750918a9d1b6" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>Plugin</name></member>
+      <member refid="db/df2/a04026_1a40b00cfb3f94741567b4836449c9eb25" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>replacesMapSampling</name></member>
+      <member refid="db/df2/a04026_1a8af4e83de626dbaa70d30f65f8174d85" prot="public" virt="non-virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>updateComponent</name></member>
+      <member refid="d9/d2c/a04042_1a1b7bdc11daaaa9909eade69909f66a49" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>writeTextureConfig</name></member>
+      <member refid="db/df2/a04026_1a34c8ea983d45a29036ad4bd72fd27652" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>zeroBuffer</name></member>
+      <member refid="db/df2/a04026_1a8442a3dd6abd51dddef6e25443d573ef" prot="public" virt="virtual"><scope>castor3d::HeightMapComponent::Plugin</scope><name>~PassComponentPlugin</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

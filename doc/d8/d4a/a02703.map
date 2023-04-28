@@ -1,5 +1,6 @@
-<map id="castor3d::CmshMeshImporter" name="castor3d::CmshMeshImporter">
-<area shape="rect" id="node1" title=" " alt="" coords="5,155,199,181"/>
-<area shape="rect" id="node2" href="$d8/dc6/a04256.html" title=" " alt="" coords="23,80,181,107"/>
-<area shape="rect" id="node3" title=" " alt="" coords="9,5,195,32"/>
+<map id="castor3d::BinaryWriter&lt; SceneNodeAnimationKeyFrame &gt;" name="castor3d::BinaryWriter&lt; SceneNodeAnimationKeyFrame &gt;">
+<area shape="rect" id="node1" title="SceneNodeAnimationKeyFrame binary loader." alt="" coords="5,285,236,325"/>
+<area shape="rect" id="node2" href="$d8/d69/a02661.html" title=" " alt="" coords="5,196,236,236"/>
+<area shape="rect" id="node3" href="$db/d6a/a02613.html" title=" " alt="" coords="75,5,230,31"/>
+<area shape="rect" id="node4" href="$d8/d69/a02661.html" title="Binary data chunk writer base class." alt="" coords="181,93,364,133"/>
 </map>

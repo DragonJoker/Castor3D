@@ -1,6 +1,7 @@
-<map id="castor3d::ChunkWriterBase" name="castor3d::ChunkWriterBase">
-<area shape="rect" id="node1" title=" " alt="" coords="5,64,188,91"/>
-<area shape="rect" id="node2" href="$d4/dfe/a02688.html" title="Chunk data writer." alt="" coords="236,5,419,32"/>
-<area shape="rect" id="node3" href="$d8/da6/a02696.html" title="ChunkWriter specialisation for castor::Path." alt="" coords="251,57,403,98"/>
-<area shape="rect" id="node4" href="$d2/dba/a02692.html" title="ChunkWriter specialisation for castor::String." alt="" coords="251,122,403,163"/>
+<map id="castor3d::BinaryParser&lt; MorphComponent &gt;" name="castor3d::BinaryParser&lt; MorphComponent &gt;">
+<area shape="rect" id="node1" title="MorphComponent loader." alt="" coords="137,285,292,325"/>
+<area shape="rect" id="node2" href="$db/d0d/a02653.html" title=" " alt="" coords="122,196,307,236"/>
+<area shape="rect" id="node3" href="$db/d6a/a02613.html" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="node5" href="$db/d0d/a02653.html" title="Binary data chunk reader base class." alt="" coords="131,93,317,133"/>
+<area shape="rect" id="node4" href="$de/dc5/a04521.html" title=" " alt="" coords="218,5,342,31"/>
 </map>

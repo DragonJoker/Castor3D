@@ -1,0 +1,413 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d0/deb/a05369" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::IblTextures</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Scene &gt;</basecompoundref>
+    <includes local="no">IblTextures.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d0/deb/a05369_1ada1dcd43bcbef41de2017c0bc4c6eeb3" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getIrradianceTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getIrradianceTexture</name>
+        <qualifiedname>castor3d::IblTextures::getIrradianceTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="75" column="16" bodyfile="Render/PBR/IblTextures.hpp" bodystart="75" bodyend="78"/>
+        <references refid="d9/d09/a05373_1a4a6e1b4199e798330b540cd53b30453b" compoundref="da/d20/a01160" startline="77" endline="80">castor3d::RadianceComputer::getResult</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1ad89be757124326abbfb6907420912f58" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getPrefilteredEnvironmentTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredEnvironmentTexture</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredEnvironmentTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="80" column="16" bodyfile="Render/PBR/IblTextures.hpp" bodystart="80" bodyend="83"/>
+        <references refid="df/d8b/a05357_1a6dbf52dc4d47481cdc51ad1373666eb8" compoundref="de/df1/a01151" startline="115" endline="118">castor3d::EnvironmentPrefilter::getResult</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1aa48282cd4c18d71609401d8f36fe0be4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getPrefilteredEnvironmentSheenTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredEnvironmentSheenTexture</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredEnvironmentSheenTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="85" column="16" bodyfile="Render/PBR/IblTextures.hpp" bodystart="85" bodyend="88"/>
+        <references refid="df/d8b/a05357_1a6dbf52dc4d47481cdc51ad1373666eb8" compoundref="de/df1/a01151" startline="115" endline="118">castor3d::EnvironmentPrefilter::getResult</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1ab49b1cdfec32960367c7c943f7c87d4e" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+        <definition>Texture const  &amp; castor3d::IblTextures::getPrefilteredBrdfTexture</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredBrdfTexture</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredBrdfTexture</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="90" column="16" bodyfile="Render/PBR/IblTextures.hpp" bodystart="90" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1a5d45288d46639de661d172598822b5f7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getIrradianceSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getIrradianceSampler</name>
+        <qualifiedname>castor3d::IblTextures::getIrradianceSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="95" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="95" bodyend="98"/>
+        <references refid="d9/d09/a05373_1ad1f45bde74c7608a6bbf99e4088f9c11">castor3d::RadianceComputer::getSampler</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1a2837d9e63ab70246556f53cb0aff6fe1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getPrefilteredEnvironmentSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredEnvironmentSampler</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredEnvironmentSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="100" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="100" bodyend="103"/>
+        <references refid="df/d8b/a05357_1ace19dfaaff10ee60ff4be98880c44d76" compoundref="de/df1/a01151" startline="120" endline="124">castor3d::EnvironmentPrefilter::getSampler</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1a9cbd9560f1ba6bdfde9b681ff2206860" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getPrefilteredEnvironmentSheenSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredEnvironmentSheenSampler</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredEnvironmentSheenSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="105" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="105" bodyend="108"/>
+        <references refid="df/d8b/a05357_1ace19dfaaff10ee60ff4be98880c44d76" compoundref="de/df1/a01151" startline="120" endline="124">castor3d::EnvironmentPrefilter::getSampler</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1a54b5d41fb98711d8092c7c343ca5af12" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>ashes::Sampler const &amp;</type>
+        <definition>ashes::Sampler const  &amp; castor3d::IblTextures::getPrefilteredBrdfSampler</definition>
+        <argsstring>() const</argsstring>
+        <name>getPrefilteredBrdfSampler</name>
+        <qualifiedname>castor3d::IblTextures::getPrefilteredBrdfSampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="110" column="23" bodyfile="Render/PBR/IblTextures.hpp" bodystart="110" bodyend="114"/>
+        <references refid="d3/d63/a04141_1a701a471334d389fb4e818f9633d1b4e5" compoundref="de/ddd/a00653" startline="156" endline="160">castor3d::Sampler::getSampler</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d0/deb/a05369_1a306993a8aab140c5a6503568d0c7ef12" prot="private" static="no" mutable="no">
+        <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const  &amp;</type>
+        <definition>Texture const&amp; castor3d::IblTextures::m_brdf</definition>
+        <argsstring></argsstring>
+        <name>m_brdf</name>
+        <qualifiedname>castor3d::IblTextures::m_brdf</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="118" column="16" bodyfile="Render/PBR/IblTextures.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a05369_1a75e272f7b480600be9d84433e607de6e" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1ac06fa1a6b2c8945eca9aa59aa8c1ea51" kindref="member">SamplerObs</ref></type>
+        <definition>SamplerObs castor3d::IblTextures::m_sampler</definition>
+        <argsstring></argsstring>
+        <name>m_sampler</name>
+        <qualifiedname>castor3d::IblTextures::m_sampler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="119" column="12" bodyfile="Render/PBR/IblTextures.hpp" bodystart="119" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a05369_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/d09/a05373" kindref="compound">RadianceComputer</ref></type>
+        <definition>RadianceComputer castor3d::IblTextures::m_radianceComputer</definition>
+        <argsstring></argsstring>
+        <name>m_radianceComputer</name>
+        <qualifiedname>castor3d::IblTextures::m_radianceComputer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="120" column="18" bodyfile="Render/PBR/IblTextures.hpp" bodystart="120" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a05369_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d8b/a05357" kindref="compound">EnvironmentPrefilter</ref></type>
+        <definition>EnvironmentPrefilter castor3d::IblTextures::m_environmentPrefilter</definition>
+        <argsstring></argsstring>
+        <name>m_environmentPrefilter</name>
+        <qualifiedname>castor3d::IblTextures::m_environmentPrefilter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="121" column="22" bodyfile="Render/PBR/IblTextures.hpp" bodystart="121" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/deb/a05369_1a874eccebf3a73ff96e61d3391727045b" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d8b/a05357" kindref="compound">EnvironmentPrefilter</ref></type>
+        <definition>EnvironmentPrefilter castor3d::IblTextures::m_environmentSheenPrefilter</definition>
+        <argsstring></argsstring>
+        <name>m_environmentSheenPrefilter</name>
+        <qualifiedname>castor3d::IblTextures::m_environmentSheenPrefilter</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="122" column="22" bodyfile="Render/PBR/IblTextures.hpp" bodystart="122" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/deb/a05369_1a315671d6cd5456fe527bd722e851b452" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::IblTextures::IblTextures</definition>
+        <argsstring>(Scene &amp;scene, RenderDevice const &amp;device, Texture const &amp;source, Texture const &amp;brdf, SamplerObs sampler)</argsstring>
+        <name>IblTextures</name>
+        <qualifiedname>castor3d::IblTextures::IblTextures</qualifiedname>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ac06fa1a6b2c8945eca9aa59aa8c1ea51" kindref="member">SamplerObs</ref></type>
+          <declname>sampler</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">source</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The source environment map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">brdf</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The prefiltered BRDF map. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sampler</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The sampler used for the environment map. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="37" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1a0931c8cee3d5c72c2877071344fe73a3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::IblTextures::~IblTextures</definition>
+        <argsstring>()</argsstring>
+        <name>~IblTextures</name>
+        <qualifiedname>castor3d::IblTextures::~IblTextures</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="42" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1ae0a2faec0feaa0da2cca40a9b3067c9c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::IblTextures::update</definition>
+        <argsstring>(QueueData const &amp;queueData)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::IblTextures::update</qualifiedname>
+        <param>
+          <type><ref refid="d2/dce/a05441" kindref="compound">QueueData</ref> const &amp;</type>
+          <declname>queueData</declname>
+        </param>
+        <briefdescription>
+<para>Updates the environment maps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">queueData</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="51" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/deb/a05369_1a00b10ab911834ce0d13bedf74028aa97" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> crg::SemaphoreWaitArray</type>
+        <definition>C3D_API crg::SemaphoreWaitArray castor3d::IblTextures::update</definition>
+        <argsstring>(crg::SemaphoreWaitArray signalsToWait, ashes::Queue const &amp;queue) const</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::IblTextures::update</qualifiedname>
+        <param>
+          <type>crg::SemaphoreWaitArray</type>
+          <declname>signalsToWait</declname>
+        </param>
+        <param>
+          <type>ashes::Queue const &amp;</type>
+          <declname>queue</declname>
+        </param>
+        <briefdescription>
+<para>Updates the environment maps. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">signalsToWait</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The semaphore from the previous render pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">queue</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The queue receiving the GPU commands. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para>The semaphores signaled by this pass. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/PBR/IblTextures.hpp" line="64" column="33"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::IblTextures</label>
+        <link refid="d0/deb/a05369"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::IblTextures</label>
+        <link refid="d0/deb/a05369"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/PBR/IblTextures.hpp" line="17" column="1" bodyfile="Render/PBR/IblTextures.hpp" bodystart="19" bodyend="123"/>
+    <listofallmembers>
+      <member refid="d0/deb/a05369_1a5d45288d46639de661d172598822b5f7" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceSampler</name></member>
+      <member refid="d0/deb/a05369_1ada1dcd43bcbef41de2017c0bc4c6eeb3" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getIrradianceTexture</name></member>
+      <member refid="d0/deb/a05369_1a54b5d41fb98711d8092c7c343ca5af12" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfSampler</name></member>
+      <member refid="d0/deb/a05369_1ab49b1cdfec32960367c7c943f7c87d4e" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredBrdfTexture</name></member>
+      <member refid="d0/deb/a05369_1a2837d9e63ab70246556f53cb0aff6fe1" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentSampler</name></member>
+      <member refid="d0/deb/a05369_1a9cbd9560f1ba6bdfde9b681ff2206860" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentSheenSampler</name></member>
+      <member refid="d0/deb/a05369_1aa48282cd4c18d71609401d8f36fe0be4" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentSheenTexture</name></member>
+      <member refid="d0/deb/a05369_1ad89be757124326abbfb6907420912f58" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>getPrefilteredEnvironmentTexture</name></member>
+      <member refid="d0/deb/a05369_1a315671d6cd5456fe527bd722e851b452" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>IblTextures</name></member>
+      <member refid="d0/deb/a05369_1a306993a8aab140c5a6503568d0c7ef12" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_brdf</name></member>
+      <member refid="d0/deb/a05369_1a0b8a2ed6e7b6504d80d2100bcdd22eb1" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_environmentPrefilter</name></member>
+      <member refid="d0/deb/a05369_1a874eccebf3a73ff96e61d3391727045b" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_environmentSheenPrefilter</name></member>
+      <member refid="d0/deb/a05369_1a5fba7190da8b10e7a66579ab8c9bf721" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_radianceComputer</name></member>
+      <member refid="d0/deb/a05369_1a75e272f7b480600be9d84433e607de6e" prot="private" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>m_sampler</name></member>
+      <member refid="d0/deb/a05369_1ae0a2faec0feaa0da2cca40a9b3067c9c" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
+      <member refid="d0/deb/a05369_1a00b10ab911834ce0d13bedf74028aa97" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>update</name></member>
+      <member refid="d0/deb/a05369_1a0931c8cee3d5c72c2877071344fe73a3" prot="public" virt="non-virtual"><scope>castor3d::IblTextures</scope><name>~IblTextures</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

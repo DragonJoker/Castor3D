@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d8c/a06438" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::LightData</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_LightData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec4Field&lt; &quot;data&quot; &gt; &gt;</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/d8c/a06438_1ac0225882a7ccc13764ba81b86eb514e3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::LightData::LightData</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LightData</name>
+        <qualifiedname>castor3d::shader::LightData::LightData</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="24" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="24" bodyend="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d8c/a06438_1af9aee19fdbf6fd982316b8318b9291c1" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightData::data</definition>
+        <argsstring>() const</argsstring>
+        <name>data</name>
+        <qualifiedname>castor3d::shader::LightData::data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="31" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="31" bodyend="31"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::LightData</label>
+        <link refid="d5/d8c/a06438"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_LightData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec4Field&lt; &quot;data&quot; &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::LightData</label>
+        <link refid="d5/d8c/a06438"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_LightData&quot;, sdw::type::MemoryLayout::eStd430, sdw::Vec4Field&lt; &quot;data&quot; &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="19" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="23" bodyend="32"/>
+    <listofallmembers>
+      <member refid="d5/d8c/a06438_1af9aee19fdbf6fd982316b8318b9291c1" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>data</name></member>
+      <member refid="d5/d8c/a06438_1ac0225882a7ccc13764ba81b86eb514e3" prot="public" virt="non-virtual"><scope>castor3d::shader::LightData</scope><name>LightData</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

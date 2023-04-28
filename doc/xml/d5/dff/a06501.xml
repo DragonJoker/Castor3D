@@ -1,0 +1,1075 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/dff/a06501" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::LightSurface</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstance</basecompoundref>
+    <includes local="no">GlslLightSurface.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/dff/a06501_1a68f32d57d35738b1b14f8e9d8c8383e4" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_eyePosition</definition>
+        <argsstring></argsstring>
+        <name>m_eyePosition</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_eyePosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="99" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a8a2aa971eb6fbc8d618bb068b395655f" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_worldPosition</definition>
+        <argsstring></argsstring>
+        <name>m_worldPosition</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_worldPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="100" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a296a9e360850c697c4274a4cb7ed838d" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_viewPosition</definition>
+        <argsstring></argsstring>
+        <name>m_viewPosition</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_viewPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="101" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="101" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a2d659f3651846362204f81024a2ea32c" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_clipPosition</definition>
+        <argsstring></argsstring>
+        <name>m_clipPosition</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_clipPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="102" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="102" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a329d21530fe2bf6f611ec39f62d97f69" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_vertexToLight</definition>
+        <argsstring></argsstring>
+        <name>m_vertexToLight</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_vertexToLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="103" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a4f2c055e26c5b9a3ae20fb6ed18a6fef" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_V</definition>
+        <argsstring></argsstring>
+        <name>m_V</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_V</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="104" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="104" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a1dcb4b37efcb51276945b7a4e527ea8c" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_N</definition>
+        <argsstring></argsstring>
+        <name>m_N</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_N</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="105" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a5d6caa28782a02186a5ffe0ae8c9b97a" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_L</definition>
+        <argsstring></argsstring>
+        <name>m_L</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_L</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="106" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a52f1a84aaabdabc24350a7e628d9cda2" prot="private" static="no" mutable="no">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::m_H</definition>
+        <argsstring></argsstring>
+        <name>m_H</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_H</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="107" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="107" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a8194205e929709529819f9ad10f67222" prot="private" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightSurface::m_lengthV</definition>
+        <argsstring></argsstring>
+        <name>m_lengthV</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_lengthV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="108" column="12" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1ae445d97bc4278c85301ecd6cc1e6d2c9" prot="private" static="no" mutable="no">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightSurface::m_lengthL</definition>
+        <argsstring></argsstring>
+        <name>m_lengthL</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_lengthL</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="109" column="12" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a2b050050190f8e4426c13665c2b22afa" prot="private" static="no" mutable="yes">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightSurface::m_NdotV</definition>
+        <argsstring></argsstring>
+        <name>m_NdotV</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_NdotV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="110" column="20" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a744565f7f183ebb4956efb88fceb92ef" prot="private" static="no" mutable="yes">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::LightSurface::m_NdotL</definition>
+        <argsstring></argsstring>
+        <name>m_NdotL</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_NdotL</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="112" column="25" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="112" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a0844a8a527bd307d8710ee1b0470c5a4" prot="private" static="no" mutable="yes">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::LightSurface::m_NdotH</definition>
+        <argsstring></argsstring>
+        <name>m_NdotH</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_NdotH</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="113" column="25" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="113" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a5d3da1712729b044715ffeb632f25e3c" prot="private" static="no" mutable="yes">
+        <type>sdw::DefaultedT&lt; sdw::Float &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Float &gt; castor3d::shader::LightSurface::m_HdotV</definition>
+        <argsstring></argsstring>
+        <name>m_HdotV</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_HdotV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="114" column="25" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="114" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1a0dd6b8b76a48131ec95c96c8b95b8d5a" prot="private" static="no" mutable="yes">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::LightSurface::m_F</definition>
+        <argsstring></argsstring>
+        <name>m_F</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_F</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="116" column="25" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="116" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1ae7dee74d54d56e398fc64263c526c6a4" prot="private" static="no" mutable="yes">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::LightSurface::m_spcF</definition>
+        <argsstring></argsstring>
+        <name>m_spcF</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_spcF</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="117" column="25" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="117" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/dff/a06501_1aedd1899635922519a49b52d0164926c7" prot="private" static="no" mutable="yes">
+        <type>sdw::DefaultedT&lt; sdw::Vec3 &gt;</type>
+        <definition>sdw::DefaultedT&lt; sdw::Vec3 &gt; castor3d::shader::LightSurface::m_difF</definition>
+        <argsstring></argsstring>
+        <name>m_difF</name>
+        <qualifiedname>castor3d::shader::LightSurface::m_difF</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="118" column="25" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="118" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/dff/a06501_1a2b67cece743fc42a6291dee922dc2746" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LightSurface::LightSurface</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, sdw::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>LightSurface</name>
+        <qualifiedname>castor3d::shader::LightSurface::LightSurface</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>sdw::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="17" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1add7899faa7b89691fadba211c1bbe317" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::LightSurface::LightSurface</definition>
+        <argsstring>(sdw::Vec3 const eye, sdw::Vec3 const world, sdw::Vec3 const view, sdw::Vec3 const clip, sdw::Vec3 const normal, bool enableDotProducts, bool enableFresnel, bool enableIridescence)</argsstring>
+        <name>LightSurface</name>
+        <qualifiedname>castor3d::shader::LightSurface::LightSurface</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>eye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableDotProducts</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableFresnel</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableIridescence</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="20" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a405dae211bf8c7a7aa3632530c6ba163" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightSurface::updateN</definition>
+        <argsstring>(sdw::Vec3 const N) const</argsstring>
+        <name>updateN</name>
+        <qualifiedname>castor3d::shader::LightSurface::updateN</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>N</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a6f0015545efbbfa8f33a617b36640e27" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightSurface::updateL</definition>
+        <argsstring>(sdw::Vec3 const L) const</argsstring>
+        <name>updateL</name>
+        <qualifiedname>castor3d::shader::LightSurface::updateL</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>L</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="69" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a6cc82ddfdad4cafc6dc1fdf1410f1a6d" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightSurface::updateN</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec3 const N, sdw::Vec3 const f0, BlendComponents const &amp;components) const</argsstring>
+        <name>updateN</name>
+        <qualifiedname>castor3d::shader::LightSurface::updateN</qualifiedname>
+        <param>
+          <type><ref refid="dd/d0f/a06605" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>N</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>f0</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="71" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a6b2bf001aa03320fbf6c7639ccdc6a49" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightSurface::updateL</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec3 const L, sdw::Vec3 const f0, BlendComponents const &amp;components) const</argsstring>
+        <name>updateL</name>
+        <qualifiedname>castor3d::shader::LightSurface::updateL</qualifiedname>
+        <param>
+          <type><ref refid="dd/d0f/a06605" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>L</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>f0</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="75" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1aa17f98205a86edfc792556a3b78a4ca7" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::eyePosition</definition>
+        <argsstring>() const</argsstring>
+        <name>eyePosition</name>
+        <qualifiedname>castor3d::shader::LightSurface::eyePosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="80" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="80" bodyend="80"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a51a219dbdf5d51e360184ae64892c105" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::worldPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>worldPosition</name>
+        <qualifiedname>castor3d::shader::LightSurface::worldPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="81" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="81" bodyend="81"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ac995d3d6f8714cdb5f55c32b3efdd727" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::viewPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>viewPosition</name>
+        <qualifiedname>castor3d::shader::LightSurface::viewPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="82" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="82" bodyend="82"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ac2e47bab1bcf17cefcf90004c95bafd4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::clipPosition</definition>
+        <argsstring>() const</argsstring>
+        <name>clipPosition</name>
+        <qualifiedname>castor3d::shader::LightSurface::clipPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="83" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="83" bodyend="83"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a57c0ac15de294a8bb875d9a582f81a2f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::vertexToLight</definition>
+        <argsstring>() const</argsstring>
+        <name>vertexToLight</name>
+        <qualifiedname>castor3d::shader::LightSurface::vertexToLight</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="84" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="84" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ac12cd73d40f545f24b2a1b3b44919dc8" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::V</definition>
+        <argsstring>() const</argsstring>
+        <name>V</name>
+        <qualifiedname>castor3d::shader::LightSurface::V</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="85" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="85" bodyend="85"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a8dbb3e961c2de72cce79c9678e50d833" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::N</definition>
+        <argsstring>() const</argsstring>
+        <name>N</name>
+        <qualifiedname>castor3d::shader::LightSurface::N</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="86" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="86" bodyend="86"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a5b3cb1f683a72c50000b7f17f3670a6d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::L</definition>
+        <argsstring>() const</argsstring>
+        <name>L</name>
+        <qualifiedname>castor3d::shader::LightSurface::L</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="87" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="87" bodyend="87"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a58afb323efa719c6992c05ca52375c1a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::H</definition>
+        <argsstring>() const</argsstring>
+        <name>H</name>
+        <qualifiedname>castor3d::shader::LightSurface::H</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="88" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="88" bodyend="88"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a3df7d962ce8c35a9c6221cb507db2f47" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::lengthV</definition>
+        <argsstring>() const</argsstring>
+        <name>lengthV</name>
+        <qualifiedname>castor3d::shader::LightSurface::lengthV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="89" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="89" bodyend="89"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ad6a4b693dca207e358b345fdaafc1dcf" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::lengthL</definition>
+        <argsstring>() const</argsstring>
+        <name>lengthL</name>
+        <qualifiedname>castor3d::shader::LightSurface::lengthL</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="90" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="90" bodyend="90"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ae5c6a709fe4af32e6cc13064af96977f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::NdotV</definition>
+        <argsstring>() const</argsstring>
+        <name>NdotV</name>
+        <qualifiedname>castor3d::shader::LightSurface::NdotV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="91" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="91" bodyend="91"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ad006ddd287179dbcece8c979f244c176" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightSurface::NdotL</definition>
+        <argsstring>() const</argsstring>
+        <name>NdotL</name>
+        <qualifiedname>castor3d::shader::LightSurface::NdotL</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="92" column="12" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="92" bodyend="92"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a8b2b4b8ed91132ba92dc968933493f7f" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Float</type>
+        <definition>sdw::Float castor3d::shader::LightSurface::NdotH</definition>
+        <argsstring>() const</argsstring>
+        <name>NdotH</name>
+        <qualifiedname>castor3d::shader::LightSurface::NdotH</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="93" column="12" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="93" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ae4fa9512e6bdd10917cf055c17121358" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::F</definition>
+        <argsstring>() const</argsstring>
+        <name>F</name>
+        <qualifiedname>castor3d::shader::LightSurface::F</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="94" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="94" bodyend="94"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ad624042a20ae622f8028d88599ce8cfb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::spcF</definition>
+        <argsstring>() const</argsstring>
+        <name>spcF</name>
+        <qualifiedname>castor3d::shader::LightSurface::spcF</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="95" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="95" bodyend="95"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a63b6038e321107b16fb9069171ec98e9" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>sdw::Vec3</type>
+        <definition>sdw::Vec3 castor3d::shader::LightSurface::difF</definition>
+        <argsstring>() const</argsstring>
+        <name>difF</name>
+        <qualifiedname>castor3d::shader::LightSurface::difF</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="96" column="11" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="96" bodyend="96"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/dff/a06501_1a9f54169bc33022b546840434cdcf56d1" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::type::BaseStructPtr</type>
+        <definition>static C3D_API sdw::type::BaseStructPtr castor3d::shader::LightSurface::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, sdw::type::TypePtr type)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::LightSurface::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>sdw::type::TypePtr</type>
+          <declname>type</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="29" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1ac80e9470dcd8f61a225ed84226e401a3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::type::BaseStructPtr</type>
+        <definition>static C3D_API sdw::type::BaseStructPtr castor3d::shader::LightSurface::makeType</definition>
+        <argsstring>(ast::type::TypesCache &amp;cache, bool enableDotProducts, bool enableFresnel, bool enableIridescence)</argsstring>
+        <name>makeType</name>
+        <qualifiedname>castor3d::shader::LightSurface::makeType</qualifiedname>
+        <param>
+          <type>ast::type::TypesCache &amp;</type>
+          <declname>cache</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableDotProducts</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableFresnel</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableIridescence</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="31" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a2228593ff445e52f07f1661faeaf306e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/dff/a06501" kindref="compound">LightSurface</ref></type>
+        <definition>static C3D_API LightSurface castor3d::shader::LightSurface::create</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, std::string const &amp;name, sdw::Vec3 const eye, sdw::Vec3 const world, sdw::Vec3 const view, sdw::Vec3 const clip, sdw::Vec3 const normal, bool enableDotProducts=true, bool enableFresnel=true, bool enableIridescence=true)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::LightSurface::create</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>eye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableDotProducts</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableFresnel</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableIridescence</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="36" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1afadd1887cda0ffe10b2726d139f4c0dc" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/dff/a06501" kindref="compound">LightSurface</ref></type>
+        <definition>static C3D_API LightSurface castor3d::shader::LightSurface::create</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, std::string const &amp;name, sdw::Vec3 const world, sdw::Vec3 const clip, sdw::Vec3 const normal, bool enableDotProducts=false, bool enableFresnel=false, bool enableIridescence=false)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::LightSurface::create</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableDotProducts</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableFresnel</declname>
+          <defval>false</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableIridescence</declname>
+          <defval>false</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="46" column="29"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a9279d5f615dc229fda92848ad88e2544" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d5/dff/a06501" kindref="compound">LightSurface</ref></type>
+        <definition>static C3D_API LightSurface castor3d::shader::LightSurface::create</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, std::string const &amp;name, sdw::Vec3 const eye, sdw::Vec3 const world, sdw::Vec3 const view, sdw::Vec3 const clip, sdw::Vec3 const normal, sdw::Vec3 const f0, BlendComponents const &amp;components, bool enableDotProducts=true, bool enableFresnel=true, bool enableIridescence=true)</argsstring>
+        <name>create</name>
+        <qualifiedname>castor3d::shader::LightSurface::create</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d0f/a06605" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>std::string const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>eye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>f0</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableDotProducts</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableFresnel</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableIridescence</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="54" column="29"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/dff/a06501_1af66820f21a4173baf2a5ae31fab1d47e" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::LightSurface::HdotV</definition>
+        <argsstring>() const</argsstring>
+        <name>HdotV</name>
+        <qualifiedname>castor3d::shader::LightSurface::HdotV</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="121" column="6" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="121" bodyend="121"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/dff/a06501_1a4994d3d2e4387a25450df3b320822d0c" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::LightSurface::doUpdateF</definition>
+        <argsstring>(Utils &amp;utils, sdw::Vec3 const f0, BlendComponents const &amp;components, sdw::Float const &amp;dotProduct) const</argsstring>
+        <name>doUpdateF</name>
+        <qualifiedname>castor3d::shader::LightSurface::doUpdateF</qualifiedname>
+        <param>
+          <type><ref refid="dd/d0f/a06605" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>f0</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> const &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>dotProduct</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="123" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-func">
+      <memberdef kind="function" id="d5/dff/a06501_1a10e51b0bea839aeb9c32707bef98115c" prot="private" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::expr::ExprPtr</type>
+        <definition>static C3D_API sdw::expr::ExprPtr castor3d::shader::LightSurface::makeInit</definition>
+        <argsstring>(sdw::type::BaseStructPtr type, sdw::Vec3 const eye, sdw::Vec3 const world, sdw::Vec3 const view, sdw::Vec3 const clip, sdw::Vec3 const normal, bool enableDotProducts, bool enableFresnel, bool enableIridescence)</argsstring>
+        <name>makeInit</name>
+        <qualifiedname>castor3d::shader::LightSurface::makeInit</qualifiedname>
+        <param>
+          <type>sdw::type::BaseStructPtr</type>
+          <declname>type</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>eye</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>world</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>view</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>clip</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const</type>
+          <declname>normal</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableDotProducts</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableFresnel</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enableIridescence</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLightSurface.hpp" line="127" column="35"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::LightSurface</label>
+        <link refid="d5/dff/a06501"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::LightSurface</label>
+        <link refid="d5/dff/a06501"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstance</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLightSurface.hpp" line="14" column="1" bodyfile="Shader/Shaders/GlslLightSurface.hpp" bodystart="16" bodyend="136"/>
+    <listofallmembers>
+      <member refid="d5/dff/a06501_1ac2e47bab1bcf17cefcf90004c95bafd4" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>clipPosition</name></member>
+      <member refid="d5/dff/a06501_1a2228593ff445e52f07f1661faeaf306e" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>create</name></member>
+      <member refid="d5/dff/a06501_1afadd1887cda0ffe10b2726d139f4c0dc" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>create</name></member>
+      <member refid="d5/dff/a06501_1a9279d5f615dc229fda92848ad88e2544" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>create</name></member>
+      <member refid="d5/dff/a06501_1a63b6038e321107b16fb9069171ec98e9" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>difF</name></member>
+      <member refid="d5/dff/a06501_1a4994d3d2e4387a25450df3b320822d0c" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>doUpdateF</name></member>
+      <member refid="d5/dff/a06501_1aa17f98205a86edfc792556a3b78a4ca7" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>eyePosition</name></member>
+      <member refid="d5/dff/a06501_1ae4fa9512e6bdd10917cf055c17121358" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>F</name></member>
+      <member refid="d5/dff/a06501_1a58afb323efa719c6992c05ca52375c1a" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>H</name></member>
+      <member refid="d5/dff/a06501_1af66820f21a4173baf2a5ae31fab1d47e" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>HdotV</name></member>
+      <member refid="d5/dff/a06501_1a5b3cb1f683a72c50000b7f17f3670a6d" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>L</name></member>
+      <member refid="d5/dff/a06501_1ad6a4b693dca207e358b345fdaafc1dcf" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>lengthL</name></member>
+      <member refid="d5/dff/a06501_1a3df7d962ce8c35a9c6221cb507db2f47" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>lengthV</name></member>
+      <member refid="d5/dff/a06501_1a2b67cece743fc42a6291dee922dc2746" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>LightSurface</name></member>
+      <member refid="d5/dff/a06501_1add7899faa7b89691fadba211c1bbe317" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>LightSurface</name></member>
+      <member refid="d5/dff/a06501_1a2d659f3651846362204f81024a2ea32c" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_clipPosition</name></member>
+      <member refid="d5/dff/a06501_1aedd1899635922519a49b52d0164926c7" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_difF</name></member>
+      <member refid="d5/dff/a06501_1a68f32d57d35738b1b14f8e9d8c8383e4" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_eyePosition</name></member>
+      <member refid="d5/dff/a06501_1a0dd6b8b76a48131ec95c96c8b95b8d5a" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_F</name></member>
+      <member refid="d5/dff/a06501_1a52f1a84aaabdabc24350a7e628d9cda2" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_H</name></member>
+      <member refid="d5/dff/a06501_1a5d3da1712729b044715ffeb632f25e3c" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_HdotV</name></member>
+      <member refid="d5/dff/a06501_1a5d6caa28782a02186a5ffe0ae8c9b97a" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_L</name></member>
+      <member refid="d5/dff/a06501_1ae445d97bc4278c85301ecd6cc1e6d2c9" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_lengthL</name></member>
+      <member refid="d5/dff/a06501_1a8194205e929709529819f9ad10f67222" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_lengthV</name></member>
+      <member refid="d5/dff/a06501_1a1dcb4b37efcb51276945b7a4e527ea8c" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_N</name></member>
+      <member refid="d5/dff/a06501_1a0844a8a527bd307d8710ee1b0470c5a4" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_NdotH</name></member>
+      <member refid="d5/dff/a06501_1a744565f7f183ebb4956efb88fceb92ef" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_NdotL</name></member>
+      <member refid="d5/dff/a06501_1a2b050050190f8e4426c13665c2b22afa" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_NdotV</name></member>
+      <member refid="d5/dff/a06501_1ae7dee74d54d56e398fc64263c526c6a4" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_spcF</name></member>
+      <member refid="d5/dff/a06501_1a4f2c055e26c5b9a3ae20fb6ed18a6fef" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_V</name></member>
+      <member refid="d5/dff/a06501_1a329d21530fe2bf6f611ec39f62d97f69" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_vertexToLight</name></member>
+      <member refid="d5/dff/a06501_1a296a9e360850c697c4274a4cb7ed838d" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_viewPosition</name></member>
+      <member refid="d5/dff/a06501_1a8a2aa971eb6fbc8d618bb068b395655f" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>m_worldPosition</name></member>
+      <member refid="d5/dff/a06501_1a10e51b0bea839aeb9c32707bef98115c" prot="private" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>makeInit</name></member>
+      <member refid="d5/dff/a06501_1a9f54169bc33022b546840434cdcf56d1" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>makeType</name></member>
+      <member refid="d5/dff/a06501_1ac80e9470dcd8f61a225ed84226e401a3" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>makeType</name></member>
+      <member refid="d5/dff/a06501_1a8dbb3e961c2de72cce79c9678e50d833" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>N</name></member>
+      <member refid="d5/dff/a06501_1a8b2b4b8ed91132ba92dc968933493f7f" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>NdotH</name></member>
+      <member refid="d5/dff/a06501_1ad006ddd287179dbcece8c979f244c176" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>NdotL</name></member>
+      <member refid="d5/dff/a06501_1ae5c6a709fe4af32e6cc13064af96977f" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>NdotV</name></member>
+      <member refid="d5/dff/a06501_1ad624042a20ae622f8028d88599ce8cfb" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>spcF</name></member>
+      <member refid="d5/dff/a06501_1a6f0015545efbbfa8f33a617b36640e27" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>updateL</name></member>
+      <member refid="d5/dff/a06501_1a6b2bf001aa03320fbf6c7639ccdc6a49" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>updateL</name></member>
+      <member refid="d5/dff/a06501_1a405dae211bf8c7a7aa3632530c6ba163" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>updateN</name></member>
+      <member refid="d5/dff/a06501_1a6cc82ddfdad4cafc6dc1fdf1410f1a6d" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>updateN</name></member>
+      <member refid="d5/dff/a06501_1ac12cd73d40f545f24b2a1b3b44919dc8" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>V</name></member>
+      <member refid="d5/dff/a06501_1a57c0ac15de294a8bb875d9a582f81a2f" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>vertexToLight</name></member>
+      <member refid="d5/dff/a06501_1ac995d3d6f8714cdb5f55c32b3efdd727" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>viewPosition</name></member>
+      <member refid="d5/dff/a06501_1a51a219dbdf5d51e360184ae64892c105" prot="public" virt="non-virtual"><scope>castor3d::shader::LightSurface</scope><name>worldPosition</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

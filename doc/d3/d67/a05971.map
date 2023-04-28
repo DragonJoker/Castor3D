@@ -1,6 +1,10 @@
-<map id="castor3d::shader::BackgroundModel" name="castor3d::shader::BackgroundModel">
-<area shape="rect" id="node1" title=" " alt="" coords="5,71,201,112"/>
-<area shape="rect" id="node2" href="$d7/d66/a05524.html" title=" " alt="" coords="257,5,467,47"/>
-<area shape="rect" id="node3" href="$df/d63/a05528.html" title=" " alt="" coords="253,71,471,112"/>
-<area shape="rect" id="node4" href="$d4/de3/a05532.html" title=" " alt="" coords="249,136,475,177"/>
+<map id="castor3d::DirectionalLight::LightData" name="castor3d::DirectionalLight::LightData">
+<area shape="rect" id="node1" title=" " alt="" coords="1088,84,1257,124"/>
+<area shape="rect" id="node2" href="$d1/d26/a05989.html" title=" " alt="" coords="783,5,943,45"/>
+<area shape="rect" id="node3" href="$db/de4/a06353.html" title=" " alt="" coords="5,22,195,47"/>
+<area shape="rect" id="node4" href="$d7/d05/a05985.html" title=" " alt="" coords="300,55,460,95"/>
+<area shape="rect" id="node5" title=" " alt="" coords="759,69,967,139"/>
+<area shape="rect" id="node6" title=" " alt="" coords="326,145,434,170"/>
+<area shape="rect" id="node8" title=" " alt="" coords="755,163,971,203"/>
+<area shape="rect" id="node7" title=" " alt="" coords="81,145,119,170"/>
 </map>

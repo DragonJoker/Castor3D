@@ -1,4 +1,7 @@
-<map id="castor3d::OpaqueRendering" name="castor3d::OpaqueRendering">
-<area shape="rect" id="node1" title=" " alt="" coords="37,80,220,107"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,5,252,32"/>
+<map id="castor3d::OverlayLines" name="castor3d::OverlayLines">
+<area shape="rect" id="node1" title="Contains the lines forming the overlay." alt="" coords="50,313,205,339"/>
+<area shape="rect" id="node2" title=" " alt="" coords="28,196,227,251"/>
+<area shape="rect" id="node3" href="$d6/ddb/a04853.html" title="A text chars container, along with its size and position." alt="" coords="5,93,135,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="159,93,267,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="193,5,232,31"/>
 </map>

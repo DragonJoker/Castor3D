@@ -1,0 +1,1503 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d66/a06537" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::ReflectionModel</compoundname>
+    <includes local="no">GlslReflection.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d66/a06537_1ae525d4f79a6aeb9c3283ad34fa60400d" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::ReflectionModel::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_writer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="264" column="20" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="264" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1aca7e4f987a800a07a60e70823d3c227b" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/d0f/a06605" kindref="compound">Utils</ref> &amp;</type>
+        <definition>Utils&amp; castor3d::shader::ReflectionModel::m_utils</definition>
+        <argsstring></argsstring>
+        <name>m_utils</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_utils</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="265" column="8" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="265" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1a7efe38f9db325fde8d26111ac4d865ba" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::ReflectionModel::m_hasIblSupport</definition>
+        <argsstring></argsstring>
+        <name>m_hasIblSupport</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_hasIblSupport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="266" column="6" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="266" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1a6dfbca13bec0bba51cd2325c2bcd1a17" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InOutBlendComponents, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InVec3, sdw::InCombinedImage2DRgba32, sdw::InVec2, sdw::InUInt, sdw::InUInt, sdw::InFloat, sdw::OutVec3, sdw::OutVec3, sdw::OutVec3, sdw::OutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InOutBlendComponents , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InVec3 , sdw::InCombinedImage2DRgba32 , sdw::InVec2 , sdw::InUInt , sdw::InUInt , sdw::InFloat , sdw::OutVec3 , sdw::OutVec3 , sdw::OutVec3 , sdw::OutVec3 , sdw::OutVec3 &gt; castor3d::shader::ReflectionModel::m_computeForward</definition>
+        <argsstring></argsstring>
+        <name>m_computeForward</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeForward</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="284" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="284" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1aa234cd1bc193fac204d3202154a09bdf" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, InOutBlendComponents, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InUInt, sdw::InUInt, sdw::InFloat, sdw::OutVec3, sdw::OutVec3, sdw::OutVec3, sdw::OutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , InOutBlendComponents , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InUInt , sdw::InUInt , sdw::InFloat , sdw::OutVec3 , sdw::OutVec3 , sdw::OutVec3 , sdw::OutVec3 , sdw::OutVec3 &gt; castor3d::shader::ReflectionModel::m_computeDeferred</definition>
+        <argsstring></argsstring>
+        <name>m_computeDeferred</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeDeferred</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="299" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="299" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1a6295894be3ea19ea49a9ce8c8ca01474" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Boolean, sdw::InVec3, sdw::InVec3, sdw::InMat4, sdw::InCombinedImage2DR32, sdw::InVec2, sdw::InFloat, sdw::InBoolean, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::InFloat, sdw::OutVec2, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Boolean , sdw::InVec3 , sdw::InVec3 , sdw::InMat4 , sdw::InCombinedImage2DR32 , sdw::InVec2 , sdw::InFloat , sdw::InBoolean , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::InFloat , sdw::OutVec2 , sdw::OutVec3 &gt; castor3d::shader::ReflectionModel::m_traceScreenSpace</definition>
+        <argsstring></argsstring>
+        <name>m_traceScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_traceScreenSpace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="316" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="316" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1a4dacf94e9e976b47e13deed31611e60e" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec3, sdw::InVec3, sdw::InVec2, sdw::InVec4, sdw::InCombinedImage2DR32, sdw::InCombinedImage2DRgba32, sdw::InCombinedImage2DRgba32 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec3 , sdw::InVec3 , sdw::InVec2 , sdw::InVec4 , sdw::InCombinedImage2DR32 , sdw::InCombinedImage2DRgba32 , sdw::InCombinedImage2DRgba32 &gt; castor3d::shader::ReflectionModel::m_computeScreenSpace</definition>
+        <argsstring></argsstring>
+        <name>m_computeScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeScreenSpace</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="324" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="324" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1aab21a381e834174eb5f4a1babef52a50" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, sdw::InVec3, sdw::InVec3, sdw::InVec2, sdw::InVec4, sdw::InCombinedImage2DRgba32, sdw::InCombinedImage2DRgba32, sdw::InCombinedImage2DRgba32 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , sdw::InVec3 , sdw::InVec3 , sdw::InVec2 , sdw::InVec4 , sdw::InCombinedImage2DRgba32 , sdw::InCombinedImage2DRgba32 , sdw::InCombinedImage2DRgba32 &gt; castor3d::shader::ReflectionModel::m_computeScreenSpace2</definition>
+        <argsstring></argsstring>
+        <name>m_computeScreenSpace2</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeScreenSpace2</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="332" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="332" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1a13a8e54e825737ebff8c2ff6b084af0b" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Void, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InUInt, sdw::InVec3, sdw::InFloat, sdw::OutVec3, sdw::OutVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Void , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InUInt , sdw::InVec3 , sdw::InFloat , sdw::OutVec3 , sdw::OutVec3 &gt; castor3d::shader::ReflectionModel::m_computeReflEnvMaps</definition>
+        <argsstring></argsstring>
+        <name>m_computeReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeReflEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="342" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="342" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1ab08f274a23d51c65591789b2428f9849" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InUInt, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InCombinedImageCubeArrayRgba32, sdw::InCombinedImage2DRgba32 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InUInt , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InCombinedImageCubeArrayRgba32 , sdw::InCombinedImage2DRgba32&gt; castor3d::shader::ReflectionModel::m_computeSpecularReflEnvMaps</definition>
+        <argsstring></argsstring>
+        <name>m_computeSpecularReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeSpecularReflEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="352" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="352" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1ae618404a9382d17fe595599e8e080327" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InUInt, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InUInt , sdw::InFloat &gt; castor3d::shader::ReflectionModel::m_computeSheenReflEnvMaps</definition>
+        <argsstring></argsstring>
+        <name>m_computeSheenReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeSheenReflEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="358" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="358" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1a8b5f2cf6beb19134ad1827c3ad91b9ca" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImageCubeArrayRgba32, sdw::InUInt, sdw::InFloat, sdw::InVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImageCubeArrayRgba32 , sdw::InUInt , sdw::InFloat , sdw::InVec3 , sdw::InFloat &gt; castor3d::shader::ReflectionModel::m_computeRefrEnvMaps</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeRefrEnvMaps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="366" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="366" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d66/a06537_1a3544a403387ed982732736c7148493d5" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec3, sdw::InVec3, sdw::InVec3, sdw::InVec3, sdw::InCombinedImage2DRgba32, sdw::InVec2, sdw::InFloat, sdw::InVec3, sdw::InVec3, sdw::InFloat, sdw::InFloat, sdw::InVec3, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec3 , sdw::InVec3 , sdw::InVec3 , sdw::InVec3 , sdw::InCombinedImage2DRgba32 , sdw::InVec2 , sdw::InFloat , sdw::InVec3 , sdw::InVec3 , sdw::InFloat , sdw::InFloat , sdw::InVec3 , sdw::InFloat &gt; castor3d::shader::ReflectionModel::m_computeRefrSceneMap</definition>
+        <argsstring></argsstring>
+        <name>m_computeRefrSceneMap</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::m_computeRefrSceneMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="379" column="2" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="379" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d66/a06537_1ae27a7aa68c0ac9754633ad93fed2ea88" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::ReflectionModel::ReflectionModel</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, Utils &amp;utils, uint32_t &amp;envMapBinding, uint32_t envMapSet, bool hasIblSupport)</argsstring>
+        <name>ReflectionModel</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::ReflectionModel</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/d0f/a06605" kindref="compound">Utils</ref> &amp;</type>
+          <declname>utils</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>envMapBinding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>envMapSet</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>hasIblSupport</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="15" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1af8477b6bdb68264bd9efcc9a32e45cc5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec3</type>
+        <definition>C3D_API sdw::RetVec3 castor3d::shader::ReflectionModel::computeIncident</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsPosition, sdw::Vec3 const &amp;wsCamera) const</argsstring>
+        <name>computeIncident</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeIncident</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsCamera</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="21" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a1dfc7e8f7c3b5d0e9b46cb412c89c669" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ReflectionModel::computeCombined</definition>
+        <argsstring>(BlendComponents &amp;components, LightSurface const &amp;lightSurface, sdw::Vec3 const &amp;position, BackgroundModel &amp;background, sdw::CombinedImage2DRgba32 const &amp;mippedScene, CameraData const &amp;camera, sdw::Vec2 const &amp;sceneUv, sdw::UInt const &amp;envMapIndex, sdw::UInt const &amp;hasReflection, sdw::Float const &amp;refractionRatio, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular, sdw::Vec3 &amp;refracted, sdw::Vec3 &amp;coatReflected, sdw::Vec3 &amp;sheenReflected)</argsstring>
+        <name>computeCombined</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeCombined</qualifiedname>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dff/a06501" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>mippedScene</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d54/a06637" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>sceneUv</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="23" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a4c08821cad03a2c973329c746fa5ce1c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ReflectionModel::computeCombined</definition>
+        <argsstring>(BlendComponents &amp;components, sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;difF, sdw::Vec3 const &amp;spcF, sdw::Vec3 const &amp;V, sdw::Float const &amp;NdotV, sdw::Vec3 const &amp;position, BackgroundModel &amp;background, sdw::CombinedImage2DRgba32 const &amp;mippedScene, CameraData const &amp;camera, sdw::Vec2 const &amp;sceneUv, sdw::UInt const &amp;envMapIndex, sdw::UInt const &amp;hasReflection, sdw::Float const &amp;refractionRatio, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular, sdw::Vec3 &amp;refracted, sdw::Vec3 &amp;coatReflected, sdw::Vec3 &amp;sheenReflected)</argsstring>
+        <name>computeCombined</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeCombined</qualifiedname>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>difF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>spcF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>position</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>mippedScene</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d54/a06637" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>sceneUv</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="38" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a8a02ccb06c17873e6efc9f6914936d32" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ReflectionModel::computeCombined</definition>
+        <argsstring>(BlendComponents &amp;pcomponents, LightSurface const &amp;lightSurface, BackgroundModel &amp;background, sdw::UInt const &amp;envMapIndex, sdw::UInt const &amp;hasReflection, sdw::Float const &amp;refractionRatio, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular, sdw::Vec3 &amp;refracted, sdw::Vec3 &amp;coatReflected, sdw::Vec3 &amp;sheenReflected)</argsstring>
+        <name>computeCombined</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeCombined</qualifiedname>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>pcomponents</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dff/a06501" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="57" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a21b682d6c851d422b943dc93cbc80a2f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ReflectionModel::computeCombined</definition>
+        <argsstring>(BlendComponents &amp;pcomponents, sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;difF, sdw::Vec3 const &amp;spcF, sdw::Vec3 const &amp;V, sdw::Float const &amp;NdotV, BackgroundModel &amp;background, sdw::UInt const &amp;envMapIndex, sdw::UInt const &amp;hasReflection, sdw::Float const &amp;refractionRatio, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular, sdw::Vec3 &amp;refracted, sdw::Vec3 &amp;coatReflected, sdw::Vec3 &amp;sheenReflected)</argsstring>
+        <name>computeCombined</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeCombined</qualifiedname>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>pcomponents</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>difF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>spcF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>coatReflected</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="68" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a0146d1479ac0a45c04a535a6ca3fb6b1" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ReflectionModel::computeReflections</definition>
+        <argsstring>(BlendComponents &amp;components, LightSurface const &amp;lightSurface, BackgroundModel &amp;background, sdw::UInt envMapIndex, sdw::UInt const &amp;reflection, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular)</argsstring>
+        <name>computeReflections</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeReflections</qualifiedname>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dff/a06501" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="83" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a1be301eefb12ef216934cebe758321ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::shader::ReflectionModel::computeReflections</definition>
+        <argsstring>(BlendComponents &amp;components, sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;difF, sdw::Vec3 const &amp;spcF, sdw::Vec3 const &amp;V, sdw::Float const &amp;NdotV, BackgroundModel &amp;background, sdw::UInt envMapIndex, sdw::UInt const &amp;reflection, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular)</argsstring>
+        <name>computeReflections</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeReflections</qualifiedname>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>difF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>spcF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>reflection</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="90" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a8ef9afee5411b9799ece1b10ed255722" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::ReflectionModel::computeRefractions</definition>
+        <argsstring>(BlendComponents &amp;components, LightSurface const &amp;lightSurface, BackgroundModel &amp;background, sdw::UInt envMapIndex, sdw::UInt const &amp;refraction, sdw::Float const &amp;refractionRatio)</argsstring>
+        <name>computeRefractions</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeRefractions</qualifiedname>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/dff/a06501" kindref="compound">LightSurface</ref> const &amp;</type>
+          <declname>lightSurface</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>refraction</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="101" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1ab46f02091d060defc213d3e946943971" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec3</type>
+        <definition>C3D_API sdw::Vec3 castor3d::shader::ReflectionModel::computeRefractions</definition>
+        <argsstring>(BlendComponents &amp;components, sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;V, BackgroundModel &amp;background, sdw::UInt envMapIndex, sdw::Float const &amp;refractionRatio)</argsstring>
+        <name>computeRefractions</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeRefractions</qualifiedname>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::UInt</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="107" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1ad103b72da81430b834490d69de81e21b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec4</type>
+        <definition>C3D_API sdw::RetVec4 castor3d::shader::ReflectionModel::computeScreenSpace</definition>
+        <argsstring>(CameraData const &amp;cameraData, sdw::Vec3 const &amp;viewPosition, sdw::Vec3 const &amp;worldNormal, sdw::Vec2 const &amp;texcoord, sdw::Vec4 const &amp;ssrSettings, sdw::CombinedImage2DR32 const &amp;depthMap, sdw::CombinedImage2DRgba32 const &amp;normalMap, sdw::CombinedImage2DRgba32 const &amp;colourMap)</argsstring>
+        <name>computeScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeScreenSpace</qualifiedname>
+        <param>
+          <type><ref refid="d0/d54/a06637" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>cameraData</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texcoord</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>ssrSettings</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DR32 const &amp;</type>
+          <declname>depthMap</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>normalMap</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>colourMap</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="113" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a02e088f84a02b30abc231b62f4679254" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec4</type>
+        <definition>C3D_API sdw::RetVec4 castor3d::shader::ReflectionModel::computeScreenSpace</definition>
+        <argsstring>(CameraData const &amp;cameraData, sdw::Vec3 const &amp;viewPosition, sdw::Vec3 const &amp;worldNormal, sdw::Vec2 const &amp;texcoord, sdw::Vec4 const &amp;ssrSettings, sdw::CombinedImage2DRgba32 const &amp;depthObjMap, sdw::CombinedImage2DRgba32 const &amp;normalMap, sdw::CombinedImage2DRgba32 const &amp;colourMap)</argsstring>
+        <name>computeScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeScreenSpace</qualifiedname>
+        <param>
+          <type><ref refid="d0/d54/a06637" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>cameraData</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>viewPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>worldNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>texcoord</declname>
+        </param>
+        <param>
+          <type>sdw::Vec4 const &amp;</type>
+          <declname>ssrSettings</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>depthObjMap</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>normalMap</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>colourMap</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="121" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1aa97cff014993a94fdc03b368d8bcaf8a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetBoolean</type>
+        <definition>C3D_API sdw::RetBoolean castor3d::shader::ReflectionModel::traceScreenSpace</definition>
+        <argsstring>(sdw::Vec3 csOrigin, sdw::Vec3 csDirection, sdw::Mat4 projectToPixelMatrix, sdw::CombinedImage2DR32 csZBuffer, sdw::Vec2 csZBufferSize, sdw::Float csZThickness, sdw::Boolean csZBufferIsHyperbolic, sdw::Vec3 clipInfo, sdw::Float nearPlaneZ, sdw::Float stride, sdw::Float jitterFraction, sdw::Float maxSteps, sdw::Float maxRayTraceDistance, sdw::Vec2 &amp;hitPixel, sdw::Vec3 &amp;csHitPoint)</argsstring>
+        <name>traceScreenSpace</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::traceScreenSpace</qualifiedname>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>csOrigin</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>csDirection</declname>
+        </param>
+        <param>
+          <type>sdw::Mat4</type>
+          <declname>projectToPixelMatrix</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DR32</type>
+          <declname>csZBuffer</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2</type>
+          <declname>csZBufferSize</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>csZThickness</declname>
+        </param>
+        <param>
+          <type>sdw::Boolean</type>
+          <declname>csZBufferIsHyperbolic</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3</type>
+          <declname>clipInfo</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>nearPlaneZ</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>stride</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>jitterFraction</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>maxSteps</declname>
+        </param>
+        <param>
+          <type>sdw::Float</type>
+          <declname>maxRayTraceDistance</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2 &amp;</type>
+          <declname>hitPixel</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>csHitPoint</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>csOrigin</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Camera-space ray origin, which must be within the view volume and must have z &lt; -0.01 and project within the valid screen rectangle. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csDirection</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Unit length camera-space ray direction. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>projectToPixelMatrix</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A projection matrix that maps to pixel coordinates (not [-1, +1] normalized device coordinates). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csZBuffer</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The depth or camera-space Z buffer, depending on the value of <emphasis>csZBufferIsHyperbolic</emphasis>. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csZBufferSize</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Dimensions of csZBuffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csZThickness</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="d4/d11/a05953" kindref="compound">Camera</ref> space thickness to ascribe to each pixel in the depth buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csZBufferIsHyperbolic</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>True if csZBuffer is an OpenGL depth buffer, false (faster) if csZBuffer contains (negative) &quot;linear&quot; camera space z values. Const so that the compiler can evaluate the branch based on it at compile time. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>clipInfo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>See G3D::Camera documentation. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>nearPlaneZ</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Negative number. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>stride</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Step in horizontal or vertical pixels between samples. This is a float because integer math is slow on GPUs, but should be set to an integer &gt;= 1. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>jitterFraction</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Number between 0 and 1 for how far to bump the ray in stride units to conceal banding artifacts. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>maxSteps</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Maximum number of iterations. Higher gives better images but may be slow. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>maxRayTraceDistance</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Maximum camera-space distance to trace before returning a miss. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>hitPixel</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Pixel coordinates of the first intersection with the scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername>csHitPoint</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="d4/d11/a05953" kindref="compound">Camera</ref> space location of the ray hit. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="164" column="25"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="db/d66/a06537_1ae49c27ec551dc2ea649f2705a7b76257" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetVec3</type>
+        <definition>sdw::RetVec3 castor3d::shader::ReflectionModel::computeSpecularReflEnvMaps</definition>
+        <argsstring>(sdw::Vec3 const &amp;fresnel, sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::Float const &amp;roughness, sdw::UInt const &amp;envMapIndex, sdw::Vec3 const &amp;f0, sdw::Float const &amp;NdotV, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::CombinedImage2DRgba32 const &amp;brdfMap, BackgroundModel &amp;background)</argsstring>
+        <name>computeSpecularReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeSpecularReflEnvMaps</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>fresnel</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>f0</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>brdfMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="181" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a8bb6b2f9b2ab1b191adb3e08b24f51ca" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetVec3</type>
+        <definition>sdw::RetVec3 castor3d::shader::ReflectionModel::computeSheenReflEnvMaps</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::UInt const &amp;envMapIndex, BlendComponents &amp;components)</argsstring>
+        <name>computeSheenReflEnvMaps</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeSheenReflEnvMaps</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="191" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1acad063b521ee7fdc368cdba4e5d25248" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetVec3</type>
+        <definition>sdw::RetVec3 castor3d::shader::ReflectionModel::computeRefrEnvMaps</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::UInt const &amp;envMapIndex, sdw::Float const &amp;refractionRatio, BlendComponents &amp;f0)</argsstring>
+        <name>computeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeRefrEnvMaps</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>f0</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="196" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a5b407893f83282ca8318a5250cacc952" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetVec3</type>
+        <definition>sdw::RetVec3 castor3d::shader::ReflectionModel::computeRefrSceneMap</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsPosition, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImage2DRgba32 const &amp;sceneMap, CameraData const &amp;camera, sdw::Vec2 sceneUv, sdw::Float const &amp;refractionRatio, BlendComponents &amp;components)</argsstring>
+        <name>computeRefrSceneMap</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::computeRefrSceneMap</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsPosition</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>sceneMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/d54/a06637" kindref="compound">CameraData</ref> const &amp;</type>
+          <declname>camera</declname>
+        </param>
+        <param>
+          <type>sdw::Vec2</type>
+          <declname>sceneUv</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="202" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a6af230244b485bd02c33fea9d16465ae" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetVec3</type>
+        <definition>sdw::RetVec3 castor3d::shader::ReflectionModel::doComputeRefrEnvMaps</definition>
+        <argsstring>(sdw::Vec3 const &amp;wsIncident, sdw::Vec3 const &amp;wsNormal, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::UInt const &amp;envMapIndex, sdw::Float const &amp;refractionRatio, sdw::Vec3 &amp;albedo, sdw::Float const &amp;roughness)</argsstring>
+        <name>doComputeRefrEnvMaps</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::doComputeRefrEnvMaps</qualifiedname>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsIncident</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>albedo</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="210" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a8197c91f48c11452b1646aece2690b56" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::ReflectionModel::doComputeReflections</definition>
+        <argsstring>(sdw::CombinedImage2DRgba32 const &amp;brdf, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Boolean const &amp;hasEnvMap, BackgroundModel &amp;background, sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;difF, sdw::Vec3 const &amp;spcF, sdw::Vec3 const &amp;V, sdw::Float const &amp;NdotV, sdw::UInt const &amp;hasReflection, BlendComponents &amp;components, sdw::UInt &amp;envMapIndex, sdw::Vec3 &amp;reflectedDiffuse, sdw::Vec3 &amp;reflectedSpecular)</argsstring>
+        <name>doComputeReflections</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::doComputeReflections</qualifiedname>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Boolean const &amp;</type>
+          <declname>hasEnvMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>difF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>spcF</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::UInt &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedDiffuse</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>reflectedSpecular</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="217" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a9d9685d34910addcb423996804f6d69e" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::ReflectionModel::doComputeRefractions</definition>
+        <argsstring>(sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Boolean const &amp;hasEnvMap, BackgroundModel &amp;background, sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;V, sdw::Float const &amp;refractionRatio, sdw::UInt const &amp;envMapIndex, BlendComponents &amp;components, sdw::Vec3 &amp;refracted)</argsstring>
+        <name>doComputeRefractions</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::doComputeRefractions</qualifiedname>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Boolean const &amp;</type>
+          <declname>hasEnvMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>refractionRatio</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>refracted</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="231" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1ad796ba91c217cb76aaebd2cb4ad864ea" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::ReflectionModel::doComputeClearcoatReflections</definition>
+        <argsstring>(sdw::CombinedImage2DRgba32 const &amp;brdf, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Boolean const &amp;hasEnvMap, BackgroundModel &amp;background, sdw::Vec3 const &amp;fresnel, sdw::Vec3 const &amp;V, sdw::UInt const &amp;hasReflection, sdw::Float const &amp;NdotV, BlendComponents &amp;components, sdw::UInt &amp;envMapIndex, sdw::Vec3 &amp;coatReflected)</argsstring>
+        <name>doComputeClearcoatReflections</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::doComputeClearcoatReflections</qualifiedname>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Boolean const &amp;</type>
+          <declname>hasEnvMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>fresnel</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::UInt &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>coatReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="240" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d66/a06537_1a2ceb423221ab650ce29ee1bf46c65ec2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::shader::ReflectionModel::doComputeSheenReflections</definition>
+        <argsstring>(sdw::CombinedImage2DRgba32 const &amp;brdf, sdw::CombinedImageCubeArrayRgba32 const &amp;envMap, sdw::Boolean const &amp;hasEnvMap, BackgroundModel &amp;background, sdw::Vec3 const &amp;wsNormal, sdw::Vec3 const &amp;V, sdw::Float const &amp;NdotV, sdw::UInt const &amp;hasReflection, BlendComponents &amp;components, sdw::UInt &amp;envMapIndex, sdw::Vec3 &amp;sheenReflected)</argsstring>
+        <name>doComputeSheenReflections</name>
+        <qualifiedname>castor3d::shader::ReflectionModel::doComputeSheenReflections</qualifiedname>
+        <param>
+          <type>sdw::CombinedImage2DRgba32 const &amp;</type>
+          <declname>brdf</declname>
+        </param>
+        <param>
+          <type>sdw::CombinedImageCubeArrayRgba32 const &amp;</type>
+          <declname>envMap</declname>
+        </param>
+        <param>
+          <type>sdw::Boolean const &amp;</type>
+          <declname>hasEnvMap</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d7e/a06413" kindref="compound">BackgroundModel</ref> &amp;</type>
+          <declname>background</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>wsNormal</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>V</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>hasReflection</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d0a/a06421" kindref="compound">BlendComponents</ref> &amp;</type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type>sdw::UInt &amp;</type>
+          <declname>envMapIndex</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 &amp;</type>
+          <declname>sheenReflected</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslReflection.hpp" line="251" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/GlslReflection.hpp" line="12" column="1" bodyfile="Shader/Shaders/GlslReflection.hpp" bodystart="13" bodyend="380"/>
+    <listofallmembers>
+      <member refid="db/d66/a06537_1a1dfc7e8f7c3b5d0e9b46cb412c89c669" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeCombined</name></member>
+      <member refid="db/d66/a06537_1a4c08821cad03a2c973329c746fa5ce1c" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeCombined</name></member>
+      <member refid="db/d66/a06537_1a8a02ccb06c17873e6efc9f6914936d32" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeCombined</name></member>
+      <member refid="db/d66/a06537_1a21b682d6c851d422b943dc93cbc80a2f" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeCombined</name></member>
+      <member refid="db/d66/a06537_1af8477b6bdb68264bd9efcc9a32e45cc5" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeIncident</name></member>
+      <member refid="db/d66/a06537_1a0146d1479ac0a45c04a535a6ca3fb6b1" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeReflections</name></member>
+      <member refid="db/d66/a06537_1a1be301eefb12ef216934cebe758321ff" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeReflections</name></member>
+      <member refid="db/d66/a06537_1a8ef9afee5411b9799ece1b10ed255722" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeRefractions</name></member>
+      <member refid="db/d66/a06537_1ab46f02091d060defc213d3e946943971" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeRefractions</name></member>
+      <member refid="db/d66/a06537_1acad063b521ee7fdc368cdba4e5d25248" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeRefrEnvMaps</name></member>
+      <member refid="db/d66/a06537_1a5b407893f83282ca8318a5250cacc952" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeRefrSceneMap</name></member>
+      <member refid="db/d66/a06537_1ad103b72da81430b834490d69de81e21b" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeScreenSpace</name></member>
+      <member refid="db/d66/a06537_1a02e088f84a02b30abc231b62f4679254" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeScreenSpace</name></member>
+      <member refid="db/d66/a06537_1a8bb6b2f9b2ab1b191adb3e08b24f51ca" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeSheenReflEnvMaps</name></member>
+      <member refid="db/d66/a06537_1ae49c27ec551dc2ea649f2705a7b76257" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>computeSpecularReflEnvMaps</name></member>
+      <member refid="db/d66/a06537_1ad796ba91c217cb76aaebd2cb4ad864ea" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>doComputeClearcoatReflections</name></member>
+      <member refid="db/d66/a06537_1a8197c91f48c11452b1646aece2690b56" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>doComputeReflections</name></member>
+      <member refid="db/d66/a06537_1a9d9685d34910addcb423996804f6d69e" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>doComputeRefractions</name></member>
+      <member refid="db/d66/a06537_1a6af230244b485bd02c33fea9d16465ae" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>doComputeRefrEnvMaps</name></member>
+      <member refid="db/d66/a06537_1a2ceb423221ab650ce29ee1bf46c65ec2" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>doComputeSheenReflections</name></member>
+      <member refid="db/d66/a06537_1aa234cd1bc193fac204d3202154a09bdf" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeDeferred</name></member>
+      <member refid="db/d66/a06537_1a6dfbca13bec0bba51cd2325c2bcd1a17" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeForward</name></member>
+      <member refid="db/d66/a06537_1a13a8e54e825737ebff8c2ff6b084af0b" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeReflEnvMaps</name></member>
+      <member refid="db/d66/a06537_1a8b5f2cf6beb19134ad1827c3ad91b9ca" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeRefrEnvMaps</name></member>
+      <member refid="db/d66/a06537_1a3544a403387ed982732736c7148493d5" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeRefrSceneMap</name></member>
+      <member refid="db/d66/a06537_1a4dacf94e9e976b47e13deed31611e60e" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeScreenSpace</name></member>
+      <member refid="db/d66/a06537_1aab21a381e834174eb5f4a1babef52a50" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeScreenSpace2</name></member>
+      <member refid="db/d66/a06537_1ae618404a9382d17fe595599e8e080327" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeSheenReflEnvMaps</name></member>
+      <member refid="db/d66/a06537_1ab08f274a23d51c65591789b2428f9849" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_computeSpecularReflEnvMaps</name></member>
+      <member refid="db/d66/a06537_1a7efe38f9db325fde8d26111ac4d865ba" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_hasIblSupport</name></member>
+      <member refid="db/d66/a06537_1a6295894be3ea19ea49a9ce8c8ca01474" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_traceScreenSpace</name></member>
+      <member refid="db/d66/a06537_1aca7e4f987a800a07a60e70823d3c227b" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_utils</name></member>
+      <member refid="db/d66/a06537_1ae525d4f79a6aeb9c3283ad34fa60400d" prot="private" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>m_writer</name></member>
+      <member refid="db/d66/a06537_1ae27a7aa68c0ac9754633ad93fed2ea88" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>ReflectionModel</name></member>
+      <member refid="db/d66/a06537_1aa97cff014993a94fdc03b368d8bcaf8a" prot="public" virt="non-virtual"><scope>castor3d::shader::ReflectionModel</scope><name>traceScreenSpace</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

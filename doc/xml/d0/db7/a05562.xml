@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d0/db7/a05562" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DebugConfig</compoundname>
+    <includes local="no">RenderTarget.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/db7/a05562_1a65f9da86f5db5c8b46be51d7c3ae83c0" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DebugConfig::debugIndex</definition>
+        <argsstring></argsstring>
+        <name>debugIndex</name>
+        <qualifiedname>castor3d::DebugConfig::debugIndex</qualifiedname>
+        <initializer>{ 0u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderTarget.hpp" line="37" column="10" bodyfile="Render/RenderTarget.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderTarget.hpp" line="35" column="1" bodyfile="Render/RenderTarget.hpp" bodystart="36" bodyend="38"/>
+    <listofallmembers>
+      <member refid="d0/db7/a05562_1a65f9da86f5db5c8b46be51d7c3ae83c0" prot="public" virt="non-virtual"><scope>castor3d::DebugConfig</scope><name>debugIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,173 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d9c/a06450" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::DirectionalLight</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">sdw::StructInstanceHelperT&lt; &quot;C3D_DirectionalLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt;, sdw::FloatField&lt; &quot;cascadeCount&quot; &gt;, sdw::FloatArrayField&lt; &quot;splitDepths&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u) &gt;, sdw::FloatArrayField&lt; &quot;splitScales&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u) &gt;, sdw::Mat4ArrayField&lt; &quot;transforms&quot;, MaxDirectionalCascadesCount &gt; &gt;</basecompoundref>
+    <includes local="no">GlslLight.hpp</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d9c/a06450_1a984cb6a633d11eb1e80acfbd4b16f378" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::DirectionalLight::DirectionalLight</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, ast::expr::ExprPtr expr, bool enabled)</argsstring>
+        <name>DirectionalLight</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::DirectionalLight</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>ast::expr::ExprPtr</type>
+          <declname>expr</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="101" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="101" bodyend="106"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9c/a06450_1afcf21157fef9c19f1ac6fef73109d19a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalLight::base</definition>
+        <argsstring>() const</argsstring>
+        <name>base</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::base</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="109" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="109" bodyend="109"/>
+        <referencedby refid="d1/d9c/a06450_1a0fb0d31fd2196acd3980057cdf7fbc9c" compoundref="da/dd5/a01580" startline="114" endline="114">shadows</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9c/a06450_1ad3fb330efa7df0a6941564c7801e5175" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalLight::direction</definition>
+        <argsstring>() const</argsstring>
+        <name>direction</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="110" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="110" bodyend="110"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9c/a06450_1adcd305eb29f153a9a19357f553dffd90" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalLight::splitDepths</definition>
+        <argsstring>() const</argsstring>
+        <name>splitDepths</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::splitDepths</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="111" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="111" bodyend="111"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9c/a06450_1a8b211eaded7e644376816fa99fd70168" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalLight::splitScales</definition>
+        <argsstring>() const</argsstring>
+        <name>splitScales</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::splitScales</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="112" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="112" bodyend="112"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9c/a06450_1aa2c7e1406cf15d9af72ce541674a1678" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalLight::transforms</definition>
+        <argsstring>() const</argsstring>
+        <name>transforms</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::transforms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="113" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="113" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9c/a06450_1a0fb0d31fd2196acd3980057cdf7fbc9c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>auto</type>
+        <definition>auto castor3d::shader::DirectionalLight::shadows</definition>
+        <argsstring>() const</argsstring>
+        <name>shadows</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::shadows</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="114" column="6" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="114" bodyend="114"/>
+        <references refid="d1/d9c/a06450_1afcf21157fef9c19f1ac6fef73109d19a" compoundref="da/dd5/a01580" startline="109" endline="109">base</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9c/a06450_1a7d355ff080e07645c77b49636f1244eb" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::UInt</type>
+        <definition>C3D_API sdw::UInt castor3d::shader::DirectionalLight::cascadeCount</definition>
+        <argsstring>() const</argsstring>
+        <name>cascadeCount</name>
+        <qualifiedname>castor3d::shader::DirectionalLight::cascadeCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslLight.hpp" line="116" column="19"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::shader::DirectionalLight</label>
+        <link refid="d1/d9c/a06450"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_DirectionalLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt;, sdw::FloatField&lt; &quot;cascadeCount&quot; &gt;, sdw::FloatArrayField&lt; &quot;splitDepths&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u) &gt;, sdw::FloatArrayField&lt; &quot;splitScales&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u) &gt;, sdw::Mat4ArrayField&lt; &quot;transforms&quot;, MaxDirectionalCascadesCount &gt; &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::shader::DirectionalLight</label>
+        <link refid="d1/d9c/a06450"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>sdw::StructInstanceHelperT&lt; &quot;C3D_DirectionalLight&quot;, sdw::type::MemoryLayout::eC, sdw::StructFieldT&lt; Light, &quot;base&quot; &gt;, sdw::Vec3Field&lt; &quot;direction&quot; &gt;, sdw::FloatField&lt; &quot;cascadeCount&quot; &gt;, sdw::FloatArrayField&lt; &quot;splitDepths&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u) &gt;, sdw::FloatArrayField&lt; &quot;splitScales&quot;, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u) &gt;, sdw::Mat4ArrayField&lt; &quot;transforms&quot;, MaxDirectionalCascadesCount &gt; &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslLight.hpp" line="91" column="1" bodyfile="Shader/Shaders/GlslLight.hpp" bodystart="100" bodyend="117"/>
+    <listofallmembers>
+      <member refid="d1/d9c/a06450_1afcf21157fef9c19f1ac6fef73109d19a" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>base</name></member>
+      <member refid="d1/d9c/a06450_1a7d355ff080e07645c77b49636f1244eb" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>cascadeCount</name></member>
+      <member refid="d1/d9c/a06450_1ad3fb330efa7df0a6941564c7801e5175" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>direction</name></member>
+      <member refid="d1/d9c/a06450_1a984cb6a633d11eb1e80acfbd4b16f378" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>DirectionalLight</name></member>
+      <member refid="d1/d9c/a06450_1a0fb0d31fd2196acd3980057cdf7fbc9c" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>shadows</name></member>
+      <member refid="d1/d9c/a06450_1adcd305eb29f153a9a19357f553dffd90" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>splitDepths</name></member>
+      <member refid="d1/d9c/a06450_1a8b211eaded7e644376816fa99fd70168" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>splitScales</name></member>
+      <member refid="d1/d9c/a06450_1aa2c7e1406cf15d9af72ce541674a1678" prot="public" virt="non-virtual"><scope>castor3d::shader::DirectionalLight</scope><name>transforms</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

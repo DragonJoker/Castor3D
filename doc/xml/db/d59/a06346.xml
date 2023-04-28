@@ -1,0 +1,448 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="db/d59/a06346" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::SssProfileBuffer</compoundname>
+    <includes local="no">SssProfileBuffer.hpp</includes>
+    <innerclass refid="dc/d1c/a06350" prot="public">castor3d::SssProfileBuffer::Data</innerclass>
+    <innerclass refid="dc/df9/a06354" prot="public">castor3d::SssProfileBuffer::SssProfileData</innerclass>
+    <innerclass refid="d0/d14/a06358" prot="public">castor3d::SssProfileBuffer::SssProfileDataPtr</innerclass>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="db/d59/a06346_1ae7bb5fe7e8ad397eb4abbdcba508af10" prot="public" static="no">
+        <type>castor::ArrayView&lt; <ref refid="dc/df9/a06354" kindref="compound">SssProfileData</ref> &gt;</type>
+        <definition>using castor3d::SssProfileBuffer::SssProfilesData =  castor::ArrayView&lt; SssProfileData &gt;</definition>
+        <argsstring></argsstring>
+        <name>SssProfilesData</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfilesData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="40" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="db/d59/a06346_1afc22691abdf949face8f9ad98b60c6da" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr uint32_t</type>
+        <definition>constexpr uint32_t castor3d::SssProfileBuffer::DataSize</definition>
+        <argsstring></argsstring>
+        <name>DataSize</name>
+        <qualifiedname>castor3d::SssProfileBuffer::DataSize</qualifiedname>
+        <initializer>= sizeof( <ref refid="dc/df9/a06354" kindref="compound">SssProfileData</ref> )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="48" column="27" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="48" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="db/d59/a06346_1ae46d3b4f82020fea4dc728f658095049" prot="private" static="no" mutable="no">
+        <type><ref refid="dc/d9a/a06298" kindref="compound">ShaderBuffer</ref></type>
+        <definition>ShaderBuffer castor3d::SssProfileBuffer::m_buffer</definition>
+        <argsstring></argsstring>
+        <name>m_buffer</name>
+        <qualifiedname>castor3d::SssProfileBuffer::m_buffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="148" column="14" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="148" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d59/a06346_1af9e045af1b3d5d9c445b7d0ed2dbc5cc" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="df/d0b/a03610" kindref="compound">SubsurfaceScatteringComponent</ref> * &gt;</type>
+        <definition>std::vector&lt; SubsurfaceScatteringComponent * &gt; castor3d::SssProfileBuffer::m_components</definition>
+        <argsstring></argsstring>
+        <name>m_components</name>
+        <qualifiedname>castor3d::SssProfileBuffer::m_components</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="149" column="13" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="149" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d59/a06346_1a44a9070e1138461849fb118041c35664" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="df/d0b/a03610" kindref="compound">SubsurfaceScatteringComponent</ref> const * &gt;</type>
+        <definition>std::vector&lt; SubsurfaceScatteringComponent const * &gt; castor3d::SssProfileBuffer::m_dirty</definition>
+        <argsstring></argsstring>
+        <name>m_dirty</name>
+        <qualifiedname>castor3d::SssProfileBuffer::m_dirty</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="150" column="13" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="150" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d59/a06346_1af33a509b94a547120072cb69ff4908a9" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d5/da6/a01698_1a59c57be370d5be7648dd9b7d1be28ed8" kindref="member">OnSssProfileChangedConnection</ref> &gt;</type>
+        <definition>std::vector&lt; OnSssProfileChangedConnection &gt; castor3d::SssProfileBuffer::m_connections</definition>
+        <argsstring></argsstring>
+        <name>m_connections</name>
+        <qualifiedname>castor3d::SssProfileBuffer::m_connections</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="151" column="13" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="151" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d59/a06346_1af451f7b974738f12aae294826f2f001c" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::SssProfileBuffer::m_profileID</definition>
+        <argsstring></argsstring>
+        <name>m_profileID</name>
+        <qualifiedname>castor3d::SssProfileBuffer::m_profileID</qualifiedname>
+        <initializer>{ 1u }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="152" column="10" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d59/a06346_1a8fd4411c1c2bc8a53e9579c70db1ccca" prot="private" static="no" mutable="no">
+        <type><ref refid="db/d59/a06346_1ae7bb5fe7e8ad397eb4abbdcba508af10" kindref="member">SssProfilesData</ref></type>
+        <definition>SssProfilesData castor3d::SssProfileBuffer::m_data</definition>
+        <argsstring></argsstring>
+        <name>m_data</name>
+        <qualifiedname>castor3d::SssProfileBuffer::m_data</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="153" column="17" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="db/d59/a06346_1a7ed93e66f4e023055d0f8dd004aa005b" prot="private" static="no" mutable="no">
+        <type>std::mutex</type>
+        <definition>std::mutex castor3d::SssProfileBuffer::m_mutex</definition>
+        <argsstring></argsstring>
+        <name>m_mutex</name>
+        <qualifiedname>castor3d::SssProfileBuffer::m_mutex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="154" column="12" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="db/d59/a06346_1aea1be844d368c13c133be311aabb1245" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::SssProfileBuffer::SssProfileBuffer</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, uint32_t count)</argsstring>
+        <name>SssProfileBuffer</name>
+        <qualifiedname>castor3d::SssProfileBuffer::SssProfileBuffer</qualifiedname>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>count</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">count</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The max configurations count. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="63" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1abd025c3db5f8e9d4a984b7b1cfd3417a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> uint32_t</type>
+        <definition>C3D_API uint32_t castor3d::SssProfileBuffer::addPass</definition>
+        <argsstring>(SubsurfaceScatteringComponent &amp;component)</argsstring>
+        <name>addPass</name>
+        <qualifiedname>castor3d::SssProfileBuffer::addPass</qualifiedname>
+        <param>
+          <type><ref refid="df/d0b/a03610" kindref="compound">SubsurfaceScatteringComponent</ref> &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Adds a pass to the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subsurface scattering component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="74" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1a317dad7a71c844e4e857a1e9860687ed" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SssProfileBuffer::removePass</definition>
+        <argsstring>(SubsurfaceScatteringComponent &amp;component)</argsstring>
+        <name>removePass</name>
+        <qualifiedname>castor3d::SssProfileBuffer::removePass</qualifiedname>
+        <param>
+          <type><ref refid="df/d0b/a03610" kindref="compound">SubsurfaceScatteringComponent</ref> &amp;</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+<para>Removes a pass from the buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">component</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The subsurface scattering component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="83" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1a7e53f551e31bfe00c9705df31c99ce8d" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SssProfileBuffer::update</definition>
+        <argsstring>(ashes::CommandBuffer const &amp;commandBuffer)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::SssProfileBuffer::update</qualifiedname>
+        <param>
+          <type>ashes::CommandBuffer const &amp;</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+<para>Updates the passes buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="90" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1a16677e20e9a079334ee6f34479c5051c" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> VkDescriptorSetLayoutBinding</type>
+        <definition>C3D_API VkDescriptorSetLayoutBinding castor3d::SssProfileBuffer::createLayoutBinding</definition>
+        <argsstring>(uint32_t binding, VkShaderStageFlags stages=(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)) const</argsstring>
+        <name>createLayoutBinding</name>
+        <qualifiedname>castor3d::SssProfileBuffer::createLayoutBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>stages</declname>
+          <defval>(VK_SHADER_STAGE_FRAGMENT_BIT|VK_SHADER_STAGE_GEOMETRY_BIT|VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT|VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT|VK_SHADER_STAGE_VERTEX_BIT)</defval>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set layout binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="97" column="38"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1af9795ca364d1ce9f3a78e24ae636a626" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SssProfileBuffer::createPassBinding</definition>
+        <argsstring>(crg::FramePass &amp;pass, uint32_t binding) const</argsstring>
+        <name>createPassBinding</name>
+        <qualifiedname>castor3d::SssProfileBuffer::createPassBinding</qualifiedname>
+        <param>
+          <type>crg::FramePass &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates a frame pass binding. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="109" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1aa63306c804e7cc431146238aa6086338" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> ashes::WriteDescriptorSet</type>
+        <definition>C3D_API ashes::WriteDescriptorSet castor3d::SssProfileBuffer::getBinding</definition>
+        <argsstring>(uint32_t binding) const</argsstring>
+        <name>getBinding</name>
+        <qualifiedname>castor3d::SssProfileBuffer::getBinding</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor write for this buffer. </para>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="116" column="35"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1a9fad13e7d36c5e763c9057df93345aea" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::SssProfileBuffer::createBinding</definition>
+        <argsstring>(ashes::DescriptorSet &amp;descriptorSet, VkDescriptorSetLayoutBinding const &amp;binding) const</argsstring>
+        <name>createBinding</name>
+        <qualifiedname>castor3d::SssProfileBuffer::createBinding</qualifiedname>
+        <param>
+          <type>ashes::DescriptorSet &amp;</type>
+          <declname>descriptorSet</declname>
+        </param>
+        <param>
+          <type>VkDescriptorSetLayoutBinding const &amp;</type>
+          <declname>binding</declname>
+        </param>
+        <briefdescription>
+<para>Creates the descriptor set binding at given point. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">descriptorSet</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set that receives the binding. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">binding</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The descriptor set layout binding. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="127" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1a0340a67ca5a2fd630f51e8cbe4a0dc8c" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d0/d14/a06358" kindref="compound">SssProfileDataPtr</ref></type>
+        <definition>C3D_API SssProfileDataPtr castor3d::SssProfileBuffer::getData</definition>
+        <argsstring>(uint32_t profileID)</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::SssProfileBuffer::getData</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>profileID</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pointer to the data for given profile ID. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="135" column="27"/>
+      </memberdef>
+      <memberdef kind="function" id="db/d59/a06346_1aa457ff04e1c0b47ec5c95aba565097bf" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>uint8_t *</type>
+        <definition>uint8_t * castor3d::SssProfileBuffer::getPtr</definition>
+        <argsstring>()</argsstring>
+        <name>getPtr</name>
+        <qualifiedname>castor3d::SssProfileBuffer::getPtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>The pointer to the buffer. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="142" column="10" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="142" bodyend="145"/>
+        <references refid="dc/d9a/a06298_1a4fcf4ffabfc41ab525819285b87fdbfe" compoundref="da/d0a/a01526" startline="133" endline="136">castor3d::ShaderBuffer::getPtr</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/SssProfileBuffer.hpp" line="25" column="1" bodyfile="Shader/ShaderBuffers/SssProfileBuffer.hpp" bodystart="26" bodyend="155"/>
+    <listofallmembers>
+      <member refid="db/d59/a06346_1abd025c3db5f8e9d4a984b7b1cfd3417a" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>addPass</name></member>
+      <member refid="db/d59/a06346_1a9fad13e7d36c5e763c9057df93345aea" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>createBinding</name></member>
+      <member refid="db/d59/a06346_1a16677e20e9a079334ee6f34479c5051c" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>createLayoutBinding</name></member>
+      <member refid="db/d59/a06346_1af9795ca364d1ce9f3a78e24ae636a626" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>createPassBinding</name></member>
+      <member refid="db/d59/a06346_1afc22691abdf949face8f9ad98b60c6da" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>DataSize</name></member>
+      <member refid="db/d59/a06346_1aa63306c804e7cc431146238aa6086338" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>getBinding</name></member>
+      <member refid="db/d59/a06346_1a0340a67ca5a2fd630f51e8cbe4a0dc8c" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>getData</name></member>
+      <member refid="db/d59/a06346_1aa457ff04e1c0b47ec5c95aba565097bf" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>getPtr</name></member>
+      <member refid="db/d59/a06346_1ae46d3b4f82020fea4dc728f658095049" prot="private" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>m_buffer</name></member>
+      <member refid="db/d59/a06346_1af9e045af1b3d5d9c445b7d0ed2dbc5cc" prot="private" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>m_components</name></member>
+      <member refid="db/d59/a06346_1af33a509b94a547120072cb69ff4908a9" prot="private" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>m_connections</name></member>
+      <member refid="db/d59/a06346_1a8fd4411c1c2bc8a53e9579c70db1ccca" prot="private" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>m_data</name></member>
+      <member refid="db/d59/a06346_1a44a9070e1138461849fb118041c35664" prot="private" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>m_dirty</name></member>
+      <member refid="db/d59/a06346_1a7ed93e66f4e023055d0f8dd004aa005b" prot="private" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>m_mutex</name></member>
+      <member refid="db/d59/a06346_1af451f7b974738f12aae294826f2f001c" prot="private" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>m_profileID</name></member>
+      <member refid="db/d59/a06346_1a317dad7a71c844e4e857a1e9860687ed" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>removePass</name></member>
+      <member refid="db/d59/a06346_1aea1be844d368c13c133be311aabb1245" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>SssProfileBuffer</name></member>
+      <member refid="db/d59/a06346_1ae7bb5fe7e8ad397eb4abbdcba508af10" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>SssProfilesData</name></member>
+      <member refid="db/d59/a06346_1a7e53f551e31bfe00c9705df31c99ce8d" prot="public" virt="non-virtual"><scope>castor3d::SssProfileBuffer</scope><name>update</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

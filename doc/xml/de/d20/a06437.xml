@@ -1,0 +1,254 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="de/d20/a06437" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::BufferT</compoundname>
+    <basecompoundref refid="dc/d99/a06433" prot="public" virt="non-virtual">castor3d::shader::BufferBase</basecompoundref>
+    <includes local="no">GlslBuffer.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename DataT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d20/a06437_1a3121cc6273753a4bda1b99bf8313ac8e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type></type>
+        <definition>castor3d::shader::BufferT&lt; DataT &gt;::BufferT</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer, std::string blockName, std::string variableName, uint32_t binding, uint32_t set, bool enabled=true, ParamsT &amp;&amp;... params)</argsstring>
+        <name>BufferT</name>
+        <qualifiedname>castor3d::shader::BufferT::BufferT</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>blockName</declname>
+        </param>
+        <param>
+          <type>std::string</type>
+          <declname>variableName</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>binding</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>set</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>enabled</declname>
+          <defval>true</defval>
+        </param>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBuffer.hpp" line="94" column="1" bodyfile="Shader/Shaders/GlslBuffer.hpp" bodystart="94" bodyend="113"/>
+        <references refid="dc/d99/a06433_1a17f3f731aeca6327e611dd45636d0760" compoundref="d7/d29/a01589" startline="72" endline="75">castor3d::shader::BufferBase::isEnabled</references>
+        <references refid="dc/d99/a06433_1a5d932674ed8f6e0d34a71affbc88bca8" compoundref="d7/d29/a01589" startline="84">castor3d::shader::BufferBase::m_ssbo</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d20/a06437_1a7fed7db7c6ddd5ec43d4b243a608ee8a" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename ...</type>
+            <declname>ParamsT</declname>
+            <defname>ParamsT</defname>
+          </param>
+        </templateparamlist>
+        <type>DataT</type>
+        <definition>DataT castor3d::shader::BufferT&lt; DataT &gt;::getData</definition>
+        <argsstring>(sdw::UInt const &amp;index, ParamsT &amp;&amp;... params) const</argsstring>
+        <name>getData</name>
+        <qualifiedname>castor3d::shader::BufferT::getData</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>ParamsT &amp;&amp;...</type>
+          <declname>params</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBuffer.hpp" line="116" column="7" bodyfile="Shader/Shaders/GlslBuffer.hpp" bodystart="116" bodyend="122"/>
+        <references refid="dc/d99/a06433_1a17f3f731aeca6327e611dd45636d0760" compoundref="d7/d29/a01589" startline="72" endline="75">castor3d::shader::BufferBase::isEnabled</references>
+        <references refid="dc/d99/a06433_1a5d932674ed8f6e0d34a71affbc88bca8" compoundref="d7/d29/a01589" startline="84">castor3d::shader::BufferBase::m_ssbo</references>
+        <references refid="dc/d99/a06433_1aae02f484169333d895df1f92ab6db2a3" compoundref="d7/d29/a01589" startline="85">castor3d::shader::BufferBase::m_variableName</references>
+        <references refid="dc/d99/a06433_1a8094a884d182023869e7b4a9be80c93e" compoundref="d7/d29/a01589" startline="83">castor3d::shader::BufferBase::m_writer</references>
+        <referencedby refid="d1/d86/a06553_1add1750110976007d5c75848e7b6281f8" compoundref="d4/d49/a01643" startline="48" endline="51">castor3d::shader::SssProfiles::getProfile</referencedby>
+        <referencedby refid="d4/d24/a06593_1a14cf2f3728dc26c7c9ae185f9ddd603a" compoundref="df/ddd/a01655" startline="51" endline="54">castor3d::shader::TextureAnimations::getTextureAnimation</referencedby>
+        <referencedby refid="d6/d64/a06601_1a4971040d3641e8a0f0a769aea61dc9de" compoundref="d9/d79/a01658" startline="177" endline="180">castor3d::shader::TextureConfigurations::getTextureConfiguration</referencedby>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::shader::BufferT&lt; FontGlyph &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; FontGlyph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::shader::BufferT&lt; LightData &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; LightData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::BufferT&lt; Material &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; Material &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="9">
+        <label>castor3d::shader::BufferT&lt; SssProfile &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; SssProfile &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor3d::shader::BufferT&lt; TextureAnimData &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; TextureAnimData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>castor3d::shader::BufferT&lt; TextureConfigData &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="1" relation="template-instance">
+          <edgelabel>&lt; TextureConfigData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="dc/d99/a06433"/>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::shader::FontData</label>
+        <link refid="de/df0/a06457"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::LightsBuffer</label>
+        <link refid="d0/d7b/a06489"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::shader::Materials</label>
+        <link refid="d8/d74/a06509"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::shader::SssProfiles</label>
+        <link refid="d1/d86/a06553"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::shader::TextureAnimations</label>
+        <link refid="d4/d24/a06593"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::shader::TextureConfigurations</label>
+        <link refid="d6/d64/a06601"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="5">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>castor3d::shader::BufferBase</label>
+        <link refid="dc/d99/a06433"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_ssbo</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_variableName</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::shader::BufferT&lt; DataT &gt;</label>
+        <link refid="de/d20/a06437"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="6">
+        <label>std::string</label>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="5" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::unique_ptr&lt; sdw::StorageBuffer &gt;</label>
+        <childnode refid="4" relation="template-instance">
+          <edgelabel>&lt; sdw::StorageBuffer &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Shader/Shaders/GlslBuffer.hpp" line="89" column="1" bodyfile="Shader/Shaders/GlslBuffer.hpp" bodystart="91" bodyend="123"/>
+    <listofallmembers>
+      <member refid="dc/d99/a06433_1a4625e7c6c7426433390143ef91de516d" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>BufferBase</name></member>
+      <member refid="de/d20/a06437_1a3121cc6273753a4bda1b99bf8313ac8e" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>BufferT</name></member>
+      <member refid="dc/d99/a06433_1ac39085e1f563915a9270c99d3837a6b7" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>getCount</name></member>
+      <member refid="de/d20/a06437_1a7fed7db7c6ddd5ec43d4b243a608ee8a" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>getData</name></member>
+      <member refid="dc/d99/a06433_1af00addb76247551b7afa557e5b366580" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>getFirstCount</name></member>
+      <member refid="dc/d99/a06433_1ae7c2ff75adb43ff14450a561fe3ea5cd" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>getFourthCount</name></member>
+      <member refid="dc/d99/a06433_1adb02316d9ef1fd07d4c12df96e79de6d" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>getSecondCount</name></member>
+      <member refid="dc/d99/a06433_1adc3bec1abc05499dc522dcb7b1288a12" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>getThirdCount</name></member>
+      <member refid="dc/d99/a06433_1a30e5f486cf48f99e981f62c0eaf4c4f2" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>getWriter</name></member>
+      <member refid="dc/d99/a06433_1a17f3f731aeca6327e611dd45636d0760" prot="public" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>isEnabled</name></member>
+      <member refid="dc/d99/a06433_1a5d932674ed8f6e0d34a71affbc88bca8" prot="protected" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>m_ssbo</name></member>
+      <member refid="dc/d99/a06433_1aae02f484169333d895df1f92ab6db2a3" prot="protected" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>m_variableName</name></member>
+      <member refid="dc/d99/a06433_1a8094a884d182023869e7b4a9be80c93e" prot="protected" virt="non-virtual"><scope>castor3d::shader::BufferT</scope><name>m_writer</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

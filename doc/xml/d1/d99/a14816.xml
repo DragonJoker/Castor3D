@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d99/a14816" kind="page">
+    <compoundname>md_Z__Projets_C___Castor3D_doc_Castor3D_Build_English</compoundname>
+    <title>Building Castor3D</title>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+<para>Castor3D uses CMake to build project files.</para>
+<para>You just need to launch CMake to build your preferential project file.</para>
+<para>Projects generation relies on vcpkg to handle dependencies.<linebreak/>
+</para>
+<para>Documentation for CastorUtils and Castor3D can be generated using Doxygen.</para>
+<para>Tested compilers are:<itemizedlist>
+<listitem><para>Visual Studio 2022</para>
+</listitem><listitem><para>gcc 12.0</para>
+</listitem><listitem><para>clang 14.0</para>
+</listitem></itemizedlist>
+</para>
+<sect1 id="d1/d99/a14816_1autotoc_md1">
+<title>Options</title>
+<para>The build is configurable through CMake using the following options:<itemizedlist>
+<listitem><para><bold>PROJECTS_BINARIES_OUTPUT_DIR</bold></para>
+<para>Used to specify the root directory for compiled binaries. Inside this folder, the bin, lib, and share directories will be created, and binaries will be put in the right folders. Some files will also be copied in share directory, that are used by the projects. On Windows, the external DLLs will be copied in bin folder, if they are found.</para>
+</listitem><listitem><para><bold>PROJECTS_GENERATE_DOC</bold></para>
+<para>Used to enable creation of documentation generation projects.</para>
+</listitem><listitem><para><bold>PROJECTS_UNITY_BUILD</bold></para>
+<para>Used to enable/disable use of Jumbo/Unity builds for the compilation.</para>
+</listitem><listitem><para><bold>PROJECTS_USE_PRECOMPILED_HEADERS</bold></para>
+<para>Used to enable/disable the use of Precompiled Headers for the compilation.</para>
+</listitem><listitem><para><bold>PROJECTS_USE_PRETTY_PRINTING</bold></para>
+<para>If it is enabled, and if A-Style is found, new test projects will be created, allowing the run of A-Style over each project&apos;s source file.</para>
+</listitem><listitem><para><bold>PROJECTS_WARNINGS_AS_ERRORS</bold></para>
+<para>Used to treat warnings as errors, during compilation.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_CASTOR3D</bold></para>
+<para>This special option allows you to disable build of Castor3D, and every other project depending on it, resulting in the build of CastorUtils and CastorUtilsTest only.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_PLUGINS</bold></para>
+<para>Another special option allowing you to disable the build of plug-ins.</para>
+</listitem><listitem><para><bold>CASTOR_C3D_NEEDS_GLSL</bold></para>
+<para>Enables support of GLSL shaders import.</para>
+</listitem><listitem><para><bold>CASTOR_USE_FREEIMAGE</bold></para>
+<para>Enables use of FreeImage to read PNG images.</para>
+</listitem><listitem><para><bold>CASTOR_USE_GLSLANG</bold></para>
+<para>Enables support of GLSL shaders import.</para>
+</listitem><listitem><para><bold>CASTOR_USE_MESH_SHADERS</bold></para>
+<para>Enables use of mesh shaders.</para>
+</listitem><listitem><para><bold>CASTOR_USE_TASK_SHADERS</bold></para>
+<para>Enables use of task shaders.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_DEMO</bold></para>
+<para>Enables the build of example applications.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_GENERATOR</bold></para>
+<para>Enables the build of Generator plug-ins.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_GENERIC</bold></para>
+<para>Enables the build of Generic plug-ins.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_IMPORTER</bold></para>
+<para>Enables the build of Importer plug-ins.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_INTEROP</bold></para>
+<para>Enables the build of Bindings.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_PARTICLES</bold></para>
+<para>Enables the build of Particles plug-ins.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_POSTFX</bold></para>
+<para>Enables the build of PostEffect plug-ins.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_SETUP</bold></para>
+<para>Allows you to build setup projects.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_TEST</bold></para>
+<para>Allows you to build test applications.</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_TONEMAPS</bold></para>
+<para>Allows you to build ToneMapping plug-ins (note that LinearToneMapping is always built).</para>
+</listitem><listitem><para><bold>CASTOR_BUILDGRP_TOOL</bold></para>
+<para>Enables the build of tool applications.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_DEMO_(NAME)</bold></para>
+<para>Enables the build of (NAME) example application.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_GENERATOR_(NAME)</bold></para>
+<para>Enables the build of (NAME) generator plug-in.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_GENERIC_(NAME)</bold></para>
+<para>Enables the build of (NAME) generic plug-in.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_IMPORTER_(NAME)</bold></para>
+<para>Enables the build of (NAME) importer plug-in.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_INTEROP_(NAME)</bold></para>
+<para>Enables the build of (NAME) binding.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_POSTFX_(NAME)</bold></para>
+<para>Enables the build of (NAME) post-effect plug-in.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_RENDERER_(NAME)</bold></para>
+<para>Enables the build of (NAME) renderer plug-in.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_TONEMAP_(NAME)</bold></para>
+<para>Enables the build of (NAME) tone mapping plug-in.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_TEST_(NAME)</bold></para>
+<para>Enables the build of (NAME) test application.</para>
+</listitem><listitem><para><bold>CASTOR_BUILD_TOOL_(NAME)</bold></para>
+<para>Enables the build of (NAME) tool application. </para>
+</listitem></itemizedlist>
+</para>
+</sect1>
+    </detaileddescription>
+    <location file="Z:/Projets/C++/Castor3D/doc/Castor3D/Build-English.md"/>
+  </compounddef>
+</doxygen>

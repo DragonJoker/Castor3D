@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/d7b/a03941" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::AlphaTestData</compoundname>
+    <includes local="no">AlphaTestComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d7b/a03941_1ac30aff4023156bf75520f691360595eb" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; float &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; float &gt; castor3d::AlphaTestData::alphaRefValue</definition>
+        <argsstring></argsstring>
+        <name>alphaRefValue</name>
+        <qualifiedname>castor3d::AlphaTestData::alphaRefValue</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/AlphaTestComponent.hpp" line="23" column="34" bodyfile="Material/Pass/Component/Other/AlphaTestComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="d1/df1/a03945_1ae8efd3dc94a6f987aeecf10b75568544" compoundref="d7/db1/a00590" startline="153" endline="156">castor3d::AlphaTestComponent::getAlphaRefValue</referencedby>
+        <referencedby refid="d1/df1/a03945_1a5a8839fe6c4bedd72190996431514e7a" compoundref="d7/db1/a00590" startline="168" endline="171">castor3d::AlphaTestComponent::setAlphaRefValue</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a03941_1a7262474d933efe3086ab0685c7b02c32" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; VkCompareOp &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; VkCompareOp &gt; castor3d::AlphaTestData::alphaFunc</definition>
+        <argsstring></argsstring>
+        <name>alphaFunc</name>
+        <qualifiedname>castor3d::AlphaTestData::alphaFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/AlphaTestComponent.hpp" line="24" column="34" bodyfile="Material/Pass/Component/Other/AlphaTestComponent.hpp" bodystart="24" bodyend="-1"/>
+        <referencedby refid="d1/df1/a03945_1a7c828e1ee08e6c2e6008e71c0a18fe00" compoundref="d7/db1/a00590" startline="143" endline="146">castor3d::AlphaTestComponent::getAlphaFunc</referencedby>
+        <referencedby refid="d1/df1/a03945_1a36ba6ae5f7214cb7b89ae06187521743" compoundref="d7/db1/a00590" startline="158" endline="161">castor3d::AlphaTestComponent::setAlphaFunc</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d7b/a03941_1a1d0cf932b2779cc14ee53a491361dc4b" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; VkCompareOp &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; VkCompareOp &gt; castor3d::AlphaTestData::blendAlphaFunc</definition>
+        <argsstring></argsstring>
+        <name>blendAlphaFunc</name>
+        <qualifiedname>castor3d::AlphaTestData::blendAlphaFunc</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/AlphaTestComponent.hpp" line="25" column="34" bodyfile="Material/Pass/Component/Other/AlphaTestComponent.hpp" bodystart="25" bodyend="-1"/>
+        <referencedby refid="d1/df1/a03945_1aba39d0761c4bceba3cc2b1ba891310ae" compoundref="d7/db1/a00590" startline="148" endline="151">castor3d::AlphaTestComponent::getBlendAlphaFunc</referencedby>
+        <referencedby refid="d1/df1/a03945_1a3e73b39f06a68fde1fe995a84a9d01cf" compoundref="d7/db1/a00590" startline="163" endline="166">castor3d::AlphaTestComponent::setBlendAlphaFunc</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d7b/a03941_1a71c4be02ac0ed0d3772d74d830279bf2" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::AlphaTestData::AlphaTestData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>AlphaTestData</name>
+        <qualifiedname>castor3d::AlphaTestData::AlphaTestData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Other/AlphaTestComponent.hpp" line="16" column="10" bodyfile="Material/Pass/Component/Other/AlphaTestComponent.hpp" bodystart="16" bodyend="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/Other/AlphaTestComponent.hpp" line="14" column="1" bodyfile="Material/Pass/Component/Other/AlphaTestComponent.hpp" bodystart="15" bodyend="26"/>
+    <listofallmembers>
+      <member refid="d8/d7b/a03941_1a7262474d933efe3086ab0685c7b02c32" prot="public" virt="non-virtual"><scope>castor3d::AlphaTestData</scope><name>alphaFunc</name></member>
+      <member refid="d8/d7b/a03941_1ac30aff4023156bf75520f691360595eb" prot="public" virt="non-virtual"><scope>castor3d::AlphaTestData</scope><name>alphaRefValue</name></member>
+      <member refid="d8/d7b/a03941_1a71c4be02ac0ed0d3772d74d830279bf2" prot="public" virt="non-virtual"><scope>castor3d::AlphaTestData</scope><name>AlphaTestData</name></member>
+      <member refid="d8/d7b/a03941_1a1d0cf932b2779cc14ee53a491361dc4b" prot="public" virt="non-virtual"><scope>castor3d::AlphaTestData</scope><name>blendAlphaFunc</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

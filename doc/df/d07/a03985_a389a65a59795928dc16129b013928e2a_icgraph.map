@@ -1,0 +1,4 @@
+<map id="castor3d::HeightComponent::Plugin::getComponentFlags" name="castor3d::HeightComponent::Plugin::getComponentFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="249,5,440,45"/>
+<area shape="rect" id="node2" href="$df/d07/a03985.html#a4d408f375ce5708cef6fcaab91620a2d" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="5,5,201,45"/>
+</map>

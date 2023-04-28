@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/d5f/a06770" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RsmUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="da/d5f/a06770_1ae1fc06af9ab928828582d30fb26826f0" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::RsmUboConfiguration::intensity</definition>
+        <argsstring></argsstring>
+        <name>intensity</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::intensity</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="369" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="369" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d5f/a06770_1af7b40cc7ac2e28819b1172af12de9919" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::RsmUboConfiguration::maxRadius</definition>
+        <argsstring></argsstring>
+        <name>maxRadius</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::maxRadius</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="370" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="370" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d5f/a06770_1a62a2b767edc4777a823fb85f605ad364" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RsmUboConfiguration::sampleCount</definition>
+        <argsstring></argsstring>
+        <name>sampleCount</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::sampleCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="371" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="371" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="da/d5f/a06770_1ae9976fb60e81cb8fdd60d87b5c7e8784" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::RsmUboConfiguration::index</definition>
+        <argsstring></argsstring>
+        <name>index</name>
+        <qualifiedname>castor3d::RsmUboConfiguration::index</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="372" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="372" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Reflective Shadow Maps based GI UBO configuration. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="367" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="368" bodyend="373"/>
+    <listofallmembers>
+      <member refid="da/d5f/a06770_1ae9976fb60e81cb8fdd60d87b5c7e8784" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>index</name></member>
+      <member refid="da/d5f/a06770_1ae1fc06af9ab928828582d30fb26826f0" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>intensity</name></member>
+      <member refid="da/d5f/a06770_1af7b40cc7ac2e28819b1172af12de9919" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>maxRadius</name></member>
+      <member refid="da/d5f/a06770_1a62a2b767edc4777a823fb85f605ad364" prot="public" virt="non-virtual"><scope>castor3d::RsmUboConfiguration</scope><name>sampleCount</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

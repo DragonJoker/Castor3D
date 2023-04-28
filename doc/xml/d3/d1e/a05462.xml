@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d1e/a05462" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::TexturedQuad</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+    <innerclass refid="d8/d03/a05466" prot="public">castor3d::TexturedQuad::Vertex</innerclass>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d1e/a05462_1aff91a561df99650c86eb2d046f4c6919" prot="public" static="no" mutable="no">
+        <type><ref refid="d8/d03/a05466" kindref="compound">Vertex</ref></type>
+        <definition>Vertex castor3d::TexturedQuad::vertex[6]</definition>
+        <argsstring>[6]</argsstring>
+        <name>vertex</name>
+        <qualifiedname>castor3d::TexturedQuad::vertex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="66" column="8" bodyfile="Render/RenderModule.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>A quad with UV. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::TexturedQuad</label>
+        <link refid="d3/d1e/a05462"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>vertex</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::TexturedQuad::Vertex</label>
+        <link refid="d8/d03/a05466"/>
+      </node>
+    </collaborationgraph>
+    <location file="Render/RenderModule.hpp" line="58" column="1" bodyfile="Render/RenderModule.hpp" bodystart="59" bodyend="67"/>
+    <listofallmembers>
+      <member refid="d3/d1e/a05462_1aff91a561df99650c86eb2d046f4c6919" prot="public" virt="non-virtual"><scope>castor3d::TexturedQuad</scope><name>vertex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

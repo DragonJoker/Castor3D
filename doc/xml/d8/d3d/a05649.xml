@@ -1,0 +1,561 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/d3d/a05649" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMap::PassData</compoundname>
+    <includes local="no">ShadowMap.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/d3d/a05649_1a48af5e717f36a0e7052fe11ce4bec62a" prot="public" static="no" mutable="no">
+        <type>ViewportUPtr</type>
+        <definition>ViewportUPtr castor3d::ShadowMap::PassData::viewport</definition>
+        <argsstring></argsstring>
+        <name>viewport</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::viewport</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="58" column="14" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="58" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3d/a05649_1acb7360409821f59bd79f66029f62c654" prot="public" static="no" mutable="no">
+        <type>FrustumUPtr</type>
+        <definition>FrustumUPtr castor3d::ShadowMap::PassData::frustum</definition>
+        <argsstring></argsstring>
+        <name>frustum</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::frustum</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="59" column="13" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3d/a05649_1a3a0edba0d2f94a366c652510abb4ef8e" prot="public" static="no" mutable="no">
+        <type>SceneCullerUPtr</type>
+        <definition>SceneCullerUPtr castor3d::ShadowMap::PassData::ownCuller</definition>
+        <argsstring></argsstring>
+        <name>ownCuller</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::ownCuller</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="60" column="17" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3d/a05649_1a24a258414d958eabb8986af9607c3ea8" prot="public" static="no" mutable="no">
+        <type><ref refid="dd/d0d/a04929" kindref="compound">SceneCuller</ref> *</type>
+        <definition>SceneCuller* castor3d::ShadowMap::PassData::culler</definition>
+        <argsstring></argsstring>
+        <name>culler</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::culler</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="61" column="14" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/d3d/a05649_1af000341727b933062f865b61d8552af6" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d57/a05665" kindref="compound">ShadowMapPass</ref> *</type>
+        <definition>ShadowMapPass* castor3d::ShadowMap::PassData::pass</definition>
+        <argsstring></argsstring>
+        <name>pass</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::pass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="62" column="16" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d8/d3d/a05649_1a19df881289d7ccd0ed211e6597685fbb" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShadowMap::PassData::PassData</definition>
+        <argsstring>(SceneCullerUPtr culler)</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::PassData</qualifiedname>
+        <param>
+          <type>SceneCullerUPtr</type>
+          <declname>culler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="28" column="10" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="28" bodyend="33"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d3d/a05649_1a86908e4da8a5a92e178edf16232aa3bb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShadowMap::PassData::PassData</definition>
+        <argsstring>(ViewportUPtr viewport, SceneCullerUPtr culler)</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::PassData</qualifiedname>
+        <param>
+          <type>ViewportUPtr</type>
+          <declname>viewport</declname>
+        </param>
+        <param>
+          <type>SceneCullerUPtr</type>
+          <declname>culler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="35" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="35" bodyend="42"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d3d/a05649_1a76461b17509befce73d120e2110b90c6" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShadowMap::PassData::PassData</definition>
+        <argsstring>(SceneCuller *culler)</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::PassData</qualifiedname>
+        <param>
+          <type><ref refid="dd/d0d/a04929" kindref="compound">SceneCuller</ref> *</type>
+          <declname>culler</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="44" column="10" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="44" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="d8/d3d/a05649_1a83d225fef1f881bf814e91f497b645d8" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ShadowMap::PassData::PassData</definition>
+        <argsstring>()</argsstring>
+        <name>PassData</name>
+        <qualifiedname>castor3d::ShadowMap::PassData::PassData</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMap.hpp" line="51" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="51" bodyend="56"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="8">
+        <label>Animable</label>
+        <link refid="de/d8b/a02545"/>
+        <childnode refid="9" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="template-instance">
+          <edgelabel>&lt; Engine &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d7/dca/a04949"/>
+        <childnode refid="31" relation="private-inheritance">
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="34" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>K</label>
+      </node>
+      <node id="13">
+        <label>T</label>
+      </node>
+      <node id="37">
+        <label>std::array&lt; castor3d::ShadowMap::AllPasses, 4u &gt;</label>
+        <childnode refid="38" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="49" relation="template-instance">
+          <edgelabel>&lt; castor3d::ShadowMap::AllPasses, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>castor3d::AnimableT&lt; AnimableHandlerT &gt;</label>
+        <link refid="de/d8b/a02545"/>
+        <childnode refid="15" relation="public-inheritance">
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_animations</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Camera</label>
+        <link refid="d4/d11/a05953"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::CameraUbo</label>
+        <link refid="df/d2f/a06641"/>
+      </node>
+      <node id="31">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d7/dde/a04945"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d7/dca/a04949"/>
+        <childnode refid="31" relation="private-inheritance">
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::MovableObject</label>
+        <link refid="d6/da1/a06025"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>m_sceneNode</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>castor3d::QueuesData</label>
+        <link refid="d9/de3/a05449"/>
+      </node>
+      <node id="20">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d6/d0f/a05457"/>
+        <childnode refid="21" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="22" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::RenderNodesPass</label>
+        <link refid="d9/ddf/a05557"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="19" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="25" relation="usage">
+          <edgelabel>m_cameraUbo</edgelabel>
+        </childnode>
+        <childnode refid="2" relation="usage">
+          <edgelabel>m_culler</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_sceneUbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d99/a05585"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::Scene</label>
+        <link refid="de/da7/a06097"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::SceneCuller</label>
+        <link refid="dd/d0d/a04929"/>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_camera</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::SceneNode</label>
+        <link refid="d7/d3e/a06285"/>
+        <childnode refid="8" relation="public-inheritance">
+        </childnode>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="26">
+        <label>castor3d::SceneUbo</label>
+        <link refid="d0/d53/a06721"/>
+      </node>
+      <node id="27">
+        <label>castor3d::ShadowMap</label>
+        <link refid="d9/d8d/a05645"/>
+        <childnode refid="18" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="usage">
+          <edgelabel>m_result</edgelabel>
+          <edgelabel>m_staticsResult</edgelabel>
+        </childnode>
+        <childnode refid="35" relation="usage">
+          <edgelabel>m_geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="37" relation="usage">
+          <edgelabel>m_passes</edgelabel>
+        </childnode>
+      </node>
+      <node id="38">
+        <label>castor3d::ShadowMap::AllPasses</label>
+        <link refid="db/dbf/a05657"/>
+        <childnode refid="39" relation="usage">
+          <edgelabel>cameraUbos</edgelabel>
+        </childnode>
+        <childnode refid="42" relation="usage">
+          <edgelabel>cameras</edgelabel>
+        </childnode>
+        <childnode refid="43" relation="usage">
+          <edgelabel>otherNodes</edgelabel>
+          <edgelabel>staticNodes</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMap::PassData</label>
+        <link refid="d8/d3d/a05649"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>culler</edgelabel>
+        </childnode>
+        <childnode refid="16" relation="usage">
+          <edgelabel>pass</edgelabel>
+        </childnode>
+      </node>
+      <node id="43">
+        <label>castor3d::ShadowMap::Passes</label>
+        <link refid="db/d56/a05653"/>
+        <childnode refid="44" relation="usage">
+          <edgelabel>passes</edgelabel>
+        </childnode>
+        <childnode refid="45" relation="usage">
+          <edgelabel>graphs</edgelabel>
+        </childnode>
+        <childnode refid="47" relation="usage">
+          <edgelabel>runnables</edgelabel>
+        </childnode>
+        <childnode refid="48" relation="usage">
+          <edgelabel>blurs</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>castor3d::ShadowMapPass</label>
+        <link refid="d2/d57/a05665"/>
+        <childnode refid="17" relation="public-inheritance">
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>m_shadowMap</edgelabel>
+        </childnode>
+        <childnode refid="50" relation="usage">
+          <edgelabel>m_shadowMapUbo</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d6/d6d/a05685"/>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="50">
+        <label>castor3d::ShadowMapUbo</label>
+        <link refid="d6/d8a/a06729"/>
+      </node>
+      <node id="6">
+        <label>castor::Named</label>
+      </node>
+      <node id="15">
+        <label>castor::OwnedBy&lt; AnimableHandlerT &gt;</label>
+      </node>
+      <node id="9">
+        <label>castor::OwnedBy&lt; Engine  &gt;</label>
+      </node>
+      <node id="18">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Scene &gt;</label>
+      </node>
+      <node id="19">
+        <label>crg::RenderPass</label>
+      </node>
+      <node id="10">
+        <label>std::map&lt; castor::String, AnimationPtr &gt;</label>
+        <childnode refid="11" relation="template-instance">
+          <edgelabel>&lt; castor::String, AnimationPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="35">
+        <label>std::set&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</label>
+        <childnode refid="36" relation="template-instance">
+          <edgelabel>&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="49">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::map&lt; K, T &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="36">
+        <label>std::set&lt; K &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="33">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="41">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="13" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="40">
+        <label>std::unique_ptr&lt; castor3d::CameraUbo &gt;</label>
+        <childnode refid="25" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="41" relation="template-instance">
+          <edgelabel>&lt; castor3d::CameraUbo &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="46">
+        <label>std::unique_ptr&lt; crg::FrameGraph &gt;</label>
+        <childnode refid="41" relation="template-instance">
+          <edgelabel>&lt; crg::FrameGraph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="42">
+        <label>std::vector&lt; CameraUPtr &gt;</label>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; CameraUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="48">
+        <label>std::vector&lt; GaussianBlurUPtr &gt;</label>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; GaussianBlurUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="44">
+        <label>std::vector&lt; PassDataPtr &gt;</label>
+        <childnode refid="41" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; PassDataPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="23" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="33" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="47">
+        <label>std::vector&lt; crg::RunnableGraphPtr &gt;</label>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; crg::RunnableGraphPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="39">
+        <label>std::vector&lt; std::unique_ptr&lt; castor3d::CameraUbo &gt; &gt;</label>
+        <childnode refid="40" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; castor3d::CameraUbo &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="45">
+        <label>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</label>
+        <childnode refid="46" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMap.hpp" line="26" column="1" bodyfile="Render/ShadowMap/ShadowMap.hpp" bodystart="27" bodyend="63"/>
+    <listofallmembers>
+      <member refid="d8/d3d/a05649_1a24a258414d958eabb8986af9607c3ea8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>culler</name></member>
+      <member refid="d8/d3d/a05649_1acb7360409821f59bd79f66029f62c654" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>frustum</name></member>
+      <member refid="d8/d3d/a05649_1a3a0edba0d2f94a366c652510abb4ef8e" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>ownCuller</name></member>
+      <member refid="d8/d3d/a05649_1af000341727b933062f865b61d8552af6" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>pass</name></member>
+      <member refid="d8/d3d/a05649_1a19df881289d7ccd0ed211e6597685fbb" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>PassData</name></member>
+      <member refid="d8/d3d/a05649_1a86908e4da8a5a92e178edf16232aa3bb" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>PassData</name></member>
+      <member refid="d8/d3d/a05649_1a76461b17509befce73d120e2110b90c6" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>PassData</name></member>
+      <member refid="d8/d3d/a05649_1a83d225fef1f881bf814e91f497b645d8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>PassData</name></member>
+      <member refid="d8/d3d/a05649_1a48af5e717f36a0e7052fe11ce4bec62a" prot="public" virt="non-virtual"><scope>castor3d::ShadowMap::PassData</scope><name>viewport</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

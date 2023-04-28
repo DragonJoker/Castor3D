@@ -1,0 +1,349 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/ddd/a03238" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::EditStyle</compoundname>
+    <basecompoundref refid="d5/de7/a03234" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <basecompoundref refid="dc/dbb/a03262" prot="public" virt="non-virtual">castor3d::ScrollableStyle</basecompoundref>
+    <includes local="no">StyleEdit.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="df/ddd/a03238_1aa17be10daae4eca917219d0ff9b9d087" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::EditStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::EditStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725da1ff2d7a9b9968f8a619f57f6c39caac0" kindref="member">ControlType::eEdit</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="17" column="30" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="17" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="df/ddd/a03238_1a6bb55e7f6bcbb7b360ccdbdd46d78f2b" prot="private" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::EditStyle::m_fontName</definition>
+        <argsstring></argsstring>
+        <name>m_fontName</name>
+        <qualifiedname>castor3d::EditStyle::m_fontName</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="81" column="16" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="81" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/ddd/a03238_1a485bdca7fff16e0abec9cfeca97e34a0" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::EditStyle::m_textMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_textMaterial</name>
+        <qualifiedname>castor3d::EditStyle::m_textMaterial</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="82" column="13" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/ddd/a03238_1af1a3af3c6ad3189764e14a657ee0451d" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::EditStyle::m_selectionMaterial</definition>
+        <argsstring></argsstring>
+        <name>m_selectionMaterial</name>
+        <qualifiedname>castor3d::EditStyle::m_selectionMaterial</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="83" column="13" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/ddd/a03238_1aae05690a2235e21b9654699b2704cfd6" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EditStyle::EditStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>EditStyle</name>
+        <qualifiedname>castor3d::EditStyle::EditStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="19" column="1" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="19" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="df/ddd/a03238_1af8d740d84a4e49650909a144942ac5c2" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::EditStyle::EditStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>EditStyle</name>
+        <qualifiedname>castor3d::EditStyle::EditStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="34" column="1" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="34" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="df/ddd/a03238_1a25dbce98cb9716e69d652c6b1c8179da" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditStyle::setFont</definition>
+        <argsstring>(castor::String const &amp;value)</argsstring>
+        <name>setFont</name>
+        <qualifiedname>castor3d::EditStyle::setFont</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="41" column="6" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="41" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="df/ddd/a03238_1ac17cda6f951dae5dad060347448ba4ea" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditStyle::setTextMaterial</definition>
+        <argsstring>(MaterialObs material)</argsstring>
+        <name>setTextMaterial</name>
+        <qualifiedname>castor3d::EditStyle::setTextMaterial</qualifiedname>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="46" column="6" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="46" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="df/ddd/a03238_1ae5e5a0d8f41bfb07264e6e0c6ad96f43" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditStyle::setSelectionMaterial</definition>
+        <argsstring>(MaterialObs material)</argsstring>
+        <name>setSelectionMaterial</name>
+        <qualifiedname>castor3d::EditStyle::setSelectionMaterial</qualifiedname>
+        <param>
+          <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+          <declname>material</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="51" column="6" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="51" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="df/ddd/a03238_1a72efb8461139c1bf2f0816641f99d6fb" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::EditStyle::getFontName</definition>
+        <argsstring>() const</argsstring>
+        <name>getFontName</name>
+        <qualifiedname>castor3d::EditStyle::getFontName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="56" column="23" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="56" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="df/ddd/a03238_1a2a1fdf1a983bbb096f5930242372a180" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::EditStyle::getTextMaterial</definition>
+        <argsstring>() const</argsstring>
+        <name>getTextMaterial</name>
+        <qualifiedname>castor3d::EditStyle::getTextMaterial</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="61" column="13" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="61" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="df/ddd/a03238_1a26b02a1669ed66482cfc68d4e4712929" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/da6/a01698_1a2320dd05b1116fa04ae1b5afc6c832bb" kindref="member">MaterialObs</ref></type>
+        <definition>MaterialObs castor3d::EditStyle::getSelectionMaterial</definition>
+        <argsstring>() const</argsstring>
+        <name>getSelectionMaterial</name>
+        <qualifiedname>castor3d::EditStyle::getSelectionMaterial</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="66" column="13" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="66" bodyend="69"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="df/ddd/a03238_1aebbd86d45a33d27bc0e332d71c4d8d15" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::EditStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="d5/de7/a03234_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="72" column="6" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="72" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="df/ddd/a03238_1a93839758fde45d918452019ddb7ad934" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::EditStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::EditStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="d5/de7/a03234_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleEdit.hpp" line="76" column="6" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="76" bodyend="78"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d5/de7/a03234"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EditStyle</label>
+        <link refid="df/ddd/a03238"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ScrollableStyle</label>
+        <link refid="dc/dbb/a03262"/>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d5/de7/a03234"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::EditStyle</label>
+        <link refid="df/ddd/a03238"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::ScrollableStyle</label>
+        <link refid="dc/dbb/a03262"/>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Theme/StyleEdit.hpp" line="12" column="1" bodyfile="Gui/Theme/StyleEdit.hpp" bodystart="15" bodyend="84"/>
+    <listofallmembers>
+      <member refid="d5/de7/a03234_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>ControlStyle</name></member>
+      <member refid="d5/de7/a03234_1aeda2101fba70a69cd4bf8256f22d8c16" prot="protected" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="df/ddd/a03238_1aebbd86d45a33d27bc0e332d71c4d8d15" prot="private" virt="virtual"><scope>castor3d::EditStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="df/ddd/a03238_1a93839758fde45d918452019ddb7ad934" prot="private" virt="virtual"><scope>castor3d::EditStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="df/ddd/a03238_1aae05690a2235e21b9654699b2704cfd6" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>EditStyle</name></member>
+      <member refid="df/ddd/a03238_1af8d740d84a4e49650909a144942ac5c2" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>EditStyle</name></member>
+      <member refid="d5/de7/a03234_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="d5/de7/a03234_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getCursor</name></member>
+      <member refid="d5/de7/a03234_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getEngine</name></member>
+      <member refid="df/ddd/a03238_1a72efb8461139c1bf2f0816641f99d6fb" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getFontName</name></member>
+      <member refid="d5/de7/a03234_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="dc/dbb/a03262_1ad2df1abfcaddd463a811c9024eb8aeca" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getHorizontalStyle</name></member>
+      <member refid="d5/de7/a03234_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getScene</name></member>
+      <member refid="df/ddd/a03238_1a26b02a1669ed66482cfc68d4e4712929" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getSelectionMaterial</name></member>
+      <member refid="df/ddd/a03238_1a2a1fdf1a983bbb096f5930242372a180" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getTextMaterial</name></member>
+      <member refid="d5/de7/a03234_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getType</name></member>
+      <member refid="dc/dbb/a03262_1af510aff1757fc8fc4b83f4f1d5333862" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>getVerticalStyle</name></member>
+      <member refid="dc/dbb/a03262_1a52885966ca4bb0b8158c8736a00f5fba" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>hasHorizontalStyle</name></member>
+      <member refid="d5/de7/a03234_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>hasScene</name></member>
+      <member refid="dc/dbb/a03262_1aefab1d527c69ec092b9bda7a205c2234" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>hasVerticalStyle</name></member>
+      <member refid="d5/de7/a03234_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="df/ddd/a03238_1a6bb55e7f6bcbb7b360ccdbdd46d78f2b" prot="private" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>m_fontName</name></member>
+      <member refid="df/ddd/a03238_1af1a3af3c6ad3189764e14a657ee0451d" prot="private" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>m_selectionMaterial</name></member>
+      <member refid="df/ddd/a03238_1a485bdca7fff16e0abec9cfeca97e34a0" prot="private" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>m_textMaterial</name></member>
+      <member refid="d5/de7/a03234_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/de7/a03234_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setCursor</name></member>
+      <member refid="df/ddd/a03238_1a25dbce98cb9716e69d652c6b1c8179da" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setFont</name></member>
+      <member refid="d5/de7/a03234_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="dc/dbb/a03262_1ae6169d62a4dcdcd78b5b9fbb3d87a7f0" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setHorizontalStyle</name></member>
+      <member refid="df/ddd/a03238_1ae5e5a0d8f41bfb07264e6e0c6ad96f43" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setSelectionMaterial</name></member>
+      <member refid="df/ddd/a03238_1ac17cda6f951dae5dad060347448ba4ea" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setTextMaterial</name></member>
+      <member refid="dc/dbb/a03262_1acf0f32a376a660ca819705dc4d144f2a" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>setVerticalStyle</name></member>
+      <member refid="df/ddd/a03238_1aa17be10daae4eca917219d0ff9b9d087" prot="public" virt="non-virtual"><scope>castor3d::EditStyle</scope><name>Type</name></member>
+      <member refid="d5/de7/a03234_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::EditStyle</scope><name>~ControlStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

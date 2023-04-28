@@ -1,5 +1,11 @@
-<map id="castor3d::IridescenceMapComponent::Plugin" name="castor3d::IridescenceMapComponent::Plugin">
-<area shape="rect" id="node1" title=" " alt="" coords="26,169,197,211"/>
-<area shape="rect" id="node2" href="$d7/d0c/a03724.html" title=" " alt="" coords="11,80,212,121"/>
-<area shape="rect" id="node3" href="$dc/d0d/a03708.html" title=" " alt="" coords="5,5,217,32"/>
+<map id="castor3d::AmbientComponent" name="castor3d::AmbientComponent">
+<area shape="rect" id="node1" title=" " alt="" coords="1516,89,1711,115"/>
+<area shape="rect" id="node2" href="$d9/d11/a03445.html" title=" " alt="" coords="1233,82,1467,122"/>
+<area shape="rect" id="node3" href="$dc/d32/a04057.html" title=" " alt="" coords="623,55,799,80"/>
+<area shape="rect" id="node9" href="$d9/d11/a03445.html" title="Pass component holding base pass data." alt="" coords="848,82,1081,122"/>
+<area shape="rect" id="node4" title=" " alt="" coords="271,5,447,31"/>
+<area shape="rect" id="node5" href="$d9/d35/a04053.html" title=" " alt="" coords="253,55,465,80"/>
+<area shape="rect" id="node6" href="$db/dfa/a04049.html" title=" " alt="" coords="258,105,461,145"/>
+<area shape="rect" id="node7" href="$d8/de8/a04041.html" title=" " alt="" coords="5,112,204,137"/>
+<area shape="rect" id="node8" href="$d4/d32/a03453.html" title=" " alt="" coords="887,147,1042,172"/>
 </map>

@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/d69/a05958" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LightCategory::ShadowData</compoundname>
+    <basecompoundref refid="d1/d1b/a06326" prot="public" virt="non-virtual">castor3d::ShaderBufferTypes</basecompoundref>
+    <includes local="no">LightCategory.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d69/a05958_1acb0eccfff1eefd4afceb8b6d90dca735" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::ShadowData::shadowMapIndex</definition>
+        <argsstring></argsstring>
+        <name>shadowMapIndex</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::shadowMapIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="38" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1a49237b8b6c0e5e9528486da1dd85b190" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::ShadowData::shadowType</definition>
+        <argsstring></argsstring>
+        <name>shadowType</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::shadowType</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="39" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1a5a98ff1cf82972fae9081af7e9c24204" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::ShadowData::pcfFilterSize</definition>
+        <argsstring></argsstring>
+        <name>pcfFilterSize</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::pcfFilterSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="40" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1a03ede93d1b1540e8e37b0da9bae6c63b" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::ShadowData::pcfSampleCount</definition>
+        <argsstring></argsstring>
+        <name>pcfSampleCount</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::pcfSampleCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="41" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1adba7b8fb8f9a9325ed0e2ebda6c11eee" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/db4/a06330" kindref="compound">Float2</ref></type>
+        <definition>Float2 castor3d::LightCategory::ShadowData::rawShadowsOffsets</definition>
+        <argsstring></argsstring>
+        <name>rawShadowsOffsets</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::rawShadowsOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="42" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1a82da60f48ffd3e690aa2e101f03c1c10" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/db4/a06330" kindref="compound">Float2</ref></type>
+        <definition>Float2 castor3d::LightCategory::ShadowData::pcfShadowsOffsets</definition>
+        <argsstring></argsstring>
+        <name>pcfShadowsOffsets</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::pcfShadowsOffsets</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="43" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1ae376781a1b3fecebfeced9573fcbaaf0" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::ShadowData::vsmMinVariance</definition>
+        <argsstring></argsstring>
+        <name>vsmMinVariance</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::vsmMinVariance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="44" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1a5da89c8241aec3103629ae6342750f23" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::ShadowData::vsmLightBleedingReduction</definition>
+        <argsstring></argsstring>
+        <name>vsmLightBleedingReduction</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::vsmLightBleedingReduction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="45" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="45" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1a141ccbe25707908f6b6cf1cc8a0e94ba" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::ShadowData::volumetricSteps</definition>
+        <argsstring></argsstring>
+        <name>volumetricSteps</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::volumetricSteps</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="46" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="46" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d69/a05958_1a7390a5da84e775a833d58f2f276fd834" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::LightCategory::ShadowData::volumetricScattering</definition>
+        <argsstring></argsstring>
+        <name>volumetricScattering</name>
+        <qualifiedname>castor3d::LightCategory::ShadowData::volumetricScattering</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/LightCategory.hpp" line="47" column="8" bodyfile="Scene/Light/LightCategory.hpp" bodystart="47" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::LightCategory::ShadowData</label>
+        <link refid="d9/d69/a05958"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="d1/d1b/a06326"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::LightCategory::ShadowData</label>
+        <link refid="d9/d69/a05958"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="d1/d1b/a06326"/>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Light/LightCategory.hpp" line="35" column="1" bodyfile="Scene/Light/LightCategory.hpp" bodystart="37" bodyend="48"/>
+    <listofallmembers>
+      <member refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>Float1</name></member>
+      <member refid="d9/d69/a05958_1a5a98ff1cf82972fae9081af7e9c24204" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>pcfFilterSize</name></member>
+      <member refid="d9/d69/a05958_1a03ede93d1b1540e8e37b0da9bae6c63b" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>pcfSampleCount</name></member>
+      <member refid="d9/d69/a05958_1a82da60f48ffd3e690aa2e101f03c1c10" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>pcfShadowsOffsets</name></member>
+      <member refid="d9/d69/a05958_1adba7b8fb8f9a9325ed0e2ebda6c11eee" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>rawShadowsOffsets</name></member>
+      <member refid="d9/d69/a05958_1acb0eccfff1eefd4afceb8b6d90dca735" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>shadowMapIndex</name></member>
+      <member refid="d9/d69/a05958_1a49237b8b6c0e5e9528486da1dd85b190" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>shadowType</name></member>
+      <member refid="d9/d69/a05958_1a7390a5da84e775a833d58f2f276fd834" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>volumetricScattering</name></member>
+      <member refid="d9/d69/a05958_1a141ccbe25707908f6b6cf1cc8a0e94ba" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>volumetricSteps</name></member>
+      <member refid="d9/d69/a05958_1a5da89c8241aec3103629ae6342750f23" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>vsmLightBleedingReduction</name></member>
+      <member refid="d9/d69/a05958_1ae376781a1b3fecebfeced9573fcbaaf0" prot="public" virt="non-virtual"><scope>castor3d::LightCategory::ShadowData</scope><name>vsmMinVariance</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

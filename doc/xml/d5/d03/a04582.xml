@@ -1,0 +1,104 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d03/a04582" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::MeshPreparer</compoundname>
+    <includes local="no">MeshPreparer.hpp</includes>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d5/d03/a04582_1a3c59a4263c3838d8712e2c4de09b80b3" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::MeshPreparer::prepare</definition>
+        <argsstring>(Mesh &amp;mesh, Parameters const &amp;parameters)</argsstring>
+        <name>prepare</name>
+        <qualifiedname>castor3d::MeshPreparer::prepare</qualifiedname>
+        <param>
+          <type><ref refid="d2/df8/a04550" kindref="compound">Mesh</ref> &amp;</type>
+          <declname>mesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Prepares a <ref refid="d2/df8/a04550" kindref="compound">Mesh</ref> for render. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">mesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh to prepare. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Prepare configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshPreparer.hpp" line="28" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/d03/a04582_1aa8c930ba4230c954c33acafda49b67a9" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>static C3D_API bool castor3d::MeshPreparer::prepare</definition>
+        <argsstring>(Submesh &amp;submesh, Parameters const &amp;parameters)</argsstring>
+        <name>prepare</name>
+        <qualifiedname>castor3d::MeshPreparer::prepare</qualifiedname>
+        <param>
+          <type><ref refid="dd/d22/a04662" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <briefdescription>
+<para>Prepares a <ref refid="d2/df8/a04550" kindref="compound">Mesh</ref> for render. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="out">submesh</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The mesh to prepare. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Prepare configuration parameters. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+<simplesect kind="return"><para><computeroutput>false</computeroutput> if any problem occured. </para>
+</simplesect>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/MeshPreparer.hpp" line="42" column="21"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/MeshPreparer.hpp" line="13" column="1" bodyfile="Model/Mesh/MeshPreparer.hpp" bodystart="14" bodyend="44"/>
+    <listofallmembers>
+      <member refid="d5/d03/a04582_1a3c59a4263c3838d8712e2c4de09b80b3" prot="public" virt="non-virtual"><scope>castor3d::MeshPreparer</scope><name>prepare</name></member>
+      <member refid="d5/d03/a04582_1aa8c930ba4230c954c33acafda49b67a9" prot="public" virt="non-virtual"><scope>castor3d::MeshPreparer</scope><name>prepare</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

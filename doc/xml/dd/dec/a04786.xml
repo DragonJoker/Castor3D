@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/dec/a04786" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="dd/dec/a04786_1a58b8dd4fc3854530938d82b78bebd576" prot="public" static="no" mutable="no">
+        <type>castor::Nanoseconds</type>
+        <definition>castor::Nanoseconds castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::time</definition>
+        <argsstring></argsstring>
+        <name>time</name>
+        <qualifiedname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::time</qualifiedname>
+        <initializer>{ 0_ns }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="297" column="21" bodyfile="Overlay/DebugOverlays.hpp" bodystart="297" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dec/a04786_1aa3a1de6b202ea7dea5e3202b69d067a6" prot="public" static="no" mutable="no">
+        <type>StaticCtrlRPtr</type>
+        <definition>StaticCtrlRPtr castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::name</definition>
+        <argsstring></argsstring>
+        <name>name</name>
+        <qualifiedname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="298" column="16" bodyfile="Overlay/DebugOverlays.hpp" bodystart="298" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="dd/dec/a04786_1a902b76911a0f531e95df541e08a1a466" prot="public" static="no" mutable="no">
+        <type>StaticCtrlRPtr</type>
+        <definition>StaticCtrlRPtr castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Overlay/DebugOverlays.hpp" line="299" column="16" bodyfile="Overlay/DebugOverlays.hpp" bodystart="299" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Overlay/DebugOverlays.hpp" line="295" column="1" bodyfile="Overlay/DebugOverlays.hpp" bodystart="296" bodyend="300"/>
+    <listofallmembers>
+      <member refid="dd/dec/a04786_1aa3a1de6b202ea7dea5e3202b69d067a6" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>name</name></member>
+      <member refid="dd/dec/a04786_1a58b8dd4fc3854530938d82b78bebd576" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>time</name></member>
+      <member refid="dd/dec/a04786_1a902b76911a0f531e95df541e08a1a466" prot="public" virt="non-virtual"><scope>castor3d::DebugOverlays::CategoryOverlays::TimeOverlays</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

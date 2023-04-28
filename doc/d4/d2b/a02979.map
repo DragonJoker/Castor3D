@@ -1,6 +1,10 @@
-<map id="castor3d::NonClientEventHandler&lt; Derived &gt;" name="castor3d::NonClientEventHandler&lt; Derived &gt;">
-<area shape="rect" id="node1" title="Description of an event handler, class that can receive event." alt="" coords="83,169,251,211"/>
-<area shape="rect" id="node2" title=" " alt="" coords="5,80,153,121"/>
-<area shape="rect" id="node3" href="$d3/dff/a02976.html" title=" " alt="" coords="177,87,333,114"/>
-<area shape="rect" id="node4" title=" " alt="" coords="202,5,309,32"/>
+<map id="castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;" name="castor3d::ObjectCacheT&lt; BillboardList, castor::String, BillboardCacheTraits &gt;">
+<area shape="rect" id="node1" title="BillboardList cache." alt="" coords="1215,61,1417,115"/>
+<area shape="rect" id="node2" href="$d2/daa/a02997.html" title=" " alt="" coords="963,61,1165,115"/>
+<area shape="rect" id="node3" title=" " alt="" coords="228,174,411,199"/>
+<area shape="rect" id="node7" href="$d2/daa/a02997.html" title=" " alt="" coords="535,115,721,155"/>
+<area shape="rect" id="node4" title=" " alt="" coords="523,35,733,90"/>
+<area shape="rect" id="node5" href="$d4/d44/a03065.html" title=" " alt="" coords="259,29,379,54"/>
+<area shape="rect" id="node6" title=" " alt="" coords="5,29,176,54"/>
+<area shape="rect" id="node8" title=" " alt="" coords="225,105,413,145"/>
 </map>

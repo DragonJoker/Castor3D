@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/d48/a05521" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DrawConstants</compoundname>
+    <includes local="no">RenderModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d5/d48/a05521_1a0830c898652ee7dd5b6a2e3694e89ffe" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::DrawConstants::pipelineId</definition>
+        <argsstring></argsstring>
+        <name>pipelineId</name>
+        <qualifiedname>castor3d::DrawConstants::pipelineId</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/RenderModule.hpp" line="144" column="10" bodyfile="Render/RenderModule.hpp" bodystart="144" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Draw constants for one render node. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/RenderModule.hpp" line="142" column="1" bodyfile="Render/RenderModule.hpp" bodystart="143" bodyend="145"/>
+    <listofallmembers>
+      <member refid="d5/d48/a05521_1a0830c898652ee7dd5b6a2e3694e89ffe" prot="public" virt="non-virtual"><scope>castor3d::DrawConstants</scope><name>pipelineId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

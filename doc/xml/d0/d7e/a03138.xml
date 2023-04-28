@@ -1,0 +1,139 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d0/d7e/a03138" kind="struct" language="C++" prot="private">
+    <compoundname>castor3d::EditCtrl::CaretIndices</compoundname>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d0/d7e/a03138_1afe2a800cf48bcaf29ae55cbbe6597d00" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::EditCtrl::CaretIndices::lineIndex</definition>
+        <argsstring></argsstring>
+        <name>lineIndex</name>
+        <qualifiedname>castor3d::EditCtrl::CaretIndices::lineIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="96" column="10" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a03138_1a9eb4ea5293de1e2b017ba610d190b50b" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::EditCtrl::CaretIndices::charIndex</definition>
+        <argsstring></argsstring>
+        <name>charIndex</name>
+        <qualifiedname>castor3d::EditCtrl::CaretIndices::charIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="97" column="10" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a03138_1a269e75396b0a32b3aa5ad585a71d1b85" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::EditCtrl::CaretIndices::captionIndex</definition>
+        <argsstring></argsstring>
+        <name>captionIndex</name>
+        <qualifiedname>castor3d::EditCtrl::CaretIndices::captionIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="98" column="10" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d7e/a03138_1aaed39fc01e8b2e4e04ade83da42a1694" prot="public" static="no" mutable="no">
+        <type>castor::U32String::const_iterator</type>
+        <definition>castor::U32String::const_iterator castor3d::EditCtrl::CaretIndices::captionIt</definition>
+        <argsstring></argsstring>
+        <name>captionIt</name>
+        <qualifiedname>castor3d::EditCtrl::CaretIndices::captionIt</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="99" column="35" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d7e/a03138_1a61c285f4ee9eae3cf17500202ce090dc" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename SizeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::CaretIndices::updateIndex</definition>
+        <argsstring>(SizeT index, castor::U32String const &amp;caption)</argsstring>
+        <name>updateIndex</name>
+        <qualifiedname>castor3d::EditCtrl::CaretIndices::updateIndex</qualifiedname>
+        <param>
+          <type>SizeT</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>castor::U32String const &amp;</type>
+          <declname>caption</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="102" column="6" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="102" bodyend="107"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7e/a03138_1ae88f60550c9dff04aed655f4c3e94c61" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::CaretIndices::incrementIndex</definition>
+        <argsstring>()</argsstring>
+        <name>incrementIndex</name>
+        <qualifiedname>castor3d::EditCtrl::CaretIndices::incrementIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="109" column="6" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="109" bodyend="113"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d7e/a03138_1a02db016c005fba5f42cad9254cc475a4" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::EditCtrl::CaretIndices::decrementIndex</definition>
+        <argsstring>()</argsstring>
+        <name>decrementIndex</name>
+        <qualifiedname>castor3d::EditCtrl::CaretIndices::decrementIndex</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlEdit.hpp" line="115" column="6" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="115" bodyend="119"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Gui/Controls/CtrlEdit.hpp" line="94" column="1" bodyfile="Gui/Controls/CtrlEdit.hpp" bodystart="95" bodyend="120"/>
+    <listofallmembers>
+      <member refid="d0/d7e/a03138_1a269e75396b0a32b3aa5ad585a71d1b85" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::CaretIndices</scope><name>captionIndex</name></member>
+      <member refid="d0/d7e/a03138_1aaed39fc01e8b2e4e04ade83da42a1694" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::CaretIndices</scope><name>captionIt</name></member>
+      <member refid="d0/d7e/a03138_1a9eb4ea5293de1e2b017ba610d190b50b" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::CaretIndices</scope><name>charIndex</name></member>
+      <member refid="d0/d7e/a03138_1a02db016c005fba5f42cad9254cc475a4" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::CaretIndices</scope><name>decrementIndex</name></member>
+      <member refid="d0/d7e/a03138_1ae88f60550c9dff04aed655f4c3e94c61" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::CaretIndices</scope><name>incrementIndex</name></member>
+      <member refid="d0/d7e/a03138_1afe2a800cf48bcaf29ae55cbbe6597d00" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::CaretIndices</scope><name>lineIndex</name></member>
+      <member refid="d0/d7e/a03138_1a61c285f4ee9eae3cf17500202ce090dc" prot="public" virt="non-virtual"><scope>castor3d::EditCtrl::CaretIndices</scope><name>updateIndex</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

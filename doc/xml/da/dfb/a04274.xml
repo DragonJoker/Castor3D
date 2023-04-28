@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="da/dfb/a04274" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkStructTraits&lt; VkImageViewCreateInfo &gt;</compoundname>
+    <includes local="no">makeVkType.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="da/dfb/a04274_1a7808f234790b7b0e318eb9a008717be6" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>VkStructureType constexpr</type>
+        <definition>VkStructureType constexpr castor3d::VkStructTraits&lt; VkImageViewCreateInfo &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::VkStructTraits&lt; VkImageViewCreateInfo &gt;::value</qualifiedname>
+        <initializer>= VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/makeVkType.hpp" line="29" column="65" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="29" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/makeVkType.hpp" line="29" column="10" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="29" bodyend="29"/>
+    <listofallmembers>
+      <member refid="da/dfb/a04274_1a7808f234790b7b0e318eb9a008717be6" prot="public" virt="non-virtual"><scope>castor3d::VkStructTraits&lt; VkImageViewCreateInfo &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

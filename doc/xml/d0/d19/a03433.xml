@@ -1,0 +1,400 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d0/d19/a03433" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::UntileMappingComponent</compoundname>
+    <basecompoundref refid="d9/d11/a03445" prot="public" virt="non-virtual">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</basecompoundref>
+    <includes local="no">UntileMappingComponent.hpp</includes>
+    <innerclass refid="d5/d56/a03437" prot="public">castor3d::UntileMappingComponent::ComponentsShader</innerclass>
+    <innerclass refid="de/dc4/a03441" prot="public">castor3d::UntileMappingComponent::Plugin</innerclass>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d0/d19/a03433_1afadb7a245087d3a6a9cbbc10f292346a" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr <ref refid="d3/d5e/a01725_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref></type>
+        <definition>constexpr PassFlag castor3d::UntileMappingComponent::eUntile</definition>
+        <argsstring></argsstring>
+        <name>eUntile</name>
+        <qualifiedname>castor3d::UntileMappingComponent::eUntile</qualifiedname>
+        <initializer>= <ref refid="d3/d5e/a01725_1a043cb84a97fa62d2b78e9f4ec3238f70" kindref="member">PassFlag</ref>( 0x01u )</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="17" column="27" bodyfile="Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="17" bodyend="-1"/>
+        <referencedby refid="de/dc4/a03441_1a8364d3cb0f2ddf7f09884be8de130bb3" compoundref="d9/d4a/a00479" startline="90" endline="93">castor3d::UntileMappingComponent::Plugin::getComponentFlags</referencedby>
+        <referencedby refid="d0/d19/a03433_1ae427d6ea0a45a46d522b1db4f9b1109d" compoundref="d9/d4a/a00479" startline="105" endline="111">getPassFlags</referencedby>
+        <referencedby refid="d5/d56/a03437_1a349ad4e72c7b10b320e768c663a9a501" compoundref="d9/d4a/a00479" startline="34" endline="38">castor3d::UntileMappingComponent::ComponentsShader::isMapSampling</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d0/d19/a03433_1aa7389fa42a96ba3bb6c07031b7ef0e08" prot="public" static="yes" mutable="no">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const</type>
+        <definition>C3D_API castor::String const castor3d::UntileMappingComponent::TypeName</definition>
+        <argsstring></argsstring>
+        <name>TypeName</name>
+        <qualifiedname>castor3d::UntileMappingComponent::TypeName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="123" column="37" bodyfile="Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="123" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d0/d19/a03433_1a0ccc01d60c9b74133eeffbe8f5f47dc2" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>PassComponentPluginUPtr</type>
+        <definition>static PassComponentPluginUPtr castor3d::UntileMappingComponent::createPlugin</definition>
+        <argsstring>(PassComponentRegister const &amp;passComponent)</argsstring>
+        <name>createPlugin</name>
+        <qualifiedname>castor3d::UntileMappingComponent::createPlugin</qualifiedname>
+        <param>
+          <type><ref refid="d7/dfc/a04061" kindref="compound">PassComponentRegister</ref> const &amp;</type>
+          <declname>passComponent</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="96" column="32" bodyfile="Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="96" bodyend="99"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d0/d19/a03433_1a7dbf469852faf0ab85b2a2246544a5f9" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::UntileMappingComponent::UntileMappingComponent</definition>
+        <argsstring>(Pass &amp;pass)</argsstring>
+        <name>UntileMappingComponent</name>
+        <qualifiedname>castor3d::UntileMappingComponent::UntileMappingComponent</qualifiedname>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="101" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d19/a03433_1a5604aea14a9be9b17d88616be2bf2e41" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::UntileMappingComponent::accept</definition>
+        <argsstring>(PassVisitorBase &amp;vis) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::UntileMappingComponent::accept</qualifiedname>
+        <reimplements refid="dc/d32/a04057_1a4e315225c20ace9097adfd65e8413e4f">accept</reimplements>
+        <param>
+          <type><ref refid="dd/d44/a04097" kindref="compound">PassVisitorBase</ref> &amp;</type>
+          <declname>vis</declname>
+        </param>
+        <briefdescription>
+<para><ref refid="d8/d7f/a04105" kindref="compound">PassVisitor</ref> acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>vis</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="103" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d19/a03433_1ae427d6ea0a45a46d522b1db4f9b1109d" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d5e/a01725_1a9c5abb1c7b30c2de4e67a8f9f64c08a6" kindref="member">PassComponentFlag</ref></type>
+        <definition>C3D_API PassComponentFlag castor3d::UntileMappingComponent::getPassFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getPassFlags</name>
+        <qualifiedname>castor3d::UntileMappingComponent::getPassFlags</qualifiedname>
+        <reimplements refid="dc/d32/a04057_1af015484800f32c718d067a80b76709e9">getPassFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="105" column="27" bodyfile="Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="105" bodyend="111"/>
+        <references refid="d3/d5e/a01725_1a043cb84a97fa62d2b78e9f4ec3238f70abe988781e4e1de1c6a36fb698afbbe1f">castor3d::eNone</references>
+        <references refid="d0/d19/a03433_1afadb7a245087d3a6a9cbbc10f292346a" compoundref="d9/d4a/a00479" startline="17">eUntile</references>
+        <references refid="dc/d32/a04057_1a625adfcb001824768e8a99a3c03dcbb1" compoundref="d4/d14/a00608" startline="1223" endline="1226">castor3d::PassComponent::getId</references>
+        <references refid="d0/d19/a03433_1a69cf43ab16d98f8b3efe8f31785b8be4" compoundref="d9/d4a/a00479" startline="113" endline="116">isUntiling</references>
+        <references refid="d3/d5e/a01725_1a337a580df6760b157e78a64b55014233" compoundref="d1/d0b/a00452" startline="78" endline="83">castor3d::makePassComponentFlag</references>
+      </memberdef>
+      <memberdef kind="function" id="d0/d19/a03433_1a69cf43ab16d98f8b3efe8f31785b8be4" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::UntileMappingComponent::isUntiling</definition>
+        <argsstring>() const</argsstring>
+        <name>isUntiling</name>
+        <qualifiedname>castor3d::UntileMappingComponent::isUntiling</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="113" column="6" bodyfile="Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="113" bodyend="116"/>
+        <references refid="d9/d11/a03445_1a23ec881a6e2aa2e40c21e108cb6458f7" compoundref="db/d8e/a00482" startline="76" endline="79">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;::getData</references>
+        <referencedby refid="d0/d19/a03433_1ae427d6ea0a45a46d522b1db4f9b1109d" compoundref="d9/d4a/a00479" startline="105" endline="111">getPassFlags</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="d0/d19/a03433_1aabdde24df3771656850514b390a8fe03" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::UntileMappingComponent::setUntiling</definition>
+        <argsstring>(bool v)</argsstring>
+        <name>setUntiling</name>
+        <qualifiedname>castor3d::UntileMappingComponent::setUntiling</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="118" column="6" bodyfile="Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="118" bodyend="121"/>
+        <references refid="d9/d11/a03445_1a074de9b2f9579c56a85617b514089545" compoundref="db/d8e/a00482" startline="56" endline="59">castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;::setData</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d0/d19/a03433_1a70b58fe037e4f03df5ae367718602ca7" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>PassComponentUPtr</type>
+        <definition>PassComponentUPtr castor3d::UntileMappingComponent::doClone</definition>
+        <argsstring>(Pass &amp;pass) const override</argsstring>
+        <name>doClone</name>
+        <qualifiedname>castor3d::UntileMappingComponent::doClone</qualifiedname>
+        <reimplements refid="dc/d32/a04057_1ad87fbb1539bb6c5004cbcb02ddfcd46f">doClone</reimplements>
+        <param>
+          <type><ref refid="d6/d16/a04077" kindref="compound">Pass</ref> &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><simplesect kind="return"><para>Clones this component into given pass. </para>
+</simplesect>
+<parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the cloned component. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="126" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="d0/d19/a03433_1a3a83eee5174c8ba6afb5196be48db7cd" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::UntileMappingComponent::doWriteText</definition>
+        <argsstring>(castor::String const &amp;tabs, castor::Path const &amp;folder, castor::String const &amp;subfolder, castor::StringStream &amp;file) const override</argsstring>
+        <name>doWriteText</name>
+        <qualifiedname>castor3d::UntileMappingComponent::doWriteText</qualifiedname>
+        <reimplements refid="dc/d32/a04057_1af8c7cb8f4c2e0753c0ebbb6adf802c9c">doWriteText</reimplements>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>tabs</declname>
+        </param>
+        <param>
+          <type>castor::Path const &amp;</type>
+          <declname>folder</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>subfolder</declname>
+        </param>
+        <param>
+          <type>castor::StringStream &amp;</type>
+          <declname>file</declname>
+        </param>
+        <briefdescription>
+<para>Writes the component content to text. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">tabs</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current tabulation level. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">folder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources folder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">subfolder</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The resources subfolder. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="inout">file</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The output file. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="127" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</label>
+        <link refid="d9/d11/a03445"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d9/d11/a03445"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="dc/d32/a04057"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::UntileMappingComponent</label>
+        <link refid="d0/d19/a03433"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::BaseDataPassComponentT&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</label>
+        <link refid="d9/d11/a03445"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; castor::AtomicGroupChangeTracked&lt; bool &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>castor3d::BaseDataPassComponentT&lt; DataT &gt;</label>
+        <link refid="d9/d11/a03445"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::PassComponent</label>
+        <link refid="dc/d32/a04057"/>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>m_plugin</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_materialShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::PassComponentPlugin</label>
+        <link refid="d9/d35/a04053"/>
+      </node>
+      <node id="1">
+        <label>castor3d::UntileMappingComponent</label>
+        <link refid="d0/d19/a03433"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::shader::PassMaterialShader</label>
+        <link refid="db/dfa/a04049"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::shader::PassShader</label>
+        <link refid="d8/de8/a04041"/>
+      </node>
+      <node id="4">
+        <label>castor::OwnedBy&lt; Pass &gt;</label>
+      </node>
+    </collaborationgraph>
+    <location file="Material/Pass/Component/Base/UntileMappingComponent.hpp" line="14" column="1" bodyfile="Material/Pass/Component/Base/UntileMappingComponent.hpp" bodystart="16" bodyend="131"/>
+    <listofallmembers>
+      <member refid="d0/d19/a03433_1a5604aea14a9be9b17d88616be2bf2e41" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>accept</name></member>
+      <member refid="dc/d32/a04057_1a2847d512604b766b3a315e4c4e9dc0ea" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>areNormalsInverted</name></member>
+      <member refid="d9/d11/a03445_1afb1743ea21712dcfe9765639815fc59d" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>BaseDataPassComponentT</name></member>
+      <member refid="dc/d32/a04057_1ae7c88041d1aae747532e537b23e41d24" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>clone</name></member>
+      <member refid="d0/d19/a03433_1a0ccc01d60c9b74133eeffbe8f5f47dc2" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>createPlugin</name></member>
+      <member refid="d0/d19/a03433_1a70b58fe037e4f03df5ae367718602ca7" prot="private" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>doClone</name></member>
+      <member refid="d0/d19/a03433_1a3a83eee5174c8ba6afb5196be48db7cd" prot="private" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>doWriteText</name></member>
+      <member refid="d0/d19/a03433_1afadb7a245087d3a6a9cbbc10f292346a" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>eUntile</name></member>
+      <member refid="dc/d32/a04057_1a8f6b8c698164310e2052be733834224a" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>fillBuffer</name></member>
+      <member refid="dc/d32/a04057_1a32dba2f2f6b92d5119c677d4faa6a324" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>fillChannel</name></member>
+      <member refid="dc/d32/a04057_1ae53af67cd5f807b90d8e31e52d6582af" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>fillConfig</name></member>
+      <member refid="dc/d32/a04057_1a89e385760304300908e5b308b2f1da4e" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>getColour</name></member>
+      <member refid="d9/d11/a03445_1a23ec881a6e2aa2e40c21e108cb6458f7" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>getData</name></member>
+      <member refid="d9/d11/a03445_1aa79468a338c3ff3c31682894db721fab" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>getData</name></member>
+      <member refid="dc/d32/a04057_1a32748929920ba651a4c5a1d5af435e77" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>getDependencies</name></member>
+      <member refid="dc/d32/a04057_1a625adfcb001824768e8a99a3c03dcbb1" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>getId</name></member>
+      <member refid="d0/d19/a03433_1ae427d6ea0a45a46d522b1db4f9b1109d" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>getPassFlags</name></member>
+      <member refid="dc/d32/a04057_1a5da51664f6736be0199d66266779b395" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>getPlugin</name></member>
+      <member refid="dc/d32/a04057_1a6aae2659952d2e9a76caabf56d69fba5" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>getType</name></member>
+      <member refid="dc/d32/a04057_1a5af951f374ee82fd61e57f96e6193f1c" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>hasColour</name></member>
+      <member refid="d0/d19/a03433_1a69cf43ab16d98f8b3efe8f31785b8be4" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>isUntiling</name></member>
+      <member refid="dc/d32/a04057_1a7c90ef14fa9721b433d361c8492c3112" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>m_dependencies</name></member>
+      <member refid="dc/d32/a04057_1a01ecec7d563666b63d7d888061e84ab1" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>m_dirty</name></member>
+      <member refid="dc/d32/a04057_1a3d2b1319d92ba70ff8450c7873492b67" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>m_id</name></member>
+      <member refid="dc/d32/a04057_1abc188311e9251e933a838a256802c4c6" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>m_materialShader</name></member>
+      <member refid="dc/d32/a04057_1ae62babd07d3faf3014f1d0af1ab03357" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>m_plugin</name></member>
+      <member refid="dc/d32/a04057_1ae5775b9cf42c79c375cbd4a033e6629f" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>m_type</name></member>
+      <member refid="d9/d11/a03445_1aa297ac5faf886e6b766533f5fc0b25d1" prot="protected" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>m_value</name></member>
+      <member refid="dc/d32/a04057_1a68b747d970c85a2799fb63b6825b0fc4" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>PassComponent</name></member>
+      <member refid="dc/d32/a04057_1a2541aa58a662bd8566c602335387cb98" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1ab6a5bf94fc25210c03c9bed7ddf1ae31" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1a61fa7c8562281c049a874b1ebc2635e4" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>setColour</name></member>
+      <member refid="dc/d32/a04057_1a2256e542753e1f85e6812de7e6fdc261" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>setColour</name></member>
+      <member refid="d9/d11/a03445_1a074de9b2f9579c56a85617b514089545" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>setData</name></member>
+      <member refid="d9/d11/a03445_1abf51560ee823896159de61bea9326391" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>setData</name></member>
+      <member refid="d0/d19/a03433_1aabdde24df3771656850514b390a8fe03" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>setUntiling</name></member>
+      <member refid="d0/d19/a03433_1aa7389fa42a96ba3bb6c07031b7ef0e08" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>TypeName</name></member>
+      <member refid="d0/d19/a03433_1a7dbf469852faf0ab85b2a2246544a5f9" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>UntileMappingComponent</name></member>
+      <member refid="dc/d32/a04057_1acfedf31a75536a40a891b3308083d738" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>update</name></member>
+      <member refid="dc/d32/a04057_1a967ba1259e24663e4a89352251acf841" prot="public" virt="non-virtual"><scope>castor3d::UntileMappingComponent</scope><name>writeText</name></member>
+      <member refid="dc/d32/a04057_1a6a3e343b81806ff616280b4eca87140b" prot="public" virt="virtual"><scope>castor3d::UntileMappingComponent</scope><name>~PassComponent</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

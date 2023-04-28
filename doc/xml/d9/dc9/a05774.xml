@@ -1,0 +1,219 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/dc9/a05774" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VertexTransformingPass</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">crg::RunnablePass</basecompoundref>
+    <includes local="no">VertexTransformingPass.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/dc9/a05774_1aa38bd36596980d73438ba5e6ef354db5" prot="private" static="no" mutable="no">
+        <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::VertexTransformingPass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::VertexTransformingPass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformingPass.hpp" line="42" column="21" bodyfile="Render/Transform/VertexTransformingPass.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dc9/a05774_1a52332a8d1af221441105e5bd5995d1c5" prot="private" static="no" mutable="no">
+        <type>ashes::Buffer&lt; <ref refid="d8/d89/a06754" kindref="compound">ModelBufferConfiguration</ref> &gt; const  &amp;</type>
+        <definition>ashes::Buffer&lt; ModelBufferConfiguration &gt; const&amp; castor3d::VertexTransformingPass::m_modelsBuffer</definition>
+        <argsstring></argsstring>
+        <name>m_modelsBuffer</name>
+        <qualifiedname>castor3d::VertexTransformingPass::m_modelsBuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformingPass.hpp" line="43" column="22" bodyfile="Render/Transform/VertexTransformingPass.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/dc9/a05774_1ae508e4f7a28cb0b9b6f30b75cc1ada7e" prot="private" static="no" mutable="no">
+        <type>std::unordered_map&lt; size_t, VertexTransformPassUPtr &gt;</type>
+        <definition>std::unordered_map&lt; size_t, VertexTransformPassUPtr &gt; castor3d::VertexTransformingPass::m_passes</definition>
+        <argsstring></argsstring>
+        <name>m_passes</name>
+        <qualifiedname>castor3d::VertexTransformingPass::m_passes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformingPass.hpp" line="44" column="20" bodyfile="Render/Transform/VertexTransformingPass.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/dc9/a05774_1add5fa192707590e9d7e62cbf6cd57209" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::VertexTransformingPass::VertexTransformingPass</definition>
+        <argsstring>(crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, ashes::Buffer&lt; ModelBufferConfiguration &gt; const &amp;modelsBuffer)</argsstring>
+        <name>VertexTransformingPass</name>
+        <qualifiedname>castor3d::VertexTransformingPass::VertexTransformingPass</qualifiedname>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>ashes::Buffer&lt; <ref refid="d8/d89/a06754" kindref="compound">ModelBufferConfiguration</ref> &gt; const &amp;</type>
+          <declname>modelsBuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformingPass.hpp" line="22" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dc9/a05774_1ab9d9b51db29684433c4cfb13236fd0dc" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VertexTransformingPass::registerNode</definition>
+        <argsstring>(SubmeshRenderNode const &amp;node, TransformPipeline const &amp;pipeline, GpuBufferOffsetT&lt; castor::Point4f &gt; const &amp;morphTargets, GpuBufferOffsetT&lt; MorphingWeightsConfiguration &gt; const &amp;morphingWeights, GpuBufferOffsetT&lt; SkinningTransformsConfiguration &gt; const &amp;skinTransforms)</argsstring>
+        <name>registerNode</name>
+        <qualifiedname>castor3d::VertexTransformingPass::registerNode</qualifiedname>
+        <param>
+          <type><ref refid="d5/dbd/a05038" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <param>
+          <type><ref refid="d0/df9/a05758" kindref="compound">TransformPipeline</ref> const &amp;</type>
+          <declname>pipeline</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point4f &gt; const &amp;</type>
+          <declname>morphTargets</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="dc/df1/a06758" kindref="compound">MorphingWeightsConfiguration</ref> &gt; const &amp;</type>
+          <declname>morphingWeights</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d4c/a02846" kindref="compound">GpuBufferOffsetT</ref>&lt; <ref refid="d4/d6c/a06782" kindref="compound">SkinningTransformsConfiguration</ref> &gt; const &amp;</type>
+          <declname>skinTransforms</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformingPass.hpp" line="28" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dc9/a05774_1a53d223592aca0b91807fc5e383763853" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VertexTransformingPass::unregisterNode</definition>
+        <argsstring>(SubmeshRenderNode const &amp;node)</argsstring>
+        <name>unregisterNode</name>
+        <qualifiedname>castor3d::VertexTransformingPass::unregisterNode</qualifiedname>
+        <param>
+          <type><ref refid="d5/dbd/a05038" kindref="compound">SubmeshRenderNode</ref> const &amp;</type>
+          <declname>node</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformingPass.hpp" line="33" column="6"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/dc9/a05774_1ad7d8efec1059472023095c9a7d1eba59" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VertexTransformingPass::doRecordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>doRecordInto</name>
+        <qualifiedname>castor3d::VertexTransformingPass::doRecordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformingPass.hpp" line="36" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/dc9/a05774_1af00c693b9ab0bb0fe429e74a90c6d980" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::VertexTransformingPass::doIsComputePass</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsComputePass</name>
+        <qualifiedname>castor3d::VertexTransformingPass::doIsComputePass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Transform/VertexTransformingPass.hpp" line="39" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::VertexTransformingPass</label>
+        <link refid="d9/dc9/a05774"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::VertexTransformingPass</label>
+        <link refid="d9/dc9/a05774"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>crg::RunnablePass</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Transform/VertexTransformingPass.hpp" line="18" column="1" bodyfile="Render/Transform/VertexTransformingPass.hpp" bodystart="20" bodyend="45"/>
+    <listofallmembers>
+      <member refid="d9/dc9/a05774_1af00c693b9ab0bb0fe429e74a90c6d980" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformingPass</scope><name>doIsComputePass</name></member>
+      <member refid="d9/dc9/a05774_1ad7d8efec1059472023095c9a7d1eba59" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformingPass</scope><name>doRecordInto</name></member>
+      <member refid="d9/dc9/a05774_1aa38bd36596980d73438ba5e6ef354db5" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformingPass</scope><name>m_device</name></member>
+      <member refid="d9/dc9/a05774_1a52332a8d1af221441105e5bd5995d1c5" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformingPass</scope><name>m_modelsBuffer</name></member>
+      <member refid="d9/dc9/a05774_1ae508e4f7a28cb0b9b6f30b75cc1ada7e" prot="private" virt="non-virtual"><scope>castor3d::VertexTransformingPass</scope><name>m_passes</name></member>
+      <member refid="d9/dc9/a05774_1ab9d9b51db29684433c4cfb13236fd0dc" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformingPass</scope><name>registerNode</name></member>
+      <member refid="d9/dc9/a05774_1a53d223592aca0b91807fc5e383763853" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformingPass</scope><name>unregisterNode</name></member>
+      <member refid="d9/dc9/a05774_1add5fa192707590e9d7e62cbf6cd57209" prot="public" virt="non-virtual"><scope>castor3d::VertexTransformingPass</scope><name>VertexTransformingPass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

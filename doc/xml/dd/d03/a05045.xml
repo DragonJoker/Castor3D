@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dd/d03/a05045" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::RenderNodeTraitsT</compoundname>
+    <includes local="no">RenderNodeModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename NodeT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="dd/d03/a05045_1ac4c248cbf634323a013f4d72ba804abf" prot="public" static="no">
+        <type><ref refid="d7/dd4/a04689" kindref="compound">Submesh</ref></type>
+        <definition>using castor3d::RenderNodeTraitsT&lt; NodeT &gt;::Object =  Submesh</definition>
+        <argsstring></argsstring>
+        <name>Object</name>
+        <qualifiedname>castor3d::RenderNodeTraitsT::Object</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/RenderNodeModule.hpp" line="85" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Node/RenderNodeModule.hpp" line="83" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="84" bodyend="86"/>
+    <listofallmembers>
+      <member refid="dd/d03/a05045_1ac4c248cbf634323a013f4d72ba804abf" prot="public" virt="non-virtual"><scope>castor3d::RenderNodeTraitsT</scope><name>Object</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

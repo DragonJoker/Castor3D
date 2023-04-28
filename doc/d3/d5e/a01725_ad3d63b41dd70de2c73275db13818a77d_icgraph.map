@@ -1,0 +1,28 @@
+<map id="castor3d::remFlags" name="castor3d::remFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="317,781,452,806"/>
+<area shape="rect" id="node2" href="$d6/df3/a03349.html#a8f97b5e0da2a440dc2466f23d6728cad" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="39,5,235,45"/>
+<area shape="rect" id="node3" href="$da/d7d/a03649.html#a8e4e3e156caa34cb414a3ad5808ca929" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="6,69,269,109"/>
+<area shape="rect" id="node4" href="$d6/d39/a03957.html#acf1d29f482c0d41d61dbcff5bec0340e" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="35,133,239,173"/>
+<area shape="rect" id="node5" href="$df/d07/a03985.html#a4d408f375ce5708cef6fcaab91620a2d" title="Removes from given component flags the ones that are useless given the provided filter." alt="" coords="39,197,235,237"/>
+<area shape="rect" id="node6" href="$d1/ddd/a03693.html#ae98cfef8d0427d443befaa8c6463aeac" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="18,261,257,301"/>
+<area shape="rect" id="node7" href="$d2/d47/a03705.html#aaac2837a287d96b782e6090dac0cd903" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="24,325,251,365"/>
+<area shape="rect" id="node8" href="$d3/d23/a03717.html#a375e02f8031e98bad334c9c82f0c9e0f" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,389,269,429"/>
+<area shape="rect" id="node9" href="$d4/d2d/a03729.html#a19c1ffe50f34cd99390d785a4c66b537" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,453,269,493"/>
+<area shape="rect" id="node10" href="$d0/d52/a03741.html#a91998f08be0045ec30ca15eeb70b4f69" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="33,517,241,557"/>
+<area shape="rect" id="node11" href="$d1/ddb/a03753.html#a76b28c49e4090e34bcbffed93c7f2bff" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="26,581,249,621"/>
+<area shape="rect" id="node12" href="$da/d93/a03765.html#addf4a880a2f53bbeaa42d64595ebe3dc" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="19,645,255,685"/>
+<area shape="rect" id="node13" href="$d3/d2f/a03777.html#a9ba5185ae251da2cbc634bb68f211470" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="33,709,241,749"/>
+<area shape="rect" id="node14" href="$d8/d11/a03789.html#a591eae2f78cce10dbd717dd632926a6a" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="18,773,257,813"/>
+<area shape="rect" id="node15" href="$dc/d0c/a03801.html#a26c0aec8fa5de90c9bfef7b40a5c0821" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,837,269,877"/>
+<area shape="rect" id="node16" href="$df/d63/a03813.html#a743ececcdbc9bf0766f47848f2b807c5" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="22,901,253,941"/>
+<area shape="rect" id="node17" href="$da/dfc/a03825.html#a906232be317cc886ca77c915b97e5ff2" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="31,965,243,1005"/>
+<area shape="rect" id="node18" href="$d9/d94/a03837.html#a81ee034b4e490cfe21c03efef7467c9d" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="23,1029,252,1069"/>
+<area shape="rect" id="node19" href="$db/d1a/a03849.html#aad081faad248bbb4a7c0cbeddbf554b3" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="29,1093,245,1133"/>
+<area shape="rect" id="node20" href="$d2/de0/a03861.html#a69559426e4240419f835c785119b7ff1" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="19,1157,255,1197"/>
+<area shape="rect" id="node21" href="$de/d6c/a03873.html#ad6546fa03dcb98ec38a75fd9b0e1a409" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="33,1221,241,1261"/>
+<area shape="rect" id="node22" href="$d7/d0d/a03885.html#a9f3bdb1ca521516958db1ad0b7a73f6a" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="46,1286,229,1341"/>
+<area shape="rect" id="node23" href="$db/dda/a03897.html#a382a30d5ce653e7ff6600b99776bec31" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="53,1365,221,1419"/>
+<area shape="rect" id="node24" href="$d7/d9a/a03909.html#ac5c4d3a7c5b9fb6f3b2b6749e57b9839" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="26,1444,249,1484"/>
+<area shape="rect" id="node25" href="$d5/df8/a03921.html#a204886c32d68882e134984df86587ee5" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="18,1508,257,1548"/>
+<area shape="rect" id="node26" href="$d2/d9d/a03937.html#a4c2c795f68ee428c863f9bc271c97810" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="18,1572,257,1612"/>
+</map>

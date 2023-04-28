@@ -1,0 +1,652 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d1/d9f/a05714" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ToneMapping</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::OwnedBy&lt; Engine &gt;</basecompoundref>
+    <includes local="no">ToneMapping.hpp</includes>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="d1/d9f/a05714_1a8e356ab5d1add11cadc1f44844ad7a97" prot="public" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> castor::String const &amp;</type>
+        <definition>C3D_API castor::String const  &amp; castor3d::ToneMapping::getFullName</definition>
+        <argsstring>() const</argsstring>
+        <name>getFullName</name>
+        <qualifiedname>castor3d::ToneMapping::getFullName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="109" column="31"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9f/a05714_1a18ca2f0389b8b42dd0b8a39673ed31fd" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>crg::FramePass const &amp;</type>
+        <definition>crg::FramePass const  &amp; castor3d::ToneMapping::getPass</definition>
+        <argsstring>() const</argsstring>
+        <name>getPass</name>
+        <qualifiedname>castor3d::ToneMapping::getPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="111" column="23" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="111" bodyend="114"/>
+        <references refid="d1/d9f/a05714_1acc4f0512371286e3e7bd3f59ea821647" compoundref="dd/d39/a01271" startline="139">m_pass</references>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9f/a05714_1a54486ed9a7b1212ef8c2af8fffb3ba76" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type>castor::String const &amp;</type>
+        <definition>castor::String const  &amp; castor3d::ToneMapping::getName</definition>
+        <argsstring>() const</argsstring>
+        <name>getName</name>
+        <qualifiedname>castor3d::ToneMapping::getName</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="116" column="23" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="116" bodyend="119"/>
+        <references refid="d1/d9f/a05714_1af28cd1367268943ec173b63376c6bac0" compoundref="dd/d39/a01271" startline="133">m_name</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-attrib">
+      <memberdef kind="variable" id="d1/d9f/a05714_1af28cd1367268943ec173b63376c6bac0" prot="protected" static="no" mutable="no">
+        <type>castor::String</type>
+        <definition>castor::String castor3d::ToneMapping::m_name</definition>
+        <argsstring></argsstring>
+        <name>m_name</name>
+        <qualifiedname>castor3d::ToneMapping::m_name</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="133" column="16" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="133" bodyend="-1"/>
+        <referencedby refid="d1/d9f/a05714_1a54486ed9a7b1212ef8c2af8fffb3ba76" compoundref="dd/d39/a01271" startline="116" endline="119">getName</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d9f/a05714_1a33733eec74c57ab293ed874b999536f0" prot="protected" static="no" mutable="no">
+        <type><ref refid="d4/dab/a06622" kindref="compound">HdrConfigUbo</ref> &amp;</type>
+        <definition>HdrConfigUbo&amp; castor3d::ToneMapping::m_hdrConfigUbo</definition>
+        <argsstring></argsstring>
+        <name>m_hdrConfigUbo</name>
+        <qualifiedname>castor3d::ToneMapping::m_hdrConfigUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="134" column="15" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d9f/a05714_1a1dcdb146bb162922519d964027053f16" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/dc8/a06378" kindref="compound">castor3d::ShaderModule</ref></type>
+        <definition>castor3d::ShaderModule castor3d::ToneMapping::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <qualifiedname>castor3d::ToneMapping::m_vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="135" column="24" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d9f/a05714_1a3df5ff521c4cce3c79aa7491dc537fe7" prot="protected" static="no" mutable="no">
+        <type><ref refid="dd/dc8/a06378" kindref="compound">castor3d::ShaderModule</ref></type>
+        <definition>castor3d::ShaderModule castor3d::ToneMapping::m_pixelShader</definition>
+        <argsstring></argsstring>
+        <name>m_pixelShader</name>
+        <qualifiedname>castor3d::ToneMapping::m_pixelShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="136" column="24" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d9f/a05714_1a1a00c695bd5c715e87f31fe7915afc5c" prot="protected" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::ToneMapping::m_source</definition>
+        <argsstring></argsstring>
+        <name>m_source</name>
+        <qualifiedname>castor3d::ToneMapping::m_source</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="137" column="18" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d9f/a05714_1add60d6dd69ead4886168a3a3fbd77fd7" prot="protected" static="no" mutable="no">
+        <type>ashes::PipelineShaderStageCreateInfoArray</type>
+        <definition>ashes::PipelineShaderStageCreateInfoArray castor3d::ToneMapping::m_program</definition>
+        <argsstring></argsstring>
+        <name>m_program</name>
+        <qualifiedname>castor3d::ToneMapping::m_program</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="138" column="43" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="138" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d9f/a05714_1acc4f0512371286e3e7bd3f59ea821647" prot="protected" static="no" mutable="no">
+        <type>crg::FramePass *</type>
+        <definition>crg::FramePass* castor3d::ToneMapping::m_pass</definition>
+        <argsstring></argsstring>
+        <name>m_pass</name>
+        <qualifiedname>castor3d::ToneMapping::m_pass</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="139" column="17" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="139" bodyend="-1"/>
+        <referencedby refid="d1/d9f/a05714_1a18ca2f0389b8b42dd0b8a39673ed31fd" compoundref="dd/d39/a01271" startline="111" endline="114">getPass</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d9f/a05714_1ac279ef1d4aaf85c8e46ca93310b33349" prot="protected" static="no" mutable="no">
+        <type>crg::RenderQuad *</type>
+        <definition>crg::RenderQuad* castor3d::ToneMapping::m_quad</definition>
+        <argsstring></argsstring>
+        <name>m_quad</name>
+        <qualifiedname>castor3d::ToneMapping::m_quad</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="140" column="18" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="140" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d1/d9f/a05714_1ad410a406ac3830c76edaa2c07a49db06" prot="protected" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ToneMapping::m_passIndex</definition>
+        <argsstring></argsstring>
+        <name>m_passIndex</name>
+        <qualifiedname>castor3d::ToneMapping::m_passIndex</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="141" column="10" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="141" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d1/d9f/a05714_1a64d2aa1db5081259c107e1a7822797f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ToneMapping::ToneMapping</definition>
+        <argsstring>(Engine &amp;engine, RenderDevice const &amp;device, castor::Size const &amp;size, crg::FrameGraph &amp;graph, crg::ImageViewIdArray const &amp;source, crg::ImageViewId const &amp;target, crg::FramePass const &amp;previousPass, HdrConfigUbo &amp;hdrConfigUbo, Parameters const &amp;parameters, ProgressBar *progress)</argsstring>
+        <name>ToneMapping</name>
+        <qualifiedname>castor3d::ToneMapping::ToneMapping</qualifiedname>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/de8/a05430" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/dab/a06622" kindref="compound">HdrConfigUbo</ref> &amp;</type>
+          <declname>hdrConfigUbo</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/da6/a01698_1acd099f112fdafb8d7d06ba8dc9cf4a47" kindref="member">Parameters</ref> const &amp;</type>
+          <declname>parameters</declname>
+        </param>
+        <param>
+          <type><ref refid="df/dd2/a04486" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+<para>Specified constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">engine</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The engine. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">size</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render area dimensions. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">source</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image source. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">target</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>L&apos;image cible. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">previousPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The previous frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">hdrConfigUbo</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The configuration data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">parameters</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The implementation specific parameters. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The progress bar. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="50" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9f/a05714_1ab93b24e139003466d88b519e901a4c73" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ToneMapping::initialise</definition>
+        <argsstring>(castor::String const &amp;name, crg::ImageViewId const &amp;source)</argsstring>
+        <name>initialise</name>
+        <qualifiedname>castor3d::ToneMapping::initialise</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <briefdescription>
+<para>Initialises tone mapping shader and pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The tone mapping name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">source</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The initial source image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="70" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9f/a05714_1acfeab299cf400830be714819b0a9262a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ToneMapping::update</definition>
+        <argsstring>(CpuUpdater &amp;updater, crg::ImageViewId const &amp;source)</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::ToneMapping::update</qualifiedname>
+        <param>
+          <type><ref refid="d7/d55/a05514" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">source</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The current source image. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="80" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9f/a05714_1a3b5dc35fd93e4a5c04d91522309f5814" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ToneMapping::updatePipeline</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>updatePipeline</name>
+        <qualifiedname>castor3d::ToneMapping::updatePipeline</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+<para>Initialises tone mapping shader and pipeline. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The tone mapping name. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="90" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9f/a05714_1a3ee902c14b357a4602c549841c3e8be2" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::ToneMapping::accept</definition>
+        <argsstring>(ToneMappingVisitor &amp;visitor)</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::ToneMapping::accept</qualifiedname>
+        <param>
+          <type><ref refid="dd/d08/a05718" kindref="compound">ToneMappingVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The visitor. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="99" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d1/d9f/a05714_1a20d3b805bd30b5a817940f3a2392145f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>crg::FramePass &amp;</type>
+        <definition>crg::FramePass &amp; castor3d::ToneMapping::doCreatePass</definition>
+        <argsstring>(castor::Size const &amp;size, crg::FrameGraph &amp;graph, crg::ImageViewIdArray const &amp;source, crg::ImageViewId const &amp;target, crg::FramePass const &amp;previousPass, ProgressBar *progress)</argsstring>
+        <name>doCreatePass</name>
+        <qualifiedname>castor3d::ToneMapping::doCreatePass</qualifiedname>
+        <param>
+          <type>castor::Size const &amp;</type>
+          <declname>size</declname>
+        </param>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewIdArray const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>target</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>previousPass</declname>
+        </param>
+        <param>
+          <type><ref refid="df/dd2/a04486" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="123" column="17"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9f/a05714_1a8a6df775a55a4b84ea470659c5a4c7ab" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ToneMapping::doCreate</definition>
+        <argsstring>(castor::String const &amp;name)</argsstring>
+        <name>doCreate</name>
+        <qualifiedname>castor3d::ToneMapping::doCreate</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="129" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d1/d9f/a05714_1a7d458e6510687229e23c286105fc9584" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::ToneMapping::doUpdatePassIndex</definition>
+        <argsstring>(crg::ImageViewId const &amp;source)</argsstring>
+        <name>doUpdatePassIndex</name>
+        <qualifiedname>castor3d::ToneMapping::doUpdatePassIndex</qualifiedname>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>source</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ToneMapping/ToneMapping.hpp" line="130" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::ToneMapping</label>
+        <link refid="d1/d9f/a05714"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="9">
+        <label>T</label>
+      </node>
+      <node id="3">
+        <label>castor3d::HdrConfigUbo</label>
+        <link refid="d4/dab/a06622"/>
+      </node>
+      <node id="4">
+        <label>castor3d::ShaderModule</label>
+        <link refid="dd/dc8/a06378"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>name</edgelabel>
+          <edgelabel>source</edgelabel>
+        </childnode>
+        <childnode refid="7" relation="usage">
+          <edgelabel>shader</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>compiled</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::SpirVShader</label>
+        <link refid="da/d02/a06374"/>
+        <childnode refid="11" relation="usage">
+          <edgelabel>spirv</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>text</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ToneMapping</label>
+        <link refid="d1/d9f/a05714"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="usage">
+          <edgelabel>m_hdrConfigUbo</edgelabel>
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_pixelShader</edgelabel>
+          <edgelabel>m_vertexShader</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="11">
+        <label>UInt32Array</label>
+      </node>
+      <node id="6">
+        <label>std::basic_string&lt; Char &gt;</label>
+      </node>
+      <node id="5">
+        <label>std::string</label>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>std::unique_ptr&lt; ast::Shader &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; ast::Shader &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ToneMapping/ToneMapping.hpp" line="20" column="1" bodyfile="Render/ToneMapping/ToneMapping.hpp" bodystart="22" bodyend="142"/>
+    <listofallmembers>
+      <member refid="d1/d9f/a05714_1a3ee902c14b357a4602c549841c3e8be2" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>accept</name></member>
+      <member refid="d1/d9f/a05714_1a8a6df775a55a4b84ea470659c5a4c7ab" prot="private" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>doCreate</name></member>
+      <member refid="d1/d9f/a05714_1a20d3b805bd30b5a817940f3a2392145f" prot="private" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>doCreatePass</name></member>
+      <member refid="d1/d9f/a05714_1a7d458e6510687229e23c286105fc9584" prot="private" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>doUpdatePassIndex</name></member>
+      <member refid="d1/d9f/a05714_1a8e356ab5d1add11cadc1f44844ad7a97" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>getFullName</name></member>
+      <member refid="d1/d9f/a05714_1a54486ed9a7b1212ef8c2af8fffb3ba76" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>getName</name></member>
+      <member refid="d1/d9f/a05714_1a18ca2f0389b8b42dd0b8a39673ed31fd" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>getPass</name></member>
+      <member refid="d1/d9f/a05714_1ab93b24e139003466d88b519e901a4c73" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>initialise</name></member>
+      <member refid="d1/d9f/a05714_1a33733eec74c57ab293ed874b999536f0" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_hdrConfigUbo</name></member>
+      <member refid="d1/d9f/a05714_1af28cd1367268943ec173b63376c6bac0" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_name</name></member>
+      <member refid="d1/d9f/a05714_1acc4f0512371286e3e7bd3f59ea821647" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_pass</name></member>
+      <member refid="d1/d9f/a05714_1ad410a406ac3830c76edaa2c07a49db06" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_passIndex</name></member>
+      <member refid="d1/d9f/a05714_1a3df5ff521c4cce3c79aa7491dc537fe7" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_pixelShader</name></member>
+      <member refid="d1/d9f/a05714_1add60d6dd69ead4886168a3a3fbd77fd7" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_program</name></member>
+      <member refid="d1/d9f/a05714_1ac279ef1d4aaf85c8e46ca93310b33349" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_quad</name></member>
+      <member refid="d1/d9f/a05714_1a1a00c695bd5c715e87f31fe7915afc5c" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_source</name></member>
+      <member refid="d1/d9f/a05714_1a1dcdb146bb162922519d964027053f16" prot="protected" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>m_vertexShader</name></member>
+      <member refid="d1/d9f/a05714_1a64d2aa1db5081259c107e1a7822797f3" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>ToneMapping</name></member>
+      <member refid="d1/d9f/a05714_1acfeab299cf400830be714819b0a9262a" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>update</name></member>
+      <member refid="d1/d9f/a05714_1a3b5dc35fd93e4a5c04d91522309f5814" prot="public" virt="non-virtual"><scope>castor3d::ToneMapping</scope><name>updatePipeline</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,81 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/dd7/a06762" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectIdsConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/dd7/a06762_1a75b4202ba8f19e611409a8b76f6d85b1" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectIdsConfiguration::nodeId</definition>
+        <argsstring></argsstring>
+        <name>nodeId</name>
+        <qualifiedname>castor3d::ObjectIdsConfiguration::nodeId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="309" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="309" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a06762_1a0de8356d4250a0164aab3a39d57535ad" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectIdsConfiguration::morphingId</definition>
+        <argsstring></argsstring>
+        <name>morphingId</name>
+        <qualifiedname>castor3d::ObjectIdsConfiguration::morphingId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="310" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="310" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a06762_1ae61d11e2e9cd8addadc357b59630e803" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectIdsConfiguration::skinningId</definition>
+        <argsstring></argsstring>
+        <name>skinningId</name>
+        <qualifiedname>castor3d::ObjectIdsConfiguration::skinningId</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="311" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="311" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dd7/a06762_1ad12b43b777f0c6335ecc99dee13a1fc1" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ObjectIdsConfiguration::pad</definition>
+        <argsstring></argsstring>
+        <name>pad</name>
+        <qualifiedname>castor3d::ObjectIdsConfiguration::pad</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="312" column="10" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="312" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Objects ID data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="307" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="308" bodyend="313"/>
+    <listofallmembers>
+      <member refid="d3/dd7/a06762_1a0de8356d4250a0164aab3a39d57535ad" prot="public" virt="non-virtual"><scope>castor3d::ObjectIdsConfiguration</scope><name>morphingId</name></member>
+      <member refid="d3/dd7/a06762_1a75b4202ba8f19e611409a8b76f6d85b1" prot="public" virt="non-virtual"><scope>castor3d::ObjectIdsConfiguration</scope><name>nodeId</name></member>
+      <member refid="d3/dd7/a06762_1ad12b43b777f0c6335ecc99dee13a1fc1" prot="public" virt="non-virtual"><scope>castor3d::ObjectIdsConfiguration</scope><name>pad</name></member>
+      <member refid="d3/dd7/a06762_1ae61d11e2e9cd8addadc357b59630e803" prot="public" virt="non-virtual"><scope>castor3d::ObjectIdsConfiguration</scope><name>skinningId</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

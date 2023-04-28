@@ -1,0 +1,360 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d6/d8d/a03266" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ScrollBarStyle</compoundname>
+    <basecompoundref refid="d5/de7/a03234" prot="public" virt="non-virtual">castor3d::ControlStyle</basecompoundref>
+    <includes local="no">StyleScrollBar.hpp</includes>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d6/d8d/a03266_1a2cac353fa67fb91f28cdf8f29ee3060d" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type><ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725d" kindref="member">ControlType</ref> constexpr</type>
+        <definition>ControlType constexpr castor3d::ScrollBarStyle::Type</definition>
+        <argsstring></argsstring>
+        <name>Type</name>
+        <qualifiedname>castor3d::ScrollBarStyle::Type</qualifiedname>
+        <initializer>= <ref refid="d5/da6/a01698_1ac80f9441f3591ef5f0b85f0608c7725da2b00b2ef98d159244d360ef2249a7659" kindref="member">ControlType::eScrollBar</ref></initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="16" column="30" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="16" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d6/d8d/a03266_1a61df1d5529c44154097494117462b1d2" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref></type>
+        <definition>PanelStyle castor3d::ScrollBarStyle::m_barStyle</definition>
+        <argsstring></argsstring>
+        <name>m_barStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::m_barStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="91" column="12" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="91" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8d/a03266_1a5de44c32d1488c69e4606d664a8a005c" prot="private" static="no" mutable="no">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref></type>
+        <definition>PanelStyle castor3d::ScrollBarStyle::m_thumbStyle</definition>
+        <argsstring></argsstring>
+        <name>m_thumbStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::m_thumbStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="92" column="12" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="92" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8d/a03266_1a3eaabb1f70e16506470cffe001e9b735" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref></type>
+        <definition>ButtonStyle castor3d::ScrollBarStyle::m_beginStyle</definition>
+        <argsstring></argsstring>
+        <name>m_beginStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::m_beginStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="93" column="13" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d6/d8d/a03266_1a13b999cdee6ad90e155df844e7a9325b" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref></type>
+        <definition>ButtonStyle castor3d::ScrollBarStyle::m_endStyle</definition>
+        <argsstring></argsstring>
+        <name>m_endStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::m_endStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="94" column="13" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d6/d8d/a03266_1a1ff3e3a9c3dfadd432371ce4d45b3113" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ScrollBarStyle::ScrollBarStyle</definition>
+        <argsstring>(castor::String const &amp;name, Scene *scene, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ScrollBarStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::ScrollBarStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="db/dd3/a06070" kindref="compound">Scene</ref> *</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="18" column="1" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="18" bodyend="32"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1a21c826143b0db3b30eae04f82b5f6268" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ScrollBarStyle::ScrollBarStyle</definition>
+        <argsstring>(castor::String const &amp;name, Engine &amp;engine, castor::String const &amp;fontName)</argsstring>
+        <name>ScrollBarStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::ScrollBarStyle</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d23/a03038" kindref="compound">Engine</ref> &amp;</type>
+          <declname>engine</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>fontName</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="34" column="1" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="34" bodyend="39"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1a5e59e229f07138a10484712334bd633c" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> const &amp;</type>
+        <definition>PanelStyle const  &amp; castor3d::ScrollBarStyle::getBarStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getBarStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::getBarStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="41" column="19" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="41" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1adc7597000ce4b34339017787ddf6e661" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> const &amp;</type>
+        <definition>PanelStyle const  &amp; castor3d::ScrollBarStyle::getThumbStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getThumbStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::getThumbStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="46" column="19" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="46" bodyend="49"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1abb60bc74df05d42ae759c6dd7a316539" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref> const &amp;</type>
+        <definition>ButtonStyle const  &amp; castor3d::ScrollBarStyle::getBeginStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getBeginStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::getBeginStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="51" column="20" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="51" bodyend="54"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1a29517dc69a44695afd4cf71599b90c25" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref> const &amp;</type>
+        <definition>ButtonStyle const  &amp; castor3d::ScrollBarStyle::getEndStyle</definition>
+        <argsstring>() const</argsstring>
+        <name>getEndStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::getEndStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="56" column="20" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="56" bodyend="59"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1a0383f9040b9c794fbfa8ab5b70c59218" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> &amp;</type>
+        <definition>PanelStyle &amp; castor3d::ScrollBarStyle::getBarStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getBarStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::getBarStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="61" column="13" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="61" bodyend="64"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1a6c3fb6da395093032ef8338973b8db31" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="d5/d08/a03254" kindref="compound">PanelStyle</ref> &amp;</type>
+        <definition>PanelStyle &amp; castor3d::ScrollBarStyle::getThumbStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getThumbStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::getThumbStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="66" column="13" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="66" bodyend="69"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1a6bc85d0164eabec88a6c82a223cdca6e" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref> &amp;</type>
+        <definition>ButtonStyle &amp; castor3d::ScrollBarStyle::getBeginStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getBeginStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::getBeginStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="71" column="14" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="71" bodyend="74"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1a08fb32cceac345cf1baf82ffc081d90b" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="dd/d6e/a03226" kindref="compound">ButtonStyle</ref> &amp;</type>
+        <definition>ButtonStyle &amp; castor3d::ScrollBarStyle::getEndStyle</definition>
+        <argsstring>()</argsstring>
+        <name>getEndStyle</name>
+        <qualifiedname>castor3d::ScrollBarStyle::getEndStyle</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="76" column="14" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="76" bodyend="79"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d6/d8d/a03266_1aec3e3c8dcb17cd06ce01940f5564a787" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ScrollBarStyle::doUpdateBackgroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateBackgroundMaterial</name>
+        <qualifiedname>castor3d::ScrollBarStyle::doUpdateBackgroundMaterial</qualifiedname>
+        <reimplements refid="d5/de7/a03234_1a3ad976d6b6f857af4c296154b044ff8c">doUpdateBackgroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="82" column="6" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="82" bodyend="84"/>
+      </memberdef>
+      <memberdef kind="function" id="d6/d8d/a03266_1aaa0929dc36f02c221c56282829f0adb8" prot="private" static="no" const="no" explicit="no" inline="yes" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ScrollBarStyle::doUpdateForegroundMaterial</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdateForegroundMaterial</name>
+        <qualifiedname>castor3d::ScrollBarStyle::doUpdateForegroundMaterial</qualifiedname>
+        <reimplements refid="d5/de7/a03234_1a045cd8c44048c2e75eb9a6c07851ec7f">doUpdateForegroundMaterial</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Theme/StyleScrollBar.hpp" line="86" column="6" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="86" bodyend="88"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d5/de7/a03234"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ScrollBarStyle</label>
+        <link refid="d6/d8d/a03266"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::ControlStyle</label>
+        <link refid="d5/de7/a03234"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ScrollBarStyle</label>
+        <link refid="d6/d8d/a03266"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Theme/StyleScrollBar.hpp" line="12" column="1" bodyfile="Gui/Theme/StyleScrollBar.hpp" bodystart="14" bodyend="95"/>
+    <listofallmembers>
+      <member refid="d5/de7/a03234_1a098fe55fee12aa4aeb0b037944f835f2" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>ControlStyle</name></member>
+      <member refid="d5/de7/a03234_1aeda2101fba70a69cd4bf8256f22d8c16" prot="protected" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>doCreateMaterial</name></member>
+      <member refid="d6/d8d/a03266_1aec3e3c8dcb17cd06ce01940f5564a787" prot="private" virt="virtual"><scope>castor3d::ScrollBarStyle</scope><name>doUpdateBackgroundMaterial</name></member>
+      <member refid="d6/d8d/a03266_1aaa0929dc36f02c221c56282829f0adb8" prot="private" virt="virtual"><scope>castor3d::ScrollBarStyle</scope><name>doUpdateForegroundMaterial</name></member>
+      <member refid="d5/de7/a03234_1ac613ecdff78b6790736de078aa5e3150" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getBackgroundMaterial</name></member>
+      <member refid="d6/d8d/a03266_1a5e59e229f07138a10484712334bd633c" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getBarStyle</name></member>
+      <member refid="d6/d8d/a03266_1a0383f9040b9c794fbfa8ab5b70c59218" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getBarStyle</name></member>
+      <member refid="d6/d8d/a03266_1abb60bc74df05d42ae759c6dd7a316539" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getBeginStyle</name></member>
+      <member refid="d6/d8d/a03266_1a6bc85d0164eabec88a6c82a223cdca6e" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getBeginStyle</name></member>
+      <member refid="d5/de7/a03234_1a344a49f21217d799892e5c8a3037428a" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getCursor</name></member>
+      <member refid="d6/d8d/a03266_1a29517dc69a44695afd4cf71599b90c25" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getEndStyle</name></member>
+      <member refid="d6/d8d/a03266_1a08fb32cceac345cf1baf82ffc081d90b" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getEndStyle</name></member>
+      <member refid="d5/de7/a03234_1a3ff11fb205d455ddc07b6986c4a804f2" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getEngine</name></member>
+      <member refid="d5/de7/a03234_1a8e2484376c900533284daa8c190e41d6" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getForegroundMaterial</name></member>
+      <member refid="d5/de7/a03234_1ab2b7e540ca276b82d78cdadc9665b59a" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getScene</name></member>
+      <member refid="d6/d8d/a03266_1adc7597000ce4b34339017787ddf6e661" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getThumbStyle</name></member>
+      <member refid="d6/d8d/a03266_1a6c3fb6da395093032ef8338973b8db31" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getThumbStyle</name></member>
+      <member refid="d5/de7/a03234_1a96622f93682e623c3dd57c8afd186aeb" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>getType</name></member>
+      <member refid="d5/de7/a03234_1a1ea4620ff83eb868e5e89aad17d4bdb1" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>hasScene</name></member>
+      <member refid="d5/de7/a03234_1a1b1654f46a2779f9606f6511e4c75b68" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>isBackgroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1abef953a375da7b02e11eab1e7fb95731" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>isForegroundInvisible</name></member>
+      <member refid="d6/d8d/a03266_1a61df1d5529c44154097494117462b1d2" prot="private" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>m_barStyle</name></member>
+      <member refid="d6/d8d/a03266_1a3eaabb1f70e16506470cffe001e9b735" prot="private" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>m_beginStyle</name></member>
+      <member refid="d6/d8d/a03266_1a13b999cdee6ad90e155df844e7a9325b" prot="private" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>m_endStyle</name></member>
+      <member refid="d6/d8d/a03266_1a5de44c32d1488c69e4606d664a8a005c" prot="private" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>m_thumbStyle</name></member>
+      <member refid="d6/d8d/a03266_1a1ff3e3a9c3dfadd432371ce4d45b3113" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>ScrollBarStyle</name></member>
+      <member refid="d6/d8d/a03266_1a21c826143b0db3b30eae04f82b5f6268" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>ScrollBarStyle</name></member>
+      <member refid="d5/de7/a03234_1abb0c1b1b69b9dcd950c95c49e6a0907b" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>setBackgroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1a71c2539b67ee882ff7e4682aa8d984c2" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>setBackgroundMaterial</name></member>
+      <member refid="d5/de7/a03234_1a8e2de50c9bf082cc93a63d7d8adcdf08" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>setCursor</name></member>
+      <member refid="d5/de7/a03234_1abdf3d22a6c22445a800f47abe1a00545" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>setForegroundInvisible</name></member>
+      <member refid="d5/de7/a03234_1a83d21de1ca65b10b0d94193920d40614" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>setForegroundMaterial</name></member>
+      <member refid="d6/d8d/a03266_1a2cac353fa67fb91f28cdf8f29ee3060d" prot="public" virt="non-virtual"><scope>castor3d::ScrollBarStyle</scope><name>Type</name></member>
+      <member refid="d5/de7/a03234_1a6170f2465de931fc0221e4b10e7e8f7f" prot="public" virt="virtual"><scope>castor3d::ScrollBarStyle</scope><name>~ControlStyle</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

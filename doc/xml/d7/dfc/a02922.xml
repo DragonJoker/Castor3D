@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/dfc/a02922" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ObjectBufferPool::ModelBuffers</compoundname>
+    <includes local="no">ObjectBufferPool.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d7/dfc/a02922_1a84e0f24e22316d0bc23373fc4f93cefb" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="d5/da6/a01698_1a683bd798faa71e3065a0fb8ccc821927" kindref="member">GpuPackedBufferPtr</ref>, size_t(<ref refid="d5/da6/a01698_1a4faec35d0640cd94dc3530998e445ff0ae558bb69fadec037d9eae46601a4df8e" kindref="member">SubmeshData::eCount</ref>) &gt;</type>
+        <definition>std::array&lt; GpuPackedBufferPtr, size_t( SubmeshData::eCount ) &gt; castor3d::ObjectBufferPool::ModelBuffers::buffers</definition>
+        <argsstring></argsstring>
+        <name>buffers</name>
+        <qualifiedname>castor3d::ObjectBufferPool::ModelBuffers::buffers</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="105" column="12" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="105" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d7/dfc/a02922_1ab8898cecf1d8a159b5fa2e8d537a6c6f" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::ObjectBufferPool::ModelBuffers::ModelBuffers</definition>
+        <argsstring>(std::array&lt; GpuPackedBufferPtr, size_t(SubmeshData::eCount) &gt; bufs={})</argsstring>
+        <name>ModelBuffers</name>
+        <qualifiedname>castor3d::ObjectBufferPool::ModelBuffers::ModelBuffers</qualifiedname>
+        <param>
+          <type>std::array&lt; <ref refid="d5/da6/a01698_1a683bd798faa71e3065a0fb8ccc821927" kindref="member">GpuPackedBufferPtr</ref>, size_t(<ref refid="d5/da6/a01698_1a4faec35d0640cd94dc3530998e445ff0ae558bb69fadec037d9eae46601a4df8e" kindref="member">SubmeshData::eCount</ref>) &gt;</type>
+          <declname>bufs</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Buffer/ObjectBufferPool.hpp" line="100" column="10" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="100" bodyend="103"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <collaborationgraph>
+      <node id="4">
+        <label>T</label>
+      </node>
+      <node id="2">
+        <label>std::array&lt; GpuPackedBufferPtr, size_t(SubmeshData::eCount) &gt;</label>
+        <childnode refid="3" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="5" relation="template-instance">
+          <edgelabel>&lt; GpuPackedBufferPtr, size_t(SubmeshData::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ObjectBufferPool::ModelBuffers</label>
+        <link refid="d7/dfc/a02922"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>buffers</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="4" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Buffer/ObjectBufferPool.hpp" line="98" column="1" bodyfile="Buffer/ObjectBufferPool.hpp" bodystart="99" bodyend="106"/>
+    <listofallmembers>
+      <member refid="d7/dfc/a02922_1a84e0f24e22316d0bc23373fc4f93cefb" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool::ModelBuffers</scope><name>buffers</name></member>
+      <member refid="d7/dfc/a02922_1ab8898cecf1d8a159b5fa2e8d537a6c6f" prot="public" virt="non-virtual"><scope>castor3d::ObjectBufferPool::ModelBuffers</scope><name>ModelBuffers</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

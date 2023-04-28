@@ -1,9 +1,7 @@
-<map id="castor3d::OpaquePass" name="castor3d::OpaquePass">
-<area shape="rect" id="node1" title=" " alt="" coords="311,244,465,271"/>
-<area shape="rect" id="node2" href="$d4/d61/a05212.html" title=" " alt="" coords="298,155,478,196"/>
-<area shape="rect" id="node3" href="$d8/de4/a05172.html" title=" " alt="" coords="182,80,370,107"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,192,32"/>
-<area shape="rect" id="node5" title=" " alt="" coords="217,5,335,32"/>
-<area shape="rect" id="node6" title=" " alt="" coords="360,5,467,32"/>
-<area shape="rect" id="node7" href="$df/dfd/a05208.html" title=" " alt="" coords="395,80,605,107"/>
+<map id="castor3d::OverlayWords" name="castor3d::OverlayWords">
+<area shape="rect" id="node1" title="Contains the words forming the overlay." alt="" coords="51,313,213,339"/>
+<area shape="rect" id="node2" title=" " alt="" coords="29,196,235,251"/>
+<area shape="rect" id="node3" href="$d6/d2e/a04845.html" title="A text chars container, along with its size and position." alt="" coords="5,93,141,119"/>
+<area shape="rect" id="node4" title=" " alt="" coords="166,93,274,119"/>
+<area shape="rect" id="node5" title=" " alt="" coords="201,5,239,31"/>
 </map>

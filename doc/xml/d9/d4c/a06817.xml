@@ -1,0 +1,252 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/d4c/a06817" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VoxelizerUboConfiguration</compoundname>
+    <includes local="no">VoxelizerUbo.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d9/d4c/a06817_1a16e83dea729d6e2fd41ef2b92b905629" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelizerUboConfiguration::worldToGrid</definition>
+        <argsstring></argsstring>
+        <name>worldToGrid</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::worldToGrid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><itemizedlist>
+<listitem><para>float worldToGrid: Factor from world position to grid position</para>
+</listitem><listitem><para>float gridToWorld: Factor from grid position to world position</para>
+</listitem><listitem><para>float gridToClip: Factor from grid position to clip position</para>
+</listitem><listitem><para>float clipToGrid: Factor from clip position to grid position </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="67" column="7" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="67" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1a888edfb59aaf615b1a21fdee55db29de" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelizerUboConfiguration::gridToWorld</definition>
+        <argsstring></argsstring>
+        <name>gridToWorld</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::gridToWorld</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="68" column="7" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1aa51e419055227337c699db192c54c168" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelizerUboConfiguration::clipToGrid</definition>
+        <argsstring></argsstring>
+        <name>clipToGrid</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::clipToGrid</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="69" column="7" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1aaebec2d1db9bf2fc755d7f20773d990f" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelizerUboConfiguration::gridToClip</definition>
+        <argsstring></argsstring>
+        <name>gridToClip</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::gridToClip</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="70" column="7" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1afe95b684298956762948cbc30e305509" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelizerUboConfiguration::radianceMaxDistance</definition>
+        <argsstring></argsstring>
+        <name>radianceMaxDistance</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::radianceMaxDistance</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><itemizedlist>
+<listitem><para>float radianceMaxDistance;</para>
+</listitem><listitem><para>float radianceMips;</para>
+</listitem><listitem><para>uint radianceNumCones;</para>
+</listitem><listitem><para>float radianceNumConesInv; </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="77" column="7" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1ab9a2c3eb43128759a4e4c87637e87dfc" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelizerUboConfiguration::radianceMips</definition>
+        <argsstring></argsstring>
+        <name>radianceMips</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::radianceMips</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="78" column="7" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="78" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1a4c1013e832f168cb338d74cbfc3e83e9" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::VoxelizerUboConfiguration::radianceNumCones</definition>
+        <argsstring></argsstring>
+        <name>radianceNumCones</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::radianceNumCones</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="79" column="10" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1aeb93cd5d2b6a9a9fdee91d83d73849e2" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelizerUboConfiguration::radianceNumConesInv</definition>
+        <argsstring></argsstring>
+        <name>radianceNumConesInv</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::radianceNumConesInv</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="80" column="7" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1ac49ba5c66a3fc1572355c496123e8d85" prot="public" static="no" mutable="no">
+        <type>castor::Point3f</type>
+        <definition>castor::Point3f castor3d::VoxelizerUboConfiguration::pad</definition>
+        <argsstring></argsstring>
+        <name>pad</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::pad</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><itemizedlist>
+<listitem><para>vec3 gridCenter: Center of the voxel grid, in world space units</para>
+</listitem><listitem><para>float rayStepSize; </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="85" column="17" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1a74f8c6b06b0fb823fdb0fac10619e95a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::VoxelizerUboConfiguration::rayStepSize</definition>
+        <argsstring></argsstring>
+        <name>rayStepSize</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::rayStepSize</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="86" column="7" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1a49efc50f44f86f83b627230473514d57" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::VoxelizerUboConfiguration::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para><itemizedlist>
+<listitem><para>uint enabled;</para>
+</listitem><listitem><para>uint enableConservativeRasterization;</para>
+</listitem><listitem><para>uint enableOcclusion;</para>
+</listitem><listitem><para>uint enableSecondaryBounce; </para>
+</listitem></itemizedlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="93" column="10" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="93" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1a34ab00eb70c3b7e52ee3a9dcc5a84d2f" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::VoxelizerUboConfiguration::enableConservativeRasterization</definition>
+        <argsstring></argsstring>
+        <name>enableConservativeRasterization</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::enableConservativeRasterization</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="94" column="10" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1a5c05f71af22cfb00b8ffde2448923e7e" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::VoxelizerUboConfiguration::enableOcclusion</definition>
+        <argsstring></argsstring>
+        <name>enableOcclusion</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::enableOcclusion</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="95" column="10" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="95" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d4c/a06817_1ae1b8b31e0686522d84389bae75a85b85" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::VoxelizerUboConfiguration::enableSecondaryBounce</definition>
+        <argsstring></argsstring>
+        <name>enableSecondaryBounce</name>
+        <qualifiedname>castor3d::VoxelizerUboConfiguration::enableSecondaryBounce</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/VoxelizerUbo.hpp" line="96" column="10" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="96" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/VoxelizerUbo.hpp" line="59" column="1" bodyfile="Shader/Ubos/VoxelizerUbo.hpp" bodystart="60" bodyend="97"/>
+    <listofallmembers>
+      <member refid="d9/d4c/a06817_1aa51e419055227337c699db192c54c168" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>clipToGrid</name></member>
+      <member refid="d9/d4c/a06817_1a34ab00eb70c3b7e52ee3a9dcc5a84d2f" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>enableConservativeRasterization</name></member>
+      <member refid="d9/d4c/a06817_1a49efc50f44f86f83b627230473514d57" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>enabled</name></member>
+      <member refid="d9/d4c/a06817_1a5c05f71af22cfb00b8ffde2448923e7e" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>enableOcclusion</name></member>
+      <member refid="d9/d4c/a06817_1ae1b8b31e0686522d84389bae75a85b85" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>enableSecondaryBounce</name></member>
+      <member refid="d9/d4c/a06817_1aaebec2d1db9bf2fc755d7f20773d990f" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>gridToClip</name></member>
+      <member refid="d9/d4c/a06817_1a888edfb59aaf615b1a21fdee55db29de" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>gridToWorld</name></member>
+      <member refid="d9/d4c/a06817_1ac49ba5c66a3fc1572355c496123e8d85" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>pad</name></member>
+      <member refid="d9/d4c/a06817_1afe95b684298956762948cbc30e305509" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>radianceMaxDistance</name></member>
+      <member refid="d9/d4c/a06817_1ab9a2c3eb43128759a4e4c87637e87dfc" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>radianceMips</name></member>
+      <member refid="d9/d4c/a06817_1a4c1013e832f168cb338d74cbfc3e83e9" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>radianceNumCones</name></member>
+      <member refid="d9/d4c/a06817_1aeb93cd5d2b6a9a9fdee91d83d73849e2" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>radianceNumConesInv</name></member>
+      <member refid="d9/d4c/a06817_1a74f8c6b06b0fb823fdb0fac10619e95a" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>rayStepSize</name></member>
+      <member refid="d9/d4c/a06817_1a16e83dea729d6e2fd41ef2b92b905629" prot="public" virt="non-virtual"><scope>castor3d::VoxelizerUboConfiguration</scope><name>worldToGrid</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

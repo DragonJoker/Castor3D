@@ -1,0 +1,6 @@
+<map id="castor3d::HeightMapComponent::Plugin::getTextureFlags" name="castor3d::HeightMapComponent::Plugin::getTextureFlags">
+<area shape="rect" id="node1" title=" " alt="" coords="261,69,469,109"/>
+<area shape="rect" id="node2" href="$d3/d2f/a03777.html#ac0894db0f7c9fe0aeddcb700148566f1" title="Fills the texture configuration for use with this component." alt="" coords="5,5,213,45"/>
+<area shape="rect" id="node3" href="$d3/d2f/a03777.html#a9ba5185ae251da2cbc634bb68f211470" title="Removes from given texture flags the ones that are useless given the provided filter." alt="" coords="5,69,213,109"/>
+<area shape="rect" id="node4" href="$d3/d2f/a03777.html#a454433e52763a3eb67679a2f7d2f2c2f" title=" " alt="" coords="5,133,213,173"/>
+</map>

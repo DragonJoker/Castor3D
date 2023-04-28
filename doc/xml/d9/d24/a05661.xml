@@ -1,0 +1,628 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d9/d24/a05661" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::ShadowMapDirectional</compoundname>
+    <basecompoundref refid="d9/d8d/a05645" prot="public" virt="non-virtual">castor3d::ShadowMap</basecompoundref>
+    <includes local="no">ShadowMapDirectional.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d9/d24/a05661_1ae8f3f0262d42dced34b0174da433f4a2" prot="private" static="no" mutable="no">
+        <type>crg::ImageId</type>
+        <definition>crg::ImageId castor3d::ShadowMapDirectional::m_blurIntermediate</definition>
+        <argsstring></argsstring>
+        <name>m_blurIntermediate</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::m_blurIntermediate</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="62" column="14" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="62" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d24/a05661_1a24e6d464ad28497ec4f78cd190a35717" prot="private" static="no" mutable="no">
+        <type>crg::ImageViewId</type>
+        <definition>crg::ImageViewId castor3d::ShadowMapDirectional::m_blurIntermediateView</definition>
+        <argsstring></argsstring>
+        <name>m_blurIntermediateView</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::m_blurIntermediateView</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="63" column="18" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d24/a05661_1a059b305a98b935e0b84045d2030082b6" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1a90275671c44e791e9556c4bed9033935" kindref="member">ShadowType</ref></type>
+        <definition>ShadowType castor3d::ShadowMapDirectional::m_shadowType</definition>
+        <argsstring></argsstring>
+        <name>m_shadowType</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::m_shadowType</qualifiedname>
+        <initializer>{ <ref refid="d3/d5e/a01725_1a90275671c44e791e9556c4bed9033935a7bafdff459a286e49c229bde7488d211" kindref="member">ShadowType::eRaw</ref> }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="64" column="12" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d24/a05661_1aeab75f3aa6c025ab380600b6f55a60e4" prot="private" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ShadowMapDirectional::m_cascades</definition>
+        <argsstring></argsstring>
+        <name>m_cascades</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::m_cascades</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="65" column="10" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="65" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d9/d24/a05661_1a18897dc6b93bf36c40d6302e85588f95" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; <ref refid="d3/d5e/a01725_1a788a36216ccbb048af69a0b240aef244" kindref="member">MeshResPtr</ref> &gt;</type>
+        <definition>std::vector&lt; MeshResPtr &gt; castor3d::ShadowMapDirectional::m_frustumMeshes</definition>
+        <argsstring></argsstring>
+        <name>m_frustumMeshes</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::m_frustumMeshes</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="66" column="13" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="66" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d9/d24/a05661_1a6a0d28af19a3643574aff4f7a018b5b8" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::ShadowMapDirectional::ShadowMapDirectional</definition>
+        <argsstring>(crg::ResourcesCache &amp;resources, RenderDevice const &amp;device, Scene &amp;scene, ProgressBar *progress)</argsstring>
+        <name>ShadowMapDirectional</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::ShadowMapDirectional</qualifiedname>
+        <param>
+          <type>crg::ResourcesCache &amp;</type>
+          <declname>resources</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type><ref refid="de/da7/a06097" kindref="compound">Scene</ref> &amp;</type>
+          <declname>scene</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d13/a04513" kindref="compound">ProgressBar</ref> *</type>
+          <declname>progress</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">resources</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render graph resources handler. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">scene</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">progress</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The optional progress bar. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="34" column="18"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d9/d24/a05661_1a33688c001b696d1b0486545d63031efe" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>crg::FramePassArray</type>
+        <definition>crg::FramePassArray castor3d::ShadowMapDirectional::doCreatePass</definition>
+        <argsstring>(crg::FrameGraph &amp;graph, crg::FramePassArray const &amp;previousPasses, uint32_t index, bool vsm, bool rsm, bool isStatic, Passes &amp;passes) override</argsstring>
+        <name>doCreatePass</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::doCreatePass</qualifiedname>
+        <reimplements refid="d9/d8d/a05645_1a8f168fba3f24d11fcedc0c38faca7322">doCreatePass</reimplements>
+        <param>
+          <type>crg::FrameGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type>crg::FramePassArray const &amp;</type>
+          <declname>previousPasses</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>vsm</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>rsm</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isStatic</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d56/a05653" kindref="compound">Passes</ref> &amp;</type>
+          <declname>passes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="40" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d24/a05661_1ac576a97392e33cb53be0364ab6deb3d0" prot="private" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type>bool</type>
+        <definition>bool castor3d::ShadowMapDirectional::doIsUpToDate</definition>
+        <argsstring>(uint32_t index, Passes const &amp;passes) const override</argsstring>
+        <name>doIsUpToDate</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::doIsUpToDate</qualifiedname>
+        <reimplements refid="d9/d8d/a05645_1a845a92736da2ea19a4ecf174801ef10a">doIsUpToDate</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d56/a05653" kindref="compound">Passes</ref> const &amp;</type>
+          <declname>passes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="47" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d24/a05661_1a521577bdcae51c7fbd6831e1f41f73b2" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ShadowMapDirectional::doSetUpToDate</definition>
+        <argsstring>(uint32_t index, Passes &amp;passes) override</argsstring>
+        <name>doSetUpToDate</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::doSetUpToDate</qualifiedname>
+        <reimplements refid="d9/d8d/a05645_1ab762f8f1a4e2b4d4e3a5f4bbfd1a9d8f">doSetUpToDate</reimplements>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d56/a05653" kindref="compound">Passes</ref> &amp;</type>
+          <declname>passes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="49" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d24/a05661_1a79eb43ea91a312463a6d769eb5a450c3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ShadowMapDirectional::doUpdate</definition>
+        <argsstring>(CpuUpdater &amp;updater, Passes &amp;passes) override</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::doUpdate</qualifiedname>
+        <reimplements refid="d9/d8d/a05645_1a5f163ca26bc20f7ded6225df42b13fc0">doUpdate</reimplements>
+        <param>
+          <type><ref refid="d5/de0/a05541" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d56/a05653" kindref="compound">Passes</ref> &amp;</type>
+          <declname>passes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="51" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d24/a05661_1a6cb00d9400ce98b21ad7bf4d731fc4b3" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::ShadowMapDirectional::doUpdate</definition>
+        <argsstring>(GpuUpdater &amp;updater, Passes &amp;passes) override</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::doUpdate</qualifiedname>
+        <reimplements refid="d9/d8d/a05645_1ac9f28412ce1789d22652e2ee1f810658">doUpdate</reimplements>
+        <param>
+          <type><ref refid="d1/da9/a05549" kindref="compound">GpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <param>
+          <type><ref refid="db/d56/a05653" kindref="compound">Passes</ref> &amp;</type>
+          <declname>passes</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="53" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d9/d24/a05661_1afa0e6eede026d9a0146a03bb5c0697d5" prot="private" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::ShadowMapDirectional::doGetMaxCount</definition>
+        <argsstring>() const override</argsstring>
+        <name>doGetMaxCount</name>
+        <qualifiedname>castor3d::ShadowMapDirectional::doGetMaxCount</qualifiedname>
+        <reimplements refid="d9/d8d/a05645_1afc2744286ac8226793e12184239cac3e">doGetMaxCount</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="56" column="10" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="56" bodyend="59"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::ShadowMap</label>
+        <link refid="d9/d8d/a05645"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMapDirectional</label>
+        <link refid="d9/d24/a05661"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="13">
+        <label>castor3d::GBufferT&lt; SmTexture &gt;</label>
+        <link refid="d7/dca/a04949"/>
+        <childnode refid="14" relation="private-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="template-instance">
+          <edgelabel>&lt; SmTexture &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>K</label>
+      </node>
+      <node id="9">
+        <label>T</label>
+      </node>
+      <node id="21">
+        <label>std::array&lt; castor3d::ShadowMap::AllPasses, 4u &gt;</label>
+        <childnode refid="22" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="34" relation="template-instance">
+          <edgelabel>&lt; castor3d::ShadowMap::AllPasses, 4u &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>castor3d::CameraUbo</label>
+        <link refid="df/d2f/a06641"/>
+      </node>
+      <node id="14">
+        <label>castor3d::GBufferBase</label>
+        <link refid="d7/dde/a04945"/>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+      </node>
+      <node id="17">
+        <label>castor3d::GBufferT&lt; TextureEnumT &gt;</label>
+        <link refid="d7/dca/a04949"/>
+        <childnode refid="14" relation="private-inheritance">
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_result</edgelabel>
+        </childnode>
+      </node>
+      <node id="7">
+        <label>castor3d::QueuesData</label>
+        <link refid="d9/de3/a05449"/>
+      </node>
+      <node id="4">
+        <label>castor3d::RenderDevice</label>
+        <link refid="d6/d0f/a05457"/>
+        <childnode refid="5" relation="usage">
+          <edgelabel>renderSystem</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>queueFamilies</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderSystem</label>
+        <link refid="d3/d99/a05585"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="10">
+        <label>castor3d::Scene</label>
+        <link refid="de/da7/a06097"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="11" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::ShadowMap</label>
+        <link refid="d9/d8d/a05645"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_device</edgelabel>
+        </childnode>
+        <childnode refid="10" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+        <childnode refid="12" relation="usage">
+          <edgelabel>m_result</edgelabel>
+          <edgelabel>m_staticsResult</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_geometryBuffers</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_passes</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>castor3d::ShadowMap::AllPasses</label>
+        <link refid="db/dbf/a05657"/>
+        <childnode refid="23" relation="usage">
+          <edgelabel>cameraUbos</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>cameras</edgelabel>
+        </childnode>
+        <childnode refid="28" relation="usage">
+          <edgelabel>otherNodes</edgelabel>
+          <edgelabel>staticNodes</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>castor3d::ShadowMap::Passes</label>
+        <link refid="db/d56/a05653"/>
+        <childnode refid="29" relation="usage">
+          <edgelabel>passes</edgelabel>
+        </childnode>
+        <childnode refid="30" relation="usage">
+          <edgelabel>graphs</edgelabel>
+        </childnode>
+        <childnode refid="32" relation="usage">
+          <edgelabel>runnables</edgelabel>
+        </childnode>
+        <childnode refid="33" relation="usage">
+          <edgelabel>blurs</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::ShadowMapDirectional</label>
+        <link refid="d9/d24/a05661"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="12">
+        <label>castor3d::ShadowMapResult</label>
+        <link refid="d6/d6d/a05685"/>
+        <childnode refid="13" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="11">
+        <label>castor::Named</label>
+      </node>
+      <node id="3">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="18">
+        <label>std::set&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</label>
+        <childnode refid="19" relation="template-instance">
+          <edgelabel>&lt; std::reference_wrapper&lt; castor3d::GeometryBuffers &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="34">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::set&lt; K &gt;</label>
+        <childnode refid="20" relation="usage">
+          <edgelabel>keys</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::shared_ptr&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::unique_ptr&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="9" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::unique_ptr&lt; castor3d::CameraUbo &gt;</label>
+        <childnode refid="25" relation="usage">
+          <edgelabel>ptr</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="template-instance">
+          <edgelabel>&lt; castor3d::CameraUbo &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>std::unique_ptr&lt; crg::FrameGraph &gt;</label>
+        <childnode refid="26" relation="template-instance">
+          <edgelabel>&lt; crg::FrameGraph &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>std::vector&lt; CameraUPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; CameraUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="33">
+        <label>std::vector&lt; GaussianBlurUPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; GaussianBlurUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="29">
+        <label>std::vector&lt; PassDataPtr &gt;</label>
+        <childnode refid="26" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; PassDataPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>std::vector&lt; QueuesData &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; QueuesData &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::vector&lt; TexturePtr &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; TexturePtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>std::vector&lt; crg::RunnableGraphPtr &gt;</label>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; crg::RunnableGraphPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::vector&lt; std::unique_ptr&lt; castor3d::CameraUbo &gt; &gt;</label>
+        <childnode refid="24" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; castor3d::CameraUbo &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>std::vector&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</label>
+        <childnode refid="31" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="template-instance">
+          <edgelabel>&lt; std::unique_ptr&lt; crg::FrameGraph &gt; &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Render/ShadowMap/ShadowMapDirectional.hpp" line="16" column="1" bodyfile="Render/ShadowMap/ShadowMapDirectional.hpp" bodystart="18" bodyend="67"/>
+    <listofallmembers>
+      <member refid="d9/d8d/a05645_1a26e954636e821e196c97ac79356e3cd8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>accept</name></member>
+      <member refid="d9/d24/a05661_1a33688c001b696d1b0486545d63031efe" prot="private" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doCreatePass</name></member>
+      <member refid="d9/d8d/a05645_1a74fdae43a5e7956cf62f5782171e08a4" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doEnableBlur</name></member>
+      <member refid="d9/d8d/a05645_1a7f24813bdec05778f4e5c4213d5c362c" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doEnableCopyStatic</name></member>
+      <member refid="d9/d24/a05661_1afa0e6eede026d9a0146a03bb5c0697d5" prot="private" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doGetMaxCount</name></member>
+      <member refid="d9/d24/a05661_1ac576a97392e33cb53be0364ab6deb3d0" prot="private" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doIsUpToDate</name></member>
+      <member refid="d9/d8d/a05645_1a22576e6323e68f469baf39474d404987" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doRegisterGraphIO</name></member>
+      <member refid="d9/d24/a05661_1a521577bdcae51c7fbd6831e1f41f73b2" prot="private" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doSetUpToDate</name></member>
+      <member refid="d9/d24/a05661_1a79eb43ea91a312463a6d769eb5a450c3" prot="private" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doUpdate</name></member>
+      <member refid="d9/d24/a05661_1a6cb00d9400ce98b21ad7bf4d731fc4b3" prot="private" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>doUpdate</name></member>
+      <member refid="d9/d8d/a05645_1a97532a0d6a8055fe2c1111e17ac31db0" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>getClearValues</name></member>
+      <member refid="d9/d8d/a05645_1a628345d684f5d83c1abd45ef14ef92b4" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>getCount</name></member>
+      <member refid="d9/d8d/a05645_1ac2c0235a4c998b748c2f7976e59a857d" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>getSampler</name></member>
+      <member refid="d9/d8d/a05645_1a67307651db741d32aa34ad4d8547100f" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>getScene</name></member>
+      <member refid="d9/d8d/a05645_1aefc259a0fc7869deb452b1f316773cd7" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>getShadowPassResult</name></member>
+      <member refid="d9/d8d/a05645_1aba47ed3ad24a995aac8c3ec09dcb7df9" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>getShadowPassResult</name></member>
+      <member refid="d9/d8d/a05645_1ad9dd96938ee421ca34bfa6d0cb0fc5a3" prot="public" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>getView</name></member>
+      <member refid="d9/d8d/a05645_1aaf169f1a9990fd4d63df9a2886c9b85d" prot="public" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>getViews</name></member>
+      <member refid="d9/d24/a05661_1ae8f3f0262d42dced34b0174da433f4a2" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_blurIntermediate</name></member>
+      <member refid="d9/d24/a05661_1a24e6d464ad28497ec4f78cd190a35717" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_blurIntermediateView</name></member>
+      <member refid="d9/d24/a05661_1aeab75f3aa6c025ab380600b6f55a60e4" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_cascades</name></member>
+      <member refid="d9/d8d/a05645_1a7f00a0e5f14bc465161695856b16948e" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_count</name></member>
+      <member refid="d9/d8d/a05645_1a668039e910e96aa5e90bb2a59f3aee78" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_device</name></member>
+      <member refid="d9/d24/a05661_1a18897dc6b93bf36c40d6302e85588f95" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_frustumMeshes</name></member>
+      <member refid="d9/d8d/a05645_1ac61987ecf84c837a3f8d7c4b11a90cca" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_geometryBuffers</name></member>
+      <member refid="d9/d8d/a05645_1a1782400ff03d33592ad6c25c25c9b228" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_lightType</name></member>
+      <member refid="d9/d8d/a05645_1a9f394df666a358ba03fe245e0e74d236" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_name</name></member>
+      <member refid="d9/d8d/a05645_1ae83e9eda63321f81ef05e13eeff73e79" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_passes</name></member>
+      <member refid="d9/d8d/a05645_1a458f1dc08f5f3aa9ca1cb00e0e8bdac1" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_passesIndex</name></member>
+      <member refid="d9/d8d/a05645_1a7f8769ca9c825e00804be04e1a6e0dd5" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_resources</name></member>
+      <member refid="d9/d8d/a05645_1a96628a8e618fc25c6656e53613d247cd" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_result</name></member>
+      <member refid="d9/d8d/a05645_1a48fc5d5186c99acf90ebe8ae857888a5" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_scene</name></member>
+      <member refid="d9/d24/a05661_1a059b305a98b935e0b84045d2030082b6" prot="private" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_shadowType</name></member>
+      <member refid="d9/d8d/a05645_1ab64098a857b483a7b95fc7280369860f" prot="protected" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>m_staticsResult</name></member>
+      <member refid="d9/d8d/a05645_1a8ee65c9a8fd7125d6648971035b5c264" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>PassDataPtr</name></member>
+      <member refid="d9/d8d/a05645_1a36b93ea4deac78e3dacff63544874486" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>render</name></member>
+      <member refid="d9/d8d/a05645_1a4bd1bef0eb1b4caf0d3419dae006c077" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>ShadowMap</name></member>
+      <member refid="d9/d24/a05661_1a6a0d28af19a3643574aff4f7a018b5b8" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>ShadowMapDirectional</name></member>
+      <member refid="d9/d8d/a05645_1ab0783b7c6a6037f2432a69015e814855" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>update</name></member>
+      <member refid="d9/d8d/a05645_1a2f74ab348844c815457ad8c134a30ff6" prot="public" virt="non-virtual"><scope>castor3d::ShadowMapDirectional</scope><name>update</name></member>
+      <member refid="d9/d8d/a05645_1ac9e7c75e731020cd90623d47a06644f3" prot="public" virt="virtual"><scope>castor3d::ShadowMapDirectional</scope><name>~ShadowMap</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

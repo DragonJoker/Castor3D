@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/d55/a03341" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::BlendData</compoundname>
+    <includes local="no">BlendComponent.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d3/d55/a03341_1a7d8b3d0b9ab2c41194f2b7f38e2cc6a4" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; <ref refid="d3/d5e/a01725_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; BlendMode &gt; castor3d::BlendData::colourBlendMode</definition>
+        <argsstring></argsstring>
+        <name>colourBlendMode</name>
+        <qualifiedname>castor3d::BlendData::colourBlendMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/BlendComponent.hpp" line="22" column="34" bodyfile="Material/Pass/Component/Base/BlendComponent.hpp" bodystart="22" bodyend="-1"/>
+        <referencedby refid="d6/d55/a03345_1a3520cecd0369c0dadb32827b9421c5e0" compoundref="dd/d63/a00455" startline="103" endline="106">castor3d::BlendComponent::getColourBlendMode</referencedby>
+        <referencedby refid="d6/d55/a03345_1aed761f404fd608db3450ecd62357ff4e" compoundref="dd/d63/a00455" startline="113" endline="116">castor3d::BlendComponent::setColourBlendMode</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="d3/d55/a03341_1a30940cb3032589178c40a16dfad0198f" prot="public" static="no" mutable="no">
+        <type>castor::AtomicGroupChangeTracked&lt; <ref refid="d3/d5e/a01725_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &gt;</type>
+        <definition>castor::AtomicGroupChangeTracked&lt; BlendMode &gt; castor3d::BlendData::alphaBlendMode</definition>
+        <argsstring></argsstring>
+        <name>alphaBlendMode</name>
+        <qualifiedname>castor3d::BlendData::alphaBlendMode</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/BlendComponent.hpp" line="23" column="34" bodyfile="Material/Pass/Component/Base/BlendComponent.hpp" bodystart="23" bodyend="-1"/>
+        <referencedby refid="d6/d55/a03345_1a8b44469c83ffe94f79b3737a0a81f290" compoundref="dd/d63/a00455" startline="98" endline="101">castor3d::BlendComponent::getAlphaBlendMode</referencedby>
+        <referencedby refid="d6/d55/a03345_1a7c9ef5a023ebd710618a75bc47b7ea09" compoundref="dd/d63/a00455" startline="108" endline="111">castor3d::BlendComponent::setAlphaBlendMode</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/d55/a03341_1af54149586d22a160b9f1da1c383d635b" prot="public" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::BlendData::BlendData</definition>
+        <argsstring>(std::atomic_bool &amp;dirty)</argsstring>
+        <name>BlendData</name>
+        <qualifiedname>castor3d::BlendData::BlendData</qualifiedname>
+        <param>
+          <type>std::atomic_bool &amp;</type>
+          <declname>dirty</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Material/Pass/Component/Base/BlendComponent.hpp" line="16" column="10" bodyfile="Material/Pass/Component/Base/BlendComponent.hpp" bodystart="16" bodyend="20"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Material/Pass/Component/Base/BlendComponent.hpp" line="14" column="1" bodyfile="Material/Pass/Component/Base/BlendComponent.hpp" bodystart="15" bodyend="24"/>
+    <listofallmembers>
+      <member refid="d3/d55/a03341_1a30940cb3032589178c40a16dfad0198f" prot="public" virt="non-virtual"><scope>castor3d::BlendData</scope><name>alphaBlendMode</name></member>
+      <member refid="d3/d55/a03341_1af54149586d22a160b9f1da1c383d635b" prot="public" virt="non-virtual"><scope>castor3d::BlendData</scope><name>BlendData</name></member>
+      <member refid="d3/d55/a03341_1a7d8b3d0b9ab2c41194f2b7f38e2cc6a4" prot="public" virt="non-virtual"><scope>castor3d::BlendData</scope><name>colourBlendMode</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/de8/a06334" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::ShaderBufferTypes::Float3</compoundname>
+    <includes local="no">ShaderBuffersModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/de8/a06334_1aaee2e18416e0bc1d1e5c0ca94e974ffa" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::ShaderBufferTypes::Float3::x</definition>
+        <argsstring></argsstring>
+        <name>x</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float3::x</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="134" column="8" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="134" bodyend="-1"/>
+        <referencedby refid="df/de8/a06334_1ab8a027641b1ac71b76cccea0be3e2fb7" compoundref="d7/def/a01538" startline="113" endline="117">operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/de8/a06334_1afd515ae106072e02c038dfc95b1cc070" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::ShaderBufferTypes::Float3::y</definition>
+        <argsstring></argsstring>
+        <name>y</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float3::y</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="135" column="8" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="135" bodyend="-1"/>
+        <referencedby refid="df/de8/a06334_1a1620b4210cf6b1b1fc3db453ce4a4939" compoundref="d7/def/a01538" startline="119" endline="124">operator=</referencedby>
+      </memberdef>
+      <memberdef kind="variable" id="df/de8/a06334_1a42d0df0c73815d7be4b6246bb90ca28b" prot="public" static="no" mutable="no">
+        <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::ShaderBufferTypes::Float3::z</definition>
+        <argsstring></argsstring>
+        <name>z</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float3::z</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="136" column="8" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="136" bodyend="-1"/>
+        <referencedby refid="df/de8/a06334_1a6d1213d11b72a80a76961c6f0406b87d" compoundref="d7/def/a01538" startline="126" endline="132">operator=</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/de8/a06334_1ab8a027641b1ac71b76cccea0be3e2fb7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/de8/a06334" kindref="compound">Float3</ref> &amp;</type>
+        <definition>Float3 &amp; castor3d::ShaderBufferTypes::Float3::operator=</definition>
+        <argsstring>(Float1 rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float3::operator=</qualifiedname>
+        <param>
+          <type><ref refid="d1/d1b/a06326_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="113" column="9" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="113" bodyend="117"/>
+        <references refid="df/de8/a06334_1aaee2e18416e0bc1d1e5c0ca94e974ffa" compoundref="d7/def/a01538" startline="134">x</references>
+      </memberdef>
+      <memberdef kind="function" id="df/de8/a06334_1a1620b4210cf6b1b1fc3db453ce4a4939" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/de8/a06334" kindref="compound">Float3</ref> &amp;</type>
+        <definition>Float3 &amp; castor3d::ShaderBufferTypes::Float3::operator=</definition>
+        <argsstring>(castor::Point2f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float3::operator=</qualifiedname>
+        <param>
+          <type>castor::Point2f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="119" column="9" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="119" bodyend="124"/>
+        <references refid="df/de8/a06334_1aaee2e18416e0bc1d1e5c0ca94e974ffa" compoundref="d7/def/a01538" startline="134">x</references>
+        <references refid="df/de8/a06334_1afd515ae106072e02c038dfc95b1cc070" compoundref="d7/def/a01538" startline="135">y</references>
+      </memberdef>
+      <memberdef kind="function" id="df/de8/a06334_1a6d1213d11b72a80a76961c6f0406b87d" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type><ref refid="df/de8/a06334" kindref="compound">Float3</ref> &amp;</type>
+        <definition>Float3 &amp; castor3d::ShaderBufferTypes::Float3::operator=</definition>
+        <argsstring>(castor::Point3f const &amp;rhs)</argsstring>
+        <name>operator=</name>
+        <qualifiedname>castor3d::ShaderBufferTypes::Float3::operator=</qualifiedname>
+        <param>
+          <type>castor::Point3f const &amp;</type>
+          <declname>rhs</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="126" column="9" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="126" bodyend="132"/>
+        <references refid="df/de8/a06334_1aaee2e18416e0bc1d1e5c0ca94e974ffa" compoundref="d7/def/a01538" startline="134">x</references>
+        <references refid="df/de8/a06334_1afd515ae106072e02c038dfc95b1cc070" compoundref="d7/def/a01538" startline="135">y</references>
+        <references refid="df/de8/a06334_1a42d0df0c73815d7be4b6246bb90ca28b" compoundref="d7/def/a01538" startline="136">z</references>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/ShaderBuffers/ShaderBuffersModule.hpp" line="111" column="1" bodyfile="Shader/ShaderBuffers/ShaderBuffersModule.hpp" bodystart="112" bodyend="137"/>
+    <listofallmembers>
+      <member refid="df/de8/a06334_1ab8a027641b1ac71b76cccea0be3e2fb7" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float3</scope><name>operator=</name></member>
+      <member refid="df/de8/a06334_1a1620b4210cf6b1b1fc3db453ce4a4939" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float3</scope><name>operator=</name></member>
+      <member refid="df/de8/a06334_1a6d1213d11b72a80a76961c6f0406b87d" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float3</scope><name>operator=</name></member>
+      <member refid="df/de8/a06334_1aaee2e18416e0bc1d1e5c0ca94e974ffa" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float3</scope><name>x</name></member>
+      <member refid="df/de8/a06334_1afd515ae106072e02c038dfc95b1cc070" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float3</scope><name>y</name></member>
+      <member refid="df/de8/a06334_1a42d0df0c73815d7be4b6246bb90ca28b" prot="public" virt="non-virtual"><scope>castor3d::ShaderBufferTypes::Float3</scope><name>z</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d7/d47/a04685" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::SubmeshComponentAdder</compoundname>
+    <includes local="no">Submesh.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d7/d47/a04685_1ab9effb408e8d70e068ace7a3164b4cab" prot="public" static="yes" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>static void castor3d::SubmeshComponentAdder&lt; T &gt;::add</definition>
+        <argsstring>(castor::UniquePtr&lt; T &gt; component, Submesh &amp;submesh)</argsstring>
+        <name>add</name>
+        <qualifiedname>castor3d::SubmeshComponentAdder::add</qualifiedname>
+        <param>
+          <type>castor::UniquePtr&lt; T &gt;</type>
+          <declname>component</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/dd4/a04689" kindref="compound">Submesh</ref> &amp;</type>
+          <declname>submesh</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Model/Mesh/Submesh/Submesh.hpp" line="37" column="20"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Model/Mesh/Submesh/Submesh.hpp" line="35" column="1" bodyfile="Model/Mesh/Submesh/Submesh.hpp" bodystart="36" bodyend="39"/>
+    <listofallmembers>
+      <member refid="d7/d47/a04685_1ab9effb408e8d70e068ace7a3164b4cab" prot="public" virt="non-virtual"><scope>castor3d::SubmeshComponentAdder</scope><name>add</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

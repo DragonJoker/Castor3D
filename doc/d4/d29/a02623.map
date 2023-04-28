@@ -1,5 +1,7 @@
-<map id="castor3d::BinaryWriter&lt; SkeletonAnimationObject &gt;" name="castor3d::BinaryWriter&lt; SkeletonAnimationObject &gt;">
-<area shape="rect" id="node1" title="SkeletonAnimationObject binary loader." alt="" coords="5,200,199,241"/>
-<area shape="rect" id="node2" href="$d9/de2/a02508.html" title=" " alt="" coords="5,109,199,151"/>
-<area shape="rect" id="node3" href="$d9/de2/a02508.html" title="Binary data chunk writer base class." alt="" coords="11,5,193,47"/>
+<map id="castor3d::BinaryParser&lt; Mesh &gt;" name="castor3d::BinaryParser&lt; Mesh &gt;">
+<area shape="rect" id="node1" title="MovableObject loader." alt="" coords="147,285,301,325"/>
+<area shape="rect" id="node2" href="$db/d0d/a02653.html" title=" " alt="" coords="131,196,317,236"/>
+<area shape="rect" id="node3" href="$db/d6a/a02613.html" title=" " alt="" coords="5,5,160,31"/>
+<area shape="rect" id="node5" href="$db/d0d/a02653.html" title="Binary data chunk reader base class." alt="" coords="131,93,317,133"/>
+<area shape="rect" id="node4" href="$de/dc5/a04521.html" title=" " alt="" coords="218,5,342,31"/>
 </map>

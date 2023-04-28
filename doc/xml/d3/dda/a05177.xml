@@ -1,0 +1,1207 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d3/dda/a05177" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::VisibilityResolvePass</compoundname>
+    <basecompoundref prot="public" virt="non-virtual">castor::Named</basecompoundref>
+    <basecompoundref refid="d5/d6f/a05609" prot="public" virt="non-virtual">castor3d::RenderTechniquePass</basecompoundref>
+    <basecompoundref prot="public" virt="non-virtual">crg::RunnablePass</basecompoundref>
+    <includes local="no">VisibilityResolvePass.hpp</includes>
+    <innerclass refid="d1/d2b/a05181" prot="private">castor3d::VisibilityResolvePass::Pipeline</innerclass>
+    <innerclass refid="db/da1/a05189" prot="private">castor3d::VisibilityResolvePass::PipelineNodesDescriptors</innerclass>
+      <sectiondef kind="private-type">
+      <memberdef kind="typedef" id="d3/dda/a05177_1afa7c80171f2daa475003079c6dad2a8b" prot="private" static="no">
+        <type>std::unique_ptr&lt; Pipeline &gt;</type>
+        <definition>using castor3d::VisibilityResolvePass::PipelinePtr =  std::unique_ptr&lt; Pipeline &gt;</definition>
+        <argsstring></argsstring>
+        <name>PipelinePtr</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::PipelinePtr</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="132" column="1" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="132" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/dda/a05177_1afa86e81fa79dd576b0b6178b4eb2d18d" prot="private" static="no">
+        <type>std::map&lt; ashes::DescriptorSet const *, uint32_t &gt;</type>
+        <definition>using castor3d::VisibilityResolvePass::SubmeshPipelinesNodesDescriptors =  std::map&lt; ashes::DescriptorSet const *, uint32_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>SubmeshPipelinesNodesDescriptors</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::SubmeshPipelinesNodesDescriptors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="133" column="1" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="133" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/dda/a05177_1a57d989e446adacd17c9819c93c17d92e" prot="private" static="no">
+        <type>std::map&lt; Pipeline const *, SubmeshPipelinesNodesDescriptors &gt;</type>
+        <definition>using castor3d::VisibilityResolvePass::SubmeshPipelinesMap =  std::map&lt; Pipeline const *, SubmeshPipelinesNodesDescriptors &gt;</definition>
+        <argsstring></argsstring>
+        <name>SubmeshPipelinesMap</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::SubmeshPipelinesMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="134" column="1" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="134" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/dda/a05177_1a56c9d6609662e759259b09c56d41c06b" prot="private" static="no">
+        <type>std::map&lt; uint32_t, PipelineNodesDescriptors &gt;</type>
+        <definition>using castor3d::VisibilityResolvePass::BillboardPipelinesNodesDescriptors =  std::map&lt; uint32_t, PipelineNodesDescriptors &gt;</definition>
+        <argsstring></argsstring>
+        <name>BillboardPipelinesNodesDescriptors</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::BillboardPipelinesNodesDescriptors</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="135" column="1" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="135" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/dda/a05177_1a05b8200e510091219bb4e5c22aa577a3" prot="private" static="no">
+        <type>std::map&lt; Pipeline const *, BillboardPipelinesNodesDescriptors &gt;</type>
+        <definition>using castor3d::VisibilityResolvePass::BillboardPipelinesMap =  std::map&lt; Pipeline const *, BillboardPipelinesNodesDescriptors &gt;</definition>
+        <argsstring></argsstring>
+        <name>BillboardPipelinesMap</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::BillboardPipelinesMap</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="136" column="1" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="136" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="d3/dda/a05177_1a678b4bc26352d1ac7ea3625cda71bb94" prot="private" static="no">
+        <type>std::map&lt; <ref refid="d0/d61/a05385" kindref="compound">PipelineBaseHash</ref>, PipelinePtr &gt;</type>
+        <definition>using castor3d::VisibilityResolvePass::PipelineContainer =  std::map&lt; PipelineBaseHash, PipelinePtr &gt;</definition>
+        <argsstring></argsstring>
+        <name>PipelineContainer</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::PipelineContainer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="137" column="1" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="137" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="d3/dda/a05177_1a7eb0560b6d44e7c5a234704a35561378" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>constexpr bool</type>
+        <definition>constexpr bool castor3d::VisibilityResolvePass::useCompute</definition>
+        <argsstring></argsstring>
+        <name>useCompute</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::useCompute</qualifiedname>
+        <initializer>{ false }</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="111" column="23" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="111" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d3/dda/a05177_1abbff7a8ace3763446c15006f11a3d279" prot="private" static="no" mutable="no">
+        <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const  &amp;</type>
+        <definition>RenderDevice const&amp; castor3d::VisibilityResolvePass::m_device</definition>
+        <argsstring></argsstring>
+        <name>m_device</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_device</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="159" column="21" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="159" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1a635717d4205b7a8f11694915b71fec70" prot="private" static="no" mutable="no">
+        <type><ref refid="d9/ddf/a05557" kindref="compound">RenderNodesPass</ref> const  &amp;</type>
+        <definition>RenderNodesPass const&amp; castor3d::VisibilityResolvePass::m_nodesPass</definition>
+        <argsstring></argsstring>
+        <name>m_nodesPass</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_nodesPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="160" column="24" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="160" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1a8a28c2009cf17259772a91df1bb313a9" prot="private" static="no" mutable="no">
+        <type><ref refid="dd/dee/a06325" kindref="compound">ShaderBuffer</ref> *</type>
+        <definition>ShaderBuffer* castor3d::VisibilityResolvePass::m_pipelinesIds</definition>
+        <argsstring></argsstring>
+        <name>m_pipelinesIds</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_pipelinesIds</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="161" column="15" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="161" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1a3cb38de822ba8d617c252cb287aea3f5" prot="private" static="no" mutable="no">
+        <type><ref refid="df/d2f/a06641" kindref="compound">CameraUbo</ref> const  &amp;</type>
+        <definition>CameraUbo const&amp; castor3d::VisibilityResolvePass::m_cameraUbo</definition>
+        <argsstring></argsstring>
+        <name>m_cameraUbo</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_cameraUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="162" column="18" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="162" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1a10517e596a71804fd2f784a39fdcc110" prot="private" static="no" mutable="no">
+        <type><ref refid="d0/d53/a06721" kindref="compound">SceneUbo</ref> const  &amp;</type>
+        <definition>SceneUbo const&amp; castor3d::VisibilityResolvePass::m_sceneUbo</definition>
+        <argsstring></argsstring>
+        <name>m_sceneUbo</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_sceneUbo</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="163" column="17" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="163" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1a7edade48e822e04304f7548b9ed14de4" prot="private" static="no" mutable="no">
+        <type><ref refid="d3/d5e/a01725_1a6088415149ceb90dad7b274336776700" kindref="member">PassSortNodesSignalConnection</ref></type>
+        <definition>PassSortNodesSignalConnection castor3d::VisibilityResolvePass::m_onNodesPassSort</definition>
+        <argsstring></argsstring>
+        <name>m_onNodesPassSort</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_onNodesPassSort</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="164" column="31" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="164" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1ac63f9fa6b121c0f524fb663f290f4cf6" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetLayoutPtr</type>
+        <definition>ashes::DescriptorSetLayoutPtr castor3d::VisibilityResolvePass::m_inOutsDescriptorLayout</definition>
+        <argsstring></argsstring>
+        <name>m_inOutsDescriptorLayout</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_inOutsDescriptorLayout</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="165" column="31" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="165" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1af889d714daae67d2b7503bd9425f50b5" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPoolPtr</type>
+        <definition>ashes::DescriptorSetPoolPtr castor3d::VisibilityResolvePass::m_inOutsDescriptorPool</definition>
+        <argsstring></argsstring>
+        <name>m_inOutsDescriptorPool</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_inOutsDescriptorPool</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="166" column="29" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="166" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1ae1818d79e46f00af29519052d1b58a72" prot="private" static="no" mutable="no">
+        <type>ashes::DescriptorSetPtr</type>
+        <definition>ashes::DescriptorSetPtr castor3d::VisibilityResolvePass::m_inOutsDescriptorSet</definition>
+        <argsstring></argsstring>
+        <name>m_inOutsDescriptorSet</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_inOutsDescriptorSet</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="167" column="25" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="167" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1ad55129edda60d28ea19e12012d695713" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::VisibilityResolvePass::m_commandsChanged</definition>
+        <argsstring></argsstring>
+        <name>m_commandsChanged</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_commandsChanged</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="168" column="6" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="168" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1aca118665518ab905606765239af7ef53" prot="private" static="no" mutable="no">
+        <type><ref refid="d2/dd4/a06405" kindref="compound">ShaderModule</ref></type>
+        <definition>ShaderModule castor3d::VisibilityResolvePass::m_vertexShader</definition>
+        <argsstring></argsstring>
+        <name>m_vertexShader</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_vertexShader</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="169" column="14" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="169" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1a956c1d8d117dc866075600469db203e2" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::VisibilityResolvePass::m_firstRenderPass</definition>
+        <argsstring></argsstring>
+        <name>m_firstRenderPass</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_firstRenderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="170" column="22" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="170" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1a1037243f6b76fed50bafbc4a51764329" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::VisibilityResolvePass::m_firstFramebuffer</definition>
+        <argsstring></argsstring>
+        <name>m_firstFramebuffer</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_firstFramebuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="171" column="23" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="171" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1afff3a38ff7351be301df2e8da9591fd7" prot="private" static="no" mutable="no">
+        <type>ashes::RenderPassPtr</type>
+        <definition>ashes::RenderPassPtr castor3d::VisibilityResolvePass::m_blendRenderPass</definition>
+        <argsstring></argsstring>
+        <name>m_blendRenderPass</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_blendRenderPass</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="172" column="22" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="172" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1a7541892b75137c21580d81c8a371675d" prot="private" static="no" mutable="no">
+        <type>ashes::FrameBufferPtr</type>
+        <definition>ashes::FrameBufferPtr castor3d::VisibilityResolvePass::m_blendFramebuffer</definition>
+        <argsstring></argsstring>
+        <name>m_blendFramebuffer</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_blendFramebuffer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="173" column="23" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="173" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1aa8e290ef62d3eaddc044f290501e7557" prot="private" static="no" mutable="no">
+        <type>PipelineContainer</type>
+        <definition>PipelineContainer castor3d::VisibilityResolvePass::m_pipelines</definition>
+        <argsstring></argsstring>
+        <name>m_pipelines</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_pipelines</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="174" column="19" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="174" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1aec2663c1c3756f886c8fbe29dcc1a3d4" prot="private" static="no" mutable="no">
+        <type>PipelineContainer</type>
+        <definition>PipelineContainer castor3d::VisibilityResolvePass::m_billboardPipelines</definition>
+        <argsstring></argsstring>
+        <name>m_billboardPipelines</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_billboardPipelines</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="175" column="19" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="175" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1ac510f997370d89f2b500976f2c11af8c" prot="private" static="no" mutable="no">
+        <type>SubmeshPipelinesMap</type>
+        <definition>SubmeshPipelinesMap castor3d::VisibilityResolvePass::m_activePipelines</definition>
+        <argsstring></argsstring>
+        <name>m_activePipelines</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_activePipelines</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="176" column="21" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="176" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d3/dda/a05177_1ae93392a46c4f3104bfc0e6e1e73e26c8" prot="private" static="no" mutable="no">
+        <type>BillboardPipelinesMap</type>
+        <definition>BillboardPipelinesMap castor3d::VisibilityResolvePass::m_activeBillboardPipelines</definition>
+        <argsstring></argsstring>
+        <name>m_activeBillboardPipelines</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::m_activeBillboardPipelines</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="177" column="23" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="177" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d3/dda/a05177_1a6ab2cd551c4ab0c8b86b5f4d22d773d5" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::VisibilityResolvePass::VisibilityResolvePass</definition>
+        <argsstring>(RenderTechnique *parent, crg::FramePass const &amp;pass, crg::GraphContext &amp;context, crg::RunnableGraph &amp;graph, RenderDevice const &amp;device, castor::String const &amp;category, castor::String const &amp;name, RenderNodesPass const &amp;nodesPass, ShaderBuffer *pipelinesIds, RenderNodesPassDesc const &amp;renderPassDesc, RenderTechniquePassDesc const &amp;techniquePassDesc)</argsstring>
+        <name>VisibilityResolvePass</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::VisibilityResolvePass</qualifiedname>
+        <param>
+          <type><ref refid="de/dc2/a05601" kindref="compound">RenderTechnique</ref> *</type>
+          <declname>parent</declname>
+        </param>
+        <param>
+          <type>crg::FramePass const &amp;</type>
+          <declname>pass</declname>
+        </param>
+        <param>
+          <type>crg::GraphContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>crg::RunnableGraph &amp;</type>
+          <declname>graph</declname>
+        </param>
+        <param>
+          <type><ref refid="d6/d0f/a05457" kindref="compound">RenderDevice</ref> const &amp;</type>
+          <declname>device</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d9/ddf/a05557" kindref="compound">RenderNodesPass</ref> const &amp;</type>
+          <declname>nodesPass</declname>
+        </param>
+        <param>
+          <type><ref refid="dd/dee/a06325" kindref="compound">ShaderBuffer</ref> *</type>
+          <declname>pipelinesIds</declname>
+        </param>
+        <param>
+          <type><ref refid="dc/d3d/a05553" kindref="compound">RenderNodesPassDesc</ref> const &amp;</type>
+          <declname>renderPassDesc</declname>
+        </param>
+        <param>
+          <type><ref refid="d4/d64/a05605" kindref="compound">RenderTechniquePassDesc</ref> const &amp;</type>
+          <declname>techniquePassDesc</declname>
+        </param>
+        <briefdescription>
+<para>Constructor. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">parent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent technique. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The parent frame pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">context</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The rendering context. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">graph</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The runnable graph. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">device</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The GPU device. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">category</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass category name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">name</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pass name. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">nodesPass</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The visibility nodes pass. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">pipelinesIds</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The pipelines IDs buffer. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPassDesc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The scene render pass construction data. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">techniquePassDesc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The technique render pass construction data. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="51" column="9"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1a4e9555cbcb70516c53801543da06aa1d" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VisibilityResolvePass::accept</definition>
+        <argsstring>(RenderTechniqueVisitor &amp;visitor) override</argsstring>
+        <name>accept</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::accept</qualifiedname>
+        <reimplements refid="d5/d6f/a05609_1a4c9d269118ce29a21fdb17eabd6e9070">accept</reimplements>
+        <param>
+          <type><ref refid="d1/df2/a05617" kindref="compound">RenderTechniqueVisitor</ref> &amp;</type>
+          <declname>visitor</declname>
+        </param>
+        <briefdescription>
+<para>Visitor acceptance function.     </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername>visitor</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The ... visitor.     </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="65" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1a526af620bb1e67b854ec04cc2ae7d049" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VisibilityResolvePass::update</definition>
+        <argsstring>(CpuUpdater &amp;updater) override</argsstring>
+        <name>update</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::update</qualifiedname>
+        <reimplements refid="d5/d6f/a05609_1a6425027445455d59c7c05c9ab5b6203c">update</reimplements>
+        <param>
+          <type><ref refid="d5/de0/a05541" kindref="compound">CpuUpdater</ref> &amp;</type>
+          <declname>updater</declname>
+        </param>
+        <briefdescription>
+<para>Updates the render pass, CPU wise.     </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">updater</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The update data.     </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="69" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1ac414af1d766e005cd37d7bbdef7e8ae5" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref></type>
+        <definition>C3D_API PipelineFlags castor3d::VisibilityResolvePass::createPipelineFlags</definition>
+        <argsstring>(PassComponentCombine components, BlendMode colourBlendMode, BlendMode alphaBlendMode, RenderPassTypeID renderPassTypeId, LightingModelID lightingModelId, BackgroundModelID backgroundModelId, VkCompareOp alphaFunc, VkCompareOp blendAlphaFunc, TextureCombine const &amp;textures, SubmeshFlags const &amp;submeshFlags, ProgramFlags const &amp;programFlags, SceneFlags const &amp;sceneFlags, VkPrimitiveTopology topology, bool isFrontCulled, bool invertNormals, uint32_t passLayerIndex, GpuBufferOffsetT&lt; castor::Point4f &gt; const &amp;morphTargets) const override</argsstring>
+        <name>createPipelineFlags</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::createPipelineFlags</qualifiedname>
+        <reimplements refid="d5/d6f/a05609_1ad6077ffe0402b8629c7405f4b1b7bce4">createPipelineFlags</reimplements>
+        <param>
+          <type><ref refid="d7/dc5/a03449" kindref="compound">PassComponentCombine</ref></type>
+          <declname>components</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>colourBlendMode</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref></type>
+          <declname>alphaBlendMode</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a567298c1844e69d8252f0b8c14206f60" kindref="member">RenderPassTypeID</ref></type>
+          <declname>renderPassTypeId</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a8fcaef546bc1fb19d2a89be57778f03a" kindref="member">LightingModelID</ref></type>
+          <declname>lightingModelId</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ab7fc2caff0f0879aa902ff48258d6c94" kindref="member">BackgroundModelID</ref></type>
+          <declname>backgroundModelId</declname>
+        </param>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>alphaFunc</declname>
+        </param>
+        <param>
+          <type>VkCompareOp</type>
+          <declname>blendAlphaFunc</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d83/a03337" kindref="compound">TextureCombine</ref> const &amp;</type>
+          <declname>textures</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a456f43ef4580c9527b0e71aa45a237ee" kindref="member">SubmeshFlags</ref> const &amp;</type>
+          <declname>submeshFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1ab503144f281345b45ccc3f3a94543dce" kindref="member">ProgramFlags</ref> const &amp;</type>
+          <declname>programFlags</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a525bec5d25db94bcff4168e9e1a826fa" kindref="member">SceneFlags</ref> const &amp;</type>
+          <declname>sceneFlags</declname>
+        </param>
+        <param>
+          <type>VkPrimitiveTopology</type>
+          <declname>topology</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>isFrontCulled</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>invertNormals</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>passLayerIndex</declname>
+        </param>
+        <param>
+          <type><ref refid="d7/d13/a02873" kindref="compound">GpuBufferOffsetT</ref>&lt; castor::Point4f &gt; const &amp;</type>
+          <declname>morphTargets</declname>
+        </param>
+        <briefdescription>
+<para>Creates the pipeline flags for given configuration.     </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">components</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The components combination. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">colourBlendMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The colour blending mode. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alphaBlendMode</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha blending mode. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">renderPassTypeId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render pass type ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">lightingModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The lighting model ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">backgroundModelId</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The background model ID. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">alphaFunc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha comparison function (for opaque nodes). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">blendAlphaFunc</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The alpha comparison function (for transparent nodes). </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">textures</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The textures configuration. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">submeshFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A combination of SubmeshFlag. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">programFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>A combination of ProgramFlag. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">sceneFlags</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><ref refid="de/da7/a06097" kindref="compound">Scene</ref> related flags. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">topology</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The render topology. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">isFrontCulled</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> for front face culling, <computeroutput>false</computeroutput> for back face culling. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">invertNormals</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> to invert normals. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">passLayerIndex</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The material pass layer index. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">morphTargets</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The morph targets buffer.     </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="73" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1aa60f9fc7b4f2bef095d385e99ad69b8e" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::VisibilityResolvePass::areValidPassFlags</definition>
+        <argsstring>(PassComponentCombine const &amp;passFlags) const override</argsstring>
+        <name>areValidPassFlags</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::areValidPassFlags</qualifiedname>
+        <reimplements refid="d5/d6f/a05609_1ad4e30e6e84cfaccd3479a3d0f0617cd0">areValidPassFlags</reimplements>
+        <param>
+          <type><ref refid="d7/dc5/a03449" kindref="compound">PassComponentCombine</ref> const &amp;</type>
+          <declname>passFlags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="93" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1a8b92964a877af32f6a6736a66b63b732" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d5e/a01725_1af8308e78be327186fc4533308ee5cd19" kindref="member">ShaderFlags</ref></type>
+        <definition>C3D_API ShaderFlags castor3d::VisibilityResolvePass::getShaderFlags</definition>
+        <argsstring>() const override</argsstring>
+        <name>getShaderFlags</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::getShaderFlags</qualifiedname>
+        <reimplements refid="d5/d6f/a05609_1a16cb6a58d4f2c253423734bc4747ce0a">getShaderFlags</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="97" column="21"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1a10213cfa284d4d1fb064b12e7fe2d85a" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>C3D_API void castor3d::VisibilityResolvePass::countNodes</definition>
+        <argsstring>(RenderInfo &amp;info) const override</argsstring>
+        <name>countNodes</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::countNodes</qualifiedname>
+        <reimplements refid="d5/d6f/a05609_1a47941c597aedf0f2ff41130eaa37c938">countNodes</reimplements>
+        <param>
+          <type><ref refid="df/d7d/a05461" kindref="compound">RenderInfo</ref> &amp;</type>
+          <declname>info</declname>
+        </param>
+        <briefdescription>
+<para>Registers nodes counts to given <ref refid="df/d7d/a05461" kindref="compound">RenderInfo</ref>.   </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="inout">info</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>Receives the counts.   </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="101" column="14"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1a4bce1dd36eb1f8c75472b393653001fa" prot="public" static="no" const="yes" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>C3D_API bool castor3d::VisibilityResolvePass::isPassEnabled</definition>
+        <argsstring>() const override</argsstring>
+        <name>isPassEnabled</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::isPassEnabled</qualifiedname>
+        <reimplements refid="d5/d6f/a05609_1a9af87043b18c08079827df42a4a7aa5c">isPassEnabled</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="105" column="14"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-static-func">
+      <memberdef kind="function" id="d3/dda/a05177_1a5f83645edbd95c8fa4fbd652f9390c3e" prot="public" static="yes" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> <ref refid="d3/d5e/a01725_1afa74b47fdeea208a304fc7d1d8a4b1dd" kindref="member">ComponentModeFlags</ref></type>
+        <definition>static C3D_API ComponentModeFlags castor3d::VisibilityResolvePass::getComponentsMask</definition>
+        <argsstring>()</argsstring>
+        <name>getComponentsMask</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::getComponentsMask</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Getters.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="109" column="35"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d3/dda/a05177_1ab362f54bcc969db224802904960569d2" prot="private" static="no" const="yes" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::VisibilityResolvePass::doIsEnabled</definition>
+        <argsstring>() const</argsstring>
+        <name>doIsEnabled</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::doIsEnabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="140" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1a9483c72e5b6adf0a665bd095422547d0" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VisibilityResolvePass::doRecordInto</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer, uint32_t index)</argsstring>
+        <name>doRecordInto</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::doRecordInto</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>index</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="141" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1acaf285cedfb367df5d023592047ace44" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VisibilityResolvePass::doRecordCompute</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer)</argsstring>
+        <name>doRecordCompute</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::doRecordCompute</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="144" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1aa712c884453573798ab7d6038e4efedf" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::VisibilityResolvePass::doRecordGraphics</definition>
+        <argsstring>(crg::RecordContext &amp;context, VkCommandBuffer commandBuffer)</argsstring>
+        <name>doRecordGraphics</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::doRecordGraphics</qualifiedname>
+        <param>
+          <type>crg::RecordContext &amp;</type>
+          <declname>context</declname>
+        </param>
+        <param>
+          <type>VkCommandBuffer</type>
+          <declname>commandBuffer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="146" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1abd00a39454d24028a72a7ee54c000734" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Pipeline &amp;</type>
+        <definition>Pipeline &amp; castor3d::VisibilityResolvePass::doCreatePipeline</definition>
+        <argsstring>(PipelineBaseHash const &amp;hash, PipelineFlags const &amp;flags)</argsstring>
+        <name>doCreatePipeline</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::doCreatePipeline</qualifiedname>
+        <param>
+          <type><ref refid="d0/d61/a05385" kindref="compound">PipelineBaseHash</ref> const &amp;</type>
+          <declname>hash</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="148" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1af969b113acf34f094ad8785baff87c15" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Pipeline &amp;</type>
+        <definition>Pipeline &amp; castor3d::VisibilityResolvePass::doCreatePipeline</definition>
+        <argsstring>(PipelineBaseHash const &amp;hash, PipelineFlags const &amp;flags, uint32_t stride)</argsstring>
+        <name>doCreatePipeline</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::doCreatePipeline</qualifiedname>
+        <param>
+          <type><ref refid="d0/d61/a05385" kindref="compound">PipelineBaseHash</ref> const &amp;</type>
+          <declname>hash</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>stride</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="150" column="11"/>
+      </memberdef>
+      <memberdef kind="function" id="d3/dda/a05177_1a3cd2c45c326c44935cdd09a33da92ea8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>Pipeline &amp;</type>
+        <definition>Pipeline &amp; castor3d::VisibilityResolvePass::doCreatePipeline</definition>
+        <argsstring>(PipelineBaseHash const &amp;hash, PipelineFlags const &amp;flags, uint32_t stride, PipelineContainer &amp;pipelines)</argsstring>
+        <name>doCreatePipeline</name>
+        <qualifiedname>castor3d::VisibilityResolvePass::doCreatePipeline</qualifiedname>
+        <param>
+          <type><ref refid="d0/d61/a05385" kindref="compound">PipelineBaseHash</ref> const &amp;</type>
+          <declname>hash</declname>
+        </param>
+        <param>
+          <type><ref refid="d8/d87/a05397" kindref="compound">PipelineFlags</ref> const &amp;</type>
+          <declname>flags</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>stride</declname>
+        </param>
+        <param>
+          <type>PipelineContainer &amp;</type>
+          <declname>pipelines</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Opaque/VisibilityResolvePass.hpp" line="153" column="11"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="3">
+        <label>castor3d::RenderTechniquePass</label>
+        <link refid="d5/d6f/a05609"/>
+      </node>
+      <node id="1">
+        <label>castor3d::VisibilityResolvePass</label>
+        <link refid="d3/dda/a05177"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="4">
+        <label>crg::RunnablePass</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="4">
+        <label>castor3d::RenderTechnique</label>
+        <link refid="de/dc2/a05601"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::RenderTechniquePass</label>
+        <link refid="d5/d6f/a05609"/>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_parent</edgelabel>
+        </childnode>
+        <childnode refid="6" relation="usage">
+          <edgelabel>m_scene</edgelabel>
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::Scene</label>
+        <link refid="de/da7/a06097"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::VisibilityResolvePass</label>
+        <link refid="d3/dda/a05177"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor::Named</label>
+      </node>
+      <node id="5">
+        <label>castor::OwnedBy&lt; Engine &gt;</label>
+      </node>
+      <node id="7">
+        <label>crg::RunnablePass</label>
+      </node>
+    </collaborationgraph>
+    <location file="Render/Opaque/VisibilityResolvePass.hpp" line="17" column="1" bodyfile="Render/Opaque/VisibilityResolvePass.hpp" bodystart="21" bodyend="178"/>
+    <listofallmembers>
+      <member refid="d3/dda/a05177_1a4e9555cbcb70516c53801543da06aa1d" prot="public" virt="virtual"><scope>castor3d::VisibilityResolvePass</scope><name>accept</name></member>
+      <member refid="d3/dda/a05177_1aa60f9fc7b4f2bef095d385e99ad69b8e" prot="public" virt="virtual"><scope>castor3d::VisibilityResolvePass</scope><name>areValidPassFlags</name></member>
+      <member refid="d3/dda/a05177_1a05b8200e510091219bb4e5c22aa577a3" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>BillboardPipelinesMap</name></member>
+      <member refid="d3/dda/a05177_1a56c9d6609662e759259b09c56d41c06b" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>BillboardPipelinesNodesDescriptors</name></member>
+      <member refid="d3/dda/a05177_1a10213cfa284d4d1fb064b12e7fe2d85a" prot="public" virt="virtual"><scope>castor3d::VisibilityResolvePass</scope><name>countNodes</name></member>
+      <member refid="d3/dda/a05177_1ac414af1d766e005cd37d7bbdef7e8ae5" prot="public" virt="virtual"><scope>castor3d::VisibilityResolvePass</scope><name>createPipelineFlags</name></member>
+      <member refid="d3/dda/a05177_1abd00a39454d24028a72a7ee54c000734" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>doCreatePipeline</name></member>
+      <member refid="d3/dda/a05177_1af969b113acf34f094ad8785baff87c15" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>doCreatePipeline</name></member>
+      <member refid="d3/dda/a05177_1a3cd2c45c326c44935cdd09a33da92ea8" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>doCreatePipeline</name></member>
+      <member refid="d3/dda/a05177_1ab362f54bcc969db224802904960569d2" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>doIsEnabled</name></member>
+      <member refid="d3/dda/a05177_1acaf285cedfb367df5d023592047ace44" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>doRecordCompute</name></member>
+      <member refid="d3/dda/a05177_1aa712c884453573798ab7d6038e4efedf" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>doRecordGraphics</name></member>
+      <member refid="d3/dda/a05177_1a9483c72e5b6adf0a665bd095422547d0" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>doRecordInto</name></member>
+      <member refid="d3/dda/a05177_1a5f83645edbd95c8fa4fbd652f9390c3e" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>getComponentsMask</name></member>
+      <member refid="d5/d6f/a05609_1a8a5de2914baf0d2bf906938e940b773c" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>getEngine</name></member>
+      <member refid="d5/d6f/a05609_1a0ccd1718bf25ac37936b8485c2c4433f" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>getScene</name></member>
+      <member refid="d5/d6f/a05609_1a47ae9073330786ee28a186af2733b58b" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>getScene</name></member>
+      <member refid="d3/dda/a05177_1a8b92964a877af32f6a6736a66b63b732" prot="public" virt="virtual"><scope>castor3d::VisibilityResolvePass</scope><name>getShaderFlags</name></member>
+      <member refid="d5/d6f/a05609_1a7c08604b0d9abf76263f046507bd477b" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>getTechnique</name></member>
+      <member refid="d3/dda/a05177_1a4bce1dd36eb1f8c75472b393653001fa" prot="public" virt="virtual"><scope>castor3d::VisibilityResolvePass</scope><name>isPassEnabled</name></member>
+      <member refid="d3/dda/a05177_1ae93392a46c4f3104bfc0e6e1e73e26c8" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_activeBillboardPipelines</name></member>
+      <member refid="d3/dda/a05177_1ac510f997370d89f2b500976f2c11af8c" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_activePipelines</name></member>
+      <member refid="d3/dda/a05177_1aec2663c1c3756f886c8fbe29dcc1a3d4" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_billboardPipelines</name></member>
+      <member refid="d3/dda/a05177_1a7541892b75137c21580d81c8a371675d" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_blendFramebuffer</name></member>
+      <member refid="d3/dda/a05177_1afff3a38ff7351be301df2e8da9591fd7" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_blendRenderPass</name></member>
+      <member refid="d3/dda/a05177_1a3cb38de822ba8d617c252cb287aea3f5" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_cameraUbo</name></member>
+      <member refid="d3/dda/a05177_1ad55129edda60d28ea19e12012d695713" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_commandsChanged</name></member>
+      <member refid="d3/dda/a05177_1abbff7a8ace3763446c15006f11a3d279" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_device</name></member>
+      <member refid="d5/d6f/a05609_1a1a0a94cfc40698bf297f549001114b81" prot="protected" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_drawCalls</name></member>
+      <member refid="d3/dda/a05177_1a1037243f6b76fed50bafbc4a51764329" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_firstFramebuffer</name></member>
+      <member refid="d3/dda/a05177_1a956c1d8d117dc866075600469db203e2" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_firstRenderPass</name></member>
+      <member refid="d3/dda/a05177_1ac63f9fa6b121c0f524fb663f290f4cf6" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_inOutsDescriptorLayout</name></member>
+      <member refid="d3/dda/a05177_1af889d714daae67d2b7503bd9425f50b5" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_inOutsDescriptorPool</name></member>
+      <member refid="d3/dda/a05177_1ae1818d79e46f00af29519052d1b58a72" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_inOutsDescriptorSet</name></member>
+      <member refid="d3/dda/a05177_1a635717d4205b7a8f11694915b71fec70" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_nodesPass</name></member>
+      <member refid="d3/dda/a05177_1a7edade48e822e04304f7548b9ed14de4" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_onNodesPassSort</name></member>
+      <member refid="d5/d6f/a05609_1abf3258a90360bca1bb9fd1269356e883" prot="protected" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_parent</name></member>
+      <member refid="d3/dda/a05177_1aa8e290ef62d3eaddc044f290501e7557" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_pipelines</name></member>
+      <member refid="d3/dda/a05177_1a8a28c2009cf17259772a91df1bb313a9" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_pipelinesIds</name></member>
+      <member refid="d5/d6f/a05609_1a97ef9757bc87714bf0d7f61594a10dc1" prot="protected" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_scene</name></member>
+      <member refid="d3/dda/a05177_1a10517e596a71804fd2f784a39fdcc110" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_sceneUbo</name></member>
+      <member refid="d3/dda/a05177_1aca118665518ab905606765239af7ef53" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>m_vertexShader</name></member>
+      <member refid="d3/dda/a05177_1a678b4bc26352d1ac7ea3625cda71bb94" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>PipelineContainer</name></member>
+      <member refid="d3/dda/a05177_1afa7c80171f2daa475003079c6dad2a8b" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>PipelinePtr</name></member>
+      <member refid="d5/d6f/a05609_1a7bf6aef3637d36baa6f2b902baf044f5" prot="protected" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>RenderTechniquePass</name></member>
+      <member refid="d3/dda/a05177_1a57d989e446adacd17c9819c93c17d92e" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>SubmeshPipelinesMap</name></member>
+      <member refid="d3/dda/a05177_1afa86e81fa79dd576b0b6178b4eb2d18d" prot="private" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>SubmeshPipelinesNodesDescriptors</name></member>
+      <member refid="d3/dda/a05177_1a526af620bb1e67b854ec04cc2ae7d049" prot="public" virt="virtual"><scope>castor3d::VisibilityResolvePass</scope><name>update</name></member>
+      <member refid="d3/dda/a05177_1a7eb0560b6d44e7c5a234704a35561378" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>useCompute</name></member>
+      <member refid="d3/dda/a05177_1a6ab2cd551c4ab0c8b86b5f4d22d773d5" prot="public" virt="non-virtual"><scope>castor3d::VisibilityResolvePass</scope><name>VisibilityResolvePass</name></member>
+      <member refid="d5/d6f/a05609_1a5fd09abe6aa268c4763d7489fe9fc35c" prot="public" virt="virtual"><scope>castor3d::VisibilityResolvePass</scope><name>~RenderTechniquePass</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

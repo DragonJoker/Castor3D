@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/df7/a05026" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::CountedNodeT</compoundname>
+    <includes local="no">RenderNodeModule.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename NodeT</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/df7/a05026_1a1340012d459e464eae38028d91cb1af5" prot="public" static="no" mutable="no">
+        <type>NodeT const  *</type>
+        <definition>NodeT const* castor3d::CountedNodeT&lt; NodeT &gt;::node</definition>
+        <argsstring></argsstring>
+        <name>node</name>
+        <qualifiedname>castor3d::CountedNodeT::node</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/RenderNodeModule.hpp" line="108" column="14" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="108" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df7/a05026_1a808a0a9273181b0ba12a5a38e2fcbcfc" prot="public" static="no" mutable="no">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::CountedNodeT&lt; NodeT &gt;::instanceCount</definition>
+        <argsstring></argsstring>
+        <name>instanceCount</name>
+        <qualifiedname>castor3d::CountedNodeT::instanceCount</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/RenderNodeModule.hpp" line="109" column="10" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/df7/a05026_1a95b8a16e0fc3cfc353447ed659804d2a" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::CountedNodeT&lt; NodeT &gt;::visibleOrFrontCulled</definition>
+        <argsstring></argsstring>
+        <name>visibleOrFrontCulled</name>
+        <qualifiedname>castor3d::CountedNodeT::visibleOrFrontCulled</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Render/Node/RenderNodeModule.hpp" line="110" column="6" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="110" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Render/Node/RenderNodeModule.hpp" line="106" column="1" bodyfile="Render/Node/RenderNodeModule.hpp" bodystart="107" bodyend="111"/>
+    <listofallmembers>
+      <member refid="d2/df7/a05026_1a808a0a9273181b0ba12a5a38e2fcbcfc" prot="public" virt="non-virtual"><scope>castor3d::CountedNodeT</scope><name>instanceCount</name></member>
+      <member refid="d2/df7/a05026_1a1340012d459e464eae38028d91cb1af5" prot="public" virt="non-virtual"><scope>castor3d::CountedNodeT</scope><name>node</name></member>
+      <member refid="d2/df7/a05026_1a95b8a16e0fc3cfc353447ed659804d2a" prot="public" virt="non-virtual"><scope>castor3d::CountedNodeT</scope><name>visibleOrFrontCulled</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

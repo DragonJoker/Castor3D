@@ -1,17 +1,17 @@
 <?xml version='1.0' encoding='UTF-8' standalone='no'?>
-<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.3" xml:lang="en-US">
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
   <compounddef id="dir_57142e14a7f7b0849a2232e480543b36" kind="dir">
     <compoundname>Plugin</compoundname>
-    <innerfile refid="df/d0c/a00788">DividerPlugin.hpp</innerfile>
-    <innerfile refid="d4/d45/a00791">GeneratorPlugin.hpp</innerfile>
-    <innerfile refid="d5/d12/a00794">GenericPlugin.hpp</innerfile>
-    <innerfile refid="da/db8/a00797">ImporterPlugin.hpp</innerfile>
-    <innerfile refid="df/d0e/a00800">ParticlePlugin.hpp</innerfile>
-    <innerfile refid="d5/d72/a00803">Plugin.hpp</innerfile>
-    <innerfile refid="d0/dad/a00806">PluginException.hpp</innerfile>
-    <innerfile refid="dd/d7e/a00809">PluginModule.hpp</innerfile>
-    <innerfile refid="d8/db7/a00812">PostFxPlugin.hpp</innerfile>
-    <innerfile refid="d8/d2d/a00815">ToneMappingPlugin.hpp</innerfile>
+    <innerfile refid="d3/dd1/a00914">DividerPlugin.hpp</innerfile>
+    <innerfile refid="d4/ddc/a00917">GeneratorPlugin.hpp</innerfile>
+    <innerfile refid="d6/d82/a00920">GenericPlugin.hpp</innerfile>
+    <innerfile refid="df/de9/a00923">ImporterPlugin.hpp</innerfile>
+    <innerfile refid="d8/d38/a00926">ParticlePlugin.hpp</innerfile>
+    <innerfile refid="dc/d92/a00929">Plugin.hpp</innerfile>
+    <innerfile refid="d8/dbb/a00932">PluginException.hpp</innerfile>
+    <innerfile refid="d8/d19/a00935">PluginModule.hpp</innerfile>
+    <innerfile refid="d5/d54/a00938">PostFxPlugin.hpp</innerfile>
+    <innerfile refid="d6/dad/a00941">ToneMappingPlugin.hpp</innerfile>
     <briefdescription>
     </briefdescription>
     <detaileddescription>

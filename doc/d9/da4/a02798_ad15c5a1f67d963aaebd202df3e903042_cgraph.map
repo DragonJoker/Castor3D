@@ -1,0 +1,9 @@
+<map id="castor3d::ChunkParser::parse" name="castor3d::ChunkParser::parse">
+<area shape="rect" id="node1" title="Retrieves a value from a chunk." alt="" coords="5,77,160,117"/>
+<area shape="rect" id="node2" href="$d5/da6/a01698.html#a8cc7a2dbcb06b7114a71b9c2bd403efa" title="Retrieves the beginning of the buffer for given value." alt="" coords="236,5,367,31"/>
+<area shape="rect" id="node3" href="$d5/da6/a01698.html#a0237c5eefd38c3d0de4466c3fbe0d713" title="Retrieves the value binary size." alt="" coords="226,55,377,80"/>
+<area shape="rect" id="node4" href="$d0/dc9/a02794.html#a062463121032ba679336be2382c508d0" title="Retrieves a value array from a chunk." alt="" coords="209,105,394,145"/>
+<area shape="rect" id="node7" href="$d5/da6/a01698.html#a430f3de9071e7d03358bb1b39d07c2b8" title="Sets given value to big endian." alt="" coords="208,169,395,195"/>
+<area shape="rect" id="node5" href="$df/d44/a02586.html#af711032d94753cb2d482fe2bcf3afb17" title="Checks that the remaining place can hold the given size." alt="" coords="455,75,610,115"/>
+<area shape="rect" id="node6" href="$df/d44/a02586.html#a7c1bb3cf53d6b4a6856c9964c54fac11" title="Retrieves data from the chunk." alt="" coords="443,140,623,165"/>
+</map>

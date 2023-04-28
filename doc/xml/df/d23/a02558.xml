@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/d23/a02558" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</compoundname>
+    <basecompoundref refid="d8/d5d/a02538" prot="public" virt="non-virtual">castor3d::Interpolator&lt; castor::Quaternion &gt;</basecompoundref>
+    <includes local="no">Interpolator.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/d23/a02558_1ac5578a48f4dac43130a210867152eec3" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::InterpolatorT</definition>
+        <argsstring>()</argsstring>
+        <name>InterpolatorT</name>
+        <qualifiedname>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::InterpolatorT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Interpolator.hpp" line="136" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="136" bodyend="139"/>
+        <references refid="d5/da6/a01698_1ad38387ab8e17377a42314bc21c171ab0ab4f471e7b4231c34ab95df36681e7a86">castor3d::eLinear</references>
+      </memberdef>
+      <memberdef kind="function" id="df/d23/a02558_1a910141885b8ae03c0ab795586cc9f345" prot="public" static="no" const="yes" explicit="no" inline="yes" virt="virtual">
+        <type>castor::Quaternion</type>
+        <definition>castor::Quaternion castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::interpolate</definition>
+        <argsstring>(castor::Quaternion const &amp;src, castor::Quaternion const &amp;dst, float percent) const override</argsstring>
+        <name>interpolate</name>
+        <qualifiedname>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;::interpolate</qualifiedname>
+        <reimplements refid="d8/d5d/a02538_1a38c4c864a411f0fbc92d8af20d4ec52f">interpolate</reimplements>
+        <param>
+          <type>castor::Quaternion const &amp;</type>
+          <declname>src</declname>
+        </param>
+        <param>
+          <type>castor::Quaternion const &amp;</type>
+          <declname>dst</declname>
+        </param>
+        <param>
+          <type>float</type>
+          <declname>percent</declname>
+        </param>
+        <briefdescription>
+<para>Interpolation function. </para>
+        </briefdescription>
+        <detaileddescription>
+<para><parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">src</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The start. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">dst</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The end. </para>
+</parameterdescription>
+</parameteritem>
+<parameteritem>
+<parameternamelist>
+<parametername direction="in">percent</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The percentage. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Animation/Interpolator.hpp" line="152" column="20" bodyfile="Animation/Interpolator.hpp" bodystart="152" bodyend="172"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para>Handles the Quaternion linear interpolations. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::Interpolator&lt; castor::Quaternion &gt;</label>
+        <link refid="d8/d5d/a02538"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Quaternion &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d8/d5d/a02538"/>
+      </node>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</label>
+        <link refid="df/d23/a02558"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>castor3d::Interpolator&lt; castor::Quaternion &gt;</label>
+        <link refid="d8/d5d/a02538"/>
+        <childnode refid="3" relation="template-instance">
+          <edgelabel>&lt; castor::Quaternion &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::Interpolator&lt; DataT &gt;</label>
+        <link refid="d8/d5d/a02538"/>
+      </node>
+      <node id="1">
+        <label>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</label>
+        <link refid="df/d23/a02558"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Animation/Interpolator.hpp" line="132" column="1" bodyfile="Animation/Interpolator.hpp" bodystart="134" bodyend="173"/>
+    <listofallmembers>
+      <member refid="d8/d5d/a02538_1a7afbe44fec7b992b8c9bc8b05af8c430" prot="public" virt="non-virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>getType</name></member>
+      <member refid="df/d23/a02558_1a910141885b8ae03c0ab795586cc9f345" prot="public" virt="virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>interpolate</name></member>
+      <member refid="d8/d5d/a02538_1a7e2e27ce38fe1866c43b8c091b79c711" prot="protected" virt="non-virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>Interpolator</name></member>
+      <member refid="df/d23/a02558_1ac5578a48f4dac43130a210867152eec3" prot="public" virt="non-virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>InterpolatorT</name></member>
+      <member refid="d8/d5d/a02538_1a94bd6de73929278b901f2643a57694a1" prot="public" virt="virtual"><scope>castor3d::InterpolatorT&lt; castor::Quaternion, InterpolatorType::eLinear &gt;</scope><name>~Interpolator</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

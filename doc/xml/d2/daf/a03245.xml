@@ -1,0 +1,493 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/daf/a03245" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::LayoutBox</compoundname>
+    <basecompoundref refid="dd/d07/a03233" prot="public" virt="non-virtual">castor3d::Layout</basecompoundref>
+    <includes local="no">LayoutBox.hpp</includes>
+      <sectiondef kind="user-defined">
+      <header>General</header>
+      <memberdef kind="variable" id="d2/daf/a03245_1a27417472dbab22b1a3c673dfd3e5f8ed" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::LayoutBox::m_horizontal</definition>
+        <argsstring></argsstring>
+        <name>m_horizontal</name>
+        <qualifiedname>castor3d::LayoutBox::m_horizontal</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/LayoutBox.hpp" line="51" column="6" bodyfile="Gui/Layout/LayoutBox.hpp" bodystart="51" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/daf/a03245_1a94af2f4b6fd87416ed2d5efcf5f407a2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::LayoutBox::LayoutBox</definition>
+        <argsstring>(LayoutControl &amp;container)</argsstring>
+        <name>LayoutBox</name>
+        <qualifiedname>castor3d::LayoutBox::LayoutBox</qualifiedname>
+        <param>
+          <type><ref refid="d1/d30/a03185" kindref="compound">LayoutControl</ref> &amp;</type>
+          <declname>container</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Constructor <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">container</parametername>
+</parameternamelist>
+<parameterdescription>
+<para>The control affected by this layout. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/LayoutBox.hpp" line="22" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/daf/a03245_1abecec9f40026ba98e4ff99bbd0015a2d" prot="public" static="no" const="no" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutBox::setHorizontal</definition>
+        <argsstring>(bool v) noexcept</argsstring>
+        <name>setHorizontal</name>
+        <qualifiedname>castor3d::LayoutBox::setHorizontal</qualifiedname>
+        <param>
+          <type>bool</type>
+          <declname>v</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Sets the layout direction. <parameterlist kind="param"><parameteritem>
+<parameternamelist>
+<parametername direction="in">v</parametername>
+</parameternamelist>
+<parameterdescription>
+<para><computeroutput>true</computeroutput> for an horizontal layout. </para>
+</parameterdescription>
+</parameteritem>
+</parameterlist>
+</para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/LayoutBox.hpp" line="27" column="6" bodyfile="Gui/Layout/LayoutBox.hpp" bodystart="27" bodyend="31"/>
+        <references refid="dd/d07/a03233_1a025672a3bbc206c9fd5371f2e4de5505">castor3d::Layout::markDirty</references>
+      </memberdef>
+      <memberdef kind="function" id="d2/daf/a03245_1a0afd87aad4645d36aa01ae75847b77a7" prot="public" static="no" const="yes" explicit="no" inline="yes" noexcept="yes" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool castor3d::LayoutBox::isHorizontal</definition>
+        <argsstring>() const noexcept</argsstring>
+        <name>isHorizontal</name>
+        <qualifiedname>castor3d::LayoutBox::isHorizontal</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/LayoutBox.hpp" line="33" column="6" bodyfile="Gui/Layout/LayoutBox.hpp" bodystart="33" bodyend="36"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/daf/a03245_1a40e327d7a73f47337775c4bf0ef1b928" prot="private" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>void</type>
+        <definition>void castor3d::LayoutBox::doUpdate</definition>
+        <argsstring>() override</argsstring>
+        <name>doUpdate</name>
+        <qualifiedname>castor3d::LayoutBox::doUpdate</qualifiedname>
+        <reimplements refid="dd/d07/a03233_1a2087ae697bd6e373260985b29cadebc1">doUpdate</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>Updates the dependant data.   </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/LayoutBox.hpp" line="43" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/daf/a03245_1ab86c4193624fbf07166cad400bd70e63" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>uint32_t</type>
+        <definition>uint32_t castor3d::LayoutBox::doComputeSeparator</definition>
+        <argsstring>(uint32_t component)</argsstring>
+        <name>doComputeSeparator</name>
+        <qualifiedname>castor3d::LayoutBox::doComputeSeparator</qualifiedname>
+        <param>
+          <type>uint32_t</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/LayoutBox.hpp" line="45" column="10"/>
+      </memberdef>
+      <memberdef kind="function" id="d2/daf/a03245_1adbd07d32e3537a9d2a87edb3628733d8" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>std::pair&lt; int32_t, uint32_t &gt;</type>
+        <definition>std::pair&lt; int32_t, uint32_t &gt; castor3d::LayoutBox::doGetFixedPosSize</definition>
+        <argsstring>(Item const &amp;item, uint32_t limit, uint32_t component)</argsstring>
+        <name>doGetFixedPosSize</name>
+        <qualifiedname>castor3d::LayoutBox::doGetFixedPosSize</qualifiedname>
+        <param>
+          <type><ref refid="da/d34/a03237" kindref="compound">Item</ref> const &amp;</type>
+          <declname>item</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>limit</declname>
+        </param>
+        <param>
+          <type>uint32_t</type>
+          <declname>component</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Layout/LayoutBox.hpp" line="46" column="11"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>castor3d::Layout</label>
+        <link refid="dd/d07/a03233"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::LayoutBox</label>
+        <link refid="d2/daf/a03245"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="6">
+        <label>castor3d::NonClientEventHandler&lt; Control &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="29" relation="template-instance">
+          <edgelabel>&lt; Control &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="10">
+        <label>T</label>
+      </node>
+      <node id="17">
+        <label>std::array&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="14">
+        <label>std::array&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::array&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="26">
+        <label>std::array&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEvent, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="23">
+        <label>std::array&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEvent, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="20">
+        <label>std::array&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEvent, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="18">
+        <label>std::array&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="19" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="15">
+        <label>std::array&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="16" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="11">
+        <label>std::array&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="12" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="27">
+        <label>std::array&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</label>
+        <childnode refid="28" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientHandlerEventConnection &gt;, size_t(HandlerEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="24">
+        <label>std::array&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</label>
+        <childnode refid="25" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientKeyboardEventConnection &gt;, size_t(KeyboardEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="21">
+        <label>std::array&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</label>
+        <childnode refid="22" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="9" relation="template-instance">
+          <edgelabel>&lt; std::vector&lt; OnNonClientMouseEventConnection &gt;, size_t(MouseEventType::eCount) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="5">
+        <label>castor3d::Control</label>
+        <link refid="d5/d27/a03157"/>
+        <childnode refid="6" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="34">
+        <label>castor3d::CpuFrameEvent</label>
+        <link refid="d7/d5a/a03069"/>
+      </node>
+      <node id="7">
+        <label>castor3d::EventHandler</label>
+        <link refid="d9/d5f/a03109"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>m_mouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="11" relation="usage">
+          <edgelabel>m_mouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="14" relation="usage">
+          <edgelabel>m_keyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="15" relation="usage">
+          <edgelabel>m_keyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="17" relation="usage">
+          <edgelabel>m_handlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="18" relation="usage">
+          <edgelabel>m_handlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::Layout</label>
+        <link refid="dd/d07/a03233"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>m_container</edgelabel>
+        </childnode>
+        <childnode refid="31" relation="usage">
+          <edgelabel>m_items</edgelabel>
+        </childnode>
+        <childnode refid="33" relation="usage">
+          <edgelabel>m_spacers</edgelabel>
+        </childnode>
+        <childnode refid="34" relation="usage">
+          <edgelabel>m_event</edgelabel>
+        </childnode>
+      </node>
+      <node id="32">
+        <label>castor3d::Layout::Item</label>
+        <link refid="da/d34/a03237"/>
+      </node>
+      <node id="1">
+        <label>castor3d::LayoutBox</label>
+        <link refid="d2/daf/a03245"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::LayoutControl</label>
+        <link refid="d1/d30/a03185"/>
+        <childnode refid="5" relation="public-inheritance">
+        </childnode>
+        <childnode refid="30" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="29">
+        <label>castor3d::NonClientEventHandler&lt; Derived &gt;</label>
+        <link refid="d0/dcd/a03113"/>
+        <childnode refid="7" relation="public-inheritance">
+        </childnode>
+        <childnode refid="20" relation="usage">
+          <edgelabel>m_ncMouseSlots</edgelabel>
+        </childnode>
+        <childnode refid="21" relation="usage">
+          <edgelabel>m_ncMouseSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="23" relation="usage">
+          <edgelabel>m_ncKeyboardSlots</edgelabel>
+        </childnode>
+        <childnode refid="24" relation="usage">
+          <edgelabel>m_ncKeyboardSlotsConnections</edgelabel>
+        </childnode>
+        <childnode refid="26" relation="usage">
+          <edgelabel>m_ncHandlerSlots</edgelabel>
+        </childnode>
+        <childnode refid="27" relation="usage">
+          <edgelabel>m_ncHandlerSlotsConnections</edgelabel>
+        </childnode>
+      </node>
+      <node id="30">
+        <label>castor3d::ScrollableCtrl</label>
+        <link refid="d6/df4/a03201"/>
+      </node>
+      <node id="3">
+        <label>castor::Named</label>
+      </node>
+      <node id="9">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="13">
+        <label>std::vector&lt; T &gt;</label>
+        <childnode refid="10" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+      <node id="19">
+        <label>std::vector&lt; OnClientHandlerEventConnection &gt;</label>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; OnClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="16">
+        <label>std::vector&lt; OnClientKeyboardEventConnection &gt;</label>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; OnClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="12">
+        <label>std::vector&lt; OnClientMouseEventConnection &gt;</label>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; OnClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="28">
+        <label>std::vector&lt; OnNonClientHandlerEventConnection &gt;</label>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; OnNonClientHandlerEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="25">
+        <label>std::vector&lt; OnNonClientKeyboardEventConnection &gt;</label>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; OnNonClientKeyboardEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="22">
+        <label>std::vector&lt; OnNonClientMouseEventConnection &gt;</label>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; OnNonClientMouseEventConnection &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="33">
+        <label>std::vector&lt; SpacerUPtr &gt;</label>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; SpacerUPtr &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="31">
+        <label>std::vector&lt; castor3d::Layout::Item &gt;</label>
+        <childnode refid="32" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+        <childnode refid="13" relation="template-instance">
+          <edgelabel>&lt; castor3d::Layout::Item &gt;</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Gui/Layout/LayoutBox.hpp" line="11" column="1" bodyfile="Gui/Layout/LayoutBox.hpp" bodystart="13" bodyend="52"/>
+    <listofallmembers>
+      <member refid="dd/d07/a03233_1a117ef63f9cab8fc17cc53e9704d55795" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>addControl</name></member>
+      <member refid="dd/d07/a03233_1ae37a0266bc8070057d3c7cb2f7b42552" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>addSpacer</name></member>
+      <member refid="dd/d07/a03233_1afe0c8414a089f078ef75034c753f3288" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>begin</name></member>
+      <member refid="d2/daf/a03245_1ab86c4193624fbf07166cad400bd70e63" prot="private" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>doComputeSeparator</name></member>
+      <member refid="d2/daf/a03245_1adbd07d32e3537a9d2a87edb3628733d8" prot="private" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>doGetFixedPosSize</name></member>
+      <member refid="d2/daf/a03245_1a40e327d7a73f47337775c4bf0ef1b928" prot="private" virt="virtual"><scope>castor3d::LayoutBox</scope><name>doUpdate</name></member>
+      <member refid="dd/d07/a03233_1ac1cb7fdda1742d6129fb8957dc0e3f75" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>end</name></member>
+      <member refid="dd/d07/a03233_1a479e82451ddd340bbdde4a3d2fce3257" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>getContainer</name></member>
+      <member refid="d2/daf/a03245_1a0afd87aad4645d36aa01ae75847b77a7" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>isHorizontal</name></member>
+      <member refid="dd/d07/a03233_1a257e2a8064ba8e055001a1fd8a92c6ad" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>Layout</name></member>
+      <member refid="dd/d07/a03233_1a9a6073fe7256ceff8cb7d009e99d40a2" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>Layout</name></member>
+      <member refid="dd/d07/a03233_1ac1b01f729da4154e7ba26aa867b349c5" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>Layout</name></member>
+      <member refid="d2/daf/a03245_1a94af2f4b6fd87416ed2d5efcf5f407a2" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>LayoutBox</name></member>
+      <member refid="dd/d07/a03233_1a41c91ca21e4b1b8d5f0afc2b56f94a69" prot="protected" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>m_container</name></member>
+      <member refid="dd/d07/a03233_1a79e5478dd49a91d06108701ad7d7d82a" prot="protected" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>m_event</name></member>
+      <member refid="d2/daf/a03245_1a27417472dbab22b1a3c673dfd3e5f8ed" prot="private" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>m_horizontal</name></member>
+      <member refid="dd/d07/a03233_1a4b24baef94ccf97b973bd355844656fe" prot="protected" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>m_items</name></member>
+      <member refid="dd/d07/a03233_1a462bd17ff46e26a3e0a64d9e460bfa97" prot="protected" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>m_spacers</name></member>
+      <member refid="dd/d07/a03233_1aa5d2534f2d7c79aaa04c91e310663000" prot="protected" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>m_updating</name></member>
+      <member refid="dd/d07/a03233_1a025672a3bbc206c9fd5371f2e4de5505" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>markDirty</name></member>
+      <member refid="dd/d07/a03233_1a0643eecae76f23786c2b7f7e0eb44d2b" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>operator=</name></member>
+      <member refid="dd/d07/a03233_1a990131c2ac35ddc4731787ccb528ebb0" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>operator=</name></member>
+      <member refid="dd/d07/a03233_1a9f363e696acc3336baafdfdb4408f4bc" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>removeControl</name></member>
+      <member refid="d2/daf/a03245_1abecec9f40026ba98e4ff99bbd0015a2d" prot="public" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>setHorizontal</name></member>
+      <member refid="dd/d07/a03233_1ad2626b4cd34e4e26fe3f3fb12f2266a0" prot="protected" virt="non-virtual"><scope>castor3d::LayoutBox</scope><name>update</name></member>
+      <member refid="dd/d07/a03233_1a905c6836fafc2aa33d03736dbee15ac6" prot="public" virt="virtual"><scope>castor3d::LayoutBox</scope><name>~Layout</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

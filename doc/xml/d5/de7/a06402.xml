@@ -1,0 +1,514 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d5/de7/a06402" kind="class" language="C++" prot="public">
+    <compoundname>castor3d::shader::BRDFHelpers</compoundname>
+    <includes local="no">GlslBRDFHelpers.hpp</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="d5/de7/a06402_1a4ba14183a735939b2b5f237d64080ce6" prot="private" static="no" mutable="no">
+        <type>sdw::ShaderWriter &amp;</type>
+        <definition>sdw::ShaderWriter&amp; castor3d::shader::BRDFHelpers::m_writer</definition>
+        <argsstring></argsstring>
+        <name>m_writer</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_writer</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="72" column="20" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1aa396fdefdfd40282711bd133b1e03f69" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InUInt &gt; castor3d::shader::BRDFHelpers::m_radicalInverse</definition>
+        <argsstring></argsstring>
+        <name>m_radicalInverse</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_radicalInverse</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="74" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="74" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1a904462d7a4992098266c38fb95baccc8" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_lambdaSheenNumericHelper</definition>
+        <argsstring></argsstring>
+        <name>m_lambdaSheenNumericHelper</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_lambdaSheenNumericHelper</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="77" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1acca83861292fefc43a4184d8913c8c42" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_lambdaSheen</definition>
+        <argsstring></argsstring>
+        <name>m_lambdaSheen</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_lambdaSheen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="80" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1a28c4750e494be58bcd35b7e4e6579b8e" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec2, sdw::InUInt, sdw::InUInt &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec2 , sdw::InUInt , sdw::InUInt &gt; castor3d::shader::BRDFHelpers::m_hammersley</definition>
+        <argsstring></argsstring>
+        <name>m_hammersley</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_hammersley</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="83" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1a72656b4fc9614e15d812eab0a128b887" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InFloat, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InFloat , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_visibilitySmithGGXCorrelated</definition>
+        <argsstring></argsstring>
+        <name>m_visibilitySmithGGXCorrelated</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_visibilitySmithGGXCorrelated</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="87" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="87" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1a2dd402a6935b9b23cc0923a9d3421e1b" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_visibilityAshikhmin</definition>
+        <argsstring></argsstring>
+        <name>m_visibilityAshikhmin</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_visibilityAshikhmin</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="90" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="90" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1a59e41adeb24a99ee2afa32677ccf7d59" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InFloat, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InFloat , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_visibilitySheen</definition>
+        <argsstring></argsstring>
+        <name>m_visibilitySheen</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_visibilitySheen</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="94" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="94" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1ad06cc3b60c5de4fa7265dd423fb649d7" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_distributionGGX</definition>
+        <argsstring></argsstring>
+        <name>m_distributionGGX</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_distributionGGX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="97" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="97" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1aad1bdeb2f1e12ac6e142d67d55480907" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Float, sdw::InFloat, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; sdw::Float , sdw::InFloat , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_distributionCharlie</definition>
+        <argsstring></argsstring>
+        <name>m_distributionCharlie</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_distributionCharlie</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="100" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="100" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1a99633a5a6b62643021f315de7dcc3cce" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="dd/d9c/a06398" kindref="compound">MicrofacetDistributionSample</ref>, sdw::InVec2, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; MicrofacetDistributionSample , sdw::InVec2 , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_importanceSampleGGX</definition>
+        <argsstring></argsstring>
+        <name>m_importanceSampleGGX</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_importanceSampleGGX</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="103" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="103" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1a68272740326000199d585caf42b2ebcb" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; <ref refid="dd/d9c/a06398" kindref="compound">MicrofacetDistributionSample</ref>, sdw::InVec2, sdw::InFloat &gt;</type>
+        <definition>sdw::Function&lt; MicrofacetDistributionSample , sdw::InVec2 , sdw::InFloat &gt; castor3d::shader::BRDFHelpers::m_importanceSampleCharlie</definition>
+        <argsstring></argsstring>
+        <name>m_importanceSampleCharlie</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_importanceSampleCharlie</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="106" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="106" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d5/de7/a06402_1a46758adf2f2415eebab422bf1e24f610" prot="private" static="no" mutable="no">
+        <type>sdw::Function&lt; sdw::Vec4, InMicrofacetDistributionSample, sdw::InVec3 &gt;</type>
+        <definition>sdw::Function&lt; sdw::Vec4 , InMicrofacetDistributionSample , sdw::InVec3 &gt; castor3d::shader::BRDFHelpers::m_getImportanceSample</definition>
+        <argsstring></argsstring>
+        <name>m_getImportanceSample</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::m_getImportanceSample</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="109" column="2" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="109" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="d5/de7/a06402_1ac4dd16d69eaa4b2d54e1d17550bbeee2" prot="public" static="no" const="no" explicit="yes" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>C3D_API castor3d::shader::BRDFHelpers::BRDFHelpers</definition>
+        <argsstring>(sdw::ShaderWriter &amp;writer)</argsstring>
+        <name>BRDFHelpers</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::BRDFHelpers</qualifiedname>
+        <param>
+          <type>sdw::ShaderWriter &amp;</type>
+          <declname>writer</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="39" column="18"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a55cd3d4cf3881c40d44240f4fcefe06f" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetVec2</type>
+        <definition>C3D_API sdw::RetVec2 castor3d::shader::BRDFHelpers::hammersley</definition>
+        <argsstring>(sdw::UInt const &amp;i, sdw::UInt const &amp;n)</argsstring>
+        <name>hammersley</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::hammersley</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>i</declname>
+        </param>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="41" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a04d1ad527815dd0108dd31e12f47f7ff" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetFloat</type>
+        <definition>C3D_API sdw::RetFloat castor3d::shader::BRDFHelpers::visibilitySmithGGXCorrelated</definition>
+        <argsstring>(sdw::Float const &amp;NdotV, sdw::Float const &amp;NdotL, sdw::Float const &amp;roughness)</argsstring>
+        <name>visibilitySmithGGXCorrelated</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::visibilitySmithGGXCorrelated</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotL</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="43" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a5c985abd4287e01c1bbb194386668744" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetFloat</type>
+        <definition>C3D_API sdw::RetFloat castor3d::shader::BRDFHelpers::visibilityAshikhmin</definition>
+        <argsstring>(sdw::Float const &amp;NdotL, sdw::Float const &amp;NdotV)</argsstring>
+        <name>visibilityAshikhmin</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::visibilityAshikhmin</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotL</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="46" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a5f732cfca8378ee9a2831b3a5c6707ae" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetFloat</type>
+        <definition>C3D_API sdw::RetFloat castor3d::shader::BRDFHelpers::visibilitySheen</definition>
+        <argsstring>(sdw::Float const &amp;NdotV, sdw::Float const &amp;NdotL, sdw::Float const &amp;roughness)</argsstring>
+        <name>visibilitySheen</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::visibilitySheen</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotV</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotL</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="48" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a7b60cecca7eef9e841d8a4862336a512" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetFloat</type>
+        <definition>C3D_API sdw::RetFloat castor3d::shader::BRDFHelpers::distributionGGX</definition>
+        <argsstring>(sdw::Float const &amp;NdotH, sdw::Float const &amp;alpha)</argsstring>
+        <name>distributionGGX</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::distributionGGX</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotH</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alpha</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="52" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a9192de32cf67589e64eb1b34a2c0e3df" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::RetFloat</type>
+        <definition>C3D_API sdw::RetFloat castor3d::shader::BRDFHelpers::distributionCharlie</definition>
+        <argsstring>(sdw::Float const &amp;NdotH, sdw::Float const &amp;alpha)</argsstring>
+        <name>distributionCharlie</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::distributionCharlie</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>NdotH</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alpha</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="54" column="23"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1afffa365620f0e04c542ffc917d6487da" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> RetMicrofacetDistributionSample</type>
+        <definition>C3D_API RetMicrofacetDistributionSample castor3d::shader::BRDFHelpers::importanceSampleGGX</definition>
+        <argsstring>(sdw::Vec2 const &amp;xi, sdw::Float const &amp;roughness)</argsstring>
+        <name>importanceSampleGGX</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::importanceSampleGGX</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>xi</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="57" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a264ab4d83f163232ed340ea5d63a73bf" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> RetMicrofacetDistributionSample</type>
+        <definition>C3D_API RetMicrofacetDistributionSample castor3d::shader::BRDFHelpers::importanceSampleCharlie</definition>
+        <argsstring>(sdw::Vec2 const &amp;xi, sdw::Float const &amp;roughness)</argsstring>
+        <name>importanceSampleCharlie</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::importanceSampleCharlie</qualifiedname>
+        <param>
+          <type>sdw::Vec2 const &amp;</type>
+          <declname>xi</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="59" column="41"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1ac415dc352d3f26e323ab4532f34e4710" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type><ref refid="d9/d39/a00257_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> sdw::Vec4</type>
+        <definition>C3D_API sdw::Vec4 castor3d::shader::BRDFHelpers::getImportanceSample</definition>
+        <argsstring>(MicrofacetDistributionSample const &amp;is, sdw::Vec3 const &amp;n)</argsstring>
+        <name>getImportanceSample</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::getImportanceSample</qualifiedname>
+        <param>
+          <type><ref refid="dd/d9c/a06398" kindref="compound">MicrofacetDistributionSample</ref> const &amp;</type>
+          <declname>is</declname>
+        </param>
+        <param>
+          <type>sdw::Vec3 const &amp;</type>
+          <declname>n</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="61" column="19"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="d5/de7/a06402_1ae876be30520c0f93b739d70be09a90ef" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetFloat</type>
+        <definition>sdw::RetFloat castor3d::shader::BRDFHelpers::radicalInverse</definition>
+        <argsstring>(sdw::UInt const &amp;inBits)</argsstring>
+        <name>radicalInverse</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::radicalInverse</qualifiedname>
+        <param>
+          <type>sdw::UInt const &amp;</type>
+          <declname>inBits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="65" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a4c4626d4dd9d1bd1482c1e46bd78fe4b" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetFloat</type>
+        <definition>sdw::RetFloat castor3d::shader::BRDFHelpers::lambdaSheenNumericHelper</definition>
+        <argsstring>(sdw::Float const &amp;cosTheta, sdw::Float const &amp;roughness)</argsstring>
+        <name>lambdaSheenNumericHelper</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::lambdaSheenNumericHelper</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>cosTheta</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>roughness</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="66" column="15"/>
+      </memberdef>
+      <memberdef kind="function" id="d5/de7/a06402_1a9e066384dfb4cc3cadd855100e826dba" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>sdw::RetFloat</type>
+        <definition>sdw::RetFloat castor3d::shader::BRDFHelpers::lambdaSheen</definition>
+        <argsstring>(sdw::Float const &amp;cosTheta, sdw::Float const &amp;alphaG)</argsstring>
+        <name>lambdaSheen</name>
+        <qualifiedname>castor3d::shader::BRDFHelpers::lambdaSheen</qualifiedname>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>cosTheta</declname>
+        </param>
+        <param>
+          <type>sdw::Float const &amp;</type>
+          <declname>alphaG</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="68" column="15"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/GlslBRDFHelpers.hpp" line="36" column="1" bodyfile="Shader/Shaders/GlslBRDFHelpers.hpp" bodystart="37" bodyend="110"/>
+    <listofallmembers>
+      <member refid="d5/de7/a06402_1ac4dd16d69eaa4b2d54e1d17550bbeee2" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>BRDFHelpers</name></member>
+      <member refid="d5/de7/a06402_1a9192de32cf67589e64eb1b34a2c0e3df" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>distributionCharlie</name></member>
+      <member refid="d5/de7/a06402_1a7b60cecca7eef9e841d8a4862336a512" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>distributionGGX</name></member>
+      <member refid="d5/de7/a06402_1ac415dc352d3f26e323ab4532f34e4710" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>getImportanceSample</name></member>
+      <member refid="d5/de7/a06402_1a55cd3d4cf3881c40d44240f4fcefe06f" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>hammersley</name></member>
+      <member refid="d5/de7/a06402_1a264ab4d83f163232ed340ea5d63a73bf" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>importanceSampleCharlie</name></member>
+      <member refid="d5/de7/a06402_1afffa365620f0e04c542ffc917d6487da" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>importanceSampleGGX</name></member>
+      <member refid="d5/de7/a06402_1a9e066384dfb4cc3cadd855100e826dba" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>lambdaSheen</name></member>
+      <member refid="d5/de7/a06402_1a4c4626d4dd9d1bd1482c1e46bd78fe4b" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>lambdaSheenNumericHelper</name></member>
+      <member refid="d5/de7/a06402_1aad1bdeb2f1e12ac6e142d67d55480907" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_distributionCharlie</name></member>
+      <member refid="d5/de7/a06402_1ad06cc3b60c5de4fa7265dd423fb649d7" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_distributionGGX</name></member>
+      <member refid="d5/de7/a06402_1a46758adf2f2415eebab422bf1e24f610" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_getImportanceSample</name></member>
+      <member refid="d5/de7/a06402_1a28c4750e494be58bcd35b7e4e6579b8e" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_hammersley</name></member>
+      <member refid="d5/de7/a06402_1a68272740326000199d585caf42b2ebcb" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_importanceSampleCharlie</name></member>
+      <member refid="d5/de7/a06402_1a99633a5a6b62643021f315de7dcc3cce" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_importanceSampleGGX</name></member>
+      <member refid="d5/de7/a06402_1acca83861292fefc43a4184d8913c8c42" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_lambdaSheen</name></member>
+      <member refid="d5/de7/a06402_1a904462d7a4992098266c38fb95baccc8" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_lambdaSheenNumericHelper</name></member>
+      <member refid="d5/de7/a06402_1aa396fdefdfd40282711bd133b1e03f69" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_radicalInverse</name></member>
+      <member refid="d5/de7/a06402_1a2dd402a6935b9b23cc0923a9d3421e1b" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_visibilityAshikhmin</name></member>
+      <member refid="d5/de7/a06402_1a59e41adeb24a99ee2afa32677ccf7d59" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_visibilitySheen</name></member>
+      <member refid="d5/de7/a06402_1a72656b4fc9614e15d812eab0a128b887" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_visibilitySmithGGXCorrelated</name></member>
+      <member refid="d5/de7/a06402_1a4ba14183a735939b2b5f237d64080ce6" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>m_writer</name></member>
+      <member refid="d5/de7/a06402_1ae876be30520c0f93b739d70be09a90ef" prot="private" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>radicalInverse</name></member>
+      <member refid="d5/de7/a06402_1a5c985abd4287e01c1bbb194386668744" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>visibilityAshikhmin</name></member>
+      <member refid="d5/de7/a06402_1a5f732cfca8378ee9a2831b3a5c6707ae" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>visibilitySheen</name></member>
+      <member refid="d5/de7/a06402_1a04d1ad527815dd0108dd31e12f47f7ff" prot="public" virt="non-virtual"><scope>castor3d::shader::BRDFHelpers</scope><name>visibilitySmithGGXCorrelated</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

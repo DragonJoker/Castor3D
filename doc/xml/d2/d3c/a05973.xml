@@ -1,0 +1,188 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d2/d3c/a05973" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::DirectionalLight::LightData</compoundname>
+    <basecompoundref refid="d1/d26/a05989" prot="public" virt="non-virtual">castor3d::LightCategory::LightData</basecompoundref>
+    <includes local="no">DirectionalLight.hpp</includes>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="d2/d3c/a05973_1afd50e1da310378b8128022513ac0b58d" prot="public" static="no">
+        <type>std::array&lt; <ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref>, ashes::getAlignedSize(<ref refid="d3/d5e/a01725_1a9a5cbd10b0beb465a4286fa4c9c1e851" kindref="member">MaxDirectionalCascadesCount</ref>, 4u) &gt;</type>
+        <definition>using castor3d::DirectionalLight::LightData::CascasdeFloatArray =  std::array&lt; Float1, ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>CascasdeFloatArray</name>
+        <qualifiedname>castor3d::DirectionalLight::LightData::CascasdeFloatArray</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="39" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="39" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d2/d3c/a05973_1a8a866d5777c8ea50017059b49a2127ff" prot="public" static="no" mutable="no">
+        <type><ref refid="d0/d3e/a06361" kindref="compound">Float3</ref></type>
+        <definition>Float3 castor3d::DirectionalLight::LightData::direction</definition>
+        <argsstring></argsstring>
+        <name>direction</name>
+        <qualifiedname>castor3d::DirectionalLight::LightData::direction</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="40" column="8" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="40" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3c/a05973_1ad5581612b16de53dabe084e6ba3d18b6" prot="public" static="no" mutable="no">
+        <type><ref refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" kindref="member">Float1</ref></type>
+        <definition>Float1 castor3d::DirectionalLight::LightData::cascadeCount</definition>
+        <argsstring></argsstring>
+        <name>cascadeCount</name>
+        <qualifiedname>castor3d::DirectionalLight::LightData::cascadeCount</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="41" column="8" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="41" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3c/a05973_1ada710e56af4f4cd431d5fb40e3e41133" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d3c/a05973_1afd50e1da310378b8128022513ac0b58d" kindref="member">CascasdeFloatArray</ref></type>
+        <definition>CascasdeFloatArray castor3d::DirectionalLight::LightData::splitDepths</definition>
+        <argsstring></argsstring>
+        <name>splitDepths</name>
+        <qualifiedname>castor3d::DirectionalLight::LightData::splitDepths</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="42" column="20" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="42" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3c/a05973_1af31904abc2439b3614c3ea8a115c8eea" prot="public" static="no" mutable="no">
+        <type><ref refid="d2/d3c/a05973_1afd50e1da310378b8128022513ac0b58d" kindref="member">CascasdeFloatArray</ref></type>
+        <definition>CascasdeFloatArray castor3d::DirectionalLight::LightData::splitScales</definition>
+        <argsstring></argsstring>
+        <name>splitScales</name>
+        <qualifiedname>castor3d::DirectionalLight::LightData::splitScales</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="43" column="20" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="43" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d2/d3c/a05973_1a53084add3e7a6972a296a7a039633c6b" prot="public" static="no" mutable="no">
+        <type>std::array&lt; <ref refid="df/d12/a06369" kindref="compound">Float4x4</ref>, <ref refid="d3/d5e/a01725_1a9a5cbd10b0beb465a4286fa4c9c1e851" kindref="member">MaxDirectionalCascadesCount</ref> &gt;</type>
+        <definition>std::array&lt; Float4x4, MaxDirectionalCascadesCount &gt; castor3d::DirectionalLight::LightData::transforms</definition>
+        <argsstring></argsstring>
+        <name>transforms</name>
+        <qualifiedname>castor3d::DirectionalLight::LightData::transforms</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Scene/Light/DirectionalLight.hpp" line="44" column="12" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="44" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>castor3d::DirectionalLight::LightData</label>
+        <link refid="d2/d3c/a05973"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d1/d26/a05989"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="db/de4/a06353"/>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="7">
+        <label>T</label>
+      </node>
+      <node id="5">
+        <label>std::array&lt; Float1, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u) &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Float1, ashes::getAlignedSize(MaxDirectionalCascadesCount, 4u) &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="8">
+        <label>std::array&lt; Float4x4, MaxDirectionalCascadesCount &gt;</label>
+        <childnode refid="6" relation="template-instance">
+          <edgelabel>&lt; Float4x4, MaxDirectionalCascadesCount &gt;</edgelabel>
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::DirectionalLight::LightData</label>
+        <link refid="d2/d3c/a05973"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+        <childnode refid="5" relation="usage">
+          <edgelabel>splitDepths</edgelabel>
+          <edgelabel>splitScales</edgelabel>
+        </childnode>
+        <childnode refid="8" relation="usage">
+          <edgelabel>transforms</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::LightCategory::LightData</label>
+        <link refid="d1/d26/a05989"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+        <childnode refid="4" relation="usage">
+          <edgelabel>shadows</edgelabel>
+        </childnode>
+      </node>
+      <node id="4">
+        <label>castor3d::LightCategory::ShadowData</label>
+        <link refid="d7/d05/a05985"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::ShaderBufferTypes</label>
+        <link refid="db/de4/a06353"/>
+      </node>
+      <node id="6">
+        <label>std::array&lt; T &gt;</label>
+        <childnode refid="7" relation="usage">
+          <edgelabel>elements</edgelabel>
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="Scene/Light/DirectionalLight.hpp" line="36" column="1" bodyfile="Scene/Light/DirectionalLight.hpp" bodystart="38" bodyend="45"/>
+    <listofallmembers>
+      <member refid="d2/d3c/a05973_1ad5581612b16de53dabe084e6ba3d18b6" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>cascadeCount</name></member>
+      <member refid="d2/d3c/a05973_1afd50e1da310378b8128022513ac0b58d" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>CascasdeFloatArray</name></member>
+      <member refid="d1/d26/a05989_1a5e00322b1a0bf4bc06a5ce9873b810f4" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>colour</name></member>
+      <member refid="d2/d3c/a05973_1a8a866d5777c8ea50017059b49a2127ff" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>direction</name></member>
+      <member refid="d1/d26/a05989_1ab261755a700a6bb39207655cf7a263e6" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>farPlane</name></member>
+      <member refid="db/de4/a06353_1a12bb5f307e322111792e60895ada0270" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>Float1</name></member>
+      <member refid="d1/d26/a05989_1ad3fde27984234899fa7032e37901179d" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>intensity</name></member>
+      <member refid="d1/d26/a05989_1af8bfcefb6357aeb30e93462bf4718a24" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>pad0</name></member>
+      <member refid="d1/d26/a05989_1aab7bb7c4ea0fc301a39a5c1dfbaafa69" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>shadows</name></member>
+      <member refid="d2/d3c/a05973_1ada710e56af4f4cd431d5fb40e3e41133" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>splitDepths</name></member>
+      <member refid="d2/d3c/a05973_1af31904abc2439b3614c3ea8a115c8eea" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>splitScales</name></member>
+      <member refid="d2/d3c/a05973_1a53084add3e7a6972a296a7a039633c6b" prot="public" virt="non-virtual"><scope>castor3d::DirectionalLight::LightData</scope><name>transforms</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

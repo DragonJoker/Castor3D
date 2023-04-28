@@ -1,0 +1,97 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d4/d54/a06738" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::LpvLightConfigUboConfiguration</compoundname>
+    <includes local="no">UbosModule.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d4/d54/a06738_1a111aad9bb757c9e6d293f8ed997109df" prot="public" static="no" mutable="no">
+        <type>castor::Matrix4x4f</type>
+        <definition>castor::Matrix4x4f castor3d::LpvLightConfigUboConfiguration::lightView</definition>
+        <argsstring></argsstring>
+        <name>lightView</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::lightView</qualifiedname>
+        <initializer>{}</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="152" column="20" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="152" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d54/a06738_1aaac1e714c96e2c99feff3ac68ecc1f07" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LpvLightConfigUboConfiguration::texelAreaModifier</definition>
+        <argsstring></argsstring>
+        <name>texelAreaModifier</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::texelAreaModifier</qualifiedname>
+        <initializer>= 1.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="153" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="153" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d54/a06738_1aa7de5c5ad2d095eafd8637cc226b5b03" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LpvLightConfigUboConfiguration::tanFovXHalf</definition>
+        <argsstring></argsstring>
+        <name>tanFovXHalf</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::tanFovXHalf</qualifiedname>
+        <initializer>= 1.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="154" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="154" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d54/a06738_1ab3b28b23fbc9c272295cd8ab7d525b6a" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LpvLightConfigUboConfiguration::tanFovYHalf</definition>
+        <argsstring></argsstring>
+        <name>tanFovYHalf</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::tanFovYHalf</qualifiedname>
+        <initializer>= 1.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="155" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="155" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d4/d54/a06738_1a2966773f12c2f7f1b5e310fd8514b6ec" prot="public" static="no" mutable="no">
+        <type>float</type>
+        <definition>float castor3d::LpvLightConfigUboConfiguration::lightOffset</definition>
+        <argsstring></argsstring>
+        <name>lightOffset</name>
+        <qualifiedname>castor3d::LpvLightConfigUboConfiguration::lightOffset</qualifiedname>
+        <initializer>= 0.0f</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Ubos/UbosModule.hpp" line="156" column="7" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="156" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+<para><ref refid="d1/de1/a05950" kindref="compound">Light</ref> propagation data. </para>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Ubos/UbosModule.hpp" line="150" column="1" bodyfile="Shader/Ubos/UbosModule.hpp" bodystart="151" bodyend="157"/>
+    <listofallmembers>
+      <member refid="d4/d54/a06738_1a2966773f12c2f7f1b5e310fd8514b6ec" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>lightOffset</name></member>
+      <member refid="d4/d54/a06738_1a111aad9bb757c9e6d293f8ed997109df" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>lightView</name></member>
+      <member refid="d4/d54/a06738_1aa7de5c5ad2d095eafd8637cc226b5b03" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>tanFovXHalf</name></member>
+      <member refid="d4/d54/a06738_1ab3b28b23fbc9c272295cd8ab7d525b6a" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>tanFovYHalf</name></member>
+      <member refid="d4/d54/a06738_1aaac1e714c96e2c99feff3ac68ecc1f07" prot="public" virt="non-virtual"><scope>castor3d::LpvLightConfigUboConfiguration</scope><name>texelAreaModifier</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

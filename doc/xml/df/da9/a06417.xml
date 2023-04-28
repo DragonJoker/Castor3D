@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="df/da9/a06417" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::shader::BlendComponentT</compoundname>
+    <includes local="no">GlslBlendComponents.hpp</includes>
+    <templateparamlist>
+      <param>
+        <type>typename T</type>
+      </param>
+    </templateparamlist>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="df/da9/a06417_1a6740613f464db6553b4f99b69d4f1bfd" prot="public" static="no" mutable="no">
+        <type>T</type>
+        <definition>T castor3d::shader::BlendComponentT&lt; T &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::shader::BlendComponentT::value</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="31" column="3" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="31" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="df/da9/a06417_1ae011035d49bddee4ed8abc56e9329507" prot="public" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool castor3d::shader::BlendComponentT&lt; T &gt;::enabled</definition>
+        <argsstring></argsstring>
+        <name>enabled</name>
+        <qualifiedname>castor3d::shader::BlendComponentT::enabled</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="32" column="6" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="32" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="df/da9/a06417_1afaa1706bdee96d1f3997a3ef7c03b3b0" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::shader::BlendComponentT&lt; T &gt;::BlendComponentT</definition>
+        <argsstring>(T v, bool e=true)</argsstring>
+        <name>BlendComponentT</name>
+        <qualifiedname>castor3d::shader::BlendComponentT::BlendComponentT</qualifiedname>
+        <param>
+          <type>T</type>
+          <declname>v</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>e</declname>
+          <defval>true</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Shader/Shaders/GlslBlendComponents.hpp" line="25" column="1" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="25" bodyend="29"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Shader/Shaders/GlslBlendComponents.hpp" line="23" column="1" bodyfile="Shader/Shaders/GlslBlendComponents.hpp" bodystart="24" bodyend="33"/>
+    <listofallmembers>
+      <member refid="df/da9/a06417_1afaa1706bdee96d1f3997a3ef7c03b3b0" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponentT</scope><name>BlendComponentT</name></member>
+      <member refid="df/da9/a06417_1ae011035d49bddee4ed8abc56e9329507" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponentT</scope><name>enabled</name></member>
+      <member refid="df/da9/a06417_1a6740613f464db6553b4f99b69d4f1bfd" prot="public" virt="non-virtual"><scope>castor3d::shader::BlendComponentT</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,46 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="d8/dde/a03178" kind="struct" language="C++" prot="protected">
+    <compoundname>castor3d::ScrollableCtrl::ScrolledControl</compoundname>
+    <includes local="no">CtrlScrollable.hpp</includes>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="d8/dde/a03178_1a57f886bc1093ec5bf025da7e97197b09" prot="public" static="no" mutable="no">
+        <type><ref refid="d5/da6/a01698_1a51e3ddb9a704c48a413420e2054ea0d7" kindref="member">OnControlChangedConnection</ref></type>
+        <definition>OnControlChangedConnection castor3d::ScrollableCtrl::ScrolledControl::connection</definition>
+        <argsstring></argsstring>
+        <name>connection</name>
+        <qualifiedname>castor3d::ScrollableCtrl::ScrolledControl::connection</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlScrollable.hpp" line="98" column="28" bodyfile="Gui/Controls/CtrlScrollable.hpp" bodystart="98" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="d8/dde/a03178_1a741764015ca97e1a451281d6df2b7bb9" prot="public" static="no" mutable="no">
+        <type>castor::Position</type>
+        <definition>castor::Position castor3d::ScrollableCtrl::ScrolledControl::originalPosition</definition>
+        <argsstring></argsstring>
+        <name>originalPosition</name>
+        <qualifiedname>castor3d::ScrollableCtrl::ScrolledControl::originalPosition</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Gui/Controls/CtrlScrollable.hpp" line="99" column="18" bodyfile="Gui/Controls/CtrlScrollable.hpp" bodystart="99" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Gui/Controls/CtrlScrollable.hpp" line="96" column="1" bodyfile="Gui/Controls/CtrlScrollable.hpp" bodystart="97" bodyend="100"/>
+    <listofallmembers>
+      <member refid="d8/dde/a03178_1a57f886bc1093ec5bf025da7e97197b09" prot="public" virt="non-virtual"><scope>castor3d::ScrollableCtrl::ScrolledControl</scope><name>connection</name></member>
+      <member refid="d8/dde/a03178_1a741764015ca97e1a451281d6df2b7bb9" prot="public" virt="non-virtual"><scope>castor3d::ScrollableCtrl::ScrolledControl</scope><name>originalPosition</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

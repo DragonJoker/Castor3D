@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="dc/da0/a04446" kind="struct" language="C++" prot="public">
+    <compoundname>castor3d::VkStructTraits&lt; VkBindBufferMemoryDeviceGroupInfo &gt;</compoundname>
+    <includes local="no">makeVkType.hpp</includes>
+    <templateparamlist>
+    </templateparamlist>
+      <sectiondef kind="public-static-attrib">
+      <memberdef kind="variable" id="dc/da0/a04446_1a48d8a664bbd65a627b6f434d36a82d73" prot="public" static="yes" constexpr="yes" mutable="no">
+        <type>VkStructureType constexpr</type>
+        <definition>VkStructureType constexpr castor3d::VkStructTraits&lt; VkBindBufferMemoryDeviceGroupInfo &gt;::value</definition>
+        <argsstring></argsstring>
+        <name>value</name>
+        <qualifiedname>castor3d::VkStructTraits&lt; VkBindBufferMemoryDeviceGroupInfo &gt;::value</qualifiedname>
+        <initializer>= VK_STRUCTURE_TYPE_BIND_BUFFER_MEMORY_DEVICE_GROUP_INFO</initializer>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/makeVkType.hpp" line="72" column="65" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="Miscellaneous/makeVkType.hpp" line="72" column="10" bodyfile="Miscellaneous/makeVkType.hpp" bodystart="72" bodyend="72"/>
+    <listofallmembers>
+      <member refid="dc/da0/a04446_1a48d8a664bbd65a627b6f434d36a82d73" prot="public" virt="non-virtual"><scope>castor3d::VkStructTraits&lt; VkBindBufferMemoryDeviceGroupInfo &gt;</scope><name>value</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

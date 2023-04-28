@@ -1,0 +1,2684 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.6" xml:lang="en-US">
+  <compounddef id="de/d47/a04501" kind="class" language="C++" prot="public" abstract="yes">
+    <compoundname>castor3d::PipelineVisitorBase</compoundname>
+    <derivedcompoundref refid="d7/dfb/a04509" prot="public" virt="non-virtual">castor3d::PipelineVisitor</derivedcompoundref>
+    <includes local="no">PipelineVisitor.hpp</includes>
+    <innerclass refid="d7/d43/a04505" prot="public">castor3d::PipelineVisitorBase::Config</innerclass>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="de/d47/a04501_1a329dec16e38b305c748e2f5adbc3b504" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(ShaderModule const &amp;shader, bool forceProgramsVisit)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d1/df2/a05617_1a2edaad3a6b7842bb2cd31662d4eeea6c">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a329dec16e38b305c748e2f5adbc3b504">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a329dec16e38b305c748e2f5adbc3b504">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a329dec16e38b305c748e2f5adbc3b504">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a329dec16e38b305c748e2f5adbc3b504">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a329dec16e38b305c748e2f5adbc3b504">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a183effbabe684c2c57cc61042a383eb3">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a183effbabe684c2c57cc61042a383eb3">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a183effbabe684c2c57cc61042a383eb3">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a183effbabe684c2c57cc61042a383eb3">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a183effbabe684c2c57cc61042a383eb3">visit</reimplementedby>
+        <param>
+          <type><ref refid="d2/dd4/a06405" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>shader</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>forceProgramsVisit</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Shader source. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="57" column="22"/>
+        <referencedby refid="de/d47/a04501_1a127e6422814b4aca771a2fbafa62aee7" compoundref="d1/d56/a00707" startline="60" endline="68">visit</referencedby>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a127e6422814b4aca771a2fbafa62aee7" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(ShaderModule const &amp;shader)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <param>
+          <type><ref refid="d2/dd4/a06405" kindref="compound">ShaderModule</ref> const &amp;</type>
+          <declname>shader</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="60" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="60" bodyend="68"/>
+        <references refid="d7/d43/a04505_1aaa35cd0efe79a842bc1ff57df7eb7a47" compoundref="d1/d56/a00707" startline="32">castor3d::PipelineVisitorBase::Config::allowProgramsVisit</references>
+        <references refid="de/d47/a04501_1a7dd3b92f7aca2b9a09113dd9f3f9e78a" compoundref="d1/d56/a00707" startline="378">config</references>
+        <references refid="de/d47/a04501_1a329dec16e38b305c748e2f5adbc3b504">visit</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a931fc40c2bd331e3d01b8e71dc0668f3" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(DebugConfig const &amp;config)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a931fc40c2bd331e3d01b8e71dc0668f3">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a931fc40c2bd331e3d01b8e71dc0668f3">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a931fc40c2bd331e3d01b8e71dc0668f3">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a931fc40c2bd331e3d01b8e71dc0668f3">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a931fc40c2bd331e3d01b8e71dc0668f3">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1ab70e8502c679fbd38bb6fc6f2b70881c">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ab70e8502c679fbd38bb6fc6f2b70881c">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ab70e8502c679fbd38bb6fc6f2b70881c">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ab70e8502c679fbd38bb6fc6f2b70881c">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ab70e8502c679fbd38bb6fc6f2b70881c">visit</reimplementedby>
+        <param>
+          <type><ref refid="d0/de1/a05589" kindref="compound">DebugConfig</ref> const &amp;</type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="70" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="de/d47/a04501_1a493e53a073b5db1a034ff6b823049755" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, crg::ImageViewId const &amp;viewId, VkImageLayout layout, TextureFactors const &amp;factors={})</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>viewId</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d92/a04489" kindref="compound">TextureFactors</ref> const &amp;</type>
+          <declname>factors</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Intermediate images. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="81" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="81" bodyend="93"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a84930df6031cc3cb8fadb04833972c89" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, Texture const &amp;texture, VkImageLayout layout, TextureFactors const &amp;factors={})</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="df/ddb/a05729" kindref="compound">Texture</ref> const &amp;</type>
+          <declname>texture</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d92/a04489" kindref="compound">TextureFactors</ref> const &amp;</type>
+          <declname>factors</declname>
+          <defval>{}</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="95" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="95" bodyend="104"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="de/d47/a04501_1a7c9eb8857f6257fac7097bfa89b4f8a6" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;category)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1af7cb550477e70c15de8f911236dc7ed3">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af7cb550477e70c15de8f911236dc7ed3">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af7cb550477e70c15de8f911236dc7ed3">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af7cb550477e70c15de8f911236dc7ed3">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af7cb550477e70c15de8f911236dc7ed3">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a7c9eb8857f6257fac7097bfa89b4f8a6">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a7c9eb8857f6257fac7097bfa89b4f8a6">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a7c9eb8857f6257fac7097bfa89b4f8a6">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a7c9eb8857f6257fac7097bfa89b4f8a6">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a7c9eb8857f6257fac7097bfa89b4f8a6">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>category</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Global pipeline configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="115" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a6f5f7748788d699204fe1c9c98b141e6" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, bool &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a716d04787bffb9ed435ffc41c69aeb0a">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a716d04787bffb9ed435ffc41c69aeb0a">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a716d04787bffb9ed435ffc41c69aeb0a">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a716d04787bffb9ed435ffc41c69aeb0a">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a716d04787bffb9ed435ffc41c69aeb0a">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a6f5f7748788d699204fe1c9c98b141e6">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a6f5f7748788d699204fe1c9c98b141e6">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a6f5f7748788d699204fe1c9c98b141e6">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a6f5f7748788d699204fe1c9c98b141e6">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a6f5f7748788d699204fe1c9c98b141e6">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>bool &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="116" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a84f3d887eb48fc52aa3ccfcd4c9f0d20" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int16_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a4cd17224ddef91bb5c6e745807cc1c0a">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a4cd17224ddef91bb5c6e745807cc1c0a">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a4cd17224ddef91bb5c6e745807cc1c0a">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a4cd17224ddef91bb5c6e745807cc1c0a">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a4cd17224ddef91bb5c6e745807cc1c0a">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a84f3d887eb48fc52aa3ccfcd4c9f0d20">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a84f3d887eb48fc52aa3ccfcd4c9f0d20">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a84f3d887eb48fc52aa3ccfcd4c9f0d20">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a84f3d887eb48fc52aa3ccfcd4c9f0d20">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a84f3d887eb48fc52aa3ccfcd4c9f0d20">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="119" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1aec39b67e1c0e66e9cc2e2a37510c1c05" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint16_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a43e829d0525724760b16ea5afa96b51c">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a43e829d0525724760b16ea5afa96b51c">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a43e829d0525724760b16ea5afa96b51c">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a43e829d0525724760b16ea5afa96b51c">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a43e829d0525724760b16ea5afa96b51c">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1aec39b67e1c0e66e9cc2e2a37510c1c05">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aec39b67e1c0e66e9cc2e2a37510c1c05">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aec39b67e1c0e66e9cc2e2a37510c1c05">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aec39b67e1c0e66e9cc2e2a37510c1c05">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aec39b67e1c0e66e9cc2e2a37510c1c05">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint16_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="122" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a90016960834902825cfde9dff737a345" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a17932f82d030eb3bd82b7aae3941c737">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a17932f82d030eb3bd82b7aae3941c737">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a17932f82d030eb3bd82b7aae3941c737">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a17932f82d030eb3bd82b7aae3941c737">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a17932f82d030eb3bd82b7aae3941c737">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a90016960834902825cfde9dff737a345">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a90016960834902825cfde9dff737a345">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a90016960834902825cfde9dff737a345">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a90016960834902825cfde9dff737a345">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a90016960834902825cfde9dff737a345">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="125" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a83dae23d9e12ee9025b97458ed3fdb85" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ad0017443971dafeed736b973bc2d899e">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ad0017443971dafeed736b973bc2d899e">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ad0017443971dafeed736b973bc2d899e">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ad0017443971dafeed736b973bc2d899e">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ad0017443971dafeed736b973bc2d899e">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a83dae23d9e12ee9025b97458ed3fdb85">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a83dae23d9e12ee9025b97458ed3fdb85">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a83dae23d9e12ee9025b97458ed3fdb85">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a83dae23d9e12ee9025b97458ed3fdb85">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a83dae23d9e12ee9025b97458ed3fdb85">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="128" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a9017a0346a11a9710f7384ecf9bcb107" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int64_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1af132cea8ea5d482b2fceee4e22c29910">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af132cea8ea5d482b2fceee4e22c29910">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af132cea8ea5d482b2fceee4e22c29910">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af132cea8ea5d482b2fceee4e22c29910">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af132cea8ea5d482b2fceee4e22c29910">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a9017a0346a11a9710f7384ecf9bcb107">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a9017a0346a11a9710f7384ecf9bcb107">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a9017a0346a11a9710f7384ecf9bcb107">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a9017a0346a11a9710f7384ecf9bcb107">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a9017a0346a11a9710f7384ecf9bcb107">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="131" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1acb5318dbec1dff5d014528f28b2f89e9" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint64_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ab67394a44b1560e36841afc0f4e8d505">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ab67394a44b1560e36841afc0f4e8d505">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ab67394a44b1560e36841afc0f4e8d505">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ab67394a44b1560e36841afc0f4e8d505">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ab67394a44b1560e36841afc0f4e8d505">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1acb5318dbec1dff5d014528f28b2f89e9">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1acb5318dbec1dff5d014528f28b2f89e9">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1acb5318dbec1dff5d014528f28b2f89e9">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1acb5318dbec1dff5d014528f28b2f89e9">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1acb5318dbec1dff5d014528f28b2f89e9">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint64_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="134" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a40a986198e8986b119caaf6a8428c914" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;enumValue, castor::StringArray const &amp;enumNames, OnSEnumValueChange onChange=[](int32_t, int32_t) {}, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a18585f8c5d471c9412fa1e33ce8f8673">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a18585f8c5d471c9412fa1e33ce8f8673">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a18585f8c5d471c9412fa1e33ce8f8673">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a18585f8c5d471c9412fa1e33ce8f8673">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a18585f8c5d471c9412fa1e33ce8f8673">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a40a986198e8986b119caaf6a8428c914">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a40a986198e8986b119caaf6a8428c914">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a40a986198e8986b119caaf6a8428c914">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a40a986198e8986b119caaf6a8428c914">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a40a986198e8986b119caaf6a8428c914">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>enumValue</declname>
+        </param>
+        <param>
+          <type>castor::StringArray const &amp;</type>
+          <declname>enumNames</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d47/a04501_1af0dce362ce90766d7e7f5cc28827fc73" kindref="member">OnSEnumValueChange</ref></type>
+          <declname>onChange</declname>
+          <defval>[](int32_t, int32_t) {}</defval>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="137" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1aba47304178a6d59dbafd0ff051dedd34" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;enumValue, castor::StringArray const &amp;enumNames, OnUEnumValueChange onChange=[](uint32_t, uint32_t) {}, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ad4ee63ccf9edfb01314b8d6e26cfd7fa">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ad4ee63ccf9edfb01314b8d6e26cfd7fa">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ad4ee63ccf9edfb01314b8d6e26cfd7fa">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ad4ee63ccf9edfb01314b8d6e26cfd7fa">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ad4ee63ccf9edfb01314b8d6e26cfd7fa">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1aba47304178a6d59dbafd0ff051dedd34">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aba47304178a6d59dbafd0ff051dedd34">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aba47304178a6d59dbafd0ff051dedd34">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aba47304178a6d59dbafd0ff051dedd34">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aba47304178a6d59dbafd0ff051dedd34">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>enumValue</declname>
+        </param>
+        <param>
+          <type>castor::StringArray const &amp;</type>
+          <declname>enumNames</declname>
+        </param>
+        <param>
+          <type><ref refid="de/d47/a04501_1a93144259936ea6e1247f8f3516127daf" kindref="member">OnUEnumValueChange</ref></type>
+          <declname>onChange</declname>
+          <defval>[](uint32_t, uint32_t) {}</defval>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="142" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a1ca854840173a48508e3c3e1bac8e354" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, float &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a4152aa86f327d028ffb85fe0604c4470">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a4152aa86f327d028ffb85fe0604c4470">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a4152aa86f327d028ffb85fe0604c4470">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a4152aa86f327d028ffb85fe0604c4470">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a4152aa86f327d028ffb85fe0604c4470">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a1ca854840173a48508e3c3e1bac8e354">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a1ca854840173a48508e3c3e1bac8e354">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a1ca854840173a48508e3c3e1bac8e354">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a1ca854840173a48508e3c3e1bac8e354">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a1ca854840173a48508e3c3e1bac8e354">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="147" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1af5973f1080fef7ef22a34da76cfc67dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, double &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1abafb139a68c94e43dc0b1ead87797c8e">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1abafb139a68c94e43dc0b1ead87797c8e">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1abafb139a68c94e43dc0b1ead87797c8e">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1abafb139a68c94e43dc0b1ead87797c8e">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1abafb139a68c94e43dc0b1ead87797c8e">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1af5973f1080fef7ef22a34da76cfc67dd">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af5973f1080fef7ef22a34da76cfc67dd">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af5973f1080fef7ef22a34da76cfc67dd">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af5973f1080fef7ef22a34da76cfc67dd">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af5973f1080fef7ef22a34da76cfc67dd">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>double &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="150" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1ae43c5e4c70fa6f03cbe5eb996745352b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, BlendMode &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ad5f51c0592fe58f6aee9a792a0e6400d">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ad5f51c0592fe58f6aee9a792a0e6400d">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ad5f51c0592fe58f6aee9a792a0e6400d">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ad5f51c0592fe58f6aee9a792a0e6400d">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ad5f51c0592fe58f6aee9a792a0e6400d">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1ae43c5e4c70fa6f03cbe5eb996745352b">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ae43c5e4c70fa6f03cbe5eb996745352b">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ae43c5e4c70fa6f03cbe5eb996745352b">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ae43c5e4c70fa6f03cbe5eb996745352b">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ae43c5e4c70fa6f03cbe5eb996745352b">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a840ab6fd50c1a08fcc1b6dc3f98d90fa" kindref="member">BlendMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="153" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1af90e56dc158624b694dc31afe2283e2b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, ParallaxOcclusionMode &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a3e7001bd20166eb662c3dd4692610ea7">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a3e7001bd20166eb662c3dd4692610ea7">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a3e7001bd20166eb662c3dd4692610ea7">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a3e7001bd20166eb662c3dd4692610ea7">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a3e7001bd20166eb662c3dd4692610ea7">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1af90e56dc158624b694dc31afe2283e2b">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af90e56dc158624b694dc31afe2283e2b">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af90e56dc158624b694dc31afe2283e2b">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af90e56dc158624b694dc31afe2283e2b">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af90e56dc158624b694dc31afe2283e2b">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type><ref refid="d3/d5e/a01725_1a808c81c0da4ffd2515292e95b6b4c124" kindref="member">ParallaxOcclusionMode</ref> &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="156" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a775255e45591a2b2c2bfe344830540fd" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkCompareOp &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a0e9d451b1c5cff342b823c691a4e6504">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a0e9d451b1c5cff342b823c691a4e6504">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a0e9d451b1c5cff342b823c691a4e6504">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a0e9d451b1c5cff342b823c691a4e6504">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a0e9d451b1c5cff342b823c691a4e6504">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a775255e45591a2b2c2bfe344830540fd">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a775255e45591a2b2c2bfe344830540fd">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a775255e45591a2b2c2bfe344830540fd">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a775255e45591a2b2c2bfe344830540fd">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a775255e45591a2b2c2bfe344830540fd">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkCompareOp &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="159" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1ad417818f8450515c5237aca82c692a19" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1aa69df1dabecfe62376a645c56fb3acde">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aa69df1dabecfe62376a645c56fb3acde">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aa69df1dabecfe62376a645c56fb3acde">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aa69df1dabecfe62376a645c56fb3acde">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aa69df1dabecfe62376a645c56fb3acde">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1ad417818f8450515c5237aca82c692a19">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ad417818f8450515c5237aca82c692a19">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ad417818f8450515c5237aca82c692a19">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ad417818f8450515c5237aca82c692a19">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ad417818f8450515c5237aca82c692a19">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="162" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a129a958c0de1e6cfe0bb962c97b4ab57" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RgbaColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ac31f915ed09cf199f48f5321f93dafb1">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ac31f915ed09cf199f48f5321f93dafb1">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ac31f915ed09cf199f48f5321f93dafb1">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ac31f915ed09cf199f48f5321f93dafb1">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ac31f915ed09cf199f48f5321f93dafb1">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a129a958c0de1e6cfe0bb962c97b4ab57">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a129a958c0de1e6cfe0bb962c97b4ab57">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a129a958c0de1e6cfe0bb962c97b4ab57">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a129a958c0de1e6cfe0bb962c97b4ab57">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a129a958c0de1e6cfe0bb962c97b4ab57">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="165" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a3a67111e63867e0435534b2009893796" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ad7d11653a6eb9450bec56697eee028ce">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ad7d11653a6eb9450bec56697eee028ce">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ad7d11653a6eb9450bec56697eee028ce">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ad7d11653a6eb9450bec56697eee028ce">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ad7d11653a6eb9450bec56697eee028ce">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a3a67111e63867e0435534b2009893796">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a3a67111e63867e0435534b2009893796">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a3a67111e63867e0435534b2009893796">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a3a67111e63867e0435534b2009893796">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a3a67111e63867e0435534b2009893796">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="168" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a032cf1b3fae57cfb7bc89c48ddc44cfc" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::HdrRgbaColour &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a10621d773b78b41679643a7d94b4e35f">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a10621d773b78b41679643a7d94b4e35f">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a10621d773b78b41679643a7d94b4e35f">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a10621d773b78b41679643a7d94b4e35f">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a10621d773b78b41679643a7d94b4e35f">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a032cf1b3fae57cfb7bc89c48ddc44cfc">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a032cf1b3fae57cfb7bc89c48ddc44cfc">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a032cf1b3fae57cfb7bc89c48ddc44cfc">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a032cf1b3fae57cfb7bc89c48ddc44cfc">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a032cf1b3fae57cfb7bc89c48ddc44cfc">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::HdrRgbaColour &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="171" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a33c88d0da75afc3e693fd7fc1755c928" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a6214a493481c9cc63de55e7821b21ea9">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a6214a493481c9cc63de55e7821b21ea9">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a6214a493481c9cc63de55e7821b21ea9">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a6214a493481c9cc63de55e7821b21ea9">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a6214a493481c9cc63de55e7821b21ea9">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a33c88d0da75afc3e693fd7fc1755c928">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a33c88d0da75afc3e693fd7fc1755c928">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a33c88d0da75afc3e693fd7fc1755c928">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a33c88d0da75afc3e693fd7fc1755c928">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a33c88d0da75afc3e693fd7fc1755c928">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="174" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1aaac539a9866bf5d22c8affdaef9855d3" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a47b0a38de0c479b48a1c708d5188df43">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a47b0a38de0c479b48a1c708d5188df43">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a47b0a38de0c479b48a1c708d5188df43">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a47b0a38de0c479b48a1c708d5188df43">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a47b0a38de0c479b48a1c708d5188df43">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1aaac539a9866bf5d22c8affdaef9855d3">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aaac539a9866bf5d22c8affdaef9855d3">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aaac539a9866bf5d22c8affdaef9855d3">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aaac539a9866bf5d22c8affdaef9855d3">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aaac539a9866bf5d22c8affdaef9855d3">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="177" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a9fae43a18b099a9d2527d24ed2d19a9e" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point2ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1aaf4d18773aef05d0d1ec078f10ad8303">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aaf4d18773aef05d0d1ec078f10ad8303">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aaf4d18773aef05d0d1ec078f10ad8303">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aaf4d18773aef05d0d1ec078f10ad8303">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aaf4d18773aef05d0d1ec078f10ad8303">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a9fae43a18b099a9d2527d24ed2d19a9e">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a9fae43a18b099a9d2527d24ed2d19a9e">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a9fae43a18b099a9d2527d24ed2d19a9e">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a9fae43a18b099a9d2527d24ed2d19a9e">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a9fae43a18b099a9d2527d24ed2d19a9e">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="180" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a4a03b72054ec0ccd246edc7fa84d638b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ac25ae433d3bbf3a406f617eba99ace00">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ac25ae433d3bbf3a406f617eba99ace00">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ac25ae433d3bbf3a406f617eba99ace00">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ac25ae433d3bbf3a406f617eba99ace00">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ac25ae433d3bbf3a406f617eba99ace00">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a4a03b72054ec0ccd246edc7fa84d638b">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a4a03b72054ec0ccd246edc7fa84d638b">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a4a03b72054ec0ccd246edc7fa84d638b">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a4a03b72054ec0ccd246edc7fa84d638b">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a4a03b72054ec0ccd246edc7fa84d638b">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="183" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a62f209e1f18417b73fde89e258fe85b7" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1adb4867c81943d6c407acc77a9c611ecf">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1adb4867c81943d6c407acc77a9c611ecf">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1adb4867c81943d6c407acc77a9c611ecf">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1adb4867c81943d6c407acc77a9c611ecf">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1adb4867c81943d6c407acc77a9c611ecf">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a62f209e1f18417b73fde89e258fe85b7">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a62f209e1f18417b73fde89e258fe85b7">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a62f209e1f18417b73fde89e258fe85b7">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a62f209e1f18417b73fde89e258fe85b7">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a62f209e1f18417b73fde89e258fe85b7">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="186" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a2bdb65ce0c9e6b199009197537a766be" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point3ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ae1e5baddd01e8849680a576b5730307a">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ae1e5baddd01e8849680a576b5730307a">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ae1e5baddd01e8849680a576b5730307a">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ae1e5baddd01e8849680a576b5730307a">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ae1e5baddd01e8849680a576b5730307a">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a2bdb65ce0c9e6b199009197537a766be">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a2bdb65ce0c9e6b199009197537a766be">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a2bdb65ce0c9e6b199009197537a766be">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a2bdb65ce0c9e6b199009197537a766be">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a2bdb65ce0c9e6b199009197537a766be">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="189" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a5a5c9c48d01ecf08956160aed80a954c" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a1bf0fa1738c8ea9710246a7e46c1f766">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a1bf0fa1738c8ea9710246a7e46c1f766">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a1bf0fa1738c8ea9710246a7e46c1f766">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a1bf0fa1738c8ea9710246a7e46c1f766">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a1bf0fa1738c8ea9710246a7e46c1f766">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a5a5c9c48d01ecf08956160aed80a954c">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a5a5c9c48d01ecf08956160aed80a954c">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a5a5c9c48d01ecf08956160aed80a954c">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a5a5c9c48d01ecf08956160aed80a954c">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a5a5c9c48d01ecf08956160aed80a954c">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="192" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a71976a6decfc5c521909ea26e8294fdb" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a0f48f14e20cc357485abda472dcc2dd6">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a0f48f14e20cc357485abda472dcc2dd6">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a0f48f14e20cc357485abda472dcc2dd6">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a0f48f14e20cc357485abda472dcc2dd6">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a0f48f14e20cc357485abda472dcc2dd6">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a71976a6decfc5c521909ea26e8294fdb">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a71976a6decfc5c521909ea26e8294fdb">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a71976a6decfc5c521909ea26e8294fdb">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a71976a6decfc5c521909ea26e8294fdb">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a71976a6decfc5c521909ea26e8294fdb">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="195" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a830222a3c463050e2bc3bd657e518d76" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Point4ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a0b7c0d4b3528f42e1d0644d10f0c965a">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a0b7c0d4b3528f42e1d0644d10f0c965a">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a0b7c0d4b3528f42e1d0644d10f0c965a">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a0b7c0d4b3528f42e1d0644d10f0c965a">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a0b7c0d4b3528f42e1d0644d10f0c965a">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a830222a3c463050e2bc3bd657e518d76">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a830222a3c463050e2bc3bd657e518d76">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a830222a3c463050e2bc3bd657e518d76">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a830222a3c463050e2bc3bd657e518d76">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a830222a3c463050e2bc3bd657e518d76">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="198" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a378562bd4ab47f3d7703304e6a7242db" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::Matrix4x4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a3b4df9a9cf5cd0f985ec0a41765bfb82">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a3b4df9a9cf5cd0f985ec0a41765bfb82">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a3b4df9a9cf5cd0f985ec0a41765bfb82">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a3b4df9a9cf5cd0f985ec0a41765bfb82">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a3b4df9a9cf5cd0f985ec0a41765bfb82">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a378562bd4ab47f3d7703304e6a7242db">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a378562bd4ab47f3d7703304e6a7242db">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a378562bd4ab47f3d7703304e6a7242db">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a378562bd4ab47f3d7703304e6a7242db">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a378562bd4ab47f3d7703304e6a7242db">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="201" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a58224e0bdd3cdeb79b4e9a19246124f4" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; float &gt; &amp;range, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a58224e0bdd3cdeb79b4e9a19246124f4">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a58224e0bdd3cdeb79b4e9a19246124f4">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a58224e0bdd3cdeb79b4e9a19246124f4">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a58224e0bdd3cdeb79b4e9a19246124f4">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a58224e0bdd3cdeb79b4e9a19246124f4">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a1fd1199a9578de6d485eda676d3d19bb">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a1fd1199a9578de6d485eda676d3d19bb">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a1fd1199a9578de6d485eda676d3d19bb">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a1fd1199a9578de6d485eda676d3d19bb">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a1fd1199a9578de6d485eda676d3d19bb">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="204" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a9dc0ccc43c3e149a57308361a6bfc355" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; int32_t &gt; &amp;range, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a9dc0ccc43c3e149a57308361a6bfc355">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a9dc0ccc43c3e149a57308361a6bfc355">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a9dc0ccc43c3e149a57308361a6bfc355">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a9dc0ccc43c3e149a57308361a6bfc355">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a9dc0ccc43c3e149a57308361a6bfc355">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a712290d9754fd0360f0fa27e1d1b7f51">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a712290d9754fd0360f0fa27e1d1b7f51">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a712290d9754fd0360f0fa27e1d1b7f51">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a712290d9754fd0360f0fa27e1d1b7f51">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a712290d9754fd0360f0fa27e1d1b7f51">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="207" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1ac581e89bdd6774d60088ce6976ce3527" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::RangedValue&lt; uint32_t &gt; &amp;range, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ac581e89bdd6774d60088ce6976ce3527">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ac581e89bdd6774d60088ce6976ce3527">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ac581e89bdd6774d60088ce6976ce3527">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ac581e89bdd6774d60088ce6976ce3527">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ac581e89bdd6774d60088ce6976ce3527">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1ac01024c6512100f7484cb65f01741ef4">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ac01024c6512100f7484cb65f01741ef4">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ac01024c6512100f7484cb65f01741ef4">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ac01024c6512100f7484cb65f01741ef4">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ac01024c6512100f7484cb65f01741ef4">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="210" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1af840d1090b3b0790ec2aa7d57e4339bc" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, float &amp;value, castor::Range&lt; float &gt; const &amp;range, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a60734870e5d9582b6b3f110a7ccc009e">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a60734870e5d9582b6b3f110a7ccc009e">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a60734870e5d9582b6b3f110a7ccc009e">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a60734870e5d9582b6b3f110a7ccc009e">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a60734870e5d9582b6b3f110a7ccc009e">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1af840d1090b3b0790ec2aa7d57e4339bc">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af840d1090b3b0790ec2aa7d57e4339bc">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af840d1090b3b0790ec2aa7d57e4339bc">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af840d1090b3b0790ec2aa7d57e4339bc">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af840d1090b3b0790ec2aa7d57e4339bc">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>castor::Range&lt; float &gt; const &amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="213" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1ac8fc67e361230b17870896dd79ac849b" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, int32_t &amp;value, castor::Range&lt; int32_t &gt; const &amp;range, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1af870627562e852709e516e73be6fe66c">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af870627562e852709e516e73be6fe66c">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af870627562e852709e516e73be6fe66c">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af870627562e852709e516e73be6fe66c">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af870627562e852709e516e73be6fe66c">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1ac8fc67e361230b17870896dd79ac849b">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ac8fc67e361230b17870896dd79ac849b">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ac8fc67e361230b17870896dd79ac849b">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ac8fc67e361230b17870896dd79ac849b">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ac8fc67e361230b17870896dd79ac849b">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>castor::Range&lt; int32_t &gt; const &amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="217" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a0910e14dfbc81b1f72344e2b147d1f52" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, uint32_t &amp;value, castor::Range&lt; uint32_t &gt; const &amp;range, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a449caa32c15a7c3ba98119eeba29d781">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a449caa32c15a7c3ba98119eeba29d781">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a449caa32c15a7c3ba98119eeba29d781">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a449caa32c15a7c3ba98119eeba29d781">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a449caa32c15a7c3ba98119eeba29d781">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a0910e14dfbc81b1f72344e2b147d1f52">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a0910e14dfbc81b1f72344e2b147d1f52">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a0910e14dfbc81b1f72344e2b147d1f52">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a0910e14dfbc81b1f72344e2b147d1f52">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a0910e14dfbc81b1f72344e2b147d1f52">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>castor::Range&lt; uint32_t &gt; const &amp;</type>
+          <declname>range</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="221" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a590ff47117e3c02cc3afc7b6d8405204" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::ChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="227" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="227" bodyend="231"/>
+        <references refid="de/d47/a04501_1a329dec16e38b305c748e2f5adbc3b504">visit</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a085dc17ed5c19d78bd39bb09fbf0af06" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, castor::GroupChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>castor::GroupChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="234" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="234" bodyend="238"/>
+        <references refid="de/d47/a04501_1a329dec16e38b305c748e2f5adbc3b504">visit</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="user-defined">
+      <memberdef kind="function" id="de/d47/a04501_1ad8bcd191efc2d3b07fdf9b5130057a2d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, float &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a96604f4af58736218b1a58bedc855f77">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a96604f4af58736218b1a58bedc855f77">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a96604f4af58736218b1a58bedc855f77">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a96604f4af58736218b1a58bedc855f77">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a96604f4af58736218b1a58bedc855f77">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1ad8bcd191efc2d3b07fdf9b5130057a2d">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ad8bcd191efc2d3b07fdf9b5130057a2d">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ad8bcd191efc2d3b07fdf9b5130057a2d">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ad8bcd191efc2d3b07fdf9b5130057a2d">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ad8bcd191efc2d3b07fdf9b5130057a2d">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>float &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+<para>name Shader buffer configuration. </para>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="249" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a1ec5edb4aed53c15496a6e50c7025a81" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, int32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a50c02f436e1ffc998cf77f5275503210">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a50c02f436e1ffc998cf77f5275503210">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a50c02f436e1ffc998cf77f5275503210">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a50c02f436e1ffc998cf77f5275503210">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a50c02f436e1ffc998cf77f5275503210">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a1ec5edb4aed53c15496a6e50c7025a81">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a1ec5edb4aed53c15496a6e50c7025a81">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a1ec5edb4aed53c15496a6e50c7025a81">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a1ec5edb4aed53c15496a6e50c7025a81">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a1ec5edb4aed53c15496a6e50c7025a81">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>int32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="255" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a4b10bcb908e79627c12bf739acaa9583" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, uint32_t &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a6485686b63853f8b105e1ba586c47808">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a6485686b63853f8b105e1ba586c47808">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a6485686b63853f8b105e1ba586c47808">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a6485686b63853f8b105e1ba586c47808">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a6485686b63853f8b105e1ba586c47808">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a4b10bcb908e79627c12bf739acaa9583">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a4b10bcb908e79627c12bf739acaa9583">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a4b10bcb908e79627c12bf739acaa9583">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a4b10bcb908e79627c12bf739acaa9583">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a4b10bcb908e79627c12bf739acaa9583">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>uint32_t &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="261" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a893547b69949f63409841c40207ea0dd" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a39faa4c8133918757af99582669d046b">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a39faa4c8133918757af99582669d046b">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a39faa4c8133918757af99582669d046b">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a39faa4c8133918757af99582669d046b">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a39faa4c8133918757af99582669d046b">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a893547b69949f63409841c40207ea0dd">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a893547b69949f63409841c40207ea0dd">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a893547b69949f63409841c40207ea0dd">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a893547b69949f63409841c40207ea0dd">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a893547b69949f63409841c40207ea0dd">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="267" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1ad60b00bddcd41efb8e10533d6e308689" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a09ebc585a399c0c65bff0759b7b20f22">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a09ebc585a399c0c65bff0759b7b20f22">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a09ebc585a399c0c65bff0759b7b20f22">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a09ebc585a399c0c65bff0759b7b20f22">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a09ebc585a399c0c65bff0759b7b20f22">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1ad60b00bddcd41efb8e10533d6e308689">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ad60b00bddcd41efb8e10533d6e308689">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ad60b00bddcd41efb8e10533d6e308689">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ad60b00bddcd41efb8e10533d6e308689">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ad60b00bddcd41efb8e10533d6e308689">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="273" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a00d22eccda44cf8c28b2ed2979dcaeb8" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point2ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1adb22bae130a7fd3bb65066db340182a5">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1adb22bae130a7fd3bb65066db340182a5">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1adb22bae130a7fd3bb65066db340182a5">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1adb22bae130a7fd3bb65066db340182a5">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1adb22bae130a7fd3bb65066db340182a5">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a00d22eccda44cf8c28b2ed2979dcaeb8">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a00d22eccda44cf8c28b2ed2979dcaeb8">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a00d22eccda44cf8c28b2ed2979dcaeb8">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a00d22eccda44cf8c28b2ed2979dcaeb8">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a00d22eccda44cf8c28b2ed2979dcaeb8">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point2ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="279" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1af246d6872dd565014b57a0c1ce556b10" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1aaa426dc6caf08f5d0d2a57f1b705a2a8">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aaa426dc6caf08f5d0d2a57f1b705a2a8">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aaa426dc6caf08f5d0d2a57f1b705a2a8">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aaa426dc6caf08f5d0d2a57f1b705a2a8">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aaa426dc6caf08f5d0d2a57f1b705a2a8">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1af246d6872dd565014b57a0c1ce556b10">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af246d6872dd565014b57a0c1ce556b10">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af246d6872dd565014b57a0c1ce556b10">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af246d6872dd565014b57a0c1ce556b10">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af246d6872dd565014b57a0c1ce556b10">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="285" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1af9a7d40be24afe7e0dc1589753a24b15" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ae85dd0c880616a184010c792cd721214">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1ae85dd0c880616a184010c792cd721214">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1ae85dd0c880616a184010c792cd721214">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1ae85dd0c880616a184010c792cd721214">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1ae85dd0c880616a184010c792cd721214">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1af9a7d40be24afe7e0dc1589753a24b15">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af9a7d40be24afe7e0dc1589753a24b15">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af9a7d40be24afe7e0dc1589753a24b15">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af9a7d40be24afe7e0dc1589753a24b15">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af9a7d40be24afe7e0dc1589753a24b15">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="291" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a99803043a6d43fddab37c0ebb966b52a" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point3ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a526d684cddfeaf12b848f480c796dd9f">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a526d684cddfeaf12b848f480c796dd9f">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a526d684cddfeaf12b848f480c796dd9f">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a526d684cddfeaf12b848f480c796dd9f">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a526d684cddfeaf12b848f480c796dd9f">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a99803043a6d43fddab37c0ebb966b52a">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a99803043a6d43fddab37c0ebb966b52a">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a99803043a6d43fddab37c0ebb966b52a">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a99803043a6d43fddab37c0ebb966b52a">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a99803043a6d43fddab37c0ebb966b52a">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point3ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="297" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a99d5e4170f03d17374ce7ff49bdf8969" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1aa7a4e8628cd78257efd0e932087ddb7f">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aa7a4e8628cd78257efd0e932087ddb7f">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aa7a4e8628cd78257efd0e932087ddb7f">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aa7a4e8628cd78257efd0e932087ddb7f">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aa7a4e8628cd78257efd0e932087ddb7f">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a99d5e4170f03d17374ce7ff49bdf8969">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a99d5e4170f03d17374ce7ff49bdf8969">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a99d5e4170f03d17374ce7ff49bdf8969">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a99d5e4170f03d17374ce7ff49bdf8969">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a99d5e4170f03d17374ce7ff49bdf8969">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="303" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1abf06f9c8a34d8084f4fcf9584ee8bd58" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4i &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1afcf5cb8b709f0a8bca65ba6e383386f5">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1afcf5cb8b709f0a8bca65ba6e383386f5">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1afcf5cb8b709f0a8bca65ba6e383386f5">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1afcf5cb8b709f0a8bca65ba6e383386f5">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1afcf5cb8b709f0a8bca65ba6e383386f5">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1abf06f9c8a34d8084f4fcf9584ee8bd58">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1abf06f9c8a34d8084f4fcf9584ee8bd58">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1abf06f9c8a34d8084f4fcf9584ee8bd58">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1abf06f9c8a34d8084f4fcf9584ee8bd58">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1abf06f9c8a34d8084f4fcf9584ee8bd58">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4i &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="309" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1aee8bdea9f522a44357b3c66a398f932d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Point4ui &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a1c6821c8061f07b19ac6fe04394adc3d">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a1c6821c8061f07b19ac6fe04394adc3d">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a1c6821c8061f07b19ac6fe04394adc3d">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a1c6821c8061f07b19ac6fe04394adc3d">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a1c6821c8061f07b19ac6fe04394adc3d">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1aee8bdea9f522a44357b3c66a398f932d">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aee8bdea9f522a44357b3c66a398f932d">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aee8bdea9f522a44357b3c66a398f932d">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aee8bdea9f522a44357b3c66a398f932d">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aee8bdea9f522a44357b3c66a398f932d">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Point4ui &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="315" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1aea2e1807fb75c41996aada0cb79b541d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::Matrix4x4f &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a404afeddaa2119cf97551fd2dbadb6b9">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a404afeddaa2119cf97551fd2dbadb6b9">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a404afeddaa2119cf97551fd2dbadb6b9">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a404afeddaa2119cf97551fd2dbadb6b9">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a404afeddaa2119cf97551fd2dbadb6b9">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1aea2e1807fb75c41996aada0cb79b541d">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aea2e1807fb75c41996aada0cb79b541d">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aea2e1807fb75c41996aada0cb79b541d">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aea2e1807fb75c41996aada0cb79b541d">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aea2e1807fb75c41996aada0cb79b541d">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::Matrix4x4f &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="321" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a46b34b8b57741fe9423474e990451d4d" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; float &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1a4f70cbd556e7b315b54bf4f374881349">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a4f70cbd556e7b315b54bf4f374881349">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a4f70cbd556e7b315b54bf4f374881349">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a4f70cbd556e7b315b54bf4f374881349">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a4f70cbd556e7b315b54bf4f374881349">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1a46b34b8b57741fe9423474e990451d4d">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1a46b34b8b57741fe9423474e990451d4d">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1a46b34b8b57741fe9423474e990451d4d">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1a46b34b8b57741fe9423474e990451d4d">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1a46b34b8b57741fe9423474e990451d4d">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; float &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="327" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1aa240f1568d3fdf2cec809d9bb06fcdaa" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; int32_t &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1aebfda78966ab949048a9c6ba59c798d1">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aebfda78966ab949048a9c6ba59c798d1">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aebfda78966ab949048a9c6ba59c798d1">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aebfda78966ab949048a9c6ba59c798d1">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aebfda78966ab949048a9c6ba59c798d1">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1aa240f1568d3fdf2cec809d9bb06fcdaa">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aa240f1568d3fdf2cec809d9bb06fcdaa">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aa240f1568d3fdf2cec809d9bb06fcdaa">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aa240f1568d3fdf2cec809d9bb06fcdaa">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aa240f1568d3fdf2cec809d9bb06fcdaa">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; int32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="333" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1aa02558a2075cf486bf2be3b149ccabc7" prot="public" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::RangedValue&lt; uint32_t &gt; &amp;value, bool *control=nullptr)=0</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1af66101264aa1ecbadce4832c40c62f9a">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1af66101264aa1ecbadce4832c40c62f9a">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1af66101264aa1ecbadce4832c40c62f9a">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1af66101264aa1ecbadce4832c40c62f9a">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1af66101264aa1ecbadce4832c40c62f9a">visit</reimplementedby>
+        <reimplementedby refid="d7/dfb/a04509_1aa02558a2075cf486bf2be3b149ccabc7">visit</reimplementedby>
+        <reimplementedby refid="d1/df2/a05617_1aa02558a2075cf486bf2be3b149ccabc7">visit</reimplementedby>
+        <reimplementedby refid="df/d85/a05745_1aa02558a2075cf486bf2be3b149ccabc7">visit</reimplementedby>
+        <reimplementedby refid="dc/dec/a05913_1aa02558a2075cf486bf2be3b149ccabc7">visit</reimplementedby>
+        <reimplementedby refid="d2/d5c/a05941_1aa02558a2075cf486bf2be3b149ccabc7">visit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::RangedValue&lt; uint32_t &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <param>
+          <type>bool *</type>
+          <declname>control</declname>
+          <defval>nullptr</defval>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="339" column="22"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a57f2d5b9317df3069ba48eea9f7b9132" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::ChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::ChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="347" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="347" bodyend="354"/>
+        <references refid="de/d47/a04501_1a329dec16e38b305c748e2f5adbc3b504">visit</references>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1abb36944feed0967de65e8497b97a23eb" prot="public" static="no" const="no" explicit="no" inline="yes" virt="non-virtual">
+        <templateparamlist>
+          <param>
+            <type>typename TypeT</type>
+          </param>
+        </templateparamlist>
+        <type>void</type>
+        <definition>void castor3d::PipelineVisitorBase::visit</definition>
+        <argsstring>(castor::String const &amp;name, VkShaderStageFlags shaders, castor::String const &amp;bufferName, castor::String const &amp;varName, castor::GroupChangeTracked&lt; TypeT &gt; &amp;value)</argsstring>
+        <name>visit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::visit</qualifiedname>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>VkShaderStageFlags</type>
+          <declname>shaders</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>bufferName</declname>
+        </param>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>varName</declname>
+        </param>
+        <param>
+          <type>castor::GroupChangeTracked&lt; TypeT &gt; &amp;</type>
+          <declname>value</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="357" column="6" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="357" bodyend="364"/>
+        <references refid="de/d47/a04501_1a329dec16e38b305c748e2f5adbc3b504">visit</references>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-type">
+      <memberdef kind="typedef" id="de/d47/a04501_1a8734742022ad5308aec1b75ee2b4be40" prot="public" static="no">
+        <templateparamlist>
+          <param>
+            <type>typename EnumT</type>
+          </param>
+        </templateparamlist>
+        <type>std::function&lt; void(EnumT oldV, EnumT newV) &gt;</type>
+        <definition>using castor3d::PipelineVisitorBase::OnEnumValueChangeT =  std::function&lt; void( EnumT oldV, EnumT newV ) &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnEnumValueChangeT</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::OnEnumValueChangeT</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="36" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d47/a04501_1af0dce362ce90766d7e7f5cc28827fc73" prot="public" static="no">
+        <type><ref refid="de/d47/a04501_1a8734742022ad5308aec1b75ee2b4be40" kindref="member">OnEnumValueChangeT</ref>&lt; int32_t &gt;</type>
+        <definition>using castor3d::PipelineVisitorBase::OnSEnumValueChange =  OnEnumValueChangeT&lt; int32_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnSEnumValueChange</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::OnSEnumValueChange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="37" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="37" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="typedef" id="de/d47/a04501_1a93144259936ea6e1247f8f3516127daf" prot="public" static="no">
+        <type><ref refid="de/d47/a04501_1a8734742022ad5308aec1b75ee2b4be40" kindref="member">OnEnumValueChangeT</ref>&lt; uint32_t &gt;</type>
+        <definition>using castor3d::PipelineVisitorBase::OnUEnumValueChange =  OnEnumValueChangeT&lt; uint32_t &gt;</definition>
+        <argsstring></argsstring>
+        <name>OnUEnumValueChange</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::OnUEnumValueChange</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="38" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="38" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-attrib">
+      <memberdef kind="variable" id="de/d47/a04501_1a7dd3b92f7aca2b9a09113dd9f3f9e78a" prot="public" static="no" mutable="no">
+        <type><ref refid="d7/d43/a04505" kindref="compound">Config</ref> const</type>
+        <definition>Config const castor3d::PipelineVisitorBase::config</definition>
+        <argsstring></argsstring>
+        <name>config</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::config</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="378" column="14" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="378" bodyend="-1"/>
+        <referencedby refid="de/d47/a04501_1a127e6422814b4aca771a2fbafa62aee7" compoundref="d1/d56/a00707" startline="60" endline="68">visit</referencedby>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="protected-func">
+      <memberdef kind="function" id="de/d47/a04501_1aed7367fc13c78bae663aed9b68be52c4" prot="protected" static="no" const="no" explicit="yes" inline="yes" virt="non-virtual">
+        <type></type>
+        <definition>castor3d::PipelineVisitorBase::PipelineVisitorBase</definition>
+        <argsstring>(Config config)</argsstring>
+        <name>PipelineVisitorBase</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::PipelineVisitorBase</qualifiedname>
+        <param>
+          <type><ref refid="d7/d43/a04505" kindref="compound">Config</ref></type>
+          <declname>config</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="41" column="10" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="41" bodyend="44"/>
+      </memberdef>
+      <memberdef kind="function" id="de/d47/a04501_1a8af3866fa51f57b21dee1e23186ed648" prot="protected" static="no" const="yes" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> bool</type>
+        <definition>virtual C3D_API bool castor3d::PipelineVisitorBase::doFilter</definition>
+        <argsstring>(crg::ImageViewId const &amp;viewId, TextureFactors const &amp;factors) const =0</argsstring>
+        <name>doFilter</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::doFilter</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1ad8099133dfa9c8ff133f9c04a6a3c7e8">doFilter</reimplementedby>
+        <param>
+          <type>crg::ImageViewId const &amp;</type>
+          <declname>viewId</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d92/a04489" kindref="compound">TextureFactors</ref> const &amp;</type>
+          <declname>factors</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="368" column="22"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="de/d47/a04501_1adf52ab958471b16a3c2982aeb0ec3ef3" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref></type>
+        <definition>virtual C3D_API castor3d::PipelineVisitorBase::~PipelineVisitorBase</definition>
+        <argsstring>()=default</argsstring>
+        <name>~PipelineVisitorBase</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::~PipelineVisitorBase</qualifiedname>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="47" column="17"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="de/d47/a04501_1ac4f8bf842a53977c7d100be8c7756847" prot="private" static="no" const="no" explicit="no" inline="no" virt="pure-virtual">
+        <type><ref refid="db/dc3/a00284_1ab7d762f315ad9902201ba70979ed2ef0" kindref="member">C3D_API</ref> void</type>
+        <definition>virtual C3D_API void castor3d::PipelineVisitorBase::doVisit</definition>
+        <argsstring>(castor::String const &amp;name, crg::ImageViewId viewId, VkImageLayout layout, TextureFactors const &amp;factors)=0</argsstring>
+        <name>doVisit</name>
+        <qualifiedname>castor3d::PipelineVisitorBase::doVisit</qualifiedname>
+        <reimplementedby refid="d7/dfb/a04509_1afc44aeffcf67cde0911b6b58e42784f0">doVisit</reimplementedby>
+        <param>
+          <type>castor::String const &amp;</type>
+          <declname>name</declname>
+        </param>
+        <param>
+          <type>crg::ImageViewId</type>
+          <declname>viewId</declname>
+        </param>
+        <param>
+          <type>VkImageLayout</type>
+          <declname>layout</declname>
+        </param>
+        <param>
+          <type><ref refid="d5/d92/a04489" kindref="compound">TextureFactors</ref> const &amp;</type>
+          <declname>factors</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="Miscellaneous/PipelineVisitor.hpp" line="372" column="22"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="4">
+        <label>castor3d::BackgroundTextWriter</label>
+        <link refid="dc/dec/a05913"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>castor3d::BackgroundVisitor</label>
+        <link refid="d2/d5c/a05941"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PipelineVisitor</label>
+        <link refid="d7/dfb/a04509"/>
+        <childnode refid="1" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>castor3d::PipelineVisitorBase</label>
+        <link refid="de/d47/a04501"/>
+      </node>
+      <node id="5">
+        <label>castor3d::RenderTechniqueVisitor</label>
+        <link refid="d1/df2/a05617"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="6">
+        <label>castor3d::ToneMappingVisitor</label>
+        <link refid="df/d85/a05745"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>castor3d::PipelineVisitorBase</label>
+        <link refid="de/d47/a04501"/>
+        <childnode refid="2" relation="usage">
+          <edgelabel>config</edgelabel>
+        </childnode>
+      </node>
+      <node id="2">
+        <label>castor3d::PipelineVisitorBase::Config</label>
+        <link refid="d7/d43/a04505"/>
+      </node>
+    </collaborationgraph>
+    <location file="Miscellaneous/PipelineVisitor.hpp" line="25" column="1" bodyfile="Miscellaneous/PipelineVisitor.hpp" bodystart="26" bodyend="379"/>
+    <listofallmembers>
+      <member refid="de/d47/a04501_1a7dd3b92f7aca2b9a09113dd9f3f9e78a" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>config</name></member>
+      <member refid="de/d47/a04501_1a8af3866fa51f57b21dee1e23186ed648" prot="protected" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>doFilter</name></member>
+      <member refid="de/d47/a04501_1ac4f8bf842a53977c7d100be8c7756847" prot="private" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>doVisit</name></member>
+      <member refid="de/d47/a04501_1a8734742022ad5308aec1b75ee2b4be40" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>OnEnumValueChangeT</name></member>
+      <member refid="de/d47/a04501_1af0dce362ce90766d7e7f5cc28827fc73" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>OnSEnumValueChange</name></member>
+      <member refid="de/d47/a04501_1a93144259936ea6e1247f8f3516127daf" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>OnUEnumValueChange</name></member>
+      <member refid="de/d47/a04501_1aed7367fc13c78bae663aed9b68be52c4" prot="protected" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>PipelineVisitorBase</name></member>
+      <member refid="de/d47/a04501_1a329dec16e38b305c748e2f5adbc3b504" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a127e6422814b4aca771a2fbafa62aee7" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a931fc40c2bd331e3d01b8e71dc0668f3" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a493e53a073b5db1a034ff6b823049755" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a84930df6031cc3cb8fadb04833972c89" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a7c9eb8857f6257fac7097bfa89b4f8a6" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a6f5f7748788d699204fe1c9c98b141e6" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a84f3d887eb48fc52aa3ccfcd4c9f0d20" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1aec39b67e1c0e66e9cc2e2a37510c1c05" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a90016960834902825cfde9dff737a345" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a83dae23d9e12ee9025b97458ed3fdb85" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a9017a0346a11a9710f7384ecf9bcb107" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1acb5318dbec1dff5d014528f28b2f89e9" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a40a986198e8986b119caaf6a8428c914" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1aba47304178a6d59dbafd0ff051dedd34" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a1ca854840173a48508e3c3e1bac8e354" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1af5973f1080fef7ef22a34da76cfc67dd" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1ae43c5e4c70fa6f03cbe5eb996745352b" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1af90e56dc158624b694dc31afe2283e2b" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a775255e45591a2b2c2bfe344830540fd" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1ad417818f8450515c5237aca82c692a19" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a129a958c0de1e6cfe0bb962c97b4ab57" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a3a67111e63867e0435534b2009893796" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a032cf1b3fae57cfb7bc89c48ddc44cfc" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a33c88d0da75afc3e693fd7fc1755c928" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1aaac539a9866bf5d22c8affdaef9855d3" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a9fae43a18b099a9d2527d24ed2d19a9e" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a4a03b72054ec0ccd246edc7fa84d638b" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a62f209e1f18417b73fde89e258fe85b7" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a2bdb65ce0c9e6b199009197537a766be" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a5a5c9c48d01ecf08956160aed80a954c" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a71976a6decfc5c521909ea26e8294fdb" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a830222a3c463050e2bc3bd657e518d76" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a378562bd4ab47f3d7703304e6a7242db" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a58224e0bdd3cdeb79b4e9a19246124f4" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a9dc0ccc43c3e149a57308361a6bfc355" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1ac581e89bdd6774d60088ce6976ce3527" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1af840d1090b3b0790ec2aa7d57e4339bc" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1ac8fc67e361230b17870896dd79ac849b" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a0910e14dfbc81b1f72344e2b147d1f52" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a590ff47117e3c02cc3afc7b6d8405204" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a085dc17ed5c19d78bd39bb09fbf0af06" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1ad8bcd191efc2d3b07fdf9b5130057a2d" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a1ec5edb4aed53c15496a6e50c7025a81" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a4b10bcb908e79627c12bf739acaa9583" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a893547b69949f63409841c40207ea0dd" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1ad60b00bddcd41efb8e10533d6e308689" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a00d22eccda44cf8c28b2ed2979dcaeb8" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1af246d6872dd565014b57a0c1ce556b10" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1af9a7d40be24afe7e0dc1589753a24b15" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a99803043a6d43fddab37c0ebb966b52a" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a99d5e4170f03d17374ce7ff49bdf8969" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1abf06f9c8a34d8084f4fcf9584ee8bd58" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1aee8bdea9f522a44357b3c66a398f932d" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1aea2e1807fb75c41996aada0cb79b541d" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a46b34b8b57741fe9423474e990451d4d" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1aa240f1568d3fdf2cec809d9bb06fcdaa" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1aa02558a2075cf486bf2be3b149ccabc7" prot="public" virt="pure-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1a57f2d5b9317df3069ba48eea9f7b9132" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1abb36944feed0967de65e8497b97a23eb" prot="public" virt="non-virtual"><scope>castor3d::PipelineVisitorBase</scope><name>visit</name></member>
+      <member refid="de/d47/a04501_1adf52ab958471b16a3c2982aeb0ec3ef3" prot="public" virt="virtual"><scope>castor3d::PipelineVisitorBase</scope><name>~PipelineVisitorBase</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

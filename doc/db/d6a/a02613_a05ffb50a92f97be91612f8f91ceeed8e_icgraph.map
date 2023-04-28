@@ -1,0 +1,11 @@
+<map id="castor3d::BinaryChunk::addSubChunk" name="castor3d::BinaryChunk::addSubChunk">
+<area shape="rect" id="node1" title="Writes a subchunk into a chunk." alt="" coords="1135,31,1289,71"/>
+<area shape="rect" id="node2" href="$d8/d69/a02661.html#a8828d359b7a61ea2b657d5aada2dd87b" title="Writes the header chunk." alt="" coords="236,35,419,75"/>
+<area shape="rect" id="node4" href="$d8/d69/a02661.html#a3b4ae75e6ecd0bdf9f5dc26381633dab" title="To chunk writer function." alt="" coords="904,31,1087,71"/>
+<area shape="rect" id="node5" href="$dc/dfd/a02837.html#a6d5639d69c83f6b59094817e85f17398" title="Writes a subchunk value into a chunk." alt="" coords="904,95,1087,135"/>
+<area shape="rect" id="node3" href="$d8/d69/a02661.html#a21e7985d2f99ff20a6056d198aac07c5" title="Writes an object to a file." alt="" coords="5,35,188,75"/>
+<area shape="rect" id="node6" href="$d5/dd2/a02849.html#afdeae129e73ddd2c7980afdd4441dba0" title="Writes a subchunk value into a chunk." alt="" coords="701,31,853,71"/>
+<area shape="rect" id="node7" href="$dd/d4f/a02845.html#a3f0c739cc3dd42610e348f722ee20506" title="Writes a subchunk value into a chunk." alt="" coords="697,95,856,135"/>
+<area shape="rect" id="node8" href="$d7/d1c/a02841.html#ac4cf51584e348def2f360b81e6ec7a9a" title="Writes a subchunk value into a chunk." alt="" coords="701,159,853,199"/>
+<area shape="rect" id="node9" href="$d8/d69/a02661.html#a95685db95521fe46169767620976688c" title="Writes a subchunk value into a chunk." alt="" coords="467,95,649,135"/>
+</map>
