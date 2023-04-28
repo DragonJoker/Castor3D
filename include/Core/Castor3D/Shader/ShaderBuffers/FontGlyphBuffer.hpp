@@ -24,11 +24,13 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
 		 *\param[in]	device	The GPU device.
+		 *\param[in]	texture	The parent font texture.
 		 *\param[in]	count	The max configurations count.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	device	Le device GPU.
+		 *\param[in]	texture	La texture de font parente.
 		 *\param[in]	count	Le nombre maximal de configurations.
 		 */
 		C3D_API FontGlyphBuffer( Engine & engine

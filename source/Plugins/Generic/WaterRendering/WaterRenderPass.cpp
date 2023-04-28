@@ -573,7 +573,7 @@ namespace water
 			, RenderPipeline::eBuffers /* lightSet */
 			, index /* shadowMapBinding */
 			, RenderPipeline::eBuffers /* shadowMapSet */
-			, false /* enableVolumetric */ };
+			, true /* enableVolumetric */ };
 		shader::ReflectionModel reflections{ writer
 			, utils
 			, index

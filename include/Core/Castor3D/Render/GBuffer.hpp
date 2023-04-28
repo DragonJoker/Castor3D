@@ -53,6 +53,8 @@ namespace castor3d
 		*	The g-buffer's dimensions.
 		*\param[in] layerCount
 		*	The layers count for the g-buffer.
+		*\param[in] sampleCount
+		*	The images samples count.
 		*\~french
 		*\brief
 		*	Initialise les textures du g-buffer 2D ou 2D array.
@@ -68,6 +70,8 @@ namespace castor3d
 		*	Les dimensions du g-buffer.
 		*\param[in] layerCount
 		*	Le nombre de layers du g-buffer.
+		*\param[in] sampleCount
+		*	Le nombre de samples des images.
 		*/
 		template< typename TextureEnumT >
 		TextureArray doCreateTextures( crg::ResourcesCache & resources
@@ -119,6 +123,8 @@ namespace castor3d
 		*	The creation flags for images remaining to create.
 		*\param[in] size
 		*	The g-buffer's dimensions.
+		*\param[in] sampleCount
+		*	The images samples count.
 		*\~french
 		*\brief
 		*	Initialise les textures du g-buffer 3D.
@@ -132,6 +138,8 @@ namespace castor3d
 		*	Les flags de création pour les images restant à créer.
 		*\param[in] size
 		*	Les dimensions du g-buffer.
+		*\param[in] sampleCount
+		*	Le nombre de samples des images.
 		*/
 		template< typename TextureEnumT >
 		TextureArray doCreateTextures( crg::ResourcesCache & resources
@@ -200,6 +208,8 @@ namespace castor3d
 		*	The g-buffer's dimensions.
 		*\param[in] layerCount
 		*	The layers count for the g-buffer.
+		*\param[in] sampleCount
+		*	The images samples count.
 		*\~french
 		*\brief
 		*	Initialise les données liées au g-buffer 2D ou 2D-Array.
@@ -217,6 +227,8 @@ namespace castor3d
 		*	Les dimensions du g-buffer.
 		*\param[in] layerCount
 		*	Le nombre de layers du g-buffer.
+		*\param[in] sampleCount
+		*	Le nombre de samples des images.
 		*/
 		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device
@@ -252,6 +264,8 @@ namespace castor3d
 		*	The creation flags for images remaining to create.
 		*\param[in] size
 		*	The g-buffer's dimensions.
+		*\param[in] sampleCount
+		*	The images samples count.
 		*\~french
 		*\brief
 		*	Initialise les données liées au g-buffer 3D.
@@ -267,6 +281,8 @@ namespace castor3d
 		*	Les flags de création pour les images restant à créer.
 		*\param[in] size
 		*	Les dimensions du g-buffer.
+		*\param[in] sampleCount
+		*	Le nombre de samples des images.
 		*/
 		GBufferT( crg::ResourcesCache & resources
 			, RenderDevice const & device

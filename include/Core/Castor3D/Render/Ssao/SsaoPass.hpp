@@ -31,7 +31,7 @@ namespace castor3d
 		 *\param[in]	previousPasses	The previous frame passes.
 		 *\param[in]	size			The render area dimensions.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
-		 *\param[in]	depth			The depth buffer.
+		 *\param[in]	depthObj		The depth buffer.
 		 *\param[in]	normal			The normals buffer.
 		 *\param[in]	cameraUbo		The camera configuration UBO.
 		 *\~french
@@ -42,7 +42,7 @@ namespace castor3d
 		 *\param[in]	previousPasses	Les frame passes précédentes.
 		 *\param[in]	size			Les dimensions de la zone de rendu.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
-		 *\param[in]	depth			Le depth buffer.
+		 *\param[in]	depthObj		Le depth buffer.
 		 *\param[in]	normal			Le buffer de normales.
 		 *\param[in]	cameraUbo		L'UBO de configuration de la caméra.
 		 */

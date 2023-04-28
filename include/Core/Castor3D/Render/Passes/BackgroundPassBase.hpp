@@ -42,7 +42,6 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, SceneBackground & background
-			, crg::ImageViewIdArray const & colour
 			, bool forceVisible );
 		C3D_API virtual ~BackgroundPassBase() = default;
 		/**

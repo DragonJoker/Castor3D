@@ -27,19 +27,21 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\param[in]	name	The overlay name.
 		 *\param[in]	engine	The engine.
 		 *\param[in]	type	The overlay type.
 		 *\param[in]	scene	The scene holding the overlay.
 		 *\param[in]	parent	The parent overlay (if any).
+		 *\param[in]	level	The overlay base level.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 *\param[in]	name	Le nom de l'incrustation.
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	type	Le type de l'incrustation.
 		 *\param[in]	scene	La scène parent.
 		 *\param[in]	parent	L'incrustation parente.
+		 *\param[in]	level	Le niveau de base de l'incrustation.
 		 */
 		C3D_API Overlay( castor::String const & name
 			, Engine & engine
@@ -49,17 +51,19 @@ namespace castor3d
 			, uint32_t level = 0u );
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	engine	The engine
-		 *\param[in]	type	The overlay type
-		 *\param[in]	scene	The scene holding the overlay
-		 *\param[in]	parent	The parent overlay (if any)
+		 *\brief		Constructor.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	type	The overlay type.
+		 *\param[in]	scene	The scene holding the overlay.
+		 *\param[in]	parent	The parent overlay (if any).
+		 *\param[in]	level	The overlay base level.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	engine	Le moteur
-		 *\param[in]	type	Le type de l'incrustation
-		 *\param[in]	scene	La scène parent
-		 *\param[in]	parent	L'incrustation parente
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	type	Le type de l'incrustation.
+		 *\param[in]	scene	La scène parent.
+		 *\param[in]	parent	L'incrustation parente.
+		 *\param[in]	level	Le niveau de base de l'incrustation.
 		 */
 		C3D_API Overlay( Engine & engine
 			, OverlayType type
@@ -68,13 +72,15 @@ namespace castor3d
 			, uint32_t level = 0u );
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor.
 		 *\param[in]	engine	The engine.
 		 *\param[in]	type	The overlay type.
+		 *\param[in]	level	The overlay base level.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur.
 		 *\param[in]	engine	Le moteur.
 		 *\param[in]	type	Le type de l'incrustation.
+		 *\param[in]	level	Le niveau de base de l'incrustation.
 		 */
 		C3D_API Overlay( Engine & engine
 			, OverlayType type

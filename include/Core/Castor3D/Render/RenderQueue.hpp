@@ -37,8 +37,7 @@ namespace castor3d
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderQueue( RenderNodesPass & renderPass
-			, SceneNode const * ignored
-			, uint32_t passCount );
+			, SceneNode const * ignored );
 		C3D_API ~RenderQueue();
 		/**
 		 *\~english

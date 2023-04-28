@@ -280,6 +280,53 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		add_subdirectory( test )
 	endif()
 
+	if ( WIN32 AND VCPKG_TOOLCHAIN AND NOT VCPKG_BUILD )
+		if ( CASTOR_FORCE_VCPKG_SUBMODULES )
+			macro( install_additional_headers _FOLDER )
+				file( GLOB_RECURSE ADDITIONAL_HEADERS
+					${VCPKG_TRIPLET_DIR}/include/${_FOLDER}/*.*
+				)
+				install(
+					FILES ${ADDITIONAL_HEADERS}
+					DESTINATION include/${_FOLDER}
+					COMPONENT Castor3D
+				)
+			endmacro()
+			macro( install_additional_cmakes _FOLDER )
+				file( GLOB_RECURSE ADDITIONAL_CMAKES
+					${VCPKG_TRIPLET_DIR}/share/${_FOLDER}/*.*
+				)
+				install(
+					FILES ${ADDITIONAL_CMAKES}
+					DESTINATION share/${_FOLDER}
+					COMPONENT Castor3D
+				)
+			endmacro()
+			install_additional_headers( ashes )
+			install_additional_headers( ashespp )
+			install_additional_headers( CompilerGlsl )
+			install_additional_headers( CompilerHlsl )
+			install_additional_headers( CompilerSpirV )
+			install_additional_headers( RenderGraph )
+			install_additional_headers( ShaderAST )
+			install_additional_headers( ShaderWriter )
+		endif ()
+		file( GLOB RELEASE_DLLS ${VCPKG_TRIPLET_DIR}/bin/*.dll )
+		install(
+			FILES ${RELEASE_DLLS}
+			DESTINATION bin
+			COMPONENT Castor3D
+			CONFIGURATIONS Release RelWithDebInfo
+		)
+		file( GLOB DEBUG_DLLS ${VCPKG_TRIPLET_DIR}/debug/bin/*.dll )
+		install(
+			FILES ${DEBUG_DLLS}
+			DESTINATION bin
+			COMPONENT Castor3D
+			CONFIGURATIONS Debug
+		)
+	endif ()
+
 	install( EXPORT Castor3D
 		FILE Castor3DConfig.cmake
 		COMPONENT Castor3D
@@ -311,7 +358,7 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 			if ( "${PROJECTS_PACKAGE_WIX}" STREQUAL "ON" )
 				set( CPACK_GENERATOR "WIX" )
 				set( CPACK_PACKAGE_INSTALL_DIRECTORY "Castor3D" )
-				set( CPACK_WIX_UPGRADE_GUID "6138748D-A6CE-4BB9-BE4B-A2E67C405336" )
+				set( CPACK_WIX_UPGRADE_GUID "2955612F-2261-4EBD-9C0A-B8705EC884AB" )
 				set( CPACK_WIX_PRODUCT_GUID "535F9AFD-0717-4730-88A6-C4864DF0B895" )
 				set( CPACK_WIX_PRODUCT_ICON "${CMAKE_CURRENT_SOURCE_DIR}/install/castor.ico" )
 				set( CPACK_WIX_UI_DIALOG "${CMAKE_CURRENT_SOURCE_DIR}/install/dialog.bmp" )

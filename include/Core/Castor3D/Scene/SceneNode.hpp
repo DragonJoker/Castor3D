@@ -33,10 +33,20 @@ namespace castor3d
 		 *\brief		Constructor
 		 *\param[in]	name		The node's name.
 		 *\param[in]	scene		The parent scene.
+		 *\param[in]	parent		The parent node.
+		 *\param[in]	position	The initial position.
+		 *\param[in]	orientation	The initial orientation.
+		 *\param[in]	scale		The initial scale.
+		 *\param[in]	isStatic	\p true for a static node.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	name		Le nom du noeud.
 		 *\param[in]	scene		La scène parente.
+		 *\param[in]	parent		Le noeud parent.
+		 *\param[in]	position	La position initiale.
+		 *\param[in]	orientation	L'orientation initiale.
+		 *\param[in]	scale		L'échelle initiale.
+		 *\param[in]	isStatic	\p true pour un noeud statique.
 		 */
 		C3D_API SceneNode( castor::String const & name
 			, Scene & scene

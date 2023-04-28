@@ -25,15 +25,16 @@ namespace castor3d
 	protected:
 		/** Constructor
 		 *\param[in]	target	The target control.
+		 *\param[in]	style	The style.
 		*/
 		C3D_API ScrollableCtrl( Control & target
 			, ScrollableStyleRPtr style );
 
-		/** @copydoc Control::create
+		/** Creates the scrollbars controls.
 		*/
 		C3D_API void createScrollBars();
 
-		/** @copydoc Control::destroy
+		/** Destroys the scrollbars controls.
 		*/
 		C3D_API void destroyScrollBars();
 

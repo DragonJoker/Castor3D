@@ -46,11 +46,11 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	parent			The parent material.
-		 *\param[in]	LightingModelID	The material's lighting model ID.
+		 *\param[in]	lightingModelId	The material's lighting model ID.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	parent			Le matériau parent.
-		 *\param[in]	LightingModelID	L'ID du modèle d'éclairage du matériau.
+		 *\param[in]	lightingModelId	L'ID du modèle d'éclairage du matériau.
 		 */
 		C3D_API explicit Pass( Material & parent
 			, LightingModelID lightingModelId );

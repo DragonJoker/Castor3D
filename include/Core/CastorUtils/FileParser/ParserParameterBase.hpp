@@ -94,13 +94,9 @@ namespace castor
 		T const & get( T & value );
 		/**
 		 *\~english
-		 *\brief		Retrieves the parameter value.
-		 *\param[out]	value	Receives the value.
-		 *\return		The value.
+		 *\return		The parameter value.
 		 *\~french
-		 *\brief		Récupère la valeur du paramètre.
-		 *\param[out]	value	Reçoit la valeur.
-		 *\return		La valeur.
+		 *\return		La valeur du paramètre.
 		 */
 		template< typename T >
 		T get()

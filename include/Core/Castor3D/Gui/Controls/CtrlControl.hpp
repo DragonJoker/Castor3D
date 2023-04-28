@@ -26,11 +26,11 @@ namespace castor3d
 
 	public:
 		/** Constructor.
-		 *\param[in]	name		The control name.
 		 *\param[in]	type		The type.
+		 *\param[in]	scene		The parent scene (nullptr for global).
+		 *\param[in]	name		The control name.
 		 *\param[in]	style		The control's style.
 		 *\param[in]	parent		The parent control, if any.
-		 *\param[in]	id			The control ID.
 		 *\param[in]	position	The position.
 		 *\param[in]	size		The size.
 		 *\param[in]	flags		The configuration flags
@@ -116,7 +116,7 @@ namespace castor3d
 		C3D_API ControlRPtr getChildControl( ControlID id )const;
 
 		/** Checks if the position is on any border (N, W, S, E).
-		 *\param[in]	The position to check for.
+		 *\param[in]	position	The position to check for.
 		 *\return		One bool per direction.
 		 */
 		C3D_API std::array< bool, 4u > isInResizeRange( castor::Position const & position )const;
@@ -542,7 +542,7 @@ namespace castor3d
 
 		/** sets the visibility
 		 *\remarks		Used for derived control specific behavious
-		 *\param[in]	value		The new value
+		 *\param[in]	visible		The new value
 		 */
 		virtual void doSetVisible( bool visible  )
 		{

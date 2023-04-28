@@ -19,7 +19,6 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, SceneBackground & background
-		, crg::ImageViewIdArray const & colour
 		, bool forceVisible )
 		: m_device{ device }
 		, m_background{ &background }

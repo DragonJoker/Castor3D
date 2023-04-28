@@ -25,10 +25,12 @@ namespace castor3d
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	cameraUbo		The scene matrices UBO.
 		 *\param[in]	sceneUbo		The scene UBO.
+		 *\param[in]	camera			The camera for this pass.
 		 *\param[in]	culler			The culler for this pass.
 		 *\param[in]	voxelizerUbo	The voxelizer configuration UBO.
 		 *\param[in]	voxels			The voxels buffer.
 		 *\param[in]	voxelConfig		The voxelizer configuration.
+		 *\param[in]	isStatic		Tells if this pass is for static nodes.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass			La frame pass parente.
@@ -37,10 +39,12 @@ namespace castor3d
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	cameraUbo		L'UBO de matrices de la scène.
 		 *\param[in]	sceneUbo		L'UBO de scène.
+		 *\param[in]	camera			La caméra pour cette passe.
 		 *\param[in]	culler			Le culler pour cette passe.
 		 *\param[in]	voxelizerUbo	L'UBO de configuration du voxelizer.
 		 *\param[in]	voxels			Le tampon de voxels.
 		 *\param[in]	voxelConfig		La configuration du voxelizer.
+		 *\param[in]	isStatic		Dit si cette passe est pour les noeuds statiques.
 		 */
 		C3D_API VoxelizePass( crg::FramePass const & pass
 			, crg::GraphContext & context

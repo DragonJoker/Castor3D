@@ -74,11 +74,17 @@ namespace castor3d
 		C3D_API uint32_t getCount( bool )const;
 		/**
 		 *\~english
-		 *\brief		Fills the given buffer.
-		 *\param[out]	buffer	The buffer.
+		 *\brief		Fills the text buffers.
+		 *\param[out]	overlayIndex	The overlay index.
+		 *\param[out]	texts			View on the allocated text chars for the overlay.
+		 *\param[out]	words			View on the allocated text words for the overlay.
+		 *\param[out]	lines			View on the allocated text lines for the overlay.
 		 *\~french
-		 *\brief		Remplit le tampon de sommets donné.
-		 *\param[out]	buffer	Le buffer.
+		 *\brief		Remplit les tampons de texte donnés.
+		 *\param[out]	overlayIndex	L'index de de l'incrustation.
+		 *\param[out]	texts			Vue sur les text chars alloués pour l'incrustation.
+		 *\param[out]	words			Vue sur les text words alloués pour l'incrustation.
+		 *\param[out]	lines			Vue sur les text lines alloués pour l'incrustation.
 		 */
 		C3D_API float fillBuffer( uint32_t overlayIndex
 			, castor::ArrayView< TextChar > texts
@@ -232,10 +238,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Computes the lines to display.
-		 *\param[in]	overlaySize	The overlay dimensions.
+		 *\param[in]	renderSize	The render area dimensions.
 		 *\~french
 		 *\brief		Calcule les lignes à afficher.
-		 *\param[in]	overlaySize	The overlay dimensions.
+		 *\param[in]	renderSize	Les dimensions de la zone de rendu.
 		 */
 		void doPrepareText( castor::Size const & renderSize );
 

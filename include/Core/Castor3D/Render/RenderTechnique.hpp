@@ -48,6 +48,8 @@ namespace castor3d
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	queueData		The queue receiving the GPU commands.
 		 *\param[in]	parameters		The technique parameters.
+		 *\param[in]	colour			The result colour image.
+		 *\param[in]	intermediate	The intermediate colour image.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	deferred		\p true to enable deferred rendering.
@@ -60,6 +62,8 @@ namespace castor3d
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	queueData		La queue recevant les commandes GPU.
 		 *\param[in]	parameters		Les paramètres de la technique.
+		 *\param[in]	colour			L'image couleur résultat.
+		 *\param[in]	intermediate	L'image couleur intermédiaire.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	deferred		\p true pour activer le deferred rendering.

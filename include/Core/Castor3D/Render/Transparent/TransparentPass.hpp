@@ -27,6 +27,7 @@ namespace castor3d
 		 *\param[in]	device				The GPU device.
 		 *\param[in]	sceneImage			The current render result.
 		 *\param[in]	targetImage			The image this pass renders to.
+		 *\param[in]	targetDepth			The depth image this pass renders to.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
@@ -37,7 +38,8 @@ namespace castor3d
 		 *\param[in]	graph				Le runnable graph.
 		 *\param[in]	device				Le device GPU.
 		 *\param[in]	sceneImage			Le résultat actuel du rendu.
-		 *\param[in]	targetImage			L'image dans laquelle cette passe effectue son rendu.
+		 *\param[in]	targetImage			L'image dans laquelle cette passe fait son rendu.
+		 *\param[in]	targetDepth			L'image de profondeur dans laquelle cette passe fait son rendu.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */

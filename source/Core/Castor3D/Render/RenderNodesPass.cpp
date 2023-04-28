@@ -131,10 +131,7 @@ namespace castor3d
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_filters{ desc.m_filters }
-		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this
-			, desc.m_ignored
-			, std::max( 1u
-				, uint32_t( std::max( m_targetImage.size(), m_targetDepth.size() ) ) ) ) }
+		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_ignored ) }
 		, m_category{ pass.group.getFullName() }
 		, m_size{ desc.m_size.width, desc.m_size.height }
 		, m_oit{ desc.m_oit }

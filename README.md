@@ -4,10 +4,9 @@
 
 # Castor3D
 
-Castor3D is a 3D engine written in C++ 17.
-It works on Windows and GNU/Linux.
-It relies on Ashes as a rendering API, allowing Vulkan, Direct3D 11, and OpenGL.
-The project itself is compilable on supported platforms using CMake (\ref build).
+Castor3D is a 3D engine written in C++ 20.
+It works on Windows and GNU/Linux and using Vulkan as rendering API.
+The project itself is compilable on supported platforms using CMake and vcpkg (\ref build).
 
 ## Features
 
@@ -32,13 +31,13 @@ The project itself is compilable on supported platforms using CMake (\ref build)
 - Shaders are writable directly from C++ code.
 - Scenes are described using a text format easily comprehensible and extensible.
 - Asynchronous (user defined) or synchronous (thread) rendering.
+- Using Mesh and Task shaders, if available.
 - GUI primitives.
 
 ## Implemented Plug-ins
 
 ### Importers
 - ASSIMP: Multiple format mesh importer.
-- PLY: Stanford Polygon library mesh importer.
 
 ### PostEffects
 - Bloom: HDR Bloom implementation.
@@ -97,3 +96,4 @@ You can reach me on the Discord server dedicated to my projects: [DragonJoker's 
 [![SanMiguel, PBR](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png)](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG.png)
 [![SanMiguel, PBR, LPV](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png)](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV.png)
 [![Bistro, PBR, VCT](http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT-Small.png)](http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT.png)
+[![AtmosphereScattering, Terrain, FFTOcean](http://dragonjoker.github.io/Castor3D/img/FFTOcean-Terrain-Small.png)](http://dragonjoker.github.io/Castor3D/img/FFTOcean-Terrain.png)

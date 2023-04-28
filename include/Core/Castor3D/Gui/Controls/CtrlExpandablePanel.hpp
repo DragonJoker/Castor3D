@@ -15,10 +15,10 @@ namespace castor3d
 	{
 	public:
 		/** Constructor
-		*\param[in]	name	The control name
-		*\param[in]	style	The control style
-		*\param[in]	parent	The parent control, if any
-		*\param[in]	id		The control ID
+		*\param[in]	scene	The parent scene (nullptr for global).
+		*\param[in]	name	The control name.
+		*\param[in]	style	The control style.
+		*\param[in]	parent	The parent control, if any.
 		*/
 		C3D_API ExpandablePanelCtrl( SceneRPtr scene
 			, castor::String const & name
@@ -26,16 +26,16 @@ namespace castor3d
 			, ControlRPtr parent );
 
 		/** Constructor
-		*\param[in]	name		The control name
-		*\param[in]	style		The control style
-		*\param[in]	parent		The parent control, if any
-		*\param[in]	values		The list value
-		*\param[in]	selected	The selected value
-		*\param[in]	id			The control ID
-		*\param[in]	position	The position
-		*\param[in]	size		The size
-		*\param[in]	flags		The configuration flags
-		*\param[in]	visible		Initial visibility status
+		*\param[in]	scene			The parent scene (nullptr for global).
+		*\param[in]	name			The control name.
+		*\param[in]	style			The control style.
+		*\param[in]	parent			The parent control, if any.
+		*\param[in]	position		The position.
+		*\param[in]	size			The size.
+		*\param[in]	headerHeight	The header height.
+		*\param[in]	expanded		\p true to create expanded, \p false to create collapsed.
+		*\param[in]	flags			The configuration flags.
+		*\param[in]	visible			Initial visibility status.
 		*/
 		C3D_API ExpandablePanelCtrl( SceneRPtr scene
 			, castor::String const & name

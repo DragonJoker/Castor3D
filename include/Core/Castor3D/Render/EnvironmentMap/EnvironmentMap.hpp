@@ -35,13 +35,13 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	handler		The render graph resources handler.
+		 *\param[in]	resources	The resources handler.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	queueData	The queue receiving the initialisation commands.
 		 *\param[in]	scene		The scene.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	handler		Le gestionnaire de ressources du render graph.
+		 *\param[in]	resources	Le gestionnaire de ressources.
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	queueData	La queue recevant les commandes d'initialisation.
 		 *\param[in]	scene		La scène.

@@ -67,11 +67,9 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Updates the UBO from given values.
-		 *\param[in]	camera	The current camera.
 		 *\param[in]	fog		The fog configuration.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
-		 *\param[in]	camera	La camera actuelle.
 		 *\param[in]	fog		La configuration du brouillard.
 		 */
 		C3D_API Configuration & cpuUpdate( Fog const & fog );
@@ -79,11 +77,9 @@ namespace castor3d
 		 *\~english
 		 *\brief		Updates the UBO from given values.
 		 *\param[in]	scene	The rendered scene.
-		 *\param[in]	camera	The current camera.
 		 *\~french
 		 *\brief		Met à jour l'UBO avec les valeurs données.
 		 *\param[in]	scene	La scène dessinée.
-		 *\param[in]	camera	La camera actuelle.
 		 */
 		C3D_API Configuration & cpuUpdate( Scene const & scene );
 

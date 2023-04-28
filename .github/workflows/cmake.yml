@@ -234,9 +234,9 @@ jobs:
       shell: bash
       run: |
         sudo apt-get update
-        sudo apt-get install -y --no-install-recommends ccache clang-12 clang++-12
-        echo "CC=clang-12" >> $GITHUB_ENV
-        echo "CXX=clang++-12" >> $GITHUB_ENV
+        sudo apt-get install -y --no-install-recommends ccache clang-14 clang++-14
+        echo "CC=clang-14" >> $GITHUB_ENV
+        echo "CXX=clang++-14" >> $GITHUB_ENV
     - name: Create Build Environment
       run: |
         cmake -E make_directory ${{runner.workspace}}/build-${{ matrix.buildType }}

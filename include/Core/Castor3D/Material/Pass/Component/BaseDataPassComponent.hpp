@@ -24,11 +24,13 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	pass	The parent pass.
 		 *\param[in]	type	The component type.
+		 *\param[in]	deps	The components this one depends on.
 		 *\param[in]	params	The component data construction params.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass	Le sous-maillage pass.
 		 *\param[in]	type	Le type de composant.
+		 *\param[in]	deps	Les composants dont celui-ci dépend
 		 *\param[in]	params	Les paramètres de construction des données du composant.
 		 */
 		template< typename ... ParamsT >

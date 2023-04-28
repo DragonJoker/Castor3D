@@ -1049,10 +1049,12 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	pass	The parent pass.
 		 *\param[in]	type	The component type.
+		 *\param[in]	deps	The components this one depends on.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	pass	Le sous-maillage pass.
 		 *\param[in]	type	Le type de composant.
+		 *\param[in]	deps	Les composants dont celui-ci dépend.
 		 */
 		C3D_API PassComponent( Pass & pass
 			, castor::String type

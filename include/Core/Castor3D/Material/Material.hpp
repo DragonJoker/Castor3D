@@ -22,12 +22,12 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	name			The material name.
 		 *\param[in]	engine			The core engine.
-		 *\param[in]	LightingModelID	The material's lighting model ID.
+		 *\param[in]	lightingModelId	The material's lighting model ID.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	name			Le nom du matériau.
 		 *\param[in]	engine			Le moteur.
-		 *\param[in]	LightingModelID	L'ID du modèle d'éclairage du matériau.
+		 *\param[in]	lightingModelId	L'ID du modèle d'éclairage du matériau.
 		 */
 		C3D_API Material( castor::String const & name
 			, Engine & engine
@@ -39,11 +39,11 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates a pass.
-		 *\param[in]	LightingModelID	The pass' lighting model ID.
+		 *\param[in]	lightingModelId	The pass' lighting model ID.
 		 *\return		The created pass.
 		 *\~french
 		 *\brief		Crée une passe.
-		 *\param[in]	LightingModelID	L'ID du modèle d'éclairage de la passe.
+		 *\param[in]	lightingModelId	L'ID du modèle d'éclairage de la passe.
 		 *\return		La passe créée.
 		 */
 		C3D_API PassRPtr createPass( LightingModelID lightingModelId );

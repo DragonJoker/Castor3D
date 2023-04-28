@@ -3,6 +3,28 @@ Suivi de versions	{#changelog}
 
 Cette page sert à informer des évolutions du moteur depuis les premières versions.
 
+## Version 0.15.0
+
+### Important Changes
+- Corrections du binding COM, et implémentation d'une application de visualisation de scène en C#.
+- Support de multiples modèles d'éclairage dans la même scène.
+- Amélioration des ombres PCF, en échantillonnant un disque de Poisson.
+- Castor3D utilise maintenant un reversed Z buffer.
+- Améliorations drastiques des preformances de préparation et rendu des incustations.
+- Suppression de la majorité des utilisations de std::shared_ptr.
+- Amélioration de la prise en compte du composant spéculaire en PBR, par rapport à ses interactions avec la metalness.
+- Amélioration des réflexions via les environment maps, elles sont plus cohérentes avec l'IBL.
+
+### New Features
+
+#### General
+- Implémentation de noeuds statiques, qui sont pas dessinés une seule fois lors des passes de shadow map ou de voxellisation.
+- Déplacement de tout le code de CastorGui dans Castor3D, et ajout de nouveaux contrôles d'IHM.
+- Support de l'inversion des normales, soit à l'import d'un mesh, soit via la passe de matériau.
+
+#### GuiCommon
+- Mise à jour des tree item properties, par rapport aux composants de passe de matériau.
+
 ## Version 0.14.0
 
 ### Important Changes

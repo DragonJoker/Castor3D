@@ -23,9 +23,11 @@ namespace castor3d
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	cameraUbo		The scene matrices UBO.
 		 *\param[in]	culler			The culler for this pass.
+		 *\param[in]	camera			The camera for this pass.
 		 *\param[in]	shadowMap		The parent shadow map.
 		 *\param[in]	needsVsm		Tells if the pass needs to generate variance shadow map.
 		 *\param[in]	needsRsm		Tells if the pass needs to generate reflective shadow maps.
+		 *\param[in]	isStatic		Tells if the pass is for static nodes.
 		 *\param[in]	cascadeIndex	The cascade this pass writes to.
 		 *\~french
 		 *\brief		Constructeur.
@@ -35,9 +37,11 @@ namespace castor3d
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	cameraUbo		L'UBO de matrices de la scène.
 		 *\param[in]	culler			Le culler pour cette passe.
+		 *\param[in]	camera			La caméra pour cette passe.
 		 *\param[in]	shadowMap		La shadow map parente.
 		 *\param[in]	needsVsm		Dit si la passe doit générer la variance shadow map.
 		 *\param[in]	needsRsm		Dit si la passe doit générer les reflective shadow maps.
+		 *\param[in]	isStatic		Dit si la passe est pour les noeuds statiques.
 		 *\param[in]	cascadeIndex	L'indice de la cascade que cette passe remplit.
 		 */
 		C3D_API ShadowMapPassDirectional( crg::FramePass const & pass

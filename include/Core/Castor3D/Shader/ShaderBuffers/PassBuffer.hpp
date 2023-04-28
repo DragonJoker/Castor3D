@@ -219,7 +219,7 @@ namespace castor3d
 			, ashes::CommandBuffer const & commandBuffer );
 		/**
 		 *\~english
-		 *\return		Clears the dirty passes container.
+		 *\brief		Clears the dirty passes container.
 		 *\~french
 		 *\brief		Vide le conteneur de passes à mettre à jour.
 		 */

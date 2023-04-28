@@ -7,7 +7,7 @@ Il fonctionne sur les plateformes GNU/Linux et Windows.
 
 Il est basé sur l'API de rendu Vulkan.
 
-Le projet en lui-même est compilable sur les plateformes supportées en utilisant CMake (cf. [génération](Build-French.md)).
+Le projet en lui-même est compilable sur les plateformes supportées en utilisant CMake et vcpkg (cf. [génération](Build-French.md)).
 
 ## Fonctionnalités
 
@@ -85,5 +85,6 @@ Le projet en lui-même est compilable sur les plateformes supportées en utilisa
 ![SanMiguel, PBR](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-Small.png){width=800px}
 ![SanMiguel, PBR, LPV](http://dragonjoker.github.io/Castor3D/img/SanMiguel-PBR-SG-LPV-Small.png){width=800px}
 ![Bistro, PBR, VCT](http://dragonjoker.github.io/Castor3D/img/Bistro-PBR-VCT-Small.png){width=800px}
+![FFTOcean, Terrain](http://dragonjoker.github.io/Castor3D/img/FFTOcean-Terrain-Small.png){width=800px}
 
 Voir le [changelog complet](ChangeLog-French.md) pour plus de détails.

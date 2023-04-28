@@ -88,7 +88,6 @@ namespace atmosphere_scattering
 			, graph
 			, device
 			, background
-			, colour
 			, forceVisible }
 		, crg::RenderQuad{ pass
 			, context

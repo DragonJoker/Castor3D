@@ -86,7 +86,6 @@ namespace castor3d
 		 *\param[in]	source			The source texture.
 		 *\param[in]	target			The target texture.
 		 *\param[in]	previousPass	The previous frame pass.
-		 *\param[in]	initialIndex	The pass initial index.
 		 *\return		\p true if ok.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
@@ -94,7 +93,6 @@ namespace castor3d
 		 *\param[in]	source			La texture source.
 		 *\param[in]	target			La texture cible.
 		 *\param[in]	previousPass	La frame pass précédente.
-		 *\param[in]	initialIndex	L'indice initial de la paase.
 		 *\return		\p true if ok.
 		 */
 		C3D_API bool initialise( castor3d::RenderDevice const & device
@@ -113,8 +111,10 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\param[in, out]	updater	The update data.
+		 *\param[in]		source	The current source image.
 		 *\~french
 		 *\param[in, out]	updater	Les données d'update.
+		 *\param[in]		source	L'image source courante.
 		 */
 		C3D_API bool update( CpuUpdater & updater
 			, Texture const & source );
@@ -181,11 +181,15 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialisation function.
 		 *\param[in]	device			The GPU device.
+		 *\param[in]	source			The initial source image.
+		 *\param[in]	target			The initial target image.
 		 *\param[in]	previousPass	The previous frame pass.
 		 *\return		\p false on failure.
 		 *\~french
 		 *\brief		Fonction d'initialisation.
 		 *\param[in]	device			Le device GPU.
+		 *\param[in]	source			L'image source initiale.
+		 *\param[in]	target			L'image cible initiale.
 		 *\param[in]	previousPass	La frame pass précédente.
 		 *\return		\p false en cas d'échec.
 		 */

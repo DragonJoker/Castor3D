@@ -3,6 +3,28 @@ Change log	{#changelog}
 
 This page is here to inform about the changes since the earliest versions of the engine.
 
+## Version 0.15.0
+
+### Important Changes
+- Fixed COM binding, and finished implementation of a basic C# viewer application.
+- Implemented support for multiple lighting models in the same scene.
+- Improved PCF shadows, sampling a Poisson disk.
+- Castor3D now uses a reversed Z buffer.
+- Drastically improved overlays preparation and rendering performances and scalability.
+- Got rid of almost all remaining uses of std::shared_ptr.
+- Reworked PBR specular component, to make it behave consistently when used with metalness.
+- Improved environment map reflections, to make it more consistent with IBL.
+
+### New Features
+
+#### General
+- Implemented static nodes, that will only be rendered once in shadow map passes and voxelize pass.
+- Moved CastorGui plugin code in Castor3D, and implemented more GUI controls.
+- Added ways to invert normals, either at mesh import or through the material pass.
+
+#### GuiCommon
+- Updated tree items properties regarding pass components.
+
 ## Version 0.14.0
 
 ### Important Changes

@@ -16,10 +16,10 @@ namespace castor3d
 	{
 	public:
 		/** Constructor
+		 *\param[in]	scene	The parent scene (nullptr for global).
 		 *\param[in]	name	The control name
 		 *\param[in]	style	The control style
 		 *\param[in]	parent	The parent control, if any
-		 *\param[in]	id		The control ID
 		 */
 		C3D_API EditCtrl( SceneRPtr scene
 			, castor::String const & name
@@ -27,11 +27,11 @@ namespace castor3d
 			, ControlRPtr parent );
 
 		/** Constructor
+		 *\param[in]	scene		The parent scene (nullptr for global).
 		 *\param[in]	name		The control name
 		 *\param[in]	style		The control style
 		 *\param[in]	parent		The parent control, if any
 		 *\param[in]	caption		The caption
-		 *\param[in]	id			The control ID
 		 *\param[in]	position	The position
 		 *\param[in]	size		The size
 		 *\param[in]	flags		The configuration flags
@@ -166,7 +166,7 @@ namespace castor3d
 
 		/** @copydoc Control::doSetCaption
 		*/
-		void doSetCaption( castor::U32String const & value )override;
+		void doSetCaption( castor::U32String const & caption )override;
 
 		/** @copydoc Control::doSetVisible
 		*/

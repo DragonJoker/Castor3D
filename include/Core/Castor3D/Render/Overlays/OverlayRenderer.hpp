@@ -60,11 +60,13 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	device	The GPU device.
 		 *\param[in]	target	The target texture.
+		 *\param[in]	timer	The timer for this pass.
 		 *\param[in]	level	The command buffer level.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	device	Le device GPU.
 		 *\param[in]	target	La texture cible.
+		 *\param[in]	timer	Le timer pour cette passe.
 		 *\param[in]	level	Le niveau du command buffer.
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
@@ -111,6 +113,16 @@ namespace castor3d
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
 		C3D_API void upload( ashes::CommandBuffer const & cb );
+		/**
+		 *\~english
+		 *\brief		Records compute commands.
+		 *\param[in]	context			The recording context.
+		 *\param[in]	commandBuffer	The command buffer on which commands are recorded.
+		 *\~french
+		 *\brief		Enregistre les commandes de compute.
+		 *\param[in]	context			Le contexte d'enregistrement.
+		 *\param[in]	commandBuffer	Le command buffer sur lequel les commandes sont enregistrées.
+		 */
 		C3D_API void registerComputeCommands( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer )const;
 		/**

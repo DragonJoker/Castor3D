@@ -22,7 +22,7 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	handler			The render graph resources handler.
+		 *\param[in]	resources		The render graph resources handler.
 		 *\param[in]	device			The GPU device.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	prefix			The pass name prefix.
@@ -32,7 +32,7 @@ namespace castor3d
 		 *\param[in]	voxelConfig		The voxelizer configuration.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	handler			Le gestionnaire de ressources du render graph.
+		 *\param[in]	resources		Le gestionnaire de ressources du render graph.
 		 *\param[in]	device			Le device GPU.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	prefix			Le préfixe du nom de la passe.

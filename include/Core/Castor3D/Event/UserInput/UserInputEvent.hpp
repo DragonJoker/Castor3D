@@ -25,10 +25,10 @@ namespace castor3d
 		C3D_API UserInputEvent & operator=( UserInputEvent const & ) = default;
 		/**
 		 *\~english
-		 *\~brief		Constructor.
+		 *\brief		Constructor.
 		 *\param[in]	type	The user input event type.
 		 *\~french
-		 *\~brief		Constructeur.
+		 *\brief		Constructeur.
 		 *\param[in]	type	Le type d'évènement entrée utilisateur.
 		 */
 		explicit UserInputEvent( UserInputEventType type )
@@ -37,9 +37,9 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\~brief		Destructor.
+		 *\brief		Destructor.
 		 *\~french
-		 *\~brief		Destructeur.
+		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~UserInputEvent() = default;
 		/**

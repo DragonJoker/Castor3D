@@ -144,11 +144,15 @@ namespace castor
 		CU_API void loadGlyph( char32_t c );
 		/**
 		 *\~english
-		 *\brief		Loads wanted glyph.
-		 *\param[in]	c	The character.
+		 *\brief		Retrieves the metrics of given text.
+		 *\param[in]	v			The text.
+		 *\param[in]	maxWidth	The maximum width if \p splitLines is \p true.
+		 *\param[in]	splitLines	\p true to split lines according to \p maxWidth.
 		 *\~french
-		 *\brief		Charge le glyphe voulu.
-		 *\param[in]	c	Le caractère.
+		 *\brief		Récupère les métriques du texte donné.
+		 *\param[in]	v			Le texte.
+		 *\param[in]	maxWidth	La largeur maximale, si \p splitLines vaut \p true.
+		 *\param[in]	splitLines	\p true pour découper les lignes en fonction de \p maxWidth.
 		 */
 		CU_API TextMetrics getTextMetrics( std::u32string const & v
 			, uint32_t maxWidth
