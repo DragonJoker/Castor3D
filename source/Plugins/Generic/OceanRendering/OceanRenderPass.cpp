@@ -20,6 +20,7 @@
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
+#include <Castor3D/Shader/Shaders/GlslDebugOutput.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
 #include <Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
@@ -45,6 +46,7 @@
 
 #pragma clang diagnostic ignored "-Wunused-member-function"
 
+#define Ocean_Debug 1
 #define Ocean_DebugPixelShader 0
 
 namespace ocean
@@ -362,13 +364,6 @@ namespace ocean
 	{
 		if ( visitor.getFlags().renderPassType == m_typeID )
 		{
-#if Ocean_Debug
-			visitor.visit( cuT( "Debug" )
-				, m_configuration.debug
-				, getOceanDisplayDataNames()
-				, []( uint32_t, uint32_t ) {}
-				, nullptr );
-#endif
 			visitor.visit( cuT( "Tessellation factor" )
 				, m_configuration.tessellationFactor
 				, nullptr );
@@ -996,18 +991,6 @@ namespace ocean
 
 	castor3d::ShaderPtr OceanRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const
 	{
-#if Ocean_Debug
-#	define displayDebugData( OceanDataType, RGB, A )\
-	IF( writer, c3d_oceanData.debug().x() == sdw::UInt( OceanDataType ) )\
-	{\
-		outColour = vec4( RGB, A );\
-		writer.returnStmt();\
-	}\
-	FI
-#else
-#	define displayDebugData( OceanDataType, RGB, A )
-#endif
-
 		using namespace sdw;
 		using namespace castor3d;
 		FragmentWriter writer;
@@ -1105,6 +1088,11 @@ namespace ocean
 			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
+				shader::DebugOutput ouput{ getDebugConfig()
+					, cuT( "Waves" )
+					, c3d_cameraData.debugIndex()
+					, outColour
+					, Ocean_Debug != 0 };
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto normal = writer.declLocale( "normal"
@@ -1131,7 +1119,7 @@ namespace ocean
 					, normalize( texSpace * normalMap1.xyz() ) );
 				finalNormal += normalize( texSpace * normalMap2.xyz() );
 				finalNormal = normalize( finalNormal );
-				displayDebugData( eFinalNormal, finalNormal, 1.0_f );
+				ouput.registerOutput( "FinalNormal", finalNormal );
 
 				if ( flags.hasInvertNormals() )
 				{
@@ -1149,7 +1137,7 @@ namespace ocean
 					, shader::BlendComponents{ materials
 						, material
 						, surface } );
-				displayDebugData( eMatSpecular, components.f0, 1.0_f );
+				ouput.registerOutput( "MatSpecular", components.f0 );
 
 				if ( auto lightingModel = lights.getLightingModel() )
 				{
@@ -1171,9 +1159,9 @@ namespace ocean
 						, output );
 					lightingModel->adjustDirectSpecular( components
 						, output.m_specular );
-					displayDebugData( eLightDiffuse, output.m_diffuse, 1.0_f );
-					displayDebugData( eLightSpecular, output.m_specular, 1.0_f );
-					displayDebugData( eLightScattering, output.m_scattering, 1.0_f );
+					ouput.registerOutput( "LightDiffuse", output.m_diffuse );
+					ouput.registerOutput( "LightSpecular", output.m_specular );
+					ouput.registerOutput( "LightScattering", output.m_scattering );
 					// Standard lighting models don't necessarily translate all that well to water.
 					// It can end up looking very glossy and plastic-like, having much more form than it really should.
 					// So here, I'm sampling some noise with three different sets of texture coordinates to try and achieve
@@ -1183,8 +1171,8 @@ namespace ocean
 					specularNoise *= c3d_waveNoise.sample( normalMapCoords2 * 0.5_f );
 					specularNoise *= c3d_waveNoise.sample( in.texture1.xy() * 0.5_f );
 					output.m_specular *= specularNoise;
-					displayDebugData( eNoisedSpecular, output.m_specular, 1.0_f );
-					displayDebugData( eSpecularNoise, vec3( specularNoise ), 1.0_f );
+					ouput.registerOutput( "NoisedSpecular", output.m_specular );
+					ouput.registerOutput( "SpecularNoise", specularNoise );
 
 
 					// Indirect Lighting
@@ -1197,18 +1185,18 @@ namespace ocean
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
 						, lightSurface
 						, indirectOcclusion );
-					displayDebugData( eIndirectOcclusion, vec3( indirectOcclusion ), 1.0_f );
-					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
+					ouput.registerOutput( "IndirectOcclusion", indirectOcclusion );
+					ouput.registerOutput( "LightIndirectDiffuse", lightIndirectDiffuse.xyz() );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
 						, lightSurface
 						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf );
-					displayDebugData( eLightIndirectSpecular, lightIndirectSpecular, 1.0_f );
+					ouput.registerOutput( "LightIndirectSpecular", lightIndirectSpecular );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
 						, indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) );
-					displayDebugData( eIndirectAmbient, indirectAmbient, 1.0_f );
+					ouput.registerOutput( "IndirectAmbient", indirectAmbient );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
@@ -1216,7 +1204,7 @@ namespace ocean
 								, lightSurface.difF()
 								, components.metalness )
 							: vec3( 0.0_f ) ) );
-					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
+					ouput.registerOutput( "IndirectDiffuse", indirectDiffuse );
 
 
 					// Reflection
@@ -1249,12 +1237,11 @@ namespace ocean
 							, c3d_depthObj
 							, c3d_normals
 							, c3d_colour ) );
-					displayDebugData( eSSRResult, ssrResult.xyz(), 1.0_f );
-					displayDebugData( eSSRFactor, ssrResult.www(), 1.0_f );
-					displayDebugData( eSSRResultFactor, ssrResult.xyz() * ssrResult.www(), 1.0_f );
+					ouput.registerOutput( "SSRResult", ssrResult.xyz() );
+					ouput.registerOutput( "SSRFactor", ssrResult.www() );
 					auto reflectionResult = writer.declLocale( "reflectionResult"
 						, mix( backgroundReflection, ssrResult.xyz(), ssrResult.www() ) );
-					displayDebugData( eReflection, reflectionResult, 1.0_f );
+					ouput.registerOutput( "Reflection", reflectionResult );
 
 
 					// Wobbly refractions
@@ -1268,7 +1255,7 @@ namespace ocean
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
 						, c3d_colour.sample( refractionTexCoord ).rgb() * components.colour );
-					displayDebugData( eRefraction, refractionResult, 1.0_f );
+					ouput.registerOutput( "Refraction", refractionResult );
 					//  Retrieve non distorted scene colour.
 					auto sceneDepth = writer.declLocale( "sceneDepth"
 						, c3d_depthObj.sample( hdrCoords ).r() );
@@ -1277,7 +1264,7 @@ namespace ocean
 					// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
 					auto depthSoftenedAlpha = writer.declLocale( "depthSoftenedAlpha"
 						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_oceanData.depthSofteningDistance(), 0.0_f, 1.0_f ) );
-					displayDebugData( eDepthSoftenedAlpha, vec3( depthSoftenedAlpha ), 1.0_f );
+					ouput.registerOutput( "DepthSoftenedAlpha", depthSoftenedAlpha );
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
@@ -1287,13 +1274,13 @@ namespace ocean
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, vec3( clamp( ( in.worldPosition.y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
-					displayDebugData( eHeightMixedRefraction, refractionResult, 1.0_f );
+					ouput.registerOutput( "HeightMixedRefraction", refractionResult );
 					auto distanceFactor = writer.declLocale( "distanceFactor"
 						, c3d_oceanData.refractionDistanceFactor() * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, utils.saturate( vec3( utils.saturate( length( in.viewPosition ) / distanceFactor ) ) ) );
-					displayDebugData( eDistanceMixedRefraction, refractionResult, 1.0_f );
+					ouput.registerOutput( "DistanceMixedRefraction", refractionResult );
 
 					// Now apply some foam on top of waves
 					auto foamColor = writer.declLocale( "foamColor"
@@ -1314,11 +1301,11 @@ namespace ocean
 						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() )
 							, components.normal
 							, c3d_oceanData.refractionRatio() ) ) );
-					displayDebugData( eFresnelFactor, vec3( fresnelFactor ), 1.0_f );
+					ouput.registerOutput( "FresnelFactor", fresnelFactor );
 					reflectionResult *= fresnelFactor;
-					displayDebugData( eFinalReflection, reflectionResult, 1.0_f );
+					ouput.registerOutput( "FinalReflection", reflectionResult );
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
-					displayDebugData( eFinalRefraction, refractionResult, 1.0_f );
+					ouput.registerOutput( "FinalRefraction", refractionResult );
 
 					outColour = vec4( output.m_specular + lightIndirectSpecular
 							+ components.emissiveColour * components.emissiveFactor

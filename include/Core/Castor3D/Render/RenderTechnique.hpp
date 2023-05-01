@@ -180,6 +180,7 @@ namespace castor3d
 		C3D_API Texture const & getBaseColourResult()const;
 		C3D_API crg::ResourcesCache & getResources()const;
 		C3D_API bool isOpaqueEnabled()const;
+		C3D_API DebugConfig & getDebugConfig()const;
 
 		castor::Size const & getSize()const
 		{

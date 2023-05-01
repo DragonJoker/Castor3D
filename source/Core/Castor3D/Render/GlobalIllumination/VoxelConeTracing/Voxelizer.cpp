@@ -209,9 +209,10 @@ namespace castor3d
 			jitterProjSpace[0] /= float( camera.getWidth() );
 			jitterProjSpace[1] /= float( camera.getHeight() );
 			m_cameraUbo.cpuUpdate( camera
-				, true
 				, identity
 				, ortho
+				, updater.debugIndex
+				, true
 				, jitterProjSpace );
 			m_sceneUbo.cpuUpdate( scene );
 			m_voxelizerUbo.cpuUpdate( m_voxelConfig

@@ -119,43 +119,6 @@ namespace castor3d::shader
 			, std::move( sheenReflected ) );
 	}
 
-	sdw::Vec3 LightingModel::combine( BlendComponents const & components
-		, sdw::Vec3 const & incident
-		, sdw::Vec3 const & directDiffuse
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & directScattering
-		, sdw::Vec3 const & directCoatingSpecular
-		, sdw::Vec2 const & directSheen
-		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & directAmbient
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 reflectedDiffuse
-		, sdw::Vec3 reflectedSpecular
-		, sdw::Vec3 refracted
-		, sdw::Vec3 coatReflected
-		, sdw::Vec3 sheenReflected )
-	{
-		return combine( components
-			, incident
-			, directDiffuse
-			, indirectDiffuse
-			, directSpecular
-			, directScattering
-			, directCoatingSpecular
-			, directSheen
-			, indirectSpecular
-			, directAmbient
-			, indirectAmbient
-			, components.occlusion
-			, components.emissiveColour * components.emissiveFactor
-			, std::move( reflectedDiffuse )
-			, std::move( reflectedSpecular )
-			, std::move( refracted )
-			, std::move( coatReflected )
-			, std::move( sheenReflected ) );
-	}
-
 	void LightingModel::compute( DirectionalLight const & plight
 		, BlendComponents const & pcomponents
 		, BackgroundModel & background

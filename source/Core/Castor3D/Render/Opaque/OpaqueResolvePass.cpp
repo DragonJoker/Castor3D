@@ -26,6 +26,7 @@
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
@@ -149,6 +150,7 @@ namespace castor3d
 
 		static ShaderPtr createPixelProgram( RenderSystem const & renderSystem
 			, Scene const & scene
+			, DebugConfig & debugConfig
 			, ResolveProgramConfig const & config
 			, VkExtent3D const & size
 			, LightingModelID lightingModelId
@@ -371,6 +373,28 @@ namespace castor3d
 						}
 						FI;
 
+						shader::DebugOutput ouput{ debugConfig
+							, cuT( "Default" )
+							, c3d_cameraData.debugIndex()
+							, outColour
+							, true };
+						ouput.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						ouput.registerOutput( "LightDiffuse", lightDiffuse );
+						ouput.registerOutput( "IndirectDiffuse", indirectDiffuse );
+						ouput.registerOutput( "ReflectedDiffuse", reflectedDiffuse );
+						ouput.registerOutput( "LightSpecular", lightSpecular );
+						ouput.registerOutput( "IndirectSpecular", lightIndirectSpecular );
+						ouput.registerOutput( "ReflectedSpecular", reflectedSpecular );
+						ouput.registerOutput( "LightScattering", lightScattering );
+						ouput.registerOutput( "DirectAmbient", directAmbient );
+						ouput.registerOutput( "IndirectAmbient", indirectAmbient );
+						ouput.registerOutput( "Occlusion", occlusion );
+						ouput.registerOutput( "Emissive", emissive );
+						ouput.registerOutput( "Refracted", refracted );
+						ouput.registerOutput( "LightCoatingSpecular", lightCoatingSpecular );
+						ouput.registerOutput( "CoatReflected", coatReflected );
+						ouput.registerOutput( "LightSheen", lightSheen );
+						ouput.registerOutput( "SheenReflected", sheenReflected );
 						outColour = vec4( lightingModel->combine( components
 								, incident
 								, lightDiffuse
@@ -480,6 +504,7 @@ namespace castor3d
 					, name
 					, dropqrslv::createPixelProgram( m_device.renderSystem
 						, m_scene
+						, m_technique.getDebugConfig()
 						, config
 						, m_depthObj.getExtent()
 						, m_lightingModelId

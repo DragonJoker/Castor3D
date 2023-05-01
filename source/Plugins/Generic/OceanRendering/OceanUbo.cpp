@@ -7,41 +7,6 @@
 
 namespace ocean
 {
-	//*********************************************************************************************
-
-#if Ocean_Debug
-	castor::StringArray const & getOceanDisplayDataNames()
-	{
-		static castor::StringArray const result{ "Result"
-			, "FinalNormal"
-			, "MatSpecular"
-			, "LightDiffuse"
-			, "LightSpecular"
-			, "LightScattering"
-			, "NoisedSpecular"
-			, "SpecularNoise"
-			, "IndirectOcclusion"
-			, "LightIndirectDiffuse"
-			, "LightIndirectSpecular"
-			, "IndirectAmbient"
-			, "IndirectDiffuse"
-			, "BackgroundReflection"
-			, "SSRResult"
-			, "SSRFactor"
-			, "SSRResultFactor"
-			, "Reflection"
-			, "Refraction"
-			, "DepthSoftenedAlpha"
-			, "HeightMixedRefraction"
-			, "DistanceMixedRefraction"
-			, "FresnelFactor"
-			, "FinalReflection"
-			, "FinalRefraction"
-			, "WaterBaseColour" };
-		return result;
-	}
-#endif
-
 	//************************************************************************************************
 
 	OceanUbo::OceanUbo( castor3d::RenderDevice const & device )

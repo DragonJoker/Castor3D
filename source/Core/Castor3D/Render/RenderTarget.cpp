@@ -926,8 +926,13 @@ namespace castor3d
 			stepProgressBar( progress, "Compiling render graph" );
 			m_runnable = m_graph.compile( device.makeContext() );
 			printGraph( *m_runnable );
-
 			doListIntermediateViews( m_intermediates );
+			m_debugConfig.resetImages();
+
+			for ( auto & intermediate : m_intermediates )
+			{
+				m_debugConfig.registerImage( intermediate.name );
+			}
 
 			m_overlays.create();
 			m_velocity->create();

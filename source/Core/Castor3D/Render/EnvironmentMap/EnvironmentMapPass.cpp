@@ -88,10 +88,11 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
 		doCreateGenMipmapsPass( m_transparentPassDesc );
-		m_cameraUbo.cpuUpdate( m_camera->getView()
+		m_cameraUbo.cpuUpdate( getSafeBandedSize( m_camera->getSize() )
+			, m_camera->getView()
 			, m_camera->getProjection( false )
-			, m_camera->getFrustum()
-			, getSafeBandedSize( m_camera->getSize() ) );
+			, 0u
+			, m_camera->getFrustum() );
 		m_graph.addOutput( m_colourView
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_graph.addGroupOutput( m_colourView );
@@ -125,7 +126,7 @@ namespace castor3d
 		m_backgroundRenderer->update( updater );
 		m_opaquePass->update( updater );
 		m_transparentPass->update( updater );
-		m_cameraUbo.cpuUpdate( camera, false );
+		m_cameraUbo.cpuUpdate( camera, updater.debugIndex, false );
 		m_hdrConfigUbo.cpuUpdate( camera.getHdrConfig() );
 		m_sceneUbo.cpuUpdate( *camera.getScene() );
 

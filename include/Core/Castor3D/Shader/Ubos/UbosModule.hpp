@@ -220,7 +220,8 @@ namespace castor3d
 		castor::Point2f jitter{};
 		castor::Point3f position{};
 		float gamma{};
-		castor::Point2f pad{};
+		uint32_t debugIndex{};
+		float pad{};
 		float nearPlane{};
 		float farPlane{};
 	};

@@ -292,7 +292,9 @@ namespace castor3d
 		pass.pass->update( updater );
 
 		auto & myCamera = pass.pass->getCuller().getCamera();
-		m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( myCamera, false );
+		m_passes[m_passesIndex].cameraUbos[updater.index]->cpuUpdate( myCamera
+			, updater.debugIndex
+			, false );
 	}
 
 	void ShadowMapSpot::doUpdate( GpuUpdater & updater

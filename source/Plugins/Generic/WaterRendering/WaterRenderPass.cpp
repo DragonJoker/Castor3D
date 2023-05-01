@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
+#include <Castor3D/Shader/Shaders/GlslDebugOutput.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
 #include <Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp>
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
@@ -44,6 +45,8 @@
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 
 #include <ashespp/Image/StagingTexture.hpp>
+
+#define Water_Debug 1
 
 namespace water
 {
@@ -313,13 +316,6 @@ namespace water
 	{
 		if ( visitor.getFlags().renderPassType == m_typeID )
 		{
-#if Water_Debug
-			visitor.visit( cuT( "Debug" )
-				, m_configuration.debug
-				, getWaterDisplayDataNames()
-				, []( uint32_t, uint32_t ) {}
-				, nullptr );
-#endif
 			visitor.visit( cuT( "Dampening factor" )
 				, m_configuration.dampeningFactor
 				, nullptr );
@@ -486,21 +482,8 @@ namespace water
 
 	castor3d::ShaderPtr WaterRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const
 	{
-#if Water_Debug
-#	define displayDebugData( WaterDataType, RGB, A )\
-	IF( writer, c3d_waterData.debug.x() == sdw::UInt( WaterDataType ) )\
-	{\
-		outColour = vec4( RGB, A );\
-		writer.returnStmt();\
-	}\
-	FI
-#else
-#	define displayDebugData( WaterDataType, RGB, A )
-#endif
-
-		using namespace sdw;
 		using namespace castor3d;
-		FragmentWriter writer;
+		sdw::FragmentWriter writer;
 
 		bool enableTextures = flags.enableTextures();
 		bool hasDiffuseGI = flags.hasDiffuseGI();
@@ -597,15 +580,20 @@ namespace water
 			, enableTextures ) );
 
 		// Fragment Outputs
-		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
+		auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0 ) );
 
-		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
+		writer.implementMainT< castor3d::shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
-			, FragmentOut{ writer }
-			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
-				, FragmentOut out )
+			, sdw::FragmentOut{ writer }
+			, [&]( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT > in
+				, sdw::FragmentOut out )
 			{
+				shader::DebugOutput ouput{ getDebugConfig()
+					, cuT( "Water" )
+					, c3d_cameraData.debugIndex()
+					, outColour
+					, Water_Debug != 0 };
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto normal = writer.declLocale( "normal"
@@ -616,9 +604,9 @@ namespace water
 					, normalize( in.bitangent ) );
 
 				auto normalMapCoords1 = writer.declLocale( "normalMapCoords1"
-					, in.texture0.xy() + c3d_waterData.time * c3d_waterData.normalMapScroll.xy() * c3d_waterData.normalMapScrollSpeed.x() );
+					, in.texture0.xy() + c3d_waterData.time() * c3d_waterData.normalMapScroll().xy() * c3d_waterData.normalMapScrollSpeed().x() );
 				auto normalMapCoords2 = writer.declLocale( "normalMapCoords2"
-					, in.texture0.xy() + c3d_waterData.time * c3d_waterData.normalMapScroll.zw() * c3d_waterData.normalMapScrollSpeed.y() );
+					, in.texture0.xy() + c3d_waterData.time() * c3d_waterData.normalMapScroll().zw() * c3d_waterData.normalMapScrollSpeed().y() );
 				auto hdrCoords = writer.declLocale( "hdrCoords"
 					, in.fragCoord.xy() / vec2( c3d_colour.getSize( 0_i ) ) );
 
@@ -632,7 +620,7 @@ namespace water
 					, normalize( texSpace * normalMap1.xyz() ) );
 				finalNormal += normalize( texSpace * normalMap2.xyz() );
 				finalNormal = normalize( finalNormal );
-				displayDebugData( eFinalNormal, finalNormal, 1.0_f );
+				ouput.registerOutput( "Final Normal", finalNormal );
 
 				if ( flags.hasInvertNormals() )
 				{
@@ -650,7 +638,7 @@ namespace water
 					, shader::BlendComponents{ materials
 						, material
 						, surface } );
-				displayDebugData( eMatSpecular, components.f0, 1.0_f );
+				ouput.registerOutput( "Material F0", components.f0 );
 
 				if ( auto lightingModel = lights.getLightingModel() )
 				{
@@ -680,9 +668,9 @@ namespace water
 						, output );
 					lightingModel->adjustDirectSpecular( components
 						, lightSpecular );
-					displayDebugData( eLightDiffuse, lightDiffuse, 1.0_f );
-					displayDebugData( eLightSpecular, lightSpecular, 1.0_f );
-					displayDebugData( eLightScattering, lightScattering, 1.0_f );
+					ouput.registerOutput( "Light Diffuse", lightDiffuse );
+					ouput.registerOutput( "Light Specular", lightSpecular );
+					ouput.registerOutput( "Light Scattering", lightScattering );
 					// Standard lighting models don't necessarily translate all that well to water.
 					// It can end up looking very glossy and plastic-like, having much more form than it really should.
 					// So here, I'm sampling some noise with three different sets of texture coordinates to try and achieve
@@ -692,8 +680,8 @@ namespace water
 					specularNoise *= c3d_waveNoise.sample( normalMapCoords2 * 0.5_f );
 					specularNoise *= c3d_waveNoise.sample( in.texture0.xy() * 0.5_f );
 					lightSpecular *= specularNoise;
-					displayDebugData( eNoisedSpecular, lightSpecular, 1.0_f );
-					displayDebugData( eSpecularNoise, vec3( specularNoise ), 1.0_f );
+					ouput.registerOutput( "Specular Noise", specularNoise );
+					ouput.registerOutput( "Noised Specular", lightSpecular );
 
 
 					// Indirect Lighting
@@ -706,18 +694,18 @@ namespace water
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
 						, lightSurface
 						, indirectOcclusion );
-					displayDebugData( eIndirectOcclusion, vec3( indirectOcclusion ), 1.0_f );
-					displayDebugData( eLightIndirectDiffuse, lightIndirectDiffuse.xyz(), 1.0_f );
+					ouput.registerOutput( "Indirect Occlusion", indirectOcclusion );
+					ouput.registerOutput( "Light Indirect Diffuse", lightIndirectDiffuse.xyz() );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
 						, lightSurface
 						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf );
-					displayDebugData( eLightIndirectSpecular, lightIndirectSpecular, 1.0_f );
+					ouput.registerOutput( "Light Indirect Specular", lightIndirectSpecular );
 					auto indirectAmbient = writer.declLocale( "indirectAmbient"
 						, indirect.computeAmbient( flags.getGlobalIlluminationFlags(), lightIndirectDiffuse.xyz() ) );
-					displayDebugData( eIndirectAmbient, indirectAmbient, 1.0_f );
+					ouput.registerOutput( "Indirect Ambient", indirectAmbient );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
@@ -725,7 +713,7 @@ namespace water
 								, lightSurface.difF()
 								, components.metalness )
 							: vec3( 0.0_f ) ) );
-					displayDebugData( eIndirectDiffuse, indirectDiffuse, 1.0_f );
+					ouput.registerOutput( "Indirect Diffuse", indirectDiffuse );
 
 					// Reflection
 					auto bgDiffuseReflection = writer.declLocale( "bgDiffuseReflection"
@@ -745,28 +733,27 @@ namespace water
 						, bgSpecularReflection );
 					auto backgroundReflection = writer.declLocale( "backgroundReflection"
 						, bgDiffuseReflection + bgSpecularReflection );
-					displayDebugData( eBackgroundReflection, backgroundReflection, 1.0_f );
+					ouput.registerOutput( "Background Reflection", backgroundReflection );
 					auto ssrResult = writer.declLocale( "ssrResult"
 						, reflections.computeScreenSpace( c3d_cameraData
 							, lightSurface.viewPosition()
 							, finalNormal
 							, hdrCoords
-							, c3d_waterData.ssrSettings
+							, c3d_waterData.ssrSettings()
 							, c3d_depthObj
 							, c3d_normals
 							, c3d_colour ) );
-					displayDebugData( eSSRResult, ssrResult.xyz(), 1.0_f );
-					displayDebugData( eSSRFactor, ssrResult.www(), 1.0_f );
-					displayDebugData( eSSRResultFactor, ssrResult.xyz() * ssrResult.www(), 1.0_f );
+					ouput.registerOutput( "SSR Result", ssrResult.xyz() );
+					ouput.registerOutput( "SSR Factor", ssrResult.w() );
 					auto reflectionResult = writer.declLocale( "reflectionResult"
 						, mix( backgroundReflection, ssrResult.xyz(), ssrResult.www() ) );
-					displayDebugData( eReflection, reflectionResult, 1.0_f );
+					ouput.registerOutput( "Reflection Result", reflectionResult );
 
 
 					// Refraction
 					// Wobbly refractions
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
-						, ( hdrCoords + ( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f ) * c3d_waterData.refractionDistortionFactor ) );
+						, ( hdrCoords + ( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f ) * c3d_waterData.refractionDistortionFactor() ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_depthObj.sample( distortedTexCoord ).r() );
 					auto distortedPosition = writer.declLocale( "distortedPosition"
@@ -775,7 +762,7 @@ namespace water
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedTexCoord, hdrCoords ) );
 					auto refractionResult = writer.declLocale( "refractionResult"
 						, c3d_colour.sample( refractionTexCoord ).rgb() * components.colour );
-					displayDebugData( eRefraction, refractionResult, 1.0_f );
+					ouput.registerOutput( "Refraction", refractionResult );
 					//  Retrieve non distorted scene colour.
 					auto sceneDepth = writer.declLocale( "sceneDepth"
 						, c3d_depthObj.sample( hdrCoords ).r() );
@@ -783,36 +770,36 @@ namespace water
 						, c3d_cameraData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
 					// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
 					auto depthSoftenedAlpha = writer.declLocale( "depthSoftenedAlpha"
-						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_waterData.depthSofteningDistance, 0.0_f, 1.0_f ) );
-					displayDebugData( eDepthSoftenedAlpha, vec3( depthSoftenedAlpha ), 1.0_f );
+						, clamp( distance( scenePosition, in.worldPosition.xyz() ) / c3d_waterData.depthSofteningDistance(), 0.0_f, 1.0_f ) );
+					ouput.registerOutput( "Depth Softened Alpha", depthSoftenedAlpha );
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
 						, components.colour * ( indirectAmbient + indirectDiffuse ) * lightDiffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
-						, c3d_waterData.refractionHeightFactor * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
+						, c3d_waterData.refractionHeightFactor() * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, vec3( clamp( ( in.worldPosition.y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
-					displayDebugData( eHeightMixedRefraction, refractionResult, 1.0_f );
+					ouput.registerOutput( "Height Mixed Refraction", refractionResult );
 					auto distanceFactor = writer.declLocale( "distanceFactor"
-						, c3d_waterData.refractionDistanceFactor * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
+						, c3d_waterData.refractionDistanceFactor() * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
 						, waterTransmission
 						, utils.saturate( vec3( utils.saturate( length( in.viewPosition ) / distanceFactor ) ) ) );
-					displayDebugData( eDistanceMixedRefraction, refractionResult, 1.0_f );
+					ouput.registerOutput( "Distance Mixed Refraction", refractionResult );
 
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
 						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() )
 							, components.normal
-							, c3d_waterData.refractionRatio ) ) );
-					displayDebugData( eFresnelFactor, vec3( fresnelFactor ), 1.0_f );
+							, c3d_waterData.refractionRatio() ) ) );
+					ouput.registerOutput( "Fresnel Factor", fresnelFactor );
 					reflectionResult *= fresnelFactor;
-					displayDebugData( eFinalReflection, reflectionResult, 1.0_f );
+					ouput.registerOutput( "Final Reflection", reflectionResult );
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
-					displayDebugData( eFinalRefraction, refractionResult, 1.0_f );
+					ouput.registerOutput( "Final Refraction", refractionResult );
 
 					outColour = vec4( lightSpecular + lightIndirectSpecular
 							+ components.emissiveColour * components.emissiveFactor

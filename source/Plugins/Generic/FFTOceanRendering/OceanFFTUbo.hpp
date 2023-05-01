@@ -15,53 +15,8 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-#define Ocean_Debug 1
-
 namespace ocean_fft
 {
-#if Ocean_Debug
-	enum OceanDisplayData : uint32_t
-	{
-#pragma clang push
-#pragma clang diagnostic ignored "-Wduplicate-enum"
-		eResult,
-		eGradJacobian,
-		eNoiseGradient,
-		eJacobian,
-		eTurbulence,
-		eNormal,
-		eColorMod,
-		eMatSpecular,
-		eLightDiffuse,
-		eLightSpecular,
-		eLightScattering,
-		eIndirectOcclusion,
-		eLightIndirectDiffuse,
-		eLightIndirectSpecular,
-		eIndirectAmbient,
-		eIndirectDiffuse,
-		eRawBackgroundReflection,
-		eFresnelBackgroundReflection,
-		eSSRResult,
-		eSSRFactor,
-		eSSRResultFactor,
-		eCombinedReflection,
-		eRawRefraction,
-		eLightAbsorbtion,
-		eWaterTransmission,
-		eRefractionResult,
-		eDepthSoftenedAlpha,
-		eHeightMixedRefraction,
-		eDistanceMixedRefraction,
-		eFresnelFactor,
-		eFinalReflection,
-		eFinalRefraction,
-		CU_EnumBounds( OceanDisplayData, eResult )
-#pragma clang pop
-	};
-	castor::StringArray const & getOceanDisplayDataNames();
-#endif
-
 	struct OceanUboConfiguration
 	{
 		float time{ 0.0f };
@@ -101,11 +56,7 @@ namespace ocean_fft
 
 		castor::Point2ui size{};
 		uint32_t displacementDownsample{};
-#if Ocean_Debug
-		uint32_t debug{ eResult };
-#else
 		uint32_t dummy3;
-#endif
 	};
 
 	struct OceanData
@@ -161,9 +112,6 @@ namespace ocean_fft
 		sdw::Float L;
 		sdw::UVec2 size;
 		sdw::Int displacementDownsample;
-#if Ocean_Debug
-		sdw::UInt debug;
-#endif
 	};
 
 	class OceanUbo

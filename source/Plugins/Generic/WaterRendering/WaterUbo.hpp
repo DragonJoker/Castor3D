@@ -10,50 +10,11 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Int.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
-
-#define Water_Debug 1
 
 namespace water
 {
-#if Water_Debug
-	enum WaterDisplayData : uint32_t
-	{
-#pragma clang push
-#pragma clang diagnostic ignored "-Wduplicate-enum"
-		eResult,
-		eFinalNormal,
-		eMatSpecular,
-		eLightDiffuse,
-		eLightSpecular,
-		eLightScattering,
-		eNoisedSpecular,
-		eSpecularNoise,
-		eIndirectOcclusion,
-		eLightIndirectDiffuse,
-		eLightIndirectSpecular,
-		eIndirectAmbient,
-		eIndirectDiffuse,
-		eBackgroundReflection,
-		eSSRResult,
-		eSSRFactor,
-		eSSRResultFactor,
-		eReflection,
-		eRefraction,
-		eDepthSoftenedAlpha,
-		eHeightMixedRefraction,
-		eDistanceMixedRefraction,
-		eFresnelFactor,
-		eFinalReflection,
-		eFinalRefraction,
-		eWaterBaseColour,
-		CU_EnumBounds( WaterDisplayData, eResult )
-#pragma clang pop
-	};
-	castor::StringArray const & getWaterDisplayDataNames();
-#endif
-
 	struct WaterUboConfiguration
 	{
 		float time{ 0.0f };
@@ -71,46 +32,42 @@ namespace water
 		float ssrForwardStepsCount{ 20.0f };
 		float ssrBackwardStepsCount{ 10.0f };
 		float ssrDepthMult{ 20.0f };
-#if Water_Debug
-		uint32_t debug{ eResult };
-		uint32_t dummy[3]{};
-#endif
 	};
 
 	struct WaterData
-		: public sdw::StructInstance
+		: public sdw::StructInstanceHelperT< "WaterData"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::FloatField< "time" >
+			, sdw::FloatField< "dampeningFactor" >
+			, sdw::FloatField< "depthSofteningDistance" >
+			, sdw::FloatField< "pad1" >
+			, sdw::FloatField< "refractionRatio" >
+			, sdw::FloatField< "refractionDistortionFactor" >
+			, sdw::FloatField< "refractionHeightFactor" >
+			, sdw::FloatField< "refractionDistanceFactor" >
+			, sdw::Vec2Field< "normalMapScrollSpeed" >
+			, sdw::Vec2Field< "pad2" >
+			, sdw::Vec4Field< "normalMapScroll" >
+			, sdw::Vec4Field< "ssrSettings" > >
 	{
 		WaterData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
-
-		SDW_DeclStructInstance( , WaterData );
-
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	private:
-		sdw::Vec4 m_base;
-		sdw::Vec4 m_refraction;
-		sdw::Vec4 m_scrSpdOth;
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
 	public:
-		sdw::Vec4 normalMapScroll;
-		sdw::Vec4 ssrSettings;
-#if Water_Debug
-		sdw::UVec4 debug;
-#endif
-		sdw::Float time;
-		sdw::Float dampeningFactor;
-		sdw::Float depthSofteningDistance;
-		sdw::Float refractionRatio;
-		sdw::Float refractionDistortionFactor;
-		sdw::Float refractionHeightFactor;
-		sdw::Float refractionDistanceFactor;
-		sdw::Vec2 normalMapScrollSpeed;
+		auto time()const { return getMember< "time" >(); }
+		auto dampeningFactor()const { return getMember< "dampeningFactor" >(); }
+		auto depthSofteningDistance()const { return getMember< "depthSofteningDistance" >(); }
+		auto refractionRatio()const { return getMember< "refractionRatio" >(); }
+		auto refractionDistortionFactor()const { return getMember< "refractionDistortionFactor" >(); }
+		auto refractionHeightFactor()const { return getMember< "refractionHeightFactor" >(); }
+		auto refractionDistanceFactor()const { return getMember< "refractionDistanceFactor" >(); }
+		auto normalMapScrollSpeed()const { return getMember< "normalMapScrollSpeed" >(); }
+		auto normalMapScroll()const { return getMember< "normalMapScroll" >(); }
+		auto ssrSettings()const { return getMember< "ssrSettings" >(); }
 	};
 
 	class WaterUbo
