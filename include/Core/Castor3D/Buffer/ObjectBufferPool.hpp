@@ -21,12 +21,12 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			explicit ModelBuffers( GpuPackedBufferPtr vtx )
+			explicit ModelBuffers( GpuPackedBufferUPtr vtx )
 				: vertex{ std::move( vtx ) }
 			{
 			}
 
-			GpuPackedBufferPtr vertex;
+			GpuPackedBufferUPtr vertex;
 		};
 		using BufferArray = std::vector< ModelBuffers >;
 
@@ -97,12 +97,12 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			explicit ModelBuffers( std::array< GpuPackedBufferPtr, size_t( SubmeshData::eCount ) > bufs = {} )
+			explicit ModelBuffers( std::array< GpuPackedBufferUPtr, size_t( SubmeshData::eCount ) > bufs = {} )
 				: buffers{ std::move( bufs ) }
 			{
 			}
 
-			std::array< GpuPackedBufferPtr, size_t( SubmeshData::eCount ) > buffers;
+			std::array< GpuPackedBufferUPtr, size_t( SubmeshData::eCount ) > buffers;
 		};
 		using BufferArray = std::vector< ModelBuffers >;
 

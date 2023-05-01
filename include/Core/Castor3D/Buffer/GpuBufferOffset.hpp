@@ -123,8 +123,17 @@ namespace castor3d
 		void markDirty( VkAccessFlags dstAccessFlags
 			, VkPipelineStageFlags dstPipelineFlags )const
 		{
+			markDirty( getSize()
+				, dstAccessFlags
+				, dstPipelineFlags );
+		}
+
+		void markDirty( VkDeviceSize size
+			, VkAccessFlags dstAccessFlags
+			, VkPipelineStageFlags dstPipelineFlags )const
+		{
 			buffer->markDirty( getOffset()
-				, getSize()
+				, std::min( size, getSize() )
 				, dstAccessFlags
 				, dstPipelineFlags );
 		}

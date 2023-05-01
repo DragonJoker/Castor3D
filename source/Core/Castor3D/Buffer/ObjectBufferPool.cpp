@@ -396,7 +396,7 @@ namespace castor3d
 				++it;
 				return lookup.buffers.end() == std::find_if( it
 					, lookup.buffers.end()
-					, [vertexCount, &index]( GpuPackedBufferPtr const & buffer )
+					, [vertexCount, &index]( GpuPackedBufferUPtr const & buffer )
 					{
 						return buffer
 							&& !buffer->hasAvailable( getSize( SubmeshData( index++ ) ) * vertexCount );
