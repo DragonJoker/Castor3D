@@ -103,6 +103,7 @@ if ( CASTOR_USE_GLSLANG AND VKFFT_INCLUDE_DIRS )
 			PREFIX ${C3D_LIB_PREFIX}
 			FOLDER "Plugins/Generic"
 	)
+	c3d_release_pdbs( ${PROJECT_NAME} )
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D
 		Plugins

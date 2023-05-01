@@ -75,6 +75,7 @@ target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
 )
+c3d_release_pdbs( ${PROJECT_NAME} )
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
 	Plugins

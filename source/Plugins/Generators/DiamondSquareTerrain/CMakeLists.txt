@@ -70,6 +70,7 @@ set_target_properties( ${PROJECT_NAME}
 		PREFIX ${C3D_LIB_PREFIX}
 		FOLDER "Plugins/Generators"
 )
+c3d_release_pdbs( ${PROJECT_NAME} )
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
 	Plugins

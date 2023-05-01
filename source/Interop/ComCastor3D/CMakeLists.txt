@@ -295,6 +295,7 @@ if ( MSVC )
 				${CASTOR_BINARY_DIR}/source/Interop
 				${ATL_INCLUDE_DIR}
 		)
+		c3d_release_pdbs( ${PROJECT_NAME} )
 		target_link_libraries( ${PROJECT_NAME}
 			PRIVATE
 				${ATL_LIBRARIES}

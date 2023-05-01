@@ -73,6 +73,15 @@ set( PLATFORM_LIBRARIES
 	Threads::Threads
 )
 
+macro( c3d_release_pdbs _TARGET_NAME )
+	if( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
+		target_compile_options( ${_TARGET_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
+		target_link_options( ${_TARGET_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
+		target_link_options( ${_TARGET_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:REF>" )
+		target_link_options( ${_TARGET_NAME} PRIVATE "$<$<CONFIG:Release>:/OPT:ICF>" )
+	endif()
+endmacro()
+
 if ( ${CASTOR_BUILD_CASTOR3D} )
 	if ( CASTOR_USE_GLSLANG )
 		option( CASTOR_FORCE_GLSLANG_SUBMODULE "Force use of glslang submodule" OFF )

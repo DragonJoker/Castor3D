@@ -130,6 +130,7 @@ if( assimp_FOUND )
 			${ImporterDependencies}
 			${assimp_LIBRARIES}
 	)
+	c3d_release_pdbs( ${PROJECT_NAME} )
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D
 		Plugins

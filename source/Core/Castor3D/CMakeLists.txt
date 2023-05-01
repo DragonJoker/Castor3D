@@ -2200,6 +2200,7 @@ set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		FOLDER "Core/${MAIN_PROJECT_NAME}"
 )
+c3d_release_pdbs( ${PROJECT_NAME} )
 install(
 	FILES
 		${CASTOR_BINARY_DIR}/include/Core/${PROJECT_NAME}/RequiredVersion.hpp

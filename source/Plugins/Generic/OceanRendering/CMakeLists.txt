@@ -53,6 +53,7 @@ target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
 )
+c3d_release_pdbs( ${PROJECT_NAME} )
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		VERSION ${PROJECT_VERSION}
