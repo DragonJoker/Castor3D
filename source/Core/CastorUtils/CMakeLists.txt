@@ -759,6 +759,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		COMPONENT Castor3D
 		CONFIGURATIONS Release
 	)
+	c3d_release_pdbs( ${PROJECT_NAME} )
 	install_target_ex( ${PROJECT_NAME}
 		Castor3D
 		Castor3D
