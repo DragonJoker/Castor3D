@@ -10,7 +10,7 @@ namespace castor3d
 	namespace details
 	{
 		template< typename DataT >
-		GpuPackedBufferPtr createBuffer( RenderDevice const & device
+		GpuPackedBufferUPtr createBuffer( RenderDevice const & device
 			, VkDeviceSize count
 			, VkBufferUsageFlags usage
 			, std::string debugName
@@ -24,7 +24,7 @@ namespace castor3d
 				maxCount *= 2u;
 			}
 
-			return std::make_unique< GpuPackedBuffer >( device.renderSystem
+			return castor::makeUnique< GpuPackedBuffer >( device.renderSystem
 				, usage
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, debugName

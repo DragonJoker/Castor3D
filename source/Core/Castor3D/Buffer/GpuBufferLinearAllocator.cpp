@@ -1,5 +1,7 @@
 #include "Castor3D/Buffer/GpuBufferLinearAllocator.hpp"
 
+CU_ImplementSmartPtr( castor3d, GpuLinearBuffer )
+
 namespace castor3d
 {
 	GpuBufferLinearAllocator::GpuBufferLinearAllocator( size_t count

@@ -163,12 +163,12 @@ namespace castor3d
 		if ( itB == it->second.end() )
 		{
 			VkDeviceSize level = 21u;
-			VkDeviceSize maxSize = ( 1u << level ) * m_minBlockSize;
+			VkDeviceSize maxSize = VkDeviceSize( 1ull << level ) * m_minBlockSize;
 
 			while ( size > maxSize && level <= 24 )
 			{
 				++level;
-				maxSize = ( 1u << level ) * m_minBlockSize;
+				maxSize = VkDeviceSize( 1ull << level ) * m_minBlockSize;
 			}
 
 			CU_Require( maxSize < std::numeric_limits< uint32_t >::max() );
