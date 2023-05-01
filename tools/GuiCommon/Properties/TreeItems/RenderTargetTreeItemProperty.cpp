@@ -89,17 +89,11 @@ namespace GuiCommon
 
 #if C3D_DebugQuads
 		static wxString PROPERTY_RENDER_WINDOW_DEBUG_VIEW = _( "Debug View" );
+		static wxString PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE = _( "Debug Value" );
 
-		auto & intermediates = target.getIntermediateViews();
 		auto & debugConfig = target.getDebugConfig();
-		wxArrayString debugChoices;
-
-		for ( auto & intermediate : intermediates )
-		{
-			debugChoices.Add( make_wxString( intermediate.name ) );
-		}
-
-		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_VIEW, debugChoices, &debugConfig.debugIndex );
+		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_VIEW, make_wxArrayString( debugConfig.getIntermediateImages() ), &debugConfig.intermediateImageIndex );
+		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE, make_wxArrayString( debugConfig.getIntermediateValues() ), &debugConfig.intermediateShaderValueIndex );
 #endif
 
 		for ( auto & renderPass : target.getCustomRenderPasses() )

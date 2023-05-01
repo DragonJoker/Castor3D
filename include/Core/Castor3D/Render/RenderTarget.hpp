@@ -32,11 +32,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct DebugConfig
-	{
-		uint32_t debugIndex{ 0u };
-	};
-
 	class RenderTarget
 		: public castor::OwnedBy< Engine >
 	{

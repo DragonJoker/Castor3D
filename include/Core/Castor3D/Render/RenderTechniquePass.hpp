@@ -249,6 +249,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API Engine * getEngine()const;
+		C3D_API DebugConfig & getDebugConfig()const;
 
 		Scene const & getScene()
 		{
@@ -402,6 +403,11 @@ namespace castor3d
 		RenderTechnique const & getTechnique()const
 		{
 			return RenderTechniquePass::getTechnique();
+		}
+
+		DebugConfig & getDebugConfig()const
+		{
+			return RenderTechniquePass::getDebugConfig();
 		}
 		/**@}*/
 

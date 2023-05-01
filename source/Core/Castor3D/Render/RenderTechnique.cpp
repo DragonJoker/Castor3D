@@ -465,6 +465,8 @@ namespace castor3d
 		auto & scene = *updater.scene;
 		auto & camera = *updater.camera;
 		updater.voxelConeTracing = scene.getVoxelConeTracingConfig().enabled;
+		auto & debugConfig = getDebugConfig();
+		updater.debugIndex = debugConfig.intermediateShaderValueIndex;
 
 		doUpdateShadowMaps( updater );
 		doUpdateLpv( updater );
@@ -518,6 +520,7 @@ namespace castor3d
 		jitterProjSpace[0] /= float( camera.getWidth() );
 		jitterProjSpace[1] /= float( camera.getHeight() );
 		m_cameraUbo.cpuUpdate( camera
+			, updater.debugIndex
 			, true
 			, jitterProjSpace );
 		m_sceneUbo.cpuUpdate( scene );
@@ -721,6 +724,11 @@ namespace castor3d
 	bool RenderTechnique::isOpaqueEnabled()const
 	{
 		return m_opaque.isEnabled();
+	}
+
+	DebugConfig & RenderTechnique::getDebugConfig()const
+	{
+		return m_renderTarget.getDebugConfig();
 	}
 
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress

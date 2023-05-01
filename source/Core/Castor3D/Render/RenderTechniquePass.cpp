@@ -126,6 +126,11 @@ namespace castor3d
 		return m_scene.getOwner();
 	}
 
+	DebugConfig & RenderTechniquePass::getDebugConfig()const
+	{
+		return m_parent->getDebugConfig();
+	}
+
 	//*************************************************************************************************
 
 	RenderTechniqueNodesPass::RenderTechniqueNodesPass( RenderTechnique * parent

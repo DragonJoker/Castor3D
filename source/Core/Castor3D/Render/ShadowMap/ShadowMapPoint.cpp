@@ -323,9 +323,10 @@ namespace castor3d
 
 			auto & pointLight = *updater.light->getPointLight();
 			m_passes[m_passesIndex].cameraUbos[face]->cpuUpdate( *updater.camera
-				, false
 				, pointLight.getViewMatrix( CubeMapFace( updater.index ) )
-				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection() );
+				, static_cast< ShadowMapPassPoint const & >( *pass.pass ).getProjection()
+				, updater.debugIndex
+				, false );
 		}
 
 		updater.index = save;

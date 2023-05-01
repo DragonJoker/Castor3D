@@ -11,47 +11,6 @@ namespace ocean_fft
 {
 	//*********************************************************************************************
 
-#if Ocean_Debug
-	castor::StringArray const & getOceanDisplayDataNames()
-	{
-		static castor::StringArray const result{ "Result"
-			, "GradJacobian"
-			, "NoiseGradient"
-			, "Jacobian"
-			, "Turbulence"
-			, "Normal"
-			, "ColorMod"
-			, "MatSpecular"
-			, "LightDiffuse"
-			, "LightSpecular"
-			, "LightScattering"
-			, "IndirectOcclusion"
-			, "LightIndirectDiffuse"
-			, "LightIndirectSpecular"
-			, "IndirectAmbient"
-			, "IndirectDiffuse"
-			, "RawBackgroundReflection"
-			, "FresnelBackgroundReflection"
-			, "SSRResult"
-			, "SSRFactor"
-			, "SSRResultFactor"
-			, "CombinedReflection"
-			, "RawRefraction"
-			, "LightAbsorbtion"
-			, "WaterTransmission"
-			, "RefractionResult"
-			, "DepthSoftenedAlpha"
-			, "HeightMixedRefraction"
-			, "DistanceMixedRefraction"
-			, "FresnelFactor"
-			, "FinalReflection"
-			, "FinalRefraction" };
-		return result;
-	}
-#endif
-
-	//*********************************************************************************************
-
 	OceanData::OceanData( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )
@@ -89,9 +48,6 @@ namespace ocean_fft
 		, L{ m_fftDistrib.z() }
 		, size{ m_size.xy() }
 		, displacementDownsample{ writer.cast< sdw::Int >( m_size.z() ) }
-#if Ocean_Debug
-		, debug{ m_size.w() }
-#endif
 	{
 	}
 

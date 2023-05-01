@@ -36,7 +36,8 @@ namespace castor3d
 				, sdw::Vec2Field< "jitter" >
 				, sdw::Vec3Field< "position" >
 				, sdw::FloatField< "gamma" >
-				, sdw::Vec2Field< "pad" >
+				, sdw::UInt32Field< "debugIndex" >
+				, sdw::FloatField< "pad" >
 				, sdw::FloatField< "nearPlane" >
 				, sdw::FloatField< "farPlane" > >
 		{
@@ -98,6 +99,7 @@ namespace castor3d
 			auto farPlane()const { return getMember< "farPlane" >(); }
 			auto position()const { return getMember< "position" >(); }
 			auto gamma()const { return getMember< "gamma" >(); }
+			auto debugIndex()const { return getMember< "debugIndex" >(); }
 
 		private:
 			auto projection()const { return getMember< "projection" >(); }
@@ -157,10 +159,11 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( Camera const & camera
+		C3D_API Configuration & cpuUpdate( castor::Size const & size
+			, Camera const & camera
 			, castor::Matrix4x4f const & view
 			, castor::Matrix4x4f const & projection
-			, castor::Size const & size
+			, uint32_t debugIndex
 			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
 		 *\~english
@@ -179,9 +182,10 @@ namespace castor3d
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( Camera const & camera
-			, bool safeBanded
 			, castor::Matrix4x4f const & view
 			, castor::Matrix4x4f const & projection
+			, uint32_t debugIndex
+			, bool safeBanded
 			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
 		 *\~english
@@ -196,6 +200,7 @@ namespace castor3d
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
 		C3D_API Configuration & cpuUpdate( Camera const & camera
+			, uint32_t debugIndex
 			, bool safeBanded
 			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
@@ -212,9 +217,10 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( Camera const & camera
+		C3D_API Configuration & cpuUpdate( castor::Size const & size
+			, Camera const & camera
+			, uint32_t debugIndex
 			, bool safeBanded
-			, castor::Size const & size
 			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
 		 *\~english
@@ -232,10 +238,11 @@ namespace castor3d
 		 *\param[in]	size		Les dimensions du rendu.
 		 *\param[in]	jitter		La valeur de jittering.
 		 */
-		C3D_API Configuration & cpuUpdate( castor::Matrix4x4f const & view
+		C3D_API Configuration & cpuUpdate( castor::Size const & size
+			, castor::Matrix4x4f const & view
 			, castor::Matrix4x4f const & projection
+			, uint32_t debugIndex
 			, Frustum const & frustum
-			, castor::Size const & size
 			, castor::Point2f const & jitter = castor::Point2f{} );
 		/**
 		 *\~english
@@ -250,7 +257,8 @@ namespace castor3d
 		 *\param[in]	projection	La nouvelle matrice de projection.
 		 */
 		C3D_API Configuration & cpuUpdate( castor::Size const & size
-			, castor::Matrix4x4f const & projection );
+			, castor::Matrix4x4f const & projection
+			, uint32_t debugIndex );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const

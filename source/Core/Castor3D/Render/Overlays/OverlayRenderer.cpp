@@ -1003,7 +1003,8 @@ namespace castor3d
 				, 0.0f
 				, float( m_size.getHeight() )
 				, -1.0f
-				, 1.0f ) );
+				, 1.0f )
+			, 0u );
 	}
 
 	OverlayRenderer::~OverlayRenderer()
@@ -1026,7 +1027,8 @@ namespace castor3d
 						, 0.0f
 						, float( m_size.getHeight() )
 						, -1.0f
-						, 1.0f ) );
+						, 1.0f )
+					, 0u );
 			}
 		}
 	}

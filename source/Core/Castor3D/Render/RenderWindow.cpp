@@ -560,8 +560,9 @@ namespace castor3d
 #else
 				auto & intermediates = target->getIntermediateViews();
 				auto & debugConfig = target->getDebugConfig();
-				updater.combineIndex = debugConfig.debugIndex;
-				auto & intermediate = intermediates[debugConfig.debugIndex];
+				updater.combineIndex = debugConfig.intermediateImageIndex;
+				updater.debugIndex = debugConfig.intermediateShaderValueIndex;
+				auto & intermediate = intermediates[updater.combineIndex];
 
 				if ( intermediate.factors.grid )
 				{
@@ -1262,7 +1263,7 @@ namespace castor3d
 #endif
 
 		auto & debugConfig = target->getDebugConfig();
-		m_renderQuad->initialisePass( debugConfig.debugIndex );
+		m_renderQuad->initialisePass( debugConfig.intermediateImageIndex );
 	}
 
 	void RenderWindow::doDestroyRenderQuad()
@@ -1726,10 +1727,10 @@ namespace castor3d
 #else
 				auto intermediates = target->getIntermediateViews();
 				auto & debugConfig = target->getDebugConfig();
-				m_savedFormat = intermediates[debugConfig.debugIndex].viewId.data->info.format;
+				m_savedFormat = intermediates[debugConfig.intermediateImageIndex].viewId.data->info.format;
 #endif
-				auto & transferCommands = m_transferCommands[debugConfig.debugIndex];
-				doInitialiseTransferCommands( queueData, transferCommands, debugConfig.debugIndex );
+				auto & transferCommands = m_transferCommands[debugConfig.intermediateImageIndex];
+				doInitialiseTransferCommands( queueData, transferCommands, debugConfig.intermediateImageIndex );
 				queueData.queue->submit( ashes::VkCommandBufferArray{ *transferCommands.commandBuffer }
 					, semaphores
 					, stages
@@ -1755,7 +1756,7 @@ namespace castor3d
 		auto target = getRenderTarget();
 		CU_Require( target );
 		auto & debugConfig = target->getDebugConfig();
-		auto passIndex = debugConfig.debugIndex;
+		auto passIndex = debugConfig.intermediateImageIndex;
 		doRecordCommandBuffer( queueData, passIndex );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
@@ -1807,7 +1808,7 @@ namespace castor3d
 				auto target = getRenderTarget();
 				CU_Require( target );
 				auto & debugConfig = target->getDebugConfig();
-				auto & intermediate = m_intermediateBarrierViews[debugConfig.debugIndex];
+				auto & intermediate = m_intermediateBarrierViews[debugConfig.intermediateImageIndex];
 				auto srcExtent = getExtent( intermediate.viewId );
 				auto dstExtent = makeExtent2D( target->getSize() );
 				dstExtent.width = std::min( dstExtent.width, srcExtent.width );

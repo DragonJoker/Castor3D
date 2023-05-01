@@ -193,16 +193,18 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
+		, Camera const & camera
 		, castor::Matrix4x4f const & view
 		, castor::Matrix4x4f const & projection
-		, castor::Size const & size
+		, uint32_t debugIndex
 		, castor::Point2f const & jitter )
 	{
-		auto & configuration = cpuUpdate( view
+		auto & configuration = cpuUpdate( size
+			, view
 			, projection
+			, debugIndex
 			, camera.getFrustum()
-			, size
 			, jitter );
 		configuration.position = camera.getParent()->getDerivedPosition();
 		configuration.gamma = camera.getHdrConfig().gamma;
@@ -213,51 +215,58 @@ namespace castor3d
 	}
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
-		, bool safeBanded
 		, castor::Matrix4x4f const & view
 		, castor::Matrix4x4f const & projection
+		, uint32_t debugIndex
+		, bool safeBanded
 		, castor::Point2f const & jitter )
 	{
-		return cpuUpdate( camera
+		return cpuUpdate( ( safeBanded
+				? getSafeBandedSize( camera.getSize() )
+				: camera.getSize() )
+			, camera
 			, view
 			, projection
-			, ( safeBanded
-				? getSafeBandedSize( camera.getSize() )
-				: camera.getSize() )
+			, debugIndex
 			, jitter );
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
+		, Camera const & camera
+		, uint32_t debugIndex
 		, bool safeBanded
-		, castor::Size const & size
 		, castor::Point2f const & jitter )
 	{
-		return cpuUpdate( camera
+		return cpuUpdate( size
+			, camera
 			, camera.getView()
 			, camera.getProjection( safeBanded )
-			, size
+			, debugIndex
 			, jitter );
 	}
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( Camera const & camera
+		, uint32_t debugIndex
 		, bool safeBanded
 		, castor::Point2f const & jitter )
 	{
-		return cpuUpdate( camera
-			, safeBanded
-			, ( safeBanded
+		return cpuUpdate( ( safeBanded
 				? getSafeBandedSize( camera.getSize() )
 				: camera.getSize() )
+			, camera
+			, debugIndex
+			, safeBanded
 			, jitter );
 	}
 
-	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Matrix4x4f const & view
+	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
+		, castor::Matrix4x4f const & view
 		, castor::Matrix4x4f const & projection
+		, uint32_t debugIndex
 		, Frustum const & frustum
-		, castor::Size const & size
 		, castor::Point2f const & jitter )
 	{
-		auto & configuration = cpuUpdate( size, projection );
+		auto & configuration = cpuUpdate( size, projection, debugIndex );
 		configuration.prvView = configuration.curView;
 		configuration.invPrvView = configuration.invCurView;
 		configuration.prvViewProj = configuration.curViewProj;
@@ -284,13 +293,15 @@ namespace castor3d
 	}
 
 	CameraUbo::Configuration & CameraUbo::cpuUpdate( castor::Size const & size
-		, castor::Matrix4x4f const & projection )
+		, castor::Matrix4x4f const & projection
+		, uint32_t debugIndex )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
 		configuration.projection = projection;
 		configuration.invProjection = projection.getInverse();
 		configuration.size = { size.getWidth(), size.getHeight() };
+		configuration.debugIndex = debugIndex;
 		return configuration;
 	}
 

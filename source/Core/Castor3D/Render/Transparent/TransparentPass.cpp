@@ -19,6 +19,7 @@
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -298,6 +299,11 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
+				shader::DebugOutput ouput{ getDebugConfig()
+					, cuT( "Default" )
+					, c3d_cameraData.debugIndex()
+					, outAccumulation
+					, true };
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto material = writer.declLocale( "material"
@@ -426,6 +432,23 @@ namespace castor3d
 								, components.metalness )
 							: vec3( 0.0_f ) ) );
 					components.emissiveFactor *= components.opacity;
+					ouput.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+					ouput.registerOutput( "LightDiffuse", lightDiffuse );
+					ouput.registerOutput( "IndirectDiffuse", indirectDiffuse );
+					ouput.registerOutput( "ReflectedDiffuse", reflectedDiffuse );
+					ouput.registerOutput( "LightSpecular", lightSpecular );
+					ouput.registerOutput( "IndirectSpecular", lightIndirectSpecular );
+					ouput.registerOutput( "ReflectedSpecular", reflectedSpecular );
+					ouput.registerOutput( "LightScattering", lightScattering );
+					ouput.registerOutput( "DirectAmbient", directAmbient );
+					ouput.registerOutput( "IndirectAmbient", indirectAmbient );
+					ouput.registerOutput( "Occlusion", components.occlusion );
+					ouput.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
+					ouput.registerOutput( "Refracted", refracted );
+					ouput.registerOutput( "LightCoatingSpecular", lightCoatingSpecular );
+					ouput.registerOutput( "CoatReflected", coatReflected );
+					ouput.registerOutput( "LightSheen", lightSheen );
+					ouput.registerOutput( "SheenReflected", sheenReflected );
 					colour = lightingModel->combine( components
 						, incident
 						, lightDiffuse
@@ -437,6 +460,8 @@ namespace castor3d
 						, lightIndirectSpecular
 						, directAmbient
 						, indirectAmbient
+						, components.occlusion
+						, components.emissiveColour * components.emissiveFactor
 						, reflectedDiffuse
 						, reflectedSpecular
 						, refracted

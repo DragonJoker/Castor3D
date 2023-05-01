@@ -769,6 +769,7 @@ namespace castor3d
 		Viewport * viewport{ nullptr };
 		uint32_t index{ 0u };
 		uint32_t combineIndex{ 0u };
+		uint32_t debugIndex{ 0u };
 		castor::Point2f jitter;
 		bool voxelConeTracing{ false };
 		castor::Point3f gridCenter{};
@@ -823,6 +824,69 @@ namespace castor3d
 		FramePassTimer * timer{ nullptr };
 		castor::Milliseconds time;
 		castor::Milliseconds total;
+	};
+
+	struct DebugConfig
+	{
+		uint32_t intermediateImageIndex{ 0u };
+		uint32_t intermediateShaderValueIndex{ 0u };
+
+		DebugConfig()
+		{
+			registerValue( "Default", "Result" );
+		}
+
+		void resetImages()
+		{
+			intermediateImageIndex = 0u;
+			m_intermediateImageNames.clear();
+		}
+
+		uint32_t registerImage( castor::String name )
+		{
+			auto it = std::find( m_intermediateImageNames.begin()
+				, m_intermediateImageNames.end()
+				, name );
+
+			if ( it == m_intermediateImageNames.end() )
+			{
+				m_intermediateImageNames.emplace_back( name );
+				it = std::next( m_intermediateImageNames.begin(), ptrdiff_t( m_intermediateImageNames.size() - 1u ) );
+			}
+
+			return uint32_t( std::distance( m_intermediateImageNames.begin(), it ) );
+		}
+
+		uint32_t registerValue( castor::String category
+			, castor::String name )
+		{
+			auto fullName = category + cuT( "/" ) + name;
+			auto it = std::find( m_intermediateValueNames.begin()
+				, m_intermediateValueNames.end()
+				, fullName );
+
+			if ( it == m_intermediateValueNames.end() )
+			{
+				m_intermediateValueNames.emplace_back( fullName );
+				it = std::next( m_intermediateValueNames.begin(), ptrdiff_t( m_intermediateValueNames.size() - 1u ) );
+			}
+
+			return uint32_t( std::distance( m_intermediateValueNames.begin(), it ) );
+		}
+
+		castor::StringArray const & getIntermediateImages()const noexcept
+		{
+			return m_intermediateImageNames;
+		}
+
+		castor::StringArray const & getIntermediateValues()const noexcept
+		{
+			return m_intermediateValueNames;
+		}
+
+	private:
+		castor::StringArray m_intermediateImageNames;
+		castor::StringArray m_intermediateValueNames;
 	};
 	//@}
 

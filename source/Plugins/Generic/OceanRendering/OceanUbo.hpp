@@ -13,47 +13,8 @@ See LICENSE file in root folder
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
-#define Ocean_Debug 1
-
 namespace ocean
 {
-#if Ocean_Debug
-	enum OceanDisplayData : uint32_t
-	{
-#pragma clang push
-#pragma clang diagnostic ignored "-Wduplicate-enum"
-		eResult,
-		eFinalNormal,
-		eMatSpecular,
-		eLightDiffuse,
-		eLightSpecular,
-		eLightScattering,
-		eNoisedSpecular,
-		eSpecularNoise,
-		eIndirectOcclusion,
-		eLightIndirectDiffuse,
-		eLightIndirectSpecular,
-		eIndirectAmbient,
-		eIndirectDiffuse,
-		eBackgroundReflection,
-		eSSRResult,
-		eSSRFactor,
-		eSSRResultFactor,
-		eReflection,
-		eRefraction,
-		eDepthSoftenedAlpha,
-		eHeightMixedRefraction,
-		eDistanceMixedRefraction,
-		eFresnelFactor,
-		eFinalReflection,
-		eFinalRefraction,
-		eWaterBaseColour,
-		CU_EnumBounds( OceanDisplayData, eResult )
-#pragma clang pop
-	};
-	castor::StringArray const & getOceanDisplayDataNames();
-#endif
-
 	static uint32_t constexpr MaxWaves = 8u;
 
 	struct WaveConfigurationData
@@ -91,10 +52,7 @@ namespace ocean
 		float ssrForwardStepsCount{ 20.0f };
 		float ssrBackwardStepsCount{ 10.0f };
 		float ssrDepthMult{ 20.0f };
-#if Ocean_Debug
-		uint32_t debug{ eResult };
-		uint32_t dummy[3]{};
-#endif
+
 		std::array< WaveConfigurationData, MaxWaves > waves{ WaveConfigurationData{ castor::Point4f{ 0.3f, 0.0f, -0.7f }, 1.79f, 3.75f, 0.85f, 1.21f }
 			, WaveConfigurationData{ castor::Point4f{ 0.5f, 0.0f, -0.2f }, 1.79f, 4.1f, 0.52f, 1.03f }
 			, WaveConfigurationData{}
@@ -153,7 +111,6 @@ namespace ocean
 			, sdw::FloatField< "ssrForwardStepsCount" >
 			, sdw::FloatField< "ssrBackwardStepsCount" >
 			, sdw::FloatField< "ssrDepthMult" >
-			, sdw::UVec4Field< "debug" >
 			, sdw::StructFieldArrayT< Wave, "waves", MaxWaves > >
 	{
 		OceanData( sdw::ShaderWriter & writer
@@ -168,7 +125,6 @@ namespace ocean
 		auto ssrForwardStepsCount()const { return getMember< "ssrForwardStepsCount" >(); }
 		auto ssrBackwardStepsCount()const { return getMember< "ssrBackwardStepsCount" >(); }
 		auto ssrDepthMult()const { return getMember< "ssrDepthMult" >(); }
-		auto debug()const { return getMember< "debug" >(); }
 		auto waves()const { return getMember< "waves" >(); }
 		auto tessellationFactor()const { return getMember< "tessellationFactor" >(); }
 		auto numWaves()const { return getMember< "numWaves" >(); }

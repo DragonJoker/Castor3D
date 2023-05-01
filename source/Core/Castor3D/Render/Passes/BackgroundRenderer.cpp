@@ -68,9 +68,10 @@ namespace castor3d
 		}
 
 		m_cameraUbo.cpuUpdate( *updater.camera
-			, true
 			, updater.bgMtxView
-			, updater.bgMtxProj );
+			, updater.bgMtxProj
+			, updater.debugIndex
+			, true );
 		auto & configuration = m_modelUbo.getData();
 		configuration.prvModel = configuration.curModel;
 		configuration.curModel = updater.bgMtxModl;
