@@ -42,10 +42,10 @@ namespace test_launcher
 {
 	namespace
 	{
-		castor3d::RenderTargetRPtr doLoadScene( castor3d::Engine & engine
+		castor3d::RenderWindowDesc doLoadScene( castor3d::Engine & engine
 			, castor::Path const & fileName )
 		{
-			castor3d::RenderTargetRPtr result{};
+			castor3d::RenderWindowDesc result{};
 
 			if ( castor::File::fileExists( fileName ) )
 			{
@@ -59,7 +59,7 @@ namespace test_launcher
 
 						if ( parser.parseFile( fileName ) )
 						{
-							result = parser.getRenderWindow().renderTarget;
+							result = parser.getRenderWindow();
 						}
 						else
 						{
@@ -306,15 +306,15 @@ namespace test_launcher
 				, m_engine
 				, sizeWnd
 				, makeWindowHandle( this ) );
-			auto target = doLoadScene( m_engine, m_filePath );
+			auto window = doLoadScene( m_engine, m_filePath );
 
-			if ( !target )
+			if ( !window.renderTarget )
 			{
 				castor::Logger::logError( cuT( "Can't initialise the render window." ) );
 			}
 			else
 			{
-				m_renderWindow->initialise( *target );
+				m_renderWindow->initialise( window );
 			}
 		}
 		else

@@ -42,8 +42,9 @@ namespace castor3d
 		{
 			using namespace castor;
 			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "render_target" ), parserWindowRenderTarget );
-			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), parserWindowVSync, { makeParameter< ParameterType::eBool >() } );
-			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "fullscreen" ), parserWindowFullscreen, { makeParameter< ParameterType::eBool >() } );
+			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), parserWindowVSync, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "fullscreen" ), parserWindowFullscreen, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "allow_hdr" ), parserWindowAllowHdr, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		}
 
 		static void addRenderTargetParsers( castor::AttributeParsers & result )

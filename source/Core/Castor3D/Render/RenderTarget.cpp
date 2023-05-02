@@ -594,7 +594,16 @@ namespace castor3d
 		auto lastTarget = &doUpdatePostEffects( updater
 			, m_hdrPostEffects
 			, { m_hdrObjects.front().get(), m_hdrObjects.back().get() } );
-		m_toneMapping->update( updater, lastTarget->sampledViewId );
+
+		if ( m_toneMapping )
+		{
+			m_toneMapping->update( updater, lastTarget->sampledViewId );
+		}
+		else
+		{
+			m_hdrCopyPassIndex = ( lastTarget == m_hdrCopyPassSource ) ? 1u : 0u;
+		}
+
 		lastTarget = &doUpdatePostEffects( updater
 			, m_srgbPostEffects
 			, { m_srgbObjects.front().get(), m_srgbObjects.back().get() } );
@@ -880,20 +889,34 @@ namespace castor3d
 		if ( result )
 		{
 			m_hdrLastPass = previousPass;
-			stepProgressBar( progress, "Creating tone mapping pass" );
-			m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
-				, device
-				, m_size
-				, m_graph
-				, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
-				, m_srgbObjects.front()->wholeViewId
-				, *m_hdrLastPass
-				, *m_hdrConfigUbo
-				, Parameters{}
-				, progress );
-			m_toneMapping->initialise( m_toneMappingName
-				, m_hdrObjects.back()->sampledViewId );
-			previousPass = &m_toneMapping->getPass();
+
+			if ( castor::isFloatingPoint( getPixelFormat() ) )
+			{
+				previousPass = &doInitialiseCopyCommands( device
+					, "HdrCopy"
+					, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
+					, m_srgbObjects.front()->wholeViewId
+					, *m_hdrLastPass
+					, progress );
+				m_hdrCopyPassSource = hdrSource;
+			}
+			else
+			{
+				stepProgressBar( progress, "Creating tone mapping pass" );
+				m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
+					, device
+					, m_size
+					, m_graph
+					, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
+					, m_srgbObjects.front()->wholeViewId
+					, *m_hdrLastPass
+					, *m_hdrConfigUbo
+					, Parameters{}
+					, progress );
+				m_toneMapping->initialise( m_toneMappingName
+					, m_hdrObjects.back()->sampledViewId );
+				previousPass = &m_toneMapping->getPass();
+			}
 		}
 
 		auto srgbSource = m_srgbObjects.front().get();
@@ -1058,15 +1081,14 @@ namespace castor3d
 
 	crg::FramePass const & RenderTarget::doInitialiseCopyCommands( RenderDevice const & device
 		, castor::String const & name
-		, Texture const & source
-		, Texture const & target
+		, crg::ImageViewIdArray const & source
+		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
-		, ProgressBar * progress
-		, bool const * enabled )
+		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating " + name + " copy commands" );
 		auto & pass = m_graph.createPass( "Other/" + name + "Copy"
-			, [this, progress, name, enabled]( crg::FramePass const & pass
+			, [this, progress, name]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -1075,16 +1097,15 @@ namespace castor3d
 					, context
 					, graph
 					, getSafeBandedExtent3D( m_size )
-					, crg::ru::Config{}
-					, crg::RunnablePass::GetPassIndexCallback( []() { return 0u; } )
-					, crg::RunnablePass::IsEnabledCallback( [enabled]() { return *enabled; } ) );
+					, crg::ru::Config{ 2u}
+					, crg::RunnablePass::GetPassIndexCallback( [this]() { return m_hdrCopyPassIndex; } ) );
 				getOwner()->registerTimer( pass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
 		pass.addDependency( previousPass );
-		pass.addTransferInputView( source.targetViewId );
-		pass.addTransferOutputView( target.targetViewId );
+		pass.addTransferInputView( source );
+		pass.addTransferOutputView( target );
 		return pass;
 	}
 

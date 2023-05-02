@@ -30,7 +30,7 @@ namespace castortd
 		~RenderPanel()override;
 
 		void reset();
-		void setRenderTarget( castor3d::RenderTargetRPtr target );
+		void updateRenderWindow( castor3d::RenderWindowDesc const & window );
 
 		castor3d::RenderWindow const & getRenderWindow()const
 		{

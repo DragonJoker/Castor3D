@@ -437,11 +437,10 @@ namespace castor3d
 		void doCleanupTechnique();
 		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name
-			, Texture const & source
-			, Texture const & target
+			, crg::ImageViewIdArray const & source
+			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
-			, ProgressBar * progress
-			, bool const * enabled );
+			, ProgressBar * progress );
 		void doCleanupCopyCommands();
 		void doInitCombineProgram( ProgressBar * progress );
 		void doCleanupCombineProgram();
@@ -495,6 +494,8 @@ namespace castor3d
 		Texture m_combined;
 		crg::FramePass & m_overlayPassDesc;
 		OverlayPass * m_overlayPass{};
+		uint32_t m_hdrCopyPassIndex{ 0u };
+		Texture const * m_hdrCopyPassSource{};
 		uint32_t m_combinePassIndex{ 1u };
 		Texture const * m_combinePassSource{};
 		crg::FramePass * m_combinePass{};

@@ -71,11 +71,11 @@ namespace castortd
 		m_renderWindow->cleanup();
 	}
 
-	void RenderPanel::setRenderTarget( castor3d::RenderTargetRPtr target )
+	void RenderPanel::updateRenderWindow( castor3d::RenderWindowDesc const & window )
 	{
-		if ( target )
+		if ( auto target = window.renderTarget )
 		{
-			m_renderWindow->initialise( *target );
+			m_renderWindow->initialise( window );
 
 			castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
 			castor::Size sizeScreen;

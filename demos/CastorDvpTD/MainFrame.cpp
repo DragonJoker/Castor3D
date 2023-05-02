@@ -61,33 +61,33 @@ namespace castortd
 	void MainFrame::doLoadScene()
 	{
 		auto & engine = *wxGetApp().getCastor();
-		auto target = GuiCommon::loadScene( engine
+		auto window = GuiCommon::loadScene( engine
 			, "CastorDvpTD"
 			, castor::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
 			, nullptr );
 
-		if ( target )
+		if ( auto target = window.renderTarget )
 		{
 			m_game = std::make_unique< Game >( *target->getScene() );
 			m_panel = wxMakeWindowPtr< RenderPanel >( this, main::MainFrameSize, *m_game );
-			m_panel->setRenderTarget( target );
-			auto & window = m_panel->getRenderWindow();
+			m_panel->updateRenderWindow( window );
+			auto & renderWindow = m_panel->getRenderWindow();
 
-			if ( window.isFullscreen() )
+			if ( renderWindow.isFullscreen() )
 			{
 				ShowFullScreen( true, wxFULLSCREEN_ALL );
 			}
 
 			if ( !IsMaximized() )
 			{
-				SetClientSize( int( window.getSize().getWidth() )
-					, int( window.getSize().getHeight() ) );
+				SetClientSize( int( renderWindow.getSize().getWidth() )
+					, int( renderWindow.getSize().getHeight() ) );
 			}
 			else
 			{
 				Maximize( false );
-				SetClientSize( int( window.getSize().getWidth() )
-					, int( window.getSize().getHeight() ) );
+				SetClientSize( int( renderWindow.getSize().getWidth() )
+					, int( renderWindow.getSize().getHeight() ) );
 				Maximize();
 			}
 

@@ -683,8 +683,10 @@ namespace CastorViewer
 #endif
 	}
 
-	void MainFrame::doSceneLoadEnd( castor3d::RenderTargetRPtr target )
+	void MainFrame::doSceneLoadEnd( castor3d::RenderWindowDesc const & window )
 	{
+		auto target = window.renderTarget;
+
 		if ( !target )
 		{
 			return;
@@ -703,7 +705,7 @@ namespace CastorViewer
 		SetMinClientSize( size );
 #endif
 
-		m_renderPanel->setTarget( target );
+		m_renderPanel->updateWindow( window );
 		m_mainScene = target->getScene();
 		auto engine = wxGetApp().getCastor();
 
@@ -1107,12 +1109,13 @@ namespace CastorViewer
 		}
 
 		auto var = static_cast< wxVariant * >( event.GetEventObject() );
-		auto rawTarget = static_cast< castor3d::RenderTarget * >( var->GetVoidPtr() );
+		auto rawTarget = static_cast< castor3d::RenderWindowDesc * >( var->GetVoidPtr() );
 		delete var;
 
 		if ( rawTarget )
 		{
-			doSceneLoadEnd( rawTarget );
+			doSceneLoadEnd( *rawTarget );
+			delete rawTarget;
 		}
 	}
 }

@@ -34,14 +34,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	struct RenderWindowDesc
-	{
-		castor::String name;
-		RenderTargetRPtr renderTarget{};
-		bool enableVSync{};
-		bool fullscreen{};
-	};
-
 	class RenderWindow
 		: public castor::OwnedBy< Engine >
 		, public castor::Named
@@ -176,7 +168,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Initialises la render window avec la RenderTarget donnée.
 		 */
-		C3D_API void initialise( RenderTarget & value );
+		C3D_API void initialise( RenderWindowDesc const & desc );
 		/**
 		 *\~english
 		 *\brief		Cleans up the instance.
@@ -464,6 +456,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API void enableLoading();
+		C3D_API void allowHdrSwapchain( bool value = true );
 
 		void enableVSync( bool value )
 		{
@@ -475,9 +468,9 @@ namespace castor3d
 			m_fullscreen = value;
 		}
 
-		void enableSaveFrame()
+		void enableSaveFrame( bool value = true )
 		{
-			m_toSave = true;
+			m_toSave = value;
 		}
 		/**@}*/
 
@@ -545,6 +538,7 @@ namespace castor3d
 		ashes::SwapChainPtr m_swapChain;
 		ashes::ImageArray m_swapChainImages;
 		std::vector< ashes::ImageViewArray > m_swapchainViews;
+		VkFormat m_swapchainFormat;
 		RenderingResourcesArray m_renderingResources;
 		size_t m_resourceIndex{ 0u };
 		crg::ResourcesCache m_resources;
@@ -577,6 +571,8 @@ namespace castor3d
 		ProgressBarUPtr m_progressBar;
 		LoadingScreenUPtr m_loadingScreen;
 		std::mutex m_renderMutex;
+		bool m_allowHdrSwapchain{};
+		bool m_hasHdrSupport{};
 	};
 }
 

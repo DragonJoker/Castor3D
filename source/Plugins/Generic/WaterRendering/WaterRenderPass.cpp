@@ -654,6 +654,11 @@ namespace water
 					auto lightSheen = writer.declLocale( "lightSheen"
 						, vec2( 0.0_f ) );
 					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
+					lightingModel->finish( passShaders
+						, surface
+						, utils
+						, c3d_cameraData.position()
+						, components );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
 						, c3d_cameraData.position()

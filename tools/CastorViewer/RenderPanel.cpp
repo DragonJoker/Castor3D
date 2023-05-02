@@ -202,10 +202,20 @@ namespace CastorViewer
 		castor::Logger::logInfo( cuT( "RenderPanel cleaned up." ) );
 	}
 
-	void RenderPanel::setTarget( castor3d::RenderTargetRPtr target )
+	void RenderPanel::updateWindow( castor3d::RenderWindowDesc const & window )
 	{
+		auto target = window.renderTarget;
+
+		if ( !target )
+		{
+
+			CU_Failure( "RenderPanel - No render target" );
+			castor::Logger::logError( cuT( "RenderPanel - No render target" ) );
+			return;
+		}
+
 		m_listener = m_renderWindow->getListener();
-		m_renderWindow->initialise( *target );
+		m_renderWindow->initialise( window );
 
 		if ( auto scene = target->getScene() )
 		{
