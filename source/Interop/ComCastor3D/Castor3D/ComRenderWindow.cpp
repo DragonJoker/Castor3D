@@ -19,7 +19,8 @@ namespace CastorCom
 		{
 			try
 			{
-				m_internal->initialise( *static_cast< CRenderTarget * >( target )->getInternal() );
+				m_internal->initialise( castor3d::RenderWindowDesc{ castor::String{}
+					, static_cast< CRenderTarget * >( target )->getInternal() } );
 				hr = S_OK;
 			}
 			catch ( castor::Exception & exc )

@@ -90,7 +90,8 @@ namespace castor3d
 			return desiredNumberOfSwapChainImages;
 		}
 
-		static VkSurfaceFormatKHR selectFormat( ashes::Surface const & surface )
+		static VkSurfaceFormatKHR selectFormat( ashes::Surface const & surface
+			, bool allowHdr )
 		{
 			VkSurfaceFormatKHR result;
 			auto formats = surface.getFormats();
@@ -105,9 +106,12 @@ namespace castor3d
 				assert( !formats.empty() );
 				auto it = std::find_if( formats.begin()
 					, formats.end()
-					, []( VkSurfaceFormatKHR const & lookup )
+					, [allowHdr]( VkSurfaceFormatKHR const & lookup )
 					{
-						return lookup.format == VK_FORMAT_R8G8B8A8_UNORM;
+						return allowHdr
+							? lookup.format == VK_FORMAT_R16G16B16A16_SFLOAT
+								|| lookup.format == VK_FORMAT_R8G8B8A8_UNORM
+							: lookup.format == VK_FORMAT_R8G8B8A8_UNORM;
 					} );
 
 				if ( it != formats.end() )
@@ -147,7 +151,8 @@ namespace castor3d
 		}
 
 		static ashes::SwapChainCreateInfo getSwapChainCreateInfo( ashes::Surface const & surface
-			, VkExtent2D const & size )
+			, VkExtent2D const & size
+			, bool allowHdr )
 		{
 			VkExtent2D swapChainExtent{};
 			auto surfaceCaps = surface.getCapabilities();
@@ -173,7 +178,7 @@ namespace castor3d
 			}
 
 			auto presentMode = selectPresentMode( surface );
-			auto surfaceFormat = selectFormat( surface );
+			auto surfaceFormat = selectFormat( surface, allowHdr );
 			return ashes::SwapChainCreateInfo{ 0u
 				, surface
 				, getImageCount( surface )
@@ -407,9 +412,12 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::initialise( RenderTarget & target )
+	void RenderWindow::initialise( RenderWindowDesc const & desc )
 	{
-		m_renderTarget = &target;
+		enableFullScreen( desc.fullscreen );
+		enableVSync( desc.enableVSync );
+		allowHdrSwapchain( desc.allowHdr );
+		m_renderTarget = desc.renderTarget;
 
 		if ( m_loadingScreen )
 		{
@@ -931,6 +939,21 @@ namespace castor3d
 		m_loading = getEngine()->isThreaded();
 	}
 
+	void RenderWindow::allowHdrSwapchain( bool value )
+	{
+		if ( value == m_allowHdrSwapchain )
+		{
+			return;
+		}
+
+		m_allowHdrSwapchain = value;
+
+		if ( m_hasHdrSupport && m_swapChain )
+		{
+			doResetSwapChainAndCommands();
+		}
+	}
+
 	void RenderWindow::doCreateRenderPass()
 	{
 		ashes::VkAttachmentDescriptionArray attaches{ { 0u
@@ -1048,14 +1071,17 @@ namespace castor3d
 	void RenderWindow::doCreateSwapchain( QueueData const & queueData )
 	{
 		m_swapChain = getDevice()->createSwapChain( rendwndw::getSwapChainCreateInfo( *m_surface
-			, { m_size.getWidth(), m_size.getHeight() } ) );
+			, { m_size.getWidth(), m_size.getHeight() }
+			, m_allowHdrSwapchain ) );
 		m_swapChainImages = m_swapChain->getImages();
 
-		if ( !m_renderPass )
+		if ( !m_renderPass
+			|| m_swapChain->getFormat() != m_swapchainFormat )
 		{
 			doCreateRenderPass();
 		}
 
+		m_swapchainFormat = m_swapChain->getFormat();
 		doCreateRenderingResources( queueData );
 		doCreateFrameBuffers();
 

@@ -29,6 +29,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserWindowRenderTarget )
 	CU_DeclareAttributeParser( parserWindowVSync )
 	CU_DeclareAttributeParser( parserWindowFullscreen )
+	CU_DeclareAttributeParser( parserWindowAllowHdr )
 	CU_DeclareAttributeParser( parserWindowEnd )
 
 	//RenderTarget parsers

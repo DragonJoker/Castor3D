@@ -230,12 +230,12 @@ namespace GuiCommon
 		}
 	}
 
-	castor3d::RenderTargetRPtr loadScene( castor3d::Engine & engine
+	castor3d::RenderWindowDesc loadScene( castor3d::Engine & engine
 		, castor::String const & appName
 		, castor::Path const & fileName
 		, castor3d::ProgressBar * progress )
 	{
-		castor3d::RenderTargetRPtr result{};
+		castor3d::RenderWindowDesc result{};
 
 		if ( castor::File::fileExists( fileName ) )
 		{
@@ -262,7 +262,7 @@ namespace GuiCommon
 
 					if ( preprocessed.parse() )
 					{
-						result = parser.getRenderWindow().renderTarget;
+						result = parser.getRenderWindow();
 					}
 					else
 					{
@@ -296,7 +296,7 @@ namespace GuiCommon
 				{
 					auto target = loadScene( engine, appName, fileName, progress );
 					auto event = new wxThreadEvent{ wxEVT_THREAD, eventID };
-					auto var = new wxVariant{ target };
+					auto var = new wxVariant{ new castor3d::RenderWindowDesc{ target } };
 					event->SetEventObject( var );
 					window->GetEventHandler()->QueueEvent( event );
 				}

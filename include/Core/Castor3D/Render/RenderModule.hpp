@@ -731,6 +731,15 @@ namespace castor3d
 	using TechniquePassVector = std::vector< RenderTechniqueNodesPass * >;
 	using TechniquePasses = std::array< TechniquePassVector, size_t( TechniquePassEvent::eCount ) >;
 
+	struct RenderWindowDesc
+	{
+		castor::String name;
+		RenderTargetRPtr renderTarget{};
+		bool enableVSync{};
+		bool fullscreen{};
+		bool allowHdr{};
+	};
+
 	struct RenderPassRegisterInfo
 	{
 		using Creator = std::function< crg::FramePassArray( RenderDevice const &

@@ -555,8 +555,18 @@ namespace castor3d
 
 		if ( !params.empty() )
 		{
-
 			params[0]->get( parsingContext.window.fullscreen );
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserWindowAllowHdr )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !params.empty() )
+		{
+			params[0]->get( parsingContext.window.allowHdr );
 		}
 	}
 	CU_EndAttribute()
