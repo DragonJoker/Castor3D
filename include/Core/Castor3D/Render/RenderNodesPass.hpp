@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "RenderModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Render/RenderInfo.hpp"
+#include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
@@ -235,6 +236,17 @@ namespace castor3d
 			m_componentModeFlags = std::move( value );
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	\p true if the pass supports clustered lighting.
+		 *\~french
+		 *\param[in]	value	\p true si la passe supporte l'éclairage par cluster.
+		 */
+		RenderNodesPassDesc & allowClusteredLighting( bool value = true )
+		{
+			m_allowClusteredLighting = value;
+			return *this;
+		}
 
 		VkExtent3D m_size;
 		CameraUbo const & m_cameraUbo;
@@ -250,6 +262,7 @@ namespace castor3d
 		std::optional< bool > m_handleStatic{ std::nullopt };
 		crg::ru::Config m_ruConfig{ 1u, true };
 		ComponentModeFlags m_componentModeFlags{ ComponentModeFlag::eAllButFwdDef };
+		bool m_allowClusteredLighting{};
 	};
 
 	class RenderNodesPass
@@ -586,6 +599,74 @@ namespace castor3d
 			, BlendMode alphaBlendMode
 			, uint32_t attachesCount );
 		/**
+		 *\~english
+		 *\brief			Adds shadow maps descriptor layout bindings to given list.
+		 *\param[in]		sceneFlags	Used to define what shadow maps need to be bound.
+		 *\param[in,out]	bindings	Receives the bindings.
+		 *\param[in,out]	index		The current binding index.
+		 *\return
+		 *\~french
+		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
+		 *\param[in]		sceneFlags	Le mode de mélange couleurs.
+		 *\param[in,out]	bindings	Reçoit les bindings.
+		 *\param[in,out]	index		L'index de binding actuel.
+		 *\return
+		 */
+		C3D_API static void addShadowBindings( SceneFlags const & sceneFlags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index );
+		/**
+		 *\~english
+		 *\brief			Adds background descriptor layout bindings to given list.
+		 *\param[in]		background	The background.
+		 *\param[in]		flags		The pipeline flags.
+		 *\param[in,out]	bindings	Receives the bindings.
+		 *\param[in,out]	index		The current binding index.
+		 *\return
+		 *\~french
+		 *\brief			Ajoute les bindings de descriptor layout du background à la liste donnée.
+		 *\param[in]		background	Le fond.
+		 *\param[in]		flags		Les indicateurs de pipeline.
+		 *\param[in,out]	bindings	Reçoit les bindings.
+		 *\param[in,out]	index		L'index de binding actuel.
+		 *\return
+		 */
+		C3D_API static void addBackgroundBindings( SceneBackground const & background
+			, PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index );
+		/**
+		 *\~english
+		 *\brief			Adds clusters descriptor layout bindings to given list.
+		 *\param[in]		frustumClusters	The clusters.
+		 *\param[in,out]	bindings		Receives the bindings.
+		 *\param[in,out]	index			The current binding index.
+		 *\return
+		 *\~french
+		 *\brief			Ajoute les bindings de descriptor layout des clusters à la liste donnée.
+		 *\param[in]		frustumClusters	Les clusters.
+		 *\param[in,out]	bindings		Reçoit les bindings.
+		 *\param[in,out]	index			L'index de binding actuel.
+		 *\return
+		 */
+		C3D_API static void addClusteredLightingBindings( FrustumClusters const & frustumClusters
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index );
+		C3D_API static void addShadowDescriptor( RenderSystem const & renderSystem
+			, crg::RunnableGraph & graph
+			, SceneFlags const & sceneFlags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, ShadowMapLightTypeArray const & shadowMaps
+			, uint32_t & index );
+		C3D_API static void addBackgroundDescriptor( SceneBackground const & background
+			, PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, crg::ImageViewIdArray const & targetImage
+			, uint32_t & index );
+		C3D_API static void addClusteredLightingDescriptor( FrustumClusters const & frustumClusters
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & index );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -754,6 +835,10 @@ namespace castor3d
 			, PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
+		C3D_API void doAddClusteredLightingBindings( RenderTarget const & target
+			, PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const;
 		C3D_API void doAddShadowDescriptor( Scene const & scene
 			, PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -763,6 +848,10 @@ namespace castor3d
 			, PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
+			, uint32_t & index )const;
+		C3D_API void doAddClusteredLightingDescriptor( RenderTarget const & target
+			, PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 
 	private:
@@ -936,6 +1025,7 @@ namespace castor3d
 		uint32_t m_index{ 0u };
 		std::optional< bool > m_handleStatic{ std::nullopt };
 		ComponentModeFlags m_componentsMask;
+		bool m_allowClusteredLighting;
 
 	private:
 		struct PassDescriptors

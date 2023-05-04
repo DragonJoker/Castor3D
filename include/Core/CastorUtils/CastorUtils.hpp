@@ -42,9 +42,22 @@ namespace castor
 	};
 	static NoInit constexpr noInit;
 
-	CU_DeclareVector( uint8_t, Byte );
-	CU_DeclareVector( int32_t, Int32 );
-	CU_DeclareVector( uint32_t, UInt32 );
+	using s8 = int8_t;
+	using u8 = uint8_t;
+	using byte = uint8_t;
+	using s16 = int16_t;
+	using u16 = uint16_t;
+	using s32 = int32_t;
+	using u32 = uint32_t;
+	using s64 = int64_t;
+	using u64 = uint64_t;
+	using usize = size_t;
+	using f32 = float;
+	using f64 = double;
+
+	CU_DeclareVector( byte, Byte );
+	CU_DeclareVector( s32, Int32 );
+	CU_DeclareVector( u32, UInt32 );
 }
 
 #include "CastorUtils/Miscellaneous/Debug.hpp"

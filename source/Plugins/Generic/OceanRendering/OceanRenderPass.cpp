@@ -19,6 +19,7 @@
 #include <Castor3D/Shader/Program.hpp>
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include <Castor3D/Shader/Shaders/GlslClusteredLights.hpp>
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslDebugOutput.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
@@ -308,6 +309,7 @@ namespace ocean
 					, technique.getSceneUbo()
 					, technique.getRenderTarget().getCuller() }
 					.safeBand( true )
+					.allowClusteredLighting()
 					.componentModeFlags( castor3d::ComponentModeFlag::eColour
 						| castor3d::ComponentModeFlag::eNormals
 						| castor3d::ComponentModeFlag::eGeometry
@@ -492,6 +494,7 @@ namespace ocean
 		doAddEnvBindings( flags, bindings, index );
 		doAddBackgroundBindings( m_scene, flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
+		doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo OceanRenderPass::doCreateDepthStencilState( castor3d::PipelineFlags const & flags )const
@@ -549,6 +552,7 @@ namespace ocean
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
+		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
 	}
 
 	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
@@ -1068,6 +1072,10 @@ namespace ocean
 		indirect.declare( index
 			, RenderPipeline::eBuffers
 			, flags.getGlobalIlluminationFlags() );
+		shader::ClusteredLights clusteredLights{ writer
+			, index
+			, RenderPipeline::eBuffers
+			, m_allowClusteredLighting };
 
 		// Fragment Outputs
 		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
@@ -1143,14 +1151,17 @@ namespace ocean
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, surface.normal );
-					lights.computeCombinedDifSpec( rastComponents
+					lights.computeCombinedDifSpec( clusteredLights
+						, components
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
+						, lightSurface.clipPosition().xy()
+						, lightSurface.viewPosition().z()
 						, output
 						, lighting );
 					lightingModel->adjustDirectSpecular( components
-						, lighting.m_specular );
+						, lighting.specular );
 					// Standard lighting models don't necessarily translate all that well to water.
 					// It can end up looking very glossy and plastic-like, having much more form than it really should.
 					// So here, I'm sampling some noise with three different sets of texture coordinates to try and achieve
@@ -1159,8 +1170,7 @@ namespace ocean
 						, c3d_waveNoise.sample( normalMapCoords1 * 0.5_f ) );
 					specularNoise *= c3d_waveNoise.sample( normalMapCoords2 * 0.5_f );
 					specularNoise *= c3d_waveNoise.sample( in.texture1.xy() * 0.5_f );
-					lighting.m_specular *= specularNoise;
-					output.registerOutput( "NoisedSpecular", lighting.m_specular );
+					lighting.specular *= specularNoise;
 					output.registerOutput( "SpecularNoise", specularNoise );
 
 
@@ -1259,7 +1269,7 @@ namespace ocean
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, components.colour * ( indirectAmbient + indirectDiffuse ) * lighting.m_diffuse );
+						, components.colour * ( indirectAmbient + indirectDiffuse ) * lighting.diffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
 						, c3d_oceanData.refractionHeightFactor() * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
@@ -1282,7 +1292,7 @@ namespace ocean
 						, utils.saturate( ( in.worldPosition.w() - c3d_oceanData.foamHeightStart() ) / c3d_oceanData.foamFadeDistance() ) * pow( utils.saturate( dot( in.normal.xyz(), vec3( 0.0_f, 1.0_f, 0.0_f ) ) ), c3d_oceanData.foamAngleExponent() ) * foamNoise );
 					foamAmount += pow( ( 1.0_f - depthSoftenedAlpha ), 3.0_f );
 					auto foamResult = writer.declLocale( "foamResult"
-						, lighting.m_diffuse * mix( vec3( 0.0_f )
+						, lighting.diffuse * mix( vec3( 0.0_f )
 							, foamColor * c3d_oceanData.foamBrightness()
 							, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 
@@ -1298,12 +1308,12 @@ namespace ocean
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
 					output.registerOutput( "FinalRefraction", refractionResult );
 
-					outColour = vec4( lighting.m_specular + lightIndirectSpecular
+					outColour = vec4( lighting.specular + lightIndirectSpecular
 							+ components.emissiveColour * components.emissiveFactor
 							+ refractionResult
 							+ ( reflectionResult * indirectAmbient )
 							+ foamResult
-							+ lighting.m_scattering
+							+ lighting.scattering
 						, depthSoftenedAlpha );
 				}
 				else

@@ -237,6 +237,7 @@ namespace castor3d
 					, m_technique.getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
 					.meshShading( true )
+					.allowClusteredLighting()
 					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags
 						| ComponentModeFlag::eForward );
 				techniquePassDesc.ssao( m_technique.getSsaoResult() )

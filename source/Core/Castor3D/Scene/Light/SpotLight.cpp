@@ -20,6 +20,24 @@ namespace castor3d
 			return getMaxDistance( light
 				, light.getAttenuation() );
 		}
+
+		static castor::BoundingBox computeAABB( castor::Point3fArray const & points )
+		{
+			castor::Point3f min{ points[0] };
+			castor::Point3f max{ points[0] };
+
+			for ( auto & cur : castor::makeArrayView( &points[1], points.size() - 1u ) )
+			{
+				max[0] = std::max( cur[0], max[0] );
+				max[1] = std::max( cur[1], max[1] );
+				max[2] = std::max( cur[2], max[2] );
+				min[0] = std::min( cur[0], min[0] );
+				min[1] = std::min( cur[1], min[1] );
+				min[2] = std::min( cur[2], min[2] );
+			}
+
+			return castor::BoundingBox{ min, max };
+		}
 	}
 
 	//*************************************************************************************************
@@ -155,12 +173,12 @@ namespace castor3d
 		auto & node = *getLight().getParent();
 		auto direction = castor::Point3f{ 0, 0, 1 };
 		node.getDerivedOrientation().transform( direction, direction );
-		m_direction = direction;
-		SpotLight::generateVertices( uint32_t( std::ceil( getOuterCutOff().degrees() ) ) );
-		auto scale = lgtspot::doCalcSpotLightBCone( *this ) / 2.0f;
-		m_cubeBox.load( castor::Point3f{ -scale, -scale, -scale }
-			, castor::Point3f{ scale, scale, scale } );
-		m_farPlane = float( castor::point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+		m_direction = -direction;
+		auto aabb = lgtspot::computeAABB( SpotLight::generateVertices( uint32_t( std::ceil( getOuterCutOff().degrees() ) ) ) );
+		auto scale = lgtspot::doCalcSpotLightBCone( *this );
+		m_cubeBox.load( aabb.getMin() * scale
+			, aabb.getMax() * scale );
+		m_farPlane = scale;
 		m_dirtyData = false;
 	}
 
@@ -199,8 +217,12 @@ namespace castor3d
 		spot.attenuation = m_attenuation;
 		spot.direction = m_direction;
 		spot.exponent = m_exponent;
-		spot.innerCutoff = m_innerCutOff.value().cos();
-		spot.outerCutoff = m_outerCutOff.value().cos();
+		spot.innerCutoffCos = m_innerCutOff.value().cos();
+		spot.outerCutoffCos = m_outerCutOff.value().cos();
+		spot.innerCutoff = m_innerCutOff.value().radians();
+		spot.outerCutoff = m_outerCutOff.value().radians();
+		spot.innerCutoffSin = m_innerCutOff.value().sin();
+		spot.outerCutoffSin = m_outerCutOff.value().sin();
 
 		spot.transform = m_lightSpace;
 	}

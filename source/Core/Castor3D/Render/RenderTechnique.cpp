@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderTechnique.hpp"
 
+#include "Castor3D/Config.hpp"
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
@@ -16,6 +17,8 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/Clustered/AssignLightsToClusters.hpp"
+#include "Castor3D/Render/Clustered/ComputeClustersAABB.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
@@ -378,12 +381,27 @@ namespace castor3d
 		, m_prepass{ *this
 			, m_device
 			, queueData
-			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ) )
+			, doCreateRenderPasses( progress, TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ) )
 			, progress
 			, deferred
 			, visbuffer }
 		, m_lastDepthPass{ &m_prepass.getLastPass() }
 		, m_depthRangePass{ &m_prepass.getDepthRangePass() }
+		, m_computeClustersAABB{ ( C3D_UseClusteredRendering 
+			? &createComputeClustersAABBPass( m_graph
+				, m_depthRangePass
+				, m_device
+				, m_cameraUbo
+				, m_renderTarget.getFrustumClusters() )
+			: nullptr ) }
+		, m_dispatchLightInClusters{ ( C3D_UseClusteredRendering
+			? &createAssignLightsToClustersPass( m_graph
+				, m_computeClustersAABB
+				, m_device
+				, m_renderTarget.getScene()->getLightCache()
+				, m_cameraUbo
+				, m_renderTarget.getFrustumClusters() )
+			: nullptr ) }
 		, m_background{ doCreateBackgroundPass( progress ) }
 		, m_opaque{ *this
 			, m_device
@@ -732,12 +750,15 @@ namespace castor3d
 		, TechniquePassEvent event
 		, crg::FramePass const * previousPass )
 	{
-		crg::FramePassArray result;
+		return doCreateRenderPasses( progress, event, crg::FramePassArray{ previousPass } );
+	}
 
-		if ( previousPass )
-		{
-			result.push_back( previousPass );
-		}
+	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
+		, TechniquePassEvent event
+		, crg::FramePassArray previousPasses )
+	{
+		crg::FramePassArray result;
+		result.insert(result.end(), previousPasses.begin(), previousPasses.end() );
 
 		for ( auto renderPassInfo : getEngine()->getRenderPassInfos( event ) )
 		{
@@ -760,6 +781,12 @@ namespace castor3d
 		auto previousPasses = doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforeBackground
 			, &m_prepass.getLastPass() );
+
+		if ( m_dispatchLightInClusters )
+		{
+			previousPasses.push_back( m_dispatchLightInClusters );
+		}
+
 		auto & graph = m_graph.createPassGroup( "Background" );
 		graph.addGroupOutput( getTargetResult().front() );
 		graph.addGroupOutput( getTargetResult().back() );

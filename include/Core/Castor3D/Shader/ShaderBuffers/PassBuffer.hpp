@@ -26,7 +26,7 @@ namespace castor3d
 	public:
 		struct PassDataPtr
 		{
-			C3D_API explicit PassDataPtr( castor::ArrayView< uint8_t > data )
+			C3D_API explicit PassDataPtr( castor::ByteArrayView data )
 				: m_data{ data }
 			{
 			}
@@ -170,7 +170,7 @@ namespace castor3d
 			}
 
 		private:
-			castor::ArrayView< uint8_t > m_data;
+			castor::ByteArrayView m_data;
 		};
 		/**
 		 *\~english
@@ -323,7 +323,7 @@ namespace castor3d
 		std::vector< OnPassChangedConnection > m_connections;
 		uint32_t m_passID{ 1u };
 		std::unordered_map< uint32_t, PassTypeData > m_passTypeIndices;
-		castor::ArrayView< uint8_t > m_data;
+		castor::ByteArrayView m_data;
 		std::mutex m_mutex;
 	};
 }

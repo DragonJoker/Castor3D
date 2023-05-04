@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
@@ -123,6 +124,11 @@ namespace castor3d
 		doAddBackgroundBindings( m_scene, flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
 
+		if ( m_parent )
+		{
+			doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
+		}
+
 		if ( m_mippedColour )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -155,6 +161,11 @@ namespace castor3d
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
+
+		if ( m_parent )
+		{
+			doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
+		}
 
 		if ( m_mippedColour )
 		{
@@ -242,6 +253,10 @@ namespace castor3d
 			, index
 			, RenderPipeline::eBuffers
 			, flags.getGlobalIlluminationFlags() };
+		shader::ClusteredLights clusteredLights{ writer
+			, index
+			, RenderPipeline::eBuffers
+			, m_allowClusteredLighting };
 		auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene"
 			, ( m_mippedColour ? index++ : 0u )
 			, RenderPipeline::eBuffers
@@ -324,6 +339,7 @@ namespace castor3d
 							, in.viewPosition.xyz()
 							, in.worldPosition.xyz()
 							, normalize( components.normal ) } );
+
 					lightingModel->finish( passShaders
 						, surface
 						, utils
@@ -336,10 +352,13 @@ namespace castor3d
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, surface.normal );
-					lights.computeCombinedDifSpec( components
+					lights.computeCombinedDifSpec( clusteredLights
+						, components
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
+						, lightSurface.clipPosition().xy()
+						, lightSurface.viewPosition().z()
 						, output
 						, lighting );
 					auto directAmbient = writer.declLocale( "directAmbient"
@@ -440,12 +459,12 @@ namespace castor3d
 
 					outColour = vec4( lightingModel->combine( components
 							, incident
-							, lighting.m_diffuse
+							, lighting.diffuse
 							, indirectDiffuse
-							, lighting.m_specular
-							, lighting.m_scattering
-							, lighting.m_coatingSpecular
-							, lighting.m_sheen
+							, lighting.specular
+							, lighting.scattering
+							, lighting.coatingSpecular
+							, lighting.sheen
 							, lightIndirectSpecular
 							, directAmbient
 							, indirectAmbient

@@ -17,6 +17,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
@@ -589,6 +590,11 @@ namespace castor3d
 		m_renderTechnique->update( updater );
 		m_overlayPass->update( updater );
 
+		if ( m_frustumClusters )
+		{
+			m_frustumClusters->update( updater );
+		}
+
 		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
 
 		auto lastTarget = &doUpdatePostEffects( updater
@@ -855,6 +861,10 @@ namespace castor3d
 	{
 		m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 		m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
+#if C3D_UseClusteredRendering
+		m_frustumClusters = castor::makeUnique< FrustumClusters >( device, *getCamera() );
+#endif
+
 		doInitCombineProgram( progress );
 		auto result = doInitialiseTechnique( device, queueData, progress );
 

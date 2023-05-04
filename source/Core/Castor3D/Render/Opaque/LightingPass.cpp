@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Opaque/LightingPass.hpp"
 
+#include "Castor3D/Config.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -10,6 +11,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
+#include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Opaque/OpaquePassResult.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -154,7 +156,8 @@ namespace castor3d
 					, m_smPointResult
 					, m_smSpotResult
 					, m_targetColourResult
-					, m_targetDepthResult );
+					, m_targetDepthResult
+					, C3D_UseClusteredRendering != 0 );
 				engine.registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				m_lightPass = result.get();
@@ -165,7 +168,7 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eMaterials ) );
 		engine.getMaterialCache().getSssProfileBuffer().createPassBinding( pass
 			, uint32_t( LightPassIdx::eSssProfiles ) );
-		pass.addInputStorageBuffer( { modelBuffer, "Models" }
+		pass.addInputStorageBuffer( { modelBuffer, "C3D_Models" }
 			, uint32_t( LightPassIdx::eModels )
 			, 0u
 			, uint32_t( modelBuffer.getSize() ) );

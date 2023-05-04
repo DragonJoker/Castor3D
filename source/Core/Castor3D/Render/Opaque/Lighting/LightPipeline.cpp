@@ -14,14 +14,27 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	LightPipelineConfig::LightPipelineConfig( LightingModelID lightingModelId
-		, SceneFlags const & sceneFlags
-		, Light const & light )
-		: lightingModelId{ lightingModelId }
-		, sceneFlags{ sceneFlags }
-		, lightType{ light.getLightType() }
-		, shadowType{ light.getShadowType() }
-		, shadows{ shadowType != ShadowType::eNone }
+	LightPipelineConfig::LightPipelineConfig( LightingModelID plightingModelId
+		, SceneFlags const & psceneFlags
+		, LightType plightType
+		, ShadowType pshadowType )
+		: lightingModelId{ plightingModelId }
+		, sceneFlags{ psceneFlags }
+		, lightType{ plightType }
+		, shadowType{ pshadowType }
+		, shadows{ pshadowType != ShadowType::eNone }
+		, clustered{}
+	{
+	}
+
+	LightPipelineConfig::LightPipelineConfig( LightingModelID plightingModelId
+		, SceneFlags const & psceneFlags )
+		: lightingModelId{ plightingModelId }
+		, sceneFlags{ psceneFlags }
+		, lightType{}
+		, shadowType{}
+		, shadows{ checkFlag( psceneFlags, SceneFlag::eShadowAny ) }
+		, clustered{ true }
 	{
 	}
 
@@ -29,16 +42,22 @@ namespace castor3d
 	{
 		size_t hash = std::hash< LightingModelID >{}( lightingModelId );
 		hash = castor::hashCombine( hash, size_t( sceneFlags ) );
-		hash = castor::hashCombine( hash, size_t( lightType ) );
-		hash = castor::hashCombine( hash, size_t( shadowType ) );
+		hash = castor::hashCombine( hash, clustered );
 		hash = castor::hashCombine( hash, shadows );
+
+		if ( !clustered )
+		{
+			hash = castor::hashCombine( hash, size_t( lightType ) );
+			hash = castor::hashCombine( hash, size_t( shadowType ) );
+		}
+
 		return hash;
 	}
 
 	std::string LightPipelineConfig::getName( Engine const & engine )
 	{
 		auto & passFactory = engine.getPassFactory();
-		return "[" + castor3d::getName( lightType )
+		return "[" + ( clustered ? castor::String{ "Clustered" } : castor3d::getName( lightType ) )
 			+ "][" + passFactory.getIdName( lightingModelId )
 			+ "]";
 	}
@@ -55,24 +74,20 @@ namespace castor3d
 	//*********************************************************************************************
 
 	uint32_t getLightRenderPassIndex( bool blend
-		, LightType lightType )
+		, LightType lightType
+		, bool clustered )
 	{
+		if ( clustered )
+		{
+			return blend ? 1u : 0u;
+		}
+
 		if ( blend )
 		{
-			if ( lightType != LightType::eDirectional )
-			{
-				return 3u;
-			}
-
-			return 2u;
+			return ( lightType == LightType::eDirectional ) ? 2u : 3u;
 		}
 
-		if ( lightType != LightType::eDirectional )
-		{
-			return 1u;
-		}
-
-		return 0u;
+		return ( lightType == LightType::eDirectional ) ? 0u : 1u;
 	}
 
 	//*********************************************************************************************
@@ -92,7 +107,9 @@ namespace castor3d
 					, crg::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) }
 				, crg::defaultV< crg::ProgramCreator >
 				, std::vector< VkDescriptorSetLayout >{ descriptorSetLayout }
-				, crg::VkPushConstantRangeArray{ { VK_SHADER_STAGE_FRAGMENT_BIT, 0u, 4u } } }
+				, ( config.clustered
+					? crg::VkPushConstantRangeArray{}
+					: crg::VkPushConstantRangeArray{ { VK_SHADER_STAGE_FRAGMENT_BIT, 0u, 4u } } ) }
 			, VK_PIPELINE_BIND_POINT_GRAPHICS
 			, 2u }
 		, m_config{ config }
@@ -112,10 +129,10 @@ namespace castor3d
 			, VK_FALSE
 			, VK_COMPARE_OP_GREATER
 			, VK_FALSE
-			, ( getLightType() == LightType::eDirectional
+			, ( ( m_config.clustered || getLightType() == LightType::eDirectional )
 				? VK_FALSE
 				: VK_TRUE )
-			, ( getLightType() == LightType::eDirectional
+			, ( ( m_config.clustered || getLightType() == LightType::eDirectional )
 				? VkStencilOpState{}
 				: VkStencilOpState{ VK_STENCIL_OP_KEEP
 					, VK_STENCIL_OP_KEEP
@@ -124,7 +141,7 @@ namespace castor3d
 					, 0xFFFFFFFFu
 					, 0xFFFFFFFFu
 					, 0x0u } )
-			, ( getLightType() == LightType::eDirectional
+			, ( m_config.clustered || getLightType() == LightType::eDirectional
 				? VkStencilOpState{}
 				: VkStencilOpState{ VK_STENCIL_OP_KEEP
 					, VK_STENCIL_OP_KEEP
@@ -160,7 +177,7 @@ namespace castor3d
 
 		for ( uint32_t index = 0u; index < 2u; ++index )
 		{
-			auto rpIndex = getLightRenderPassIndex( index != 0u, getLightType() );
+			auto rpIndex = getLightRenderPassIndex( index != 0u, getLightType(), m_config.clustered );
 			auto viewportState = doCreateViewportState( targetExtent );
 			auto colourBlend = doCreateBlendState( index != 0u );
 			auto & program = m_holder.getProgram( index );
@@ -190,7 +207,7 @@ namespace castor3d
 
 	ashes::PipelineVertexInputStateCreateInfo LightPipeline::doCreateVertexLayout()
 	{
-		if ( getLightType() == LightType::eDirectional )
+		if ( m_config.clustered || getLightType() == LightType::eDirectional )
 		{
 			return { 0u
 				, ashes::VkVertexInputBindingDescriptionArray{ { 0u
@@ -266,7 +283,7 @@ namespace castor3d
 
 	VkCullModeFlags LightPipeline::doGetCullMode()const
 	{
-		if ( getLightType() == LightType::eDirectional )
+		if ( m_config.clustered || getLightType() == LightType::eDirectional )
 		{
 			return VK_CULL_MODE_NONE;
 		}

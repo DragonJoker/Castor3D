@@ -972,7 +972,7 @@ namespace c3d_assimp
 				}
 				else
 				{
-					it->transform = transform;
+					it->transform *= transform;
 				}
 			}
 		}

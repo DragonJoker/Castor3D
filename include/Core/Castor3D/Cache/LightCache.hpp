@@ -8,6 +8,8 @@ See LICENSE file in root folder
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
+#include "Castor3D/Buffer/GpuBufferOffset.hpp"
+
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
 
@@ -139,19 +141,26 @@ namespace castor3d
 		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding
 			, VkDeviceSize offset
 			, VkDeviceSize size )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the count of the lights of given type.
-		 *\param[in]	type	The light type.
-		 *\return		The count.
-		 *\~french
-		 *\brief		Récupère le nombre de lumières du type donné.
-		 *\param[in]	type	Le type de lumière.
-		 *\return		Le compte.
-		 */
+
 		uint32_t getLightsCount( LightType type )const
 		{
 			return uint32_t( getLights( type ).size() );
+		}
+
+		GpuBufferOffsetT< castor::Point2ui > getLightsIndexOffset()const noexcept
+		{
+			return m_lightsIndexOffset;
+		}
+
+		bool isDirty()const noexcept
+		{
+			return m_dirty || !m_dirtyLights.empty();
+		}
+
+		bool hasClusteredLights()const noexcept
+		{
+			return !getLights( LightType::ePoint ).empty()
+				|| !getLights( LightType::eSpot ).empty();
 		}
 
 	private:
@@ -162,7 +171,9 @@ namespace castor3d
 	private:
 		LightsRefArray m_dirtyLights;
 		LightBufferUPtr m_lightBuffer;
+		GpuBufferOffsetT< castor::Point2ui > m_lightsIndexOffset;
 		std::vector< Light * > m_pendingLights;
+		bool m_dirty{ true };
 	};
 }
 

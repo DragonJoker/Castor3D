@@ -66,14 +66,14 @@ namespace castor3d::shader
 			, bool enableIridescence = true );
 
 		C3D_API void updateN( sdw::Vec3 const N )const;
-		C3D_API void updateL( sdw::Vec3 const L )const;
+		C3D_API void updateL( sdw::Vec3 const VtoL )const;
 
 		C3D_API void updateN( Utils & utils
 			, sdw::Vec3 const N
 			, sdw::Vec3 const f0
 			, BlendComponents const & components )const;
 		C3D_API void updateL( Utils & utils
-			, sdw::Vec3 const L
+			, sdw::Vec3 const VtoL
 			, sdw::Vec3 const f0
 			, BlendComponents const & components )const;
 

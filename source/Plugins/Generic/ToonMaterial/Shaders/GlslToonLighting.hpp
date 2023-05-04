@@ -30,6 +30,8 @@ namespace toon::shader
 	class ToonLightingModel
 	{
 	protected:
+		void initLightSpecifics( c3d::LightSurface const & lightSurface
+			, c3d::BlendComponents const & components );
 		sdw::Float getNdotL( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components );
 		sdw::Float getNdotH( c3d::LightSurface const & lightSurface
@@ -65,6 +67,8 @@ namespace toon::shader
 			, bool enableVolumetric );
 
 	protected:
+		void doInitLightSpecifics( c3d::LightSurface const & lightSurface
+			, c3d::BlendComponents const & components )override;
 		sdw::Float doGetNdotL( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components )override;
 		sdw::Float doGetNdotH( c3d::LightSurface const & lightSurface
@@ -96,6 +100,8 @@ namespace toon::shader
 			, bool enableVolumetric );
 
 	protected:
+		void doInitLightSpecifics( c3d::LightSurface const & lightSurface
+			, c3d::BlendComponents const & components )override;
 		sdw::Float doGetNdotL( c3d::LightSurface const & lightSurface
 			, c3d::BlendComponents const & components )override;
 		sdw::Float doGetNdotH( c3d::LightSurface const & lightSurface

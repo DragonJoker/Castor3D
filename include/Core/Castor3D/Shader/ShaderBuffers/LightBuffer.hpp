@@ -131,7 +131,7 @@ namespace castor3d
 		}
 
 	private:
-		uint32_t doGetOffset( Light const & light )const;
+		std::pair< uint32_t, uint32_t > doGetOffsetIndex( Light const & light )const;
 		void doMarkNextDirty( LightType type
 			, uint32_t index );
 

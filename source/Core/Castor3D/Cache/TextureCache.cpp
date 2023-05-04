@@ -238,6 +238,19 @@ namespace castor3d
 				CU_LoaderError( "Couldn't load image." );
 			}
 
+			if ( !image->hasBuffer() )
+			{
+				**image = *engine.createImage( name
+					, castor::ImageCreateParams{ type
+					, data
+					, { false, false, false } } );
+			}
+
+			if ( !image->hasBuffer() )
+			{
+				CU_LoaderError( "Couldn't load image." );
+			}
+
 			return getImageBuffer( *image, allowSRGB, engine.getMaxImageSize() );
 		}
 
@@ -257,6 +270,18 @@ namespace castor3d
 			}
 
 			if ( !image )
+			{
+				CU_LoaderError( "Couldn't load image." );
+			}
+
+			if ( !image->hasBuffer() )
+			{
+				**image = *engine.createImage( name
+					, castor::ImageCreateParams{ folder / relative
+					, { false, false, false } } );
+			}
+
+			if ( !image->hasBuffer() )
 			{
 				CU_LoaderError( "Couldn't load image." );
 			}

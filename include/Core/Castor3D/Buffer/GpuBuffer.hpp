@@ -185,7 +185,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ArrayView< uint8_t > const & getDatas()const
+		castor::ByteArrayView const & getDatas()const
 		{
 			return m_data;
 		}
@@ -197,7 +197,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ArrayView< uint8_t > & getDatas()
+		castor::ByteArrayView & getDatas()
 		{
 			return m_data;
 		}
@@ -211,7 +211,7 @@ namespace castor3d
 		ashes::BufferPtr< uint8_t > m_buffer;
 		ashes::StagingBufferPtr m_stagingBuffer;
 		std::vector< uint8_t > m_ownData;
-		castor::ArrayView< uint8_t > m_data;
+		castor::ByteArrayView m_data;
 		struct MemoryRange
 		{
 			VkDeviceSize offset;

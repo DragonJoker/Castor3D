@@ -91,7 +91,7 @@ namespace castor3d
 					, &texture.wholeViewId.data->info.subresourceRange );
 			}
 
-			auto shaderBarrier = makeVkStruct< VkImageMemoryBarrier >( 0u
+			auto shaderBarrier = makeVkStruct< VkImageMemoryBarrier >( VkAccessFlags( VK_ACCESS_TRANSFER_WRITE_BIT )
 				, crg::getAccessMask( finalLayout )
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, finalLayout
@@ -226,12 +226,15 @@ namespace castor3d
 
 			for ( auto & view : result.subViewsId )
 			{
-				visitor.visit( m_name + "/" + getTexName( SmTexture( i ) ) + cuT( "L" ) + castor::string::toString( index++ )
+				auto smTexture = SmTexture( i );
+				visitor.visit( m_name + "/" + getTexName( smTexture ) + cuT( "L" ) + castor::string::toString( index++ )
 					, view
 					, ( ashes::isDepthOrStencilFormat( view.data->info.format )
 						? VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
 						: VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )
-					, TextureFactors{}.invert( true ) );
+					, TextureFactors::tex2D( { 25.0, 25.0, 25.0 }, { -24.0, -24.0, -24.0 } )
+						.invert( true )
+						.depth( smTexture == SmTexture::eLinearDepth ) );
 			}
 		}
 	}

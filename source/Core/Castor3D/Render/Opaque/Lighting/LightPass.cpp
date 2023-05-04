@@ -14,6 +14,7 @@
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
@@ -33,7 +34,54 @@
 namespace castor3d
 {
 	//************************************************************************************************
+/*
+	float getMaxDistance( LightCategory const & light
+		, castor::Point3f const & attenuation )
+	{
+		constexpr float threshold = 0.000001f;
+		auto constant = std::abs( attenuation[0] );
+		auto linear = std::abs( attenuation[1] );
+		auto quadratic = std::abs( attenuation[2] );
+		float maxChannel = std::max( std::max( light.getColour()[0]
+			, light.getColour()[1] )
+			, light.getColour()[2] );
+		auto result = 256.0f * maxChannel * light.getDiffuseIntensity();
+		constant = std::max( constant - 1.0f / threshold, 0.0f );
 
+		if ( linear >= threshold
+			|| quadratic >= threshold )
+		{
+			if ( linear >= threshold
+				&& quadratic >= threshold )
+			{
+				auto delta = linear * linear - 4 * quadratic * constant;
+				return result * ( -linear + sqrtf( delta ) ) / ( 2 * quadratic );
+			}
+
+			if ( constant >= threshold
+				&& quadratic >= threshold )
+			{
+				return result * sqrt( constant / quadratic );
+			}
+
+			if ( constant >= threshold
+				&& linear >= threshold )
+			{
+				return result * constant / linear;
+			}
+
+			if ( linear >= threshold )
+			{
+				return result / linear;
+			}
+
+			return result / sqrt( quadratic );
+		}
+
+		log::error << cuT( "Light's attenuation is set to (Xxx, 0.0, 0.0), which results in infinite light radius, not representable." ) << std::endl;
+		return result * 40000.0f;
+	}
+*/
 	float getMaxDistance( LightCategory const & light
 		, castor::Point3f const & attenuation )
 	{
@@ -112,6 +160,185 @@ namespace castor3d
 		, Scene const & scene
 		, DebugConfig & debugConfig
 		, SceneFlags const & sceneFlags
+		, VkExtent2D const & targetSize )
+	{
+		sdw::FragmentWriter writer;
+		shader::Utils utils{ writer };
+		shader::BRDFHelpers brdf{ writer };
+		shader::PassShaders passShaders{ scene.getEngine()->getPassComponentsRegister()
+			, TextureCombine{}
+			, ( ComponentModeFlag::eColour
+				| ComponentModeFlag::eDiffuseLighting
+				| ComponentModeFlag::eSpecularLighting
+				| ComponentModeFlag::eSpecifics )
+			, utils };
+
+		// Shader inputs
+		auto index = uint32_t( LightPassIdx::eCount );
+		shader::Materials materials{ *scene.getEngine()
+			, writer
+			, passShaders
+			, uint32_t( LightPassIdx::eMaterials )
+			, 0u
+			, index };
+		shader::SssProfiles sssProfiles{ writer
+			, uint32_t( LightPassIdx::eSssProfiles )
+			, 0u };
+		C3D_ModelsData( writer
+			, LightPassIdx::eModels
+			, 0u );
+		C3D_Camera( writer
+			, LightPassIdx::eCamera
+			, 0u );
+
+		auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( PpTexture::eDepthObj ), uint32_t( LightPassIdx::eDepthObj ), 0u );
+		auto c3d_mapNmlOcc = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eNmlOcc ), uint32_t( LightPassIdx::eNmlOcc ), 0u );
+		auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( LightPassIdx::eColMtl ), 0u );
+		auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( LightPassIdx::eSpcRgh ), 0u );
+		auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( LightPassIdx::eEmsTrn ), 0u );
+
+		// Lights specifics
+		auto lightsIndex = uint32_t( ClusteredLightPassLgtIdx::eLights );
+		auto clustersIndex = uint32_t( ClusteredLightPassLgtIdx::eClusters );
+		index = uint32_t( ClusteredLightPassLgtIdx::eCount );
+		shader::Lights lights{ *scene.getEngine()
+			, lightingModelId
+			, backgroundModelId
+			, materials
+			, brdf
+			, utils
+			, shader::ShadowOptions{ sceneFlags, true, false }
+			, &sssProfiles
+			, lightsIndex /* lightBinding */
+			, 1u /* lightSet */
+			, index /* shadowMapBinding */
+			, 1u /* shadowMapSet */
+			, true };
+		shader::ClusteredLights clusteredLights{ writer
+			, clustersIndex
+			, 1u };
+		auto backgroundModel = shader::BackgroundModel::createModel( scene
+			, writer
+			, utils
+			, targetSize
+			, false
+			, index
+			, 1u );
+
+		// Shader outputs
+		auto outLightDiffuse = writer.declOutput< sdw::Vec4 >( "outLightDiffuse", 0 );
+		auto outLightSpecular = writer.declOutput< sdw::Vec3 >( "outLightSpecular", 1 );
+		auto outLightScattering = writer.declOutput< sdw::Vec3 >( "outLightScattering", 2 );
+
+		writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOut out )
+			{
+				shader::DebugOutput output{ debugConfig
+					, cuT( "Default" )
+					, c3d_cameraData.debugIndex()
+					, outLightDiffuse
+					, true };
+				auto texCoord = writer.declLocale( "texCoord"
+					, c3d_cameraData.calcTexCoord( utils
+						, in.fragCoord.xy() ) );
+				auto depthObj = writer.declLocale( "depthObj"
+					, c3d_mapDepthObj.lod( texCoord, 0.0_f ) );
+				auto nodeId = writer.declLocale( "nodeId"
+					, writer.cast< sdw::UInt >( depthObj.z() ) );
+				auto lightModelId = writer.declLocale( "lightModelId"
+					, writer.cast< sdw::UInt >( depthObj.w() ) );
+
+				IF( writer, nodeId == 0u
+					|| lightModelId != uint32_t( lightingModelId ) )
+				{
+					writer.demote();
+				}
+				FI;
+
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
+				auto materialId = writer.declLocale( "materialId"
+					, modelData.getMaterialId() );
+				auto material = writer.declLocale( "material"
+					, materials.getMaterial( materialId ) );
+
+				auto colMtl = writer.declLocale( "colMtl"
+					, c3d_mapColMtl.lod( texCoord, 0.0_f ) );
+				auto shadowReceiver = writer.declLocale( "shadowReceiver"
+					, modelData.isShadowReceiver() );
+				auto albedo = writer.declLocale( "albedo"
+					, colMtl.xyz() );
+
+				if ( auto lightingModel = lights.getLightingModel() )
+				{
+					auto nmlOcc = writer.declLocale( "nmlOcc"
+						, c3d_mapNmlOcc.lod( texCoord, 0.0_f ) );
+					auto spcRgh = writer.declLocale( "spcRgh"
+						, c3d_mapSpcRgh.lod( texCoord, 0.0_f ) );
+					auto emsTrn = writer.declLocale( "emsTrn"
+						, c3d_mapEmsTrn.lod( texCoord, 0.0_f ) );
+
+					auto depth = writer.declLocale( "depth"
+						, depthObj.x() );
+					auto vsPosition = writer.declLocale( "vsPosition"
+						, c3d_cameraData.projToView( utils, texCoord, depth ) );
+					auto wsPosition = writer.declLocale( "wsPosition"
+						, c3d_cameraData.curProjToWorld( utils, texCoord, depth ) );
+					auto wsNormal = writer.declLocale( "wsNormal"
+						, normalize( nmlOcc.xyz() ) );
+
+					shader::OutputComponents lighting{ writer, false };
+					auto surface = writer.declLocale( "surface"
+						, shader::Surface{ vec3( in.fragCoord.xy(), depth )
+						, vsPosition
+						, wsPosition
+						, wsNormal
+						, vec3( texCoord, 0.0_f ) } );
+					materials.fill( colMtl.rgb(), spcRgh, colMtl, material );
+					auto components = writer.declLocale( "components"
+						, shader::BlendComponents{ materials
+						, material
+						, surface } );
+					lightingModel->finish( passShaders
+						, surface
+						, utils
+						, c3d_cameraData.position()
+						, components );
+					auto lightSurface = shader::LightSurface::create( writer
+						, "lightSurface"
+						, c3d_cameraData.position()
+						, surface.worldPosition.xyz()
+						, surface.viewPosition.xyz()
+						, surface.clipPosition
+						, surface.normal );
+					lights.computeCombinedDifSpec( clusteredLights
+						, components
+						, *backgroundModel
+						, lightSurface
+						, modelData.isShadowReceiver()
+						, lightSurface.clipPosition().xy()
+						, lightSurface.viewPosition().z()
+						, output
+						, lighting );
+					outLightDiffuse = vec4( lighting.diffuse, 1.0_f );
+					outLightSpecular = lighting.specular;
+					outLightScattering = lighting.scattering;
+				}
+				else
+				{
+					outLightDiffuse = vec4( albedo, 1.0_f );
+					outLightSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
+					outLightScattering = vec3( 0.0_f, 0.0_f, 0.0_f );
+				}
+			} );
+
+		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+	}
+
+	ShaderPtr LightPass::getPixelShaderSource( LightingModelID lightingModelId
+		, BackgroundModelID backgroundModelId
+		, Scene const & scene
+		, DebugConfig & debugConfig
 		, LightType lightType
 		, ShadowType shadowType
 		, bool shadows
@@ -275,9 +502,9 @@ namespace castor3d
 						, shadowReceiver
 						, output
 						, lighting );
-					outLightDiffuse = vec4( lighting.m_diffuse, 1.0_f );
-					outLightSpecular = lighting.m_specular;
-					outLightScattering = lighting.m_scattering;
+					outLightDiffuse = vec4( lighting.diffuse, 1.0_f );
+					outLightSpecular = lighting.specular;
+					outLightScattering = lighting.scattering;
 				}
 				else
 				{

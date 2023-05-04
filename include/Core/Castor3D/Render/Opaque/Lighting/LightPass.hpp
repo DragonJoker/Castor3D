@@ -26,11 +26,37 @@ namespace castor3d
 		static ShaderPtr getVertexShaderSource( LightType lightType );
 		/**
 		 *\~english
+		 *\brief		Retrieves the pixel shader source for a clustered lighting.
+		 *\param[in]	lightingModelId		The lighting model ID.
+		 *\param[in]	backgroundModelId	The background model ID.
+		 *\param[in]	scene				The scene.
+		 *\param[in]	debugConfig			The debug data.
+		 *\param[in]	sceneFlags			The scene flags.
+		 *\param[in]	targetSize			The target image size.
+		 *\return		The source.
+		 *\~french
+		 *\brief		Récupère le source du fragment shader pour l'éclairage par clusters.
+		 *\param[in]	lightingModelId		L'ID de modèle d'éclairage.
+		 *\param[in]	backgroundModelId	L'ID de modèle de fond.
+		 *\param[in]	scene				La scène.
+		 *\param[in]	debugConfig			Les données de debug.
+		 *\param[in]	sceneFlags			Les indicateurs de scène.
+		 *\param[in]	targetSize			Les dimensions de l'image cible.
+		 *\return		Le source.
+		 */
+		static ShaderPtr getPixelShaderSource( LightingModelID lightingModelId
+			, BackgroundModelID backgroundModelId
+			, Scene const & scene
+			, DebugConfig & debugConfig
+			, SceneFlags const & sceneFlags
+			, VkExtent2D const & targetSize );
+		/**
+		 *\~english
 		 *\brief		Retrieves the pixel shader source for a light type.
 		 *\param[in]	lightingModelId		The lighting model ID.
 		 *\param[in]	backgroundModelId	The background model ID.
 		 *\param[in]	scene				The scene.
-		 *\param[in]	sceneFlags			The scene flags.
+		 *\param[in]	debugConfig			The debug data.
 		 *\param[in]	lightType			The light source type.
 		 *\param[in]	shadowType			The shadow type.
 		 *\param[in]	shadows				Tells if shadows are used.
@@ -41,6 +67,7 @@ namespace castor3d
 		 *\param[in]	lightingModelId		L'ID de modèle d'éclairage.
 		 *\param[in]	backgroundModelId	L'ID de modèle de fond.
 		 *\param[in]	scene				La scène.
+		 *\param[in]	debugConfig			Les données de debug.
 		 *\param[in]	sceneFlags			Les indicateurs de scène.
 		 *\param[in]	lightType			Le type de source lumineuse.
 		 *\param[in]	shadowType			Le type d'ombres.
@@ -52,7 +79,6 @@ namespace castor3d
 			, BackgroundModelID backgroundModelId
 			, Scene const & scene
 			, DebugConfig & debugConfig
-			, SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
 			, bool shadows

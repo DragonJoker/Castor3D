@@ -127,6 +127,7 @@ namespace castor3d
 		bool invertY{ false };
 		bool isSlice{};
 		uint32_t slice{};
+		bool isDepth{};
 
 		static TextureFactors tex2D( castor::Point3f multiply = castor::Point3f{ 1.0f, 1.0f, 1.0f }
 			, castor::Point3f add = castor::Point3f{} )
@@ -155,6 +156,12 @@ namespace castor3d
 		TextureFactors & invert( bool value )
 		{
 			invertY = value;
+			return *this;
+		}
+
+		TextureFactors & depth( bool value )
+		{
+			isDepth = value;
 			return *this;
 		}
 	};

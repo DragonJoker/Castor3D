@@ -68,7 +68,6 @@ namespace castor3d
 				, m_scene.getBackgroundModelId()
 				, m_scene
 				, m_scene.getDebugConfig()
-				, m_config.sceneFlags
 				, m_config.lightType
 				, m_config.shadowType
 				, m_config.shadows
@@ -152,7 +151,7 @@ namespace castor3d
 		if ( !m_enabledLights.empty() )
 		{
 			auto baseDS = m_lightPipeline.getDescriptorSet();
-			doRecordLightPass( m_renderPasses[getLightRenderPassIndex( pipelineIndex != 0u, m_config.lightType )]
+			doRecordLightPass( m_renderPasses[getLightRenderPassIndex( pipelineIndex != 0u, m_config.lightType, false )]
 				, m_stencilRenderPasses[pipelineIndex]
 				, baseDS
 				, 0u
@@ -164,7 +163,7 @@ namespace castor3d
 
 			if ( m_enabledLights.size() > 1u )
 			{
-				auto & renderPass = m_renderPasses[getLightRenderPassIndex( true, m_config.lightType )];
+				auto & renderPass = m_renderPasses[getLightRenderPassIndex( true, m_config.lightType, false )];
 				auto & stencilRenderPass = m_stencilRenderPasses[pipelineIndex];
 
 				for ( size_t i = 1u; i < m_enabledLights.size(); ++i )
@@ -426,7 +425,7 @@ namespace castor3d
 			, 1u
 			, &vertexBuffer
 			, &offset );
-		auto bufferIndex = entry.light.getBufferIndex();
+		auto bufferIndex = entry.light.getBufferOffset();
 		m_context.vkCmdPushConstants( commandBuffer
 			, m_lightPipeline.getPipelineLayout()
 			, VK_SHADER_STAGE_FRAGMENT_BIT

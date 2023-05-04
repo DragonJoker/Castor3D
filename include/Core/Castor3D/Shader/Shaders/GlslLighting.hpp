@@ -184,6 +184,8 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 & output );
+		C3D_API virtual void doInitLightSpecifics( LightSurface const & lightSurface
+			, BlendComponents const & components );
 		C3D_API virtual sdw::Float doGetNdotL( LightSurface const & lightSurface
 			, BlendComponents const & components );
 		C3D_API virtual sdw::Float doGetNdotH( LightSurface const & lightSurface

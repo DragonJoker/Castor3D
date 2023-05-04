@@ -12,6 +12,13 @@ namespace castor
 	class DataHolderT
 	{
 	public:
+		DataHolderT()noexcept = default;
+
+		DataHolderT( Data d )noexcept
+			: m_data{ std::move( d ) }
+		{
+		}
+
 		Data & getData()
 		{
 			return m_data;

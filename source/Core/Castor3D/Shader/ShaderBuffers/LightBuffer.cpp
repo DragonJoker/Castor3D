@@ -28,11 +28,11 @@ namespace castor3d
 	LightBuffer::LightBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, device, count * 512u, cuT( "LightBuffer" ) }
+		: m_buffer{ engine, device, count * 32u * sizeof( castor::Point4f ), cuT( "LightBuffer" ) }
 		, m_lightSizes{ DirectionalLight::LightDataComponents
 			, PointLight::LightDataComponents
 			, SpotLight::LightDataComponents }
-		, m_data{ lgtbuf::doBindData( m_buffer.getPtr(), count ) }
+		, m_data{ lgtbuf::doBindData( m_buffer.getPtr(), count * 32u ) }
 	{
 	}
 
@@ -89,8 +89,8 @@ namespace castor3d
 
 			for ( auto light : castor::makeArrayView( dirty.begin(), std::unique( dirty.begin(), dirty.end() ) ) )
 			{
-				auto index = doGetOffset( *light );
-				light->fillBuffer( index, &m_data[index] );
+				auto [index, offset] = doGetOffsetIndex( *light );
+				light->fillBuffer( index, offset, &m_data[offset] );
 			}
 
 			auto dirEnd = uint32_t( m_typeSortedLights[0].size() * DirectionalLight::LightDataComponents );
@@ -140,27 +140,32 @@ namespace castor3d
 		return m_buffer.getSingleBinding( binding, offset, size );
 	}
 
-	uint32_t LightBuffer::doGetOffset( Light const & light )const
+	std::pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( Light const & light )const
 	{
 		uint32_t result{};
-		uint32_t index = uint32_t( light.getLightType() );
+		uint32_t type = uint32_t( light.getLightType() );
+		uint32_t index{};
 
-		for ( uint32_t i = 0u; i < index; ++i )
+		for ( uint32_t i = 0u; i < type; ++i )
 		{
-			result += uint32_t( m_typeSortedLights[i].size() * m_lightSizes[i] );
+			auto count = m_typeSortedLights[i].size();
+			index += uint32_t( count );
+			result += uint32_t( count * m_lightSizes[i] );
 		}
 
-		auto it = std::find( m_typeSortedLights[index].begin()
-			, m_typeSortedLights[index].end()
+		auto typeSortedLights = m_typeSortedLights[type];
+		auto it = std::find( typeSortedLights.begin()
+			, typeSortedLights.end()
 			, &light );
-		auto size = m_typeSortedLights[index].size();
+		auto count = typeSortedLights.size();
 
-		if ( it != m_typeSortedLights[index].end() )
+		if ( it != typeSortedLights.end() )
 		{
-			size = size_t( std::distance( m_typeSortedLights[index].begin(), it ) );
+			count = size_t( std::distance( typeSortedLights.begin(), it ) );
 		}
 
-		return result + uint32_t( size * m_lightSizes[index] );
+		return { uint32_t( index + count )
+			, result + uint32_t( count * m_lightSizes[type] ) };
 	}
 
 	void LightBuffer::doMarkNextDirty( LightType type

@@ -1,6 +1,18 @@
 /*
 See LICENSE file in root folder
 */
+/*
+This file is generated through cmake configure.
+You can modify it, but it will be overwritten, hence prefer using the following cmake options:
+- CASTOR_USE_GLSLANG				Use glslang to allow using external GLSL programs.
+- CASTOR_USE_WEIGHED_BLENDED_OIT	Use Weighted Blended OIT for translucent objects.
+- CASTOR_USE_DEFERRED_RENDERING		Use deferred rendering for opaque objects.
+- CASTOR_USE_VISIBILITY				Use visibility buffer when rendering opaque objects.
+- CASTOR_USE_ALLOCATION_CALLBACKS	Use Vulkan allocation callbacks.
+- CASTOR_USE_MESH_SHADERS			Use mesh shaders.
+- CASTOR_USE_TASK_SHADERS			Use task shaders along with mesh shaders.
+- CASTOR_USE_CLUSTERED_RENDERING	Enable clustered forward/deferred rendering.
+*/
 #ifndef ___C3D_Config_H___
 #define ___C3D_Config_H___
 
@@ -24,5 +36,8 @@ See LICENSE file in root folder
 
 // Use task shaders along with mesh shaders.
 #define C3D_UseTaskShaders ${C3D_USE_TASK}
+
+// Use clustered rendering in forward/deferred passes.
+#define C3D_UseClusteredRendering ${C3D_USE_CLUSTERED_RENDERING}
 
 #endif

@@ -43,6 +43,7 @@ namespace castor3d
 		{
 			castor::Point4f multiply;
 			castor::Point4f add;
+			castor::Point4f data;
 		};
 
 		struct RenderingResources
@@ -544,7 +545,7 @@ namespace castor3d
 		crg::ResourcesCache m_resources;
 		ashes::RenderPassPtr m_renderPass;
 		ashes::BufferBasePtr m_stagingBuffer;
-		castor::ArrayView< uint8_t > m_stagingData;
+		castor::ByteArrayView m_stagingData;
 		std::vector< CommandsSemaphore > m_transferCommands;
 		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
 		std::vector< ashes::CommandBufferPtrArray > m_commandBuffers;

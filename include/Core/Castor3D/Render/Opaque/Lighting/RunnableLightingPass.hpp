@@ -6,7 +6,10 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Opaque/Lighting/LightingModule.hpp"
 
+#include "Castor3D/Render/Opaque/Lighting/ClusteredLightsPipeline.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightsPipeline.hpp"
+
+#include <unordered_set>
 
 namespace castor3d
 {
@@ -25,7 +28,8 @@ namespace castor3d
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
 			, crg::ImageViewIdArray const & targetColourResult
-			, crg::ImageViewIdArray const & targetDepthResult );
+			, crg::ImageViewIdArray const & targetDepthResult
+			, bool clustered );
 
 		void clear();
 		void updateCamera( Camera const & camera );
@@ -56,6 +60,8 @@ namespace castor3d
 			, uint32_t index );
 		LightsPipeline & doFindPipeline( Light const & light
 			, LightingModelID lightingModelId );
+		ClusteredLightsPipeline & doFindClusteredPipeline( LightingModelID lightingModelId
+			, RenderTarget const & target );
 
 	private:
 		RenderDevice const & m_device;
@@ -70,9 +76,11 @@ namespace castor3d
 		crg::ImageViewId m_target;
 		LightRenderPassArray m_renderPasses;
 		LightRenderPassArray m_stencilRenderPasses;
-		std::set< Light const * > m_pendingLights;
+		std::unordered_set< Light const *> m_pendingLights;
 		std::map< size_t, LightsPipelinePtr > m_pipelines;
+		std::map< size_t, ClusteredLightsPipelinePtr > m_clusteredPipelines;
 		uint32_t m_passIndex{};
+		bool m_clustered{};
 	};
 }
 

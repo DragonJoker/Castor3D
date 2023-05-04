@@ -29,8 +29,8 @@ namespace castor
 #pragma clang pop
 		};
 
-		using Buffer = castor::ArrayView< uint8_t >;
-		using ConstBuffer = castor::ArrayView< uint8_t const >;
+		using Buffer = castor::ByteArrayView;
+		using ConstBuffer = castor::ConstByteArrayView;
 		using DeviceSize = uint64_t;
 		using Range = castor::Range< DeviceSize >;
 

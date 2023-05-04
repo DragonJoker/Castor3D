@@ -100,7 +100,7 @@ namespace castor3d
 
 	void SssProfileBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
 	{
-		return m_buffer.createPassBinding( pass, cuT( "SssProfiles" ), binding );
+		return m_buffer.createPassBinding( pass, cuT( "C3D_SssProfiles" ), binding );
 	}
 
 	void SssProfileBuffer::createBinding( ashes::DescriptorSet & descriptorSet

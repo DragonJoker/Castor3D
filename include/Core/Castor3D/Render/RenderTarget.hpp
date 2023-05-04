@@ -9,14 +9,15 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/Overlays/OverlaysModule.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
-#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
@@ -240,147 +241,147 @@ namespace castor3d
 		C3D_API CameraUbo const & getCameraUbo()const;
 		C3D_API SceneUbo const & getSceneUbo()const;
 
-		SsaoConfig const & getSsaoConfig()const
+		SsaoConfig const & getSsaoConfig()const noexcept
 		{
 			return m_ssaoConfig;
 		}
 		
-		SsaoConfig & getSsaoConfig()
+		SsaoConfig & getSsaoConfig()noexcept
 		{
 			return m_ssaoConfig;
 		}
 
-		bool isInitialised()const
+		bool isInitialised()const noexcept
 		{
 			return m_initialised;
 		}
 
-		castor::Size const & getSize()const
+		castor::Size const & getSize()const noexcept
 		{
 			return m_size;
 		}
 
-		bool hasTechnique()const
+		bool hasTechnique()const noexcept
 		{
 			return ( m_renderTechnique != nullptr );
 		}
 
-		RenderTechnique & getTechnique()const
+		RenderTechnique & getTechnique()const noexcept
 		{
 			CU_Require( hasTechnique() );
 			return *m_renderTechnique;
 		}
 
-		SceneRPtr getScene()const
+		SceneRPtr getScene()const noexcept
 		{
 			return m_scene;
 		}
 
-		CameraRPtr getCamera()const
+		CameraRPtr getCamera()const noexcept
 		{
 			return m_camera;
 		}
 
-		Texture const & getTexture()const
+		Texture const & getTexture()const noexcept
 		{
 			return m_combined;
 		}
 
-		TexturePtr getVelocity()const
+		TexturePtr getVelocity()const noexcept
 		{
 			return m_velocity;
 		}
 
-		VkFormat getPixelFormat()const
+		VkFormat getPixelFormat()const noexcept
 		{
 			return m_pixelFormat;
 		}
 
-		TargetType getTargetType()const
+		TargetType getTargetType()const noexcept
 		{
 			return m_type;
 		}
 
-		uint32_t getIndex()const
+		uint32_t getIndex()const noexcept
 		{
 			return m_index;
 		}
 
-		PostEffectArray const & getHDRPostEffects()const
+		PostEffectArray const & getHDRPostEffects()const noexcept
 		{
 			return m_hdrPostEffects;
 		}
 
-		PostEffectArray const & getSRGBPostEffects()const
+		PostEffectArray const & getSRGBPostEffects()const noexcept
 		{
 			return m_srgbPostEffects;
 		}
 
-		ToneMappingRPtr getToneMapping()const
+		ToneMappingRPtr getToneMapping()const noexcept
 		{
 			CU_Require( m_toneMapping );
 			return m_toneMapping.get();
 		}
 
-		crg::SemaphoreWaitArray const & getSemaphore()const
+		crg::SemaphoreWaitArray const & getSemaphore()const noexcept
 		{
 			return m_signalFinished;
 		}
 
-		SceneCuller const & getCuller()const
+		SceneCuller const & getCuller()const noexcept
 		{
 			CU_Require( m_culler );
 			return *m_culler;
 		}
 
-		SceneCuller & getCuller()
+		SceneCuller & getCuller()noexcept
 		{
 			CU_Require( m_culler );
 			return *m_culler;
 		}
 
-		castor::Point2f const & getJitter()const
+		castor::Point2f const & getJitter()const noexcept
 		{
 			return m_jitter;
 		}
 
-		castor::String const & getName()const
+		castor::String const & getName()const noexcept
 		{
 			return m_name;
 		}
 
-		HdrConfigUbo const & getHdrConfigUbo()const
+		HdrConfigUbo const & getHdrConfigUbo()const noexcept
 		{
 			CU_Require( m_hdrConfigUbo );
 			return *m_hdrConfigUbo;
 		}
 
-		crg::FrameGraph & getGraph()
+		crg::FrameGraph & getGraph()noexcept
 		{
 			return m_graph;
 		}
 
-		crg::ResourcesCache & getResources()
+		crg::ResourcesCache & getResources()noexcept
 		{
 			return m_resources;
 		}
 
-		bool isInitialising()const
+		bool isInitialising()const noexcept
 		{
 			return m_initialising;
 		}
 
-		bool isUsingStereo()const
+		bool isUsingStereo()const noexcept
 		{
 			return m_stereo.enabled;
 		}
 
-		float getIntraOcularDistance()const
+		float getIntraOcularDistance()const noexcept
 		{
 			return m_stereo.intraOcularDistance;
 		}
 
-		IntermediateViewArray const & getIntermediateViews()const
+		IntermediateViewArray const & getIntermediateViews()const noexcept
 		{
 			return m_intermediates;
 		}
@@ -397,29 +398,35 @@ namespace castor3d
 		C3D_API void setExposure( float value );
 		C3D_API void setGamma( float value );
 
-		void setSsaoConfig( SsaoConfig const & config )
+		void setSsaoConfig( SsaoConfig const & config )noexcept
 		{
 			m_ssaoConfig = config;
 		}
 
-		void setJitter( castor::Point2f const & value )
+		void setJitter( castor::Point2f const & value )noexcept
 		{
 			m_jitter = value;
 		}
 
-		void setStereo( bool value )
+		void setStereo( bool value )noexcept
 		{
 			m_stereo.enabled = value;
 		}
 
-		void setIntraOcularDistance( float value )
+		void setIntraOcularDistance( float value )noexcept
 		{
 			m_stereo.intraOcularDistance = value;
 		}
 
-		TargetDebugConfig & getDebugConfig()
+		TargetDebugConfig & getDebugConfig()noexcept
 		{
 			return m_debugConfig;
+		}
+
+		FrustumClusters const & getFrustumClusters()const noexcept
+		{
+			CU_Require( m_frustumClusters );
+			return *m_frustumClusters;
 		}
 		/**@}*/
 
@@ -506,6 +513,7 @@ namespace castor3d
 		std::vector< OnInitialisedConnection > m_onTargetInitialised;
 		IntermediateViewArray m_intermediates;
 		TargetDebugConfig m_debugConfig;
+		FrustumClustersUPtr m_frustumClusters;
 
 		struct StereoConfig
 		{

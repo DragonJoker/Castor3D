@@ -301,119 +301,113 @@ namespace castor3d
 		C3D_API bool hasObjects( LightingModelID lightingModelId )const;
 		C3D_API bool hasIBLSupport( LightingModelID lightingModelId )const;
 
-		castor::BoundingBox const & getBoundingBox()const
+		castor::BoundingBox const & getBoundingBox()const noexcept
 		{
 			return m_boundingBox;
 		}
 
-		SceneBackgroundRPtr getBackground()const
+		SceneBackgroundRPtr getBackground()const noexcept
 		{
 			return m_background.get();
 		}
 
-		castor::RgbColour const & getBackgroundColour()const
+		castor::RgbColour const & getBackgroundColour()const noexcept
 		{
 			return m_backgroundColour;
 		}
 
-		SceneNodeRPtr getRootNode()const
+		SceneNodeRPtr getRootNode()const noexcept
 		{
 			return m_rootNode;
 		}
 
-		SceneNodeRPtr getCameraRootNode()const
+		SceneNodeRPtr getCameraRootNode()const noexcept
 		{
 			return m_rootCameraNode;
 		}
 
-		SceneNodeRPtr getObjectRootNode()const
+		SceneNodeRPtr getObjectRootNode()const noexcept
 		{
 			return m_rootObjectNode;
 		}
 
-		castor::RgbColour const & getAmbientLight()const
+		castor::RgbColour const & getAmbientLight()const noexcept
 		{
 			return m_ambientLight;
 		}
 
-		Fog const & getFog()const
+		Fog const & getFog()const noexcept
 		{
 			return m_fog;
 		}
 
-		Fog & getFog()
+		Fog & getFog()noexcept
 		{
 			return m_fog;
 		}
 
-		FrameListener const & getListener()const
+		FrameListener & getListener()const noexcept
 		{
 			CU_Require( m_listener );
 			return *m_listener;
 		}
 
-		FrameListener & getListener()
-		{
-			CU_Require( m_listener );
-			return *m_listener;
-		}
-
-		bool isInitialised()const
+		bool isInitialised()const noexcept
 		{
 			return m_initialised;
 		}
 
-		bool needsSubsurfaceScattering()const
+		bool needsSubsurfaceScattering()const noexcept
 		{
 			return m_needsSubsurfaceScattering;
 		}
 
-		bool hasOpaqueObjects()const
+		bool hasOpaqueObjects()const noexcept
 		{
 			return m_hasOpaqueObjects;
 		}
 
-		bool hasTransparentObjects()const
+		bool hasTransparentObjects()const noexcept
 		{
 			return m_hasTransparentObjects;
 		}
 
-		uint32_t getDirectionalShadowCascades()const
+		uint32_t getDirectionalShadowCascades()const noexcept
 		{
 			return m_directionalShadowCascades;
 		}
 
-		float getLpvIndirectAttenuation()const
+		float getLpvIndirectAttenuation()const noexcept
 		{
 			return m_lpvIndirectAttenuation;
 		}
 
-		VoxelSceneData const & getVoxelConeTracingConfig()const
+		VoxelSceneData const & getVoxelConeTracingConfig()const noexcept
 		{
 			return m_voxelConfig;
 		}
 
-		VoxelSceneData & getVoxelConeTracingConfig()
+		VoxelSceneData & getVoxelConeTracingConfig()noexcept
 		{
 			return m_voxelConfig;
 		}
 
-		SceneRenderNodes & getRenderNodes()const
+		SceneRenderNodes & getRenderNodes()const noexcept
 		{
 			return *m_renderNodes;
 		}
 
-		LightFactory & getLightsFactory()const
+		LightFactory & getLightsFactory()const noexcept
 		{
 			return *m_lightFactory;
 		}
 
-		crg::ResourcesCache & getResources()
+		crg::ResourcesCache & getResources()noexcept
 		{
 			return m_resources;
 		}
 
-		DebugConfig & getDebugConfig()const
+		DebugConfig & getDebugConfig()const noexcept
 		{
 			return m_debugConfig;
 		}
@@ -431,12 +425,12 @@ namespace castor3d
 		C3D_API void setLpvIndirectAttenuation( float value );
 		C3D_API void setDefaultLightingModel( LightingModelID value );
 
-		void setBackgroundColour( castor::RgbColour const & value )
+		void setBackgroundColour( castor::RgbColour const & value )noexcept
 		{
 			m_backgroundColour = value;
 		}
 
-		void setAmbientLight( castor::RgbColour const & value )
+		void setAmbientLight( castor::RgbColour const & value )noexcept
 		{
 			m_ambientLight = value;
 		}

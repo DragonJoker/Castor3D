@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
@@ -61,6 +62,9 @@ namespace castor3d
 			m_lightBuffer = castor::makeUnique< LightBuffer >( m_engine
 				, device
 				, MaxLightsCount );
+			m_lightsIndexOffset = device.bufferPool->getBuffer< castor::Point2ui >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+				, MaxLightsCount
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 
 			for ( auto light : m_pendingLights )
 			{
@@ -86,19 +90,21 @@ namespace castor3d
 
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( CpuUpdater & updater )
 	{
+		m_dirty = false;
 		auto lock( castor::makeUniqueLock( *this ) );
 		auto & sceneObjs = updater.dirtyScenes[getScene()];
-		m_dirtyLights.insert( m_dirtyLights.end()
+		LightsRefArray dirty;
+		std::swap( m_dirtyLights, dirty );
+		dirty.insert( dirty.end()
 			, sceneObjs.dirtyLights.begin()
 			, sceneObjs.dirtyLights.end() );
 
-		if ( !m_dirtyLights.empty() )
+		if ( !dirty.empty() )
 		{
-			LightsRefArray dirty;
-			std::swap( m_dirtyLights, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
+			dirty.erase( end, dirty.end() );
 
-			for ( auto light : makeArrayView( dirty.begin(), end ) )
+			for ( auto light : dirty )
 			{
 				light->update( updater );
 			}
@@ -107,6 +113,20 @@ namespace castor3d
 		if ( m_lightBuffer )
 		{
 			m_lightBuffer->update( updater );
+			m_dirty = !dirty.empty();
+
+			if ( m_dirty )
+			{
+				auto lightsData = m_lightsIndexOffset.getData();
+
+				for ( auto light : dirty )
+				{
+					lightsData[light->getBufferIndex()] = { uint32_t( light->getLightType() ), uint32_t( light->getBufferOffset() ) };
+				}
+
+				m_lightsIndexOffset.markDirty( VK_ACCESS_SHADER_READ_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+			}
 		}
 	}
 

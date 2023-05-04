@@ -21,6 +21,7 @@
 #include <Castor3D/Shader/Program.hpp>
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslDebugOutput.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
@@ -243,6 +244,7 @@ namespace ocean_fft
 							, technique.getSceneUbo()
 							, technique.getRenderTarget().getCuller() }
 							.safeBand( true )
+							.allowClusteredLighting()
 							.componentModeFlags( castor3d::ComponentModeFlag::eColour
 								| castor3d::ComponentModeFlag::eNormals
 								| castor3d::ComponentModeFlag::eOcclusion
@@ -528,6 +530,7 @@ namespace ocean_fft
 		doAddEnvBindings( flags, bindings, index );
 		doAddBackgroundBindings( m_scene, flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
+		doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo OceanRenderPass::doCreateDepthStencilState( castor3d::PipelineFlags const & flags )const
@@ -586,6 +589,7 @@ namespace ocean_fft
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
+		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
 	}
 
 	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
@@ -1082,6 +1086,10 @@ namespace ocean_fft
 		indirect.declare( index
 			, RenderPipeline::eBuffers
 			, flags.getGlobalIlluminationFlags() );
+		shader::ClusteredLights clusteredLights{ writer
+			, index
+			, RenderPipeline::eBuffers
+			, m_allowClusteredLighting };
 
 		// Fragment Outputs
 		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
@@ -1175,14 +1183,17 @@ namespace ocean_fft
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, nml );
-					lights.computeCombinedDifSpec( components
+					lights.computeCombinedDifSpec( clusteredLights
+						, components
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
+						, lightSurface.clipPosition().xy()
+						, lightSurface.viewPosition().z()
 						, output
 						, lighting );
 					lightingModel->adjustDirectSpecular( components
-						, lighting.m_specular );
+						, lighting.specular );
 
 
 					// Indirect Lighting
@@ -1317,11 +1328,11 @@ namespace ocean_fft
 					output.registerOutput( "FinalReflection", reflectionResult );
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
 					output.registerOutput( "FinalRefraction", refractionResult );
-					outColour = vec4( lighting.m_specular + lightIndirectSpecular
+					outColour = vec4( lighting.specular + lightIndirectSpecular
 							+ components.emissiveColour * components.emissiveFactor
 							+ refractionResult * colorMod
 							+ ( reflectionResult * colorMod * indirectAmbient )
-							+ lighting.m_scattering
+							+ lighting.scattering
 						, depthSoftenedAlpha );
 				}
 				else
