@@ -148,9 +148,13 @@ namespace castor3d::shader
 			, sdw::Vec3Field< "position" >
 			, sdw::FloatField< "exponent" >
 			, sdw::Vec3Field< "attenuation" >
-			, sdw::FloatField< "innerCutOff" >
+			, sdw::FloatField< "innerCutOffCos" >
 			, sdw::Vec3Field< "direction" >
+			, sdw::FloatField< "outerCutOffCos" >
+			, sdw::FloatField< "innerCutOff" >
 			, sdw::FloatField< "outerCutOff" >
+			, sdw::FloatField< "innerCutOffSin" >
+			, sdw::FloatField< "outerCutOffSin" >
 			, sdw::Mat4Field< "transform" > >
 	{
 		C3D_API SpotLight( sdw::ShaderWriter & writer
@@ -167,13 +171,17 @@ namespace castor3d::shader
 		auto position()const { return getMember< "position" >(); }
 		auto exponent()const { return getMember< "exponent" >(); }
 		auto attenuation()const { return getMember< "attenuation" >(); }
-		auto innerCutOff()const { return getMember< "innerCutOff" >(); }
 		auto direction()const { return getMember< "direction" >(); }
+		auto innerCutOff()const { return getMember< "innerCutOff" >(); }
 		auto outerCutOff()const { return getMember< "outerCutOff" >(); }
+		auto innerCutOffCos()const { return getMember< "innerCutOffCos" >(); }
+		auto outerCutOffCos()const { return getMember< "outerCutOffCos" >(); }
+		auto innerCutOffSin()const { return getMember< "innerCutOffSin" >(); }
+		auto outerCutOffSin()const { return getMember< "outerCutOffSin" >(); }
 		auto transform()const { return getMember< "transform" >(); }
 		auto shadows()const { return base().shadows(); }
 		// SpecificValues
-		auto cutOffsDiff()const { return innerCutOff() - outerCutOff(); }
+		auto cutOffsCosDiff()const { return innerCutOffCos() - outerCutOffCos(); }
 	};
 
 	class LightsBuffer
@@ -202,6 +210,11 @@ namespace castor3d::shader
 		sdw::UInt getSpotsEnd()const
 		{
 			return getThirdCount();
+		}
+
+		sdw::UInt getClusteredGridScale()const
+		{
+			return getFourthCount();
 		}
 
 	private:
@@ -494,27 +507,18 @@ namespace castor3d::shader
 		//\{
 		/**
 		*\name
-		*	Forward renderring
+		*	Clustered Lighting, all paths
 		*/
 		//\{
-		C3D_API void computeCombinedDifSpec( BlendComponents const & components
+		C3D_API void computeCombinedDifSpec( ClusteredLights & clusteredLights
+			, BlendComponents const & components
 			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
-			, sdw::UInt const & receivesShadows
+			, sdw::UInt const receivesShadows
+			, sdw::Vec2 const screenPosition
+			, sdw::Float const viewDepth
 			, DebugOutput & debugOutput
 			, OutputComponents & output );
-		/**
-		*\name
-		*	Diffuse only.
-		*/
-		//\{
-		C3D_API void computeCombinedDif( BlendComponents const & components
-			, BackgroundModel & backgroundModel
-			, LightSurface const & lightSurface
-			, sdw::UInt const & receivesShadows
-			, DebugOutput & debugOutput
-			, sdw::Vec3 & output );
-		//\}
 		//\}
 		/**
 		*\name
@@ -529,6 +533,18 @@ namespace castor3d::shader
 			, sdw::UInt const receivesShadows
 			, DebugOutput & debugOutput
 			, OutputComponents & output );
+		//\}
+		/**
+		*\name
+		*	Diffuse only.
+		*/
+		//\{
+		C3D_API void computeCombinedDif( BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const & receivesShadows
+			, DebugOutput & debugOutput
+			, sdw::Vec3 & output );
 		//\}
 		/**
 		*\name
@@ -554,9 +570,15 @@ namespace castor3d::shader
 			, sdw::UInt maxCascadeCount );
 		//\}
 
-		inline Shadow & getShadowModel()const
+		Shadow & getShadowModel()const noexcept
 		{
 			return *m_shadowModel;
+		}
+
+		sdw::UInt getClusteredGridScale()const noexcept
+		{
+			CU_Require( m_lightsBuffer );
+			return m_lightsBuffer->getClusteredGridScale();
 		}
 
 	private:

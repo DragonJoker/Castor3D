@@ -298,6 +298,11 @@ namespace castor3d
 							, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
 							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
+						output.registerOutput( "Clustered", "PointErrors", lightDiffuse );
+						output.registerOutput( "Clustered", "SpotErrors", lightDiffuse );
+						output.registerOutput( "Clustered", "ClusterIndex", lightDiffuse );
+						output.registerOutput( "Clustered", "PointLightsCount", lightDiffuse );
+						output.registerOutput( "Clustered", "SpotLightsCount", lightDiffuse );
 						output.registerOutput( "Lighting", "Diffuse", lightDiffuse );
 						output.registerOutput( "Lighting", "Specular", lightDiffuse );
 						output.registerOutput( "Lighting", "Scattering", lightDiffuse );

@@ -7,6 +7,7 @@
 #include "Castor3D/Shader/LightingModelFactory.hpp"
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
@@ -181,11 +182,17 @@ namespace castor3d::shader
 
 					lightData = getLightData( offset );
 					result.attenuation() = lightData.xyz();
-					result.innerCutOff() = lightData.w();
+					result.innerCutOffCos() = lightData.w();
 
 					lightData = getLightData( offset );
 					result.direction() = normalize( lightData.xyz() );
-					result.outerCutOff() = lightData.w();
+					result.outerCutOffCos() = lightData.w();
+
+					lightData = getLightData( offset );
+					result.innerCutOff() = lightData.x();
+					result.outerCutOff() = lightData.y();
+					result.innerCutOffSin() = lightData.z();
+					result.outerCutOffSin() = lightData.w();
 
 					result.transform() = mat4( getData( offset + 0_u ).data()
 						, getData( offset + 1_u ).data()
@@ -343,10 +350,13 @@ namespace castor3d::shader
 			, lightsBufSet );
 	}
 
-	void Lights::computeCombinedDifSpec( BlendComponents const & components
+	void Lights::computeCombinedDifSpec( ClusteredLights & clusteredLights
+		, BlendComponents const & components
 		, BackgroundModel & backgroundModel
 		, LightSurface const & lightSurface
-		, sdw::UInt const & receivesShadows
+		, sdw::UInt const receivesShadows
+		, sdw::Vec2 const screenPosition
+		, sdw::Float const viewDepth
 		, DebugOutput & debugOutput
 		, OutputComponents & parentOutput )
 	{
@@ -369,37 +379,53 @@ namespace castor3d::shader
 			}
 			ELIHW;
 
-			end = m_lightsBuffer->getPointsEnd();
-
-			WHILE( m_writer, cur < end )
+			if ( clusteredLights.isEnabled() )
 			{
-				lightingModel->compute( getPointLight( cur )
+				clusteredLights.computeCombinedDifSpec( *this
+					, *lightingModel
 					, components
+					, backgroundModel
 					, lightSurface
 					, receivesShadows
+					, screenPosition
+					, viewDepth
+					, debugOutput
 					, parentOutput );
-				cur += castor3d::PointLight::LightDataComponents;
 			}
-			ELIHW;
-
-			end = m_lightsBuffer->getSpotsEnd();
-
-			WHILE( m_writer, cur < end )
+			else
 			{
-				lightingModel->compute( getSpotLight( cur )
-					, components
-					, lightSurface
-					, receivesShadows
-					, parentOutput );
-				cur += castor3d::SpotLight::LightDataComponents;
-			}
-			ELIHW;
+				end = m_lightsBuffer->getPointsEnd();
 
-			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.m_diffuse );
-			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.m_specular );
-			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.m_scattering );
-			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.m_coatingSpecular );
-			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.m_sheen );
+				WHILE( m_writer, cur < end )
+				{
+					lightingModel->compute( getPointLight( cur )
+						, components
+						, lightSurface
+						, receivesShadows
+						, parentOutput );
+					cur += castor3d::PointLight::LightDataComponents;
+				}
+				ELIHW;
+
+				end = m_lightsBuffer->getSpotsEnd();
+
+				WHILE( m_writer, cur < end )
+				{
+					lightingModel->compute( getSpotLight( cur )
+						, components
+						, lightSurface
+						, receivesShadows
+						, parentOutput );
+					cur += castor3d::SpotLight::LightDataComponents;
+				}
+				ELIHW;
+			}
+
+			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse );
+			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.specular );
+			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering );
+			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular );
+			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen );
 		}
 	}
 
@@ -507,11 +533,11 @@ namespace castor3d::shader
 				break;
 			}
 
-			debugOutput.registerOutput( "Lighting", "Diffuse", output.m_diffuse );
-			debugOutput.registerOutput( "Lighting", "Specular", output.m_specular );
-			debugOutput.registerOutput( "Lighting", "Scattering", output.m_scattering );
-			debugOutput.registerOutput( "Lighting", "CoatingSpecular", output.m_coatingSpecular );
-			debugOutput.registerOutput( "Lighting", "Sheen", output.m_sheen );
+			debugOutput.registerOutput( "Lighting", "Diffuse", output.diffuse );
+			debugOutput.registerOutput( "Lighting", "Specular", output.specular );
+			debugOutput.registerOutput( "Lighting", "Scattering", output.scattering );
+			debugOutput.registerOutput( "Lighting", "CoatingSpecular", output.coatingSpecular );
+			debugOutput.registerOutput( "Lighting", "Sheen", output.sheen );
 		}
 	}
 

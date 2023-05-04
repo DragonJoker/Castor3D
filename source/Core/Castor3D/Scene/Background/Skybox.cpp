@@ -457,10 +457,8 @@ namespace castor3d
 				, VK_FILTER_LINEAR );
 		}
 
-		m_texture->generateMipmaps( *commandBuffer );
-		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_texture->getLayerCubeView( 0u ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
+		m_texture->generateMipmaps( *commandBuffer
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 
@@ -597,10 +595,8 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 			, m_texture->getTexture()
 			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
-		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-			, m_texture->getLayerCubeView( 0u ).getSampledView().makeShaderInputResource( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL ) );
-		m_texture->generateMipmaps( *commandBuffer );
+		m_texture->generateMipmaps( *commandBuffer
+			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
 		commandBuffer->endDebugBlock();
 		commandBuffer->end();
 

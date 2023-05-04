@@ -214,6 +214,13 @@ namespace castor
 	{
 		return makeArrayView( buffer, buffer + N );
 	}
+
+	CU_DeclareArrayView( byte, Byte );
+	CU_DeclareArrayView( s32, Int32 );
+	CU_DeclareArrayView( u32, UInt32 );
+	CU_DeclareArrayView( byte const, ConstByte );
+	CU_DeclareArrayView( s32 const, ConstInt32 );
+	CU_DeclareArrayView( u32 const, ConstUInt32 );
 }
 
 #endif

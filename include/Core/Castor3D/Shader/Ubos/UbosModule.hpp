@@ -23,6 +23,7 @@ namespace castor3d
 	{
 		struct BillboardData;
 		struct CameraData;
+		struct ClustersData;
 		struct HdrConfigData;
 		struct LayeredLpvGridData;
 		struct LpvGridData;
@@ -207,6 +208,36 @@ namespace castor3d
 		float pad{};
 		float nearPlane{};
 		float farPlane{};
+	};
+	/**
+	*\~english
+	*\brief
+	*	Clusters data UBO.
+	*\~french
+	*\brief
+	*	UBO des données des clusters.
+	*/
+	class ClustersUbo;
+	/**
+	*\~english
+	*\brief
+	*	Clusters data.
+	*\~french
+	*\brief
+	*	Données des clusters.
+	*/
+	struct ClustersUboConfiguration
+	{
+		// The 3D dimensions of the cluster grid.
+		castor::Point3ui gridDim;
+		// The distance to the near clipping plane. (Used for computing the index in the cluster grid)
+		float viewNear;
+		// The size of a cluster in screen space (pixels).
+		castor::Point2ui clusterSize;
+		// ( 1 + ( 2 * tan( fov * 0.5 ) / ClusterGridDim.y ) ) // Used to compute the near plane for clusters at depth k.
+		float nearK;
+		// 1.0f / log( 1 + ( tan( fov * 0.5 ) / ClusterGridDim.y )
+		float logGridDimY;
 	};
 	/**
 	*\~english
@@ -442,6 +473,8 @@ namespace castor3d
 	CU_DeclareVector( LpvLightConfigUbo, LpvLightConfigUbo );
 	CU_DeclareVector( LpvGridConfigUbo, LpvGridConfigUbo );
 
+	// Needs to be last, because of namespace changes...
+	CU_DeclareSmartPtr( castor3d::shader, ClustersData, C3D_API );
 	//@}
 	//@}
 }

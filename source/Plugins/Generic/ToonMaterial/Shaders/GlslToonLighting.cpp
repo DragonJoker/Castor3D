@@ -17,35 +17,47 @@ namespace toon::shader
 {
 	//*********************************************************************************************
 
+	void ToonLightingModel::initLightSpecifics( c3d::LightSurface const & lightSurface
+		, c3d::BlendComponents const & components )
+	{
+		auto & writer = *lightSurface.getWriter();
+		auto smoothBand = components.getMember< sdw::Float >( "smoothBand", true );
+		auto ndotl = smoothStep( 0.0_f
+			, fwidth( lightSurface.NdotL() ) * smoothBand
+			, lightSurface.NdotL() );
+
+		if ( !m_NdotL )
+		{
+			m_NdotL = std::make_unique< sdw::Float >( writer.declLocale( "toonNdotL", std::move( ndotl ) ) );
+		}
+		else
+		{
+			*m_NdotL = ndotl;
+		}
+
+		auto ndoth = smoothStep( 0.0_f
+			, 0.01_f * smoothBand
+			, lightSurface.NdotH() * getNdotL( lightSurface, components ) );
+
+		if ( !m_NdotH )
+		{
+			m_NdotH = std::make_unique< sdw::Float >( writer.declLocale( "toonNdotH", std::move( ndoth ) ) );
+		}
+		else
+		{
+			*m_NdotH = ndoth;
+		}
+	}
+
 	sdw::Float ToonLightingModel::getNdotL( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
-		if ( !m_NdotL )
-		{
-			auto & writer = *lightSurface.getWriter();
-			auto smoothBand = components.getMember< sdw::Float >( "smoothBand", true );
-			auto delta = writer.declLocale( "deltaNdotL"
-				, fwidth( lightSurface.NdotL() ) * smoothBand );
-			m_NdotL = std::make_unique< sdw::Float >( writer.declLocale( "toonNdotL"
-				, smoothStep( 0.0_f, delta, lightSurface.NdotL() ) ) );
-		}
-
 		return *m_NdotL;
 	}
 
 	sdw::Float ToonLightingModel::getNdotH( c3d::LightSurface const & lightSurface
 		, c3d::BlendComponents const & components )
 	{
-		if ( !m_NdotH )
-		{
-			auto & writer = *lightSurface.getWriter();
-			auto smoothBand = components.getMember< sdw::Float >( "smoothBand", true );
-			m_NdotH = std::make_unique< sdw::Float >( writer.declLocale( "toonNdotH"
-				, smoothStep( 0.0_f
-					, 0.01_f * smoothBand
-					, lightSurface.NdotH() * getNdotL( lightSurface, components ) ) ) );
-		}
-
 		return *m_NdotH;
 	}
 
@@ -93,6 +105,12 @@ namespace toon::shader
 			, shadowModel
 			, lights
 			, enableVolumetric );
+	}
+
+	void ToonPhongLightingModel::doInitLightSpecifics( c3d::LightSurface const & lightSurface
+		, c3d::BlendComponents const & components )
+	{
+		initLightSpecifics( lightSurface, components );
 	}
 
 	sdw::Float ToonPhongLightingModel::doGetNdotL( c3d::LightSurface const & lightSurface
@@ -151,6 +169,12 @@ namespace toon::shader
 			, shadowModel
 			, lights
 			, enableVolumetric );
+	}
+
+	void ToonPbrLightingModel::doInitLightSpecifics( c3d::LightSurface const & lightSurface
+		, c3d::BlendComponents const & components )
+	{
+		initLightSpecifics( lightSurface, components );
 	}
 
 	sdw::Float ToonPbrLightingModel::doGetNdotL( c3d::LightSurface const & lightSurface

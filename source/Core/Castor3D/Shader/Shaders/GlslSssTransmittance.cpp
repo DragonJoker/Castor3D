@@ -70,7 +70,7 @@ namespace castor3d
 								, sssProfileIndex
 								, wsNormal
 								, sssTransmittance
-								, light.direction()
+								, -light.direction() // vertexTolight
 								, light.base().farPlane() );
 						}
 						FI;
@@ -124,16 +124,16 @@ namespace castor3d
 							auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 								, wsPosition - wsNormal * 0.005_f );
 
-							auto vertexToLight = m_writer.declLocale( "vertexToLight"
+							auto lightToVertex = m_writer.declLocale( "lightToVertex"
 								, shrinkedPos - light.position() );
 							auto shadowDepth = m_writer.declLocale( "shadowDepth"
-								, c3d_mapNormalDepthPoint.sample( vec4( vertexToLight, m_writer.cast< sdw::Float >( light.shadows().shadowMapIndex() ) ) ) );
+								, c3d_mapNormalDepthPoint.sample( vec4( lightToVertex, m_writer.cast< sdw::Float >( light.shadows().shadowMapIndex() ) ) ) );
 							result = m_compute( ( shrinkedPos - light.position() ).z()
 								, shadowDepth
 								, sssProfileIndex
 								, wsNormal
 								, sssTransmittance
-								, -vertexToLight
+								, -lightToVertex
 								, light.base().farPlane() );
 						}
 						FI;
@@ -235,7 +235,7 @@ namespace castor3d
 						, sdw::UInt const & sssProfileIndex
 						, sdw::Vec3 const & worldNormal
 						, sdw::Float const & translucency
-						, sdw::Vec3 const & lightVector
+						, sdw::Vec3 const & lightToVertex
 						, sdw::Float const & lightFarPlane )
 					{
 						auto sssProfile = m_writer.declLocale( "sssProfile"
@@ -277,7 +277,7 @@ namespace castor3d
 							*/
 						factor = profile
 							* translucency
-							* clamp( 0.3_f + dot( lightVector, -worldNormal )
+							* clamp( 0.3_f + dot( -lightToVertex, worldNormal )
 								, 0.0_f
 								, 1.0_f );
 						m_writer.returnStmt( factor );
@@ -287,7 +287,7 @@ namespace castor3d
 					, sdw::InUInt{ m_writer, "sssProfileIndex" }
 					, sdw::InVec3{ m_writer, "worldNormal" }
 					, sdw::InFloat{ m_writer, "transmittance" }
-					, sdw::InVec3{ m_writer, "lightVector" }
+					, sdw::InVec3{ m_writer, "lightToVertex" }
 					, sdw::InFloat{ m_writer, "lightFarPlane" } );
 			}
 		}

@@ -10,21 +10,13 @@ namespace castor3d
 {
 	/**
 	*\name
-	*	Shaders.
+	*	Materials.
 	*/
 	//@{
 	// Maximum different lighting models.
 	static uint32_t constexpr MaxLightingModels = 63u;
 	// Maximum different background models.
 	static uint32_t constexpr MaxBackgroundModels = 63u;
-	// The number of vec4s in the random buffer.
-	static uint32_t constexpr RandomDataCount = 1024u;
-	//@}
-	/**
-	*\name
-	*	Materials.
-	*/
-	//@{
 	// Maximum textures in a pass.
 	static uint32_t constexpr MaxPassTextures = 8u;
 	// Maximum passes in a material.
@@ -154,6 +146,8 @@ namespace castor3d
 	*	Other.
 	*/
 	//@{
+	// The number of vec4s in the random buffer.
+	static uint32_t constexpr RandomDataCount = 1024u;
 	// Max overlay count per buffer
 	static uint32_t constexpr MaxOverlaysPerBuffer = 65'536u;
 	// Max counts for text overlays
@@ -189,6 +183,13 @@ namespace castor3d
 	//@{
 	static uint32_t constexpr MaxMeshletVertexCount = 64u;
 	static uint32_t constexpr MaxMeshletTriangleCount = 124u;
+	//@}
+	/**
+	*\name
+	*	Clustered rendering.
+	*/
+	//@{
+	static uint32_t constexpr MaxLightsPerCluster = 512u;
 	//@}
 }
 

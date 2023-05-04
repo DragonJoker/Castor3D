@@ -128,7 +128,7 @@ namespace castor3d
 
 	DebugConfig & RenderTechniquePass::getDebugConfig()const
 	{
-		return m_parent->getDebugConfig();
+		return m_scene.getDebugConfig();
 	}
 
 	//*************************************************************************************************
@@ -438,6 +438,11 @@ namespace castor3d
 		doAddEnvBindings( flags, bindings, index );
 		doAddBackgroundBindings( m_scene, flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
+
+		if ( m_parent )
+		{
+			doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
+		}
 	}
 
 	void RenderTechniqueNodesPass::doFillAdditionalDescriptor( PipelineFlags const & flags
@@ -464,6 +469,11 @@ namespace castor3d
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
+
+		if ( m_parent )
+		{
+			doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
+		}
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo RenderTechniqueNodesPass::doCreateDepthStencilState( PipelineFlags const & flags )const

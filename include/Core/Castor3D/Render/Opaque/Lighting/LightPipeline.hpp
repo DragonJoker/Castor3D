@@ -22,16 +22,20 @@ namespace castor3d
 	{
 		LightPipelineConfig( LightingModelID lightingModelId
 			, SceneFlags const & sceneFlags
-			, Light const & light );
+			, LightType lightType
+			, ShadowType shadowType );
+		LightPipelineConfig( LightingModelID lightingModelId
+			, SceneFlags const & sceneFlags );
 
 		size_t makeHash()const;
 		std::string getName( Engine const & engine );
 
 		LightingModelID lightingModelId;
-		SceneFlags const & sceneFlags;
+		SceneFlags sceneFlags;
 		LightType lightType;
 		ShadowType shadowType;
 		bool shadows;
+		bool clustered{};
 	};
 
 	struct LightRenderPass
@@ -56,7 +60,8 @@ namespace castor3d
 	using LightRenderPassArray = std::vector< LightRenderPass >;
 
 	uint32_t getLightRenderPassIndex( bool blend
-		, LightType lightType );
+		, LightType lightType
+		, bool clustered );
 
 	struct LightDescriptors
 	{

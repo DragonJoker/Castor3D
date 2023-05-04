@@ -78,6 +78,8 @@ namespace castor3d::shader
 		}
 	};
 
+	struct AABB;
+	struct Cone;
 	struct DerivTex;
 	struct DirectionalLight;
 	struct Intersection;
@@ -89,6 +91,7 @@ namespace castor3d::shader
 	struct LpvLightData;
 	struct Material;
 	struct OutputComponents;
+	struct Plane;
 	struct PointLight;
 	struct Ray;
 	struct ShadowData;
@@ -129,6 +132,7 @@ namespace castor3d::shader
 	class BackgroundModel;
 	class BufferBase;
 	class BRDFHelpers;
+	class ClusteredLights;
 	class DebugOutput;
 	class Fog;
 	class Lights;
@@ -155,6 +159,7 @@ namespace castor3d::shader
 
 	CU_DeclareSmartPtr( castor3d::shader, LightsBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, LightingModel, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, Material, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, Shadow, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, SssTransmittance, C3D_API );
 
@@ -186,7 +191,10 @@ namespace castor3d::shader
 		, BackgroundModelCreator
 		, BackgroundModelID >;
 
+	Writer_Parameter( AABB );
 	Writer_Parameter( BlendComponents );
+	Writer_Parameter( Cone );
+	Writer_Parameter( DerivTex );
 	Writer_Parameter( DirectionalLight );
 	Writer_Parameter( Intersection );
 	Writer_Parameter( LayeredLpvGridData );
@@ -195,6 +203,7 @@ namespace castor3d::shader
 	Writer_Parameter( LpvGridData );
 	Writer_Parameter( LpvLightData );
 	Writer_Parameter( Material );
+	Writer_Parameter( Plane );
 	Writer_Parameter( PointLight );
 	Writer_Parameter( Ray );
 	Writer_Parameter( ShadowData );
@@ -250,9 +259,37 @@ namespace castor3d::shader
 		auto dPdy()const { return getMember< "dPdy" >(); }
 	};
 
-	Writer_Parameter( DerivTex );
+	namespace details
+	{
+		inline void makeExprListRec( sdw::expr::ExprList & )
+		{
+		}
 
-	CU_DeclareSmartPtr( castor3d::shader, Material, C3D_API );
+		inline void makeExprListRec( sdw::expr::ExprList & result
+			, sdw::expr::ExprPtr expr )
+		{
+			result.emplace_back( std::move( expr ) );
+		}
+
+		template< typename ... ExprT >
+		inline void makeExprListRec( sdw::expr::ExprList & result
+			, sdw::expr::ExprPtr expr
+			, ExprT && ... remains )
+		{
+			result.emplace_back( std::move( expr ) );
+			details::makeExprListRec( result
+				, std::forward< ExprT >( remains )... );
+		}
+	}
+
+	template< typename ... ExprT >
+	inline sdw::expr::ExprList makeExprList( ExprT && ... expr )
+	{
+		sdw::expr::ExprList result;
+		details::makeExprListRec( result
+			, std::forward< ExprT >( expr )... );
+		return result;
+	}
 
 	//@}
 	//@}

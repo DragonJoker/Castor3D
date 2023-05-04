@@ -374,6 +374,9 @@ namespace castor3d
 		crg::FramePassArray doCreateRenderPasses( ProgressBar * progress
 			, TechniquePassEvent event
 			, crg::FramePass const * previousPass );
+		crg::FramePassArray doCreateRenderPasses( ProgressBar * progress
+			, TechniquePassEvent event
+			, crg::FramePassArray previousPasses );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
@@ -416,6 +419,8 @@ namespace castor3d
 		PrepassRendering m_prepass;
 		crg::FramePass const * m_lastDepthPass{};
 		crg::FramePass const * m_depthRangePass{};
+		crg::FramePass const* m_computeClustersAABB{};
+		crg::FramePass const* m_dispatchLightInClusters{};
 		BackgroundRendererUPtr m_background{};
 		OpaqueRendering m_opaque;
 		crg::FramePass const * m_lastOpaquePass{};

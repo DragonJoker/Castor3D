@@ -60,13 +60,16 @@ namespace castor3d
 		 *\~english
 		 *\brief		Records the light data into given buffer.
 		 *\param[in]	index	The light index in the buffer.
+		 *\param[in]	offset	The light data offset in the buffer.
 		 *\param[out]	data	Receives the informations.
 		 *\~french
 		 *\brief		Enregistre les données de la source lumineuse dans le tampon donné.
 		 *\param[in]	index	L'index de la source lumineuse dans le buffer.
+		 *\param[in]	offset	L'offset des données de la source lumineuse dans le buffer.
 		 *\param[out]	data	Reçoit les informations.
 		 */
 		C3D_API void fillBuffer( uint32_t index
+			, VkDeviceSize offset
 			, castor::Point4f * data );
 		/**
 		*\~english
@@ -154,6 +157,11 @@ namespace castor3d
 		uint32_t getBufferIndex()const
 		{
 			return m_bufferIndex;
+		}
+
+		VkDeviceSize getBufferOffset()const
+		{
+			return m_bufferOffset;
 		}
 
 		bool needsRsmShadowMaps()const
@@ -392,27 +400,23 @@ namespace castor3d
 		{
 			m_shadows.vsmLightBleedingReduction = value;
 		}
-
-		void setBufferIndex( uint32_t value )
-		{
-			m_bufferIndex = value;
-		}
 		/**@}*/
 
 	public:
 		OnLightChanged onGPUChanged;
 
 	protected:
-		bool m_enabled{ false };
-		bool m_shadowCaster{ false };
-		std::atomic_bool m_currentShadowCaster{ false };
+		bool m_enabled{};
+		bool m_shadowCaster{};
+		std::atomic_bool m_currentShadowCaster{};
 		bool m_dirty{ true };
 		ShadowConfig m_shadows;
 		LightCategoryUPtr m_category;
-		ShadowMapRPtr m_shadowMap{ nullptr };
-		uint32_t m_shadowMapIndex{ 0u };
-		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{ GlobalIlluminationType::eNone };
-		uint32_t m_bufferIndex{ 0u };
+		ShadowMapRPtr m_shadowMap{};
+		uint32_t m_shadowMapIndex{};
+		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{};
+		uint32_t m_bufferIndex{ InvalidIndex };
+		VkDeviceSize m_bufferOffset{};
 	};
 }
 

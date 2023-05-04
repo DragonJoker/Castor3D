@@ -67,6 +67,26 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The lighting passes light specific bindings index.
+	*\~french
+	*\brief
+	*	L'index des bindings spécifiques à la source lumineuse, pour les passes d'éclairage.
+	*/
+	enum class ClusteredLightPassLgtIdx
+		: uint32_t
+	{
+		eLights,
+		eMatrix,
+		eClusters,
+		ePointLightGridIndex,
+		ePointLightGridCluster,
+		eSpotLightGridIndex,
+		eSpotLightGridCluster,
+		eCount,
+	};
+	/**
+	*\~english
+	*\brief
 	*	Enumerator of textures used by the lighting pass in deferred rendering.
 	*\~french
 	*\brief
@@ -176,7 +196,7 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Retrieve the maximum litten distance for given light and attenuation.
+	*	Retrieve the maximum lit distance for given light and attenuation.
 	*\param[in] light
 	*	The light source.
 	*\param[in] attenuation
@@ -185,7 +205,7 @@ namespace castor3d
 	*	The value.
 	*\~french
 	*\brief
-	*	Récupère l'indice d'attache pour la valeur d'énumeration de texture.
+	*	Calcule la distance maximale d'éclairage d'une source lumineuse selon son atténuation.
 	*\param[in] light
 	*	La source lumineuse.
 	*\param[in] attenuation
@@ -198,7 +218,7 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Retrieve the maximum litten distance for given light and attenuation.
+	*	Retrieve the maximum lit distance for given light and attenuation.
 	*\param[in] light
 	*	The light source.
 	*\param[in] attenuation
@@ -209,7 +229,7 @@ namespace castor3d
 	*	The value.
 	*\~french
 	*\brief
-	*	Récupère l'indice d'attache pour la valeur d'énumeration de texture.
+	*	Calcule la distance maximale d'éclairage d'une source lumineuse selon son atténuation.
 	*\param[in] light
 	*	La source lumineuse.
 	*\param[in] attenuation

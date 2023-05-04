@@ -193,7 +193,7 @@ namespace castor3d
 
 	void PassBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
 	{
-		return m_buffer.createPassBinding( pass, cuT( "Materials" ), binding );
+		return m_buffer.createPassBinding( pass, cuT( "C3D_Materials" ), binding );
 	}
 
 	void PassBuffer::createBinding( ashes::DescriptorSet & descriptorSet

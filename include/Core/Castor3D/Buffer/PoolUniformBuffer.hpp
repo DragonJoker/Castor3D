@@ -39,7 +39,7 @@ namespace castor3d
 		 *\param[in]	sharingMode		Le mode de partage.
 		 */
 		C3D_API PoolUniformBuffer( RenderSystem const & renderSystem
-			, castor::ArrayView< uint8_t > data
+			, castor::ByteArrayView data
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
 			, castor::String debugName
@@ -140,7 +140,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ArrayView< uint8_t > const & getDatas()const
+		castor::ByteArrayView const & getDatas()const
 		{
 			return m_data;
 		}
@@ -152,7 +152,7 @@ namespace castor3d
 		*\return
 		*	Les données.
 		*/
-		castor::ArrayView< uint8_t > & getDatas()
+		castor::ByteArrayView & getDatas()
 		{
 			return m_data;
 		}
@@ -253,11 +253,11 @@ namespace castor3d
 		std::set< MemChunk > m_allocated;
 		ashes::UniformBufferPtr m_buffer;
 		castor::String m_debugName;
-		castor::ArrayView< uint8_t > m_data;
+		castor::ByteArrayView m_data;
 	};
 
 	inline PoolUniformBufferUPtr makePoolUniformBuffer( RenderSystem const & renderSystem
-		, castor::ArrayView< uint8_t > data
+		, castor::ByteArrayView data
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, std::string name

@@ -129,10 +129,10 @@ namespace castor3d
 	void PointLight::update()
 	{
 		PointLight::generateVertices();
-		auto scale = lgtpoint::doCalcPointLightBSphere( *this ) / 2.0f;
+		auto scale = lgtpoint::doCalcPointLightBSphere( *this );
 		m_cubeBox.load( castor::Point3f{ -scale, -scale, -scale }
 			, castor::Point3f{ scale, scale, scale } );
-		m_farPlane = float( castor::point::distance( m_cubeBox.getMin(), m_cubeBox.getMax() ) );
+		m_farPlane = scale * 2.0f;
 		m_attenuation.reset();
 	}
 

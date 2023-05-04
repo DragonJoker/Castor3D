@@ -30,9 +30,11 @@ namespace castor3d
 	}
 
 	void Light::fillBuffer( uint32_t index
+		, VkDeviceSize offset
 		, castor::Point4f * data )
 	{
 		m_bufferIndex = index;
+		m_bufferOffset = offset;
 		m_category->fillBuffer( data );
 	}
 

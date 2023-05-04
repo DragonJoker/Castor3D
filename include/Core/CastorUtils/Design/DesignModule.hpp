@@ -11,6 +11,13 @@ See LICENSE file in root folder
 #include <memory>
 #include <unordered_map>
 
+#define CU_DeclareArrayView( key, name )\
+	using name##ArrayView = castor::ArrayView< key >;\
+	using name##ArrayViewIt = name##ArrayView::iterator;\
+	using name##ArrayViewRIt = name##ArrayView::reverse_iterator;\
+	using name##ArrayViewConstIt = name##ArrayView::const_iterator;\
+	using name##ArrayViewConstRIt = name##ArrayView::const_reverse_iterator
+
 namespace castor
 {
 	/**@name Design */
@@ -38,9 +45,6 @@ namespace castor
 		, typename IteratorTraitsT = IteratorTraits< ValueT * > >
 	class ArrayView;
 	/**
-	\author		Sylvain DOREMUS
-	\version	0.9.0
-	\date		11/12/2016
 	\~english
 	\brief		Allows to declare a scoped variable with an action on construction
 				<br />and an action on destruction.
@@ -572,7 +576,6 @@ namespace castor
 	{
 		inline void operator()( ResourceT< ResT, KeyT > * pointer )noexcept;
 	};
-
 	//@}
 }
 

@@ -11,6 +11,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Transparent/TransparentPassResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -18,6 +19,7 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 #include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
@@ -149,6 +151,7 @@ namespace castor3d
 		doAddEnvBindings( flags, bindings, index );
 		doAddBackgroundBindings( m_scene, flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
+		doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
 
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -179,6 +182,7 @@ namespace castor3d
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
+		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
 
 		bindTexture( m_sceneImage.wholeView
 			, *m_sceneImage.sampler
@@ -249,7 +253,7 @@ namespace castor3d
 		shader::ReflectionModel reflections{ writer
 			, utils
 			, index
-			, uint32_t( RenderPipeline::eBuffers )
+			, RenderPipeline::eBuffers
 			, lights.hasIblSupport() };
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
@@ -258,10 +262,15 @@ namespace castor3d
 			, false
 			, index
 			, RenderPipeline::eBuffers );
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( index
+		shader::GlobalIllumination indirect{ writer
+			, utils
+			, index
 			, RenderPipeline::eBuffers
-			, flags.getGlobalIlluminationFlags() );
+			, flags.getGlobalIlluminationFlags() };
+		shader::ClusteredLights clusteredLights{ writer
+			, index
+			, RenderPipeline::eBuffers
+			, m_allowClusteredLighting };
 		auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene"
 			, index++
 			, RenderPipeline::eBuffers );
@@ -341,10 +350,13 @@ namespace castor3d
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, surface.normal );
-					lights.computeCombinedDifSpec( components
+					lights.computeCombinedDifSpec( clusteredLights
+						, components
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
+						, lightSurface.clipPosition().xy()
+						, lightSurface.viewPosition().z()
 						, output
 						, lighting );
 					auto directAmbient = writer.declLocale( "directAmbient"
@@ -428,12 +440,12 @@ namespace castor3d
 
 					colour = lightingModel->combine( components
 						, incident
-						, lighting.m_diffuse
+						, lighting.diffuse
 						, indirectDiffuse
-						, lighting.m_specular
-						, lighting.m_scattering
-						, lighting.m_coatingSpecular
-						, lighting.m_sheen
+						, lighting.specular
+						, lighting.scattering
+						, lighting.coatingSpecular
+						, lighting.sheen
 						, lightIndirectSpecular
 						, directAmbient
 						, indirectAmbient

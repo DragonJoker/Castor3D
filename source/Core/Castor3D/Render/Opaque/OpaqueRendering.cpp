@@ -416,6 +416,7 @@ namespace castor3d
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
 					.meshShading( true )
+					.allowClusteredLighting()
 					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags );
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.indirect( getOwner()->getIndirectLighting() );
@@ -471,7 +472,8 @@ namespace castor3d
 						| ComponentModeFlag::eDiffuseLighting
 						| ComponentModeFlag::eSpecularLighting
 						| ComponentModeFlag::eSpecifics
-						| ComponentModeFlag::eOcclusion );
+						| ComponentModeFlag::eOcclusion
+						| ComponentModeFlag::eDeferred );
 				auto nmlOccIt = std::next( framePass.images.begin(), 1u );
 				auto colRghIt = std::next( nmlOccIt );
 				auto spcMtlIt = std::next( colRghIt );

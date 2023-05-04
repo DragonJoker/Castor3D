@@ -37,28 +37,16 @@ namespace castor3d::shader
 			, castor::String name
 			, sdw::Float const value );
 
+		template< typename ValueT >
 		void registerOutput( castor::String name
-			, sdw::Vec4 const value )
+			, ValueT const value )
 		{
 			registerOutput( m_category, name, value );
 		}
 
-		void registerOutput( castor::String name
-			, sdw::Vec3 const value )
+		bool isEnabled()const
 		{
-			registerOutput( m_category, name, value );
-		}
-
-		void registerOutput( castor::String name
-			, sdw::Vec2 const value )
-		{
-			registerOutput( m_category, name, value );
-		}
-
-		void registerOutput( castor::String name
-			, sdw::Float const value )
-		{
-			registerOutput( m_category, name, value );
+			return m_enable;
 		}
 
 	private:

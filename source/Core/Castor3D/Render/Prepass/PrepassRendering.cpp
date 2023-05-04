@@ -34,7 +34,7 @@ namespace castor3d
 		, m_result{ parent.getResources()
 			, device
 			, makeSize( parent.getTargetExtent() )
-			, visbuffer && m_device.hasBindless() }
+			, visbuffer && m_device.hasBindless() && deferred }
 		, m_visibilityPassDesc{ ( hasVisibility()
 			? &doCreateVisibilityPass( progress, previousPasses )
 			: nullptr ) }

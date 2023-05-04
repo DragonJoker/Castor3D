@@ -19,8 +19,9 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/Background/Background.hpp>
 #include <Castor3D/Shader/Program.hpp>
-#include "Castor3D/Shader/Shaders/GlslBackground.hpp"
-#include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include <Castor3D/Shader/Shaders/GlslBackground.hpp>
+#include <Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp>
+#include <Castor3D/Shader/Shaders/GlslClusteredLights.hpp>
 #include <Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp>
 #include <Castor3D/Shader/Shaders/GlslDebugOutput.hpp>
 #include <Castor3D/Shader/Shaders/GlslFog.hpp>
@@ -263,6 +264,7 @@ namespace water
 					, technique.getSceneUbo()
 					, technique.getRenderTarget().getCuller() }
 					.safeBand( true )
+					.allowClusteredLighting()
 					.componentModeFlags( castor3d::ComponentModeFlag::eColour
 						| castor3d::ComponentModeFlag::eNormals
 						| castor3d::ComponentModeFlag::eOcclusion
@@ -399,6 +401,7 @@ namespace water
 		doAddEnvBindings( flags, bindings, index );
 		doAddBackgroundBindings( m_scene, flags, bindings, index );
 		doAddGIBindings( flags, bindings, index );
+		doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo WaterRenderPass::doCreateDepthStencilState( castor3d::PipelineFlags const & flags )const
@@ -455,6 +458,7 @@ namespace water
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
+		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
 	}
 
 	castor3d::SubmeshFlags WaterRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
@@ -564,6 +568,10 @@ namespace water
 		indirect.declare( index
 			, RenderPipeline::eBuffers
 			, flags.getGlobalIlluminationFlags() );
+		shader::ClusteredLights clusteredLights{ writer
+			, index
+			, RenderPipeline::eBuffers
+			, m_allowClusteredLighting };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -647,14 +655,17 @@ namespace water
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, surface.normal );
-					lights.computeCombinedDifSpec( components
+					lights.computeCombinedDifSpec( clusteredLights
+						, components
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
+						, lightSurface.clipPosition().xy()
+						, lightSurface.viewPosition().z()
 						, output
 						, lighting );
 					lightingModel->adjustDirectSpecular( components
-						, lighting.m_specular );
+						, lighting.specular );
 					// Standard lighting models don't necessarily translate all that well to water.
 					// It can end up looking very glossy and plastic-like, having much more form than it really should.
 					// So here, I'm sampling some noise with three different sets of texture coordinates to try and achieve
@@ -663,9 +674,9 @@ namespace water
 						, c3d_waveNoise.sample( normalMapCoords1 * 0.5_f ) );
 					specularNoise *= c3d_waveNoise.sample( normalMapCoords2 * 0.5_f );
 					specularNoise *= c3d_waveNoise.sample( in.texture0.xy() * 0.5_f );
-					lighting.m_specular *= specularNoise;
+					lighting.specular *= specularNoise;
 					output.registerOutput( "Specular Noise", specularNoise );
-					output.registerOutput( "Noised Specular", lighting.m_specular );
+					output.registerOutput( "Noised Specular", lighting.specular );
 
 
 					// Indirect Lighting
@@ -759,7 +770,7 @@ namespace water
 					auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 						, writer.ternary( distortedPosition.y() < in.worldPosition.y(), distortedPosition, scenePosition ) );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, components.colour * ( indirectAmbient + indirectDiffuse ) * lighting.m_diffuse );
+						, components.colour * ( indirectAmbient + indirectDiffuse ) * lighting.diffuse );
 					auto heightFactor = writer.declLocale( "heightFactor"
 						, c3d_waterData.refractionHeightFactor() * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
 					refractionResult = mix( refractionResult
@@ -785,11 +796,11 @@ namespace water
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
 					output.registerOutput( "Final Refraction", refractionResult );
 
-					outColour = vec4( lighting.m_specular + lightIndirectSpecular
+					outColour = vec4( lighting.specular + lightIndirectSpecular
 							+ components.emissiveColour * components.emissiveFactor
 							+ ( refractionResult )
 							+ ( reflectionResult * indirectAmbient )
-							+ lighting.m_scattering
+							+ lighting.scattering
 						, depthSoftenedAlpha );
 
 				}

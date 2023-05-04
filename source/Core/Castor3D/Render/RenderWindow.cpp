@@ -588,6 +588,8 @@ namespace castor3d
 				auto & config = m_configUbo.getData();
 				config.multiply = castor::Point4f{ intermediate.factors.multiply };
 				config.add = castor::Point4f{ intermediate.factors.add };
+				config.data = castor::Point4f{ intermediate.factors.isDepth ? 1.0f : 0.0f
+					, 0.0f, 0.0f, 0.0f };
 #endif
 			}
 		}
@@ -1039,6 +1041,7 @@ namespace castor3d
 			auto c3d_config = writer.declUniformBuffer( "c3d_config", 1u, 0u );
 			auto c3d_multiply = c3d_config.declMember< sdw::Vec4 >( "c3d_multiply" );
 			auto c3d_add = c3d_config.declMember< sdw::Vec4 >( "c3d_add" );
+			auto c3d_data = c3d_config.declMember< sdw::Vec4 >( "c3d_data" );
 			c3d_config.end();
 
 			// Shader outputs
@@ -1050,8 +1053,20 @@ namespace castor3d
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 					outColour = vec4( vec3( c3d_mapResult.sample( vtx_texture ).xyz() ), 1.0_f );
 #else
-					outColour = vec4( fma( c3d_mapResult.sample( vtx_texture ).xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
-						, 1.0_f );
+					auto sampled = writer.declLocale( "sampled"
+						, c3d_mapResult.sample( vtx_texture ) );
+
+					IF( writer, c3d_data.x() == 1.0_f )
+					{
+						outColour = vec4( fma( sampled.xxx(), c3d_multiply.xyz(), c3d_add.xyz() )
+							, 1.0_f );
+					}
+					ELSE
+					{
+						outColour = vec4( fma( sampled.xyz(), c3d_multiply.xyz(), c3d_add.xyz() )
+							, 1.0_f );
+					}
+					FI;
 #endif
 				} );
 			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

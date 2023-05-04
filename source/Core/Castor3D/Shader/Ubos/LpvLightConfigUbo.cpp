@@ -54,7 +54,7 @@ namespace castor3d
 		auto & lpvConfig = light.getLpvConfig();
 		auto & configuration = m_ubo.getData();
 
-		configuration.lightOffset = float( light.getBufferIndex() );
+		configuration.lightOffset = float( light.getBufferOffset() );
 		configuration.texelAreaModifier = lpvConfig.texelAreaModifier;
 		auto ltType = light.getLightType();
 

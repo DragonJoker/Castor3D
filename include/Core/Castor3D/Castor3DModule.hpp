@@ -44,6 +44,19 @@ namespace castor3d
 	using castor::xchar;
 	using castor::ychar;
 
+	using castor::s8;
+	using castor::u8;
+	using castor::byte;
+	using castor::s16;
+	using castor::u16;
+	using castor::s32;
+	using castor::u32;
+	using castor::s64;
+	using castor::u64;
+	using castor::usize;
+	using castor::f32;
+	using castor::f64;
+
 	using castor::UInt32StrMap;
 	using castor::UInt64StrMap;
 	using castor::UInt32Array;

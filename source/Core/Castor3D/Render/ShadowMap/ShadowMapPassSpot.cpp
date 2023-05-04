@@ -357,20 +357,20 @@ namespace castor3d
 						, length( lightToVertex ) );
 					auto attenuation = writer.declLocale( "attenuation"
 						, light.getAttenuationFactor( distance ) );
-					auto lightDirection = writer.declLocale( "lightDirection"
+					auto L = writer.declLocale( "L"
 						, lightToVertex / distance );
 					auto spotFactor = writer.declLocale( "spotFactor"
-						, dot( lightDirection, -light.direction() ) );
+						, dot( L, light.direction() ) );
 					spotFactor = max( 0.0_f
 						, sdw::fma( ( spotFactor - 1.0_f )
-							, 1.0_f / ( 1.0_f - light.outerCutOff() )
+							, 1.0_f / ( 1.0_f - light.outerCutOffCos() )
 							, 1.0_f ) );
 					spotFactor = 1.0_f - step( spotFactor, 0.0_f );
 					components.colour *= in.colour;
 					outFlux.rgb() = ( components.colour
 							* light.base().colour()
 							* light.base().intensity().x()
-							* clamp( dot( lightDirection, components.normal ), 0.0_f, 1.0_f ) )
+							* clamp( dot( L, components.normal ), 0.0_f, 1.0_f ) )
 						/ attenuation;
 					outNormal.xyz() = components.normal;
 					outPosition.xyz() = in.worldPosition.xyz();

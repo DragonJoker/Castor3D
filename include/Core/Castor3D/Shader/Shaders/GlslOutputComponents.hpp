@@ -31,11 +31,11 @@ namespace castor3d
 				return true;
 			}
 
-			sdw::InOutVec3 m_diffuse;
-			sdw::InOutVec3 m_specular;
-			sdw::InOutVec3 m_scattering;
-			sdw::InOutVec3 m_coatingSpecular;
-			sdw::InOutVec2 m_sheen;
+			sdw::InOutVec3 diffuse;
+			sdw::InOutVec3 specular;
+			sdw::InOutVec3 scattering;
+			sdw::InOutVec3 coatingSpecular;
+			sdw::InOutVec2 sheen;
 
 		private:
 			ast::expr::ExprPtr m_expr;

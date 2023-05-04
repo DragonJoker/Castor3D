@@ -38,34 +38,22 @@ namespace castor3d
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
 		, m_uploadResources{ UploadResources{ { nullptr, nullptr }, nullptr }
 			, UploadResources{ { nullptr, nullptr }, nullptr } }
-#if C3D_DebugTimers
-		, m_timerCpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "CPUEvents/PreRender" )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "CPUEvents/QueueRender" )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "CPUEvents/PostRender" ) }
-		, m_timerGpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "GPUEvents/PreRender" )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "GPUEvents/QueueRender" )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "GPUEvents/PostRender" ) }
-#endif
+		, m_uploadTimer{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Upload" ) }
+		, m_timerCpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PreRender" )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/QueueRender" )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PostRender" ) }
+		, m_timerGpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PreRender" )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/QueueRender" )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PostRender" ) }
 	{
 		{
 			auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
 			m_debugOverlays->initialise( getEngine()->getOverlayCache() );
 		}
-
-#if C3D_DebugTimers
-		registerTimer( "CPUEvents/PreRender", *m_timerCpuEvents[0] );
-		registerTimer( "CPUEvents/QueueRender", *m_timerCpuEvents[1] );
-		registerTimer( "CPUEvents/PostRender", *m_timerCpuEvents[2] );
-
-		registerTimer( "GPUEvents/PreRender", *m_timerGpuEvents[0] );
-		registerTimer( "GPUEvents/QueueRender", *m_timerGpuEvents[1] );
-		registerTimer( "GPUEvents/PostRender", *m_timerGpuEvents[2] );
-#endif
 	}
 
 	RenderLoop::~RenderLoop()
 	{
-#if C3D_DebugTimers
 		m_timerCpuEvents[0].reset();
 		m_timerCpuEvents[1].reset();
 		m_timerCpuEvents[2].reset();
@@ -73,7 +61,7 @@ namespace castor3d
 		m_timerGpuEvents[0].reset();
 		m_timerGpuEvents[1].reset();
 		m_timerGpuEvents[2].reset();
-#endif
+
 		auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );
 		m_debugOverlays->cleanup();
 		m_debugOverlays.reset();
@@ -81,15 +69,13 @@ namespace castor3d
 
 	void RenderLoop::cleanup()
 	{
-#if C3D_DebugTimers
-		unregisterTimer( "CPUEvents/PreRender", *m_timerCpuEvents[0] );
-		unregisterTimer( "CPUEvents/QueueRender", *m_timerCpuEvents[1] );
-		unregisterTimer( "CPUEvents/PostRender", *m_timerCpuEvents[2] );
+		unregisterTimer( "Events/CPU/PreRender", *m_timerCpuEvents[0] );
+		unregisterTimer( "Events/CPU/QueueRender", *m_timerCpuEvents[1] );
+		unregisterTimer( "Events/CPU/PostRender", *m_timerCpuEvents[2] );
 
-		unregisterTimer( "GPUEvents/PreRender", *m_timerGpuEvents[0] );
-		unregisterTimer( "GPUEvents/QueueRender", *m_timerGpuEvents[1] );
-		unregisterTimer( "GPUEvents/PostRender", *m_timerGpuEvents[2] );
-#endif
+		unregisterTimer( "Events/GPU/PreRender", *m_timerGpuEvents[0] );
+		unregisterTimer( "Events/GPU/QueueRender", *m_timerGpuEvents[1] );
+		unregisterTimer( "Events/GPU/PostRender", *m_timerGpuEvents[2] );
 
 		if ( m_uploadTimer )
 		{
@@ -229,9 +215,7 @@ namespace castor3d
 
 	void RenderLoop::doProcessEvents( EventType eventType )
 	{
-#if C3D_DebugTimers
 		auto block = m_timerCpuEvents[size_t( eventType )]->start();
-#endif
 		getEngine()->getFrameListenerCache().forEach( [eventType]( FrameListener & listener )
 			{
 				listener.fireEvents( eventType );
@@ -242,9 +226,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, QueueData const & queueData )
 	{
-#if C3D_DebugTimers
 		auto block = m_timerGpuEvents[size_t( eventType )]->start();
-#endif
 		getEngine()->getFrameListenerCache().forEach( [eventType, &device, &queueData]( FrameListener & listener )
 			{
 				listener.fireEvents( eventType, device, queueData );
@@ -284,10 +266,18 @@ namespace castor3d
 				resources.fence = device->createFence( VK_FENCE_CREATE_SIGNALED_BIT );
 			}
 
-			m_uploadTimer = std::make_unique< crg::FramePassTimer >( device.makeContext(), "Buffers" );
-			getEngine()->registerTimer( "Buffers", *m_uploadTimer );
+			registerTimer( "Upload", *m_uploadTimer );
+
+			registerTimer( "Events/CPU/PreRender", *m_timerCpuEvents[0] );
+			registerTimer( "Events/CPU/QueueRender", *m_timerCpuEvents[1] );
+			registerTimer( "Events/CPU/PostRender", *m_timerCpuEvents[2] );
+
+			registerTimer( "Events/GPU/PreRender", *m_timerGpuEvents[0] );
+			registerTimer( "Events/GPU/QueueRender", *m_timerGpuEvents[1] );
+			registerTimer( "Events/GPU/PostRender", *m_timerGpuEvents[2] );
 		}
-		else if ( !data )
+
+		if ( !data )
 		{
 			data = device.graphicsData().release();
 		}
@@ -363,7 +353,7 @@ namespace castor3d
 		// Usually GPU cleanup
 		doProcessEvents( EventType::eQueueRender, device, *data );
 
-		m_debugOverlays->endGpuTask();
+		m_debugOverlays->endGpuTasks();
 
 		if ( !m_reservedQueue )
 		{

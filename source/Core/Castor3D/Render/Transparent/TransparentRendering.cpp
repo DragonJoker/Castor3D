@@ -229,6 +229,7 @@ namespace castor3d
 							, isOit }
 						.safeBand( true )
 						.meshShading( true )
+						.allowClusteredLighting()
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.ssao( getOwner()->getSsaoResult() )
@@ -281,6 +282,7 @@ namespace castor3d
 							, isOit }
 						.safeBand( true )
 						.meshShading( true )
+						.allowClusteredLighting()
 						.componentModeFlags( ComponentModeFlag::eOpacity
 							| ComponentModeFlag::eAlphaBlending
 							| ComponentModeFlag::eColour

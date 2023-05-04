@@ -150,9 +150,9 @@ namespace castor3d::shader
 		m_NdotV = max( 0.0_f, dot( N(), V() ) );
 	}
 
-	void LightSurface::updateL( sdw::Vec3 const l )const
+	void LightSurface::updateL( sdw::Vec3 const VtoL )const
 	{
-		vertexToLight() = l;
+		vertexToLight() = VtoL;
 		L() = normalize( vertexToLight() );
 		lengthL() = length( vertexToLight() );
 		H() = normalize( L() + V() );
@@ -172,11 +172,11 @@ namespace castor3d::shader
 	}
 
 	void LightSurface::updateL( Utils & utils
-		, sdw::Vec3 const l
+		, sdw::Vec3 const VtoL
 		, sdw::Vec3 const f0
 		, BlendComponents const & components )const
 	{
-		updateL( l );
+		updateL( VtoL );
 		doUpdateF( utils, f0, components, HdotV() );
 	}
 

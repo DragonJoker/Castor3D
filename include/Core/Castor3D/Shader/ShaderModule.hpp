@@ -121,12 +121,25 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Helper class for SSBO.
+	*	Helper class for SSBO with 4 counts heading its data, to be coupled with shader::BufferT.
 	*\~french
 	*\brief
-	*	Classe d'aide pour un SSBO.
+	*	Classe d'aide pour un SSBO avec 4 compteurs au début de ses données, à utiliser avec shader::BufferT.
 	*/
 	class ShaderBuffer;
+	/**
+	*\~english
+	*\brief
+	*	Helper class for SSBO with a counter heading its data, to be coupled with shader::AppendBufferT.
+	*\remarks
+	*	This buffer is meant to be filled by the GPU.
+	*\~french
+	*\brief
+	*	Classe d'aide pour un SSBO avec un compteur au début de ses données, à utiliser avec shader::AppendBufferT.
+	*\remarks
+	*	Ce buffer est fait pour être rempli au niveau GPU.
+	*/
+	class ShaderAppendBuffer;
 	/**
 	*\~english
 	*\brief
@@ -151,6 +164,7 @@ namespace castor3d
 	template< typename ElementTypeTraits >
 	class StructuredShaderBuffer;
 
+	CU_DeclareSmartPtr( castor3d, ShaderAppendBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ShaderBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ShaderProgram, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightingModelFactory, C3D_API );

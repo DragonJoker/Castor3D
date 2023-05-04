@@ -522,7 +522,7 @@ namespace castor3d
 
 	SceneFlags Scene::getFlags()const
 	{
-		SceneFlags result;
+		SceneFlags result{};
 
 		switch ( m_fog.getType() )
 		{

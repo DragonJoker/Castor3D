@@ -23,9 +23,13 @@ namespace castor3d
 			Float3 position;
 			Float1 exponent;
 			Float3 attenuation;
-			Float1 innerCutoff;
+			Float1 innerCutoffCos;
 			Float3 direction;
+			Float1 outerCutoffCos;
+			Float1 innerCutoff;
 			Float1 outerCutoff;
+			Float1 innerCutoffSin;
+			Float1 outerCutoffSin;
 			Float4x4 transform;
 		};
 

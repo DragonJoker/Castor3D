@@ -5,6 +5,7 @@
 #include "Castor3D/Render/Opaque/LightingPass.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Light/Light.hpp"
 
 #include <RenderGraph/RunnableGraph.hpp>
 
@@ -41,7 +42,8 @@ namespace castor3d
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
 		, crg::ImageViewIdArray const & targetColourResult
-		, crg::ImageViewIdArray const & targetDepthResult )
+		, crg::ImageViewIdArray const & targetDepthResult
+		, bool clustered )
 		: crg::RunnablePass{ pass
 			, context
 			, graph
@@ -67,22 +69,43 @@ namespace castor3d
 		, m_targetColourResult{ targetColourResult }
 		, m_targetDepthResult{ targetDepthResult }
 		, m_target{ m_targetColourResult.front() }
+		, m_clustered{ clustered }
 	{
 	}
 
 	void RunnableLightingPass::clear()
 	{
-		for ( auto & pipeline : m_pipelines )
+		if ( m_clustered )
 		{
-			pipeline.second->clear();
+			for ( auto & pipeline : m_clusteredPipelines )
+			{
+				pipeline.second->clear();
+			}
+		}
+		else
+		{
+			for ( auto & pipeline : m_pipelines )
+			{
+				pipeline.second->clear();
+			}
 		}
 	}
 
 	void RunnableLightingPass::updateCamera( Camera const & camera )
 	{
-		for ( auto & pipeline : m_pipelines )
+		if ( m_clustered )
 		{
-			pipeline.second->updateCamera( camera );
+			for ( auto & pipeline : m_clusteredPipelines )
+			{
+				pipeline.second->updateCamera( camera );
+			}
+		}
+		else
+		{
+			for ( auto & pipeline : m_pipelines )
+			{
+				pipeline.second->updateCamera( camera );
+			}
 		}
 	}
 
@@ -94,13 +117,28 @@ namespace castor3d
 			return;
 		}
 
-		for ( auto lightingModelId : m_scene.getLightingModelsID() )
+		if ( m_clustered )
 		{
-			if ( m_scene.hasObjects( lightingModelId ) )
+			for ( auto lightingModelId : m_scene.getLightingModelsID() )
 			{
-				auto & pipeline = doFindPipeline( light
-					, lightingModelId );
-				pipeline.addLight( light );
+				if ( m_scene.hasObjects( lightingModelId ) )
+				{
+					auto & pipeline = doFindClusteredPipeline( lightingModelId
+						, m_renderTarget );
+					pipeline.addLight( light );
+				}
+			}
+		}
+		else
+		{
+			for ( auto lightingModelId : m_scene.getLightingModelsID() )
+			{
+				if ( m_scene.hasObjects( lightingModelId ) )
+				{
+					auto & pipeline = doFindPipeline( light
+						, lightingModelId );
+					pipeline.addLight( light );
+				}
 			}
 		}
 	}
@@ -121,9 +159,19 @@ namespace castor3d
 	{
 		uint32_t result{};
 
-		for ( auto & pipeline : m_pipelines )
+		if ( m_clustered )
 		{
-			result += pipeline.second->getLightCount();
+			for ( auto & pipeline : m_clusteredPipelines )
+			{
+				result += pipeline.second->getLightCount();
+			}
+		}
+		else
+		{
+			for ( auto & pipeline : m_pipelines )
+			{
+				result += pipeline.second->getLightCount();
+			}
 		}
 
 		return result + uint32_t( m_pendingLights.size() );
@@ -133,26 +181,40 @@ namespace castor3d
 	{
 		if ( m_renderPasses.empty() )
 		{
-			m_renderPasses.resize( 4u );
-			m_renderPasses[getLightRenderPassIndex( false, LightType::eDirectional )] = doCreateRenderPass( false, false );
-			m_renderPasses[getLightRenderPassIndex( false, LightType::eMax )] = doCreateRenderPass( false, true );
-			m_renderPasses[getLightRenderPassIndex( true, LightType::eDirectional )] = doCreateRenderPass( true, false );
-			m_renderPasses[getLightRenderPassIndex( true, LightType::eMax )] = doCreateRenderPass( true, true );
+			if ( m_clustered )
+			{
+				m_renderPasses.resize( 2u );
+				m_renderPasses[getLightRenderPassIndex( false, LightType::eMax, m_clustered )] = doCreateRenderPass( false, false );
+				m_renderPasses[getLightRenderPassIndex( true, LightType::eMax, m_clustered )] = doCreateRenderPass( true, false );
+			}
+			else
+			{
+				m_renderPasses.resize( 4u );
+				m_renderPasses[getLightRenderPassIndex( false, LightType::eDirectional, m_clustered )] = doCreateRenderPass( false, false );
+				m_renderPasses[getLightRenderPassIndex( false, LightType::eMax, m_clustered )] = doCreateRenderPass( false, true );
+				m_renderPasses[getLightRenderPassIndex( true, LightType::eDirectional, m_clustered )] = doCreateRenderPass( true, false );
+				m_renderPasses[getLightRenderPassIndex( true, LightType::eMax, m_clustered )] = doCreateRenderPass( true, true );
+
+				m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( false ) );
+				m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( true ) );
+			}
 		}
 
-		if ( m_stencilRenderPasses.empty() )
+		if ( m_clustered )
 		{
-			m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( false ) );
-			m_stencilRenderPasses.emplace_back( doCreateStencilRenderPass( true ) );
+			doCreateFramebuffer( false, false, m_renderPasses[getLightRenderPassIndex( false, LightType::eMax, m_clustered )], index );
+			doCreateFramebuffer( true, false, m_renderPasses[getLightRenderPassIndex( true, LightType::eMax, m_clustered )], index );
 		}
+		else
+		{
+			doCreateFramebuffer( false, false, m_renderPasses[getLightRenderPassIndex( false, LightType::eDirectional, m_clustered )], index );
+			doCreateFramebuffer( false, true, m_renderPasses[getLightRenderPassIndex( false, LightType::eMax, m_clustered )], index );
+			doCreateFramebuffer( true, false, m_renderPasses[getLightRenderPassIndex( true, LightType::eDirectional, m_clustered )], index );
+			doCreateFramebuffer( true, true, m_renderPasses[getLightRenderPassIndex( true, LightType::eMax, m_clustered )], index );
 
-		doCreateFramebuffer( false, false, m_renderPasses[getLightRenderPassIndex( false, LightType::eDirectional )], index );
-		doCreateFramebuffer( false, true, m_renderPasses[getLightRenderPassIndex( false, LightType::eMax )], index );
-		doCreateFramebuffer( true, false, m_renderPasses[getLightRenderPassIndex( true, LightType::eDirectional )], index );
-		doCreateFramebuffer( true, true, m_renderPasses[getLightRenderPassIndex( true, LightType::eMax )], index );
-
-		doCreateStencilFramebuffer( false, m_stencilRenderPasses[0], index );
-		doCreateStencilFramebuffer( true, m_stencilRenderPasses[1], index );
+			doCreateStencilFramebuffer( false, m_stencilRenderPasses[0], index );
+			doCreateStencilFramebuffer( true, m_stencilRenderPasses[1], index );
+		}
 
 		for ( auto & pending : m_pendingLights )
 		{
@@ -168,9 +230,19 @@ namespace castor3d
 	{
 		uint32_t pipelineIndex = 0u;
 
-		for ( auto & pipeline : m_pipelines )
+		if ( m_clustered )
 		{
-			pipeline.second->recordInto( context, commandBuffer, index, pipelineIndex );
+			for ( auto & pipeline : m_clusteredPipelines )
+			{
+				pipeline.second->recordInto( context, commandBuffer, index, pipelineIndex );
+			}
+		}
+		else
+		{
+			for ( auto & pipeline : m_pipelines )
+			{
+				pipeline.second->recordInto( context, commandBuffer, index, pipelineIndex );
+			}
 		}
 	}
 
@@ -432,7 +504,8 @@ namespace castor3d
 	{
 		LightPipelineConfig config{ lightingModelId
 			, m_scene.getFlags()
-			, light };
+			, light.getLightType()
+			, light.getShadowType() };
 		auto hash = config.makeHash();
 		auto it = m_pipelines.find( hash );
 
@@ -454,6 +527,33 @@ namespace castor3d
 							: m_smSpotResult ) )
 					, m_renderPasses
 					, m_stencilRenderPasses
+					, m_targetColourResult ) ).first;
+		}
+
+		return *it->second;
+	}
+
+	ClusteredLightsPipeline & RunnableLightingPass::doFindClusteredPipeline( LightingModelID lightingModelId
+		, RenderTarget const & target )
+	{
+		LightPipelineConfig config{ lightingModelId
+			, m_scene.getFlags() };
+		auto hash = config.makeHash();
+		auto it = m_clusteredPipelines.find( hash );
+
+		if ( it == m_clusteredPipelines.end() )
+		{
+			it = m_clusteredPipelines.emplace( hash
+				, std::make_unique< ClusteredLightsPipeline >( m_scene
+					, m_pass
+					, m_context
+					, m_graph
+					, m_device
+					, target.getFrustumClusters()
+					, config
+					, m_lpResult
+					, m_renderPasses
+					, target.getShadowMaps()
 					, m_targetColourResult ) ).first;
 		}
 

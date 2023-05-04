@@ -38,21 +38,6 @@ namespace c3d_assimp
 		else
 		{
 			auto ownNode = scene.createSceneNode( name, scene );
-
-			if ( aiLight.mType == aiLightSource_DIRECTIONAL
-				|| aiLight.mType == aiLightSource_SPOT )
-			{
-				auto direction = castor::point::getNormalised( castor::Point3f{ aiLight.mDirection.x, aiLight.mDirection.y, aiLight.mDirection.z } );
-				auto up = castor::point::getNormalised( castor::Point3f{ aiLight.mUp.x, aiLight.mUp.y, aiLight.mUp.z } );
-				ownNode->setOrientation( castor::Quaternion::fromMatrix( fromAssimp( direction, up ) ) );
-			}
-
-			if ( aiLight.mType != aiLightSource_DIRECTIONAL )
-			{
-				auto position = castor::Point3f{ aiLight.mPosition.x, aiLight.mPosition.y, aiLight.mPosition.z };
-				ownNode->setPosition( position );
-			}
-
 			ownNode->attachTo( *scene.getObjectRootNode() );
 			node = scene.addSceneNode( name, ownNode );
 		}
