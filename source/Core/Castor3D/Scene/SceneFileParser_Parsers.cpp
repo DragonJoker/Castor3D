@@ -2738,6 +2738,26 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserNodeRotate )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [orientation] parameter." ) );
+		}
+		else
+		{
+			castor::Point3f axis;
+			float angle;
+			params[0]->get( axis );
+			params[1]->get( angle );
+			parsingContext.nodeConfig.orientation *= castor::Quaternion::fromAxisAngle( axis
+				, castor::Angle::fromDegrees( angle ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserNodeDirection )
 	{
 		auto & parsingContext = getParserContext( context );
