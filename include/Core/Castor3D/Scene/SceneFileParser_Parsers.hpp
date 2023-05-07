@@ -167,6 +167,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserNodeParent )
 	CU_DeclareAttributeParser( parserNodePosition )
 	CU_DeclareAttributeParser( parserNodeOrientation )
+	CU_DeclareAttributeParser( parserNodeRotate )
 	CU_DeclareAttributeParser( parserNodeDirection )
 	CU_DeclareAttributeParser( parserNodeScale )
 	CU_DeclareAttributeParser( parserNodeEnd )
