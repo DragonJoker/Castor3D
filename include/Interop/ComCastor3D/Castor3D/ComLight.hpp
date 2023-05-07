@@ -23,7 +23,7 @@ namespace CastorCom
 	{
 	public:
 		COMEX_PROPERTY_GET( Name, BSTR, m_internal, &castor3d::MovableObject::getName );
-		COMEX_PROPERTY_GET( Type, eMOVABLE_TYPE, m_internal, &castor3d::MovableObject::getType );
+		COMEX_PROPERTY_GET( Type, eMOVABLE_TYPE, m_internal, &castor3d::MovableObject::getMovableType );
 		COMEX_PROPERTY_GET( Scene, IScene *, m_internal, &castor3d::MovableObject::getScene );
 		COMEX_PROPERTY_GET( Node, ISceneNode *, m_internal, &castor3d::MovableObject::getParent );
 		COMEX_PROPERTY_GET( LightType, eLIGHT_TYPE, m_internal, &castor3d::Light::getLightType );

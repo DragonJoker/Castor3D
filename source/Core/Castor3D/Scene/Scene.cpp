@@ -872,7 +872,7 @@ namespace castor3d
 
 		for ( auto movable : m_dirtyObjects )
 		{
-			switch ( movable->getType() )
+			switch ( movable->getMovableType() )
 			{
 			case MovableType::eGeometry:
 				sceneObjs.dirtyGeometries.emplace_back( static_cast< Geometry * >( movable ) );

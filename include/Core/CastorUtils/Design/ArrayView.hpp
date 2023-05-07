@@ -39,11 +39,13 @@ namespace castor
 
 		reference operator[]( size_t index )noexcept
 		{
+			CU_Require( index < size() );
 			return *( m_begin + index );
 		}
 
 		const reference operator[]( size_t index )const noexcept
 		{
+			CU_Require( index < size() );
 			return *( m_begin + index );
 		}
 
@@ -69,11 +71,13 @@ namespace castor
 
 		reference front()noexcept
 		{
+			CU_Require( !empty() );
 			return *m_begin;
 		}
 
 		const reference front()const noexcept
 		{
+			CU_Require( !empty() );
 			return *m_begin;
 		}
 

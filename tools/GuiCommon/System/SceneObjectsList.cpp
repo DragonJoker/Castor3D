@@ -536,7 +536,7 @@ namespace GuiCommon
 	{
 		for ( auto & object : node.getObjects() )
 		{
-			switch ( object.get().getType() )
+			switch ( object.get().getMovableType() )
 			{
 			case castor3d::MovableType::eGeometry:
 				doAddGeometry( id, static_cast< castor3d::Geometry & >( object.get() ) );
