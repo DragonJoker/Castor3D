@@ -2,6 +2,8 @@
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
+#pragma GCC diagnostic ignored "-Wrestrict"
+
 namespace castor
 {
 	using namespace castor3d;

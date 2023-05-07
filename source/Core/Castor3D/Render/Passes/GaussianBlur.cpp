@@ -23,6 +23,8 @@
 
 CU_ImplementSmartPtr( castor3d, GaussianBlur )
 
+#pragma GCC diagnostic ignored "-Wrestrict"
+
 namespace castor3d
 {
 	namespace passgauss

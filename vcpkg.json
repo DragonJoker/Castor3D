@@ -61,7 +61,12 @@
     "vcpkg-deps": {
       "description": "Use vcpkg's ashes/rendergraph/shaderwriter.",
       "dependencies": [
-        "ashes",
+        {
+          "name": "ashes",
+          "features": [
+            "vulkan"
+          ]
+        },
         "rendergraph",
         {
           "name": "shaderwriter",

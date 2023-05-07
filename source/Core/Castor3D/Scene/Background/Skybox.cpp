@@ -26,6 +26,8 @@
 
 CU_ImplementSmartPtr( castor3d, SkyboxBackground )
 
+#pragma GCC diagnostic ignored "-Wrestrict"
+
 namespace castor
 {
 	using namespace castor3d;

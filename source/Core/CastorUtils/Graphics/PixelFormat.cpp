@@ -4,6 +4,8 @@
 
 #include <ashes/common/Format.hpp>
 
+#pragma GCC diagnostic ignored "-Wrestrict"
+
 namespace castor
 {
 	//*****************************************************************************************

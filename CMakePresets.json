@@ -11,7 +11,6 @@
 			"hidden": true,
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
-				"ASHES_BUILD_RENDERER_OGL": false,
 				"CASTOR_BUILD_PLUGINS": true,
 				"CASTOR_BUILDGRP_DEMO": true,
 				"CASTOR_BUILDGRP_INTEROP": false,
@@ -82,20 +81,20 @@
 		{
 			"name": "ci-base",
 			"hidden": true,
-			"binaryDir": "${sourceDir}/build-Release",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
 				"CMAKE_BUILD_TYPE": "Release",
-				"ASHES_BUILD_RENDERER_OGL": false,
-				"SDW_GENERATE_SOURCE": false,
 				"CASTOR_BUILD_PLUGINS": true,
-				"CASTOR_BUILDGRP_DEMO": false,
+				"CASTOR_BUILDGRP_DEMO": true,
 				"CASTOR_BUILDGRP_INTEROP": false,
 				"CASTOR_BUILDGRP_TEST": false,
-				"CASTOR_BUILDGRP_TOOL": false,
+				"CASTOR_BUILDGRP_TOOL": true,
 				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
 				"CASTOR_FORCE_VCPKG_SUBMODULES": true,
+				"CASTOR_GUICOMMON_NEEDS_HLSL": true,
 				"CASTOR_USE_GLSLANG": true,
+				"CASTOR_USE_MESH_SHADERS": false,
+				"CASTOR_USE_TASK_SHADERS": false,
 				"PROJECTS_OUTPUT_DIR": "${sourceDir}",
 				"PROJECTS_UNITY_BUILD": true,
 				"PROJECTS_USE_PRECOMPILED_HEADERS": false

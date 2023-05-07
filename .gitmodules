@@ -7,9 +7,6 @@
 [submodule "external/Ashes"]
 	path = external/Ashes
 	url = https://github.com/DragonJoker/Ashes.git
-[submodule "external/glslang"]
-	path = external/glslang
-	url = https://github.com/KhronosGroup/glslang.git
 [submodule "external/ShaderWriter"]
 	path = external/ShaderWriter
 	url = https://github.com/DragonJoker/ShaderWriter.git
