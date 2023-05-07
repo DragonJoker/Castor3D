@@ -85,13 +85,13 @@ namespace castor3d::shader
 					auto result = m_writer.declLocale< DirectionalLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
 
-					lightData = getData( offset ).data(); ++offset;
+					lightData = getLightData( offset );
 					result.direction() = normalize( lightData.xyz() );
 					result.getMember< "cascadeCount" >() = lightData.w();
 
 					for ( uint32_t i = 0u; i < ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ); i += 4 )
 					{
-						lightData = getData( offset ).data(); ++offset;
+						lightData = getLightData( offset );
 						result.splitDepths()[i + 0] = lightData[0];
 						result.splitDepths()[i + 1] = lightData[1];
 						result.splitDepths()[i + 2] = lightData[2];
@@ -100,7 +100,7 @@ namespace castor3d::shader
 
 					for ( uint32_t i = 0u; i < ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ); i += 4 )
 					{
-						lightData = getData( offset ).data(); ++offset;
+						lightData = getLightData( offset );
 						result.splitScales()[i + 0] = lightData[0];
 						result.splitScales()[i + 1] = lightData[1];
 						result.splitScales()[i + 2] = lightData[2];
@@ -114,10 +114,10 @@ namespace castor3d::shader
 
 					for ( uint32_t i = 0u; i < MaxDirectionalCascadesCount; ++i )
 					{
-						col0 = getData( offset ).data(); ++offset;
-						col1 = getData( offset ).data(); ++offset;
-						col2 = getData( offset ).data(); ++offset;
-						col3 = getData( offset ).data(); ++offset;
+						col0 = getLightData( offset );
+						col1 = getLightData( offset );
+						col2 = getLightData( offset );
+						col3 = getLightData( offset );
 						result.transforms()[i] = mat4( col0, col1, col2, col3 );
 					}
 
@@ -144,10 +144,10 @@ namespace castor3d::shader
 					auto result = m_writer.declLocale< PointLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
 
-					lightData = getData( offset ).data(); ++offset;
+					lightData = getLightData( offset );
 					result.position() = lightData.xyz();
 
-					lightData = getData( offset ).data(); ++offset;
+					lightData = getLightData( offset );
 					result.attenuation() = lightData.xyz();
 
 					m_writer.returnStmt( result );
@@ -173,15 +173,15 @@ namespace castor3d::shader
 					auto result = m_writer.declLocale< SpotLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
 
-					lightData = getData( offset ).data(); ++offset;
+					lightData = getLightData( offset );
 					result.position() = lightData.xyz();
 					result.exponent() = lightData.w();
 
-					lightData = getData( offset ).data(); ++offset;
+					lightData = getLightData( offset );
 					result.attenuation() = lightData.xyz();
 					result.innerCutOff() = lightData.w();
 
-					lightData = getData( offset ).data(); ++offset;
+					lightData = getLightData( offset );
 					result.direction() = normalize( lightData.xyz() );
 					result.outerCutOff() = lightData.w();
 
@@ -198,21 +198,27 @@ namespace castor3d::shader
 		return m_getSpotLight( offset );
 	}
 
+
+	sdw::Vec4 LightsBuffer::getLightData( sdw::UInt & index )const
+	{
+		return getData( index++ ).data();
+	}
+
 	void LightsBuffer::getShadows( sdw::Vec4 & lightData
 		, ShadowData shadows
 		, sdw::UInt & offset )
 	{
-		lightData = getData( offset ).data(); ++offset;
+		lightData = getLightData( offset );
 		shadows.shadowMapIndex() = m_writer.cast< sdw::Int >( lightData.x() );
 		shadows.shadowType() = m_writer.cast< sdw::UInt >( lightData.y() );
 		shadows.pcfFilterSize() = lightData.z();
 		shadows.pcfSampleCount() = m_writer.cast< sdw::UInt >( lightData.w() );
 
-		lightData = getData( offset ).data(); ++offset;
+		lightData = getLightData( offset );
 		shadows.rawShadowOffsets() = lightData.xy();
 		shadows.pcfShadowOffsets() = lightData.zw();
 
-		lightData = getData( offset ).data(); ++offset;
+		lightData = getLightData( offset );
 		shadows.vsmMinVariance() = lightData.x();
 		shadows.vsmLightBleedingReduction() = lightData.y();
 		shadows.volumetricSteps() = m_writer.cast< sdw::UInt >( lightData.z() );
@@ -223,11 +229,11 @@ namespace castor3d::shader
 		, Light light
 		, sdw::UInt & offset )
 	{
-		lightData = getData( offset ).data(); ++offset;
+		lightData = getLightData( offset );
 		light.colour() = lightData.xyz();
 		light.farPlane() = lightData.w();
 
-		lightData = getData( offset ).data(); ++offset;
+		lightData = getLightData( offset );
 		light.intensity() = lightData.xy();
 
 		getShadows( lightData, light.shadows(), offset );

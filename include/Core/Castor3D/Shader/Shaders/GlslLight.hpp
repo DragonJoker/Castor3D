@@ -205,6 +205,8 @@ namespace castor3d::shader
 		}
 
 	private:
+		sdw::Vec4 getLightData( sdw::UInt & index )const;
+
 		void getShadows( sdw::Vec4 & lightData
 			, ShadowData shadows
 			, sdw::UInt & offset );

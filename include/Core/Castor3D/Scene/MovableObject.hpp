@@ -96,7 +96,7 @@ namespace castor3d
 			return m_sceneNode;
 		}
 
-		MovableType getType()const
+		MovableType getMovableType()const
 		{
 			return m_type;
 		}
