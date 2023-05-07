@@ -48,7 +48,10 @@ namespace castor
 	QuaternionT< T >::QuaternionT( QuaternionT< T > && rhs )noexcept
 		: QuaternionT{ NoInit{} }
 	{
-		std::memmove( BaseType::ptr(), rhs.constPtr(), sizeof( QuaternionDataT< T > ) );
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Warray-bounds"
+		std::memmove( BaseType::ptr(), rhs.ptr(), sizeof( QuaternionDataT< T > ) );
+#pragma GCC diagnostic pop
 	}
 
 	template< typename T >

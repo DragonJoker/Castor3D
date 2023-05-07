@@ -230,7 +230,6 @@ jobs:
         vcpkgDirectory: '${{ github.workspace }}/external/vcpkg'
         vcpkgJsonGlob: 'vcpkg.json'
     - name: Install necessary Clang++ version
-      if: matrix.os[2] == 'clang'
       shell: bash
       run: |
         sudo apt-get update

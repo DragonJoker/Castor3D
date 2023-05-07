@@ -55,17 +55,20 @@ namespace castor
 			datas.push_back( data );
 		}
 
-		m_vendor = makeString( datas[0][1] );
-		m_vendor += makeString( datas[0][3] );
-		m_vendor += makeString( datas[0][2] );
+		if ( !datas.empty() )
+		{
+			m_vendor = makeString( datas[0][1] );
+			m_vendor += makeString( datas[0][3] );
+			m_vendor += makeString( datas[0][2] );
 
-		if ( m_vendor == "GenuineIntel" )
-		{
-			m_isIntel = true;
-		}
-		else if ( m_vendor == "AuthenticAMD" )
-		{
-			m_isAMD = true;
+			if ( m_vendor == "GenuineIntel" )
+			{
+				m_isIntel = true;
+			}
+			else if ( m_vendor == "AuthenticAMD" )
+			{
+				m_isAMD = true;
+			}
 		}
 
 		// load bitset with flags for function 0x00000001
