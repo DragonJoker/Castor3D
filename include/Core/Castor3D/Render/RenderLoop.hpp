@@ -269,7 +269,7 @@ namespace castor3d
 		crg::SemaphoreWaitArray m_toWait;
 
 	private:
-		bool m_first = true;
+		s32 m_ignored = 5;
 		QueueData const * m_reservedQueue{};
 		std::unordered_set< ShaderBuffer const * > m_shaderBuffers;
 		std::mutex m_shaderBuffersMtx;
