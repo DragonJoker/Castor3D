@@ -45,6 +45,14 @@ namespace castor3d
 		{
 			return static_cast< ControlsManager & >( *engine.getUserInputListener() );
 		}
+
+		template< typename DataT, typename RatioT >
+		static bool areRelevantTimes( castor::Nanoseconds const & cpu
+			, castor::Nanoseconds const & gpu
+			, std::chrono::duration< DataT, RatioT > const & threshold )
+		{
+			return cpu >= threshold || gpu >= threshold;
+		}
 	}
 
 	//*********************************************************************************************
@@ -471,9 +479,9 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::PassOverlays::update( uint32_t & top )
+	bool DebugOverlays::PassOverlays::update( uint32_t & top )
 	{
-		m_visible = m_cpu.time > 0_ns && m_gpu.time > 0_ns;
+		m_visible = dbgovl::areRelevantTimes( m_cpu.time, m_gpu.time, 100_ns );
 
 		if ( m_panel->isVisible() != m_visible )
 		{
@@ -484,12 +492,14 @@ namespace castor3d
 			|| !m_gpu.value
 			|| !m_visible )
 		{
-			return;
+			return false;
 		}
 
 		m_cpu.value->setCaption( castor::string::toU32String( m_cpu.time ) );
 		m_gpu.value->setCaption( castor::string::toU32String( m_gpu.time ) );
 		top += PanelHeight;
+
+		return m_visible;
 	}
 
 	void DebugOverlays::PassOverlays::retrieveGpuTime()
@@ -846,24 +856,15 @@ namespace castor3d
 		}
 	}
 
-	void DebugOverlays::CategoryOverlays::update( uint32_t & top )
+	bool DebugOverlays::CategoryOverlays::update( uint32_t & top )
 	{
-		m_visible = m_cpu.time > 0_ns && m_gpu.time > 0_ns;
-
-		if ( m_container->isVisible() != ( m_visible && m_parentVisible ) )
-		{
-			m_container->setVisible( m_visible && m_parentVisible );
-		}
-
 		if ( !m_cpu.value
-			|| !m_gpu.value
-			|| !m_container->isVisible() )
+			|| !m_gpu.value )
 		{
-			return;
+			return false;
 		}
 
-		m_cpu.value->setCaption( castor::string::toU32String( m_cpu.time ) );
-		m_gpu.value->setCaption( castor::string::toU32String( m_gpu.time ) );
+		bool hasVisibleChildren{};
 
 		if ( m_container->isExpanded() )
 		{
@@ -873,13 +874,13 @@ namespace castor3d
 			{
 				if ( pass )
 				{
-					pass->update( height );
+					hasVisibleChildren = pass->update( height ) || hasVisibleChildren;
 				}
 			}
 
 			for ( auto & catIt : m_categories )
 			{
-				catIt->update( height );
+				hasVisibleChildren = catIt->update( height ) || hasVisibleChildren;
 			}
 
 			top += height;
@@ -888,7 +889,26 @@ namespace castor3d
 		else
 		{
 			top += PanelHeight;
+			hasVisibleChildren = hasVisibleChild();
 		}
+
+		m_visible = hasVisibleChildren
+			|| dbgovl::areRelevantTimes( m_cpu.time, m_gpu.time, 1_ms );
+
+		if ( m_container->isVisible() != ( m_visible && m_parentVisible ) )
+		{
+			m_container->setVisible( m_visible && m_parentVisible );
+		}
+
+		if ( !m_container->isVisible() )
+		{
+			return false;
+		}
+
+		m_cpu.value->setCaption( castor::string::toU32String( m_cpu.time ) );
+		m_gpu.value->setCaption( castor::string::toU32String( m_gpu.time ) );
+
+		return m_visible;
 	}
 
 	void DebugOverlays::CategoryOverlays::retrieveGpuTime()
@@ -911,6 +931,28 @@ namespace castor3d
 	{
 		m_parentVisible = visible;
 		m_container->setVisible( m_visible && m_parentVisible );
+	}
+
+	bool DebugOverlays::CategoryOverlays::hasVisibleChild()const noexcept
+	{
+		auto result = std::any_of( m_passes.begin()
+			, m_passes.end()
+			, []( PassOverlaysPtr const & lookup )
+			{
+				return lookup && lookup->isVisible();
+			} );
+
+		if ( !result )
+		{
+			result = std::any_of( m_categories.begin()
+				, m_categories.end()
+				, []( CategoryOverlaysPtr const & lookup )
+				{
+					return lookup->hasVisibleChild();
+				} );
+		}
+
+		return result;
 	}
 
 	PanelCtrl * DebugOverlays::CategoryOverlays::getContainer()const
@@ -973,8 +1015,9 @@ namespace castor3d
 	{
 		if ( m_visible )
 		{
-			m_gpuTime = 0_ns;
 			m_cpuTime = 0_ns;
+			m_gpuTotalTime = 0_ns;
+			m_gpuClientTime = 0_ns;
 			m_taskTimer.getElapsed();
 		}
 
@@ -1066,18 +1109,21 @@ namespace castor3d
 			, "\r%0.2f ms, %0.2f fps                           "
 			, float( result.count() ) / 1000.0f
 			, m_fps );
-		m_frameTimer.getElapsed();
-
 		return result;
 	}
 
 	void DebugOverlays::endGpuTask()
 	{
+		m_gpuClientTime += m_taskTimer.getElapsed();
+	}
+
+	void DebugOverlays::endGpuTasks()
+	{
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			m_renderPasses.retrieveGpuTime();
 		}
-		m_gpuTime += m_taskTimer.getElapsed();
+		endGpuTask();
 	}
 
 	void DebugOverlays::endCpuTask()
@@ -1191,8 +1237,6 @@ namespace castor3d
 
 	void DebugOverlays::doCompute()
 	{
-		m_gpuTotalTime = 0_ns;
-		m_gpuClientTime = 0_ns;
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			m_renderPasses.compute();

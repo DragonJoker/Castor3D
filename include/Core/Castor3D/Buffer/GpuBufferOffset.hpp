@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 
-#include <ashespp/Descriptor/WriteDescriptorSet.hpp>
+#include <ashespp/Descriptor/DescriptorSet.hpp>
 
 namespace castor3d
 {
@@ -34,6 +34,12 @@ namespace castor3d
 		, ashes::BufferBase const & buffer
 		, VkDeviceSize offset
 		, VkDeviceSize size );
+	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
 	C3D_API void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
@@ -53,6 +59,12 @@ namespace castor3d
 		, VkDeviceSize offset
 		, VkDeviceSize size );
 	C3D_API void createOutputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::Buffer< uint8_t > const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size );
+	C3D_API void createClearableOutputStorageBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
 		, ashes::Buffer< uint8_t > const & buffer
@@ -138,6 +150,14 @@ namespace castor3d
 				, dstPipelineFlags );
 		}
 
+		VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index
+			, VkShaderStageFlags stages )const
+		{
+			return castor3d::makeDescriptorSetLayoutBinding( index
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, stages );
+		}
+
 		void createUniformPassBinding( crg::FramePass & pass
 			, uint32_t binding
 			, std::string const & name )const
@@ -186,6 +206,18 @@ namespace castor3d
 				, getSize() );
 		}
 
+		void createClearableOutputStorageBinding( crg::FramePass & pass
+			, uint32_t binding
+			, std::string const & name )const
+		{
+			castor3d::createClearableOutputStorageBinding( pass
+				, binding
+				, name
+				, getBuffer()
+				, getOffset()
+				, getSize() );
+		}
+
 		ashes::WriteDescriptorSet getUniformBinding( uint32_t binding )const
 		{
 			auto result = ashes::WriteDescriptorSet{ binding
@@ -204,6 +236,15 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
 			result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
 			return result;
+		}
+
+		void createBinding( ashes::DescriptorSet & descriptorSet
+			, VkDescriptorSetLayoutBinding const & binding )const
+		{
+			descriptorSet.createBinding( binding
+				, getBuffer()
+				, uint32_t( getOffset() )
+				, uint32_t( getSize() ) );
 		}
 	};
 }

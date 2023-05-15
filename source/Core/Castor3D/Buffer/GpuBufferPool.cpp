@@ -67,6 +67,19 @@ namespace castor3d
 			, size );
 	}
 
+	void createClearableOutputStorageBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::BufferBase const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		pass.addClearableOutputStorageBuffer( { buffer, name }
+			, binding
+			, offset
+			, size );
+	}
+
 	void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
@@ -114,6 +127,19 @@ namespace castor3d
 		, VkDeviceSize size )
 	{
 		pass.addOutputStorageBuffer( { buffer, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createClearableOutputStorageBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, ashes::Buffer< uint8_t > const & buffer
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		pass.addClearableOutputStorageBuffer( { buffer, name }
 			, binding
 			, offset
 			, size );

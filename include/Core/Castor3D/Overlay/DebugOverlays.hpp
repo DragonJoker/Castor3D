@@ -81,6 +81,13 @@ namespace castor3d
 		void endGpuTask();
 		/**
 		 *\~english
+		 *\brief		Collects all GPU times
+		 *\~french
+		 *\brief		Collecte tous les temps GPU
+		 */
+		void endGpuTasks();
+		/**
+		 *\~english
 		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask
 		 *\~french
 		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de endGpuTask ou endCpuTask
@@ -254,21 +261,26 @@ namespace castor3d
 			~PassOverlays()noexcept;
 			void retrieveGpuTime();
 			void compute();
-			void update( uint32_t & top );
+			bool update( uint32_t & top );
 			void addTimer( FramePassTimer & timer );
 			bool removeTimer( FramePassTimer & timer );
 
-			castor::Nanoseconds getGpuTime()const
+			bool isVisible()const noexcept
+			{
+				return m_visible;
+			}
+
+			castor::Nanoseconds getGpuTime()const noexcept
 			{
 				return m_gpu.time;
 			}
 
-			castor::Nanoseconds getCpuTime()const
+			castor::Nanoseconds getCpuTime()const noexcept
 			{
 				return m_cpu.time;
 			}
 
-			castor::String const & getName()const
+			castor::String const & getName()const noexcept
 			{
 				return m_name;
 			}
@@ -319,8 +331,9 @@ namespace castor3d
 				, FramePassTimer & timer );
 			void retrieveGpuTime();
 			void compute();
-			void update( uint32_t & top );
+			bool update( uint32_t & top );
 			void setVisible( bool visible );
+			bool hasVisibleChild()const noexcept;
 			PanelCtrl * getContainer()const;
 			void dumpFrameTimes( castor::String prefix
 				, Parameters & params )const;
@@ -405,7 +418,6 @@ namespace castor3d
 		castor::Nanoseconds m_cpuTime{ 0 };
 		castor::Nanoseconds m_gpuClientTime{ 0 };
 		castor::Nanoseconds m_gpuTotalTime{ 0 };
-		castor::Nanoseconds m_gpuTime{ 0 };
 		castor::Nanoseconds m_totalTime{ 0 };
 		castor::Nanoseconds m_externalTime{ 0 };
 		float m_fps{ 0.0f };
