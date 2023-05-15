@@ -209,19 +209,21 @@ namespace castor3d
 	{
 		if ( m_renderSystem.hasDevice() )
 		{
-			bool first = m_first;
+			bool first = m_ignored == 5;
 			RenderInfo & info = m_debugOverlays->beginFrame();
 			doProcessEvents( EventType::ePreRender );
 			doGpuStep( info );
 			doProcessEvents( EventType::eQueueRender );
 			doCpuStep( tslf );
 			doProcessEvents( EventType::ePostRender );
-			m_lastFrameTime = m_debugOverlays->endFrame( first );
+			m_lastFrameTime = m_debugOverlays->endFrame( m_ignored > 0 );
 
 			if ( first )
 			{
 				log::info << "Initialisation time: " << ( float( m_lastFrameTime.load().count() ) / 1000.0f ) << " ms." << std::endl;
 			}
+
+			m_ignored = std::max( m_ignored - 1, 0 );
 		}
 	}
 
@@ -256,7 +258,7 @@ namespace castor3d
 		auto & device = m_renderSystem.getRenderDevice();
 		auto data = m_reservedQueue;
 
-		if ( !m_uploadTimer )
+		if ( m_ignored == 5 )
 		{
 			// Run this initialisation here, to make sure we are in the render loop thread.
 			m_reservedQueue = device.graphicsQueueSize() > 1
@@ -352,11 +354,10 @@ namespace castor3d
 		for ( auto & window : windows )
 		{
 			window.second->render( info
-				, m_first
+				, m_ignored == 5
 				, toWait );
 		}
 
-		m_first = false;
 		uploadResources.used = toWait.empty();
 
 		// Usually GPU cleanup
