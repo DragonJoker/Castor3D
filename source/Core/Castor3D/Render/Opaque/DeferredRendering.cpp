@@ -230,7 +230,6 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising additional opaque pass" );
-				static constexpr bool hasVelocity = true;
 				RenderTechniquePassDesc techniquePassDesc{ false, m_technique.getSsaoConfig() };
 				RenderNodesPassDesc renderPassDesc{ m_technique.getTargetExtent()
 					, m_technique.getCameraUbo()

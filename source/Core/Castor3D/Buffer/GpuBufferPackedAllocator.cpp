@@ -1,5 +1,7 @@
 #include "Castor3D/Buffer/GpuBufferPackedAllocator.hpp"
 
+#include "Castor3D/Buffer/GpuBuffer.hpp"
+
 CU_ImplementSmartPtr( castor3d, GpuPackedBuffer )
 
 namespace castor3d

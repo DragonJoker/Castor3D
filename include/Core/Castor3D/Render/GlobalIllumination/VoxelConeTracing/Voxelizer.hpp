@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_Voxelizer_H___
 #define ___C3D_Voxelizer_H___
 
-#include "VoxelizeModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/Culling/DummyCuller.hpp"
