@@ -39,19 +39,13 @@ namespace castor3d
 		 *\param[in]	smDirectionalResult	The directional lights shadow map.
 		 *\param[in]	smPointResult		The point lights shadow map.
 		 *\param[in]	smSpotResult		The spot lights shadow map.
-		 *\param[in]	lpvResult			The LPV result.
-		 *\param[in]	llpvResult			The Layered LPV result.
-		 *\param[in]	vctFirstBounce		The VCT first bounce result.
-		 *\param[in]	vctSecondaryBounce	The VCT secondary bounce result.
+		 *\param[in]	indirect			The indirect lighting objects.
 		 *\param[in]	ssao				The SSAO result.
 		 *\param[in]	size				The render dimensions.
 		 *\param[in]	technique			The parent technique.
 		 *\param[in]	sceneUbo			The scene configuration UBO.
 		 *\param[in]	hdrConfigUbo		The HDR configuration UBO.
 		 *\param[in]	cameraUbo			The camera configuration UBO.
-		 *\param[in]	lpvConfigUbo		The LPV configuration UBO.
-		 *\param[in]	llpvConfigUbo		The Layered LPV configuration UBO.
-		 *\param[in]	vctConfigUbo		The VCT configuration UBO.
 		 *\param[in]	ssaoConfig			The SSAO configuration.
 		 *\param[in]	opaquePassEnabled	The opaque pass enabled status.
 		 *\~french
@@ -69,19 +63,13 @@ namespace castor3d
 		 *\param[in]	smDirectionalResult	La shadow map des source lumineuses directionnelles.
 		 *\param[in]	smPointResult		La shadow map des source lumineuses omnidirectionnelles.
 		 *\param[in]	smSpotResult		La shadow map des source lumineuses projecteurs.
-		 *\param[in]	lpvResult			Le résultat du LPV.
-		 *\param[in]	llpvResult			Le résultat du Layered LPV.
-		 *\param[in]	vctFirstBounce		Le résultat du premier rebond de VCT.
-		 *\param[in]	vctSecondaryBounce	Le résultat du second rebond de VCT.
+		 *\param[in]	indirect			Les objets de l'éclairage indirect.
 		 *\param[in]	ssao				Le résultat du SSAO.
 		 *\param[in]	size				Les dimensions du rendu.
 		 *\param[in]	technique			La technique parente.
 		 *\param[in]	sceneUbo			L'UBO de configuration de la scène
 		 *\param[in]	hdrConfigUbo		L'UBO de configuration HDR.
 		 *\param[in]	cameraUbo			L'UBO de configuration de la caméra.
-		 *\param[in]	lpvConfigUbo		L'UBO de configuration des LPV.
-		 *\param[in]	llpvConfigUbo		L'UBO de configuration des Layered LPV.
-		 *\param[in]	vctConfigUbo		L'UBO de configuration du VCT.
 		 *\param[in]	ssaoConfig			La configuration du SSAO.
 		 *\param[in]	opaquePassEnabled	Le statut d'activation de la passe opaque.
 		 */
@@ -98,19 +86,13 @@ namespace castor3d
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
 			, ShadowMapResult const & smSpotResult
-			, LightVolumePassResult const & lpvResult
-			, LightVolumePassResultArray const & llpvResult
-			, Texture const & vctFirstBounce
-			, Texture const & vctSecondaryBounce
+			, IndirectLightingData const & indirect
 			, Texture const & ssao
 			, castor::Size const & size
-			, RenderTechnique const & technique
+			, RenderTechnique & technique
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, HdrConfigUbo const & hdrConfigUbo
-			, LpvGridConfigUbo const & lpvConfigUbo
-			, LayeredLpvGridConfigUbo const & llpvConfigUbo
-			, VoxelizerUbo const & vctConfigUbo
 			, SsaoConfig & ssaoConfig
 			, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled );
 		/**
@@ -171,11 +153,15 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SsaoConfig & ssaoConfig
 			, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled );
+		crg::FramePass & doCreateDeferredAdditionalPass( crg::FramePassGroup & graph
+			, ProgressBar * progress
+			, crg::FramePass const & lastPass );
+		bool doIsAdditionalPassEnabled()const;
 
 	private:
 		RenderDevice const & m_device;
 		OpaquePassResult const & m_opaquePassResult;
-		RenderTechnique const & m_technique;
+		RenderTechnique & m_technique;
 		crg::FramePass const * m_lastPass{};
 		castor::Size m_size;
 		LightPassResult m_lightPassResult;
@@ -183,6 +169,9 @@ namespace castor3d
 		IndirectLightingPassUPtr m_indirectLightingPass;
 		SubsurfaceScatteringPassUPtr m_subsurfaceScattering;
 		std::vector< OpaqueResolvePassUPtr > m_resolves;
+		crg::FramePass * m_additionalPassDesc{};
+		RenderTechniquePass * m_additionalPass{};
+		crg::RunnablePass::IsEnabledCallback m_additionalPassEnabled;
 		uint32_t m_index{};
 		std::vector< ashes::ImagePtr > m_results;
 	};

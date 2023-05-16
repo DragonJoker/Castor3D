@@ -1,6 +1,7 @@
 #include "Castor3D/Render/Opaque/Lighting/RunnableLightingPass.hpp"
 
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
+#include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Opaque/LightingPass.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPassResult.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -13,11 +14,9 @@ namespace castor3d
 
 	namespace runlgt
 	{
-		static std::array< VkImageLayout, 6u > getDefaultLayouts( bool blend )
+		static std::array< VkImageLayout, 4u > getDefaultLayouts( bool blend )
 		{
-			return std::array< VkImageLayout, 6u >{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
-				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
-				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
+			return std::array< VkImageLayout, 4u >{ VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL
 				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
 				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED )
 				, ( blend ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_UNDEFINED ) };
@@ -36,7 +35,7 @@ namespace castor3d
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
-		, Scene const & scene
+		, RenderTarget const & renderTarget
 		, LightPassResult const & lpResult
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
@@ -57,13 +56,10 @@ namespace castor3d
 				.implicitAction( lpResult[LpTexture::eSpecular].targetViewId
 					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eSpecular].targetViewId, getClearValue( LpTexture::eSpecular ) ) )
 				.implicitAction( lpResult[LpTexture::eScattering].targetViewId
-					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eScattering].targetViewId, getClearValue( LpTexture::eScattering ) ) )
-				.implicitAction( lpResult[LpTexture::eCoatingSpecular].targetViewId
-					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eCoatingSpecular].targetViewId, getClearValue( LpTexture::eCoatingSpecular ) ) )
-				.implicitAction( lpResult[LpTexture::eSheen].targetViewId
-					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eSheen].targetViewId, getClearValue( LpTexture::eSheen ) ) ) }
+					, crg::RecordContext::clearAttachment( lpResult[LpTexture::eScattering].targetViewId, getClearValue( LpTexture::eScattering ) ) ) }
 		, m_device{ device }
-		, m_scene{ scene }
+		, m_renderTarget{ renderTarget }
+		, m_scene{ *m_renderTarget.getScene() }
 		, m_lpResult{ lpResult }
 		, m_smDirectionalResult{ smDirectionalResult }
 		, m_smPointResult{ smPointResult }
@@ -82,38 +78,19 @@ namespace castor3d
 		}
 	}
 
-	void RunnableLightingPass::enableLight( Camera const & camera
-		, Light const & light )
+	void RunnableLightingPass::updateCamera( Camera const & camera )
 	{
-		if ( m_renderPasses.empty() )
+		for ( auto & pipeline : m_pipelines )
 		{
-			m_pendingLights[&light] = &camera;
-			return;
-		}
-
-		for ( auto lightingModelId : m_scene.getLightingModelsID() )
-		{
-			if ( m_scene.hasObjects( lightingModelId ) )
-			{
-				auto & pipeline = doFindPipeline( light
-					, lightingModelId );
-				pipeline.addLight( camera, light );
-			}
+			pipeline.second->updateCamera( camera );
 		}
 	}
 
-	void RunnableLightingPass::disableLight( Camera const & camera
-		, Light const & light )
+	void RunnableLightingPass::enableLight( Light const & light )
 	{
 		if ( m_renderPasses.empty() )
 		{
-			auto it = m_pendingLights.find( &light );
-
-			if ( it != m_pendingLights.end() )
-			{
-				m_pendingLights.erase( it );
-			}
-
+			m_pendingLights.emplace( &light );
 			return;
 		}
 
@@ -123,7 +100,7 @@ namespace castor3d
 			{
 				auto & pipeline = doFindPipeline( light
 					, lightingModelId );
-				pipeline.removeLight( camera, light );
+				pipeline.addLight( light );
 			}
 		}
 	}
@@ -179,8 +156,7 @@ namespace castor3d
 
 		for ( auto & pending : m_pendingLights )
 		{
-			enableLight( *pending.second
-				, *pending.first );
+			enableLight( *pending );
 		}
 
 		m_pendingLights.clear();
@@ -252,30 +228,10 @@ namespace castor3d
 				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
 				, layouts[3u]
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
-			, { 0u
-				, lpResult[LpTexture::eCoatingSpecular].getFormat()
-				, VK_SAMPLE_COUNT_1_BIT
-				, loadOp
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, layouts[4u]
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL }
-			, { 0u
-				, lpResult[LpTexture::eSheen].getFormat()
-				, VK_SAMPLE_COUNT_1_BIT
-				, loadOp
-				, VK_ATTACHMENT_STORE_OP_STORE
-				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-				, VK_ATTACHMENT_STORE_OP_DONT_CARE
-				, layouts[4u]
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } };
 		ashes::VkAttachmentReferenceArray references{ { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
 			, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-			, { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-			, { 4u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-			, { 5u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } };
+			, { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } };
 
 		ashes::SubpassDescriptionArray subpasses;
 		subpasses.emplace_back( ashes::SubpassDescription{ 0u
@@ -315,8 +271,6 @@ namespace castor3d
 		result.clearValues.push_back( getClearValue( LpTexture::eDiffuse ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eSpecular ) );
 		result.clearValues.push_back( getClearValue( LpTexture::eScattering ) );
-		result.clearValues.push_back( getClearValue( LpTexture::eCoatingSpecular ) );
-		result.clearValues.push_back( getClearValue( LpTexture::eSheen ) );
 		result.framebuffers.resize( std::max( m_targetColourResult.size(), m_targetDepthResult.size() ) );
 
 		return result;
@@ -405,9 +359,7 @@ namespace castor3d
 		std::vector< VkImageView > viewAttaches{ m_graph.createImageView( m_targetDepthResult[index] )
 			, lpResult[LpTexture::eDiffuse].targetView
 			, lpResult[LpTexture::eSpecular].targetView
-			, lpResult[LpTexture::eScattering].targetView
-			, lpResult[LpTexture::eCoatingSpecular].targetView
-			, lpResult[LpTexture::eSheen].targetView };
+			, lpResult[LpTexture::eScattering].targetView };
 		auto fbCreateInfo = makeVkStruct< VkFramebufferCreateInfo >( 0u
 			, VkRenderPass{}
 			, uint32_t{}
@@ -435,12 +387,6 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 		framebuffer.attaches.push_back( { crg::ImageViewIdArray{ lpResult[LpTexture::eScattering].targetViewId }
 			, layouts[3]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		framebuffer.attaches.push_back( { crg::ImageViewIdArray{ lpResult[LpTexture::eCoatingSpecular].targetViewId }
-			, layouts[4]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
-		framebuffer.attaches.push_back( { crg::ImageViewIdArray{ lpResult[LpTexture::eSheen].targetViewId }
-			, layouts[5]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } );
 	}
 
@@ -494,6 +440,7 @@ namespace castor3d
 		{
 			it = m_pipelines.emplace( hash
 				, std::make_unique< LightsPipeline >( m_scene
+					, *m_renderTarget.getCamera()
 					, m_pass
 					, m_context
 					, m_graph

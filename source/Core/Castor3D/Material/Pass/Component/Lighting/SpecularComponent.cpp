@@ -84,11 +84,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SpecularComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void SpecularComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
 		{
 			return;
 		}
@@ -129,6 +131,11 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
+		if ( !res.hasMember( "specular" ) )
+		{
+			return;
+		}
+
 		res.getMember< sdw::Vec3 >( "specular", true ) += src.getMember< sdw::Vec3 >( "specular", true ) * passMultiplier;
 		res.getMember< sdw::Float >( "specularFactor", true ) += src.getMember< sdw::Float >( "specularFactor", true ) * passMultiplier;
 	}
@@ -136,9 +143,13 @@ namespace castor3d
 	void SpecularComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
 		, sdw::StructInstance const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & sheen )const
+		, sdw::Vec4 & colMtl )const
 	{
+		if ( !components.hasMember( "specular" ) )
+		{
+			return;
+		}
+
 		spcRgh.rgb() = components.getMember< sdw::Vec3 >( "specular", true )
 			* components.getMember< sdw::Float >( "specularFactor", true );
 	}
@@ -165,8 +176,6 @@ namespace castor3d
 	void SpecularComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & crTsIr
-		, sdw::Vec4 const & sheen
 		, shader::Material & material )const
 	{
 		material.getMember< sdw::Vec3 >( "specular", true ) = spcRgh.rgb();

@@ -80,6 +80,56 @@ namespace castor3d::shader
 		, sdw::Vec3 coatReflected
 		, sdw::Vec3 sheenReflected )
 	{
+		auto combineResult = combine( components
+			, incident
+			, directDiffuse
+			, indirectDiffuse
+			, directSpecular
+			, indirectSpecular
+			, directAmbient
+			, indirectAmbient
+			, ambientOcclusion
+			, emissive
+			, std::move( reflectedDiffuse )
+			, std::move( reflectedSpecular )
+			, std::move( refracted ) );
+
+		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
+		{
+			combineResult = ( sheenReflected * ambientOcclusion )
+				+ ( components.colour * directSheen.x() )
+				+ combineResult * directSheen.y() * max( max( components.colour.r(), components.colour.g() ), components.colour.b() );
+		}
+		FI;
+
+		IF( m_writer, components.clearcoatFactor != 0.0_f )
+		{
+			auto clearcoatNdotV = m_writer.declLocale( "clearcoatNdotV"
+				, max( dot( components.clearcoatNormal, -incident ), 0.0_f ) );
+			auto clearcoatFresnel = m_writer.declLocale( "clearcoatFresnel"
+				, pow( 0.04_f + ( 1.0_f - 0.04_f ) * ( 1.0_f - clearcoatNdotV ), 5.0_f ) );
+			combineResult = combineResult * ( 1.0_f - vec3( components.clearcoatFactor * clearcoatFresnel ) )
+				+ ( coatReflected * ambientOcclusion ) + directCoatingSpecular;
+		}
+		FI;
+
+		return combineResult + directScattering;
+	}
+
+	sdw::Vec3 LightingModel::combine( BlendComponents const & components
+		, sdw::Vec3 const & incident
+		, sdw::Vec3 const & directDiffuse
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec3 const & directSpecular
+		, sdw::Vec3 const & indirectSpecular
+		, sdw::Vec3 const & directAmbient
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Float const & ambientOcclusion
+		, sdw::Vec3 const & emissive
+		, sdw::Vec3 reflectedDiffuse
+		, sdw::Vec3 reflectedSpecular
+		, sdw::Vec3 refracted )
+	{
 		IF( m_writer, components.refractionRatio != 0.0_f
 			&& components.hasTransmission == 0_u )
 		{
@@ -104,9 +154,6 @@ namespace castor3d::shader
 			, directDiffuse
 			, indirectDiffuse
 			, directSpecular
-			, directScattering
-			, directCoatingSpecular
-			, directSheen
 			, indirectSpecular
 			, directAmbient
 			, indirectAmbient
@@ -114,9 +161,7 @@ namespace castor3d::shader
 			, emissive
 			, std::move( reflectedDiffuse )
 			, std::move( reflectedSpecular )
-			, std::move( refracted )
-			, std::move( coatReflected )
-			, std::move( sheenReflected ) );
+			, std::move( refracted ) );
 	}
 
 	void LightingModel::compute( DirectionalLight const & plight

@@ -65,11 +65,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void NormalComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void NormalComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eNormals ) )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eNormals )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eNormals ) )
 		{
 			return;
 		}
@@ -89,7 +91,7 @@ namespace castor3d
 		, sdw::Vec4 const * clrCot
 		, sdw::expr::ExprList & inits )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eNormals ) )
+		if ( !components.hasMember( "normal" ) )
 		{
 			return;
 		}
@@ -113,7 +115,7 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( src.hasMember( "normal" ) )
+		if ( res.hasMember( "normal" ) )
 		{
 			res.getMember< sdw::Vec3 >( "normal" ) += src.getMember< sdw::Vec3 >( "normal" ) * passMultiplier;
 			res.getMember< sdw::Vec3 >( "tangent" ) += src.getMember< sdw::Vec3 >( "tangent" ) * passMultiplier;

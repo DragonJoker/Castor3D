@@ -127,19 +127,13 @@ namespace castor3d
 				, getOwner()->getDirectionalShadowPassResult()
 				, getOwner()->getPointShadowPassResult()
 				, getOwner()->getSpotShadowPassResult()
-				, getOwner()->getLpvResult()
-				, getOwner()->getLlpvResult()
-				, getOwner()->getFirstVctBounce()
-				, getOwner()->getSecondaryVctBounce()
+				, getOwner()->getIndirectLighting()
 				, m_ssao->getResult()
 				, getOwner()->getSize()
 				, *getOwner()
 				, getOwner()->getCameraUbo()
 				, getOwner()->getSceneUbo()
 				, getOwner()->getRenderTarget().getHdrConfigUbo()
-				, getOwner()->getLpvConfigUbo()
-				, getOwner()->getLlpvConfigUbo()
-				, getOwner()->getVctConfigUbo()
 				, getOwner()->getSsaoConfig()
 				, m_opaquePassEnabled )
 			: nullptr ) }
@@ -230,7 +224,10 @@ namespace castor3d
 			m_deferredRendering->update( updater );
 		}
 
-		m_opaquePass->countNodes( updater.info );
+		if ( m_opaquePass )
+		{
+			m_opaquePass->countNodes( updater.info );
+		}
 	}
 
 	void OpaqueRendering::accept( RenderTechniqueVisitor & visitor )
@@ -329,17 +326,11 @@ namespace castor3d
 					auto nmlOccIt = std::next( dataIt );
 					auto colRghIt = std::next( nmlOccIt );
 					auto spcMtlIt = std::next( colRghIt );
-					auto emsTrnIt = std::next( spcMtlIt );
-					auto clrCotIt = std::next( emsTrnIt );
-					auto crTsIrIt = std::next( clrCotIt );
-					auto sheenIt = std::next( crTsIrIt );
+					auto emsTrnIt = std::next(spcMtlIt);
 					renderPassDesc.implicitAction( nmlOccIt->view(), crg::RecordContext::clearAttachment( *nmlOccIt ) )
 						.implicitAction( colRghIt->view(), crg::RecordContext::clearAttachment( *colRghIt ) )
 						.implicitAction( spcMtlIt->view(), crg::RecordContext::clearAttachment( *spcMtlIt ) )
-						.implicitAction( emsTrnIt->view(), crg::RecordContext::clearAttachment( *emsTrnIt ) )
-						.implicitAction( clrCotIt->view(), crg::RecordContext::clearAttachment( *clrCotIt ) )
-						.implicitAction( crTsIrIt->view(), crg::RecordContext::clearAttachment( *crTsIrIt ) )
-						.implicitAction( sheenIt->view(), crg::RecordContext::clearAttachment( *sheenIt ) );
+						.implicitAction( emsTrnIt->view(), crg::RecordContext::clearAttachment( *emsTrnIt ) );
 				}
 
 				auto res = std::make_unique< VisibilityResolvePass >( getOwner()
@@ -389,12 +380,6 @@ namespace castor3d
 				, index++ );
 			result.addOutputStorageView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
 				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eClrCot].targetViewId
-				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eCrTsIr].targetViewId
-				, index++ );
-			result.addOutputStorageView( opaquePassResult[DsTexture::eSheen].targetViewId
-				, index++ );
 		}
 		else
 		{
@@ -406,12 +391,6 @@ namespace castor3d
 				, getClearValue( DsTexture::eSpcRgh ) );
 			result.addOutputColourView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
 				, getClearValue( DsTexture::eEmsTrn ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eClrCot].targetViewId
-				, getClearValue( DsTexture::eClrCot ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eCrTsIr].targetViewId
-				, getClearValue( DsTexture::eCrTsIr ) );
-			result.addOutputColourView( opaquePassResult[DsTexture::eSheen].targetViewId
-				, getClearValue( DsTexture::eSheen ) );
 		}
 
 		return result;
@@ -439,13 +418,7 @@ namespace castor3d
 					.meshShading( true )
 					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags );
 				techniquePassDesc.ssao( m_ssao->getResult() )
-					.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
-					.llpvConfigUbo( getOwner()->getLlpvConfigUbo() )
-					.vctConfigUbo( getOwner()->getVctConfigUbo() )
-					.lpvResult( getOwner()->getLpvResult() )
-					.llpvResult( getOwner()->getLlpvResult() )
-					.vctFirstBounce( getOwner()->getFirstVctBounce() )
-					.vctSecondaryBounce( getOwner()->getSecondaryVctBounce() );
+					.indirect( getOwner()->getIndirectLighting() );
 				auto res = std::make_unique< ForwardRenderTechniquePass >( getOwner()
 					, framePass
 					, context
@@ -533,12 +506,6 @@ namespace castor3d
 			, getClearValue( DsTexture::eSpcRgh ) );
 		result.addOutputColourView( opaquePassResult[DsTexture::eEmsTrn].targetViewId
 			, getClearValue( DsTexture::eEmsTrn ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eClrCot].targetViewId
-			, getClearValue( DsTexture::eClrCot ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eCrTsIr].targetViewId
-			, getClearValue( DsTexture::eCrTsIr ) );
-		result.addOutputColourView( opaquePassResult[DsTexture::eSheen].targetViewId
-			, getClearValue( DsTexture::eSheen ) );
 
 		CU_Require( !m_ssao );
 		m_ssao = doCreateSsaoPass( progress, result, {} );
@@ -547,6 +514,7 @@ namespace castor3d
 
 	bool OpaqueRendering::doIsOpaquePassEnabled()const
 	{
+		CU_Require( m_opaquePass );
 		return m_opaquePass->isPassEnabled();
 	}
 }

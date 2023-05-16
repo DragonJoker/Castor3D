@@ -29,7 +29,8 @@ namespace castor3d
 			{
 			}
 
-			C3D_API void fillComponents( sdw::type::BaseStruct & components
+			C3D_API void fillComponents( ComponentModeFlags componentsMask
+				, sdw::type::BaseStruct & components
 				, shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
 			C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components

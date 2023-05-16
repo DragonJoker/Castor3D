@@ -32,31 +32,9 @@ namespace castor3d
 		 *\~french
 		 *\param[in]	value	La configuration des LPV.
 		 */
-		RenderTechniquePassDesc & lpvConfigUbo( LpvGridConfigUbo const & value )
+		RenderTechniquePassDesc & indirect( IndirectLightingData value )
 		{
-			m_lpvConfigUbo = &value;
-			return *this;
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	The Layered LPV configuration.
-		 *\~french
-		 *\param[in]	value	La configuration des Layered LPV.
-		 */
-		RenderTechniquePassDesc & llpvConfigUbo( LayeredLpvGridConfigUbo const & value )
-		{
-			m_llpvConfigUbo = &value;
-			return *this;
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	The VCT configuration.
-		 *\~french
-		 *\param[in]	value	La configuration du VCT.
-		 */
-		RenderTechniquePassDesc & vctConfigUbo( VoxelizerUbo const & value )
-		{
-			m_vctConfigUbo = &value;
+			m_indirectLighting = std::move( value );
 			return *this;
 		}
 		/**
@@ -68,50 +46,6 @@ namespace castor3d
 		RenderTechniquePassDesc & ssao( Texture const & value )
 		{
 			m_ssao = &value;
-			return *this;
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	The LPV result.
-		 *\~french
-		 *\param[in]	value	Le résultat du LPV.
-		 */
-		RenderTechniquePassDesc & lpvResult( LightVolumePassResult const & value )
-		{
-			m_lpvResult = &value;
-			return *this;
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	The LPV result.
-		 *\~french
-		 *\param[in]	value	Le résultat du LPV.
-		 */
-		RenderTechniquePassDesc & llpvResult( LightVolumePassResultArray const & value )
-		{
-			m_llpvResult = &value;
-			return *this;
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	The VCT first bounce result.
-		 *\~french
-		 *\param[in]	value	Le résultat du premier rebond de VCT.
-		 */
-		RenderTechniquePassDesc & vctFirstBounce( Texture const & value )
-		{
-			m_vctFirstBounce = &value;
-			return *this;
-		}
-		/**
-		 *\~english
-		 *\param[in]	value	The VCT second bounce result.
-		 *\~french
-		 *\param[in]	value	Le résultat du second rebond de VCT.
-		 */
-		RenderTechniquePassDesc & vctSecondaryBounce( Texture const & value )
-		{
-			m_vctSecondaryBounce = &value;
 			return *this;
 		}
 		/**
@@ -158,13 +92,7 @@ namespace castor3d
 
 		SsaoConfig const & m_ssaoConfig;
 		Texture const * m_ssao{};
-		LpvGridConfigUbo const * m_lpvConfigUbo{};
-		LayeredLpvGridConfigUbo const * m_llpvConfigUbo{};
-		VoxelizerUbo const * m_vctConfigUbo{};
-		LightVolumePassResult const * m_lpvResult{};
-		LightVolumePassResultArray const * m_llpvResult{};
-		Texture const * m_vctFirstBounce{};
-		Texture const * m_vctSecondaryBounce{};
+		IndirectLightingData m_indirectLighting;
 		ShaderFlags m_shaderFlags{ ShaderFlag::eWorldSpace
 			| ShaderFlag::eViewSpace
 			| ShaderFlag::eTangentSpace

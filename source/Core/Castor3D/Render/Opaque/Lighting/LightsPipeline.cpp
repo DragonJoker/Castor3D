@@ -41,6 +41,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	LightsPipeline::LightsPipeline( Scene const & scene
+		, Camera const & camera
 		, crg::FramePass const & pass
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
@@ -56,6 +57,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_renderPasses{ renderPasses }
 		, m_scene{ scene }
+		, m_targetCamera{ camera }
 		, m_config{ config }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, "Vtx" + m_config.getName( *m_scene.getEngine() )
@@ -109,47 +111,36 @@ namespace castor3d
 		m_enabledLights.clear();
 	}
 
-	void LightsPipeline::addLight( Camera const & camera
-		, Light const & light )
+	void LightsPipeline::updateCamera( Camera const & camera )
 	{
+		m_camera = &camera;
+	}
+
+	void LightsPipeline::addLight( Light const & light )
+	{
+		auto camera = m_camera ? m_camera : &m_targetCamera;
 		auto & entry = doCreateLightEntry( light );
 
 		if ( m_config.lightType != LightType::eDirectional )
 		{
-			entry.cameraUbo.cpuUpdate( camera
+			entry.cameraUbo.cpuUpdate( *camera
 				, 0u
 				, false );
-			auto model = doComputeModelMatrix( light, camera );
+			auto model = doComputeModelMatrix( light, *camera );
 			auto & data = entry.modelMatrixUbo.getData();
 			data.prvModel = data.curModel;
 			data.curModel = model;
 		}
 		else
 		{
-			entry.cameraUbo.cpuUpdate( camera
-				, camera.getView()
+			entry.cameraUbo.cpuUpdate( *camera
+				, camera->getView()
 				, m_viewport.getProjection()
 				, 0u
 				, true );
 		}
 
 		m_enabledLights.push_back( &entry );
-	}
-
-	void LightsPipeline::removeLight( Camera const & camera
-		, Light const & light )
-	{
-		auto it = std::find_if( m_enabledLights.begin()
-			, m_enabledLights.end()
-			, [&light]( LightDescriptors const * lookup )
-			{
-				return &lookup->light == &light;
-			} );
-
-		if ( it != m_enabledLights.end() )
-		{
-			m_enabledLights.erase( it );
-		}
 	}
 
 	void LightsPipeline::recordInto( crg::RecordContext & context

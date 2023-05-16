@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "OpaqueModule.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightingModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -98,14 +99,8 @@ namespace castor3d
 			, Texture const & depthObj
 			, OpaquePassResult const & gpResult
 			, LightPassResult const & lpResult
-			, LightVolumePassResult const & lpvResult
-			, LightVolumePassResultArray const & llpvResult
-			, Texture const & vctFirstBounce
-			, Texture const & vctSecondaryBounce
-			, CameraUbo const & cameraUbo
-			, LpvGridConfigUbo const & lpvConfigUbo
-			, LayeredLpvGridConfigUbo const & llpvConfigUbo
-			, VoxelizerUbo const & vctConfigUbo );
+			, IndirectLightingData const & indirect
+			, CameraUbo const & cameraUbo );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

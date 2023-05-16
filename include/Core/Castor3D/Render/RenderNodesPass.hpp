@@ -249,7 +249,7 @@ namespace castor3d
 		uint32_t m_index{ 0u };
 		std::optional< bool > m_handleStatic{ std::nullopt };
 		crg::ru::Config m_ruConfig{ 1u, true };
-		ComponentModeFlags m_componentModeFlags{ ComponentModeFlag::eAll };
+		ComponentModeFlags m_componentModeFlags{ ComponentModeFlag::eAllButFwdDef };
 	};
 
 	class RenderNodesPass
@@ -679,6 +679,16 @@ namespace castor3d
 		bool handleStatic()const
 		{
 			return m_handleStatic != std::nullopt;
+		}
+
+		bool allowDeferrable()const
+		{
+			return castor3d::allowDeferrable( getComponentsMask() );
+		}
+
+		bool handleDeferrable()const
+		{
+			return castor3d::handleDeferrable( getComponentsMask() );
 		}
 		/**@}*/
 

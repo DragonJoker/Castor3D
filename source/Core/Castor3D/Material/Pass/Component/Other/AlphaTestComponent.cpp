@@ -108,11 +108,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void AlphaTestComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void AlphaTestComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eOpacity ) )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eOpacity )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eOpacity ) )
 		{
 			return;
 		}
@@ -150,7 +152,7 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( src.hasMember( "alphaRef" ) )
+		if ( res.hasMember( "alphaRef" ) )
 		{
 			res.getMember< sdw::Float >( "alphaRef" ) += src.getMember< sdw::Float >( "alphaRef" ) * passMultiplier;
 		}

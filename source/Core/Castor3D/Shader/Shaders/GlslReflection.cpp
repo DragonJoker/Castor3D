@@ -80,9 +80,9 @@ namespace castor3d::shader
 		, sdw::Vec3 & pcoatReflected
 		, sdw::Vec3 & psheenReflected )
 	{
-		if ( !m_computeForward )
+		if ( !m_computeForwardSceneRefr)
 		{
-			m_computeForward = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefrForward"
+			m_computeForwardSceneRefr = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefrForward"
 				, [&]( BlendComponents components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & difF
@@ -188,7 +188,7 @@ namespace castor3d::shader
 				, sdw::OutVec3{ m_writer, "sheenReflected" } );
 		}
 
-		m_computeForward( pcomponents
+		m_computeForwardSceneRefr( pcomponents
 			, pwsNormal
 			, pdifF
 			, pspcF
@@ -207,7 +207,7 @@ namespace castor3d::shader
 			, psheenReflected );
 	}
 
-	void ReflectionModel::computeCombined( BlendComponents & components
+	void ReflectionModel::computeCombined( BlendComponents & pcomponents
 		, LightSurface const & lightSurface
 		, BackgroundModel & background
 		, sdw::UInt const & envMapIndex
@@ -216,10 +216,10 @@ namespace castor3d::shader
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
 		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected )
+		, sdw::Vec3& coatReflected
+		, sdw::Vec3& sheenReflected )
 	{
-		computeCombined( components
+		computeCombined( pcomponents
 			, lightSurface.N()
 			, lightSurface.difF()
 			, lightSurface.spcF()
@@ -252,9 +252,9 @@ namespace castor3d::shader
 		, sdw::Vec3 & pcoatReflected
 		, sdw::Vec3 & psheenReflected )
 	{
-		if ( !m_computeDeferred )
+		if ( !m_computeForwardEnvRefr)
 		{
-			m_computeDeferred = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefrDeferred"
+			m_computeForwardEnvRefr = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefrForward"
 				, [&]( BlendComponents components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & difF
@@ -337,7 +337,7 @@ namespace castor3d::shader
 				, sdw::OutVec3{ m_writer, "sheenReflected" } );
 		}
 
-		m_computeDeferred( pcomponents
+		m_computeForwardEnvRefr( pcomponents
 			, pwsNormal
 			, pdifF
 			, pspcF
@@ -351,6 +351,118 @@ namespace castor3d::shader
 			, prefracted
 			, pcoatReflected
 			, psheenReflected );
+	}
+
+	void ReflectionModel::computeCombined( BlendComponents & components
+		, LightSurface const & lightSurface
+		, BackgroundModel & background
+		, sdw::UInt const & envMapIndex
+		, sdw::UInt const & hasReflection
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular
+		, sdw::Vec3 & refracted )
+	{
+		computeCombined( components
+			, lightSurface.N()
+			, lightSurface.difF()
+			, lightSurface.spcF()
+			, lightSurface.V()
+			, lightSurface.NdotV()
+			, background
+			, envMapIndex
+			, hasReflection
+			, refractionRatio
+			, reflectedDiffuse
+			, reflectedSpecular
+			, refracted );
+	}
+
+	void ReflectionModel::computeCombined( BlendComponents & pcomponents
+		, sdw::Vec3 const & pwsNormal
+		, sdw::Vec3 const & pdifF
+		, sdw::Vec3 const & pspcF
+		, sdw::Vec3 const & pV
+		, sdw::Float const & pNdotV
+		, BackgroundModel & background
+		, sdw::UInt const & penvMapIndex
+		, sdw::UInt const & phasReflection
+		, sdw::Float const & prefractionRatio
+		, sdw::Vec3 & preflectedDiffuse
+		, sdw::Vec3 & preflectedSpecular
+		, sdw::Vec3 & prefracted )
+	{
+		if ( !m_computeDeferred )
+		{
+			m_computeDeferred = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefrDeferred"
+				, [&]( BlendComponents components
+					, sdw::Vec3 const & wsNormal
+					, sdw::Vec3 const & difF
+					, sdw::Vec3 const & spcF
+					, sdw::Vec3 const & V
+					, sdw::Float const & NdotV
+					, sdw::UInt envMapIndex
+					, sdw::UInt const & hasReflection
+					, sdw::Float const & refractionRatio
+					, sdw::Vec3 reflectedDiffuse
+					, sdw::Vec3 reflectedSpecular
+					, sdw::Vec3 refracted )
+				{
+					auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
+					auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
+					auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
+						, envMapIndex > 0_u );
+					--envMapIndex;
+					doComputeReflections( brdf
+						, envMap
+						, hasEnvMap
+						, background
+						, wsNormal
+						, difF
+						, spcF
+						, V
+						, NdotV
+						, hasReflection
+						, components
+						, envMapIndex
+						, reflectedDiffuse
+						, reflectedSpecular );
+					doComputeRefractions( envMap
+						, hasEnvMap
+						, background
+						, wsNormal
+						, V
+						, refractionRatio
+						, envMapIndex
+						, components
+						, refracted );
+				}
+				, InOutBlendComponents{ m_writer, "components", pcomponents }
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InVec3{ m_writer, "difF" }
+				, sdw::InVec3{ m_writer, "spcF" }
+				, sdw::InVec3{ m_writer, "V" }
+				, sdw::InFloat{ m_writer, "NdotV" }
+				, sdw::InUInt{ m_writer, "envMapIndex" }
+				, sdw::InUInt{ m_writer, "hasReflection" }
+				, sdw::InFloat{ m_writer, "refractionRatio" }
+				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
+				, sdw::OutVec3{ m_writer, "reflectedSpecular" }
+				, sdw::OutVec3{ m_writer, "refracted" } );
+		}
+
+		m_computeDeferred( pcomponents
+			, pwsNormal
+			, pdifF
+			, pspcF
+			, pV
+			, pNdotV
+			, penvMapIndex
+			, phasReflection
+			, prefractionRatio
+			, preflectedDiffuse
+			, preflectedSpecular
+			, prefracted );
 	}
 
 	void ReflectionModel::computeReflections( BlendComponents & components

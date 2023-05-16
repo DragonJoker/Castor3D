@@ -59,7 +59,7 @@ namespace castor3d::shader
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->fillComponents( components, materials, nullptr );
+			shader->fillComponents( getFilter(), components, materials, nullptr );
 			shader->fillComponentsInits( components, materials, nullptr, nullptr, nullptr, inits );
 		}
 	}
@@ -73,7 +73,7 @@ namespace castor3d::shader
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->fillComponents( components, materials, &surface );
+			shader->fillComponents( getFilter(), components, materials, &surface );
 			shader->fillComponentsInits( components, materials, &material, &surface, clrCot, inits );
 		}
 	}
@@ -151,8 +151,6 @@ namespace castor3d::shader
 	void PassShaders::updateMaterial( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & crTsIr
-		, sdw::Vec4 const & sheen
 		, Material & material )const
 	{
 		for ( auto & shader : m_compRegister.getMaterialShaders() )
@@ -160,8 +158,6 @@ namespace castor3d::shader
 			shader->updateMaterial( albedo
 				, spcRgh
 				, colMtl
-				, crTsIr
-				, sheen
 				, material );
 		}
 	}
@@ -169,32 +165,28 @@ namespace castor3d::shader
 	void PassShaders::updateOutputs( Material const & material
 		, SurfaceBase const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & sheen )const
+		, sdw::Vec4 & colMtl )const
 	{
 		for ( auto & shader : m_compRegister.getMaterialShaders() )
 		{
 			shader->updateOutputs( material
 				, surface
 				, spcRgh
-				, colMtl
-				, sheen );
+				, colMtl );
 		}
 	}
 
 	void PassShaders::updateOutputs( BlendComponents const & components
 		, SurfaceBase const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & sheen )const
+		, sdw::Vec4 & colMtl )const
 	{
 		for ( auto & shader : m_shaders )
 		{
 			shader->updateOutputs( components
 				, surface
 				, spcRgh
-				, colMtl
-				, sheen );
+				, colMtl );
 		}
 	}
 

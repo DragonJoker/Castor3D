@@ -87,11 +87,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SheenComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void SheenComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
 		{
 			return;
 		}
@@ -132,6 +134,11 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
+		if ( !res.hasMember( "sheenFactor" ) )
+		{
+			return;
+		}
+
 		res.getMember< sdw::Vec3 >( "sheenFactor", true ) = src.getMember< sdw::Vec3 >( "sheenFactor", true ) * passMultiplier;
 		res.getMember< sdw::Float >( "sheenRoughness", true ) = src.getMember< sdw::Float >( "sheenRoughness", true ) * passMultiplier;
 	}

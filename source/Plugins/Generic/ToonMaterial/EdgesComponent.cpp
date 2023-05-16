@@ -166,11 +166,15 @@ namespace toon
 
 	//*********************************************************************************************
 
-	void EdgesComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void EdgesComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, castor3d::shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( ( !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecifics )
+		if ( ( !checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecifics )
+				&& !checkFlag( componentsMask, castor3d::ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecifics )
 				&& !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eDiffuseLighting )
 				&& !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecularLighting ) )
 			|| !materials.hasSpecificsBuffer< shader::ToonProfile >() )
@@ -230,7 +234,7 @@ namespace toon
 		, castor3d::shader::BlendComponents & res
 		, castor3d::shader::BlendComponents const & src )const
 	{
-		if ( src.hasMember( "edgeColour" ) )
+		if ( res.hasMember( "edgeColour" ) )
 		{
 			res.getMember< sdw::Vec4 >( "edgeColour" ) += src.getMember< sdw::Vec4 >( "edgeColour" ) * passMultiplier;
 			res.getMember< sdw::Float >( "edgeWidth" ) += src.getMember< sdw::Float >( "edgeWidth" ) * passMultiplier;

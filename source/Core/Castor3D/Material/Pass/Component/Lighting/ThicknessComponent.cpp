@@ -64,12 +64,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ThicknessComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void ThicknessComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
-			&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( ( !checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) ) )
 		{
 			return;
 		}
@@ -107,6 +110,11 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
+		if ( !res.hasMember( "thicknessFactor" ) )
+		{
+			return;
+		}
+
 		res.getMember< sdw::Float >( "thicknessFactor", true ) = src.getMember< sdw::Float >( "thicknessFactor", true ) * passMultiplier;
 	}
 

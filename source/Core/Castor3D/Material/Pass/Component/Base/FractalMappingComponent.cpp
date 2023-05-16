@@ -63,7 +63,8 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void FractalMappingComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void FractalMappingComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{

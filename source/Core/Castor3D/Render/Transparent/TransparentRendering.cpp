@@ -232,13 +232,7 @@ namespace castor3d
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.ssao( getOwner()->getSsaoResult() )
-						.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
-						.llpvConfigUbo( getOwner()->getLlpvConfigUbo() )
-						.vctConfigUbo( getOwner()->getVctConfigUbo() )
-						.lpvResult( getOwner()->getLpvResult() )
-						.llpvResult( getOwner()->getLlpvResult() )
-						.vctFirstBounce( getOwner()->getFirstVctBounce() )
-						.vctSecondaryBounce( getOwner()->getSecondaryVctBounce() )
+						.indirect( getOwner()->getIndirectLighting() )
 						.hasVelocity( hasVelocity ) );
 				m_transparentPass = res.get();
 				getEngine()->registerTimer( framePass.getFullName()
@@ -299,13 +293,7 @@ namespace castor3d
 						.implicitAction( revealIt->view(), crg::RecordContext::clearAttachment( *revealIt ) )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.ssao( getOwner()->getSsaoResult() )
-						.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
-						.llpvConfigUbo( getOwner()->getLlpvConfigUbo() )
-						.vctConfigUbo( getOwner()->getVctConfigUbo() )
-						.lpvResult( getOwner()->getLpvResult() )
-						.llpvResult( getOwner()->getLlpvResult() )
-						.vctFirstBounce( getOwner()->getFirstVctBounce() )
-						.vctSecondaryBounce( getOwner()->getSecondaryVctBounce() )
+						.indirect( getOwner()->getIndirectLighting() )
 						.hasVelocity( hasVelocity ) );
 				m_transparentPass = res.get();
 				getEngine()->registerTimer( framePass.getFullName()

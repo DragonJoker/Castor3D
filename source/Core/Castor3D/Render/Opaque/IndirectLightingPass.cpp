@@ -138,12 +138,6 @@ namespace castor3d
 
 					IF( writer, material.lighting != 0_u )
 					{
-						auto clrCot = writer.declLocale( "clrCot"
-							, vec4( 0.0_f ) );
-						auto crTsIr = writer.declLocale( "crTsIr"
-							, vec4( 0.0_f ) );
-						auto sheen = writer.declLocale( "sheen"
-							, vec4( 0.0_f ) );
 						auto wsNormal = writer.declLocale( "wsNormal"
 							, normalize( nmlOcc.xyz() ) );
 						auto surface = writer.declLocale( "surface"
@@ -151,12 +145,11 @@ namespace castor3d
 								, vsPosition
 								, wsPosition
 								, wsNormal } );
-						materials.fill( colMtl.rgb(), spcRgh, colMtl, crTsIr, sheen, material );
+						materials.fill( colMtl.rgb(), spcRgh, colMtl, material );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material
-								, surface
-								, clrCot } );
+								, surface } );
 
 						auto lightSurface = shader::LightSurface::create( writer
 							, "lightSurface"
@@ -290,28 +283,22 @@ namespace castor3d
 		, Texture const & depthObj
 		, OpaquePassResult const & gpResult
 		, LightPassResult const & lpResult
-		, LightVolumePassResult const & lpvResult
-		, LightVolumePassResultArray const & llpvResult
-		, Texture const & vctFirstBounce
-		, Texture const & vctSecondaryBounce
-		, CameraUbo const & cameraUbo
-		, LpvGridConfigUbo const & lpvConfigUbo
-		, LayeredLpvGridConfigUbo const & llpvConfigUbo
-		, VoxelizerUbo const & vctConfigUbo )
+		, IndirectLightingData const & indirect
+		, CameraUbo const & cameraUbo )
 		: m_device{ device }
 		, m_scene{ scene }
 		, m_brdf{ brdf }
 		, m_depthObj{ depthObj }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
-		, m_lpvResult{ lpvResult }
-		, m_llpvResult{ llpvResult }
-		, m_vctFirstBounce{ vctFirstBounce }
-		, m_vctSecondaryBounce{ vctSecondaryBounce }
+		, m_lpvResult{ *indirect.lpvResult }
+		, m_llpvResult{ *indirect.llpvResult }
+		, m_vctFirstBounce{ *indirect.vctFirstBounce }
+		, m_vctSecondaryBounce{ *indirect.vctSecondaryBounce }
 		, m_cameraUbo{ cameraUbo }
-		, m_lpvConfigUbo{ lpvConfigUbo }
-		, m_llpvConfigUbo{ llpvConfigUbo }
-		, m_vctConfigUbo{ vctConfigUbo }
+		, m_lpvConfigUbo{ *indirect.lpvConfigUbo }
+		, m_llpvConfigUbo{ *indirect.llpvConfigUbo }
+		, m_vctConfigUbo{ *indirect.vctConfigUbo }
 		, m_group{ graph.createPassGroup( "IndirectLighting" ) }
 	{
 		m_programs.resize( size_t( IndirectLightingPass::ProgramType::eCount ) );
@@ -319,9 +306,9 @@ namespace castor3d
 		m_group.addGroupOutput( m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId );
 		m_group.addGroupOutput( m_lpResult[LpTexture::eIndirectSpecular].wholeViewId );
 
-		m_group.addInput( vctFirstBounce.targetViewId
+		m_group.addInput( m_vctFirstBounce.targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		m_group.addInput( vctSecondaryBounce.targetViewId
+		m_group.addInput( m_vctSecondaryBounce.targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		m_group.addInput( m_lpvResult[LpvTexture::eR].targetViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );

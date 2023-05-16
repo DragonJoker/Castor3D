@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "RenderModule.hpp"
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 #include "Castor3D/Render/Opaque/OpaqueModule.hpp"
@@ -172,8 +173,6 @@ namespace castor3d
 		C3D_API SsaoConfig const & getSsaoConfig()const;
 		C3D_API SsaoConfig & getSsaoConfig();
 		C3D_API Texture const & getSsaoResult()const;
-		C3D_API Texture const & getFirstVctBounce()const;
-		C3D_API Texture const & getSecondaryVctBounce()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
 		C3D_API Texture const & getDiffuseLightingResult()const;
 		C3D_API Texture const & getScatteringLightingResult()const;
@@ -267,17 +266,6 @@ namespace castor3d
 			return m_spotShadowMap->getShadowPassResult( false );
 		}
 
-		LightVolumePassResult const & getLpvResult()const
-		{
-			CU_Require( m_lpvResult );
-			return *m_lpvResult;
-		}
-
-		LightVolumePassResultArray const & getLlpvResult()const
-		{
-			return m_llpvResult;
-		}
-
 		CameraUbo const & getCameraUbo()const
 		{
 			return m_cameraUbo;
@@ -296,21 +284,6 @@ namespace castor3d
 		SceneUbo & getSceneUbo()
 		{
 			return m_sceneUbo;
-		}
-
-		LpvGridConfigUbo const & getLpvConfigUbo()const
-		{
-			return m_lpvConfigUbo;
-		}
-
-		LayeredLpvGridConfigUbo const & getLlpvConfigUbo()const
-		{
-			return m_llpvConfigUbo;
-		}
-
-		VoxelizerUbo const & getVctConfigUbo()const
-		{
-			return m_vctConfigUbo;
 		}
 
 		ShadowMapLightTypeArray const & getShadowMaps()const
@@ -387,6 +360,11 @@ namespace castor3d
 		{
 			return m_graph;
 		}
+
+		IndirectLightingData const & getIndirectLighting()const noexcept
+		{
+			return m_indirectLighting;
+		}
 		/**@}*/
 
 	public:
@@ -433,6 +411,7 @@ namespace castor3d
 		VoxelizerUPtr m_voxelizer;
 		LightVolumePassResultUPtr m_lpvResult;
 		LightVolumePassResultArray m_llpvResult;
+		IndirectLightingData m_indirectLighting;
 		TechniquePasses m_renderPasses;
 		PrepassRendering m_prepass;
 		crg::FramePass const * m_lastDepthPass{};

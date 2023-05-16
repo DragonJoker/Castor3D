@@ -58,7 +58,8 @@ namespace toon
 			{
 			}
 
-			C3D_ToonMaterial_API void fillComponents( sdw::type::BaseStruct & components
+			C3D_ToonMaterial_API void fillComponents( castor3d::ComponentModeFlags componentsMask
+				, sdw::type::BaseStruct & components
 				, castor3d::shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
 			C3D_ToonMaterial_API void fillComponentsInits( sdw::type::BaseStruct const & components

@@ -156,13 +156,13 @@ namespace castor3d
 		, m_shaderFlags{ techniquePassDesc.m_shaderFlags }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
-		, m_lpvConfigUbo{ techniquePassDesc.m_lpvConfigUbo }
-		, m_llpvConfigUbo{ techniquePassDesc.m_llpvConfigUbo }
-		, m_vctConfigUbo{ techniquePassDesc.m_vctConfigUbo }
-		, m_lpvResult{ techniquePassDesc.m_lpvResult }
-		, m_llpvResult{ techniquePassDesc.m_llpvResult }
-		, m_vctFirstBounce{ techniquePassDesc.m_vctFirstBounce }
-		, m_vctSecondaryBounce{ techniquePassDesc.m_vctSecondaryBounce }
+		, m_lpvConfigUbo{ techniquePassDesc.m_indirectLighting.lpvConfigUbo }
+		, m_llpvConfigUbo{ techniquePassDesc.m_indirectLighting.llpvConfigUbo }
+		, m_vctConfigUbo{ techniquePassDesc.m_indirectLighting.vctConfigUbo }
+		, m_lpvResult{ techniquePassDesc.m_indirectLighting.lpvResult }
+		, m_llpvResult{ techniquePassDesc.m_indirectLighting.llpvResult }
+		, m_vctFirstBounce{ techniquePassDesc.m_indirectLighting.vctFirstBounce }
+		, m_vctSecondaryBounce{ techniquePassDesc.m_indirectLighting.vctSecondaryBounce }
 	{
 	}
 
@@ -479,15 +479,19 @@ namespace castor3d
 		{
 			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 				, VK_TRUE
-				, VK_FALSE
+				, checkFlag( m_filters, RenderFilter::eAlphaBlend )
 				, ( checkFlag( m_filters, RenderFilter::eAlphaBlend )
-					? VK_COMPARE_OP_EQUAL
+					? ( checkFlag( getComponentsMask(), ComponentModeFlag::eForward )
+						? VK_COMPARE_OP_GREATER
+						: VK_COMPARE_OP_GREATER_OR_EQUAL )
 					: VK_COMPARE_OP_GREATER_OR_EQUAL ) };
 		}
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniqueNodesPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderNodesPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 1u );
+		return RenderNodesPass::createBlendState( flags.colourBlendMode
+			, flags.alphaBlendMode
+			, flags.writeVelocity() ? 2u : 1u );
 	}
 }

@@ -98,11 +98,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void OcclusionMapComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void OcclusionMapComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eOcclusion ) )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eOcclusion )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eOcclusion ) )
 		{
 			return;
 		}
@@ -133,7 +135,7 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( src.hasMember( "occlusion" ) )
+		if ( res.hasMember( "occlusion" ) )
 		{
 			res.getMember< sdw::Float >( "occlusion" ) += src.getMember< sdw::Float >( "occlusion" ) * passMultiplier;
 		}
@@ -146,6 +148,11 @@ namespace castor3d
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
+		if ( !components.hasMember( "occlusion" ) )
+		{
+			return;
+		}
+
 		applyFloatComponent( "occlusion"
 			, getTextureFlags()
 			, config

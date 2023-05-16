@@ -354,8 +354,6 @@ namespace castor3d::shader
 	void Materials::fill( sdw::Vec3 const & newAlbedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & crTsIr
-		, sdw::Vec4 const & sheen
 		, Material & material )
 	{
 		if ( isEnabled() )
@@ -363,8 +361,6 @@ namespace castor3d::shader
 			m_passShaders.updateMaterial( newAlbedo
 				, spcRgh
 				, colMtl
-				, crTsIr
-				, sheen
 				, material );
 		}
 	}
@@ -372,16 +368,14 @@ namespace castor3d::shader
 	void Materials::apply( Material const & material
 		, SurfaceBase const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & sheen )
+		, sdw::Vec4 & colMtl )
 	{
 		if ( isEnabled() )
 		{
 			m_passShaders.updateOutputs( material
 				, surface
 				, spcRgh
-				, colMtl
-				, sheen );
+				, colMtl );
 		}
 	}
 

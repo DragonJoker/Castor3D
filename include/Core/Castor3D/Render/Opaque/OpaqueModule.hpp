@@ -32,9 +32,6 @@ namespace castor3d
 		eColMtl, // RGB => Diffuse/Albedo - PBR: A => Metalness - Phong: A => Unused
 		eSpcRgh, // RGB => Specular - Phong: A => Shininess - PBR: A => Roughness
 		eEmsTrn, // RGB => Emissive, A => Transmittance
-		eClrCot, // RGB => Coating normal, A => Coating factor.
-		eCrTsIr, // R => Coating roughness, G => Transmission, B => Iridescence factor, A => Iridescence thickness.
-		eSheen, // RGB => Sheen color factor, A => Sheen roughness.
 		CU_ScopedEnumBounds( eNmlOcc ),
 	};
 	C3D_API castor::String getTextureName( DsTexture texture );

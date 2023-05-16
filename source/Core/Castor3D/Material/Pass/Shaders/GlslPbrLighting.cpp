@@ -185,9 +185,6 @@ namespace castor3d::shader
 		, sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & directScattering
-		, sdw::Vec3 const & directCoatingSpecular
-		, sdw::Vec2 const & directSheen
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
@@ -195,9 +192,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & emissive
 		, sdw::Vec3 const & reflectedDiffuse
 		, sdw::Vec3 const & reflectedSpecular
-		, sdw::Vec3 const & refracted
-		, sdw::Vec3 const & coatReflected
-		, sdw::Vec3 const & sheenReflected )
+		, sdw::Vec3 const & refracted )
 	{
 		 // Fresnel already included in both diffuse and specular.
 		auto diffuseBrdf = m_writer.declLocale( "diffuseBrdf"
@@ -222,26 +217,7 @@ namespace castor3d::shader
 		auto combineResult = m_writer.declLocale( "combineResult"
 			, emissive + specularBrdf + diffuseBrdf );
 
-		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
-		{
-			combineResult = ( sheenReflected * ambientOcclusion )
-				+ ( components.colour * directSheen.x() )
-				+ combineResult * directSheen.y() * max( max( components.colour.r(), components.colour.g() ), components.colour.b() );
-		}
-		FI;
-
-		IF( m_writer, components.clearcoatFactor != 0.0_f )
-		{
-			auto clearcoatNdotV = m_writer.declLocale( "clearcoatNdotV"
-				, max( dot( components.clearcoatNormal, -incident ), 0.0_f ) );
-			auto clearcoatFresnel = m_writer.declLocale( "clearcoatFresnel"
-				, pow( 0.04_f + ( 1.0_f - 0.04_f ) * ( 1.0_f - clearcoatNdotV ), 5.0_f ) );
-			combineResult = combineResult * ( 1.0_f - vec3( components.clearcoatFactor * clearcoatFresnel ) )
-				+ ( coatReflected * ambientOcclusion ) + directCoatingSpecular;
-		}
-		FI;
-
-		return combineResult + directScattering;
+		return combineResult;
 	}
 
 	//***********************************************************************************************

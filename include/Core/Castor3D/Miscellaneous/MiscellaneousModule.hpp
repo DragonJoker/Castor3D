@@ -295,6 +295,16 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, std::string const & name );
 
+	C3D_API void setProgressBarTitle( ProgressBar * progress
+		, castor::String const & value );
+	C3D_API void setProgressBarLabel( ProgressBar * progress
+		, castor::String const & value );
+	C3D_API void stepProgressBar( ProgressBar * progress
+		, castor::String const & label );
+	C3D_API void stepProgressBar( ProgressBar * progress );
+	C3D_API void incProgressBarRange( ProgressBar * progress
+		, int32_t value );
+
 	//@}
 }
 

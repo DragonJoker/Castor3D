@@ -87,11 +87,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ClearcoatComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void ClearcoatComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( ( castor3d::handleDeferrable( componentsMask )
+				&& !checkFlag( componentsMask, ComponentModeFlag::eForward ) )
+			|| !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
 		{
 			return;
 		}
@@ -157,6 +161,11 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
+		if ( !res.hasMember( "clearcoatFactor" ) )
+		{
+			return;
+		}
+
 		res.getMember< sdw::Float >( "clearcoatFactor", true ) = src.getMember< sdw::Float >( "clearcoatFactor", true ) * passMultiplier;
 		res.getMember< sdw::Float >( "clearcoatRoughness", true ) = src.getMember< sdw::Float >( "clearcoatRoughness", true ) * passMultiplier;
 		res.getMember< sdw::Vec3 >( "clearcoatNormal", true ) += src.getMember< sdw::Vec3 >( "clearcoatNormal", true ) * passMultiplier;
@@ -179,16 +188,6 @@ namespace castor3d
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 		}
-	}
-
-	void ClearcoatComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
-		, sdw::Vec4 const & spcRgh
-		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & crTsIr
-		, sdw::Vec4 const & sheen
-		, shader::Material & material )const
-	{
-		material.getMember< sdw::Float >( "clearcoatRoughness", true ) = crTsIr.x();
 	}
 
 	//*********************************************************************************************

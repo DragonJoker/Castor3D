@@ -75,11 +75,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void AmbientComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void AmbientComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting ) )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting ) )
 		{
 			return;
 		}
@@ -120,6 +122,11 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
+		if ( !res.hasMember( "ambientColour" ) )
+		{
+			return;
+		}
+
 		res.getMember< sdw::Vec3 >( "ambientColour", true ) += src.getMember< sdw::Vec3 >( "ambientColour", true ) * passMultiplier;
 		res.getMember< sdw::Float >( "ambientFactor", true ) += src.getMember< sdw::Float >( "ambientFactor", true ) * passMultiplier;
 	}

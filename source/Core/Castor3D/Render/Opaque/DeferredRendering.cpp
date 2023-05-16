@@ -5,6 +5,7 @@
 #include "Castor3D/Cache/OverlayCache.hpp"
 #include "Castor3D/Cache/PluginCache.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
@@ -13,6 +14,7 @@
 #include "Castor3D/Render/Opaque/OpaquePass.hpp"
 #include "Castor3D/Render/Opaque/OpaqueResolvePass.hpp"
 #include "Castor3D/Render/Opaque/Lighting/SubsurfaceScatteringPass.hpp"
+#include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -40,19 +42,13 @@ namespace castor3d
 		, ShadowMapResult const & smDirectionalResult
 		, ShadowMapResult const & smPointResult
 		, ShadowMapResult const & smSpotResult
-		, LightVolumePassResult const & lpvResult
-		, LightVolumePassResultArray const & llpvResult
-		, Texture const & vctFirstBounce
-		, Texture const & vctSecondaryBounce
+		, IndirectLightingData const & indirect
 		, Texture const & ssao
 		, castor::Size const & size
-		, RenderTechnique const & technique
+		, RenderTechnique & technique
 		, CameraUbo const & cameraUbo
 		, SceneUbo const & sceneUbo
 		, HdrConfigUbo const & hdrConfigUbo
-		, LpvGridConfigUbo const & lpvConfigUbo
-		, LayeredLpvGridConfigUbo const & llpvConfigUbo
-		, VoxelizerUbo const & vctConfigUbo
 		, SsaoConfig & ssaoConfig
 		, crg::RunnablePass::IsEnabledCallback const & opaquePassEnabled )
 		: m_device{ device }
@@ -83,14 +79,8 @@ namespace castor3d
 			, depthObj
 			, m_opaquePassResult
 			, m_lightPassResult
-			, lpvResult
-			, llpvResult
-			, vctFirstBounce
-			, vctSecondaryBounce
-			, cameraUbo
-			, lpvConfigUbo
-			, llpvConfigUbo
-			, vctConfigUbo ) }
+			, indirect
+			, cameraUbo ) }
 		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( graph
 			, m_lightingPass->getLastPass()
 			, m_device
@@ -116,6 +106,9 @@ namespace castor3d
 			, ssaoConfig
 			, opaquePassEnabled );
 		m_lightPassResult.create();
+		m_additionalPassDesc = &doCreateDeferredAdditionalPass( graph, progress, *m_lastPass );
+		m_additionalPassEnabled = crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsAdditionalPassEnabled(); } };
+		m_lastPass = m_additionalPassDesc;
 	}
 
 	void DeferredRendering::update( CpuUpdater & updater )
@@ -129,11 +122,14 @@ namespace castor3d
 			CU_Require( resolve );
 			resolve->update( updater );
 		}
+
+		m_additionalPass->update( updater );
 	}
 
 	void DeferredRendering::update( GpuUpdater & updater )
 	{
 		m_lightingPass->update( updater );
+		m_additionalPass->countNodes( updater.info );
 	}
 
 	void DeferredRendering::accept( RenderTechniqueVisitor & visitor )
@@ -218,5 +214,60 @@ namespace castor3d
 			m_lastPass = &m_resolves[lightingModelId - 1u]->getLastPass();
 			previousPasses = { m_lastPass };
 		}
+	}
+
+	crg::FramePass & DeferredRendering::doCreateDeferredAdditionalPass( crg::FramePassGroup & graph
+		, ProgressBar * progress
+		, crg::FramePass const & lastPass )
+	{
+		stepProgressBar( progress, "Creating additional opaque pass" );
+		auto targetResult = m_technique.getTargetResult();
+		auto targetDepth = m_technique.getTargetDepth();
+		auto & result = graph.createPass( "AdditionalPass"
+			, [this, progress, targetResult, targetDepth]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				stepProgressBar( progress, "Initialising additional opaque pass" );
+				static constexpr bool hasVelocity = true;
+				RenderTechniquePassDesc techniquePassDesc{ false, m_technique.getSsaoConfig() };
+				RenderNodesPassDesc renderPassDesc{ m_technique.getTargetExtent()
+					, m_technique.getCameraUbo()
+					, m_technique.getSceneUbo()
+					, m_technique.getRenderTarget().getCuller() };
+				renderPassDesc.safeBand( true )
+					.meshShading( true )
+					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags
+						| ComponentModeFlag::eForward );
+				techniquePassDesc.ssao( m_technique.getSsaoResult() )
+					.indirect( m_technique.getIndirectLighting() )
+					.hasVelocity( true );
+				auto res = std::make_unique< ForwardRenderTechniquePass >( &m_technique
+					, framePass
+					, context
+					, runnableGraph
+					, m_device
+					, "c3d.deferred.additional"
+					, cuT( "Default" )
+					, targetResult
+					, targetDepth
+					, std::move( renderPassDesc )
+					, std::move( techniquePassDesc ) );
+				m_additionalPass = res.get();
+				m_technique.getEngine()->registerTimer( framePass.getFullName()
+					, res->getTimer() );
+				return res;
+			} );
+		result.addDependency( lastPass );
+		result.addInOutDepthStencilView( targetDepth );
+		result.addInOutColourView( targetResult );
+		result.addInOutColourView( m_technique.getRenderTarget().getVelocity()->targetViewId );
+		return result;
+	}
+
+	bool DeferredRendering::doIsAdditionalPassEnabled()const
+	{
+		CU_Require( m_additionalPass );
+		return m_additionalPass->isPassEnabled();
 	}
 }

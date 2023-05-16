@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ShaderUbosModule_H___
 #define ___C3D_ShaderUbosModule_H___
 
+#include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
@@ -110,15 +111,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Light propagation UBO.
-	*\~french
-	*\brief
-	*	UBO de light propagation.
-	*/
-	class LpvGridConfigUbo;
-	/**
-	*\~english
-	*\brief
 	*	Light propagation data.
 	*\~french
 	*\brief
@@ -155,15 +147,6 @@ namespace castor3d
 		float tanFovYHalf = 1.0f;
 		float lightOffset = 0.0f;
 	};
-	/**
-	*\~english
-	*\brief
-	*	Light propagation UBO.
-	*\~french
-	*\brief
-	*	UBO de light propagation.
-	*/
-	class LayeredLpvGridConfigUbo;
 	/**
 	*\~english
 	*\brief
@@ -444,15 +427,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Voxelizer configuration data UBO.
-	*\~french
-	*\brief
-	*	UBO des données de configuration du voxelizer.
-	*/
-	class VoxelizerUbo;
-	/**
-	*\~english
-	*\brief
 	*	Voxelizer configuration data.
 	*\~french
 	*\brief
@@ -460,10 +434,11 @@ namespace castor3d
 	*/
 	struct VoxelizerUboConfiguration;
 
+	CU_DeclareSmartPtr( castor3d, LayeredLpvGridConfigUbo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LpvGridConfigUbo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LpvLightConfigUbo, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LayeredLpvGridConfigUbo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SceneUbo, C3D_API );
+
 	CU_DeclareVector( LpvLightConfigUbo, LpvLightConfigUbo );
 	CU_DeclareVector( LpvGridConfigUbo, LpvGridConfigUbo );
 
