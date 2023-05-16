@@ -274,6 +274,7 @@ namespace castor3d
 		PassComponentFlag m_alphaBlendingFlag{};
 		PassComponentFlag m_alphaTestFlag{};
 		PassComponentFlag m_transmissionFlag{};
+		std::vector< PassComponentFlag > m_nonDeferrableFlags{};
 		PassComponentFlag m_parallaxOcclusionMappingOneFlag{};
 		PassComponentFlag m_parallaxOcclusionMappingRepeatFlag{};
 	};

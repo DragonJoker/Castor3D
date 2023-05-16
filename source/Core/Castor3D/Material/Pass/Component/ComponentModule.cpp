@@ -5,20 +5,31 @@
 
 namespace castor3d
 {
-	bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )
+	bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )noexcept
 	{
 		return lhs.baseId == rhs.baseId
 			&& lhs.flags == rhs.flags;
 	}
 
 	bool hasAny( PassComponentCombine const & lhs
-		, PassComponentFlag rhs )
+		, PassComponentFlag rhs )noexcept
 	{
 		return hasAny( lhs.flags, rhs );
 	}
 
+	bool hasAny( PassComponentCombine const & lhs
+		, std::vector< PassComponentFlag > const & rhs )noexcept
+	{
+		return std::any_of( rhs.begin()
+			, rhs.end()
+			, [&lhs]( PassComponentFlag const & lookup )
+			{
+				return hasAny( lhs, lookup );
+			} );
+	}
+
 	void remFlags( PassComponentCombine & lhs
-		, PassComponentFlag rhs )
+		, PassComponentFlag rhs )noexcept
 	{
 		auto it = lhs.flags.find( rhs );
 
@@ -31,7 +42,7 @@ namespace castor3d
 	}
 
 	void remFlags( PassComponentCombine & lhs
-		, PassComponentFlagsSet const & rhs )
+		, PassComponentFlagsSet const & rhs )noexcept
 	{
 		for ( auto flag : rhs )
 		{
@@ -40,7 +51,7 @@ namespace castor3d
 	}
 
 	void addFlags( PassComponentCombine & lhs
-		, PassComponentFlag rhs )
+		, PassComponentFlag rhs )noexcept
 	{
 		auto split = splitPassComponentFlag( rhs );
 		auto componentId = split.first;
@@ -66,7 +77,7 @@ namespace castor3d
 	}
 
 	void addFlags( PassComponentCombine & lhs
-		, PassComponentFlagsSet const & rhs )
+		, PassComponentFlagsSet const & rhs )noexcept
 	{
 		for ( auto flag : rhs )
 		{
@@ -75,7 +86,7 @@ namespace castor3d
 	}
 
 	bool contains( PassComponentCombine const & cont
-		, PassComponentFlag test )
+		, PassComponentFlag test )noexcept
 	{
 		auto split = splitPassComponentFlag( test );
 		auto testComponentId = split.first;
@@ -92,7 +103,7 @@ namespace castor3d
 	}
 
 	bool contains( PassComponentCombine const & cont
-		, PassComponentCombine const & test )
+		, PassComponentCombine const & test )noexcept
 	{
 		if ( cont.baseId == test.baseId )
 		{

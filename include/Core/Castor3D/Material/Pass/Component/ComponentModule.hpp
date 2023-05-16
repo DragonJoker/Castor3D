@@ -63,6 +63,8 @@ namespace castor3d
 		eSpecifics,
 		eDerivTex,
 		eOcclusion,
+		eForward,
+		eDeferred,
 		CU_ScopedEnumBounds( eNone ),
 	};
 	enum class ComponentModeFlag : uint16_t
@@ -78,9 +80,22 @@ namespace castor3d
 		eSpecifics = 0x0001u << uint16_t( ComponentMode::eSpecifics ),
 		eDerivTex = 0x0001u << uint16_t( ComponentMode::eDerivTex ),
 		eOcclusion = 0x0001u << uint16_t( ComponentMode::eOcclusion ),
-		eAll = ( ( 0x0001u << uint16_t( ComponentMode::eCount ) ) - 1u ),
+		eAllButFwdDef = ( ( 0x0001u << uint16_t( ComponentMode::eForward ) ) - 1u ),
+		eForward = 0x0001u << uint16_t( ComponentMode::eForward ),
+		eDeferred = 0x0001u << uint16_t( ComponentMode::eDeferred ),
 	};
 	CU_ImplementFlags( ComponentModeFlag )
+
+	inline constexpr bool allowDeferrable( ComponentModeFlags mask )noexcept
+	{
+		return checkFlag( mask, ComponentModeFlag::eDeferred );
+	}
+
+	inline constexpr bool handleDeferrable( ComponentModeFlags mask )noexcept
+	{
+		return checkFlag( mask, ComponentModeFlag::eForward )
+			|| checkFlag( mask, ComponentModeFlag::eDeferred );
+	};
 	/**
 	\~english
 	\brief		Pass component holding base pass data.
@@ -580,6 +595,7 @@ namespace castor3d
 		PassComponentCombineID baseId{};
 		PassComponentFlagsSet flags{};
 		// Computed from \p flags
+		bool hasNonDeferrableFlag{};
 		bool hasTransmissionFlag{};
 		bool hasAlphaTestFlag{};
 		bool hasAlphaBlendingFlag{};
@@ -587,22 +603,24 @@ namespace castor3d
 		bool hasParallaxOcclusionMappingRepeatFlag{};
 	};
 
-	C3D_API bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs );
+	C3D_API bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )noexcept;
 
 	C3D_API bool hasAny( PassComponentCombine const & lhs
-		, PassComponentFlag rhs );
+		, PassComponentFlag rhs )noexcept;
+	C3D_API bool hasAny( PassComponentCombine const & lhs
+		, std::vector< PassComponentFlag > const & rhs )noexcept;
 	C3D_API void remFlags( PassComponentCombine & lhs
-		, PassComponentFlag rhs );
+		, PassComponentFlag rhs )noexcept;
 	C3D_API void remFlags( PassComponentCombine & lhs
-		, PassComponentFlagsSet const & rhs );
+		, PassComponentFlagsSet const & rhs )noexcept;
 	C3D_API void addFlags( PassComponentCombine & lhs
-		, PassComponentFlag rhs );
+		, PassComponentFlag rhs )noexcept;
 	C3D_API void addFlags( PassComponentCombine & lhs
-		, PassComponentFlagsSet const & rhs );
+		, PassComponentFlagsSet const & rhs )noexcept;
 	C3D_API bool contains( PassComponentCombine const & cont
-		, PassComponentFlag test );
+		, PassComponentFlag test )noexcept;
 	C3D_API bool contains( PassComponentCombine const & cont
-		, PassComponentCombine const & test );
+		, PassComponentCombine const & test )noexcept;
 
 	CU_DeclareSmartPtr( castor3d, PassComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassComponentRegister, C3D_API );

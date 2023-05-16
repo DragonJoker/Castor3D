@@ -65,11 +65,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void HeightComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void HeightComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eGeometry ) )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eGeometry )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eGeometry ) )
 		{
 			return;
 		}
@@ -110,7 +112,7 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( src.hasMember( "tangentSpaceViewPosition" ) )
+		if ( res.hasMember( "tangentSpaceViewPosition" ) )
 		{
 			res.getMember< sdw::Vec3 >( "tangentSpaceViewPosition" ) += src.getMember< sdw::Vec3 >( "tangentSpaceViewPosition" ) * passMultiplier;
 			res.getMember< sdw::Vec3 >( "tangentSpaceFragPosition" ) += src.getMember< sdw::Vec3 >( "tangentSpaceFragPosition" ) * passMultiplier;

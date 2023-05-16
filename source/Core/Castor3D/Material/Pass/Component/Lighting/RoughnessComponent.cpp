@@ -101,12 +101,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void RoughnessComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void RoughnessComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
-			&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( ( !checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) ) )
 		{
 			return;
 		}
@@ -144,7 +147,7 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( src.hasMember( "roughness" ) )
+		if ( res.hasMember( "roughness" ) )
 		{
 			res.getMember< sdw::Float >( "roughness" ) += src.getMember< sdw::Float >( "roughness" ) * passMultiplier;
 		}
@@ -153,9 +156,13 @@ namespace castor3d
 	void RoughnessComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
 		, sdw::StructInstance const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & sheen )const
+		, sdw::Vec4 & colMtl )const
 	{
+		if ( !components.hasMember( "roughness" ) )
+		{
+			return;
+		}
+
 		spcRgh.a() = components.getMember< sdw::Float >( "roughness", true );
 	}
 
@@ -179,8 +186,6 @@ namespace castor3d
 	void RoughnessComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & crTsIr
-		, sdw::Vec4 const & sheen
 		, shader::Material & material )const
 	{
 		material.getMember< sdw::Float >( "roughness", true ) = spcRgh.a();

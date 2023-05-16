@@ -131,16 +131,11 @@ namespace castor3d
 			eColMtl,
 			eSpcRgh,
 			eEmsTrn,
-			eClrCot,
-			eCrTsIr,
-			eSheen,
 			eSsao,
 			eBrdf,
 			eDirectDiffuse,
 			eDirectSpecular,
 			eDirectScattering,
-			eDirectCoatingSpecular,
-			eDirectSheen,
 			eIndirectDiffuse,
 			eIndirectSpecular,
 			eEnvironment,
@@ -188,16 +183,11 @@ namespace castor3d
 			auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( ResolveBind::eColMtl ), 0u );
 			auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( ResolveBind::eSpcRgh ), 0u );
 			auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( ResolveBind::eEmsTrn ), 0u );
-			auto c3d_mapClrCot = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eClrCot ), uint32_t( ResolveBind::eClrCot ), 0u );
-			auto c3d_mapCrTsIr = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eCrTsIr ), uint32_t( ResolveBind::eCrTsIr ), 0u );
-			auto c3d_mapSheen = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSheen ), uint32_t( ResolveBind::eSheen ), 0u );
 			auto c3d_mapSsao = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapSsao", uint32_t( ResolveBind::eSsao ), 0u, config.hasSsao );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf", uint32_t( ResolveBind::eBrdf ), 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", uint32_t( ResolveBind::eDirectDiffuse ), 0u );
 			auto c3d_mapLightSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightSpecular", uint32_t( ResolveBind::eDirectSpecular ), 0u );
 			auto c3d_mapLightScattering = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightScattering", uint32_t( ResolveBind::eDirectScattering ), 0u );
-			auto c3d_mapLightCoatingSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightCoatingSpecular", uint32_t( ResolveBind::eDirectCoatingSpecular ), 0u );
-			auto c3d_mapLightSheen = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightSheen", uint32_t( ResolveBind::eDirectSheen ), 0u );
 			auto c3d_mapLightIndirectDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightIndirectDiffuse", uint32_t( ResolveBind::eIndirectDiffuse ), 0u, config.hasDiffuseGi );
 			auto c3d_mapLightIndirectSpecular = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightIndirectSpecular", uint32_t( ResolveBind::eIndirectSpecular ), 0u, config.hasSpecularGi );
 
@@ -259,12 +249,6 @@ namespace castor3d
 						, c3d_mapNmlOcc.lod( vtx_texture, 0.0_f ) );
 					auto colMtl = writer.declLocale( "colMtl"
 						, c3d_mapColMtl.lod( vtx_texture, 0.0_f ) );
-					auto clrCot = writer.declLocale( "clrCot"
-						, c3d_mapClrCot.lod( vtx_texture, 0.0_f ) );
-					auto crTsIr = writer.declLocale( "crTsIr"
-						, c3d_mapCrTsIr.lod( vtx_texture, 0.0_f ) );
-					auto sheen = writer.declLocale( "sheen"
-						, c3d_mapSheen.lod( vtx_texture, 0.0_f ) );
 					auto envMapIndex = writer.declLocale( "envMapIndex"
 						, modelData.getEnvMapIndex() );
 					auto depth = writer.declLocale( "depth"
@@ -293,12 +277,11 @@ namespace castor3d
 								: nmlOcc.w() ) );
 						auto emissive = writer.declLocale( "emissive"
 							, emsTrn.xyz() );
-						materials.fill( albedo, spcRgh, colMtl, crTsIr, sheen, material );
+						materials.fill( albedo, spcRgh, colMtl, material );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material
-								, surface
-								, clrCot } );
+								, surface } );
 						lightingModel->finish( passShaders
 							, surface
 							, utils
@@ -313,10 +296,6 @@ namespace castor3d
 							, c3d_mapLightSpecular.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightScattering = writer.declLocale( "lightScattering"
 							, c3d_mapLightScattering.lod( vtx_texture, 0.0_f ).xyz() );
-						auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
-							, c3d_mapLightCoatingSpecular.lod( vtx_texture, 0.0_f ).xyz() );
-						auto lightSheen = writer.declLocale( "lightSheen"
-							, c3d_mapLightSheen.lod( vtx_texture, 0.0_f ).xy() );
 						auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
 							, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasDiffuseGi );
@@ -342,10 +321,6 @@ namespace castor3d
 							, vec3( 0.0_f ) );
 						auto refracted = writer.declLocale( "refracted"
 							, vec3( 0.0_f ) );
-						auto coatReflected = writer.declLocale( "coatReflected"
-							, vec3( 0.0_f ) );
-						auto sheenReflected = writer.declLocale( "sheenReflected"
-							, vec3( 0.0_f ) );
 						reflections.computeCombined( components
 							, lightSurface
 							, *backgroundModel
@@ -354,9 +329,7 @@ namespace castor3d
 							, components.refractionRatio
 							, reflectedDiffuse
 							, reflectedSpecular
-							, refracted
-							, coatReflected
-							, sheenReflected );
+							, refracted );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
 							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
@@ -370,6 +343,9 @@ namespace castor3d
 						IF( writer, material.hasTransmission != 0_u )
 						{
 							refracted = vec3( 0.0_f );
+							// Ignore transmission for the rest of the shader.
+							components.hasTransmission = 0_u;
+							components.transmission = 0.0_f;
 						}
 						FI;
 
@@ -391,18 +367,11 @@ namespace castor3d
 						ouput.registerOutput( "Occlusion", occlusion );
 						ouput.registerOutput( "Emissive", emissive );
 						ouput.registerOutput( "Refracted", refracted );
-						ouput.registerOutput( "LightCoatingSpecular", lightCoatingSpecular );
-						ouput.registerOutput( "CoatReflected", coatReflected );
-						ouput.registerOutput( "LightSheen", lightSheen );
-						ouput.registerOutput( "SheenReflected", sheenReflected );
-						outColour = vec4( lightingModel->combine( components
+						outColour = vec4( lightScattering + lightingModel->combine( components
 								, incident
 								, lightDiffuse
 								, indirectDiffuse
 								, lightSpecular
-								, lightScattering
-								, lightCoatingSpecular
-								, lightSheen
 								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
 								, directAmbient
 								, indirectAmbient
@@ -410,9 +379,7 @@ namespace castor3d
 								, emissive
 								, reflectedDiffuse
 								, reflectedSpecular
-								, refracted
-								, coatReflected
-								, sheenReflected )
+								, refracted )
 							, 1.0_f );
 					}
 					else
@@ -574,12 +541,6 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eSpcRgh ) );
 		pass.addSampledView( m_opaquePassResult[DsTexture::eEmsTrn].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eEmsTrn ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eClrCot].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eClrCot ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eCrTsIr].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eCrTsIr ) );
-		pass.addSampledView( m_opaquePassResult[DsTexture::eSheen].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eSheen ) );
 		pass.addSampledView( m_ssaoResult.sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eSsao ) );
 		pass.addSampledView( m_device.renderSystem.getPrefilteredBrdfTexture().sampledViewId
@@ -593,10 +554,6 @@ namespace castor3d
 			, uint32_t( dropqrslv::ResolveBind::eDirectSpecular ) );
 		pass.addSampledView( m_lighting[LpTexture::eScattering].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eDirectScattering ) );
-		pass.addSampledView( m_lighting[LpTexture::eCoatingSpecular].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eDirectCoatingSpecular ) );
-		pass.addSampledView( m_lighting[LpTexture::eSheen].sampledViewId
-			, uint32_t( dropqrslv::ResolveBind::eDirectSheen ) );
 		pass.addSampledView( m_lighting[LpTexture::eIndirectDiffuse].sampledViewId
 			, uint32_t( dropqrslv::ResolveBind::eIndirectDiffuse ) );
 		pass.addSampledView( m_lighting[LpTexture::eIndirectSpecular].sampledViewId

@@ -63,12 +63,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void MetalnessComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void MetalnessComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eOpacity )
-			&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( ( !checkFlag( componentsMask, ComponentModeFlag::eOpacity )
+				&& !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), ComponentModeFlag::eOpacity )
+				&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) ) )
 		{
 			return;
 		}
@@ -106,14 +109,18 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
+		if ( !res.hasMember( "metalness" ) )
+		{
+			return;
+		}
+
 		res.getMember< sdw::Float >( "metalness", true ) += src.getMember< sdw::Float >( "metalness", true ) * passMultiplier;
 	}
 
 	void MetalnessComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
 		, sdw::StructInstance const & surface
 		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & sheen )const
+		, sdw::Vec4 & colMtl )const
 	{
 		if ( components.hasMember( "metalness" ) )
 		{
@@ -151,8 +158,6 @@ namespace castor3d
 	void MetalnessComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
 		, sdw::Vec4 const & spcRgh
 		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & crTsIr
-		, sdw::Vec4 const & sheen
 		, shader::Material & material )const
 	{
 		material.getMember< sdw::Float >( "metalness", true ) = colMtl.a();

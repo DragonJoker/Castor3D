@@ -68,19 +68,15 @@ namespace castor3d::shader
 		C3D_API void updateMaterial( sdw::Vec3 const & albedo
 			, sdw::Vec4 const & spcRgh
 			, sdw::Vec4 const & colMtl
-			, sdw::Vec4 const & crTsIr
-			, sdw::Vec4 const & sheen
 			, Material & material )const;
 		C3D_API void updateOutputs( Material const & material
 			, SurfaceBase const & surface
 			, sdw::Vec4 & spcRgh
-			, sdw::Vec4 & colMtl
-			, sdw::Vec4 & sheen )const;
+			, sdw::Vec4 & colMtl )const;
 		C3D_API void updateOutputs( BlendComponents const & components
 			, SurfaceBase const & surface
 			, sdw::Vec4 & spcRgh
-			, sdw::Vec4 & colMtl
-			, sdw::Vec4 & sheen )const;
+			, sdw::Vec4 & colMtl )const;
 		C3D_API void updateComponents( PipelineFlags const & flags
 			, BlendComponents & components )const;
 		C3D_API void updateComponents( TextureCombine const & combine

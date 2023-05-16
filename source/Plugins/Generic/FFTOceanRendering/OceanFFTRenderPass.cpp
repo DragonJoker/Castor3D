@@ -251,13 +251,7 @@ namespace ocean_fft
 								| castor3d::ComponentModeFlag::eSpecifics )
 						, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 							.ssao( technique.getSsaoResult() )
-							.lpvConfigUbo( technique.getLpvConfigUbo() )
-							.llpvConfigUbo( technique.getLlpvConfigUbo() )
-							.vctConfigUbo( technique.getVctConfigUbo() )
-							.lpvResult( technique.getLpvResult() )
-							.llpvResult( technique.getLlpvResult() )
-							.vctFirstBounce( technique.getFirstVctBounce() )
-							.vctSecondaryBounce( technique.getSecondaryVctBounce() )
+							.indirect( technique.getIndirectLighting() )
 						, castor3d::IsRenderPassEnabledUPtr( isEnabled ) );
 					renderPasses[size_t( OceanRenderPass::Event )].push_back( res.get() );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()

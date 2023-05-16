@@ -40,7 +40,57 @@ namespace castor3d
 		CU_ScopedEnumBounds( eNone ),
 	};
 	C3D_API castor::String getName( GlobalIlluminationType giType );
+	/**
+	*\~english
+	*\brief
+	*	Lighting propagation volumes pass resulting buffers.
+	*\~french
+	*\brief
+	*	Buffers résultant d'une passe de light propagation volumes.
+	*/
+	class LightVolumePassResult;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation UBO.
+	*\~french
+	*\brief
+	*	UBO de light propagation.
+	*/
+	class LpvGridConfigUbo;
+	/**
+	*\~english
+	*\brief
+	*	Light propagation UBO.
+	*\~french
+	*\brief
+	*	UBO de light propagation.
+	*/
+	class LayeredLpvGridConfigUbo;
+	/**
+	*\~english
+	*\brief
+	*	Voxelizer configuration data UBO.
+	*\~french
+	*\brief
+	*	UBO des données de configuration du voxelizer.
+	*/
+	class VoxelizerUbo;
 
+	CU_DeclareSmartPtr( castor3d, LightVolumePassResult, C3D_API );
+
+	CU_DeclareVector( LightVolumePassResultUPtr, LightVolumePassResult );
+
+	struct IndirectLightingData
+	{
+		LpvGridConfigUbo const * lpvConfigUbo{};
+		LayeredLpvGridConfigUbo const * llpvConfigUbo{};
+		VoxelizerUbo const * vctConfigUbo{};
+		LightVolumePassResult const * lpvResult{};
+		LightVolumePassResultArray const * llpvResult{};
+		Texture const * vctFirstBounce{};
+		Texture const * vctSecondaryBounce{};
+	};
 	//@}
 	//@}
 }

@@ -85,12 +85,17 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void AttenuationComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void AttenuationComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
-			&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( ( castor3d::handleDeferrable( componentsMask )
+				&& !checkFlag( componentsMask, ComponentModeFlag::eForward ) )
+			|| ( !checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) ) )
 		{
 			return;
 		}
@@ -131,6 +136,11 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
+		if ( !res.hasMember( "attenuationColour" ) )
+		{
+			return;
+		}
+
 		res.getMember< sdw::Vec3 >( "attenuationColour", true ) = src.getMember< sdw::Vec3 >( "attenuationColour", true ) * passMultiplier;
 		res.getMember< sdw::Float >( "attenuationDistance", true ) = src.getMember< sdw::Float >( "attenuationDistance", true ) * passMultiplier;
 	}

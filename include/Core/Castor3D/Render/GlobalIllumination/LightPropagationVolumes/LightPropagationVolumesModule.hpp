@@ -112,15 +112,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Lighting propagation volumes pass resulting buffers.
-	*\~french
-	*\brief
-	*	Buffers résultant d'une passe de light propagation volumes.
-	*/
-	class LightVolumePassResult;
-	/**
-	*\~english
-	*\brief
 	*	Light propagation data.
 	*\~french
 	*\brief
@@ -140,7 +131,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, LightPropagationPass, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightPropagationVolumes, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightPropagationVolumesG, C3D_API );
-	CU_DeclareSmartPtr( castor3d, LightVolumePassResult, C3D_API );
 
 	using LightPropagationVolumesLightType = std::array< LightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
 	using LayeredLightPropagationVolumesLightType = std::array< LayeredLightPropagationVolumesUPtr, size_t( LightType::eCount ) >;
@@ -149,8 +139,6 @@ namespace castor3d
 
 	CU_DeclareVector( GeometryInjectionPass, GeometryInjectionPass );
 	CU_DeclareVector( LightInjectionPass, LightInjectionPass );
-	CU_DeclareVector( LightVolumePassResultUPtr, LightVolumePassResult );
-
 	//@}
 	//@}
 	//@}

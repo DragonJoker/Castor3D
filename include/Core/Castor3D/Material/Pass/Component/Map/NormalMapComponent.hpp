@@ -119,10 +119,18 @@ namespace castor3d
 
 		C3D_API static castor::String const TypeName;
 
+		void needsConversion()noexcept
+		{
+			m_needsConversion = true;
+		}
+
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
 		void doFillConfig( TextureConfiguration & configuration
 			, PassVisitorBase & vis )const override;
+
+		private:
+			bool m_needsConversion{};
 	};
 }
 

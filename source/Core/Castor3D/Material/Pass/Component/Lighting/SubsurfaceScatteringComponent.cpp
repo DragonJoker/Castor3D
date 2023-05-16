@@ -178,11 +178,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SubsurfaceScatteringComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void SubsurfaceScatteringComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting ) )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
+			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting ) )
 		{
 			return;
 		}
@@ -220,7 +222,7 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( src.hasMember( "sssProfileIndex" ) )
+		if ( res.hasMember( "sssProfileIndex" ) )
 		{
 			res.getMember< sdw::UInt >( "sssProfileIndex" ) = max( src.getMember< sdw::UInt >( "sssProfileIndex" ), src.getMember< sdw::UInt >( "sssProfileIndex" ) );
 		}

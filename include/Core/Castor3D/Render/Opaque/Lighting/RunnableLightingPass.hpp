@@ -19,7 +19,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, Scene const & scene
+			, RenderTarget const & renderTarget
 			, LightPassResult const & lpResult
 			, ShadowMapResult const & smDirectionalResult
 			, ShadowMapResult const & smPointResult
@@ -28,10 +28,8 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetDepthResult );
 
 		void clear();
-		void enableLight( Camera const & camera
-			, Light const & light );
-		void disableLight( Camera const & camera
-			, Light const & light );
+		void updateCamera( Camera const & camera );
+		void enableLight( Light const & light );
 		void resetCommandBuffer( crg::ImageViewId currentTarget );
 		bool hasEnabledLights()const;
 		uint32_t getEnabledLightsCount()const;
@@ -61,6 +59,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
+		RenderTarget const & m_renderTarget;
 		Scene const & m_scene;
 		LightPassResult const & m_lpResult;
 		ShadowMapResult const & m_smDirectionalResult;
@@ -71,7 +70,7 @@ namespace castor3d
 		crg::ImageViewId m_target;
 		LightRenderPassArray m_renderPasses;
 		LightRenderPassArray m_stencilRenderPasses;
-		std::map< Light const *, Camera const * > m_pendingLights;
+		std::set< Light const * > m_pendingLights;
 		std::map< size_t, LightsPipelinePtr > m_pipelines;
 		uint32_t m_passIndex{};
 	};

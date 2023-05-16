@@ -98,12 +98,15 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void TransmittanceMapComponent::ComponentsShader::fillComponents( sdw::type::BaseStruct & components
+	void TransmittanceMapComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
-			&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
+		if ( ( !checkFlag( componentsMask, ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting ) )
+			|| ( !checkFlag( materials.getFilter(), ComponentModeFlag::eDiffuseLighting )
+				&& !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) ) )
 		{
 			return;
 		}
@@ -141,7 +144,7 @@ namespace castor3d
 		, shader::BlendComponents & res
 		, shader::BlendComponents const & src )const
 	{
-		if ( src.hasMember( "transmittance" ) )
+		if ( res.hasMember( "transmittance" ) )
 		{
 			res.getMember< sdw::Float >( "transmittance" ) = src.getMember< sdw::Float >( "transmittance" ) * passMultiplier;
 		}
@@ -154,6 +157,11 @@ namespace castor3d
 		, sdw::Vec4 const & sampled
 		, shader::BlendComponents & components )const
 	{
+		if ( !components.hasMember( "transmittance" ) )
+		{
+			return;
+		}
+
 		applyFloatComponent( "transmittance"
 			, getTextureFlags()
 			, config

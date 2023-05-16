@@ -67,9 +67,6 @@ namespace castor3d::shader
 			, sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & directScattering
-			, sdw::Vec3 const & directCoatingSpecular
-			, sdw::Vec2 const & directSheen
 			, sdw::Vec3 const & indirectSpecular
 			, sdw::Vec3 const & directAmbient
 			, sdw::Vec3 const & indirectAmbient
@@ -77,9 +74,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & emissive
 			, sdw::Vec3 const & reflectedDiffuse
 			, sdw::Vec3 const & reflectedSpecular
-			, sdw::Vec3 const & refracted
-			, sdw::Vec3 const & coatReflected
-			, sdw::Vec3 const & sheenReflected )override;
+			, sdw::Vec3 const & refracted )override;
 	};
 }
 

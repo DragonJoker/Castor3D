@@ -24,8 +24,6 @@ namespace castor3d
 				cuT( "Diffuse" ),
 				cuT( "Specular" ),
 				cuT( "Scattering" ),
-				cuT( "CoatingSpecular" ),
-				cuT( "Sheen" ),
 				cuT( "IndirectDiffuse" ),
 				cuT( "IndirectSpecular" ),
 			}
@@ -41,8 +39,6 @@ namespace castor3d
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eDiffuse ) ) ),
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eSpecular ) ) ),
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eScattering ) ) ),
-				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eCoatingSpecular ) ) ),
-				device.selectSmallestFormatRGSFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eSheen ) ) ),
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eIndirectDiffuse ) ) ),
 				device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( getUsageFlags( LpTexture::eIndirectSpecular ) ) ),
 			}
@@ -59,8 +55,6 @@ namespace castor3d
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
 				opaqueBlackClearColor,
-				makeClearValue( 0.0f, 1.0f, 0.0f, 1.0f ),
-				opaqueBlackClearColor,
 				opaqueBlackClearColor,
 			}
 		};
@@ -72,8 +66,6 @@ namespace castor3d
 		static std::array< VkImageUsageFlags, size_t( LpTexture::eCount ) > Values
 		{
 			{
-				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
-				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
 				VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_SAMPLED_BIT,
@@ -92,8 +84,6 @@ namespace castor3d
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
-				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
-				VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 				VK_BORDER_COLOR_FLOAT_OPAQUE_WHITE,
 			}
@@ -109,7 +99,7 @@ namespace castor3d
 		: GBufferT< LpTexture >{ handler
 			, device
 			, cuT( "LPResult" )
-			, { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }
+			, { nullptr, nullptr, nullptr, nullptr }
 			, 0u
 			, size }
 	{

@@ -368,6 +368,13 @@ namespace castor3d
 		, m_llpvResult{ rendtech::doCreateLLPVResult( m_renderTarget.getResources()
 			, m_device
 			, getName() ) }
+		, m_indirectLighting{ &m_lpvConfigUbo
+			, &m_llpvConfigUbo
+			, &m_vctConfigUbo
+			, m_lpvResult.get()
+			, &m_llpvResult
+			, &m_voxelizer->getFirstBounce()
+			, &m_voxelizer->getSecondaryBounce() }
 		, m_prepass{ *this
 			, m_device
 			, queueData
@@ -674,16 +681,6 @@ namespace castor3d
 	Texture const & RenderTechnique::getSsaoResult()const
 	{
 		return m_opaque.getSsaoResult();
-	}
-
-	Texture const & RenderTechnique::getFirstVctBounce()const
-	{
-		return m_voxelizer->getFirstBounce();
-	}
-
-	Texture const & RenderTechnique::getSecondaryVctBounce()const
-	{
-		return m_voxelizer->getSecondaryBounce();
 	}
 
 	TechniquePassVector RenderTechnique::getCustomRenderPasses()const

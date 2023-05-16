@@ -61,8 +61,6 @@ namespace castor3d
 		m_group.addGroupOutput( m_lpResult[LpTexture::eDiffuse].wholeViewId );
 		m_group.addGroupOutput( m_lpResult[LpTexture::eSpecular].wholeViewId );
 		m_group.addGroupOutput( m_lpResult[LpTexture::eScattering].wholeViewId );
-		m_group.addGroupOutput( m_lpResult[LpTexture::eCoatingSpecular].wholeViewId );
-		m_group.addGroupOutput( m_lpResult[LpTexture::eSheen].wholeViewId );
 	}
 
 	void LightingPass::update( CpuUpdater & updater )
@@ -104,14 +102,6 @@ namespace castor3d
 			, m_lpResult[LpTexture::eScattering]
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Light Clearcoat"
-			, m_lpResult[LpTexture::eCoatingSpecular]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
-		visitor.visit( "Light Sheen"
-			, m_lpResult[LpTexture::eSheen]
-			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-			, TextureFactors{}.invert( true ) );
 	}
 
 	bool LightingPass::isEnabled()const
@@ -127,13 +117,14 @@ namespace castor3d
 		auto & camera = *updater.camera;
 		auto & scene = *updater.camera->getScene();
 		auto & cache = scene.getLightCache();
+		m_lightPass->updateCamera( camera );
 
 		for ( auto & light : cache.getLights( lightType ) )
 		{
 			if ( light->getLightType() == LightType::eDirectional
 				|| camera.isVisible( light->getBoundingBox(), light->getParent()->getDerivedTransformationMatrix() ) )
 			{
-				m_lightPass->enableLight( camera, *light );
+				m_lightPass->enableLight( *light );
 			}
 		}
 	}
@@ -147,7 +138,7 @@ namespace castor3d
 		auto & engine = *m_device.renderSystem.getEngine();
 		auto & modelBuffer = scene.getModelBuffer().getBuffer();
 		auto & pass = graph.createPass( "Lighting"
-			, [this, progress, &engine, &scene]( crg::FramePass const & framePass
+			, [this, progress, &engine]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -157,7 +148,7 @@ namespace castor3d
 					, context
 					, runnableGraph
 					, m_device
-					, scene
+					, m_technique.getRenderTarget()
 					, m_lpResult
 					, m_smDirectionalResult
 					, m_smPointResult
@@ -190,12 +181,6 @@ namespace castor3d
 			, uint32_t( LightPassIdx::eSpcRgh ) );
 		pass.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
 			, uint32_t( LightPassIdx::eEmsTrn ) );
-		pass.addSampledView( m_gpResult[DsTexture::eClrCot].sampledViewId
-			, uint32_t( LightPassIdx::eClrCot ) );
-		pass.addSampledView( m_gpResult[DsTexture::eCrTsIr].sampledViewId
-			, uint32_t( LightPassIdx::eCrTsIr ) );
-		pass.addSampledView( m_gpResult[DsTexture::eSheen].sampledViewId
-			, uint32_t( LightPassIdx::eSheen ) );
 		auto index = uint32_t( LightPassIdx::eCount );
 		engine.createSpecificsBuffersPassBindings( pass, index );
 
@@ -203,8 +188,6 @@ namespace castor3d
 		pass.addOutputColourView( m_lpResult[LpTexture::eDiffuse].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eSpecular].targetViewId );
 		pass.addOutputColourView( m_lpResult[LpTexture::eScattering].targetViewId );
-		pass.addOutputColourView( m_lpResult[LpTexture::eCoatingSpecular].targetViewId );
-		pass.addOutputColourView( m_lpResult[LpTexture::eSheen].targetViewId );
 
 		return pass;
 	}

@@ -19,6 +19,7 @@ namespace castor3d
 	struct LightsPipeline
 	{
 		LightsPipeline( Scene const & scene
+			, Camera const & camera
 			, crg::FramePass const & pass
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
@@ -31,10 +32,8 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetColourResult );
 
 		void clear();
-		void addLight( Camera const & camera
-			, Light const & light );
-		void removeLight( Camera const & camera
-			, Light const & light );
+		void updateCamera( Camera const & camera );
+		void addLight( Light const & light );
 		void recordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t passIndex
@@ -81,6 +80,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		LightRenderPassArray const & m_renderPasses;
 		Scene const & m_scene;
+		Camera const & m_targetCamera;
 		LightPipelineConfig m_config;
 		ShaderModule m_vertexShader;
 		ShaderModule m_pixelShader;
@@ -96,6 +96,7 @@ namespace castor3d
 		std::vector< LightDescriptors const * > m_enabledLights;
 		Viewport m_viewport;
 		crg::ImageViewIdArray m_targetColourResult;
+		Camera const * m_camera{};
 	};
 
 	using LightsPipelinePtr = std::unique_ptr< LightsPipeline >;

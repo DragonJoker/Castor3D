@@ -478,6 +478,12 @@ namespace castor3d
 
 	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const
 	{
+		if ( handleDeferrable()
+			&& passFlags.hasNonDeferrableFlag == allowDeferrable() )
+		{
+			return false;
+		}
+
 		if ( passFlags.hasTransmissionFlag )
 		{
 			return !checkFlag( m_filters, RenderFilter::eTransmission );
@@ -860,13 +866,15 @@ namespace castor3d
 			flags.alphaFunc = VK_COMPARE_OP_ALWAYS;
 		}
 
-		if ( checkFlag( m_filters, RenderFilter::eAlphaBlend ) )
+		if ( checkFlag( m_filters, RenderFilter::eAlphaBlend )
+			&& checkFlag( m_filters, RenderFilter::eTransmission ) )
 		{
 			flags.alphaBlendMode = BlendMode::eNoBlend;
 		}
 
 		if ( checkFlag( m_filters, RenderFilter::eAlphaBlend )
-			&& checkFlag( m_filters, RenderFilter::eAlphaTest ) )
+			&& checkFlag( m_filters, RenderFilter::eAlphaTest )
+			&& checkFlag( m_filters, RenderFilter::eTransmission ) )
 		{
 			remFlag( flags.m_shaderFlags, ShaderFlag::eOpacity );
 		}

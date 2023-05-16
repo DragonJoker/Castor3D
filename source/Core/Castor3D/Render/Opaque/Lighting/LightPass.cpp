@@ -153,9 +153,6 @@ namespace castor3d
 		auto c3d_mapColMtl = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eColMtl ), uint32_t( LightPassIdx::eColMtl ), 0u );
 		auto c3d_mapSpcRgh = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSpcRgh ), uint32_t( LightPassIdx::eSpcRgh ), 0u );
 		auto c3d_mapEmsTrn = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eEmsTrn ), uint32_t( LightPassIdx::eEmsTrn ), 0u );
-		auto c3d_mapClrCot = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eClrCot ), uint32_t( LightPassIdx::eClrCot ), 0u );
-		auto c3d_mapCrTsIr = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eCrTsIr ), uint32_t( LightPassIdx::eCrTsIr ), 0u );
-		auto c3d_mapSheen = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( DsTexture::eSheen ), uint32_t( LightPassIdx::eSheen ), 0u );
 
 		shadowType = shadows
 			? shadowType
@@ -231,12 +228,6 @@ namespace castor3d
 						, c3d_mapSpcRgh.lod( texCoord, 0.0_f ) );
 					auto emsTrn = writer.declLocale( "emsTrn"
 						, c3d_mapEmsTrn.lod( texCoord, 0.0_f ) );
-					auto clrCot = writer.declLocale( "clrCot"
-						, c3d_mapClrCot.lod( texCoord, 0.0_f ) );
-					auto crTsIr = writer.declLocale( "crTsIr"
-						, c3d_mapCrTsIr.lod( texCoord, 0.0_f ) );
-					auto sheen = writer.declLocale( "sheen"
-						, c3d_mapSheen.lod( texCoord, 0.0_f ) );
 
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
@@ -264,12 +255,11 @@ namespace castor3d
 							, wsPosition
 							, wsNormal
 							, vec3( texCoord, 0.0_f ) } );
-					materials.fill( colMtl.rgb(), spcRgh, colMtl, crTsIr, sheen, material );
+					materials.fill( colMtl.rgb(), spcRgh, colMtl, material );
 					auto components = writer.declLocale( "components"
 						, shader::BlendComponents{ materials
 							, material
-							, surface
-							, clrCot } );
+							, surface } );
 					lightingModel->finish( passShaders
 						, surface
 						, utils

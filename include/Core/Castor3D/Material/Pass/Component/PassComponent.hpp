@@ -45,8 +45,6 @@ namespace castor3d
 			*	Receives Specular (RGB) and Roughness (A).
 			*\param[out] colMtl
 			*	Receives Colour (RGB) and Metalness (A).
-			*\param[out] sheen
-			*	Receives Sheen Specular (RGB) and Sheen Roughness (A).
 			*\~french
 			*\brief		Met à jour les valeurs nécessaires à l'éclairage (specular, metalness, roughness et colour).
 			*\param[in] components
@@ -57,14 +55,11 @@ namespace castor3d
 			*	Reçoit la Specular (RGB) et la Roughness (A).
 			*\param[out] colMtl
 			*	Reçoit la Colour (RGB) et la Metalness (A).
-			*\param[out] sheen
-			*	Reçoit la Sheen Specular (RGB) et la Sheen Roughness (A).
 			*/
 			C3D_API virtual void updateOutputs( sdw::StructInstance const & components
 				, sdw::StructInstance const & surface
 				, sdw::Vec4 & spcRgh
-				, sdw::Vec4 & colMtl
-				, sdw::Vec4 & sheen )const
+				, sdw::Vec4 & colMtl )const
 			{
 			}
 		};
@@ -96,7 +91,8 @@ namespace castor3d
 			*\param[in] surface
 			*	Utilisés pour vérifier si la surface supporte les données nécessaires pour ce composant.
 			*/
-			C3D_API virtual void fillComponents( sdw::type::BaseStruct & components
+			C3D_API virtual void fillComponents( ComponentModeFlags componentsMask
+				, sdw::type::BaseStruct & components
 				, Materials const & materials
 				, sdw::StructInstance const * surface )const
 			{
@@ -453,10 +449,6 @@ namespace castor3d
 			*	Specular (RGB) and Roughness (A).
 			*\param[in] colMtl
 			*	Colour (RGB) and Metalness (A).
-			*\param[in] crTsIr
-			*	Clearcoat Roughness (R), Transmission (G), Iridescence Factor (B) and Iridescence Thickness (A).
-			*\param[in] sheen
-			*	Sheen Specular (RGB) and Sheen Roughness (A).
 			*\param[out] material
 			*	Receives the values necessary for this component.
 			*\~french
@@ -467,18 +459,12 @@ namespace castor3d
 			*	Specular (RGB) et la Roughness (A).
 			*\param[out] colMtl
 			*	Colour (RGB) et la Metalness (A).
-			*\param[in] crTsIr
-			*	Clearcoat Roughness (R), Transmission (G), Iridescence Factor (B) et Iridescence Thickness (A).
-			*\param[in] sheen
-			*	Sheen Specular (RGB) et Sheen Roughness (A).
 			*\param[out] material
 			*	Reçoit les valeurs nécessaires pour ce composant.
 			*/
 			C3D_API virtual void updateMaterial( sdw::Vec3 const & colour
 				, sdw::Vec4 const & spcRgh
 				, sdw::Vec4 const & colMtl
-				, sdw::Vec4 const & crTsIr
-				, sdw::Vec4 const & sheen
 				, Material & material )const
 			{
 			}
@@ -755,6 +741,18 @@ namespace castor3d
 		C3D_API virtual PassComponentFlag getParallaxOcclusionMappingRepeatFlag()const
 		{
 			return 0u;
+		}
+		/**
+		*\~english
+		*\return
+		*	\p true if this component can be processed through deferred rendering.
+		*\~french
+		*\return
+		*	\p true si le composant peut être traité via le deferred rendering.
+		*/
+		C3D_API virtual bool isNonDeferrable()const
+		{
+			return false;
 		}
 		/**@}*/
 		/**

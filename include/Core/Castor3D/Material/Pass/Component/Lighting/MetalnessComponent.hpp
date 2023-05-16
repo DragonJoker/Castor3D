@@ -22,7 +22,8 @@ namespace castor3d
 			{
 			}
 
-			C3D_API void fillComponents( sdw::type::BaseStruct & components
+			C3D_API void fillComponents( ComponentModeFlags componentsMask
+				, sdw::type::BaseStruct & components
 				, shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
 			C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
@@ -38,8 +39,7 @@ namespace castor3d
 			C3D_API void updateOutputs( sdw::StructInstance const & components
 				, sdw::StructInstance const & surface
 				, sdw::Vec4 & spcRgh
-				, sdw::Vec4 & colMtl
-				, sdw::Vec4 & sheen )const override;
+				, sdw::Vec4 & colMtl )const override;
 		};
 
 		struct MaterialShader
@@ -51,8 +51,6 @@ namespace castor3d
 			C3D_API void updateMaterial( sdw::Vec3 const & albedo
 				, sdw::Vec4 const & spcRgh
 				, sdw::Vec4 const & colMtl
-				, sdw::Vec4 const & crTsIr
-				, sdw::Vec4 const & sheen
 				, shader::Material & material )const override;
 		};
 

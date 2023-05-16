@@ -333,8 +333,12 @@ namespace castor3d
 		, PassComponentCombineID newComponents )
 	{
 		auto & componentsReg = getOwner()->getEngine()->getPassComponentsRegister();
-		bool newHasEnvMap = componentsReg.needsEnvironmentMapping( newComponents );
-		bool oldHasEnvMap = componentsReg.needsEnvironmentMapping( oldComponents );
+		bool newHasEnvMap = newComponents
+			? componentsReg.needsEnvironmentMapping( newComponents )
+			: false;
+		bool oldHasEnvMap = oldComponents
+			? componentsReg.needsEnvironmentMapping( oldComponents )
+			: false;
 		auto removeNode = [this, &pass, newHasEnvMap, oldHasEnvMap]( auto & nodes )
 		{
 			for ( auto & nodeIt : nodes )
