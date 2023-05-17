@@ -191,6 +191,21 @@ namespace castor3d
 			return m_staticStyles;
 		}
 
+		bool isEmpty()const noexcept
+		{
+			return m_buttonStyles.empty()
+				&& m_comboBoxStyles.empty()
+				&& m_editStyles.empty()
+				&& m_expandablePanelStyles.empty()
+				&& m_frameStyles.empty()
+				&& m_listBoxStyles.empty()
+				&& m_panelStyles.empty()
+				&& m_progressStyles.empty()
+				&& m_scrollBarStyles.empty()
+				&& m_sliderStyles.empty()
+				&& m_staticStyles.empty();
+		}
+
 	protected:
 		auto & getHolderName()const noexcept
 		{

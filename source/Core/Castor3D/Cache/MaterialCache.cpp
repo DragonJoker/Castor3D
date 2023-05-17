@@ -156,6 +156,7 @@ namespace castor
 			{
 				material->createPass();
 				material->getPass( 0 )->createComponent< castor3d::TwoSidedComponent >()->setTwoSided( true );
+				material->setSerialisable( false );
 			}
 
 			m_defaultMaterial = material;
