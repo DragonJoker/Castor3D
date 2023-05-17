@@ -109,12 +109,16 @@ namespace castor3d::exporter
 
 			if ( !cache.isEmpty() )
 			{
+				auto scount = 0u;
+				auto gcount = 0u;
+				castor::StringStream sstream;
+				castor::StringStream gstream;
 				log::info << cuT( "Scene::write - " ) << elemsName << cuT( "\n" );
-				globalFile << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
+				gstream << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 
 				if ( !view.isEmpty() )
 				{
-					sceneFile << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
+					sstream << ( cuT( "// " ) + elemsName + cuT( "\n" ) );
 				}
 
 				castor::TextWriter< ObjType > writer{ castor::cuEmptyString
@@ -131,14 +135,26 @@ namespace castor3d::exporter
 						{
 							if ( view.has( name ) )
 							{
-								result = result && writer( *elem, sceneFile );
+								result = result && writer( *elem, sstream );
+								++scount;
 							}
 							else
 							{
-								result = result && writer( *elem, globalFile );
+								result = result && writer( *elem, gstream );
+								++gcount;
 							}
 						}
 					}
+				}
+
+				if ( gcount )
+				{
+					globalFile << gstream.str();
+				}
+
+				if ( scount )
+				{
+					sceneFile << sstream.str();
 				}
 			}
 
@@ -1013,11 +1029,16 @@ namespace castor3d::exporter
 			castor::TextWriter< StylesHolder > sceneWriter{ castor::cuEmptyString, &scene, "" };
 			castor::StringStream sceneStream;
 			castor::StringStream globalStream;
-			auto result = sceneWriter( manager, sceneStream );
+			bool result = true;
 
-			if ( result )
+			if ( !manager.isEmpty() )
 			{
-				result = globalWriter( manager, globalStream );
+				result = sceneWriter( manager, sceneStream );
+
+				if ( result )
+				{
+					result = globalWriter( manager, globalStream );
+				}
 			}
 
 			if ( result && !globalStream.str().empty() )
