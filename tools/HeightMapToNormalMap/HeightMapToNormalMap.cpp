@@ -72,8 +72,7 @@ namespace
 
 		if ( it != args.end() )
 		{
-			args.erase( it );
-			++it;
+			it = args.erase( it );
 			options.normalStrength = castor::string::toFloat( *it );
 			args.erase( it );
 		}
