@@ -224,6 +224,17 @@ namespace castor3d
 			m_meshShading = value;
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	The nodes pass components flags.
+		 *\~french
+		 *\param[in]	value	Les indicateurs de composants de la passe de noeuds.
+		 */
+		RenderNodesPassDesc & componentModeFlags( ComponentModeFlags value )
+		{
+			m_componentModeFlags = std::move( value );
+			return *this;
+		}
 
 		VkExtent3D m_size;
 		CameraUbo const & m_cameraUbo;
@@ -238,6 +249,7 @@ namespace castor3d
 		uint32_t m_index{ 0u };
 		std::optional< bool > m_handleStatic{ std::nullopt };
 		crg::ru::Config m_ruConfig{ 1u, true };
+		ComponentModeFlags m_componentModeFlags{ ComponentModeFlag::eAll };
 	};
 
 	class RenderNodesPass
@@ -582,7 +594,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API virtual ComponentModeFlags getComponentsMask()const;
 		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const;
 		C3D_API virtual bool isPassEnabled()const;
 		C3D_API virtual ShaderFlags getShaderFlags()const;
@@ -601,6 +612,11 @@ namespace castor3d
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
 			, ashes::BufferBase const & buffer )const;
 		C3D_API uint32_t getDrawCallsCount()const;
+
+		ComponentModeFlags getComponentsMask()const
+		{
+			return m_componentsMask;
+		}
 
 		bool isOrderIndependent()const
 		{
@@ -909,6 +925,7 @@ namespace castor3d
 		SceneUbo const * m_sceneUbo{};
 		uint32_t m_index{ 0u };
 		std::optional< bool > m_handleStatic{ std::nullopt };
+		ComponentModeFlags m_componentsMask;
 
 	private:
 		struct PassDescriptors

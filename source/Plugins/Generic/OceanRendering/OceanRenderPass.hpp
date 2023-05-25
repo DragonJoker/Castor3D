@@ -49,7 +49,6 @@ namespace ocean
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor3d::ComponentModeFlags getComponentsMask()const override;
 		castor3d::ShaderFlags getShaderFlags()const override;
 		/**@}*/
 

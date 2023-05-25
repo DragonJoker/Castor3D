@@ -82,7 +82,6 @@ namespace castor3d
 		/**@{*/
 		C3D_API bool isPassEnabled()const override;
 		C3D_API ShaderFlags getShaderFlags()const override;
-		C3D_API ComponentModeFlags getComponentsMask()const override;
 		/**@}*/
 
 		C3D_API void setUpToDate();

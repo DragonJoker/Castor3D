@@ -58,10 +58,6 @@ namespace castor3d
 		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
-		 */
-		C3D_API ComponentModeFlags getComponentsMask()const override;
-		/**
 		*\~english
 		*name
 		*	Getters.

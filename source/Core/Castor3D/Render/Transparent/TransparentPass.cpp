@@ -73,19 +73,6 @@ namespace castor3d
 	{
 	}
 
-	ComponentModeFlags TransparentPass::getComponentsMask()const
-	{
-		return ComponentModeFlag::eOpacity
-			| ComponentModeFlag::eAlphaBlending
-			| ComponentModeFlag::eColour
-			| ComponentModeFlag::eDiffuseLighting
-			| ComponentModeFlag::eSpecularLighting
-			| ComponentModeFlag::eNormals
-			| ComponentModeFlag::eGeometry
-			| ComponentModeFlag::eOcclusion
-			| ComponentModeFlag::eSpecifics;
-	}
-
 	void TransparentPass::accept( RenderTechniqueVisitor & visitor )
 	{
 		if ( visitor.getFlags().renderPassType == m_typeID
@@ -299,7 +286,7 @@ namespace castor3d
 			, [&]( FragmentInT< shader::FragmentSurfaceT > in
 				, FragmentOut out )
 			{
-				shader::DebugOutput ouput{ getDebugConfig()
+				shader::DebugOutput output{ getDebugConfig()
 					, cuT( "Default" )
 					, c3d_cameraData.debugIndex()
 					, outAccumulation
@@ -330,17 +317,7 @@ namespace castor3d
 
 				if ( auto lightingModel = lights.getLightingModel() )
 				{
-					auto lightDiffuse = writer.declLocale( "lightDiffuse"
-						, vec3( 0.0_f ) );
-					auto lightSpecular = writer.declLocale( "lightSpecular"
-						, vec3( 0.0_f ) );
-					auto lightScattering = writer.declLocale( "lightScattering"
-						, vec3( 0.0_f ) );
-					auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
-						, vec3( 0.0_f ) );
-					auto lightSheen = writer.declLocale( "lightSheen"
-						, vec2( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
+					shader::OutputComponents lighting{ writer, false };
 					auto surface = writer.declLocale( "surface"
 						, shader::Surface{ in.fragCoord.xyz()
 							, in.viewPosition.xyz()
@@ -362,8 +339,7 @@ namespace castor3d
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
-						, output );
-
+						, lighting );
 					auto directAmbient = writer.declLocale( "directAmbient"
 						, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
 					auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
@@ -432,31 +408,19 @@ namespace castor3d
 								, components.metalness )
 							: vec3( 0.0_f ) ) );
 					components.emissiveFactor *= components.opacity;
-					ouput.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-					ouput.registerOutput( "LightDiffuse", lightDiffuse );
-					ouput.registerOutput( "IndirectDiffuse", indirectDiffuse );
-					ouput.registerOutput( "ReflectedDiffuse", reflectedDiffuse );
-					ouput.registerOutput( "LightSpecular", lightSpecular );
-					ouput.registerOutput( "IndirectSpecular", lightIndirectSpecular );
-					ouput.registerOutput( "ReflectedSpecular", reflectedSpecular );
-					ouput.registerOutput( "LightScattering", lightScattering );
-					ouput.registerOutput( "DirectAmbient", directAmbient );
-					ouput.registerOutput( "IndirectAmbient", indirectAmbient );
-					ouput.registerOutput( "Occlusion", components.occlusion );
-					ouput.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
-					ouput.registerOutput( "Refracted", refracted );
-					ouput.registerOutput( "LightCoatingSpecular", lightCoatingSpecular );
-					ouput.registerOutput( "CoatReflected", coatReflected );
-					ouput.registerOutput( "LightSheen", lightSheen );
-					ouput.registerOutput( "SheenReflected", sheenReflected );
+
+					output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+					output.registerOutput( "Occlusion", components.occlusion );
+					output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
+
 					colour = lightingModel->combine( components
 						, incident
-						, lightDiffuse
+						, lighting.m_diffuse
 						, indirectDiffuse
-						, lightSpecular
-						, lightScattering
-						, lightCoatingSpecular
-						, lightSheen
+						, lighting.m_specular
+						, lighting.m_scattering
+						, lighting.m_coatingSpecular
+						, lighting.m_sheen
 						, lightIndirectSpecular
 						, directAmbient
 						, indirectAmbient

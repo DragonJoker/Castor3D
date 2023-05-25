@@ -11,7 +11,7 @@ CU_ImplementSmartPtr( castor3d, PoolUniformBuffer )
 namespace castor3d
 {
 	PoolUniformBuffer::PoolUniformBuffer( RenderSystem const & renderSystem
-		, castor::ByteArrayView data
+		, castor::ArrayView< uint8_t > data
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, castor::String debugName

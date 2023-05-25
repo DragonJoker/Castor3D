@@ -306,7 +306,15 @@ namespace ocean
 				, castor3d::RenderNodesPassDesc{ extent
 					, technique.getCameraUbo()
 					, technique.getSceneUbo()
-					, technique.getRenderTarget().getCuller() }.safeBand( true )
+					, technique.getRenderTarget().getCuller() }
+					.safeBand( true )
+					.componentModeFlags( castor3d::ComponentModeFlag::eColour
+						| castor3d::ComponentModeFlag::eNormals
+						| castor3d::ComponentModeFlag::eGeometry
+						| castor3d::ComponentModeFlag::eOcclusion
+						| castor3d::ComponentModeFlag::eDiffuseLighting
+						| castor3d::ComponentModeFlag::eSpecularLighting
+						| castor3d::ComponentModeFlag::eSpecifics )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 					.ssao( technique.getSsaoResult() )
 					.lpvConfigUbo( technique.getLpvConfigUbo() )
@@ -335,17 +343,6 @@ namespace ocean
 		result.addInOutDepthStencilView( technique.getTargetDepth() );
 		result.addInOutColourView( technique.getTargetResult() );
 		return { &result };
-	}
-
-	castor3d::ComponentModeFlags OceanRenderPass::getComponentsMask()const
-	{
-		return castor3d::ComponentModeFlag::eColour
-			| castor3d::ComponentModeFlag::eNormals
-			| castor3d::ComponentModeFlag::eGeometry
-			| castor3d::ComponentModeFlag::eOcclusion
-			| castor3d::ComponentModeFlag::eDiffuseLighting
-			| castor3d::ComponentModeFlag::eSpecularLighting
-			| castor3d::ComponentModeFlag::eSpecifics;
 	}
 
 	castor3d::ShaderFlags OceanRenderPass::getShaderFlags()const

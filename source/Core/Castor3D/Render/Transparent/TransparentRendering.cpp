@@ -211,7 +211,6 @@ namespace castor3d
 				, crg::RunnableGraph & runnableGraph )
 			{
 				stepProgressBar( progress, "Initialising transparent pass" );
-				castor::String name = cuT( "Forward" );
 				static constexpr bool isOit = false;
 				static constexpr bool hasVelocity = false;
 				auto res = std::make_unique< ForwardRenderTechniquePass >( getOwner()
@@ -220,6 +219,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, ForwardRenderTechniquePass::Type
+					, cuT( "Default" )
 					, targetResult
 					, targetDepth
 					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
@@ -229,6 +229,7 @@ namespace castor3d
 							, isOit }
 						.safeBand( true )
 						.meshShading( true )
+						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.ssao( getOwner()->getSsaoResult() )
 						.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
@@ -285,6 +286,15 @@ namespace castor3d
 							, isOit }
 						.safeBand( true )
 						.meshShading( true )
+						.componentModeFlags( ComponentModeFlag::eOpacity
+							| ComponentModeFlag::eAlphaBlending
+							| ComponentModeFlag::eColour
+							| ComponentModeFlag::eDiffuseLighting
+							| ComponentModeFlag::eSpecularLighting
+							| ComponentModeFlag::eNormals
+							| ComponentModeFlag::eGeometry
+							| ComponentModeFlag::eOcclusion
+							| ComponentModeFlag::eSpecifics )
 						.implicitAction( accumIt->view(), crg::RecordContext::clearAttachment( *accumIt ) )
 						.implicitAction( revealIt->view(), crg::RecordContext::clearAttachment( *revealIt ) )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }

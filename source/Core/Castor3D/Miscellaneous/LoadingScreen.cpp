@@ -419,10 +419,12 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
+					, cuT( "LoadingScreen" )
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, crg::ImageViewIdArray{ m_depth.targetViewId }
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_cameraUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
+						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_opaquePass = result.get();
 				return result;
@@ -447,10 +449,12 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
+					, cuT( "LoadingScreen" )
 					, crg::ImageViewIdArray{ m_colour.targetViewId }
 					, crg::ImageViewIdArray{ m_depth.targetViewId }
 					, RenderNodesPassDesc{ makeExtent3D( m_camera->getSize() ), m_cameraUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
+						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_transparentPass = result.get();
 				return result;

@@ -436,7 +436,8 @@ namespace castor3d
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
-					.meshShading( true );
+					.meshShading( true )
+					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags );
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.lpvConfigUbo( getOwner()->getLpvConfigUbo() )
 					.llpvConfigUbo( getOwner()->getLlpvConfigUbo() )
@@ -451,6 +452,7 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, ForwardRenderTechniquePass::Type
+					, cuT( "Default" )
 					, targetResult
 					, targetDepth
 					, std::move( renderPassDesc )
@@ -488,7 +490,15 @@ namespace castor3d
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
-					.meshShading( true );
+					.meshShading( true )
+					.componentModeFlags( ComponentModeFlag::eOpacity
+						| ComponentModeFlag::eNormals
+						| ComponentModeFlag::eGeometry
+						| ComponentModeFlag::eColour
+						| ComponentModeFlag::eDiffuseLighting
+						| ComponentModeFlag::eSpecularLighting
+						| ComponentModeFlag::eSpecifics
+						| ComponentModeFlag::eOcclusion );
 				auto nmlOccIt = std::next( framePass.images.begin(), 1u );
 				auto colRghIt = std::next( nmlOccIt );
 				auto spcMtlIt = std::next( colRghIt );
