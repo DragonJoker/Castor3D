@@ -178,10 +178,12 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
+					, cuT( "Environment" )
 					, crg::ImageViewIdArray{ m_colourView }
 					, crg::ImageViewIdArray{ depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
+						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -213,10 +215,12 @@ namespace castor3d
 					, graph
 					, m_device
 					, ForwardRenderTechniquePass::Type
+					, cuT( "Environment" )
 					, crg::ImageViewIdArray{ m_colourView }
 					, crg::ImageViewIdArray{ depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
+						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
 					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );

@@ -63,14 +63,6 @@ namespace castor3d
 	{
 	}
 
-	ComponentModeFlags DepthPass::getComponentsMask()const
-	{
-		return ComponentModeFlag::eOpacity
-			| ComponentModeFlag::eGeometry
-			| ( m_deferred ? ComponentModeFlag::eNone : ComponentModeFlag::eNormals )
-			| ( m_deferred ? ComponentModeFlag::eNone : ComponentModeFlag::eOcclusion );
-	}
-
 	ShaderFlags DepthPass::getShaderFlags()const
 	{
 		return ShaderFlag::eWorldSpace

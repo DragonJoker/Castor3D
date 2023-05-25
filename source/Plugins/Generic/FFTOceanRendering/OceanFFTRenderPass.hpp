@@ -52,7 +52,6 @@ namespace ocean_fft
 		*	Accesseurs.
 		*/
 		/**@{*/
-		castor3d::ComponentModeFlags getComponentsMask()const override;
 		castor3d::ShaderFlags getShaderFlags()const override;
 		/**@}*/
 

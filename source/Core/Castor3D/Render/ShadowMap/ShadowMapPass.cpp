@@ -71,6 +71,11 @@ namespace castor3d
 				}
 			}
 
+			result.componentModeFlags( ComponentModeFlag::eOpacity
+				| ComponentModeFlag::eNormals
+				| ComponentModeFlag::eGeometry
+				| ( needsRsm ? ComponentModeFlag::eColour : ComponentModeFlag::eNone ) );
+
 			return result;
 		}
 	}

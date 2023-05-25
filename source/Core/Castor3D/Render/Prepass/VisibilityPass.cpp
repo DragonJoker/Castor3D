@@ -73,14 +73,6 @@ namespace castor3d
 		}
 	}
 
-	ComponentModeFlags VisibilityPass::getComponentsMask()const
-	{
-		// Normally, ( ComponentModeFlag::eOpacity | ComponentModeFlag::eHeight | ComponentModeFlag::eNormals ) would be enough,
-		// but to have the pipeline ID order synchronization with visibility resolve,
-		// allow the same flags.
-		return VisibilityResolvePass::getComponentsMask();
-	}
-
 	ShaderFlags VisibilityPass::getShaderFlags()const
 	{
 		return ShaderFlag::eWorldSpace

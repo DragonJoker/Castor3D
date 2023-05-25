@@ -70,18 +70,6 @@ namespace castor3d
 		}
 	}
 
-	ComponentModeFlags OpaquePass::getComponentsMask()const
-	{
-		return ComponentModeFlag::eOpacity
-			| ComponentModeFlag::eNormals
-			| ComponentModeFlag::eGeometry
-			| ComponentModeFlag::eColour
-			| ComponentModeFlag::eDiffuseLighting
-			| ComponentModeFlag::eSpecularLighting
-			| ComponentModeFlag::eSpecifics
-			| ComponentModeFlag::eOcclusion;
-	}
-
 	ShaderFlags OpaquePass::getShaderFlags()const
 	{
 		return ShaderFlag::eTangentSpace

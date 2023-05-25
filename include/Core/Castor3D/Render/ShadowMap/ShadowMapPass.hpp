@@ -73,16 +73,6 @@ namespace castor3d
 		C3D_API bool isPassEnabled()const override;
 		C3D_API bool isUpToDate()const;
 		/**
-		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
-		 */
-		ComponentModeFlags getComponentsMask()const override
-		{
-			return ComponentModeFlag::eOpacity
-				| ComponentModeFlag::eNormals
-				| ComponentModeFlag::eGeometry
-				| ( m_needsRsm ? ComponentModeFlag::eColour : ComponentModeFlag::eNone );
-		}
-		/**
 		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
 		 */
 		ShaderFlags getShaderFlags()const override

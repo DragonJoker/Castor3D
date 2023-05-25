@@ -69,7 +69,9 @@ namespace castor3d
 			, {}
 			, {}
 			, RenderNodesPassDesc{ { size.getWidth(), size.getHeight(), 1u }, cameraUbo, sceneUbo, culler, RenderFilter::eNone, true, false }
-				.meshShading( true ) }
+				.meshShading( true )
+				.componentModeFlags( ComponentModeFlag::eOpacity
+					| ComponentModeFlag::eGeometry ) }
 	{
 	}
 
@@ -81,12 +83,6 @@ namespace castor3d
 	{
 		ShadowMapLightTypeArray shadowMaps;
 		m_renderQueue->update( shadowMaps, scissor );
-	}
-
-	ComponentModeFlags PickingPass::getComponentsMask()const
-	{
-		return ComponentModeFlag::eOpacity
-			| ComponentModeFlag::eGeometry;
 	}
 
 	bool PickingPass::doIsValidPass( Pass const & pass )const

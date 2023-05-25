@@ -48,10 +48,6 @@ namespace castor3d
 			, RenderNodesPassDesc const & renderPassDesc
 			, bool deferred );
 		/**
-		 *\copydoc		castor3d::RenderNodesPass::getComponentsMask
-		 */
-		C3D_API ComponentModeFlags getComponentsMask()const override;
-		/**
 		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const override;

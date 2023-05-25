@@ -141,6 +141,7 @@ namespace castor3d
 		, m_sceneUbo{ desc.m_sceneUbo }
 		, m_index{ desc.m_index }
 		, m_handleStatic{ desc.m_handleStatic }
+		, m_componentsMask{ desc.m_componentModeFlags }
 	{
 	}
 
@@ -473,11 +474,6 @@ namespace castor3d
 			VK_LOGIC_OP_COPY,
 			ashes::VkPipelineColorBlendAttachmentStateArray{ size_t( attachesCount ), attach },
 		};
-	}
-
-	ComponentModeFlags RenderNodesPass::getComponentsMask()const
-	{
-		return ComponentModeFlags{ ComponentModeFlag::eAll };
 	}
 
 	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const

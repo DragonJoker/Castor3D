@@ -65,6 +65,11 @@ namespace castor3d
 				, true
 				, true };
 			result.isStatic( isStatic );
+			result.componentModeFlags( ComponentModeFlag::eOcclusion
+				| ComponentModeFlag::eColour
+				| ComponentModeFlag::eDiffuseLighting
+				| ComponentModeFlag::eSpecularLighting
+				| ComponentModeFlag::eNormals );
 			return result;
 		}
 	}
@@ -165,15 +170,6 @@ namespace castor3d
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eGeometry
 			| ShaderFlag::eColour;
-	}
-
-	ComponentModeFlags VoxelizePass::getComponentsMask()const
-	{
-		return ( ComponentModeFlag::eOcclusion
-			| ComponentModeFlag::eColour
-			| ComponentModeFlag::eDiffuseLighting
-			| ComponentModeFlag::eSpecularLighting
-			| ComponentModeFlag::eNormals );
 	}
 
 	void VoxelizePass::setUpToDate()

@@ -7,6 +7,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
+#include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 #include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
 #include "Castor3D/Render/Prepass/DepthPass.hpp"
 #include "Castor3D/Render/Prepass/VisibilityPass.hpp"
@@ -171,6 +172,10 @@ namespace castor3d
 							, getOwner()->getRenderTarget().getCuller() }
 						.safeBand( true )
 						.meshShading( true )
+						// Normally, ( ComponentModeFlag::eOpacity | ComponentModeFlag::eHeight | ComponentModeFlag::eNormals ) would be enough,
+						// but to have the pipeline ID order synchronization with visibility resolve,
+						// allow the same flags.
+						.componentModeFlags( VisibilityResolvePass::getComponentsMask() )
 						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
 						.implicitAction( dataIt->view(), crg::RecordContext::clearAttachment( *dataIt ) )
@@ -221,6 +226,10 @@ namespace castor3d
 							, getOwner()->getRenderTarget().getCuller() }
 						.safeBand( true )
 						.meshShading( true )
+						.componentModeFlags( ComponentModeFlag::eOpacity
+							| ComponentModeFlag::eGeometry
+							| ComponentModeFlag::eNormals
+							| ComponentModeFlag::eOcclusion )
 						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
 						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) )
@@ -269,6 +278,8 @@ namespace castor3d
 							, getOwner()->getRenderTarget().getCuller() }
 						.safeBand( true )
 						.meshShading( true )
+						.componentModeFlags( ComponentModeFlag::eOpacity
+							| ComponentModeFlag::eGeometry )
 						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
 						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) )
