@@ -86,6 +86,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & directAmbient )const = 0;
 		C3D_API virtual sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const = 0;
+		C3D_API virtual sdw::Vec3 adjustRefraction( BlendComponents const & components
+			, sdw::Vec3 const & refraction )const = 0;
 		/**
 		*\name
 		*	Deferred renderring
@@ -206,6 +208,20 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
 			, sdw::Vec3 & output ) = 0;
+		C3D_API virtual sdw::Vec3 doGetDiffuseBrdf( BlendComponents const & components
+			, sdw::Vec3 const & directDiffuse
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directAmbient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & reflectedDiffuse ) = 0;
+		C3D_API virtual sdw::Vec3 doGetSpecularBrdf( BlendComponents const & components
+			, sdw::Vec3 const & directSpecular
+			, sdw::Vec3 const & indirectSpecular
+			, sdw::Vec3 const & directAmbient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & reflectedSpecular ) = 0;
 
 	private:
 		C3D_API virtual sdw::Vec3 doComputeLight( Light light
@@ -217,20 +233,6 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 & radiance );
-
-		C3D_API virtual sdw::Vec3 doCombine( BlendComponents const & components
-			, sdw::Vec3 const & incident
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflectedDiffuse
-			, sdw::Vec3 const & reflectedSpecular
-			, sdw::Vec3 const & refracted ) = 0;
 
 	protected:
 		LightingModelID m_lightingModelId;

@@ -35,6 +35,7 @@ namespace castor3d
 		 *\param[in]	targetDepth			The depth image this pass renders to.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
+		 *\param[in]	mippedColour		The scene colour render result, with mipmaps.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	parent				La technique parente.
@@ -48,6 +49,7 @@ namespace castor3d
 		 *\param[in]	targetDepth			L'image de profondeur dans laquelle cette passe fait son rendu.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
+		 *\param[in]	mippedColour		Le résultat couleur du rendu de la scène, avec ses mipmaps.
 		 */
 		C3D_API ForwardRenderTechniquePass( RenderTechnique * parent
 			, crg::FramePass const & pass
@@ -59,7 +61,8 @@ namespace castor3d
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
-			, RenderTechniquePassDesc const & techniquePassDesc );
+			, RenderTechniquePassDesc const & techniquePassDesc
+			, Texture const * mippedColour = nullptr );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -69,9 +72,15 @@ namespace castor3d
 		C3D_API static castor::String const Type;
 
 	private:
+		void doFillAdditionalBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
+		void doFillAdditionalDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, castor3d::ShadowMapLightTypeArray const & shadowMaps )override;
 		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
 
 	private:
+		Texture const * m_mippedColour;
 		castor::String m_groupName;
 	};
 }

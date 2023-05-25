@@ -39,20 +39,20 @@ namespace castor3d::shader
 
 			if ( flags.enablePassMasks() )
 			{
-				auto firstComponents = writer.declLocale( "firstComponents"
-					, output );
 				auto result = writer.declLocale( "result"
 					, BlendComponents{ materials, true } );
-				materials.applyMaterial( flags
-					, textureConfigs, textureAnims, maps
-					, material
-					, firstComponents );
 				auto passMultiplier = writer.declLocale( "passMultiplier"
 					, passMultipliers[0_u][0_u] );
 
 				IF( writer, passMultiplier != 0.0_f )
 				{
-					passShaders.blendComponents( materials, passMultiplier, result, firstComponents );
+					auto passComponents = writer.declLocale( "passComponents"
+						, output );
+					materials.applyMaterialMaps( flags
+						, textureConfigs, textureAnims, maps
+						, material
+						, passComponents );
+					passShaders.blendComponents( materials, passMultiplier, result, passComponents );
 				}
 				FI;
 
@@ -62,11 +62,11 @@ namespace castor3d::shader
 
 					IF( writer, passMultiplier != 0.0_f )
 					{
-						auto passComponents = writer.declLocale( "passComponents"
-							, output );
 						auto curMaterial = writer.declLocale( "passMaterial"
 							, materials.getMaterial( materialId + passIdx ) );
-						materials.applyMaterial( flags
+						auto passComponents = writer.declLocale( "passComponents"
+							, output );
+						materials.applyMaterialMaps( flags
 							, textureConfigs, textureAnims, maps
 							, curMaterial
 							, passComponents );
@@ -79,34 +79,23 @@ namespace castor3d::shader
 
 				output = result;
 				output.normal = normalize( result.normal );
-
-				if ( opaque
-					|| !output.hasMember( "transmission" ) )
-				{
-					Material::applyAlphaFunc( writer
-						, alphaFunc
-						, opacity
-						, 0.0_f
-						, 1.0_f
-						, opaque );
-				}
 			}
 			else
 			{
-				materials.applyMaterial( flags
+				materials.applyMaterialMaps( flags
 					, textureConfigs, textureAnims, maps
 					, material
 					, output );
+			}
 
-				if ( opaque
-					|| !output.hasMember( "transmission" ) )
-				{
-					material.applyAlphaFunc( alphaFunc
-						, opacity
-						, 1.0_f
-						, opaque );
-				}
-
+			if ( opaque
+				|| !output.hasMember( "transmission" ) )
+			{
+				Material::applyAlphaFunc( writer
+					, alphaFunc
+					, opacity
+					, material.alphaRef
+					, opaque );
 			}
 		}
 	}
@@ -167,41 +156,12 @@ namespace castor3d::shader
 		}
 	}
 
-	void Material::applyAlphaFunc( VkCompareOp alphaFunc
-		, sdw::Float & alpha
-		, sdw::Float const & passMultiplier
-		, bool opaque )const
-	{
-		applyAlphaFunc( alphaFunc
-			, alpha
-			, alphaRef
-			, passMultiplier
-			, opaque );
-	}
-
-	void Material::applyAlphaFunc( VkCompareOp alphaFunc
-		, sdw::Float & alpha
-		, sdw::Float const & palphaRef
-		, sdw::Float const & passMultiplier
-		, bool opaque )const
-	{
-		applyAlphaFunc( *m_writer
-			, alphaFunc
-			, alpha
-			, alphaRef
-			, passMultiplier
-			, opaque );
-	}
-
 	void Material::applyAlphaFunc( sdw::ShaderWriter & writer
 		, VkCompareOp alphaFunc
 		, sdw::Float & alpha
 		, sdw::Float const & ref
-		, sdw::Float const & passMultiplier
 		, bool opaque )
 	{
-		alpha *= passMultiplier;
-
 		if ( alphaFunc != VK_COMPARE_OP_ALWAYS
 			&& alpha.isEnabled()
 			&& ref.isEnabled() )
@@ -431,7 +391,7 @@ namespace castor3d::shader
 			, output );
 	}
 
-	void Materials::applyMaterial( PipelineFlags const & flags
+	void Materials::applyMaterialMaps( PipelineFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps

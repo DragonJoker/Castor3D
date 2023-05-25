@@ -9,6 +9,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
@@ -59,7 +60,8 @@ namespace castor3d
 		, crg::ImageViewIdArray targetImage
 		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
-		, RenderTechniquePassDesc const & techniquePassDesc )
+		, RenderTechniquePassDesc const & techniquePassDesc
+		, Texture const * mippedColour )
 		: RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -70,6 +72,7 @@ namespace castor3d
 			, std::move( targetDepth )
 			, renderPassDesc
 			, techniquePassDesc }
+		, m_mippedColour{ mippedColour }
 		, m_groupName{ groupName }
 	{
 		if ( !checkFlag( m_filters, RenderFilter::eAlphaTest )
@@ -94,6 +97,71 @@ namespace castor3d
 			auto shaderProgram = doGetProgram( flags );
 			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
 			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+	}
+
+	void ForwardRenderTechniquePass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	{
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		doAddPassSpecificsBindings( flags, bindings, index );
+		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
+
+		if ( m_ssao )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+		}
+
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+
+		doAddShadowBindings( m_scene, flags, bindings, index );
+		doAddEnvBindings( flags, bindings, index );
+		doAddBackgroundBindings( m_scene, flags, bindings, index );
+		doAddGIBindings( flags, bindings, index );
+
+		if ( m_mippedColour )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
+		}
+	}
+
+	void ForwardRenderTechniquePass::doFillAdditionalDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
+		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
+
+		if ( m_ssao )
+		{
+			bindTexture( m_ssao->wholeView
+				, *m_ssao->sampler
+				, descriptorWrites
+				, index );
+		}
+
+		bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
+			, descriptorWrites
+			, index );
+		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
+		doAddEnvDescriptor( flags, descriptorWrites, index );
+		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
+		doAddGIDescriptor( flags, descriptorWrites, index );
+
+		if ( m_mippedColour )
+		{
+			bindTexture( m_mippedColour->wholeView
+				, *m_mippedColour->sampler
+				, descriptorWrites
+				, index );
 		}
 	}
 
@@ -169,10 +237,15 @@ namespace castor3d
 			, true
 			, index
 			, RenderPipeline::eBuffers );
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( index
+		shader::GlobalIllumination indirect{ writer
+			, utils
+			, index
 			, RenderPipeline::eBuffers
-			, flags.getGlobalIlluminationFlags() );
+			, flags.getGlobalIlluminationFlags() };
+		auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene"
+			, ( m_mippedColour ? index++ : 0u )
+			, RenderPipeline::eBuffers
+			, m_mippedColour != nullptr );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -209,9 +282,10 @@ namespace castor3d
 					, shader::BlendComponents{ materials
 						, material
 						, in } );
-				components.occlusion = ( m_ssao
-					? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
-					: 1.0_f );
+				auto occlusion = writer.declLocale( "occlusion"
+					, ( m_ssao
+						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
+						: 1.0_f ) );
 				materials.blendMaterials( checkFlag( m_filters, RenderFilter::eAlphaBlend )
 					, flags
 					, textureConfigs
@@ -221,6 +295,12 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
+
+				if ( components.occlusion )
+				{
+					occlusion *= components.occlusion;
+				}
+
 				auto incident = writer.declLocale( "incident"
 					, reflections.computeIncident( in.worldPosition.xyz(), c3d_cameraData.position() ) );
 
@@ -274,6 +354,9 @@ namespace castor3d
 						, vec3( 0.0_f ) );
 					auto sheenReflected = writer.declLocale( "sheenReflected"
 						, vec3( 0.0_f ) );
+					auto sceneUv = writer.declLocale( "sceneUv"
+						, in.fragCoord.xy() / vec2( c3d_cameraData.renderSize() )
+						, m_mippedColour != nullptr );
 
 					if ( components.hasMember( "thicknessFactor" ) )
 					{
@@ -284,18 +367,41 @@ namespace castor3d
 						, components.normal
 						, components.f0
 						, components );
-					reflections.computeCombined( components
-						, lightSurface
-						, *backgroundModel
-						, modelData.getEnvMapIndex()
-						, components.hasReflection
-						, components.refractionRatio
-						, reflectedDiffuse
-						, reflectedSpecular
-						, refracted
-						, coatReflected
-						, sheenReflected
-						, output );
+
+					if ( m_mippedColour )
+					{
+						reflections.computeCombined( components
+							, lightSurface
+							, lightSurface.worldPosition()
+							, *backgroundModel
+							, c3d_mapScene
+							, c3d_cameraData
+							, sceneUv
+							, modelData.getEnvMapIndex()
+							, components.hasReflection
+							, components.refractionRatio
+							, reflectedDiffuse
+							, reflectedSpecular
+							, refracted
+							, coatReflected
+							, sheenReflected
+							, output );
+					}
+					else
+					{
+						reflections.computeCombined( components
+							, lightSurface
+							, *backgroundModel
+							, modelData.getEnvMapIndex()
+							, components.hasReflection
+							, components.refractionRatio
+							, reflectedDiffuse
+							, reflectedSpecular
+							, refracted
+							, coatReflected
+							, sheenReflected
+							, output );
+					}
 
 					lightSurface.updateL( utils
 						, components.normal
@@ -320,7 +426,7 @@ namespace castor3d
 						, output );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
-							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
+							? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
 								, length( lightIndirectDiffuse.xyz() )
 								, lightSurface.difF()
 								, components.metalness )
@@ -329,7 +435,7 @@ namespace castor3d
 					output.registerOutput( "Lighting", "Ambient", directAmbient );
 					output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
 					output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-					output.registerOutput( "Occlusion", components.occlusion );
+					output.registerOutput( "Occlusion", occlusion );
 					output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
 
 					outColour = vec4( lightingModel->combine( components
@@ -343,7 +449,7 @@ namespace castor3d
 							, lightIndirectSpecular
 							, directAmbient
 							, indirectAmbient
-							, components.occlusion
+							, occlusion
 							, components.emissiveColour * components.emissiveFactor
 							, reflectedDiffuse
 							, reflectedSpecular

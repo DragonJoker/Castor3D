@@ -233,7 +233,8 @@ namespace castor3d
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.ssao( getOwner()->getSsaoResult() )
 						.indirect( getOwner()->getIndirectLighting() )
-						.hasVelocity( hasVelocity ) );
+						.hasVelocity( hasVelocity )
+					, &m_mippedColour );
 				m_transparentPass = res.get();
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );

@@ -180,44 +180,29 @@ namespace castor3d::shader
 		FI;
 	}
 
-	sdw::Vec3 PbrLightingModel::doCombine( BlendComponents const & components
-		, sdw::Vec3 const & incident
+	sdw::Vec3 PbrLightingModel::doGetDiffuseBrdf( BlendComponents const & components
 		, sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec3 const & directAmbient
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Float const & ambientOcclusion
+		, sdw::Vec3 const & reflectedDiffuse )
+	{
+		return  ( components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+			+ ( reflectedDiffuse * ambientOcclusion * directAmbient ) );
+	}
+
+	sdw::Vec3 PbrLightingModel::doGetSpecularBrdf( BlendComponents const & components
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 const & reflectedDiffuse
-		, sdw::Vec3 const & reflectedSpecular
-		, sdw::Vec3 const & refracted )
+		, sdw::Vec3 const & reflectedSpecular )
 	{
-		 // Fresnel already included in both diffuse and specular.
-		auto diffuseBrdf = m_writer.declLocale( "diffuseBrdf"
-			, components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
-				+ ( reflectedDiffuse * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion ) );
-		auto specularBrdf = m_writer.declLocale( "specularBrdf"
-			, ( reflectedSpecular * adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
-			+ adjustDirectSpecular( components, directSpecular ) + ( indirectSpecular * ambientOcclusion ) );
-
-		IF( m_writer, components.hasTransmission )
-		{
-			auto specularBtdf = m_writer.declLocale( "specularBtdf"
-				, adjustRefraction( components, refracted ) );
-			diffuseBrdf = mix( diffuseBrdf, specularBtdf, vec3( components.transmission ) );
-		}
-		ELSE
-		{
-			diffuseBrdf += refracted;
-		}
-		FI;
-
-		auto combineResult = m_writer.declLocale( "combineResult"
-			, emissive + specularBrdf + diffuseBrdf );
-
-		return combineResult;
+		return ( adjustDirectSpecular( components, directSpecular )
+			+ ( reflectedSpecular * ambientOcclusion * directAmbient )
+			+ ( indirectSpecular * ambientOcclusion ) );
 	}
 
 	//***********************************************************************************************
