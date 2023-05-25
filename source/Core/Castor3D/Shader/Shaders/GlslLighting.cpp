@@ -130,38 +130,36 @@ namespace castor3d::shader
 		, sdw::Vec3 reflectedSpecular
 		, sdw::Vec3 refracted )
 	{
-		IF( m_writer, components.refractionRatio != 0.0_f
-			&& components.hasTransmission == 0_u )
+		auto finalAmbient = m_writer.declLocale( "c3d_directAmbient"
+			, adjustDirectAmbient( components, directAmbient ) );
+		 // Fresnel already included in both diffuse and specular.
+		auto diffuseBrdf = m_writer.declLocale( "c3d_diffuseBrdf"
+			, doGetDiffuseBrdf( components
+				, directDiffuse, indirectDiffuse
+				, finalAmbient, indirectAmbient, ambientOcclusion
+				, reflectedDiffuse ) );
+		auto specularBrdf = m_writer.declLocale( "c3d_specularBrdf"
+			, doGetSpecularBrdf( components
+				, directSpecular, indirectSpecular
+				, finalAmbient, indirectAmbient, ambientOcclusion
+				, reflectedSpecular ) );
+
+		IF( m_writer, components.hasTransmission )
 		{
-			auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
-				, m_utils.fresnelMix( incident
-					, components.normal
-					, components.refractionRatio ) );
-			reflectedDiffuse = mix( vec3( 0.0_f )
-				, reflectedDiffuse
-				, vec3( fresnelFactor ) );
-			reflectedSpecular = mix( vec3( 0.0_f )
-				, reflectedSpecular
-				, vec3( fresnelFactor ) );
-			refracted = mix( refracted
-				, vec3( 0.0_f )
-				, vec3( fresnelFactor ) );
+			auto specularBtdf = m_writer.declLocale( "c3d_specularBtdf"
+				, adjustRefraction( components, refracted ) );
+			diffuseBrdf = mix( diffuseBrdf, specularBtdf, vec3( components.transmission ) );
+		}
+		ELSE
+		{
+			diffuseBrdf += refracted;
 		}
 		FI;
 
-		return doCombine( components
-			, incident
-			, directDiffuse
-			, indirectDiffuse
-			, directSpecular
-			, indirectSpecular
-			, directAmbient
-			, indirectAmbient
-			, ambientOcclusion
-			, emissive
-			, std::move( reflectedDiffuse )
-			, std::move( reflectedSpecular )
-			, std::move( refracted ) );
+		auto combineResult = m_writer.declLocale( "c3d_combineResult"
+			, emissive + specularBrdf + diffuseBrdf );
+
+		return combineResult;
 	}
 
 	void LightingModel::compute( DirectionalLight const & plight

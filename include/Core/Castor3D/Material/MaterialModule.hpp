@@ -75,14 +75,14 @@ namespace castor3d
 	using PassComponentCombineID = uint16_t;
 	using PassComponentFlag = uint32_t;
 
-	inline PassComponentFlag makePassComponentFlag( PassComponentID componentId
-		, PassFlags componentTextureFlag )
+	inline constexpr PassComponentFlag makePassComponentFlag( PassComponentID componentId
+		, PassFlags componentTextureFlag )noexcept
 	{
 		return PassComponentFlag{ uint32_t( uint32_t( componentId ) << 8u )
 			| uint32_t( componentTextureFlag ) };
 	}
 
-	inline std::pair< PassComponentID, PassFlags > splitPassComponentFlag( PassComponentFlag flag )
+	inline constexpr std::pair< PassComponentID, PassFlags > splitPassComponentFlag( PassComponentFlag flag )noexcept
 	{
 		return { PassComponentID( uint32_t( flag ) >> 8u )
 			, PassFlags( uint32_t( flag ) & 0x000000FFu ) };

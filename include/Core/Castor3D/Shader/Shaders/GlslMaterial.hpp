@@ -33,46 +33,6 @@ namespace castor3d::shader
 			sdw::expr::ExprList inits;
 			return makeType( cache, passShaders, inits );
 		}
-
-		/**
-		 *\~english
-		 *\brief		Writes the alpha function in GLSL.
-		 *\param		alphaFunc		The alpha function.
-		 *\param[in]	opacity			The alpha TypeEnum.
-		 *\param[in]	passMultiplier	The pass multiplier factor.
-		 *\param[in]	opaque			\p true for opaque nodes, \p false for transparent ones.
-		 *\~french
-		 *\brief		Ecrit la fonction d'opacité en GLSL.
-		 *\param		alphaFunc		La fonction d'opacité.
-		 *\param[in]	opacity			La valeur d'opacité.
-		 *\param[in]	passMultiplier	Le facteur de multiplication de la passe.
-		 *\param[in]	opaque			\p true pour les noeuds opaques, \p false pour les transparents.
-		 */
-		C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
-			, sdw::Float & opacity
-			, sdw::Float const & passMultiplier
-			, bool opaque = true )const;
-		/**
-		 *\~english
-		 *\brief		Writes the alpha function in GLSL.
-		 *\param		alphaFunc		The alpha function.
-		 *\param[in]	opacity			The opacity value.
-		 *\param[in]	alphaRef		The alpha comparison reference value.
-		 *\param[in]	passMultiplier	The pass multiplier factor.
-		 *\param[in]	opaque			\p true for opaque nodes, \p false for transparent ones.
-		 *\~french
-		 *\brief		Ecrit la fonction d'opacité en GLSL.
-		 *\param		alphaFunc		La fonction d'opacité.
-		 *\param[in]	opacity			La valeur d'opacité.
-		 *\param[in]	alphaRef		La valeur de référence pour la comparaison alpha.
-		 *\param[in]	passMultiplier	Le facteur de multiplication de la passe.
-		 *\param[in]	opaque			\p true pour les noeuds opaques, \p false pour les transparents.
-		 */
-		C3D_API void applyAlphaFunc( VkCompareOp alphaFunc
-			, sdw::Float & opacity
-			, sdw::Float const & alphaRef
-			, sdw::Float const & passMultiplier
-			, bool opaque = true )const;
 		/**
 		 *\~english
 		 *\brief		Writes the alpha function in GLSL.
@@ -95,7 +55,6 @@ namespace castor3d::shader
 			, VkCompareOp alphaFunc
 			, sdw::Float & opacity
 			, sdw::Float const & alphaRef
-			, sdw::Float const & passMultiplier
 			, bool opaque = true );
 
 		C3D_API void getPassMultipliers( PipelineFlags const & flags
@@ -227,7 +186,7 @@ namespace castor3d::shader
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, BlendComponents & output )const;
 
-		C3D_API void applyMaterial( PipelineFlags const & flags
+		C3D_API void applyMaterialMaps( PipelineFlags const & flags
 			, TextureConfigurations const & textureConfigs
 			, TextureAnimations const & textureAnims
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps

@@ -594,7 +594,7 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const;
+		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const;
 		C3D_API virtual bool isPassEnabled()const;
 		C3D_API virtual ShaderFlags getShaderFlags()const;
 		C3D_API bool isValidPass( Pass const & pass )const;

@@ -138,6 +138,7 @@ namespace castor3d
 			result += 2;// m_indirectLightingPass;
 			result += 2;// m_subsurfaceScattering;
 			result += 2;// m_resolve;
+			result += 2;// m_additionalPass;
 			return result;
 		}
 

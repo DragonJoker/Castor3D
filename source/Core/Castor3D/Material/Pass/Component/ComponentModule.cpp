@@ -91,7 +91,7 @@ namespace castor3d
 		auto split = splitPassComponentFlag( test );
 		auto testComponentId = split.first;
 		auto testComponentFlag = split.second;
-		return cont.flags.end() != std::find_if( cont.flags.begin()
+		return std::any_of( cont.flags.begin()
 			, cont.flags.end()
 			, [testComponentId, testComponentFlag]( PassComponentFlag const & lookup )
 			{

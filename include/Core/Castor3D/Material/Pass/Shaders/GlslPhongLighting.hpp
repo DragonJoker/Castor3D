@@ -39,6 +39,8 @@ namespace castor3d::shader
 			, sdw::Vec3 const & directAmbient )const override;
 		C3D_API sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const override;
+		C3D_API sdw::Vec3 adjustRefraction( BlendComponents const & components
+			, sdw::Vec3 const & refraction )const override;
 
 	protected:
 		C3D_API void doFinish( BlendComponents & components )override;
@@ -60,21 +62,20 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
 			, sdw::Vec3 & output )override;
-
-	private:
-		C3D_API sdw::Vec3 doCombine( BlendComponents const & components
-			, sdw::Vec3 const & incident
+		C3D_API sdw::Vec3 doGetDiffuseBrdf( BlendComponents const & components
 			, sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec3 const & directAmbient
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Float const & ambientOcclusion
+			, sdw::Vec3 const & reflectedDiffuse )override;
+		C3D_API sdw::Vec3 doGetSpecularBrdf( BlendComponents const & components
 			, sdw::Vec3 const & directSpecular
 			, sdw::Vec3 const & indirectSpecular
 			, sdw::Vec3 const & directAmbient
 			, sdw::Vec3 const & indirectAmbient
 			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 const & reflectedDiffuse
-			, sdw::Vec3 const & reflectedSpecular
-			, sdw::Vec3 const & refracted )override;
+			, sdw::Vec3 const & reflectedSpecular )override;
 	};
 }
 

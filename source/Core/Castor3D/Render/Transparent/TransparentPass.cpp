@@ -299,9 +299,10 @@ namespace castor3d
 					, shader::BlendComponents{ materials
 						, material
 						, in } );
-				components.occlusion = ( m_ssao
-					? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
-					: 1.0_f );
+				auto occlusion = writer.declLocale( "occlusion"
+					, ( m_ssao
+						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
+						: 1.0_f ) );
 				materials.blendMaterials( false
 					, flags
 					, textureConfigs
@@ -311,6 +312,11 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
+
+				if ( components.occlusion )
+				{
+					occlusion *= components.occlusion;
+				}
 
 				auto colour = writer.declLocale( "colour"
 					, vec3( 0.0_f ) );
@@ -407,7 +413,7 @@ namespace castor3d
 						, output );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
-							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
+							? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
 								, length( lightIndirectDiffuse.xyz() )
 								, lightSurface.difF()
 								, components.metalness )
@@ -417,7 +423,7 @@ namespace castor3d
 					output.registerOutput( "Lighting", "Ambient", directAmbient );
 					output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
 					output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-					output.registerOutput( "Occlusion", components.occlusion );
+					output.registerOutput( "Occlusion", occlusion );
 					output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
 
 					colour = lightingModel->combine( components
@@ -431,7 +437,7 @@ namespace castor3d
 						, lightIndirectSpecular
 						, directAmbient
 						, indirectAmbient
-						, components.occlusion
+						, occlusion
 						, components.emissiveColour * components.emissiveFactor
 						, reflectedDiffuse
 						, reflectedSpecular

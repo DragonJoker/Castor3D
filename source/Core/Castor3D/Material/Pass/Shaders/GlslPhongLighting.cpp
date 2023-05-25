@@ -82,6 +82,12 @@ namespace castor3d::shader
 		return directSpecular * specular;
 	}
 
+	sdw::Vec3 PhongLightingModel::adjustRefraction( BlendComponents const & components
+		, sdw::Vec3 const & refraction )const
+	{
+		return refraction;
+	}
+
 	void PhongLightingModel::doFinish( BlendComponents & components )
 	{
 		components.f0 = components.specular;
@@ -136,31 +142,28 @@ namespace castor3d::shader
 		FI;
 	}
 
-	sdw::Vec3 PhongLightingModel::doCombine( BlendComponents const & components
-		, sdw::Vec3 const & incident
+	sdw::Vec3 PhongLightingModel::doGetDiffuseBrdf( BlendComponents const & components
 		, sdw::Vec3 const & directDiffuse
 		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec3 const & directAmbient
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Float const & ambientOcclusion
+		, sdw::Vec3 const & reflectedDiffuse )
+	{
+		return  ( components.colour * ( directDiffuse + ( ( indirectDiffuse + reflectedDiffuse ) * ambientOcclusion ) )
+			+ directAmbient * indirectAmbient * ambientOcclusion );
+	}
+
+	sdw::Vec3 PhongLightingModel::doGetSpecularBrdf( BlendComponents const & components
 		, sdw::Vec3 const & directSpecular
 		, sdw::Vec3 const & indirectSpecular
 		, sdw::Vec3 const & directAmbient
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 const & reflectedDiffuse
-		, sdw::Vec3 const & reflectedSpecular
-		, sdw::Vec3 const & refracted )
+		, sdw::Vec3 const & reflectedSpecular )
 	{
-		return m_writer.ternary( components.hasTransmission != 0_u
-			, components.colour * components.transmission * ( directDiffuse + ( ( reflectedDiffuse + indirectDiffuse ) * ambientOcclusion ) )
-				+ ( adjustDirectSpecular( components, directSpecular ) + ( ( reflectedSpecular + indirectSpecular ) * ambientOcclusion ) )
-				+ ( adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
-				+ emissive
-				+ refracted
-			, components.colour * ( directDiffuse + ( ( reflectedDiffuse + indirectDiffuse ) * ambientOcclusion ) )
-				+ ( adjustDirectSpecular( components, directSpecular ) + ( ( reflectedSpecular + indirectSpecular ) * ambientOcclusion ) )
-				+ ( adjustDirectAmbient( components, directAmbient ) * indirectAmbient * ambientOcclusion )
-				+ emissive
-				+ refracted );
+		return ( adjustDirectSpecular( components, directSpecular )
+			+ ( ( reflectedSpecular + indirectSpecular ) * ambientOcclusion ) );
 	}
 
 	//*********************************************************************************************

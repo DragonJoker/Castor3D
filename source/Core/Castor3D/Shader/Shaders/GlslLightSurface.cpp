@@ -104,12 +104,7 @@ namespace castor3d::shader
 		auto result = writer.declLocale< LightSurface >( name
 			, LightSurface{ eye, world, view, clip, normal
 				, enableDotProducts, enableFresnel, enableIridescence } );
-
-		if ( enableDotProducts )
-		{
-			result.m_NdotV = max( 0.0_f, dot( result.N(), result.V() ) );
-		}
-
+		result.m_NdotV = max( 0.0_f, dot( result.N(), result.V() ) );
 		return result;
 	}
 
