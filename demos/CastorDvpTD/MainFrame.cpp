@@ -41,7 +41,7 @@ namespace castortd
 	MainFrame::MainFrame()
 		: wxFrame{ nullptr, wxID_ANY, ApplicationName, wxDefaultPosition, main::MainFrameSize, wxSYSTEM_MENU | wxCAPTION | wxCLOSE_BOX | wxCLIP_CHILDREN | wxRESIZE_BORDER | wxMAXIMIZE_BOX }
 	{
-		SetClientSize( main::MainFrameSize );
+		SetClientSize( FromDIP( main::MainFrameSize ) );
 		Show( true );
 
 		try
@@ -65,6 +65,7 @@ namespace castortd
 			, "CastorDvpTD"
 			, castor::File::getExecutableDirectory().getPath() / cuT( "share" ) / cuT( "CastorDvpTD" ) / cuT( "Data.zip" )
 			, nullptr );
+		castor::Logger::logInfo( cuT( "Scene file read" ) );
 
 		if ( auto target = window.renderTarget )
 		{
@@ -78,26 +79,20 @@ namespace castortd
 				ShowFullScreen( true, wxFULLSCREEN_ALL );
 			}
 
+			auto size = FromDIP( GuiCommon::make_wxSize( renderWindow.getSize() ) );
+
 			if ( !IsMaximized() )
 			{
-				SetClientSize( int( renderWindow.getSize().getWidth() )
-					, int( renderWindow.getSize().getHeight() ) );
+				SetClientSize( size );
 			}
 			else
 			{
 				Maximize( false );
-				SetClientSize( int( renderWindow.getSize().getWidth() )
-					, int( renderWindow.getSize().getHeight() ) );
+				SetClientSize( size );
 				Maximize();
 			}
-
-			castor::Logger::logInfo( cuT( "Scene file read" ) );
-
 #if wxCHECK_VERSION( 2, 9, 0 )
-
-			wxSize size = GetClientSize();
 			SetMinClientSize( size );
-
 #endif
 
 			if ( engine.isThreaded() )
@@ -114,6 +109,12 @@ namespace castortd
 				m_timer = new wxTimer( this, main::eID_RENDER_TIMER );
 				m_timer->Start( 1000 / int( engine.getRenderLoop().getWantedFps() ), true );
 			}
+
+			castor::Logger::logInfo( cuT( "Initialised render panel." ) );
+		}
+		else
+		{
+			castor::Logger::logWarning( cuT( "No render target found in the scene" ) );
 		}
 	}
 
