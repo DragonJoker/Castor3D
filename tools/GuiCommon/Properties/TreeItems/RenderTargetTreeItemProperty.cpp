@@ -14,6 +14,7 @@
 #include <Castor3D/Render/RenderTechnique.hpp>
 #include <Castor3D/Render/RenderTechniquePass.hpp>
 #include <Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp>
+#include <Castor3D/Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>
 
@@ -91,8 +92,9 @@ namespace GuiCommon
 		static wxString PROPERTY_RENDER_WINDOW_DEBUG_VIEW = _( "Debug View" );
 		static wxString PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE = _( "Debug Value" );
 
-		auto & debugConfig = target.getDebugConfig();
-		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_VIEW, make_wxArrayString( debugConfig.getIntermediateImages() ), &debugConfig.intermediateImageIndex );
+		auto & targetDebugConfig = target.getDebugConfig();
+		auto & debugConfig = target.getScene()->getDebugConfig();
+		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_VIEW, make_wxArrayString( targetDebugConfig.getIntermediateImages() ), &targetDebugConfig.intermediateImageIndex );
 		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE, make_wxArrayString( debugConfig.getIntermediateValues() ), &debugConfig.intermediateShaderValueIndex );
 #endif
 

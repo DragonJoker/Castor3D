@@ -129,6 +129,7 @@ namespace castor3d::shader
 	class BackgroundModel;
 	class BufferBase;
 	class BRDFHelpers;
+	class DebugOutput;
 	class Fog;
 	class Lights;
 	class LightsBuffer;

@@ -339,6 +339,7 @@ namespace castor3d
 						, *backgroundModel
 						, lightSurface
 						, modelData.isShadowReceiver()
+						, output
 						, lighting );
 					auto directAmbient = writer.declLocale( "directAmbient"
 						, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
@@ -380,26 +381,30 @@ namespace castor3d
 						, reflectedSpecular
 						, refracted
 						, coatReflected
-						, sheenReflected );
+						, sheenReflected
+						, output );
 
 					lightSurface.updateL( utils
 						, components.normal
 						, components.f0
 						, components );
 					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
-						, lightSurface );
+						, lightSurface
+						, output );
 					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
 						, lightSurface
-						, indirectOcclusion );
+						, indirectOcclusion
+						, output );
 					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
 						, lightSurface
 						, components.roughness
 						, indirectOcclusion
 						, lightIndirectDiffuse.w()
-						, c3d_mapBrdf );
-					auto indirectAmbient = writer.declLocale( "indirectAmbient"
-						, indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-							, lightIndirectDiffuse.xyz() ) );
+						, c3d_mapBrdf
+						, output );
+					auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+						, lightIndirectDiffuse.xyz()
+						, output );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
@@ -409,6 +414,8 @@ namespace castor3d
 							: vec3( 0.0_f ) ) );
 					components.emissiveFactor *= components.opacity;
 
+					output.registerOutput( "Lighting", "Ambient", directAmbient );
+					output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
 					output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 					output.registerOutput( "Occlusion", components.occlusion );
 					output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );

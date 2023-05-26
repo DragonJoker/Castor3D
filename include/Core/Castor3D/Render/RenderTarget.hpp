@@ -417,7 +417,7 @@ namespace castor3d
 			m_stereo.intraOcularDistance = value;
 		}
 
-		DebugConfig & getDebugConfig()
+		TargetDebugConfig & getDebugConfig()
 		{
 			return m_debugConfig;
 		}
@@ -505,7 +505,7 @@ namespace castor3d
 		OnInitialised m_onInitialised;
 		std::vector< OnInitialisedConnection > m_onTargetInitialised;
 		IntermediateViewArray m_intermediates;
-		DebugConfig m_debugConfig;
+		TargetDebugConfig m_debugConfig;
 
 		struct StereoConfig
 		{

@@ -24,14 +24,42 @@ namespace castor3d::shader
 			, bool enable );
 		C3D_API ~DebugOutput()noexcept;
 
-		C3D_API void registerOutput( castor::String name
+		C3D_API void registerOutput( castor::String category
+			, castor::String name
 			, sdw::Vec4 const value );
-		C3D_API void registerOutput( castor::String name
+		C3D_API void registerOutput( castor::String category
+			, castor::String name
 			, sdw::Vec3 const value );
-		C3D_API void registerOutput( castor::String name
+		C3D_API void registerOutput( castor::String category
+			, castor::String name
 			, sdw::Vec2 const value );
-		C3D_API void registerOutput( castor::String name
+		C3D_API void registerOutput( castor::String category
+			, castor::String name
 			, sdw::Float const value );
+
+		void registerOutput( castor::String name
+			, sdw::Vec4 const value )
+		{
+			registerOutput( m_category, name, value );
+		}
+
+		void registerOutput( castor::String name
+			, sdw::Vec3 const value )
+		{
+			registerOutput( m_category, name, value );
+		}
+
+		void registerOutput( castor::String name
+			, sdw::Vec2 const value )
+		{
+			registerOutput( m_category, name, value );
+		}
+
+		void registerOutput( castor::String name
+			, sdw::Float const value )
+		{
+			registerOutput( m_category, name, value );
+		}
 
 	private:
 		DebugConfig & m_config;

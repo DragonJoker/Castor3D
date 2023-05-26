@@ -14,6 +14,7 @@
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
@@ -109,6 +110,7 @@ namespace castor3d
 	ShaderPtr LightPass::getPixelShaderSource( LightingModelID lightingModelId
 		, BackgroundModelID backgroundModelId
 		, Scene const & scene
+		, DebugConfig & debugConfig
 		, SceneFlags const & sceneFlags
 		, LightType lightType
 		, ShadowType shadowType
@@ -128,11 +130,9 @@ namespace castor3d
 			, utils };
 
 		// Shader outputs
-		auto outLightDiffuse = writer.declOutput< Vec3 >( "outLightDiffuse", 0 );
+		auto outLightDiffuse = writer.declOutput< Vec4 >( "outLightDiffuse", 0 );
 		auto outLightSpecular = writer.declOutput< Vec3 >( "outLightSpecular", 1 );
 		auto outLightScattering = writer.declOutput< Vec3 >( "outLightScattering", 2 );
-		auto outLightCoatingSpecular = writer.declOutput< Vec3 >( "outLightCoatingSpecular", 3 );
-		auto outLightSheen = writer.declOutput< Vec2 >( "outLightSheen", 4 );
 
 		// Shader inputs
 		auto index = uint32_t( LightPassIdx::eCount );
@@ -189,6 +189,11 @@ namespace castor3d
 		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 			, FragmentOut out )
 			{
+				shader::DebugOutput output{ debugConfig
+					, cuT( "Default" )
+					, c3d_cameraData.debugIndex()
+					, outLightDiffuse
+					, true };
 				auto texCoord = writer.declLocale( "texCoord"
 					, c3d_cameraData.calcTexCoord( utils
 						, in.fragCoord.xy() ) );
@@ -238,17 +243,7 @@ namespace castor3d
 					auto wsNormal = writer.declLocale( "wsNormal"
 						, normalize( nmlOcc.xyz() ) );
 
-					auto lightDiffuse = writer.declLocale( "lightDiffuse"
-						, vec3( 0.0_f ) );
-					auto lightSpecular = writer.declLocale( "lightSpecular"
-						, vec3( 0.0_f ) );
-					auto lightScattering = writer.declLocale( "lightScattering"
-						, vec3( 0.0_f ) );
-					auto lightCoatingSpecular = writer.declLocale( "lightCoatingSpecular"
-						, vec3( 0.0_f ) );
-					auto lightSheen = writer.declLocale( "lightSheen"
-						, vec2( 0.0_f ) );
-					shader::OutputComponents output{ lightDiffuse, lightSpecular, lightScattering, lightCoatingSpecular, lightSheen };
+					shader::OutputComponents lighting{ writer, false };
 					auto surface = writer.declLocale( "surface"
 						, shader::Surface{ vec3( in.fragCoord.xy(), depth )
 							, vsPosition
@@ -272,60 +267,23 @@ namespace castor3d
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, surface.normal );
-
-					switch ( lightType )
-					{
-					case LightType::eDirectional:
-					{
-						auto light = writer.declLocale( "light", lights.getDirectionalLight( lightOffset ) );
-						lightingModel->compute( light
-							, components
-							, *backgroundModel
-							, lightSurface
-							, shadowReceiver
-							, output );
-						break;
-					}
-
-					case LightType::ePoint:
-					{
-						auto light = writer.declLocale( "light", lights.getPointLight( lightOffset ) );
-						lightingModel->compute( light
-							, components
-							, lightSurface
-							, shadowReceiver
-							, output );
-						break;
-					}
-
-					case LightType::eSpot:
-					{
-						auto light = writer.declLocale( "light", lights.getSpotLight( lightOffset ) );
-						lightingModel->compute( light
-							, components
-							, lightSurface
-							, shadowReceiver
-							, output );
-						break;
-					}
-
-					default:
-						break;
-					}
-
-					outLightDiffuse = lightDiffuse;
-					outLightSpecular = lightSpecular;
-					outLightScattering = lightScattering;
-					outLightCoatingSpecular = lightCoatingSpecular;
-					outLightSheen = lightSheen;
+					lights.computeDifSpec( lightType
+						, components
+						, *backgroundModel
+						, lightSurface
+						, lightOffset
+						, shadowReceiver
+						, output
+						, lighting );
+					outLightDiffuse = vec4( lighting.m_diffuse, 1.0_f );
+					outLightSpecular = lighting.m_specular;
+					outLightScattering = lighting.m_scattering;
 				}
 				else
 				{
-					outLightDiffuse = albedo;
+					outLightDiffuse = vec4( albedo, 1.0_f );
 					outLightSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 					outLightScattering = vec3( 0.0_f, 0.0_f, 0.0_f );
-					outLightCoatingSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
-					outLightSheen = vec2( 0.0_f, 1.0_f );
 				}
 			} );
 

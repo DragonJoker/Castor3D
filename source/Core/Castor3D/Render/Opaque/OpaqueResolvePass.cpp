@@ -266,6 +266,12 @@ namespace castor3d
 
 					if ( auto lightingModel = lights.getLightingModel() )
 					{
+						shader::DebugOutput output{ debugConfig
+							, cuT( "Default" )
+							, c3d_cameraData.debugIndex()
+							, outColour
+							, true };
+
 						auto spcRgh = writer.declLocale( "spcRgh"
 							, c3d_mapSpcRgh.lod( vtx_texture, 0.0_f ) );
 						auto emsTrn = writer.declLocale( "emsTrn"
@@ -292,6 +298,11 @@ namespace castor3d
 							, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
 						auto lightDiffuse = writer.declLocale( "lightDiffuse"
 							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
+						output.registerOutput( "Lighting", "Diffuse", lightDiffuse );
+						output.registerOutput( "Lighting", "Specular", lightDiffuse );
+						output.registerOutput( "Lighting", "Scattering", lightDiffuse );
+						output.registerOutput( "Lighting", "CoatingSpecular", lightDiffuse );
+						output.registerOutput( "Lighting", "Sheen", lightDiffuse );
 						auto lightSpecular = writer.declLocale( "lightSpecular"
 							, c3d_mapLightSpecular.lod( vtx_texture, 0.0_f ).xyz() );
 						auto lightScattering = writer.declLocale( "lightScattering"
@@ -299,6 +310,8 @@ namespace castor3d
 						auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
 							, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasDiffuseGi );
+						output.registerOutput( "Indirect", "Raw Diffuse", lightIndirectDiffuse );
+						output.registerOutput( "Indirect", "Specular", lightIndirectDiffuse );
 						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
 							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
 							, config.hasSpecularGi );
@@ -329,9 +342,11 @@ namespace castor3d
 							, components.refractionRatio
 							, reflectedDiffuse
 							, reflectedSpecular
-							, refracted );
+							, refracted
+							, output );
 						auto indirectAmbient = writer.declLocale( "indirectAmbient"
 							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
+						output.registerOutput( "Indirect", "Ambient", indirectAmbient );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( config.hasDiffuseGi
 								? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse )
@@ -349,24 +364,12 @@ namespace castor3d
 						}
 						FI;
 
-						shader::DebugOutput ouput{ debugConfig
-							, cuT( "Default" )
-							, c3d_cameraData.debugIndex()
-							, outColour
-							, true };
-						ouput.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						ouput.registerOutput( "LightDiffuse", lightDiffuse );
-						ouput.registerOutput( "IndirectDiffuse", indirectDiffuse );
-						ouput.registerOutput( "ReflectedDiffuse", reflectedDiffuse );
-						ouput.registerOutput( "LightSpecular", lightSpecular );
-						ouput.registerOutput( "IndirectSpecular", lightIndirectSpecular );
-						ouput.registerOutput( "ReflectedSpecular", reflectedSpecular );
-						ouput.registerOutput( "LightScattering", lightScattering );
-						ouput.registerOutput( "DirectAmbient", directAmbient );
-						ouput.registerOutput( "IndirectAmbient", indirectAmbient );
-						ouput.registerOutput( "Occlusion", occlusion );
-						ouput.registerOutput( "Emissive", emissive );
-						ouput.registerOutput( "Refracted", refracted );
+						output.registerOutput( "Lighting", "Ambient", directAmbient );
+						output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
+						output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( "Occlusion", occlusion );
+						output.registerOutput( "Emissive", emissive );
+
 						outColour = vec4( lightScattering + lightingModel->combine( components
 								, incident
 								, lightDiffuse
@@ -569,6 +572,7 @@ namespace castor3d
 		auto index = uint32_t( dropqrslv::ResolveBind::eBackground );
 		background.addPassBindings( pass, result, index );
 		pass.addInOutColourView( result );
+
 		return pass;
 	}
 

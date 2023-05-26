@@ -73,6 +73,7 @@ namespace castor3d
 		, m_indirectLightingPass{ castor::makeUnique< IndirectLightingPass >( m_device
 			, progress
 			, *m_technique.getRenderTarget().getScene()
+			, m_technique.getDebugConfig()
 			, graph
 			, m_lightingPass->getLastPass()
 			, brdf

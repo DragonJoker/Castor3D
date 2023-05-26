@@ -34,27 +34,35 @@ namespace castor3d::shader
 		}
 	}
 
-	void DebugOutput::registerOutput( castor::String name
+	void DebugOutput::registerOutput( castor::String category
+		, castor::String name
 		, sdw::Vec4 const value )
 	{
-		m_values.emplace_back( m_config.registerValue( m_category, std::move( name ) ), value );
+		auto & writer = sdw::findWriterMandat( value );
+		auto index = m_config.registerValue( category, std::move( name ) );
+		m_values.emplace_back( index
+			, writer.declLocale( "debugValue" + castor::string::toString( index )
+				, value ) );
 	}
 
-	void DebugOutput::registerOutput( castor::String name
+	void DebugOutput::registerOutput( castor::String category
+		, castor::String name
 		, sdw::Vec3 const value )
 	{
-		registerOutput( name, vec4( value, 1.0_f ) );
+		registerOutput( category, name, vec4( value, 1.0_f ) );
 	}
 
-	void DebugOutput::registerOutput( castor::String name
+	void DebugOutput::registerOutput( castor::String category
+		, castor::String name
 		, sdw::Vec2 const value )
 	{
-		registerOutput( name, vec3( value, 0.0_f ) );
+		registerOutput( category, name, vec3( value, 0.0_f ) );
 	}
 
-	void DebugOutput::registerOutput( castor::String name
+	void DebugOutput::registerOutput( castor::String category
+		, castor::String name
 		, sdw::Float const value )
 	{
-		registerOutput( name, vec3( value ) );
+		registerOutput( category, name, vec3( value ) );
 	}
 }

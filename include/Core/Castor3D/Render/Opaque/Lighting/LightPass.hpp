@@ -51,6 +51,7 @@ namespace castor3d
 		static ShaderPtr getPixelShaderSource( LightingModelID lightingModelId
 			, BackgroundModelID backgroundModelId
 			, Scene const & scene
+			, DebugConfig & debugConfig
 			, SceneFlags const & sceneFlags
 			, LightType lightType
 			, ShadowType shadowType
