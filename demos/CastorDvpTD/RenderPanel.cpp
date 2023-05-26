@@ -77,13 +77,12 @@ namespace castortd
 		{
 			m_renderWindow->initialise( window );
 
-			castor::Size sizeWnd = GuiCommon::makeSize( GetClientSize() );
+			auto sizeWnd = FromDIP( GetClientSize() );
 			castor::Size sizeScreen;
 			castor::System::getScreenSize( 0, sizeScreen );
-			GetParent()->SetClientSize( int( sizeWnd.getWidth() ), int( sizeWnd.getHeight() ) );
-			sizeWnd = GuiCommon::makeSize( GetParent()->GetClientSize() );
-			GetParent()->SetPosition( wxPoint( std::abs( int( sizeScreen.getWidth() ) - int( sizeWnd.getWidth() ) ) / 2
-				, std::abs( int( sizeScreen.getHeight() ) - int( sizeWnd.getHeight() ) ) / 2 ) );
+			GetParent()->SetClientSize( sizeWnd );
+			GetParent()->SetPosition( FromDIP( wxPoint( std::max( 0, int( sizeScreen.getWidth() ) - sizeWnd.GetWidth() ) / 2
+				, std::max( 0, int( sizeScreen.getHeight() ) - sizeWnd.GetHeight() ) / 2 ) ) );
 			castor3d::SceneRPtr scene = target->getScene();
 
 			if ( scene )

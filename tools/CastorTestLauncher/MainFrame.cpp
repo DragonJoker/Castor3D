@@ -262,7 +262,7 @@ namespace test_launcher
 		, m_engine{ engine }
 		, m_maxFrameCount{ maxFrameCount }
 	{
-		SetClientSize( 800, 600 );
+		SetClientSize( FromDIP( wxSize{ 800, 600 } ) );
 	}
 
 	bool MainFrame::initialise()
