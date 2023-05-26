@@ -412,6 +412,11 @@ namespace castor3d
 		{
 			return m_resources;
 		}
+
+		DebugConfig & getDebugConfig()const
+		{
+			return m_debugConfig;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -523,6 +528,7 @@ namespace castor3d
 		FramePassTimerUPtr m_timerGpuUpdate;
 		FramePassTimerUPtr m_timerMovables;
 		CpuFrameEvent * m_cleanBackground{};
+		mutable DebugConfig m_debugConfig;
 
 	public:
 		//!\~english	The cameras root node name.

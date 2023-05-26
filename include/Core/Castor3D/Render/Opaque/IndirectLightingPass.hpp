@@ -80,6 +80,7 @@ namespace castor3d
 		{
 			Program( RenderDevice const & device
 				, Scene const & scene
+				, DebugConfig & debugConfig
 				, Config const & config );
 
 			ShaderModule vertexShader;
@@ -93,6 +94,7 @@ namespace castor3d
 		IndirectLightingPass( RenderDevice const & device
 			, ProgressBar * progress
 			, Scene const & scene
+			, DebugConfig & debugConfig
 			, crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, Texture const & brdf
@@ -130,6 +132,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Scene const & m_scene;
+		DebugConfig & m_debugConfig;
 		Texture const & m_brdf;
 		Texture const & m_depthObj;
 		OpaquePassResult const & m_gpResult;

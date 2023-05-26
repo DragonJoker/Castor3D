@@ -67,6 +67,7 @@ namespace castor3d
 			, LightPass::getPixelShaderSource( m_config.lightingModelId
 				, m_scene.getBackgroundModelId()
 				, m_scene
+				, m_scene.getDebugConfig()
 				, m_config.sceneFlags
 				, m_config.lightType
 				, m_config.shadowType

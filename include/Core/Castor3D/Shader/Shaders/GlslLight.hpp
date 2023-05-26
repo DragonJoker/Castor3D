@@ -498,50 +498,37 @@ namespace castor3d::shader
 		*/
 		//\{
 		C3D_API void computeCombinedDifSpec( BlendComponents const & components
-			, BackgroundModel & background
+			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
+			, DebugOutput & debugOutput
 			, OutputComponents & output );
+		/**
+		*\name
+		*	Diffuse only.
+		*/
+		//\{
 		C3D_API void computeCombinedDif( BlendComponents const & components
-			, BackgroundModel & background
+			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
+			, DebugOutput & debugOutput
 			, sdw::Vec3 & output );
+		//\}
 		//\}
 		/**
 		*\name
 		*	Deferred renderring
 		*/
 		//\{
-		C3D_API void computeDifSpec( DirectionalLight const & light
+		C3D_API void computeDifSpec( LightType lightType
 			, BlendComponents const & components
-			, BackgroundModel & background
+			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
-			, sdw::UInt const & receivesShadows
+			, sdw::UInt const lightOffset
+			, sdw::UInt const receivesShadows
+			, DebugOutput & debugOutput
 			, OutputComponents & output );
-		C3D_API void computeDifSpec( PointLight const & light
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
-		C3D_API void computeDifSpec( SpotLight const & light
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
-		C3D_API sdw::Vec3 computeDif( DirectionalLight const & light
-			, BlendComponents const & components
-			, BackgroundModel & background
-			, LightSurface const & lightSurface
-			, sdw::UInt const & receivesShadows );
-		C3D_API sdw::Vec3 computeDif( PointLight const & light
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::UInt const & receivesShadows );
-		C3D_API sdw::Vec3 computeDif( SpotLight const & light
-			, BlendComponents const & components
-			, LightSurface const & lightSurface
-			, sdw::UInt const & receivesShadows );
 		//\}
 		/**
 		*\name
@@ -585,9 +572,6 @@ namespace castor3d::shader
 		ShadowUPtr m_shadowModel;
 		SssTransmittanceUPtr m_sssTransmittance;
 		LightsBufferUPtr m_lightsBuffer;
-		sdw::Function< sdw::Float
-			, InBlendComponents
-			, sdw::InVec3 > m_getFinalTransmission;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InFloatArray

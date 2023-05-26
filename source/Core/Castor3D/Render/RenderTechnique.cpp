@@ -725,7 +725,7 @@ namespace castor3d
 
 	DebugConfig & RenderTechnique::getDebugConfig()const
 	{
-		return m_renderTarget.getDebugConfig();
+		return m_renderTarget.getScene()->getDebugConfig();
 	}
 
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress

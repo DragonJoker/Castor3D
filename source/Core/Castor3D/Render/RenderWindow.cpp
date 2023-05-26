@@ -567,8 +567,9 @@ namespace castor3d
 				config.add = castor::Point4f{};
 #else
 				auto & intermediates = target->getIntermediateViews();
-				auto & debugConfig = target->getDebugConfig();
-				updater.combineIndex = debugConfig.intermediateImageIndex;
+				auto & targetDebugConfig = target->getDebugConfig();
+				auto & debugConfig = target->getScene()->getDebugConfig();
+				updater.combineIndex = targetDebugConfig.intermediateImageIndex;
 				updater.debugIndex = debugConfig.intermediateShaderValueIndex;
 				auto & intermediate = intermediates[updater.combineIndex];
 

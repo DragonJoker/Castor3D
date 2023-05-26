@@ -1,9 +1,10 @@
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
-#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Math/Angle.hpp>
@@ -92,8 +93,6 @@ namespace castor3d
 			, uint32_t texSetIndex
 			, SceneFlags sceneFlags )
 		{
-			using namespace sdw;
-
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				declareVct( vctUboBindingIndex, vctTexBindingIndex, 0u, texSetIndex );
@@ -290,7 +289,8 @@ namespace castor3d
 		}
 
 		sdw::Float GlobalIllumination::computeOcclusion( SceneFlags sceneFlags
-			, LightSurface lightSurface )
+			, LightSurface lightSurface
+			, DebugOutput & debugOutput )
 		{
 			auto indirectOcclusion = m_writer.declLocale( "indirectOcclusion"
 				, 1.0_f );
@@ -320,6 +320,7 @@ namespace castor3d
 				FI;
 			}
 
+			debugOutput.registerOutput( "Indirect", "Occlusion", indirectOcclusion );
 			return indirectOcclusion;
 		}
 
@@ -389,7 +390,8 @@ namespace castor3d
 
 		sdw::Vec4 GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
 			, LightSurface lightSurface
-			, sdw::Float indirectOcclusion )
+			, sdw::Float indirectOcclusion
+			, DebugOutput & debugOutput )
 		{
 			auto indirectDiffuse = m_writer.declLocale( "lightIndirectDiffuse"
 				, vec4( 0.0_f ) );
@@ -414,30 +416,34 @@ namespace castor3d
 				}
 			}
 
+			debugOutput.registerOutput( "Indirect", "Raw Diffuse", indirectDiffuse );
 			return indirectDiffuse;
 		}
 
 		sdw::Vec3 GlobalIllumination::computeAmbient( SceneFlags sceneFlags
-			, sdw::Vec3 const & indirectDiffuse )
+			, sdw::Vec3 const & indirectDiffuse
+			, DebugOutput & debugOutput )
 		{
+			auto indirectAmbient = m_writer.declLocale( "indirectAmbient"
+				, vec3( 1.0_f ) );
+
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
-				return indirectDiffuse;
+				indirectAmbient = indirectDiffuse;
 			}
-
-			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			else if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-				return indirectDiffuse / llpvGridData.indirectAttenuation;
+				indirectAmbient = indirectDiffuse / llpvGridData.indirectAttenuation;
 			}
-
-			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			else if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-				return indirectDiffuse / lpvGridData.indirectAttenuation();
+				indirectAmbient = indirectDiffuse / lpvGridData.indirectAttenuation();
 			}
 
-			return vec3( 1.0_f );
+			debugOutput.registerOutput( "Indirect", "Ambient", indirectAmbient );
+			return indirectAmbient;
 		}
 
 		sdw::Vec3 GlobalIllumination::computeSpecular( SceneFlags sceneFlags
@@ -445,7 +451,8 @@ namespace castor3d
 			, sdw::Float roughness
 			, sdw::Float indirectOcclusion
 			, sdw::Float indirectBlend
-			, sdw::CombinedImage2DRgba32 brdfMap )
+			, sdw::CombinedImage2DRgba32 brdfMap
+			, DebugOutput & debugOutput )
 		{
 			auto indirectSpecular = m_writer.declLocale( "lightIndirectSpecular"
 				, vec3( 0.0_f ) );
@@ -465,6 +472,7 @@ namespace castor3d
 					, vec3( envBRDF.y() ) );
 			}
 
+			debugOutput.registerOutput( "Indirect", "Specular", indirectSpecular );
 			return indirectSpecular;
 		}
 

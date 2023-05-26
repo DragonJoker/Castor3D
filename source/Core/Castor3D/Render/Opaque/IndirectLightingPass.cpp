@@ -16,6 +16,7 @@
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
@@ -55,6 +56,7 @@ namespace castor3d
 		}
 
 		static ShaderPtr getPixelShaderSource( RenderSystem const & renderSystem
+			, DebugConfig & debugConfig
 			, IndirectLightingPass::Config const & config )
 		{
 			using namespace sdw;
@@ -63,7 +65,7 @@ namespace castor3d
 			shader::BRDFHelpers brdf{ writer };
 
 			// Shader outputs
-			auto outIndirectDiffuse = writer.declOutput< Vec3 >( "outIndirectDiffuse", 0 );
+			auto outIndirectDiffuse = writer.declOutput< Vec4 >( "outIndirectDiffuse", 0 );
 			auto outIndirectSpecular = writer.declOutput< Vec3 >( "outIndirectSpecular", 1 );
 
 			// Shader inputs
@@ -103,6 +105,12 @@ namespace castor3d
 			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
 				, FragmentOut out )
 				{
+					shader::DebugOutput output{ debugConfig
+						, cuT( "Indirect" )
+						, c3d_cameraData.debugIndex()
+						, outIndirectDiffuse
+						, true };
+
 					auto texCoord = writer.declLocale( "texCoord"
 						, c3d_cameraData.calcTexCoord( utils
 							, in.fragCoord.xy() ) );
@@ -163,19 +171,21 @@ namespace castor3d
 							, 1.0_f );
 						auto indirectDiffuse = indirect.computeDiffuse( config.sceneFlags
 							, lightSurface
-							, indirectOcclusion );
+							, indirectOcclusion
+							, output );
 						auto indirectSpecular = indirect.computeSpecular( config.sceneFlags
 							, lightSurface
 							, components.roughness
 							, indirectOcclusion
 							, indirectDiffuse.w()
-							, c3d_brdfMap );
-						outIndirectDiffuse = indirectDiffuse.xyz();
+							, c3d_brdfMap
+							, output );
+						outIndirectDiffuse = indirectDiffuse;
 						outIndirectSpecular = indirectSpecular;
 					}
 					ELSE
 					{
-						outIndirectDiffuse = vec3( 0.0_f, 0.0_f, 0.0_f );
+						outIndirectDiffuse = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
 						outIndirectSpecular = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
 					FI;
@@ -260,13 +270,14 @@ namespace castor3d
 
 	IndirectLightingPass::Program::Program( RenderDevice const & device
 		, Scene const & scene
+		, DebugConfig & debugConfig
 		, Config const & config )
 		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, "IndirectLightingPass"
 			, drindirlgtpass::getVertexShaderSource() }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, "IndirectLightingPass"
-			, drindirlgtpass::getPixelShaderSource( device.renderSystem, config ) }
+			, drindirlgtpass::getPixelShaderSource( device.renderSystem, debugConfig, config ) }
 		, stages{ makeShaderState( device, vertexShader )
 			, makeShaderState( device, pixelShader ) }
 	{
@@ -277,6 +288,7 @@ namespace castor3d
 	IndirectLightingPass::IndirectLightingPass( RenderDevice const & device
 		, ProgressBar * progress
 		, Scene const & scene
+		, DebugConfig & debugConfig
 		, crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, Texture const & brdf
@@ -287,6 +299,7 @@ namespace castor3d
 		, CameraUbo const & cameraUbo )
 		: m_device{ device }
 		, m_scene{ scene }
+		, m_debugConfig{ debugConfig }
 		, m_brdf{ brdf }
 		, m_depthObj{ depthObj }
 		, m_gpResult{ gpResult }
@@ -485,7 +498,7 @@ namespace castor3d
 			if ( !config.llpv
 				|| m_device.renderSystem.hasLLPV() )
 			{
-				m_programs[programIndex] = std::make_unique< Program >( m_device, m_scene, config );
+				m_programs[programIndex] = std::make_unique< Program >( m_device, m_scene, m_debugConfig, config );
 				m_programs[programIndex]->stages = { makeShaderState( m_device, m_programs[programIndex]->vertexShader )
 					, makeShaderState( m_device, m_programs[programIndex]->pixelShader ) };
 			}

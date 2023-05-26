@@ -7,9 +7,11 @@
 #include "Castor3D/Shader/LightingModelFactory.hpp"
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
@@ -342,9 +344,10 @@ namespace castor3d::shader
 	}
 
 	void Lights::computeCombinedDifSpec( BlendComponents const & components
-		, BackgroundModel & background
+		, BackgroundModel & backgroundModel
 		, LightSurface const & lightSurface
 		, sdw::UInt const & receivesShadows
+		, DebugOutput & debugOutput
 		, OutputComponents & parentOutput )
 	{
 		if ( auto lightingModel = getLightingModel() )
@@ -358,7 +361,7 @@ namespace castor3d::shader
 			{
 				lightingModel->compute( getDirectionalLight( cur )
 					, components
-					, background
+					, backgroundModel
 					, lightSurface
 					, receivesShadows
 					, parentOutput );
@@ -391,13 +394,20 @@ namespace castor3d::shader
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
 			ELIHW;
+
+			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.m_diffuse );
+			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.m_specular );
+			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.m_scattering );
+			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.m_coatingSpecular );
+			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.m_sheen );
 		}
 	}
 
 	void Lights::computeCombinedDif( BlendComponents const & components
-		, BackgroundModel & background
+		, BackgroundModel & backgroundModel
 		, LightSurface const & lightSurface
 		, sdw::UInt const & receivesShadows
+		, DebugOutput & debugOutput
 		, sdw::Vec3 & output )
 	{
 		if ( auto lightingModel = getLightingModel() )
@@ -411,7 +421,7 @@ namespace castor3d::shader
 			{
 				output += lightingModel->computeDiffuse( getDirectionalLight( cur )
 					, components
-					, background
+					, backgroundModel
 					, lightSurface
 					, receivesShadows );
 				cur += castor3d::DirectionalLight::LightDataComponents;
@@ -441,101 +451,68 @@ namespace castor3d::shader
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
 			ELIHW;
+
+			debugOutput.registerOutput( "Lighting", "Diffuse", output );
 		}
 	}
 
-	void Lights::computeDifSpec( DirectionalLight const & light
+	void Lights::computeDifSpec( LightType lightType
 		, BlendComponents const & components
-		, BackgroundModel & background
+		, BackgroundModel & backgroundModel
 		, LightSurface const & lightSurface
-		, sdw::UInt const & receivesShadows
+		, sdw::UInt const lightOffset
+		, sdw::UInt const receivesShadows
+		, DebugOutput & debugOutput
 		, OutputComponents & output )
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
-			lightingModel->compute( light
-				, components
-				, background
-				, lightSurface
-				, receivesShadows
-				, output );
+			switch ( lightType )
+			{
+			case LightType::eDirectional:
+				{
+					auto light = m_writer.declLocale( "light", getDirectionalLight( lightOffset ) );
+					lightingModel->compute( light
+						, components
+						, backgroundModel
+						, lightSurface
+						, receivesShadows
+						, output );
+					break;
+				}
+
+			case LightType::ePoint:
+				{
+					auto light = m_writer.declLocale( "light", getPointLight( lightOffset ) );
+					lightingModel->compute( light
+						, components
+						, lightSurface
+						, receivesShadows
+						, output );
+					break;
+				}
+
+			case LightType::eSpot:
+				{
+					auto light = m_writer.declLocale( "light", getSpotLight( lightOffset ) );
+					lightingModel->compute( light
+						, components
+						, lightSurface
+						, receivesShadows
+						, output );
+					break;
+				}
+
+			default:
+				break;
+			}
+
+			debugOutput.registerOutput( "Lighting", "Diffuse", output.m_diffuse );
+			debugOutput.registerOutput( "Lighting", "Specular", output.m_specular );
+			debugOutput.registerOutput( "Lighting", "Scattering", output.m_scattering );
+			debugOutput.registerOutput( "Lighting", "CoatingSpecular", output.m_coatingSpecular );
+			debugOutput.registerOutput( "Lighting", "Sheen", output.m_sheen );
 		}
-	}
-
-	void Lights::computeDifSpec( PointLight const & light
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::UInt const & receivesShadows
-		, OutputComponents & output )
-	{
-		if ( auto lightingModel = getLightingModel() )
-		{
-			lightingModel->compute( light
-				, components
-				, lightSurface
-				, receivesShadows
-				, output );
-		}
-	}
-
-	void Lights::computeDifSpec( SpotLight const & light
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::UInt const & receivesShadows
-		, OutputComponents & output )
-	{
-		if ( auto lightingModel = getLightingModel() )
-		{
-			lightingModel->compute( light
-				, components
-				, lightSurface
-				, receivesShadows
-				, output );
-		}
-	}
-
-	sdw::Vec3 Lights::computeDif( DirectionalLight const & light
-		, BlendComponents const & components
-		, BackgroundModel & background
-		, LightSurface const & lightSurface
-		, sdw::UInt const & receivesShadows )
-	{
-		auto lightingModel = getLightingModel();
-		return lightingModel
-			? lightingModel->computeDiffuse( light
-				, components
-				, background
-				, lightSurface
-				, receivesShadows )
-			: sdw::vec3( 0.0_f );
-	}
-
-	sdw::Vec3 Lights::computeDif( PointLight const & light
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::UInt const & receivesShadows )
-	{
-		auto lightingModel = getLightingModel();
-		return lightingModel
-			? lightingModel->computeDiffuse( light
-				, components
-				, lightSurface
-				, receivesShadows )
-			: sdw::vec3( 0.0_f );
-	}
-
-	sdw::Vec3 Lights::computeDif( SpotLight const & light
-		, BlendComponents const & components
-		, LightSurface const & lightSurface
-		, sdw::UInt const & receivesShadows )
-	{
-		auto lightingModel = getLightingModel();
-		return lightingModel
-			? lightingModel->computeDiffuse( light
-				, components
-				, lightSurface
-				, receivesShadows )
-			: sdw::vec3( 0.0_f );
 	}
 
 	sdw::Float Lights::getFinalTransmission( BlendComponents const & components

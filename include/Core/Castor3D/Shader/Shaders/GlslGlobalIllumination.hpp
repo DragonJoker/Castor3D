@@ -80,18 +80,22 @@ namespace castor3d
 				, LayeredLpvGridData llpvGridData );
 
 			C3D_API sdw::Float computeOcclusion( SceneFlags sceneFlags
-				, LightSurface lightSurface );
+				, LightSurface lightSurface
+				, DebugOutput & debugOutput );
 			C3D_API sdw::Vec4 computeDiffuse( SceneFlags sceneFlags
 				, LightSurface lightSurface
-				, sdw::Float indirectOcclusion );
+				, sdw::Float indirectOcclusion
+				, DebugOutput & debugOutput );
 			C3D_API sdw::Vec3 computeAmbient( SceneFlags sceneFlags
-				, sdw::Vec3 const & indirectDiffuse );
+				, sdw::Vec3 const & indirectDiffuse
+				, DebugOutput & debugOutput );
 			C3D_API sdw::Vec3 computeSpecular( SceneFlags sceneFlags
 				, LightSurface lightSurface
 				, sdw::Float roughness
 				, sdw::Float indirectOcclusion
 				, sdw::Float indirectBlend
-				, sdw::CombinedImage2DRgba32 brdfMap );
+				, sdw::CombinedImage2DRgba32 brdfMap
+				, DebugOutput & debugOutput );
 			sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 				, LightSurface lightSurface
 				, VoxelData const & voxelData );

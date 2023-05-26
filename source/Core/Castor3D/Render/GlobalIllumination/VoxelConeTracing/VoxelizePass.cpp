@@ -23,6 +23,7 @@
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -583,7 +584,12 @@ namespace castor3d
 						, in.passMultipliers
 						, components );
 					auto color = writer.declLocale( "color"
-						, components.emissiveColour * components.emissiveFactor );
+						, vec4( components.emissiveColour * components.emissiveFactor, 1.0f ) );
+					shader::DebugOutput debugOutput{ getScene().getDebugConfig()
+						, cuT( "Default" )
+						, c3d_cameraData.debugIndex()
+						, color
+						, true };
 
 					IF( writer, material.lighting != 0_u )
 					{
@@ -604,15 +610,16 @@ namespace castor3d
 							, *backgroundModel
 							, lightSurface
 							, modelData.isShadowReceiver()
+							, debugOutput
 							, combined );
-						color += vec3( components.occlusion )
+						color.xyz() += vec3( components.occlusion )
 							* components.colour
 							* combined;
 					}
 					FI;
 
 					auto encodedColor = writer.declLocale( "encodedColor"
-						, utils.encodeColor( vec4( color, components.opacity ) ) );
+						, utils.encodeColor( vec4( color.xyz(), components.opacity ) ) );
 					auto encodedNormal = writer.declLocale( "encodedNormal"
 						, utils.encodeNormal( components.normal ) );
 					auto writecoord = writer.declLocale( "writecoord"
