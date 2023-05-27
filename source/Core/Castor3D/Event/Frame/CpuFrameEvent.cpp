@@ -2,12 +2,14 @@
 
 #include <CastorUtils/Miscellaneous/Debug.hpp>
 
+#define C3D_UseEventsStack 0
+
 namespace castor3d
 {
 	CpuFrameEvent::CpuFrameEvent( CpuFrameEvent const & rhs )
 		: m_type{ rhs.m_type }
 		, m_skip{ rhs.m_skip.load() }
-#if !defined( NDEBUG )
+#if !defined( NDEBUG ) && C3D_UseEventsStack
 		, m_stackTrace{ rhs.m_stackTrace }
 #endif
 	{
@@ -16,7 +18,7 @@ namespace castor3d
 	CpuFrameEvent::CpuFrameEvent( CpuFrameEvent && rhs )
 		: m_type{ rhs.m_type }
 		, m_skip{ rhs.m_skip.load() }
-#if !defined( NDEBUG )
+#if !defined( NDEBUG ) && C3D_UseEventsStack
 		, m_stackTrace{ std::move( rhs.m_stackTrace ) }
 #endif
 	{
@@ -27,7 +29,7 @@ namespace castor3d
 	{
 		m_type = rhs.m_type;
 		m_skip = rhs.m_skip.load();
-#if !defined( NDEBUG )
+#if !defined( NDEBUG ) && C3D_UseEventsStack
 		m_stackTrace = rhs.m_stackTrace;
 #endif
 
@@ -38,7 +40,7 @@ namespace castor3d
 	{
 		m_type = rhs.m_type;
 		m_skip = rhs.m_skip.load();
-#if !defined( NDEBUG )
+#if !defined( NDEBUG ) && C3D_UseEventsStack
 		m_stackTrace = std::move( rhs.m_stackTrace );
 #endif
 		rhs.m_skip = true;
@@ -49,7 +51,7 @@ namespace castor3d
 	CpuFrameEvent::CpuFrameEvent( EventType type )
 		: m_type{ type }
 	{
-#if !defined( NDEBUG )
+#if !defined( NDEBUG ) && C3D_UseEventsStack
 
 		castor::StringStream stream = castor::makeStringStream();
 		stream << castor::Debug::Backtrace{ 20 };

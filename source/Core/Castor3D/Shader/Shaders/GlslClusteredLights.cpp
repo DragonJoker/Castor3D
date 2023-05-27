@@ -23,28 +23,28 @@ namespace castor3d::shader
 			, binding++
 			, set
 			, m_enabled );
-		C3D_PointLightGridIndicesEx( writer
+		C3D_PointLightClusterIndexEx( writer
 			, binding++
 			, set
 			, m_enabled );
-		C3D_PointLightGridClustersEx( writer
+		C3D_PointLightClusterGridEx( writer
 			, binding++
 			, set
 			, m_enabled );
-		C3D_SpotLightGridIndicesEx( writer
+		C3D_SpotLightClusterIndexEx( writer
 			, binding++
 			, set
 			, m_enabled );
-		C3D_SpotLightGridClustersEx( writer
+		C3D_SpotLightClusterGridEx( writer
 			, binding++
 			, set
 			, m_enabled );
 
 		m_clusterData = castor::makeUnique< shader::ClustersData >( c3d_clustersData );
-		m_pointLightGridIndex = std::make_unique< sdw::UInt32Array >( c3d_pointLightGridIndices );
-		m_pointLightGridCluster = std::make_unique< sdw::U32Vec2Array >( c3d_pointLightGridClusters );
-		m_spotLightGridIndex = std::make_unique< sdw::UInt32Array >( c3d_spotLightGridIndices );
-		m_spotLightGridCluster = std::make_unique< sdw::U32Vec2Array >( c3d_spotLightGridClusters );
+		m_pointLightIndices = std::make_unique< sdw::UInt32Array >( c3d_pointLightClusterIndex );
+		m_pointLightClusters = std::make_unique< sdw::U32Vec2Array >( c3d_pointLightClusterGrid );
+		m_spotLightIndices = std::make_unique< sdw::UInt32Array >( c3d_spotLightClusterIndex );
+		m_spotLightClusters = std::make_unique< sdw::U32Vec2Array >( c3d_spotLightClusterGrid );
 	}
 
 	void ClusteredLights::computeCombinedDifSpec( shader::Lights & lights
@@ -69,14 +69,14 @@ namespace castor3d::shader
 			, m_clusterData->computeClusterIndex1D( clusterIndex3D ) );
 
 		auto pointStartOffset = m_writer.declLocale( "pointStartOffset"
-			, ( *m_pointLightGridCluster )[clusterIndex1D].x() );
+			, ( *m_pointLightClusters )[clusterIndex1D].x() );
 		auto pointLightCount = m_writer.declLocale( "pointLightCount"
-			, ( *m_pointLightGridCluster )[clusterIndex1D].y() );
+			, ( *m_pointLightClusters )[clusterIndex1D].y() );
 
 		FOR( m_writer, sdw::UInt, i, 0_u, i < pointLightCount, ++i )
 		{
 			auto lightOffset = m_writer.declLocale( "lightOffset"
-				, ( *m_pointLightGridIndex )[pointStartOffset + i] );
+				, ( *m_pointLightIndices )[pointStartOffset + i] );
 			auto light = m_writer.declLocale( "point", lights.getPointLight( lightOffset ) );
 			lightingModel.compute( light
 				, components
@@ -87,14 +87,14 @@ namespace castor3d::shader
 		ROF;
 
 		auto spotStartOffset = m_writer.declLocale( "spotStartOffset"
-			, (*m_spotLightGridCluster)[clusterIndex1D].x() );
+			, ( *m_spotLightClusters )[clusterIndex1D].x() );
 		auto spotLightCount = m_writer.declLocale( "spotLightCount"
-			, ( *m_spotLightGridCluster )[clusterIndex1D].y() );
+			, ( *m_spotLightClusters )[clusterIndex1D].y() );
 
 		FOR( m_writer, sdw::UInt, i, 0_u, i < spotLightCount, ++i )
 		{
 			auto lightOffset = m_writer.declLocale( "lightOffset"
-				, ( *m_spotLightGridIndex )[spotStartOffset + i] );
+				, ( *m_spotLightIndices )[spotStartOffset + i] );
 			auto light = m_writer.declLocale( "spot", lights.getSpotLight( lightOffset ) );
 			lightingModel.compute( light
 				, components

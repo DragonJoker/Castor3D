@@ -307,6 +307,8 @@ namespace castor3d
 		result.addInOutDepthStencilView( targetDepth );
 		result.addImplicitColourView( m_mippedColour.targetViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.addImplicitColourView( getOwner()->getSsaoResult().wholeViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		auto & transparentPassResult = *m_transparentPassResult;
 		result.addOutputColourView( transparentPassResult[WbTexture::eAccumulation].targetViewId
 			, getClearValue( WbTexture::eAccumulation ) );

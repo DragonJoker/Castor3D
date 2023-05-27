@@ -23,11 +23,11 @@ namespace castor
 
 #	if !defined( NDEBUG )
 #		define CU_Assert( pred, text ) ( !!( pred ) )\
-		|| ( castor::cuFailure( text ), 0 )
-#else
+			|| ( castor::cuFailure( text ), 0 )
+#	else
 #		define CU_Assert( pred, text ) ( !!( pred ) )\
-		|| ( castor::cuLogError( text ), 0 )
-#endif
+			|| ( castor::cuLogError( text ), 0 )
+#	endif
 
 //!\~english	Calls invariant checking function.
 //!\~french		Appelle la fonction de vérification des invariants de classe.

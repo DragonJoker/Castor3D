@@ -2,6 +2,7 @@
 
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 
 #include <ashespp/Buffer/StagingBuffer.hpp>
 
@@ -99,7 +100,9 @@ namespace castor3d
 	void ClustersUbo::cpuUpdate( castor::Point3ui gridDim
 		, float viewNear
 		, uint32_t clusterSize
-		, float nearK )
+		, float nearK
+		, uint32_t pointLightsCount
+		, uint32_t spotLightsCount )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
@@ -108,6 +111,10 @@ namespace castor3d
 		configuration.viewNear = viewNear;
 		configuration.nearK = nearK;
 		configuration.logGridDimY = 1.0f / std::log( nearK );
+		configuration.pointLightsCount = pointLightsCount;
+		configuration.spotLightsCount = spotLightsCount;
+		configuration.pointLightLevelsCount = FrustumClusters::getNumLevels( pointLightsCount );
+		configuration.spotLightLevelsCount = FrustumClusters::getNumLevels( spotLightsCount );
 	}
 
 	//*********************************************************************************************

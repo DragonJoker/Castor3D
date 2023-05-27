@@ -419,8 +419,7 @@ namespace castor3d
 		PrepassRendering m_prepass;
 		crg::FramePass const * m_lastDepthPass{};
 		crg::FramePass const * m_depthRangePass{};
-		crg::FramePass const* m_computeClustersAABB{};
-		crg::FramePass const* m_dispatchLightInClusters{};
+		crg::FramePass const * m_clustersLastPass{};
 		BackgroundRendererUPtr m_background{};
 		OpaqueRendering m_opaque;
 		crg::FramePass const * m_lastOpaquePass{};

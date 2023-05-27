@@ -8,7 +8,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template< class Data >
+	template< class Data, size_t Index >
 	class DataHolderT
 	{
 	public:

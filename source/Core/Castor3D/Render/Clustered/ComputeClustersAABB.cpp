@@ -96,8 +96,7 @@ namespace castor3d
 			writer.implementMainT< VoidT >( 1u, 1u, 1u
 				, [&]( ComputeIn in )
 				{
-					auto clusterIndex3D = writer.declLocale( "clusterIndex3D"
-						, in.globalInvocationID );
+					auto clusterIndex3D = in.globalInvocationID;
 					auto clusterIndex1D = writer.declLocale( "clusterIndex1D"
 						, c3d_clustersData.computeClusterIndex1D( clusterIndex3D ) );
 
@@ -207,7 +206,7 @@ namespace castor3d
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
-		, FrustumClusters const & clusters )
+		, FrustumClusters & clusters )
 	{
 		auto & pass = graph.createPass( "ComputeClustersAABB"
 			, [&clusters, &device]( crg::FramePass const & framePass
@@ -230,7 +229,7 @@ namespace castor3d
 		pass.addDependency( *previousPass );
 		cameraUbo.createPassBinding( pass, cptclsb::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptclsb::eClusters );
-		createClearableOutputStorageBinding( pass, uint32_t( cptclsb::eClustersAABB ), "C3D_ClustersAABB", clusters.getAabbBuffer().getBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( pass, uint32_t( cptclsb::eClustersAABB ), "C3D_ClustersAABB", clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
 		return pass;
 	}
 

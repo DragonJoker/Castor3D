@@ -238,6 +238,14 @@ namespace castor3d
 		float nearK;
 		// 1.0f / log( 1 + ( tan( fov * 0.5 ) / ClusterGridDim.y )
 		float logGridDimY;
+		// The number of BVH levels for point lights.
+		uint32_t pointLightLevelsCount;
+		// The number of BVH levels for spot lights.
+		uint32_t spotLightLevelsCount;
+		// The number of point lights.
+		uint32_t pointLightsCount;
+		// The number of spot lights.
+		uint32_t spotLightsCount;
 	};
 	/**
 	*\~english

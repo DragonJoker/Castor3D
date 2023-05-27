@@ -71,6 +71,14 @@ namespace castor3d
 			return MaxPointShadowMapCount;
 		}
 
+		void groupMemoryBarrierWithGroupSync( sdw::ShaderWriter & writer )
+		{
+			writer.controlBarrier( sdw::type::Scope::eWorkgroup
+				, sdw::type::Scope::eWorkgroup
+				, ( sdw::type::MemorySemanticsMask::eAcquireRelease
+					| sdw::type::MemorySemanticsMask::eWorkgroupMemory ) );
+		}
+
 		castor::String concatModelNames( castor::String lhs
 			, castor::String rhs )
 		{

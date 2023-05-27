@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 
+#include <CastorUtils/Design/DesignModule.hpp>
+
 namespace castor3d
 {
 	/**@name Render */
@@ -33,6 +35,10 @@ namespace castor3d
 	class FrustumClusters;
 
 	CU_DeclareSmartPtr( castor3d, FrustumClusters, C3D_API );
+
+	using ClustersBuffersChangedFunction = std::function< void( FrustumClusters const & ) >;
+	using OnClustersBuffersChanged = castor::SignalT< ClustersBuffersChangedFunction >;
+	using OnClustersBuffersChangedConnection = castor::ConnectionT< ClustersBuffersChangedFunction >;
 
 	//@}
 	//@}
