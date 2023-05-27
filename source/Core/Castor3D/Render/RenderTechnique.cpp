@@ -17,8 +17,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/Clustered/AssignLightsToClusters.hpp"
-#include "Castor3D/Render/Clustered/ComputeClustersAABB.hpp"
+#include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LayeredLightPropagationVolumes.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumes.hpp"
@@ -387,20 +386,10 @@ namespace castor3d
 			, visbuffer }
 		, m_lastDepthPass{ &m_prepass.getLastPass() }
 		, m_depthRangePass{ &m_prepass.getDepthRangePass() }
-		, m_computeClustersAABB{ ( C3D_UseClusteredRendering 
-			? &createComputeClustersAABBPass( m_graph
+		, m_clustersLastPass{ ( C3D_UseClusteredRendering
+			? &m_renderTarget.getFrustumClusters().createFramePasses( m_graph
 				, m_depthRangePass
-				, m_device
-				, m_cameraUbo
-				, m_renderTarget.getFrustumClusters() )
-			: nullptr ) }
-		, m_dispatchLightInClusters{ ( C3D_UseClusteredRendering
-			? &createAssignLightsToClustersPass( m_graph
-				, m_computeClustersAABB
-				, m_device
-				, m_renderTarget.getScene()->getLightCache()
-				, m_cameraUbo
-				, m_renderTarget.getFrustumClusters() )
+				, m_cameraUbo )
 			: nullptr ) }
 		, m_background{ doCreateBackgroundPass( progress ) }
 		, m_opaque{ *this
@@ -782,9 +771,9 @@ namespace castor3d
 			, TechniquePassEvent::eBeforeBackground
 			, &m_prepass.getLastPass() );
 
-		if ( m_dispatchLightInClusters )
+		if ( m_clustersLastPass )
 		{
-			previousPasses.push_back( m_dispatchLightInClusters );
+			previousPasses.push_back( m_clustersLastPass );
 		}
 
 		auto & graph = m_graph.createPassGroup( "Background" );

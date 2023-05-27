@@ -122,7 +122,7 @@ namespace castor
 	*\brief		Conteneur de donnée.
 	*\remark	Utilisé pour forcer l'ordre d'initialisation des données via l'héritage.
 	*/
-	template< class Data >
+	template< class Data, size_t Index = 0u >
 	class DataHolderT;
 	/**
 	\~english

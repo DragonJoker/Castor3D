@@ -22,7 +22,11 @@ namespace castor3d
 				, sdw::FloatField< "viewNear" > // Distance to the near clipping plane.
 				, sdw::U32Vec2Field< "clusterSize" > // Screenspace size of a cluster
 				, sdw::FloatField< "nearK" > // ( 1 + ( 2 * tan( fov * 0.5 ) / dimensions.y ) ) // Used to compute the near plane for clusters at depth k.
-				, sdw::FloatField< "logGridDimY" > > // 1.0f / log( 1 + ( tan( fov * 0.5 ) / dimensions.y )
+				, sdw::FloatField< "logGridDimY" > // 1.0f / log( 1 + ( tan( fov * 0.5 ) / dimensions.y )
+				, sdw::UIntField< "pointLightLevels" >
+				, sdw::UIntField< "spotLightLevels" >
+				, sdw::UIntField< "pointLightCount" >
+				, sdw::UIntField< "spotLightCount" > >
 		{
 			ClustersData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
@@ -36,6 +40,10 @@ namespace castor3d
 			auto clusterSize()const { return getMember< "clusterSize" >(); }
 			auto nearK()const { return getMember< "nearK" >(); }
 			auto logGridDimY()const { return getMember< "logGridDimY" >(); }
+			auto pointLightLevels()const { return getMember< "pointLightLevels" >(); }
+			auto spotLightLevels()const { return getMember< "spotLightLevels" >(); }
+			auto pointLightCount()const { return getMember< "pointLightCount" >(); }
+			auto spotLightCount()const { return getMember< "spotLightCount" >(); }
 
 			C3D_API sdw::RetU32Vec3 computeClusterIndex3D( sdw::UInt32 const index );
 			C3D_API sdw::RetU32Vec3 computeClusterIndex3D( sdw::Vec2 const screenPos
@@ -68,11 +76,9 @@ namespace castor3d
 		C3D_API void cpuUpdate( castor::Point3ui gridDim
 			, float viewNear
 			, uint32_t clusterSize
-			, castor::Angle const & fov );
-		C3D_API void cpuUpdate( castor::Point3ui gridDim
-			, float viewNear
-			, uint32_t clusterSize
-			, float nearK );
+			, float nearK
+			, uint32_t pointLightsCount
+			, uint32_t spotLightsCount );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
@@ -119,7 +125,7 @@ namespace castor3d
 		, uint32_t( set ) \
 		, ast::type::MemoryLayout::eStd140 \
 		, enabled }; \
-	auto c3d_clustersData = clusters.declMember< castor3d::shader::ClustersData >( "d", enabled ); \
+	auto c3d_clustersData = clusters.declMember< castor3d::shader::ClustersData >( "c", enabled ); \
 	clusters.end()
 
 #define C3D_Clusters( writer, binding, set ) \

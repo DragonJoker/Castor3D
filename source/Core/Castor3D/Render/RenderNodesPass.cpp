@@ -605,10 +605,10 @@ namespace castor3d
 		, uint32_t & index )
 	{
 		descriptorWrites.push_back( frustumClusters.getClustersUbo().getDescriptorWrite( index++ ) );
-		bindBuffer( frustumClusters.getPointLightIndexBuffer().getBuffer(), descriptorWrites, index );
-		bindBuffer( frustumClusters.getPointLightClusterBuffer().getBuffer(), descriptorWrites, index );
-		bindBuffer( frustumClusters.getSpotLightIndexBuffer().getBuffer(), descriptorWrites, index );
-		bindBuffer( frustumClusters.getSpotLightClusterBuffer().getBuffer(), descriptorWrites, index );
+		bindBuffer( frustumClusters.getPointLightClusterIndexBuffer(), descriptorWrites, index );
+		bindBuffer( frustumClusters.getPointLightClusterGridBuffer(), descriptorWrites, index );
+		bindBuffer( frustumClusters.getSpotLightClusterIndexBuffer(), descriptorWrites, index );
+		bindBuffer( frustumClusters.getSpotLightClusterGridBuffer(), descriptorWrites, index );
 	}
 
 	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const

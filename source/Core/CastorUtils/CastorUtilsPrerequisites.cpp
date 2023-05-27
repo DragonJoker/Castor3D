@@ -89,6 +89,6 @@ namespace castor
 		stream << "Assertion failed: " << description << "\n";
 		stream << Debug::Backtrace{};
 		cuLogError( stream.str().c_str() );
-		std::abort();
+		assert( false );
 	}
 }

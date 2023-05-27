@@ -217,6 +217,7 @@ namespace castor3d::shader
 
 	C3D_API uint32_t getSpotShadowMapCount();
 	C3D_API uint32_t getPointShadowMapCount();
+	C3D_API void groupMemoryBarrierWithGroupSync( sdw::ShaderWriter & writer );
 
 	C3D_API castor::String concatModelNames( castor::String lhs
 		, castor::String rhs );
