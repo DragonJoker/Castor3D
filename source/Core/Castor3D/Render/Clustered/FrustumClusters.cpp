@@ -10,6 +10,7 @@
 #include "Castor3D/Render/Clustered/ComputeClustersAABB.hpp"
 #include "Castor3D/Render/Clustered/ComputeLightsMortonCode.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
+#include "Castor3D/Render/Clustered/SortLightsMortonCode.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
@@ -118,6 +119,40 @@ namespace castor3d
 			, "C3D_SpotLightBVH" ) }
 #endif
 	{
+#if C3D_DebugUseLightsBVH
+#	if C3D_DebugSortLightsMortonCode
+		static uint32_t constexpr NumThreadsPerThreadGroup = 256u;
+		static uint32_t constexpr ElementsPerThread = 8u;
+
+		// The maximum number of elements that need to be sorted.
+		uint32_t maxElements = MaxLightsCount;
+
+		// Radix sort will sort Morton codes (keys) into chunks of SORT_NUM_THREADS_PER_THREAD_GROUP size.
+		uint32_t chunkSize = NumThreadsPerThreadGroup;
+		// The number of chunks that need to be merge sorted after Radix sort finishes.
+		uint32_t numChunks = uint32_t( std::ceil( float( maxElements ) / float( chunkSize ) ) );
+		// The number of sort groups that are needed to sort the first set of chunks.
+		// Each sort group will sort 2 chunks. So the maximum number of sort groups is 1/2 of the 
+		// number of chunks.
+		uint32_t maxSortGroups = numChunks / 2u;
+		// The number of merge path partitions per sort group is the total values
+		// to be sorted per sort group (2 chunks) divided by the number of elements 
+		// that can be sorted per thread group. One is added to account for the 
+		// merge path partition at the END of the chunk.
+		uint32_t numMergePathPartitionsPerSortGroup = uint32_t( std::ceil( float( chunkSize * 2u ) / float( ElementsPerThread * NumThreadsPerThreadGroup ) ) ) + 1u;
+
+		// The maximum number of merge path partitions is the number of merge path partitions
+		// needed by a single sort group multiplied by the maximum number of sort groups.
+		uint32_t maxMergePathPartitions = numMergePathPartitionsPerSortGroup * maxSortGroups;
+
+		m_mergePathPartitionsBuffer = makeBufferBase( m_device
+			, sizeof( u32 ) * maxMergePathPartitions
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "C3D_MergePathPartitions" );
+#	endif
+#endif
+
 		doUpdate();
 	}
 
@@ -145,17 +180,21 @@ namespace castor3d
 		, CameraUbo const & cameraUbo )
 	{
 		auto & graph = parentGraph.createPassGroup( "Clusters" );
-		auto lastPass = &createComputeClustersAABBPass( graph, previousPass
-			, m_device, cameraUbo, *this );
+		crg::FramePassArray lastPasses = { &createComputeClustersAABBPass( graph, previousPass
+			, m_device, cameraUbo, *this ) };
 #if C3D_DebugUseLightsBVH
-		lastPass = &createReduceLightsAABBPass( graph, lastPass
+		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
+			, m_device, cameraUbo, *this ) };
+		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
+			, m_device, cameraUbo, *this ) };
+#	if C3D_DebugSortLightsMortonCode
+		lastPasses = createSortLightsMortonCodePass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this );
-		lastPass = &createComputeLightsMortonCodePass( graph, lastPass
-			, m_device, cameraUbo, *this );
-		lastPass = &createBuildLightsBVHPass( graph, lastPass
-			, m_device, cameraUbo, *this );
+#	endif
+		lastPasses = { &createBuildLightsBVHPass( graph, lastPasses
+			, m_device, cameraUbo, *this ) };
 #endif
-		return createAssignLightsToClustersPass( graph, lastPass
+		return createAssignLightsToClustersPass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this );
 	}
 

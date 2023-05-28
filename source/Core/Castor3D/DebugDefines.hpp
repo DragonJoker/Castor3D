@@ -16,5 +16,6 @@ See LICENSE file in root folder
 #define C3D_DebugDisableSafeBands 0
 
 #define C3D_DebugUseLightsBVH 1
+#define C3D_DebugSortLightsMortonCode 1
 
 #endif

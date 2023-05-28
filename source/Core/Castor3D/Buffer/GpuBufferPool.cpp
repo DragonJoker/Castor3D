@@ -15,6 +15,93 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
+	namespace gpupol
+	{
+		static crg::VkBufferArray makeVkArray( std::vector< ashes::BufferBase const * > const & buffers )
+		{
+			crg::VkBufferArray result;
+
+			for ( auto buffer : buffers )
+			{
+				result.push_back( *buffer );
+			}
+
+			return result;
+		}
+	}
+
+	//*********************************************************************************************
+
+	void createUniformPassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, std::vector< ashes::BufferBase const * > buffers
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
+		pass.addUniformBuffer( { vkBuffers, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createInputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, std::vector< ashes::BufferBase const * > buffers
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
+		pass.addInputStorageBuffer( { vkBuffers, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createInOutStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, std::vector< ashes::BufferBase const * > buffers
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
+		pass.addInOutStorageBuffer( { vkBuffers, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createOutputStoragePassBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, std::vector< ashes::BufferBase const * > buffers
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
+		pass.addOutputStorageBuffer( { vkBuffers, name }
+			, binding
+			, offset
+			, size );
+	}
+
+	void createClearableOutputStorageBinding( crg::FramePass & pass
+		, uint32_t binding
+		, std::string const & name
+		, std::vector< ashes::BufferBase const * > buffers
+		, VkDeviceSize offset
+		, VkDeviceSize size )
+	{
+		crg::VkBufferArray vkBuffers = gpupol::makeVkArray( buffers );
+		pass.addClearableOutputStorageBuffer( { vkBuffers, name }
+			, binding
+			, offset
+			, size );
+	}
+
 	void createUniformPassBinding( crg::FramePass & pass
 		, uint32_t binding
 		, std::string const & name
@@ -22,8 +109,10 @@ namespace castor3d
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addUniformBuffer( { buffer, name }
+		createUniformPassBinding( pass
 			, binding
+			, name
+			, { &buffer }
 			, offset
 			, size );
 	}
@@ -35,8 +124,10 @@ namespace castor3d
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addInputStorageBuffer( { buffer, name }
+		createInputStoragePassBinding( pass
 			, binding
+			, name
+			, { &buffer }
 			, offset
 			, size );
 	}
@@ -48,8 +139,10 @@ namespace castor3d
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addInOutStorageBuffer( { buffer, name }
+		createInOutStoragePassBinding( pass
 			, binding
+			, name
+			, { &buffer }
 			, offset
 			, size );
 	}
@@ -61,8 +154,10 @@ namespace castor3d
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addOutputStorageBuffer( { buffer, name }
+		createOutputStoragePassBinding( pass
 			, binding
+			, name
+			, { &buffer }
 			, offset
 			, size );
 	}
@@ -74,8 +169,10 @@ namespace castor3d
 		, VkDeviceSize offset
 		, VkDeviceSize size )
 	{
-		pass.addClearableOutputStorageBuffer( { buffer, name }
+		createClearableOutputStorageBinding( pass
 			, binding
+			, name
+			, { &buffer }
 			, offset
 			, size );
 	}

@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Clustered/BuildLightsBVH.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -24,6 +25,8 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
+#include <limits>
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -42,6 +45,7 @@ namespace castor3d
 		};
 
 		static uint32_t constexpr NumThreads = 32u * 16u;
+		static float constexpr FltMax = std::numeric_limits< float >::max();
 
 		static ShaderPtr createShader( bool bottomLevel )
 		{
@@ -149,8 +153,8 @@ namespace castor3d
 						}
 						ELSE
 						{
-							aabbMin = vec4( sdw::Float{ FLT_MAX }, FLT_MAX, FLT_MAX, 1.0f );
-							aabbMax = vec4( sdw::Float{ -FLT_MAX }, -FLT_MAX, -FLT_MAX, 1.0f );
+							aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
+							aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 						}
 						FI;
 
@@ -197,8 +201,8 @@ namespace castor3d
 						}
 						ELSE
 						{
-							aabbMin = vec4( sdw::Float{ FLT_MAX }, FLT_MAX, FLT_MAX, 1.0f );
-							aabbMax = vec4( sdw::Float{ -FLT_MAX }, -FLT_MAX, -FLT_MAX, 1.0f );
+							aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
+							aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 						}
 						FI;
 
@@ -247,8 +251,8 @@ namespace castor3d
 						}
 						ELSE
 						{
-							aabbMin = vec4( sdw::Float{ FLT_MAX }, FLT_MAX, FLT_MAX, 1.0f );
-							aabbMax = vec4( sdw::Float{ -FLT_MAX }, -FLT_MAX, -FLT_MAX, 1.0f );
+							aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
+							aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 						}
 						FI;
 
@@ -289,8 +293,8 @@ namespace castor3d
 						}
 						ELSE
 						{
-							aabbMin = vec4( sdw::Float{ FLT_MAX }, FLT_MAX, FLT_MAX, 1.0f );
-							aabbMax = vec4( sdw::Float{ -FLT_MAX }, -FLT_MAX, -FLT_MAX, 1.0f );
+							aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
+							aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
 						}
 						FI;
 
@@ -337,13 +341,18 @@ namespace castor3d
 					, { [this]( uint32_t index ){ doInitialise( index ); }
 						, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
 						, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
-						, GetPassIndexCallback( [](){ return 0u; } )
+						, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
 						, IsComputePassCallback( [](){ return true; } ) }
+#if C3D_DebugSortLightsMortonCode
+					, crg::ru::Config{ 2u, true /* resettable */ } }
+#else
 					, crg::ru::Config{ 1u, true /* resettable */ } }
+#endif
+				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
-				, m_bottom{ framePass, context, graph, device, true, clusters }
-				, m_top{ framePass, context, graph, device, false, clusters }
+				, m_bottom{ framePass, context, graph, device, true, this }
+				, m_top{ framePass, context, graph, device, false, this }
 			{
 			}
 
@@ -371,12 +380,13 @@ namespace castor3d
 					, crg::RunnableGraph & graph
 					, RenderDevice const & device
 					, bool bottomLevel
-					, FrustumClusters const & clusters )
+					, FramePass * parent )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "BuildLightsBVH", createShader( bottomLevel ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
-					, cpConfig{ crg::defaultV< uint32_t const * >
-						, &clusters.needsLightsUpdate()
+					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
+						, &parent->m_clusters.needsLightsUpdate()
 						, crg::getDefaultV< IsEnabledCallback >()
+						, GetPassIndexCallback( [parent]() { return parent->doGetPassIndex(); } )
 						, crg::getDefaultV< RecordCallback >()
 						, crg::getDefaultV< RecordCallback >()
 						, 1u
@@ -386,15 +396,20 @@ namespace castor3d
 						, context
 						, graph
 						, crg::pp::Config{}
-						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( createInfo ) )
-					.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u } )
+							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( createInfo ) )
+							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u } )
 						, VK_PIPELINE_BIND_POINT_COMPUTE
+#if C3D_DebugSortLightsMortonCode
+						, 2u }
+#else
 						, 1u }
+#endif
 				{
 				}
 			};
 
 		private:
+			FrustumClusters const & m_clusters;
 			LightCache const & m_lightCache;
 			Pipeline m_bottom;
 			Pipeline m_top;
@@ -406,6 +421,27 @@ namespace castor3d
 				m_top.pipeline.initialise();
 				doCreatePipeline( index, m_bottom );
 				doCreatePipeline( index, m_top );
+			}
+
+			uint32_t doGetPassIndex()
+			{
+#if C3D_DebugSortLightsMortonCode
+				u32 result = {};
+
+				auto pointLightsCount = m_lightCache.getLightsCount( LightType::ePoint );
+				auto spoLightsCount = m_lightCache.getLightsCount( LightType::eSpot );
+				auto totalValues = std::max( pointLightsCount, spoLightsCount );
+				auto numChunks = getLightsMortonCodeChunkCount( totalValues );
+
+				if ( numChunks > 1u )
+				{
+					result = ( ( numChunks - 1u ) % 2u );
+				}
+
+				return result;
+#else
+				return 0u;
+#endif
 			}
 
 			bool doIsEnabled()const
@@ -422,11 +458,11 @@ namespace castor3d
 				auto pointLightsCount = m_lightCache.getLightsCount( LightType::ePoint );
 				auto spoLightsCount = m_lightCache.getLightsCount( LightType::eSpot );
 				auto maxLeaves = std::max( pointLightsCount, spoLightsCount );
-				auto numThreadGroups = uint32_t( std::ceil( float( maxLeaves ) / float( 32u * 16u ) ) );
+				auto numThreadGroups = uint32_t( std::ceil( float( maxLeaves ) / float( NumThreads ) ) );
 				m_bottom.pipeline.recordInto( context, commandBuffer, index );
 				m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
 				uint32_t maxLevels = FrustumClusters::getNumLevels( maxLeaves );
-				doBarriers( context, commandBuffer, 0 );
+				doBarriers( context, commandBuffer, index, 0 );
 
 				// Now build upper levels of the BVH.
 				if ( maxLevels > 1u )
@@ -435,7 +471,7 @@ namespace castor3d
 
 					for ( uint32_t level = maxLevels - 1u; level > 0; --level )
 					{
-						doBarriers( context, commandBuffer, 1 );
+						doBarriers( context, commandBuffer, index, 1 );
 						m_context.vkCmdPushConstants( commandBuffer, m_top.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u, &level );
 						uint32_t numChildNodes = FrustumClusters::getNumLevelNodes( level );
 						numThreadGroups = uint32_t( std::ceil( float( numChildNodes ) / float( NumThreads ) ) );
@@ -443,11 +479,12 @@ namespace castor3d
 					}
 				}
 
-				doBarriers( context, commandBuffer, 2 );
+				doBarriers( context, commandBuffer, index, 2 );
 			}
 
 			void doBarriers( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
+				, uint32_t passIndex
 				, int idx )
 			{
 				for ( auto & attach : m_pass.buffers )
@@ -458,10 +495,10 @@ namespace castor3d
 						&& attach.isStorageBuffer()
 						&& attach.isClearableBuffer() )
 					{
-						auto currentState = context.getAccessState( buffer.buffer.buffer
+						auto currentState = context.getAccessState( buffer.buffer.buffer( passIndex )
 							, buffer.range );
 						context.memoryBarrier( commandBuffer
-							, buffer.buffer.buffer
+							, buffer.buffer.buffer( passIndex )
 							, buffer.range
 							, currentState.access
 							, currentState.pipelineStage
@@ -492,7 +529,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	crg::FramePass const & createBuildLightsBVHPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters )
@@ -511,13 +548,18 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( *previousPass );
+		pass.addDependencies( previousPasses );
 		cameraUbo.createPassBinding( pass, lgtbvh::eCamera );
 		auto & lights = clusters.getCamera().getScene()->getLightCache();
 		lights.createPassBinding( pass, lgtbvh::eLights );
 		clusters.getClustersUbo().createPassBinding( pass, lgtbvh::eClusters );
+#if C3D_DebugSortLightsMortonCode
+		createInputStoragePassBinding( pass, uint32_t( lgtbvh::ePointLightIndices ), "C3D_PointLightIndices", { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer() }, 0u, ashes::WholeSize );
+		createInputStoragePassBinding( pass, uint32_t( lgtbvh::eSpotLightIndices ), "C3D_SpotLightIndices", { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer() }, 0u, ashes::WholeSize );
+#else
 		createInputStoragePassBinding( pass, uint32_t( lgtbvh::ePointLightIndices ), "C3D_PointLightIndices", clusters.getInputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( pass, uint32_t( lgtbvh::eSpotLightIndices ), "C3D_SpotLightIndices", clusters.getInputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
+#endif
 		createClearableOutputStorageBinding( pass, uint32_t( lgtbvh::ePointLightBVH ), "C3D_PointLightBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( lgtbvh::eSpotLightBVH ), "C3D_SpotLightBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 		return pass;

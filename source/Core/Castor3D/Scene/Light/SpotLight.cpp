@@ -26,7 +26,7 @@ namespace castor3d
 			castor::Point3f min{ points[0] };
 			castor::Point3f max{ points[0] };
 
-			for ( auto & cur : castor::makeArrayView( &points[1], points.size() - 1u ) )
+			for ( auto & cur : castor::makeArrayView( &points[1], uint64_t( points.size() - 1u ) ) )
 			{
 				max[0] = std::max( cur[0], max[0] );
 				max[1] = std::max( cur[1], max[1] );

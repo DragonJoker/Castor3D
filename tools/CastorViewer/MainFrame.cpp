@@ -265,7 +265,11 @@ namespace CastorViewer
 		SetBackgroundColour( GuiCommon::PANEL_BACKGROUND_COLOUR );
 		SetForegroundColour( GuiCommon::PANEL_FOREGROUND_COLOUR );
 
-		auto size = FromDIP( wxSize{ 800 + m_propertiesWidth, 600 + m_logsHeight } );
+#if wxCHECK_VERSION( 3, 1, 0 )
+		auto size = this->FromDIP( wxSize{ 800 + m_propertiesWidth, 600 + m_logsHeight } );
+#else
+		auto size = wxSize{ 800 + m_propertiesWidth, 600 + m_logsHeight };
+#endif
 		SetClientSize( size );
 #if wxCHECK_VERSION( 2, 9, 0 )
 		SetMinClientSize( size );
@@ -690,14 +694,18 @@ namespace CastorViewer
 			return;
 		}
 
-		auto size = FromDIP( GuiCommon::make_wxSize( target->getSize() ) );
+#if wxCHECK_VERSION( 3, 1, 0 )
+		auto size = this->FromDIP( GuiCommon::make_wxSize( target->getSize() ) );
+#else
+		auto size = GuiCommon::make_wxSize( target->getSize() );
+#endif
 
 		if ( IsMaximized() )
 		{
 			Maximize( false );
 		}
 
-		SetPosition( FromDIP( wxPoint{} ) );
+		SetPosition( wxPoint{} );
 		SetClientSize( size );
 #if wxCHECK_VERSION( 2, 9, 0 )
 		SetMinClientSize( size );

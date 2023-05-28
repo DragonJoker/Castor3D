@@ -168,7 +168,7 @@ namespace castor3d
 			if ( attach.view.size() == 1u )
 			{
 				auto view = attach.view.front();
-				context.setLayoutState( view
+				context.setLayoutState( resolveView( view, passIndex )
 					, { attach.output
 					, crg::getAccessMask( attach.output )
 					, crg::getStageMask( attach.output ) } );

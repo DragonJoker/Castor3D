@@ -565,6 +565,7 @@ namespace castor3d
 		doCleanupCombineProgram();
 		m_culler.reset();
 		m_hdrConfigUbo.reset();
+		m_frustumClusters.reset();
 	}
 
 	void RenderTarget::update( CpuUpdater & updater )

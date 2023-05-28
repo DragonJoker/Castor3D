@@ -354,7 +354,7 @@ namespace castor3d
 			{
 				auto buffer = attach.buffer.buffer;
 				m_context.vkCmdFillBuffer( commandBuffer
-					, buffer.buffer
+					, buffer.buffer( index )
 					, 0u
 					, ashes::WholeSize
 					, 0u );

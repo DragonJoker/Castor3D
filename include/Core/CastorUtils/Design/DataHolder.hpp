@@ -14,7 +14,7 @@ namespace castor
 	public:
 		DataHolderT()noexcept = default;
 
-		DataHolderT( Data d )noexcept
+		explicit DataHolderT( Data d )noexcept
 			: m_data{ std::move( d ) }
 		{
 		}
