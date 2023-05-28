@@ -11,7 +11,6 @@ See LICENSE file in root folder
 namespace castor
 {
 	CU_API void cuLogError( char const * const description );
-	[[ noreturn ]]
 	CU_API void cuFailure( char const * const description );
 }
 

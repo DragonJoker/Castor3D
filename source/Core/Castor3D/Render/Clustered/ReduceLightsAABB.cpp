@@ -25,6 +25,8 @@
 #include <RenderGraph/FramePassGroup.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 
+#include <limits>
+
 #define C3D_DebugEnableWarpOptimisation 0
 
 namespace castor3d
@@ -42,6 +44,7 @@ namespace castor3d
 		};
 
 		static uint32_t constexpr NumThreads = 512u;
+		static float constexpr FltMax = std::numeric_limits< float >::max();
 
 		static ShaderPtr createShader( bool first )
 		{
@@ -151,9 +154,9 @@ namespace castor3d
 					auto threadIndex = in.globalInvocationID.x();
 
 					auto aabbMin = writer.declLocale( "aabbMin"
-						, vec4( sdw::Float{ FLT_MAX }, FLT_MAX, FLT_MAX, 1.0f ) );
+						, vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f ) );
 					auto aabbMax = writer.declLocale( "aabbMax"
-						, vec4( sdw::Float{ -FLT_MAX }, -FLT_MAX, -FLT_MAX, 1.0f ) );
+						, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) );
 
 					if ( first )
 					{
@@ -277,9 +280,10 @@ namespace castor3d
 					, FrustumClusters const & clusters )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB" + ( first ? std::string{ "/First" } : std::string{ "/Second" } ), createShader( first ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
-					, cpConfig{ crg::defaultV< uint32_t const * >
+					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
 						, &clusters.needsLightsUpdate()
 						, crg::getDefaultV< IsEnabledCallback >()
+						, crg::getDefaultV< GetPassIndexCallback >()
 						, crg::getDefaultV< RecordCallback >()
 						, crg::getDefaultV< RecordCallback >()
 						, 1u

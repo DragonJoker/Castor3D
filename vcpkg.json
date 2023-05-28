@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg/master/scripts/vcpkg.schema.json",
   "name": "castor3d",
   "version": "0.15.0",
-  "builtin-baseline": "6accd15d644e93cec849ea346a147828437928b3",
+  "builtin-baseline": "1c5a340f6e10985e2d92af174a68dbd15c1fa4e1",
   "dependencies": [
     "convectionkernels",
     "freetype",
@@ -15,7 +15,6 @@
     "assimp",
     "freeimage",
     "glsl",
-    "tools",
     "vkfft"
   ],
   "vcpkg-configuration": {

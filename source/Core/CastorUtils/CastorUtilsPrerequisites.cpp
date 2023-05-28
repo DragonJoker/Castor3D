@@ -82,7 +82,6 @@ namespace castor
 		Logger::logError( description );
 	}
 
-	[[ noreturn ]]
 	void cuFailure( char const * const description )
 	{
 		std::stringstream stream;

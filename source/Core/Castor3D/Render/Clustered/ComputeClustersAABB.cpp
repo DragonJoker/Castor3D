@@ -186,10 +186,10 @@ namespace castor3d
 						&& attach.isStorageBuffer()
 						&& attach.isClearableBuffer() )
 					{
-						auto currentState = context.getAccessState( buffer.buffer.buffer
+						auto currentState = context.getAccessState( buffer.buffer.buffer( index )
 							, buffer.range );
 						context.memoryBarrier( commandBuffer
-							, buffer.buffer.buffer
+							, buffer.buffer.buffer( index )
 							, buffer.range
 							, currentState.access
 							, currentState.pipelineStage

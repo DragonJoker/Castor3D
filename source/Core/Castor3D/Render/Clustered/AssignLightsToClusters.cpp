@@ -538,15 +538,42 @@ namespace castor3d
 				, crg::ComputePass{framePass
 					, context
 					, graph
-					, crg::ru::Config{}
+#if C3D_DebugUseLightsBVH && C3D_DebugSortLightsMortonCode
+					, crg::ru::Config{ 2u }
+#else
+					, crg::ru::Config{ 1u }
+#endif
 					, config
+						.getPassIndex( RunnablePass::GetPassIndexCallback( [this](){ return doGetPassIndex(); } ) )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) )
 						.enabled( &clusters.needsLightsUpdate() )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
+				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
 			{
 			}
 
 		private:
+			uint32_t doGetPassIndex()
+			{
+#if C3D_DebugUseLightsBVH && C3D_DebugSortLightsMortonCode
+				u32 result = {};
+
+				auto pointLightsCount = m_lightCache.getLightsCount( LightType::ePoint );
+				auto spoLightsCount = m_lightCache.getLightsCount( LightType::eSpot );
+				auto totalValues = std::max( pointLightsCount, spoLightsCount );
+				auto numChunks = getLightsMortonCodeChunkCount( totalValues );
+
+				if ( numChunks > 1u )
+				{
+					result = ( ( numChunks - 1u ) % 2u );
+				}
+
+				return result;
+#else
+				return 0u;
+#endif
+			}
+
 			void doPostRecord( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
@@ -559,10 +586,10 @@ namespace castor3d
 						&& attach.isStorageBuffer()
 						&& attach.isClearableBuffer() )
 					{
-						auto currentState = context.getAccessState( buffer.buffer.buffer
+						auto currentState = context.getAccessState( buffer.buffer.buffer( index )
 							, buffer.range );
 						context.memoryBarrier( commandBuffer
-							, buffer.buffer.buffer
+							, buffer.buffer.buffer( index )
 							, buffer.range
 							, currentState.access
 							, currentState.pipelineStage
@@ -570,6 +597,9 @@ namespace castor3d
 					}
 				}
 			}
+
+		private:
+			LightCache const & m_lightCache;
 		};
 	}
 
@@ -610,8 +640,13 @@ namespace castor3d
 #if C3D_DebugUseLightsBVH
 		createInputStoragePassBinding( pass, uint32_t( dspclst::ePointLightBVH ), "C3D_PointLightsBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( pass, uint32_t( dspclst::eSpotLightBVH ), "C3D_SpotLightsBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
+#	if C3D_DebugSortLightsMortonCode
+		createInputStoragePassBinding( pass, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices", { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer() }, 0u, ashes::WholeSize );
+		createInputStoragePassBinding( pass, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices", { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer() }, 0u, ashes::WholeSize );
+#	else
 		createInputStoragePassBinding( pass, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices", clusters.getInputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( pass, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices", clusters.getInputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
+#	endif
 #endif
 		return pass;
 	}

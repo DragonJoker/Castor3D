@@ -40,6 +40,8 @@ namespace castor3d
 	using OnClustersBuffersChanged = castor::SignalT< ClustersBuffersChangedFunction >;
 	using OnClustersBuffersChangedConnection = castor::ConnectionT< ClustersBuffersChangedFunction >;
 
+	C3D_API u32 getLightsMortonCodeChunkCount( u32 lightCount );
+
 	//@}
 	//@}
 }

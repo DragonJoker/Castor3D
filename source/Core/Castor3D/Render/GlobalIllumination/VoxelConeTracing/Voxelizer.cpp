@@ -102,7 +102,7 @@ namespace castor3d
 				for ( auto & attach : m_pass.buffers )
 				{
 					m_context.vkCmdFillBuffer( commandBuffer
-						, attach.buffer.buffer.buffer
+						, attach.buffer.buffer.buffer( index )
 						, attach.buffer.range.offset
 						, attach.buffer.range.size
 						, 0u );
