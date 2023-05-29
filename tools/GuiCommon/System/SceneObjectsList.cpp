@@ -241,34 +241,16 @@ namespace GuiCommon
 						, elem );
 				} );
 
-			catId = AppendItem( sceneId
-				, _( "Cameras" )
-				, eBMP_CAMERA
-				, eBMP_CAMERA_SEL );
-			scene->getCameraCache().forEach( [this, catId]( castor3d::Camera & elem )
-				{
-					doAddCamera( catId, elem );
-				} );
+			//catId = AppendItem( sceneId
+			//	, _( "Scene Nodes" )
+			//	, eBMP_NODE
+			//	, eBMP_NODE_SEL );
+			//auto rootNode = scene->getRootNode();
 
-			catId = AppendItem( sceneId
-				, _( "Light Sources" )
-				, eBMP_DIRECTIONAL_LIGHT
-				, eBMP_DIRECTIONAL_LIGHT_SEL );
-			scene->getLightCache().forEach( [this, catId]( castor3d::Light & elem )
-				{
-					doAddLight( catId, elem );
-				} );
-
-			catId = AppendItem( sceneId
-				, _( "Scene Nodes" )
-				, eBMP_NODE
-				, eBMP_NODE_SEL );
-			auto rootNode = scene->getRootNode();
-
-			if ( rootNode )
-			{
-				doAddNode( catId, *rootNode );
-			}
+			//if ( rootNode )
+			//{
+			//	doAddNode( catId, *rootNode );
+			//}
 
 			catId = AppendItem( sceneId
 				, _( "Materials" )

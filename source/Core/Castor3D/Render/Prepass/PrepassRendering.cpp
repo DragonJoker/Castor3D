@@ -88,19 +88,6 @@ namespace castor3d
 
 	void PrepassRendering::update( GpuUpdater & updater )
 	{
-		if ( !m_depthPass && !m_visibilityPass )
-		{
-			return;
-		}
-
-		if ( hasVisibility() )
-		{
-			m_visibilityPass->countNodes( updater.info );
-		}
-		else
-		{
-			m_depthPass->countNodes( updater.info );
-		}
 	}
 
 	void PrepassRendering::accept( RenderTechniqueVisitor & visitor )

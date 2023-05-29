@@ -7,6 +7,7 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -21,6 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
+#include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>

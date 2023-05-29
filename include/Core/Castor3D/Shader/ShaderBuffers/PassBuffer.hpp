@@ -317,6 +317,7 @@ namespace castor3d
 
 	private:
 		uint32_t m_stride;
+		uint32_t m_maxCount;
 		ShaderBuffer m_buffer;
 		std::vector< Pass * > m_passes;
 		std::vector< Pass const * > m_dirty;

@@ -89,6 +89,11 @@ namespace castor3d
 			return m_category->getLightType();
 		}
 
+		uint32_t getComponentCount()const
+		{
+			return m_category->getComponentCount();
+		}
+
 		bool isEnabled()const
 		{
 			return m_enabled;

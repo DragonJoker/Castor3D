@@ -7,8 +7,10 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Clustered/AssignLightsToClusters.hpp"
 #include "Castor3D/Render/Clustered/BuildLightsBVH.hpp"
+#include "Castor3D/Render/Clustered/ClustersMask.hpp"
 #include "Castor3D/Render/Clustered/ComputeClustersAABB.hpp"
 #include "Castor3D/Render/Clustered/ComputeLightsMortonCode.hpp"
+#include "Castor3D/Render/Clustered/FindUniqueClusters.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
 #include "Castor3D/Render/Clustered/SortLightsMortonCode.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -33,7 +35,8 @@ namespace castor3d
 			, VkDeviceSize elementCount
 			, std::string const & debugName
 			, ashes::BufferBasePtr & buffer
-			, std::vector< ashes::BufferBasePtr > & toDelete )
+			, std::vector< ashes::BufferBasePtr > & toDelete
+			, VkBufferUsageFlags usage = VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
 		{
 			if ( buffer )
 			{
@@ -42,11 +45,10 @@ namespace castor3d
 
 			buffer = makeBufferBase( device
 				, elementCount * sizeof( DataT )
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, usage
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_" + debugName );
 		}
-
 	}
 
 	//*********************************************************************************************
@@ -61,59 +63,66 @@ namespace castor3d
 		, m_cameraView{ m_clustersDirty, {} }
 		, m_nearK{ m_clustersDirty, 0.0f }
 		, m_clustersUbo{ m_device }
+#if C3D_DebugUseDepthClusteredSamples
+		, m_clustersIndirect{ makeBuffer< VkDispatchIndirectCommand >( m_device
+			, getNumNodes( MaxLightsCount )
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "C3D_ClustersIndirect" ) }
+#endif
 #if C3D_DebugUseLightsBVH
-		, m_lightsAABBBuffer{ makeBufferBase( m_device
-			, sizeof( AABB ) * MaxLightsCount
+		, m_lightsAABBBuffer{ makeBuffer< AABB >( m_device
+			, MaxLightsCount
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_LightsAABB" ) }
-		, m_pointMortonCodesBuffers{ { makeBufferBase( m_device
-				, MaxLightsCount * sizeof( u32 )
+		, m_pointMortonCodesBuffers{ { makeBuffer< u32 >( m_device
+				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_PointLightMortonCodesA" )
-			, makeBufferBase( m_device
-				, MaxLightsCount * sizeof( u32 )
+			, makeBuffer< u32 >( m_device
+				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_PointLightMortonCodesB" ) } }
-		, m_spotMortonCodesBuffers{ { makeBufferBase( m_device
-				, MaxLightsCount * sizeof( u32 )
+		, m_spotMortonCodesBuffers{ { makeBuffer< u32 >( m_device
+				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_SpotLightMortonCodesA" )
-			, makeBufferBase( m_device
-				, MaxLightsCount * sizeof( u32 )
+			, makeBuffer< u32 >( m_device
+				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_SpotLightMortonCodesB" ) } }
-		, m_pointIndicesBuffers{ { makeBufferBase( m_device
-				, MaxLightsCount * sizeof( u32 )
+		, m_pointIndicesBuffers{ { makeBuffer< u32 >( m_device
+				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_PointLightIndicesA" )
-			, makeBufferBase( m_device
-				, MaxLightsCount * sizeof( u32 )
+			, makeBuffer< u32 >( m_device
+				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_PointLightIndicesB" ) } }
-		, m_spotIndicesBuffers{ { makeBufferBase( m_device
-				, MaxLightsCount * sizeof( u32 )
+		, m_spotIndicesBuffers{ { makeBuffer< u32 >( m_device
+				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_SpotLightIndicesA" )
-			, makeBufferBase( m_device
-				, MaxLightsCount * sizeof( u32 )
+			, makeBuffer< u32 >( m_device
+				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_SpotLightIndicesB" ) } }
-		, m_pointBVHBuffer{ makeBufferBase( m_device
-			, sizeof( AABB ) * getNumNodes( MaxLightsCount )
+		, m_pointBVHBuffer{ makeBuffer< AABB >( m_device
+			, getNumNodes( MaxLightsCount )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_PointLightBVH" ) }
-		, m_spotBVHBuffer{ makeBufferBase( m_device
-			, sizeof( AABB ) * getNumNodes( MaxLightsCount )
+		, m_spotBVHBuffer{ makeBuffer< AABB >( m_device
+			, getNumNodes( MaxLightsCount )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_SpotLightBVH" ) }
@@ -145,8 +154,8 @@ namespace castor3d
 		// needed by a single sort group multiplied by the maximum number of sort groups.
 		uint32_t maxMergePathPartitions = numMergePathPartitionsPerSortGroup * maxSortGroups;
 
-		m_mergePathPartitionsBuffer = makeBufferBase( m_device
-			, sizeof( u32 ) * maxMergePathPartitions
+		m_mergePathPartitionsBuffer = makeBuffer< s32 >( m_device
+			, maxMergePathPartitions
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_MergePathPartitions" );
@@ -158,7 +167,8 @@ namespace castor3d
 
 	void FrustumClusters::update( CpuUpdater & updater )
 	{
-		auto & lightCache = m_camera.getScene()->getLightCache();
+		auto scene = m_camera.getScene();
+		auto & lightCache = scene->getLightCache();
 		m_clustersDirty = lightCache.hasClusteredLights()
 			&& m_first;
 		doUpdate();
@@ -166,10 +176,13 @@ namespace castor3d
 			, m_camera.getNear()
 			, m_clusterSize.value()
 			, m_nearK.value()
-			, lightCache.getLightsCount( LightType::ePoint )
-			, lightCache.getLightsCount( LightType::eSpot ) );
+			, lightCache.getLightsBufferCount( LightType::ePoint )
+			, lightCache.getLightsBufferCount( LightType::eSpot ) );
+		auto it = updater.dirtyScenes.find( scene );
 		m_lightsDirty = lightCache.hasClusteredLights()
-			&& ( m_clustersDirty || lightCache.isDirty() );
+			&& ( m_clustersDirty
+				|| lightCache.isDirty()
+				|| ( it != updater.dirtyScenes.end() && !it->second.isEmpty() ) );
 		m_first = m_camera.getEngine()->areUpdateOptimisationsEnabled()
 			? false
 			: true;
@@ -177,10 +190,20 @@ namespace castor3d
 
 	crg::FramePass const & FrustumClusters::createFramePasses( crg::FramePassGroup & parentGraph
 		, crg::FramePass const * previousPass
-		, CameraUbo const & cameraUbo )
+		, RenderTechnique & technique
+		, CameraUbo const & cameraUbo
+		, RenderNodesPass *& nodesPass )
 	{
 		auto & graph = parentGraph.createPassGroup( "Clusters" );
-		crg::FramePassArray lastPasses = { &createComputeClustersAABBPass( graph, previousPass
+		crg::FramePassArray lastPasses{ 1u, previousPass };
+#if C3D_DebugUseDepthClusteredSamples
+		lastPasses = { &createClustersMaskPass( graph, *lastPasses.front()
+			, m_device, cameraUbo, *this
+			, technique, nodesPass ) };
+		lastPasses = { &createFindUniqueClustersPass( graph, *lastPasses.front()
+			, m_device, cameraUbo, *this ) };
+#endif
+		lastPasses = { &createComputeClustersAABBPass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this ) };
 #if C3D_DebugUseLightsBVH
 		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
@@ -287,7 +310,11 @@ namespace castor3d
 			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, "PointLightClusterGrid", m_pointLightClusterGridBuffer, m_toDelete );
 			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, "SpotLightClusterGrid", m_spotLightClusterGridBuffer, m_toDelete );
 			frscls::updateBuffer< u32 >( m_device, indexCount, "PointLightClusterIndex", m_pointLightClusterIndexBuffer, m_toDelete );
-			frscls::updateBuffer< u32 >( m_device, indexCount, "SpottLightClusterIndex", m_spotLightClusterIndexBuffer, m_toDelete );
+			frscls::updateBuffer< u32 >( m_device, indexCount, "SpotLightClusterIndex", m_spotLightClusterIndexBuffer, m_toDelete );
+#if C3D_DebugUseDepthClusteredSamples
+			frscls::updateBuffer< u32 >( m_device, cellCount, "ClusterFlags", m_clusterFlags, m_toDelete );
+			frscls::updateBuffer< u32 >( m_device, cellCount, "UniqueClusters", m_uniqueClusters, m_toDelete );
+#endif
 			onClusterBuffersChanged( *this );
 		}
 	}

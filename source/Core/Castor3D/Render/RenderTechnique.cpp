@@ -67,9 +67,9 @@ namespace castor3d
 			auto lock( castor::makeUniqueLock( cache ) );
 			std::map< double, LightRPtr > lights;
 
-			if ( cache.getLightsCount( LightType::eDirectional ) <= 1u
-				&& cache.getLightsCount( LightType::ePoint ) <= MaxPointShadowMapCount
-				&& cache.getLightsCount( LightType::eSpot ) <= MaxSpotShadowMapCount )
+			if ( cache.getLightsBufferCount( LightType::eDirectional ) <= 1u
+				&& cache.getLightsBufferCount( LightType::ePoint ) <= MaxPointShadowMapCount
+				&& cache.getLightsBufferCount( LightType::eSpot ) <= MaxSpotShadowMapCount )
 			{
 				double index{};
 
@@ -389,7 +389,9 @@ namespace castor3d
 		, m_clustersLastPass{ ( C3D_UseClusteredRendering
 			? &m_renderTarget.getFrustumClusters().createFramePasses( m_graph
 				, m_depthRangePass
-				, m_cameraUbo )
+				, *this
+				, m_cameraUbo
+				, m_clustersFlagsPass )
 			: nullptr ) }
 		, m_background{ doCreateBackgroundPass( progress ) }
 		, m_opaque{ *this
@@ -496,6 +498,11 @@ namespace castor3d
 				renderPass.update( updater );
 			} );
 		m_prepass.update( updater );
+
+		if ( m_clustersFlagsPass )
+		{
+			m_clustersFlagsPass->update( updater );
+		}
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
 			, [&updater]( RenderTechniquePass & renderPass )

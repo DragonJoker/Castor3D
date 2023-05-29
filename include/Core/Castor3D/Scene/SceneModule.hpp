@@ -464,7 +464,7 @@ namespace castor3d
 		using ElementKeyT = KeyT;
 		using ElementPtrT = castor::UniquePtr< ElementT >;
 		using ElementObsT = ElementT *;
-		using ElementContT = std::unordered_map< KeyT, ElementPtrT >;
+		using ElementContT = std::map< KeyT, ElementPtrT >;
 		using ElementCacheT = ObjectCacheBaseT< ElementT, KeyT >;
 
 		using ElementInitialiserT = std::function< void( ElementT & ) >;

@@ -64,10 +64,16 @@ namespace castor3d
 		if ( m_count )
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
-			auto buffer = m_data.data();
+			auto buffer = m_data.begin();
 
 			for ( auto anim : castor::makeArrayView( std::next( m_animations.begin() ), m_animations.end() ) )
 			{
+				if ( buffer == m_data.end() )
+				{
+					log::warn << "TextureAnimation [" << anim->getName() << "] is out of buffer boundaries, ignoring it." << std::endl;
+					break;
+				}
+
 				if ( anim )
 				{
 					anim->fillBuffer( buffer );
@@ -76,7 +82,7 @@ namespace castor3d
 				++buffer;
 			}
 
-			m_buffer.setCount( uint32_t( m_animations.size() ) );
+			m_buffer.setCount( uint32_t( std::min( m_data.size(), m_animations.size() ) ) );
 			m_buffer.upload( commandBuffer );
 		}
 	}

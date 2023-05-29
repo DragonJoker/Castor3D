@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in]	lightType	Le type de catégorie de lumière.
 		 *\param[in]	light		La Light parente.
 		 */
-		C3D_API explicit LightCategory( LightType lightType, Light & light );
+		C3D_API explicit LightCategory( LightType lightType, Light & light, uint32_t componentCount );
 
 	public:
 		struct ShadowData
@@ -105,6 +105,11 @@ namespace castor3d
 		LightType getLightType()const
 		{
 			return m_lightType;
+		}
+
+		uint32_t getComponentCount()const
+		{
+			return m_componentCount;
 		}
 
 		float getDiffuseIntensity()const
@@ -204,6 +209,7 @@ namespace castor3d
 	private:
 		LightType m_lightType;
 		Light & m_light;
+		uint32_t m_componentCount{};
 		castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
 		castor::Point2f m_intensity{ 1.0, 1.0 };
 	};

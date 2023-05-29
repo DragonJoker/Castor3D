@@ -6,6 +6,9 @@ See LICENSE file in root folder
 
 #include "MiscellaneousModule.hpp"
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+
 namespace castor3d
 {
 	template< typename AshesType >
@@ -884,11 +887,14 @@ namespace castor3d
 	template<> struct VkStructTraits< VkVideoEncodeRateControlInfoKHR >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_VIDEO_ENCODE_RATE_CONTROL_INFO_KHR; };
 #endif
 
+	template< typename VkStructT >
+	static VkStructureType constexpr vkStructureTypeV = VkStructTraits< VkStructT >::value;
+
 	template< typename VkStructT, typename ... ParamsT >
 	inline VkStructT makeVkStructPNext( void * next
 		, ParamsT && ... params )
 	{
-		return VkStructT{ VkStructTraits< VkStructT >::value
+		return VkStructT{ vkStructureTypeV< VkStructT >
 			, next
 			, std::forward< ParamsT >( params )... };
 	}
@@ -896,10 +902,12 @@ namespace castor3d
 	template< typename VkStructT, typename ... ParamsT >
 	inline VkStructT makeVkStruct( ParamsT && ... params )
 	{
-		return VkStructT{ VkStructTraits< VkStructT >::value
+		return VkStructT{ vkStructureTypeV< VkStructT >
 			, nullptr
 			, std::forward< ParamsT >( params )... };
 	}
 }
+
+#pragma GCC diagnostic pop
 
 #endif

@@ -63,10 +63,11 @@ namespace castor
 					}
 
 					auto dimensions = unit.getTexture()->getDimensions();
+					auto format = unit.getTexture()->getPixelFormat();
 
 					if ( result
 						&& unit.getTexture()->getMipmapCount() > 1
-						&& unit.getTexture()->getMipmapCount() != ashes::getMaxMipCount( dimensions ) )
+						&& unit.getTexture()->getMipmapCount() != castor::getMipLevels( dimensions, format ) )
 					{
 						result = write( file, cuT( "levels_count" ), unit.getTexture()->getMipmapCount() );
 					}

@@ -164,7 +164,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	DirectionalLight::DirectionalLight( Light & light )
-		: LightCategory{ LightType::eDirectional, light }
+		: LightCategory{ LightType::eDirectional, light, LightDataComponents }
 		, m_cascades( light.getScene()->getDirectionalShadowCascades() )
 		, m_prvCascades( light.getScene()->getDirectionalShadowCascades() )
 	{

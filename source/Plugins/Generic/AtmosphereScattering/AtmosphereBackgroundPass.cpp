@@ -3,6 +3,7 @@
 #include "AtmosphereScattering/AtmosphereBackground.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Miscellaneous/makeVkType.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
@@ -96,7 +97,7 @@ namespace atmosphere_scattering
 			, crg::rq::Config{}
 				.isEnabled( IsEnabledCallback( [this](){ return castor3d::BackgroundPassBase::doIsEnabled(); } ) )
 				.renderSize( size )
-				.depthStencilState( ashes::PipelineDepthStencilStateCreateInfo{ 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL } )
+				.depthStencilState( castor3d::makeVkStruct< VkPipelineDepthStencilStateCreateInfo >( 0u, VK_TRUE, VK_FALSE, VK_COMPARE_OP_GREATER_OR_EQUAL ) )
 				.passIndex( &background.getPassIndex( forceVisible ) )
 				.programCreator( { 2u
 					, [size, this, &background, &device]( uint32_t programIndex )

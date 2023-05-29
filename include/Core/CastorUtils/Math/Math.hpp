@@ -122,6 +122,65 @@ namespace castor
 
 	//************************************************************************************************
 
+	namespace details
+	{
+		template< typename DataT >
+		concept ValueTypeT = std::is_floating_point_v< DataT >
+			|| std::is_integral_v< DataT >;
+
+
+		template< ValueTypeT DataT, DataT ... ValuesT >
+		struct MinRecT;
+
+		template< ValueTypeT DataT, DataT ValueT >
+		struct MinRecT< DataT, ValueT >
+		{
+			static constexpr DataT value = ValueT;
+		};
+
+		template< ValueTypeT DataT, DataT LhsT, DataT RhsT >
+		struct MinRecT< DataT, LhsT, RhsT >
+		{
+			static constexpr DataT value = std::min( LhsT, RhsT );
+		};
+
+		template< ValueTypeT DataT, DataT LhsT, DataT RhsT, DataT ... ValuesT >
+		struct MinRecT< DataT, LhsT, RhsT, ValuesT... >
+		{
+			static constexpr DataT value = MinRecT< DataT, std::max( LhsT, RhsT ), ValuesT... >::value;
+		};
+
+
+		template< ValueTypeT DataT, DataT ... ValuesT >
+		struct MaxRecT;
+
+		template< ValueTypeT DataT, DataT ValueT >
+		struct MaxRecT< DataT, ValueT >
+		{
+			static constexpr DataT value = ValueT;
+		};
+
+		template< ValueTypeT DataT, DataT LhsT, DataT RhsT >
+		struct MaxRecT< DataT, LhsT, RhsT >
+		{
+			static constexpr DataT value = std::max( LhsT, RhsT );
+		};
+
+		template< ValueTypeT DataT, DataT LhsT, DataT RhsT, DataT ... ValuesT >
+		struct MaxRecT< DataT, LhsT, RhsT, ValuesT... >
+		{
+			static constexpr DataT value = MaxRecT< DataT, std::max( LhsT, RhsT ), ValuesT... >::value;
+		};
+	}
+
+	template< details::ValueTypeT DataT, DataT ... ValuesT >
+	static DataT minValueT = details::MinRecT< DataT, ValuesT... >::value;
+
+	template< details::ValueTypeT DataT, DataT ... ValuesT >
+	static DataT maxValueT = details::MaxRecT< DataT, ValuesT... >::value;
+
+	//************************************************************************************************
+
 	/**
 	 *\~english
 	 *\brief		Tests if a double is a number

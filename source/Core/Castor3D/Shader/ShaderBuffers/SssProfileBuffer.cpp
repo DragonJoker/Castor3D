@@ -81,13 +81,23 @@ namespace castor3d
 			std::vector< SubsurfaceScatteringComponent const * > dirty;
 			std::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
+			uint32_t index{};
 
-			std::for_each( dirty.begin(), end, [this]( SubsurfaceScatteringComponent const * component )
+			for ( auto component : castor::makeArrayView( dirty.begin(), end ) )
 			{
+				if ( index * VkDeviceSize( DataSize ) > m_data.size() )
+				{
+					log::warn << "SssProfile [" << component->getSssProfileId() << "] is out of buffer boundaries, ignoring it." << std::endl;
+				}
+				else
+				{
 					component->fillProfileBuffer( *this );
-			} );
+				}
 
-			m_buffer.setCount( uint32_t( m_components.size() ) );
+				++index;
+			}
+
+			m_buffer.setCount( uint32_t( std::min( m_data.size() * DataSize, m_components.size() ) ) );
 			m_buffer.upload( commandBuffer );
 		}
 	}

@@ -119,6 +119,16 @@ namespace castor3d
 		 */
 		C3D_API void createBinding( ashes::DescriptorSet & descriptorSet
 			, VkDescriptorSetLayoutBinding const & binding )const;
+		/**
+		 *\~english
+		 *\param[in]	type	The light type.
+		 *\return		The number of light sources of the given type, in the buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
+		 *\param[in]	type	Le type de lumière.
+		 *\return		Le nombre de sources lumineuses du type donné, dans le buffer.
+		 */
+		C3D_API uint32_t getLightsBufferCount( LightType type )const noexcept;
 
 		uint8_t * getPtr()
 		{
@@ -134,6 +144,7 @@ namespace castor3d
 		std::pair< uint32_t, uint32_t > doGetOffsetIndex( Light const & light )const;
 		void doMarkNextDirty( LightType type
 			, uint32_t index );
+		uint32_t doGetBufferEnd( LightType type )const noexcept;
 
 	private:
 		ShaderBuffer m_buffer;

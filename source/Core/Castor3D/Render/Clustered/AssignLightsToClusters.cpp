@@ -46,6 +46,7 @@ namespace castor3d
 			eSpotLightBVH,
 			ePointLightIndices,
 			eSpotLightIndices,
+			eUniqueClusters,
 		};
 
 #if C3D_DebugUseLightsBVH
@@ -107,6 +108,10 @@ namespace castor3d
 				, eSpotLightIndices
 				, 0u
 				, useLightBVH );
+			C3D_UniqueClustersEx( writer
+				, eUniqueClusters
+				, 0u
+				, C3D_DebugUseDepthClusteredSamples != 0 );
 
 			// Using a stack of node IDs to traverse the BVH was inspired by:
 			// Source: https://devblogs.nvidia.com/parallelforall/thinking-parallel-part-ii-tree-traversal-gpu/
@@ -124,7 +129,6 @@ namespace castor3d
 			auto gsSpotLights = writer.declSharedVariable< shader::AppendArrayT< sdw::UInt > >( "gsSpotLights"
 				, true, "U32", MaxLightsPerCluster );
 
-			auto gsClusterIndex3D = writer.declSharedVariable< sdw::U32Vec3 >( "gsClusterIndex3D" );
 			auto gsClusterIndex1D = writer.declSharedVariable< sdw::UInt32 >( "gsClusterIndex1D" );
 			auto gsClusterAABB = writer.declSharedVariable< shader::AABB >( "gsClusterAABB" );
 			auto gsClusterSphere = writer.declSharedVariable< sdw::Vec4 >( "gsClusterSphere" );
@@ -286,8 +290,11 @@ namespace castor3d
 						gsStackPtr = 0_i;
 						gsParentIndex = 0_u;
 
+#if C3D_DebugUseDepthClusteredSamples
+						gsClusterIndex1D = c3d_uniqueClusters[in.workGroupID.x()];
+#else
 						gsClusterIndex1D = in.workGroupID.x();
-						gsClusterIndex3D = c3d_clustersData.computeClusterIndex3D( gsClusterIndex1D );
+#endif
 						gsClusterAABB = c3D_clustersAABB[gsClusterIndex1D];
 						auto aabbCenter = writer.declLocale( "aabbCenter"
 							, gsClusterAABB.min().xyz() + ( gsClusterAABB.max().xyz() - gsClusterAABB.min().xyz() ) / 2.0_f );
@@ -544,22 +551,26 @@ namespace castor3d
 					, crg::ru::Config{ 1u }
 #endif
 					, config
-						.getPassIndex( RunnablePass::GetPassIndexCallback( [this](){ return doGetPassIndex(); } ) )
+						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) )
+#if C3D_DebugUseDepthClusteredSamples
+						.recordInto( RunnablePass::RecordCallback( [this, &clusters]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx, clusters ); } ) )
+#else
 						.enabled( &clusters.needsLightsUpdate() )
+#endif
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
-				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
 			{
 			}
 
 		private:
-			uint32_t doGetPassIndex()
+			uint32_t doGetPassIndex( FrustumClusters const & clusters )
 			{
 #if C3D_DebugUseLightsBVH && C3D_DebugSortLightsMortonCode
 				u32 result = {};
+				auto & lightCache = clusters.getCamera().getScene()->getLightCache();
 
-				auto pointLightsCount = m_lightCache.getLightsCount( LightType::ePoint );
-				auto spoLightsCount = m_lightCache.getLightsCount( LightType::eSpot );
+				auto pointLightsCount = lightCache.getLightsBufferCount( LightType::ePoint );
+				auto spoLightsCount = lightCache.getLightsBufferCount( LightType::eSpot );
 				auto totalValues = std::max( pointLightsCount, spoLightsCount );
 				auto numChunks = getLightsMortonCodeChunkCount( totalValues );
 
@@ -572,6 +583,20 @@ namespace castor3d
 #else
 				return 0u;
 #endif
+			}
+
+			void doSubRecordInto( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, uint32_t index
+				, FrustumClusters const & clusters )
+			{
+				auto & buffer = clusters.getClustersIndirectBuffer();
+				context.memoryBarrier( commandBuffer
+					, VkBuffer( buffer )
+					, crg::BufferSubresourceRange{ 0u, ashes::WholeSize }
+					, VkAccessFlags( VK_ACCESS_INDIRECT_COMMAND_READ_BIT )
+					, VkPipelineStageFlags( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT )
+					, crg::AccessState{ VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
 			}
 
 			void doPostRecord( crg::RecordContext & context
@@ -597,9 +622,6 @@ namespace castor3d
 					}
 				}
 			}
-
-		private:
-			LightCache const & m_lightCache;
 		};
 	}
 
@@ -622,7 +644,12 @@ namespace castor3d
 					, device
 					, clusters
 					, crg::cp::Config{}
-						.groupCountX( clusters.getDimensions()->x * clusters.getDimensions()->y * clusters.getDimensions()->z ) );
+#if C3D_DebugUseDepthClusteredSamples
+						.indirectBuffer( crg::IndirectBuffer{ { clusters.getClustersIndirectBuffer(), "C3D_ClustersIndirect" }, uint32_t( sizeof( VkDispatchIndirectCommand ) ) } )
+#else
+						.groupCountX( clusters.getDimensions()->x * clusters.getDimensions()->y * clusters.getDimensions()->z )
+#endif
+					);
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
@@ -647,6 +674,9 @@ namespace castor3d
 		createInputStoragePassBinding( pass, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices", clusters.getInputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( pass, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices", clusters.getInputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
 #	endif
+#endif
+#if C3D_DebugUseDepthClusteredSamples
+		createInputStoragePassBinding( pass, uint32_t( dspclst::eUniqueClusters ), "C3D_UniqueClusters", clusters.getUniqueClustersBuffer(), 0u, ashes::WholeSize );
 #endif
 		return pass;
 	}

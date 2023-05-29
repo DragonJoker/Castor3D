@@ -191,6 +191,46 @@ namespace castor3d::shader
 
 #define C3D_SpotLightMortonCodes( writer, binding, set ) \
 	C3D_SpotLightMortonCodesEx( writer, binding, set, true )
+
+
+
+#define C3D_ClusterFlagsEx( writer, binding, set, enabled ) \
+	auto c3d_clusterFlagsBuffer = writer.declStorageBuffer( "c3d_clusterFlagsBuffer" \
+		, ( enabled ? uint32_t( binding ) : 0u ) \
+		, set \
+		, sdw::type::MemoryLayout::eStd430 \
+		, enabled ); \
+	auto c3d_clusterFlags = c3d_clusterFlagsBuffer.declMemberArray< sdw::UInt >( "cf", enabled ); \
+	c3d_clusterFlagsBuffer.end()
+
+#define C3D_ClusterFlags( writer, binding, set ) \
+	C3D_ClusterFlagsEx( writer, binding, set, true )
+
+#define C3D_UniqueClustersEx( writer, binding, set, enabled ) \
+	auto c3d_uniqueClustersBuffer = writer.declStorageBuffer( "c3d_uniqueClustersBuffer" \
+		, ( enabled ? uint32_t( binding ) : 0u ) \
+		, set \
+		, sdw::type::MemoryLayout::eStd430 \
+		, enabled ); \
+	auto c3d_uniqueClusters = c3d_uniqueClustersBuffer.declMemberArray< sdw::UInt >( "uc", enabled ); \
+	c3d_uniqueClustersBuffer.end()
+
+#define C3D_UniqueClusters( writer, binding, set ) \
+	C3D_UniqueClustersEx( writer, binding, set, true )
+
+#define C3D_ClustersIndirectEx( writer, binding, set, enabled ) \
+	auto c3d_clustersIndirectBuffer = writer.declStorageBuffer( "c3d_clustersIndirectBuffer" \
+		, ( enabled ? uint32_t( binding ) : 0u ) \
+		, set \
+		, sdw::type::MemoryLayout::eStd430 \
+		, enabled ); \
+	auto c3d_clustersCountX = c3d_clustersIndirectBuffer.declMember< sdw::UInt >( "ccx" , enabled ); \
+	auto c3d_clustersCountY = c3d_clustersIndirectBuffer.declMember< sdw::UInt >( "ccy" , enabled ); \
+	auto c3d_clustersCountZ = c3d_clustersIndirectBuffer.declMember< sdw::UInt >( "ccz" , enabled ); \
+	c3d_clustersIndirectBuffer.end()
+
+#define C3D_ClustersIndirect( writer, binding, set ) \
+	C3D_ClustersIndirectEx( writer, binding, set, true )
 }
 
 #endif
