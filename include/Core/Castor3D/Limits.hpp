@@ -94,7 +94,7 @@ namespace castor3d
 	*	Directional Light Shadows.
 	*/
 	//@{
-	static uint32_t constexpr ShadowMapDirectionalTextureSize = 2048u;
+	static uint32_t constexpr ShadowMapDirectionalTextureSize = 2'048u;
 	static uint32_t constexpr MaxDirectionalCascadesCount = 6u;
 	//@}
 	/**
@@ -123,7 +123,6 @@ namespace castor3d
 	// Pass Buffer.
 	static uint32_t constexpr MaxMaterialsCount = 2'048u;
 	static uint32_t constexpr MaxSssProfilesCount = 128u;
-	static int32_t constexpr MaxMaterialComponentsCount = 8;
 	// Texture Configuration Buffer.
 	static uint32_t constexpr MaxTextureConfigurationCount = 4'096u;
 	// Texture Animation Buffer.
@@ -147,12 +146,11 @@ namespace castor3d
 	*/
 	//@{
 	// The number of vec4s in the random buffer.
-	static uint32_t constexpr RandomDataCount = 1024u;
+	static uint32_t constexpr RandomDataCount = 1'024u;
 	// Max overlay count per buffer
 	static uint32_t constexpr MaxOverlaysPerBuffer = 65'536u;
 	// Max counts for text overlays
 	static uint32_t constexpr MaxCharsPerOverlay = 1'024u;
-	static uint32_t constexpr MaxLinesPerOverlay = 1'024u;
 	// Max counts for text overlays text buffer
 	static uint32_t constexpr MaxCharsPerBuffer = 65'536u;
 	static uint32_t constexpr MaxWordsPerBuffer = 16'384u;

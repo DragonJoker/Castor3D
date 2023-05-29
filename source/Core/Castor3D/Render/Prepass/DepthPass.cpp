@@ -100,6 +100,17 @@ namespace castor3d
 			, m_deferred ? 2u : 3u );
 	}
 
+	void DepthPass::doFillAdditionalBindings( PipelineFlags const & flags
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
+	{
+	}
+
+	void DepthPass::doFillAdditionalDescriptor( PipelineFlags const & flags
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps )
+	{
+	}
+
 	ShaderPtr DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		return ShaderPtr{};

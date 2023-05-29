@@ -281,8 +281,8 @@ namespace castor3d
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB" + ( first ? std::string{ "/First" } : std::string{ "/Second" } ), createShader( first ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
 					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
-						, &clusters.needsLightsUpdate()
-						, crg::getDefaultV< IsEnabledCallback >()
+						, nullptr
+						, IsEnabledCallback( [&clusters]() { return clusters.needsLightsUpdate(); } )
 						, crg::getDefaultV< GetPassIndexCallback >()
 						, crg::getDefaultV< RecordCallback >()
 						, crg::getDefaultV< RecordCallback >()
@@ -331,8 +331,8 @@ namespace castor3d
 					uint32_t reduceNumElements{};
 				} dispatchData;
 
-				auto pointLightsCount = m_lightCache.getLightsCount( LightType::ePoint );
-				auto spoLightsCount = m_lightCache.getLightsCount( LightType::eSpot );
+				auto pointLightsCount = m_lightCache.getLightsBufferCount( LightType::ePoint );
+				auto spoLightsCount = m_lightCache.getLightsBufferCount( LightType::eSpot );
 				auto maxLightsCount = std::max( pointLightsCount, spoLightsCount );
 
 				// Don't dispatch more than 512 thread groups. The reduction algorithm depends on the

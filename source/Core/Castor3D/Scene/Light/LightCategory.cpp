@@ -11,9 +11,10 @@ CU_ImplementSmartPtr( castor3d, LightCategory )
 
 namespace castor3d
 {
-	LightCategory::LightCategory( LightType lightType, Light & light )
+	LightCategory::LightCategory( LightType lightType, Light & light, uint32_t componentCount )
 		: m_lightType{ lightType }
 		, m_light{ light }
+		, m_componentCount{ componentCount }
 	{
 	}
 

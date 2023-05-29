@@ -43,7 +43,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	SpotLight::SpotLight( Light & light )
-		: LightCategory{ LightType::eSpot, light }
+		: LightCategory{ LightType::eSpot, light, LightDataComponents }
 		, m_attenuation{ m_dirtyData, castor::Point3f{ 1, 0, 0 } }
 		, m_exponent{ m_dirtyData, 1.0f }
 		, m_innerCutOff{ m_dirtyData, 22.5_degrees }

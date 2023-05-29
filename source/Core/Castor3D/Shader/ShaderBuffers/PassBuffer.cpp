@@ -88,7 +88,8 @@ namespace castor3d
 		, RenderDevice const & device
 		, uint32_t count )
 		: m_stride{ uint32_t( engine.getPassComponentsRegister().getPassBufferStride() ) }
-		, m_buffer{ engine, device, count * m_stride, cuT( "PassBuffer" ) }
+		, m_maxCount{ count }
+		, m_buffer{ engine, device, count * VkDeviceSize( m_stride ), cuT( "PassBuffer" ) }
 		, m_data{ castor::makeArrayView( m_buffer.getPtr(), count * m_stride ) }
 	{
 	}
@@ -99,7 +100,7 @@ namespace castor3d
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 
-			CU_Require( m_passes.size() < MaxMaterialsCount );
+			CU_Require( m_passes.size() < m_maxCount );
 			m_passes.emplace_back( &pass );
 			pass.setId( m_passID++ );
 			m_connections.emplace_back( pass.onChanged.connect( [this]( Pass const & ppass
@@ -153,8 +154,15 @@ namespace castor3d
 					, PassTypeData{ uint16_t( m_passTypeIndices.size() )
 						, pass->getComponentCombineID()
 						, pass->getTextureCombineID() } ).first;
-					
-				pass->fillBuffer( *this, it->second.index );
+
+				if ( it->second.index * VkDeviceSize( m_stride ) > m_data.size() )
+				{
+					log::warn << "Material pass [" << pass->getOwner()->getName() << ", " << pass->getIndex() <<"] is out of buffer boundaries, ignoring it." << std::endl;
+				}
+				else
+				{
+					pass->fillBuffer( *this, it->second.index );
+				}
 
 				for ( auto & buffer : specifics )
 				{
@@ -164,7 +172,8 @@ namespace castor3d
 				pass->reset();
 			}
 
-			m_buffer.setCount( uint32_t( m_passes.size() ) );
+			auto passCount = std::min( m_maxCount, uint32_t( m_passes.size() ) );
+			m_buffer.setCount( passCount );
 			m_buffer.setSecondCount( uint32_t( m_passTypeIndices.size() ) );
 			m_buffer.upload( commandBuffer );
 
@@ -172,7 +181,7 @@ namespace castor3d
 			{
 				if ( auto & buf = buffer.second.second )
 				{
-					buf->setCount( uint32_t( m_passes.size() ) );
+					buf->setCount( passCount );
 					buf->upload( commandBuffer );
 				}
 			}
@@ -211,7 +220,20 @@ namespace castor3d
 	{
 		CU_Require( passID > 0 );
 		auto index = passID - 1;
-		return PassBuffer::PassDataPtr{ castor::makeArrayView( m_data.data() + m_stride * index, m_stride ) };
+
+		if ( index < m_maxCount )
+		{
+			return PassBuffer::PassDataPtr{ castor::makeArrayView( m_data.data() + ptrdiff_t( m_stride ) * index, m_stride ) };
+		}
+
+		CU_Failure( "Pass ID is out of buffer bounds." );
+		static castor::ByteArray dummy{ [this]()
+			{
+				castor::ByteArray result;
+				result.resize( m_stride );
+				return result;
+			}() };
+		return PassBuffer::PassDataPtr{ castor::makeArrayView( dummy.data(), m_stride ) };
 	}
 
 	uint32_t PassBuffer::getMaxPassTypeCount()const

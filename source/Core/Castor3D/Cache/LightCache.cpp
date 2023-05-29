@@ -62,16 +62,14 @@ namespace castor3d
 			m_lightBuffer = castor::makeUnique< LightBuffer >( m_engine
 				, device
 				, MaxLightsCount );
-			m_lightsIndexOffset = device.bufferPool->getBuffer< castor::Point2ui >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, MaxLightsCount
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
+			std::vector< Light * > pending;
+			std::swap( pending, m_pendingLights );
 
-			for ( auto light : m_pendingLights )
+			for ( auto light : pending )
 			{
 				doRegisterLight( *light );
 			}
 
-			m_pendingLights.clear();
 		}
 	}
 
@@ -90,7 +88,6 @@ namespace castor3d
 
 	void ObjectCacheT< Light, castor::String, LightCacheTraits >::update( CpuUpdater & updater )
 	{
-		m_dirty = false;
 		auto lock( castor::makeUniqueLock( *this ) );
 		auto & sceneObjs = updater.dirtyScenes[getScene()];
 		LightsRefArray dirty;
@@ -101,6 +98,7 @@ namespace castor3d
 
 		if ( !dirty.empty() )
 		{
+			m_dirty = true;
 			auto end = std::unique( dirty.begin(), dirty.end() );
 			dirty.erase( end, dirty.end() );
 
@@ -114,19 +112,6 @@ namespace castor3d
 		{
 			m_lightBuffer->update( updater );
 			m_dirty = !dirty.empty();
-
-			if ( m_dirty )
-			{
-				auto lightsData = m_lightsIndexOffset.getData();
-
-				for ( auto light : dirty )
-				{
-					lightsData[light->getBufferIndex()] = { uint32_t( light->getLightType() ), uint32_t( light->getBufferOffset() ) };
-				}
-
-				m_lightsIndexOffset.markDirty( VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
-			}
 		}
 	}
 
@@ -172,10 +157,20 @@ namespace castor3d
 		return m_lightBuffer->getSingleBinding( binding, offset, size );
 	}
 
+	uint32_t ObjectCacheT< Light, castor::String, LightCacheTraits >::getLightsBufferCount( LightType type )const noexcept
+	{
+		if ( m_lightBuffer )
+		{
+			return m_lightBuffer->getLightsBufferCount( type );
+		}
+
+		return 0u;
+	}
+
 	bool ObjectCacheT< Light, castor::String, LightCacheTraits >::doCheckUniqueDirectionalLight( LightType toAdd )
 	{
 		bool result = toAdd != LightType::eDirectional
-			|| getLightsCount( LightType::eDirectional ) == 0u;
+			|| getLightsBufferCount( LightType::eDirectional ) == 0u;
 
 		if ( !result )
 		{

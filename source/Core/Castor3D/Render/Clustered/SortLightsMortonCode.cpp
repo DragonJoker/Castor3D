@@ -324,7 +324,7 @@ namespace castor3d
 				bool doIsEnabled()const
 				{
 					return m_clusters.needsLightsUpdate()
-						&& m_lightCache.getLightsCount( m_lightData.lightType ) > 0;
+						&& m_lightCache.getLightsBufferCount( m_lightData.lightType ) > 0;
 				}
 
 				void doRecordInto( crg::RecordContext & context
@@ -332,7 +332,7 @@ namespace castor3d
 					, uint32_t index )
 				{
 					// Build bottom level of the BVH.
-					auto lightsCount = m_lightCache.getLightsCount( m_lightData.lightType );
+					auto lightsCount = m_lightCache.getLightsBufferCount( m_lightData.lightType );
 					auto numThreadGroups = uint32_t( std::ceil( float( lightsCount ) / float( NumThreadsPerThreadGroup ) ) );
 					DispatchData data{ lightsCount, 0u };
 					m_pipeline.pipeline.recordInto( context, commandBuffer, index );
@@ -747,14 +747,14 @@ namespace castor3d
 				bool doIsEnabled()const
 				{
 					return m_clusters.needsLightsUpdate()
-						&& m_lightCache.getLightsCount( m_lightData.lightType ) > 0;
+						&& m_lightCache.getLightsBufferCount( m_lightData.lightType ) > 0;
 				}
 
 				void doRecordInto( crg::RecordContext & context
 					, VkCommandBuffer commandBuffer
 					, uint32_t index )
 				{
-					auto totalValues = m_lightCache.getLightsCount( m_lightData.lightType );
+					auto totalValues = m_lightCache.getLightsBufferCount( m_lightData.lightType );
 					auto chunkSize = NumThreadsPerThreadGroup;
 
 					// The total number of complete chunks to sort.

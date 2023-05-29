@@ -384,8 +384,8 @@ namespace castor3d
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "BuildLightsBVH", createShader( bottomLevel ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
 					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
-						, &parent->m_clusters.needsLightsUpdate()
-						, crg::getDefaultV< IsEnabledCallback >()
+						, nullptr
+						, IsEnabledCallback( [parent]() { return parent->m_clusters.needsLightsUpdate(); } )
 						, GetPassIndexCallback( [parent]() { return parent->doGetPassIndex(); } )
 						, crg::getDefaultV< RecordCallback >()
 						, crg::getDefaultV< RecordCallback >()
@@ -428,8 +428,8 @@ namespace castor3d
 #if C3D_DebugSortLightsMortonCode
 				u32 result = {};
 
-				auto pointLightsCount = m_lightCache.getLightsCount( LightType::ePoint );
-				auto spoLightsCount = m_lightCache.getLightsCount( LightType::eSpot );
+				auto pointLightsCount = m_lightCache.getLightsBufferCount( LightType::ePoint );
+				auto spoLightsCount = m_lightCache.getLightsBufferCount( LightType::eSpot );
 				auto totalValues = std::max( pointLightsCount, spoLightsCount );
 				auto numChunks = getLightsMortonCodeChunkCount( totalValues );
 
@@ -455,8 +455,8 @@ namespace castor3d
 				, uint32_t index )
 			{
 				// Build bottom level of the BVH.
-				auto pointLightsCount = m_lightCache.getLightsCount( LightType::ePoint );
-				auto spoLightsCount = m_lightCache.getLightsCount( LightType::eSpot );
+				auto pointLightsCount = m_lightCache.getLightsBufferCount( LightType::ePoint );
+				auto spoLightsCount = m_lightCache.getLightsBufferCount( LightType::eSpot );
 				auto maxLeaves = std::max( pointLightsCount, spoLightsCount );
 				auto numThreadGroups = uint32_t( std::ceil( float( maxLeaves ) / float( NumThreads ) ) );
 				m_bottom.pipeline.recordInto( context, commandBuffer, index );

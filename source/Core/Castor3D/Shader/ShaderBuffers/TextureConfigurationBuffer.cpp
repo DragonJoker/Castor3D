@@ -109,14 +109,18 @@ namespace castor3d
 			std::swap( m_dirty, dirty );
 			auto end = std::unique( dirty.begin(), dirty.end() );
 
-			std::for_each( dirty.begin()
-				, end
-				, [this]( TextureUnit const * unit )
-				{
-					CU_Require( unit->getId() > 0 );
-					auto & config = unit->getConfiguration();
-					auto index = unit->getId() - 1u;
+			for ( auto unit : castor::makeArrayView( dirty.begin(), end ) )
+			{
+				CU_Require( unit->getId() > 0 );
+				auto & config = unit->getConfiguration();
+				auto index = unit->getId() - 1u;
 
+				if ( index * DataSize > m_data.size() )
+				{
+					log::warn << "TextureUnit [" << unit->getId() << "] is out of buffer boundaries, ignoring it." << std::endl;
+				}
+				else
+				{
 					auto & data = m_data[index];
 					data.translate = config.transform.translate;
 					data.rotateU = config.transform.rotate.cos();
@@ -139,9 +143,10 @@ namespace castor3d
 					{
 						data.components[i] = texcfgbuf::writeFlags( config.components[i] );
 					}
-				} );
+				}
+			}
 
-			m_buffer.setCount( uint32_t( m_configurations.size() ) );
+			m_buffer.setCount( uint32_t( std::min( m_data.size() * DataSize, m_configurations.size() ) ) );
 			m_buffer.upload( commandBuffer );
 		}
 	}

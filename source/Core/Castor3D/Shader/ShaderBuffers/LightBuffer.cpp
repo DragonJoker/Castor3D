@@ -1,11 +1,14 @@
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+
+#include <CastorUtils/Math/Math.hpp>
 
 CU_ImplementSmartPtr( castor3d, LightBuffer )
 
@@ -15,12 +18,10 @@ namespace castor3d
 
 	namespace lgtbuf
 	{
-		static LightBuffer::LightsData doBindData( uint8_t * buffer
-			, uint32_t count )
-		{
-			return castor::makeArrayView( reinterpret_cast< castor::Point4f * >( buffer )
-				, reinterpret_cast< castor::Point4f * >( buffer ) + count );
-		}
+		static VkDeviceSize MaxLightComponentsCount = castor::maxValueT< uint32_t
+			, DirectionalLight::LightDataComponents
+			, PointLight::LightDataComponents
+			, SpotLight::LightDataComponents >;
 	}
 
 	//*********************************************************************************************
@@ -28,11 +29,15 @@ namespace castor3d
 	LightBuffer::LightBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, device, count * 32u * sizeof( castor::Point4f ), cuT( "LightBuffer" ) }
+		: m_buffer{ engine
+			, device
+			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount * sizeof( castor::Point4f )
+			, cuT( "C3D_LightBuffer" ) }
 		, m_lightSizes{ DirectionalLight::LightDataComponents
 			, PointLight::LightDataComponents
 			, SpotLight::LightDataComponents }
-		, m_data{ lgtbuf::doBindData( m_buffer.getPtr(), count * 32u ) }
+		, m_data{ castor::makeArrayView( reinterpret_cast< castor::Point4f * >( m_buffer.getPtr() )
+			, VkDeviceSize( count ) * lgtbuf::MaxLightComponentsCount ) }
 	{
 	}
 
@@ -40,19 +45,20 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto index = size_t( light.getLightType() );
-		auto it = std::find( m_typeSortedLights[index].begin()
-			, m_typeSortedLights[index].end()
+		auto & lights = m_typeSortedLights[index];
+		auto it = std::find( lights.begin()
+			, lights.end()
 			, &light );
 
-		if ( it == m_typeSortedLights[index].end() )
+		if ( it == lights.end() )
 		{
-			m_typeSortedLights[index].push_back( &light );
+			lights.push_back( &light );
 			m_dirty.emplace_back( &light );
 			m_connections.emplace( &light
 				, light.onGPUChanged.connect( [this]( Light & plight )
-				{
-					m_dirty.emplace_back( &plight );
-				} ) );
+					{
+						m_dirty.emplace_back( &plight );
+					} ) );
 
 			// Mark next lights as dirty (due to sorted container)
 			doMarkNextDirty( LightType( index + 1u ), 0u );
@@ -63,14 +69,15 @@ namespace castor3d
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		auto index = size_t( light.getLightType() );
-		auto it = std::find( m_typeSortedLights[index].begin()
-			, m_typeSortedLights[index].end()
+		auto & lights = m_typeSortedLights[index];
+		auto it = std::find( lights.begin()
+			, lights.end()
 			, &light );
 
-		if ( it != m_typeSortedLights[index].end() )
+		if ( it != lights.end() )
 		{
-			auto dist = uint32_t( std::distance( m_typeSortedLights[index].begin(), it ) );
-			m_typeSortedLights[index].erase( it );
+			auto dist = uint32_t( std::distance( lights.begin(), it ) );
+			lights.erase( it );
 			m_connections.erase( &light );
 
 			// Mark next lights as dirty (due to sorted container)
@@ -90,15 +97,16 @@ namespace castor3d
 			for ( auto light : castor::makeArrayView( dirty.begin(), std::unique( dirty.begin(), dirty.end() ) ) )
 			{
 				auto [index, offset] = doGetOffsetIndex( *light );
-				light->fillBuffer( index, offset, &m_data[offset] );
+
+				if ( index <= MaxLightsCount )
+				{
+					light->fillBuffer( index, offset, &m_data[offset] );
+				}
 			}
 
-			auto dirEnd = uint32_t( m_typeSortedLights[0].size() * DirectionalLight::LightDataComponents );
-			auto pntEnd = uint32_t( dirEnd + m_typeSortedLights[1].size() * PointLight::LightDataComponents );
-			auto sptEnd = uint32_t( pntEnd + m_typeSortedLights[2].size() * SpotLight::LightDataComponents );
-			m_buffer.setFirstCount( dirEnd );
-			m_buffer.setSecondCount( pntEnd );
-			m_buffer.setThirdCount( sptEnd );
+			m_buffer.setFirstCount( std::min( uint32_t( m_data.size() ), doGetBufferEnd( LightType::eDirectional ) ) );
+			m_buffer.setSecondCount( std::min( uint32_t( m_data.size() ), doGetBufferEnd( LightType::ePoint ) ) );
+			m_buffer.setThirdCount( std::min( uint32_t( m_data.size() ), doGetBufferEnd( LightType::eSpot ) ) );
 			m_wasDirty = true;
 		}
 	}
@@ -140,17 +148,33 @@ namespace castor3d
 		return m_buffer.getSingleBinding( binding, offset, size );
 	}
 
-	std::pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( Light const & light )const
+	uint32_t LightBuffer::getLightsBufferCount( LightType lightType )const noexcept
 	{
 		uint32_t result{};
-		uint32_t type = uint32_t( light.getLightType() );
-		uint32_t index{};
+		auto type = uint32_t( lightType );
 
 		for ( uint32_t i = 0u; i < type; ++i )
 		{
-			auto count = m_typeSortedLights[i].size();
-			index += uint32_t( count );
-			result += uint32_t( count * m_lightSizes[i] );
+			result += getLightsBufferCount( LightType( i ) );
+		}
+
+		auto count = uint32_t( m_typeSortedLights[type].size() );
+		return ( ( result + count <= MaxLightsCount )
+			? count
+			: ( MaxLightsCount - result ) );
+	}
+
+	std::pair< uint32_t, uint32_t > LightBuffer::doGetOffsetIndex( Light const & light )const
+	{
+		uint32_t index{};
+		uint32_t result{};
+		uint32_t type = uint32_t( light.getLightType() );
+
+		for ( uint32_t i = 0u; i < type; ++i )
+		{
+			auto count = getLightsBufferCount( LightType( i ) );
+			index += count;
+			result += count * m_lightSizes[i];
 		}
 
 		auto typeSortedLights = m_typeSortedLights[type];
@@ -180,5 +204,21 @@ namespace castor3d
 				m_dirty.emplace_back( it );
 			}
 		}
+	}
+
+	uint32_t LightBuffer::doGetBufferEnd( LightType lightType )const noexcept
+	{
+		uint32_t bufferEnd{};
+		auto type = uint32_t( lightType );
+
+		for ( uint32_t i = 0u; i < type; ++i )
+		{
+			auto count = getLightsBufferCount( LightType( i ) );
+			bufferEnd += count * m_lightSizes[i];
+		}
+
+		auto count = getLightsBufferCount( lightType );
+		bufferEnd += count * m_lightSizes[type];
+		return bufferEnd;
 	}
 }

@@ -43,7 +43,9 @@ namespace castor3d
 		 */
 		C3D_API crg::FramePass const & createFramePasses( crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
-			, CameraUbo const & cameraUbo );
+			, RenderTechnique & technique
+			, CameraUbo const & cameraUbo
+			, RenderNodesPass *& nodesPass );
 		/**
 		 *\~english
 		 *\brief		Compute the number of nodes for given BVH level.
@@ -124,20 +126,17 @@ namespace castor3d
 
 		auto & getLightsAABBBuffer()const noexcept
 		{
-			CU_Require( m_lightsAABBBuffer );
-			return *m_lightsAABBBuffer;
+			return m_lightsAABBBuffer->getBuffer();
 		}
 
 		auto & getPointLightBVHBuffer()const noexcept
 		{
-			CU_Require( m_pointBVHBuffer );
-			return *m_pointBVHBuffer;
+			return m_pointBVHBuffer->getBuffer();
 		}
 
 		auto & getSpotLightBVHBuffer()const noexcept
 		{
-			CU_Require( m_spotBVHBuffer );
-			return *m_spotBVHBuffer;
+			return m_spotBVHBuffer->getBuffer();
 		}
 
 		void initPointLightMortonIndicesIO()noexcept
@@ -162,22 +161,22 @@ namespace castor3d
 
 		ashes::BufferBase & getPointLightIndicesBuffer( uint32_t index )const noexcept
 		{
-			return *m_pointIndicesBuffers[index];
+			return m_pointIndicesBuffers[index]->getBuffer();
 		}
 
 		ashes::BufferBase & getSpotLightIndicesBuffer( uint32_t index )const noexcept
 		{
-			return *m_spotIndicesBuffers[index];
+			return m_spotIndicesBuffers[index]->getBuffer();
 		}
 
 		ashes::BufferBase & getPointLightMortonCodesBuffer( uint32_t index )const noexcept
 		{
-			return *m_pointMortonCodesBuffers[index];
+			return m_pointMortonCodesBuffers[index]->getBuffer();
 		}
 
 		ashes::BufferBase & getSpotLightMortonCodesBuffer( uint32_t index )const noexcept
 		{
-			return *m_spotMortonCodesBuffers[index];
+			return m_spotMortonCodesBuffers[index]->getBuffer();
 		}
 
 		ashes::BufferBase & getInputPointLightIndicesBuffer()const noexcept
@@ -222,7 +221,22 @@ namespace castor3d
 
 		ashes::BufferBase & getMergePathPartitionsBuffer()const noexcept
 		{
-			return *m_mergePathPartitionsBuffer;
+			return m_mergePathPartitionsBuffer->getBuffer();
+		}
+
+		ashes::BufferBase & getClusterFlagsBuffer()const noexcept
+		{
+			return *m_clusterFlags;
+		}
+
+		ashes::BufferBase & getUniqueClustersBuffer()const noexcept
+		{
+			return *m_uniqueClusters;
+		}
+
+		ashes::BufferBase & getClustersIndirectBuffer()const noexcept
+		{
+			return m_clustersIndirect->getBuffer();
 		}
 
 		auto & getCamera()const noexcept
@@ -237,7 +251,6 @@ namespace castor3d
 		{
 			castor::Point4f min;
 			castor::Point4f max;
-			castor::Point4f sphere;
 		};
 
 	private:
@@ -257,19 +270,26 @@ namespace castor3d
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_cameraView;
 		castor::GroupChangeTracked< float > m_nearK;
 		ClustersUbo m_clustersUbo;
+		ashes::BufferPtr< VkDispatchIndirectCommand > m_clustersIndirect;
+
+		// Fixed size buffers, related to lights
+		ashes::BufferPtr< AABB > m_lightsAABBBuffer;
+		std::array< ashes::BufferPtr< u32 >, 2u > m_pointMortonCodesBuffers;
+		std::array< ashes::BufferPtr< u32 >, 2u > m_spotMortonCodesBuffers;
+		std::array< ashes::BufferPtr< u32 >, 2u > m_pointIndicesBuffers;
+		std::array< ashes::BufferPtr< u32 >, 2u > m_spotIndicesBuffers;
+		ashes::BufferPtr< AABB > m_pointBVHBuffer;
+		ashes::BufferPtr< AABB > m_spotBVHBuffer;
+		ashes::BufferPtr< s32 > m_mergePathPartitionsBuffer;
+
+		// Variable size buffers, related to frustum dimensions
 		ashes::BufferBasePtr m_aabbBuffer;
 		ashes::BufferBasePtr m_pointLightClusterGridBuffer;
 		ashes::BufferBasePtr m_spotLightClusterGridBuffer;
 		ashes::BufferBasePtr m_pointLightClusterIndexBuffer;
 		ashes::BufferBasePtr m_spotLightClusterIndexBuffer;
-		ashes::BufferBasePtr m_lightsAABBBuffer;
-		ashes::BufferBasePtr m_mergePathPartitionsBuffer;
-		std::array< ashes::BufferBasePtr, 2u > m_pointMortonCodesBuffers;
-		std::array< ashes::BufferBasePtr, 2u > m_spotMortonCodesBuffers;
-		std::array< ashes::BufferBasePtr, 2u > m_pointIndicesBuffers;
-		std::array< ashes::BufferBasePtr, 2u > m_spotIndicesBuffers;
-		ashes::BufferBasePtr m_pointBVHBuffer;
-		ashes::BufferBasePtr m_spotBVHBuffer;
+		ashes::BufferBasePtr m_clusterFlags;
+		ashes::BufferBasePtr m_uniqueClusters;
 		std::vector< ashes::BufferBasePtr > m_toDelete;
 	};
 }

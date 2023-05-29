@@ -141,15 +141,20 @@ namespace castor3d
 		C3D_API ashes::WriteDescriptorSet getBinding( uint32_t binding
 			, VkDeviceSize offset
 			, VkDeviceSize size )const;
+		/**
+		 *\~english
+		 *\param[in]	type	The light type.
+		 *\return		The number of light sources of the given type, in the buffer.
+		 *\~french
+		 *\brief		Crée le descriptor write pour le buffer de sources lumineuses.
+		 *\param[in]	type	Le type de lumière.
+		 *\return		Le nombre de sources lumineuses du type donné, dans le buffer.
+		 */
+		C3D_API uint32_t getLightsBufferCount( LightType type )const noexcept;
 
 		uint32_t getLightsCount( LightType type )const
 		{
 			return uint32_t( getLights( type ).size() );
-		}
-
-		GpuBufferOffsetT< castor::Point2ui > getLightsIndexOffset()const noexcept
-		{
-			return m_lightsIndexOffset;
 		}
 
 		bool isDirty()const noexcept
@@ -171,7 +176,6 @@ namespace castor3d
 	private:
 		LightsRefArray m_dirtyLights;
 		LightBufferUPtr m_lightBuffer;
-		GpuBufferOffsetT< castor::Point2ui > m_lightsIndexOffset;
 		std::vector< Light * > m_pendingLights;
 		bool m_dirty{ true };
 	};
