@@ -41,7 +41,7 @@ namespace castor3d
 	TextureConfigurationBuffer::TextureConfigurationBuffer( Engine & engine
 		, RenderDevice const & device
 		, uint32_t count )
-		: m_buffer{ engine, device, count * DataSize, cuT( "TextureConfigurationBuffer" ) }
+		: m_buffer{ engine, device, count * VkDeviceSize( DataSize ), cuT( "TextureConfigurationBuffer" ) }
 		, m_data{ texcfgbuf::doBindData( m_buffer.getPtr(), m_buffer.getSize(), count ) }
 	{
 	}
@@ -115,7 +115,7 @@ namespace castor3d
 				auto & config = unit->getConfiguration();
 				auto index = unit->getId() - 1u;
 
-				if ( index * DataSize > m_data.size() )
+				if ( index > m_data.size() )
 				{
 					log::warn << "TextureUnit [" << unit->getId() << "] is out of buffer boundaries, ignoring it." << std::endl;
 				}

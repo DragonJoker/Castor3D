@@ -162,7 +162,8 @@ namespace castor3d
 
 	void ShadowMapPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );

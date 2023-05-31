@@ -31,6 +31,8 @@ namespace castor3d
 	*	Render nodes.
 	*/
 	//@{
+	// Base count for objects buffers pool
+	static uint32_t constexpr BaseObjectPoolBufferCount = 1'048'576u;
 	// Maximum pipelines and buffer count.
 	static uint64_t constexpr MaxPipelines = 32'768ull;
 	// Maximum nodes per Pipeline Nodes buffer.
@@ -119,7 +121,7 @@ namespace castor3d
 	*/
 	//@{
 	// Light Buffer.
-	static uint32_t constexpr MaxLightsCount = 2'048u;
+	static uint32_t constexpr MaxLightsCount = 32'768u;
 	// Pass Buffer.
 	static uint32_t constexpr MaxMaterialsCount = 2'048u;
 	static uint32_t constexpr MaxSssProfilesCount = 128u;
@@ -142,11 +144,11 @@ namespace castor3d
 	//@}
 	/**
 	*\name
-	*	Other.
+	*	Overlays.
 	*/
 	//@{
-	// The number of vec4s in the random buffer.
-	static uint32_t constexpr RandomDataCount = 1'024u;
+	// Maximum overlay pipelines and buffer count.
+	static uint32_t constexpr MaxOverlayPipelines = 16'384ull;
 	// Max overlay count per buffer
 	static uint32_t constexpr MaxOverlaysPerBuffer = 65'536u;
 	// Max counts for text overlays
@@ -157,8 +159,14 @@ namespace castor3d
 	static uint32_t constexpr MaxLinesPerBuffer = 16'384u;
 	// Max counts for text buffers
 	static uint32_t constexpr MaxTextsContsPerOverlay = MaxCharsPerOverlay;
-	// Base count for objects buffers pool
-	static uint32_t constexpr BaseObjectPoolBufferCount = 1'048'576u;
+	//@}
+	/**
+	*\name
+	*	Other.
+	*/
+	//@{
+	// The number of vec4s in the random buffer.
+	static uint32_t constexpr RandomDataCount = 1'024u;
 	// Max bones affecting a vertex
 	static uint32_t constexpr MaxBonesPerVertex = 8u;
 	// Max bones in a skeleton
@@ -187,7 +195,7 @@ namespace castor3d
 	*	Clustered rendering.
 	*/
 	//@{
-	static uint32_t constexpr MaxLightsPerCluster = 512u;
+	static uint32_t constexpr MaxLightsPerCluster = 2'048u;
 	//@}
 }
 

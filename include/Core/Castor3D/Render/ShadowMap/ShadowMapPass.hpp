@@ -105,7 +105,8 @@ namespace castor3d
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps )override;
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer )override;
 
 		C3D_API virtual ShaderFlags doGetShaderFlags()const = 0;
 

@@ -33,18 +33,13 @@ namespace castor3d
 	public:
 		using Cascade = DirectionalLightCascade;
 
-		struct LightData
-			: LightCategory::LightData
-		{
-			using CascasdeFloatArray = std::array< Float1, ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >;
-			Float3 direction;
-			Float1 cascadeCount;
-			CascasdeFloatArray splitDepths;
-			CascasdeFloatArray splitScales;
-			std::array< Float4x4, MaxDirectionalCascadesCount > transforms;
-		};
-		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), 4u ) );
-		static constexpr uint32_t LightDataComponents = LightDataSize / ( 4u * sizeof( float ) );
+		using ShadowData = DirectionalShadowData;
+		static constexpr uint32_t ShadowDataSize = uint32_t( ashes::getAlignedSize( sizeof( ShadowData ), LightMbrAlign ) );
+		static constexpr uint32_t ShadowDataComponents = ShadowDataSize / LightMbrAlign;
+
+		using LightData = LightCategory::LightData;
+		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
+		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
 
 	private:
 		friend class Scene;
@@ -88,6 +83,15 @@ namespace castor3d
 		 */
 		C3D_API bool updateShadow( Camera const & sceneCamera );
 		/**
+		 *\~english
+		 *\brief		Puts the shadow data into the given buffer.
+		 *\param[out]	data	Receives the light's shadow data.
+		 *\~french
+		 *\brief		Met les données d'ombre dans le buffer donné.
+		 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
+		 */
+		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -128,7 +132,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillBuffer( castor::Point4f * data )const override;
+		void doFillLightBuffer( castor::Point4f * data )const override;
 
 	private:
 		castor::Point3f m_direction;

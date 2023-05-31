@@ -23,7 +23,7 @@ namespace castor3d
 			, rsmIntensity{ getMember< sdw::Float >( "rsmIntensity" ) }
 			, rsmRMax{ getMember< sdw::Float >( "rsmRMax" ) }
 			, rsmSampleCount{ getMember< sdw::UInt >( "rsmSampleCount" ) }
-			, rsmIndex{ getMember< sdw::UInt >( "rsmIndex" ) }
+			, rsmIndex{ getMember< sdw::Int >( "rsmIndex" ) }
 		{
 		}
 
@@ -37,7 +37,7 @@ namespace castor3d
 				result->declMember( "rsmIntensity", ast::type::Kind::eFloat );
 				result->declMember( "rsmRMax", ast::type::Kind::eFloat );
 				result->declMember( "rsmSampleCount", ast::type::Kind::eUInt );
-				result->declMember( "rsmIndex", ast::type::Kind::eUInt );
+				result->declMember( "rsmIndex", ast::type::Kind::eInt );
 			}
 
 			return result;

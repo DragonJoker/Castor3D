@@ -937,6 +937,16 @@ namespace castor3d
 		return {};
 	}
 
+	ShadowBuffer * RenderWindow::getShadowBuffer()const
+	{
+		if ( auto target = getRenderTarget() )
+		{
+			return target->getShadowBuffer();
+		}
+
+		return nullptr;
+	}
+
 	void RenderWindow::enableLoading()
 	{
 		m_loading = getEngine()->isThreaded();

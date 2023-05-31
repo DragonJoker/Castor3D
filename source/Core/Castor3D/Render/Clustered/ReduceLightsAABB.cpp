@@ -171,8 +171,8 @@ namespace castor3d
 							auto vsPosition = writer.declLocale( "vsPosition"
 								, c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ) );
 
-							aabbMin = min( aabbMin, vsPosition - point.base().farPlane() );
-							aabbMax = max( aabbMax, vsPosition + point.base().farPlane() );
+							aabbMin = min( aabbMin, vsPosition - point.radius() );
+							aabbMax = max( aabbMax, vsPosition + point.radius() );
 						}
 						ROF;
 
@@ -186,8 +186,8 @@ namespace castor3d
 							auto vsPosition = writer.declLocale( "vsPosition"
 								, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ) );
 
-							aabbMin = min( aabbMin, vsPosition - spot.base().farPlane() );
-							aabbMax = max( aabbMax, vsPosition + spot.base().farPlane() );
+							aabbMin = min( aabbMin, vsPosition - spot.radius() );
+							aabbMax = max( aabbMax, vsPosition + spot.radius() );
 						}
 						ROF;
 

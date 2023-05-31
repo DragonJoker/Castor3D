@@ -95,7 +95,8 @@ namespace castor3d
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps )override;
+			, ShadowMapLightTypeArray const & shadowMaps
+			, castor3d::ShadowBuffer const * shadowBuffer )override;
 		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;

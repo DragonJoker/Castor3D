@@ -33,7 +33,7 @@ namespace castor3d
 			sdw::Float rsmIntensity;
 			sdw::Float rsmRMax;
 			sdw::UInt rsmSampleCount;
-			sdw::UInt rsmIndex;
+			sdw::Int rsmIndex;
 
 		private:
 			using sdw::StructInstance::getMember;

@@ -568,7 +568,8 @@ namespace ocean_fft
 
 	void OceanRenderPass::doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps
+		, castor3d::ShadowBuffer const * shadowBuffer )
 	{
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( rdpass::OceanFFTIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo->getDescriptorWrite( rdpass::OceanFFTIdx::eOceanUbo ) );
@@ -585,7 +586,7 @@ namespace ocean_fft
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
+		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );

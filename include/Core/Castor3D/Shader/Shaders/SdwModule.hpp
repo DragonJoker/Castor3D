@@ -82,6 +82,7 @@ namespace castor3d::shader
 	struct Cone;
 	struct DerivTex;
 	struct DirectionalLight;
+	struct DirectionalShadowData;
 	struct Intersection;
 	struct Light;
 	struct LightData;
@@ -93,9 +94,11 @@ namespace castor3d::shader
 	struct OutputComponents;
 	struct Plane;
 	struct PointLight;
+	struct PointShadowData;
 	struct Ray;
 	struct ShadowData;
 	struct SpotLight;
+	struct SpotShadowData;
 	struct SssProfile;
 	struct TextureAnimData;
 	struct TextureConfigData;
@@ -142,6 +145,7 @@ namespace castor3d::shader
 	class PassShaders;
 	class ReflectionModel;
 	class Shadow;
+	class ShadowsBuffer;
 	class SssProfiles;
 	class SssTransmittance;
 	class TextureAnimations;
@@ -161,6 +165,7 @@ namespace castor3d::shader
 	CU_DeclareSmartPtr( castor3d::shader, LightingModel, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, Material, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, Shadow, C3D_API );
+	CU_DeclareSmartPtr( castor3d::shader, ShadowsBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d::shader, SssTransmittance, C3D_API );
 
 	using ReflectionModelPtr = std::unique_ptr< ReflectionModel >;
@@ -196,6 +201,7 @@ namespace castor3d::shader
 	Writer_Parameter( Cone );
 	Writer_Parameter( DerivTex );
 	Writer_Parameter( DirectionalLight );
+	Writer_Parameter( DirectionalShadowData );
 	Writer_Parameter( Intersection );
 	Writer_Parameter( LayeredLpvGridData );
 	Writer_Parameter( Light );
@@ -205,9 +211,11 @@ namespace castor3d::shader
 	Writer_Parameter( Material );
 	Writer_Parameter( Plane );
 	Writer_Parameter( PointLight );
+	Writer_Parameter( PointShadowData );
 	Writer_Parameter( Ray );
 	Writer_Parameter( ShadowData );
 	Writer_Parameter( SpotLight );
+	Writer_Parameter( SpotShadowData );
 	Writer_Parameter( Surface );
 	Writer_Parameter( TextureAnimData );
 	Writer_Parameter( TextureConfigData );
@@ -258,6 +266,23 @@ namespace castor3d::shader
 		auto uv()const { return getMember< "uv" >(); }
 		auto dPdx()const { return getMember< "dPdx" >(); }
 		auto dPdy()const { return getMember< "dPdy" >(); }
+	};
+
+	struct BufferData
+		: public sdw::StructInstanceHelperT < "C3D_BufferData"
+		, sdw::type::MemoryLayout::eStd430
+		, sdw::Vec4Field< "data" > >
+	{
+		BufferData( sdw::ShaderWriter & writer
+			, ast::expr::ExprPtr expr
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
+
+		auto data()const {
+			return getMember< "data" >();
+		}
 	};
 
 	namespace details

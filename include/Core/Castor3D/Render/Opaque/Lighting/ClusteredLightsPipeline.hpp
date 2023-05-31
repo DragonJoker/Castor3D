@@ -28,6 +28,7 @@ namespace castor3d
 			, LightPassResult const & lpResult
 			, LightRenderPassArray const & renderPasses
 			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const & shadowBuffer
 			, crg::ImageViewIdArray const & targetColourResult );
 
 		void clear();
@@ -46,7 +47,8 @@ namespace castor3d
 	private:
 		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout();
 		ashes::DescriptorSetPtr doCreateDescriptorSet( crg::RunnableGraph & graph
-			, ShadowMapLightTypeArray const & shadowMaps );
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const & shadowBuffer );
 		GpuBufferOffsetT< float > doCreateVertexBuffer();
 
 	private:

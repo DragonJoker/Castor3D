@@ -107,7 +107,8 @@ namespace castor3d
 
 	void DepthPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 	}
 

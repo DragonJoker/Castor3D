@@ -519,6 +519,7 @@ namespace castor3d
 					if ( !techniqueQueues.queues.empty() )
 					{
 						techniqueQueues.shadowMaps = target.getShadowMaps();
+						techniqueQueues.shadowBuffer = target.getShadowBuffer();
 						updater.techniquesQueues.push_back( techniqueQueues );
 					}
 				}
@@ -533,6 +534,7 @@ namespace castor3d
 			if ( !techniqueQueues.queues.empty() )
 			{
 				techniqueQueues.shadowMaps = window.second->getShadowMaps();
+				techniqueQueues.shadowBuffer = window.second->getShadowBuffer();
 				updater.techniquesQueues.push_back( techniqueQueues );
 			}
 		}

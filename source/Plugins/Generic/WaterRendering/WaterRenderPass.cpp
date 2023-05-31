@@ -439,7 +439,8 @@ namespace water
 
 	void WaterRenderPass::doFillAdditionalDescriptor( castor3d::PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps
+		, castor3d::ShadowBuffer const * shadowBuffer )
 	{
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( WaterIdx::eLightBuffer ) );
 		descriptorWrites.push_back( m_ubo.getDescriptorWrite( WaterIdx::eWaterUbo ) );
@@ -454,7 +455,7 @@ namespace water
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
+		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );

@@ -44,8 +44,12 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
+#include "Castor3D/Scene/Light/DirectionalLight.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleSystem.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -108,6 +112,7 @@ namespace castor3d
 
 		static void doPrepareShadowMap( LightCache const & cache
 			, LightType type
+			, ShadowBuffer & shadowBuffer
 			, ShadowMap & shadowMap
 			, ShadowMapLightArray & activeShadowMaps
 			, LightPropagationVolumesLightType const & lightPropagationVolumes
@@ -121,7 +126,8 @@ namespace castor3d
 
 			if ( count > 0 )
 			{
-				uint32_t index = 0u;
+				int32_t index = 0;
+				uint32_t offset = 0u;
 				auto lightIt = lights.begin();
 				activeShadowMaps[size_t( type )].push_back( { std::ref( shadowMap ), LightIdArray{} } );
 				auto & active = activeShadowMaps[size_t( type )].back();
@@ -130,10 +136,11 @@ namespace castor3d
 				{
 					auto & light = *lightIt->second;
 					light.setShadowMap( &shadowMap, index );
-					active.ids.push_back( { &light, index } );
+					active.ids.push_back( { &light, uint32_t( index ) } );
 					updater.light = &light;
-					updater.index = index;
+					updater.index = uint32_t( index );
 					shadowMap.update( updater );
+					light.fillShadowBuffer( shadowBuffer.getData() );
 
 					switch ( updater.light->getGlobalIlluminationType() )
 					{
@@ -181,7 +188,10 @@ namespace castor3d
 
 					++index;
 					++lightIt;
+					offset += light.getShadowComponentCount();
 				}
+
+				shadowBuffer.markDirty();
 			}
 		}
 
@@ -342,6 +352,9 @@ namespace castor3d
 		, m_vctConfigUbo{ m_device }
 		, m_graph{ m_renderTarget.getGraph().createPassGroup( "Technique" ) }
 #if !C3D_DebugDisableShadowMaps
+		, m_shadowBuffer{ castor::makeUnique< ShadowBuffer >( *getOwner()
+			, device
+			, 1u ) }
 		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getResources()
 			, m_device
 			, *m_renderTarget.getScene()
@@ -896,6 +909,7 @@ namespace castor3d
 			auto & cache = scene.getLightCache();
 			rendtech::doPrepareShadowMap( cache
 				, LightType::eDirectional
+				, *m_shadowBuffer
 				, *m_directionalShadowMap
 				, m_activeShadowMaps
 				, m_lightPropagationVolumes
@@ -905,6 +919,7 @@ namespace castor3d
 				, updater );
 			rendtech::doPrepareShadowMap( cache
 				, LightType::ePoint
+				, *m_shadowBuffer
 				, *m_pointShadowMap
 				, m_activeShadowMaps
 				, m_lightPropagationVolumes
@@ -914,6 +929,7 @@ namespace castor3d
 				, updater );
 			rendtech::doPrepareShadowMap( cache
 				, LightType::eSpot
+				, *m_shadowBuffer
 				, *m_spotShadowMap
 				, m_activeShadowMaps
 				, m_lightPropagationVolumes

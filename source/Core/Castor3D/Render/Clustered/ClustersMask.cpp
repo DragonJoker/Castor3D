@@ -101,7 +101,8 @@ namespace castor3d
 
 			void doFillAdditionalDescriptor( PipelineFlags const & flags
 				, ashes::WriteDescriptorSetArray & descriptorWrites
-				, ShadowMapLightTypeArray const & shadowMaps )override
+				, ShadowMapLightTypeArray const & shadowMaps
+				, ShadowBuffer const * shadowBuffer )override
 			{
 				auto index = uint32_t( GlobalBuffersIdx::eCount );
 				auto & frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();

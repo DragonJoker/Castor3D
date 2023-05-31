@@ -803,6 +803,16 @@ namespace castor3d
 		return {};
 	}
 
+	ShadowBuffer * RenderTarget::getShadowBuffer()const
+	{
+		if ( m_renderTechnique )
+		{
+			return &m_renderTechnique->getShadowBuffer();
+		}
+
+		return nullptr;
+	}
+
 	TechniquePassVector RenderTarget::getCustomRenderPasses()const
 	{
 		if ( m_renderTechnique )

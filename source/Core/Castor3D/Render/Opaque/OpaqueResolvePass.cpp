@@ -375,7 +375,8 @@ namespace castor3d
 						output.registerOutput( "Occlusion", occlusion );
 						output.registerOutput( "Emissive", emissive );
 
-						outColour = vec4( lightScattering + lightingModel->combine( components
+						outColour = vec4( lightScattering + lightingModel->combine( output
+								, components
 								, incident
 								, lightDiffuse
 								, indirectDiffuse

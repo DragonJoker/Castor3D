@@ -47,7 +47,9 @@ namespace atmosphere_scattering
 		sdw::Vec3 doComputeRadiance( c3d::Light const & light
 			, sdw::Vec3 const & lightDirection )const override;
 		void doComputeScatteringTerm( sdw::Vec3 const & radiance
-			, c3d::Light const & light
+			, c3d::ShadowData const & shadows
+			, sdw::Int const shadowMapIndex
+			, sdw::Vec2 const & lightIntensity
 			, c3d::BlendComponents const & components
 			, c3d::LightSurface const & lightSurface
 			, sdw::Vec3 & output )override;
@@ -80,7 +82,9 @@ namespace atmosphere_scattering
 		sdw::Vec3 doComputeRadiance( c3d::Light const & light
 			, sdw::Vec3 const & lightDirection )const override;
 		void doComputeScatteringTerm( sdw::Vec3 const & radiance
-			, c3d::Light const & light
+			, c3d::ShadowData const & shadows
+			, sdw::Int const shadowMapIndex
+			, sdw::Vec2 const & lightIntensity
 			, c3d::BlendComponents const & components
 			, c3d::LightSurface const & lightSurface
 			, sdw::Vec3 & output )override;

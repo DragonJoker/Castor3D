@@ -229,13 +229,14 @@ namespace castor3d
 
 	void VoxelizePass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
 		bindBuffer( m_voxels.getBuffer(), descriptorWrites, index );
-		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
+		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 	}
 

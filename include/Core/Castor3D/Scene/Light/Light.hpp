@@ -68,9 +68,22 @@ namespace castor3d
 		 *\param[in]	offset	L'offset des données de la source lumineuse dans le buffer.
 		 *\param[out]	data	Reçoit les informations.
 		 */
-		C3D_API void fillBuffer( uint32_t index
+		C3D_API void fillLightBuffer( uint32_t index
 			, VkDeviceSize offset
 			, castor::Point4f * data );
+		/**
+		 *\~english
+		 *\brief		Records the light data into given buffer.
+		 *\param[in]	index	The light index in the buffer.
+		 *\param[in]	offset	The light data offset in the buffer.
+		 *\param[out]	data	Receives the informations.
+		 *\~french
+		 *\brief		Enregistre les données de la source lumineuse dans le tampon donné.
+		 *\param[in]	index	L'index de la source lumineuse dans le buffer.
+		 *\param[in]	offset	L'offset des données de la source lumineuse dans le buffer.
+		 *\param[out]	data	Reçoit les informations.
+		 */
+		C3D_API void fillShadowBuffer( AllShadowData & data );
 		/**
 		*\~english
 		*name
@@ -89,9 +102,14 @@ namespace castor3d
 			return m_category->getLightType();
 		}
 
-		uint32_t getComponentCount()const
+		uint32_t getLightComponentCount()const
 		{
-			return m_category->getComponentCount();
+			return m_category->getLightComponentCount();
+		}
+
+		uint32_t getShadowComponentCount()const
+		{
+			return m_category->getShadowComponentCount();
 		}
 
 		bool isEnabled()const
@@ -154,7 +172,7 @@ namespace castor3d
 			return m_shadowMap;
 		}
 
-		uint32_t getShadowMapIndex()const
+		int32_t getShadowMapIndex()const
 		{
 			return m_shadowMapIndex;
 		}
@@ -325,7 +343,7 @@ namespace castor3d
 			markDirty();
 		}
 
-		void setShadowMapIndex( uint32_t index )
+		void setShadowMapIndex( int32_t index )
 		{
 			if ( m_shadowMapIndex != index )
 			{
@@ -334,7 +352,8 @@ namespace castor3d
 			}
 		}
 
-		void setShadowMap( ShadowMapRPtr value, uint32_t index = 0u )
+		void setShadowMap( ShadowMapRPtr value
+			, int32_t index = -1 )
 		{
 			if ( m_shadowMap != value
 				|| m_shadowMapIndex != index )
@@ -418,7 +437,7 @@ namespace castor3d
 		ShadowConfig m_shadows;
 		LightCategoryUPtr m_category;
 		ShadowMapRPtr m_shadowMap{};
-		uint32_t m_shadowMapIndex{};
+		int32_t m_shadowMapIndex{ -1 };
 		std::atomic< GlobalIlluminationType > m_currentGlobalIllumination{};
 		uint32_t m_bufferIndex{ InvalidIndex };
 		VkDeviceSize m_bufferOffset{};

@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/Multithreading/SpinMutex.hpp>
@@ -61,7 +62,8 @@ namespace castor3d
 		 *\brief			Met à jour les noeuds de rendu.
 		 *\param[in,out]	shadowMaps	Reçoit les shadow maps utilisées par la passe de rendu.
 		 */
-		C3D_API void update( ShadowMapLightTypeArray & shadowMaps );
+		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer );
 		/**
 		 *\~english
 		 *\brief			Updates the render nodes.
@@ -75,6 +77,7 @@ namespace castor3d
 		 *\param[in]		scissor		Le scissor restreignant par la passe de rendu.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer
 			, VkViewport const & viewport
 			, VkRect2D const & scissor );
 		/**
@@ -88,6 +91,7 @@ namespace castor3d
 		 *\param[in]		scissor		Le scissor restreignant par la passe de rendu.
 		 */
 		C3D_API void update( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer
 			, VkRect2D const & scissor );
 		/**
 		 *\~english

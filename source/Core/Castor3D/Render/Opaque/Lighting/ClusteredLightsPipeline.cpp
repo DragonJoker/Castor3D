@@ -43,6 +43,7 @@ namespace castor3d
 		, LightPassResult const & lpResult
 		, LightRenderPassArray const & renderPasses
 		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const & shadowBuffer
 		, crg::ImageViewIdArray const & targetColourResult )
 		: m_context{ context }
 		, m_device{ device }
@@ -67,7 +68,7 @@ namespace castor3d
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_descriptorLayout{ doCreateDescriptorLayout() }
 		, m_descriptorPool{ m_descriptorLayout->createPool( "ClusteredLights", 1u ) }
-		, m_descriptorSet{ doCreateDescriptorSet( graph, shadowMaps ) }
+		, m_descriptorSet{ doCreateDescriptorSet( graph, shadowMaps, shadowBuffer ) }
 		, m_lightPipeline{ pass
 			, context
 			, graph
@@ -199,7 +200,8 @@ namespace castor3d
 	}
 
 	ashes::DescriptorSetPtr ClusteredLightsPipeline::doCreateDescriptorSet( crg::RunnableGraph & graph
-		, ShadowMapLightTypeArray const & shadowMaps )
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const & shadowBuffer )
 	{
 		ashes::WriteDescriptorSetArray writes;
 		u32 index{};
@@ -208,7 +210,7 @@ namespace castor3d
 		writes.emplace_back( m_scene.getLightCache().getBinding( index++ ) );
 		writes.emplace_back( m_cameraUbo.getDescriptorWrite( index++ ) );
 		RenderNodesPass::addClusteredLightingDescriptor( m_frustumClusters, writes, index );
-		RenderNodesPass::addShadowDescriptor( m_device.renderSystem, graph, m_scene.getFlags(), writes, shadowMaps, index );
+		RenderNodesPass::addShadowDescriptor( m_device.renderSystem, graph, m_scene.getFlags(), writes, shadowMaps, shadowBuffer, index );
 		RenderNodesPass::addBackgroundDescriptor( *m_scene.getBackground(), flags, writes, m_targetColourResult, index );
 
 		auto result = m_descriptorPool->createDescriptorSet( "ClusteredLights"

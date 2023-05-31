@@ -4,6 +4,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"

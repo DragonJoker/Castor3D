@@ -4,8 +4,9 @@ See LICENSE file in root folder
 #ifndef ___C3D_LightModule_H___
 #define ___C3D_LightModule_H___
 
-#include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Scene/SceneModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include "Castor3D/Limits.hpp"
 
@@ -182,6 +183,44 @@ namespace castor3d
 	using LightResPtr = CameraCacheTraits::ElementObsT;
 
 	CU_DeclareSmartPtr( castor3d, LightCache, C3D_API );
+
+	struct BaseShadowData
+	{
+		u32 shadowType;
+		u32 cascadeCount;
+		f32 pcfFilterSize;
+		u32 pcfSampleCount;
+		castor::Point2f rawShadowsOffsets;
+		castor::Point2f pcfShadowsOffsets;
+		f32 vsmMinVariance;
+		f32 vsmLightBleedingReduction;
+		u32 volumetricSteps;
+		f32 volumetricScattering;
+	};
+
+	struct DirectionalShadowData
+		: BaseShadowData
+	{
+		using CascasdeFloatArray = std::array< f32, ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >;
+		CascasdeFloatArray splitDepths;
+		CascasdeFloatArray splitScales;
+		std::array< castor::Matrix4x4f, MaxDirectionalCascadesCount > transforms;
+	};
+
+	struct SpotShadowData
+		: BaseShadowData
+	{
+		castor::Matrix4x4f transform;
+	};
+
+	using PointShadowData = BaseShadowData;
+
+	struct AllShadowData
+	{
+		DirectionalShadowData directional;
+		std::array< PointShadowData, MaxPointShadowMapCount > point;
+		std::array< SpotShadowData, MaxSpotShadowMapCount > spot;
+	};
 
 	//@}
 	//@}

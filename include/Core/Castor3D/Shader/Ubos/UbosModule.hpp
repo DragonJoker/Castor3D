@@ -392,7 +392,7 @@ namespace castor3d
 		float intensity{};
 		float maxRadius{};
 		uint32_t sampleCount{};
-		uint32_t index{};
+		int32_t index{};
 	};
 	/**
 	*\~english

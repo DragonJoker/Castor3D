@@ -164,7 +164,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	DirectionalLight::DirectionalLight( Light & light )
-		: LightCategory{ LightType::eDirectional, light, LightDataComponents }
+		: LightCategory{ LightType::eDirectional, light, LightDataComponents, ShadowDataComponents }
 		, m_cascades( light.getScene()->getDirectionalShadowCascades() )
 		, m_prvCascades( light.getScene()->getDirectionalShadowCascades() )
 	{
@@ -198,13 +198,14 @@ namespace castor3d
 		return result;
 	}
 
-	void DirectionalLight::doFillBuffer( castor::Point4f * data )const
+	void DirectionalLight::fillShadowBuffer( AllShadowData & data )const
 	{
-		auto & directional = *reinterpret_cast< LightData * >( data->ptr() );
-		directional.direction = m_direction;
-		directional.cascadeCount = float( m_cascades.size() );
-		LightData::CascasdeFloatArray splitDepths{};
-		LightData::CascasdeFloatArray splitScales{};
+		auto & directional = data.directional;
+		LightCategory::doFillBaseShadowData( directional );
+
+		directional.cascadeCount = uint32_t( m_cascades.size() );
+		ShadowData::CascasdeFloatArray splitDepths{};
+		ShadowData::CascasdeFloatArray splitScales{};
 
 		for ( uint32_t i = 0u; i < m_cascades.size(); ++i )
 		{
@@ -224,5 +225,12 @@ namespace castor3d
 		{
 			directional.transforms[i] = castor::Matrix4x4f{ 0.0f };
 		}
+	}
+
+	void DirectionalLight::doFillLightBuffer( castor::Point4f * data )const
+	{
+		auto & directional = *reinterpret_cast< LightData * >( data->ptr() );
+		directional.cascadeCount = float( m_cascades.size() );
+		directional.posDir = m_direction;
 	}
 }

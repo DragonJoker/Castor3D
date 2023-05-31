@@ -11,38 +11,27 @@ CU_ImplementSmartPtr( castor3d, LightCategory )
 
 namespace castor3d
 {
-	LightCategory::LightCategory( LightType lightType, Light & light, uint32_t componentCount )
+	LightCategory::LightCategory( LightType lightType
+		, Light & light
+		, uint32_t lightComponentCount
+		, uint32_t shadowComponentCount )
 		: m_lightType{ lightType }
 		, m_light{ light }
-		, m_componentCount{ componentCount }
+		, m_lightComponentCount{ lightComponentCount }
+		, m_shadowComponentCount{ shadowComponentCount }
 	{
 	}
 
-	void LightCategory::fillBuffer( castor::Point4f * data )const
+	void LightCategory::fillLightBuffer( castor::Point4f * data )const
 	{
 		auto & base = *reinterpret_cast< LightData * >( data->ptr() );
 		base.colour = getColour();
-		base.farPlane = getFarPlane();
+		base.radius = getFarPlane();
 
 		base.intensity = getIntensity();
+		base.shadowMapIndex = float( m_light.getShadowMapIndex() );
 
-		auto & shadows = base.shadows;
-		shadows.shadowMapIndex = float( m_light.getShadowMapIndex() );
-		shadows.shadowType = float( getLight().isShadowProducer()
-			? getLight().getShadowType()
-			: ShadowType::eNone );
-		shadows.pcfFilterSize = float( getShadowPcfFilterSize().value() );
-		shadows.pcfSampleCount = float( getShadowPcfSampleCount().value() );
-
-		shadows.rawShadowsOffsets = getShadowRawOffsets();
-		shadows.pcfShadowsOffsets = getShadowPcfOffsets();
-
-		shadows.vsmMinVariance = getVsmMinVariance();
-		shadows.vsmLightBleedingReduction = getVsmLightBleedingReduction();
-		shadows.volumetricSteps = float( getVolumetricSteps() );
-		shadows.volumetricScattering = getVolumetricScatteringFactor();
-
-		doFillBuffer( data );
+		doFillLightBuffer( data );
 	}
 
 	uint32_t LightCategory::getVolumetricSteps()const
@@ -172,5 +161,22 @@ namespace castor3d
 	{
 		m_intensity[1] = value;
 		getLight().markDirty();
+	}
+
+	void LightCategory::doFillBaseShadowData( BaseShadowData & data )const
+	{
+		data.shadowType = uint32_t( getLight().isShadowProducer()
+			? getLight().getShadowType()
+			: ShadowType::eNone );
+		data.pcfFilterSize = float( getShadowPcfFilterSize().value() );
+		data.pcfSampleCount = getShadowPcfSampleCount().value();
+
+		data.rawShadowsOffsets = getShadowRawOffsets();
+		data.pcfShadowsOffsets = getShadowPcfOffsets();
+
+		data.vsmMinVariance = getVsmMinVariance();
+		data.vsmLightBleedingReduction = getVsmLightBleedingReduction();
+		data.volumetricSteps = getVolumetricSteps();
+		data.volumetricScattering = getVolumetricScatteringFactor();
 	}
 }
