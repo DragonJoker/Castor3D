@@ -365,6 +365,11 @@ namespace castor3d
 		{
 			return m_indirectLighting;
 		}
+
+		ShadowBuffer & getShadowBuffer()const noexcept
+		{
+			return *m_shadowBuffer;
+		}
 		/**@}*/
 
 	public:
@@ -408,6 +413,7 @@ namespace castor3d
 		LayeredLpvGridConfigUbo m_llpvConfigUbo;
 		VoxelizerUbo m_vctConfigUbo;
 		crg::FramePassGroup & m_graph;
+		ShadowBufferUPtr m_shadowBuffer;
 		ShadowMapUPtr m_directionalShadowMap;
 		ShadowMapUPtr m_pointShadowMap;
 		ShadowMapUPtr m_spotShadowMap;

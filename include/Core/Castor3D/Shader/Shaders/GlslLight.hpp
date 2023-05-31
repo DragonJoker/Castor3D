@@ -16,64 +16,22 @@ See LICENSE file in root folder
 
 namespace castor3d::shader
 {
-	struct LightData
-		: public sdw::StructInstanceHelperT < "C3D_LightData"
-		, sdw::type::MemoryLayout::eStd430
-		, sdw::Vec4Field< "data" > >
-	{
-		LightData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-		{
-		}
-
-		auto data()const { return getMember< "data" >(); }
-	};
-
-	struct ShadowData
-		: public sdw::StructInstanceHelperT< "C3D_ShadowData"
-			, sdw::type::MemoryLayout::eC
-			, sdw::IntField< "shadowMapIndex" >
-			, sdw::UIntField< "shadowType" >
-			, sdw::FloatField< "pcfFilterSize" >
-			, sdw::UIntField< "pcfSampleCount" >
-			, sdw::Vec2Field< "rawShadowOffsets" >
-			, sdw::Vec2Field< "pcfShadowOffsets" >
-			, sdw::FloatField< "vsmMinVariance" >
-			, sdw::FloatField< "vsmLightBleedingReduction" >
-			, sdw::UIntField< "volumetricSteps" >
-			, sdw::FloatField< "volumetricScattering" > >
-	{
-		ShadowData( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled )
-			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
-		{
-		}
-
-		auto shadowMapIndex()const { return getMember< "shadowMapIndex" >(); }
-		auto shadowType()const { return getMember< "shadowType" >(); }
-		auto pcfFilterSize()const { return getMember< "pcfFilterSize" >(); }
-		auto pcfSampleCount()const { return getMember< "pcfSampleCount" >(); }
-		auto rawShadowOffsets()const { return getMember< "rawShadowOffsets" >(); }
-		auto pcfShadowOffsets()const { return getMember< "pcfShadowOffsets" >(); }
-		auto vsmMinVariance()const { return getMember< "vsmMinVariance" >(); }
-		auto vsmLightBleedingReduction()const { return getMember< "vsmLightBleedingReduction" >(); }
-		auto volumetricSteps()const { return getMember< "volumetricSteps" >(); }
-		auto volumetricScattering()const { return getMember< "volumetricScattering" >(); }
-
-		C3D_API void updateShadowType( ShadowType type );
-	};
-
 	struct Light
 		: public sdw::StructInstanceHelperT< "C3D_Light"
 			, sdw::type::MemoryLayout::eC
 			, sdw::Vec3Field< "colour" >
-			, sdw::FloatField< "farPlane" >
+			, sdw::FloatField< "radius" >
 			, sdw::Vec2Field< "intensity" >
-			, sdw::StructFieldT< ShadowData, "shadows" > >
+			, sdw::IntField< "shadowMapIndex" >
+			, sdw::UIntField< "cascadeCount" >
+			, sdw::Vec3Field< "posDir" >
+			, sdw::FloatField< "exponent" > >
 	{
+		friend class LightsBuffer;
+		friend struct DirectionalLight;
+		friend struct PointLight;
+		friend struct SpotLight;
+
 		Light( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
 			, bool enabled )
@@ -84,19 +42,19 @@ namespace castor3d::shader
 	public:
 		auto colour()const { return getMember< "colour" >(); }
 		auto intensity()const { return getMember< "intensity" >(); }
-		auto farPlane()const { return getMember< "farPlane" >(); }
-		auto shadows()const { return getMember< "shadows" >(); }
+		auto radius()const { return getMember< "radius" >(); }
+		auto shadowMapIndex()const { return getMember< "shadowMapIndex" >(); }
+
+	private:
+		auto posDir()const { return getMember< "posDir" >(); }
+		auto exponent()const { return getMember< "exponent" >(); }
+		auto cascadeCount()const { return getMember< "cascadeCount" >(); }
 	};
 
 	struct DirectionalLight
 		: public sdw::StructInstanceHelperT< "C3D_DirectionalLight"
 			, sdw::type::MemoryLayout::eC
-			, sdw::StructFieldT< Light, "base" >
-			, sdw::Vec3Field< "direction" >
-			, sdw::FloatField< "cascadeCount" >
-			, sdw::FloatArrayField< "splitDepths", ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >
-			, sdw::FloatArrayField< "splitScales", ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) >
-			, sdw::Mat4ArrayField< "transforms", MaxDirectionalCascadesCount > >
+			, sdw::StructFieldT< Light, "base" > >
 	{
 		DirectionalLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -107,23 +65,22 @@ namespace castor3d::shader
 
 	public:
 		auto base()const { return getMember< "base" >(); }
-		auto direction()const { return getMember< "direction" >(); }
-		auto splitDepths()const { return getMember< "splitDepths" >(); }
-		auto splitScales()const { return getMember< "splitScales" >(); }
-		auto transforms()const { return getMember< "transforms" >(); }
-		auto shadows()const { return base().shadows(); }
 
-		C3D_API sdw::UInt cascadeCount()const;
+		auto colour()const { return base().colour(); }
+		auto intensity()const { return base().intensity(); }
+		auto radius()const { return base().radius(); }
+		auto shadowMapIndex()const { return base().shadowMapIndex(); }
+		auto cascadeCount()const { return base().cascadeCount(); }
+
+		auto direction()const { return base().posDir(); }
 	};
 
 	struct PointLight
 		: public sdw::StructInstanceHelperT< "C3D_PointLight"
 			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" >
-			, sdw::Vec3Field< "position" >
-			, sdw::FloatField< "pad0" >
 			, sdw::Vec3Field< "attenuation" >
-			, sdw::FloatField< "pad1" > >
+			, sdw::FloatField< "pad" > >
 	{
 		PointLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -136,17 +93,20 @@ namespace castor3d::shader
 
 	public:
 		auto base()const { return getMember< "base" >(); }
-		auto position()const { return getMember< "position" >(); }
+
+		auto colour()const { return base().colour(); }
+		auto intensity()const { return base().intensity(); }
+		auto radius()const { return base().radius(); }
+		auto shadowMapIndex()const { return base().shadowMapIndex(); }
+
+		auto position()const { return base().posDir(); }
 		auto attenuation()const { return getMember< "attenuation" >(); }
-		auto shadows()const { return base().shadows(); }
 	};
 
 	struct SpotLight
 		: public sdw::StructInstanceHelperT< "C3D_SpotLight"
 			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" >
-			, sdw::Vec3Field< "position" >
-			, sdw::FloatField< "exponent" >
 			, sdw::Vec3Field< "attenuation" >
 			, sdw::FloatField< "innerCutOffCos" >
 			, sdw::Vec3Field< "direction" >
@@ -154,8 +114,7 @@ namespace castor3d::shader
 			, sdw::FloatField< "innerCutOff" >
 			, sdw::FloatField< "outerCutOff" >
 			, sdw::FloatField< "innerCutOffSin" >
-			, sdw::FloatField< "outerCutOffSin" >
-			, sdw::Mat4Field< "transform" > >
+			, sdw::FloatField< "outerCutOffSin" > >
 	{
 		C3D_API SpotLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -168,8 +127,14 @@ namespace castor3d::shader
 
 	public:
 		auto base()const { return getMember< "base" >(); }
-		auto position()const { return getMember< "position" >(); }
-		auto exponent()const { return getMember< "exponent" >(); }
+
+		auto colour()const { return base().colour(); }
+		auto intensity()const { return base().intensity(); }
+		auto radius()const { return base().radius(); }
+		auto shadowMapIndex()const { return base().shadowMapIndex(); }
+
+		auto position()const { return base().posDir(); }
+		auto exponent()const { return base().exponent(); }
 		auto attenuation()const { return getMember< "attenuation" >(); }
 		auto direction()const { return getMember< "direction" >(); }
 		auto innerCutOff()const { return getMember< "innerCutOff" >(); }
@@ -178,14 +143,12 @@ namespace castor3d::shader
 		auto outerCutOffCos()const { return getMember< "outerCutOffCos" >(); }
 		auto innerCutOffSin()const { return getMember< "innerCutOffSin" >(); }
 		auto outerCutOffSin()const { return getMember< "outerCutOffSin" >(); }
-		auto transform()const { return getMember< "transform" >(); }
-		auto shadows()const { return base().shadows(); }
 		// SpecificValues
 		auto cutOffsCosDiff()const { return innerCutOffCos() - outerCutOffCos(); }
 	};
 
 	class LightsBuffer
-		: public BufferT< LightData >
+		: public BufferT< BufferData >
 	{
 	public:
 		C3D_API LightsBuffer( sdw::ShaderWriter & writer
@@ -220,9 +183,6 @@ namespace castor3d::shader
 	private:
 		sdw::Vec4 getLightData( sdw::UInt & index )const;
 
-		void getShadows( sdw::Vec4 & lightData
-			, ShadowData shadows
-			, sdw::UInt & offset );
 		void getBaseLight( sdw::Vec4 & lightData
 			, Light light
 			, sdw::UInt & offset );
@@ -565,7 +525,7 @@ namespace castor3d::shader
 		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & offset );
 		C3D_API PointLight getPointLight( sdw::UInt const & offset );
 		C3D_API SpotLight getSpotLight( sdw::UInt const & offset );
-		C3D_API sdw::Vec3 getCascadeFactors( DirectionalLight const light
+		C3D_API sdw::Vec3 getCascadeFactors( DirectionalShadowData const light
 			, sdw::Vec3 viewVertex
 			, sdw::UInt maxCascadeCount );
 		//\}
@@ -596,7 +556,7 @@ namespace castor3d::shader
 		LightsBufferUPtr m_lightsBuffer;
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
-			, sdw::InFloatArray
+			, sdw::InVec4Array
 			, sdw::InUInt
 			, sdw::InUInt > m_getCascadeFactors;
 		sdw::Function< sdw::Vec3

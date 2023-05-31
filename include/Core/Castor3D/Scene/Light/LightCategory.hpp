@@ -22,40 +22,36 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Constructor.
-		 *\param[in]	lightType	The light category type.
-		 *\param[in]	light		The parent Light.
+		 *\param[in]	lightType				The light category type.
+		 *\param[in]	light					The parent Light.
+		 *\param[in]	lightComponentCount		The number of vec4 used to store light data.
+		 *\param[in]	shadowComponentCount	The number of vec4 used to store shadow data.
 		 *\~french
 		 *\brief		Constructeur.
-		 *\param[in]	lightType	Le type de catégorie de lumière.
-		 *\param[in]	light		La Light parente.
+		 *\param[in]	lightType				Le type de catégorie de lumière.
+		 *\param[in]	light					La Light parente.
+		 *\param[in]	lightComponentCount		Le nombre de vec4 utilisés pour stocker les données de lumière.
+		 *\param[in]	shadowComponentCount	Le nombre de vec4 utilisés pour stocker les données d'ombres.
 		 */
-		C3D_API explicit LightCategory( LightType lightType, Light & light, uint32_t componentCount );
+		C3D_API explicit LightCategory( LightType lightType
+			, Light & light
+			, uint32_t lightComponentCount
+			, uint32_t shadowComponentCount );
 
 	public:
-		struct ShadowData
-			: ShaderBufferTypes
-		{
-			Float1 shadowMapIndex;
-			Float1 shadowType;
-			Float1 pcfFilterSize;
-			Float1 pcfSampleCount;
-			Float2 rawShadowsOffsets;
-			Float2 pcfShadowsOffsets;
-			Float1 vsmMinVariance;
-			Float1 vsmLightBleedingReduction;
-			Float1 volumetricSteps;
-			Float1 volumetricScattering;
-		};
-
 		struct LightData
 			: ShaderBufferTypes
 		{
 			Float3 colour;
-			Float1 farPlane;
+			Float1 radius;
 			Float2 intensity;
-			Float2 pad0;
-			ShadowData shadows;
+			Float1 shadowMapIndex;
+			Float1 cascadeCount;
+			Float3 posDir;
+			Float1 exponent;
 		};
+
+		static uint32_t constexpr LightMbrAlign = 4u * sizeof( float );
 
 	public:
 		/**
@@ -74,13 +70,22 @@ namespace castor3d
 		C3D_API virtual void update() = 0;
 		/**
 		 *\~english
-		 *\brief		Puts the light into the given texture.
+		 *\brief		Puts the light into the given buffer.
 		 *\param[out]	data	Receives the light's data.
 		 *\~french
-		 *\brief		Met la lumière dans la texture donnée.
+		 *\brief		Met la lumière dans le buffer donné.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		C3D_API void fillBuffer( castor::Point4f * data )const;
+		C3D_API void fillLightBuffer( castor::Point4f * data )const;
+		/**
+		 *\~english
+		 *\brief		Puts the shadow data into the given buffer.
+		 *\param[out]	data	Receives the light's shadow data.
+		 *\~french
+		 *\brief		Met les données d'ombre dans le buffer donné.
+		 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
+		 */
+		C3D_API virtual void fillShadowBuffer( AllShadowData & data )const = 0;
 		/**
 		*\~english
 		*name
@@ -107,9 +112,14 @@ namespace castor3d
 			return m_lightType;
 		}
 
-		uint32_t getComponentCount()const
+		uint32_t getLightComponentCount()const
 		{
-			return m_componentCount;
+			return m_lightComponentCount;
+		}
+
+		uint32_t getShadowComponentCount()const
+		{
+			return m_shadowComponentCount;
 		}
 
 		float getDiffuseIntensity()const
@@ -188,15 +198,21 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		LightType m_lightType;
+		Light & m_light;
+		uint32_t m_lightComponentCount{};
+		uint32_t m_shadowComponentCount{};
+		castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
+		castor::Point2f m_intensity{ 1.0, 1.0 };
 		/**
 		 *\~english
-		 *\brief		Puts the light into the given texture.
+		 *\brief		Puts the light into the given buffer.
 		 *\param[out]	data	Receives the light's data.
 		 *\~french
-		 *\brief		Met la lumière dans la texture donnée.
+		 *\brief		Met la lumière dans le buffer donné.
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
-		C3D_API virtual void doFillBuffer( castor::Point4f * data )const = 0;
+		C3D_API virtual void doFillLightBuffer( castor::Point4f * data )const = 0;
 
 	protected:
 		//!\~english	The cube box for the light volume of effect.
@@ -205,13 +221,15 @@ namespace castor3d
 		//!\~english	The far plane's depth.
 		//!\~french		La profondeur du plan éloigné.
 		float m_farPlane{ 1.0f };
-
-	private:
-		LightType m_lightType;
-		Light & m_light;
-		uint32_t m_componentCount{};
-		castor::Point3f m_colour{ 1.0, 1.0, 1.0 };
-		castor::Point2f m_intensity{ 1.0, 1.0 };
+		/**
+		 *\~english
+		 *\brief		Puts the shadow data into the given buffer.
+		 *\param[out]	data	Receives the light's shadow data.
+		 *\~french
+		 *\brief		Met les données d'ombre dans le buffer donné.
+		 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
+		 */
+		C3D_API void doFillBaseShadowData( BaseShadowData & data )const;
 	};
 }
 

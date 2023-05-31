@@ -61,6 +61,7 @@ namespace castor3d
 		eSmLinear,
 		eSmLinearCmp,
 		eSmVariance,
+		eShadowBuffer,
 		eRandomStorage,
 		eCount,
 	};

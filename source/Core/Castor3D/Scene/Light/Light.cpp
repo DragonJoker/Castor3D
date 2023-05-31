@@ -29,13 +29,18 @@ namespace castor3d
 		m_currentShadowCaster = m_shadowCaster;
 	}
 
-	void Light::fillBuffer( uint32_t index
+	void Light::fillLightBuffer( uint32_t index
 		, VkDeviceSize offset
 		, castor::Point4f * data )
 	{
 		m_bufferIndex = index;
 		m_bufferOffset = offset;
-		m_category->fillBuffer( data );
+		m_category->fillLightBuffer( data );
+	}
+
+	void Light::fillShadowBuffer( AllShadowData & data )
+	{
+		m_category->fillShadowBuffer( data );
 	}
 
 	DirectionalLightRPtr Light::getDirectionalLight()const

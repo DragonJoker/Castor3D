@@ -75,14 +75,15 @@ namespace castor3d
 		m_pass.commandBuffer.reset();
 	}
 
-	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps )
+	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 		if ( hasCommandBuffer() )
 		{
 			if ( m_culledChanged )
 			{
 				CU_Require( m_renderNodes );
-				m_renderNodes->sortNodes( shadowMaps );
+				m_renderNodes->sortNodes( shadowMaps, shadowBuffer );
 				m_culledChanged = false;
 			}
 
@@ -101,20 +102,22 @@ namespace castor3d
 	}
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 		, VkViewport const & viewport
 		, VkRect2D const & scissor )
 	{
 		m_viewport = viewport;
 		m_scissor = scissor;
-		update( shadowMaps );
+		update( shadowMaps, shadowBuffer );
 	}
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 		, VkRect2D const & scissor )
 	{
 		m_scissor = scissor;
 		m_commandsChanged = m_commandsChanged || m_scissor.isDirty();
-		update( shadowMaps );
+		update( shadowMaps, shadowBuffer );
 	}
 
 	void RenderQueue::setIgnoredNode( SceneNode const & node )

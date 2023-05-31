@@ -16,17 +16,18 @@ namespace castor3d
 		: public LightCategory
 	{
 	public:
+		using ShadowData = PointShadowData;
+		static constexpr uint32_t ShadowDataSize = uint32_t( ashes::getAlignedSize( sizeof( ShadowData ), LightMbrAlign ) );
+		static constexpr uint32_t ShadowDataComponents = ShadowDataSize / LightMbrAlign;
+
 		struct LightData
 			: LightCategory::LightData
 		{
-			Float3 position;
-			Float1 pad0;
 			Float3 attenuation;
-			Float1 pad1;
+			Float1 pad;
 		};
-
-		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), 4u ) );
-		static constexpr uint32_t LightDataComponents = LightDataSize / ( 4u * sizeof( float ) );
+		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
+		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
 
 	private:
 		/**
@@ -73,6 +74,15 @@ namespace castor3d
 		C3D_API void updateShadow( int32_t index );
 		/**
 		 *\~english
+		 *\brief		Puts the shadow data into the given buffer.
+		 *\param[out]	data	Receives the light's shadow data.
+		 *\~french
+		 *\brief		Met les données d'ombre dans le buffer donné.
+		 *\param[out]	data	Reçoit les données d'ombres de la source lumineuse.
+		 */
+		C3D_API void fillShadowBuffer( AllShadowData & data )const override;
+		/**
+		 *\~english
 		 *\brief		Sets attenuation components.
 		 *\param[in]	value	The new value.
 		 *\~french
@@ -99,7 +109,7 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doFillBuffer( castor::Point4f * data )const override;
+		void doFillLightBuffer( castor::Point4f * data )const override;
 
 	private:
 		friend class Scene;

@@ -77,7 +77,9 @@ namespace atmosphere_scattering
 	}
 
 	void AtmospherePhongLightingModel::doComputeScatteringTerm( sdw::Vec3 const & radiance
-		, c3d::Light const & light
+		, c3d::ShadowData const & shadows
+		, sdw::Int const shadowMapIndex
+		, sdw::Vec2 const & lightIntensity
 		, c3d::BlendComponents const & components
 		, c3d::LightSurface const & lightSurface
 		, sdw::Vec3 & output )
@@ -98,16 +100,17 @@ namespace atmosphere_scattering
 			&& m_directionalCascadeIndex
 			&& m_directionalCascadeCount )
 		{
-			IF( m_writer, light.shadows().volumetricSteps() != 0_u )
+			IF( m_writer, shadows.volumetricSteps() != 0_u
+				&& shadowMapIndex >= 0_i )
 			{
 				auto volumetric = m_writer.declLocale( "volumetric"
-					, m_shadowModel.computeVolumetric( light.shadows()
+					, m_shadowModel.computeVolumetric( shadows
 						, lightSurface
 						, *m_directionalTransform
 						, *m_directionalCascadeIndex
 						, *m_directionalCascadeCount ) );
 				output *= volumetric
-					* light.intensity().x();
+					* lightIntensity.x();
 			}
 			FI;
 		}
@@ -171,7 +174,9 @@ namespace atmosphere_scattering
 	}
 
 	void AtmospherePbrLightingModel::doComputeScatteringTerm( sdw::Vec3 const & radiance
-		, c3d::Light const & light
+		, c3d::ShadowData const & shadows
+		, sdw::Int const shadowMapIndex
+		, sdw::Vec2 const & lightIntensity
 		, c3d::BlendComponents const & components
 		, c3d::LightSurface const & lightSurface
 		, sdw::Vec3 & output )
@@ -192,16 +197,17 @@ namespace atmosphere_scattering
 			&& m_directionalCascadeIndex
 			&& m_directionalCascadeCount )
 		{
-			IF( m_writer, light.shadows().volumetricSteps() != 0_u )
+			IF( m_writer, shadows.volumetricSteps() != 0_u
+				&& shadowMapIndex >= 0_i )
 			{
 				auto volumetric = m_writer.declLocale( "volumetric"
-					, m_shadowModel.computeVolumetric( light.shadows()
+					, m_shadowModel.computeVolumetric( shadows
 						, lightSurface
 						, *m_directionalTransform
 						, *m_directionalCascadeIndex
 						, *m_directionalCascadeCount ) );
 				output *= volumetric
-					* light.intensity().x();
+					* lightIntensity.x();
 			}
 			FI;
 		}

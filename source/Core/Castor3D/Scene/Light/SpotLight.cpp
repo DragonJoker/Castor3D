@@ -43,7 +43,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	SpotLight::SpotLight( Light & light )
-		: LightCategory{ LightType::eSpot, light, LightDataComponents }
+		: LightCategory{ LightType::eSpot, light, LightDataComponents, ShadowDataComponents }
 		, m_attenuation{ m_dirtyData, castor::Point3f{ 1, 0, 0 } }
 		, m_exponent{ m_dirtyData, 1.0f }
 		, m_innerCutOff{ m_dirtyData, 22.5_degrees }
@@ -185,7 +185,7 @@ namespace castor3d
 	void SpotLight::updateShadow( Camera & lightCamera
 		, int32_t index )
 	{
-		getLight().setShadowMapIndex( uint32_t( index ) );
+		getLight().setShadowMapIndex( index );
 		auto node = getLight().getParent();
 		node->update();
 		lightCamera.attachTo( *node );
@@ -208,15 +208,23 @@ namespace castor3d
 		}
 	}
 
-	void SpotLight::doFillBuffer( castor::Point4f * data )const
+	void SpotLight::fillShadowBuffer( AllShadowData & data )const
+	{
+		auto & spot = data.spot[size_t( getLight().getShadowMapIndex() )];
+		LightCategory::doFillBaseShadowData( spot );
+
+		spot.transform = m_lightSpace;
+	}
+
+	void SpotLight::doFillLightBuffer( castor::Point4f * data )const
 	{
 		auto & spot = *reinterpret_cast< LightData * >( data->ptr() );
 		auto position = getLight().getParent()->getDerivedPosition();
 
-		spot.position = position;
+		spot.posDir = position;
+		spot.exponent = m_exponent;
 		spot.attenuation = m_attenuation;
 		spot.direction = m_direction;
-		spot.exponent = m_exponent;
 		spot.innerCutoffCos = m_innerCutOff.value().cos();
 		spot.outerCutoffCos = m_outerCutOff.value().cos();
 		spot.innerCutoff = m_innerCutOff.value().radians();
@@ -224,7 +232,6 @@ namespace castor3d
 		spot.innerCutoffSin = m_innerCutOff.value().sin();
 		spot.outerCutoffSin = m_outerCutOff.value().sin();
 
-		spot.transform = m_lightSpace;
 	}
 
 	void SpotLight::setAttenuation( castor::Point3f const & attenuation )

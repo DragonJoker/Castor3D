@@ -16,6 +16,7 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
 
 namespace castor3d
 {
@@ -116,10 +117,11 @@ namespace castor3d
 		m_camera = &camera;
 	}
 
-	void LightsPipeline::addLight( Light const & light )
+	void LightsPipeline::addLight( Light const & light
+		, ShadowBuffer const & shadowBuffer )
 	{
 		auto camera = m_camera ? m_camera : &m_targetCamera;
-		auto & entry = doCreateLightEntry( light );
+		auto & entry = doCreateLightEntry( light, shadowBuffer );
 
 		if ( m_config.lightType != LightType::eDirectional )
 		{
@@ -207,6 +209,9 @@ namespace castor3d
 		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eSmVariance )
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eShadowBuffer )
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		setLayoutBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( LightPassLgtIdx::eRandomStorage )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -218,7 +223,8 @@ namespace castor3d
 		return m_device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
 
-	LightDescriptors & LightsPipeline::doCreateLightEntry( Light const & light )
+	LightDescriptors & LightsPipeline::doCreateLightEntry( Light const & light
+		, ShadowBuffer const & shadowBuffer )
 	{
 		auto ires = m_lightDescriptors.emplace( light.getBufferIndex(), nullptr );
 
@@ -255,6 +261,7 @@ namespace castor3d
 				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler()->getSampler()
 					, m_smResult[SmTexture::eVariance].wholeView
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+			writes.emplace_back( shadowBuffer.getBinding( uint32_t( LightPassLgtIdx::eShadowBuffer) ) );
 			auto & randomStorage = m_device.renderSystem.getRandomStorage().getBuffer();
 			writes.emplace_back( uint32_t( LightPassLgtIdx::eRandomStorage )
 				, 0u

@@ -31,7 +31,7 @@ namespace castor3d
 		, descriptorLayout{ descriptorLayout }
 		, name{ debugName }
 		, overlaysData{ makeBuffer< OverlayUboConfiguration >( device
-			, MaxPipelines
+			, MaxOverlayPipelines
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, name + "Data" ) }
@@ -42,7 +42,7 @@ namespace castor3d
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, name + "Vertex"
 			, ashes::QueueShare{}
-			, MaxPipelines * sizeof( VertexT ) * CountT }
+			, MaxOverlayPipelines * sizeof( VertexT ) * CountT }
 		, descriptorPool{ descriptorLayout.createPool( 1000u ) }
 		, textBuffer{ std::move( textBuf ) }
 	{
@@ -78,14 +78,14 @@ namespace castor3d
 		{
 			auto & pipelineData = ires.first->second;
 			pipelineData.overlaysIDsBuffer = makeBuffer< uint32_t >( device
-				, MaxPipelines
+				, MaxOverlayPipelines
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, debugName + "-PipelineIDs" );
 			pipelineData.overlaysIDs = castor::makeArrayView( pipelineData.overlaysIDsBuffer->lock( 0u, ashes::WholeSize, 0u )
 				, pipelineData.overlaysIDsBuffer->getCount() );
 			pipelineData.indirectCommandsBuffer = makeBuffer< VkDrawIndirectCommand >( device
-				, MaxPipelines
+				, MaxOverlayPipelines
 				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, debugName + "-IndirectCommands" );
@@ -156,7 +156,7 @@ namespace castor3d
 		auto count = overlay.getCount( secondary );
 
 		if ( !count
-			|| allocated > ( MaxPipelines * CountT - count ) )
+			|| allocated > ( MaxOverlayPipelines * CountT - count ) )
 		{
 			if ( count )
 			{

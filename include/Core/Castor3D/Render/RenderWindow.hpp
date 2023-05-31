@@ -389,6 +389,7 @@ namespace castor3d
 		C3D_API Submesh const * getPickedSubmesh()const;
 		C3D_API uint32_t getPickedFace()const;
 		C3D_API ShadowMapLightTypeArray getShadowMaps()const;
+		C3D_API ShadowBuffer * getShadowBuffer()const;
 
 		uint32_t getIndex()const
 		{

@@ -560,6 +560,7 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
 		/**
 		 *\~english
@@ -657,6 +658,7 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const & shadowBuffer
 			, uint32_t & index );
 		C3D_API static void addBackgroundDescriptor( SceneBackground const & background
 			, PipelineFlags const & flags
@@ -843,6 +845,7 @@ namespace castor3d
 			, PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundDescriptor( Scene const & scene
 			, PipelineFlags const & flags
@@ -920,7 +923,8 @@ namespace castor3d
 		 */
 		C3D_API virtual void doFillAdditionalDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
-			, ShadowMapLightTypeArray const & shadowMaps ) = 0;
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const * shadowBuffer ) = 0;
 		/**
 		 *\~english
 		 *\brief			Modifies the given flags to make them match the render pass requirements.

@@ -25,6 +25,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
+#include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
@@ -175,7 +176,7 @@ namespace castor3d
 					auto light = writer.declLocale( "light"
 						, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
 					auto cascadeIndex = writer.declLocale( "cascadeIndex"
-						, writer.cast< Int >( max( 1_u, light.cascadeCount() ) - 1_u ) );
+						, writer.cast< Int >( max( 1_u, light.cascadeCount() - 1_u ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
@@ -247,7 +248,7 @@ namespace castor3d
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.shadows().shadowMapIndex() * 6_i + int32_t( face ) ) );
+							, light.shadowMapIndex() * 6_i + int32_t( face ) ) );
 
 					auto rsmPosition = writer.declLocale( "rsmPosition"
 						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );
@@ -312,7 +313,7 @@ namespace castor3d
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
-							, light.shadows().shadowMapIndex() ) );
+							, light.shadowMapIndex() ) );
 
 					auto rsmPosition = writer.declLocale( "rsmPosition"
 						, c3d_rsmPositionMap.fetch( rsmCoords, 0_i ).rgb() );

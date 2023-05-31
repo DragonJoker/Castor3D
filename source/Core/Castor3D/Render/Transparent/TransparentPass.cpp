@@ -160,7 +160,8 @@ namespace castor3d
 
 	void TransparentPass::doFillAdditionalDescriptor( PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, castor3d::ShadowMapLightTypeArray const & shadowMaps )
+		, castor3d::ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
@@ -178,7 +179,7 @@ namespace castor3d
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
 			, index );
-		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, index );
+		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
 		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
@@ -438,7 +439,8 @@ namespace castor3d
 					output.registerOutput( "Occlusion", occlusion );
 					output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
 
-					colour = lightingModel->combine( components
+					colour = lightingModel->combine( output
+						, components
 						, incident
 						, lighting.diffuse
 						, indirectDiffuse

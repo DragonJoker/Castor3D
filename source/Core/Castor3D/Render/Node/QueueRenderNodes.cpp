@@ -1009,7 +1009,8 @@ namespace castor3d
 			|| billboardsIt != culler.getBillboards().end();
 	}
 
-	void QueueRenderNodes::sortNodes( ShadowMapLightTypeArray & shadowMaps )
+	void QueueRenderNodes::sortNodes( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer )
 	{
 		auto & queue = *getOwner();
 		auto & renderPass = *queue.getOwner();
@@ -1047,12 +1048,14 @@ namespace castor3d
 					if ( node.instance.getParent()->isVisible() )
 					{
 						doAddInstancedSubmesh( shadowMaps
+							, shadowBuffer
 							, *culled.node
 							, false );
 
 						if ( needsFront )
 						{
 							doAddInstancedSubmesh( shadowMaps
+								, shadowBuffer
 								, *culled.node
 								, true );
 						}
@@ -1061,12 +1064,14 @@ namespace castor3d
 				else
 				{
 					doAddSubmesh( shadowMaps
+						, shadowBuffer
 						, *culled.node
 						, false );
 
 					if ( needsFront )
 					{
 						doAddSubmesh( shadowMaps
+							, shadowBuffer
 							, *culled.node
 							, true );
 					}
@@ -1082,7 +1087,9 @@ namespace castor3d
 				&& renderPass.isValidRenderable( node.instance )
 				&& renderPass.isValidNode( *node.instance.getNode() ) )
 			{
-				doAddBillboard( shadowMaps, node );
+				doAddBillboard( shadowMaps
+					, shadowBuffer
+					, node );
 			}
 		}
 
@@ -1447,6 +1454,7 @@ namespace castor3d
 	}
 
 	void QueueRenderNodes::doAddSubmesh( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 		, SubmeshRenderNode const & node
 		, bool frontCulled )
 	{
@@ -1460,11 +1468,13 @@ namespace castor3d
 			, m_nodesIds );
 		renderPass.initialiseAdditionalDescriptor( pipeline
 			, shadowMaps
+			, shadowBuffer
 			, node.data.getMorphTargets() );
 		m_hasNodes = true;
 	}
 
 	void QueueRenderNodes::doAddInstancedSubmesh( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 		, SubmeshRenderNode const & node
 		, bool frontCulled )
 	{
@@ -1478,11 +1488,13 @@ namespace castor3d
 			, m_nodesIds );
 		renderPass.initialiseAdditionalDescriptor( pipeline
 			, shadowMaps
+			, shadowBuffer
 			, node.data.getMorphTargets() );
 		m_hasNodes = true;
 	}
 
 	void QueueRenderNodes::doAddBillboard( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 		, BillboardRenderNode const & node )
 	{
 		auto & renderPass = *getOwner()->getOwner();
@@ -1495,6 +1507,7 @@ namespace castor3d
 			, m_nodesIds );
 		renderPass.initialiseAdditionalDescriptor( pipeline
 			, shadowMaps
+			, shadowBuffer
 			, {} );
 		m_hasNodes = true;
 	}

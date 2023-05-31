@@ -38,6 +38,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShadowBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
@@ -507,6 +508,10 @@ namespace castor3d
 
 		if ( hasShadows )
 		{
+			// Shadow Buffer
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			// Random Storage
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -547,6 +552,7 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const & shadowBuffer
 		, uint32_t & index )
 	{
 #if !C3D_DebugDisableShadowMaps
@@ -581,6 +587,7 @@ namespace castor3d
 
 		if ( hasShadows )
 		{
+			descriptorWrites.push_back( shadowBuffer.getBinding( index++ ) );
 			bindBuffer( renderSystem.getRandomStorage().getBuffer()
 				, descriptorWrites
 				, index );
@@ -763,6 +770,7 @@ namespace castor3d
 
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
 	{
 		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( pipeline.getFlags() )
@@ -823,7 +831,8 @@ namespace castor3d
 
 			doFillAdditionalDescriptor( pipeline.getFlags()
 				, descriptorWrites
-				, shadowMaps );
+				, shadowMaps
+				, shadowBuffer );
 			descriptorSet.setBindings( descriptorWrites );
 			descriptorSet.update();
 		}
@@ -894,13 +903,16 @@ namespace castor3d
 		, PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const * shadowBuffer
 		, uint32_t & index )const
 	{
+		CU_Require( shadowBuffer );
 		addShadowDescriptor( *getEngine()->getRenderSystem()
 			, m_graph
 			, doAdjustSceneFlags( scene.getFlags() )
 			, descriptorWrites
 			, shadowMaps
+			, *shadowBuffer
 			, index );
 	}
 

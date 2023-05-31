@@ -29,7 +29,8 @@ namespace castor3d
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
 		C3D_API void checkEmpty();
-		C3D_API void sortNodes( ShadowMapLightTypeArray & shadowMaps );
+		C3D_API void sortNodes( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer );
 		C3D_API void fillIndirectBuffers();
 		C3D_API uint32_t prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors );
@@ -87,12 +88,15 @@ namespace castor3d
 			, bool frontCulled );
 		RenderPipeline & doGetPipeline( BillboardRenderNode const & node );
 		void doAddSubmesh( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer
 			, SubmeshRenderNode const & node
 			, bool frontCulled );
 		void doAddInstancedSubmesh( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer
 			, SubmeshRenderNode const & node
 			, bool frontCulled );
 		void doAddBillboard( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer
 			, BillboardRenderNode const & node );
 
 	private:

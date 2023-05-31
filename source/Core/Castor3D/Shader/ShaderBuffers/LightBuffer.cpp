@@ -100,7 +100,7 @@ namespace castor3d
 
 				if ( index <= MaxLightsCount )
 				{
-					light->fillBuffer( index, offset, &m_data[offset] );
+					light->fillLightBuffer( index, offset, &m_data[offset] );
 				}
 			}
 

@@ -32,7 +32,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	PointLight::PointLight( Light & light )
-		: LightCategory{ LightType::ePoint, light, LightDataComponents }
+		: LightCategory{ LightType::ePoint, light, LightDataComponents, ShadowDataComponents }
 	{
 	}
 
@@ -138,7 +138,7 @@ namespace castor3d
 
 	void PointLight::updateShadow( int32_t index )
 	{
-		getLight().setShadowMapIndex( uint32_t( index ) );
+		getLight().setShadowMapIndex( index );
 		m_position = getLight().getParent()->getDerivedPosition();
 
 		if ( m_position.isDirty() )
@@ -149,12 +149,18 @@ namespace castor3d
 		}
 	}
 
-	void PointLight::doFillBuffer( castor::Point4f * data )const
+	void PointLight::fillShadowBuffer( AllShadowData & data )const
+	{
+		auto & point = data.point[size_t( getLight().getShadowMapIndex() )];
+		LightCategory::doFillBaseShadowData( point );
+	}
+
+	void PointLight::doFillLightBuffer( castor::Point4f * data )const
 	{
 		auto & point = *reinterpret_cast< LightData * >( data->ptr() );
 		auto position = getLight().getParent()->getDerivedPosition();
 
-		point.position = position;
+		point.posDir = position;
 		point.attenuation = m_attenuation;
 	}
 

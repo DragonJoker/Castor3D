@@ -24,20 +24,6 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	void ShadowData::updateShadowType( ShadowType type )
-	{
-		getMember< "shadowType" >() = uint32_t( type );
-	}
-
-	//*********************************************************************************************
-
-	sdw::UInt DirectionalLight::cascadeCount()const
-	{
-		return getWriter()->cast< sdw::UInt >( getMember< "cascadeCount" >() );
-	}
-
-	//*********************************************************************************************
-
 	sdw::Float PointLight::getAttenuationFactor( sdw::Float const & distance )const
 	{
 		return sdw::fma( attenuation().z()
@@ -64,7 +50,7 @@ namespace castor3d::shader
 		, uint32_t binding
 		, uint32_t set
 		, bool enable )
-		: BufferT< LightData >{ writer
+		: BufferT< BufferData >{ writer
 			, "C3D_LightsBuffer"
 			, "c3d_lights"
 			, binding
@@ -88,41 +74,7 @@ namespace castor3d::shader
 					auto result = m_writer.declLocale< DirectionalLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
 
-					lightData = getLightData( offset );
-					result.direction() = normalize( lightData.xyz() );
-					result.getMember< "cascadeCount" >() = lightData.w();
-
-					for ( uint32_t i = 0u; i < ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ); i += 4 )
-					{
-						lightData = getLightData( offset );
-						result.splitDepths()[i + 0] = lightData[0];
-						result.splitDepths()[i + 1] = lightData[1];
-						result.splitDepths()[i + 2] = lightData[2];
-						result.splitDepths()[i + 3] = lightData[3];
-					}
-
-					for ( uint32_t i = 0u; i < ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ); i += 4 )
-					{
-						lightData = getLightData( offset );
-						result.splitScales()[i + 0] = lightData[0];
-						result.splitScales()[i + 1] = lightData[1];
-						result.splitScales()[i + 2] = lightData[2];
-						result.splitScales()[i + 3] = lightData[3];
-					}
-
-					auto col0 = m_writer.declLocale< sdw::Vec4 >( "col0" );
-					auto col1 = m_writer.declLocale< sdw::Vec4 >( "col1" );
-					auto col2 = m_writer.declLocale< sdw::Vec4 >( "col2" );
-					auto col3 = m_writer.declLocale< sdw::Vec4 >( "col3" );
-
-					for ( uint32_t i = 0u; i < MaxDirectionalCascadesCount; ++i )
-					{
-						col0 = getLightData( offset );
-						col1 = getLightData( offset );
-						col2 = getLightData( offset );
-						col3 = getLightData( offset );
-						result.transforms()[i] = mat4( col0, col1, col2, col3 );
-					}
+					result.direction() = normalize( result.direction() );
 
 					m_writer.returnStmt( result );
 				}
@@ -146,9 +98,6 @@ namespace castor3d::shader
 
 					auto result = m_writer.declLocale< PointLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
-
-					lightData = getLightData( offset );
-					result.position() = lightData.xyz();
 
 					lightData = getLightData( offset );
 					result.attenuation() = lightData.xyz();
@@ -177,10 +126,6 @@ namespace castor3d::shader
 					getBaseLight( lightData, result.base(), offset );
 
 					lightData = getLightData( offset );
-					result.position() = lightData.xyz();
-					result.exponent() = lightData.w();
-
-					lightData = getLightData( offset );
 					result.attenuation() = lightData.xyz();
 					result.innerCutOffCos() = lightData.w();
 
@@ -193,11 +138,6 @@ namespace castor3d::shader
 					result.outerCutOff() = lightData.y();
 					result.innerCutOffSin() = lightData.z();
 					result.outerCutOffSin() = lightData.w();
-
-					result.transform() = mat4( getData( offset + 0_u ).data()
-						, getData( offset + 1_u ).data()
-						, getData( offset + 2_u ).data()
-						, getData( offset + 3_u ).data() );
 
 					m_writer.returnStmt( result );
 				}
@@ -213,39 +153,22 @@ namespace castor3d::shader
 		return getData( index++ ).data();
 	}
 
-	void LightsBuffer::getShadows( sdw::Vec4 & lightData
-		, ShadowData shadows
-		, sdw::UInt & offset )
-	{
-		lightData = getLightData( offset );
-		shadows.shadowMapIndex() = m_writer.cast< sdw::Int >( lightData.x() );
-		shadows.shadowType() = m_writer.cast< sdw::UInt >( lightData.y() );
-		shadows.pcfFilterSize() = lightData.z();
-		shadows.pcfSampleCount() = m_writer.cast< sdw::UInt >( lightData.w() );
-
-		lightData = getLightData( offset );
-		shadows.rawShadowOffsets() = lightData.xy();
-		shadows.pcfShadowOffsets() = lightData.zw();
-
-		lightData = getLightData( offset );
-		shadows.vsmMinVariance() = lightData.x();
-		shadows.vsmLightBleedingReduction() = lightData.y();
-		shadows.volumetricSteps() = m_writer.cast< sdw::UInt >( lightData.z() );
-		shadows.volumetricScattering() = lightData.w();
-	}
-
 	void LightsBuffer::getBaseLight( sdw::Vec4 & lightData
 		, Light light
 		, sdw::UInt & offset )
 	{
 		lightData = getLightData( offset );
 		light.colour() = lightData.xyz();
-		light.farPlane() = lightData.w();
+		light.radius() = lightData.w();
 
 		lightData = getLightData( offset );
 		light.intensity() = lightData.xy();
+		light.shadowMapIndex() = m_writer.cast< sdw::Int >( lightData.z() );
+		light.cascadeCount() = m_writer.cast< sdw::UInt >( lightData.w() );
 
-		getShadows( lightData, light.shadows(), offset );
+		lightData = getLightData( offset );
+		light.posDir() = lightData.xyz();
+		light.exponent() = lightData.w();
 	}
 
 	//*********************************************************************************************
@@ -369,7 +292,9 @@ namespace castor3d::shader
 
 			WHILE( m_writer, cur < end )
 			{
-				lightingModel->compute( getDirectionalLight( cur )
+				auto directionalLight = m_writer.declLocale( "directionalLight"
+					, getDirectionalLight( cur ) );
+				lightingModel->compute( directionalLight
 					, components
 					, backgroundModel
 					, lightSurface
@@ -398,7 +323,9 @@ namespace castor3d::shader
 
 				WHILE( m_writer, cur < end )
 				{
-					lightingModel->compute( getPointLight( cur )
+					auto pointLight = m_writer.declLocale( "pointLight"
+						, getPointLight( cur ) );
+					lightingModel->compute( pointLight
 						, components
 						, lightSurface
 						, receivesShadows
@@ -411,7 +338,9 @@ namespace castor3d::shader
 
 				WHILE( m_writer, cur < end )
 				{
-					lightingModel->compute( getSpotLight( cur )
+					auto spotLight = m_writer.declLocale( "spotLight"
+						, getSpotLight( cur ) );
+					lightingModel->compute( spotLight
 						, components
 						, lightSurface
 						, receivesShadows
@@ -445,7 +374,9 @@ namespace castor3d::shader
 
 			WHILE( m_writer, cur < end )
 			{
-				output += lightingModel->computeDiffuse( getDirectionalLight( cur )
+				auto directionalLight = m_writer.declLocale( "directionalLight"
+					, getDirectionalLight( cur ) );
+				output += lightingModel->computeDiffuse( directionalLight
 					, components
 					, backgroundModel
 					, lightSurface
@@ -458,7 +389,9 @@ namespace castor3d::shader
 
 			WHILE( m_writer, cur < end )
 			{
-				output += lightingModel->computeDiffuse( getPointLight( cur )
+				auto pointLight = m_writer.declLocale( "pointLight"
+					, getPointLight( cur ) );
+				lightingModel->computeDiffuse( pointLight
 					, components
 					, lightSurface
 					, receivesShadows );
@@ -470,7 +403,9 @@ namespace castor3d::shader
 
 			WHILE( m_writer, cur < end )
 			{
-				output += lightingModel->computeDiffuse( getSpotLight( cur )
+				auto pointLight = m_writer.declLocale( "pointLight"
+					, getPointLight( cur ) );
+				lightingModel->computeDiffuse( pointLight
 					, components
 					, lightSurface
 					, receivesShadows );
@@ -497,7 +432,8 @@ namespace castor3d::shader
 			{
 			case LightType::eDirectional:
 				{
-					auto light = m_writer.declLocale( "light", getDirectionalLight( lightOffset ) );
+					auto light = m_writer.declLocale( "light"
+						, getDirectionalLight( lightOffset ) );
 					lightingModel->compute( light
 						, components
 						, backgroundModel
@@ -509,7 +445,8 @@ namespace castor3d::shader
 
 			case LightType::ePoint:
 				{
-					auto light = m_writer.declLocale( "light", getPointLight( lightOffset ) );
+					auto light = m_writer.declLocale( "light"
+						, getPointLight( lightOffset ) );
 					lightingModel->compute( light
 						, components
 						, lightSurface
@@ -520,7 +457,8 @@ namespace castor3d::shader
 
 			case LightType::eSpot:
 				{
-					auto light = m_writer.declLocale( "light", getSpotLight( lightOffset ) );
+					auto light = m_writer.declLocale( "light"
+						, getSpotLight( lightOffset ) );
 					lightingModel->compute( light
 						, components
 						, lightSurface
@@ -596,7 +534,7 @@ namespace castor3d::shader
 		return m_lightsBuffer->getSpotLight( offset );
 	}
 
-	sdw::Vec3 Lights::getCascadeFactors( DirectionalLight const light
+	sdw::Vec3 Lights::getCascadeFactors( DirectionalShadowData const shadows
 		, sdw::Vec3 pviewVertex
 		, sdw::UInt pmaxCascadeCount )
 	{
@@ -604,7 +542,7 @@ namespace castor3d::shader
 		{
 			m_getCascadeFactors = m_writer.implementFunction< sdw::Vec3 >( "c3d_getCascadeFactors"
 				, [this]( sdw::Vec3 viewVertex
-					, sdw::FloatArray splitDepths
+					, sdw::Vec4Array splitDepths
 					, sdw::UInt cascadeCount
 					, sdw::UInt maxCascadeCount )
 				{
@@ -616,7 +554,7 @@ namespace castor3d::shader
 					// Get cascade index for the current fragment's view position
 					FOR( m_writer, sdw::UInt, i, maxCount, i > 0u, --i )
 					{
-						IF( m_writer, viewVertex.z() > splitDepths[i] )
+						IF( m_writer, viewVertex.z() > splitDepths[i / 4u][i % 4u] )
 						{
 							auto factors = m_writer.declLocale( "factors"
 								, vec3( m_writer.cast< sdw::Float >( i ), 1.0_f, 0.0_f ) );
@@ -658,14 +596,14 @@ namespace castor3d::shader
 					m_writer.returnStmt( cascadeFactors );
 				}
 				, sdw::InVec3{ m_writer, "viewVertex" }
-				, sdw::InFloatArray{ m_writer, "splitDepths", uint32_t( ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) ) }
+				, sdw::InVec4Array{ m_writer, "splitDepths", uint32_t( ashes::getAlignedSize( MaxDirectionalCascadesCount, 4u ) / 4u ) }
 				, sdw::InUInt{ m_writer, "cascadeCount" }
 				, sdw::InUInt{ m_writer, "maxCascadeCount" } );
 		}
 
 		return m_getCascadeFactors( pviewVertex
-			, light.splitDepths()
-			, light.cascadeCount()
+			, shadows.splitDepths()
+			, shadows.cascadeCount()
 			, pmaxCascadeCount );
 	}
 

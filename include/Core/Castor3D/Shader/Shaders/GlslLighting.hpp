@@ -48,7 +48,8 @@ namespace castor3d::shader
 			, Utils & utils
 			, sdw::Vec3 const worldEye
 			, BlendComponents & components );
-		C3D_API sdw::Vec3 combine( BlendComponents const & components
+		C3D_API sdw::Vec3 combine( DebugOutput & debugOutput
+			, BlendComponents const & components
 			, sdw::Vec3 const & incident
 			, sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
@@ -66,7 +67,8 @@ namespace castor3d::shader
 			, sdw::Vec3 refracted
 			, sdw::Vec3 coatReflected
 			, sdw::Vec3 sheenReflected );
-		C3D_API sdw::Vec3 combine( BlendComponents const & components
+		C3D_API sdw::Vec3 combine( DebugOutput & debugOutput
+			, BlendComponents const & components
 			, sdw::Vec3 const & incident
 			, sdw::Vec3 const & directDiffuse
 			, sdw::Vec3 const & indirectDiffuse
@@ -139,32 +141,42 @@ namespace castor3d::shader
 	protected:
 		C3D_API void doComputeAttenuation( sdw::Float const attenuation
 			, OutputComponents & output );
-		C3D_API void doApplyShadows( DirectionalLight const & light
+		C3D_API void doApplyShadows( DirectionalShadowData const & light
+			, sdw::Int const shadowMapIndex
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
-		C3D_API void doApplyShadows( PointLight const & light
+		C3D_API void doApplyShadows( PointShadowData const & light
+			, sdw::Int const shadowMapIndex
+			, sdw::Float const lightRange
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
-		C3D_API void doApplyShadows( SpotLight const & light
+		C3D_API void doApplyShadows( SpotShadowData const & light
+			, sdw::Int const shadowMapIndex
+			, sdw::Float const lightRange
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
-		C3D_API void doApplyShadowsDiffuse( DirectionalLight const & light
+		C3D_API void doApplyShadowsDiffuse( DirectionalShadowData const & light
+			, sdw::Int const shadowMapIndex
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
 			, sdw::Vec3 & output );
-		C3D_API void doApplyShadowsDiffuse( PointLight const & light
+		C3D_API void doApplyShadowsDiffuse( PointShadowData const & light
+			, sdw::Int const shadowMapIndex
+			, sdw::Float const lightRange
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
 			, sdw::Vec3 & output );
-		C3D_API void doApplyShadowsDiffuse( SpotLight const & light
+		C3D_API void doApplyShadowsDiffuse( SpotShadowData const & light
+			, sdw::Int const shadowMapIndex
+			, sdw::Float const lightRange
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
@@ -180,7 +192,9 @@ namespace castor3d::shader
 			, sdw::Float const & isLit
 			, sdw::Vec2 & output );
 		C3D_API virtual void doComputeScatteringTerm( sdw::Vec3 const & radiance
-			, Light const & light
+			, ShadowData const & shadows
+			, sdw::Int const shadowMapIndex
+			, sdw::Vec2 const & lightIntensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 & output );

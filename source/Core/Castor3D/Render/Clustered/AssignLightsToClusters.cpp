@@ -332,7 +332,7 @@ namespace castor3d
 										, lights.getPointLight( lightOffset ) );
 
 									IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz()
-										, point.base().farPlane()
+										, point.radius()
 										, gsClusterAABB ) )
 									{
 										gsPointLights.appendData( lightOffset, MaxLightsPerCluster );
@@ -394,12 +394,12 @@ namespace castor3d
 
 #if 1
 									IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-										, spot.base().farPlane()
+										, spot.radius()
 										, gsClusterAABB ) )
 #else
 									IF( writer, coneInsideSphere( shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
 											, spot.direction()
-											, spot.base().farPlane()
+											, spot.radius()
 											, spot.outerCutOff()
 											, spot.outerCutOffCos()
 											, spot.outerCutOffSin() }
@@ -446,7 +446,7 @@ namespace castor3d
 								, lights.getPointLight( cur ) );
 
 							IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz()
-								, point.base().farPlane()
+								, point.radius()
 								, gsClusterAABB ) )
 							{
 								gsPointLights.appendData( cur, MaxLightsPerCluster );
@@ -468,12 +468,12 @@ namespace castor3d
 
 #if 1
 							IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-								, spot.base().farPlane()
+								, spot.radius()
 								, gsClusterAABB ) )
 #else
 							IF( writer, coneInsideSphere( shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
 									, spot.direction()
-									, spot.base().farPlane()
+									, spot.radius()
 									, spot.outerCutOff()
 									, spot.outerCutOffCos()
 									, spot.outerCutOffSin() }

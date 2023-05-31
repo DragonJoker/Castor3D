@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
+#include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
@@ -712,6 +713,7 @@ namespace castor3d
 	{
 		RenderQueueArray queues;
 		ShadowMapLightTypeArray shadowMaps;
+		ShadowBuffer const * shadowBuffer;
 	};
 
 	enum class TechniquePassEvent

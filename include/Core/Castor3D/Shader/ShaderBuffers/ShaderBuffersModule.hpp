@@ -46,6 +46,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	ShaderBuffer holding the light sources shadow data.
+	*\~french
+	*\brief
+	*	ShaderBuffer contenant les données d'ombres des sources lumineuses.
+	*/
+	class ShadowBuffer;
+	/**
+	*\~english
+	*\brief
 	*	ShaderBuffer holding the Subsurface Scattering profiles data.
 	*\~french
 	*\brief
@@ -81,6 +90,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, FontGlyphBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LightBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ShadowBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SssProfileBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureConfigurationBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureAnimationBuffer, C3D_API );
@@ -89,41 +99,45 @@ namespace castor3d
 	{
 		using Float1 = float;
 
-		struct Float2
+		template< typename DataT >
+		struct Data2T
 		{
-			Float2 & operator=( Float1 rhs )
+			Data2T & operator=( DataT rhs )
 			{
 				x = rhs;
 				return *this;
 			}
 
-			Float2 & operator=( castor::Point2f const & rhs )
+			Data2T & operator=( castor::Point2< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
 				return *this;
 			}
 
-			Float1 x{};
-			Float1 y{};
+			DataT x{};
+			DataT y{};
 		};
 
-		struct Float3
+		using Float2 = Data2T< Float1 >;
+
+		template< typename DataT >
+		struct Data3T
 		{
-			Float3 & operator=( Float1 rhs )
+			Data3T & operator=( DataT rhs )
 			{
 				x = rhs;
 				return *this;
 			}
 
-			Float3 & operator=( castor::Point2f const & rhs )
+			Data3T & operator=( castor::Point2< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
 				return *this;
 			}
 
-			Float3 & operator=( castor::Point3f const & rhs )
+			Data3T & operator=( castor::Point3< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
@@ -131,27 +145,30 @@ namespace castor3d
 				return *this;
 			}
 
-			Float1 x{};
-			Float1 y{};
-			Float1 z{};
+			DataT x{};
+			DataT y{};
+			DataT z{};
 		};
 
-		struct Float4
+		using Float3 = Data3T< Float1 >;
+
+		template< typename DataT >
+		struct Data4T
 		{
-			Float4 & operator=( Float1 rhs )
+			Data4T & operator=( DataT rhs )
 			{
 				x = rhs;
 				return *this;
 			}
 
-			Float4 & operator=( castor::Point2f const & rhs )
+			Data4T & operator=( castor::Point2< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
 				return *this;
 			}
 
-			Float4 & operator=( castor::Point3f const & rhs )
+			Data4T & operator=( castor::Point3< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
@@ -159,7 +176,7 @@ namespace castor3d
 				return *this;
 			}
 
-			Float4 & operator=( castor::Point4f const & rhs )
+			Data4T & operator=( castor::Point4< DataT > const & rhs )
 			{
 				x = rhs->x;
 				y = rhs->y;
@@ -168,11 +185,13 @@ namespace castor3d
 				return *this;
 			}
 
-			Float1 x{};
-			Float1 y{};
-			Float1 z{};
-			Float1 w{};
+			DataT x{};
+			DataT y{};
+			DataT z{};
+			DataT w{};
 		};
+
+		using Float4 = Data4T< Float1 >;
 
 		struct Float4x4
 		{

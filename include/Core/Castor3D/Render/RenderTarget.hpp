@@ -237,6 +237,7 @@ namespace castor3d
 		C3D_API HdrConfig const & getHdrConfig()const;
 		C3D_API HdrConfig & getHdrConfig();
 		C3D_API ShadowMapLightTypeArray getShadowMaps()const;
+		C3D_API ShadowBuffer * getShadowBuffer()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
 		C3D_API CameraUbo const & getCameraUbo()const;
 		C3D_API SceneUbo const & getSceneUbo()const;
