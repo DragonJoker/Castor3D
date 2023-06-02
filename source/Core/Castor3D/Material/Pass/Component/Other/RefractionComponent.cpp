@@ -27,7 +27,8 @@ namespace castor
 		bool operator()( castor3d::RefractionComponent const & object
 			, StringStream & file )override
 		{
-			return write( file, cuT( "refraction_ratio" ), object.getRefractionRatio() );
+			return writeOpt( file, cuT( "refraction_ratio" ), object.getRefractionRatio(), 0.0f )
+				&& writeOpt( file, cuT( "has_refraction" ), object.hasRefraction(), false );
 		}
 	};
 }
@@ -48,10 +49,24 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				float value = 0;
-				params[0]->get( value );
 				auto & component = getPassComponent< RefractionComponent >( parsingContext );
-				component.setRefractionRatio( value );
+				component.setRefractionRatio( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserPassHasRefraction )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( !params.empty() )
+			{
+				auto & component = getPassComponent< RefractionComponent >( parsingContext );
+				component.enableRefraction( params[0]->get< bool >() );
 			}
 		}
 		CU_EndAttribute()
@@ -75,6 +90,7 @@ namespace castor3d
 		if ( !components.hasMember( "refractionRatio" ) )
 		{
 			components.declMember( "refractionRatio", sdw::type::Kind::eFloat );
+			components.declMember( "hasRefraction", sdw::type::Kind::eUInt );
 		}
 	}
 
@@ -93,10 +109,12 @@ namespace castor3d
 		if ( material )
 		{
 			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "refractionRatio" ) ) );
+			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::UInt >( "hasRefraction" ) ) );
 		}
 		else
 		{
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ RefractionComponent::Default } ) );
+			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
 
@@ -108,13 +126,15 @@ namespace castor3d
 		if ( res.hasMember( "refractionRatio" ) )
 		{
 			res.getMember< sdw::Float >( "refractionRatio" ) += src.getMember< sdw::Float >( "refractionRatio" ) * passMultiplier;
+			res.getMember< sdw::UInt >( "hasRefraction" ) = max( res.getMember< sdw::UInt >( "hasRefraction" )
+				, src.getMember< sdw::UInt >( "hasRefraction" ) );
 		}
 	}
 
 	//*********************************************************************************************
 
 	RefractionComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 4u }
+		: shader::PassMaterialShader{ 8u }
 	{
 	}
 
@@ -124,7 +144,9 @@ namespace castor3d
 		if ( !type.hasMember( "refractionRatio" ) )
 		{
 			type.declMember( "refractionRatio", ast::type::Kind::eFloat );
+			type.declMember( "hasRefraction", ast::type::Kind::eUInt );
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ RefractionComponent::Default } ) );
+			inits.emplace_back( sdw::makeExpr( 0_u ) );
 		}
 	}
 
@@ -138,6 +160,11 @@ namespace castor3d
 			, cuT( "refraction_ratio" )
 			, refrcmp::parserPassRefractionRatio
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, CSCNSection::ePass
+			, cuT( "has_refraction" )
+			, refrcmp::parserPassHasRefraction
+			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 	}
 
 	void RefractionComponent::Plugin::zeroBuffer( Pass const & pass
@@ -145,7 +172,9 @@ namespace castor3d
 		, PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk(), RefractionComponent::Default, 0u );
+		VkDeviceSize offset{};
+		offset += data.write( materialShader.getMaterialChunk(), RefractionComponent::Default, offset );
+		data.write( materialShader.getMaterialChunk(), 0u, offset );
 	}
 
 	bool RefractionComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -159,19 +188,18 @@ namespace castor3d
 
 	castor::String const RefractionComponent::TypeName = C3D_MakePassOtherComponentName( "refraction" );
 
-	RefractionComponent::RefractionComponent( Pass & pass
-		, float defaultValue )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >{ pass
+	RefractionComponent::RefractionComponent( Pass & pass )
+		: BaseDataPassComponentT< RefractionData >{ pass
 			, TypeName
-			, {}
-			, defaultValue }
+			, {} }
 	{
 	}
 
 	void RefractionComponent::accept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Refraction" ) );
-		vis.visit( cuT( "IoR" ), m_value );
+		vis.visit( cuT( "IoR" ), m_value.factor );
+		vis.visit( cuT( "Has Refraction" ), m_value.enabled );
 	}
 
 	PassComponentUPtr RefractionComponent::doClone( Pass & pass )const
@@ -192,7 +220,9 @@ namespace castor3d
 	void RefractionComponent::doFillBuffer( PassBuffer & buffer )const
 	{
 		auto data = buffer.getData( getOwner()->getId() );
-		data.write( m_materialShader->getMaterialChunk(), getRefractionRatio(), 0u );
+		VkDeviceSize offset{};
+		offset += data.write( m_materialShader->getMaterialChunk(), getRefractionRatio(), offset );
+		data.write( m_materialShader->getMaterialChunk(), hasRefraction() ? 1u : 0u, offset );
 	}
 
 	//*********************************************************************************************

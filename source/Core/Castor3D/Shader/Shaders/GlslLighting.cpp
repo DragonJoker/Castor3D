@@ -134,6 +134,26 @@ namespace castor3d::shader
 		, sdw::Vec3 reflectedSpecular
 		, sdw::Vec3 refracted )
 	{
+		IF( m_writer, components.refractionRatio != 0.0_f
+			&& components.hasRefraction != 0_u
+			&& components.hasTransmission == 0_u )
+		{
+			auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
+				, m_utils.fresnelMix( incident
+					, components.normal
+					, components.refractionRatio ) );
+			reflectedDiffuse = mix( vec3( 0.0_f )
+				, reflectedDiffuse
+				, vec3( fresnelFactor ) );
+			reflectedSpecular = mix( vec3( 0.0_f )
+				, reflectedSpecular
+				, vec3( fresnelFactor ) );
+			refracted = mix( refracted
+				, vec3( 0.0_f )
+				, vec3( fresnelFactor ) );
+		}
+		FI;
+
 		auto finalAmbient = m_writer.declLocale( "c3d_directAmbient"
 			, adjustDirectAmbient( components, directAmbient ) );
 		debugOutput.registerOutput( "Final Ambient", finalAmbient );

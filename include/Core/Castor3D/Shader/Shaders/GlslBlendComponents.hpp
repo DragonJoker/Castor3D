@@ -118,6 +118,7 @@ namespace castor3d::shader
 		sdw::DefaultedT< sdw::Float > occlusion;
 		sdw::DefaultedT< sdw::Float > transmittance;
 		sdw::DefaultedT< sdw::Float > refractionRatio;
+		sdw::DefaultedT< sdw::UInt > hasRefraction;
 		sdw::DefaultedT< sdw::UInt > hasReflection;
 		sdw::DefaultedT< sdw::Float > metalness;
 		sdw::DefaultedT< sdw::Float > roughness;

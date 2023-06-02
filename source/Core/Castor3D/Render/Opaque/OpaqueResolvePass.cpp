@@ -344,6 +344,7 @@ namespace castor3d
 							, *backgroundModel
 							, envMapIndex
 							, components.hasReflection
+							, components.hasRefraction
 							, components.refractionRatio
 							, reflectedDiffuse
 							, reflectedSpecular

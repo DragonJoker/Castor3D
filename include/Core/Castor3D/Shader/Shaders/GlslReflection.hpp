@@ -29,6 +29,7 @@ namespace castor3d::shader
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
+			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
@@ -49,6 +50,7 @@ namespace castor3d::shader
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
+			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
@@ -61,6 +63,7 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
+			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
@@ -77,6 +80,7 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
+			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
@@ -89,6 +93,7 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
+			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
@@ -103,6 +108,7 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, sdw::UInt const & envMapIndex
 			, sdw::UInt const & hasReflection
+			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
@@ -310,6 +316,7 @@ namespace castor3d::shader
 			, sdw::InVec2
 			, sdw::InUInt
 			, sdw::InUInt
+			, sdw::InUInt
 			, sdw::InFloat
 			, sdw::OutVec3
 			, sdw::OutVec3
@@ -325,6 +332,7 @@ namespace castor3d::shader
 			, sdw::InFloat
 			, sdw::InUInt
 			, sdw::InUInt
+			, sdw::InUInt
 			, sdw::InFloat
 			, sdw::OutVec3
 			, sdw::OutVec3
@@ -338,6 +346,7 @@ namespace castor3d::shader
 			, sdw::InVec3
 			, sdw::InVec3
 			, sdw::InFloat
+			, sdw::InUInt
 			, sdw::InUInt
 			, sdw::InUInt
 			, sdw::InFloat
