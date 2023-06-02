@@ -139,8 +139,8 @@ namespace castor3d
 			return;
 		}
 
-		res.getMember< sdw::Vec3 >( "sheenFactor", true ) = src.getMember< sdw::Vec3 >( "sheenFactor", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "sheenRoughness", true ) = src.getMember< sdw::Float >( "sheenRoughness", true ) * passMultiplier;
+		res.getMember< sdw::Vec3 >( "sheenFactor", true ) += src.getMember< sdw::Vec3 >( "sheenFactor", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "sheenRoughness", true ) += src.getMember< sdw::Float >( "sheenRoughness", true ) * passMultiplier;
 	}
 
 	//*********************************************************************************************

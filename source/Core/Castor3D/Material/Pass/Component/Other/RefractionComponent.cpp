@@ -10,6 +10,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+#include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
+
 CU_ImplementSmartPtr( castor3d, RefractionComponent )
 
 namespace castor
@@ -126,7 +128,7 @@ namespace castor3d
 		if ( res.hasMember( "refractionRatio" ) )
 		{
 			res.getMember< sdw::Float >( "refractionRatio" ) += src.getMember< sdw::Float >( "refractionRatio" ) * passMultiplier;
-			res.getMember< sdw::UInt >( "hasRefraction" ) = max( res.getMember< sdw::UInt >( "hasRefraction" )
+			res.getMember< sdw::UInt >( "hasRefraction" ) = sdw::max( res.getMember< sdw::UInt >( "hasRefraction" )
 				, src.getMember< sdw::UInt >( "hasRefraction" ) );
 		}
 	}

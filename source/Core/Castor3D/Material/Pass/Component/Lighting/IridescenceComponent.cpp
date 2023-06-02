@@ -198,13 +198,13 @@ namespace castor3d
 			return;
 		}
 
-		res.getMember< sdw::Float >( "iridescenceFactor", true ) = src.getMember< sdw::Float >( "iridescenceFactor", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "iridescenceIor", true ) = src.getMember< sdw::Float >( "iridescenceIor", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "iridescenceMinThickness", true ) = src.getMember< sdw::Float >( "iridescenceMinThickness", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "iridescenceMaxThickness", true ) = src.getMember< sdw::Float >( "iridescenceMaxThickness", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "iridescenceThickness", true ) = src.getMember< sdw::Float >( "iridescenceThickness", true ) * passMultiplier;
-		res.getMember< sdw::Vec3 >( "iridescenceFresnel", true ) = src.getMember< sdw::Vec3 >( "iridescenceFresnel", true ) * passMultiplier;
-		res.getMember< sdw::Vec3 >( "iridescenceF0", true ) = src.getMember< sdw::Vec3 >( "iridescenceF0", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "iridescenceFactor", true ) += src.getMember< sdw::Float >( "iridescenceFactor", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "iridescenceIor", true ) += src.getMember< sdw::Float >( "iridescenceIor", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "iridescenceMinThickness", true ) += src.getMember< sdw::Float >( "iridescenceMinThickness", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "iridescenceMaxThickness", true ) += src.getMember< sdw::Float >( "iridescenceMaxThickness", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "iridescenceThickness", true ) += src.getMember< sdw::Float >( "iridescenceThickness", true ) * passMultiplier;
+		res.getMember< sdw::Vec3 >( "iridescenceFresnel", true ) += src.getMember< sdw::Vec3 >( "iridescenceFresnel", true ) * passMultiplier;
+		res.getMember< sdw::Vec3 >( "iridescenceF0", true ) += src.getMember< sdw::Vec3 >( "iridescenceF0", true ) * passMultiplier;
 	}
 
 	//*********************************************************************************************

@@ -127,7 +127,6 @@ namespace castor3d
 			if ( count > 0 )
 			{
 				int32_t index = 0;
-				uint32_t offset = 0u;
 				auto lightIt = lights.begin();
 				activeShadowMaps[size_t( type )].push_back( { std::ref( shadowMap ), LightIdArray{} } );
 				auto & active = activeShadowMaps[size_t( type )].back();
@@ -188,7 +187,6 @@ namespace castor3d
 
 					++index;
 					++lightIt;
-					offset += light.getShadowComponentCount();
 				}
 
 				shadowBuffer.markDirty();

@@ -9,6 +9,8 @@
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 
+#include <ShaderWriter/Intrinsics/IntrinsicFunctions.hpp>
+
 CU_ImplementSmartPtr( castor3d, ReflectionComponent )
 
 namespace castor
@@ -106,7 +108,8 @@ namespace castor3d
 	{
 		if ( res.hasMember( "hasReflection" ) )
 		{
-			res.getMember< sdw::UInt >( "hasReflection" ) += src.getMember< sdw::UInt >( "hasReflection" );
+			res.getMember< sdw::UInt >( "hasReflection" ) = sdw::max( res.getMember< sdw::UInt >( "hasReflection" )
+				, src.getMember< sdw::UInt >( "hasReflection" ) );
 		}
 	}
 

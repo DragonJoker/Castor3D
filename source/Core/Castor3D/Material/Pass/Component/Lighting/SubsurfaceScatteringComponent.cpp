@@ -224,7 +224,8 @@ namespace castor3d
 	{
 		if ( res.hasMember( "sssProfileIndex" ) )
 		{
-			res.getMember< sdw::UInt >( "sssProfileIndex" ) = max( src.getMember< sdw::UInt >( "sssProfileIndex" ), src.getMember< sdw::UInt >( "sssProfileIndex" ) );
+			res.getMember< sdw::UInt >( "sssProfileIndex" ) = max( res.getMember< sdw::UInt >( "sssProfileIndex" )
+				, src.getMember< sdw::UInt >( "sssProfileIndex" ) );
 		}
 	}
 

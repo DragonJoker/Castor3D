@@ -141,8 +141,8 @@ namespace castor3d
 			return;
 		}
 
-		res.getMember< sdw::Vec3 >( "attenuationColour", true ) = src.getMember< sdw::Vec3 >( "attenuationColour", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "attenuationDistance", true ) = src.getMember< sdw::Float >( "attenuationDistance", true ) * passMultiplier;
+		res.getMember< sdw::Vec3 >( "attenuationColour", true ) += src.getMember< sdw::Vec3 >( "attenuationColour", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "attenuationDistance", true ) += src.getMember< sdw::Float >( "attenuationDistance", true ) * passMultiplier;
 	}
 
 	//*********************************************************************************************

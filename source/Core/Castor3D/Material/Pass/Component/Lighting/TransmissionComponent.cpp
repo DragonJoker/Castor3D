@@ -116,7 +116,7 @@ namespace castor3d
 			return;
 		}
 
-		res.getMember< sdw::Float >( "transmission", true ) = src.getMember< sdw::Float >( "transmission", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "transmission", true ) += src.getMember< sdw::Float >( "transmission", true ) * passMultiplier;
 		res.getMember< sdw::Float >( "hasTransmission", true ) = max( res.getMember< sdw::Float >( "hasTransmission", true )
 			, src.getMember< sdw::Float >( "hasTransmission", true ) );
 	}
