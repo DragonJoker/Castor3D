@@ -166,8 +166,8 @@ namespace castor3d
 			return;
 		}
 
-		res.getMember< sdw::Float >( "clearcoatFactor", true ) = src.getMember< sdw::Float >( "clearcoatFactor", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "clearcoatRoughness", true ) = src.getMember< sdw::Float >( "clearcoatRoughness", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "clearcoatFactor", true ) += src.getMember< sdw::Float >( "clearcoatFactor", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "clearcoatRoughness", true ) += src.getMember< sdw::Float >( "clearcoatRoughness", true ) * passMultiplier;
 		res.getMember< sdw::Vec3 >( "clearcoatNormal", true ) += src.getMember< sdw::Vec3 >( "clearcoatNormal", true ) * passMultiplier;
 	}
 

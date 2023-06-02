@@ -115,7 +115,7 @@ namespace castor3d
 			return;
 		}
 
-		res.getMember< sdw::Float >( "thicknessFactor", true ) = src.getMember< sdw::Float >( "thicknessFactor", true ) * passMultiplier;
+		res.getMember< sdw::Float >( "thicknessFactor", true ) += src.getMember< sdw::Float >( "thicknessFactor", true ) * passMultiplier;
 	}
 
 	//*********************************************************************************************
