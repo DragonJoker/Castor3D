@@ -399,6 +399,7 @@ namespace castor3d
 							, sceneUv
 							, modelData.getEnvMapIndex()
 							, components.hasReflection
+							, components.hasRefraction
 							, components.refractionRatio
 							, reflectedDiffuse
 							, reflectedSpecular
@@ -414,6 +415,7 @@ namespace castor3d
 							, *backgroundModel
 							, modelData.getEnvMapIndex()
 							, components.hasReflection
+							, components.hasRefraction
 							, components.refractionRatio
 							, reflectedDiffuse
 							, reflectedSpecular

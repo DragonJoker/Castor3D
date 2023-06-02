@@ -33,6 +33,7 @@ namespace castor3d::shader
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::UInt const & hasReflection
+		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
@@ -54,6 +55,7 @@ namespace castor3d::shader
 			, sceneUv
 			, envMapIndex
 			, hasReflection
+			, hasRefraction
 			, refractionRatio
 			, reflectedDiffuse
 			, reflectedSpecular
@@ -76,6 +78,7 @@ namespace castor3d::shader
 		, sdw::Vec2 const & psceneUv
 		, sdw::UInt const & penvMapIndex
 		, sdw::UInt const & phasReflection
+		, sdw::UInt const & phasRefraction
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 & preflectedDiffuse
 		, sdw::Vec3 & preflectedSpecular
@@ -98,6 +101,7 @@ namespace castor3d::shader
 					, sdw::Vec2 const & sceneUv
 					, sdw::UInt envMapIndex
 					, sdw::UInt const & hasReflection
+					, sdw::UInt const & hasRefraction
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 reflectedDiffuse
 					, sdw::Vec3 reflectedSpecular
@@ -136,7 +140,7 @@ namespace castor3d::shader
 							, refractionRatio
 							, components );
 					}
-					ELSE
+					ELSEIF( hasRefraction != 0_u )
 					{
 						doComputeRefractions( envMap
 							, hasEnvMap
@@ -184,6 +188,7 @@ namespace castor3d::shader
 				, sdw::InVec2{ m_writer, "sceneUv" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InUInt{ m_writer, "hasReflection" }
+				, sdw::InUInt{ m_writer, "hasRefraction" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
 				, sdw::OutVec3{ m_writer, "reflectedSpecular" }
@@ -203,6 +208,7 @@ namespace castor3d::shader
 			, psceneUv
 			, penvMapIndex
 			, phasReflection
+			, phasRefraction
 			, prefractionRatio
 			, preflectedDiffuse
 			, preflectedSpecular
@@ -221,6 +227,7 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, sdw::UInt const & envMapIndex
 		, sdw::UInt const & hasReflection
+		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
@@ -238,6 +245,7 @@ namespace castor3d::shader
 			, background
 			, envMapIndex
 			, hasReflection
+			, hasRefraction
 			, refractionRatio
 			, reflectedDiffuse
 			, reflectedSpecular
@@ -256,6 +264,7 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, sdw::UInt const & penvMapIndex
 		, sdw::UInt const & phasReflection
+		, sdw::UInt const & phasRefraction
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 & preflectedDiffuse
 		, sdw::Vec3 & preflectedSpecular
@@ -275,6 +284,7 @@ namespace castor3d::shader
 					, sdw::Float const & NdotV
 					, sdw::UInt envMapIndex
 					, sdw::UInt const & hasReflection
+					, sdw::UInt const & hasRefraction
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 reflectedDiffuse
 					, sdw::Vec3 reflectedSpecular
@@ -301,15 +311,21 @@ namespace castor3d::shader
 						, envMapIndex
 						, reflectedDiffuse
 						, reflectedSpecular );
-					doComputeRefractions( envMap
-						, hasEnvMap
-						, background
-						, wsNormal
-						, V
-						, refractionRatio
-						, envMapIndex
-						, components
-						, refracted );
+
+					IF( m_writer, hasRefraction != 0_u )
+					{
+						doComputeRefractions( envMap
+							, hasEnvMap
+							, background
+							, wsNormal
+							, V
+							, refractionRatio
+							, envMapIndex
+							, components
+							, refracted );
+					}
+					FI;
+
 					doComputeClearcoatReflections( brdf
 						, envMap
 						, hasEnvMap
@@ -341,6 +357,7 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "NdotV" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InUInt{ m_writer, "hasReflection" }
+				, sdw::InUInt{ m_writer, "hasRefraction" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
 				, sdw::OutVec3{ m_writer, "reflectedSpecular" }
@@ -357,6 +374,7 @@ namespace castor3d::shader
 			, pNdotV
 			, penvMapIndex
 			, phasReflection
+			, phasRefraction
 			, prefractionRatio
 			, preflectedDiffuse
 			, preflectedSpecular
@@ -375,6 +393,7 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, sdw::UInt const & envMapIndex
 		, sdw::UInt const & hasReflection
+		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
@@ -390,6 +409,7 @@ namespace castor3d::shader
 			, background
 			, envMapIndex
 			, hasReflection
+			, hasRefraction
 			, refractionRatio
 			, reflectedDiffuse
 			, reflectedSpecular
@@ -406,6 +426,7 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, sdw::UInt const & penvMapIndex
 		, sdw::UInt const & phasReflection
+		, sdw::UInt const & phasRefraction
 		, sdw::Float const & prefractionRatio
 		, sdw::Vec3 & preflectedDiffuse
 		, sdw::Vec3 & preflectedSpecular
@@ -423,6 +444,7 @@ namespace castor3d::shader
 					, sdw::Float const & NdotV
 					, sdw::UInt envMapIndex
 					, sdw::UInt const & hasReflection
+					, sdw::UInt const & hasRefraction
 					, sdw::Float const & refractionRatio
 					, sdw::Vec3 reflectedDiffuse
 					, sdw::Vec3 reflectedSpecular
@@ -447,15 +469,20 @@ namespace castor3d::shader
 						, envMapIndex
 						, reflectedDiffuse
 						, reflectedSpecular );
-					doComputeRefractions( envMap
-						, hasEnvMap
-						, background
-						, wsNormal
-						, V
-						, refractionRatio
-						, envMapIndex
-						, components
-						, refracted );
+
+					IF( m_writer, hasRefraction != 0_u )
+					{
+						doComputeRefractions( envMap
+							, hasEnvMap
+							, background
+							, wsNormal
+							, V
+							, refractionRatio
+							, envMapIndex
+							, components
+							, refracted );
+					}
+					FI;
 				}
 				, InOutBlendComponents{ m_writer, "components", pcomponents }
 				, sdw::InVec3{ m_writer, "wsNormal" }
@@ -465,6 +492,7 @@ namespace castor3d::shader
 				, sdw::InFloat{ m_writer, "NdotV" }
 				, sdw::InUInt{ m_writer, "envMapIndex" }
 				, sdw::InUInt{ m_writer, "hasReflection" }
+				, sdw::InUInt{ m_writer, "hasRefraction" }
 				, sdw::InFloat{ m_writer, "refractionRatio" }
 				, sdw::OutVec3{ m_writer, "reflectedDiffuse" }
 				, sdw::OutVec3{ m_writer, "reflectedSpecular" }
@@ -479,6 +507,7 @@ namespace castor3d::shader
 			, pNdotV
 			, penvMapIndex
 			, phasReflection
+			, phasRefraction
 			, prefractionRatio
 			, preflectedDiffuse
 			, preflectedSpecular

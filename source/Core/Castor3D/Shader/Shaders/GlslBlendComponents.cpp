@@ -32,6 +32,7 @@ namespace castor3d::shader
 		, occlusion{ getMember( "occlusion", 1.0_f ) }
 		, transmittance{ getMember( "transmittance", 1.0_f ) }
 		, refractionRatio{ getMember( "refractionRatio", sdw::Float{ RefractionComponent::Default } ) }
+		, hasRefraction{ getMember( "hasRefraction", 0_u ) }
 		, hasReflection{ getMember( "hasReflection", 0_u ) }
 		, metalness{ getMember( "metalness", 0.0_f ) }
 		, roughness{ getMember( "roughness", 1.0_f ) }
