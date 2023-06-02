@@ -76,6 +76,12 @@ namespace castor3d
 					| ShaderFlag::eDepth );
 			}
 
+			bool isPassEnabled()const override
+			{
+				return hasNodes()
+					&& getScene().getLightCache().hasClusteredLights();
+			}
+
 		private:
 			ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override
 			{

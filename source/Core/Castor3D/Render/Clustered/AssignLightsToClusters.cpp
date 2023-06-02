@@ -525,12 +525,10 @@ namespace castor3d
 		class FramePass
 			: private castor::DataHolderT< ShaderModule >
 			, private castor::DataHolderT< ashes::PipelineShaderStageCreateInfoArray >
-			, private castor::DataHolderT< bool >
 			, public crg::ComputePass
 		{
 			using ShaderHolder = DataHolderT< ShaderModule >;
 			using CreateInfoHolder = DataHolderT< ashes::PipelineShaderStageCreateInfoArray >;
-			using EnabledHolder = DataHolderT< bool >;
 
 		public:
 			FramePass( crg::FramePass const & framePass
@@ -541,7 +539,6 @@ namespace castor3d
 				, crg::cp::Config config )
 				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( C3D_DebugUseLightsBVH != 0 ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
-				, EnabledHolder{ true }
 				, crg::ComputePass{framePass
 					, context
 					, graph
@@ -551,6 +548,7 @@ namespace castor3d
 					, crg::ru::Config{ 1u }
 #endif
 					, config
+						.isEnabled( IsEnabledCallback( [&clusters]() { return clusters.getCamera().getScene()->getLightCache().hasClusteredLights(); } ) )
 						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) )
 #if C3D_DebugUseDepthClusteredSamples
