@@ -143,6 +143,7 @@ namespace castor3d::shader
 			, OutputComponents & output );
 		C3D_API void doApplyShadows( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex
+			, sdw::Vec2 const & lightIntensity
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
@@ -192,8 +193,6 @@ namespace castor3d::shader
 			, sdw::Float const & isLit
 			, sdw::Vec2 & output );
 		C3D_API virtual void doComputeScatteringTerm( sdw::Vec3 const & radiance
-			, ShadowData const & shadows
-			, sdw::Int const shadowMapIndex
 			, sdw::Vec2 const & lightIntensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface

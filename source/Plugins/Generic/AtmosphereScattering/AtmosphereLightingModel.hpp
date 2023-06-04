@@ -17,8 +17,22 @@ namespace atmosphere_scattering
 {
 	namespace c3d = castor3d::shader;
 
+	class AtmosphereLightingModel
+	{
+	protected:
+		void initBackground( c3d::BackgroundModel & background
+			, c3d::Shadow & shadowModel );
+		sdw::Vec3 compRadiance( sdw::Vec3 const & lightDirection )const;
+		void compScatteringTerm( c3d::LightSurface const & lightSurface
+			, sdw::Vec3 & output );
+
+	public:
+		AtmosphereBackgroundModel * atmosphereBackground{};
+	};
+
 	class AtmospherePhongLightingModel
 		: public c3d::PhongLightingModel
+		, public AtmosphereLightingModel
 	{
 	public:
 		AtmospherePhongLightingModel( castor3d::LightingModelID lightingModelId
@@ -39,16 +53,11 @@ namespace atmosphere_scattering
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-	public:
-		AtmosphereBackgroundModel * atmosphereBackground{};
-
 	protected:
 		void doInitialiseBackground( c3d::BackgroundModel & pbackground )override;
 		sdw::Vec3 doComputeRadiance( c3d::Light const & light
 			, sdw::Vec3 const & lightDirection )const override;
 		void doComputeScatteringTerm( sdw::Vec3 const & radiance
-			, c3d::ShadowData const & shadows
-			, sdw::Int const shadowMapIndex
 			, sdw::Vec2 const & lightIntensity
 			, c3d::BlendComponents const & components
 			, c3d::LightSurface const & lightSurface
@@ -57,6 +66,7 @@ namespace atmosphere_scattering
 
 	class AtmospherePbrLightingModel
 		: public c3d::PbrLightingModel
+		, public AtmosphereLightingModel
 	{
 	public:
 		explicit AtmospherePbrLightingModel( castor3d::LightingModelID lightingModelId
@@ -82,15 +92,10 @@ namespace atmosphere_scattering
 		sdw::Vec3 doComputeRadiance( c3d::Light const & light
 			, sdw::Vec3 const & lightDirection )const override;
 		void doComputeScatteringTerm( sdw::Vec3 const & radiance
-			, c3d::ShadowData const & shadows
-			, sdw::Int const shadowMapIndex
 			, sdw::Vec2 const & lightIntensity
 			, c3d::BlendComponents const & components
 			, c3d::LightSurface const & lightSurface
 			, sdw::Vec3 & output )override;
-
-	public:
-		AtmosphereBackgroundModel * atmosphereBackground{};
 	};
  }
 

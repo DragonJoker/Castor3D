@@ -21,6 +21,40 @@ namespace atmosphere_scattering
 {
 	//*********************************************************************************************
 
+	void AtmosphereLightingModel::initBackground( c3d::BackgroundModel & background
+		, c3d::Shadow & shadowModel )
+	{
+		if ( !atmosphereBackground )
+		{
+			atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( background );
+			atmosphereBackground->atmosphere.settings.shadowMapEnabled = true;
+			atmosphereBackground->atmosphere.shadows = &shadowModel;
+		}
+	}
+
+	sdw::Vec3 AtmosphereLightingModel::compRadiance( sdw::Vec3 const & lightDirection )const
+	{
+		return atmosphereBackground->getSunRadiance( lightDirection );
+	}
+
+	void AtmosphereLightingModel::compScatteringTerm( c3d::LightSurface const & lightSurface
+		, sdw::Vec3 & output )
+	{
+		auto & writer = sdw::findWriterMandat( lightSurface, output );
+		auto targetSize = vec2( sdw::Float{ float( atmosphereBackground->getTargetSize().width ) }
+		, float( atmosphereBackground->getTargetSize().height ) );
+		auto luminance = writer.declLocale< sdw::Vec4 >( "luminance" );
+		auto transmittance = writer.declLocale< sdw::Vec4 >( "transmittance" );
+		atmosphereBackground->getPixelTransLum( lightSurface.clipPosition().xy()
+			, targetSize
+			, lightSurface.clipPosition().z()
+			, transmittance
+			, luminance );
+		output = luminance.xyz() / luminance.a();
+	}
+
+	//*********************************************************************************************
+
 	AtmospherePhongLightingModel::AtmospherePhongLightingModel( castor3d::LightingModelID lightingModelId
 		, sdw::ShaderWriter & writer
 		, c3d::Materials const & materials
@@ -60,60 +94,24 @@ namespace atmosphere_scattering
 			, enableVolumetric );
 	}
 
-	void AtmospherePhongLightingModel::doInitialiseBackground( c3d::BackgroundModel & pbackground )
+	void AtmospherePhongLightingModel::doInitialiseBackground( c3d::BackgroundModel & background )
 	{
-		if ( !atmosphereBackground )
-		{
-			atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( pbackground );
-			atmosphereBackground->atmosphere.settings.shadowMapEnabled = true;
-			atmosphereBackground->atmosphere.shadows = &m_shadowModel;
-		}
+		initBackground( background, m_shadowModel );
 	}
 
 	sdw::Vec3 AtmospherePhongLightingModel::doComputeRadiance( c3d::Light const & light
 		, sdw::Vec3 const & lightDirection )const
 	{
-		return atmosphereBackground->getSunRadiance( lightDirection );
+		return compRadiance( lightDirection );
 	}
 
 	void AtmospherePhongLightingModel::doComputeScatteringTerm( sdw::Vec3 const & radiance
-		, c3d::ShadowData const & shadows
-		, sdw::Int const shadowMapIndex
 		, sdw::Vec2 const & lightIntensity
 		, c3d::BlendComponents const & components
 		, c3d::LightSurface const & lightSurface
 		, sdw::Vec3 & output )
 	{
-		auto targetSize = vec2( sdw::Float{ float( atmosphereBackground->getTargetSize().width ) }
-		, float( atmosphereBackground->getTargetSize().height ) );
-		auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
-		auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
-		atmosphereBackground->getPixelTransLum( lightSurface.clipPosition().xy()
-			, targetSize
-			, lightSurface.clipPosition().z()
-			, transmittance
-			, luminance );
-		output = luminance.xyz() / luminance.a();
-
-		if ( m_enableVolumetric
-			&& m_directionalTransform
-			&& m_directionalCascadeIndex
-			&& m_directionalCascadeCount )
-		{
-			IF( m_writer, shadows.volumetricSteps() != 0_u
-				&& shadowMapIndex >= 0_i )
-			{
-				auto volumetric = m_writer.declLocale( "volumetric"
-					, m_shadowModel.computeVolumetric( shadows
-						, lightSurface
-						, *m_directionalTransform
-						, *m_directionalCascadeIndex
-						, *m_directionalCascadeCount ) );
-				output *= volumetric
-					* lightIntensity.x();
-			}
-			FI;
-		}
+		compScatteringTerm( lightSurface, output );
 	}
 
 	//*********************************************************************************************
@@ -157,60 +155,24 @@ namespace atmosphere_scattering
 			, enableVolumetric );
 	}
 
-	void AtmospherePbrLightingModel::doInitialiseBackground( c3d::BackgroundModel & pbackground )
+	void AtmospherePbrLightingModel::doInitialiseBackground( c3d::BackgroundModel & background )
 	{
-		if ( !atmosphereBackground )
-		{
-			atmosphereBackground = &static_cast< AtmosphereBackgroundModel & >( pbackground );
-			atmosphereBackground->atmosphere.settings.shadowMapEnabled = true;
-			atmosphereBackground->atmosphere.shadows = &m_shadowModel;
-		}
+		initBackground( background, m_shadowModel );
 	}
 
 	sdw::Vec3 AtmospherePbrLightingModel::doComputeRadiance( c3d::Light const & light
 		, sdw::Vec3 const & lightDirection )const
 	{
-		return atmosphereBackground->getSunRadiance( lightDirection );
+		return compRadiance( lightDirection );
 	}
 
 	void AtmospherePbrLightingModel::doComputeScatteringTerm( sdw::Vec3 const & radiance
-		, c3d::ShadowData const & shadows
-		, sdw::Int const shadowMapIndex
 		, sdw::Vec2 const & lightIntensity
 		, c3d::BlendComponents const & components
 		, c3d::LightSurface const & lightSurface
 		, sdw::Vec3 & output )
 	{
-		auto targetSize = vec2( sdw::Float{ float( atmosphereBackground->getTargetSize().width ) }
-		, float( atmosphereBackground->getTargetSize().height ) );
-		auto luminance = m_writer.declLocale< sdw::Vec4 >( "luminance" );
-		auto transmittance = m_writer.declLocale< sdw::Vec4 >( "transmittance" );
-		atmosphereBackground->getPixelTransLum( lightSurface.clipPosition().xy()
-			, targetSize
-			, lightSurface.clipPosition().z()
-			, transmittance
-			, luminance );
-		output = luminance.xyz() / luminance.a();
-
-		if ( m_enableVolumetric
-			&& m_directionalTransform
-			&& m_directionalCascadeIndex
-			&& m_directionalCascadeCount )
-		{
-			IF( m_writer, shadows.volumetricSteps() != 0_u
-				&& shadowMapIndex >= 0_i )
-			{
-				auto volumetric = m_writer.declLocale( "volumetric"
-					, m_shadowModel.computeVolumetric( shadows
-						, lightSurface
-						, *m_directionalTransform
-						, *m_directionalCascadeIndex
-						, *m_directionalCascadeCount ) );
-				output *= volumetric
-					* lightIntensity.x();
-			}
-			FI;
-		}
+		compScatteringTerm( lightSurface, output );
 	}
 
 	//*********************************************************************************************
