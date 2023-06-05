@@ -319,6 +319,11 @@ namespace castor3d
 		{
 			return m_crossTexturePath;
 		}
+
+		std::array< castor::Path, 6u > const & getLayerTexturePath()const
+		{
+			return m_layerTexturePath;
+		}
 		/**@}*/
 		/**
 		*\~english

@@ -84,12 +84,12 @@ namespace castor
 				{
 					result = writeFile( file, cuT( "cross" ), background.getCrossTexturePath(), m_folder, cuT( "Textures" ) );
 				}
-				else if ( castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 0u ) ).toString() } )
-					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 1u ) ).toString() } )
-					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 2u ) ).toString() } )
-					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 3u ) ).toString() } )
-					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 4u ) ).toString() } )
-					&& castor::File::fileExists( Path{ background.getTexture().getLayerCubeFaceView( 0, CubeMapFace( 5u ) ).toString() } ) )
+				else if ( castor::File::fileExists( background.getLayerTexturePath()[0u] )
+					&& castor::File::fileExists( background.getLayerTexturePath()[1u] )
+					&& castor::File::fileExists( background.getLayerTexturePath()[2u] )
+					&& castor::File::fileExists( background.getLayerTexturePath()[3u] )
+					&& castor::File::fileExists( background.getLayerTexturePath()[4u] )
+					&& castor::File::fileExists( background.getLayerTexturePath()[5u] ) )
 				{
 					result = true;
 
@@ -99,7 +99,7 @@ namespace castor
 					{
 						result = writeFile( file
 							, faces[i]
-							, Path{ background.getTexture().getLayerCubeFaceView( 0u, CubeMapFace( i ) ).toString() }
+							, background.getLayerTexturePath()[i]
 							, m_folder
 							, cuT( "Textures" ) );
 					}
