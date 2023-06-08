@@ -13,6 +13,14 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	/**
+	*\~english
+	*\brief		Creates a cmsh version number.
+	*\param[in]	maj, min, rev	The version makor, minor and revision numbers.
+	*\~french
+	*\brief		Crée un numéro de version cmsh.
+	*\param[in]	maj, min, rev	Les numéros de version majeure, mineure et révision.
+	*/
 	inline constexpr uint32_t makeCmshVersion( uint32_t maj
 		, uint32_t min
 		, uint32_t rev )
@@ -21,27 +29,79 @@ namespace castor3d
 			| ( min << 16 )
 			| ( rev << 0 ) );
 	}
-
+	/**
+	*\~english
+	*\param[in]	version	The cmsh version number.
+	*\return	The major version number
+	*\~french
+	*\param[in]	version Un numéro de version cmsh.
+	*\return	Le numéro majeur de la version.
+	*/
 	inline constexpr uint32_t getCmshMajor( uint32_t version )
 	{
 		return ( version >> 24 );
 	}
-
+	/**
+	*\~english
+	*\param[in]	version	The cmsh version number.
+	*\return	The major version number
+	*\~french
+	*\param[in]	version Un numéro de version cmsh.
+	*\return	Le numéro mineur de la version.
+	*/
 	inline constexpr uint32_t getCmshMinor( uint32_t version )
 	{
 		return ( ( version >> 16 ) & uint32_t( 0xff ) );
 	}
-
+	/**
+	*\~english
+	*\param[in]	version	The cmsh version number.
+	*\return	The major version number
+	*\~french
+	*\param[in]	version Un numéro de version cmsh.
+	*\return	Le numéro de révision de la version.
+	*/
 	inline constexpr uint32_t getCmshRevision( uint32_t version )
 	{
 		return ( version & uint32_t( 0xff ) );
 	}
-
-	//!\~english	The current format version number.
-	//!\~french		La version actuelle du format.
-	uint32_t constexpr CurrentCmshVersion = makeCmshVersion( 0x01u, 0x06u, 0x0000u );
-	//!\~english	A define to ease the declaration of a chunk id.
-	//!\~french		Un define pour faciliter la déclaration d'un id de chunk.
+	/**
+	*\~english
+	*	The current format version number.
+	*\version 1.2
+	*	Added support for skeleton animations.
+	*\version 1.4
+	*	Increased flexibility for index buffers.
+	*\version 1.5
+	*	Added support for scene nodes animations.
+	*\version 1.6
+	*	Updated to submesh components system.
+	*\version 1.7
+	*	Moved to little endian.
+	*\~french
+	*	La version actuelle du format.
+	*\version 1.2
+	*	Ajout du support des animations de squelette.
+	*\version 1.4
+	*	Amélioration de la flexibilité pour les index buffers.
+	*\version 1.5
+	*	Ajout du support des animations de scene node.
+	*\version 1.6
+	*	Mise à jour pour les composants de submesh.
+	*\version 1.7
+	*	Passage à little endian.
+	*/
+	uint32_t constexpr CurrentCmshVersion = makeCmshVersion( 0x01u, 0x07u, 0x0000u );
+	/**
+	*\~english
+	*\brief		Creates a chunk ID.
+	*\param[in]	a, b, c, d, e,f, g, h	The 8 characters describing the chunkID.
+	*\return	The chunk ID.
+	*\~french
+	*\brief		Crée un ID de chunk.
+	*\param[in]	a, b, c, d, e,f, g, h	Les 8 caractères décrivant l'ID de chunk.
+	*\return	L'ID de chunk..
+	*/
 	uint64_t constexpr makeChunkID( char a, char b, char c, char d
 		, char e, char f, char g, char h )
 	{
@@ -158,10 +218,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( ChunkType & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 
 	class BinaryChunk
@@ -169,18 +226,18 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Constructor
+		 *\brief		Constructor, read mode.
 		 *\~french
-		 *\brief		Constructeur
+		 *\brief		Constructeur, mode lecture.
 		 */
-		C3D_API BinaryChunk();
+		C3D_API explicit BinaryChunk( bool isLittleEndian );
 		/**
 		 *\~english
-		 *\brief		Constructor
-		 *\param[in]	type		The chunk type
+		 *\brief		Constructor, write mode.
+		 *\param[in]	type		The chunk type.
 		 *\~french
-		 *\brief		Constructeur
-		 *\param[in]	type		Le type du chunk
+		 *\brief		Constructeur, mode écriture.
+		 *\param[in]	type		Le type du chunk.
 		 */
 		C3D_API explicit BinaryChunk( ChunkType type );
 		/**
@@ -190,6 +247,15 @@ namespace castor3d
 		 *\brief		Crée le tampon final à partir de tout ce qui a été ajouté jusqu'à cet appel
 		 */
 		C3D_API void finalise();
+		/**
+		 *\~english
+		 *\brief		adds data to the chunk
+		 *\param[in]	data	The data buffer
+		 *\~french
+		 *\brief		Ajoute des données au chunk
+		 *\param[in]	data	Le tampon de données
+		 */
+		C3D_API void add( castor::ByteArray data );
 		/**
 		 *\~english
 		 *\brief		adds data to the chunk
@@ -358,6 +424,11 @@ namespace castor3d
 			m_index = 0u;
 		}
 
+		bool isLittleEndian()const noexcept
+		{
+			return m_isLittleEndian;
+		}
+
 	private:
 		C3D_API void binaryError( std::string_view view );
 
@@ -378,7 +449,7 @@ namespace castor3d
 				for ( auto it = begin; it != end; ++it )
 				{
 					( *value ) = *it;
-					prepareChunkData( *value );
+					prepareChunkDataT( this, *value );
 					++value;
 				}
 
@@ -397,6 +468,7 @@ namespace castor3d
 		castor::ByteArray m_data;
 		uint32_t m_index;
 		std::list< castor::ByteArray > m_addedData;
+		bool m_isLittleEndian{ true };
 	};
 }
 

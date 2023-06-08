@@ -97,9 +97,16 @@ namespace castor
 	template< typename T >
 	inline constexpr T systemEndianToBigEndian( T const & value )
 	{
-		T result{ value };
-		switchEndianness( result );
-		return result;
+		if constexpr ( !isBigEndian() )
+		{
+			T result{ value };
+			switchEndianness( result );
+			return result;
+		}
+		else
+		{
+			return value;
+		}
 	}
 	/**
 	 *\~english
@@ -236,9 +243,16 @@ namespace castor
 	template< typename T >
 	inline constexpr T systemEndianToLittleEndian( T const & value )
 	{
-		T result{ value };
-		switchEndianness( result );
-		return result;
+		if constexpr ( !isLittleEndian() )
+		{
+			T result{ value };
+			switchEndianness( result );
+			return result;
+		}
+		else
+		{
+			return value;
+		}
 	}
 	/**
 	 *\~english
@@ -375,9 +389,16 @@ namespace castor
 	template< typename T >
 	inline constexpr T bigEndianToSystemEndian( T const & value )
 	{
-		T result{ value };
-		switchEndianness( result );
-		return result;
+		if constexpr ( !isBigEndian() )
+		{
+			T result{ value };
+			switchEndianness( result );
+			return result;
+		}
+		else
+		{
+			return value;
+		}
 	}
 	/**
 	 *\~english
@@ -514,9 +535,16 @@ namespace castor
 	template< typename T >
 	inline constexpr T littleEndianToSystemEndian( T const & value )
 	{
-		T result{ value };
-		switchEndianness( result );
-		return result;
+		if constexpr ( !isLittleEndian() )
+		{
+			T result{ value };
+			switchEndianness( result );
+			return result;
+		}
+		else
+		{
+			return value;
+		}
 	}
 	/**
 	 *\~english

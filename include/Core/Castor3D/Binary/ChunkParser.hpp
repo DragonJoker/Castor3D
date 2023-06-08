@@ -79,7 +79,7 @@ namespace castor3d
 
 			for ( uint32_t i = 0; i < count; ++i )
 			{
-				prepareChunkData( *values++ );
+				prepareChunkDataT( &chunk, *values++ );
 			}
 
 			return result;
@@ -102,7 +102,7 @@ namespace castor3d
 			bool result{ ChunkParserBase::parse( getBuffer( value )
 				, uint32_t( getDataSize( value ) )
 				, chunk ) };
-			prepareChunkData( value );
+			prepareChunkDataT( &chunk, value );
 			return result;
 		}
 	};

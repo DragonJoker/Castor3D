@@ -914,10 +914,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( int16_t & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -929,10 +926,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( uint16_t & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -944,10 +938,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( int32_t & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -959,10 +950,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( uint32_t & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -974,10 +962,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( int64_t & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -989,10 +974,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( uint64_t & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -1004,10 +986,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( float & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -1019,10 +998,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( double & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -1034,10 +1010,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( long double & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value );
-		}
+		castor::switchEndianness( value );
 	}
 	/**
 	 *\~english
@@ -1050,12 +1023,9 @@ namespace castor3d
 	template< typename T >
 	static inline void prepareChunkData( std::vector< T > & values )
 	{
-		if ( !castor::isBigEndian() )
+		for ( auto & value : values )
 		{
-			for ( auto & value : values )
-			{
-				castor::switchEndianness( value );
-			}
+			castor::switchEndianness( value );
 		}
 	}
 	/**
@@ -1069,12 +1039,9 @@ namespace castor3d
 	template< typename T, size_t Count >
 	static inline void prepareChunkData( std::array< T, Count > & values )
 	{
-		if ( !castor::isBigEndian() )
+		for ( auto & value : values )
 		{
-			for ( auto & value : values )
-			{
-				castor::switchEndianness( value );
-			}
+			castor::switchEndianness( value );
 		}
 	}
 	/**
@@ -1088,12 +1055,9 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline void prepareChunkData( castor::SquareMatrix< T, Count > & value )
 	{
-		if ( !castor::isBigEndian() )
+		for ( auto i = 0u; i < Count * Count; ++i )
 		{
-			for ( auto i = 0u; i < Count * Count; ++i )
-			{
-				castor::switchEndianness( value.ptr()[i] );
-			}
+			castor::switchEndianness( value.ptr()[i] );
 		}
 	}
 	/**
@@ -1107,12 +1071,9 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline void prepareChunkData( castor::Point< T, Count > & value )
 	{
-		if ( !castor::isBigEndian() )
+		for ( auto & component : value )
 		{
-			for ( auto & component : value )
-			{
-				castor::switchEndianness( component );
-			}
+			castor::switchEndianness( component );
 		}
 	}
 	/**
@@ -1126,12 +1087,9 @@ namespace castor3d
 	template< typename T, uint32_t Count >
 	static inline void prepareChunkData( castor::Coords< T, Count > & value )
 	{
-		if ( !castor::isBigEndian() )
+		for ( auto & component : value )
 		{
-			for ( auto & component : value )
-			{
-				castor::switchEndianness( component );
-			}
+			castor::switchEndianness( component );
 		}
 	}
 	/**
@@ -1145,12 +1103,9 @@ namespace castor3d
 	template< typename T >
 	static inline void prepareChunkData( castor::QuaternionT< T > & value )
 	{
-		if ( !castor::isBigEndian() )
+		for ( auto & component : value )
 		{
-			for ( auto & component : value )
-			{
-				castor::switchEndianness( component );
-			}
+			castor::switchEndianness( component );
 		}
 	}
 	/**
@@ -1163,10 +1118,7 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( castor::ColourComponent & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value.value() );
-		}
+		castor::switchEndianness( value.value() );
 	}
 	/**
 	 *\~english
@@ -1178,12 +1130,9 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( castor::RgbColour & value )
 	{
-		if ( !castor::isBigEndian() )
+		for ( auto & component : value )
 		{
-			for ( auto & component : value )
-			{
-				castor::switchEndianness( component );
-			}
+			castor::switchEndianness( component );
 		}
 	}
 	/**
@@ -1196,12 +1145,9 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( castor::RgbaColour & value )
 	{
-		if ( !castor::isBigEndian() )
+		for ( auto & component : value )
 		{
-			for ( auto & component : value )
-			{
-				castor::switchEndianness( component );
-			}
+			castor::switchEndianness( component );
 		}
 	}
 	/**
@@ -1215,21 +1161,18 @@ namespace castor3d
 	template< typename T >
 	static inline void prepareChunkData( OldInterleavedVertexT< T > & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value.pos[0] );
-			castor::switchEndianness( value.pos[1] );
-			castor::switchEndianness( value.pos[2] );
-			castor::switchEndianness( value.nml[0] );
-			castor::switchEndianness( value.nml[1] );
-			castor::switchEndianness( value.nml[2] );
-			castor::switchEndianness( value.tan[0] );
-			castor::switchEndianness( value.tan[1] );
-			castor::switchEndianness( value.tan[2] );
-			castor::switchEndianness( value.tex[0] );
-			castor::switchEndianness( value.tex[1] );
-			castor::switchEndianness( value.tex[2] );
-		}
+		castor::switchEndianness( value.pos[0] );
+		castor::switchEndianness( value.pos[1] );
+		castor::switchEndianness( value.pos[2] );
+		castor::switchEndianness( value.nml[0] );
+		castor::switchEndianness( value.nml[1] );
+		castor::switchEndianness( value.nml[2] );
+		castor::switchEndianness( value.tan[0] );
+		castor::switchEndianness( value.tan[1] );
+		castor::switchEndianness( value.tan[2] );
+		castor::switchEndianness( value.tex[0] );
+		castor::switchEndianness( value.tex[1] );
+		castor::switchEndianness( value.tex[2] );
 	}
 	/**
 	 *\~english
@@ -1241,21 +1184,18 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( InterleavedVertex & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value.pos[0] );
-			castor::switchEndianness( value.pos[1] );
-			castor::switchEndianness( value.pos[2] );
-			castor::switchEndianness( value.nml[0] );
-			castor::switchEndianness( value.nml[1] );
-			castor::switchEndianness( value.nml[2] );
-			castor::switchEndianness( value.tan[0] );
-			castor::switchEndianness( value.tan[1] );
-			castor::switchEndianness( value.tan[2] );
-			castor::switchEndianness( value.tex[0] );
-			castor::switchEndianness( value.tex[1] );
-			castor::switchEndianness( value.tex[2] );
-		}
+		castor::switchEndianness( value.pos[0] );
+		castor::switchEndianness( value.pos[1] );
+		castor::switchEndianness( value.pos[2] );
+		castor::switchEndianness( value.nml[0] );
+		castor::switchEndianness( value.nml[1] );
+		castor::switchEndianness( value.nml[2] );
+		castor::switchEndianness( value.tan[0] );
+		castor::switchEndianness( value.tan[1] );
+		castor::switchEndianness( value.tan[2] );
+		castor::switchEndianness( value.tex[0] );
+		castor::switchEndianness( value.tex[1] );
+		castor::switchEndianness( value.tex[2] );
 	}
 	/**
 	 *\~english
@@ -1267,16 +1207,13 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( SubmeshAnimationBuffer & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value.positions );
-			castor::switchEndianness( value.normals );
-			castor::switchEndianness( value.tangents );
-			castor::switchEndianness( value.texcoords0 );
-			castor::switchEndianness( value.texcoords1 );
-			castor::switchEndianness( value.texcoords2 );
-			castor::switchEndianness( value.texcoords3 );
-		}
+		castor::switchEndianness( value.positions );
+		castor::switchEndianness( value.normals );
+		castor::switchEndianness( value.tangents );
+		castor::switchEndianness( value.texcoords0 );
+		castor::switchEndianness( value.texcoords1 );
+		castor::switchEndianness( value.texcoords2 );
+		castor::switchEndianness( value.texcoords3 );
 	}
 	/**
 	 *\~english
@@ -1288,12 +1225,9 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( FaceIndices & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value.m_index[0] );
-			castor::switchEndianness( value.m_index[1] );
-			castor::switchEndianness( value.m_index[2] );
-		}
+		castor::switchEndianness( value.m_index[0] );
+		castor::switchEndianness( value.m_index[1] );
+		castor::switchEndianness( value.m_index[2] );
 	}
 	/**
 	 *\~english
@@ -1305,11 +1239,8 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( LineIndices & value )
 	{
-		if ( !castor::isBigEndian() )
-		{
-			castor::switchEndianness( value.m_index[0] );
-			castor::switchEndianness( value.m_index[1] );
-		}
+		castor::switchEndianness( value.m_index[0] );
+		castor::switchEndianness( value.m_index[1] );
 	}
 	/**
 	 *\~english
@@ -1321,24 +1252,79 @@ namespace castor3d
 	 */
 	static inline void prepareChunkData( VertexBoneData & value )
 	{
-		if ( !castor::isBigEndian() )
+		castor::switchEndianness( value.m_ids.data[0] );
+		castor::switchEndianness( value.m_ids.data[1] );
+		castor::switchEndianness( value.m_ids.data[2] );
+		castor::switchEndianness( value.m_ids.data[3] );
+		castor::switchEndianness( value.m_ids.data[4] );
+		castor::switchEndianness( value.m_ids.data[5] );
+		castor::switchEndianness( value.m_ids.data[6] );
+		castor::switchEndianness( value.m_ids.data[7] );
+		castor::switchEndianness( value.m_weights.data[0] );
+		castor::switchEndianness( value.m_weights.data[1] );
+		castor::switchEndianness( value.m_weights.data[2] );
+		castor::switchEndianness( value.m_weights.data[3] );
+		castor::switchEndianness( value.m_weights.data[4] );
+		castor::switchEndianness( value.m_weights.data[5] );
+		castor::switchEndianness( value.m_weights.data[6] );
+		castor::switchEndianness( value.m_weights.data[7] );
+	}
+	/**
+	 *\~english
+	 *\brief			Prepares chunk data for read/write.
+	 *\param[in,out]	chunk	The chunk, for endianness check.
+	 *\param[in,out]	value	The value.
+	 *\~french
+	 *\brief			Prépare les données du chunk à l'écriture/lecture.
+	 *\param[in,out]	chunk	Le chunk pour le boutisme.
+	 *\param[in,out]	value	La valeur.
+	 */
+	template< typename DataT >
+	static inline void prepareChunkDataT( BinaryChunk const * chunk
+		, DataT & value )
+	{
+		if ( chunk )
 		{
-			castor::switchEndianness( value.m_ids.data[0] );
-			castor::switchEndianness( value.m_ids.data[1] );
-			castor::switchEndianness( value.m_ids.data[2] );
-			castor::switchEndianness( value.m_ids.data[3] );
-			castor::switchEndianness( value.m_ids.data[4] );
-			castor::switchEndianness( value.m_ids.data[5] );
-			castor::switchEndianness( value.m_ids.data[6] );
-			castor::switchEndianness( value.m_ids.data[7] );
-			castor::switchEndianness( value.m_weights.data[0] );
-			castor::switchEndianness( value.m_weights.data[1] );
-			castor::switchEndianness( value.m_weights.data[2] );
-			castor::switchEndianness( value.m_weights.data[3] );
-			castor::switchEndianness( value.m_weights.data[4] );
-			castor::switchEndianness( value.m_weights.data[5] );
-			castor::switchEndianness( value.m_weights.data[6] );
-			castor::switchEndianness( value.m_weights.data[7] );
+			// Read from chunk.
+			if ( isLittleEndian( *chunk ) == castor::isLittleEndian() )
+			{
+				// chunk and system endiannesses are identical, nothing to do
+				return;
+			}
+
+			prepareChunkData( value );
+		}
+		else
+		{
+			// Write to chunk.
+			if constexpr ( !castor::isLittleEndian() )
+			{
+				prepareChunkData( value );
+			}
+		}
+	}
+
+	template< typename T >
+	T & chunkEndianToSystemEndian( BinaryChunk const & chunk
+		, T & value )
+	{
+		if constexpr ( !castor::isLittleEndian() )
+		{
+			if ( isLittleEndian( chunk ) )
+			{
+				return castor::switchEndianness( value );
+			}
+
+			return value;
+		}
+		else
+		{
+			if ( !isLittleEndian( chunk ) )
+			{
+				return castor::switchEndianness( value );
+			}
+
+			return value;
 		}
 	}
 }

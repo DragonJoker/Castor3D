@@ -53,7 +53,7 @@ namespace castor3d
 		inline bool parse( TParsed & obj
 			, castor::BinaryFile & file )
 		{
-			BinaryChunk header;
+			BinaryChunk header{ true };
 			bool result = header.read( file );
 
 			if ( header.getChunkType() != ChunkType::eCmshFile )
@@ -73,7 +73,7 @@ namespace castor3d
 				checkError( result, "No more data in chunk." );
 			}
 
-			BinaryChunk chunk;
+			BinaryChunk chunk{ isLittleEndian( header ) };
 
 			if ( result )
 			{
@@ -360,6 +360,10 @@ namespace castor3d
 		}
 
 	protected:
+		bool doIsLittleEndian()const noexcept
+		{
+			return m_chunk ? isLittleEndian( *m_chunk ) : castor::isLittleEndian();
+		}
 		/**
 		 *\~english
 		 *\brief			Parses the header chunk.
@@ -372,7 +376,7 @@ namespace castor3d
 		 */
 		inline bool doParseHeader( BinaryChunk & chunk )const
 		{
-			BinaryChunk schunk;
+			BinaryChunk schunk{ isLittleEndian( chunk ) };
 			bool result = chunk.getSubChunk( schunk );
 
 			if ( schunk.getChunkType() != ChunkType::eCmshHeader )
@@ -386,7 +390,7 @@ namespace castor3d
 
 			while ( result && schunk.checkAvailable( 1 ) )
 			{
-				BinaryChunk subchunk;
+				BinaryChunk subchunk{ isLittleEndian( chunk ) };
 				result = schunk.getSubChunk( subchunk );
 				checkError( result, "Couldn't retrieve subchunk." );
 

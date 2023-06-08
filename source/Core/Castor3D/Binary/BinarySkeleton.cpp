@@ -42,7 +42,7 @@ namespace castor3d
 	{
 		bool result = true;
 		SkeletonNodeUPtr node;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 		SkeletonAnimationUPtr animation;
 		std::map< SkeletonNode *, castor::String > hierarchy;
 

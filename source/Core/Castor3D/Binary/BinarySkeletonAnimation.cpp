@@ -53,7 +53,7 @@ namespace castor3d
 		SkeletonAnimationBoneUPtr bone{};
 		SkeletonAnimationKeyFrameUPtr keyFrame;
 		castor::String name;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{

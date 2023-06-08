@@ -104,6 +104,8 @@ namespace castor3d
 	template< typename T >
 	struct OldInterleavedVertexT;
 
+	C3D_API bool isLittleEndian( BinaryChunk const & chunk );
+
 	//@}
 }
 
