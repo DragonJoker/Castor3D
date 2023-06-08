@@ -78,12 +78,19 @@ namespace GuiCommon
 				, castor3d::FrameListener & listener )
 				: m_listener{ listener }
 			{
-				PutProfileHint( appName.c_str() );
-				PutFrameTimingSource( TimingSource::SpaceMouse );
-				EnableNavigation( true );
-				Write( getMotionModelSettingsName(), "FreeCamera" );
-				Write( getLockHorizonSettingsName(), true );
-				Write( getMoveObjectsSettingsName(), false );
+				try
+				{
+					PutProfileHint( appName.c_str() );
+					PutFrameTimingSource( TimingSource::SpaceMouse );
+					EnableNavigation( true );
+					Write( getMotionModelSettingsName(), "FreeCamera" );
+					Write( getLockHorizonSettingsName(), true );
+					Write( getMoveObjectsSettingsName(), false );
+				}
+				catch ( std::exception & exc )
+				{
+					castor::Logger::logError( "COuldn't initialise space mouse controller: " + std::string{ exc.what() } );
+				}
 			}
 
 			~SpaceMouseController()noexcept override
