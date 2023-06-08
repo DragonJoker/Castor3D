@@ -99,7 +99,18 @@ namespace castor
 		, StringStream & file )
 	{
 		auto fontName = style.getDefaultFont()->getName();
-		return writeNameOpt( file, "default_font", fontName, m_fontName )
+		bool result{ fontName == m_fontName
+			|| fontName == cuT( "Arial8" )
+			|| fontName == cuT( "Arial10" )
+			|| fontName == cuT( "Arial16" )
+			|| fontName == cuT( "Arial20" ) };
+
+		if ( !result )
+		{
+			result = writeName( file, "default_font", fontName );
+		}
+
+		return result
 			&& stlhdrwrtr::write( *this, m_scene, style.getButtonStyles(), "button_style", file, fontName )
 			&& stlhdrwrtr::write( *this, m_scene, style.getComboBoxStyles(), "combobox_style", file, fontName )
 			&& stlhdrwrtr::write( *this, m_scene, style.getEditStyles(), "edit_style", file, fontName )
