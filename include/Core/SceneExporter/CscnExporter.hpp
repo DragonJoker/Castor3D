@@ -23,6 +23,9 @@ namespace castor3d::exporter
 			, castor3d::Mesh const & mesh
 			, castor::Path const & outputFolder
 			, castor::String const & outputName )override;
+
+	private:
+		bool carryOn( bool result )const noexcept;
 	};
 }
 

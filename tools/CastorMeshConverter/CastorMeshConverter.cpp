@@ -46,7 +46,8 @@ namespace convert
 		std::cout << "CastorMeshConverter FILE [-o NAME] [-s] [-c] [-p DEGREES] [-y DEGREES] [-r DEGREES] [-a VALUE] [-m VALUE]" << std::endl;
 		std::cout << "Options:" << std::endl;
 		std::cout << "  -o NAME     Allows you to specify the output file name." << std::endl;
-		std::cout << "              NAME can omit the extension." << std::endl << std::endl;
+		std::cout << "              NAME can omit the .cscn extension." << std::endl << std::endl;
+		std::cout << "  -f          Enables stop at first failure." << std::endl;
 		std::cout << "  -s          Splits the mesh per material." << std::endl;
 		std::cout << "  -c          Recenters the submesh in its bounding box." << std::endl;
 		std::cout << "              Only useful when -s is specified" << std::endl;
@@ -176,6 +177,7 @@ namespace convert
 
 		options.options.splitPerMaterial = parseSwitchOption( "s", args );
 		options.options.recenter = parseSwitchOption( "c", args );
+		options.options.ignoreFailures = !parseSwitchOption( "f", args );
 
 		if ( args.empty() )
 		{

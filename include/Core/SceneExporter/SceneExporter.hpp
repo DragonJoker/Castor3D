@@ -23,6 +23,7 @@ namespace castor3d::exporter
 		bool dataSubfolders{ true };
 		bool splitPerMaterial{ false };
 		bool recenter{ false };
+		bool ignoreFailures{ false };
 	};
 	/**
 	\~english
