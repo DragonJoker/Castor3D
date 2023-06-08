@@ -34,7 +34,7 @@ namespace castor3d
 		std::vector< VertexBoneData > bones;
 		uint32_t count{ 0u };
 		uint32_t boneCount{ 0u };
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{

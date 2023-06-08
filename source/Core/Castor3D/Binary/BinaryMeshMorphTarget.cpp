@@ -97,7 +97,7 @@ namespace castor3d
 	bool BinaryParser< MeshMorphTarget >::doParse( MeshMorphTarget & obj )
 	{
 		bool result = true;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 		uint32_t id{ 0 };
 		double time{ 0.0 };
 		SubmeshRPtr submesh{};
@@ -153,7 +153,7 @@ namespace castor3d
 		{
 			v1_3::OldInterleavedVertexTArray< double > pointsd;
 			InterleavedVertexArray points;
-			BinaryChunk chunk;
+			BinaryChunk chunk{ doIsLittleEndian() };
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -198,7 +198,7 @@ namespace castor3d
 		{
 			v1_3::OldInterleavedVertexTArray< double > bufferd;
 			InterleavedVertexArray points;
-			BinaryChunk chunk;
+			BinaryChunk chunk{ doIsLittleEndian() };
 
 			while ( result && doGetSubChunk( chunk ) )
 			{

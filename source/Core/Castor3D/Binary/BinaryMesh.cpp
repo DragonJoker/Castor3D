@@ -32,7 +32,7 @@ namespace castor3d
 	{
 		bool result = true;
 		SubmeshUPtr submesh{};
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -62,7 +62,7 @@ namespace castor3d
 	{
 		bool result = true;
 		SkeletonRPtr skeleton;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -91,7 +91,7 @@ namespace castor3d
 	bool BinaryParser< Mesh >::doParse_v1_4( Mesh & obj )
 	{
 		bool result = true;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( doGetSubChunk( chunk ) )
 		{

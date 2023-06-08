@@ -8,15 +8,127 @@
 
 namespace castor3d
 {
-	BinaryChunk::BinaryChunk()
+	//*********************************************************************************************
+
+	namespace binchunk
+	{
+		static bool isValidType( ChunkType v )
+		{
+			switch ( v )
+			{
+			case castor3d::ChunkType::eUnknown:
+			case castor3d::ChunkType::eCmshFile:
+			case castor3d::ChunkType::eCmshHeader:
+			case castor3d::ChunkType::eCmshVersion:
+			case castor3d::ChunkType::eName:
+			case castor3d::ChunkType::eMesh:
+			case castor3d::ChunkType::eSkeleton:
+			case castor3d::ChunkType::eSkeletonGlobalInverse:
+			case castor3d::ChunkType::eSkeletonBone:
+			case castor3d::ChunkType::eSkeletonNode:
+			case castor3d::ChunkType::eBoneParentName:
+			case castor3d::ChunkType::eBoneOffsetMatrix:
+			case castor3d::ChunkType::eSubmesh:
+			case castor3d::ChunkType::eSubmeshTopology:
+			case castor3d::ChunkType::eSubmeshVertexCount:
+			case castor3d::ChunkType::eSubmeshBoneCount:
+			case castor3d::ChunkType::eSubmeshBones:
+			case castor3d::ChunkType::eSubmeshMatrixCount:
+			case castor3d::ChunkType::eSubmeshMatrices:
+			case castor3d::ChunkType::eAnimable:
+			case castor3d::ChunkType::eAnimation:
+			case castor3d::ChunkType::eAnimLength:
+			case castor3d::ChunkType::eSkeletonAnimation:
+			case castor3d::ChunkType::eMeshAnimation:
+			case castor3d::ChunkType::eAnimInterpolator:
+			case castor3d::ChunkType::eAnimationObject:
+			case castor3d::ChunkType::eSkeletonAnimationNode:
+			case castor3d::ChunkType::eSkeletonAnimationBone:
+			case castor3d::ChunkType::eMovingTransform:
+			case castor3d::ChunkType::eBonesComponent:
+			case castor3d::ChunkType::eSkeletonAnimationKeyFrame:
+			case castor3d::ChunkType::eSkeletonAnimationKeyFrameTime:
+			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectType:
+			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectName:
+			case castor3d::ChunkType::eSubmeshIndexComponentCount:
+			case castor3d::ChunkType::eSubmeshIndexCount:
+			case castor3d::ChunkType::eSubmeshIndices:
+			case castor3d::ChunkType::eSceneNodeAnimation:
+			case castor3d::ChunkType::eSceneNodeAnimationKeyFrame:
+			case castor3d::ChunkType::eSceneNodeAnimationKeyFrameTime:
+			case castor3d::ChunkType::eSceneNodeAnimationKeyFrameTranslate:
+			case castor3d::ChunkType::eSceneNodeAnimationKeyFrameRotate:
+			case castor3d::ChunkType::eSceneNodeAnimationKeyFrameScale:
+			case castor3d::ChunkType::eBoneId:
+			case castor3d::ChunkType::eSubmeshPositions:
+			case castor3d::ChunkType::eSubmeshNormals:
+			case castor3d::ChunkType::eSubmeshTangents:
+			case castor3d::ChunkType::eSubmeshTexcoords0:
+			case castor3d::ChunkType::eSubmeshTexcoords1:
+			case castor3d::ChunkType::eSubmeshTexcoords2:
+			case castor3d::ChunkType::eSubmeshTexcoords3:
+			case castor3d::ChunkType::eSubmeshColours:
+			case castor3d::ChunkType::eMorphComponent:
+			case castor3d::ChunkType::eMorphTargetBufferSize:
+			case castor3d::ChunkType::eMorphTargetPositions:
+			case castor3d::ChunkType::eMorphTargetNormals:
+			case castor3d::ChunkType::eMorphTargetTangents:
+			case castor3d::ChunkType::eMorphTargetTexcoords0:
+			case castor3d::ChunkType::eMorphTargetTexcoords1:
+			case castor3d::ChunkType::eMorphTargetTexcoords2:
+			case castor3d::ChunkType::eMorphTargetTexcoords3:
+			case castor3d::ChunkType::eMorphTargetColours:
+			case castor3d::ChunkType::eMeshMorphTarget:
+			case castor3d::ChunkType::eMeshMorphTargetTime:
+			case castor3d::ChunkType::eMeshMorphTargetSubmeshID:
+			case castor3d::ChunkType::eMeshMorphTargetWeights:
+			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectTranslate:
+			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectRotate:
+			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectScale:
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+			case castor3d::ChunkType::eKeyframeCount:
+			case castor3d::ChunkType::eKeyframes:
+			case castor3d::ChunkType::eSubmeshFaceCount:
+			case castor3d::ChunkType::eSubmeshFaces:
+			case castor3d::ChunkType::eSubmeshVertex:
+			case castor3d::ChunkType::eMeshAnimationKeyFrame:
+			case castor3d::ChunkType::eMeshAnimationKeyFrameTime:
+			case castor3d::ChunkType::eMeshAnimationKeyFrameBufferData:
+			case castor3d::ChunkType::eMeshAnimationKeyFrameSubmeshID:
+			case castor3d::ChunkType::eMeshAnimationKeyFrameBufferSize:
+			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectTransform:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
+				return true;
+			}
+
+			return false;
+		}
+	}
+
+	//*********************************************************************************************
+
+	bool isLittleEndian( BinaryChunk const & chunk )
+	{
+		return chunk.isLittleEndian();
+	}
+
+	//*********************************************************************************************
+
+	BinaryChunk::BinaryChunk( bool isLittleEndian )
 		: m_type{ ChunkType::eUnknown }
 		, m_index{ 0 }
+		, m_isLittleEndian{ isLittleEndian }
 	{
 	}
 
 	BinaryChunk::BinaryChunk( ChunkType type )
-		:	m_type{ type }
-		,	m_index{ 0 }
+		: m_type{ type }
+		, m_index{ 0 }
+		, m_isLittleEndian{ true }
 	{
 	}
 
@@ -39,10 +151,14 @@ namespace castor3d
 		}
 	}
 
+	void BinaryChunk::add( castor::ByteArray data )
+	{
+		m_addedData.push_back( std::move( data ) );
+	}
+
 	void BinaryChunk::add( uint8_t * data, uint32_t size )
 	{
-		castor::ByteArray buffer( data, data + size );
-		m_addedData.push_back( buffer );
+		add( castor::ByteArray( data, data + size ) );
 	}
 
 	void BinaryChunk::get( uint8_t * data, uint32_t size )
@@ -64,7 +180,7 @@ namespace castor3d
 	bool BinaryChunk::getSubChunk( BinaryChunk & chunkDst )
 	{
 		// First we retrieve the chunk type
-		BinaryChunk subchunk;
+		BinaryChunk subchunk{ m_isLittleEndian };
 		bool result = doRead( &subchunk.m_type, 1 );
 		uint32_t size = 0;
 
@@ -96,30 +212,33 @@ namespace castor3d
 		uint32_t size = uint32_t( subchunk.m_data.size() );
 		castor::ByteArray buffer;
 		buffer.reserve( sizeof( uint32_t ) + sizeof( ChunkType ) + size );
-		// write subchunk type
-		auto type = castor::systemEndianToBigEndian( subchunk.m_type );
+
+		// Write subchunk type,
+		auto type = castor::systemEndianToLittleEndian( subchunk.m_type );
 		auto data = reinterpret_cast< uint8_t const * >( &type );
 		buffer.insert( buffer.end(), data, data + sizeof( ChunkType ) );
-		// The its size
-		castor::systemEndianToBigEndian( size );
+		// Then its size,
+		castor::systemEndianToLittleEndian( size );
 		data = reinterpret_cast< uint8_t * >( &size );
 		buffer.insert( buffer.end(), data, data + sizeof( uint32_t ) );
-		// And eventually its data
+		// And eventually its data.
 		buffer.insert( buffer.end(), subchunk.m_data.begin(), subchunk.m_data.end() );
-		// And add it to this chunk
-		add( buffer.data(), uint32_t( buffer.size() ) );
+
+		// Now add it to this chunk
+		add( std::move( buffer ) );
+
 		return true;
 	}
 
 	bool BinaryChunk::write( castor::BinaryFile & file )
 	{
-		auto type = castor::systemEndianToBigEndian( getChunkType() );
+		auto type = castor::systemEndianToLittleEndian( getChunkType() );
 		auto result = file.write( type ) == sizeof( ChunkType );
 
 		if ( result )
 		{
 			finalise();
-			auto size = castor::systemEndianToBigEndian( getDataSize() );
+			auto size = castor::systemEndianToLittleEndian( getDataSize() );
 			result = file.write( size ) == sizeof( uint32_t );
 		}
 
@@ -135,12 +254,22 @@ namespace castor3d
 	{
 		uint32_t size = 0;
 		bool result = file.read( m_type ) == sizeof( ChunkType );
-		castor::bigEndianToSystemEndian( m_type );
+
+		if ( result )
+		{
+			m_isLittleEndian = binchunk::isValidType( m_type );
+
+			if ( !m_isLittleEndian )
+			{
+				castor::switchEndianness( m_type );
+				result = binchunk::isValidType( m_type );
+			}
+		}
 
 		if ( result )
 		{
 			result = file.read( size ) == sizeof( uint32_t );
-			castor::bigEndianToSystemEndian( size );
+			chunkEndianToSystemEndian( *this, size );
 		}
 
 		if ( result )
@@ -156,4 +285,6 @@ namespace castor3d
 	{
 		log::error << view;
 	}
+
+	//*********************************************************************************************
 }

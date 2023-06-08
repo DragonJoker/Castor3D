@@ -90,7 +90,7 @@ namespace castor3d
 		uint32_t count{ 0u };
 		std::set< MorphFlag > flags;
 		castor::Point3fArray values;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{

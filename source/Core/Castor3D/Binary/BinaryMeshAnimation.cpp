@@ -30,7 +30,7 @@ namespace castor3d
 		bool result = true;
 		MeshMorphTargetUPtr keyFrame;
 		castor::String name;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -75,7 +75,7 @@ namespace castor3d
 		{
 			MeshMorphTargetUPtr keyFrame;
 			castor::String name;
-			BinaryChunk chunk;
+			BinaryChunk chunk{ doIsLittleEndian() };
 
 			while ( result && doGetSubChunk( chunk ) )
 			{

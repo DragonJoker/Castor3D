@@ -78,7 +78,7 @@ namespace castor3d
 	bool BinaryParser< SkeletonAnimationObject >::doParse( SkeletonAnimationObject & obj )
 	{
 		bool result = true;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -127,7 +127,7 @@ namespace castor3d
 		bool result = true;
 		std::vector< binsklanmobj::KeyFrame > keyframes;
 		std::vector< binsklanmobj::KeyFramed > keyframesd;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 		uint32_t count{ 0 };
 		float length{ 0.0f };
 
@@ -206,7 +206,7 @@ namespace castor3d
 
 	bool BinaryParser< SkeletonAnimationObject >::doParse_v1_5( SkeletonAnimationObject & obj )
 	{
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 		auto & skeleton = static_cast< Skeleton & >( *obj.getOwner()->getAnimable() );
 		auto objNode = ( obj.getType() == SkeletonNodeType::eNode
 			? static_cast< SkeletonAnimationNode const & >( obj ).getNode()

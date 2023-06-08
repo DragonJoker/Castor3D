@@ -55,7 +55,7 @@ namespace castor3d
 		double time{ 0.0 };
 		castor::String name;
 		uint8_t type{};
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 		castor::Point3f translate;
 		castor::Point3f scale;
 		castor::Quaternion rotate;
@@ -137,7 +137,7 @@ namespace castor3d
 			castor::SquareMatrix< double, 4 > matrix;
 			castor::String name;
 			uint8_t type{};
-			BinaryChunk chunk;
+			BinaryChunk chunk{ doIsLittleEndian() };
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -190,7 +190,7 @@ namespace castor3d
 			castor::Matrix4x4f matrix;
 			castor::String name;
 			uint8_t type{};
-			BinaryChunk chunk;
+			BinaryChunk chunk{ doIsLittleEndian() };
 
 			while ( result && doGetSubChunk( chunk ) )
 			{

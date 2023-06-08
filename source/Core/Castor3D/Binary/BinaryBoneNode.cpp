@@ -37,7 +37,7 @@ namespace castor3d
 	{
 		bool result = true;
 		castor::String name;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{

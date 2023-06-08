@@ -34,7 +34,7 @@ namespace castor3d
 	bool BinaryParser< SceneNodeAnimationKeyFrame >::doParse( SceneNodeAnimationKeyFrame & obj )
 	{
 		bool result = true;
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 		castor::Point3f vec{};
 		castor::Quaternion quat{};
 		double time{ 0.0 };

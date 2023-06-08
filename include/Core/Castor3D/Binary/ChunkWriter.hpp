@@ -89,7 +89,7 @@ namespace castor3d
 
 			for ( auto & value : values )
 			{
-				prepareChunkData( value );
+				prepareChunkDataT( nullptr, value );
 			}
 
 			return ChunkWriterBase::write( reinterpret_cast< uint8_t const * >( values.data() )
@@ -116,7 +116,7 @@ namespace castor3d
 			, BinaryChunk & chunk )
 		{
 			auto cvalue = value;
-			prepareChunkData( cvalue );
+			prepareChunkDataT( nullptr, cvalue );
 			auto begin = getBuffer( cvalue );
 			auto end = begin + getDataSize( cvalue );
 			return ChunkWriterBase::write( begin, end, type, chunk );

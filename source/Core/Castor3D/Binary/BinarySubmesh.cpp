@@ -241,7 +241,7 @@ namespace castor3d
 		uint32_t count{ 0u };
 		uint32_t components{ 0u };
 		uint32_t faceCount{ 0u };
-		BinaryChunk chunk;
+		BinaryChunk chunk{ doIsLittleEndian() };
 
 		while ( result && doGetSubChunk( chunk ) )
 		{
@@ -455,7 +455,7 @@ namespace castor3d
 			std::vector< OldInterleavedVertexT< double > > srcbuf;
 			uint32_t count{ 0u };
 			uint32_t faceCount{ 0u };
-			BinaryChunk chunk;
+			BinaryChunk chunk{ doIsLittleEndian() };
 			uint32_t boneCount{ 0u };
 			std::vector< VertexBoneData > bones;
 			castor::UniquePtr< SkinComponent > bonesComponent;
@@ -574,7 +574,7 @@ namespace castor3d
 
 		if ( m_fileVersion <= Version{ 1, 5, 0 } )
 		{
-			BinaryChunk chunk;
+			BinaryChunk chunk{ doIsLittleEndian() };
 			uint32_t count{};
 			std::vector< InterleavedVertex > vertices;
 
