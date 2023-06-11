@@ -152,6 +152,8 @@ namespace castor3d
 			, progress ) }
 		, m_runnable{ m_graph.compile( m_device.makeContext() ) }
 	{
+		m_scene.getEngine()->registerTimer( m_runnable->getName() + "/Graph"
+			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
 		m_graph.addOutput( m_firstBounce.wholeViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
@@ -168,6 +170,8 @@ namespace castor3d
 
 	Voxelizer::~Voxelizer()
 	{
+		m_scene.getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
+			, m_runnable->getTimer() );
 		m_runnable.reset();
 		m_firstBounce.destroy();
 		m_secondaryBounce.destroy();

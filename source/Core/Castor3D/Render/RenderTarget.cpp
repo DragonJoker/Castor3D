@@ -540,6 +540,8 @@ namespace castor3d
 			getEngine()->unregisterTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 			m_overlaysTimer.reset();
 			m_intermediates.clear();
+			getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
+				, m_runnable->getTimer() );
 			m_runnable.reset();
 			m_combinePassSource = {};
 			m_combinePass = {};
@@ -982,6 +984,8 @@ namespace castor3d
 
 			stepProgressBar( progress, "Compiling render graph" );
 			m_runnable = m_graph.compile( device.makeContext() );
+			getEngine()->registerTimer( m_runnable->getName() + "/Graph"
+				, m_runnable->getTimer() );
 			printGraph( *m_runnable );
 			doListIntermediateViews( m_intermediates );
 			m_debugConfig.resetImages();

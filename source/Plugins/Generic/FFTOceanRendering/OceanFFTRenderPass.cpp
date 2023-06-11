@@ -375,6 +375,8 @@ namespace ocean_fft
 			, oceanFFT->getHeightDisplacement()
 			, oceanFFT->getNormals() );
 		auto runnable = fftGraph.compile( device.makeContext() );
+		getEngine()->registerTimer( runnable->getName() + "/Graph"
+			, runnable->getTimer() );
 		runnable->record();
 #else
 		auto oceanFFT = std::make_unique< OceanFFT >( device

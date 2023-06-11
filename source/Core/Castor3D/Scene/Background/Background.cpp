@@ -109,9 +109,7 @@ namespace castor3d
 		private:
 			void doResetPipeline( uint32_t index )override
 			{
-				resetCommandBuffer( index );
 				resetPipeline( {}, index );
-				reRecordCurrent();
 			}
 
 			crg::IndexBuffer doCreateIndexBuffer( RenderDevice const & device )

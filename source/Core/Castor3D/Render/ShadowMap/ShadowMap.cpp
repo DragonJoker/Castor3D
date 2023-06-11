@@ -256,6 +256,8 @@ namespace castor3d
 		{
 			CU_Require( myPasses.otherNodes.graphs[index] != nullptr );
 			myPasses.otherNodes.runnables[index] = myPasses.otherNodes.graphs[index]->compile( m_device.makeContext() );
+			getEngine()->registerTimer( myPasses.otherNodes.runnables[index]->getName()
+				, myPasses.otherNodes.runnables[index]->getTimer() );
 			printGraph( *myPasses.otherNodes.runnables.back() );
 			myPasses.otherNodes.runnables[index]->record();
 		}
@@ -323,6 +325,8 @@ namespace castor3d
 		{
 			// The graph will be defined for finale shadow map pass, but not for static one.
 			passes.runnables.push_back( graph.compile( m_device.makeContext() ) );
+			getEngine()->registerTimer( passes.runnables.back()->getName()
+				, passes.runnables.back()->getTimer() );
 			printGraph( *passes.runnables.back() );
 			passes.runnables.back()->record();
 		}

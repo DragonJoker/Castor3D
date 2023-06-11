@@ -32,7 +32,8 @@ namespace castor3d
 		C3D_API OverlayPreparer( OverlayRenderer & renderer
 			, RenderDevice const & device
 			, VkRenderPass renderPass
-			, VkFramebuffer framebuffer );
+			, VkFramebuffer framebuffer
+			, crg::Fence & fence );
 		C3D_API OverlayPreparer( OverlayPreparer && rhs )noexcept;
 		C3D_API OverlayPreparer & operator=( OverlayPreparer && rhs )noexcept;
 		C3D_API ~OverlayPreparer()noexcept;
@@ -74,6 +75,7 @@ namespace castor3d
 	private:
 		OverlayRenderer & m_renderer;
 		RenderDevice const & m_device;
+		crg::Fence & m_fence;
 		using OverlayDataArray = std::vector< OverlayDrawData >;
 		using OverlayDatasMap = std::map< OverlayPipelineData *, OverlayDataArray >;
 		std::map< uint32_t, OverlayDatasMap > m_levelsOverlays;

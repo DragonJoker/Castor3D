@@ -46,7 +46,6 @@ namespace castor3d
 
 	private:
 		using RunnablePass::resetCommandBuffer;
-		using RunnablePass::resetCommandBuffers;
 
 		LightRenderPass doCreateRenderPass( bool blend
 			, bool hasStencil );

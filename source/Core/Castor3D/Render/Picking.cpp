@@ -164,6 +164,8 @@ namespace castor3d
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
 		m_runnable = m_graph.compile( device.makeContext() );
+		getEngine()->registerTimer( m_runnable->getName() + "/Graph"
+			, m_runnable->getTimer() );
 		printGraph( *m_runnable );
 		m_colourTexture = std::make_unique< ashes::Image >( *m_device
 			, m_runnable->createImage( m_colourImage )
@@ -175,6 +177,8 @@ namespace castor3d
 
 	Picking::~Picking()
 	{
+		getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
+			, m_runnable->getTimer() );
 		m_commandBuffer.reset();
 		m_pickBuffer->unlock();
 		m_pickBuffer.reset();

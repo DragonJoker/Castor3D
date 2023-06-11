@@ -722,11 +722,13 @@ namespace castor3d
 
 	void OverlayRenderer::OverlaysDrawData::beginPrepare( VkRenderPass renderPass
 		, VkFramebuffer framebuffer
+		, crg::Fence & fence
 		, crg::FramePassTimer & timer
 		, castor::Size const & size )
 	{
 		timerBlock = std::make_unique< crg::FramePassTimerBlock >( timer.start() );
 		retired.clear();
+		fence.wait( ashes::MaxTimeout );
 		commands.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT | VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT
 			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass
 				, 0u
@@ -1035,9 +1037,10 @@ namespace castor3d
 
 	OverlayPreparer OverlayRenderer::beginPrepare( RenderDevice const & device
 		, VkRenderPass renderPass
-		, VkFramebuffer framebuffer )
+		, VkFramebuffer framebuffer
+		, crg::Fence & fence )
 	{
-		return OverlayPreparer{ *this, device, renderPass, framebuffer };
+		return OverlayPreparer{ *this, device, renderPass, framebuffer, fence };
 	}
 
 	void OverlayRenderer::upload( UploadData & uploader )
@@ -1054,9 +1057,10 @@ namespace castor3d
 	}
 
 	ashes::CommandBuffer & OverlayRenderer::doBeginPrepare( VkRenderPass renderPass
-		, VkFramebuffer framebuffer )
+		, VkFramebuffer framebuffer
+		, crg::Fence & fence )
 	{
-		m_draw.beginPrepare( renderPass, framebuffer, m_timer, m_size );
+		m_draw.beginPrepare( renderPass, framebuffer, fence, m_timer, m_size );
 		return *m_draw.commands.commandBuffer;
 	}
 

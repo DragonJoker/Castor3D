@@ -332,6 +332,8 @@ namespace castor3d
 			m_aabb = m_scene.getBoundingBox();
 			m_lightPropagationPassesDesc = doCreatePropagationPasses();
 			m_runnable = m_graph.compile( m_device.makeContext() );
+			m_scene.getEngine()->registerTimer( m_runnable->getName() + "/Graph"
+				, m_runnable->getTimer() );
 			printGraph( *m_runnable );
 			m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [this]( RenderDevice const & device
@@ -384,8 +386,12 @@ namespace castor3d
 
 			if ( m_runnable )
 			{
+				m_scene.getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
+					, m_runnable->getTimer() );
 				m_runnable.reset();
 				m_runnable = m_graph.compile( m_device.makeContext() );
+				m_scene.getEngine()->registerTimer( m_runnable->getName() + "/Graph"
+					, m_runnable->getTimer() );
 				printGraph( *m_runnable );
 
 				if ( m_recordEvent )
