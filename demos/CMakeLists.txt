@@ -21,17 +21,14 @@ function( DemosBuild )
 		set( DEMOS_TARGETS )
 		if( CASTOR_BUILD_DEMO_CASTOR_TD )
 			if( APPLE )
-				set( GTK_FOUND TRUE )
-				set( GTK2_FOUND TRUE )
+				set( GTK_FOUND ON )
 				set( GTK_LIBRARIES
 					"-framework AppKit"
 					"-framework QuartzCore"
 					"-framework Metal"
 				)
-				set( GTK2_LIBRARIES ${GTK_LIBRARIES} )
 			elseif ( WIN32 )
-				set( GTK_FOUND TRUE )
-				set( GTK2_FOUND TRUE )
+				set( GTK_FOUND ON )
 			else()
 				find_package( GTK3 QUIET )
 				find_package( X11 QUIET )
@@ -39,20 +36,24 @@ function( DemosBuild )
 					set( GTK_FOUND ${GTK3_FOUND} )
 					set( GTK_INCLUDE_DIRS ${GTK3_INCLUDE_DIRS} )
 					set( GTK_LIBRARIES ${GTK3_LIBRARIES} )
-					set( GTK2_FOUND ${GTK_FOUND} )
-					set( GTK2_INCLUDE_DIRS ${GTK_INCLUDE_DIRS} )
-					set( GTK2_LIBRARIES ${GTK_LIBRARIES} )
 				else ()
-					set( GTK_FOUND FALSE )
-					set( GTK2_FOUND FALSE )
+					set( GTK_FOUND OFF )
 				endif ()
 			endif()
-			if ( WIN32 AND CASTOR_USE_DEPS_WXWIDGETS )
+			if ( VCPKG_TOOLCHAIN AND ( MSVC OR APPLE ) )
+				set( NanoSVG_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/share/NanoSVG )
+				set( wxWidgets_DIR ${VCPKG_INSTALLED_DIR}/${VCPKG_TARGET_TRIPLET}/share/wxwidgets )
+				find_package( NanoSVG CONFIG )
 				find_package( wxWidgets CONFIG COMPONENTS core base adv aui stc propgrid )
-			elseif ( CASTOR_USE_SYSTEM_WXWIDGETS )
-				find_package( wxWidgets REQUIRED COMPONENTS core base stc aui adv propgrid )
 			else ()
-				find_package( wxWidgets CONFIG COMPONENTS core base stc aui adv propgrid )
+				set( CMAKE_MODULE_PATH
+					${CMAKE_CURRENT_SOURCE_DIR}/CMake
+					${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
+					${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/Traditional
+					${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
+				)
+				find_package( wxWidgets REQUIRED COMPONENTS core base adv aui stc propgrid )
+				include( ${wxWidgets_USE_FILE} )
 			endif ()
 
 			if( wxWidgets_FOUND AND GTK_FOUND )

@@ -15,7 +15,7 @@ namespace castor3d
 	struct SpecularFactorMapComponent
 		: public PassMapComponent
 	{
-		static const TextureFlag Specular = TextureFlag( 0x01u );
+		static constexpr TextureFlag Specular = TextureFlag( 0x01u );
 
 		struct ComponentsShader
 			: shader::PassComponentsShader

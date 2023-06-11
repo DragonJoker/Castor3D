@@ -62,16 +62,27 @@
 #include <assimp/version.h>
 #if !defined( AI_MATKEY_ROUGHNESS_FACTOR )
 #	include <assimp/pbrmaterial.h>
-#	define AI_MATKEY_ROUGHNESS_FACTOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_ROUGHNESS_FACTOR
+#	define AI_MATKEY_ROUGHNESS_FACTOR "$mat.roughnessFactor", 0, 0
 #	define AI_MATKEY_SPECULAR_FACTOR "$mat.specularFactor", 0, 0
-#	define AI_MATKEY_GLOSSINESS_FACTOR AI_MATKEY_GLTF_PBRSPECULARGLOSSINESS_GLOSSINESS_FACTOR
-#	define AI_MATKEY_METALLIC_FACTOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_METALLIC_FACTOR
-#	define AI_MATKEY_BASE_COLOR AI_MATKEY_GLTF_PBRMETALLICROUGHNESS_BASE_COLOR_FACTOR
-#	define AI_MATKEY_TRANSMISSION_FACTOR AI_MATKEY_GLTF_MATERIAL_TRANSMISSION_FACTOR
-#	define AI_MATKEY_CLEARCOAT_FACTOR AI_MATKEY_GLTF_MATERIAL_CLEARCOAT_FACTOR
-#	define AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR AI_MATKEY_GLTF_MATERIAL_CLEARCOAT_ROUGHNESS_FACTOR
-#	define AI_MATKEY_SHEEN_COLOR_FACTOR AI_MATKEY_GLTF_MATERIAL_SHEEN_COLOR_FACTOR
-#	define AI_MATKEY_SHEEN_ROUGHNESS_FACTOR AI_MATKEY_GLTF_MATERIAL_SHEEN_ROUGHNESS_FACTOR
+#	define AI_MATKEY_GLOSSINESS_FACTOR "$mat.glossinessFactor", 0, 0
+#	define AI_MATKEY_METALLIC_FACTOR "$mat.metallicFactor", 0, 0
+#	define AI_MATKEY_BASE_COLOR "$clr.base", 0, 0
+#	define AI_MATKEY_TRANSMISSION_FACTOR "$mat.transmission.factor", 0, 0
+#	define AI_MATKEY_CLEARCOAT_FACTOR "$mat.clearcoat.factor", 0, 0
+#	define AI_MATKEY_CLEARCOAT_ROUGHNESS_FACTOR "$mat.clearcoat.roughnessFactor", 0, 0
+#	define AI_MATKEY_SHEEN_COLOR_FACTOR "$clr.sheen.factor", 0, 0
+#	define AI_MATKEY_SHEEN_ROUGHNESS_FACTOR "$mat.sheen.roughnessFactor", 0, 0
+#	define AI_MATKEY_VOLUME_THICKNESS_FACTOR "$mat.volume.thicknessFactor", 0, 0
+#	define AI_MATKEY_VOLUME_ATTENUATION_COLOR "$mat.volume.attenuationColor", 0, 0
+#	define AI_MATKEY_VOLUME_ATTENUATION_DISTANCE "$mat.volume.attenuationDistance", 0, 0
+#	define AI_MATKEY_USE_COLOR_MAP "$mat.useColorMap", 0, 0
+#	define AI_MATKEY_USE_METALLIC_MAP "$mat.useMetallicMap", 0, 0
+#	define AI_MATKEY_USE_ROUGHNESS_MAP "$mat.useRoughnessMap", 0, 0
+#	define AI_MATKEY_USE_EMISSIVE_MAP "$mat.useEmissiveMap", 0, 0
+#	define AI_MATKEY_EMISSIVE_INTENSITY "$mat.emissiveIntensity", 0, 0
+#	define AI_MATKEY_ANISOTROPY_FACTOR "$mat.anisotropyFactor", 0, 0
+	static constexpr aiShadingMode aiShadingMode_PBR_BRDF = aiShadingMode( 0xb );
+	static constexpr aiShadingMode aiShadingMode_Unlit = aiShadingMode_NoShading;
 #else
 #	include <assimp/GltfMaterial.h>
 #endif
@@ -1279,8 +1290,11 @@ namespace c3d_assimp
 			case aiShadingMode_Minnaert:
 			case aiShadingMode_CookTorrance:
 			case aiShadingMode_Fresnel:
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wswitch"
 			case aiShadingMode_PBR_BRDF:
 				return factory.getNameId( castor3d::PbrPass::LightingModel );
+#pragma GCC diagnostic pop
 			case aiShadingMode_Unlit:
 				return factory.getNameId( castor3d::PbrPass::LightingModel );
 			default:

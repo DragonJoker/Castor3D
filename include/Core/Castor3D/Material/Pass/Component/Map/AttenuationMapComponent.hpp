@@ -15,7 +15,7 @@ namespace castor3d
 	struct AttenuationMapComponent
 		: public PassMapComponent
 	{
-		static const TextureFlag Attenuation = TextureFlag( 0x01u );
+		static constexpr TextureFlag Attenuation = TextureFlag( 0x01u );
 
 		struct ComponentsShader
 			: shader::PassComponentsShader

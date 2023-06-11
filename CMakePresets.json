@@ -32,7 +32,12 @@
 			"displayName": "Castor3D User Visual Studio Config",
 			"description": "Build configuration using Visual Studio, for Castor3D users",
 			"inherits": "user-base",
-			"generator": "Visual Studio 17 2022"
+			"generator": "Visual Studio 17 2022",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			}
 		},
 		{
 			"name": "user-ninja",
@@ -46,7 +51,7 @@
 			"hidden": true,
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
-				"ASHES_BUILD_RENDERER_OGL": false,
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;vkfft;tools",
 				"CASTOR_BUILD_PLUGINS": true,
 				"CASTOR_BUILDGRP_DEMO": true,
 				"CASTOR_BUILDGRP_INTEROP": false,
@@ -59,9 +64,8 @@
 				"CASTOR_USE_GLSLANG": true,
 				"CASTOR_USE_MESH_SHADERS": false,
 				"CASTOR_USE_TASK_SHADERS": false,
-				"PROJECTS_OUTPUT_DIR": "${sourceDir}",
-				"PROJECTS_UNITY_BUILD": true,
-				"PROJECTS_USE_PRECOMPILED_HEADERS": false
+				"PROJECTS_UNITY_BUILD": false,
+				"PROJECTS_USE_PRECOMPILED_HEADERS": true
 			}
 		},
 		{
@@ -69,59 +73,111 @@
 			"displayName": "Castor3D Developer Visual Studio Config",
 			"description": "Build configuration using Visual Studio, for Castor3D developers",
 			"inherits": "dev-base",
-			"generator": "Visual Studio 17 2022"
+			"generator": "Visual Studio 17 2022",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
+			}
 		},
 		{
 			"name": "dev-ninja",
-			"displayName": "Castor3D Developer Ninja Config",
-			"description": "Build configuration using Ninja, for Castor3D developers",
 			"inherits": "dev-base",
-			"generator": "Ninja"
+			"generator": "Ninja",
+			"hidden": true,
+			"cacheVariables": {
+				"CASTOR_USE_SYSTEM_ASSIMP": true,
+				"CASTOR_USE_SYSTEM_WXWIDGETS": true
+			}
 		},
 		{
-			"name": "ci-base",
+			"name": "dev-ninja-debug",
+			"displayName": "Castor3D Developer Ninja Config, Debug",
+			"description": "Build configuration using Ninja, for Castor3D developers, Debug",
+			"inherits": "dev-ninja",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "dev-ninja-release",
+			"displayName": "Castor3D Developer Ninja Config, Release",
+			"description": "Build configuration using Ninja, for Castor3D developers, Release",
+			"inherits": "dev-ninja",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
+			"name": "dev-vcpkg-msvc",
+			"inherits": "dev-msvc",
+			"displayName": "Castor3D Developer Visual Studio Config, using vcpkg",
+			"description": "Build configuration using Visual Studio, for Castor3D developers, using vcpkg",
+			"cacheVariables": {
+				"PROJECTS_UNITY_BUILD": false,
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;vkfft;tools",
+				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
+			}
+		},
+		{
+			"name": "dev-vcpkg-ninja",
+			"inherits": "dev-ninja",
 			"hidden": true,
+			"cacheVariables": {
+				"PROJECTS_UNITY_BUILD": false,
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;vkfft;tools",
+				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
+			}
+		},
+		{
+			"name": "dev-vcpkg-ninja-debug",
+			"displayName": "Castor3D Developer Ninja Config, using vcpkg, Debug",
+			"description": "Build configuration using Ninja, for Castor3D developers, Debug",
+			"inherits": "dev-vcpkg-ninja",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Debug"
+			}
+		},
+		{
+			"name": "dev-vcpkg-ninja-release",
+			"displayName": "Castor3D Developer Ninja Config, using vcpkg, Release",
+			"description": "Build configuration using Ninja, for Castor3D developers, Release",
+			"inherits": "dev-vcpkg-ninja",
+			"cacheVariables": {
+				"CMAKE_BUILD_TYPE": "Release"
+			}
+		},
+		{
+			"name": "ci-vcpkg",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
-				"CMAKE_BUILD_TYPE": "Release",
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;vkfft;vcpkg-deps",
 				"CASTOR_BUILD_PLUGINS": true,
-				"CASTOR_BUILDGRP_DEMO": true,
+				"CASTOR_BUILDGRP_DEMO": false,
 				"CASTOR_BUILDGRP_INTEROP": false,
 				"CASTOR_BUILDGRP_TEST": false,
-				"CASTOR_BUILDGRP_TOOL": true,
+				"CASTOR_BUILDGRP_TOOL": false,
+				"CASTOR_DEBUG_TARGETS": true,
 				"CASTOR_DISABLE_DELAYED_INITIALISATION": true,
 				"CASTOR_FORCE_VCPKG_SUBMODULES": true,
 				"CASTOR_GUICOMMON_NEEDS_HLSL": true,
 				"CASTOR_USE_GLSLANG": true,
 				"CASTOR_USE_MESH_SHADERS": false,
 				"CASTOR_USE_TASK_SHADERS": false,
-				"PROJECTS_OUTPUT_DIR": "${sourceDir}",
 				"PROJECTS_UNITY_BUILD": true,
 				"PROJECTS_USE_PRECOMPILED_HEADERS": false
 			}
 		},
 		{
-			"name": "ci-x64-windows",
-			"displayName": "X64 Windows CI Config",
-			"inherits": "ci-base",
-			"cacheVariables": {
-				"PROJECTS_WARNINGS_AS_ERRORS": true
-			}
-		},
-		{
-			"name": "ci-x64-linux",
-			"displayName": "X64 Linux CI Config",
-			"inherits": "ci-base",
-			"cacheVariables": {
-				"PROJECTS_WARNINGS_AS_ERRORS": true
-			}
-		},
-		{
-			"name": "ci-x64-osx",
-			"displayName": "X64 MacOS CI Config",
-			"inherits": "ci-base",
-			"cacheVariables": {
-				"PROJECTS_WARNINGS_AS_ERRORS": false
+			"name": "ci-vcpkg-msvc",
+			"inherits": "ci-vcpkg",
+			"displayName": "CI Visual Studio Config",
+			"description": "Build configuration for CI, using Visual Studio",
+			"generator": "Visual Studio 17 2022",
+			"condition": {
+				"type": "equals",
+				"lhs": "${hostSystemName}",
+				"rhs": "Windows"
 			}
 		}
 	]

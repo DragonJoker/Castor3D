@@ -15,7 +15,7 @@ namespace castor3d
 	struct ClearcoatMapComponent
 		: public PassMapComponent
 	{
-		static const TextureFlag Clearcoat = TextureFlag( 0x01u );
+		static constexpr TextureFlag Clearcoat = TextureFlag( 0x01u );
 
 		struct ComponentsShader
 			: shader::PassComponentsShader

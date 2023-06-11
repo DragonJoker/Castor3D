@@ -15,7 +15,7 @@ namespace castor3d
 	struct TransmittanceMapComponent
 		: public PassMapComponent
 	{
-		static const TextureFlag Transmittance = TextureFlag( 0x01u );
+		static constexpr TextureFlag Transmittance = TextureFlag( 0x01u );
 
 		struct ComponentsShader
 			: shader::PassComponentsShader

@@ -15,7 +15,7 @@ namespace castor3d
 	struct IridescenceMapComponent
 		: public PassMapComponent
 	{
-		static const TextureFlag Iridescence = TextureFlag( 0x01u );
+		static constexpr TextureFlag Iridescence = TextureFlag( 0x01u );
 
 		struct ComponentsShader
 			: shader::PassComponentsShader
