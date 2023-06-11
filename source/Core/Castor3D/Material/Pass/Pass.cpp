@@ -247,21 +247,33 @@ namespace castor3d
 
 	void Pass::initialise()
 	{
-		for ( auto & unit : m_textureUnits )
+		if ( !m_initialised )
 		{
-			while ( !unit->isInitialised() )
+			if ( !m_initialising.exchange( true ) )
 			{
-				std::this_thread::sleep_for( 1_ms );
+				for ( auto & unit : m_textureUnits )
+				{
+					while ( !unit->isInitialised() )
+					{
+						std::this_thread::sleep_for( 1_ms );
+					}
+				}
+
+				m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
+				getOwner()->getOwner()->getMaterialCache().registerPass( *this );
+				m_initialising = false;
+				m_initialised = true;
 			}
 		}
-
-		m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
-		getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 	}
 
 	void Pass::cleanup()
 	{
-		getOwner()->getOwner()->getMaterialCache().unregisterPass( *this );
+		if ( m_initialised )
+		{
+			m_initialised = false;
+			getOwner()->getOwner()->getMaterialCache().unregisterPass( *this );
+		}
 	}
 
 	void Pass::update()

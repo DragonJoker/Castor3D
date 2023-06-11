@@ -113,10 +113,10 @@ namespace castor3d
 		, m_listener{ engine.addNewFrameListener( cuT( "Scene_" ) + name + castor::string::toString( intptr_t( this ) ) ) }
 		, m_renderNodes{ castor::makeUnique< SceneRenderNodes >( *this ) }
 	{
-				m_billboardCache = makeObjectCache< BillboardList, castor::String, BillboardListCacheTraits >( *this
-					, m_rootNode
-					, m_rootCameraNode
-					, m_rootObjectNode );
+		m_billboardCache = makeObjectCache< BillboardList, castor::String, BillboardListCacheTraits >( *this
+			, m_rootNode
+			, m_rootCameraNode
+			, m_rootObjectNode );
 		m_cameraCache = makeObjectCache< Camera, castor::String, CameraCacheTraits >( *this
 			, m_rootNode
 			, m_rootCameraNode
@@ -329,6 +329,23 @@ namespace castor3d
 
 				if ( node && mesh )
 				{
+					for ( auto & submesh : *mesh )
+					{
+						for ( auto & pass : *geometry.getMaterial( *submesh ) )
+						{
+							if ( !pass->isInitialised() )
+							{
+								pass->prepareTextures();
+								pass->initialise();
+							}
+
+							while ( !pass->isInitialised() )
+							{
+								std::this_thread::sleep_for( 1_ms );
+							}
+						}
+					}
+
 					auto bbox = mesh->getBoundingBox().getAxisAligned( node->getDerivedTransformationMatrix() );
 
 					for ( auto i = 0u; i < 3u; ++i )
