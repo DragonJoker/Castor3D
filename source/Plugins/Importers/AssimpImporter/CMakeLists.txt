@@ -3,15 +3,6 @@ project( ${FOLDER_NAME} )
 
 if ( VCPKG_TOOLCHAIN )
 	option( CASTOR_USE_SYSTEM_ASSIMP "Use system Assimp instead of vcpkg's" OFF )
-
-	if ( CASTOR_USE_SYSTEM_ASSIMP )
-		set( CMAKE_MODULE_PATH
-			${CMAKE_CURRENT_SOURCE_DIR}/CMake
-			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
-			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/Traditional
-			${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
-		)
-	endif ()
 endif ()
 
 if ( VCPKG_BUILD OR ( VCPKG_TOOLCHAIN AND NOT CASTOR_USE_SYSTEM_ASSIMP ) )
@@ -30,22 +21,15 @@ if ( VCPKG_BUILD OR ( VCPKG_TOOLCHAIN AND NOT CASTOR_USE_SYSTEM_ASSIMP ) )
 	endif ()
 	set( assimp_DIR ${VCPKG_SHARE_DIR}/assimp )
 	find_package( assimp CONFIG QUIET )
-else ()
-	find_package( assimp 5.0 )
-endif ()
-if ( TARGET assimp::assimp )
-	set( assimp_FOUND ON )
-	get_target_property( assimp_INCLUDE_DIR assimp::assimp INTERFACE_INCLUDE_DIRECTORIES )
 	set( assimp_LIBRARIES assimp::assimp )
-	get_target_property( assimp_LOCATION assimp::assimp IMPORTED_LOCATION_DEBUG )
-	if ( NOT assimp_LOCATION )
-		get_target_property( assimp_LOCATION assimp::assimp IMPORTED_LOCATION_RELEASE )
-		get_target_property( assimp_IMPLIB assimp::assimp IMPORTED_IMPLIB_RELEASE )
-		set_target_properties( assimp::assimp PROPERTIES
-			IMPORTED_LOCATION_DEBUG "${assimp_LOCATION}"
-			IMPORTED_IMPLIB_DEBUG "${assimp_IMPLIB}"
-		)
-	endif ()
+else ()
+	set( CMAKE_MODULE_PATH
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Modules/Traditional
+		${CMAKE_CURRENT_SOURCE_DIR}/CMake/Toolchains
+	)
+	find_package( assimp 5.0 )
 endif ()
 
 if( assimp_FOUND )

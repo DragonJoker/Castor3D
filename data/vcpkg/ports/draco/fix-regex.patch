@@ -1,0 +1,16 @@
+diff --git a/cmake/draco_install.cmake b/cmake/draco_install.cmake
+index 3be1ba1..d2e3142 100644
+--- a/cmake/draco_install.cmake
++++ b/cmake/draco_install.cmake
+@@ -38,7 +38,8 @@ macro(draco_setup_install_target)
+ 
+   # Strip $draco_src_root from the file paths: we need to install relative to
+   # $include_directory.
+-  list(TRANSFORM draco_api_includes REPLACE "${draco_src_root}/" "")
++  string(REPLACE "+" "\\+" draco_src_root2 "${draco_src_root}")
++  list(TRANSFORM draco_api_includes REPLACE "${draco_src_root2}/" "")
+ 
+   foreach(draco_api_include ${draco_api_includes})
+     get_filename_component(file_directory ${draco_api_include} DIRECTORY)
+
+warning: in the working copy of 'cmake/draco_install.cmake', LF will be replaced by CRLF the next time Git touches it

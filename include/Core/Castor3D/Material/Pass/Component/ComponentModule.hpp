@@ -95,7 +95,7 @@ namespace castor3d
 	{
 		return checkFlag( mask, ComponentModeFlag::eForward )
 			|| checkFlag( mask, ComponentModeFlag::eDeferred );
-	};
+	}
 	/**
 	\~english
 	\brief		Pass component holding base pass data.

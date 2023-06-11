@@ -20,6 +20,7 @@
   "vcpkg-configuration": {
     "overlay-ports": [
       "./data/vcpkg/ports/ashes",
+      "./data/vcpkg/ports/draco",
       "./data/vcpkg/ports/rendergraph",
       "./data/vcpkg/ports/shaderwriter",
       "./data/vcpkg/ports/vkfft"
@@ -54,7 +55,19 @@
     "tools": {
       "description": "Build tools projects.",
       "dependencies": [
-        "wxwidgets"
+        {
+          "name": "wxwidgets",
+          "platform": "!linux"
+        }
+      ]
+    },
+    "demos": {
+      "description": "Build demo projects.",
+      "dependencies": [
+        {
+          "name": "wxwidgets",
+          "platform": "!linux"
+        }
       ]
     },
     "vcpkg-deps": {

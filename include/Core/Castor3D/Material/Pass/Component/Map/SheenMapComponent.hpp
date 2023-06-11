@@ -15,7 +15,7 @@ namespace castor3d
 	struct SheenMapComponent
 		: public PassMapComponent
 	{
-		static const TextureFlag Sheen = TextureFlag( 0x01u );
+		static constexpr TextureFlag Sheen = TextureFlag( 0x01u );
 
 		struct ComponentsShader
 			: shader::PassComponentsShader

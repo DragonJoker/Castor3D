@@ -5,7 +5,14 @@ set( gli_DIR ${VCPKG_SHARE_DIR}/gli )
 set( minizip_DIR ${VCPKG_SHARE_DIR}/minizip )
 find_package( unofficial-convectionkernels CONFIG REQUIRED )
 find_package( gli CONFIG REQUIRED )
-find_package( minizip CONFIG REQUIRED )
+
+if ( VCPKG_TOOLCHAIN )
+	find_package( unofficial-minizip CONFIG REQUIRED )
+	set( minizip_LIB unofficial::minizip::minizip )
+else ()
+	find_package( minizip CONFIG REQUIRED )
+	set( minizip_LIB minizip::minizip )
+endif ()
 
 include( Doxygen )
 include( AndroidNdkModules )
@@ -669,7 +676,7 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		PRIVATE
 			${PLATFORM_LIBRARIES}
 			${Freetype_LIBRARIES}
-			minizip::minizip
+			${minizip_LIB}
 			unofficial::convectionkernels::convectionkernels
 			gli
 	)

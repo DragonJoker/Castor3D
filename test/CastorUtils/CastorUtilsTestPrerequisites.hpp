@@ -92,7 +92,7 @@ namespace Testing
 			&& std::abs( a[2][2] - b[2][2] ) < epsilon;
 	}
 
-	template< typename T, size_t C >
+	template< typename T, uint32_t C >
 	inline bool compare( castor::Point< T, C > const & a, castor::Point< T, C > const & b )
 	{
 		float epsilon = 0.001f;
@@ -101,7 +101,7 @@ namespace Testing
 			&& std::abs( a[2] - b[2] ) < epsilon;
 	}
 
-	template< typename T, size_t C >
+	template< typename T, uint32_t C >
 	inline bool compare( castor::Coords< T, C > const & a, castor::Coords< T, C > const & b )
 	{
 		float epsilon = 0.001f;

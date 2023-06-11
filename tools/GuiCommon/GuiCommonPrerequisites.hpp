@@ -325,4 +325,12 @@ namespace GuiCommon
 	static const wxString ZIP_WILDCARD = wxT( " (*.zip)|*.zip|" );
 }
 
+#if !wxCHECK_VERSION( 3, 1, 0 )
+template< typename T >
+static T const & FromDIP( T const & t )
+{
+	return t;
+}
+#endif
+
 #endif
