@@ -380,6 +380,16 @@ namespace castor3d
 		C3D_API castor::String getTextureFlagsName( PassComponentTextureFlag flags )const;
 		C3D_API LightingModelID getLightingModelId()const;
 
+		bool isInitialised()const
+		{
+			return m_initialised;
+		}
+
+		bool isInitialising()const
+		{
+			return m_initialising;
+		}
+
 		bool hasAutomaticShader()const
 		{
 			return m_automaticShader;
@@ -526,6 +536,8 @@ namespace castor3d
 		bool m_automaticShader{ true };
 		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_unitsConnections;
 		RenderPassRegisterInfo * m_renderPassInfo{};
+		bool m_initialised{ false };
+		std::atomic_bool m_initialising{ false };
 	};
 }
 
