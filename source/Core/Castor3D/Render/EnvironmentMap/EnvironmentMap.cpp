@@ -174,6 +174,8 @@ namespace castor3d
 						, index
 						, *m_scene.getBackground() );
 					m_runnables[index] = graph.compile( m_device.makeContext() );
+					m_scene.getEngine()->registerTimer( m_runnables[index]->getName() + "/Graph"
+						, m_runnables[index]->getTimer() );
 					printGraph( *m_runnables[index] );
 					auto runnable = m_runnables[index].get();
 					m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
@@ -212,6 +214,12 @@ namespace castor3d
 
 	void EnvironmentMap::cleanup()
 	{
+		for ( auto & runnable : m_runnables )
+		{
+			m_scene.getEngine()->unregisterTimer( runnable->getName() + "/Graph"
+				, runnable->getTimer() );
+		}
+
 		m_runnables.clear();
 		m_passes.clear();
 		m_environmentMapViews.clear();
@@ -406,6 +414,8 @@ namespace castor3d
 			, index
 			, *m_scene.getBackground() ) );
 		m_runnables.emplace_back( graph.compile( m_device.makeContext() ) );
+		m_scene.getEngine()->registerTimer( graph.getName()
+			, m_runnables.back()->getTimer() );
 		printGraph( *m_runnables.back() );
 		m_runnables.back()->record();
 	}

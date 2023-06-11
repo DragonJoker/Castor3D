@@ -103,7 +103,8 @@ namespace castor3d
 		 */
 		C3D_API OverlayPreparer beginPrepare( RenderDevice const & device
 			, VkRenderPass renderPass
-			, VkFramebuffer framebuffer );
+			, VkFramebuffer framebuffer
+			, crg::Fence & fence );
 		/**
 		 *\~english
 		 *\brief		Uploads all GPU buffers to VRAM.
@@ -239,6 +240,7 @@ namespace castor3d
 			ashes::DescriptorSet const & createTextDescriptorSet( FontTexture & fontTexture );
 			void beginPrepare( VkRenderPass renderPass
 				, VkFramebuffer framebuffer
+				, crg::Fence & fence
 				, crg::FramePassTimer & timer
 				, castor::Size const & size );
 			void endPrepare();
@@ -274,7 +276,8 @@ namespace castor3d
 
 	private:
 		ashes::CommandBuffer & doBeginPrepare( VkRenderPass renderPass
-			, VkFramebuffer framebuffer );
+			, VkFramebuffer framebuffer
+			, crg::Fence & fence );
 		void doEndPrepare();
 		std::pair< OverlayDrawNode *, OverlayPipelineData * > doGetDrawNodeData( RenderDevice const & device
 			, VkRenderPass renderPass

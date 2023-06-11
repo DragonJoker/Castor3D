@@ -95,7 +95,8 @@ namespace castor3d
 			m_counts = {};
 			auto preparer = m_renderer->beginPrepare( m_device
 				, m_renderPass.getRenderPass( 0u )
-				, m_renderPass.getFramebuffer( 0u ) );
+				, m_renderPass.getFramebuffer( 0u )
+				, m_graph.getFence() );
 			preparer.setDrawCounts( m_counts.drawCalls );
 
 			if ( m_drawGlobal )
@@ -137,7 +138,8 @@ namespace castor3d
 		{
 			m_renderer->beginPrepare( m_device
 				, m_renderPass.getRenderPass( 0u )
-				, m_renderPass.getFramebuffer( 0u ) );
+				, m_renderPass.getFramebuffer( 0u )
+				, m_graph.getFence() );
 		}
 
 		m_renderer->registerComputeCommands( context, commandBuffer );

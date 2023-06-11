@@ -444,6 +444,9 @@ namespace castor3d
 			? m_clearLpvGraph.compile( m_device.makeContext() )
 			: nullptr ) }
 	{
+		getEngine()->registerTimer( m_clearLpvRunnable->getName()
+			, m_clearLpvRunnable->getTimer() );
+
 		if ( m_voxelizer )
 		{
 			m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
@@ -488,6 +491,8 @@ namespace castor3d
 
 	RenderTechnique::~RenderTechnique()
 	{
+		getEngine()->unregisterTimer( m_clearLpvRunnable->getName()
+			, m_clearLpvRunnable->getTimer() );
 		m_llpvResult.clear();
 		m_lpvResult.reset();
 		m_voxelizer.reset();

@@ -65,9 +65,11 @@ namespace castor3d
 	OverlayPreparer::OverlayPreparer( OverlayRenderer & renderer
 		, RenderDevice const & device
 		, VkRenderPass renderPass
-		, VkFramebuffer framebuffer )
+		, VkFramebuffer framebuffer
+		, crg::Fence & fence )
 		: m_renderer{ renderer }
 		, m_device{ device }
+		, m_fence{ fence }
 		, m_renderPass{ renderPass }
 		, m_framebuffer{ framebuffer }
 	{
@@ -77,6 +79,7 @@ namespace castor3d
 	OverlayPreparer::OverlayPreparer( OverlayPreparer && rhs )noexcept
 		: m_renderer{ rhs.m_renderer }
 		, m_device{ rhs.m_device }
+		, m_fence{ rhs.m_fence }
 		, m_renderPass{ rhs.m_renderPass }
 		, m_framebuffer{ rhs.m_framebuffer }
 	{
@@ -87,6 +90,7 @@ namespace castor3d
 	OverlayPreparer & OverlayPreparer::operator=( OverlayPreparer && rhs )noexcept
 	{
 		m_renderPass = rhs.m_renderPass;
+		m_framebuffer = rhs.m_framebuffer;
 
 		rhs.m_renderPass = VkRenderPass{};
 		rhs.m_framebuffer = VkFramebuffer{};
@@ -99,7 +103,7 @@ namespace castor3d
 		if ( m_renderPass )
 		{
 			fillDrawData();
-			auto & commandBuffer = m_renderer.doBeginPrepare( m_renderPass, m_framebuffer );
+			auto & commandBuffer = m_renderer.doBeginPrepare( m_renderPass, m_framebuffer, m_fence );
 
 			for ( auto [level, pipelines] : m_levelsOverlays )
 			{
