@@ -2,6 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
@@ -33,14 +34,8 @@ namespace castor3d
 			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT )
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, name ) }
-		, m_staging{ std::make_unique< ashes::StagingBuffer >( *m_device
-			, name + "Staging"
-			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-			, m_size
-			, ashes::QueueShare{ { m_device.getGraphicsQueueFamilyIndex()
-				, m_device.getComputeQueueFamilyIndex()
-				, m_device.getTransferQueueFamilyIndex() } } ) }
-		, m_rawData( m_staging->getBuffer().lock( 0u, m_size, 0u ) )
+		, m_ownData( size_t( m_size ), byte{} )
+		, m_rawData( m_ownData.data() )
 		, m_data{ ( m_rawData + shdbuf::HeaderSize ) }
 		, m_counts{ castor::makeArrayView( reinterpret_cast< uint32_t * >( m_rawData )
 			, reinterpret_cast< uint32_t * >( m_data ) ) }
@@ -48,22 +43,14 @@ namespace castor3d
 		CU_Require( m_rawData );
 	}
 
-	void ShaderBuffer::upload( ashes::CommandBuffer const & commandBuffer )const
+	void ShaderBuffer::upload( UploadData & uploader )const
 	{
-		doUpload( commandBuffer
+		uploader.pushUpload( m_rawData
+			, m_size
+			, *m_buffer
 			, 0u
-			, ashes::WholeSize );
-	}
-
-	void ShaderBuffer::upload( ashes::CommandBuffer const & commandBuffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )const
-	{
-		doUpload( commandBuffer
-			, 0u
-			, std::min( m_size
-				, ashes::getAlignedSize( size
-					, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) ) );
+			, m_wantedState.access
+			, m_wantedState.pipelineStage );
 	}
 
 	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index
@@ -117,40 +104,5 @@ namespace castor3d
 			, *m_buffer
 			, 0u
 			, uint32_t( m_size ) );
-	}
-
-	void ShaderBuffer::doUpload( ashes::CommandBuffer const & commandBuffer
-		, VkDeviceSize offset
-		, VkDeviceSize size )const
-	{
-		CU_Require( ( offset + size <= m_size )
-			|| ( offset == 0u && size == ashes::WholeSize ) );
-		size = ( size == ashes::WholeSize ? m_size : size );
-		m_staging->getBuffer().flush( offset, size );
-		auto stgSrcStage = m_staging->getBuffer().getCompatibleStageFlags();
-		commandBuffer.memoryBarrier( stgSrcStage
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_staging->getBuffer().makeTransferSource() );
-
-		auto dstSrcStage = m_buffer->getCompatibleStageFlags();
-		commandBuffer.memoryBarrier( dstSrcStage
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_buffer->makeTransferDestination() );
-
-		commandBuffer.copyBuffer( m_staging->getBuffer()
-			, *m_buffer
-			, size
-			, offset
-			, 0u );
-
-		auto dstDstStage = m_buffer->getCompatibleStageFlags();
-		commandBuffer.memoryBarrier( dstDstStage
-			, m_wantedState.pipelineStage
-			, m_buffer->makeMemoryTransitionBarrier( m_wantedState.access ) );
-
-		auto stgDstStage = m_staging->getBuffer().getCompatibleStageFlags();
-		commandBuffer.memoryBarrier( stgDstStage
-			, VK_PIPELINE_STAGE_HOST_BIT
-			, m_staging->getBuffer().makeHostWrite() );
 	}
 }

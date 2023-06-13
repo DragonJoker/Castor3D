@@ -193,7 +193,7 @@ namespace castor3d
 	}
 
 	template< typename VertexT, uint32_t CountT >
-	void OverlayVertexBufferPoolT< VertexT, CountT >::upload( ashes::CommandBuffer const & cb )
+	void OverlayVertexBufferPoolT< VertexT, CountT >::upload( UploadData & uploader )
 	{
 		if ( allocated )
 		{
@@ -211,7 +211,7 @@ namespace castor3d
 
 		if ( textBuffer )
 		{
-			textBuffer->upload( cb );
+			textBuffer->upload( uploader );
 		}
 
 		m_retired.clear();

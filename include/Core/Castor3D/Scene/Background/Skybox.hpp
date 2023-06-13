@@ -277,6 +277,7 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater )const override;
 		void doGpuUpdate( GpuUpdater & updater )const override;
+		void doUpload( UploadData & uploader )override;
 		void doAddPassBindings( crg::FramePass & pass
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
@@ -286,21 +287,23 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
 		bool doInitialiseTexture( RenderDevice const & device );
-		void doInitialiseLayerTexture( RenderDevice const & device
-			, QueueData const & queueData );
-		void doInitialiseEquiTexture( RenderDevice const & device
-			, QueueData const & queueData );
-		void doInitialiseCrossTexture( RenderDevice const & device
-			, QueueData const & queueData );
+		void doInitialiseLayerTexture( RenderDevice const & device );
+		void doInitialiseEquiTexture( RenderDevice const & device );
 
 	private:
-		std::array< TextureLayoutUPtr, 6u > m_layerTexture;
+		std::array< castor::ImageUPtr, 6u > m_layerTexture;
 		std::array< castor::Path, 6u > m_layerTexturePath;
 		TextureLayoutUPtr m_equiTexture;
 		castor::Path m_equiTexturePath;
 		castor::Size m_equiSize;
-		TextureLayoutUPtr m_crossTexture;
 		castor::Path m_crossTexturePath;
+
+		static castor::ImageUPtr copyCrossImageFace( Engine & engine
+			, castor::StringView faceName
+			, castor::Image const & lines
+			, uint32_t index );
+		static std::array< castor::ImageUPtr, 6u > splitCrossImageBuffer( Engine & engine
+			, castor::Image const & cross );
 	};
 }
 

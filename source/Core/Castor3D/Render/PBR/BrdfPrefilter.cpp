@@ -1,6 +1,8 @@
 #include "Castor3D/Render/PBR/BrdfPrefilter.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/DirectUploadData.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -42,17 +44,25 @@ namespace castor3d
 		// Initialise the vertex buffer.
 		auto queueData = m_device.graphicsData();
 		m_vertexBuffer = device.vertexPools->getBuffer< TexturedQuad >( 1u );
-		m_vertexBuffer.getData< TexturedQuad >( SubmeshFlag::ePositions ).front() = { { { castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
+		auto & vb = m_vertexBuffer.getBufferChunk( SubmeshFlag::ePositions );
+		TexturedQuad data = { { { castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
 			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
 			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
 			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
 			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
 			, { castor::Point2f{ +1.0, +1.0 }, castor::Point2f{ 1.0, 1.0 } } } };
-		m_vertexBuffer.directUpload( SubmeshFlag::ePositions 
-			, *queueData->queue
-			, *queueData->commandPool
-			, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+		{
+			InstantDirectUploadData uploader{ *queueData->queue
+				, m_device
+				, "BrdfPrefilter"
+				, *queueData->commandPool };
+			uploader->pushUpload( &data
+				, sizeof( TexturedQuad )
+				, vb.getBuffer()
+				, vb.getOffset()
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+		}
 
 		// Initialise the vertex layout.
 		m_vertexLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u

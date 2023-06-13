@@ -124,9 +124,9 @@ namespace castor3d
 		m_renderer->update( updater );
 	}
 
-	void OverlayPass::upload( ashes::CommandBuffer const & cb )
+	void OverlayPass::upload( UploadData & uploader )
 	{
-		m_renderer->upload( cb );
+		m_renderer->upload( uploader );
 	}
 
 	void OverlayPass::doRecordInto( crg::RecordContext & context

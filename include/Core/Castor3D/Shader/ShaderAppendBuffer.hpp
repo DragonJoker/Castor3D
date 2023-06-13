@@ -12,7 +12,6 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
-#include <ashespp/Buffer/StagingBuffer.hpp>
 
 namespace castor3d
 {

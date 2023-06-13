@@ -1,9 +1,10 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
+#include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 
@@ -48,54 +49,50 @@ namespace castor3d
 	void UniformBufferPool::cleanup()
 	{
 		m_buffers.clear();
-
-		if ( m_stagingBuffer )
-		{
-			m_stagingBuffer->getBuffer().unlock();
-			m_stagingBuffer.reset();
-		}
 	}
 
-	void UniformBufferPool::upload( ashes::CommandBuffer const & commandBuffer )const
+	void UniformBufferPool::upload( UploadData & uploader )const
 	{
-		if ( m_stagingBuffer )
-		{
-			m_stagingBuffer->getBuffer().flush( 0u, m_currentUboIndex * m_maxUboSize );
-			auto stgSrcStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
-			commandBuffer.memoryBarrier( stgSrcStage
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_stagingBuffer->getBuffer().makeTransferSource() );
+		auto & commandBuffer = uploader.getCommandBuffer();
 
-			for ( auto & bufferIt : m_buffers )
+		for ( auto & bufferIt : m_buffers )
+		{
+			for ( auto & buffer : bufferIt.second )
 			{
-				for ( auto & buffer : bufferIt.second )
+				if ( buffer.buffer->hasAllocated() )
 				{
-					if ( buffer.buffer->hasAllocated() )
+					auto & vkBuffer = buffer.buffer->getBuffer().getBuffer();
+					auto curFlags = vkBuffer.getCompatibleStageFlags();
+					auto barrier = vkBuffer.makeHostWrite();
+
+					if ( curFlags != VK_PIPELINE_STAGE_HOST_BIT )
 					{
-						copyBuffer( commandBuffer
-							, m_stagingBuffer->getBuffer()
-							, buffer.buffer->getBuffer().getBuffer()
-							, buffer.index * m_maxUboSize
-							, m_maxUboSize
-							, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
+						commandBuffer.memoryBarrier( curFlags
+							, VK_PIPELINE_STAGE_HOST_BIT
+							, barrier );
+					}
+
+					buffer.buffer->flush();
+
+					if ( curFlags != VK_PIPELINE_STAGE_HOST_BIT )
+					{
+						commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+							, curFlags
+							, vkBuffer.makeMemoryTransitionBarrier( barrier.srcAccessMask ) );
+					}
+					else
+					{
+						commandBuffer.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+							, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT
+							, vkBuffer.makeUniformBufferInput() );
 					}
 				}
 			}
-
-			auto stgDstStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
-			commandBuffer.memoryBarrier( stgDstStage
-				, VK_PIPELINE_STAGE_HOST_BIT
-				, m_stagingBuffer->getBuffer().makeHostWrite() );
 		}
 	}
 
 	uint32_t UniformBufferPool::getBufferCount()const
 	{
-		if ( !m_stagingBuffer )
-		{
-			return 0u;
-		}
-
 		uint32_t result = 0u;
 
 		for ( auto & bufferIt : m_buffers )
@@ -119,32 +116,6 @@ namespace castor3d
 		return it;
 	}
 
-	void UniformBufferPool::doCreateStagingBuffer()
-	{
-		auto & renderSystem = *getRenderSystem();
-		auto & device = renderSystem.getRenderDevice();
-		ashes::QueueShare sharingMode
-		{
-			{
-				device.getGraphicsQueueFamilyIndex(),
-				device.getComputeQueueFamilyIndex(),
-				device.getTransferQueueFamilyIndex(),
-			}
-		};
-		auto maxSize = std::min( 65536u, renderSystem.getValue( GpuMax::eUniformBufferSize ) );
-		auto elementSize = renderSystem.getValue( GpuMin::eUniformBufferOffsetAlignment );
-		m_maxUboElemCount = uint32_t( std::floor( float( maxSize ) / float( elementSize ) ) );
-		m_maxUboSize = m_maxUboElemCount * elementSize;
-		m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
-			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-			, m_maxUboSize * m_maxPoolUboCount
-			, sharingMode );
-		m_stagingData = m_stagingBuffer->getBuffer().lock( 0u
-			, m_maxUboSize * m_maxPoolUboCount
-			, 0u );
-		assert( m_stagingData );
-	}
-
 	UniformBufferPool::BufferArray::iterator UniformBufferPool::doCreatePoolBuffer( VkMemoryPropertyFlags flags
 		, UniformBufferPool::BufferArray & buffers )
 	{
@@ -158,10 +129,7 @@ namespace castor3d
 				device.getTransferQueueFamilyIndex(),
 			}
 		};
-		auto index = m_maxUboSize * m_currentUboIndex;
 		auto buffer = makePoolUniformBuffer( renderSystem
-			, castor::makeArrayView( m_stagingData + index
-				, m_stagingData + index + m_maxUboSize )
 			, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, flags
 			, m_debugName

@@ -11,17 +11,15 @@ CU_ImplementSmartPtr( castor3d, PoolUniformBuffer )
 namespace castor3d
 {
 	PoolUniformBuffer::PoolUniformBuffer( RenderSystem const & renderSystem
-		, castor::ByteArrayView data
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, castor::String debugName
 		, ashes::QueueShare sharingMode )
 		: m_renderSystem{ renderSystem }
 		, m_usage{ usage }
-		, m_flags{ flags }
+		, m_flags{ flags | VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT }
 		, m_sharingMode{ std::move( sharingMode ) }
 		, m_debugName{ std::move( debugName ) }
-		, m_data{ std::move( data ) }
 	{
 		initialise( m_renderSystem.getRenderDevice() );
 	}
@@ -39,12 +37,29 @@ namespace castor3d
 			, m_usage | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, m_sharingMode );
 		m_buffer->bindMemory( setupMemory( device, *m_buffer, m_flags, m_debugName + "Ubo" ) );
+		m_data = castor::makeArrayView( m_buffer->getBuffer().lock( 0u, ashes::WholeSize, 0u )
+			, m_buffer->getBuffer().getSize() );
 		return uint32_t( m_buffer->getBuffer().getSize() );
 	}
 
 	void PoolUniformBuffer::cleanup( RenderDevice const & device )
 	{
-		m_buffer.reset();
+		m_data = {};
+
+		if ( m_buffer )
+		{
+			m_buffer->getBuffer().unlock();
+			m_buffer.reset();
+		}
+
+	}
+
+	void PoolUniformBuffer::flush()
+	{
+		if ( m_buffer )
+		{
+			m_buffer->getBuffer().flush( 0u, ashes::WholeSize );
+		}
 	}
 
 	bool PoolUniformBuffer::hasAvailable( VkDeviceSize size )const

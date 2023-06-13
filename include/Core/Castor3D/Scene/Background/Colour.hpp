@@ -76,6 +76,7 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater )const override;
 		void doGpuUpdate( GpuUpdater & updater )const override;
+		void doUpload( UploadData & uploader )override;
 		void doAddPassBindings( crg::FramePass & pass
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
@@ -84,13 +85,10 @@ namespace castor3d
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
-		void doUpdateColour( QueueData const & queueData
-			, RenderDevice const & device )const;
 
 	private:
-		mutable castor::ChangeTracked< castor::HdrRgbColour > m_colour;
-		ashes::StagingTexturePtr m_stagingTexture;
-		ashes::CommandBufferPtr m_cmdCopy;
+		mutable castor::GroupChangeTracked< castor::HdrRgbColour > m_colour;
+		castor::PxBufferBaseUPtr m_buffer;
 	};
 }
 

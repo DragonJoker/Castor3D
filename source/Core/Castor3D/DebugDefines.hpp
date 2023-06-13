@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #define C3D_DebugTimers 0
 #define C3D_DebugDisableShadowMaps 0
 #define C3D_DebugDisableSafeBands 0
+#define C3D_DebugUpload 0
 
 // Clustered lighting
 #define C3D_DebugUseLightsBVH 1

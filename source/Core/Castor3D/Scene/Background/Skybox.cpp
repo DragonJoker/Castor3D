@@ -1,6 +1,8 @@
 #include "Castor3D/Scene/Background/Skybox.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/DirectUploadData.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -211,24 +213,12 @@ namespace castor3d
 		, castor::Path const & relative
 		, CubeMapFace face )
 	{
-		ashes::ImageCreateInfo image{ 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_UNDEFINED
-			, { 1u, 1u, 1u }
-			, 1u
-			, 1u
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
-		auto texture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
-			, std::move( image )
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "SkyboxBackground" ) + castor3d::getName( face ) );
-		texture->setSource( folder, relative, { false, false, false } );
 		m_layerTexturePath[size_t( face )] = folder / relative;
-		m_layerTexture[size_t( face )] = std::move( texture );
+		m_layerTexture[size_t( face )] = SceneBackground::loadImage( *getScene().getEngine()
+			, cuT( "SkyboxBackground" ) + castor3d::getName( face )
+			, folder
+			, relative
+			, true );
 		notifyChanged();
 	}
 
@@ -266,24 +256,12 @@ namespace castor3d
 	void SkyboxBackground::setCrossTexture( castor::Path const & folder
 		, castor::Path const & relative )
 	{
-		ashes::ImageCreateInfo image{ 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_UNDEFINED
-			, { 1u, 1u, 1u }
-			, 1u
-			, 1u
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
-		auto texture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
-			, image
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, cuT( "SkyboxBackgroundCross" ) );
-		texture->setSource( folder, relative, { false, false, false } );
 		m_crossTexturePath = folder / relative;
-		m_crossTexture = std::move( texture );
+		m_layerTexture = splitCrossImageBuffer( *getScene().getEngine()
+			, getFileImage( *getScene().getEngine()
+				, cuT( "SkyboxBackgroundCross" )
+				, folder
+				, relative ) );
 		notifyChanged();
 	}
 
@@ -314,6 +292,24 @@ namespace castor3d
 
 	void SkyboxBackground::doGpuUpdate( GpuUpdater & updater )const
 	{
+	}
+
+	void SkyboxBackground::doUpload( UploadData & uploader )
+	{
+		VkImageSubresourceRange dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u };
+
+		for ( auto & layer : m_layerTexture )
+		{
+			dstSubresource.levelCount = layer->getLevels();
+			uploader.pushUpload( layer->getPxBuffer().getConstPtr()
+				, layer->getPxBuffer().getSize()
+				, m_texture->getTexture()
+				, layer->getLayout()
+				, dstSubresource
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+			dstSubresource.baseArrayLayer++;
+		}
 	}
 
 	void SkyboxBackground::doAddPassBindings( crg::FramePass & pass
@@ -347,19 +343,13 @@ namespace castor3d
 
 	bool SkyboxBackground::doInitialiseTexture( RenderDevice const & device )
 	{
-		auto data = device.graphicsData();
-
 		if ( m_equiTexture )
 		{
-			doInitialiseEquiTexture( device, *data );
-		}
-		else if ( m_crossTexture )
-		{
-			doInitialiseCrossTexture( device, *data );
+			doInitialiseEquiTexture( device );
 		}
 		else
 		{
-			doInitialiseLayerTexture( device, *data );
+			doInitialiseLayerTexture( device );
 		}
 
 		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
@@ -371,23 +361,19 @@ namespace castor3d
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
 		m_srgb = isSRGBFormat( convert( m_texture->getPixelFormat() ) );
-		return m_texture->initialise( device, *data );
+		return m_texture->initialise( device );
 	}
 
-	void SkyboxBackground::doInitialiseLayerTexture( RenderDevice const & device
-		, QueueData const & queueData )
+	void SkyboxBackground::doInitialiseLayerTexture( RenderDevice const & device )
 	{
 		uint32_t maxDim{};
 
 		for ( auto & layer : m_layerTexture )
 		{
-			layer->initialise( device, queueData );
 			auto dim = layer->getDimensions();
 			maxDim = std::max( maxDim
-				, std::max( dim.width, dim.height ) );
+				, std::max( dim->x, dim->y ) );
 		}
-
-		auto & engine = *getEngine();
 
 		// create the cube texture if needed.
 		m_textureId = { device
@@ -397,7 +383,7 @@ namespace castor3d
 			, { maxDim, maxDim, 1u }
 			, 6u
 			, ashes::getMaxMipCount( { maxDim, maxDim, maxDim } )
-			, m_layerTexture[0]->getPixelFormat()
+			, convert( m_layerTexture[0]->getPxBuffer().getFormat() )
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
 		m_textureId.create();
@@ -405,58 +391,29 @@ namespace castor3d
 			, cuT( "SkyboxBackgroundLayerCube" )
 			, *m_textureId.image
 			, m_textureId.wholeViewId );
-
-		auto commandBuffer = queueData.commandPool->createCommandBuffer( "SkyboxBackground" );
-		commandBuffer->begin();
-		commandBuffer->beginDebugBlock(
-			{
-				"Layer to Skybox",
-				makeFloatArray( engine.getNextRainbowColour() ),
-			} );
-		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_texture->getLayerCubeTargetView( 0u ).makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		VkImageSubresourceLayers srcSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u };
-		VkImageSubresourceLayers dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u };
-
-		for ( auto & layer : m_layerTexture )
-		{
-			auto dim = layer->getDimensions();
-			VkImageBlit blitInfo{ srcSubresource
-				, { {}, { int32_t( dim.width ), int32_t( dim.height ), 1 } }
-				, dstSubresource
-				, { {}, { int32_t( maxDim ), int32_t( maxDim ), 1 } } };
-			dstSubresource.baseArrayLayer++;
-
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, layer->getDefaultTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-			commandBuffer->blitImage( layer->getTexture()
-				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-				, m_texture->getTexture()
-				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-				, { blitInfo }
-				, VK_FILTER_LINEAR );
-		}
-
-		m_texture->generateMipmaps( *commandBuffer
-			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
-		commandBuffer->endDebugBlock();
-		commandBuffer->end();
-
-		queueData.queue->submit( *commandBuffer, nullptr );
-		queueData.queue->waitIdle();
-
-		for ( auto & layer : m_layerTexture )
-		{
-			layer->cleanup();
-		}
+		m_needsUpload = true;
 	}
 
-	void SkyboxBackground::doInitialiseEquiTexture( RenderDevice const & device
-		, QueueData const & queueData )
+	void SkyboxBackground::doInitialiseEquiTexture( RenderDevice const & device )
 	{
-		m_equiTexture->initialise( device, queueData );
+		auto data = device.graphicsData();
+		auto & queueData = *data;
+		m_equiTexture->initialise( device );
+		{
+			auto & image = m_equiTexture->getImage();
+			auto & texture = m_equiTexture->getTexture();
+			InstantDirectUploadData upload{ *queueData.queue
+				, device
+				, image.getName()
+				, *queueData.commandPool };
+			upload->pushUpload( image.getPxBuffer().getConstPtr()
+				, image.getPxBuffer().getSize()
+				, texture
+				, image.getLayout()
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, image.getLayout().depthLayers() }
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+		}
 
 		// create the cube texture if needed.
 		if ( m_texture->getDimensions().width != m_equiSize.getWidth()
@@ -489,103 +446,63 @@ namespace castor3d
 		m_equiTexture->cleanup();
 	}
 
-	void SkyboxBackground::doInitialiseCrossTexture( RenderDevice const & device
-		, QueueData const & queueData )
+	castor::ImageUPtr SkyboxBackground::copyCrossImageFace( Engine & engine
+		, castor::StringView faceName
+		, castor::Image const & lines
+		, uint32_t index )
 	{
-		m_crossTexture->initialise( device, queueData );
-		auto width = m_crossTexture->getWidth() / 4u;
-		auto height = m_crossTexture->getHeight() / 3u;
-		CU_Require( width == height );
+		auto name = lines.getName() + faceName.data();
+		auto height = lines.getHeight();
+		auto width = height;
+		auto blockExtent = ashes::getMinimalExtent2D( convert( lines.getPixelFormat() ) );
+		auto blockSize = ashes::getMinimalSize( convert( lines.getPixelFormat() ) );
+		auto lineSize = lines.getWidth() * blockSize;
+		auto sectionSize = lineSize / 4u;
+		auto lineOffset = ptrdiff_t( index * sectionSize );
+		auto buffer = castor::PxBufferBase::create( { width, height }, lines.getPixelFormat() );
+		auto srcData = lines.getBuffer().data() + lineOffset;
+		auto dstData = buffer->getPtr();
+		auto blockCount = height / blockExtent.height;
 
-		// create the cube texture if needed.
-		m_textureId = { device
-			, getScene().getResources()
-			, cuT( "SkyboxBackgroundCrossCube" )
-			, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
-			, { width, width, 1u }
-			, 6u
-			, ashes::getMaxMipCount( { width, width, width } )
-			, m_crossTexture->getPixelFormat()
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT
-				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
-		m_textureId.create();
-		m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
-			, cuT( "SkyboxBackgroundCrossCube" )
-			, *m_textureId.image
-			, m_textureId.wholeViewId );
-
-		VkImageSubresourceLayers srcSubresource
+		for ( uint32_t i = 0u; i < blockCount; ++i )
 		{
-			m_crossTexture->getDefaultTargetView()->subresourceRange.aspectMask,
-			0,
-			0,
-			1,
-		};
-		VkImageSubresourceLayers dstSubresource
-		{
-			m_texture->getDefaultTargetView()->subresourceRange.aspectMask,
-			0,
-			0,
-			1,
-		};
-		ashes::VkImageCopyArray copyInfos
-		{
-			6u,
-			VkImageCopy
-			{
-				srcSubresource,
-				{},
-				dstSubresource,
-				{},
-				{ width, height, 1u }
-			}
-		};
-		auto iwidth = int32_t( width );
-		std::array< VkOffset3D, 6u > srcOffsets
-		{
-			{
-				{ iwidth * 2, iwidth, 0 },
-				{ 0, iwidth, 0 },
-				{ 0, 0, 0 },
-				{ iwidth, iwidth * 2, 0 },
-				{ iwidth, iwidth, 0 },
-				{ iwidth * 3, iwidth, 0 },
-			}
-		};
-
-		for ( uint32_t i = 0u; i < 6u; ++i )
-		{
-			copyInfos[i].srcOffset = srcOffsets[i];
-			copyInfos[i].dstSubresource.baseArrayLayer = i;
+			std::memcpy( dstData, srcData, sectionSize );
+			srcData += lineSize;
+			dstData += sectionSize;
 		}
 
-		auto commandBuffer = queueData.commandPool->createCommandBuffer( "SkyboxBackground" );
-		commandBuffer->begin();
-		commandBuffer->beginDebugBlock(
-			{
-				"Cross to Skybox",
-				makeFloatArray( getScene().getEngine()->getNextRainbowColour() ),
-			} );
-		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_crossTexture->getDefaultTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_texture->getLayerCubeTargetView( 0u ).makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
-		commandBuffer->copyImage( copyInfos
-			, m_crossTexture->getTexture()
-			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
-			, m_texture->getTexture()
-			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
-		m_texture->generateMipmaps( *commandBuffer
-			, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL );
-		commandBuffer->endDebugBlock();
-		commandBuffer->end();
+		buffer = adaptBuffer( engine
+			, *buffer
+			, name
+			, true );
+		castor::ImageLayout layout{ lines.getLayout().type, *buffer };
+		log::info << "Loaded image [" << name << "] (" << layout << ")" << std::endl;
+		return castor::makeUnique< castor::Image >( lines.getName()
+			, lines.getPath()
+			, layout
+			, std::move( buffer ) );
+	}
 
-		queueData.queue->submit( *commandBuffer, nullptr );
-		queueData.queue->waitIdle();
+	std::array< castor::ImageUPtr, 6u > SkyboxBackground::splitCrossImageBuffer( Engine & engine
+		, castor::Image const & cross )
+	{
+		auto height = cross.getHeight() / 3u;
+		CU_Require( cross.getWidth() / 4u == height );
+		uint8_t const * buffer = cross.getBuffer().data();
 
-		m_crossTexture->cleanup();
+		// First, split vertically, since it's the most straightforward.
+		auto linesStride = height * cross.getPxBuffer().getSize() / cross.getHeight();
+		std::array< castor::ImageUPtr, 3u > lines{
+			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 0 ), cross.getPixelFormat() ),
+			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 1 ), cross.getPixelFormat() ),
+			castor::makeUnique< castor::Image >( cross.getName(), cross.getPath(), castor::Size{ cross.getWidth(), height }, cross.getPixelFormat(), buffer + ptrdiff_t( linesStride * 2 ), cross.getPixelFormat() ) };
+
+		// Then split horizontally
+		return { copyCrossImageFace( engine, cuT( "/Face/Left" ), *lines[1], 2u )
+			, copyCrossImageFace( engine, cuT( "/Face/Right" ), *lines[1], 0u )
+			, copyCrossImageFace( engine, cuT( "/Face/Top" ), *lines[0], 1u )
+			, copyCrossImageFace( engine, cuT( "/Face/Bottom" ), *lines[2], 1u )
+			, copyCrossImageFace( engine, cuT( "/Face/Front" ), *lines[1], 1u )
+			, copyCrossImageFace( engine, cuT( "/Face/Back" ), *lines[1], 3u ) };
 	}
 }

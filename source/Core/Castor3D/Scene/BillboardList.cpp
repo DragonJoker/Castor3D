@@ -1,6 +1,8 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 
+#include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -114,11 +116,20 @@ namespace castor3d
 				BillboardVertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
 			m_geometryBuffers.bufferOffset = device.vertexPools->getBuffer< Quad >( 1u );
-			auto bufferData = m_geometryBuffers.bufferOffset.getData< Quad >( SubmeshFlag::ePositions );
-			bufferData.front() = vertices;
-			m_geometryBuffers.bufferOffset.markDirty( SubmeshFlag::ePositions
-				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			auto & vb = m_geometryBuffers.bufferOffset.getBufferChunk( SubmeshFlag::ePositions );
+			{
+				auto queueData = device.graphicsData();
+				InstantDirectUploadData uploader{ *queueData->queue
+					, device
+					, "BillboardBase"
+					, *queueData->commandPool };
+				uploader->pushUpload( &vertices
+					, sizeof( Quad )
+					, vb.getBuffer()
+					, vb.getOffset()
+					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			}
 
 			m_quadLayout = std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
 				, ashes::VkVertexInputBindingDescriptionArray{ { 0u, sizeof( BillboardVertex ), VK_VERTEX_INPUT_RATE_VERTEX } }

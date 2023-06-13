@@ -160,8 +160,14 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
-		C3D_API bool initialise( RenderDevice const & device
-			, QueueData const & queueData );
+		C3D_API bool initialise( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Uploads image data to the texture buffer.
+		 *\~french
+		 *\brief		Upload les données d'image dans le buffer de la texture.
+		 */
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture and all its views.
@@ -384,12 +390,6 @@ namespace castor3d
 		result->bindMemory( std::move( memory ) );
 		return result;
 	}
-
-	C3D_API void uploadTexture( RenderDevice const & device
-		, QueueData const & queueData
-		, castor::Image const & image
-		, ashes::Image const & texture
-		, ashes::ImageViewCreateInfo & viewInfo );
 }
 
 #endif

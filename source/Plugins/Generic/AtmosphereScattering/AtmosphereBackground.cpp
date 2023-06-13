@@ -837,7 +837,7 @@ namespace atmosphere_scattering
 		m_hdr = true;
 		m_srgb = false;
 		m_timer.getElapsed();
-		auto result = m_texture->initialise( device, *data );
+		auto result = m_texture->initialise( device );
 
 		if ( result )
 		{
@@ -887,6 +887,10 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::doGpuUpdate( castor3d::GpuUpdater & updater )const
+	{
+	}
+
+	void AtmosphereBackground::doUpload( castor3d::UploadData & uploader )
 	{
 	}
 

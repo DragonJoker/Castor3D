@@ -78,7 +78,7 @@ namespace castor
 		}
 	}
 
-	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::upload( ashes::CommandBuffer const & commandBuffer )
+	void ResourceCacheT< Overlay, String, OverlayCacheTraits >::upload( castor3d::UploadData & uploader )
 	{
 		auto lock( makeUniqueLock( *this ) );
 
@@ -86,7 +86,7 @@ namespace castor
 		{
 			if ( texture.second )
 			{
-				texture.second->upload( commandBuffer );
+				texture.second->upload( uploader );
 			}
 		}
 	}

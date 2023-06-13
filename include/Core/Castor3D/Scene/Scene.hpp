@@ -108,6 +108,13 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
+		 *\brief		Uploads the scene objects data.
+		 *\~french
+		 *\brief		Upload les données des objets de la scène.
+		 */
+		C3D_API void upload( UploadData & uploader );
+		/**
+		 *\~english
 		 *\brief		Updates the scene device dependant stuff.
 		 *\~french
 		 *\brief		Met à jour les objets de scène dépendant du device.

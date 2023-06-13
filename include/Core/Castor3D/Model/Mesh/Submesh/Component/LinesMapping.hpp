@@ -153,7 +153,7 @@ namespace castor3d
 
 	private:
 		void doCleanup( RenderDevice const & device )override;
-		void doUpload()override;
+		void doUpload( UploadData & uploader )override;
 
 	public:
 		C3D_API static castor::String const Name;

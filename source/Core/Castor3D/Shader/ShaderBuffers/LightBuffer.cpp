@@ -111,11 +111,11 @@ namespace castor3d
 		}
 	}
 
-	void LightBuffer::upload( ashes::CommandBuffer const & commandBuffer )
+	void LightBuffer::upload( UploadData & uploader )
 	{
 		if ( m_wasDirty )
 		{
-			m_buffer.upload( commandBuffer );
+			m_buffer.upload( uploader );
 			m_wasDirty = false;
 		}
 	}

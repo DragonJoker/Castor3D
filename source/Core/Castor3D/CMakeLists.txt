@@ -191,17 +191,21 @@ source_group( "Header Files\\Binary" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Binary" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/DirectUploadData.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/GpuBuffer.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/GpuBufferPool.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/GpuBufferLinearAllocator.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/GpuBufferPackedAllocator.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/ObjectBufferPool.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/PoolUniformBuffer.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/StagedUploadData.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/UploadData.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/UniformBufferBase.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Buffer/UniformBufferPool.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/BufferModule.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/DirectUploadData.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/GeometryBuffers.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/GpuBuffer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/GpuBuffer.inl
@@ -211,10 +215,13 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/GpuBufferPackedAllocator.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/GpuBufferPool.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/GpuBufferPool.inl
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/InstantUploadData.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/ObjectBufferOffset.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/ObjectBufferPool.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/ObjectBufferPool.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/PoolUniformBuffer.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/StagedUploadData.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UploadData.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBufferBase.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBuffer.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Buffer/UniformBuffer.inl
@@ -749,7 +756,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/LoadingScreen.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Logger.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/ProgressBar.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/StagingData.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/Version.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Miscellaneous/VersionException.cpp
 )
@@ -766,7 +772,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/Pattern.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/PipelineVisitor.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/ProgressBar.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/StagingData.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/Version.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Miscellaneous/VersionException.hpp
 )

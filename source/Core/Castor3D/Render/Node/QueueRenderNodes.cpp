@@ -94,7 +94,7 @@ namespace castor3d
 			, PipelineBufferArray & nodesIds )
 		{
 			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
-			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
+			auto buffer = &bufferChunk.buffer->getBuffer();
 			NodePtrByBufferMapT< NodeT > & pipelineMap = nodes.emplace( &pipeline, NodePtrByBufferMapT< NodeT >{} ).first->second;
 			NodeArrayT< NodeT > & bufferMap = pipelineMap.emplace( buffer, NodeArrayT< NodeT >{} ).first->second;
 			auto it = std::find_if( bufferMap.begin()
@@ -117,7 +117,7 @@ namespace castor3d
 			, PipelineBufferArray & nodesIds )
 		{
 			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshFlag::ePositions );
-			auto buffer = &bufferChunk.buffer->getBuffer().getBuffer();
+			auto buffer = &bufferChunk.buffer->getBuffer();
 			ObjectNodesPtrByBufferMapT< NodeT > & pipelineMap = nodes.emplace( &pipeline, ObjectNodesPtrByBufferMapT< NodeT >{} ).first->second;
 			ObjectNodesPtrByPassT< NodeT > & bufferMap = pipelineMap.emplace( buffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
 			ObjectNodesPtrMapT< NodeT > & passMap = bufferMap.emplace( node.pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;

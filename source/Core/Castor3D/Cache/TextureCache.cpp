@@ -1,6 +1,7 @@
 #include "Castor3D/Cache/TextureCache.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
@@ -570,6 +571,31 @@ namespace castor3d
 		}
 	}
 
+	void TextureUnitCache::upload( UploadData & uploader )
+	{
+		std::map< TextureData *, Texture * > toUpload;
+		{
+			auto lock( castor::makeUniqueLock( m_uploadMtx ) );
+			toUpload = std::move( m_toUpload );
+		}
+
+		for ( auto [data, texture] : toUpload )
+		{
+			uploader.pushUpload( data->image->getBuffer().data()
+				, data->image->getBuffer().size()
+				, *texture->image
+				, data->image->getLayout()
+				, texture->sampledViewId.data->info.subresourceRange
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+
+			for ( auto unit : doListTextureUnits( texture ) )
+			{
+				doAddWrite( *unit );
+			}
+		}
+	}
+
 	void TextureUnitCache::notifyPassChange( Pass & pass )
 	{
 		auto lock( castor::makeUniqueLock( m_dirtyMtx ) );
@@ -806,7 +832,16 @@ namespace castor3d
 					result->setConfiguration( std::move( config ) );
 
 					result->initialise();
-					doAddWrite( *result );
+
+					if ( data.sourceInfo.isRenderTarget() )
+					{
+						doAddWrite( *result );
+					}
+					else
+					{
+						auto & array = m_unitsToAdd.emplace( texture, std::vector< TextureUnit * >{} ).first->second;
+						array.push_back( result );
+					}
 				} );
 		}
 		else
@@ -990,14 +1025,10 @@ namespace castor3d
 				, data.data->usage
 				, &sourceInfo.sampler()->getSampler() };
 			data.texture->create();
-			auto queueData = device.graphicsData();
-			ashes::ImageViewCreateInfo viewInfo{ *data.texture->image
-				, data.texture->sampledViewId.data->info };
-			uploadTexture( device
-				, *queueData
-				, *data.data->image
-				, *data.texture->image
-				, viewInfo );
+			{
+				auto lock( castor::makeUniqueLock( m_uploadMtx ) );
+				m_toUpload.emplace( data.data, data.texture );
+			}
 		}
 	}
 
@@ -1076,6 +1107,21 @@ namespace castor3d
 			auto lock( castor::makeUniqueLock( m_dirtyWritesMtx ) );
 			m_dirtyWrites.emplace_back( write );
 		}
+	}
+
+	std::vector< TextureUnit * > TextureUnitCache::doListTextureUnits( Texture const * texture )
+	{
+		auto lock( castor::makeUniqueLock( m_loadMtx ) );
+		auto it = m_unitsToAdd.find( texture );
+
+		if ( it == m_unitsToAdd.end() )
+		{
+			return {};
+		}
+
+		auto result = std::move( it->second );
+		m_unitsToAdd.erase( it );
+		return result;
 	}
 
 	//*********************************************************************************************

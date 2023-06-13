@@ -254,7 +254,7 @@ namespace castor3d
 		}
 	}
 
-	void MeshletComponent::doUpload()
+	void MeshletComponent::doUpload( UploadData & uploader )
 	{
 		if ( !m_meshletBuffer )
 		{

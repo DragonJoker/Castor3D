@@ -1230,61 +1230,61 @@ namespace castor3d
 
 			if ( flags.enablePosition() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePositions )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPosition, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableNormal() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eNormals )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInNormal, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTangentSpace() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord0() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords0 )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord0, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord1() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords1 )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord1, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord2() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords2 )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord2, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord3() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTexcoords3 )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTexcoord3, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableColours() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eColours )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInColour, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enablePassMasks() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::ePassMasks )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInPassMasks, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableVelocity() )
 			{
-				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer().getBuffer();
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eVelocity )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInVelocity, 0u, buffer.getSize() ) );
 			}
 

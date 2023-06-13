@@ -4,6 +4,7 @@
 #include "Castor3D/Miscellaneous/Logger.hpp"
 
 CU_ImplementSmartPtr( castor3d, GpuPackedBuffer )
+CU_ImplementSmartPtr( castor3d, GpuPackedBaseBuffer )
 
 #define C3D_DebugGPUPackedAllocator 0
 

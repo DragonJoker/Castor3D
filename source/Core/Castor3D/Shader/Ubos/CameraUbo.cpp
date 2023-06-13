@@ -8,8 +8,6 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
-
 #include <ShaderWriter/Source.hpp>
 
 namespace castor3d

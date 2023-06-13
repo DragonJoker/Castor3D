@@ -31,11 +31,11 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshComponent::upload()
+	void SubmeshComponent::upload( UploadData & uploader )
 	{
 		if ( m_initialised && m_dirty )
 		{
-			doUpload();
+			doUpload( uploader );
 			m_dirty = false;
 		}
 	}

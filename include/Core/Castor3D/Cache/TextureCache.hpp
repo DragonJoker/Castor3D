@@ -72,6 +72,7 @@ namespace castor3d
 		C3D_API void stopLoad();
 
 		C3D_API void update( GpuUpdater & updater );
+		C3D_API void upload( UploadData & uploader );
 
 		C3D_API void notifyPassChange( Pass & pass );
 		C3D_API void preparePass( Pass & pass );
@@ -163,6 +164,7 @@ namespace castor3d
 		ThreadData & doCreateThreadData( TextureData & data );
 		ThreadData & doFindThreadData( TextureData & data );
 		void doDestroyThreadData( ThreadData & data );
+		std::vector< TextureUnit * > doListTextureUnits( Texture const * texture );
 
 		bool hasBindless()const
 		{
@@ -174,6 +176,7 @@ namespace castor3d
 		castor::CheckedMutex m_dirtyMtx;
 		std::unordered_set< Pass * > m_dirty;
 		castor::CheckedMutex m_loadMtx;
+		castor::CheckedMutex m_uploadMtx;
 		std::vector< std::unique_ptr< ThreadData > > m_loading;
 		std::unordered_map< size_t, TextureUPtr > m_loaded;
 		std::unordered_map< size_t, TextureUnitUPtr > m_loadedUnits;
@@ -188,6 +191,8 @@ namespace castor3d
 		std::atomic_bool m_initialised{};
 		std::vector< TextureUnit * > m_pendingUnits;
 		mutable std::vector< TextureCombine > m_texturesCombines;
+		std::map< TextureData *, Texture * > m_toUpload;
+		std::map< Texture const *, std::vector< TextureUnit * > > m_unitsToAdd;
 	};
 }
 

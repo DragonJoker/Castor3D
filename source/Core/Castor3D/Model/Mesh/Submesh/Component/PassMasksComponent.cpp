@@ -3,8 +3,8 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -125,7 +125,7 @@ namespace castor3d
 		m_data.clear();
 	}
 
-	void PassMasksComponent::doUpload()
+	void PassMasksComponent::doUpload( UploadData & uploader )
 	{
 		auto count = uint32_t( m_data.size() );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
@@ -134,11 +134,13 @@ namespace castor3d
 		if ( count && buffer.hasData() )
 		{
 			CU_Require( buffer.getCount< castor::Point4ui >() == count );
-			auto up = passflags::convert( m_data );
-			std::copy( up.begin()
-				, up.end()
-				, buffer.getData< castor::Point4ui >().begin() );
-			buffer.markDirty();
+			m_up = passflags::convert( m_data );
+			uploader.pushUpload( m_up.data()
+				, m_up.size() * sizeof( castor::Point4ui )
+				, buffer.getBuffer()
+				, buffer.getOffset()
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 }

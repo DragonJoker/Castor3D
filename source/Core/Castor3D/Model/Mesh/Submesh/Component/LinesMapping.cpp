@@ -1,14 +1,12 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
-
-#include <ashespp/Buffer/StagingBuffer.hpp>
 
 //*************************************************************************************************
 
@@ -106,7 +104,7 @@ namespace castor3d
 		m_lines.clear();
 	}
 
-	void LinesMapping::doUpload()
+	void LinesMapping::doUpload( UploadData & uploader )
 	{
 		auto count = uint32_t( m_lines.size() * 2 );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
@@ -114,10 +112,11 @@ namespace castor3d
 
 		if ( count && buffer.hasData() )
 		{
-			std::copy( m_lines.begin()
-				, m_lines.end()
-				, buffer.getData< Line >().begin() );
-			buffer.markDirty( VK_ACCESS_INDEX_READ_BIT
+			uploader.pushUpload( m_lines.data()
+				, m_lines.size() * sizeof( Line )
+				, buffer.getBuffer()
+				, buffer.getOffset()
+				, VK_ACCESS_INDEX_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}

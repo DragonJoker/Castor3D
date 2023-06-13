@@ -1,6 +1,7 @@
 #include "Castor3D/Scene/Background/Colour.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -40,6 +41,7 @@ namespace castor3d
 			, name + cuT( "Colour" )
 			, cuT( "colour" )
 			, true }
+		, m_colour{ m_needsUpload }
 	{
 		m_hdr = false;
 		m_textureId = { engine.getRenderSystem()->getRenderDevice()
@@ -56,6 +58,8 @@ namespace castor3d
 			, cuT( "ColourBackground_Colour" )
 			, *m_textureId.image
 			, m_textureId.wholeViewId );
+		m_buffer = castor::PxBufferBase::create( makeSize( m_textureId.getExtent() )
+			, castor::PixelFormat::eR32G32B32A32_SFLOAT );
 	}
 
 	void ColourBackground::accept( BackgroundVisitor & visitor )
@@ -80,36 +84,11 @@ namespace castor3d
 		auto data = device.graphicsData();
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = castor::HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
-		m_stagingTexture = device->createStagingTexture( "ColourBackgroundStaging"
-			, VK_FORMAT_R32G32B32A32_SFLOAT
-			, VkExtent2D{ bgcolour::Dim, bgcolour::Dim } );
-		auto result = m_texture->initialise( device, *data );
-		m_colour.reset();
-
-		if ( result )
-		{
-			m_cmdCopy = data->commandPool->createCommandBuffer( "ColourBackgroundCopy"
-				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-			m_cmdCopy->begin();
-
-			for ( uint32_t i = 0; i < 6u; ++i )
-			{
-				m_stagingTexture->copyTextureData( *m_cmdCopy
-					, VK_FORMAT_R32G32B32A32_SFLOAT
-					, m_texture->getLayerCubeFaceTargetView( 0u, CubeMapFace( i ) ) );
-			}
-
-			m_cmdCopy->end();
-		}
-
-		doUpdateColour( *data, device );
-		return result;
+		return true;
 	}
 
 	void ColourBackground::doCleanup()
 	{
-		m_stagingTexture.reset();
-		m_cmdCopy.reset();
 		m_textureId.destroy();
 	}
 
@@ -132,10 +111,31 @@ namespace castor3d
 
 	void ColourBackground::doGpuUpdate( GpuUpdater & updater )const
 	{
-		if ( m_colour.isDirty() )
+	}
+
+	void ColourBackground::doUpload( UploadData & uploader )
+	{
+		castor::Point4f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value(), 1.0f };
+		auto view = castor::makeArrayView( reinterpret_cast< castor::Point4f * >( m_buffer->getPtr() )
+			, m_buffer->getSize() / sizeof( castor::Point4f ) );
+
+		for ( auto & c : view )
 		{
-			auto data = updater.device.graphicsData();
-			doUpdateColour( *data, updater.device );
+			c = colour;
+		}
+
+		VkImageSubresourceRange dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, m_texture->getMipLevels(), 0u, 1u };
+
+		for ( uint32_t i = 0; i < 6u; ++i )
+		{
+			uploader.pushUpload( m_buffer->getPtr()
+				, m_buffer->getSize()
+				, m_texture->getTexture()
+				, castor::ImageLayout{ castor::ImageLayout::e2D, *m_buffer }
+				, dstSubresource
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+			dstSubresource.baseArrayLayer++;
 		}
 	}
 
@@ -166,31 +166,6 @@ namespace castor3d
 			, *m_textureId.sampler
 			, descriptorWrites
 			, index );
-	}
-
-	void ColourBackground::doUpdateColour( QueueData const & queueData
-		, RenderDevice const & device )const
-	{
-		VkDeviceSize lockSize = bgcolour::Dim * bgcolour::Dim * sizeof( castor::Point4f );
-
-		if ( auto * buffer = reinterpret_cast< castor::Point4f * >( m_stagingTexture->lock( 0u, lockSize, 0u ) ) )
-		{
-			castor::Point4f colour{ m_colour->red().value(), m_colour->green().value(), m_colour->blue().value(), 1.0f };
-
-			for ( auto i = 0u; i < bgcolour::Dim * bgcolour::Dim; ++i )
-			{
-				*buffer = colour;
-				++buffer;
-			}
-
-			m_stagingTexture->flush( 0u, lockSize );
-			m_stagingTexture->unlock();
-
-			queueData.queue->submit( *m_cmdCopy, nullptr );
-			queueData.queue->waitIdle();
-
-			m_colour.reset();
-		}
 	}
 
 	//************************************************************************************************

@@ -136,7 +136,7 @@ namespace castor3d
 		}
 	}
 
-	void MorphComponent::doUpload()
+	void MorphComponent::doUpload( UploadData & uploader )
 	{
 		if ( !m_buffer )
 		{

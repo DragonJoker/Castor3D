@@ -10,8 +10,6 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
-
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
@@ -57,7 +55,7 @@ namespace castor3d
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & cb )const;
+		C3D_API void upload( UploadData & uploader )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves a uniform buffer.
@@ -91,7 +89,6 @@ namespace castor3d
 	private:
 		C3D_API BufferArray::iterator doFindBuffer( BufferArray & array
 			, VkDeviceSize alignedSize );
-		C3D_API void doCreateStagingBuffer();
 		C3D_API BufferArray::iterator doCreatePoolBuffer( VkMemoryPropertyFlags flags
 			, UniformBufferPool::BufferArray & buffers );
 
@@ -101,8 +98,6 @@ namespace castor3d
 		uint32_t m_maxUboSize{ 0u };
 		uint32_t m_maxPoolUboCount{ 100u };
 		uint32_t m_currentUboIndex{ 0u };
-		ashes::StagingBufferPtr m_stagingBuffer;
-		uint8_t * m_stagingData;
 		std::map< uint32_t, BufferArray > m_buffers;
 		castor::String m_debugName;
 		std::mutex m_mutex;

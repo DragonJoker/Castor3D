@@ -1,5 +1,6 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
@@ -97,146 +98,51 @@ namespace castor3d
 			, m_memoryFlags
 			, debugName
 			, m_sharingMode ) }
+		, m_ownData( size_t( m_allocatedSize ) )
+		, m_data{ castor::makeArrayView( m_ownData.begin()
+			, m_ownData.end() ) }
 	{
-		auto & device = renderSystem.getRenderDevice();
-
-		if ( smallData )
-		{
-			m_ownData.resize( size_t( m_allocatedSize ) );
-			m_data = castor::makeArrayView( m_ownData.begin()
-				, m_ownData.end() );
-		}
-		else
-		{
-			m_stagingBuffer = std::make_unique< ashes::StagingBuffer >( *device
-				, debugName + "Staging"
-				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-				, m_allocatedSize );
-			m_data = castor::makeArrayView( m_stagingBuffer->getBuffer().lock( 0u
-				, m_allocatedSize
-				, 0u )
-				, m_allocatedSize );
-		}
 	}
 
-	void GpuBufferBase::upload( ashes::CommandBuffer const & commandBuffer )
+	void GpuBufferBase::upload( UploadData & uploader )
 	{
 		std::unordered_map< size_t, MemoryRangeArray > ranges;
 		std::swap( m_ranges, ranges );
 
 		if ( !ranges.empty() )
 		{
-			if ( !m_ownData.empty() )
+			for ( auto & rangesIt : ranges )
 			{
-				for ( auto & rangesIt : ranges )
+				if ( !rangesIt.second.empty() )
 				{
-					if ( !rangesIt.second.empty() )
+					for ( auto & range : rangesIt.second )
 					{
-						std::vector< VkBufferCopy > regions;
-
-						for ( auto & range : rangesIt.second )
-						{
-							auto [offset, size] = adaptRange( range.offset
-								, range.size
-								, 4u );
-							regions.push_back( { offset, offset, size } );
-						}
-
-						updateBuffer( commandBuffer
-							, m_ownData
-							, getBuffer().getBuffer()
-							, regions
-							, rangesIt.second.front().dstAccessFlags
-							, rangesIt.second.front().dstPipelineFlags );
+						upload( uploader
+							, range.offset
+							, range.size
+							, range.dstAccessFlags
+							, range.dstPipelineFlags );
 					}
 				}
-			}
-			else if ( m_stagingBuffer )
-			{
-				auto stgSrcStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
-				commandBuffer.memoryBarrier( stgSrcStage
-					, VK_PIPELINE_STAGE_TRANSFER_BIT
-					, m_stagingBuffer->getBuffer().makeTransferSource() );
-
-				for ( auto & rangesIt : ranges )
-				{
-					if ( !rangesIt.second.empty() )
-					{
-						std::vector< VkBufferCopy > regions;
-
-						for ( auto & range : rangesIt.second )
-						{
-							auto [offset, size] = adaptRange( range.offset
-								, range.size
-								, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
-							regions.push_back( { offset, offset, size } );
-						}
-
-						copyBuffer( commandBuffer
-							, m_stagingBuffer->getBuffer()
-							, getBuffer().getBuffer()
-							, regions
-							, rangesIt.second.front().dstAccessFlags
-							, rangesIt.second.front().dstPipelineFlags );
-					}
-				}
-
-				auto stgDstStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
-				commandBuffer.memoryBarrier( stgDstStage
-					, VK_PIPELINE_STAGE_HOST_BIT
-					, m_stagingBuffer->getBuffer().makeHostWrite() );
 			}
 		}
 	}
 
-	void GpuBufferBase::uploadDirect( ashes::Queue const & queue
-		, ashes::CommandPool const & commandPool
+	void GpuBufferBase::upload( UploadData & staging
 		, VkDeviceSize offset
 		, VkDeviceSize size
 		, VkAccessFlags dstAccessFlags
 		, VkPipelineStageFlags dstPipelineFlags )
 	{
-		auto commandBuffer = commandPool.createCommandBuffer( "StaginBufferUpload"
-			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 		auto [o, s] = adaptRange( offset
 			, size
 			, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
-		std::vector< VkBufferCopy > regions;
-		regions.push_back( { o, o, s } );
-
-		if ( !m_ownData.empty() )
-		{
-			updateBuffer( *commandBuffer
-				, m_ownData
-				, getBuffer().getBuffer()
-				, regions
-				, dstAccessFlags
-				, dstPipelineFlags );
-		}
-		else if ( m_stagingBuffer )
-		{
-			auto stgSrcStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
-			commandBuffer->memoryBarrier( stgSrcStage
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, m_stagingBuffer->getBuffer().makeTransferSource() );
-			copyBuffer( *commandBuffer
-				, m_stagingBuffer->getBuffer()
-				, getBuffer().getBuffer()
-				, regions
-				, dstAccessFlags
-				, dstPipelineFlags );
-			auto stgDstStage = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
-			commandBuffer->memoryBarrier( stgDstStage
-				, VK_PIPELINE_STAGE_HOST_BIT
-				, m_stagingBuffer->getBuffer().makeHostWrite() );
-		}
-
-		commandBuffer->end();
-		auto fence = m_renderSystem.getRenderDevice()->createFence();
-		queue.submit( *commandBuffer
-			, fence.get() );
-		fence->wait( ashes::MaxTimeout );
+		staging.pushUpload( m_ownData.data() + o
+			, s
+			, getBuffer().getBuffer()
+			, o
+			, dstAccessFlags
+			, dstPipelineFlags );
 	}
 
 	void GpuBufferBase::markDirty( VkDeviceSize offset
@@ -257,12 +163,6 @@ namespace castor3d
 		if ( it == ranges.end() )
 		{
 			ranges.push_back( MemoryRange{ offset, size, dstAccessFlags, dstPipelineFlags } );
-
-			if ( m_stagingBuffer )
-			{
-				auto [o, s] = adaptRange( offset, size, m_renderSystem.getValue( GpuMin::eBufferMapSize ) );
-				m_stagingBuffer->getBuffer().flush( o, s );
-			}
 		}
 	}
 

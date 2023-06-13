@@ -230,7 +230,7 @@ namespace castor3d
 		 *\brief		Met à jour les buffers.
 		 *\param[in]	commandBuffer	Reçoit les commandes d'upload.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Retrieves the cleanup status
@@ -686,6 +686,7 @@ namespace castor3d
 		C3D_API uint32_t getMaxPassTypeCount()const;
 		C3D_API RenderDevice * getRenderDevice()const;
 		C3D_API ControlsManager * getControlsManager()const;
+		C3D_API UploadData & getUploadData()const noexcept;
 
 		castor::String const & getAppName()const noexcept
 		{

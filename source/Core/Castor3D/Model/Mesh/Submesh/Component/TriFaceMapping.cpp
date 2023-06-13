@@ -1,8 +1,8 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
@@ -10,8 +10,6 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Design/ArrayView.hpp>
-
-#include <ashespp/Buffer/StagingBuffer.hpp>
 
 //*************************************************************************************************
 
@@ -276,7 +274,7 @@ namespace castor3d
 		m_faces.clear();
 	}
 
-	void TriFaceMapping::doUpload()
+	void TriFaceMapping::doUpload( UploadData & uploader )
 	{
 		auto count = uint32_t( m_faces.size() * 3 );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
@@ -284,10 +282,11 @@ namespace castor3d
 
 		if ( count && buffer.hasData() )
 		{
-			std::copy( m_faces.begin()
-				, m_faces.end()
-				, buffer.getData< Face >().begin() );
-			buffer.markDirty( VK_ACCESS_INDEX_READ_BIT
+			uploader.pushUpload( m_faces.data()
+				, m_faces.size() * sizeof( Face )
+				, buffer.getBuffer()
+				, buffer.getOffset()
+				, VK_ACCESS_INDEX_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}

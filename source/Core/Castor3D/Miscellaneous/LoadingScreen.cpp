@@ -367,9 +367,9 @@ namespace castor3d
 		}
 	}
 
-	void LoadingScreen::upload( ashes::CommandBuffer const & cb )
+	void LoadingScreen::upload( UploadData & uploader )
 	{
-		m_overlayPass->upload( cb );
+		m_overlayPass->upload( uploader );
 	}
 
 	void LoadingScreen::setRenderPass( VkRenderPass renderPass

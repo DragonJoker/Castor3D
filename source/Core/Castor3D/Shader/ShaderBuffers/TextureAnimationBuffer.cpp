@@ -60,7 +60,7 @@ namespace castor3d
 		}
 	}
 
-	void TextureAnimationBuffer::update( ashes::CommandBuffer const & commandBuffer )
+	void TextureAnimationBuffer::update( UploadData & uploader )
 	{
 		if ( m_count )
 		{
@@ -84,7 +84,7 @@ namespace castor3d
 			}
 
 			m_buffer.setCount( uint32_t( std::min( m_data.size(), m_animations.size() ) ) );
-			m_buffer.upload( commandBuffer );
+			m_buffer.upload( uploader );
 		}
 	}
 

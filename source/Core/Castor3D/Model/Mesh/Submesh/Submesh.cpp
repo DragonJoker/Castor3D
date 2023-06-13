@@ -7,7 +7,6 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
@@ -280,11 +279,6 @@ namespace castor3d
 				{
 					m_initialised = component.second->initialise( device );
 				}
-
-				if ( m_initialised )
-				{
-					component.second->upload();
-				}
 			}
 
 			m_dirty = !m_initialised;
@@ -337,13 +331,13 @@ namespace castor3d
 		}
 	}
 
-	void Submesh::update()
+	void Submesh::upload( UploadData & uploader )
 	{
 		m_dirty = false;
 
 		for ( auto & component : m_components )
 		{
-			component.second->upload();
+			component.second->upload( uploader );
 		}
 	}
 

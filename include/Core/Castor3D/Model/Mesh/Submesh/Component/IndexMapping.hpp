@@ -97,15 +97,12 @@ namespace castor3d
 		{
 		}
 
-		void doUpload()override
+		void doUpload( UploadData & uploader )override
 		{
 		}
 
 	private:
 		VkBufferUsageFlags m_bufferUsageFlags;
-
-	protected:
-		StagingDataUPtr m_staging;
 	};
 }
 

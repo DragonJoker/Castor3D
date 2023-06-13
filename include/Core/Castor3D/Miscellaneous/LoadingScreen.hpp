@@ -56,7 +56,7 @@ namespace castor3d
 		 *\brief		Met à jour tous les tampons GPU d'incrustations en VRAM.
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & cb );
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Renders the loading screen.

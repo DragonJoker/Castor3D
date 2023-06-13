@@ -118,6 +118,13 @@ namespace castor3d
 		*/
 		C3D_API void update( GpuUpdater & updater )const;
 		/**
+		 *\~english
+		 *\brief		Uploads image data to the texture buffer.
+		 *\~french
+		 *\brief		Upload les données d'image dans le buffer de la texture.
+		 */
+		C3D_API void upload( UploadData & uploader );
+		/**
 		*\~english
 		*\brief
 		*	Notifies a change to apply on GPU for the background.
@@ -453,12 +460,24 @@ namespace castor3d
 		bool m_hasIBLSupport;
 		bool m_visible{ true };
 		uint32_t m_passIndex{ 0u };
+		bool m_needsUpload{};
+
+		C3D_API static castor::PxBufferBaseUPtr adaptBuffer( Engine & engine
+			, castor::PxBufferBase & buffer
+			, castor::String const & name
+			, bool generateMips );
+		C3D_API static castor::ImageUPtr loadImage( Engine & engine
+			, castor::String const & name
+			, castor::Path const & folder
+			, castor::Path const & relative
+			, bool generateMips );
 
 	private:
 		virtual bool doInitialise( RenderDevice const & device ) = 0;
 		virtual void doCleanup() = 0;
 		virtual void doCpuUpdate( CpuUpdater & updater )const = 0;
 		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
+		virtual void doUpload( UploadData & uploader ) = 0;
 		virtual void doAddPassBindings( crg::FramePass & pass
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const = 0;

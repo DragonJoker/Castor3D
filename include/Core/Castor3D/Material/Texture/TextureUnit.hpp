@@ -6,6 +6,7 @@ See LICENSE file in root folder
 #pragma once
 
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Render/Texture.hpp"
 
@@ -82,13 +83,11 @@ namespace castor3d
 		C3D_API ~TextureUnit()override;
 		/**
 		 *\~english
-		 *\brief		Initialises the texture, id est : fills the image buffer, creates the texture in the render system.
+		 *\brief		Creates the texture in the render system.
 		 *\param[in]	device		The GPU device.
-		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\~french
-		 *\brief		Initialise la texture, id est : remplit le buffer d'image, cree la texture au niveau du renderer.
+		 *\brief		Crée la texture au niveau du renderer.
 		 *\param[in]	device		Le device GPU.
-		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
 		C3D_API bool initialise();
 		/**

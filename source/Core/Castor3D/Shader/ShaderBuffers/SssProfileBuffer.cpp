@@ -72,7 +72,7 @@ namespace castor3d
 		m_profileID--;
 	}
 
-	void SssProfileBuffer::update( ashes::CommandBuffer const & commandBuffer )
+	void SssProfileBuffer::update( UploadData & uploader )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 
@@ -98,7 +98,7 @@ namespace castor3d
 			}
 
 			m_buffer.setCount( uint32_t( std::min( m_data.size() * DataSize, m_components.size() ) ) );
-			m_buffer.upload( commandBuffer );
+			m_buffer.upload( uploader );
 		}
 	}
 

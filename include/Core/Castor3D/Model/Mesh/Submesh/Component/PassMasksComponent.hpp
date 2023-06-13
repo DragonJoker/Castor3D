@@ -106,7 +106,7 @@ namespace castor3d
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup( RenderDevice const & device )override;
-		void doUpload()override;
+		void doUpload( UploadData & uploader )override;
 
 	public:
 		C3D_API static castor::String const Name;
@@ -115,6 +115,7 @@ namespace castor3d
 	private:
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 		std::vector< PassMasks > m_data;
+		std::vector< castor::Point4ui > m_up;
 
 		friend class BinaryWriter< PassMasksComponent >;
 		friend class BinaryParser< PassMasksComponent >;

@@ -1,6 +1,9 @@
 #include "Castor3D/Scene/Background/Image.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/DirectUploadData.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -144,8 +147,7 @@ namespace castor3d
 
 	bool ImageBackground::doInitialise( RenderDevice const & device )
 	{
-		auto data = device.graphicsData();
-		doInitialise2DTexture( device, *data );
+		doInitialise2DTexture( device );
 		m_hdr = m_texture->getPixelFormat() == VK_FORMAT_R32_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R32G32B32_SFLOAT
@@ -155,7 +157,7 @@ namespace castor3d
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16_SFLOAT
 			|| m_texture->getPixelFormat() == VK_FORMAT_R16G16B16A16_SFLOAT;
 		m_srgb = isSRGBFormat( convert( m_texture->getPixelFormat() ) );
-		return m_texture->initialise( device, *data );
+		return m_texture->initialise( device );
 	}
 
 	void ImageBackground::doCleanup()
@@ -189,6 +191,10 @@ namespace castor3d
 	{
 	}
 
+	void ImageBackground::doUpload( UploadData & uploader )
+	{
+	}
+
 	void ImageBackground::doAddPassBindings( crg::FramePass & pass
 		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
@@ -218,10 +224,27 @@ namespace castor3d
 			, index );
 	}
 
-	void ImageBackground::doInitialise2DTexture( RenderDevice const & device
-		, QueueData const & queueData )
+	void ImageBackground::doInitialise2DTexture( RenderDevice const & device )
 	{
-		m_2dTexture->initialise( device, queueData );
+		auto data = device.graphicsData();
+		auto & queueData = *data;
+		m_2dTexture->initialise( device );
+		{
+			auto & image = m_2dTexture->getImage();
+			auto & texture = m_2dTexture->getTexture();
+			InstantDirectUploadData upload{ *queueData.queue
+				, device
+				, image.getName()
+				, *queueData.commandPool };
+			upload->pushUpload( image.getPxBuffer().getConstPtr()
+				, image.getPxBuffer().getSize()
+				, texture
+				, image.getLayout()
+				, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, image.getLayout().depthLayers() }
+				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
+				, VK_PIPELINE_STAGE_TRANSFER_BIT );
+		}
+
 		VkExtent3D extent{ m_2dTexture->getWidth(), m_2dTexture->getHeight(), 1u };
 		auto dim = std::max( extent.width, extent.height );
 

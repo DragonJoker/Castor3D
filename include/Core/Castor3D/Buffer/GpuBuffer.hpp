@@ -13,7 +13,6 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/ArrayView.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
 
 #include <unordered_map>
@@ -60,7 +59,7 @@ namespace castor3d
 		 *\brief		Met à jour tous les intervalles mémoire prêts en VRAM.
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & cb );
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Uploads a memory range.
@@ -77,8 +76,7 @@ namespace castor3d
 		 *\param[in]	dstAccessFlags		Les flags d'accès voulus après l'upload.
 		 *\param[in]	dstPipelineFlags	Les flags d'étape de pipeline voulus après l'upload.
 		 */
-		C3D_API void uploadDirect( ashes::Queue const & queue
-			, ashes::CommandPool const & commandPool
+		C3D_API void upload( UploadData & uploader
 			, VkDeviceSize offset
 			, VkDeviceSize size
 			, VkAccessFlags dstAccessFlags
@@ -209,8 +207,7 @@ namespace castor3d
 		ashes::QueueShare m_sharingMode;
 		VkDeviceSize m_allocatedSize;
 		ashes::BufferPtr< uint8_t > m_buffer;
-		ashes::StagingBufferPtr m_stagingBuffer;
-		std::vector< uint8_t > m_ownData;
+		castor::ByteArray m_ownData;
 		castor::ByteArrayView m_data;
 		struct MemoryRange
 		{
@@ -295,6 +292,115 @@ namespace castor3d
 		size_t getMinAlignment()const;
 
 	private:
+		AllocatorT m_allocator;
+	};
+
+	template< typename AllocatorT >
+	class GpuBaseBufferT
+	{
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	renderSystem	The device on which the storage is allocated.
+		 *\param[in]	usage			The buffer targets.
+		 *\param[in]	memoryFlags		The buffer memory properties.
+		 *\param[in]	debugName		The debug name.
+		 *\param[in]	sharingMode		The sharing mode.
+		 *\param[in]	allocator		The allocator.
+		 *\param[in]	smallData		Tells if the memory chunks allocated through this buffer are less than 65536 bytes.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	renderSystem	Le device sur lequel le stockage est alloué.
+		 *\param[in]	usage			Les cibles du tampon.
+		 *\param[in]	memoryFlags		Les propriétés mémoire du tampon.
+		 *\param[in]	debugName		Le nom debug.
+		 *\param[in]	sharingMode		Le mode de partage.
+		 *\param[in]	allocator		L'allocateur.
+		 *\param[in]	smallData		Dit si les chunks mémoire alloués via ce buffer font moins de 65536 bytes.
+		 */
+		GpuBaseBufferT( RenderDevice const & device
+			, VkBufferUsageFlags usage
+			, VkMemoryPropertyFlags memoryFlags
+			, castor::String debugName
+			, ashes::QueueShare sharingMode
+			, AllocatorT allocator );
+		/**
+		 *\~english
+		 *\param[in]	size	The requested memory size.
+		 *\return		\p true if there is enough remaining memory for given size.
+		 *\~french
+		 *\param[in]	size	La taille requise pour la mémoire.
+		 *\return		\p true s'il y a assez de mémoire restante pour la taille donnée.
+		 */
+		bool hasAvailable( VkDeviceSize size )const;
+		/**
+		 *\~english
+		 *\brief		Allocates a memory chunk for a CPU buffer.
+		 *\param[in]	size	The requested memory size.
+		 *\return		The memory chunk offset.
+		 *\~french
+		 *\brief		Alloue une zone mémoire pour un CPU buffer.
+		 *\param[in]	size	La taille requise pour la mémoire.
+		 *\return		L'offset de la zone mémoire.
+		 */
+		MemChunk allocate( VkDeviceSize size );
+		/**
+		 *\~english
+		 *\brief		Deallocates memory.
+		 *\param[in]	mem	The memory chunk.
+		 *\~french
+		 *\brief		Désalloue de la mémoire.
+		 *\param[in]	mem	La zone mémoire.
+		 */
+		void deallocate( MemChunk const & mem );
+		/**
+		 *\~english
+		 *\return		The element aligned size.
+		 *\~french
+		 *\return		La taille  alignée d'un élément.
+		 */
+		size_t getMinAlignment()const;
+		/**
+		*\~english
+		*\return
+		*	The internal buffer.
+		*\~french
+		*\return
+		*	Le tampon interne.
+		*/
+		ashes::BufferBase const & getBuffer()const
+		{
+			return *m_buffer;
+		}
+		operator ashes::BufferBase const & ( )const
+		{
+			return *m_buffer;
+		}
+		/**
+		*\~english
+		*\return
+		*	The internal buffer.
+		*\~french
+		*\return
+		*	Le tampon interne.
+		*/
+		ashes::BufferBase & getBuffer()
+		{
+			return *m_buffer;
+		}
+		operator ashes::BufferBase & ( )
+		{
+			return *m_buffer;
+		}
+
+	private:
+		RenderDevice const & m_device;
+		VkBufferUsageFlags m_usage;
+		VkMemoryPropertyFlags m_memoryFlags;
+		ashes::QueueShare m_sharingMode;
+		VkDeviceSize m_allocatedSize;
+		ashes::BufferBasePtr m_buffer;
 		AllocatorT m_allocator;
 	};
 

@@ -48,6 +48,17 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	A GPU buffer pool, that uses an allocator to allocate sub-buffers.
+	*\~french
+	*\brief
+	*	Un pool de buffer GPU, utilisant un allocateur pour allouer des sous-tampons.
+	*\remark
+	*/
+	template< typename AllocatorT >
+	class GpuBaseBufferT;
+	/**
+	*\~english
+	*\brief
 	*	GPU buffer allocation traits for buddy allocator.
 	*\~french
 	*\brief
@@ -174,6 +185,34 @@ namespace castor3d
 	*	Un pool de GpuBuffer pour les VBO.
 	*/
 	class VertexBufferPool;
+	/**
+	*\~english
+	*\brief
+	*	Base upload interface.
+	*\~french
+	*\brief
+	*	Interface de base pour l'upload.
+	*/
+	class UploadData;
+	/**
+	*\~english
+	*\brief
+	*	Direct upload data, device memories uploaded using this must be host visible.
+	*\~french
+	*\brief
+	*	Upload direct, les device memories uploadées via cet objet doivent être host visible.
+	*/
+	class DirectUploadData;
+	/**
+	*\~english
+	*\brief
+	*	Upload using staging buffers, for device local device memories.
+	*\~french
+	*\brief
+	*	Upload en utilisant des staging buffers, pour les device memories en device local.
+	*\remark
+	*/
+	class StagedUploadData;
 
 	template< typename DataT >
 	class GpuLinearAllocatorT;
@@ -183,6 +222,13 @@ namespace castor3d
 	using GpuBuddyBuffer = GpuBufferT< GpuBufferBuddyAllocator >;
 	using GpuLinearBuffer = GpuBufferT< GpuBufferLinearAllocator >;
 	using GpuPackedBuffer = GpuBufferT< GpuBufferPackedAllocator >;
+	using GpuPackedBaseBuffer = GpuBaseBufferT< GpuBufferPackedAllocator >;
+
+	template< typename UploaderT >
+	concept UploadDataT = std::derived_from< UploaderT, UploadData >;
+
+	template< UploadDataT UploaderT >
+	class InstantUploadDataT;
 
 	CU_DeclareSmartPtr( castor3d, GpuBufferPool, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ObjectBufferPool, C3D_API );
@@ -193,7 +239,9 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, GpuBuddyBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, GpuLinearBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, GpuPackedBuffer, C3D_API );
+	CU_DeclareSmartPtr( castor3d, GpuPackedBaseBuffer, C3D_API );
 	CU_DeclareSmartPtr( castor3d, GpuBufferBase, C3D_API );
+	CU_DeclareSmartPtr( castor3d, UploadData, C3D_API );
 
 	CU_DeclareTemplateSmartPtr( castor3d, UniformBuffer );
 	/**

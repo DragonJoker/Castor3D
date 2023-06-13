@@ -556,14 +556,19 @@ namespace castor3d
 		}
 	}
 
-	void Engine::upload( ashes::CommandBuffer const & commandBuffer )
+	void Engine::upload( UploadData & uploader )
 	{
-		getMaterialCache().upload( commandBuffer );
-		getOverlayCache().upload( commandBuffer );
-		getSceneCache().forEach( [&commandBuffer]( Scene & scene )
+		getMaterialCache().upload( uploader );
+		getOverlayCache().upload( uploader );
+		getSceneCache().forEach( [&uploader]( Scene & scene )
 			{
-				scene.getLightCache().upload( commandBuffer );
+				scene.upload( uploader );
 			} );
+
+		if ( m_loadingScene )
+		{
+			m_loadingScene->upload( uploader );
+		}
 	}
 
 	castor::Path Engine::getPluginsDirectory()
@@ -668,6 +673,11 @@ namespace castor3d
 		return m_userInputListener
 			? &static_cast< ControlsManager & >( *m_userInputListener )
 			: nullptr;
+	}
+
+	UploadData & Engine::getUploadData()const noexcept
+	{
+		return m_renderLoop->getUploadData();
 	}
 
 	castor::RgbaColour Engine::getNextRainbowColour()const

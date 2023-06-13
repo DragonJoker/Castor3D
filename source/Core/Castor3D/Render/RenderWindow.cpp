@@ -611,7 +611,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderWindow::upload( ashes::CommandBuffer const & cb )
+	void RenderWindow::upload( UploadData & uploader )
 	{
 		if ( m_skip )
 		{
@@ -622,11 +622,11 @@ namespace castor3d
 
 		if ( m_loadingScreen && m_loadingScreen->isEnabled() )
 		{
-			m_loadingScreen->upload( cb );
+			m_loadingScreen->upload( uploader );
 		}
 		else if ( auto target = getRenderTarget() )
 		{
-			target->upload( cb );
+			target->upload( uploader );
 		}
 	}
 

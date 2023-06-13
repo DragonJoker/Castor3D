@@ -40,7 +40,7 @@ namespace castor3d
 			, OverlayDrawData & data
 			, bool secondary
 			, FontTexture const * fontTexture );
-		void upload( ashes::CommandBuffer const & cb );
+		void upload( UploadData & uploader );
 
 		void clearDrawPipelineData( FontTexture const * fontTexture );
 		OverlayPipelineData & getDrawPipelineData( OverlayDrawPipeline const & pipeline

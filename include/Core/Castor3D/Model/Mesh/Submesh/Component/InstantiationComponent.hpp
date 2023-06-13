@@ -4,7 +4,6 @@ See LICENSE file in root folder
 #ifndef ___C3D_InstantiationComponent_H___
 #define ___C3D_InstantiationComponent_H___
 
-#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -164,7 +163,7 @@ namespace castor3d
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup( RenderDevice const & device )override;
-		void doUpload()override;
+		void doUpload( UploadData & uploader )override;
 		inline bool doCheckInstanced( uint32_t count )const
 		{
 			return count >= getThreshold();
