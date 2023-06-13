@@ -46,6 +46,12 @@ namespace castor3d
 		//!\~english	The draw calls count.
 		//!\~french		Le nombre d'appels aux fonctions de dessin.
 		uint32_t drawCalls{};
+		//!\~english	The binary size of uploads.
+		//!\~french		La taille binaire des uploads.
+		uint32_t uploadSize{};
+		//!\~english	The upload staging buffers count.
+		//!\~french		Le nombre de staging buffers pour l'upload.
+		uint32_t stagingBuffersCount{};
 	};
 }
 

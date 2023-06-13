@@ -201,6 +201,7 @@ namespace atmosphere_scattering
 		void doCleanup()override;
 		void doCpuUpdate( castor3d::CpuUpdater & updater )const override;
 		void doGpuUpdate( castor3d::GpuUpdater & updater )const override;
+		void doUpload( castor3d::UploadData & uploader )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doAddPassBindings
 		*/

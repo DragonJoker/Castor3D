@@ -19,12 +19,12 @@ namespace castor3d
 	public:
 		struct GpuBufferChunk
 		{
-			GpuPackedBuffer * buffer{};
+			GpuPackedBaseBuffer * buffer{};
 			MemChunk chunk{};
 
 			ashes::BufferBase const & getBuffer()const
 			{
-				return buffer->getBuffer().getBuffer();
+				return buffer->getBuffer();
 			}
 
 			bool hasData()const
@@ -40,14 +40,6 @@ namespace castor3d
 			uint32_t getAllocSize()const
 			{
 				return uint32_t( chunk.size );
-			}
-
-			template< typename DataT >
-			castor::ArrayView< DataT > getData()const
-			{
-				CU_Require( hasData() );
-				return castor::makeArrayView( reinterpret_cast< DataT * >( buffer->getDatas().data() + getOffset() )
-					, uint32_t( chunk.askedSize / sizeof( DataT ) ) );
 			}
 
 			template< typename DataT >
@@ -67,34 +59,12 @@ namespace castor3d
 				return uint32_t( getOffset() / sizeof( DataT ) );
 			}
 
-			void markDirty( VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-				, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
-			{
-				buffer->markDirty( getOffset()
-					, getAskedSize()
-					, dstAccessFlags
-					, dstPipelineFlags );
-			}
-
 			void reset()
 			{
 				buffer = nullptr;
 				chunk.offset = 0u;
 				chunk.askedSize = 0u;
 				chunk.size = 0u;
-			}
-
-			void directUpload( ashes::Queue const & queue
-				, ashes::CommandPool const & commandPool
-				, VkAccessFlags dstAccessFlags
-				, VkPipelineStageFlags dstPipelineFlags )
-			{
-				buffer->uploadDirect( queue
-					, commandPool
-					, chunk.offset
-					, chunk.askedSize
-					, dstAccessFlags
-					, dstPipelineFlags);
 			}
 
 			void createUniformPassBinding( crg::FramePass & pass
@@ -192,18 +162,6 @@ namespace castor3d
 			}
 		}
 
-		void directUpload( SubmeshFlag flag
-			, ashes::Queue const & queue
-			, ashes::CommandPool const & commandPool
-			, VkAccessFlags dstAccessFlags
-			, VkPipelineStageFlags dstPipelineFlags )
-		{
-			getBufferChunk( flag ).directUpload( queue
-				, commandPool
-				, dstAccessFlags
-				, dstPipelineFlags );
-		}
-
 		ashes::BufferBase const & getBuffer( SubmeshFlag flag )const
 		{
 			return getBufferChunk( flag ).getBuffer();
@@ -212,12 +170,6 @@ namespace castor3d
 		bool hasData( SubmeshFlag flag )const
 		{
 			return getBufferChunk( flag ).hasData();
-		}
-
-		template< typename DataT >
-		castor::ArrayView< DataT > getData( SubmeshFlag flag )const
-		{
-			return getBufferChunk( flag ).getData< DataT >();
 		}
 
 		uint32_t getAskedSize( SubmeshFlag flag )const
@@ -252,14 +204,6 @@ namespace castor3d
 		uint32_t getFirstVertex()const
 		{
 			return getFirst< PositionT >( SubmeshFlag::ePositions );
-		}
-
-		void markDirty( SubmeshFlag flag
-			, VkAccessFlags dstAccessFlags = VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-			, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
-		{
-			getBufferChunk( flag ).markDirty( dstAccessFlags
-				, dstPipelineFlags );
 		}
 
 		void createUniformPassBinding( SubmeshFlag flag

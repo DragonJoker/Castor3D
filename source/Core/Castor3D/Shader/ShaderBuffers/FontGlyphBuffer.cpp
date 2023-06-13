@@ -61,7 +61,7 @@ namespace castor3d
 		m_dirty = true;
 	}
 
-	void FontGlyphBuffer::update( ashes::CommandBuffer const & commandBuffer )
+	void FontGlyphBuffer::update( UploadData & uploader )
 	{
 		if ( !m_glyphs.empty() && m_dirty.exchange( false ) )
 		{
@@ -76,7 +76,7 @@ namespace castor3d
 			}
 
 			m_buffer.setCount( uint32_t( m_glyphs.size() ) );
-			m_buffer.upload( commandBuffer );
+			m_buffer.upload( uploader );
 		}
 	}
 

@@ -4,8 +4,6 @@
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
-
 #include <ShaderWriter/Source.hpp>
 
 CU_ImplementSmartPtr( castor3d::shader, ClustersData )

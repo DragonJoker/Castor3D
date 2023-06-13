@@ -49,9 +49,9 @@ namespace castor
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::update( castor3d::PassBuffer & passBuffer
-		, ashes::CommandBuffer const & cb )const
+		, castor3d::UploadData & uploader )const
 	{
-		passBuffer.update( m_buffers, cb );
+		passBuffer.update( m_buffers, uploader );
 	}
 
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::PassDataBuffers::registerBuffer( std::string const & name
@@ -241,14 +241,14 @@ namespace castor
 	{
 	}
 
-	void ResourceCacheT< Material, String, MaterialCacheTraits >::upload( ashes::CommandBuffer const & cb )const
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::upload( castor3d::UploadData & uploader )const
 	{
 		if ( m_passBuffer )
 		{
-			m_specificsBuffers.update( *m_passBuffer, cb );
-			m_sssProfileBuffer->update( cb );
-			m_texConfigBuffer->update( cb );
-			m_texAnimBuffer->update( cb );
+			m_specificsBuffers.update( *m_passBuffer, uploader );
+			m_sssProfileBuffer->update( uploader );
+			m_texConfigBuffer->update( uploader );
+			m_texAnimBuffer->update( uploader );
 		}
 	}
 

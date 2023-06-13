@@ -464,6 +464,19 @@ namespace castor3d
 		}
 	}
 
+	void Scene::upload( UploadData & uploader )
+	{
+		getLightCache().upload( uploader );
+		m_meshCache->forEach( [&uploader]( Mesh & mesh )
+			{
+				for ( auto & submesh : mesh )
+				{
+					submesh->upload( uploader );
+				}
+			} );
+		m_background->upload( uploader );
+	}
+
 	void Scene::update( GpuUpdater & updater )
 	{
 #if C3D_DebugTimers
@@ -475,13 +488,6 @@ namespace castor3d
 		updater.info.totalLightsCount += getLightCache().getLightsBufferCount( LightType::ePoint );
 		doUpdateParticles( updater );
 		m_renderNodes->update( updater );
-		m_meshCache->forEach( []( Mesh & mesh )
-			{
-				for ( auto & submesh : mesh )
-				{
-					submesh->update();
-				}
-			} );
 	}
 
 	void Scene::setBackground( SceneBackgroundUPtr value )

@@ -70,13 +70,13 @@ namespace castor3d
 		}
 	}
 
-	void RenderTargetCache::upload( ashes::CommandBuffer const & cb )
+	void RenderTargetCache::upload( UploadData & uploader )
 	{
 		cachetgt::LockType lock{ castor::makeUniqueLock( *this ) };
 
 		for ( auto & target : m_renderTargets[size_t( TargetType::eTexture )] )
 		{
-			target->upload( cb );
+			target->upload( uploader );
 		}
 	}
 

@@ -2,6 +2,7 @@
 
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -49,7 +50,9 @@ namespace castor3d
 
 	void uploadBaseData( SubmeshFlag submeshData
 		, Submesh const & submesh
-		, castor::Point3fArray const & data )
+		, castor::Point3fArray const & data
+		, castor::Point4fArray & up
+		, UploadData & uploader )
 	{
 		auto count = uint32_t( data.size() );
 		auto & offsets = submesh.getSourceBufferOffsets();
@@ -57,11 +60,13 @@ namespace castor3d
 
 		if ( count && buffer.hasData() )
 		{
-			auto up = smshbase::convert( data );
-			std::copy( up.begin()
-				, up.end()
-				, buffer.getData< castor::Point4f >().begin() );
-			buffer.markDirty();
+			up = smshbase::convert( data );
+			uploader.pushUpload( up.data()
+				, up.size() * sizeof( castor::Point4f )
+				, buffer.getBuffer()
+				, buffer.getOffset()
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 

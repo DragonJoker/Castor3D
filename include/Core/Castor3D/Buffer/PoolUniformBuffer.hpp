@@ -24,7 +24,6 @@ namespace castor3d
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	renderSystem	The RenderSystem.
-		 *\param[in]	data			The mapped data.
 		 *\param[in]	usage			The buffer usage flags.
 		 *\param[in]	flags			The buffer memory flags.
 		 *\param[in]	debugName		The buffer debug name.
@@ -32,14 +31,12 @@ namespace castor3d
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	renderSystem	Le RenderSystem.
-		 *\param[in]	data			Les données mappées
 		 *\param[in]	usage			Les indicateurs d'utilisation du tampon.
 		 *\param[in]	flags			Les indicateurs de mémoire du tampon.
 		 *\param[in]	debugName		Le nom debug du tampon.
 		 *\param[in]	sharingMode		Le mode de partage.
 		 */
 		C3D_API PoolUniformBuffer( RenderSystem const & renderSystem
-			, castor::ByteArrayView data
 			, VkBufferUsageFlags usage
 			, VkMemoryPropertyFlags flags
 			, castor::String debugName
@@ -62,6 +59,13 @@ namespace castor3d
 		 *\param[in]	device	Le device GPU.
 		 */
 		C3D_API void cleanup( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Makes current local modifications available in VRAM.
+		 *\~french
+		 *\brief		Rend disponible en VRAM les modifications locales.
+		 */
+		C3D_API void flush();
 		/**
 		 *\~english
 		 *\param		size	The size wanted.
@@ -257,14 +261,12 @@ namespace castor3d
 	};
 
 	inline PoolUniformBufferUPtr makePoolUniformBuffer( RenderSystem const & renderSystem
-		, castor::ByteArrayView data
 		, VkBufferUsageFlags usage
 		, VkMemoryPropertyFlags flags
 		, std::string name
 		, ashes::QueueShare sharingMode = {} )
 	{
 		return castor::makeUnique< PoolUniformBuffer >( renderSystem
-			, data
 			, usage
 			, flags
 			, std::move( name )

@@ -16,7 +16,9 @@ namespace castor3d
 {
 	C3D_API void uploadBaseData( SubmeshFlag submeshData
 		, Submesh const & submesh
-		, castor::Point3fArray const & data );
+		, castor::Point3fArray const & data
+		, castor::Point4fArray & up
+		, UploadData & uploader );
 	C3D_API void gatherBaseDataBuffer( SubmeshFlag submeshData
 		, PipelineFlags const & flags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -102,9 +104,9 @@ namespace castor3d
 			m_data.clear();
 		}
 
-		void doUpload()override
+		void doUpload( UploadData & uploader )override
 		{
-			uploadBaseData( SubmeshFlagT , *getOwner(), m_data );
+			uploadBaseData( SubmeshFlagT , *getOwner(), m_data, m_up, uploader );
 		}
 
 	public:
@@ -114,6 +116,7 @@ namespace castor3d
 
 	private:
 		castor::Point3fArray m_data;
+		castor::Point4fArray m_up;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};
 

@@ -5,7 +5,6 @@
 #include <RenderGraph/FramePass.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
@@ -257,13 +256,13 @@ namespace castor3d
 		m_buffers.clear();
 	}
 
-	void GpuBufferPool::upload( ashes::CommandBuffer const & cb )
+	void GpuBufferPool::upload( UploadData & uploader )
 	{
 		for ( auto & buffers : m_buffers )
 		{
 			for ( auto & buffer : buffers.second )
 			{
-				buffer->upload( cb );
+				buffer->upload( uploader );
 			}
 		}
 	}

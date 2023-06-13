@@ -1232,6 +1232,12 @@ namespace castor3d
 		m_debugPanel->addCountPanel( cuT( "DrawCalls" )
 			, cuT( "Draw calls:" )
 			, m_renderInfo.drawCalls );
+		m_debugPanel->addCountPanel( cuT( "UploadSize" )
+			, cuT( "Upload Size:" )
+			, m_renderInfo.uploadSize );
+		m_debugPanel->addCountPanel( cuT( "StagingBuffersCount" )
+			, cuT( "Upload Buffers:" )
+			, m_renderInfo.stagingBuffersCount );
 		m_debugPanel->setVisible( m_visible );
 	}
 

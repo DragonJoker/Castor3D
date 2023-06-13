@@ -138,7 +138,7 @@ namespace castor3d
 	}
 
 	void PassBuffer::update( SpecificsBuffers const & specifics
-		, ashes::CommandBuffer const & commandBuffer )
+		, UploadData & uploader )
 	{
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 
@@ -175,14 +175,14 @@ namespace castor3d
 			auto passCount = std::min( m_maxCount, uint32_t( m_passes.size() ) );
 			m_buffer.setCount( passCount );
 			m_buffer.setSecondCount( uint32_t( m_passTypeIndices.size() ) );
-			m_buffer.upload( commandBuffer );
+			m_buffer.upload( uploader );
 
 			for ( auto & buffer : specifics )
 			{
 				if ( auto & buf = buffer.second.second )
 				{
 					buf->setCount( passCount );
-					buf->upload( commandBuffer );
+					buf->upload( uploader );
 				}
 			}
 		}

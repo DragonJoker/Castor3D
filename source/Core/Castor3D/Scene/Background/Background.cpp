@@ -1,7 +1,9 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
@@ -23,7 +25,6 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 
 #include <RenderGraph/FramePassGroup.hpp>
@@ -135,15 +136,22 @@ namespace castor3d
 					castor::DataHolderT< ashes::BufferPtr< uint16_t > >::setData( makeBuffer< uint16_t >( device
 						, uint32_t( indexData.size() )
 						, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-						, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 						, "BackgroundIndexBuffer" ) );
 					auto & indexBuffer = *castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
-					auto data = m_device.graphicsData();
-					ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, VkDeviceSize( sizeof( uint16_t ) * indexData.size() ) };
-					stagingBuffer.uploadBufferData( *data->queue
-						, *data->commandPool
-						, indexData
-						, indexBuffer );
+					{
+						auto data = m_device.graphicsData();
+						InstantDirectUploadData uploader{ *data->queue
+							, device
+							, "BackgroundIndexBuffer"
+							, *data->commandPool };
+						uploader->pushUpload( indexData.data()
+							, VkDeviceSize( sizeof( uint16_t ) * indexData.size() )
+							, indexBuffer.getBuffer()
+							, 0u
+							, VK_ACCESS_INDEX_READ_BIT
+							, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+					}
 				}
 
 				auto & indexBuffer = *castor::DataHolderT< ashes::BufferPtr< uint16_t > >::getData();
@@ -176,15 +184,22 @@ namespace castor3d
 					VertexBufferHolder::setData( makeVertexBuffer< Point3f >( m_device
 						, 24u
 						, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-						, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+						, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 						, "Background" ) );
 					auto & vertexBuffer = *VertexBufferHolder::getData();
-					auto data = m_device.graphicsData();
-					ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, VkDeviceSize( sizeof( Point3f ) * 24u ) };
-					stagingBuffer.uploadVertexData( *data->queue
-						, *data->commandPool
-						, vertexData
-						, vertexBuffer );
+					{
+						auto data = m_device.graphicsData();
+						InstantDirectUploadData uploader{ *data->queue
+							, device
+							, "BackgroundVertexBuffer"
+							, *data->commandPool };
+						uploader->pushUpload( vertexData.data()
+							, vertexData.size() * sizeof( Point3f )
+							, vertexBuffer.getBuffer()
+							, 0u
+							, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+							, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+					}
 				}
 
 				auto & vertexBuffer = *VertexBufferHolder::getData();
@@ -309,6 +324,14 @@ namespace castor3d
 		{
 			m_initialised = doInitialise( device );
 			castor::String const name = cuT( "Skybox_" ) + castor::string::toString( m_texture->getMipLevels() );
+			{
+				auto queueData = device.graphicsData();
+				InstantDirectUploadData uploader{ *queueData->queue
+					, device
+					, name
+					, *queueData->commandPool };
+				upload( uploader );
+			}
 			auto sampler = getEngine()->tryFindSampler( name );
 
 			if ( !sampler )
@@ -384,6 +407,15 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			doGpuUpdate( updater );
+		}
+	}
+
+	void SceneBackground::upload( UploadData & uploader )
+	{
+		if ( m_initialised && m_needsUpload )
+		{
+			doUpload( uploader );
+			m_needsUpload = false;
 		}
 	}
 
@@ -562,6 +594,85 @@ namespace castor3d
 	BackgroundModelID SceneBackground::getModelID()const
 	{
 		return getEngine()->getBackgroundModelFactory().getTypeId( getModelName() );
+	}
+
+	castor::PxBufferBaseUPtr SceneBackground::adaptBuffer( Engine & engine
+		, castor::PxBufferBase & buffer
+		, castor::String const & name
+		, bool generateMips )
+	{
+		auto result = buffer.clone();
+		auto dstFormat = result->getFormat();
+		bool changed{};
+
+		switch ( dstFormat )
+		{
+		case castor::PixelFormat::eR8G8B8_UNORM:
+			dstFormat = castor::PixelFormat::eR8G8B8A8_UNORM;
+			break;
+		case castor::PixelFormat::eB8G8R8_UNORM:
+			dstFormat = castor::PixelFormat::eA8B8G8R8_UNORM;
+			break;
+		case castor::PixelFormat::eR8G8_SRGB:
+		case castor::PixelFormat::eR8G8B8_SRGB:
+			dstFormat = castor::PixelFormat::eR8G8B8A8_SRGB;
+			break;
+		case castor::PixelFormat::eB8G8R8_SRGB:
+			dstFormat = castor::PixelFormat::eA8B8G8R8_SRGB;
+			break;
+		case castor::PixelFormat::eR16G16B16_SFLOAT:
+			dstFormat = castor::PixelFormat::eR16G16B16A16_SFLOAT;
+			break;
+		case castor::PixelFormat::eR32G32B32_SFLOAT:
+			dstFormat = castor::PixelFormat::eR32G32B32A32_SFLOAT;
+			break;
+		default:
+			// No conversion
+			break;
+		}
+
+		if ( result->getFormat() != dstFormat )
+		{
+			log::debug << name << cuT( " - Converting RGB to RGBA.\n" );
+			result = castor::PxBufferBase::create( result->getDimensions()
+				, result->getLayers()
+				, result->getLevels()
+				, dstFormat
+				, result->getConstPtr()
+				, result->getFormat()
+				, result->getAlign() );
+			changed = true;
+		}
+
+		if ( generateMips
+			&& !castor::isCompressed( result->getFormat() ) )
+		{
+			log::debug << ( name + cuT( " - Generating result mipmaps.\n" ) );
+			result->generateMips();
+		}
+
+		return result;
+	}
+
+	castor::ImageUPtr SceneBackground::loadImage( Engine & engine
+		, castor::String const & name
+		, castor::Path const & folder
+		, castor::Path const & relative
+		, bool generateMips )
+	{
+		auto & image = getFileImage( engine
+			, name
+			, folder
+			, relative );
+		auto buffer = adaptBuffer( engine
+			, image.getPxBuffer()
+			, name
+			, generateMips );
+		castor::ImageLayout layout{ image.getLayout().type, * buffer };
+		return castor::makeUnique< castor::Image >( name
+			, folder / relative
+			, layout
+			, std::move( buffer ) );
 	}
 
 	//*********************************************************************************************

@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FontTexture_H___
 #define ___C3D_FontTexture_H___
 
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
@@ -27,10 +28,15 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
-		using Resource = ResourceT;
 		using ResourcePtrT = PointerT< ResourceT >;
 		using OnChangedFunction = std::function< void( DoubleBufferedResourceT const & ) >;
 		using OnChanged = castor::SignalT< OnChangedFunction >;
+
+		struct Resource
+		{
+			ResourcePtrT resource;
+			bool needsUpload{ true };
+		};
 
 	protected:
 		DoubleBufferedResourceT( Engine & parent
@@ -59,14 +65,14 @@ namespace castor3d
 			doRefresh( clean, m_first.exchange( false ) );
 		}
 
-		inline ResourcePtrT const & getResource()const
+		inline Resource const & getResource()const
 		{
 			return m_front;
 		}
 
 	protected:
-		ResourcePtrT m_back;
-		ResourcePtrT m_front;
+		Resource m_back;
+		Resource m_front;
 		/**
 		 *\~english
 		 *\brief		Initialises the texture.
@@ -80,8 +86,8 @@ namespace castor3d
 		void doInitialise( RenderDevice const & device
 			, QueueData const & queueData )
 		{
-			initialiseResource( *m_back, device, queueData );
-			initialiseResource( *m_front, device, queueData );
+			initialiseResource( m_back, device, queueData );
+			initialiseResource( m_front, device, queueData );
 		}
 		/**
 		 *\~english
@@ -91,8 +97,8 @@ namespace castor3d
 		 */
 		void doCleanup()
 		{
-			cleanupResource( *m_front );
-			cleanupResource( *m_back );
+			cleanupResource( m_front );
+			cleanupResource( m_back );
 		}
 		/**
 		 *\~english
@@ -103,7 +109,7 @@ namespace castor3d
 		void doRefresh( bool clean
 			, bool front )
 		{
-			auto & resource = front ? *m_front : *m_back;
+			auto & resource = front ? m_front : m_back;
 			updateResource( resource, front );
 			postPreRenderGpuEvent( *getEngine()
 				, [this, clean, front, &resource]( RenderDevice const & device
@@ -129,6 +135,11 @@ namespace castor3d
 							} );
 					}
 				} );
+		}
+
+		Resource & doGetResource()
+		{
+			return m_front;
 		}
 
 	private:
@@ -195,7 +206,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Upload le buffer d'informations des glyphes.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Converts text to glyph index array.
@@ -242,7 +253,7 @@ namespace castor3d
 
 		TextureLayoutRPtr getTexture()const
 		{
-			return getResource().get();
+			return getResource().resource.get();
 		}
 
 		SamplerObs getSampler()const

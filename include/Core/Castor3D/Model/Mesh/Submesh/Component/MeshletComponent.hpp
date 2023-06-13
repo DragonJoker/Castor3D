@@ -99,7 +99,7 @@ namespace castor3d
 	private:
 		bool doInitialise( RenderDevice const & device )override;
 		void doCleanup( RenderDevice const & device )override;
-		void doUpload()override;
+		void doUpload( UploadData & uploader )override;
 		void doCreateDescriptorLayout( RenderDevice const & device );
 
 	public:

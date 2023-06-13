@@ -216,7 +216,7 @@ namespace castor3d
 		 *\param[in]	commandBuffer	Reçoit les commandes de mise à jour.
 		 */
 		C3D_API void update( SpecificsBuffers const & specifics
-			, ashes::CommandBuffer const & commandBuffer );
+			, UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Clears the dirty passes container.

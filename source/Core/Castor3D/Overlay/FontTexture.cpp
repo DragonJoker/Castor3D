@@ -104,9 +104,17 @@ namespace castor3d
 		doCleanup();
 	}
 
-	void FontTexture::upload( ashes::CommandBuffer const & commandBuffer )
+	void FontTexture::upload( UploadData & uploader )
 	{
-		m_buffer->update( commandBuffer );
+		auto & resource = doGetResource();
+
+		if ( resource.needsUpload )
+		{
+			resource.resource->upload( uploader );
+			resource.needsUpload = false;
+		}
+
+		m_buffer->update( uploader );
 	}
 
 	castor::UInt32Array FontTexture::convert( castor::U32String const & text )const
@@ -152,12 +160,12 @@ namespace castor3d
 		, RenderDevice const & device
 		, QueueData const & queueData )
 	{
-		resource.initialise( device, queueData );
+		resource.resource->initialise( device );
 	}
 
 	void FontTexture::cleanupResource( Resource & resource )
 	{
-		resource.cleanup();
+		resource.resource->cleanup();
 	}
 
 	void FontTexture::updateResource( Resource & resource
@@ -173,9 +181,9 @@ namespace castor3d
 			m_buffer->setMaxHeight( font->getMaxHeight() );
 			m_buffer->setImgWidth( size.getWidth() );
 			m_buffer->setImgHeight( size.getHeight() );
-			resource.setSource( castor::PxBufferBase::create( castor::Size( maxWidth * 16, maxHeight * count )
+			resource.resource->setSource( castor::PxBufferBase::create( castor::Size( maxWidth * 16, maxHeight * count )
 				, castor::PixelFormat::eR8_UNORM ), true );
-			auto & image = resource.getImage();
+			auto & image = resource.resource->getImage();
 
 			auto it = font->begin();
 			castor::Size const & sizeImg = size;
@@ -219,6 +227,8 @@ namespace castor3d
 
 				offY -= maxHeight;
 			}
+
+			resource.needsUpload = true;
 		}
 	}
 

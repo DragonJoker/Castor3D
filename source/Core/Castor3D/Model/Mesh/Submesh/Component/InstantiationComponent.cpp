@@ -250,7 +250,7 @@ namespace castor3d
 		}
 	}
 
-	void InstantiationComponent::doUpload()
+	void InstantiationComponent::doUpload( UploadData & uploader )
 	{
 		for ( auto & data : m_instances )
 		{

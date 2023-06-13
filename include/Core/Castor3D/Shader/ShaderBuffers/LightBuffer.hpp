@@ -76,7 +76,7 @@ namespace castor3d
 		 *\brief		Uploade le tampon en VRAM.
 		 *\param[in]	commandBuffer	Reçoit les commandes d'upload.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding.

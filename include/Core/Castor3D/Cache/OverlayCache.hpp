@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "CacheModule.hpp"
 
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Overlay/OverlayFactory.hpp"
@@ -75,7 +76,7 @@ namespace castor
 		C3D_API void cleanup();
 		C3D_API void initialise( castor3d::Overlay & overlay );
 		C3D_API void cleanup( castor3d::Overlay & overlay );
-		C3D_API void upload( ashes::CommandBuffer const & commandBuffer );
+		C3D_API void upload( castor3d::UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Retrieves a FontTexture given a font name.

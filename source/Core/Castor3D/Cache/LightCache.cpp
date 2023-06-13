@@ -115,11 +115,11 @@ namespace castor3d
 		}
 	}
 
-	void ObjectCacheT< Light, castor::String, LightCacheTraits >::upload( ashes::CommandBuffer const & cb )const
+	void ObjectCacheT< Light, castor::String, LightCacheTraits >::upload( UploadData & uploader )const
 	{
 		if ( m_lightBuffer )
 		{
-			m_lightBuffer->upload( cb );
+			m_lightBuffer->upload( uploader );
 		}
 	}
 

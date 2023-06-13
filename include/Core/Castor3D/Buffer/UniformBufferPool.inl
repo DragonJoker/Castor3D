@@ -18,12 +18,6 @@ namespace castor3d
 		if ( itB == it->second.end() )
 		{
 			CU_Require( m_currentUboIndex < m_maxPoolUboCount - 1u );
-
-			if ( !m_maxUboElemCount )
-			{
-				doCreateStagingBuffer();
-			}
-
 			itB = doCreatePoolBuffer( flags, it->second );
 			CU_Require( itB != it->second.end() );
 		}

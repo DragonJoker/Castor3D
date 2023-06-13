@@ -10,6 +10,7 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <atomic>
+#include <mutex>
 #include <CastorUtils/Config/EndExternHeaderGuard.hpp>
 
 namespace castor3d

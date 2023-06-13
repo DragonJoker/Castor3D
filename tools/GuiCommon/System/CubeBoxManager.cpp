@@ -319,10 +319,10 @@ namespace GuiCommon
 
 			castor3d::Engine * engine = m_scene.getEngine();
 			engine->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
-				, [aabbSubmesh]( castor3d::RenderDevice const & device
+				, [aabbSubmesh, engine]( castor3d::RenderDevice const & device
 					, castor3d::QueueData const & queueData )
 				{
-					aabbSubmesh->update();
+					aabbSubmesh->upload( engine->getUploadData() );
 				} ) );
 		}
 	}

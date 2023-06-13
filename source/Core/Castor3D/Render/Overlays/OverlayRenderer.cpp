@@ -1040,11 +1040,11 @@ namespace castor3d
 		return OverlayPreparer{ *this, device, renderPass, framebuffer };
 	}
 
-	void OverlayRenderer::upload( ashes::CommandBuffer const & cb )
+	void OverlayRenderer::upload( UploadData & uploader )
 	{
-		m_common.panelVertexBuffer->upload( cb );
-		m_common.borderVertexBuffer->upload( cb );
-		m_common.textVertexBuffer->upload( cb );
+		m_common.panelVertexBuffer->upload( uploader );
+		m_common.borderVertexBuffer->upload( uploader );
+		m_common.textVertexBuffer->upload( uploader );
 	}
 
 	void OverlayRenderer::registerComputeCommands( crg::RecordContext & context

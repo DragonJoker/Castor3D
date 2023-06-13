@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_MaterialCache_H___
 #define ___C3D_MaterialCache_H___
 
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
@@ -107,7 +108,7 @@ namespace castor
 		 *\brief		Met à jour tous les tampons GPU en VRAM.
 		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & cb )const;
+		C3D_API void upload( castor3d::UploadData & uploader )const;
 		/**
 		 *\~english
 		 *\brief			Registers a specific data shader buffer.
@@ -269,7 +270,7 @@ namespace castor
 			void initialise( castor3d::RenderDevice const & device );
 			void cleanup();
 			void update( castor3d::PassBuffer & passBuffer
-				, ashes::CommandBuffer const & cb )const;
+				, castor3d::UploadData & uploader )const;
 			/**@}*/
 			/**
 			*\~english

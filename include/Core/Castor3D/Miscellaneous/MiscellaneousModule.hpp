@@ -257,15 +257,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Used to facilitate staging buffer use.
-	*\~french
-	*\brief
-	*	Utilisé pour faciliter l'utilisation de staging buffer.
-	*/
-	class StagingData;
-	/**
-	*\~english
-	*\brief
 	*	Version management class
 	*\remark
 	*	Class used to manage versions and versions dependencies for plug-ins
@@ -290,7 +281,6 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( castor3d, LoadingScreen, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ProgressBar, C3D_API );
-	CU_DeclareSmartPtr( castor3d, StagingData, C3D_API );
 
 	struct RenderDevice;
 	C3D_API ashes::DeviceMemoryPtr setupMemory( ashes::Device const & device

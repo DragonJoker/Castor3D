@@ -84,6 +84,7 @@ namespace castor3d
 		void doCleanup()override;
 		void doCpuUpdate( CpuUpdater & updater )const override;
 		void doGpuUpdate( GpuUpdater & updater )const override;
+		void doUpload( UploadData & uploader )override;
 		void doAddPassBindings( crg::FramePass & pass
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
@@ -92,8 +93,7 @@ namespace castor3d
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
-		void doInitialise2DTexture( RenderDevice const & device
-			, QueueData const & queueData );
+		void doInitialise2DTexture( RenderDevice const & device );
 
 	private:
 		TextureLayoutUPtr m_2dTexture;

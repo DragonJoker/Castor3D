@@ -89,7 +89,7 @@ namespace castor3d
 		return result;
 	}
 
-	void OverlayTextBuffer::upload( ashes::CommandBuffer const & cb )
+	void OverlayTextBuffer::upload( UploadData & uploader )
 	{
 		charsBuffer.allocated = 0u;
 		wordsBuffer.allocated = 0u;
@@ -158,11 +158,11 @@ namespace castor3d
 		return it->second->fill( overlayIndex, overlay );
 	}
 
-	void OverlayTextBufferPool::upload( ashes::CommandBuffer const & cb )
+	void OverlayTextBufferPool::upload( UploadData & uploader )
 	{
 		for ( auto & it : m_buffers )
 		{
-			it.second->upload( cb );
+			it.second->upload( uploader );
 		}
 	}
 

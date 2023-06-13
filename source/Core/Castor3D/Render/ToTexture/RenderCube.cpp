@@ -1,7 +1,9 @@
 #include "Castor3D/Render/ToTexture/RenderCube.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
+#include "Castor3D/Buffer/InstantUploadData.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -13,9 +15,9 @@
 #include <CastorUtils/Math/SquareMatrix.hpp>
 #include <CastorUtils/Math/TransformationMatrix.hpp>
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/ImageView.hpp>
+#include <ashespp/Pipeline/GraphicsPipeline.hpp>
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineInputAssemblyStateCreateInfo.hpp>
 #include <ashespp/Pipeline/PipelineMultisampleStateCreateInfo.hpp>
@@ -114,16 +116,20 @@ namespace castor3d
 			auto result = makeVertexBuffer< castor::Point4f >( device
 				, uint32_t( vertexData.size() )
 				, VK_BUFFER_USAGE_TRANSFER_DST_BIT
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 				, "RenderCube" );
-
-			ashes::StagingBuffer stagingBuffer{ *device.device
-				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-				, result->getBuffer().getSize() };
-			stagingBuffer.uploadVertexData( queue
-				, commandPool
-				, vertexData
-				, *result );
+			{
+				InstantDirectUploadData uploader{ queue
+					, device
+					, "RenderCube"
+					, commandPool };
+				uploader->pushUpload( vertexData.data()
+					, result->getSize()
+					, result->getBuffer()
+					, 0u
+					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+			}
 			return result;
 		}
 

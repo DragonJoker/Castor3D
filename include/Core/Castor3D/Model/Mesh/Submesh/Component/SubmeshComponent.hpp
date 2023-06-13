@@ -61,7 +61,7 @@ namespace castor3d
 		 *\brief		Met les données en VRAM.
 		 *\remarks		Pour les buffers host visible.
 		 */
-		C3D_API void upload();
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief			Gathers buffers that need to go in a vertex layout.
@@ -164,7 +164,7 @@ namespace castor3d
 	private:
 		C3D_API virtual bool doInitialise( RenderDevice const & device ) = 0;
 		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
-		C3D_API virtual void doUpload() = 0;
+		C3D_API virtual void doUpload( UploadData & uploader ) = 0;
 
 	private:
 		castor::String m_type;

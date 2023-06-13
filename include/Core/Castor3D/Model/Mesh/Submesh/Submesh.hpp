@@ -23,10 +23,6 @@ See LICENSE file in root folder
 #include <CastorUtils/Graphics/BoundingBox.hpp>
 #include <CastorUtils/Graphics/BoundingSphere.hpp>
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Sync/Fence.hpp>
-
 #include <unordered_map>
 
 namespace castor3d
@@ -93,7 +89,7 @@ namespace castor3d
 		 *\~french
 		 *\brief		Met à jour les tampons.
 		 */
-		C3D_API void update();
+		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief		Computes the containers (cube and sphere)
@@ -374,7 +370,6 @@ namespace castor3d
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };
-		StagingDataUPtr m_staging;
 
 		friend class BinaryWriter< Submesh >;
 		friend class BinaryParser< Submesh >;

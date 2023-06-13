@@ -512,6 +512,14 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::StagedUploadData::GpuBufferOffset">
+		<DisplayString>{chunk}({*buffer})</DisplayString>
+		<Expand>
+			<Item Name="chunk">chunk</Item>
+			<Item Name="buffer">buffer</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Submesh">
 		<DisplayString>{*m_owner}({m_id})</DisplayString>
 		<Expand>

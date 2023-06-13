@@ -19,12 +19,12 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			explicit ModelBuffers( GpuPackedBufferUPtr vtx )
+			explicit ModelBuffers( GpuPackedBaseBufferUPtr vtx )
 				: vertex{ std::move( vtx ) }
 			{
 			}
 
-			GpuPackedBufferUPtr vertex;
+			GpuPackedBaseBufferUPtr vertex;
 		};
 		using BufferArray = std::vector< ModelBuffers >;
 
@@ -48,15 +48,6 @@ namespace castor3d
 		 *\brief		Nettoie tous les tampons GPU.
 		 */
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Uploads all GPU buffers to VRAM.
-		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
-		 *\~french
-		 *\brief		Met à jour tous les tampons GPU en VRAM.
-		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
-		 */
-		C3D_API void upload( ashes::CommandBuffer const & cb );
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -95,12 +86,12 @@ namespace castor3d
 	public:
 		struct ModelBuffers
 		{
-			explicit ModelBuffers( std::array< GpuPackedBufferUPtr, size_t( SubmeshData::eCount ) > bufs = {} )
+			explicit ModelBuffers( std::array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > bufs = {} )
 				: buffers{ std::move( bufs ) }
 			{
 			}
 
-			std::array< GpuPackedBufferUPtr, size_t( SubmeshData::eCount ) > buffers;
+			std::array< GpuPackedBaseBufferUPtr, size_t( SubmeshData::eCount ) > buffers;
 		};
 		using BufferArray = std::vector< ModelBuffers >;
 
@@ -124,15 +115,6 @@ namespace castor3d
 		 *\brief		Nettoie tous les tampons GPU.
 		 */
 		C3D_API void cleanup();
-		/**
-		 *\~english
-		 *\brief		Uploads all GPU buffers to VRAM.
-		 *\param[in]	cb	The command buffer on which transfer commands are recorded.
-		 *\~french
-		 *\brief		Met à jour tous les tampons GPU en VRAM.
-		 *\param[in]	cb	Le command buffer sur lequel les commandes de transfert sont enregistrées.
-		 */
-		C3D_API void upload( ashes::CommandBuffer const & cb );
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.

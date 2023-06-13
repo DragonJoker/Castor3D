@@ -5,6 +5,8 @@
 #include "FFTOceanRendering/OceanFFTRenderPass.hpp"
 
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Buffer/DirectUploadData.hpp>
+#include <Castor3D/Buffer/InstantUploadData.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
@@ -12,7 +14,6 @@
 #include <Castor3D/Shader/ShaderModule.hpp>
 
 #include <ashespp/Sync/Fence.hpp>
-#include <ashespp/Buffer/StagingBuffer.hpp>
 
 #include <RenderGraph/RunnablePasses/BufferToImageCopy.hpp>
 
@@ -205,7 +206,7 @@ namespace ocean_fft
 		, m_heightSeeds{ castor3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, Name + "HeightSeeds" ) }
 		, m_heightDistribution{ castor3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
@@ -310,12 +311,12 @@ namespace ocean_fft
 		, m_normalSeeds{ castor3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, Name + "NormalsSeeds" ) }
 		, m_normalDistribution{ castor3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, Name + "NormalsDistribution" ) }
 		, m_generateNormalDistribution{ &createGenerateDistributionPass( Name
 			, "Normals"
@@ -418,16 +419,19 @@ namespace ocean_fft
 				distribution[size_t( z * Nx + x )] = cfloat{ m_normDis( m_engine ), m_normDis( m_engine ) };
 			}
 		}
-
-		ashes::StagingBuffer staging{ *m_fftConfig.device
-			, "OceanFFTDistributionSeedsStaging"
-			, VkBufferUsageFlags{}
-			, distribution.size() * sizeof( cfloat ) };
-		auto queueData = m_device.graphicsData();
-		staging.uploadBufferData( *queueData->queue
-			, *queueData->commandPool
-			, distribution
-			, distribBuffer );
+		{
+			auto queueData = m_device.graphicsData();
+			castor3d::InstantDirectUploadData uploader{ *queueData->queue
+				, m_device
+				, "OceanFFTDistributionSeeds"
+				, *queueData->commandPool};
+			uploader->pushUpload( distribution.data()
+				, distribution.size() * sizeof( cfloat )
+				, distribBuffer.getBuffer()
+				, 0u
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT );
+		}
 	}
 
 	//************************************************************************************************

@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_ShaderBuffer_H___
 
 #include "ShaderModule.hpp"
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
@@ -12,7 +13,6 @@ See LICENSE file in root folder
 
 #include <ashespp/Buffer/Buffer.hpp>
 #include <ashespp/Buffer/BufferView.hpp>
-#include <ashespp/Buffer/StagingBuffer.hpp>
 
 namespace castor3d
 {
@@ -48,7 +48,7 @@ namespace castor3d
 		 *\brief		Met à jour le tampon.
 		 *\param[in]	commandBuffer	Le command buffer recevant les commandes d'upload.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & commandBuffer )const;
+		C3D_API void upload( UploadData & uploader )const;
 		/**
 		 *\~english
 		 *\brief		Updates the buffer on GPU.
@@ -59,7 +59,7 @@ namespace castor3d
 		 *\param[in]	commandBuffer	Le command buffer recevant les commandes d'upload.
 		 *\param[in]	offset, size	L'intervalle à mettre à jour.
 		 */
-		C3D_API void upload( ashes::CommandBuffer const & commandBuffer
+		C3D_API void upload( UploadData & uploader
 			, VkDeviceSize offset
 			, VkDeviceSize size )const;
 		/**
@@ -186,16 +186,11 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doUpload( ashes::CommandBuffer const & commandBuffer
-			, VkDeviceSize offset
-			, VkDeviceSize size )const;
-
-	private:
 		RenderDevice const & m_device;
 		VkDeviceSize m_size;
 		crg::AccessState m_wantedState;
 		ashes::BufferBasePtr m_buffer;
-		ashes::StagingBufferPtr m_staging;
+		castor::ByteArray m_ownData;
 		uint8_t * m_rawData;
 		uint8_t * m_data;
 		castor::ArrayView< uint32_t > m_counts;

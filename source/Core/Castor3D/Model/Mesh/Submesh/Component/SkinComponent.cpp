@@ -3,8 +3,8 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Skeleton/BonedVertex.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -58,7 +58,7 @@ namespace castor3d
 	{
 	}
 
-	void SkinComponent::doUpload()
+	void SkinComponent::doUpload( UploadData & uploader )
 	{
 		auto count = uint32_t( m_bones.size() );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
@@ -67,10 +67,12 @@ namespace castor3d
 		if ( count && buffer.hasData() )
 		{
 			CU_Require( buffer.getCount< VertexBoneData >() == count );
-			std::copy( m_bones.begin()
-				, m_bones.end()
-				, buffer.getData< VertexBoneData >().begin() );
-			buffer.markDirty();
+			uploader.pushUpload( m_bones.data()
+				, m_bones.size() * sizeof( VertexBoneData )
+				, buffer.getBuffer()
+				, buffer.getOffset()
+				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
 }

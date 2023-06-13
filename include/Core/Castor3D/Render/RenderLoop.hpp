@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_RenderLoop_H___
 #define ___C3D_RenderLoop_H___
 
+#include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
@@ -209,6 +210,12 @@ namespace castor3d
 			return m_lastFrameTime;
 		}
 
+		UploadData & getUploadData()const noexcept
+		{
+			return *m_uploadData;
+		}
+		/**@}*/
+
 	protected:
 		/**
 		 *\~english
@@ -245,31 +252,16 @@ namespace castor3d
 		//!\~french		Les incrustations de débogage.
 		std::unique_ptr< DebugOverlays > m_debugOverlays;
 		std::mutex m_debugOverlaysMtx;
-		struct UploadResources
-		{
-			//!\~english	The command buffer and semaphore used for UBO uploads.
-			//!\~french		Le command buffer et le semaphore utilisé pour l'upload des UBO.
-			CommandsSemaphore commands;
-			//!\~english	The fence and semaphore used for UBO uploads.
-			//!\~french		La fence et le semaphore utilisé pour l'upload des UBO.
-			ashes::FencePtr fence;
-			//!\~english	Tells if the smaphore has been used in previous frame.
-			//!\~french		Dit si le sémaphore a été utilisé pendant la précédente frame.
-			bool used{ true };
-			uint32_t waitCount{ 1u };
-		};
-		std::array< UploadResources, 2u > m_uploadResources;
-		uint32_t m_currentUpdate{ 0u };
-		crg::SemaphoreWaitArray m_toWait;
 
 	private:
 		int32_t m_ignored = 5;
 		QueueData const * m_reservedQueue{};
 		std::unordered_set< ShaderBuffer const * > m_shaderBuffers;
 		std::mutex m_shaderBuffersMtx;
-		FramePassTimerUPtr m_uploadTimer;
 		std::array< FramePassTimerUPtr, size_t( EventType::eCount ) > m_timerCpuEvents;
 		std::array< FramePassTimerUPtr, size_t( EventType::eCount ) > m_timerGpuEvents;
+		UploadDataUPtr m_uploadData{};
+		ashes::FencePtr m_uploadFence{};
 	};
 }
 

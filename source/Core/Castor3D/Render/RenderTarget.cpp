@@ -647,11 +647,11 @@ namespace castor3d
 		}
 	}
 
-	void RenderTarget::upload( ashes::CommandBuffer const & cb )
+	void RenderTarget::upload( UploadData & uploader )
 	{
 		if ( m_initialised )
 		{
-			m_overlayPass->upload( cb );
+			m_overlayPass->upload( uploader );
 		}
 	}
 
