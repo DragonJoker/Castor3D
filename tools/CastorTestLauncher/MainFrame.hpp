@@ -45,7 +45,7 @@ namespace test_launcher
 		castor3d::Engine & m_engine;
 		uint32_t m_maxFrameCount;
 		castor::Path m_filePath;
-		castor3d::RenderWindowPtr m_renderWindow;
+		castor3d::RenderWindowUPtr m_renderWindow;
 	};
 }
 

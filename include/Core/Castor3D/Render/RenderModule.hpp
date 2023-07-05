@@ -31,6 +31,8 @@ namespace castor3d
 
 	castor::String const RenderTypeUndefined = cuT( "Undefined" );
 
+	using RenderPassTypeID = uint16_t;
+
 	/**
 	*\~english
 	*\brief
@@ -689,8 +691,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, RenderTechniquePass, C3D_API );
 	CU_DeclareSmartPtr( castor3d, RenderWindow, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Viewport, C3D_API );
-
-	using RenderWindowPtr = std::unique_ptr< RenderWindow >;
+	CU_DeclareSmartPtr( castor3d, Texture, C3D_API );
 
 	CU_DeclareVector( IntermediateView, IntermediateView );
 

@@ -85,7 +85,7 @@ namespace castortd
 		bool m_mouseLeftDown{ false };
 		std::array< wxTimer *, size_t( TimerID::eCount ) > m_timers;
 		GuiCommon::NodeStatePtr m_cameraState{};
-		castor3d::RenderWindowPtr m_renderWindow{};
+		castor3d::RenderWindowUPtr m_renderWindow{};
 		castor3d::FrameListenerRPtr m_listener{};
 		castor3d::GeometryRPtr m_selectedGeometry{};
 		castor3d::SceneNodeRPtr m_marker{};

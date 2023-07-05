@@ -145,7 +145,7 @@ namespace CastorViewer
 		bool m_extraSpeed{};
 		std::atomic_bool m_movementStarted{};
 		std::array< wxTimer *, eTIMER_ID_COUNT > m_timers{};
-		castor3d::RenderWindowPtr m_renderWindow{};
+		castor3d::RenderWindowUPtr m_renderWindow{};
 
 		castor3d::SceneNodeRPtr m_lightsNode{};
 		castor3d::SceneNodeRPtr m_currentNode{};

@@ -302,7 +302,7 @@ namespace test_launcher
 		{
 			auto sizewx = GetClientSize();
 			castor::Size sizeWnd{ uint32_t( sizewx.GetWidth() ), uint32_t( sizewx.GetHeight() ) };
-			m_renderWindow = std::make_unique< castor3d::RenderWindow >( "CastorTest"
+			m_renderWindow = castor::makeUnique< castor3d::RenderWindow >( "CastorTest"
 				, m_engine
 				, sizeWnd
 				, makeWindowHandle( this ) );
@@ -387,7 +387,16 @@ namespace test_launcher
 				stream << m_engine.getRenderSystem()->getGpuInformations().getRenderer() << "\n";
 				stream << totalTime.count()
 					<< " " << std::chrono::duration_cast< castor::Microseconds >( avg ).count()
-					<< " " << std::chrono::duration_cast< castor::Microseconds >( last ).count();
+					<< " " << std::chrono::duration_cast< castor::Microseconds >( last ).count()
+					<< "\n"
+					<< "\n";
+
+				for ( auto & param : times.params )
+				{
+					castor::Nanoseconds time{};
+					times.params.get( param.first, time );
+					stream << param.first << " " << std::chrono::duration_cast< castor::Microseconds >( time ).count() << "\n";
+				}
 			}
 		}
 
