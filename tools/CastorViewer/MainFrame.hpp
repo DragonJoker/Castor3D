@@ -123,7 +123,13 @@ namespace CastorViewer
 #ifndef NDEBUG
 		LogContainer m_debugLog;
 #endif
-		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_sceneObjects{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_sceneTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_objectsTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_nodesTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_lightsTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_materialsTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_overlaysTree{ nullptr };
+		GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList > * m_guiTree{ nullptr };
 		castor3d::SceneRPtr m_mainScene{};
 		castor3d::CameraRPtr m_mainCamera{};
 		castor3d::SceneNodeRPtr m_sceneNode{};

@@ -121,7 +121,6 @@ namespace GuiCommon
 	class SceneObjectsList;
 	class FrameVariablesList;
 	class ImagesLoader;
-	class MaterialsList;
 	class RendererSelector;
 	class ShaderDialog;
 	class ShaderEditor;

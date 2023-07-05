@@ -11,8 +11,10 @@
 #include "GuiCommon/Properties/TreeItems/ControlTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/GeometryTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/LightTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/MaterialTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/NodeTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/OverlayTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/PassTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderTargetTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderWindowTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SceneTreeItemProperty.hpp"
@@ -21,9 +23,9 @@
 #include "GuiCommon/Properties/TreeItems/SkeletonTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/StyleTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SubmeshTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/TextureTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/ViewportTreeItemProperty.hpp"
 #include "GuiCommon/System/ImagesLoader.hpp"
-#include "GuiCommon/System/MaterialsList.hpp"
 
 #include <wx/imaglist.h>
 #include <wx/aui/framemanager.h>
@@ -176,6 +178,152 @@ namespace GuiCommon
 
 		if ( scene )
 		{
+			auto rootId = AddRoot( make_wxString( window.getName() )
+				, eBMP_RENDER_WINDOW
+				, eBMP_RENDER_WINDOW_SEL
+				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+
+			wxTreeItemId sceneId = AppendItem( rootId
+				, scene->getName()
+				, eBMP_SCENE
+				, eBMP_SCENE_SEL
+				, new SceneTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene ) );
+
+			AppendItem( sceneId
+				, _( "Background" )
+				, eBMP_BACKGROUND
+				, eBMP_BACKGROUND_SEL
+				, new BackgroundTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene->getBackground() ) );
+
+			auto catId = AppendItem( sceneId
+				, _( "Render Targets" )
+				, eBMP_RENDER_TARGET
+				, eBMP_RENDER_TARGET_SEL );
+			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( castor3d::RenderTarget & elem )
+				{
+					appendRenderTarget( this
+						, m_propertiesHolder->isEditable()
+						, catId
+						, elem );
+				} );
+			
+			catId = AppendItem( sceneId
+				, _( "Cameras" )
+				, eBMP_CAMERA
+				, eBMP_CAMERA_SEL );
+			scene->getCameraCache().forEach( [this, catId]( castor3d::Camera & elem )
+				{
+					doAddCamera( catId, elem );
+				} );
+
+			catId = AppendItem( sceneId
+				, _( "Animated Object Groups" )
+				, eBMP_ANIMATED_OBJECTGROUP
+				, eBMP_ANIMATED_OBJECTGROUP_SEL );
+			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( castor3d::AnimatedObjectGroup & elem )
+				{
+					doAddAnimatedObjectGroup( AppendItem( catId
+							, elem.getName()
+							, eBMP_ANIMATED_OBJECTGROUP
+							, eBMP_ANIMATED_OBJECTGROUP_SEL
+							, new AnimatedObjectGroupTreeItemProperty{ m_propertiesHolder->isEditable(), elem } )
+						, elem );
+				} );
+
+			CollapseAll();
+			Expand( rootId );
+			Expand( sceneId );
+		}
+	}
+
+	void SceneObjectsList::loadSceneMaterials( castor3d::Engine * engine
+		, castor3d::RenderWindow & window
+		, castor3d::SceneRPtr scene )
+	{
+		m_scene = scene;
+		m_engine = engine;
+
+		if ( scene )
+		{
+			auto rootId = AddRoot( make_wxString( window.getName() )
+				, eBMP_RENDER_WINDOW
+				, eBMP_RENDER_WINDOW_SEL
+				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+
+			for ( auto materialName : scene->getMaterialView() )
+			{
+				auto material = engine->findMaterial( materialName );
+				doAddMaterial( rootId
+					, material );
+			}
+
+			CollapseAll();
+			Expand( rootId );
+		}
+	}
+
+	void SceneObjectsList::loadSceneOverlays( castor3d::Engine * engine
+		, castor3d::RenderWindow & window
+		, castor3d::SceneRPtr scene )
+	{
+		m_scene = scene;
+		m_engine = engine;
+
+		if ( scene )
+		{
+			auto rootId = AddRoot( make_wxString( window.getName() )
+				, eBMP_RENDER_WINDOW
+				, eBMP_RENDER_WINDOW_SEL
+				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+
+			for ( auto overlay : scene->getOverlayCache().getCategories() )
+			{
+				switch ( overlay->getType() )
+				{
+				case castor3d::OverlayType::ePanel:
+					doAddOverlay( AppendItem( rootId
+							, overlay->getOverlayName()
+							, eBMP_PANEL_OVERLAY
+							, eBMP_PANEL_OVERLAY_SEL
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
+						, *overlay );
+					break;
+				case castor3d::OverlayType::eBorderPanel:
+					doAddOverlay( AppendItem( rootId
+							, overlay->getOverlayName()
+							, eBMP_BORDER_PANEL_OVERLAY
+							, eBMP_BORDER_PANEL_OVERLAY_SEL
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
+						, *overlay );
+					break;
+				case castor3d::OverlayType::eText:
+					doAddOverlay( AppendItem( rootId
+							, overlay->getOverlayName()
+							, eBMP_TEXT_OVERLAY
+							, eBMP_TEXT_OVERLAY_SEL
+							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
+						, *overlay );
+					break;
+				default:
+					CU_Failure( "Unsupported OverlayType" );
+					break;
+				}
+			}
+
+			CollapseAll();
+			Expand( rootId );
+		}
+	}
+
+	void SceneObjectsList::loadSceneGui( castor3d::Engine * engine
+		, castor3d::RenderWindow & window
+		, castor3d::SceneRPtr scene )
+	{
+		m_scene = scene;
+		m_engine = engine;
+
+		if ( scene )
+		{
 			auto & controlsManager = static_cast< castor3d::ControlsManager & >( *scene->getEngine()->getUserInputListener() );
 
 			auto rootId = AddRoot( make_wxString( window.getName() )
@@ -217,115 +365,13 @@ namespace GuiCommon
 				}
 			}
 
-			wxTreeItemId sceneId = AppendItem( rootId
-				, scene->getName()
-				, eBMP_SCENE
-				, eBMP_SCENE_SEL
-				, new SceneTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene ) );
-
-			AppendItem( sceneId
-				, _( "Background" )
-				, eBMP_BACKGROUND
-				, eBMP_BACKGROUND_SEL
-				, new BackgroundTreeItemProperty( this, m_propertiesHolder->isEditable(), *scene->getBackground() ) );
-
-			catId = AppendItem( sceneId
-				, _( "Render Targets" )
-				, eBMP_RENDER_TARGET
-				, eBMP_RENDER_TARGET_SEL );
-			scene->getEngine()->getRenderTargetCache().forEach( [this, catId]( castor3d::RenderTarget & elem )
-				{
-					appendRenderTarget( this
-						, m_propertiesHolder->isEditable()
-						, catId
-						, elem );
-				} );
-
-			//catId = AppendItem( sceneId
-			//	, _( "Scene Nodes" )
-			//	, eBMP_NODE
-			//	, eBMP_NODE_SEL );
-			//auto rootNode = scene->getRootNode();
-
-			//if ( rootNode )
-			//{
-			//	doAddNode( catId, *rootNode );
-			//}
-
-			catId = AppendItem( sceneId
-				, _( "Materials" )
-				, eBMP_MATERIAL
-				, eBMP_MATERIAL_SEL );
-			for ( auto materialName : scene->getMaterialView() )
-			{
-				auto material = engine->findMaterial( materialName );
-				MaterialsList::addMaterial( this
-					, *scene
-					, m_propertiesHolder->isEditable()
-					, catId
-					, material );
-			}
-
-			catId = AppendItem( sceneId
-				, _( "Animated Object Groups" )
-				, eBMP_ANIMATED_OBJECTGROUP
-				, eBMP_ANIMATED_OBJECTGROUP_SEL );
-			scene->getAnimatedObjectGroupCache().forEach( [this, catId]( castor3d::AnimatedObjectGroup & elem )
-				{
-					doAddAnimatedObjectGroup( AppendItem( catId
-							, elem.getName()
-							, eBMP_ANIMATED_OBJECTGROUP
-							, eBMP_ANIMATED_OBJECTGROUP_SEL
-							, new AnimatedObjectGroupTreeItemProperty{ m_propertiesHolder->isEditable(), elem } )
-						, elem );
-				} );
-
-			catId = AppendItem( sceneId
-				, _( "Overlays" )
-				, eBMP_PANEL_OVERLAY
-				, eBMP_PANEL_OVERLAY_SEL );
-
-			for ( auto overlay : scene->getOverlayCache().getCategories() )
-			{
-				switch ( overlay->getType() )
-				{
-				case castor3d::OverlayType::ePanel:
-					doAddOverlay( AppendItem( catId
-							, overlay->getOverlayName()
-							, eBMP_PANEL_OVERLAY
-							, eBMP_PANEL_OVERLAY_SEL
-							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
-						, *overlay );
-					break;
-				case castor3d::OverlayType::eBorderPanel:
-					doAddOverlay( AppendItem( catId
-							, overlay->getOverlayName()
-							, eBMP_BORDER_PANEL_OVERLAY
-							, eBMP_BORDER_PANEL_OVERLAY_SEL
-							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
-						, *overlay );
-					break;
-				case castor3d::OverlayType::eText:
-					doAddOverlay( AppendItem( catId
-							, overlay->getOverlayName()
-							, eBMP_TEXT_OVERLAY
-							, eBMP_TEXT_OVERLAY_SEL
-							, new OverlayTreeItemProperty( m_propertiesHolder->isEditable(), *overlay ) )
-						, *overlay );
-					break;
-				default:
-					CU_Failure( "Unsupported OverlayType" );
-					break;
-				}
-			}
-
-			catId = AppendItem( sceneId
+			catId = AppendItem( rootId
 				, _( "Scene GUI Styles" )
 				, eBMP_STYLES
 				, eBMP_STYLES_SEL );
 			doAddStyles( catId, controlsManager, scene );
 
-			catId = AppendItem( sceneId
+			catId = AppendItem( rootId
 				, _( "Scene GUI Controls" )
 				, eBMP_CONTROLS
 				, eBMP_CONTROLS_SEL );
@@ -342,7 +388,79 @@ namespace GuiCommon
 
 			CollapseAll();
 			Expand( rootId );
-			Expand( sceneId );
+		}
+	}
+
+	void SceneObjectsList::loadSceneNodes( castor3d::Engine * engine
+		, castor3d::RenderWindow & window
+		, castor3d::SceneRPtr scene )
+	{
+		m_scene = scene;
+		m_engine = engine;
+
+		if ( scene )
+		{
+			auto rootId = AddRoot( make_wxString( window.getName() )
+				, eBMP_RENDER_WINDOW
+				, eBMP_RENDER_WINDOW_SEL
+				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+			auto rootNode = scene->getRootNode();
+
+			if ( rootNode )
+			{
+				doAddNode( rootId, *rootNode );
+			}
+
+			CollapseAll();
+			Expand( rootId );
+		}
+	}
+
+	void SceneObjectsList::loadSceneLights( castor3d::Engine * engine
+		, castor3d::RenderWindow & window
+		, castor3d::SceneRPtr scene )
+	{
+		m_scene = scene;
+		m_engine = engine;
+
+		if ( scene )
+		{
+			auto rootId = AddRoot( make_wxString( window.getName() )
+				, eBMP_RENDER_WINDOW
+				, eBMP_RENDER_WINDOW_SEL
+				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+
+			scene->getLightCache().forEach( [this, rootId]( castor3d::Light & elem )
+				{
+					doAddLight( rootId, elem );
+				} );
+
+			CollapseAll();
+			Expand( rootId );
+		}
+	}
+
+	void SceneObjectsList::loadSceneObjects( castor3d::Engine * engine
+		, castor3d::RenderWindow & window
+		, castor3d::SceneRPtr scene )
+	{
+		m_scene = scene;
+		m_engine = engine;
+
+		if ( scene )
+		{
+			auto rootId = AddRoot( make_wxString( window.getName() )
+				, eBMP_RENDER_WINDOW
+				, eBMP_RENDER_WINDOW_SEL
+				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+
+			scene->getGeometryCache().forEach( [this, rootId]( castor3d::Geometry & elem )
+				{
+					doAddGeometry( rootId, elem );
+				} );
+
+			CollapseAll();
+			Expand( rootId );
 		}
 	}
 
@@ -355,9 +473,9 @@ namespace GuiCommon
 	void SceneObjectsList::select( castor3d::GeometryRPtr geometry
 		, castor3d::Submesh const * submesh )
 	{
-		auto itg = m_ids.find( geometry );
+		auto itg = m_objects.find( geometry );
 
-		if ( itg != m_ids.end() )
+		if ( itg != m_objects.end() )
 		{
 			auto its = itg->second.find( submesh );
 
@@ -368,11 +486,21 @@ namespace GuiCommon
 		}
 	}
 
+	void SceneObjectsList::select( castor3d::MaterialRPtr material )
+	{
+		auto itm = m_materials.find( material );
+
+		if ( itm != m_materials.end() )
+		{
+			SelectItem( itm->second );
+		}
+	}
+
 	void SceneObjectsList::doAddSubmesh( castor3d::GeometryRPtr geometry
 		, castor3d::SubmeshRPtr submesh
 		, wxTreeItemId id )
 	{
-		auto itg = m_ids.insert( { geometry, SubmeshIdMap{} } ).first;
+		auto itg = m_objects.insert( { geometry, SubmeshIdMap{} } ).first;
 		itg->second.insert( { submesh, id } );
 	}
 
@@ -516,30 +644,6 @@ namespace GuiCommon
 	void SceneObjectsList::doAddNode( wxTreeItemId id
 		, castor3d::SceneNode & node )
 	{
-		for ( auto & object : node.getObjects() )
-		{
-			switch ( object.get().getMovableType() )
-			{
-			case castor3d::MovableType::eGeometry:
-				doAddGeometry( id, static_cast< castor3d::Geometry & >( object.get() ) );
-				break;
-			case castor3d::MovableType::eCamera:
-				doAddCamera( id, static_cast< castor3d::Camera & >( object.get() ) );
-				break;
-			case castor3d::MovableType::eLight:
-				doAddLight( id, static_cast< castor3d::Light & >( object.get() ) );
-				break;
-			case castor3d::MovableType::eBillboard:
-				doAddBillboard( id, static_cast< castor3d::BillboardList & >( object.get() ) );
-				break;
-			case castor3d::MovableType::eParticleEmitter:
-				break;
-			default:
-				CU_Failure( "Unsupported MovableType" );
-				break;
-			}
-		}
-
 		for ( auto pair : node.getChildren() )
 		{
 			doAddNode( AppendItem( id
@@ -753,6 +857,71 @@ namespace GuiCommon
 		{
 			auto & frame = static_cast< castor3d::FrameCtrl & >( control );
 			doAddControl( parentId, "Content", *frame.getContent(), false, false );
+		}
+	}
+
+	void SceneObjectsList::doAddMaterial( wxTreeItemId id
+		, castor3d::MaterialObs material )
+	{
+		wxTreeItemId materialId = AppendItem( id
+			, material->getName()
+			, int( eBMP_MATERIAL )
+			, int( eBMP_MATERIAL_SEL )
+			, new MaterialTreeItemProperty{ m_propertiesHolder->isEditable(), *material } );
+		uint32_t passIndex = 0;
+		m_materials.emplace( material, materialId );
+
+		for ( auto & pass : *material )
+		{
+			doAddPass( materialId
+				, ++passIndex
+				, *pass );
+		}
+	}
+
+	void SceneObjectsList::doAddPass( wxTreeItemId id
+		, uint32_t index
+		, castor3d::Pass & pass )
+	{
+		wxTreeItemId passId = AppendItem( id
+			, wxString( _( "Pass " ) ) << index
+			, int( eBMP_PASS )
+			, int( eBMP_PASS_SEL )
+			, new PassTreeItemProperty{ m_propertiesHolder->isEditable()
+				, pass
+				, *m_scene
+				, this } );
+		uint32_t unitIndex = 0;
+
+		for ( auto unit : pass )
+		{
+			doAddTexture( passId
+				, ++unitIndex
+				, pass
+				, *unit );
+		}
+	}
+
+	void SceneObjectsList::doAddTexture( wxTreeItemId id
+		, uint32_t index
+		, castor3d::Pass & pass
+		, castor3d::TextureUnit & texture )
+	{
+		wxTreeItemId unitId = AppendItem( id
+			, wxString( _( "Texture Unit " ) ) << index
+			, int( eBMP_TEXTURE )
+			, int( eBMP_TEXTURE_SEL )
+			, new TextureTreeItemProperty{ m_propertiesHolder->isEditable()
+				, pass
+				, texture } );
+
+		if ( texture.isRenderTarget() )
+		{
+			auto target = texture.getRenderTarget();
+			appendRenderTarget( this
+				, m_propertiesHolder->isEditable()
+				, unitId
+				, *target );
 		}
 	}
 
