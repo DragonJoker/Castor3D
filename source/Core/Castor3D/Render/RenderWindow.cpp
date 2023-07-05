@@ -11,8 +11,6 @@
 #include "Castor3D/Event/UserInput/UserInputListener.hpp"
 #include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Controls/CtrlProgress.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
@@ -36,12 +34,11 @@
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
-#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Core/Surface.hpp>
 #include <ashespp/Core/SwapChain.hpp>
 #include <ashespp/Core/SwapChainCreateInfo.hpp>
-#include <ashespp/Image/StagingTexture.hpp>
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPass.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
@@ -1477,15 +1474,12 @@ namespace castor3d
 			, 1u
 			, 1u )
 			, getDevice().renderSystem.getValue( GpuMin::eBufferMapSize ) );
-		m_stagingBuffer = getDevice()->createBuffer( "Snapshot"
+		m_snapshotBuffer = makeBufferBase( m_device
 			, bufferSize
-			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT );
-		auto requirements = m_stagingBuffer->getMemoryRequirements();
-		auto deduced = getDevice()->deduceMemoryType( requirements.memoryTypeBits
-			, VkMemoryPropertyFlagBits::VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT );
-		m_stagingBuffer->bindMemory( getDevice()->allocateMemory( "Snapshot"
-			, makeVkStruct< VkMemoryAllocateInfo >( requirements.size, deduced ) ) );
-		m_stagingData = castor::makeArrayView( m_stagingBuffer->lock( 0u, bufferSize, 0u )
+			, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, "Snapshot" );
+		m_snapshotData = castor::makeArrayView( m_snapshotBuffer->lock( 0u, bufferSize, 0u )
 			, bufferSize );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		m_transferCommands.resize( 1u );
@@ -1498,7 +1492,14 @@ namespace castor3d
 	void RenderWindow::doDestroySaveData()
 	{
 		m_transferCommands.clear();
-		m_stagingBuffer.reset();
+		m_snapshotData = {};
+
+		if ( m_snapshotBuffer )
+		{
+			m_snapshotBuffer->unlock();
+			m_snapshotBuffer.reset();
+		}
+
 		m_saveBuffer.reset();
 	}
 
@@ -1619,7 +1620,7 @@ namespace castor3d
 
 			if ( m_toSave )
 			{
-				std::memcpy( m_saveBuffer->getPtr(), m_stagingData.data(), m_stagingData.size() );
+				std::memcpy( m_saveBuffer->getPtr(), m_snapshotData.data(), m_snapshotData.size() );
 				m_toSave = false;
 			}
 		}
@@ -1686,7 +1687,7 @@ namespace castor3d
 
 		commands.memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_stagingBuffer->makeTransferDestination() );
+			, m_snapshotBuffer->makeTransferDestination() );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		auto srcExtent = getExtent( m_picking->getImageView() );
 #else
@@ -1728,10 +1729,10 @@ namespace castor3d
 				, srcOffset
 				, makeExtent3D( dstExtent ) }
 			, srcImage
-			, *m_stagingBuffer );
+			, *m_snapshotBuffer );
 		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_HOST_BIT
-			, m_stagingBuffer->makeHostRead() );
+			, m_snapshotBuffer->makeHostRead() );
 
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 		commands.memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -1871,7 +1872,7 @@ namespace castor3d
 				dstExtent.height = std::max( 1u, dstExtent.height >> mipLevel );
 				m_saveBuffer = castor::PxBufferBase::create( makeSize( dstExtent )
 					, convert( target->getPixelFormat() )
-					, m_stagingData.data()
+					, m_snapshotData.data()
 					, castor::PixelFormat( m_savedFormat )
 					, 0u );
 				m_savedFormat = {};

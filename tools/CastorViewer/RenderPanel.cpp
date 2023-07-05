@@ -91,12 +91,12 @@ namespace CastorViewer
 		, long style )
 		: wxPanel( parent, id, pos, size, style )
 		, m_timers{ panel::createTimers( this ) }
-		, m_camSpeed( panel::DEF_CAM_SPEED, castor::Range< float >{ panel::MIN_CAM_SPEED, panel::MAX_CAM_SPEED } )
-	{
-		m_renderWindow = std::make_unique< castor3d::RenderWindow >( cuT( "RenderPanel" )
+		, m_renderWindow{ castor::makeUnique< castor3d::RenderWindow >( cuT( "RenderPanel" )
 			, *wxGetApp().getCastor()
 			, GuiCommon::makeSize( GetClientSize() )
-			, GuiCommon::makeWindowHandle( this ) );
+			, GuiCommon::makeWindowHandle( this ) ) }
+		, m_camSpeed( panel::DEF_CAM_SPEED, castor::Range< float >{ panel::MIN_CAM_SPEED, panel::MAX_CAM_SPEED } )
+	{
 		auto listener = wxGetApp().getCastor()->getUserInputListener();
 		listener->registerClipboardTextAction( [this]( bool set
 			, castor::U32String text )

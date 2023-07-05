@@ -545,8 +545,8 @@ namespace castor3d
 		size_t m_resourceIndex{ 0u };
 		crg::ResourcesCache m_resources;
 		ashes::RenderPassPtr m_renderPass;
-		ashes::BufferBasePtr m_stagingBuffer;
-		castor::ByteArrayView m_stagingData;
+		ashes::BufferBasePtr m_snapshotBuffer;
+		castor::ByteArrayView m_snapshotData;
 		std::vector< CommandsSemaphore > m_transferCommands;
 		std::vector< ashes::FrameBufferPtr > m_frameBuffers;
 		std::vector< ashes::CommandBufferPtrArray > m_commandBuffers;

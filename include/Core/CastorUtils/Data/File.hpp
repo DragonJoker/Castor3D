@@ -389,6 +389,13 @@ namespace castor
 			, bool allowReplace = false );
 		/**
 		 *\~english
+		 *\brief		Replaces the characters non valid for file name with '_'
+		 *\~french
+		 *\brief		Remplace les caractères non valides pour un nim de fichier par des '_'
+		 */
+		CU_API static castor::String normaliseFileName( castor::String const & name );
+		/**
+		 *\~english
 		 *\brief		Retrieves the file size
 		 *\return		The value
 		 *\~french
