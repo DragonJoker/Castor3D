@@ -23,6 +23,10 @@ add_target_min(
 	""
 	""
 )
+target_sources( ${PROJECT_NAME} 
+	PRIVATE
+		${CASTOR_EDITORCONFIG_FILE}
+)
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 		${Castor3DIncludeDirs}

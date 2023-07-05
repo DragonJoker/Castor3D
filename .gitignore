@@ -1,4 +1,6 @@
 /.vscode
+/.gitattributes
+/.vs
 /binaries
 /build
 /build*
@@ -14,8 +16,11 @@
 /CMake
 /out
 /vcpkg_installed
-/.gitattributes
+/ci
+/old
+/ref
 /package
+
 *.csproj
 *.user
 *.suo
@@ -25,9 +30,6 @@
 *.dll
 *.cache
 *.AssemblyAttributes.cs
-/.vs
 CMakeSettings.json
 .DS_Store
-/old
-/ref
 *.mk

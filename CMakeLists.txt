@@ -87,6 +87,8 @@ endif ()
 
 set( DEPENDENCIES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/${COMPILER_FOLDER}/${PROJECTS_PLATFORM} )
 
+set( CASTOR_EDITORCONFIG_FILE ${CMAKE_CURRENT_SOURCE_DIR}/.editorconfig )
+
 if ( WIN32 AND NOT VCPKG_TOOLCHAIN )
 	msg_debug( "Fetching system libraries from dependencies submodule." )
 	if ( EXISTS ${DEPENDENCIES_DIR}/glslang/ )
