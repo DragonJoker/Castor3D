@@ -305,6 +305,10 @@ add_target_min(
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/${PROJECT_NAME}Pch.hpp
 	${CASTOR_SOURCE_DIR}/tools/${PROJECT_NAME}/${PROJECT_NAME}Pch.cpp
 )
+target_sources( ${PROJECT_NAME} 
+	PRIVATE
+		${CASTOR_EDITORCONFIG_FILE}
+)
 add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
@@ -365,9 +369,13 @@ if ( TDxWare_SDK_FOUND )
 		PRIVATE
 			GC_HasSpaceMouseSDK
 	)
+	target_include_directories( ${PROJECT_NAME}
+		PRIVATE
+			${TDxWare_INCLUDE_DIRS}
+	)
 	target_link_libraries( ${PROJECT_NAME}
 		PRIVATE
-			3DxWare::Navlib
+			${TDxWare_LIBRARIES}
 	)
 endif ()
 if ( CASTOR_C3D_NEEDS_GLSL )

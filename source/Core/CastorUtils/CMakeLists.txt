@@ -631,6 +631,10 @@ if ( ZLIB_FOUND AND FreeType_FOUND )
 		ALIAS
 		${PROJECT_NAME}
 	)
+	target_sources( ${PROJECT_NAME} 
+		PRIVATE
+			${CASTOR_EDITORCONFIG_FILE}
+	)
 	if ( CASTOR_DISABLE_DELAYED_INITIALISATION )
 		target_compile_definitions( ${PROJECT_NAME}
 			PUBLIC

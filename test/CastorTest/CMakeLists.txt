@@ -33,6 +33,10 @@ add_library( castor::${PROJECT_NAME}
 	ALIAS
 	${PROJECT_NAME}
 )
+target_sources( ${PROJECT_NAME} 
+	PRIVATE
+		${CASTOR_EDITORCONFIG_FILE}
+)
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::CastorUtils

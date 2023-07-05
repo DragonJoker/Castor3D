@@ -85,6 +85,10 @@ add_target_min(
 	${PROJECT_NAME}
 	bin_dos
 )
+target_sources( ${PROJECT_NAME} 
+	PRIVATE
+		${CASTOR_EDITORCONFIG_FILE}
+)
 target_include_directories( ${PROJECT_NAME}
 	PRIVATE
 		${CMAKE_SOURCE_DIR}/include/Core

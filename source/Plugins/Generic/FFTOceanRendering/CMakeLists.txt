@@ -62,6 +62,10 @@ if ( CASTOR_USE_GLSLANG AND VKFFT_INCLUDE_DIRS )
 		""
 		""
 	)
+	target_sources( ${PROJECT_NAME} 
+		PRIVATE
+			${CASTOR_EDITORCONFIG_FILE}
+	)
 	if ( CMAKE_CXX_COMPILER_ID MATCHES "MSVC" )
 		target_compile_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/Zi>" )
 		target_link_options( ${PROJECT_NAME} PRIVATE "$<$<CONFIG:Release>:/DEBUG>" )
