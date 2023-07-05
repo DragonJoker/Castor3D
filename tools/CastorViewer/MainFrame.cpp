@@ -31,6 +31,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
+#include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -226,9 +227,10 @@ namespace CastorViewer
 
 	void MainFrame::select( castor3d::GeometryRPtr geometry, castor3d::Submesh const * submesh )
 	{
-		if ( m_sceneObjects && m_sceneObjects->getList() )
+		if (m_objectsTree && m_objectsTree->getList() )
 		{
-			m_sceneObjects->getList()->select( geometry, submesh );
+			m_objectsTree->getList()->select( geometry, submesh );
+			m_materialsTree->getList()->select( geometry->getMaterial( *submesh ) );
 		}
 	}
 
@@ -279,7 +281,7 @@ namespace CastorViewer
 		m_renderPanel = new RenderPanel( this, main::eID_PANE_RENDER, wxDefaultPosition, wxSize( size.x - m_propertiesWidth, size.y - m_logsHeight ) );
 		m_logTabsContainer = new wxAuiNotebook( this, main::eID_PANE_LOGS, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
 		m_logTabsContainer->SetArtProvider( new GuiCommon::AuiTabArt );
-		m_sceneTabsContainer = new wxAuiNotebook( this, main::eID_PANE_LISTS, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE | wxAUI_NB_TAB_FIXED_WIDTH );
+		m_sceneTabsContainer = new wxAuiNotebook( this, main::eID_PANE_LISTS, wxDefaultPosition, wxDefaultSize, wxAUI_NB_TOP | wxAUI_NB_TAB_MOVE );
 		m_sceneTabsContainer->SetBackgroundColour( GuiCommon::PANEL_BACKGROUND_COLOUR );
 		m_sceneTabsContainer->SetForegroundColour( GuiCommon::PANEL_FOREGROUND_COLOUR );
 		m_sceneTabsContainer->SetArtProvider( new GuiCommon::AuiTabArt );
@@ -352,8 +354,20 @@ namespace CastorViewer
 #endif
 		m_logTabsContainer->ChangeSelection( 0u );
 
-		m_sceneObjects = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		m_sceneTabsContainer->AddPage( m_sceneObjects, _( "Scene" ), true );
+		m_sceneTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_objectsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_nodesTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_lightsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_materialsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_overlaysTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_guiTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_sceneTabsContainer->AddPage( m_sceneTree, _( "Scene" ), true );
+		m_sceneTabsContainer->AddPage( m_objectsTree, _( "Objects" ), false );
+		m_sceneTabsContainer->AddPage( m_nodesTree, _( "Nodes" ), false );
+		m_sceneTabsContainer->AddPage( m_lightsTree, _( "Lights" ), false );
+		m_sceneTabsContainer->AddPage( m_materialsTree, _( "Materials" ), false );
+		m_sceneTabsContainer->AddPage( m_overlaysTree, _( "Overlays" ), false );
+		m_sceneTabsContainer->AddPage( m_guiTree, _( "GUI" ), false );
 
 		m_auiManager.Update();
 	}
@@ -511,7 +525,13 @@ namespace CastorViewer
 		{
 			auto engine = wxGetApp().getCastor();
 
-			m_sceneObjects->getList()->unloadScene();
+			m_sceneTree->getList()->unloadScene();
+			m_objectsTree->getList()->unloadScene();
+			m_nodesTree->getList()->unloadScene();
+			m_lightsTree->getList()->unloadScene();
+			m_materialsTree->getList()->unloadScene();
+			m_overlaysTree->getList()->unloadScene();
+			m_guiTree->getList()->unloadScene();
 			m_mainCamera = {};
 			m_sceneNode = {};
 
@@ -717,7 +737,13 @@ namespace CastorViewer
 
 		if ( m_mainScene )
 		{
-			m_sceneObjects->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			m_sceneTree->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			m_objectsTree->getList()->loadSceneObjects(engine, m_renderPanel->getRenderWindow(), m_mainScene);
+			m_nodesTree->getList()->loadSceneNodes(engine, m_renderPanel->getRenderWindow(), m_mainScene);
+			m_lightsTree->getList()->loadSceneLights( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			m_materialsTree->getList()->loadSceneMaterials( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			m_overlaysTree->getList()->loadSceneOverlays( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			m_guiTree->getList()->loadSceneGui( engine, m_renderPanel->getRenderWindow(), m_mainScene );
 		}
 
 #if CV_MainFrameToolbar

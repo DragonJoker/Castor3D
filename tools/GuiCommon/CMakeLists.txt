@@ -248,7 +248,6 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	System/CubeBoxManager.cpp
 	System/GradientButton.cpp
 	System/ImagesLoader.cpp
-	System/MaterialsList.cpp
 	System/NodeState.cpp
 	System/Recorder.cpp
 	System/RendererSelector.cpp
@@ -261,7 +260,6 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	System/CubeBoxManager.hpp
 	System/GradientButton.hpp
 	System/ImagesLoader.hpp
-	System/MaterialsList.hpp
 	System/NodeState.hpp
 	System/Recorder.hpp
 	System/RendererSelector.hpp
