@@ -34,7 +34,7 @@ namespace castor3d
 		void clear();
 		void updateCamera( Camera const & camera );
 		void addLight( Light const & light
-			, ShadowBuffer const & shadowBuffer );
+			, ShadowBuffer const * shadowBuffer );
 		void recordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer
 			, uint32_t passIndex
@@ -48,7 +48,7 @@ namespace castor3d
 	private:
 		ashes::DescriptorSetLayoutPtr doCreateDescriptorLayout();
 		LightDescriptors & doCreateLightEntry( Light const & light
-			, ShadowBuffer const & shadowBuffer );
+			, ShadowBuffer const * shadowBuffer );
 		castor::Matrix4x4f doComputeModelMatrix( castor3d::Light const & light
 			, Camera const & camera )const;
 		GpuBufferOffsetT< float > doCreateVertexBuffer( Light const * light );

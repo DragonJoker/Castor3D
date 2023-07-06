@@ -24,6 +24,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRootMaxImageSize )
 	CU_DeclareAttributeParser( parserRootLpvGridSize )
 	CU_DeclareAttributeParser( parserRootDefaultUnit )
+	CU_DeclareAttributeParser( parserRootFullLoading )
 
 	//Window parsers
 	CU_DeclareAttributeParser( parserWindowRenderTarget )
@@ -41,6 +42,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRenderTargetPostEffect )
 	CU_DeclareAttributeParser( parserRenderTargetToneMapping )
 	CU_DeclareAttributeParser( parserRenderTargetSsao )
+	CU_DeclareAttributeParser( parserRenderTargetFullLoading )
 	CU_DeclareAttributeParser( parserRenderTargetEnd )
 
 	// Sampler parsers

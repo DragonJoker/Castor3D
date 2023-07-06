@@ -36,6 +36,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "max_image_size" ), parserRootMaxImageSize, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "lpv_grid_size" ), parserRootLpvGridSize, { makeParameter< ParameterType::eUInt32 >() } );
 			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "default_unit" ), parserRootDefaultUnit, { makeParameter< ParameterType::eCheckedText, castor::LengthUnit >() } );
+			addParser( result, uint32_t( CSCNSection::eRoot ), cuT( "enable_full_loading" ), parserRootFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		}
 
 		static void addWindowParsers( castor::AttributeParsers & result )
@@ -58,6 +59,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), parserRenderTargetPostEffect, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), parserRenderTargetToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "ssao" ), parserRenderTargetSsao );
+			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "enable_full_loading" ), parserRenderTargetFullLoading, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "}" ), parserRenderTargetEnd );
 		}
 

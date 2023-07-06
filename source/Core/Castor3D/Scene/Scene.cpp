@@ -1176,6 +1176,11 @@ namespace castor3d
 			++i;
 		}
 
+		if ( !needsGI )
+		{
+			needsGI = getVoxelConeTracingConfig().enabled;
+		}
+
 		changed = m_hasAnyShadows.exchange( hasAnyShadows ) != hasAnyShadows
 			|| changed;
 		changed = m_needsGlobalIllumination.exchange( needsGI ) != needsGI

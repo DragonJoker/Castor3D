@@ -41,20 +41,26 @@ namespace GuiCommon
 
 		for ( auto & postEffect : target.getHDRPostEffects() )
 		{
-			list->AppendItem( targetId
-				, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
-				, eBMP_POST_EFFECT
-				, eBMP_POST_EFFECT_SEL
-				, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
+			if ( target.isFullLoadingEnabled() || postEffect->isEnabled() )
+			{
+				list->AppendItem( targetId
+					, _( "HDR - " ) + make_wxString( postEffect->getFullName() )
+					, eBMP_POST_EFFECT
+					, eBMP_POST_EFFECT_SEL
+					, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
+			}
 		}
 
 		for ( auto & postEffect : target.getSRGBPostEffects() )
 		{
-			list->AppendItem( targetId
-				, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
-				, eBMP_POST_EFFECT
-				, eBMP_POST_EFFECT_SEL
-				, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
+			if ( target.isFullLoadingEnabled() || postEffect->isEnabled() )
+			{
+				list->AppendItem( targetId
+					, _( "SRGB - " ) + make_wxString( postEffect->getFullName() )
+					, eBMP_POST_EFFECT
+					, eBMP_POST_EFFECT_SEL
+					, new PostEffectTreeItemProperty( editable, *postEffect, list ) );
+			}
 		}
 
 		list->AppendItem( targetId
@@ -98,6 +104,12 @@ namespace GuiCommon
 		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE, make_wxArrayString( debugConfig.getIntermediateValues() ), &debugConfig.intermediateShaderValueIndex );
 #endif
 
+		if ( target.isFullLoadingEnabled()
+			|| target.getScene()->getVoxelConeTracingConfig().enabled )
+		{
+			doCreateVctProperties( editor, grid );
+		}
+
 		for ( auto & renderPass : target.getCustomRenderPasses() )
 		{
 			if ( renderPass->isPassEnabled() )
@@ -109,5 +121,32 @@ namespace GuiCommon
 		}
 
 		setPrefix( {} );
+	}
+
+	void RenderTargetTreeItemProperty::doCreateVctProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
+	{
+		static wxString PROPERTY_VCT = _( "Voxel Cone Tracing" );
+		static wxString PROPERTY_VCT_ENABLED = _( "Enable VCT" );
+		static wxString PROPERTY_VCT_CONSERVATIVE_RASTERIZATION = _( "Conservative Rasterization" );
+		static wxString PROPERTY_VCT_OCCLUSION = _( "Occlusion" );
+		static wxString PROPERTY_VCT_TEMPORAL_SMOOTHING = _( "Temporal Smoothing" );
+		static wxString PROPERTY_VCT_SECONDARY_BOUNCE = _( "Secondary Bounce" );
+		static wxString PROPERTY_VCT_NUM_CONES = _( "Num. Cones" );
+		static wxString PROPERTY_VCT_MAX_DISTANCE = _( "Max. Distance" );
+		static wxString PROPERTY_VCT_RAY_STEP_SIZE = _( "Ray Step Size" );
+		static wxString PROPERTY_VCT_VOXEL_SIZE = _( "Voxel Size" );
+
+		auto & vctConfig = getRenderTarget().getScene()->getVoxelConeTracingConfig();
+		addProperty( grid, PROPERTY_VCT );
+		addPropertyT( grid, PROPERTY_VCT_ENABLED, &vctConfig.enabled );
+		addPropertyT( grid, PROPERTY_VCT_CONSERVATIVE_RASTERIZATION, &vctConfig.enableConservativeRasterization );
+		addPropertyT( grid, PROPERTY_VCT_OCCLUSION, &vctConfig.enableOcclusion );
+		addPropertyT( grid, PROPERTY_VCT_SECONDARY_BOUNCE, &vctConfig.enableSecondaryBounce );
+		addPropertyT( grid, PROPERTY_VCT_TEMPORAL_SMOOTHING, &vctConfig.enableTemporalSmoothing );
+		addPropertyT( grid, PROPERTY_VCT_NUM_CONES, &vctConfig.numCones );
+		addPropertyT( grid, PROPERTY_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
+		addPropertyT( grid, PROPERTY_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
+		addPropertyT( grid, PROPERTY_VCT_VOXEL_SIZE, &vctConfig.voxelSizeFactor );
 	}
 }

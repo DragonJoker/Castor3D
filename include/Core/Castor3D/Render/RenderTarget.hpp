@@ -241,6 +241,8 @@ namespace castor3d
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
 		C3D_API CameraUbo const & getCameraUbo()const;
 		C3D_API SceneUbo const & getSceneUbo()const;
+		C3D_API bool hasIndirect()const noexcept;
+		C3D_API bool hasSss()const noexcept;
 
 		SsaoConfig const & getSsaoConfig()const noexcept
 		{
@@ -386,6 +388,11 @@ namespace castor3d
 		{
 			return m_intermediates;
 		}
+
+		bool isFullLoadingEnabled()const noexcept
+		{
+			return m_enableFullLoading;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -428,6 +435,11 @@ namespace castor3d
 		{
 			CU_Require( m_frustumClusters );
 			return *m_frustumClusters;
+		}
+
+		void enableFullLoading( bool value )noexcept
+		{
+			m_enableFullLoading = value;
 		}
 		/**@}*/
 
@@ -515,6 +527,7 @@ namespace castor3d
 		IntermediateViewArray m_intermediates;
 		TargetDebugConfig m_debugConfig;
 		FrustumClustersUPtr m_frustumClusters;
+		bool m_enableFullLoading{ false };
 
 		struct StereoConfig
 		{

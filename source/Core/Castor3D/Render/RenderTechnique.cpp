@@ -349,44 +349,58 @@ namespace castor3d
 		, m_vctConfigUbo{ m_device }
 		, m_graph{ m_renderTarget.getGraph().createPassGroup( "Technique" ) }
 #if !C3D_DebugDisableShadowMaps
-		, m_shadowBuffer{ castor::makeUnique< ShadowBuffer >( *getOwner()
-			, device
-			, 1u ) }
-		, m_directionalShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getResources()
-			, m_device
-			, *m_renderTarget.getScene()
-			, progress ) }
-		, m_pointShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getResources()
-			, m_device
-			, *m_renderTarget.getScene()
-			, progress ) }
-		, m_spotShadowMap{ castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getResources()
-			, m_device
-			, *m_renderTarget.getScene()
-			, progress ) }
+		, m_shadowBuffer{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
+			? castor::makeUnique< ShadowBuffer >( *getOwner()
+				, device
+				, 1u )
+			: nullptr ) }
+		, m_directionalShadowMap{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
+			? castor::makeUniqueDerived< ShadowMap, ShadowMapDirectional >( m_renderTarget.getResources()
+				, m_device
+				, *m_renderTarget.getScene()
+				, progress )
+			: nullptr ) }
+		, m_pointShadowMap{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
+			? castor::makeUniqueDerived< ShadowMap, ShadowMapPoint >( m_renderTarget.getResources()
+				, m_device
+				, *m_renderTarget.getScene()
+				, progress )
+			: nullptr ) }
+		, m_spotShadowMap{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->hasShadows() )
+			? castor::makeUniqueDerived< ShadowMap, ShadowMapSpot >( m_renderTarget.getResources()
+				, m_device
+				, *m_renderTarget.getScene()
+				, progress )
+			: nullptr ) }
 #endif
-		, m_voxelizer{ castor::makeUnique< Voxelizer >( m_renderTarget.getResources()
-			, m_device
-			, progress
-			, getName()
-			, *m_renderTarget.getScene()
-			, *m_renderTarget.getCamera()
-			, m_vctConfigUbo
-			, m_renderTarget.getScene()->getVoxelConeTracingConfig() ) }
-		, m_lpvResult{ castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
-			, m_device
-			, getName()
-			, getEngine()->getLpvGridSize() ) }
-		, m_llpvResult{ rendtech::doCreateLLPVResult( m_renderTarget.getResources()
-			, m_device
-			, getName() ) }
-		, m_indirectLighting{ &m_lpvConfigUbo
-			, &m_llpvConfigUbo
-			, &m_vctConfigUbo
-			, m_lpvResult.get()
-			, &m_llpvResult
-			, &m_voxelizer->getFirstBounce()
-			, &m_voxelizer->getSecondaryBounce() }
+		, m_voxelizer{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->getVoxelConeTracingConfig().enabled )
+			? castor::makeUnique< Voxelizer >( m_renderTarget.getResources()
+				, m_device
+				, progress
+				, getName()
+				, *m_renderTarget.getScene()
+				, *m_renderTarget.getCamera()
+				, m_vctConfigUbo
+				, m_renderTarget.getScene()->getVoxelConeTracingConfig() )
+			: nullptr ) }
+		, m_lpvResult{ ( m_shadowBuffer
+			? castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
+				, m_device
+				, getName()
+				, getEngine()->getLpvGridSize() )
+			: nullptr ) }
+		, m_llpvResult{ ( m_shadowBuffer
+			? rendtech::doCreateLLPVResult( m_renderTarget.getResources()
+				, m_device
+				, getName() )
+			: LightVolumePassResultArray{} ) }
+		, m_indirectLighting{ ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? &m_lpvConfigUbo : nullptr )
+			, ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? &m_llpvConfigUbo : nullptr )
+			, ( m_voxelizer ? &m_vctConfigUbo : nullptr )
+			, ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? m_lpvResult.get() : nullptr )
+			, ( ( m_renderTarget.isFullLoadingEnabled() || m_renderTarget.getScene()->needsGlobalIllumination() ) ? &m_llpvResult : nullptr )
+			, ( m_voxelizer ? &m_voxelizer->getFirstBounce() : nullptr )
+			, ( m_voxelizer ? &m_voxelizer->getSecondaryBounce() : nullptr ) }
 		, m_prepass{ *this
 			, m_device
 			, queueData
@@ -423,28 +437,50 @@ namespace castor3d
 			, progress
 			, weightedBlended }
 		, m_lastTransparentPass{ &m_transparent.getLastPass() }
-		, m_clearLpvGraph{ rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), device, progress, getName(), *m_lpvResult, m_llpvResult ) }
-		, m_clearLpvRunnable{ m_clearLpvGraph.compile( m_device.makeContext() ) }
+		, m_clearLpvGraph{ ( m_shadowBuffer
+			? rendtech::doCreateClearLpvCommands( m_renderTarget.getResources(), device, progress, getName(), *m_lpvResult, m_llpvResult )
+			: crg::FrameGraph{ m_renderTarget.getResources().getHandler(), getName() + "/ClearLpv" } ) }
+		, m_clearLpvRunnable{ ( m_shadowBuffer
+			? m_clearLpvGraph.compile( m_device.makeContext() )
+			: nullptr ) }
 	{
-		m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
+		if ( m_voxelizer )
+		{
+			m_renderTarget.getGraph().addDependency( m_voxelizer->getGraph() );
+		}
+
 		doCreateRenderPasses( progress
 			, TechniquePassEvent::eBeforePostEffects
 			, &m_transparent.getLastPass() );
 
 		m_depth->create();
 		m_normal->create();
-		auto runnable = m_clearLpvRunnable.get();
-		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [runnable]( RenderDevice const &
-				, QueueData const & )
-			{
-				runnable->record();
-			} ) );
+		if ( auto runnable = m_clearLpvRunnable.get() )
+		{
+			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				, [runnable]( RenderDevice const &
+					, QueueData const & )
+				{
+					runnable->record();
+				} ) );
+		}
 
 #if !C3D_DebugDisableShadowMaps
-		m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
-		m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
-		m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+		if ( m_directionalShadowMap )
+		{
+			m_allShadowMaps[size_t( LightType::eDirectional )].emplace_back( std::ref( *m_directionalShadowMap ), UInt32Array{} );
+		}
+
+		if ( m_spotShadowMap )
+		{
+			m_allShadowMaps[size_t( LightType::eSpot )].emplace_back( std::ref( *m_spotShadowMap ), UInt32Array{} );
+		}
+
+		if ( m_pointShadowMap )
+		{
+			m_allShadowMaps[size_t( LightType::ePoint )].emplace_back( std::ref( *m_pointShadowMap ), UInt32Array{} );
+		}
+
 		doInitialiseLpv();
 #endif
 	}
@@ -521,7 +557,7 @@ namespace castor3d
 			} );
 		m_background->update( updater );
 
-		if ( updater.voxelConeTracing )
+		if ( updater.voxelConeTracing && m_voxelizer )
 		{
 			m_voxelizer->update( updater );
 		}
@@ -616,7 +652,11 @@ namespace castor3d
 				renderPass.accept( visitor );
 			} );
 		m_prepass.accept( visitor );
-		m_voxelizer->accept( visitor );
+
+		if ( m_voxelizer )
+		{
+			m_voxelizer->accept( visitor );
+		}
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeBackground )]
 			, [&visitor]( RenderTechniquePass & renderPass )
@@ -644,9 +684,20 @@ namespace castor3d
 			} );
 
 #if !C3D_DebugDisableShadowMaps
-		m_directionalShadowMap->accept( visitor );
-		m_spotShadowMap->accept( visitor );
-		m_pointShadowMap->accept( visitor );
+		if ( m_directionalShadowMap )
+		{
+			m_directionalShadowMap->accept( visitor );
+		}
+
+		if ( m_spotShadowMap )
+		{
+			m_spotShadowMap->accept( visitor );
+		}
+
+		if ( m_pointShadowMap )
+		{
+			m_pointShadowMap->accept( visitor );
+		}
 #endif
 
 		for ( auto & lpv : m_lightPropagationVolumes )
@@ -819,6 +870,11 @@ namespace castor3d
 
 		for ( auto i = uint32_t( LightType::eMin ); i < uint32_t( LightType::eCount ); ++i )
 		{
+			if ( m_allShadowMaps[i].empty() )
+			{
+				continue;
+			}
+
 			auto needLpv = scene.needsGlobalIllumination( LightType( i )
 				, GlobalIlluminationType::eLpv );
 			auto needLpvG = scene.needsGlobalIllumination( LightType( i )
@@ -904,36 +960,48 @@ namespace castor3d
 			}
 
 			auto & cache = scene.getLightCache();
-			rendtech::doPrepareShadowMap( cache
-				, LightType::eDirectional
-				, *m_shadowBuffer
-				, *m_directionalShadowMap
-				, m_activeShadowMaps
-				, m_lightPropagationVolumes
-				, m_lightPropagationVolumesG
-				, m_layeredLightPropagationVolumes
-				, m_layeredLightPropagationVolumesG
-				, updater );
-			rendtech::doPrepareShadowMap( cache
-				, LightType::ePoint
-				, *m_shadowBuffer
-				, *m_pointShadowMap
-				, m_activeShadowMaps
-				, m_lightPropagationVolumes
-				, m_lightPropagationVolumesG
-				, m_layeredLightPropagationVolumes
-				, m_layeredLightPropagationVolumesG
-				, updater );
-			rendtech::doPrepareShadowMap( cache
-				, LightType::eSpot
-				, *m_shadowBuffer
-				, *m_spotShadowMap
-				, m_activeShadowMaps
-				, m_lightPropagationVolumes
-				, m_lightPropagationVolumesG
-				, m_layeredLightPropagationVolumes
-				, m_layeredLightPropagationVolumesG
-				, updater );
+
+			if ( m_directionalShadowMap )
+			{
+				rendtech::doPrepareShadowMap( cache
+					, LightType::eDirectional
+					, *m_shadowBuffer
+					, *m_directionalShadowMap
+					, m_activeShadowMaps
+					, m_lightPropagationVolumes
+					, m_lightPropagationVolumesG
+					, m_layeredLightPropagationVolumes
+					, m_layeredLightPropagationVolumesG
+					, updater );
+			}
+
+			if ( m_pointShadowMap )
+			{
+				rendtech::doPrepareShadowMap( cache
+					, LightType::ePoint
+					, *m_shadowBuffer
+					, *m_pointShadowMap
+					, m_activeShadowMaps
+					, m_lightPropagationVolumes
+					, m_lightPropagationVolumesG
+					, m_layeredLightPropagationVolumes
+					, m_layeredLightPropagationVolumesG
+					, updater );
+			}
+
+			if ( m_spotShadowMap )
+			{
+				rendtech::doPrepareShadowMap( cache
+					, LightType::eSpot
+					, *m_shadowBuffer
+					, *m_spotShadowMap
+					, m_activeShadowMaps
+					, m_lightPropagationVolumes
+					, m_lightPropagationVolumesG
+					, m_layeredLightPropagationVolumes
+					, m_layeredLightPropagationVolumesG
+					, updater );
+			}
 		}
 #endif
 	}
@@ -989,7 +1057,8 @@ namespace castor3d
 	{
 		crg::SemaphoreWaitArray result = semaphore;
 
-		if ( m_renderTarget.getScene()->needsGlobalIllumination() )
+		if ( m_renderTarget.getScene()->needsGlobalIllumination()
+			&& m_clearLpvRunnable )
 		{
 			result = m_clearLpvRunnable->run( result, queue );
 
@@ -1068,7 +1137,8 @@ namespace castor3d
 		auto scene = m_renderTarget.getScene();
 
 		if ( scene
-			&& scene->getVoxelConeTracingConfig().enabled )
+			&& scene->getVoxelConeTracingConfig().enabled
+			&& m_voxelizer )
 		{
 			result = m_voxelizer->render( result, queue );
 		}

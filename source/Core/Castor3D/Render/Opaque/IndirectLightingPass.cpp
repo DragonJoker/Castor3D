@@ -313,26 +313,37 @@ namespace castor3d
 		m_group.addGroupOutput( m_lpResult[LpTexture::eIndirectDiffuse].wholeViewId );
 		m_group.addGroupOutput( m_lpResult[LpTexture::eIndirectSpecular].wholeViewId );
 
-		m_group.addInput( m_vctFirstBounce.targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		m_group.addInput( m_vctSecondaryBounce.targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		m_group.addInput( m_lpvResult[LpvTexture::eR].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		m_group.addInput( m_lpvResult[LpvTexture::eG].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		m_group.addInput( m_lpvResult[LpvTexture::eB].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-
-		for ( auto & plpvResult : m_llpvResult )
+		if ( m_indirect.vctFirstBounce )
 		{
-			auto & lpvRes = *plpvResult;
-			m_group.addInput( lpvRes[LpvTexture::eR].targetViewId
+			m_group.addInput( m_indirect.vctFirstBounce->targetViewId
 				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			m_group.addInput( lpvRes[LpvTexture::eG].targetViewId
+			m_group.addInput( m_indirect.vctSecondaryBounce->targetViewId
 				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-			m_group.addInput( lpvRes[LpvTexture::eB].targetViewId
+		}
+
+		if ( indirect.lpvResult )
+		{
+			auto & lpvResult = *indirect.lpvResult;
+			m_group.addInput( lpvResult[LpvTexture::eR].targetViewId
 				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			m_group.addInput( lpvResult[LpvTexture::eG].targetViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			m_group.addInput( lpvResult[LpvTexture::eB].targetViewId
+				, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		}
+
+		if ( indirect.llpvResult )
+		{
+			for ( auto & plpvResult : *indirect.llpvResult )
+			{
+				auto & lpvRes = *plpvResult;
+				m_group.addInput( lpvRes[LpvTexture::eR].targetViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				m_group.addInput( lpvRes[LpvTexture::eG].targetViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+				m_group.addInput( lpvRes[LpvTexture::eB].targetViewId
+					, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+			}
 		}
 	}
 
@@ -399,17 +410,30 @@ namespace castor3d
 			, uint32_t( IndirectLightingPass::eCamera ) );
 		engine.getMaterialCache().getPassBuffer().createPassBinding( pass
 			, uint32_t( IndirectLightingPass::eMaterials ) );
-		m_lpvConfigUbo.createPassBinding( pass
-			, uint32_t( IndirectLightingPass::eLpvGridConfig ) );
 
-		if ( m_device.renderSystem.hasLLPV() )
+		if ( m_indirect.lpvConfigUbo
+			&& m_indirect.lpvResult )
 		{
-			m_llpvConfigUbo.createPassBinding( pass
+			m_indirect.lpvConfigUbo->createPassBinding( pass
+				, uint32_t( IndirectLightingPass::eLpvGridConfig ) );
+		}
+
+		if ( m_indirect.llpvConfigUbo
+			&& m_device.renderSystem.hasLLPV()
+			&& m_indirect.llpvResult
+			&& !m_indirect.llpvResult->empty() )
+		{
+			m_indirect.llpvConfigUbo->createPassBinding( pass
 				, uint32_t( IndirectLightingPass::eLayeredLpvGridConfig ) );
 		}
 
-		m_vctConfigUbo.createPassBinding( pass
-			, uint32_t( IndirectLightingPass::eVoxelData ) );
+		if ( m_indirect.vctConfigUbo
+			&& m_indirect.vctFirstBounce )
+		{
+			m_indirect.vctConfigUbo->createPassBinding( pass
+				, uint32_t( IndirectLightingPass::eVoxelData ) );
+		}
+
 		pass.addSampledView( m_depthObj.sampledViewId
 			, uint32_t( IndirectLightingPass::eDepthObj ) );
 		pass.addSampledView( m_gpResult[DsTexture::eNmlOcc].sampledViewId
@@ -423,25 +447,36 @@ namespace castor3d
 		crg::SamplerDesc linearSampler{ VK_FILTER_LINEAR
 			, VK_FILTER_LINEAR
 			, VK_SAMPLER_MIPMAP_MODE_LINEAR };
-		pass.addSampledView( m_vctFirstBounce.sampledViewId
-			, uint32_t( IndirectLightingPass::eVctFirstBounce )
-			, linearSampler );
-		pass.addSampledView( m_vctSecondaryBounce.sampledViewId
-			, uint32_t( IndirectLightingPass::eVctSecondBounce )
-			, linearSampler );
-		pass.addSampledView( m_lpvResult[LpvTexture::eR].sampledViewId
-			, uint32_t( IndirectLightingPass::eLpvR )
-			, linearSampler );
-		pass.addSampledView( m_lpvResult[LpvTexture::eG].sampledViewId
-			, uint32_t( IndirectLightingPass::eLpvG )
-			, linearSampler );
-		pass.addSampledView( m_lpvResult[LpvTexture::eB].sampledViewId
-			, uint32_t( IndirectLightingPass::eLpvB )
-			, linearSampler );
-
-		if ( m_device.renderSystem.hasLLPV() )
+		
+		if ( m_indirect.vctFirstBounce )
 		{
-			auto & lpvResult0 = *m_llpvResult[0];
+			pass.addSampledView( m_indirect.vctFirstBounce->sampledViewId
+				, uint32_t( IndirectLightingPass::eVctFirstBounce )
+				, linearSampler );
+			pass.addSampledView( m_indirect.vctSecondaryBounce->sampledViewId
+				, uint32_t( IndirectLightingPass::eVctSecondBounce )
+				, linearSampler );
+		}
+
+		if ( m_indirect.lpvResult )
+		{
+			auto & lpvResult = *m_indirect.lpvResult;
+			pass.addSampledView( lpvResult[LpvTexture::eR].sampledViewId
+				, uint32_t( IndirectLightingPass::eLpvR )
+				, linearSampler );
+			pass.addSampledView( lpvResult[LpvTexture::eG].sampledViewId
+				, uint32_t( IndirectLightingPass::eLpvG )
+				, linearSampler );
+			pass.addSampledView( lpvResult[LpvTexture::eB].sampledViewId
+				, uint32_t( IndirectLightingPass::eLpvB )
+				, linearSampler );
+		}
+
+		if ( m_device.renderSystem.hasLLPV()
+			&& m_indirect.llpvResult
+			&& !m_indirect.llpvResult->empty() )
+		{
+			auto & lpvResult0 = *( *m_indirect.llpvResult )[0];
 			pass.addSampledView( lpvResult0[LpvTexture::eR].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv1R )
 				, linearSampler );
@@ -451,7 +486,7 @@ namespace castor3d
 			pass.addSampledView( lpvResult0[LpvTexture::eB].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv1B )
 				, linearSampler );
-			auto & lpvResult1 = *m_llpvResult[1];
+			auto & lpvResult1 = *( *m_indirect.llpvResult )[1];
 			pass.addSampledView( lpvResult1[LpvTexture::eR].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv2R )
 				, linearSampler );
@@ -461,7 +496,7 @@ namespace castor3d
 			pass.addSampledView( lpvResult1[LpvTexture::eB].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv2B )
 				, linearSampler );
-			auto & lpvResult2 = *m_llpvResult[2];
+			auto & lpvResult2 = *( *m_indirect.llpvResult )[2];
 			pass.addSampledView( lpvResult2[LpvTexture::eR].sampledViewId
 				, uint32_t( IndirectLightingPass::eLayeredLpv3R )
 				, linearSampler );

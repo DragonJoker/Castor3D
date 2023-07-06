@@ -31,7 +31,6 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_SHADOW_LPV_INDIRECT_ATT, m_scene.getLpvIndirectAttenuation(), &m_scene, &castor3d::Scene::setLpvIndirectAttenuation );
 
 		doCreateFogProperties( editor, grid );
-		doCreateVctProperties( editor, grid );
 	}
 
 	void SceneTreeItemProperty::doCreateFogProperties( wxPGEditor * editor
@@ -56,33 +55,6 @@ namespace GuiCommon
 		addPropertyE( grid, PROPERTY_FOG_TYPE, choices, fogConfig.getType()
 			, [&fogConfig]( castor3d::FogType value ){ fogConfig.setType( value ); } );
 		addPropertyT( grid, PROPERTY_FOG_DENSITY, fogConfig.getDensity(), &fogConfig, &castor3d::Fog::setDensity );
-	}
-
-	void SceneTreeItemProperty::doCreateVctProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
-	{
-		static wxString PROPERTY_VCT = _( "Voxel Cone Tracing" );
-		static wxString PROPERTY_VCT_ENABLED = _( "Enable VCT" );
-		static wxString PROPERTY_VCT_CONSERVATIVE_RASTERIZATION = _( "Conservative Rasterization" );
-		static wxString PROPERTY_VCT_OCCLUSION = _( "Occlusion" );
-		static wxString PROPERTY_VCT_TEMPORAL_SMOOTHING = _( "Temporal Smoothing" );
-		static wxString PROPERTY_VCT_SECONDARY_BOUNCE = _( "Secondary Bounce" );
-		static wxString PROPERTY_VCT_NUM_CONES = _( "Num. Cones" );
-		static wxString PROPERTY_VCT_MAX_DISTANCE = _( "Max. Distance" );
-		static wxString PROPERTY_VCT_RAY_STEP_SIZE = _( "Ray Step Size" );
-		static wxString PROPERTY_VCT_VOXEL_SIZE = _( "Voxel Size" );
-
-		auto & vctConfig = m_scene.getVoxelConeTracingConfig();
-		addProperty( grid, PROPERTY_VCT );
-		addPropertyT( grid, PROPERTY_VCT_ENABLED, &vctConfig.enabled );
-		addPropertyT( grid, PROPERTY_VCT_CONSERVATIVE_RASTERIZATION, &vctConfig.enableConservativeRasterization );
-		addPropertyT( grid, PROPERTY_VCT_OCCLUSION, &vctConfig.enableOcclusion );
-		addPropertyT( grid, PROPERTY_VCT_SECONDARY_BOUNCE, &vctConfig.enableSecondaryBounce );
-		addPropertyT( grid, PROPERTY_VCT_TEMPORAL_SMOOTHING, &vctConfig.enableTemporalSmoothing );
-		addPropertyT( grid, PROPERTY_VCT_NUM_CONES, &vctConfig.numCones );
-		addPropertyT( grid, PROPERTY_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
-		addPropertyT( grid, PROPERTY_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
-		addPropertyT( grid, PROPERTY_VCT_VOXEL_SIZE, &vctConfig.voxelSizeFactor );
 	}
 
 	void SceneTreeItemProperty::onDebugOverlaysChange( wxVariant const & var )
