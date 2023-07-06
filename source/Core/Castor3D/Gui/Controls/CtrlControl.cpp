@@ -221,6 +221,7 @@ namespace castor3d
 
 	ControlRPtr Control::getChildControl( ControlID id )const
 	{
+		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
 		auto it = std::find_if( std::begin( m_children )
 			, std::end( m_children )
 			, [&id]( ControlRPtr lookup )
@@ -331,12 +332,14 @@ namespace castor3d
 
 	void Control::addChild( ControlRPtr control )
 	{
+		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
 		m_children.push_back( control );
 		doAddChild( control );
 	}
 
 	void Control::removeChild( ControlRPtr control )
 	{
+		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
 		auto it = std::find( m_children.begin(), m_children.end(), control );
 
 		if ( it != m_children.end() )
@@ -351,12 +354,15 @@ namespace castor3d
 		auto level = doGetBackground().getLevel();
 		doGetBackground().setOrder( level + offset, 0u );
 		doAdjustZIndex( offset );
-
-		for ( auto control : m_children )
 		{
-			if ( control )
+			auto lock( castor::makeUniqueLock( m_mutexChildren ) );
+
+			for ( auto control : m_children )
 			{
-				control->adjustZIndex( offset );
+				if ( control )
+				{
+					control->adjustZIndex( offset );
+				}
 			}
 		}
 	}
@@ -365,6 +371,7 @@ namespace castor3d
 		, std::vector< Control * > & controls
 		, std::vector< Control * > & topControls )
 	{
+		auto lock( castor::makeUniqueLock( m_mutexChildren ) );
 		bool hasMovable = std::any_of( m_children.begin()
 			, m_children.end()
 			, []( auto const & lookup )

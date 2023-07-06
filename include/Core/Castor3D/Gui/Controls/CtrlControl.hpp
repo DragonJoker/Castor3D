@@ -611,6 +611,7 @@ namespace castor3d
 		castor::Size m_size{};
 		castor::Point4ui m_borders{};
 		BorderPanelOverlayRPtr m_background{};
+		mutable std::mutex m_mutexChildren;
 		std::vector< ControlRPtr > m_children{};
 		ControlsManagerRPtr m_ctrlManager{};
 		bool m_moving{};
