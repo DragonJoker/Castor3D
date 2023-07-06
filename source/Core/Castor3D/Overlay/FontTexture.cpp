@@ -148,19 +148,19 @@ namespace castor3d
 		return it->second;
 	}
 
-	void FontTexture::initialiseResource( TextureLayout & resource
+	void FontTexture::initialiseResource( Resource & resource
 		, RenderDevice const & device
 		, QueueData const & queueData )
 	{
 		resource.initialise( device, queueData );
 	}
 
-	void FontTexture::cleanupResource( TextureLayout & resource )
+	void FontTexture::cleanupResource( Resource & resource )
 	{
 		resource.cleanup();
 	}
 
-	void FontTexture::updateResource( TextureLayout & resource
+	void FontTexture::updateResource( Resource & resource
 		, bool front )
 	{
 		if ( auto font = getFont() )

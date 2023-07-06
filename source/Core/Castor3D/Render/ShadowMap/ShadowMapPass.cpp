@@ -16,7 +16,6 @@
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMap.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ShaderAST/Shader.hpp>
 

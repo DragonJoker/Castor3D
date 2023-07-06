@@ -12,7 +12,6 @@
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"

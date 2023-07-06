@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Animation/Interpolator.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Miscellaneous/StagingData.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"

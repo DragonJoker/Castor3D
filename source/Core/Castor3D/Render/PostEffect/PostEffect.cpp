@@ -2,7 +2,6 @@
 
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/RenderPass/FrameBuffer.hpp>

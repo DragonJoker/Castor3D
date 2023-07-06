@@ -63,6 +63,9 @@ namespace castor3d
 			, public BackgroundPassBase
 			, public crg::RenderMesh
 		{
+			using VertexBufferHolder = castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >;
+			using IndexBufferHolder = castor::DataHolderT< ashes::BufferPtr< u16 > >;
+
 		public:
 			BackgroundPass( crg::FramePass const & pass
 				, crg::GraphContext & context
@@ -150,12 +153,12 @@ namespace castor3d
 
 			crg::VertexBuffer doCreateVertexBuffer( RenderDevice const & device )
 			{
-				if ( !castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >::getData() )
+				if ( !VertexBufferHolder::getData() )
 				{
 					using castor::Point3f;
 
 					// Vertex Buffer
-					std::vector< Point3f > vertexData
+					static constexpr std::array< Point3f, 24u > vertexData
 					{
 						// Front
 						Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 }, Point3f{ +1.0, -1.0, +1.0 }, Point3f{ +1.0, +1.0, +1.0 },
@@ -170,12 +173,12 @@ namespace castor3d
 						// Left
 						Point3f{ -1.0, -1.0, -1.0 }, Point3f{ -1.0, +1.0, -1.0 }, Point3f{ -1.0, -1.0, +1.0 }, Point3f{ -1.0, +1.0, +1.0 },
 					};
-					castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >::setData( makeVertexBuffer< Point3f >( m_device
+					VertexBufferHolder::setData( makeVertexBuffer< Point3f >( m_device
 						, 24u
 						, VK_BUFFER_USAGE_TRANSFER_DST_BIT
 						, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 						, "Background" ) );
-					auto & vertexBuffer = *castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >::getData();
+					auto & vertexBuffer = *VertexBufferHolder::getData();
 					auto data = m_device.graphicsData();
 					ashes::StagingBuffer stagingBuffer{ *m_device.device, 0u, VkDeviceSize( sizeof( Point3f ) * 24u ) };
 					stagingBuffer.uploadVertexData( *data->queue
@@ -184,7 +187,7 @@ namespace castor3d
 						, vertexBuffer );
 				}
 
-				auto & vertexBuffer = *castor::DataHolderT< ashes::VertexBufferPtr< castor::Point3f > >::getData();
+				auto & vertexBuffer = *VertexBufferHolder::getData();
 				return crg::VertexBuffer{ crg::Buffer{ vertexBuffer.getBuffer(), "Vertex" }
 					, vertexBuffer.getBuffer().getStorage()
 					, { 1u, VkVertexInputAttributeDescription{ 0u, 0u, VK_FORMAT_R32G32B32_SFLOAT, 0u } }

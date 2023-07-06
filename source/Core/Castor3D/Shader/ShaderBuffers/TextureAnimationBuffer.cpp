@@ -41,7 +41,8 @@ namespace castor3d
 
 	void TextureAnimationBuffer::addTextureAnimation( AnimatedTexture const & texture )
 	{
-		auto & unit = texture.getTexture();
+		CU_Require( texture.hasTextureUnit() );
+		auto & unit = texture.getTextureUnit();
 		CU_Require( unit.getId() != 0u );
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		m_animations[unit.getId()] = &texture;
@@ -50,9 +51,9 @@ namespace castor3d
 
 	void TextureAnimationBuffer::removeTextureAnimation( AnimatedTexture const & texture )
 	{
-		if ( texture.hasTexture() )
+		if ( texture.hasTextureUnit() )
 		{
-			auto & unit = texture.getTexture();
+			auto & unit = texture.getTextureUnit();
 			--m_count;
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			m_animations[unit.getId()] = nullptr;

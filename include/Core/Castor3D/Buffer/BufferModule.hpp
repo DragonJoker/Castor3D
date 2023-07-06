@@ -172,7 +172,6 @@ namespace castor3d
 	*\~french
 	*\brief
 	*	Un pool de GpuBuffer pour les VBO.
-	*\remark
 	*/
 	class VertexBufferPool;
 

@@ -6,7 +6,6 @@
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Buffer/StagingBuffer.hpp>
 
 CU_ImplementSmartPtr( castor3d, GpuBuddyBuffer )
 CU_ImplementSmartPtr( castor3d, GpuBufferBase )

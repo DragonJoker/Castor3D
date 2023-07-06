@@ -359,6 +359,16 @@ namespace castor3d
 			return m_values.size();
 		}
 
+		auto begin()const noexcept
+		{
+			return m_values.begin();
+		}
+
+		auto end()const noexcept
+		{
+			return m_values.end();
+		}
+
 	private:
 		using ByteArray = std::vector< uint8_t >;
 		using ParamNameMap = std::map< KeyT, ByteArray >;

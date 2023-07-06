@@ -7,10 +7,6 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
-#include <ashespp/Command/CommandBuffer.hpp>
-#include <ashespp/Sync/Fence.hpp>
-
 namespace castor3d
 {
 	class IndexMapping

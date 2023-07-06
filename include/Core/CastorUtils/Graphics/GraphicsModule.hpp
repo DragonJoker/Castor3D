@@ -186,9 +186,9 @@ namespace castor
 	*/
 	struct ImageLoaderConfig
 	{
-		bool allowCompression;
-		bool generateMips;
-		bool layersToTiles;
+		bool allowCompression{};
+		bool generateMips{};
+		bool layersToTiles{};
 	};
 	/**
 	\~english

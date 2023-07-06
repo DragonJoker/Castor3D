@@ -19,6 +19,10 @@ namespace castor3d
 		, public castor::Named
 	{
 	public:
+		static inline uint32_t constexpr VisiblePassIndex = 0u;
+		static inline uint32_t constexpr HiddenPassIndex = 1u;
+
+		OnBackgroundChanged onChanged;
 		/**
 		*\~english
 		*\brief
@@ -391,12 +395,6 @@ namespace castor3d
 			return m_texture->getTexture();
 		}
 
-		ashes::ImageView const & getView()const
-		{
-			CU_Require( m_texture );
-			return m_texture->getDefaultView().getSampledView();
-		}
-
 		bool isHdr()const noexcept
 		{
 			return m_hdr;
@@ -442,26 +440,6 @@ namespace castor3d
 		}
 		/**@}*/
 
-	private:
-		virtual bool doInitialise( RenderDevice const & device ) = 0;
-		virtual void doCleanup() = 0;
-		virtual void doCpuUpdate( CpuUpdater & updater )const = 0;
-		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
-		virtual void doAddPassBindings( crg::FramePass & pass
-			, crg::ImageViewIdArray const & targetImage
-			, uint32_t & index )const = 0;
-		virtual void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
-			, uint32_t & index )const = 0;
-		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
-			, crg::ImageViewIdArray const & targetImage
-			, uint32_t & index )const = 0;
-
-	public:
-		static inline uint32_t constexpr VisiblePassIndex = 0u;
-		static inline uint32_t constexpr HiddenPassIndex = 1u;
-
-		OnBackgroundChanged onChanged;
-
 	protected:
 		Scene & m_scene;
 		castor::String m_type;
@@ -475,6 +453,20 @@ namespace castor3d
 		bool m_hasIBLSupport;
 		bool m_visible{ true };
 		uint32_t m_passIndex{ 0u };
+
+	private:
+		virtual bool doInitialise( RenderDevice const & device ) = 0;
+		virtual void doCleanup() = 0;
+		virtual void doCpuUpdate( CpuUpdater & updater )const = 0;
+		virtual void doGpuUpdate( GpuUpdater & updater )const = 0;
+		virtual void doAddPassBindings( crg::FramePass & pass
+			, crg::ImageViewIdArray const & targetImage
+			, uint32_t & index )const = 0;
+		virtual void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const = 0;
+		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
+			, crg::ImageViewIdArray const & targetImage
+			, uint32_t & index )const = 0;
 	};
 }
 

@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_FontTexture_H___
 #define ___C3D_FontTexture_H___
 
-#include "OverlayModule.hpp"
+#include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
@@ -27,6 +27,7 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
+		using Resource = ResourceT;
 		using ResourcePtrT = PointerT< ResourceT >;
 		using OnChangedFunction = std::function< void( DoubleBufferedResourceT const & ) >;
 		using OnChanged = castor::SignalT< OnChangedFunction >;
@@ -133,11 +134,11 @@ namespace castor3d
 	private:
 		std::atomic_bool m_first{ true };
 
-		C3D_API virtual void initialiseResource( ResourceT & resource
+		C3D_API virtual void initialiseResource( Resource & resource
 			, RenderDevice const & device
 			, QueueData const & queueData ) = 0;
-		C3D_API virtual void cleanupResource( ResourceT & resource ) = 0;
-		C3D_API virtual void updateResource( ResourceT & resource
+		C3D_API virtual void cleanupResource( Resource & resource ) = 0;
+		C3D_API virtual void updateResource( Resource & resource
 			, bool front ) = 0;
 		C3D_API virtual void swapResources() = 0;
 	};
@@ -263,11 +264,11 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void initialiseResource( TextureLayout & resource
+		void initialiseResource( Resource & resource
 			, RenderDevice const & device
 			, QueueData const & queueData )override;
-		void cleanupResource( TextureLayout & resource )override;
-		void updateResource( TextureLayout & resource
+		void cleanupResource( Resource & resource )override;
+		void updateResource( Resource & resource
 			, bool front )override;
 		void swapResources()override;
 

@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "FxaaUbo.hpp"
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
 #include <Castor3D/Render/Passes/RenderQuad.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Render/Viewport.hpp>

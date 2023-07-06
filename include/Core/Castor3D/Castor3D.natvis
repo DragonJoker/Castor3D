@@ -2,9 +2,7 @@
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
 	<Type Name="castor3d::AnimableT&lt;*&gt;">
-		<DisplayString>{m_name}</DisplayString>
 		<Expand>
-			<Item Name="name">m_name</Item>
 			<Item Name="owner">m_owner</Item>
 			<Item Name="animations">m_animations</Item>
 		</Expand>
@@ -116,6 +114,23 @@
 		<Expand>
 			<Item Name="viewport">m_viewport</Item>
 			<Item Name="planes">m_planes</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::MemChunk">
+		<DisplayString>[{offset}, {offset + size}]</DisplayString>
+		<Expand>
+			<Item Name="offset">offset</Item>
+			<Item Name="askedSize">askedSize</Item>
+			<Item Name="allocSize">size</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::ObjectBufferOffset::GpuBufferChunk">
+		<DisplayString>{chunk} [{buffer}]</DisplayString>
+		<Expand>
+			<Item Name="chunk">chunk</Item>
+			<Item Name="buffer">buffer</Item>
 		</Expand>
 	</Type>
 
@@ -370,6 +385,15 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::Sampler">
+		<DisplayString>{m_name}</DisplayString>
+		<Expand>
+			<Item Name="info">m_info</Item>
+			<Item Name="mipmapIsSet">m_mipmapIsSet</Item>
+			<Item Name="sampler">m_sampler</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::SceneRenderPass">
 		<DisplayString>{m_name}({m_pass})</DisplayString>
 	</Type>
@@ -528,6 +552,72 @@
 			<Item Name="timeIndex">m_timeIndex</Item>
 			<Item Name="tile">m_tile</Item>
 			<Item Name="owner">m_owner</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::TextureSourceInfo">
+		<DisplayString Condition="m_renderTarget!=nullptr">TargetImage {*m_renderTarget}</DisplayString>
+		<DisplayString Condition="m_relative._Mypair._Myval2._Mysize>0">FileImage "{m_folder,sb}/{m_relative,sb}"</DisplayString>
+		<DisplayString Condition="m_createInfo.vk.format!=0">VulkanImage {m_createInfo}</DisplayString>
+		<DisplayString Condition="(m_renderTarget == nullptr) &amp;&amp; (m_createInfo.vk.format == 0) &amp;&amp; (m_relative._Mypair._Myval2._Mysize == 0)">BufferImage {m_data}</DisplayString>
+		<Expand>
+			<Item Name="sampler">m_sampler</Item>
+			<Item Condition="m_renderTarget!=nullptr" Name="renderTarget">m_renderTarget</Item>
+			<Item Condition="m_relative._Mypair._Myval2._Mysize>0" Name="folder">m_folder</Item>
+			<Item Condition="m_relative._Mypair._Myval2._Mysize>0" Name="relative">m_relative</Item>
+			<Item Condition="m_relative._Mypair._Myval2._Mysize>0" Name="loadConfig">m_loadConfig</Item>
+			<Item Condition="(m_renderTarget == nullptr) &amp;&amp; (m_createInfo.vk.format == 0) &amp;&amp; (m_relative._Mypair._Myval2._Mysize == 0)" Name="name">m_name</Item>
+			<Item Condition="(m_renderTarget == nullptr) &amp;&amp; (m_createInfo.vk.format == 0) &amp;&amp; (m_relative._Mypair._Myval2._Mysize == 0)" Name="type">m_type</Item>
+			<Item Condition="(m_renderTarget == nullptr) &amp;&amp; (m_createInfo.vk.format == 0) &amp;&amp; (m_relative._Mypair._Myval2._Mysize == 0)" Name="data">m_data</Item>
+			<Item Condition="m_createInfo.vk.format!=0" Name="createInfo">m_createInfo</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::Texture">
+		<DisplayString >{imageId} [{*sampler}]</DisplayString>
+		<Expand>
+			<Item Name="resources">resources</Item>
+			<Item Name="device">device</Item>
+			<Item Name="imageId">imageId</Item>
+			<Item Name="image">image</Item>
+			<Item Name="wholeViewId">wholeViewId</Item>
+			<Item Name="targetViewId">targetViewId</Item>
+			<Item Name="sampledViewId">sampledViewId</Item>
+			<Item Name="wholeView">wholeView</Item>
+			<Item Name="targetView">targetView</Item>
+			<Item Name="sampledView">sampledView</Item>
+			<Item Name="subViewsId">subViewsId</Item>
+			<Item Name="subViews">subViews</Item>
+			<Item Name="sampler">sampler</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::TextureUnitData">
+		<Expand>
+			<Item Name="passConfig">passConfig</Item>
+			<Item Name="animation">animation</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::TextureUnit">
+		<DisplayString >{m_id} {m_name} [{m_data}]</DisplayString>
+		<Expand>
+			<Item Name="owner">m_owner</Item>
+			<Item Name="animations">m_animations</Item>
+			<Item Name="id">m_id</Item>
+			<Item Name="name">m_name</Item>
+			<Item Name="data">m_data</Item>
+			<Item Name="device">m_device</Item>
+			<Item Name="configuration">m_configuration</Item>
+			<Item Name="transform">m_transform</Item>
+			<Item Name="transformations">m_transformations</Item>
+			<Item Name="gpuImage">m_gpuImage</Item>
+			<Item Name="texture">m_texture</Item>
+			<Item Name="descriptor">m_descriptor</Item>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="animated">m_animated</Item>
+			<Item Name="needsUpload">m_needsUpload</Item>
+			<Item Name="setIndex">m_setIndex</Item>
 		</Expand>
 	</Type>
 

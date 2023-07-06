@@ -5,12 +5,13 @@ See LICENSE file in root folder
 #define ___C3D_TextureUnit_H___
 #pragma once
 
+#include "Castor3D/Scene/Animation/AnimationModule.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
+#include "Castor3D/Render/Texture.hpp"
+
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
-#include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Scene/Animation/AnimationModule.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Math/SquareMatrix.hpp>
@@ -154,17 +155,11 @@ namespace castor3d
 			return m_texture.get();
 		}
 
-		TextureConfiguration const & getConfiguration()const
+
 		{
-			return m_configuration;
 		}
 
-		SamplerObs getSampler()const
-		{
-			return m_sampler;
-		}
-
-		bool isTextured()const
+		bool isTextured()const noexcept
 		{
 			return m_texture != nullptr;
 		}
@@ -174,48 +169,48 @@ namespace castor3d
 			return m_renderTarget;
 		}
 
-		ashes::WriteDescriptorSet getDescriptor()const
+		ashes::WriteDescriptorSet getDescriptor()const noexcept
 		{
 			return m_descriptor;
 		}
 
-		uint32_t getId()const
+		uint32_t getId()const noexcept
 		{
 			return m_id;
 		}
 
-		bool hasDevice()const
+		bool hasDevice()const noexcept
 		{
 			return m_device != nullptr;
 		}
 
-		RenderDevice const & getDevice()const
+		RenderDevice const & getDevice()const noexcept
 		{
 			CU_Require( hasDevice() );
 			return *m_device;
 		}
 
-		bool hasAnimation()const
+		bool hasAnimation()const noexcept
 		{
 			return m_animated || hasAnimation( "Default" );
 		}
 
-		TextureTransform const & getTransform()const
+		TextureTransform const & getTransform()const noexcept
 		{
 			return m_transform;
 		}
 
-		TextureSourceInfo const & getSourceInfo()const
+		TextureSourceInfo const & getSourceInfo()const noexcept
 		{
 			return m_data.sourceInfo;
 		}
 
-		uint32_t getTexcoordSet()const
+		uint32_t getTexcoordSet()const noexcept
 		{
 			return m_data.passConfig.texcoordSet;
 		}
 
-		TextureUnitData & getData()const
+		TextureUnitData & getData()const noexcept
 		{
 			return m_data;
 		}
@@ -272,8 +267,8 @@ namespace castor3d
 		friend class TextureRenderer;
 		TextureUnitData & m_data;
 		RenderDevice const * m_device{ nullptr };
-		TextureConfiguration m_configuration;
-		TextureTransform m_transform;
+		TextureConfiguration m_configuration{};
+		TextureTransform m_transform{};
 		castor::Matrix4x4f m_transformations;
 		TextureLayoutUPtr m_texture;
 		RenderTargetRPtr m_renderTarget{};
@@ -281,7 +276,7 @@ namespace castor3d
 		ashes::WriteDescriptorSet m_descriptor;
 		uint32_t m_id{ 0u };
 		mutable bool m_changed;
-		castor::String m_name;
+		castor::String m_name{};
 		bool m_initialised{ false };
 		bool m_animated{ false };
 		uint32_t m_setIndex{};

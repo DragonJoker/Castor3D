@@ -17,8 +17,6 @@
 #include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
-#include <ashespp/Image/StagingTexture.hpp>
-
 #include <ShaderWriter/BaseTypes/Float.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
 
@@ -833,7 +831,8 @@ namespace atmosphere_scattering
 		m_multiScatter.create();
 		m_textureId.create();
 		m_texture = castor::makeUnique< castor3d::TextureLayout >( device.renderSystem
-			, m_textureId.image
+			, "AtmosphereBackground/Dummy"
+			, *m_textureId.image
 			, m_textureId.wholeViewId );
 		m_hdr = true;
 		m_srgb = false;

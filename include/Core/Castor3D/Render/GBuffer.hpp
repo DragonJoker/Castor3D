@@ -330,37 +330,37 @@ namespace castor3d
 			return *m_result[size_t( texture )];
 		}
 
-		TextureArray::const_iterator cbegin()const
+		auto cbegin()const
 		{
 			return m_result.begin();
 		}
 
-		TextureArray::const_iterator cend()const
+		auto cend()const
 		{
 			return m_result.end();
 		}
 
-		TextureArray::const_iterator begin()const
+		auto begin()const
 		{
 			return m_result.begin();
 		}
 
-		TextureArray::const_iterator end()const
+		auto end()const
 		{
 			return m_result.end();
 		}
 
-		TextureArray::iterator begin()
+		auto begin()
 		{
 			return m_result.begin();
 		}
 
-		TextureArray::iterator end()
+		auto end()
 		{
 			return m_result.end();
 		}
 
-		TextureArray::size_type size()
+		auto size()
 		{
 			return m_result.size();
 		}

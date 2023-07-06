@@ -58,7 +58,7 @@ namespace GuiCommon
 
 							if ( castor::File::fileExists( path ) )
 							{
-								background.loadEquiTexture( castor::Path{}, path, background.getEquiSize().getWidth() );
+								background.setEquiTexture( castor::Path{}, path, background.getEquiSize().getWidth() );
 							}
 						} );
 				}
@@ -73,7 +73,7 @@ namespace GuiCommon
 
 							if ( castor::File::fileExists( path ) )
 							{
-								background.loadCrossTexture( castor::Path{}, path );
+								background.setCrossTexture( castor::Path{}, path );
 							}
 						} );
 				}
@@ -276,7 +276,7 @@ namespace GuiCommon
 
 						if ( castor::File::fileExists( path ) )
 						{
-							background.loadImage( castor::Path{}, path );
+							background.setImage( castor::Path{}, path );
 						}
 					} );
 			}
@@ -295,7 +295,7 @@ namespace GuiCommon
 
 						if ( castor::File::fileExists( path ) )
 						{
-							background.loadFaceImage( castor::Path{}, path, face );
+							background.setFaceTexture( castor::Path{}, path, face );
 						}
 					} );
 			}

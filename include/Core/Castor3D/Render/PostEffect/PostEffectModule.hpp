@@ -31,19 +31,6 @@ namespace castor3d
 	*	<br />Les effets post rendu sont appliqués de manière cumulative.
 	*/
 	class PostEffect;
-	/**
-	*\~english
-	*\brief
-	*	Post render effect surface structure.
-	*\remarks
-	*	Holds basic informations for a possible post effect surface: framebuffer and colour texture.
-	*\~french
-	*\brief
-	*	Surface pour effet post rendu.
-	*\remarks
-	*	Contient les informations basiques de surface d'un effet: framebuffer, texture de couleur.
-	*/
-	struct PostEffectSurface;
 
 	CU_DeclareSmartPtr( castor3d, PostEffect, C3D_API );
 	/**

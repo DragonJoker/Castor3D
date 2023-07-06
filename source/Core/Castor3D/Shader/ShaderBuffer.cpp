@@ -12,6 +12,11 @@ CU_ImplementSmartPtr( castor3d, ShaderBuffer )
 
 namespace castor3d
 {
+	namespace shdbuf
+	{
+		static VkDeviceSize constexpr HeaderSize = 4u * sizeof( uint32_t );
+	}
+
 	//*********************************************************************************************
 
 	ShaderBuffer::ShaderBuffer( Engine & engine
@@ -36,7 +41,7 @@ namespace castor3d
 				, m_device.getComputeQueueFamilyIndex()
 				, m_device.getTransferQueueFamilyIndex() } } ) }
 		, m_rawData( m_staging->getBuffer().lock( 0u, m_size, 0u ) )
-		, m_data{ ( m_rawData + 4u * sizeof( uint32_t ) ) }
+		, m_data{ ( m_rawData + shdbuf::HeaderSize ) }
 		, m_counts{ castor::makeArrayView( reinterpret_cast< uint32_t * >( m_rawData )
 			, reinterpret_cast< uint32_t * >( m_data ) ) }
 	{

@@ -2,29 +2,18 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Miscellaneous/makeVkType.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/RenderModule.hpp"
-#include "Castor3D/Render/RenderPipeline.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
-#include "Castor3D/Render/PBR/IblTextures.hpp"
-#include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
 
-#include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
+#include <ashespp/Command/CommandBuffer.hpp>
 #include <ashespp/Image/Image.hpp>
-#include <ashespp/RenderPass/FrameBuffer.hpp>
-#include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
-
-#include <ShaderWriter/Source.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 

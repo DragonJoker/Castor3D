@@ -38,6 +38,20 @@ namespace castor3d
 			, Scene & scene
 			, castor::String const & name = castor::String{} );
 		/**
+		*\copydoc	castor3d::SceneBackground::accept
+		*/
+		C3D_API void accept( BackgroundVisitor & visitor )override;
+		/**
+		*\copydoc	castor3d::SceneBackground::accept
+		*/
+		C3D_API void accept( PipelineVisitor & visitor )override;
+		/**
+		*\copydoc	castor3d::SceneBackground::write
+		*/
+		C3D_API bool write( castor::String const & tabs
+			, castor::Path const & folder
+			, castor::StringStream & stream )const override;
+		/**
 		*\~english
 		*\return
 		*	Sets the texture image.
@@ -53,22 +67,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API bool loadImage( castor::Path const & folder
+		C3D_API bool setImage( castor::Path const & folder
 			, castor::Path const & relative );
-		/**
-		*\copydoc	castor3d::SceneBackground::accept
-		*/
-		C3D_API void accept( BackgroundVisitor & visitor )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::accept
-		*/
-		C3D_API void accept( PipelineVisitor & visitor )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::write
-		*/
-		C3D_API bool write( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::StringStream & stream )const override;
 		/**
 		*\copydoc	castor3d::SceneBackground::getModelName
 		*/

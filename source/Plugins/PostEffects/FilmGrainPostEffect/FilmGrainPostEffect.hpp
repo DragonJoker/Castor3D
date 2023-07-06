@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include <Castor3D/Buffer/UniformBuffer.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
 #include <Castor3D/Render/Passes/RenderQuad.hpp>
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 

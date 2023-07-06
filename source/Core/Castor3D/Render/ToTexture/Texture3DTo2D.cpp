@@ -2,9 +2,6 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
@@ -16,7 +13,6 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Descriptor/DescriptorSet.hpp>

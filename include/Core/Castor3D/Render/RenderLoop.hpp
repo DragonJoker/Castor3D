@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include <RenderGraph/FramePassTimer.hpp>
 
 #include <ashespp/Core/WindowHandle.hpp>
+#include <ashespp/Sync/Fence.hpp>
 
 #include <chrono>
 #include <unordered_set>
@@ -185,32 +186,25 @@ namespace castor3d
 		 */
 		C3D_API virtual void endRendering() = 0;
 		/**
-		 *\~english
-		 *\return		The wanted frame time, in milliseconds.
-		 *\~french
-		 *\return		Le temps voulu pour une frame, en millisecondes.
-		 */
-		castor::Milliseconds getFrameTime()const
+		*\~english
+		*\name
+		*	Getters.
+		*\~french
+		*\name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		castor::Milliseconds getFrameTime()const noexcept
 		{
 			return m_frameTime;
 		}
-		/**
-		 *\~english
-		 *\return		The wanted refresh rate.
-		 *\~french
-		 *\return		La vitesse de rafraichissement.
-		 */
-		uint32_t getWantedFps()const
+
+		uint32_t getWantedFps()const noexcept
 		{
 			return m_wantedFPS;
 		}
-		/**
-		 *\~english
-		 *\return		The last frame time, in milliseconds.
-		 *\~french
-		 *\return		Le temps écoulé pour la dernière frame, en millisecondes.
-		 */
-		castor::Microseconds getLastFrameTime()const
+
+		castor::Microseconds getLastFrameTime()const noexcept
 		{
 			return m_lastFrameTime;
 		}

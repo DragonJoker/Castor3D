@@ -11,11 +11,9 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <ashespp/Buffer/UniformBuffer.hpp>
 #include <ashespp/Buffer/VertexBuffer.hpp>
-#include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>

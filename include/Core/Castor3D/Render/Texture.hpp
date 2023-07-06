@@ -18,8 +18,8 @@ namespace castor3d
 	{
 		C3D_API Texture( Texture const & ) = delete;
 		C3D_API Texture & operator=( Texture const & ) = delete;
-		C3D_API Texture( Texture && rhs );
-		C3D_API Texture & operator=( Texture && rhs );
+		C3D_API Texture( Texture && rhs )noexcept;
+		C3D_API Texture & operator=( Texture && rhs )noexcept;
 
 		C3D_API Texture();
 		C3D_API Texture( RenderDevice const & device
@@ -80,12 +80,12 @@ namespace castor3d
 			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
 			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
 			, bool createSubviews = true );
-		C3D_API ~Texture();
+		C3D_API ~Texture()noexcept;
 
 		C3D_API void create();
 		C3D_API void destroy();
 
-		operator bool()const
+		operator bool()const noexcept
 		{
 			return resources != nullptr
 				&& device != nullptr;
@@ -199,10 +199,10 @@ namespace castor3d
 		{
 		}
 
-		castor::String name;
-		crg::ImageViewId viewId;
-		VkImageLayout layout;
-		TextureFactors factors;
+		castor::String name{};
+		crg::ImageViewId viewId{};
+		VkImageLayout layout{};
+		TextureFactors factors{};
 	};
 }
 

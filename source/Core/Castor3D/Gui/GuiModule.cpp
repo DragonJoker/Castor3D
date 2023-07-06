@@ -74,42 +74,4 @@ namespace castor3d
 		setMaterialColour( *result->getPass( 0u ), colour );
 		return result;
 	}
-
-	MaterialObs createMaterial( Engine & engine
-		, castor::String const & name
-		, TextureLayoutUPtr texture )
-	{
-		auto & cache = engine.getMaterialCache();
-		MaterialObs created{};
-		auto result = cache.tryAdd( name
-			, true
-			, created
-			, engine
-			, engine.getDefaultLightingModel() );
-
-		if ( created == result )
-		{
-			result->createPass();
-		}
-
-		auto pass = result->getPass( 0u );
-
-		if ( pass->getTextureUnitsCount() == 0 )
-		{
-			auto & texCache = engine.getTextureUnitCache();
-			auto & compRegister = engine.getPassComponentsRegister();
-			TextureConfiguration baseConfig{};
-			compRegister.fillTextureConfiguration( compRegister.getColourMapFlags(), baseConfig );
-			auto unit = std::make_shared< TextureUnit >( engine
-				, texCache.getSourceData( TextureSourceInfo{ nullptr, texture->getCreateInfo() }
-					, PassTextureConfig{ { {} }, baseConfig }
-					, nullptr ) );
-			unit->setConfiguration( baseConfig );
-			//pass->addTextureUnit( unit );
-		}
-
-		auto unit = pass->getTextureUnit( 0 );
-		unit->setTexture( std::move( texture ) );
-		return result;
-	}
 }

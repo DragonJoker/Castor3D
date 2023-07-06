@@ -8,8 +8,6 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
-
 namespace castor3d
 {
 	class GpuBufferPool

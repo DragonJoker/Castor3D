@@ -1,8 +1,6 @@
 #include "Castor3D/Render/Transparent/TransparentPassResult.hpp"
 
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Render/RenderDevice.hpp"
 
 CU_ImplementSmartPtr( castor3d, TransparentPassResult )
 
