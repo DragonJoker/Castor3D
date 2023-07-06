@@ -107,12 +107,16 @@ namespace castor3d
 
 	bool Sampler::initialise( RenderDevice const & device )
 	{
-		if ( !m_sampler )
+		if ( !m_initialised
+			&& !m_sampler
+			&& !m_initialising.exchange( true ) )
 		{
 			CU_Require( m_info.sType == VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO );
 			m_info.maxAnisotropy = std::min( m_info.maxAnisotropy, device.properties.limits.maxSamplerAnisotropy );
-			m_sampler = device->createSampler( getName() + "Sampler"
+			m_sampler = device->createSampler( getName()
 				, m_info );
+			m_initialised = true;
+			m_initialising = false;
 		}
 
 		return true;
@@ -120,6 +124,7 @@ namespace castor3d
 
 	void Sampler::cleanup()
 	{
+		m_initialised = false;
 		m_sampler.reset();
 	}
 }

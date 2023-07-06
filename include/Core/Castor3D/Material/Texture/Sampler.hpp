@@ -281,6 +281,8 @@ namespace castor3d
 		};
 		bool m_mipmapIsSet{ false };
 		ashes::SamplerPtr m_sampler;
+		std::atomic_bool m_initialised;
+		std::atomic_bool m_initialising;
 	};
 }
 
