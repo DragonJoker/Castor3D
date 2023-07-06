@@ -979,6 +979,11 @@ namespace castor3d
 #endif
 	}
 
+	void QueueRenderNodes::clear()
+	{
+		m_pipelines.clear();
+	}
+
 	void QueueRenderNodes::checkEmpty()
 	{
 		auto & queue = *getOwner();

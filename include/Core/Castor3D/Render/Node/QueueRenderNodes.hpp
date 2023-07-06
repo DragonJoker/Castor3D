@@ -28,6 +28,7 @@ namespace castor3d
 
 		C3D_API void initialise( RenderDevice const & device );
 		C3D_API void cleanup();
+		C3D_API void clear();
 		C3D_API void checkEmpty();
 		C3D_API void sortNodes( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
