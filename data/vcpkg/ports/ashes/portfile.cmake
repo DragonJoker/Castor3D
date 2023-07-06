@@ -3,9 +3,9 @@ vcpkg_check_linkage(ONLY_DYNAMIC_LIBRARY)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO DragonJoker/Ashes
-    REF 924c9df67d01be2e3959f3acf82ebcf880fc20cf
+    REF 6ceaf2b452c9778cbeafc8fb52ad97f8a02d4997
     HEAD_REF master
-    SHA512 7aab264d394099d05155968bf082bbb88cf72beeedc99c6cdffe9f05d208d613d4e2d0b1bf34fc0078ce68ac805dd77b5f79135dc21558b772e6190bb7bd1051
+    SHA512 41fe2fc4ebfcc49b2f67bfafa3d59cabe879fe55ab5540b251d14783ebcc3352c93646a8bc720c99702a83742efc9124de892d948458aae88f1f034fe37b1318
 )
 
 vcpkg_from_github(

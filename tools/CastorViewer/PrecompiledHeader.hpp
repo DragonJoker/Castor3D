@@ -53,7 +53,6 @@ See LICENSE file in root folder
 #include <GuiCommon/Shader/ShaderDialog.hpp>
 #include <GuiCommon/System/SceneObjectsList.hpp>
 #include <GuiCommon/System/ImagesLoader.hpp>
-#include <GuiCommon/System/MaterialsList.hpp>
 #include <GuiCommon/System/RendererSelector.hpp>
 #include <GuiCommon/System/SplashScreen.hpp>
 

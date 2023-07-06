@@ -25,7 +25,7 @@ namespace castor3d
 	{
 		explicit TextureData( TextureSourceInfo psourceInfo
 			, castor::ImageRPtr pimage = {}
-			, VkImageUsageFlags pusage = { VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT } )
+			, VkImageUsageFlags pusage = VkImageUsageFlags{ VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT } )
 			: sourceInfo{ std::move( psourceInfo ) }
 			, image{ std::move( pimage ) }
 			, usage{ std::move( pusage ) }

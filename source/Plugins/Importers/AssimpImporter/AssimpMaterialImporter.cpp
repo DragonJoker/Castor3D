@@ -780,7 +780,6 @@ namespace c3d_assimp
 						if ( sourceInfo )
 						{
 							auto & image = loadImage( *sourceInfo );
-							auto layout = image.getLayout();
 							texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
 								, castor::Angle::fromRadians( info.transform.mRotation )
 								, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };

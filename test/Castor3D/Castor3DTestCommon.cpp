@@ -11,7 +11,7 @@ namespace Testing
 {
 	namespace details
 	{
-		std::map< castor::String, SceneNodeRPtr > sortNodes( Scene const & scene )
+		static std::map< castor::String, SceneNodeRPtr > sortNodes( Scene const & scene )
 		{
 			std::map< castor::String, SceneNodeRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getSceneNodeCache() );
@@ -24,7 +24,7 @@ namespace Testing
 			return result;
 		}
 
-		std::map< castor::String, GeometryRPtr > sortGeometries( Scene const & scene )
+		static std::map< castor::String, GeometryRPtr > sortGeometries( Scene const & scene )
 		{
 			std::map< castor::String, GeometryRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getGeometryCache() );
@@ -37,7 +37,7 @@ namespace Testing
 			return result;
 		}
 
-		std::map< castor::String, LightRPtr > sortLights( Scene const & scene )
+		static std::map< castor::String, LightRPtr > sortLights( Scene const & scene )
 		{
 			std::map< castor::String, LightRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getLightCache() );
@@ -50,7 +50,7 @@ namespace Testing
 			return result;
 		}
 
-		std::map< castor::String, CameraRPtr > sortCameras( Scene const & scene )
+		static std::map< castor::String, CameraRPtr > sortCameras( Scene const & scene )
 		{
 			std::map< castor::String, CameraRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getCameraCache() );
@@ -63,7 +63,7 @@ namespace Testing
 			return result;
 		}
 
-		std::map< castor::String, AnimatedObjectGroupRPtr > sortAnimatedGroups( Scene const & scene )
+		static std::map< castor::String, AnimatedObjectGroupRPtr > sortAnimatedGroups( Scene const & scene )
 		{
 			std::map< castor::String, AnimatedObjectGroupRPtr > result;
 			auto lock = castor::makeUniqueLock( scene.getAnimatedObjectGroupCache() );

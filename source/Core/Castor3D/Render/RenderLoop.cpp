@@ -98,6 +98,8 @@ namespace castor3d
 					listener.fireEvents( EventType::eQueueRender );
 				} );
 
+			device->waitIdle();
+
 			for ( auto & uploadResources : m_uploadResources )
 			{
 				uploadResources.fence->wait( ashes::MaxTimeout );
@@ -108,6 +110,7 @@ namespace castor3d
 			}
 
 			m_uploadTimer = nullptr;
+			m_ignored = 5;
 
 			if ( m_reservedQueue )
 			{

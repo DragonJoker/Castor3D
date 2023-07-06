@@ -24,7 +24,7 @@ namespace castor3d
 	public:
 		struct ThreadData
 		{
-			ThreadData( TextureData & pdata )
+			explicit ThreadData( TextureData & pdata )
 				: data{ &pdata }
 			{
 			}

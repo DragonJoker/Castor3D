@@ -749,7 +749,7 @@ namespace castor3d
 		, PassTextureConfig const & rhsConfig
 		, VkFormat rhsFormat )
 	{
-		return lhsConfig.texcoordSet == lhsConfig.texcoordSet
+		return lhsConfig.texcoordSet == rhsConfig.texcoordSet
 			&& getFlags( lhsConfig.config ).size() == 1u
 			&& getFlags( rhsConfig.config ).size() == 1u
 			&& cachetex::isMergeable( lhsSource, lhsFormat, animations.find( lhsSource ) != animations.end() )
