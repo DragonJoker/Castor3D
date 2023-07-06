@@ -49,6 +49,13 @@ namespace castor3d
 		C3D_API void initialise();
 		/**
 		 *\~english
+		 *\brief		Tells the queue its GPU data is not valid anymore.
+		 *\~french
+		 *\brief		Dit à la queue que ses données GPU sont invalides.
+		 */
+		C3D_API void invalidate();
+		/**
+		 *\~english
 		 *\brief		Cleans the queue up.
 		 *\~french
 		 *\brief		Nettoie la file de rendu.

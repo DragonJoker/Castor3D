@@ -68,6 +68,12 @@ namespace castor3d
 		}
 	}
 
+	void RenderQueue::invalidate()
+	{
+		m_culledChanged = true;
+		m_commandsChanged = true;
+	}
+
 	void RenderQueue::cleanup()
 	{
 		CU_Require( m_renderNodes );
@@ -192,8 +198,7 @@ namespace castor3d
 		pass.initEvent = nullptr;
 
 		m_renderNodes->initialise( device );
-		m_culledChanged = true;
-		m_commandsChanged = true;
+		invalidate();
 	}
 
 	void RenderQueue::doPrepareCommandBuffer()

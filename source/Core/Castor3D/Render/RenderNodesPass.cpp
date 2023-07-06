@@ -846,6 +846,14 @@ namespace castor3d
 		{
 			m_renderQueue->initialise();
 		}
+		else
+		{
+			m_renderQueue->invalidate();
+		}
+
+		m_renderQueue->getRenderNodes().clear();
+		m_backPipelines.clear();
+		m_frontPipelines.clear();
 	}
 
 	void RenderNodesPass::doSubRecordInto( crg::RecordContext & context
