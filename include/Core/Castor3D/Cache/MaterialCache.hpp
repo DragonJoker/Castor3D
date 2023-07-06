@@ -312,6 +312,8 @@ namespace castor
 			castor3d::SpecificsBuffers m_buffers;
 		};
 
+		void doUpdatePending();
+
 	private:
 		castor3d::Engine & m_engine;
 		castor3d::MaterialObs m_defaultMaterial{};
