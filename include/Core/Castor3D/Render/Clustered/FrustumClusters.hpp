@@ -261,7 +261,7 @@ namespace castor3d
 		Camera const & m_camera;
 		bool m_clustersDirty{ true };
 		bool m_lightsDirty{ true };
-		bool m_first{ true };
+		int32_t m_first{ 5 };
 		uint32_t m_pointLightMortonIndicesInput{ 1u };
 		uint32_t m_spotLightMortonIndicesInput{ 1u };
 		castor::GroupChangeTracked< castor::Point3ui > m_dimensions;

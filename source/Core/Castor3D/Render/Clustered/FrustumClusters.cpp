@@ -170,7 +170,7 @@ namespace castor3d
 		auto scene = m_camera.getScene();
 		auto & lightCache = scene->getLightCache();
 		m_clustersDirty = lightCache.hasClusteredLights()
-			&& m_first;
+			&& m_first > 0;
 		doUpdate();
 		m_clustersUbo.cpuUpdate( m_dimensions.value()
 			, m_camera.getNear()
@@ -184,8 +184,8 @@ namespace castor3d
 				|| lightCache.isDirty()
 				|| ( it != updater.dirtyScenes.end() && !it->second.isEmpty() ) );
 		m_first = m_camera.getEngine()->areUpdateOptimisationsEnabled()
-			? false
-			: true;
+			? std::max( 0, m_first - 1 )
+			: 5;
 	}
 
 	crg::FramePass const & FrustumClusters::createFramePasses( crg::FramePassGroup & parentGraph
