@@ -1,6 +1,7 @@
 #include "Castor3D/Cache/TextureCache.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Texture/TextureSourceInfo.hpp"
@@ -23,14 +24,55 @@ namespace castor3d
 
 	namespace cachetex
 	{
-		static castor::PxBufferBaseUPtr mergeBuffers( castor::PxBufferBaseUPtr lhsBuffer
+		static bool isMergeable( TextureSourceInfo const & source
+			, VkFormat format
+			, bool hasAnimation )
+		{
+			return !source.isRenderTarget()
+				&& !ashes::isCompressedFormat( format )
+				&& !hasAnimation;
+		}
+
+		static bool areFormatsCompatible( VkFormat lhs, VkFormat rhs )
+		{
+			if ( ashes::isCompressedFormat( lhs )
+				|| ashes::isCompressedFormat( rhs ) )
+			{
+				return false;
+			}
+
+			if ( isSRGBFormat( convert( rhs ) ) )
+			{
+				return isSRGBFormat( getSRGBFormat( convert( lhs ) ) );
+			}
+
+			if ( isSRGBFormat( convert( lhs ) ) )
+			{
+				return isSRGBFormat( getSRGBFormat( convert( rhs ) ) );
+			}
+
+			return true;
+		}
+
+		static bool areSpacesCompatible( TextureSpaces lhs, TextureSpaces rhs )
+		{
+			return checkFlag( lhs, TextureSpace::eAllowSRGB ) == checkFlag( rhs, TextureSpace::eAllowSRGB )
+				&& checkFlag( lhs, TextureSpace::eNormalised ) == checkFlag( rhs, TextureSpace::eNormalised );
+		}
+
+		static castor::ImageRPtr mergeBuffers( Engine & engine
+			, std::atomic_bool & interrupted
+			, castor::Image const & lhsImage
 			, uint32_t const & lhsSrcMask
 			, uint32_t const & lhsDstMask
-			, castor::PxBufferBaseUPtr rhsBuffer
+			, castor::Image const & rhsImage
 			, uint32_t const & rhsSrcMask
 			, uint32_t const & rhsDstMask
 			, castor::String const & name )
 		{
+			auto lhsBuffer = lhsImage.getPixels()->clone();
+			auto rhsBuffer = rhsImage.getPixels()->clone();
+
 			// Resize images to max images dimensions, if needed.
 			auto dimensions = lhsBuffer->getDimensions();
 
@@ -54,10 +96,10 @@ namespace castor3d
 				}
 			}
 
-			// Adjust the pixel formats to the most precise one
 			auto pixelFormat = lhsBuffer->getFormat();
 			auto rhsPixelFormat = rhsBuffer->getFormat();
 
+			// Favor SRGB format against linear (@TODO: change that ?)
 			if ( isSRGBFormat( rhsPixelFormat ) )
 			{
 				pixelFormat = getSRGBFormat( pixelFormat );
@@ -67,6 +109,7 @@ namespace castor3d
 				rhsPixelFormat = getSRGBFormat( rhsPixelFormat );
 			}
 
+			// Adjust the pixel formats to the most precise one
 			auto lhsComponentFormat = getSingleComponent( pixelFormat );
 			auto rhsComponentFormat = getSingleComponent( rhsPixelFormat );
 
@@ -115,63 +158,60 @@ namespace castor3d
 				, getPixelComponents( rhsDstMask )
 				, *rhsBuffer
 				, *result );
-			return result;
+			result->generateMips();
+			castor::ImageLayout layout{ lhsImage.getLayout().type, *result };
+			log::info << "Loaded image [" << name << "] (" << layout << ")" << std::endl;
+			return engine.addNewImage( name
+				, castor::Path{}
+				, std::move( layout )
+				, std::move( result ) );
 		}
 
-		static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBaseUPtr buffer )
+		static castor::PixelFormat normaliseFormat( castor::PixelFormat format )
 		{
-			auto dstFormat = buffer->getFormat();
-
-			switch ( dstFormat )
+			switch ( format )
 			{
 			case castor::PixelFormat::eR8G8B8_UNORM:
-				dstFormat = castor::PixelFormat::eR8G8B8A8_UNORM;
-				break;
+				return castor::PixelFormat::eR8G8B8A8_UNORM;
 			case castor::PixelFormat::eB8G8R8_UNORM:
-				dstFormat = castor::PixelFormat::eA8B8G8R8_UNORM;
-				break;
+				return castor::PixelFormat::eA8B8G8R8_UNORM;
 			case castor::PixelFormat::eR8G8_SRGB:
 			case castor::PixelFormat::eR8G8B8_SRGB:
-				dstFormat = castor::PixelFormat::eR8G8B8A8_SRGB;
-				break;
+				return castor::PixelFormat::eR8G8B8A8_SRGB;
 			case castor::PixelFormat::eB8G8R8_SRGB:
-				dstFormat = castor::PixelFormat::eA8B8G8R8_SRGB;
-				break;
+				return castor::PixelFormat::eA8B8G8R8_SRGB;
 			case castor::PixelFormat::eR16G16B16_SFLOAT:
-				dstFormat = castor::PixelFormat::eR16G16B16A16_SFLOAT;
-				break;
+				return castor::PixelFormat::eR16G16B16A16_SFLOAT;
 			case castor::PixelFormat::eR32G32B32_SFLOAT:
-				dstFormat = castor::PixelFormat::eR32G32B32A32_SFLOAT;
-				break;
+				return castor::PixelFormat::eR32G32B32A32_SFLOAT;
 			default:
-				// No conversion
-				break;
+				return format;
 			}
-
-			if ( buffer->getFormat() != dstFormat )
-			{
-				auto flipped = buffer->isFlipped();
-				buffer = castor::PxBufferBase::create( buffer->getDimensions()
-					, buffer->getLayers()
-					, buffer->getLevels()
-					, dstFormat
-					, buffer->getConstPtr()
-					, buffer->getFormat()
-					, buffer->getAlign() );
-
-				if ( flipped )
-				{
-					buffer->flip();
-				}
-			}
-
-			return buffer;
 		}
 
-		static castor::PxBufferBaseUPtr getImageBuffer( castor::Image & image
-			, bool allowSRGB
-			, uint32_t maxImageSize )
+		static castor::ImageRes adaptToTextureImage( Engine & engine
+			, std::atomic_bool & interrupted
+			, castor::Image & image
+			, TextureSourceInfo const & sourceInfo
+			, uint32_t maxImageSize
+			, bool generateMips )
 		{
+			auto name = image.getName();
+			auto imagePixels = image.getPixels();
+
+			// Normalise format, regarding SRGB/Linear space
+			auto format = ( ( isSRGBFormat( imagePixels->getFormat() ) && sourceInfo.allowSRGB() )
+				? imagePixels->getFormat()
+				: getNonSRGBFormat( imagePixels->getFormat() ) );
+			auto buffer = castor::PxBufferBase::create( imagePixels->getDimensions()
+				, imagePixels->getLayers()
+				, imagePixels->getLevels()
+				, format
+				, imagePixels->getConstPtr()
+				, format
+				, imagePixels->getAlign() );
+
+			// Account for image size limit set in the engine (if possible).
 			if ( !castor::isCompressed( image.getPixelFormat() ) )
 			{
 				auto maxDim = std::max( image.getWidth(), image.getHeight() );
@@ -181,158 +221,116 @@ namespace castor3d
 				{
 					auto ratio = float( maxImageSize ) / float( image.getWidth() );
 					auto height = uint32_t( float( image.getHeight() ) * ratio );
-					image.resample( { maxImageSize, height } );
+					buffer = castor::Image::resample( { maxImageSize, height }, std::move( buffer ) );
+					name += "/WResampled";
 				}
 				else if ( maxDim == image.getHeight()
 					&& image.getHeight() > maxImageSize )
 				{
 					auto ratio = float( maxImageSize ) / float( image.getHeight() );
 					auto width = uint32_t( float( image.getHeight() ) * ratio );
-					image.resample( { width, maxImageSize } );
+					buffer = castor::Image::resample( { width, maxImageSize }, std::move( buffer ) );
+					name += "/HResampled";
 				}
 			}
 
-			auto format = ( ( isSRGBFormat( image.getPixels()->getFormat() ) && allowSRGB )
-				? image.getPixels()->getFormat()
-				: getNonSRGBFormat( image.getPixels()->getFormat() ) );
-			auto buffer = castor::PxBufferBase::create( image.getPixels()->getDimensions()
-				, image.getPixels()->getLayers()
-				, image.getPixels()->getLevels()
-				, format
-				, image.getPixels()->getConstPtr()
-				, format
-				, image.getPixels()->getAlign() );
-			buffer = adaptBuffer( std::move( buffer ) );
+			// Expand RGB to RGBA format
+			auto normalisedFormat = normaliseFormat( buffer->getFormat() );
 
-			if ( !buffer )
+			if ( buffer->getFormat() != normalisedFormat )
 			{
-				CU_LoaderError( "Couldn't adapt image buffer." );
+				log::debug << name << cuT( " - Converting RGB to RGBA.\n" );
+				buffer = castor::PxBufferBase::create( buffer->getDimensions()
+					, buffer->getLayers()
+					, buffer->getLevels()
+					, normalisedFormat
+					, buffer->getConstPtr()
+					, buffer->getFormat()
+					, buffer->getAlign() );
+				name += "/RGBA";
 			}
 
-			if ( image.getPixels()->isFlipped() )
+			// Convert from layered image to tiled image
+			if ( sourceInfo.layersToTiles()
+				&& buffer->getLayers() > 1u )
 			{
-				buffer->flip();
+				log::debug << name << cuT( " - Converting layers to tiles.\n" );
+				buffer->convertToTiles( engine.getRenderSystem()->getProperties().limits.maxImageDimension2D );
+				name += "/Tiled";
 			}
 
-			return buffer;
-		}
-
-		static castor::PxBufferBaseUPtr getBufferImage( Engine & engine
-			, castor::String const & name
-			, castor::String const & type
-			, castor::ByteArray const & data
-			, bool allowSRGB )
-		{
-			auto image = engine.tryFindImage( name );
-
-			if ( !image )
+			// Generate mipmaps, if possible.
+			if ( !castor::isCompressed( buffer->getFormat() )
+				&& generateMips )
 			{
-				image = engine.addNewImage( name
-					, castor::ImageCreateParams{ type
-						, data
-						, { false, false, false } } );
+				log::debug << name << cuT( " - Generating mipmaps.\n" );
+				buffer->generateMips();
+				name += "/Mipped";
 			}
 
-			if ( !image )
-			{
-				CU_LoaderError( "Couldn't load image." );
-			}
-
-			if ( !image->hasBuffer() )
-			{
-				**image = *engine.createImage( name
-					, castor::ImageCreateParams{ type
-					, data
-					, { false, false, false } } );
-			}
-
-			if ( !image->hasBuffer() )
-			{
-				CU_LoaderError( "Couldn't load image." );
-			}
-
-			return getImageBuffer( *image, allowSRGB, engine.getMaxImageSize() );
-		}
-
-		static castor::PxBufferBaseUPtr getFileImage( Engine & engine
-			, castor::String const & name
-			, castor::Path const & folder
-			, castor::Path const & relative
-			, bool allowSRGB )
-		{
-			auto image = engine.tryFindImage( name );
-
-			if ( !image )
-			{
-				image = engine.addNewImage( name
-					, castor::ImageCreateParams{ folder / relative
-						, { false, false, false } } );
-			}
-
-			if ( !image )
-			{
-				CU_LoaderError( "Couldn't load image." );
-			}
-
-			if ( !image->hasBuffer() )
-			{
-				**image = *engine.createImage( name
-					, castor::ImageCreateParams{ folder / relative
-					, { false, false, false } } );
-			}
-
-			if ( !image->hasBuffer() )
-			{
-				CU_LoaderError( "Couldn't load image." );
-			}
-
-			return getImageBuffer( *image, allowSRGB, engine.getMaxImageSize() );
-		}
-
-		static TextureLayoutUPtr getTextureLayout( Engine & engine
-			, castor::PxBufferBaseUPtr buffer
-			, castor::String const & name
-			, bool allowCompression
-			, bool layersToTiles
-			, std::atomic_bool & interrupted )
-		{
-			// Finish buffer initialisation.
+			// Compress result.
 			auto & loader = engine.getImageLoader();
 			auto compressedFormat = loader.getOptions().getCompressed( buffer->getFormat() );
 
 			if ( compressedFormat != buffer->getFormat()
-				&& allowCompression )
+				&& sourceInfo.allowCompression() )
 			{
-				log::debug << ( name + cuT( " - Compressing result.\n" ) );
+				log::debug << name << cuT( " - Compressing.\n" );
 				buffer = castor::PxBufferBase::create( &loader.getOptions()
 					, &interrupted
 					, buffer->getDimensions()
 					, compressedFormat
 					, buffer->getConstPtr()
 					, buffer->getFormat() );
-			}
-			else if ( !castor::isCompressed( buffer->getFormat() ) )
-			{
-				log::debug << ( name + cuT( " - Generating result mipmaps.\n" ) );
-				buffer->generateMips();
+				name += "/Compressed";
 			}
 
-			if ( layersToTiles )
+			// Apply original buffer flip
+			if ( imagePixels->isFlipped() )
 			{
-				buffer->convertToTiles( engine.getRenderSystem()->getProperties().limits.maxImageDimension2D );
+				buffer->flip();
 			}
 
-			// Create the resulting texture.
-			return createTextureLayout( engine
-				, name
-				, std::move( buffer )
-				, true );
+			castor::ImageLayout layout{ ( ( buffer->getLayers() == 1u && image.getLayout().type == castor::ImageLayout::e2DArray )
+					? castor::ImageLayout::e2D
+					: image.getLayout().type )
+				, *buffer };
+			return engine.createImage( name
+				, image.getPath()
+				, std::move( layout )
+				, std::move( buffer ) );
+		}
+
+		static castor::ImageRes loadSource( Engine & engine
+			, std::atomic_bool & interrupted
+			, TextureSourceInfo const & sourceInfo
+			, bool generateMips )
+		{
+			return adaptToTextureImage( engine
+				, interrupted
+				, ( sourceInfo.isBufferImage()
+					? getBufferImage( engine
+						, sourceInfo.name()
+						, sourceInfo.type()
+						, sourceInfo.buffer() )
+					: getFileImage( engine
+						, sourceInfo.name()
+						, sourceInfo.folder()
+						, sourceInfo.relative() ) )
+				, sourceInfo
+				, engine.getMaxImageSize()
+				, generateMips );
+		}
+
+		static size_t makeHash( TextureSourceInfo const & sourceInfo )
+		{
+			return TextureSourceInfoHasher{}( sourceInfo );
 		}
 
 		static size_t makeHash( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config )
 		{
-			auto result = TextureSourceInfoHasher{}( sourceInfo );
+			auto result = makeHash( sourceInfo );
 			auto flags = getFlags( config.config );
 
 			for ( auto flag : flags )
@@ -354,7 +352,7 @@ namespace castor3d
 			, TextureUnitData & data
 			, TextureUnitRPtr & result )
 		{
-			auto hash = makeHash( data.sourceInfo, data.passConfig );
+			auto hash = makeHash( data.base->sourceInfo, data.passConfig );
 			auto lock( makeUniqueLock( loadMtx ) );
 			auto ires = loaded.emplace( hash, nullptr );
 			auto it = ires.first;
@@ -368,9 +366,9 @@ namespace castor3d
 			{
 				auto merged = data.passConfig.config;
 
-				if ( it->second->getTexture() )
+				if ( it->second->isTextured() )
 				{
-					updateIndices( convert( it->second->getTexture()->getPixelFormat() )
+					updateIndices( convert( it->second->getTexturePixelFormat() )
 						, merged );
 				}
 				else
@@ -397,23 +395,6 @@ namespace castor3d
 			return !loading.empty();
 		}
 
-		static castor::PxBufferBaseUPtr loadSource( Engine & engine
-			, TextureSourceInfo const & sourceInfo
-			, bool allowSRGB )
-		{
-			return sourceInfo.isBufferImage()
-				? cachetex::getBufferImage( engine
-					, sourceInfo.name()
-					, sourceInfo.type()
-					, sourceInfo.buffer()
-					, allowSRGB )
-				: cachetex::getFileImage( engine
-					, sourceInfo.relative()
-					, sourceInfo.folder()
-					, sourceInfo.relative()
-					, allowSRGB );
-		}
-
 		static TextureCombineID addCombine( TextureCombine combine
 			, std::vector< TextureCombine > & result )
 		{
@@ -424,8 +405,10 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	TextureUnitCache::TextureUnitCache( Engine & engine )
+	TextureUnitCache::TextureUnitCache( Engine & engine
+		, crg::ResourcesCache & resources )
 		: OwnedBy< Engine >{ engine }
+		, m_resources{ resources }
 	{
 	}
 
@@ -435,6 +418,7 @@ namespace castor3d
 
 	TextureCombine TextureUnitCache::registerTextureCombine( Pass const & pass )
 	{
+		auto loadLock( castor::makeUniqueLock( m_loadMtx ) );
 		TextureCombine result;
 		result.configCount = pass.getTextureUnitsCount();
 
@@ -542,9 +526,14 @@ namespace castor3d
 	{
 		if ( m_initialised.exchange( false ) )
 		{
-			for ( auto & unit : m_loaded )
+			for ( auto & loaded : m_loadedUnits )
 			{
-				unit.second->cleanup();
+				loaded.second->cleanup();
+			}
+
+			for ( auto & loaded : m_loaded )
+			{
+				loaded.second->destroy();
 			}
 
 			m_bindlessTexSet.reset();
@@ -609,74 +598,220 @@ namespace castor3d
 		auto loadLock( castor::makeUniqueLock( m_loadMtx ) );
 		m_dirty.clear();
 
-		for ( auto & loaded : m_loaded )
+		for ( auto & loaded : m_loadedUnits )
 		{
 			loaded.second->cleanup();
 		}
 
+		for ( auto & loaded : m_loaded )
+		{
+			loaded.second->destroy();
+		}
+
+		m_loadedUnits.clear();
 		m_loaded.clear();
 		m_loading.clear();
 		m_dirtyWrites.clear();
 		m_units.clear();
+		m_unitDatas.clear();
 		m_datas.clear();
 		m_pendingUnits.clear();
 		m_texturesCombines.clear();
 	}
 
-	TextureUnitRPtr TextureUnitCache::getTexture( TextureUnitData & unitData )
+	TextureSourceInfo TextureUnitCache::mergeSourceInfos( TextureSourceInfo const & lhs
+		, TextureSourceInfo const & rhs )
+	{
+		auto folder = lhs.isFileImage()
+			? lhs.folder()
+			: ( rhs.isFileImage()
+				? rhs.folder()
+				: castor::Path{} );
+		auto lhsName = lhs.isFileImage()
+			? castor::Path{ lhs.relative() }.getFileName()
+			: castor::Path{ lhs.name() }.getFileName();
+		auto rhsName = rhs.isFileImage()
+			? castor::Path{ rhs.relative() }.getFileName()
+			: castor::Path{ rhs.name() }.getFileName();
+		auto name = castor::string::getLongestCommonSubstring( lhsName, rhsName );
+
+		if ( name.size() > 2 )
+		{
+			castor::string::replace( lhsName, name, castor::String{} );
+			castor::string::replace( rhsName, name, castor::String{} );
+		}
+		else
+		{
+			name.clear();
+		}
+
+		return TextureSourceInfo{ lhs.sampler()
+			, folder
+			, castor::Path{ name + lhsName + rhsName }
+			, lhs.config() };
+	}
+
+	Texture const * TextureUnitCache::getTexture( TextureData & data )
+	{
+		return doGetTexture( data, []( TextureData const &, Texture const * ){} );
+	}
+
+	TextureData & TextureUnitCache::getSourceData( TextureSourceInfo const & sourceInfo )
+	{
+		auto hash = cachetex::makeHash( sourceInfo );
+		auto ires = m_datas.emplace( hash, nullptr );
+		auto it = ires.first;
+
+		if ( ires.second )
+		{
+			it->second = castor::makeUnique< TextureData >( sourceInfo );
+			auto result = it->second.get();
+
+			if ( !result->sourceInfo.isRenderTarget() )
+			{
+				auto & data = doCreateThreadData( *result );
+				getEngine()->pushCpuJob( [this, &data]()
+					{
+						auto image = cachetex::loadSource( *getEngine()
+							, data.interrupted
+							, data.data->sourceInfo
+							, true );
+						auto name = image->getName();
+						log::info << "Loaded image [" << name << "] (" << *image << ")" << std::endl;
+						data.data->image = getEngine()->addImage( name, image );
+					} );
+			}
+		}
+		else
+		{
+			log::info << "TextureCache: Reusing existing TextureData for [" << sourceInfo.name() << "]" << std::endl;
+		}
+
+		return *it->second;
+	}
+
+	TextureData & TextureUnitCache::mergeSources( TextureSourceInfo const & lhsSourceInfo
+		, uint32_t lhsSrcMask
+		, uint32_t lhsDstMask
+		, TextureSourceInfo const & rhsSourceInfo
+		, uint32_t rhsSrcMask
+		, uint32_t rhsDstMask
+		, castor::String const & name
+		, TextureSourceInfo const & resultSourceInfo )
+	{
+		auto hash = cachetex::makeHash( resultSourceInfo );
+		auto ires = m_datas.emplace( hash, nullptr );
+		auto it = ires.first;
+
+		if ( ires.second )
+		{
+			it->second = castor::makeUnique< TextureData >( resultSourceInfo );
+			auto result = it->second.get();
+			auto & data = doCreateThreadData( *result );
+
+			getEngine()->pushCpuJob( [this, &data, name, lhsSrcMask, lhsDstMask, lhsSourceInfo, rhsSrcMask, rhsDstMask, rhsSourceInfo]()
+				{
+					// Merge CPU buffers on CPU thread.
+					auto realLhsSource = lhsSourceInfo;
+					realLhsSource.allowCompression( false );
+					auto lhsImage = cachetex::loadSource( *getEngine()
+						, data.interrupted
+						, realLhsSource
+						, false );
+
+					auto realRhsSource = rhsSourceInfo;
+					realRhsSource.allowCompression( false );
+					auto rhsImage = cachetex::loadSource( *getEngine()
+						, data.interrupted
+						, realRhsSource
+						, false );
+
+					data.data->image = cachetex::mergeBuffers( *getEngine()
+						, data.interrupted
+						, *lhsImage
+						, lhsSrcMask
+						, lhsDstMask
+						, *rhsImage
+						, rhsSrcMask
+						, rhsDstMask
+						, name );
+				} );
+		}
+
+		return *it->second;
+	}
+
+	bool TextureUnitCache::areMergeable( std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > const & animations
+		, TextureSourceInfo const & lhsSource
+		, PassTextureConfig const & lhsConfig
+		, VkFormat lhsFormat
+		, TextureSourceInfo const & rhsSource
+		, PassTextureConfig const & rhsConfig
+		, VkFormat rhsFormat )
+	{
+		return lhsConfig.texcoordSet == lhsConfig.texcoordSet
+			&& getFlags( lhsConfig.config ).size() == 1u
+			&& getFlags( rhsConfig.config ).size() == 1u
+			&& cachetex::isMergeable( lhsSource, lhsFormat, animations.find( lhsSource ) != animations.end() )
+			&& cachetex::isMergeable( rhsSource, rhsFormat, animations.find( rhsSource ) != animations.end() )
+			&& cachetex::areFormatsCompatible( lhsFormat, rhsFormat )
+			&& cachetex::areSpacesCompatible( lhsConfig.config.textureSpace, rhsConfig.config.textureSpace );
+	}
+
+	TextureUnitRPtr TextureUnitCache::getTextureUnit( TextureUnitData & unitData )
 	{
 		TextureUnitRPtr result{};
 
-		if ( !cachetex::findUnit( *getEngine(), m_loadMtx, m_loaded, unitData, result ) )
+		if ( !cachetex::findUnit( *getEngine(), m_loadMtx, m_loadedUnits, unitData, result ) )
 		{
-			auto & data = doCreateThreadData( unitData, *result );
+			doGetTexture( *unitData.base
+				, [this, &unitData, result]( TextureData const & data
+					, Texture const * texture )
+				{
+					auto config = unitData.passConfig.config;
 
-			if ( data.data->sourceInfo.isRenderTarget() )
-			{
-				getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-					, [this, &data]( RenderDevice const & device
-						, QueueData const & queueData )
-						{
-							if ( !data.interrupted )
-							{
-								data.unit->setSampler( data.data->sourceInfo.sampler() );
-								data.unit->setRenderTarget( data.data->sourceInfo.renderTarget() );
-								auto config = data.data->passConfig.config;
-								config.tileSet->z = 1u;
-								config.tileSet->w = 1u;
-								data.unit->setConfiguration( std::move( config ) );
-								data.unit->initialise( device, queueData );
-								doAddWrite( *data.unit );
-							}
-
-							doDestroyThreadData( data );
-						} ) );
-			}
-			else
-			{
-				getEngine()->pushCpuJob( [this, &data]()
+					if ( data.sourceInfo.isRenderTarget() )
 					{
-						while ( !data.interrupted
-							&& data.data->buffer == nullptr )
+						config.tileSet->z = 1u;
+						config.tileSet->w = 1u;
+						texture = &data.sourceInfo.renderTarget()->getTexture();
+						std::atomic_bool isInitialised = false;
+						auto renderTarget = unitData.base->sourceInfo.renderTarget();
+						renderTarget->initialise( [&isInitialised]( RenderTarget const & rt, QueueData const & queue )
+							{
+								isInitialised = true;
+							} );
+
+						while ( !isInitialised )
 						{
-							std::this_thread::sleep_for( 1_ms );
+							std::this_thread::sleep_for( 5_ms );
+						}
+					}
+					else
+					{
+						auto tiles = data.image->getPixels()->getTiles();
+
+						if ( config.tileSet->z <= 1 && tiles->x >= 1 )
+						{
+							config.tileSet->z = tiles->x;
 						}
 
-						if ( !data.interrupted )
+						if ( config.tileSet->w <= 1 && tiles->y >= 1 )
 						{
-							doCreateLayout( data
-								, ( data.data->sourceInfo.isBufferImage()
-									? data.data->sourceInfo.name()
-									: castor::String{ data.data->sourceInfo.relative() } ) );
-							// On buffer load end, upload to VRAM on GPU thread.
-							doUpload( data );
+							config.tileSet->w = tiles->y;
 						}
-						else
-						{
-							doDestroyThreadData( data );
-						}
-					} );
-			}
+					}
+
+					result->setTexture( texture );
+					result->setConfiguration( std::move( config ) );
+
+					result->initialise();
+					doAddWrite( *result );
+				} );
+		}
+		else
+		{
+			log::info << "TextureCache: Reusing existing TextureUnitData for [" << unitData.base->sourceInfo.name() << "]" << std::endl;
 		}
 
 		return result;
@@ -686,31 +821,26 @@ namespace castor3d
 		, PassTextureConfig const & passConfig
 		, TextureAnimationUPtr animation )
 	{
-		auto hash = cachetex::makeHash( sourceInfo, passConfig );
-		auto ires = m_datas.emplace( hash, nullptr );
+		auto realSource = sourceInfo;
+		realSource.allowSRGB( realSource.allowSRGB()
+			&& checkFlag( passConfig.config.textureSpace, TextureSpace::eAllowSRGB ) );
+		realSource.allowCompression( realSource.allowCompression()
+			&& !checkFlag( passConfig.config.textureSpace, TextureSpace::eTangentSpace ) );
+
+		auto hash = cachetex::makeHash( realSource, passConfig );
+		auto ires = m_unitDatas.emplace( hash, nullptr );
 		auto it = ires.first;
 
 		if ( ires.second )
 		{
-			bool allowSRGB = checkFlag( passConfig.config.textureSpace, TextureSpace::eAllowSRGB );
-			it->second = castor::makeUnique< TextureUnitData >( sourceInfo
+			it->second = castor::makeUnique< TextureUnitData >( &getSourceData( realSource )
 				, passConfig
 				, std::move( animation ) );
-			auto result = it->second.get();
-
-			if ( result->sourceInfo.isBufferImage()
-				|| result->sourceInfo.isFileImage() )
-			{
-				getEngine()->pushCpuJob( [this, result, allowSRGB]()
-					{
-						result->buffer = cachetex::loadSource( *getEngine(), result->sourceInfo, allowSRGB );
-					} );
-			}
 		}
 
 		return *it->second;
 	}
-	
+
 	TextureUnitData & TextureUnitCache::mergeSources( TextureSourceInfo const & lhsSourceInfo
 		, PassTextureConfig const & lhsPassConfig
 		, uint32_t lhsSrcMask
@@ -723,53 +853,172 @@ namespace castor3d
 		, TextureSourceInfo const & resultSourceInfo
 		, PassTextureConfig const & resultPassConfig )
 	{
-		auto hash = cachetex::makeHash( resultSourceInfo, resultPassConfig );
-		auto ires = m_datas.emplace( hash, nullptr );
+		auto realLhsSource = lhsSourceInfo;
+		realLhsSource.allowSRGB( realLhsSource.allowSRGB()
+			&& checkFlag( lhsPassConfig.config.textureSpace, TextureSpace::eAllowSRGB ) );
+		realLhsSource.allowCompression( realLhsSource.allowCompression()
+			&& !checkFlag( lhsPassConfig.config.textureSpace, TextureSpace::eTangentSpace ) );
+		auto realRhsSource = rhsSourceInfo;
+		realRhsSource.allowSRGB( realRhsSource.allowSRGB()
+			&& checkFlag( rhsPassConfig.config.textureSpace, TextureSpace::eAllowSRGB ) );
+		realRhsSource.allowCompression( realRhsSource.allowCompression()
+			&& !checkFlag( rhsPassConfig.config.textureSpace, TextureSpace::eTangentSpace ) );
+		auto realResultSource = resultSourceInfo;
+		realResultSource.allowSRGB( realResultSource.allowSRGB()
+			&& checkFlag( resultPassConfig.config.textureSpace, TextureSpace::eAllowSRGB ) );
+		realResultSource.allowCompression( realResultSource.allowCompression()
+			&& !checkFlag( resultPassConfig.config.textureSpace, TextureSpace::eTangentSpace ) );
+
+		auto hash = cachetex::makeHash( realResultSource, resultPassConfig );
+		auto ires = m_unitDatas.emplace( hash, nullptr );
 		auto it = ires.first;
 
 		if ( ires.second )
 		{
-			it->second = castor::makeUnique< TextureUnitData >( resultSourceInfo
+			it->second = castor::makeUnique< TextureUnitData >( &mergeSources( realLhsSource
+				, lhsSrcMask
+				, lhsDstMask
+				, realRhsSource
+				, rhsSrcMask
+				, rhsDstMask
+				, name
+				, realResultSource )
 				, resultPassConfig );
-			auto result = it->second.get();
-			bool lhsAllowSRGB = checkFlag( lhsPassConfig.config.textureSpace, TextureSpace::eAllowSRGB );
-			bool rhsAllowSRGB = checkFlag( rhsPassConfig.config.textureSpace, TextureSpace::eAllowSRGB );
-
-			getEngine()->pushCpuJob( [this, result, name, lhsAllowSRGB, lhsSrcMask, lhsDstMask, lhsSourceInfo, rhsAllowSRGB, rhsSrcMask, rhsDstMask, rhsSourceInfo]()
-				{
-					// Merge CPU buffers on CPU thread.
-					auto lhsImage = cachetex::loadSource( *getEngine(), lhsSourceInfo, lhsAllowSRGB );
-					auto rhsImage = cachetex::loadSource( *getEngine(), rhsSourceInfo, rhsAllowSRGB );
-					result->buffer = cachetex::mergeBuffers( std::move( lhsImage )
-						, lhsSrcMask
-						, lhsDstMask
-						, std::move( rhsImage )
-						, rhsSrcMask
-						, rhsDstMask
-						, name );
-				} );
 		}
 
 		return *it->second;
 	}
 
-	void TextureUnitCache::doCreateLayout( ThreadData & data
-		, castor::String const & name )
+	Texture const * TextureUnitCache::doGetTexture( TextureData & data
+		, std::function< void( TextureData const &, Texture const * ) > onEndCpuLoad )
 	{
-		data.layout = cachetex::getTextureLayout( *getEngine()
-			, std::move( data.data->buffer )
-			, name
-			, data.data->sourceInfo.allowCompression() && !checkFlag( data.data->passConfig.config.textureSpace, TextureSpace::eTangentSpace )
-			, data.data->sourceInfo.layersToTiles()
-			, data.interrupted );
+		Texture * result{};
+		bool wasFound{};
+		{
+			auto hash = cachetex::makeHash( data.sourceInfo );
+			auto lock( castor::makeUniqueLock( m_loadMtx ) );
+			auto ires = m_loaded.emplace( hash, nullptr );
+			auto it = ires.first;
+			wasFound = !ires.second;
+
+			if ( !wasFound )
+			{
+				if ( data.sourceInfo.isRenderTarget() )
+				{
+					auto texture = &data.sourceInfo.renderTarget()->getTexture();
+
+					if ( onEndCpuLoad )
+					{
+						onEndCpuLoad( data, texture );
+					}
+
+					return texture;
+				}
+
+				it->second = castor::makeUnique< Texture >();
+			}
+
+			result = it->second.get();
+		}
+
+		if ( !wasFound )
+		{
+			auto & threadData = doFindThreadData( data );
+			threadData.texture = result;
+			getEngine()->pushCpuJob( [this, onEndCpuLoad, &threadData]()
+				{
+					// Wait for interruption or image CPU loading end
+					while ( !threadData.interrupted
+						&& threadData.data->image == nullptr )
+					{
+						std::this_thread::sleep_for( 1_ms );
+					}
+
+					if ( !threadData.interrupted )
+					{
+						auto lock( castor::makeUniqueLock( m_loadMtx ) );
+						doInitTexture( threadData );
+
+						if ( onEndCpuLoad )
+						{
+							onEndCpuLoad( *threadData.data, threadData.texture );
+						}
+					}
+
+					doDestroyThreadData( threadData );
+				} );
+		}
+		else if ( onEndCpuLoad )
+		{
+			getEngine()->pushCpuJob( [this, result, &data, onEndCpuLoad]()
+				{
+					// Wait for full loading end
+					while ( data.image == nullptr || !*result )
+					{
+						std::this_thread::sleep_for( 1_ms );
+					}
+					{
+						auto lock( castor::makeUniqueLock( m_loadMtx ) );
+
+						if ( onEndCpuLoad )
+						{
+							onEndCpuLoad( data, result );
+						}
+					}
+				} );
+		}
+
+		return result;
 	}
 
-	TextureUnitCache::ThreadData & TextureUnitCache::doCreateThreadData( TextureUnitData & data
-		, TextureUnit & unit )
+	void TextureUnitCache::doInitTexture( ThreadData & data )
+	{
+		if ( !data.interrupted )
+		{
+			auto & device = *getEngine()->getRenderDevice();
+			auto & sourceInfo = data.data->sourceInfo;
+			auto & layout = data.data->image->getLayout();
+			sourceInfo.sampler()->initialise( device );
+			*data.texture = Texture{ device
+				, m_resources
+				, data.data->image->getName()
+				, 0u
+				, VkExtent3D{ layout.extent->x, layout.extent->y, layout.extent->z }
+				, layout.layers
+				, layout.levels
+				, convert( layout.format )
+				, data.data->usage
+				, &sourceInfo.sampler()->getSampler() };
+			data.texture->create();
+			auto queueData = device.graphicsData();
+			ashes::ImageViewCreateInfo viewInfo{ *data.texture->image
+				, data.texture->sampledViewId.data->info };
+			uploadTexture( device
+				, *queueData
+				, *data.data->image
+				, *data.texture->image
+				, viewInfo );
+		}
+	}
+
+	TextureUnitCache::ThreadData & TextureUnitCache::doCreateThreadData( TextureData & data )
 	{
 		auto lock( castor::makeUniqueLock( m_loadMtx ) );
-		m_loading.emplace_back( std::make_unique< ThreadData >( data, unit ) );
+		m_loading.emplace_back( std::make_unique< ThreadData >( data ) );
 		return *m_loading.back();
+	}
+
+	TextureUnitCache::ThreadData & TextureUnitCache::doFindThreadData( TextureData & data )
+	{
+		auto lock( castor::makeUniqueLock( m_loadMtx ) );
+		auto it = std::find_if( m_loading.begin()
+			, m_loading.end()
+			, [&data]( auto & lookup )
+			{
+				return lookup->data == ( &data );
+			} );
+		CU_Require( it != m_loading.end() );
+		return **it;
 	}
 
 	void TextureUnitCache::doDestroyThreadData( TextureUnitCache::ThreadData & data )
@@ -783,38 +1032,6 @@ namespace castor3d
 			} );
 		CU_Require( it != m_loading.end() );
 		m_loading.erase( it );
-	}
-
-	void TextureUnitCache::doUpload( ThreadData & data )
-	{
-		getEngine()->sendEvent( makeGpuFunctorEvent( EventType::ePreRender
-			, [this, &data]( RenderDevice const & device
-				, QueueData const & queueData )
-				{
-					if ( !data.interrupted )
-					{
-						auto tiles = data.layout->getImage().getPixels()->getTiles();
-						data.unit->setSampler( data.data->sourceInfo.sampler() );
-						data.unit->setTexture( std::move( data.layout ) );
-						auto config = data.data->passConfig.config;
-
-						if ( config.tileSet->z <= 1 && tiles->x >= 1 )
-						{
-							config.tileSet->z = tiles->x;
-						}
-
-						if ( config.tileSet->w <= 1 && tiles->y >= 1 )
-						{
-							config.tileSet->w = tiles->y;
-						}
-
-						data.unit->setConfiguration( std::move( config ) );
-						data.unit->initialise( device, queueData );
-						doAddWrite( *data.unit );
-					}
-
-					doDestroyThreadData( data );
-				} ) );
 	}
 
 	void TextureUnitCache::doAddWrite( TextureUnit & unit )

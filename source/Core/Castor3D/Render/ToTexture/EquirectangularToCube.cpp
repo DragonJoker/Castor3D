@@ -166,7 +166,7 @@ namespace castor3d
 		: RenderCube{ device, false }
 		, m_device{ device }
 		, m_commandBuffer{ device.graphicsData()->commandPool->createCommandBuffer( "EquirectangularToCube" ) }
-		, m_view{ equiRectangular.getDefaultView().getSampledView() }
+		, m_view{ equiRectangular.getDefaultSampledView() }
 		, m_renderPass{ equitocube::doCreateRenderPass( m_device, target.getPixelFormat() ) }
 	{
 		auto size = VkExtent2D{ target.getWidth(), target.getHeight() };

@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "TextureModule.hpp"
 
-#include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 
@@ -23,44 +22,16 @@ namespace castor3d
 		std::vector< TextureViewUPtr > levels;
 
 		template< typename FuncT >
-		void forMipView( FuncT function )const
+		void forEachView( FuncT function )const
 		{
 			function( view );
-		}
 
-		template< typename FuncT >
-		void forEachLeafView( FuncT function )const
-		{
 			if ( !levels.empty() )
 			{
 				for ( auto & level : levels )
 				{
 					function( level );
 				}
-			}
-			else
-			{
-				forMipView( function );
-			}
-		}
-
-		template< typename FuncT >
-		void forEachView( FuncT function )const
-		{
-			forMipView( function );
-			forEachLeafView( function );
-		}
-
-		template< typename FuncT >
-		void forEachFirstMipView( FuncT function )const
-		{
-			if ( !levels.empty() )
-			{
-				function( *levels.begin() );
-			}
-			else
-			{
-				forMipView( function );
 			}
 		}
 	};
@@ -80,21 +51,6 @@ namespace castor3d
 				face.forEachView( function );
 			}
 		}
-		
-		template< typename FuncT >
-		void forEachFirstMipView( FuncT function )const
-		{
-			view.forEachFirstMipView( function );
-		}
-
-		template< typename FuncT >
-		void forEachLeafView( FuncT function )const
-		{
-			for ( auto & face : faces )
-			{
-				face.forEachLeafView( function );
-			}
-		}
 	};
 
 	template< typename ViewT >
@@ -109,24 +65,6 @@ namespace castor3d
 			for ( auto & layer : layers )
 			{
 				layer.forEachView( function );
-			}
-		}
-
-		template< typename FuncT >
-		void forEachFirstMipView( FuncT function )const
-		{
-			for ( auto & layer : layers )
-			{
-				layer.forEachFirstMipView( function );
-			}
-		}
-
-		template< typename FuncT >
-		void forEachLeafView( FuncT function )const
-		{
-			for ( auto & layer : layers )
-			{
-				layer.forEachLeafView( function );
 			}
 		}
 	};
@@ -145,36 +83,7 @@ namespace castor3d
 				slice.forEachView( function );
 			}
 		}
-
-		template< typename FuncT >
-		void forEachFirstMipView( FuncT function )const
-		{
-			for ( auto & slice : slices )
-			{
-				slice.forEachFirstMipView( function );
-			}
-		}
-
-		template< typename FuncT >
-		void forEachLeafView( FuncT function )const
-		{
-			for ( auto & slice : slices )
-			{
-				slice.forEachLeafView( function );
-			}
-		}
 	};
-
-	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
-		, castor::Path const & relative
-		, castor::Path const & folder
-		, castor::ImageLoaderConfig config = { true, true, true } );
-	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
-		, castor::String const & name
-		, castor::PxBufferBaseUPtr buffer
-		, bool isStatic = false );
-	C3D_API uint32_t getMipLevels( VkExtent3D const & extent
-		, VkFormat format );
 
 	class TextureLayout
 		: public castor::OwnedBy< RenderSystem >
@@ -245,12 +154,10 @@ namespace castor3d
 		 *\~english
 		 *\brief		Initialises the texture and all its views.
 		 *\param[in]	device		The GPU device.
-		 *\param[in]	queueData	The queue receiving the GPU commands.
 		 *\return		\p true if OK.
 		 *\~french
 		 *\brief		Initialise la texture et toutes ses vues.
 		 *\param[in]	device		Le device GPU.
-		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 *\return		\p true si tout s'est bien passé.
 		 */
 		C3D_API bool initialise( RenderDevice const & device
@@ -299,7 +206,7 @@ namespace castor3d
 		C3D_API void generateMipmaps( ashes::CommandBuffer & cmd
 			, VkImageLayout srcLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL )const;
 		/**
-		 *\name Whole texture access.
+		 *\name Texture source setup.
 		 **/
 		/**@{*/
 		/**
@@ -318,309 +225,43 @@ namespace castor3d
 			, castor::ImageLoaderConfig config = { true, true, true } );
 		C3D_API void setSource( VkExtent3D const & extent
 			, VkFormat format );
+
 		void setSource( VkExtent2D const & extent
 			, VkFormat format )
 		{
 			return setSource( { extent.width, extent.height, 1u }
 				, format );
 		}
+		/**@}*/
 		/**
 		 *\name Getters.
 		 **/
 		/**@{*/
-		TextureView const & getDefaultView()const noexcept
-		{
-			CU_Require( m_defaultView.view );
-			return *m_defaultView.view;
-		}
+		C3D_API castor::String getDefaultSourceString()const;
+		C3D_API ashes::ImageView const & getDefaultSampledView()const noexcept;
+		C3D_API ashes::ImageView const & getDefaultTargetView()const noexcept;
+		C3D_API castor::String getLayerCubeSourceString( size_t layer )const noexcept;
+		C3D_API ashes::ImageView const & getLayerCubeTargetView( size_t layer )const noexcept;
+		C3D_API castor::String getLayerCubeFaceSourceString( size_t layer
+			, CubeMapFace face )const noexcept;
+		C3D_API ashes::ImageView const & getLayerCubeFaceTargetView( size_t layer
+			, CubeMapFace face )const noexcept;
+		C3D_API castor::String getName()const;
+		C3D_API castor::Path getPath()const;
+		C3D_API bool needsYInversion()const;
+		C3D_API bool hasBuffer()const;
 
-		TextureView & getDefaultView()noexcept
-		{
-			CU_Require( m_defaultView.view );
-			return *m_defaultView.view;
-		}
-
-		MipView const & getDefault()const noexcept
-		{
-			return m_defaultView;
-		}
-		/**@}*/
-		/**@}*/
-		/**
-		*\name
-		*	2D texture's mip level access.
-		**/
-		/**@{*/
-		TextureView & getMipView( size_t level )const noexcept
-		{
-			CU_Require( getDefault().levels.size() > level );
-			return *getDefault().levels[level];
-		}
-		/**@}*/
-		/**
-		 *\name Texture array's layer access.
-		 **/
-		/**@{*/
-		/**
-		 *\~english
-		 *\brief		Sets the source for all mip lever of one layer in the layout.
-		 *\~french
-		 *\brief		Définit la source pour tous les mip levels une couche du layout.
-		 */
-		C3D_API void setLayerSource( uint32_t index
-			, castor::PxBufferBaseUPtr buffer
-			, uint32_t bufferOrigLevels );
-		C3D_API void setLayerSource( uint32_t index
-			, castor::PxBufferBaseUPtr buffer );
-		C3D_API void setLayerSource( uint32_t index
-			, castor::Path const & folder
-			, castor::Path const & relative
-			, castor::ImageLoaderConfig config = { true, true, false } );
-		C3D_API void setLayerSource( uint32_t index
-			, VkExtent3D const & extent
-			, VkFormat format );
-		void setLayerSource( uint32_t index
-			, VkExtent2D const & extent
-			, VkFormat format )
-		{
-			return setLayerSource( index
-				, { extent.width, extent.height, 1u }
-			, format );
-		}
-		/**
-		 *\name Getters.
-		 **/
-		/**@{*/
 		uint32_t getLayersCount()const noexcept
 		{
 			return m_info->arrayLayers;
 		}
 
-		ArrayView< MipView > const & getArray2D()const noexcept
-		{
-			return m_arrayView;
-		}
-
-		MipView const & getLayer2D( size_t layer )const noexcept
-		{
-			CU_Require( m_cubeView.layers.empty() );
-			CU_Require( m_sliceView.slices.empty() );
-			CU_Require( getLayersCount() > 1u );
-			CU_Require( layer < m_arrayView.layers.size() );
-			return m_arrayView.layers[layer];
-		}
-
-		MipView & getLayer2D( size_t layer )noexcept
-		{
-			CU_Require( m_cubeView.layers.empty() );
-			CU_Require( m_sliceView.slices.empty() );
-			CU_Require( getLayersCount() > 1u );
-			CU_Require( layer < m_arrayView.layers.size() );
-			return m_arrayView.layers[layer];
-		}
-
-		TextureView & getLayer2DView( size_t layer )const noexcept
-		{
-			CU_Require( getLayer2D( layer ).view );
-			return *getLayer2D( layer ).view;
-		}
-		/**@}*/
-		/**
-		 *\name Texture array layer's mip level access.
-		 **/
-		/**@{*/
-		/**
-		 *\~english
-		 *\brief		Sets the source for one mip level of a layer in the layout.
-		 *\~french
-		 *\brief		Définit la source pour un mip level d'une couche du layout.
-		 */
-		C3D_API void setLayerMipSource( uint32_t index
-			, uint32_t level
-			, castor::PxBufferBaseUPtr buffer );
-		C3D_API void setLayerMipSource( uint32_t index
-			, uint32_t level
-			, castor::Path const & folder
-			, castor::Path const & relative
-			, castor::ImageLoaderConfig config = { true, false, false } );
-		C3D_API void setLayerMipSource( uint32_t index
-			, uint32_t level
-			, VkExtent3D const & extent
-			, VkFormat format );
-		void setLayerMipSource( uint32_t index
-			, uint32_t level
-			, VkExtent2D const & extent
-			, VkFormat format )
-		{
-			return setLayerMipSource( index
-				, level
-				, { extent.width, extent.height, 1u }
-				, format );
-		}
-		/**@}*/
-		/**
-		 *\name 3D texture's slice access.
-		 **/
-		/**@{*/
-		SliceView< MipView > const & getSlices3D()const noexcept
-		{
-			return m_sliceView;
-		}
-
-		MipView const & getSlice( size_t slice )const noexcept
-		{
-			CU_Require( m_cubeView.layers.empty() );
-			CU_Require( m_arrayView.layers.empty() );
-			CU_Require( getDepth() > 1u );
-			CU_Require( slice < m_sliceView.slices.size() );
-			return m_sliceView.slices[slice];
-		}
-
-		MipView & getSlice( size_t slice )noexcept
-		{
-			CU_Require( m_cubeView.layers.empty() );
-			CU_Require( m_arrayView.layers.empty() );
-			CU_Require( getDepth() > 1u );
-			CU_Require( slice < m_sliceView.slices.size() );
-			return m_sliceView.slices[slice];
-		}
-
-		TextureView & getSliceView( size_t slice )const noexcept
-		{
-			CU_Require( getSlice( slice ).view );
-			return *getSlice( slice ).view;
-		}
-		/**@}*/
-		/**
-		*\name
-		*	Cube array's texture access.
-		*\remarks
-		*	A simple cube texture is a cube array of size 1.
-		**/
-		/**@{*/
 		uint32_t isCube()const noexcept
 		{
 			return getLayersCount() >= 6u
 				&& ( getLayersCount() % 6u ) == 0u
 				&& ashes::checkFlag( m_info->flags, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT );
 		}
-
-		ArrayView< CubeView > const & getArrayCube()const noexcept
-		{
-			return m_cubeView;
-		}
-
-		CubeView const & getLayerCube( size_t layer )const noexcept
-		{
-			CU_Require( m_arrayView.layers.empty() );
-			CU_Require( m_sliceView.slices.empty() );
-			CU_Require( isCube() );
-			CU_Require( layer < m_cubeView.layers.size() );
-			return m_cubeView.layers[layer];
-		}
-
-		CubeView & getLayerCube( size_t layer )noexcept
-		{
-			CU_Require( m_arrayView.layers.empty() );
-			CU_Require( m_sliceView.slices.empty() );
-			CU_Require( isCube() );
-			CU_Require( layer < m_cubeView.layers.size() );
-			return m_cubeView.layers[layer];
-		}
-
-		TextureView & getLayerCubeView( size_t layer )const noexcept
-		{
-			CU_Require( getLayerCube( layer ).view.view );
-			return *getLayerCube( layer ).view.view;
-		}
-		/**@}*/
-		/**
-		 *\name Cube array texture layer's face access.
-		 **/
-		/**@{*/
-		MipView const & getLayerCubeFace( size_t layer
-			, CubeMapFace face )const noexcept
-		{
-			return getLayerCube( layer ).faces[size_t( face )];
-		}
-
-		MipView & getLayerCubeFace( size_t layer
-			, CubeMapFace face )noexcept
-		{
-			return getLayerCube( layer ).faces[size_t( face )];
-		}
-
-		TextureView const & getLayerCubeFaceView( size_t layer
-			, CubeMapFace face )const noexcept
-		{
-			CU_Require( getLayerCubeFace( layer, face ).view );
-			return *getLayerCubeFace( layer, face ).view;
-		}
-		/**@{*/
-		/**
-		 *\~english
-		 *\brief		Sets the source for a layer cube's face in the layout.
-		 *\~french
-		 *\brief		Définit la source pour une face d'un cube d'un tableau dans le layout.
-		 */
-		C3D_API void setLayerCubeFaceSource( uint32_t layer
-			, CubeMapFace face
-			, castor::PxBufferBaseUPtr buffer );
-		C3D_API void setLayerCubeFaceSource( uint32_t layer
-			, CubeMapFace face
-			, castor::Path const & folder
-			, castor::Path const & relative
-			, castor::ImageLoaderConfig config = { true, true, false } );
-		void setLayerCubeFaceSource( uint32_t layer
-			, CubeMapFace face
-			, VkExtent2D const & extent
-			, VkFormat format );
-		/**@}*/
-		/**@}*/
-		/**
-		 *\name Cube array texture layer face's mip level access.
-		 **/
-		/**@{*/
-		TextureView & getLayerCubeFaceMipView( size_t layer
-			, CubeMapFace face
-			, uint32_t level )const noexcept
-		{
-			CU_Require( getLayerCubeFace( layer, face ).levels.size() > level );
-			CU_Require( getLayerCubeFace( layer, face ).levels[level] );
-			return *getLayerCubeFace( layer, face ).levels[level];
-		}
-		/**@{*/
-		/**
-		 *\~english
-		 *\brief		Sets the source for a face of layer in the layout.
-		 *\~french
-		 *\brief		Définit la source pour un mip level d'une couche du layout.
-		 */
-		C3D_API void setLayerCubeFaceMipSource( uint32_t layer
-			, CubeMapFace face
-			, uint32_t level
-			, castor::PxBufferBaseUPtr buffer );
-		C3D_API void setLayerCubeFaceMipSource( uint32_t layer
-			, CubeMapFace face
-			, uint32_t level
-			, castor::Path const & folder
-			, castor::Path const & relative
-			, castor::ImageLoaderConfig config = { true, false, false } );
-		void setLayerCubeFaceMipSource( uint32_t layer
-			, CubeMapFace face
-			, uint32_t level
-			, VkExtent2D const & extent
-			, VkFormat format );
-		/**@}*/
-		/**@}*/
-		/**
-		*name
-		*	Getters.
-		**/
-		/**@{*/
-		C3D_API castor::String getName()const;
-		C3D_API castor::Path getPath()const;
-		C3D_API bool needsYInversion()const;
 
 		bool isInitialised()const noexcept
 		{
@@ -673,7 +314,7 @@ namespace castor3d
 			return m_info->extent.depth;
 		}
 
-		uint32_t getMipmapCount()const noexcept
+		uint32_t getMipLevels()const noexcept
 		{
 			return m_info->mipLevels;
 		}
@@ -688,80 +329,32 @@ namespace castor3d
 			return m_info->format;
 		}
 		/**@}*/
-		/**
-		*\~english
-		*name
-		*	Views parsing.
-		*\~french
-		*name
-		*	Parsing des vues.
-		**/
-		/**@{*/
-		template< typename FuncT >
-		void forEachView( FuncT function )const
-		{
-			m_defaultView.forEachView( function );
-
-			if ( !m_cubeView.layers.empty() )
-			{
-				m_cubeView.forEachView( function );
-			}
-			else if ( !m_arrayView.layers.empty() )
-			{
-				m_arrayView.forEachView( function );
-			}
-			else if ( !m_sliceView.slices.empty() )
-			{
-				m_sliceView.forEachView( function );
-			}
-		}
-		
-		template< typename FuncT >
-		void forEachFirstMipView( FuncT function )const
-		{
-			if ( !m_cubeView.layers.empty() )
-			{
-				m_cubeView.forEachFirstMipView( function );
-			}
-			else if ( !m_arrayView.layers.empty() )
-			{
-				m_arrayView.forEachFirstMipView( function );
-			}
-			else if ( !m_sliceView.slices.empty() )
-			{
-				m_sliceView.forEachFirstMipView( function );
-			}
-			else
-			{
-				m_defaultView.forEachFirstMipView( function );
-			}
-		}
-
-		template< typename FuncT >
-		void forEachLeafView( FuncT function )const
-		{
-			if ( !m_cubeView.layers.empty() )
-			{
-				m_cubeView.forEachLeafView( function );
-			}
-			else if ( !m_arrayView.layers.empty() )
-			{
-				m_arrayView.forEachLeafView( function );
-			}
-			else if ( !m_sliceView.slices.empty() )
-			{
-				m_sliceView.forEachLeafView( function );
-			}
-		}
-		/**@}*/
 
 	private:
 		uint32_t doUpdateViews();
 		void doUpdateCreateInfo( castor::ImageLayout const & layout );
-		void doUpdateFromFirstImage( uint32_t mipLevel, castor::ImageLayout layout );
 		void doUpdateMips( bool genNeeded, uint32_t mipLevels );
-		void doUpdateLayerMip( bool genNeeded, uint32_t layer, uint32_t level );
-		void doUpdateLayerMips( bool genNeeded, uint32_t layer, uint32_t mipLevels );
+
+		TextureView & getDefaultView()const noexcept
+		{
+			CU_Require( m_defaultView.view );
+			return *m_defaultView.view;
+		}
+
+		CubeView const & getLayerCube( size_t layer )const noexcept
+		{
+			CU_Require( m_arrayView.layers.empty() );
+			CU_Require( m_sliceView.slices.empty() );
+			CU_Require( isCube() );
+			CU_Require( layer < m_cubeView.layers.size() );
+			return m_cubeView.layers[layer];
+		}
+
+		MipView const & getLayerCubeFace( size_t layer
+			, CubeMapFace face )const noexcept
+		{
+			return getLayerCube( layer ).faces[size_t( face )];
+		}
 
 	private:
 		bool m_initialised{ false };
@@ -791,6 +384,12 @@ namespace castor3d
 		result->bindMemory( std::move( memory ) );
 		return result;
 	}
+
+	C3D_API void uploadTexture( RenderDevice const & device
+		, QueueData const & queueData
+		, castor::Image const & image
+		, ashes::Image const & texture
+		, ashes::ImageViewCreateInfo & viewInfo );
 }
 
 #endif

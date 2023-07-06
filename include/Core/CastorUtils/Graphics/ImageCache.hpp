@@ -89,6 +89,11 @@ namespace castor
 		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< ElementT, KeyT, ResourceCacheTraitsT< ElementT, KeyT > > const & cache
 			, KeyT const & name
 			, ImageCreateParams const & params );
+		CU_API static ElementPtrT makeElement( ResourceCacheBaseT< ElementT, KeyT, ResourceCacheTraitsT< ElementT, KeyT > > const & cache
+			, KeyT const & name
+			, Path const & path
+			, ImageLayout layout
+			, PxBufferBaseUPtr buffer );
 	};
 	using ImageCacheTraits = ResourceCacheTraitsT< Image, String >;
 	/**

@@ -183,7 +183,7 @@ namespace castor3d
 		uint32_t m_count{ 0u };
 		OnSceneNodeChangedConnection m_onNodeChanged;
 		std::vector< crg::RunnableGraphPtr > m_runnables;
-		ashes::ImagePtr m_image;
+		ashes::Image * m_image;
 		std::vector< ashes::ImageView > m_environmentMapViews;
 		OnBackgroundChangedConnection m_onSetBackground;
 	};

@@ -10,11 +10,16 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/GBuffer.hpp"
 
+#include <CastorUtils/Design/DataHolder.hpp>
+
 namespace castor3d
 {
 	class PrepassResult
-		: public GBufferT< PpTexture >
+		: private castor::DataHolderT< TextureUPtr >
+		, public GBufferT< PpTexture >
 	{
+		using TextureHolder = castor::DataHolderT< TextureUPtr >;
+
 	public:
 		C3D_API PrepassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device

@@ -17,26 +17,40 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/SquareMatrix.hpp>
 
 #include <ashespp/Descriptor/DescriptorSet.hpp>
+#include <ashespp/Image/Image.hpp>
 
 namespace castor3d
 {
-	struct TextureUnitData
+	struct TextureData
 	{
-		explicit TextureUnitData( TextureSourceInfo psourceInfo
-			, PassTextureConfig ppassConfig = {}
-			, TextureAnimationUPtr panimation = {}
-			, castor::PxBufferBaseUPtr pbuffer = {} )
+		explicit TextureData( TextureSourceInfo psourceInfo
+			, castor::ImageRPtr pimage = {}
+			, VkImageUsageFlags pusage = { VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT } )
 			: sourceInfo{ std::move( psourceInfo ) }
-			, passConfig{ std::move( ppassConfig ) }
-			, animation{ std::move( panimation ) }
-			, buffer{ std::move( pbuffer ) }
+			, image{ std::move( pimage ) }
+			, usage{ std::move( pusage ) }
 		{
 		}
 
 		TextureSourceInfo sourceInfo;
+		castor::ImageRPtr image;
+		VkImageUsageFlags usage;
+	};
+
+	struct TextureUnitData
+	{
+		explicit TextureUnitData( TextureData * pbase = {}
+			, PassTextureConfig ppassConfig = {}
+			, TextureAnimationUPtr panimation = {} )
+			: base{ std::move( pbase ) }
+			, passConfig{ std::move( ppassConfig ) }
+			, animation{ std::move( panimation ) }
+		{
+		}
+
+		TextureData * base;
 		PassTextureConfig passConfig;
 		TextureAnimationUPtr animation;
-		castor::PxBufferBaseUPtr buffer;
 	};
 
 	class TextureUnit
@@ -76,8 +90,7 @@ namespace castor3d
 		 *\param[in]	device		Le device GPU.
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 */
-		C3D_API bool initialise( RenderDevice const & device
-			, QueueData const & queueData );
+		C3D_API bool initialise();
 		/**
 		 *\~english
 		 *\brief		Cleans up the texture.
@@ -93,7 +106,7 @@ namespace castor3d
 		 *\brief		Définit la texture.
 		 *\param[in]	texture	La texture.
 		 */
-		C3D_API void setTexture( TextureLayoutUPtr texture );
+		C3D_API void setTexture( Texture const * texture );
 		/**
 		*\~english
 		*name
@@ -149,14 +162,22 @@ namespace castor3d
 		C3D_API bool isInitialised()const;
 		C3D_API bool isTransformAnimated()const;
 		C3D_API bool isTileAnimated()const;
-		
-		TextureLayoutRPtr getTexture()const
-		{
-			return m_texture.get();
-		}
+		C3D_API ashes::Sampler const & getSampler()const;
+		C3D_API RenderTargetRPtr getRenderTarget()const;
 
+		C3D_API castor::String getTextureName()const;
+		C3D_API castor::Path getTexturePath()const;
+		C3D_API bool isTextureStatic()const;
+		C3D_API VkFormat getTexturePixelFormat()const;
+		C3D_API castor::Point3ui getTextureImageTiles()const;
+		C3D_API bool hasTextureImageBuffer()const;
+		C3D_API castor::PxBufferBase const & getTextureImageBuffer()const;
+		C3D_API VkExtent3D getTextureDimensions()const;
+		C3D_API uint32_t getTextureMipmapCount()const;
 
+		TextureConfiguration const & getConfiguration()const noexcept
 		{
+			return m_configuration;
 		}
 
 		bool isTextured()const noexcept
@@ -164,9 +185,9 @@ namespace castor3d
 			return m_texture != nullptr;
 		}
 
-		RenderTargetRPtr getRenderTarget()const
+		bool isRenderTarget()const noexcept
 		{
-			return m_renderTarget;
+			return m_data.base->sourceInfo.isRenderTarget();
 		}
 
 		ashes::WriteDescriptorSet getDescriptor()const noexcept
@@ -202,7 +223,7 @@ namespace castor3d
 
 		TextureSourceInfo const & getSourceInfo()const noexcept
 		{
-			return m_data.sourceInfo;
+			return m_data.base->sourceInfo;
 		}
 
 		uint32_t getTexcoordSet()const noexcept
@@ -213,6 +234,18 @@ namespace castor3d
 		TextureUnitData & getData()const noexcept
 		{
 			return m_data;
+		}
+
+		castor::Image const & getCPUImage()const noexcept
+		{
+			CU_Require( m_data.base->image );
+			return *m_data.base->image;
+		}
+
+		ashes::Image const & getGPUImage()const noexcept
+		{
+			CU_Require( m_gpuImage );
+			return *m_gpuImage;
 		}
 		/**@}*/
 		/**
@@ -233,16 +266,6 @@ namespace castor3d
 			, castor::Angle const & rotate
 			, castor::Point3f const & scale );
 		C3D_API void setTexcoordSet( uint32_t value );
-
-		void setRenderTarget( RenderTargetRPtr value )
-		{
-			m_renderTarget = value;
-		}
-
-		void setSampler( SamplerObs value )
-		{
-			m_sampler = value;
-		}
 
 		void setId( uint32_t value )
 		{
@@ -270,15 +293,14 @@ namespace castor3d
 		TextureConfiguration m_configuration{};
 		TextureTransform m_transform{};
 		castor::Matrix4x4f m_transformations;
-		TextureLayoutUPtr m_texture;
-		RenderTargetRPtr m_renderTarget{};
-		SamplerObs m_sampler{};
+		ashes::Image * m_gpuImage{};
+		Texture const * m_texture{};
 		ashes::WriteDescriptorSet m_descriptor;
 		uint32_t m_id{ 0u };
-		mutable bool m_changed;
 		castor::String m_name{};
 		bool m_initialised{ false };
 		bool m_animated{ false };
+		bool m_needsUpload{ false };
 		uint32_t m_setIndex{};
 	};
 }

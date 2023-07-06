@@ -17,7 +17,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Transparent/TransparentModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
+#include "Castor3D/Render/Texture.hpp"
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Render/Prepass/PrepassRendering.hpp"
@@ -208,7 +208,7 @@ namespace castor3d
 
 		crg::ImageViewIdArray getTargetDepth()const
 		{
-			return { m_depth->targetViewId };
+			return { m_depth.targetViewId };
 		}
 
 		Texture const & getResult()const
@@ -233,7 +233,7 @@ namespace castor3d
 
 		Texture const & getNormal()const
 		{
-			return *m_normal;
+			return m_normal;
 		}
 
 		Texture const & getDepthObj()const
@@ -405,8 +405,8 @@ namespace castor3d
 		castor::Size m_rawSize;
 		Texture const * m_colour;
 		Texture const * m_intermediate;
-		TexturePtr m_depth;
-		TexturePtr m_normal;
+		Texture m_depth;
+		Texture m_normal;
 		CameraUbo m_cameraUbo;
 		SceneUbo m_sceneUbo;
 		LpvGridConfigUbo m_lpvConfigUbo;

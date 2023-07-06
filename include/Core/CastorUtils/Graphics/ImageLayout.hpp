@@ -28,6 +28,28 @@ namespace castor
 			CU_EnumBounds( Type, e1D ),
 #pragma clang pop
 		};
+		static castor::StringView getName( Type t )
+		{
+			switch ( t )
+			{
+			case Type::e1D:
+				return "1D";
+			case Type::e2D:
+				return "2D";
+			case Type::e3D:
+				return "3D";
+			case Type::eCube:
+				return "Cube";
+			case Type::e1DArray:
+				return "1DArray";
+			case Type::e2DArray:
+				return "2DArray";
+			case Type::eCubeArray:
+				return "CubeArray";
+			default:
+				return "UnknowImageType";
+			}
+		}
 
 		using Buffer = castor::ByteArrayView;
 		using ConstBuffer = castor::ConstByteArrayView;

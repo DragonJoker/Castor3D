@@ -57,7 +57,7 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED
-				, texture.image
+				, *texture.image
 				, texture.wholeViewId.data->info.subresourceRange );
 			device->vkCmdPipelineBarrier( commandBuffer
 				, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
@@ -73,7 +73,7 @@ namespace castor3d
 			if ( ashes::isDepthOrStencilFormat( texture.imageId.data->info.format ) )
 			{
 				device->vkCmdClearDepthStencilImage( commandBuffer
-					, texture.image
+					, *texture.image
 					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 					, &clearValue.depthStencil
 					, 1u
@@ -82,7 +82,7 @@ namespace castor3d
 			else
 			{
 				device->vkCmdClearColorImage( commandBuffer
-					, texture.image
+					, *texture.image
 					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
 					, &clearValue.color
 					, 1u
@@ -95,7 +95,7 @@ namespace castor3d
 				, finalLayout
 				, VK_QUEUE_FAMILY_IGNORED
 				, VK_QUEUE_FAMILY_IGNORED
-				, texture.image
+				, *texture.image
 				, texture.wholeViewId.data->info.subresourceRange );
 			device->vkCmdPipelineBarrier( commandBuffer
 				, VK_PIPELINE_STAGE_TRANSFER_BIT

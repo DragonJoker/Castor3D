@@ -1,12 +1,51 @@
 #include "Castor3D/Material/Texture/TextureModule.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 
 CU_ImplementSmartPtr( castor3d, SamplerCache )
 
 namespace castor3d
 {
+	namespace texmod
+	{
+		static castor::Image & getImage( Engine & engine
+			, castor::String const & name
+			, castor::ImageCreateParams createParams )
+		{
+			auto image = engine.tryFindImage( name );
+
+			if ( !image )
+			{
+				image = engine.addNewImage( name, createParams );
+			}
+
+			if ( !image )
+			{
+				CU_LoaderError( "Couldn't load image." );
+			}
+
+			if ( !image->hasBuffer() )
+			{
+				**image = *engine.createImage( name, createParams );
+
+				if ( image )
+				{
+					log::info << "Loaded image [" << name << "] (" << *image << ")" << std::endl;
+				}
+			}
+
+			if ( !image->hasBuffer() )
+			{
+				CU_LoaderError( "Couldn't load image." );
+			}
+
+			return *image;
+		}
+	}
+
 	const castor::String PtrCacheTraitsT< castor3d::Sampler, castor::String >::Name = cuT( "Sampler" );
 
 	castor::String getName( TextureSpace value )
@@ -75,23 +114,118 @@ namespace castor3d
 		}
 	}
 
-	std::ostream & operator<<( std::ostream & stream, TextureLayout const & rhs )
+	std::ostream & operator<<( std::ostream & stream, castor::ImageLayout const & rhs )
 	{
-		stream << ashes::getName( rhs.getType() )
-			<< ", " << ashes::getName( rhs.getPixelFormat() )
-			<< ", " << rhs.getDimensions().width
-			<< "x" << rhs.getDimensions().height;
+		stream << castor::ImageLayout::getName( rhs.type )
+			<< ", " << ashes::getName( convert( rhs.format ) )
+			<< ", " << rhs.extent->x
+			<< "x" << rhs.extent->y;
 
-		if ( rhs.getDimensions().depth > 1 )
+		if ( rhs.extent->z > 1 )
 		{
-			stream << ", " << rhs.getDimensions().depth << " slices";
+			stream << ", " << rhs.extent << " slices";
 		}
 		else
 		{
-			stream << ", " << rhs.getLayersCount() << " layers";
+			stream << ", " << rhs.layers << " layers";
 		}
 
-		stream << ", " << rhs.getMipmapCount() << " miplevels";
+		stream << ", " << rhs.levels << " miplevels";
 		return stream;
+	}
+
+	std::ostream & operator<<( std::ostream & stream, castor::Image const & rhs )
+	{
+		stream << rhs.getLayout();
+		return stream;
+	}
+
+	std::ostream & operator<<( std::ostream & stream, TextureLayout const & rhs )
+	{
+		stream << rhs.getImage();
+		return stream;
+	}
+
+	castor::Image & getBufferImage( Engine & engine
+		, castor::String const & name
+		, castor::String const & type
+		, castor::ByteArray const & data )
+	{
+		return texmod::getImage( engine
+			, name
+			, castor::ImageCreateParams{ type
+				, data
+				, { false, false, false } } );
+	}
+
+	castor::Image & getFileImage( Engine & engine
+		, castor::String const & name
+		, castor::Path const & folder
+		, castor::Path const & relative )
+	{
+		return texmod::getImage( engine
+			, name
+			, castor::ImageCreateParams{ folder / relative
+				, { false, false, false } } );
+	}
+
+	TextureLayoutUPtr createTextureLayout( Engine const & engine
+		, castor::Path const & relative
+		, castor::Path const & folder
+		, castor::ImageLoaderConfig config )
+	{
+		ashes::ImageCreateInfo createInfo
+		{
+			0u,
+			VK_IMAGE_TYPE_2D,
+			VK_FORMAT_UNDEFINED,
+			{ 1u, 1u, 1u },
+			20u,
+			1u,
+			VK_SAMPLE_COUNT_1_BIT,
+			VK_IMAGE_TILING_OPTIMAL,
+			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
+		};
+		auto texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
+			, createInfo
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, relative );
+		texture->setSource( folder
+			, relative
+			, std::move( config ) );
+		return texture;
+	}
+
+	TextureLayoutUPtr  createTextureLayout( Engine const & engine
+		, castor::String const & name
+		, castor::PxBufferBaseUPtr buffer
+		, bool isStatic )
+	{
+		ashes::ImageCreateInfo createInfo{ 0u
+			, ( buffer->getHeight() <= 1u && buffer->getWidth() > 1u
+				? VK_IMAGE_TYPE_1D
+				: VK_IMAGE_TYPE_2D )
+			, VK_FORMAT_UNDEFINED
+			, { buffer->getWidth(), buffer->getHeight(), 1u }
+			, uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) )
+			, 1u// TODO: Support array layers: buffer->getLayers()
+			, VK_SAMPLE_COUNT_1_BIT
+			, VK_IMAGE_TILING_OPTIMAL
+			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
+		log::debug << ( cuT( "Creating " ) + name + cuT( " texture layout.\n" ) );
+		auto texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
+			, createInfo
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, name );
+		texture->setSource( std::move( buffer ), isStatic );
+		return texture;
+	}
+
+	uint32_t getMipLevels( VkExtent3D const & extent
+		, VkFormat format )
+	{
+		auto blockSize = ashes::getBlockSize( format );
+		auto min = std::min( extent.width / blockSize.extent.width, extent.height / blockSize.extent.height );
+		return uint32_t( castor::getBitSize( min ) );
 	}
 }

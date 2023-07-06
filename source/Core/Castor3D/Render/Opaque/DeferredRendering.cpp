@@ -301,7 +301,7 @@ namespace castor3d
 		result.addImplicitColourView( m_technique.getSsaoResult().wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addInOutColourView( targetResult );
-		result.addInOutColourView( m_technique.getRenderTarget().getVelocity()->targetViewId );
+		result.addInOutColourView( m_technique.getRenderTarget().getVelocity().targetViewId );
 		return result;
 	}
 

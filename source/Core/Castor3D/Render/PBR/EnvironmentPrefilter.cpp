@@ -354,7 +354,7 @@ namespace castor3d
 		: m_device{ device }
 		, m_srcView{ srcTexture }
 		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
-		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
+		, m_srcImage{ m_srcView.image.get() }
 		, m_srcImageView{ m_srcImage->createView( m_prefix + "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, m_srcView.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
 		, m_result{ envpref::doCreatePrefilteredTexture( m_device, *m_srcView.resources, size, m_prefix ) }
 		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_prefix, m_result.getMipLevels() - 1u ) }

@@ -113,7 +113,7 @@ namespace castor3d
 	{
 	}
 
-	TexturePtr GBufferBase::doCreateTexture( crg::ResourcesCache & resources
+	TextureUPtr GBufferBase::doCreateTexture( crg::ResourcesCache & resources
 		, castor::String const & name
 		, VkImageCreateFlags createFlags
 		, VkExtent3D const & size
@@ -125,7 +125,7 @@ namespace castor3d
 		, VkBorderColor const & borderColor
 		, VkCompareOp compareOp )const
 	{
-		return std::make_shared< Texture >( m_device
+		return castor::makeUnique< Texture >( m_device
 			, resources
 			, name
 			, createFlags

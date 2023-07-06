@@ -10,6 +10,8 @@
 
 #include <ashespp/Image/Image.hpp>
 
+CU_ImplementSmartPtr( castor3d, Texture )
+
 namespace castor3d
 {
 	//*********************************************************************************************
@@ -36,6 +38,52 @@ namespace castor3d
 				? getDepthFormat( device, format )
 				: format;
 		}
+
+		static ashes::Sampler const * getSampler( RenderDevice const & device
+			, VkFilter minFilter
+			, VkFilter magFilter
+			, VkSamplerMipmapMode mipFilter
+			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
+			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER )
+		{
+			auto & engine = *device.renderSystem.getEngine();
+			SamplerObs c3dSampler{};
+			auto splName = getSamplerName( compareOp
+				, minFilter
+				, magFilter
+				, mipFilter
+				, addressMode
+				, addressMode
+				, addressMode );
+
+			if ( engine.hasSampler( splName ) )
+			{
+				c3dSampler = engine.findSampler( splName );
+			}
+			else
+			{
+				auto created = engine.createSampler( splName, engine );
+				created->setMinFilter( minFilter );
+				created->setMagFilter( magFilter );
+				created->setMipFilter( mipFilter );
+				created->setWrapS( addressMode );
+				created->setWrapT( addressMode );
+				created->setWrapR( addressMode );
+				created->setBorderColour( borderColor );
+
+				if ( compareOp != VK_COMPARE_OP_NEVER )
+				{
+					created->enableCompare( true );
+					created->setCompareOp( compareOp );
+				}
+
+				created->initialise( device );
+				c3dSampler = engine.addSampler( splName, created, false );
+			}
+
+			return &c3dSampler->getSampler();
+		}
 	}
 
 	//*********************************************************************************************
@@ -56,7 +104,7 @@ namespace castor3d
 	{
 	}
 
-	Texture::Texture( Texture && rhs )
+	Texture::Texture( Texture && rhs )noexcept
 		: resources{ std::move( rhs.resources ) }
 		, device{ std::move( rhs.device ) }
 		, imageId{ std::move( rhs.imageId ) }
@@ -72,13 +120,13 @@ namespace castor3d
 	{
 		rhs.device = nullptr;
 		rhs.resources = nullptr;
-		rhs.image = VkImage{};
+		rhs.image = nullptr;
 		rhs.wholeView = VkImageView{};
 		rhs.targetView = VkImageView{};
 		rhs.sampledView = VkImageView{};
 	}
 
-	Texture & Texture::operator=( Texture && rhs )
+	Texture & Texture::operator=( Texture && rhs )noexcept
 	{
 		resources = std::move( rhs.resources );
 		device = std::move( rhs.device );
@@ -95,7 +143,7 @@ namespace castor3d
 
 		rhs.device = nullptr;
 		rhs.resources = nullptr;
-		rhs.image = VkImage{};
+		rhs.image = nullptr;
 		rhs.wholeView = VkImageView{};
 		rhs.targetView = VkImageView{};
 		rhs.sampledView = VkImageView{};
@@ -125,12 +173,13 @@ namespace castor3d
 			, mipLevels
 			, format
 			, usageFlags
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, borderColor
-			, compareOp
+			, texture::getSampler( device
+				, VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR
+				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+				, borderColor
+				, compareOp )
 			, createSubviews }
 	{
 	}
@@ -161,12 +210,39 @@ namespace castor3d
 			, mipLevels
 			, format
 			, usageFlags
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, borderColor
-			, compareOp
+			, texture::getSampler( pdevice
+				, minFilter
+				, magFilter
+				, mipFilter
+				, addressMode
+				, borderColor
+				, compareOp )
+			, createSubviews }
+	{
+	}
+	
+	Texture::Texture( RenderDevice const & device
+		, crg::ResourcesCache & resources
+		, castor::String const & name
+		, VkImageCreateFlags createFlags
+		, VkExtent3D const & size
+		, uint32_t layerCount
+		, uint32_t mipLevels
+		, VkFormat format
+		, VkImageUsageFlags usageFlags
+		, ashes::Sampler const * sampler
+		, bool createSubviews )
+		: Texture{ device
+			, resources
+			, name
+			, createFlags
+			, size
+			, layerCount
+			, VK_SAMPLE_COUNT_1_BIT
+			, mipLevels
+			, format
+			, usageFlags
+			, sampler
 			, createSubviews }
 	{
 	}
@@ -194,12 +270,13 @@ namespace castor3d
 			, mipLevels
 			, format
 			, usageFlags
-			, VK_FILTER_LINEAR
-			, VK_FILTER_LINEAR
-			, VK_SAMPLER_MIPMAP_MODE_LINEAR
-			, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
-			, borderColor
-			, compareOp
+			, texture::getSampler( device
+				, VK_FILTER_LINEAR
+				, VK_FILTER_LINEAR
+				, VK_SAMPLER_MIPMAP_MODE_LINEAR
+				, VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
+				, borderColor
+				, compareOp )
 			, createSubviews }
 	{
 	}
@@ -221,8 +298,42 @@ namespace castor3d
 		, VkBorderColor const & borderColor
 		, VkCompareOp compareOp
 		, bool createSubviews )
+		: Texture{ pdevice
+			, presources
+			, name
+			, createFlags
+			, size
+			, layerCount
+			, sampleCount
+			, mipLevels
+			, format
+			, usageFlags
+			, texture::getSampler( pdevice
+				, minFilter
+				, magFilter
+				, mipFilter
+				, addressMode
+				, borderColor
+				, compareOp )
+			, createSubviews }
+	{
+	}
+
+	Texture::Texture( RenderDevice const & pdevice
+		, crg::ResourcesCache & presources
+		, castor::String const & name
+		, VkImageCreateFlags createFlags
+		, VkExtent3D const & size
+		, uint32_t layerCount
+		, VkSampleCountFlagBits sampleCount
+		, uint32_t mipLevels
+		, VkFormat format
+		, VkImageUsageFlags usageFlags
+		, ashes::Sampler const * psampler
+		, bool createSubviews )
 		: resources{ &presources }
 		, device{ &pdevice }
+		, sampler{ psampler }
 	{
 		auto & handler = resources->getHandler();
 		mipLevels = std::max( 1u, mipLevels );
@@ -309,46 +420,9 @@ namespace castor3d
 					, { ashes::getAspectMask( format ), 0u, 1u, index, 1u } } ) );
 			}
 		}
-
-		auto & engine = *device->renderSystem.getEngine();
-		SamplerObs c3dSampler{};
-		auto splName = getSamplerName( compareOp
-			, minFilter
-			, magFilter
-			, mipFilter
-			, addressMode
-			, addressMode
-			, addressMode );
-
-		if ( engine.hasSampler( splName ) )
-		{
-			c3dSampler = engine.findSampler( splName );
-		}
-		else
-		{
-			auto created = engine.createSampler( splName, engine );
-			created->setMinFilter( minFilter );
-			created->setMagFilter( magFilter );
-			created->setMipFilter( mipFilter );
-			created->setWrapS( addressMode );
-			created->setWrapT( addressMode );
-			created->setWrapR( addressMode );
-			created->setBorderColour( borderColor );
-
-			if ( compareOp != VK_COMPARE_OP_NEVER )
-			{
-				created->enableCompare( true );
-				created->setCompareOp( compareOp );
-			}
-
-			created->initialise( *device );
-			c3dSampler = engine.addSampler( splName, created, false );
-		}
-
-		sampler = &c3dSampler->getSampler();
 	}
 
-	Texture::~Texture()
+	Texture::~Texture()noexcept
 	{
 		CU_Require( image == nullptr && wholeView == nullptr );
 	}
@@ -361,7 +435,11 @@ namespace castor3d
 		}
 
 		auto & context = device->makeContext();
-		image = resources->createImage( context, imageId );
+		
+		image = std::make_unique< ashes::Image >( **device
+			, imageId.data->name
+			, resources->createImage( context, imageId )
+			, ashes::ImageCreateInfo{ imageId.data->info } );
 		wholeView = resources->createImageView( context, wholeViewId );
 
 		if ( wholeViewId != targetViewId )
@@ -410,7 +488,7 @@ namespace castor3d
 		resources->destroyImageView( wholeViewId );
 		wholeView = VkImageView{};
 		resources->destroyImage( imageId );
-		image = VkImage{};
+		image = nullptr;
 	}
 
 	VkImageMemoryBarrier Texture::makeGeneralLayout( VkImageLayout srcLayout
@@ -555,7 +633,7 @@ namespace castor3d
 			, dstLayout
 			, srcQueueFamily
 			, dstQueueFamily
-			, image
+			, *image
 			, ( target
 				? targetViewId.data->info.subresourceRange
 				: sampledViewId.data->info.subresourceRange ) );

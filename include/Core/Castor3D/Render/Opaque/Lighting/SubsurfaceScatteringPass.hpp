@@ -72,7 +72,7 @@ namespace castor3d
 
 		Texture const & getResult()const
 		{
-			return *m_result;
+			return m_result;
 		}
 
 		crg::FramePass const & getLastPass()const
@@ -113,9 +113,9 @@ namespace castor3d
 		crg::FramePassGroup & m_group;
 		bool m_enabled;
 		castor::Size m_size;
-		TexturePtr m_intermediate;
-		TextureArray m_blurImages;
-		TexturePtr m_result;
+		Texture m_intermediate;
+		std::array< Texture, 3u > m_blurImages;
+		Texture m_result;
 		UniformBufferOffsetT< BlurConfiguration > m_blurCfgUbo;
 		UniformBufferOffsetT< BlurWeights > m_blurWgtUbo;
 		ShaderModule m_blurHorizVertexShader;

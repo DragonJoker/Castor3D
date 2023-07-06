@@ -75,6 +75,7 @@ namespace castor3d
 		}
 
 		result = castor::hashCombine( result, value.allowCompression() );
+		result = castor::hashCombine( result, value.allowSRGB() );
 		return castor::hashCombine( result, value.generateMips() );
 	}
 

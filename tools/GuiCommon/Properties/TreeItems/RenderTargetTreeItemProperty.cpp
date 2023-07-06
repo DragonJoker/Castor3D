@@ -11,6 +11,7 @@
 #include <Castor3D/Plugin/ToneMappingPlugin.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
+#include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderTechnique.hpp>
 #include <Castor3D/Render/RenderTechniquePass.hpp>
 #include <Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp>

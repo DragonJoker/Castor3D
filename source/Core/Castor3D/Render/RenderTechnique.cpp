@@ -322,7 +322,7 @@ namespace castor3d
 		, m_rawSize{ getSafeBandedSize( m_targetSize ) }
 		, m_colour{ &colour }
 		, m_intermediate{ &intermediate }
-		, m_depth{ std::make_shared< Texture >( m_device
+		, m_depth{ m_device
 			, m_renderTarget.getResources()
 			, getName() + "/Depth"
 			, 0u
@@ -331,8 +331,8 @@ namespace castor3d
 			, 1u
 			, m_device.selectSuitableDepthStencilFormat( getFeatureFlags( rendtech::depthUsageFlags ) )
 			, rendtech::depthUsageFlags
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
-		, m_normal{ std::make_shared< Texture >( m_device
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_normal{ m_device
 			, m_renderTarget.getResources()
 			, getName() + "/" + getTexName( DsTexture::eNmlOcc )
 			, 0u
@@ -341,7 +341,7 @@ namespace castor3d
 			, 1u
 			, getFormat( m_device, DsTexture::eNmlOcc )
 			, getUsageFlags( DsTexture::eNmlOcc )
-			, getBorderColor( DsTexture::eNmlOcc ) ) }
+			, getBorderColor( DsTexture::eNmlOcc ) }
 		, m_cameraUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_lpvConfigUbo{ m_device }
@@ -425,7 +425,7 @@ namespace castor3d
 			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeOpaque, &m_background->getPass() )
 			, getSsaoConfig()
 			, progress
-			, m_normal
+			, &m_normal
 			, deferred }
 		, m_lastOpaquePass{ &m_opaque.getLastPass() }
 		, m_transparent{ *this
@@ -453,8 +453,9 @@ namespace castor3d
 			, TechniquePassEvent::eBeforePostEffects
 			, &m_transparent.getLastPass() );
 
-		m_depth->create();
-		m_normal->create();
+		m_depth.create();
+		m_normal.create();
+
 		if ( auto runnable = m_clearLpvRunnable.get() )
 		{
 			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -490,8 +491,8 @@ namespace castor3d
 		m_llpvResult.clear();
 		m_lpvResult.reset();
 		m_voxelizer.reset();
-		m_normal->destroy();
-		m_depth->destroy();
+		m_normal.destroy();
+		m_depth.destroy();
 
 		for ( auto & array : m_activeShadowMaps )
 		{
@@ -642,8 +643,8 @@ namespace castor3d
 			, m_renderTarget.getGraph().getFinalLayoutState( m_colour->sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 		visitor.visit( "Technique Depth"
-			, *m_depth
-			, m_renderTarget.getGraph().getFinalLayoutState( m_depth->sampledViewId ).layout
+			, m_depth
+			, m_renderTarget.getGraph().getFinalLayoutState( m_depth.sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
 
 		rendtech::applyAction( m_renderPasses[size_t( TechniquePassEvent::eBeforeDepth )]

@@ -18,24 +18,6 @@ namespace castor3d
 
 	namespace passdownscl
 	{
-		static TexturePtr doCreateImage( RenderDevice const & device
-			, crg::ResourcesCache & resources
-			, castor::String const & name
-			, VkFormat format
-			, VkExtent2D const & size )
-		{
-			return std::make_shared< Texture >( device
-				, resources
-				, name
-				, 0u
-				, VkExtent3D{ size.width, size.height, 1u }
-				, 1u
-				, 1u
-				, format
-				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
-					| VK_IMAGE_USAGE_SAMPLED_BIT ) );
-		}
-
 		static TextureArray doCreateImages( RenderDevice const & device
 			, castor::String const & name
 			, TextureArray const & views
@@ -45,15 +27,20 @@ namespace castor3d
 
 			if ( !views.empty() )
 			{
-				auto & resources = *( *views.begin() )->resources;
+				auto & resources = *( *views.begin() ).resources;
 
 				for ( auto & view : views )
 				{
-					result.emplace_back( doCreateImage( device
+					result.emplace_back( device
 						, resources
 						, name + castor::string::toString( result.size() )
-						, view->getFormat()
-						, size ) );
+						, 0u
+						, VkExtent3D{ size.width, size.height, 1u }
+						, 1u
+						, 1u
+						, view.getFormat()
+						, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+							| VK_IMAGE_USAGE_SAMPLED_BIT ) );
 				}
 			}
 
@@ -85,7 +72,7 @@ namespace castor3d
 		//for ( auto & srcView : srcViews )
 		//{
 		//	auto srcSize = srcView.image->getDimensions();
-		//	auto dstView = it->getTexture()->getDefaultView().getTargetView();
+		//	auto dstView = it->getTexture()->getDefaultTargetView();
 
 		//	m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 		//		, VK_PIPELINE_STAGE_TRANSFER_BIT
@@ -144,7 +131,7 @@ namespace castor3d
 		for ( auto & texture : m_result )
 		{
 			visitor.visit( "Downscale" + castor::string::toString( index++ )
-				, *texture
+				, texture
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}

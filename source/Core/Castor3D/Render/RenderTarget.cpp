@@ -326,7 +326,7 @@ namespace castor3d
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + castor::string::toString( m_index ) }
 		, m_graph{ m_resources.getHandler(), m_name }
-		, m_velocity{ std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
+		, m_velocity{ getOwner()->getRenderSystem()->getRenderDevice()
 			, m_resources
 			, "Velocity"
 			, 0u
@@ -339,8 +339,8 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_STORAGE_BIT )
-			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
-		, m_srgbObjects{ std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_srgbObjects{ Texture{ getOwner()->getRenderSystem()->getRenderDevice()
 				, m_resources
 				, "SRGBResult0"
 				, 0u
@@ -349,8 +349,8 @@ namespace castor3d
 				, 1u
 				, getPixelFormat()
 				, rendtgt::objectsUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK )
-			, std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
+				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, Texture{ getOwner()->getRenderSystem()->getRenderDevice()
 				, m_resources
 				, "SRGBResult1"
 				, 0u
@@ -359,8 +359,8 @@ namespace castor3d
 				, 1u
 				, getPixelFormat()
 				, rendtgt::objectsUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
-		, m_hdrObjects{ std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
+				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK } }
+		, m_hdrObjects{ Texture{ getOwner()->getRenderSystem()->getRenderDevice()
 				, m_resources
 				, "HDRResult0"
 				, 0u
@@ -369,8 +369,8 @@ namespace castor3d
 				, 1u
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, rendtgt::objectsUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK )
-			, std::make_shared< Texture >( getOwner()->getRenderSystem()->getRenderDevice()
+				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+			, Texture{ getOwner()->getRenderSystem()->getRenderDevice()
 				, m_resources
 				, "HDRResult1"
 				, 0u
@@ -379,7 +379,7 @@ namespace castor3d
 				, 1u
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, rendtgt::objectsUsageFlags
-				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK ) }
+				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK } }
 		, m_overlays{ getOwner()->getRenderSystem()->getRenderDevice()
 			, m_resources
 			, "Overlays"
@@ -439,12 +439,12 @@ namespace castor3d
 
 		for ( auto & texture : m_hdrObjects )
 		{
-			texture->create();
+			texture.create();
 		}
 
 		for ( auto & texture : m_srgbObjects )
 		{
-			texture->create();
+			texture.create();
 		}
 	}
 
@@ -452,12 +452,12 @@ namespace castor3d
 	{
 		for ( auto & texture : m_srgbObjects )
 		{
-			texture->destroy();
+			texture.destroy();
 		}
 
 		for ( auto & texture : m_hdrObjects )
 		{
-			texture->destroy();
+			texture.destroy();
 		}
 	}
 
@@ -558,7 +558,7 @@ namespace castor3d
 		}
 
 		m_overlays.destroy();
-		m_velocity->destroy();
+		m_velocity.destroy();
 		m_combined.destroy();
 		doCleanupTechnique();
 		doCleanupCombineProgram();
@@ -599,7 +599,7 @@ namespace castor3d
 
 		auto lastTarget = &doUpdatePostEffects( updater
 			, m_hdrPostEffects
-			, { m_hdrObjects.front().get(), m_hdrObjects.back().get() } );
+			, { &m_hdrObjects.front(), &m_hdrObjects.back() } );
 
 		if ( m_toneMapping )
 		{
@@ -612,7 +612,7 @@ namespace castor3d
 
 		lastTarget = &doUpdatePostEffects( updater
 			, m_srgbPostEffects
-			, { m_srgbObjects.front().get(), m_srgbObjects.back().get() } );
+			, { &m_srgbObjects.front(), &m_srgbObjects.back() } );
 		m_combinePassIndex = ( lastTarget == m_combinePassSource ) ? 1u : 0u;
 	}
 
@@ -747,7 +747,7 @@ namespace castor3d
 					else
 					{
 						m_toneMapping->initialise( m_toneMappingName
-							, m_hdrObjects.back()->sampledViewId );
+							, m_hdrObjects.back().sampledViewId );
 					}
 				} ) );
 		}
@@ -898,14 +898,15 @@ namespace castor3d
 
 		setProgressBarTitle( progress, "Initialising: Render Target" );
 		auto * previousPass = &m_renderTechnique->getLastPass();
-		auto hdrSource = m_hdrObjects.front().get();
-		auto hdrTarget = m_hdrObjects.back().get();
+		auto hdrSource = &m_hdrObjects.front();
+		auto hdrTarget = &m_hdrObjects.back();
 
 		if ( !m_hdrPostEffects.empty() )
 		{
 			for ( auto & effect : m_hdrPostEffects )
 			{
-				if ( result )
+				if ( result
+					&& ( isFullLoadingEnabled() || effect->isEnabled() ) )
 				{
 					stepProgressBar( progress, "Initialising post effect " + effect->getName() );
 					result = effect->initialise( device
@@ -927,7 +928,7 @@ namespace castor3d
 				previousPass = &doInitialiseCopyCommands( device
 					, "HdrCopy"
 					, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
-					, m_srgbObjects.front()->wholeViewId
+					, m_srgbObjects.front().wholeViewId
 					, *m_hdrLastPass
 					, progress );
 				m_hdrCopyPassSource = hdrSource;
@@ -940,25 +941,26 @@ namespace castor3d
 					, m_size
 					, m_graph
 					, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
-					, m_srgbObjects.front()->wholeViewId
+					, m_srgbObjects.front().wholeViewId
 					, *m_hdrLastPass
 					, *m_hdrConfigUbo
 					, Parameters{}
 					, progress );
 				m_toneMapping->initialise( m_toneMappingName
-					, m_hdrObjects.back()->sampledViewId );
+					, m_hdrObjects.back().sampledViewId );
 				previousPass = &m_toneMapping->getPass();
 			}
 		}
 
-		auto srgbSource = m_srgbObjects.front().get();
-		auto srgbTarget = m_srgbObjects.back().get();
+		auto srgbSource = &m_srgbObjects.front();
+		auto srgbTarget = &m_srgbObjects.back();
 
 		if ( !m_srgbPostEffects.empty() )
 		{
 			for ( auto & effect : m_srgbPostEffects )
 			{
-				if ( result )
+				if ( result
+					&& ( isFullLoadingEnabled() || effect->isEnabled() ) )
 				{
 					stepProgressBar( progress, "Initialising post effect " + effect->getName() );
 					result = effect->initialise( device
@@ -990,7 +992,7 @@ namespace castor3d
 			}
 
 			m_overlays.create();
-			m_velocity->create();
+			m_velocity.create();
 			m_combined.create();
 			auto runnable = m_runnable.get();
 			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
@@ -1088,8 +1090,8 @@ namespace castor3d
 					, device
 					, queueData
 					, m_techniqueParameters
-					, *m_hdrObjects.front()
-					, *m_hdrObjects.back()
+					, m_hdrObjects.front()
+					, m_hdrObjects.back()
 					, m_ssaoConfig
 					, progress
 					, C3D_UseDeferredRendering != 0
@@ -1282,11 +1284,11 @@ namespace castor3d
 			, m_combined
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.emplace_back( "Target SRGB Colour"
-			, *m_srgbObjects.front()
+			, m_srgbObjects.front()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		result.emplace_back( "Target HDR Colour"
-			, *m_hdrObjects.front()
+			, m_hdrObjects.front()
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 		result.emplace_back( "Target Overlays"
@@ -1294,7 +1296,7 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{ { 0.5f, 0.5f, 0.5f }, { 0.5f, 0.5f, 0.5f } }.invert( true ) );
 		result.emplace_back( "Target Velocity"
-			, *m_velocity
+			, m_velocity
 			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 

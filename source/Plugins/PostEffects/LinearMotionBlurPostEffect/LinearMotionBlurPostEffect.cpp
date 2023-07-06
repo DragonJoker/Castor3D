@@ -187,7 +187,7 @@ namespace motion_blur
 			, BlurCfgUboIdx );
 		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
 			, ColorTexIdx );
-		m_pass->addSampledView( m_renderTarget.getVelocity()->sampledViewId
+		m_pass->addSampledView( m_renderTarget.getVelocity().sampledViewId
 			, VelocityTexIdx );
 		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
 		m_saved = Clock::now();

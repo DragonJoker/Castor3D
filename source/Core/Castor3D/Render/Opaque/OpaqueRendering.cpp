@@ -43,7 +43,7 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses
 		, SsaoConfig const & ssaoConfig
 		, ProgressBar * progress
-		, TexturePtr normal
+		, Texture const * normal
 		, bool deferred )
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }

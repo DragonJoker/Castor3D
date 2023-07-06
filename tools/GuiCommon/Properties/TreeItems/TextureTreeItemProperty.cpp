@@ -535,9 +535,9 @@ namespace GuiCommon
 			, unit
 			, &castor3d::TextureUnit::setTexcoordSet );
 
-		if ( unit->getTexture()->isStatic() )
+		if ( unit->isTextureStatic() )
 		{
-			m_path = castor::Path{ unit->getTexture()->getPath() };
+			m_path = castor::Path{ unit->getTexturePath() };
 			addProperty( mainContainer, PROPERTY_TEXTURE_IMAGE, m_path
 				, [this]( wxVariant const & var )
 				{
@@ -614,7 +614,7 @@ namespace GuiCommon
 
 		m_properties = textp::UnitTreeGatherer::submit( m_pass
 			, m_configuration
-			, castor::PixelFormat( unit->getTexture()->getPixelFormat() )
+			, castor::PixelFormat( unit->getTexturePixelFormat() )
 			, this
 			, grid
 			, mainContainer

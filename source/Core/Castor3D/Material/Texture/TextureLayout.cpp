@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Material/Texture/TextureSource.hpp"
+#include "Castor3D/Material/Texture/TextureView.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
@@ -513,16 +514,6 @@ namespace castor3d
 			}
 		}
 
-		static castor::String getBufferName( castor::PxBufferBase const & value )
-		{
-			auto stream = castor::makeStringStream();
-			stream << value.getWidth()
-				<< cuT( "x" ) << value.getHeight()
-				<< cuT( "x" ) << value.getLayers()
-				<< cuT( "_" ) << ashes::getName( VkFormat( value.getFormat() ) );
-			return stream.str();
-		}
-
 		static castor::PxBufferBaseUPtr adaptBuffer( castor::PxBufferBaseRPtr buffer
 			, uint32_t mipLevels )
 		{
@@ -576,7 +567,7 @@ namespace castor3d
 			return result;
 		}
 
-		static castor::Image getFileImage( Engine & engine
+		castor::Image getFileImage( Engine & engine
 			, castor::String const & name
 			, castor::Path const & folder
 			, castor::Path const & relative
@@ -584,21 +575,8 @@ namespace castor3d
 			, uint32_t & srcMipLevels
 			, castor::ImageLoaderConfig config )
 		{
-			auto image = engine.tryFindImage( name );
-
-			if ( !image )
-			{
-				image = engine.addNewImage( name
-					, castor::ImageCreateParams{ folder / relative
-						, std::move( config ) });
-			}
-
-			if ( !image )
-			{
-				CU_LoaderError( "Couldn't load image." );
-			}
-
-			auto buffer = adaptBuffer( image->getPixels(), mipLevels );
+			auto & image = castor3d::getFileImage( engine, name, folder, relative );
+			auto buffer = texlayt::adaptBuffer( image.getPixels(), mipLevels );
 
 			if ( !buffer )
 			{
@@ -606,102 +584,11 @@ namespace castor3d
 			}
 
 			srcMipLevels = buffer->getLevels();
-			castor::ImageLayout layout{ image->getLayout().type, *buffer };
+			castor::ImageLayout layout{ image.getLayout().type, * buffer };
 			return castor::Image{ name
 				, folder / relative
 				, layout
 				, std::move( buffer ) };
-		}
-
-		static void processLevels( RenderDevice const & device
-			, QueueData const & queueData
-			, castor::Image const & image
-			, ashes::Image const & texture
-			, ashes::ImageViewCreateInfo & viewInfo )
-		{
-			bool is3D = image.getLayout().type == castor::ImageLayout::e3D;
-			auto & layout = image.getLayout();
-			auto mappedSize = ashes::getAlignedSize( image.getPxBuffer().getSize()
-				, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
-			auto buffer = makeBufferBase( device
-				, mappedSize
-				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, image.getName() + "StagingBuffer" );
-
-			if ( auto data = buffer->lock( 0u, mappedSize, 0u ) )
-			{
-				std::memcpy( data, image.getPxBuffer().getConstPtr(), size_t( image.getPxBuffer().getSize() ) );
-				buffer->flush( 0u, mappedSize );
-				buffer->unlock();
-			}
-			else
-			{
-				return;
-			}
-
-			ashes::VkBufferImageCopyArray copies;
-			VkExtent3D baseDimensions{ image.getWidth(), image.getHeight(), image.getLayout().depthLayers() };
-
-			for ( auto layer = viewInfo->subresourceRange.baseArrayLayer;
-				layer < viewInfo->subresourceRange.baseArrayLayer + viewInfo->subresourceRange.layerCount;
-				++layer )
-			{
-				VkImageSubresourceLayers subresourceLayers{ viewInfo->subresourceRange.aspectMask
-					, 0u
-					, ( is3D ? 0u : layer )
-					, 1u };
-
-				for ( auto level = layout.baseLevel;
-					level < layout.baseLevel + viewInfo->subresourceRange.levelCount;
-					++level )
-				{
-					subresourceLayers.mipLevel = level;
-					auto offset = image.getLayout().layerMipOffset( layer
-						, level );
-					copies.push_back( { offset
-						, 0u
-						, 0u
-						, subresourceLayers
-						, VkOffset3D{ 0
-							, 0
-							, int32_t( is3D ? std::max( 1u, layer >> level ) : 0u ) }
-						, VkExtent3D{ std::max( 1u, baseDimensions.width >> level )
-							, std::max( 1u, baseDimensions.height >> level )
-							, 1u } } );
-				}
-			}
-
-			if ( is3D )
-			{
-				viewInfo->viewType = VK_IMAGE_VIEW_TYPE_3D;
-				viewInfo->subresourceRange.layerCount = 1u;
-			}
-
-			auto commandBuffer = queueData.commandPool->createCommandBuffer( image.getName() + "ImageUpload"
-				, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
-			commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			commandBuffer->beginDebugBlock( { "Upload " + image.getName() + " Image"
-				, { 0.5f, 0.5f, 0.5f, 1.0f } } );
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
-				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, texture.makeTransition( VK_IMAGE_LAYOUT_UNDEFINED
-					, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, viewInfo->subresourceRange ) );
-			commandBuffer->copyToImage( copies, *buffer, texture );
-			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, texture.makeTransition( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-					, viewInfo->subresourceRange
-					, queueData.parent->familyIndex
-					, device.getGraphicsQueueFamilyIndex() ) );
-			commandBuffer->endDebugBlock();
-			commandBuffer->end();
-			auto fence = device.device->createFence();
-			queueData.queue->submit( *commandBuffer
-				, fence.get() );
-			fence->wait( ashes::MaxTimeout );
 		}
 
 		static auto updateMipLevels( bool genNeeded
@@ -811,64 +698,95 @@ namespace castor3d
 
 	//************************************************************************************************
 
-	TextureLayoutUPtr createTextureLayout( Engine const & engine
-		, castor::Path const & relative
-		, castor::Path const & folder
-		, castor::ImageLoaderConfig config )
+	void uploadTexture( RenderDevice const & device
+		, QueueData const & queueData
+		, castor::Image const & image
+		, ashes::Image const & texture
+		, ashes::ImageViewCreateInfo & viewInfo )
 	{
-		ashes::ImageCreateInfo createInfo
+		bool is3D = image.getLayout().type == castor::ImageLayout::e3D;
+		auto & layout = image.getLayout();
+		auto mappedSize = ashes::getAlignedSize( image.getPxBuffer().getSize()
+			, device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
+		auto buffer = makeBufferBase( device
+			, mappedSize
+			, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, image.getName() + "StagingBuffer" );
+
+		if ( auto data = buffer->lock( 0u, mappedSize, 0u ) )
 		{
-			0u,
-			VK_IMAGE_TYPE_2D,
-			VK_FORMAT_UNDEFINED,
-			{ 1u, 1u, 1u },
-			20u,
-			1u,
-			VK_SAMPLE_COUNT_1_BIT,
-			VK_IMAGE_TILING_OPTIMAL,
-			VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT,
-		};
-		auto texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
-			, createInfo
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, relative );
-		texture->setSource( folder
-			, relative
-			, std::move( config ) );
-		return texture;
-	}
+			std::memcpy( data, image.getPxBuffer().getConstPtr(), size_t( image.getPxBuffer().getSize() ) );
+			buffer->flush( 0u, mappedSize );
+			buffer->unlock();
+		}
+		else
+		{
+			return;
+		}
 
-	TextureLayoutUPtr  createTextureLayout( Engine const & engine
-		, castor::String const & name
-		, castor::PxBufferBaseUPtr buffer
-		, bool isStatic )
-	{
-		ashes::ImageCreateInfo createInfo{ 0u
-			, ( buffer->getHeight() <= 1u && buffer->getWidth() > 1u
-				? VK_IMAGE_TYPE_1D
-				: VK_IMAGE_TYPE_2D )
-			, VK_FORMAT_UNDEFINED
-			, { buffer->getWidth(), buffer->getHeight(), 1u }
-			, uint32_t( castor::getBitSize( std::min( buffer->getWidth(), buffer->getHeight() ) ) )
-			, 1u// TODO: Support array layers: buffer->getLayers()
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
-		log::debug << ( cuT( "Creating " ) + name + cuT( " texture layout.\n" ) );
-		auto texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
-			, createInfo
-			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, name );
-		texture->setSource( std::move( buffer ), isStatic );
-		return texture;
-	}
+		ashes::VkBufferImageCopyArray copies;
+		VkExtent3D baseDimensions{ image.getWidth(), image.getHeight(), image.getLayout().depthLayers() };
 
-	uint32_t getMipLevels( VkExtent3D const & extent
-		, VkFormat format )
-	{
-		auto blockSize = ashes::getBlockSize( format );
-		auto min = std::min( extent.width / blockSize.extent.width, extent.height / blockSize.extent.height );
-		return uint32_t( castor::getBitSize( min ) );
+		for ( auto layer = viewInfo->subresourceRange.baseArrayLayer;
+			layer < viewInfo->subresourceRange.baseArrayLayer + viewInfo->subresourceRange.layerCount;
+			++layer )
+		{
+			VkImageSubresourceLayers subresourceLayers{ viewInfo->subresourceRange.aspectMask
+				, 0u
+				, ( is3D ? 0u : layer )
+				, 1u };
+
+			for ( auto level = layout.baseLevel;
+				level < layout.baseLevel + viewInfo->subresourceRange.levelCount;
+				++level )
+			{
+				subresourceLayers.mipLevel = level;
+				auto offset = image.getLayout().layerMipOffset( layer
+					, level );
+				copies.push_back( { offset
+					, 0u
+					, 0u
+					, subresourceLayers
+					, VkOffset3D{ 0
+					, 0
+					, int32_t( is3D ? std::max( 1u, layer >> level ) : 0u ) }
+					, VkExtent3D{ std::max( 1u, baseDimensions.width >> level )
+					, std::max( 1u, baseDimensions.height >> level )
+					, 1u } } );
+			}
+		}
+
+		if ( is3D )
+		{
+			viewInfo->viewType = VK_IMAGE_VIEW_TYPE_3D;
+			viewInfo->subresourceRange.layerCount = 1u;
+		}
+
+		auto commandBuffer = queueData.commandPool->createCommandBuffer( image.getName() + "ImageUpload"
+			, VK_COMMAND_BUFFER_LEVEL_PRIMARY );
+		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
+		commandBuffer->beginDebugBlock( { "Upload " + image.getName() + " Image"
+			, { 0.5f, 0.5f, 0.5f, 1.0f } } );
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
+			, VK_PIPELINE_STAGE_TRANSFER_BIT
+			, texture.makeTransition( VK_IMAGE_LAYOUT_UNDEFINED
+				, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, viewInfo->subresourceRange ) );
+		commandBuffer->copyToImage( copies, *buffer, texture );
+		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+			, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+			, texture.makeTransition( VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				, viewInfo->subresourceRange
+				, queueData.parent->familyIndex
+				, device.getGraphicsQueueFamilyIndex() ) );
+		commandBuffer->endDebugBlock();
+		commandBuffer->end();
+		auto fence = device.device->createFence();
+		queueData.queue->submit( *commandBuffer
+			, fence.get() );
+		fence->wait( ashes::MaxTimeout );
 	}
 
 	//************************************************************************************************
@@ -1087,7 +1005,7 @@ namespace castor3d
 					? 1u
 					: m_image.getLayout().levels;
 				viewInfo->subresourceRange.levelCount = mipLevels;
-				texlayt::processLevels( device, queueData, m_image, *m_texture, viewInfo );
+				uploadTexture( device, queueData, m_image, *m_texture, viewInfo );
 			}
 
 			m_defaultView.forEachView( []( TextureViewUPtr const & view )
@@ -1227,182 +1145,47 @@ namespace castor3d
 			, isStatic );
 	}
 
-	void TextureLayout::setLayerSource( uint32_t index
-		, castor::PxBufferBaseUPtr buffer
-		, uint32_t bufferOrigLevels )
+	castor::String TextureLayout::getDefaultSourceString()const
 	{
-		buffer = texlayt::adaptBuffer( buffer.get(), buffer->getLevels() );
-		auto layout = castor::ImageLayout{ *buffer };
-		auto name = texlayt::getBufferName( *buffer );
-		auto layerBuffer = buffer.get();
-		castor::Image srcImage{ name, layout, std::move( buffer ) };
-		auto & srcLayout = srcImage.getLayout();
-		doUpdateFromFirstImage( 0u, srcLayout );
-		auto & dstLayout = m_image.getLayout();
-		auto src = srcLayout.buffer( *layerBuffer );
-		auto dst = dstLayout.layerBuffer( m_image.getPxBuffer(), index );
-		CU_Require( src.size() == dst.size() );
-		std::memcpy( dst.data(), src.data(), std::min( src.size(), dst.size() ) );
-		doUpdateLayerMips( false
-			, index
-			, m_image.getPixels()->getLevels() );
+		return getDefaultView().toString();
 	}
 
-	void TextureLayout::setLayerSource( uint32_t index
-		, castor::PxBufferBaseUPtr buffer )
+	ashes::ImageView const & TextureLayout::getDefaultSampledView()const noexcept
 	{
-		setLayerSource( index
-			, std::move( buffer )
-			, m_image.getPixels()->getLevels() );
+		CU_Require( m_defaultView.view );
+		return m_defaultView.view->getSampledView();
 	}
 
-	void TextureLayout::setLayerSource( uint32_t index
-		, castor::Path const & folder
-		, castor::Path const & relative
-		, castor::ImageLoaderConfig config )
+	ashes::ImageView const & TextureLayout::getDefaultTargetView()const noexcept
 	{
-		uint32_t srcMips = 1u;
-		auto image = texlayt::getFileImage( *getRenderSystem()->getEngine()
-			, m_image.getName() + castor::string::toString( index )
-			, folder
-			, relative
-			, m_image.getLevels()
-			, srcMips
-			, { config.allowCompression, config.generateMips, false } );
-		setLayerSource( index
-			, image.getPixels()->clone()
-			, srcMips );
+		CU_Require( m_defaultView.view );
+		return m_defaultView.view->getTargetView();
 	}
 
-	void TextureLayout::setLayerSource( uint32_t index
-		, VkExtent3D const & extent
-		, VkFormat format )
+	ashes::ImageView const & TextureLayout::getLayerCubeTargetView( size_t layer )const noexcept
 	{
-		setLayerSource( index
-			, castor::PxBufferBase::create( { extent.width, extent.height }
-				, extent.depth
-				, m_image.getLevels()
-				, castor::PixelFormat( format ) )
-			, m_image.getLevels() );
+		CU_Require( getLayerCube( layer ).view.view );
+		return getLayerCube( layer ).view.view->getTargetView();
 	}
 
-	void TextureLayout::setLayerMipSource( uint32_t index
-		, uint32_t level
-		, castor::PxBufferBaseUPtr buffer )
+	castor::String TextureLayout::getLayerCubeSourceString( size_t layer )const noexcept
 	{
-		buffer = texlayt::adaptBuffer( buffer.get(), 1u );
-		auto layout = castor::ImageLayout{ *buffer };
-		auto name = texlayt::getBufferName( *buffer );
-		auto mipBuffer = buffer.get();
-		castor::Image srcImage{ name, layout, std::move( buffer ) };
-		auto & srcLayout = srcImage.getLayout();
-		auto & dstLayout = m_image.getLayout();
-		doUpdateFromFirstImage( level, srcLayout );
-		auto src = srcLayout.buffer( *mipBuffer );
-		auto dst = dstLayout.layerMipBuffer( m_image.getPxBuffer(), index, level );
-		CU_Require( src.size() == dst.size() );
-		std::memcpy( dst.data(), src.data(), std::min( src.size(), dst.size() ) );
-		doUpdateLayerMip( false
-			, index
-			, level );
+		CU_Require( getLayerCube( layer ).view.view );
+		return getLayerCube( layer ).view.view->toString();
 	}
 
-	void TextureLayout::setLayerMipSource( uint32_t index
-		, uint32_t level
-		, castor::Path const & folder
-		, castor::Path const & relative
-		, castor::ImageLoaderConfig config )
+	ashes::ImageView const & TextureLayout::getLayerCubeFaceTargetView( size_t layer
+		, CubeMapFace face )const noexcept
 	{
-		uint32_t srcMips = 1u;
-		auto image = texlayt::getFileImage( *getRenderSystem()->getEngine()
-			, m_image.getName() + castor::string::toString( index ) + "_" + castor::string::toString( level )
-			, folder
-			, relative
-			, 1u
-			, srcMips
-			, { config.allowCompression, false, false } );
-		setLayerMipSource( index
-			, level
-			, image.getPixels()->clone() );
+		CU_Require( getLayerCubeFace( layer, face ).view );
+		return getLayerCubeFace( layer, face ).view->getTargetView();
 	}
 
-	void TextureLayout::setLayerMipSource( uint32_t index
-		, uint32_t level
-		, VkExtent3D const & extent
-		, VkFormat format )
+	castor::String TextureLayout::getLayerCubeFaceSourceString( size_t layer
+		, CubeMapFace face )const noexcept
 	{
-		setLayerMipSource( index
-			, level
-			, castor::PxBufferBase::create( { extent.width, extent.height }
-				, extent.depth
-				, 1u
-				, castor::PixelFormat( format ) ) );
-	}
-
-	void TextureLayout::setLayerCubeFaceSource( uint32_t layer
-		, CubeMapFace face
-		, castor::PxBufferBaseUPtr buffer )
-	{
-		setLayerSource( layer * 6u + uint32_t( face )
-			, std::move( buffer ) );
-	}
-
-	void TextureLayout::setLayerCubeFaceSource( uint32_t layer
-		, CubeMapFace face
-		, castor::Path const & folder
-		, castor::Path const & relative
-		, castor::ImageLoaderConfig config )
-	{
-		setLayerSource( layer * 6u + uint32_t( face )
-			, folder
-			, relative
-			, std::move( config ) );
-	}
-
-	void TextureLayout::setLayerCubeFaceSource( uint32_t layer
-		, CubeMapFace face
-		, VkExtent2D const & extent
-		, VkFormat format )
-	{
-		setLayerSource( layer * 6u + uint32_t( face )
-			, extent
-			, format );
-	}
-
-	void TextureLayout::setLayerCubeFaceMipSource( uint32_t layer
-		, CubeMapFace face
-		, uint32_t level
-		, castor::PxBufferBaseUPtr buffer )
-	{
-		setLayerMipSource( layer * 6u + uint32_t( face )
-			, level
-			, std::move( buffer ) );
-	}
-
-	void TextureLayout::setLayerCubeFaceMipSource( uint32_t layer
-		, CubeMapFace face
-		, uint32_t level
-		, castor::Path const & folder
-		, castor::Path const & relative
-		, castor::ImageLoaderConfig config )
-	{
-		setLayerMipSource( layer * 6u + uint32_t( face )
-			, level
-			, folder
-			, relative
-			, std::move( config ) );
-	}
-
-	void TextureLayout::setLayerCubeFaceMipSource( uint32_t layer
-		, CubeMapFace face
-		, uint32_t level
-		, VkExtent2D const & extent
-		, VkFormat format )
-	{
-		setLayerMipSource( layer * 6u + uint32_t( face )
-			, level
-			, extent
-			, format );
+		CU_Require( getLayerCubeFace( layer, face ).view );
+		return getLayerCubeFace( layer, face ).view->toString();
 	}
 
 	castor::String TextureLayout::getName()const
@@ -1425,6 +1208,11 @@ namespace castor3d
 
 		return getDefaultView().needsYInversion()
 			|| m_image.getPixels()->isFlipped();
+	}
+
+	bool TextureLayout::hasBuffer()const
+	{
+		return getDefaultView().hasBuffer();
 	}
 
 	uint32_t TextureLayout::doUpdateViews()
@@ -1487,96 +1275,11 @@ namespace castor3d
 		doUpdateViews();
 	}
 
-	void TextureLayout::doUpdateFromFirstImage( uint32_t mipLevel
-		, castor::ImageLayout layout )
-	{
-		using ashes::operator==;
-		layout.extent->x <<= mipLevel;
-		layout.extent->y <<= mipLevel;
-		auto changed = m_image.updateLayerLayout( layout.dimensions(), layout.format )
-			|| m_info->extent == VkExtent3D{}
-			|| m_info->extent.width != layout.extent->x
-			|| m_info->extent.height != layout.extent->y
-			|| m_info->extent.depth != layout.extent->z
-			|| m_info->format != VkFormat( layout.format );
-
-		if ( changed )
-		{
-			VkImage texture = VK_NULL_HANDLE;
-
-			if ( m_texture )
-			{
-				texture = *m_texture;
-			}
-
-			m_info->extent.width = layout.extent->x;
-			m_info->extent.height = layout.extent->y;
-			m_info->extent.depth = layout.extent->z;
-			m_info->format = VkFormat( layout.format );
-			doUpdateViews();
-
-			texlayt::update( m_defaultView
-				, texture
-				, 0u
-				, m_info->arrayLayers
-				, 0u
-				, m_info->mipLevels );
-
-			texlayt::update( m_arrayView
-				, texture
-				, m_info->mipLevels );
-			texlayt::update( m_cubeView
-				, texture
-				, m_info->mipLevels );
-			texlayt::update( m_sliceView
-				, texture
-				, m_info->mipLevels );
-		}
-	}
-
 	void TextureLayout::doUpdateMips( bool genNeeded, uint32_t mipLevels )
 	{
 		if ( getDepth() <= 1u && getLayersCount() <= 1u )
 		{
 			texlayt::updateMipLevels( genNeeded, mipLevels, m_info->mipLevels, m_defaultView );
-		}
-	}
-
-	void TextureLayout::doUpdateLayerMip( bool genNeeded, uint32_t layer, uint32_t level )
-	{
-		if ( isCube() )
-		{
-			getLayerCube( layer / 6u ).faces[layer % 6u].levels[level]->setMipmapsGenerationNeeded( genNeeded );
-		}
-		else if ( getDepth() > 1u )
-		{
-			getSlice( layer ).levels[level]->setMipmapsGenerationNeeded( genNeeded );
-		}
-		else
-		{
-			getLayer2D( layer ).levels[level]->setMipmapsGenerationNeeded( genNeeded );
-		}
-	}
-
-	void TextureLayout::doUpdateLayerMips( bool genNeeded, uint32_t layer, uint32_t mipLevels )
-	{
-		if ( isCube() )
-		{
-			texlayt::updateMipLevels( genNeeded
-				, mipLevels
-				, getLayerCube( layer / 6u ).faces[layer % 6u] );
-		}
-		else if ( getDepth() > 1u )
-		{
-			texlayt::updateMipLevels( genNeeded
-				, mipLevels
-				, getSlice( layer ) );
-		}
-		else
-		{
-			texlayt::updateMipLevels( genNeeded
-				, mipLevels
-				, getLayer2D( layer ) );
 		}
 	}
 

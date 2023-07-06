@@ -91,7 +91,7 @@ namespace castor3d
 		Texture m_result;
 		SamplerObs m_sampler{};
 		Texture const & m_srcView;
-		ashes::ImagePtr m_srcImage;
+		ashes::Image * m_srcImage;
 		ashes::ImageView m_srcImageView;
 		ashes::RenderPassPtr m_renderPass;
 		RenderPasses m_renderPasses;

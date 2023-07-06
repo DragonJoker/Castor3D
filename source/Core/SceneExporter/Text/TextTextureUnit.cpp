@@ -29,25 +29,25 @@ namespace castor
 		, StringStream & file )
 	{
 		bool result = true;
-		auto hasTexture = unit.isTextured() && unit.getTexture();
+		auto hasTexture = unit.isTextured();
 
 		if ( hasTexture )
 		{
 			log::info << tabs() << cuT( "Writing TextureUnit" ) << std::endl;
-			auto texture = unit.getTexture();
-			auto image = texture->getPath();
-			hasTexture = !image.empty() || !texture->isStatic();
+			auto image = unit.getTexturePath();
+			hasTexture = !image.empty() || !unit.isTextureStatic();
 			bool createImageFile = false;
 			auto config = unit.getConfiguration();
+			auto defaultSampler = &unit.getEngine()->getDefaultSampler()->getSampler();
 
 			if ( !hasTexture
-				&& texture->isStatic() )
+				&& unit.isTextureStatic() )
 			{
 				hasTexture = true;
 				createImageFile = true;
-				image = Path{ Path{ texture->getName() }.getFileName() + cuT( ".dds" ) };
+				image = Path{ Path{ unit.getTextureName() }.getFileName() + cuT( ".dds" ) };
 
-				if ( Path{ texture->getName() }.getExtension() != "dds" )
+				if ( Path{ unit.getTextureName() }.getExtension() != "dds" )
 				{
 					config.needsYInversion = !config.needsYInversion;
 				}
@@ -57,19 +57,19 @@ namespace castor
 			{
 				if ( auto block{ beginBlock( file, cuT( "texture_unit" ) ) } )
 				{
-					if ( unit.getSampler() && unit.getSampler()->getName() != cuT( "Default" ) )
+					if ( unit.getSampler() && defaultSampler != &unit.getSampler() )
 					{
-						result = writeName( file, cuT( "sampler" ), unit.getSampler()->getName() );
+						result = writeName( file, cuT( "sampler" ), unit.getSampler().getName() );
 					}
 
-					auto dimensions = unit.getTexture()->getDimensions();
-					auto format = unit.getTexture()->getPixelFormat();
+					auto dimensions = unit.getTextureDimensions();
+					auto format = unit.getTexturePixelFormat();
 
 					if ( result
-						&& unit.getTexture()->getMipmapCount() > 1
-						&& unit.getTexture()->getMipmapCount() != castor::getMipLevels( dimensions, format ) )
+						&& unit.getTextureMipmapCount() > 1
+						&& unit.getTextureMipmapCount() != castor::getMipLevels( dimensions, format ) )
 					{
-						result = write( file, cuT( "levels_count" ), unit.getTexture()->getMipmapCount() );
+						result = write( file, cuT( "levels_count" ), unit.getTextureMipmapCount() );
 					}
 
 					if ( result )
@@ -79,7 +79,7 @@ namespace castor
 
 					if ( result )
 					{
-						if ( !texture->isStatic() )
+						if ( !unit.isTextureStatic() )
 						{
 							if ( unit.getRenderTarget() )
 							{
@@ -108,8 +108,8 @@ namespace castor
 								}
 
 								path /= image;
-								auto & writer = texture->getOwner()->getEngine()->getImageWriter();
-								result = writer.write( m_folder / path, texture->getImage().getPxBuffer() );
+								auto & writer = unit.getEngine()->getImageWriter();
+								result = writer.write( m_folder / path, unit.getTextureImageBuffer() );
 								checkError( result, "Image creation" );
 
 								if ( result )

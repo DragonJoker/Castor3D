@@ -32,7 +32,7 @@ namespace castor3d
 		: m_renderSystem{ *engine.getRenderSystem() }
 		, m_device{ device }
 		, m_image{ std::make_unique< ashes::Image >( *m_device
-			, dstTexture.image
+			, *dstTexture.image
 			, dstTexture.imageId.data->info ) }
 		, m_view{ dstTexture.targetViewId.data->info
 			, dstTexture.targetView

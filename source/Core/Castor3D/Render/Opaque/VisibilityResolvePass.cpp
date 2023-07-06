@@ -1710,25 +1710,25 @@ namespace castor3d
 			, getClearValue( DsTexture::eEmsTrn ) };
 
 		context.getContext().vkCmdClearColorImage( commandBuffer
-			, opaqueResult[DsTexture::eNmlOcc].image
+			, *opaqueResult[DsTexture::eNmlOcc].image
 			, VK_IMAGE_LAYOUT_GENERAL
 			, &clearValues[0u].color
 			, 1u
 			, &opaqueResult[DsTexture::eNmlOcc].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
-			, opaqueResult[DsTexture::eColMtl].image
+			, *opaqueResult[DsTexture::eColMtl].image
 			, VK_IMAGE_LAYOUT_GENERAL
 			, &clearValues[1u].color
 			, 1u
 			, &opaqueResult[DsTexture::eColMtl].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
-			, opaqueResult[DsTexture::eSpcRgh].image
+			, *opaqueResult[DsTexture::eSpcRgh].image
 			, VK_IMAGE_LAYOUT_GENERAL
 			, &clearValues[2u].color
 			, 1u
 			, &opaqueResult[DsTexture::eSpcRgh].targetViewId.data->info.subresourceRange );
 		context.getContext().vkCmdClearColorImage( commandBuffer
-			, opaqueResult[DsTexture::eEmsTrn].image
+			, *opaqueResult[DsTexture::eEmsTrn].image
 			, VK_IMAGE_LAYOUT_GENERAL
 			, &clearValues[3u].color
 			, 1u

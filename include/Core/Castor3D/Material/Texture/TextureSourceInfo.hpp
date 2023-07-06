@@ -106,6 +106,16 @@ namespace castor3d
 			m_loadConfig.allowCompression = v;
 		}
 
+		bool allowSRGB()const
+		{
+			return m_loadConfig.allowSRGB;
+		}
+
+		void allowSRGB( bool v )
+		{
+			m_loadConfig.allowSRGB = v;
+		}
+
 		bool generateMips()const
 		{
 			CU_Require( isFileImage() || isBufferImage() );
