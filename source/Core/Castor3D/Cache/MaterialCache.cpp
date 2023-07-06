@@ -185,24 +185,7 @@ namespace castor
 				}
 			}
 
-			for ( auto pass : m_pendingPasses )
-			{
-				registerPass( *pass );
-			}
-
-			for ( auto unit : m_pendingUnits )
-			{
-				registerUnit( *unit );
-			}
-
-			for ( auto texture : m_pendingTextures )
-			{
-				registerTexture( *texture );
-			}
-
-			m_pendingPasses.clear();
-			m_pendingUnits.clear();
-			m_pendingTextures.clear();
+			doUpdatePending();
 			m_specificsBuffers.initialise( device );
 		}
 	}
@@ -243,6 +226,7 @@ namespace castor
 	void ResourceCacheT< Material, String, MaterialCacheTraits >::update( CpuUpdater & updater )
 	{
 		auto lock( makeUniqueLock( *this ) );
+		doUpdatePending();
 
 		for ( auto & it : *this )
 		{
@@ -337,19 +321,23 @@ namespace castor
 
 	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerPass( Pass & pass )
 	{
-		if ( m_passBuffer )
+		if ( !pass.getId() )
 		{
-			m_passBuffer->addPass( pass );
-
-			if ( auto sss = pass.getComponent< SubsurfaceScatteringComponent >() )
+			if ( m_passBuffer )
 			{
-				m_sssProfileBuffer->addPass( *sss );
+				m_passBuffer->addPass( pass );
+
+				if ( auto sss = pass.getComponent< SubsurfaceScatteringComponent >() )
+				{
+					m_sssProfileBuffer->addPass( *sss );
+				}
+
+				return true;
 			}
 
-			return true;
+			m_pendingPasses.push_back( &pass );
 		}
 
-		m_pendingPasses.push_back( &pass );
 		return false;
 	}
 
@@ -378,15 +366,18 @@ namespace castor
 
 	bool ResourceCacheT< Material, String, MaterialCacheTraits >::registerUnit( TextureUnit & unit )
 	{
-		if ( m_texConfigBuffer
-			&& unit.getId() == 0u )
+		if ( unit.getId() == 0u )
 		{
-			m_texConfigBuffer->addTextureConfiguration( unit );
+			if ( m_texConfigBuffer )
+			{
+				m_texConfigBuffer->addTextureConfiguration( unit );
 
-			return true;
+				return true;
+			}
+
+			m_pendingUnits.push_back( &unit );
 		}
 
-		m_pendingUnits.push_back( &unit );
 		return false;
 	}
 
@@ -412,11 +403,7 @@ namespace castor
 	{
 		if ( m_texAnimBuffer )
 		{
-			if ( texture.getTexture().getId() == 0u )
-			{
-				registerUnit( texture.getTexture() );
-			}
-
+			registerUnit( texture.getTextureUnit() );
 			m_texAnimBuffer->addTextureAnimation( texture );
 			return true;
 		}
@@ -445,6 +432,28 @@ namespace castor
 	uint32_t ResourceCacheT< Material, String, MaterialCacheTraits >::getCurrentPassTypeCount()const
 	{
 		return m_passBuffer->getCurrentPassTypeCount();
+	}
+
+	void ResourceCacheT< Material, String, MaterialCacheTraits >::doUpdatePending()
+	{
+		auto passes = std::move( m_pendingPasses );
+		auto units = std::move( m_pendingUnits );
+		auto textures = std::move( m_pendingTextures );
+
+		for ( auto pass : passes )
+		{
+			registerPass( *pass );
+		}
+
+		for ( auto unit : units )
+		{
+			registerUnit( *unit );
+		}
+
+		for ( auto texture : textures )
+		{
+			registerTexture( *texture );
+		}
 	}
 
 	//*********************************************************************************************
