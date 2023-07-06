@@ -302,6 +302,7 @@ namespace castor3d
 		m_background->initialise( device );
 		doUpdateLightsDependent();
 		updateBoundingBox();
+		doUpdateMaterials();
 		log::info << "Initialised scene [" << getName() << "], AABB: " << print( m_boundingBox ) << std::endl;
 		m_initialised = true;
 	}
