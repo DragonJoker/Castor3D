@@ -9,8 +9,6 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
-
 #include <unordered_map>
 
 namespace castor3d

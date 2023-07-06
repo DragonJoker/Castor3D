@@ -577,7 +577,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		parsingContext.inWindow = false;
-		log::info << "Loaded RenderWindow [" << parsingContext.window.name
+		log::info << "Loaded window [" << parsingContext.window.name
 			<< ", HDR(" << parsingContext.window.allowHdr << ")"
 			<< ", VSYNC(" << parsingContext.window.enableVSync << ")"
 			<< ", FS" << parsingContext.window.fullscreen << ")]" << std::endl;
@@ -791,7 +791,7 @@ namespace castor3d
 		else
 		{
 			auto target = parsingContext.renderTarget;
-			log::info << "Loaded RenderTarget [" << target->getName()
+			log::info << "Loaded target [" << target->getName()
 				<< ", FMT(" << ashes::getName( VkFormat( target->getPixelFormat() ) ) << ")"
 				<< ", VSYNC(" << target->getSize() << ")]" << std::endl;
 
@@ -1081,7 +1081,7 @@ namespace castor3d
 		}
 		else
 		{
-			log::info << "Loaded Sampler [" << parsingContext.sampler->getName() << "]" << std::endl;
+			log::info << "Loaded sampler [" << parsingContext.sampler->getName() << "]" << std::endl;
 
 			if ( parsingContext.ownSampler )
 			{
@@ -1125,7 +1125,7 @@ namespace castor3d
 			auto imgBackground = castor::makeUnique< ImageBackground >( *parsingContext.parser->getEngine()
 				, *parsingContext.scene );
 			castor::Path path;
-			imgBackground->loadImage( context.file.getPath(), params[0]->get( path ) );
+			imgBackground->setImage( context.file.getPath(), params[0]->get( path ) );
 			parsingContext.scene->setBackground( castor::ptrRefCast< SceneBackground >( imgBackground ) );
 			parsingContext.skybox.reset();
 		}
@@ -1481,7 +1481,7 @@ namespace castor3d
 		}
 		else
 		{
-			log::info << "Loaded Scene [" << parsingContext.scene->getName() << "]" << std::endl;
+			log::info << "Loaded scene [" << parsingContext.scene->getName() << "]" << std::endl;
 
 			if ( parsingContext.scene->getName() == LoadingScreen::SceneName )
 			{
@@ -1926,7 +1926,7 @@ namespace castor3d
 		else
 		{
 			parsingContext.parentNode = nullptr;
-			log::info << "Loaded Sampler [" << parsingContext.particleSystem->getName() << "]" << std::endl;
+			log::info << "Loaded sampler [" << parsingContext.particleSystem->getName() << "]" << std::endl;
 
 			if ( parsingContext.ownParticleSystem )
 			{
@@ -2041,7 +2041,7 @@ namespace castor3d
 		}
 		else
 		{
-			log::info << "Loaded Light [" << parsingContext.light->getName() << "]" << std::endl;
+			log::info << "Loaded light [" << parsingContext.light->getName() << "]" << std::endl;
 			parsingContext.parentNode = nullptr;
 
 			if ( parsingContext.ownLight )
@@ -2849,7 +2849,7 @@ namespace castor3d
 			}
 		}
 
-		log::info << "Loaded SceneNode [" << name << "]" << std::endl;
+		log::info << "Loaded scene node [" << name << "]" << std::endl;
 	}
 	CU_EndAttributePop()
 
@@ -2995,7 +2995,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		parsingContext.parentNode = nullptr;
-		log::info << "Loaded Geometry [" << parsingContext.geometry->getName() << "]" << std::endl;
+		log::info << "Loaded geometry [" << parsingContext.geometry->getName() << "]" << std::endl;
 
 		if ( parsingContext.ownGeometry )
 		{
@@ -3165,7 +3165,7 @@ namespace castor3d
 		}
 		else
 		{
-			log::info << "Loaded Skeleton [" << parsingContext.skeleton->getName() << "]" << std::endl;
+			log::info << "Loaded skeleton [" << parsingContext.skeleton->getName() << "]" << std::endl;
 			parsingContext.importer.reset();
 			parsingContext.skeleton = nullptr;
 		}
@@ -3624,7 +3624,7 @@ namespace castor3d
 		}
 		else if ( auto mesh = parsingContext.mesh )
 		{
-			log::info << "Loaded MorpAnimation [" << parsingContext.morphAnimation->getName() << "]" << std::endl;
+			log::info << "Loaded morp animation [" << parsingContext.morphAnimation->getName() << "]" << std::endl;
 			mesh->addAnimation( castor::ptrRefCast< Animation >( parsingContext.morphAnimation ) );
 		}
 		else
@@ -4154,7 +4154,7 @@ namespace castor3d
 		}
 		else if ( parsingContext.ownMaterial )
 		{
-			log::info << "Loaded Material [" << parsingContext.material->getName() << "]" << std::endl;
+			log::info << "Loaded material [" << parsingContext.material->getName() << "]" << std::endl;
 
 			if ( parsingContext.scene )
 			{
@@ -4233,7 +4233,7 @@ namespace castor3d
 		else
 		{
 			parsingContext.pass->prepareTextures();
-			log::info << "Loaded Pass [" << parsingContext.material->getName()
+			log::info << "Loaded pass [" << parsingContext.material->getName()
 				<< ", " << parsingContext.pass->getIndex() << "]" << std::endl;
 			parsingContext.pass = {};
 			parsingContext.passComponent = nullptr;
@@ -4921,7 +4921,7 @@ namespace castor3d
 					, context.file.getPath() / parsingContext.path );
 			}
 
-			log::info << "Loaded Font [" << parsingContext.strName << "]" << std::endl;
+			log::info << "Loaded font [" << parsingContext.strName << "]" << std::endl;
 		}
 	}
 	CU_EndAttributePop()
@@ -5086,7 +5086,7 @@ namespace castor3d
 	CU_ImplementAttributeParser( parserOverlayEnd )
 	{
 		auto & parsingContext = getParserContext( context );
-		log::info << "Loaded Overlay [" << parsingContext.overlay.rptr->getName() << "]" << std::endl;
+		log::info << "Loaded overlay [" << parsingContext.overlay.rptr->getName() << "]" << std::endl;
 
 		if ( parsingContext.overlay.rptr->getType() == OverlayType::eText )
 		{
@@ -5493,7 +5493,7 @@ namespace castor3d
 				, std::move( *parsingContext.viewport.release() ) );
 			camera->setGamma( parsingContext.point2f[0] );
 			camera->setExposure( parsingContext.point2f[1] );
-			log::info << "Loaded Camera [" << camera->getName() << "]" << std::endl;
+			log::info << "Loaded camera [" << camera->getName() << "]" << std::endl;
 		}
 	}
 	CU_EndAttributePop()
@@ -5707,7 +5707,7 @@ namespace castor3d
 	{
 		auto & parsingContext = getParserContext( context );
 		parsingContext.parentNode = nullptr;
-		log::info << "Loaded Billboards [" << parsingContext.billboards->getName() << "]" << std::endl;
+		log::info << "Loaded billboards [" << parsingContext.billboards->getName() << "]" << std::endl;
 
 		if ( parsingContext.ownBillboards )
 		{
@@ -5958,7 +5958,7 @@ namespace castor3d
 			CU_ParsingError( cuT( "No animated object group initialised" ) );
 		}
 
-		log::info << "Loaded AnimatedObjectGroup [" << parsingContext.animGroup->getName() << "]" << std::endl;
+		log::info << "Loaded animated object group [" << parsingContext.animGroup->getName() << "]" << std::endl;
 		parsingContext.animGroup = {};
 	}
 	CU_EndAttributePop()
@@ -6096,7 +6096,7 @@ namespace castor3d
 			{
 				uint32_t size;
 				params[1]->get( size );
-				parsingContext.skybox->loadEquiTexture( filePath, path, size );
+				parsingContext.skybox->setEquiTexture( filePath, path, size );
 			}
 			else
 			{
@@ -6127,7 +6127,7 @@ namespace castor3d
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
-				parsingContext.skybox->loadCrossTexture( filePath, path );
+				parsingContext.skybox->setCrossTexture( filePath, path );
 			}
 			else
 			{
@@ -6150,7 +6150,7 @@ namespace castor3d
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
-				parsingContext.skybox->loadLeftImage( filePath, path );
+				parsingContext.skybox->setLeftImage( filePath, path );
 			}
 			else
 			{
@@ -6178,7 +6178,7 @@ namespace castor3d
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
-				parsingContext.skybox->loadRightImage( filePath, path );
+				parsingContext.skybox->setRightImage( filePath, path );
 			}
 			else
 			{
@@ -6206,7 +6206,7 @@ namespace castor3d
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
-				parsingContext.skybox->loadTopImage( filePath, path );
+				parsingContext.skybox->setTopImage( filePath, path );
 			}
 			else
 			{
@@ -6234,7 +6234,7 @@ namespace castor3d
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
-				parsingContext.skybox->loadBottomImage( filePath, path );
+				parsingContext.skybox->setBottomImage( filePath, path );
 			}
 			else
 			{
@@ -6262,7 +6262,7 @@ namespace castor3d
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
-				parsingContext.skybox->loadFrontImage( filePath, path );
+				parsingContext.skybox->setFrontImage( filePath, path );
 			}
 			else
 			{
@@ -6290,7 +6290,7 @@ namespace castor3d
 
 			if ( castor::File::fileExists( filePath / path ) )
 			{
-				parsingContext.skybox->loadBackImage( filePath, path );
+				parsingContext.skybox->setBackImage( filePath, path );
 			}
 			else
 			{
@@ -6313,7 +6313,7 @@ namespace castor3d
 
 		if ( parsingContext.skybox )
 		{
-			log::info << "Loaded Skybox" << std::endl;
+			log::info << "Loaded skybox" << std::endl;
 			parsingContext.scene->setBackground( castor::ptrRefCast< SceneBackground >( parsingContext.skybox ) );
 		}
 		else
@@ -6665,7 +6665,7 @@ namespace castor3d
 
 		if ( parsingContext.renderTarget )
 		{
-			log::info << "Loaded SSAO Configuration" << std::endl;
+			log::info << "Loaded SSAO configuration" << std::endl;
 			parsingContext.renderTarget->setSsaoConfig( parsingContext.ssaoConfig );
 			parsingContext.ssaoConfig = {};
 		}

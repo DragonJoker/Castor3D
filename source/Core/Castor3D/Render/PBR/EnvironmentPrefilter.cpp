@@ -3,7 +3,6 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -14,6 +13,7 @@
 #include <CastorUtils/Graphics/Size.hpp>
 #include <CastorUtils/Math/Angle.hpp>
 
+#include <ashespp/Image/Image.hpp>
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
@@ -82,7 +82,8 @@ namespace castor3d
 			, uint32_t mipLevel
 			, bool isCharlie )
 		{
-			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "EnvironmentPrefilter" };
+			std::string prefix = isCharlie ? std::string{ "Sheen" } : std::string{};
+			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, prefix + "EnvironmentPrefilter" };
 			{
 				using namespace sdw;
 				VertexWriter writer;
@@ -105,7 +106,7 @@ namespace castor3d
 				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
-			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "EnvironmentPrefilter" };
+			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, prefix + "EnvironmentPrefilter" };
 			{
 				using namespace sdw;
 				FragmentWriter writer;
@@ -268,7 +269,7 @@ namespace castor3d
 		: RenderCube{ device, false, std::move( sampler ) }
 		, m_renderPass{ renderPass }
 		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
-		, m_commands{ m_device, queueData, "EnvironmentPrefilter" }
+		, m_commands{ m_device, queueData, m_prefix + "EnvironmentPrefilter" }
 	{
 		auto & handler = resources.getHandler();
 		auto & context = m_device.makeContext();
@@ -354,7 +355,7 @@ namespace castor3d
 		, m_srcView{ srcTexture }
 		, m_prefix{ isCharlie ? std::string{ "Sheen" } : std::string{} }
 		, m_srcImage{ std::make_unique< ashes::Image >( *device, m_srcView.image, m_srcView.imageId.data->info ) }
-		, m_srcImageView{ m_srcImage->createView( "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, m_srcView.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
+		, m_srcImageView{ m_srcImage->createView( m_prefix + "EnvironmentPrefilterSrc", VK_IMAGE_VIEW_TYPE_CUBE, m_srcView.getFormat(), 0u, m_srcView.getMipLevels(), 0u, 6u ) }
 		, m_result{ envpref::doCreatePrefilteredTexture( m_device, *m_srcView.resources, size, m_prefix ) }
 		, m_sampler{ envpref::doCreateSampler( engine, m_device, m_prefix, m_result.getMipLevels() - 1u ) }
 		, m_renderPass{ envpref::doCreateRenderPass( m_device, m_prefix, m_result.getFormat() ) }

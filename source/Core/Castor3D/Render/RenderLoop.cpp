@@ -339,7 +339,7 @@ namespace castor3d
 			, info
 			, *data->queue
 			, { { *uploadResources.commands.semaphore
-			, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } } );
 
 		for ( auto & window : windows )
 		{

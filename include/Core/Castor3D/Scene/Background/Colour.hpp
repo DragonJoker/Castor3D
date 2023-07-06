@@ -65,30 +65,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline TextureLayout const & getTexture()const
-		{
-			CU_Require( m_texture );
-			return *m_texture;
-		}
-
-		inline TextureLayout & getTexture()
-		{
-			CU_Require( m_texture );
-			return *m_texture;
-		}
-
-		inline ashes::Image const & getImage()const
-		{
-			CU_Require( m_texture );
-			return m_texture->getTexture();
-		}
-
-		inline ashes::ImageView const & getView()const
-		{
-			CU_Require( m_texture );
-			return m_texture->getDefaultView().getSampledView();
-		}
-
 		inline castor::HdrRgbColour const & getColour()const
 		{
 			return m_colour.value();

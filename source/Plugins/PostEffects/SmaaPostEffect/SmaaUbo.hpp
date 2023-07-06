@@ -7,7 +7,6 @@ See LICENSE file in root folder
 #include "SmaaConfig.hpp"
 
 #include <Castor3D/Buffer/UniformBufferOffset.hpp>
-#include <Castor3D/Render/PostEffect/PostEffectSurface.hpp>
 
 #include <CastorUtils/Math/Point.hpp>
 

@@ -23,7 +23,7 @@ namespace castor3d
 	{
 		for ( auto pending : m_pending )
 		{
-			static_cast< AnimatedTexture & >( *pending ).setTexture( unit );
+			static_cast< AnimatedTexture & >( *pending ).setTextureUnit( unit );
 			pending->addAnimation( unit.getAnimation().getName() );
 		}
 	}

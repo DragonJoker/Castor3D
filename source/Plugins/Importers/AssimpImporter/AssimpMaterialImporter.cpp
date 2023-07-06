@@ -48,8 +48,6 @@
 #include <Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp>
-#include <Castor3D/Material/Texture/TextureUnit.hpp>
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Shader/LightingModelFactory.hpp>
 

@@ -17,7 +17,6 @@
 #include <ashespp/Core/RendererList.hpp>
 #include <ashespp/Core/Surface.hpp>
 #include <ashespp/Image/Image.hpp>
-#include <ashespp/Image/StagingTexture.hpp>
 
 #include <ShaderWriter/Source.hpp>
 #include <CompilerSpirV/compileSpirV.hpp>

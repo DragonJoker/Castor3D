@@ -1,6 +1,5 @@
 #include "DiamondSquareTerrain/GenerateBiomes.hpp"
 
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp>

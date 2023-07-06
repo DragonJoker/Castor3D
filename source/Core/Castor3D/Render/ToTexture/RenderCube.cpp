@@ -100,7 +100,7 @@ namespace castor3d
 
 		static ashes::VertexBufferPtr< castor::Point4f > doCreateVertexBuffer( RenderDevice const & device
 			, ashes::Queue const & queue
-			, ashes::CommandPool const & pool )
+			, ashes::CommandPool const & commandPool )
 		{
 			std::vector< castor::Point4f > vertexData
 			{
@@ -121,7 +121,7 @@ namespace castor3d
 				, VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, result->getBuffer().getSize() };
 			stagingBuffer.uploadVertexData( queue
-				, pool
+				, commandPool
 				, vertexData
 				, *result );
 			return result;

@@ -4,9 +4,6 @@
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
-#include <Castor3D/Material/Texture/Sampler.hpp>
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
-#include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Render/RenderLoop.hpp>

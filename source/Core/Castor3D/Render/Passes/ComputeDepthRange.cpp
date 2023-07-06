@@ -1,8 +1,6 @@
 #include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-#include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"

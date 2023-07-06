@@ -786,14 +786,14 @@ namespace castor3d
 		bool voxelConeTracing{ false };
 		castor::Point3f gridCenter{};
 		float cellSize{ 0.0f };
-		castor::Milliseconds tslf;
-		castor::Milliseconds time;
-		castor::Milliseconds total;
-		std::vector< TechniqueQueues > techniquesQueues;
-		castor::Point2f bandRatio;
-		castor::Matrix4x4f bgMtxModl;
-		castor::Matrix4x4f bgMtxView;
-		castor::Matrix4x4f bgMtxProj;
+		castor::Milliseconds tslf{};
+		castor::Milliseconds time{};
+		castor::Milliseconds total{};
+		std::vector< TechniqueQueues > techniquesQueues{};
+		castor::Point2f bandRatio{};
+		castor::Matrix4x4f bgMtxModl{};
+		castor::Matrix4x4f bgMtxView{};
+		castor::Matrix4x4f bgMtxProj{};
 		bool isSafeBanded{ true };
 		crg::ImageViewIdArray targetImage{};
 		struct DirtyObjects

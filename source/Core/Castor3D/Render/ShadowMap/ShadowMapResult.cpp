@@ -1,11 +1,6 @@
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
-#include "Castor3D/Engine.hpp"
-#include "Castor3D/Material/Texture/Sampler.hpp"
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
-
-#include <CastorUtils/Design/ResourceCache.hpp>
+#include "Castor3D/Render/RenderDevice.hpp"
 
 namespace castor3d
 {

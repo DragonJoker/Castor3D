@@ -2,16 +2,9 @@
 
 #include "Shaders/GlslToonProfile.hpp"
 
-#include <Castor3D/Engine.hpp>
-#include <Castor3D/Material/Material.hpp>
-#include <Castor3D/Material/Pass/PassFactory.hpp>
 #include <Castor3D/Material/Pass/PassVisitor.hpp>
-#include <Castor3D/Material/Texture/TextureConfiguration.hpp>
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
-#include <Castor3D/Material/Texture/TextureUnit.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
-#include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
 #include <Castor3D/Shader/Shaders/GlslBlendComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 

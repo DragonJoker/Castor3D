@@ -57,11 +57,11 @@ namespace castor3d
 			, std::string const & name
 			, ShaderPtr shader );
 
-		VkShaderStageFlagBits stage;
-		std::string name;
-		std::string source;
-		ShaderPtr shader;
-		SpirVShader compiled;
+		VkShaderStageFlagBits stage{};
+		std::string name{};
+		std::string source{};
+		ShaderPtr shader{};
+		SpirVShader compiled{};
 	};
 	/**
 	*\~english

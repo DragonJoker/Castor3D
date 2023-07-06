@@ -44,6 +44,20 @@ namespace castor3d
 			, Scene & scene
 			, castor::String const & name = castor::String{} );
 		/**
+		*\copydoc	castor3d::SceneBackground::accept
+		*/
+		C3D_API void accept( BackgroundVisitor & visitor )override;
+		/**
+		*\copydoc	castor3d::SceneBackground::accept
+		*/
+		C3D_API void accept( PipelineVisitor & visitor )override;
+		/**
+		*\copydoc	castor3d::SceneBackground::write
+		*/
+		C3D_API bool write( castor::String const & tabs
+			, castor::Path const & folder
+			, castor::StringStream & stream )const override;
+		/**
 		*\~english
 		*\brief
 		*	Sets the skybox's left face texture.
@@ -59,7 +73,7 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void loadLeftImage( castor::Path const & folder
+		C3D_API void setLeftImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
@@ -77,7 +91,7 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void loadRightImage( castor::Path const & folder
+		C3D_API void setRightImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
@@ -95,7 +109,7 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void loadTopImage( castor::Path const & folder
+		C3D_API void setTopImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
@@ -113,7 +127,7 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void loadBottomImage( castor::Path const & folder
+		C3D_API void setBottomImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
@@ -131,7 +145,7 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void loadFrontImage( castor::Path const & folder
+		C3D_API void setFrontImage( castor::Path const & folder
 			, castor::Path const & relative );
 		/**
 		*\~english
@@ -149,31 +163,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void loadBackImage( castor::Path const & folder
+		C3D_API void setBackImage( castor::Path const & folder
 			, castor::Path const & relative );
-		/**
-		*\~english
-		*\brief
-		*	Sets a skybox's face texture.
-		*\param[in] folder
-		*	The image folder.
-		*\param[in] relative
-		*	The image file path, relative to \p folder.
-		*\param[in] face
-		*	The face into which the image will be loaded.
-		*\~french
-		*\brief
-		*	Définit la texture d'une face de la skybox.
-		*\param[in] folder
-		*	Le dossier de l'image.
-		*\param[in] relative
-		*	Le chemin d'accès à l'image, relatif à \p folder.
-		*\param[in] face
-		*	La face dans laquelle l'image sera chargée.
-		*/
-		C3D_API void loadFaceImage( castor::Path const & folder
-			, castor::Path const & relative
-			, CubeMapFace face );
 		/**
 		*\~english
 		*\brief
@@ -201,24 +192,6 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Sets the skybox's equirectangular texture.
-		*\param[in] texture
-		*	The texture.
-		*\param[in] size
-		*	The wanted skybox dimensions.
-		*\~french
-		*\brief
-		*	Définit la texture équirectangulaire de la skybox.
-		*\param[in] texture
-		*	La texture.
-		*\param[in] size
-		*	Les dimensions voulues pour la skybox.
-		*/
-		C3D_API void setEquiTexture( TextureLayoutUPtr texture
-			, uint32_t size );
-		/**
-		*\~english
-		*\brief
-		*	Sets the skybox's equirectangular texture.
 		*\param[in] folder
 		*	The image folder.
 		*\param[in] relative
@@ -235,7 +208,7 @@ namespace castor3d
 		*\param[in] size
 		*	Les dimensions voulues pour la skybox.
 		*/
-		C3D_API void loadEquiTexture( castor::Path const & folder
+		C3D_API void setEquiTexture( castor::Path const & folder
 			, castor::Path const & relative
 			, uint32_t size );
 		/**
@@ -267,35 +240,8 @@ namespace castor3d
 		*\param[in] relative
 		*	Le chemin d'accès à l'image, relatif à \p folder.
 		*/
-		C3D_API void loadCrossTexture( castor::Path const & folder
+		C3D_API void setCrossTexture( castor::Path const & folder
 			, castor::Path const & relative );
-		/**
-		*\~english
-		*\brief
-		*	Sets the skybox's cross texture.
-		*\param[in] texture
-		*	The texture.
-		*\~french
-		*\brief
-		*	Définit la texture croix de la skybox.
-		*\param[in] texture
-		*	La texture.
-		*/
-		C3D_API void setCrossTexture( TextureLayoutUPtr texture );
-		/**
-		*\copydoc	castor3d::SceneBackground::accept
-		*/
-		C3D_API void accept( BackgroundVisitor & visitor )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::accept
-		*/
-		C3D_API void accept( PipelineVisitor & visitor )override;
-		/**
-		*\copydoc	castor3d::SceneBackground::write
-		*/
-		C3D_API bool write( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::StringStream & stream )const override;
 		/**
 		*\~english
 		*name
@@ -323,20 +269,6 @@ namespace castor3d
 		std::array< castor::Path, 6u > const & getLayerTexturePath()const
 		{
 			return m_layerTexturePath;
-		}
-		/**@}*/
-		/**
-		*\~english
-		*name
-		*	Mutators.
-		*\~french
-		*name
-		*	Mutateurs.
-		*/
-		/**@{*/
-		void setTexture( TextureLayoutUPtr texture )
-		{
-			m_texture = std::move( texture );
 		}
 		/**@}*/
 

@@ -77,9 +77,9 @@ namespace castor3d
 		castor::String name()const
 		{
 			CU_Require( isFileImage() || isBufferImage() );
-			return isBufferImage()
+			return ( isBufferImage()
 				? m_name
-				: relative().getFileName();
+				: relative().getFileName() );
 		}
 
 		castor::String const & type()const
@@ -98,6 +98,12 @@ namespace castor3d
 		{
 			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig.allowCompression;
+		}
+
+		void allowCompression( bool v )
+		{
+			CU_Require( isFileImage() || isBufferImage() );
+			m_loadConfig.allowCompression = v;
 		}
 
 		bool generateMips()const
@@ -120,9 +126,7 @@ namespace castor3d
 
 		ashes::ImageCreateInfo const & createInfo()const
 		{
-			CU_Require( !isRenderTarget() );
-			CU_Require( !isFileImage() );
-			CU_Require( !isBufferImage() );
+			CU_Require( isVulkanImage() );
 			return m_createInfo;
 		}
 

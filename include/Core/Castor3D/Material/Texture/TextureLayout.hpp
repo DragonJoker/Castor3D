@@ -216,6 +216,7 @@ namespace castor3d
 		 *\param[in]	imageView		La vue sur l'image.
 		 */
 		C3D_API TextureLayout( RenderSystem & renderSystem
+			, castor::String const & name
 			, VkImage image
 			, crg::ImageViewId imageView );
 		/**

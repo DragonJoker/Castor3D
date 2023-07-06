@@ -53,7 +53,8 @@ namespace castor3d
 			, VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_SAMPLED_BIT };
 		m_textureId.create();
 		m_texture = castor::makeUnique< TextureLayout >( *engine.getRenderSystem()
-			, m_textureId.image
+			, cuT( "ColourBackground_Colour" )
+			, *m_textureId.image
 			, m_textureId.wholeViewId );
 	}
 

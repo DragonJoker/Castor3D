@@ -60,14 +60,14 @@ namespace castor3d
 		 *name Getters.
 		**/
 		/**@{*/
-		bool hasTexture()const
+		bool hasTextureUnit()const
 		{
 			return m_texture != nullptr;
 		}
 
-		TextureUnit & getTexture()const
+		TextureUnit & getTextureUnit()const
 		{
-			CU_Require( hasTexture() );
+			CU_Require( hasTextureUnit() );
 			return *m_texture;
 		}
 
@@ -86,7 +86,7 @@ namespace castor3d
 		 *name Setters.
 		**/
 		/**@{*/
-		void setTexture( TextureUnit & texture )
+		void setTextureUnit( TextureUnit & texture )
 		{
 			CU_Require( !m_texture );
 			m_texture = &texture;

@@ -1,8 +1,6 @@
 #include "Castor3D/Render/Opaque/OpaquePassResult.hpp"
 
-#include "Castor3D/Material/Texture/TextureLayout.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/RenderSystem.hpp"
 
 CU_ImplementSmartPtr( castor3d, OpaquePassResult )
 

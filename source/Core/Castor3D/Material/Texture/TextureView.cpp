@@ -6,7 +6,6 @@
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 
-#include <ashespp/Image/StagingTexture.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/Image.hpp>
 

@@ -1,8 +1,6 @@
 #include "DrawEdgesPostEffect/ObjectIDEdgeDetection.hpp"
 
 #include <Castor3D/Engine.hpp>
-#include <Castor3D/Material/Texture/Sampler.hpp>
-#include <Castor3D/Material/Texture/TextureLayout.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Scene/Scene.hpp>

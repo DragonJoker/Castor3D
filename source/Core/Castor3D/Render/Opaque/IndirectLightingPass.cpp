@@ -304,14 +304,8 @@ namespace castor3d
 		, m_depthObj{ depthObj }
 		, m_gpResult{ gpResult }
 		, m_lpResult{ lpResult }
-		, m_lpvResult{ *indirect.lpvResult }
-		, m_llpvResult{ *indirect.llpvResult }
-		, m_vctFirstBounce{ *indirect.vctFirstBounce }
-		, m_vctSecondaryBounce{ *indirect.vctSecondaryBounce }
+		, m_indirect{ indirect }
 		, m_cameraUbo{ cameraUbo }
-		, m_lpvConfigUbo{ *indirect.lpvConfigUbo }
-		, m_llpvConfigUbo{ *indirect.llpvConfigUbo }
-		, m_vctConfigUbo{ *indirect.vctConfigUbo }
 		, m_group{ graph.createPassGroup( "IndirectLighting" ) }
 	{
 		m_programs.resize( size_t( IndirectLightingPass::ProgramType::eCount ) );

@@ -87,44 +87,6 @@ namespace castor3d
 			, cuT( "ImageBackground_Dummy" ) );
 	}
 
-	bool ImageBackground::loadImage( castor::Path const & folder, castor::Path const & relative )
-	{
-		bool result = false;
-
-		try
-		{
-			ashes::ImageCreateInfo image
-			{
-				0u,
-				VK_IMAGE_TYPE_2D,
-				VK_FORMAT_UNDEFINED,
-				{ 1u, 1u, 1u },
-				1u,
-				1u,
-				VK_SAMPLE_COUNT_1_BIT,
-				VK_IMAGE_TILING_OPTIMAL,
-				( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ),
-			};
-			auto texture = castor::makeUnique< TextureLayout >( *getEngine()->getRenderSystem()
-				, image
-				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-				, cuT( "ImageBackground_Colour" ) );
-			texture->setSource( folder, relative, { false, false, false } );
-			m_2dTexturePath = texture->getImage().getPath();
-			m_2dTexture = std::move( texture );
-			notifyChanged();
-			result = true;
-		}
-		catch ( castor::Exception & exc )
-		{
-			log::error << exc.what() << std::endl;
-		}
-
-		return result;
-	}
-
 	void ImageBackground::accept( BackgroundVisitor & visitor )
 	{
 		visitor.visit( *this );
@@ -139,6 +101,40 @@ namespace castor3d
 		, castor::StringStream & stream )const
 	{
 		return castor::TextWriter< ImageBackground >{ tabs, folder }( *this, stream );
+	}
+
+	bool ImageBackground::setImage( castor::Path const & folder, castor::Path const & relative )
+	{
+		bool result = false;
+
+		try
+		{
+			ashes::ImageCreateInfo image{ 0u
+				, VK_IMAGE_TYPE_2D
+				, VK_FORMAT_UNDEFINED
+				, { 1u, 1u, 1u }
+				, 1u
+				, 1u
+				, VK_SAMPLE_COUNT_1_BIT
+				, VK_IMAGE_TILING_OPTIMAL
+				, ( VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
+			m_2dTexture = castor::makeUnique< TextureLayout >( *getScene().getEngine()->getRenderSystem()
+				, std::move( image )
+				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+				, cuT( "SkyboxBackground2D" ) );
+			m_2dTexture->setSource( folder, relative, { false, false, false } );
+
+			m_2dTexturePath = folder / relative;
+			notifyChanged();
+			result = true;
+		}
+		catch ( castor::Exception & exc )
+		{
+			log::error << exc.what() << std::endl;
+		}
+
+		return result;
 	}
 
 	castor::String const & ImageBackground::getModelName()const
@@ -227,18 +223,14 @@ namespace castor3d
 	{
 		m_2dTexture->initialise( device, queueData );
 		VkExtent3D extent{ m_2dTexture->getWidth(), m_2dTexture->getHeight(), 1u };
-		auto dim = std::max( m_2dTexture->getWidth(), m_2dTexture->getHeight() );
+		auto dim = std::max( extent.width, extent.height );
 
 		// create the cube texture if needed.
 		if ( m_texture->getDimensions().width != dim
 			|| m_texture->getDimensions().height != dim )
 		{
-			m_ratio = float( m_2dTexture->getHeight() ) / float( m_2dTexture->getWidth() );
-			auto xOffset = ( dim - extent.width ) / 2u;
-			auto yOffset = ( dim - extent.height ) / 2u;
-			VkOffset3D const srcOffset{ 0, 0, 0 };
-			VkOffset3D const dstOffset{ int32_t( xOffset ), int32_t( yOffset ), 0 };
-			m_textureId = { device
+			m_ratio = float( extent.height ) / float( extent.width );
+			m_textureId = Texture{ device
 				, getScene().getResources()
 				, cuT( "ImageBackgroundCube" )
 				, VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT
@@ -247,11 +239,11 @@ namespace castor3d
 				, 1u
 				, m_2dTexture->getPixelFormat()
 				, ( VK_IMAGE_USAGE_SAMPLED_BIT
-					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
-					| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT ) };
+					| VK_IMAGE_USAGE_TRANSFER_DST_BIT ) };
 			m_textureId.create();
 			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
-				, m_textureId.image
+				, cuT( "ImageBackgroundCube" )
+				, *m_textureId.image
 				, m_textureId.wholeViewId );
 
 			VkImageSubresourceLayers srcSubresource

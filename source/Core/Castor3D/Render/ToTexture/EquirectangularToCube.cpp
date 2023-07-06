@@ -10,7 +10,6 @@
 #include <CastorUtils/Graphics/Position.hpp>
 #include <CastorUtils/Math/TransformationMatrix.hpp>
 
-#include <ashespp/Buffer/StagingBuffer.hpp>
 #include <ashespp/Sync/Queue.hpp>
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Image/Image.hpp>
