@@ -153,12 +153,13 @@ namespace castor3d
 			, { PickingAreaWidth, PickingAreaWidth, 1u } }
 		, m_pickDisplayRegions{ rendpick::createPickDisplayRegions() }
 		, m_commandBuffer{ queueData.commandPool->createCommandBuffer( "PickingPass" ) }
-		, m_stagingBuffer{ makeBuffer< castor::Point4ui >( m_device
+		, m_pickBuffer{ makeBuffer< castor::Point4ui >( m_device
 			, PickingAreaWidth * PickingAreaWidth
 			, ( VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				| VK_BUFFER_USAGE_TRANSFER_SRC_BIT )
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-			, "PickingPassStagingBuffer" ) }
+			, "PickingBuffer" ) }
+		, m_pickData{ castor::makeArrayView( m_pickBuffer->lock( 0u, ashes::WholeSize, 0u ), PickingAreaWidth * PickingAreaWidth ) }
 		, m_buffer{ PickingAreaWidth * PickingAreaWidth }
 		, m_transferFence{ m_device->createFence( "PickingPass" ) }
 	{
@@ -175,7 +176,8 @@ namespace castor3d
 	Picking::~Picking()
 	{
 		m_commandBuffer.reset();
-		m_stagingBuffer.reset();
+		m_pickBuffer->unlock();
+		m_pickBuffer.reset();
 		m_colourTexture.reset();
 	}
 
@@ -271,16 +273,16 @@ namespace castor3d
 		m_commandBuffer->begin();
 		m_commandBuffer->beginDebugBlock( { "PickingPass Copy"
 			, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
-		auto pipelineStageFlags = m_stagingBuffer->getBuffer().getCompatibleStageFlags();
+		auto pipelineStageFlags = m_pickBuffer->getBuffer().getCompatibleStageFlags();
 		m_commandBuffer->memoryBarrier( pipelineStageFlags
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_stagingBuffer->getBuffer().makeTransferDestination() );
+			, m_pickBuffer->getBuffer().makeTransferDestination() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_colourView.makeTransferSource( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 		m_commandBuffer->copyToBuffer( m_copyRegion
 			, *m_colourTexture
-			, m_stagingBuffer->getBuffer() );
+			, m_pickBuffer->getBuffer() );
 
 #	if C3D_DebugPickingTransfer
 
@@ -292,18 +294,18 @@ namespace castor3d
 			} );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_stagingBuffer->getBuffer().makeTransferSource() );
+			, m_pickBuffer->getBuffer().makeTransferSource() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
 			, m_colourView.makeTransferDestination( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
 		m_commandBuffer->copyToImage( m_transferDisplayRegion
-			, m_stagingBuffer->getBuffer()
+			, m_pickBuffer->getBuffer()
 			, *m_colourTexture );
 
 		for ( auto & region : m_pickDisplayRegions )
 		{
 			m_commandBuffer->copyToImage( region
-				, m_stagingBuffer->getBuffer()
+				, m_pickBuffer->getBuffer()
 				, *m_colourTexture );
 		}
 
@@ -313,7 +315,7 @@ namespace castor3d
 
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_HOST_BIT
-			, m_stagingBuffer->getBuffer().makeHostRead() );
+			, m_pickBuffer->getBuffer().makeHostRead() );
 		m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 			, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
 			, m_colourView.makeColourAttachment( VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL ) );
@@ -335,11 +337,7 @@ namespace castor3d
 #endif
 #if !C3D_DebugPicking
 
-		if ( auto * data = m_stagingBuffer->lock( 0u, m_stagingBuffer->getCount(), 0u ) )
-		{
-			std::copy( data, data + m_stagingBuffer->getCount(), m_buffer.begin() );
-			m_stagingBuffer->unlock();
-		}
+		std::copy( m_pickData.begin(), m_pickData.end(), m_buffer.begin() );
 
 #endif
 

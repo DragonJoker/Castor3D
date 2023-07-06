@@ -164,7 +164,8 @@ namespace castor3d
 		VkBufferImageCopy m_copyRegion;
 		std::vector< VkBufferImageCopy > m_pickDisplayRegions;
 		ashes::CommandBufferPtr m_commandBuffer;
-		ashes::BufferPtr< castor::Point4ui > m_stagingBuffer;
+		ashes::BufferPtr< castor::Point4ui > m_pickBuffer;
+		castor::ArrayView< castor::Point4ui > m_pickData;
 		Geometry const * m_geometry{};
 		Submesh const * m_submesh{};
 		BillboardBase const * m_billboard{};
