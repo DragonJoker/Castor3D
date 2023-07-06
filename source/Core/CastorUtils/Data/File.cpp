@@ -314,6 +314,21 @@ namespace castor
 		return result;
 	}
 
+	castor::String File::normaliseFileName( castor::String const & name )
+	{
+		auto result = name;
+		castor::string::replace( result, "\\", "_" );
+		castor::string::replace( result, "/", "_" );
+		castor::string::replace( result, ":", "_" );
+		castor::string::replace( result, "*", "_" );
+		castor::string::replace( result, "?", "_" );
+		castor::string::replace( result, "\"", "_" );
+		castor::string::replace( result, "<", "_" );
+		castor::string::replace( result, ">", "_" );
+		castor::string::replace( result, "|", "_" );
+		return result;
+	}
+
 	bool File::listDirectoryFiles( Path const & folderPath
 		, PathArray & files
 		, bool recursive )
