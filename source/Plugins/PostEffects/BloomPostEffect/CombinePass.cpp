@@ -107,6 +107,8 @@ namespace Bloom
 			} ) }
 	{
 		m_pass.addDependencies( previousPasses );
+		m_pass.addImplicitColourView( blurViews.front()
+			, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
 		m_pass.addSampledView( m_pass.mergeViews( blurViews )
 			, 0u
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
