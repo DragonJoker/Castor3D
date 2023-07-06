@@ -72,7 +72,7 @@ namespace castor3d
 		 */
 		bool hasAvailable( size_t size )const
 		{
-			return size < m_allocatedSize
+			return size <= m_allocatedSize
 				&& m_allocatedSize - size >= m_currentAllocated;
 		}
 

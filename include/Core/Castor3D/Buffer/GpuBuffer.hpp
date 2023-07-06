@@ -298,6 +298,10 @@ namespace castor3d
 		AllocatorT m_allocator;
 	};
 
+	C3D_API std::pair< VkDeviceSize, VkDeviceSize > adaptRange( VkDeviceSize offset
+		, VkDeviceSize size
+		, VkDeviceSize align );
+
 	template< typename T >
 	inline ashes::BufferPtr< T > makeBuffer( RenderDevice const & device
 		, VkDeviceSize count

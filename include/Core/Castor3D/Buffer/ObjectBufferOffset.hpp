@@ -32,9 +32,14 @@ namespace castor3d
 				return chunk.askedSize != 0;
 			}
 
-			uint32_t getSize()const
+			uint32_t getAskedSize()const
 			{
 				return uint32_t( chunk.askedSize );
+			}
+
+			uint32_t getAllocSize()const
+			{
+				return uint32_t( chunk.size );
 			}
 
 			template< typename DataT >
@@ -48,7 +53,7 @@ namespace castor3d
 			template< typename DataT >
 			uint32_t getCount()const
 			{
-				return uint32_t( getSize() / sizeof( DataT ) );
+				return uint32_t( getAskedSize() / sizeof( DataT ) );
 			}
 
 			VkDeviceSize getOffset()const
@@ -66,7 +71,7 @@ namespace castor3d
 				, VkPipelineStageFlags dstPipelineFlags = VK_PIPELINE_STAGE_VERTEX_INPUT_BIT )const
 			{
 				buffer->markDirty( getOffset()
-					, getSize()
+					, getAskedSize()
 					, dstAccessFlags
 					, dstPipelineFlags );
 			}
@@ -101,7 +106,7 @@ namespace castor3d
 					, name
 					, getBuffer()
 					, getOffset()
-					, getSize() );
+					, getAskedSize() );
 			}
 
 			void createInputStoragePassBinding( crg::FramePass & pass
@@ -113,7 +118,7 @@ namespace castor3d
 					, name
 					, getBuffer()
 					, getOffset()
-					, getSize() );
+					, getAskedSize() );
 			}
 
 			void createInOutStoragePassBinding( crg::FramePass & pass
@@ -125,7 +130,7 @@ namespace castor3d
 					, name
 					, getBuffer()
 					, getOffset()
-					, getSize() );
+					, getAskedSize() );
 			}
 
 			void createOutputStoragePassBinding( crg::FramePass & pass
@@ -137,7 +142,7 @@ namespace castor3d
 					, name
 					, getBuffer()
 					, getOffset()
-					, getSize() );
+					, getAskedSize() );
 			}
 
 			ashes::WriteDescriptorSet getUniformBinding( uint32_t binding )const
@@ -146,7 +151,7 @@ namespace castor3d
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER };
-				result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
+				result.bufferInfo.push_back( { getBuffer(), getOffset(), getAskedSize() } );
 				return result;
 			}
 
@@ -156,7 +161,7 @@ namespace castor3d
 					, 0u
 					, 1u
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER };
-				result.bufferInfo.push_back( { getBuffer(), getOffset(), getSize() } );
+				result.bufferInfo.push_back( { getBuffer(), getOffset(), getAskedSize() } );
 				return result;
 			}
 		};
@@ -215,9 +220,9 @@ namespace castor3d
 			return getBufferChunk( flag ).getData< DataT >();
 		}
 
-		uint32_t getSize( SubmeshFlag flag )const
+		uint32_t getAskedSize( SubmeshFlag flag )const
 		{
-			return getBufferChunk( flag ).getSize();
+			return getBufferChunk( flag ).getAskedSize();
 		}
 
 		template< typename DataT >
