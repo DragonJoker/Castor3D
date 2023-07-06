@@ -531,6 +531,21 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserRootFullLoading )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [enable] parameter." ) );
+		}
+		else
+		{
+			params[0]->get( parsingContext.enableFullLoading );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserWindowRenderTarget )
 	{
 		auto & parsingContext = getParserContext( context );
@@ -653,6 +668,7 @@ namespace castor3d
 				parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
 					, parsingContext.size
 					, parsingContext.pixelFormat );
+				parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
 			}
 		}
 	}
@@ -673,6 +689,7 @@ namespace castor3d
 					parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
 						, parsingContext.size
 						, parsingContext.pixelFormat );
+					parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
 				}
 			}
 			else
@@ -779,6 +796,21 @@ namespace castor3d
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eSsao )
+
+	CU_ImplementAttributeParser( parserRenderTargetFullLoading )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [enable] parameter." ) );
+		}
+		else
+		{
+			parsingContext.renderTarget->enableFullLoading( params[0]->get< bool >() );
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserRenderTargetEnd )
 	{

@@ -137,14 +137,8 @@ namespace castor3d
 		Texture const & m_depthObj;
 		OpaquePassResult const & m_gpResult;
 		LightPassResult const & m_lpResult;
-		LightVolumePassResult const & m_lpvResult;
-		LightVolumePassResultArray const & m_llpvResult;
-		Texture const & m_vctFirstBounce;
-		Texture const & m_vctSecondaryBounce;
+		IndirectLightingData const & m_indirect;
 		CameraUbo const & m_cameraUbo;
-		LpvGridConfigUbo const & m_lpvConfigUbo;
-		LayeredLpvGridConfigUbo const & m_llpvConfigUbo;
-		VoxelizerUbo const & m_vctConfigUbo;
 		crg::FramePassGroup & m_group;
 		std::vector< ProgramPtr > m_programs;
 		uint32_t m_programIndex{};

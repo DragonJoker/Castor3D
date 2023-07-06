@@ -168,6 +168,7 @@ namespace castor3d
 		MaterialObs material{};
 		MaterialPtr ownMaterial{};
 		bool createMaterial{ true };
+		bool enableFullLoading{ false };
 		uint32_t passIndex{};
 		SamplerObs sampler{};
 		SamplerPtr ownSampler{};

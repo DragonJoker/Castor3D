@@ -875,9 +875,12 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
-		addShadowBindings( doAdjustSceneFlags( scene.getFlags() )
-			, bindings
-			, index );
+		if ( scene.hasShadows() )
+		{
+			addShadowBindings( doAdjustSceneFlags( scene.getFlags() )
+				, bindings
+				, index );
+		}
 	}
 
 	void RenderNodesPass::doAddBackgroundBindings( Scene const & scene
@@ -914,14 +917,16 @@ namespace castor3d
 		, ShadowBuffer const * shadowBuffer
 		, uint32_t & index )const
 	{
-		CU_Require( shadowBuffer );
-		addShadowDescriptor( *getEngine()->getRenderSystem()
-			, m_graph
-			, doAdjustSceneFlags( scene.getFlags() )
-			, descriptorWrites
-			, shadowMaps
-			, *shadowBuffer
-			, index );
+		if ( shadowBuffer )
+		{
+			addShadowDescriptor( *getEngine()->getRenderSystem()
+				, m_graph
+				, doAdjustSceneFlags( scene.getFlags() )
+				, descriptorWrites
+				, shadowMaps
+				, *shadowBuffer
+				, index );
+		}
 	}
 
 	void RenderNodesPass::doAddBackgroundDescriptor( Scene const & scene

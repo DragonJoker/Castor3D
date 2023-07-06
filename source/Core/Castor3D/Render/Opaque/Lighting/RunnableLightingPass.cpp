@@ -137,7 +137,7 @@ namespace castor3d
 				{
 					auto & pipeline = doFindPipeline( light
 						, lightingModelId );
-					pipeline.addLight( light, *m_renderTarget.getShadowBuffer() );
+					pipeline.addLight( light, m_renderTarget.getShadowBuffer() );
 				}
 			}
 		}
@@ -554,7 +554,7 @@ namespace castor3d
 					, m_lpResult
 					, m_renderPasses
 					, target.getShadowMaps()
-					, *target.getShadowBuffer()
+					, target.getShadowBuffer()
 					, m_targetColourResult ) ).first;
 		}
 

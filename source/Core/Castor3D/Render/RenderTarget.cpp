@@ -834,6 +834,18 @@ namespace castor3d
 		return m_renderTechnique->getSceneUbo();
 	}
 
+	bool RenderTarget::hasIndirect()const noexcept
+	{
+		return getScene()->needsGlobalIllumination()
+			|| isFullLoadingEnabled();
+	}
+
+	bool RenderTarget::hasSss()const noexcept
+	{
+		return getScene()->needsSubsurfaceScattering()
+			|| isFullLoadingEnabled();
+	}
+
 	void RenderTarget::setExposure( float value )
 	{
 		if ( auto camera = getCamera() )
@@ -1230,7 +1242,8 @@ namespace castor3d
 
 		for ( auto & effect : effects )
 		{
-			if ( effect->update( updater, *src ) )
+			if ( ( isFullLoadingEnabled() || effect->isEnabled() )
+				&& effect->update( updater, *src ) )
 			{
 				std::swap( src, dst );
 			}
@@ -1287,12 +1300,18 @@ namespace castor3d
 
 		for ( auto & postEffect : m_hdrPostEffects )
 		{
-			rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
+			if ( isFullLoadingEnabled() || postEffect->isEnabled() )
+			{
+				rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
+			}
 		}
 
 		for ( auto & postEffect : m_srgbPostEffects )
 		{
-			rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
+			if (isFullLoadingEnabled() || postEffect->isEnabled())
+			{
+				rendtgt::IntermediatesLister::submit( *getScene(), *postEffect, result );
+			}
 		}
 
 		if ( m_renderTechnique )

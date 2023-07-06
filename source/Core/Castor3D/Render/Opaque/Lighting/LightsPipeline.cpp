@@ -118,7 +118,7 @@ namespace castor3d
 	}
 
 	void LightsPipeline::addLight( Light const & light
-		, ShadowBuffer const & shadowBuffer )
+		, ShadowBuffer const * shadowBuffer )
 	{
 		auto camera = m_camera ? m_camera : &m_targetCamera;
 		auto & entry = doCreateLightEntry( light, shadowBuffer );
@@ -224,7 +224,7 @@ namespace castor3d
 	}
 
 	LightDescriptors & LightsPipeline::doCreateLightEntry( Light const & light
-		, ShadowBuffer const & shadowBuffer )
+		, ShadowBuffer const * shadowBuffer )
 	{
 		auto ires = m_lightDescriptors.emplace( light.getBufferIndex(), nullptr );
 
@@ -243,32 +243,35 @@ namespace castor3d
 				writes.emplace_back( result.modelMatrixUbo.getDescriptorWrite( uint32_t( LightPassLgtIdx::eModelMatrix ) ) );
 			}
 
-			writes.emplace_back( uint32_t( LightPassLgtIdx::eSmLinear )
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler()->getSampler()
-					, m_smResult[SmTexture::eLinearDepth].wholeView
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
-			writes.emplace_back( uint32_t( LightPassLgtIdx::eSmLinearCmp )
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, ashes::VkDescriptorImageInfoArray{ { *m_smResult[SmTexture::eLinearDepth].sampler
-					, m_smResult[SmTexture::eLinearDepth].wholeView
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
-			writes.emplace_back( uint32_t( LightPassLgtIdx::eSmVariance )
-				, 0u
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler()->getSampler()
-					, m_smResult[SmTexture::eVariance].wholeView
-					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
-			writes.emplace_back( shadowBuffer.getBinding( uint32_t( LightPassLgtIdx::eShadowBuffer) ) );
-			auto & randomStorage = m_device.renderSystem.getRandomStorage().getBuffer();
-			writes.emplace_back( uint32_t( LightPassLgtIdx::eRandomStorage )
-				, 0u
-				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-				, ashes::VkDescriptorBufferInfoArray{ { randomStorage
+			if ( shadowBuffer )
+			{
+				writes.emplace_back( uint32_t( LightPassLgtIdx::eSmLinear )
 					, 0u
-					, randomStorage.getSize() } } );
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler()->getSampler()
+						, m_smResult[SmTexture::eLinearDepth].wholeView
+						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+				writes.emplace_back( uint32_t( LightPassLgtIdx::eSmLinearCmp )
+					, 0u
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, ashes::VkDescriptorImageInfoArray{ { *m_smResult[SmTexture::eLinearDepth].sampler
+						, m_smResult[SmTexture::eLinearDepth].wholeView
+						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+				writes.emplace_back( uint32_t( LightPassLgtIdx::eSmVariance )
+					, 0u
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, ashes::VkDescriptorImageInfoArray{ { m_device.renderSystem.getEngine()->getDefaultSampler()->getSampler()
+						, m_smResult[SmTexture::eVariance].wholeView
+						, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } );
+				writes.emplace_back( shadowBuffer->getBinding( uint32_t( LightPassLgtIdx::eShadowBuffer) ) );
+				auto & randomStorage = m_device.renderSystem.getRandomStorage().getBuffer();
+				writes.emplace_back( uint32_t( LightPassLgtIdx::eRandomStorage )
+					, 0u
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, ashes::VkDescriptorBufferInfoArray{ { randomStorage
+						, 0u
+						, randomStorage.getSize() } } );
+			}
 
 			auto index = uint32_t( LightPassLgtIdx::eCount );
 			PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };

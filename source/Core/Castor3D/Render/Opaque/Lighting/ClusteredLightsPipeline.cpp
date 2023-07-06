@@ -43,7 +43,7 @@ namespace castor3d
 		, LightPassResult const & lpResult
 		, LightRenderPassArray const & renderPasses
 		, ShadowMapLightTypeArray const & shadowMaps
-		, ShadowBuffer const & shadowBuffer
+		, ShadowBuffer const * shadowBuffer
 		, crg::ImageViewIdArray const & targetColourResult )
 		: m_context{ context }
 		, m_device{ device }
@@ -66,7 +66,7 @@ namespace castor3d
 				, makeExtent2D( lpResult[LpTexture::eDiffuse].getExtent() ) ) }
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
-		, m_descriptorLayout{ doCreateDescriptorLayout() }
+		, m_descriptorLayout{ doCreateDescriptorLayout( shadowBuffer ) }
 		, m_descriptorPool{ m_descriptorLayout->createPool( "ClusteredLights", 1u ) }
 		, m_descriptorSet{ doCreateDescriptorSet( graph, shadowMaps, shadowBuffer ) }
 		, m_lightPipeline{ pass
@@ -180,7 +180,7 @@ namespace castor3d
 		pipelineIndex = 1u;
 	}
 
-	ashes::DescriptorSetLayoutPtr ClusteredLightsPipeline::doCreateDescriptorLayout()
+	ashes::DescriptorSetLayoutPtr ClusteredLightsPipeline::doCreateDescriptorLayout( ShadowBuffer const * shadowBuffer )
 	{
 		PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };
 		ashes::VkDescriptorSetLayoutBindingArray setLayoutBindings;
@@ -192,7 +192,12 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, VK_SHADER_STAGE_VERTEX_BIT ) );
 		RenderNodesPass::addClusteredLightingBindings( m_frustumClusters, setLayoutBindings, index );
-		RenderNodesPass::addShadowBindings( m_scene.getFlags(), setLayoutBindings, index );
+		
+		if ( shadowBuffer )
+		{
+			RenderNodesPass::addShadowBindings( m_scene.getFlags(), setLayoutBindings, index );
+		}
+
 		RenderNodesPass::addBackgroundBindings( *m_scene.getBackground(), flags, setLayoutBindings, index );
 
 		return m_device->createDescriptorSetLayout( "ClusteredLights"
@@ -201,7 +206,7 @@ namespace castor3d
 
 	ashes::DescriptorSetPtr ClusteredLightsPipeline::doCreateDescriptorSet( crg::RunnableGraph & graph
 		, ShadowMapLightTypeArray const & shadowMaps
-		, ShadowBuffer const & shadowBuffer )
+		, ShadowBuffer const * shadowBuffer )
 	{
 		ashes::WriteDescriptorSetArray writes;
 		u32 index{};
@@ -210,7 +215,12 @@ namespace castor3d
 		writes.emplace_back( m_scene.getLightCache().getBinding( index++ ) );
 		writes.emplace_back( m_cameraUbo.getDescriptorWrite( index++ ) );
 		RenderNodesPass::addClusteredLightingDescriptor( m_frustumClusters, writes, index );
-		RenderNodesPass::addShadowDescriptor( m_device.renderSystem, graph, m_scene.getFlags(), writes, shadowMaps, shadowBuffer, index );
+
+		if ( shadowBuffer )
+		{
+			RenderNodesPass::addShadowDescriptor( m_device.renderSystem, graph, m_scene.getFlags(), writes, shadowMaps, *shadowBuffer, index );
+		}
+
 		RenderNodesPass::addBackgroundDescriptor( *m_scene.getBackground(), flags, writes, m_targetColourResult, index );
 
 		auto result = m_descriptorPool->createDescriptorSet( "ClusteredLights"

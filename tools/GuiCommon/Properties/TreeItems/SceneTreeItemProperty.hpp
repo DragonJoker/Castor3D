@@ -56,8 +56,6 @@ namespace GuiCommon
 			, wxPropertyGrid * grid )override;
 		void doCreateFogProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid );
-		void doCreateVctProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
 
 	private:
 		void onDebugOverlaysChange( wxVariant const & var );
