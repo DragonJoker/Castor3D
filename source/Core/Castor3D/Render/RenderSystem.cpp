@@ -152,8 +152,7 @@ namespace castor3d
 		}
 
 #endif
-#if !defined( NDEBUG )
-#	if C3D_HasGLSL
+#if C3D_HasGLSL
 
 		static glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
 		{
@@ -229,7 +228,6 @@ namespace castor3d
 			return result;
 		}
 
-#	endif
 #endif
 
 		//*************************************************************************
@@ -980,31 +978,78 @@ namespace castor3d
 			, &availableExtensions };
 		log::debug << " SPV ...";
 		result.spirv = spirv::serialiseSpirv( shader, spirvConfig );
+		std::string glsl;
 
+		if ( getEngine()->isValidationEnabled() )
+		{
+			auto shadersDir = Engine::getEngineDirectory() / cuT( "Shaders" );
+			auto fileBaseName = castor::File::normaliseFileName( name + "_" + ashes::getName( stage ) );
+
+			if ( !castor::File::directoryExists( shadersDir ) )
+			{
+				castor::File::directoryCreate( shadersDir );
+			}
+
+			if ( !castor::File::directoryExists( shadersDir / cuT( "SPV" ) ) )
+			{
+				castor::File::directoryCreate( shadersDir / cuT( "SPV" ) );
+			}
+
+			castor::BinaryFile file{ shadersDir / cuT( "SPV" ) / ( fileBaseName + ".spirv" )
+				, castor::File::OpenMode::eWrite };
+			file.writeArray( result.spirv.data()
+				, result.spirv.size() );
+#if C3D_HasGLSL
+			{
+				if ( !castor::File::directoryExists( shadersDir / cuT( "GLSL" ) ) )
+				{
+					castor::File::directoryCreate( shadersDir / cuT( "GLSL" ) );
+				}
+
+				log::debug << " GLSL ...";
+				glsl::GlslConfig config{ shader.getType()
+					, glsl::v4_6
+					, rendsys::getGLSLExtensions( glsl::v4_6 )
+					, true
+					, false
+					, true
+					, true
+					, true
+					, true };
+				glsl = glsl::compileGlsl( shader
+					, ast::SpecialisationInfo{}
+					, config );
+				castor::BinaryFile glslFile{ shadersDir / cuT( "GLSL" ) / ( fileBaseName + ".glsl" )
+					, castor::File::OpenMode::eWrite };
+				glslFile.writeArray( glsl.data()
+					, glsl.size() );
+			}
+#endif
+		}
 #if !defined( NDEBUG )
 #	if C3D_HasGLSL
-		log::debug << " GLSL ...";
-		glsl::GlslConfig config{ shader.getType()
-			, glsl::v4_6
-			, rendsys::getGLSLExtensions( glsl::v4_6 )
-			, true
-			, false
-			, true
-			, true
-			, true
-			, true };
-		std::string glsl = glsl::compileGlsl( shader
-			, ast::SpecialisationInfo{}
-			, config );
-#	else
-		std::string glsl;
+		else
+		{
+			log::debug << " GLSL ...";
+			glsl::GlslConfig config{ shader.getType()
+				, glsl::v4_6
+				, rendsys::getGLSLExtensions( glsl::v4_6 )
+				, true
+				, false
+				, true
+				, true
+				, true
+				, true };
+			glsl = glsl::compileGlsl( shader
+				, ast::SpecialisationInfo{}
+				, config );
+		}
 #	endif
 
 		result.text = glsl + "\n" + spirv::writeSpirv( shader, spirvConfig );
 		//log::trace << result.text << std::endl;
 
 #	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
-		std::string name = name + "_" + ashes::getName( stage );
 
 		try
 		{
@@ -1019,7 +1064,7 @@ namespace castor3d
 			log::error << result.text << std::endl;
 			log::error << exc.what() << std::endl;
 			{
-				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_sdw.spv" )
+				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( fileBaseName + "_sdw.spv" )
 					, castor::File::OpenMode::eWrite };
 				file.writeArray( result.spirv.data()
 					, result.spirv.size() );
@@ -1029,7 +1074,7 @@ namespace castor3d
 				, stage
 				, glsl );
 			{
-				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( name + "_glslang.spv" )
+				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( fileBaseName + "_glslang.spv" )
 					, castor::File::OpenMode::eWrite };
 				file.writeArray( ref.data()
 					, ref.size() );
