@@ -199,13 +199,13 @@ namespace GuiCommon
 
 	void createBitmapFromBuffer( castor3d::TextureUnit const & unit, bool flip, wxBitmap & bitmap )
 	{
-		if ( unit.getTexture()->getDefaultView().hasBuffer() )
+		if ( unit.isTextureStatic() )
 		{
-			createBitmapFromBuffer( *unit.getTexture()->getImage().getPixels(), flip, bitmap );
+			createBitmapFromBuffer( unit.getTextureImageBuffer(), flip, bitmap );
 		}
 		else
 		{
-			castor::Path path{ unit.getTexture()->getDefaultView().toString() };
+			castor::Path path{ unit.getTexturePath() };
 
 			if ( !path.empty() )
 			{

@@ -784,15 +784,6 @@ namespace c3d_assimp
 							texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
 								, castor::Angle::fromRadians( info.transform.mRotation )
 								, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
-							auto create = ashes::ImageCreateInfo{ 0u
-								, VkImageType( layout.type )
-								, VkFormat( layout.format )
-								, { layout.extent->x, layout.extent->y, layout.extent->z }
-								, layout.levels
-								, layout.layers
-								, VK_SAMPLE_COUNT_1_BIT
-								, VK_IMAGE_TILING_OPTIMAL
-								, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
 							auto texFlags = getFlags( texConfig );
 
 							if ( getComponentsMask( texConfig, m_opacityMapFlags )
@@ -825,14 +816,14 @@ namespace c3d_assimp
 							}
 
 							m_result.registerTexture( std::move( *sourceInfo )
-								, { create, texConfig, info.texcoordSet } );
+								, { texConfig, info.texcoordSet } );
 						}
 					}
 					catch ( std::exception & )
 					{
 						m_importer.loadTexture( info.sampler
 							, castor::Path{ info.name }
-							, { { {} }, texConfig }
+							, { texConfig }
 						, m_result );
 					}
 				}

@@ -19,6 +19,16 @@ namespace castor
 		bool operator()( castor3d::Sampler const & sampler
 			, castor::StringStream & file )override;
 	};
+
+	template<>
+	class TextWriter< ashes::Sampler >
+		: public TextWriterT< ashes::Sampler >
+	{
+	public:
+		explicit TextWriter( String const & tabs );
+		bool operator()( ashes::Sampler const & sampler
+			, castor::StringStream & file )override;
+	};
 }
 
 #endif

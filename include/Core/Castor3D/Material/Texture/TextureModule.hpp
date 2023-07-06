@@ -184,6 +184,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Data for a texture.
+	*\~french
+	*\brief
+	*	Données pour une texture.
+	*/
+	struct TextureData;
+	/**
+	*\~english
+	*\brief
 	*	Data for a texture unit.
 	*\~french
 	*\brief
@@ -214,6 +223,7 @@ namespace castor3d
 	class TextureView;
 
 	CU_DeclareSmartPtr( castor3d, Sampler, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureData, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureLayout, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureSource, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureUnit, C3D_API );
@@ -233,6 +243,8 @@ namespace castor3d
 	using OnTextureUnitChanged = castor::SignalT< OnTextureUnitChangedFunction >;
 	using OnTextureUnitChangedConnection = OnTextureUnitChanged::connection;
 
+	std::ostream & operator<<( std::ostream & stream, castor::ImageLayout const & rhs );
+	std::ostream & operator<<( std::ostream & stream, castor::Image const & rhs );
 	std::ostream & operator<<( std::ostream & stream, TextureLayout const & layout );
 	/**
 	*\~english
@@ -279,6 +291,25 @@ namespace castor3d
 	{
 		return !( lhs == rhs );
 	}
+
+	C3D_API castor::Image & getBufferImage( Engine & engine
+		, castor::String const & name
+		, castor::String const & type
+		, castor::ByteArray const & data );
+	C3D_API castor::Image & getFileImage( Engine & engine
+		, castor::String const & name
+		, castor::Path const & folder
+		, castor::Path const & relative );
+	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
+		, castor::Path const & relative
+		, castor::Path const & folder
+		, castor::ImageLoaderConfig config = { true, true, true } );
+	C3D_API TextureLayoutUPtr createTextureLayout( Engine const & engine
+		, castor::String const & name
+		, castor::PxBufferBaseUPtr buffer
+		, bool isStatic = false );
+	C3D_API uint32_t getMipLevels( VkExtent3D const & extent
+		, VkFormat format );
 
 	//@}
 	//@}

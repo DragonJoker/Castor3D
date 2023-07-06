@@ -63,7 +63,7 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, SsaoConfig const & ssaoConfig
 			, ProgressBar * progress
-			, TexturePtr normal
+			, Texture const * normal
 			, bool deferred );
 		/**
 		 *\~english

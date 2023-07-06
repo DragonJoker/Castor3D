@@ -56,6 +56,17 @@ namespace castor3d
 			, VkImageCreateFlags createFlags
 			, VkExtent3D const & size
 			, uint32_t layerCount
+			, uint32_t mipLevels
+			, VkFormat format
+			, VkImageUsageFlags usageFlags
+			, ashes::Sampler const * sampler
+			, bool createSubviews = true );
+		C3D_API Texture( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, castor::String const & name
+			, VkImageCreateFlags createFlags
+			, VkExtent3D const & size
+			, uint32_t layerCount
 			, VkSampleCountFlagBits sampleCount
 			, uint32_t mipLevels
 			, VkFormat format
@@ -79,6 +90,18 @@ namespace castor3d
 			, VkSamplerAddressMode addressMode = VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE
 			, VkBorderColor const & borderColor = VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK
 			, VkCompareOp compareOp = VK_COMPARE_OP_NEVER
+			, bool createSubviews = true );
+		C3D_API Texture( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, castor::String const & name
+			, VkImageCreateFlags createFlags
+			, VkExtent3D const & size
+			, uint32_t layerCount
+			, VkSampleCountFlagBits sampleCount
+			, uint32_t mipLevels
+			, VkFormat format
+			, VkImageUsageFlags usageFlags
+			, ashes::Sampler const * sampler
 			, bool createSubviews = true );
 		C3D_API ~Texture()noexcept;
 
@@ -161,7 +184,7 @@ namespace castor3d
 		crg::ResourcesCache * resources{};
 		RenderDevice const * device{};
 		crg::ImageId imageId{};
-		VkImage image{};
+		ashes::ImagePtr image{};
 		crg::ImageViewId wholeViewId{};
 		crg::ImageViewId targetViewId{};
 		crg::ImageViewId sampledViewId{};

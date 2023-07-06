@@ -290,7 +290,7 @@ namespace castor3d
 			return m_combined;
 		}
 
-		TexturePtr getVelocity()const noexcept
+		Texture const & getVelocity()const noexcept
 		{
 			return m_velocity;
 		}
@@ -507,9 +507,9 @@ namespace castor3d
 		crg::SemaphoreWaitArray m_signalFinished;
 		SceneCullerUPtr m_culler;
 		crg::FrameGraph m_graph;
-		TexturePtr m_velocity;
-		TextureArray m_srgbObjects;
-		TextureArray m_hdrObjects;
+		Texture m_velocity;
+		std::array< Texture, 2u > m_srgbObjects;
+		std::array< Texture, 2u > m_hdrObjects;
 		Texture m_overlays;
 		Texture m_combined;
 		crg::FramePass & m_overlayPassDesc;

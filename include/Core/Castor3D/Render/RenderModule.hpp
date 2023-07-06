@@ -131,9 +131,6 @@ namespace castor3d
 	*	Contient les données minimales pour une vue intermédiaire.
 	*/
 	struct IntermediateView;
-	using TexturePtr = std::shared_ptr< Texture >;
-	using TextureArray = std::vector< TexturePtr >;
-	using RenderPassTypeID = uint16_t;
 	/**
 	*\~english
 	*\brief
@@ -696,6 +693,7 @@ namespace castor3d
 	CU_DeclareVector( IntermediateView, IntermediateView );
 
 	using RenderQueueArray = std::vector< std::reference_wrapper< RenderQueue > >;
+	using TextureArray = std::vector< Texture >;
 
 	using ShadowMapRefIds = std::pair< std::reference_wrapper< ShadowMap >, UInt32Array >;
 	using ShadowMapRefArray = std::vector< ShadowMapRefIds >;
@@ -911,20 +909,15 @@ namespace castor3d
 	C3D_API ashes::Image makeImage( ashes::Device const & device
 		, VkImage image
 		, crg::ImageId data );
-	C3D_API ashes::Image makeImage( ashes::Device const & device
-		, Texture const & texture );
 	C3D_API ashes::ImageView makeImageView( ashes::Device const & device
 		, ashes::Image const & image
 		, VkImageView view
 		, crg::ImageViewId data );
 	C3D_API ashes::ImageView makeTargetImageView( ashes::Device const & device
-		, ashes::Image const & image
 		, Texture const & texture );
 	C3D_API ashes::ImageView makeSampledImageView( ashes::Device const & device
-		, ashes::Image const & image
 		, Texture const & texture );
 	C3D_API ashes::ImageView makeWholeImageView( ashes::Device const & device
-		, ashes::Image const & image
 		, Texture const & texture );
 	C3D_API void printGraph( crg::RunnableGraph const & graph );
 	/**

@@ -861,8 +861,8 @@ namespace castor3d::exporter
 			log::info << cuT( "SceneExporter::write - Samplers\n" );
 			castor::StringStream sceneStream;
 			castor::StringStream globalStream;
-			std::set< castor3d::SamplerObs > sceneSamplers;
-			std::set< castor3d::SamplerObs > globalSamplers;
+			std::set< ashes::Sampler const * > sceneSamplers;
+			std::set< ashes::Sampler const * > globalSamplers;
 
 			for ( auto & materialIt : scene.getEngine()->getMaterialCache() )
 			{
@@ -876,10 +876,10 @@ namespace castor3d::exporter
 						{
 							for ( auto & unit : pass->getTextureUnits() )
 							{
-								if ( unit->getSampler() != scene.getEngine()->getDefaultSampler()
-									&& unit->getSampler() != scene.getEngine()->getLightsSampler() )
+								if ( &unit->getSampler() != &scene.getEngine()->getDefaultSampler()->getSampler()
+									&& &unit->getSampler() != &scene.getEngine()->getLightsSampler()->getSampler() )
 								{
-									sceneSamplers.insert( unit->getSampler() );
+									sceneSamplers.insert( &unit->getSampler() );
 								}
 							}
 						}
@@ -890,10 +890,10 @@ namespace castor3d::exporter
 						{
 							for ( auto & unit : pass->getTextureUnits() )
 							{
-								if ( unit->getSampler() != scene.getEngine()->getDefaultSampler()
-									&& unit->getSampler() != scene.getEngine()->getLightsSampler() )
+								if ( &unit->getSampler() != &scene.getEngine()->getDefaultSampler()->getSampler()
+									&& &unit->getSampler() != &scene.getEngine()->getLightsSampler()->getSampler() )
 								{
-									globalSamplers.insert( unit->getSampler() );
+									globalSamplers.insert( &unit->getSampler() );
 								}
 							}
 						}
@@ -901,7 +901,7 @@ namespace castor3d::exporter
 				}
 			}
 
-			castor::TextWriter< Sampler > writer{ castor::cuEmptyString };
+			castor::TextWriter< ashes::Sampler > writer{ castor::cuEmptyString };
 			bool result = true;
 
 			for ( auto & sampler : sceneSamplers )

@@ -308,7 +308,7 @@ namespace castor3d
 		if ( !m_initialised )
 		{
 			m_initialised = doInitialise( device );
-			castor::String const name = cuT( "Skybox_" ) + castor::string::toString( m_texture->getMipmapCount() );
+			castor::String const name = cuT( "Skybox_" ) + castor::string::toString( m_texture->getMipLevels() );
 			auto sampler = getEngine()->tryFindSampler( name );
 
 			if ( !sampler )
@@ -320,10 +320,10 @@ namespace castor3d
 				created->setWrapT( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setWrapR( VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE );
 				created->setMinLod( 0.0f );
-				created->setMaxLod( float( m_texture->getMipmapCount() - 1u ) );
+				created->setMaxLod( float( m_texture->getMipLevels() - 1u ) );
 				sampler = getEngine()->addSampler( name, created, false );
 
-				if ( m_texture->getMipmapCount() > 1u )
+				if ( m_texture->getMipLevels() > 1u )
 				{
 					sampler->setMipFilter( VK_SAMPLER_MIPMAP_MODE_LINEAR );
 				}

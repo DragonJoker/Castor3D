@@ -313,13 +313,13 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static TexturePtr doCreateImage( crg::ResourcesCache & resources
+		static Texture doCreateImage( crg::ResourcesCache & resources
 			, RenderDevice const & device
 			, castor::Size const & size
 			, VkFormat format
 			, std::string name )
 		{
-			return std::make_shared< Texture >( device
+			return { device
 				, resources
 				, name
 				, 0u
@@ -331,7 +331,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_SAMPLED_BIT
 					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT )
-				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK );
+				, VK_BORDER_COLOR_FLOAT_TRANSPARENT_BLACK };
 		}
 
 		static crg::rq::Config createConfig( castor::Size const & size
@@ -375,10 +375,10 @@ namespace castor3d
 		, m_enabled{ m_scene.needsSubsurfaceScattering() }
 		, m_size{ makeSize( m_lpResult[LpTexture::eDiffuse].getExtent() ) }
 		, m_intermediate{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_lpResult[LpTexture::eDiffuse].getFormat(), "SSSIntermediate" ) }
-		, m_blurImages{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate->getFormat(), "SSSBlur0" )
-			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate->getFormat(), "SSSBlur1" )
-			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate->getFormat(), "SSSBlur2" ) }
-		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate->getFormat(), "SSSResult" ) }
+		, m_blurImages{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSBlur0" )
+			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSBlur1" )
+			, sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSBlur2" ) }
+		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSResult" ) }
 		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( 0u ) }
 		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( 0u ) }
 		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", sssss::getVertexProgram() }
@@ -411,7 +411,7 @@ namespace castor3d
 
 		for ( uint32_t i = 0u; i < PassCount; ++i )
 		{
-			auto blurYDestination = m_blurImages[i].get();
+			auto blurYDestination = &m_blurImages[i];
 			auto & blurX = m_group.createPass( "BlurX" + std::to_string( i )
 				, [this]( crg::FramePass const & framePass
 					, crg::GraphContext & context
@@ -447,7 +447,7 @@ namespace castor3d
 				, sssss::BlurEmsTrnImgId );
 			blurX.addSampledView( blurXSource->sampledViewId
 				, sssss::BlurLgtDiffImgId );
-			blurX.addOutputColourView( m_intermediate->targetViewId );
+			blurX.addOutputColourView( m_intermediate.targetViewId );
 
 			auto & blurY = m_group.createPass( "BlurY" + std::to_string( i )
 				, [this]( crg::FramePass const & framePass
@@ -482,7 +482,7 @@ namespace castor3d
 				, sssss::BlurDepthObjImgId );
 			blurY.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
 				, sssss::BlurEmsTrnImgId );
-			blurY.addSampledView( m_intermediate->sampledViewId
+			blurY.addSampledView( m_intermediate.sampledViewId
 				, sssss::BlurLgtDiffImgId );
 			blurY.addOutputColourView( blurYDestination->targetViewId );
 
@@ -496,11 +496,11 @@ namespace castor3d
 				, crg::RunnableGraph & graph )
 			{
 				stepProgressBar( progress, "Initialising SSSSS combine pass" );
-				auto extent = m_result->getExtent();
+				auto extent = m_result.getExtent();
 				auto ruConfig = crg::ru::Config{}
-					.implicitAction( m_result->wholeViewId
+					.implicitAction( m_result.wholeViewId
 						, crg::RecordContext::copyImage( m_lpResult[LpTexture::eDiffuse].wholeViewId
-							, m_result->wholeViewId
+							, m_result.wholeViewId
 							, { extent.width, extent.height } ) );
 				auto rqConfig = sssss::createConfig( m_size, m_combineShader, &m_enabled );
 				auto result = std::make_unique< crg::RenderQuad >( framePass
@@ -524,22 +524,22 @@ namespace castor3d
 			, sssss::CombDepthObjImgId );
 		pass.addSampledView( m_gpResult[DsTexture::eEmsTrn].sampledViewId
 			, sssss::CombEmsTrnImgId );
-		pass.addSampledView( m_blurImages[0]->sampledViewId
+		pass.addSampledView( m_blurImages[0].sampledViewId
 			, sssss::CombBlur1ImgId );
-		pass.addSampledView( m_blurImages[1]->sampledViewId
+		pass.addSampledView( m_blurImages[1].sampledViewId
 			, sssss::CombBlur2ImgId );
-		pass.addSampledView( m_blurImages[2]->sampledViewId
+		pass.addSampledView( m_blurImages[2].sampledViewId
 			, sssss::CombBlur3ImgId );
 		pass.addSampledView( m_lpResult[LpTexture::eDiffuse].sampledViewId
 			, sssss::CombLgtDiffImgId );
-		pass.addOutputColourView( m_result->targetViewId );
+		pass.addOutputColourView( m_result.targetViewId );
 
-		m_result->create();
-		m_intermediate->create();
+		m_result.create();
+		m_intermediate.create();
 
 		for ( auto & texture : m_blurImages )
 		{
-			texture->create();
+			texture.create();
 		}
 	}
 
@@ -547,11 +547,11 @@ namespace castor3d
 	{
 		for ( auto & texture : m_blurImages )
 		{
-			texture->destroy();
+			texture.destroy();
 		}
 
-		m_intermediate->destroy();
-		m_result->destroy();
+		m_intermediate.destroy();
+		m_result.destroy();
 	}
 
 	void SubsurfaceScatteringPass::update( CpuUpdater & updater )
@@ -564,13 +564,13 @@ namespace castor3d
 		for ( size_t i{ 0u }; i < m_blurImages.size(); ++i )
 		{
 			visitor.visit( "SSSSS Blur " + castor::string::toString( i )
-				, *m_blurImages[i]
+				, m_blurImages[i]
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				, TextureFactors{}.invert( true ) );
 		}
 
 		visitor.visit( "SSSSS Result"
-			, *m_result
+			, m_result
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 

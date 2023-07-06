@@ -24,16 +24,13 @@ namespace castor3d
 	public:
 		struct ThreadData
 		{
-			ThreadData( TextureUnitData & pdata
-				, TextureUnit & punit )
+			ThreadData( TextureData & pdata )
 				: data{ &pdata }
-				, unit{ &punit }
 			{
 			}
 
-			TextureUnitData * data;
-			TextureLayoutUPtr layout{};
-			TextureUnit * unit{};
+			TextureData * data;
+			Texture * texture{};
 			std::atomic_bool interrupted{ false };
 		};
 
@@ -43,7 +40,8 @@ namespace castor3d
 		 *	Construction / Destruction.
 		 */
 		/**@{*/
-		C3D_API explicit TextureUnitCache( Engine & engine );
+		C3D_API explicit TextureUnitCache( Engine & engine
+			, crg::ResourcesCache & resources );
 		C3D_API ~TextureUnitCache();
 		/**@}*/
 		/**
@@ -89,7 +87,36 @@ namespace castor3d
 		 *	Fonctions de gestion de textures.
 		 */
 		/**@{*/
-		C3D_API TextureUnitRPtr getTexture( TextureUnitData & unitData );
+		C3D_API TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
+			, TextureSourceInfo const & rhs );
+		C3D_API Texture const * getTexture( TextureData & unitData );
+		C3D_API TextureData & getSourceData( TextureSourceInfo const & sourceInfo );
+		C3D_API TextureData & mergeSources( TextureSourceInfo const & lhsSourceInfo
+			, uint32_t lhsSrcMask
+			, uint32_t lhsDstMask
+			, TextureSourceInfo const & rhsSourceInfo
+			, uint32_t rhsSrcMask
+			, uint32_t rhsDstMask
+			, castor::String const & name
+			, TextureSourceInfo const & resultSourceInfo );
+		/**@}*/
+		/**
+		 *\~english
+		 *\name
+		 *	Texture unit handling functions.
+		 *\~french
+		 *\name
+		 *	Fonctions de gestion d'unités de texture.
+		 */
+		/**@{*/
+		C3D_API bool areMergeable( std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > const & animations
+			, TextureSourceInfo const & lhsSource
+			, PassTextureConfig const & lhsConfig
+			, VkFormat lhsFormat
+			, TextureSourceInfo const & rhsSource
+			, PassTextureConfig const & rhsConfig
+			, VkFormat rhsFormat );
+		C3D_API TextureUnitRPtr getTextureUnit( TextureUnitData & unitData );
 		C3D_API TextureUnitData & getSourceData( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config
 			, TextureAnimationUPtr animation );
@@ -127,13 +154,14 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doCreateLayout( ThreadData & data
-			, castor::String const & name );
+		Texture const * doGetTexture( TextureData & data
+			, std::function< void( TextureData const & , Texture const * ) > onEndCpuLoad );
+		void doInitTexture( ThreadData & data );
 		void doUpload( ThreadData & data );
 		void doAddWrite( TextureUnit & unit );
 		void doUpdateWrite( TextureUnit const & unit );
-		ThreadData & doCreateThreadData( TextureUnitData & data
-			, TextureUnit & unit );
+		ThreadData & doCreateThreadData( TextureData & data );
+		ThreadData & doFindThreadData( TextureData & data );
 		void doDestroyThreadData( ThreadData & data );
 
 		bool hasBindless()const
@@ -142,18 +170,21 @@ namespace castor3d
 		}
 
 	private:
+		crg::ResourcesCache & m_resources;
 		castor::CheckedMutex m_dirtyMtx;
 		std::unordered_set< Pass * > m_dirty;
 		castor::CheckedMutex m_loadMtx;
 		std::vector< std::unique_ptr< ThreadData > > m_loading;
-		std::unordered_map< size_t, TextureUnitUPtr > m_loaded;
+		std::unordered_map< size_t, TextureUPtr > m_loaded;
+		std::unordered_map< size_t, TextureUnitUPtr > m_loadedUnits;
 		ashes::DescriptorSetLayoutPtr m_bindlessTexLayout;
 		ashes::DescriptorPoolPtr m_bindlessTexPool;
 		ashes::DescriptorSetPtr m_bindlessTexSet;
 		std::mutex m_dirtyWritesMtx;
 		std::vector< ashes::WriteDescriptorSet > m_dirtyWrites;
 		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_units;
-		std::map< size_t, TextureUnitDataUPtr > m_datas;
+		std::map< size_t, TextureDataUPtr > m_datas;
+		std::map< size_t, TextureUnitDataUPtr > m_unitDatas;
 		std::atomic_bool m_initialised{};
 		std::vector< TextureUnit * > m_pendingUnits;
 		mutable std::vector< TextureCombine > m_texturesCombines;

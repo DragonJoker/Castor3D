@@ -100,7 +100,7 @@ namespace castor3d
 					| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT ) };
 			result.create();
-			auto image = std::make_unique< ashes::Image >( *device, result.image, result.imageId.data->info );
+			auto image = result.image.get();
 			auto imagePath = Engine::getEngineDirectory() / cuT( "Core" ) / cuT( "brdf.png" );
 			castor::ImageResPtr created;
 			auto img = engine.tryAddImage( cuT( "BRDF" )
@@ -202,7 +202,7 @@ namespace castor3d
 			, castor::ResourceInitialiserT< SceneCache >{}
 			, castor::ResourceCleanerT< SceneCache >{} );
 		m_targetCache = castor::makeUnique< RenderTargetCache >( *this );
-		m_textureCache = castor::makeUnique< TextureUnitCache >( *this );
+		m_textureCache = castor::makeUnique< TextureUnitCache >( *this, m_resources );
 
 		if ( !castor::File::directoryExists( getEngineDirectory() ) )
 		{

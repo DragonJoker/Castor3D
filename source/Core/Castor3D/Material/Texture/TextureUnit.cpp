@@ -11,6 +11,7 @@
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
+CU_ImplementSmartPtr( castor3d, TextureData )
 CU_ImplementSmartPtr( castor3d, TextureUnit )
 CU_ImplementSmartPtr( castor3d, TextureUnitData )
 
@@ -24,11 +25,8 @@ namespace castor3d
 		, m_transform{ std::move( rhs.m_transform ) }
 		, m_transformations{ std::move( rhs.m_transformations ) }
 		, m_texture{ std::move( rhs.m_texture ) }
-		, m_renderTarget{ std::move( rhs.m_renderTarget ) }
-		, m_sampler{ std::move( rhs.m_sampler ) }
 		, m_descriptor{ std::move( rhs.m_descriptor ) }
 		, m_id{ std::move( rhs.m_id ) }
-		, m_changed{ std::move( rhs.m_changed ) }
 		, m_name{ std::move( rhs.m_name ) }
 		, m_initialised{ std::move( rhs.m_initialised ) }
 		, m_animated{ std::move( rhs.m_animated ) }
@@ -36,7 +34,6 @@ namespace castor3d
 	{
 		getOwner()->getMaterialCache().unregisterUnit( rhs );
 		rhs.m_id = 0u;
-		rhs.m_changed = false;
 		rhs.m_initialised = false;
 		rhs.m_animated = false;
 
@@ -51,15 +48,7 @@ namespace castor3d
 		, TextureUnitData & data )
 		: AnimableT< Engine >{ engine }
 		, m_data{ data }
-		, m_sampler{ engine.getDefaultSampler() }
-		, m_descriptor
-		{
-			0u,
-			0u,
-			1u,
-			VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-		}
-		, m_changed{ false }
+		, m_descriptor{ 0u, 0u, 1u, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER }
 	{
 		m_transformations.setIdentity();
 	}
@@ -71,23 +60,16 @@ namespace castor3d
 			cleanup();
 		}
 
-		auto renderTarget = m_renderTarget;
-
-		if ( renderTarget )
+		if ( m_data.base->sourceInfo.isRenderTarget() )
 		{
-			getEngine()->getRenderTargetCache().remove( std::move( renderTarget ) );
+			auto renderTarget = m_data.base->sourceInfo.renderTarget();
+			getEngine()->getRenderTargetCache().remove( renderTarget );
 		}
 	}
 
-	void TextureUnit::setTexture( TextureLayoutUPtr texture )
+	void TextureUnit::setTexture( Texture const * texture )
 	{
-		m_texture = std::move( texture );
-		m_changed = true;
-
-		if ( m_texture )
-		{
-			m_name = m_texture->getImage().getName();
-		}
+		m_texture = texture;
 	}
 
 	TextureAnimation & TextureUnit::createAnimation()
@@ -121,8 +103,7 @@ namespace castor3d
 		return doGetAnimation< TextureAnimation >( "Default" );
 	}
 
-	bool TextureUnit::initialise( RenderDevice const & device
-		, QueueData const & queueData )
+	bool TextureUnit::initialise()
 	{
 		if ( m_initialised && isInitialised() )
 		{
@@ -131,61 +112,28 @@ namespace castor3d
 		}
 
 		bool result = false;
-		auto sampler = getSampler();
-		CU_Require( sampler );
-		sampler->initialise( device );
+		m_device = getEngine()->getRenderDevice();
 
-		if ( m_renderTarget )
+		if ( m_data.base->sourceInfo.isRenderTarget() )
 		{
-			std::atomic_bool isInitialised = false;
-			m_renderTarget->initialise( [&isInitialised]( RenderTarget const & rt, QueueData const & queue )
-				{
-					isInitialised = true;
-				} );
-
-			while ( !isInitialised )
-			{
-				std::this_thread::sleep_for( 5_ms );
-			}
-
-			m_texture = castor::makeUnique< TextureLayout >( device.renderSystem
-				, m_renderTarget->getTexture().image
-				, m_renderTarget->getTexture().wholeViewId );
+			m_name = m_texture->imageId.data->name;
 			result = true;
-			m_name = cuT( "RT_" ) + castor::string::toString( m_renderTarget->getIndex() );
 		}
 		else if ( m_texture )
 		{
-			result = m_texture->initialise( device, queueData );
-
-			if ( result
-				&& m_texture->getMipmapCount() > 1u
-				&& m_texture->isStatic() )
-			{
-				m_texture->generateMipmaps( device );
-			}
-
-			m_name = m_texture->getImage().getName();
+			m_name = getCPUImage().getName();
+			result = true;
 		}
 
 		if ( result )
 		{
+			m_gpuImage = m_texture->image.get();
 			m_descriptor = ashes::WriteDescriptorSet{ 0u
 				, 0u
 				, VkDescriptorType( VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER )
-				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ sampler->getSampler()
-					, m_texture->getDefaultView().getSampledView()
+				, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ getSampler()
+					, m_texture->sampledView
 					, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL } } };
-		}
-
-		if ( m_texture )
-		{
-			log::info << "Loaded texture [" << toString() << "] image (" << *m_texture << ")" << std::endl;
-		}
-		else
-		{
-			CU_Failure( "Couldn't load texture" );
-			log::error << "Couldn't load texture [" << toString() << "]" << std::endl;
 		}
 
 		if ( hasAnimation() )
@@ -193,7 +141,6 @@ namespace castor3d
 			getAnimation().initialiseTiles( *this );
 		}
 
-		m_device = &device;
 		m_initialised = result;
 		getOwner()->getMaterialCache().registerUnit( *this );
 		return result;
@@ -209,37 +156,22 @@ namespace castor3d
 			auto & device = *m_device;
 			m_device = nullptr;
 
-			if ( auto sampler = getSampler() )
+			if ( m_data.base->sourceInfo.isRenderTarget() )
 			{
-				sampler->cleanup();
-			}
-
-			if ( m_texture )
-			{
-				m_texture->cleanup();
-			}
-
-			if ( m_renderTarget )
-			{
-				m_renderTarget->cleanup( device );
+				auto renderTarget = m_data.base->sourceInfo.renderTarget();
+				renderTarget->cleanup( device );
 			}
 		}
 	}
 
 	VkImageType TextureUnit::getType()const
 	{
-		CU_Require( m_texture );
-		return m_texture->getType();
+		CU_Require( isTextured() );
+		return m_texture->imageId.data->info.imageType;
 	}
 
 	castor::String TextureUnit::toString()const
 	{
-		if ( m_renderTarget )
-		{
-			return cuT( "RT_" ) + castor::string::toString( m_renderTarget->getIndex() );
-		}
-
-		CU_Require( m_texture );
 		return m_name;
 	}
 
@@ -250,8 +182,7 @@ namespace castor3d
 
 	bool TextureUnit::isInitialised()const
 	{
-		return m_texture
-			&& m_texture->isInitialised();
+		return m_texture && *m_texture;
 	}
 
 	bool TextureUnit::isTransformAnimated()const
@@ -266,28 +197,91 @@ namespace castor3d
 			&& getAnimation().isTileAnimated();
 	}
 
+	ashes::Sampler const & TextureUnit::getSampler()const
+	{
+		CU_Require( isTextured() );
+		return *m_texture->sampler;
+	}
+
+	RenderTargetRPtr TextureUnit::getRenderTarget()const
+	{
+		CU_Require( isRenderTarget() );
+		return m_data.base->sourceInfo.renderTarget();
+	}
+
+	castor::String TextureUnit::getTextureName()const
+	{
+		CU_Require( isTextured() );
+		return m_name;
+	}
+
+	castor::Path TextureUnit::getTexturePath()const
+	{
+		CU_Require( isTextured() );
+		return getCPUImage().getPath();
+	}
+
+	bool TextureUnit::isTextureStatic()const
+	{
+		return m_data.base->sourceInfo.isBufferImage()
+			|| m_data.base->sourceInfo.isFileImage();
+	}
+
+	VkFormat TextureUnit::getTexturePixelFormat()const
+	{
+		CU_Require( isTextured() );
+		return m_texture->imageId.data->info.format;
+	}
+
+	castor::Point3ui TextureUnit::getTextureImageTiles()const
+	{
+		return getCPUImage().getPxBuffer().getTiles();
+	}
+
+	bool TextureUnit::hasTextureImageBuffer()const
+	{
+		return getCPUImage().hasBuffer();
+	}
+
+	castor::PxBufferBase const & TextureUnit::getTextureImageBuffer()const
+	{
+		return getCPUImage().getPxBuffer();
+	}
+
+	VkExtent3D TextureUnit::getTextureDimensions()const
+	{
+		CU_Require( isTextured() );
+		return m_texture->imageId.data->info.extent;
+	}
+
+	uint32_t TextureUnit::getTextureMipmapCount()const
+	{
+		CU_Require( isTextured() );
+		return m_texture->imageId.data->info.mipLevels;
+	}
+
 	void TextureUnit::setConfiguration( TextureConfiguration value )
 	{
 		auto format = castor::PixelFormat::eR8G8B8A8_UNORM;
 
-		if ( m_renderTarget )
+		if ( m_data.base->sourceInfo.isRenderTarget() )
 		{
-			format = castor::PixelFormat( m_renderTarget->getPixelFormat() );
+			auto renderTarget = m_data.base->sourceInfo.renderTarget();
+			format = castor::PixelFormat( renderTarget->getPixelFormat() );
 		}
 		else if ( m_texture )
 		{
-			format = m_texture->getImage().getPixelFormat();
+			format = convert( getTexturePixelFormat() );
 		}
 
 		auto needsYInversion = value.needsYInversion;
-		m_configuration = std::move( value );
-		m_configuration.needsYInversion = m_texture
-			? ( ( m_texture->needsYInversion() && needsYInversion )
-				? 0u
-				: ( ( m_texture->needsYInversion() || needsYInversion )
-					? 1u
-					: 0u ) )
+		auto flippedPixels = m_data.base->image
+			? m_data.base->image->getPixels()->isFlipped()
 			: needsYInversion;
+		m_configuration = std::move( value );
+		m_configuration.needsYInversion = ( ( flippedPixels && needsYInversion )
+			? 0u
+			: ( ( flippedPixels || needsYInversion ) ? 1u : 0u ) );
 		updateIndices( format, m_configuration );
 		setTransform( m_configuration.transform );
 		onChanged( *this );

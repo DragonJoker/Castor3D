@@ -51,103 +51,6 @@ namespace castor3d
 
 	namespace matpass
 	{
-		static bool isPreparable( TextureSourceInfo const & source
-			, PassTextureConfig const & config )
-		{
-			return ( !source.isRenderTarget() )
-				&& !ashes::isCompressedFormat( config.imageInfo->format );
-		}
-
-		static bool isMergeable( TextureSourceInfo const & source
-			, PassTextureConfig const & config
-			, Animation const * animation )
-		{
-			return isPreparable( source, config )
-				&& !animation;
-		}
-
-		static bool areFormatsCompatible( VkFormat lhs, VkFormat rhs )
-		{
-			if ( ashes::isCompressedFormat( lhs )
-				|| ashes::isCompressedFormat( rhs ) )
-			{
-				return false;
-			}
-
-			if ( isSRGBFormat( convert( rhs ) ) )
-			{
-				return isSRGBFormat( getSRGBFormat( convert( lhs ) ) );
-			}
-
-			if ( isSRGBFormat( convert( lhs ) ) )
-			{
-				return isSRGBFormat( getSRGBFormat( convert( rhs ) ) );
-			}
-
-			return true;
-		}
-
-		static bool areSpacesCompatible( TextureSpaces lhs, TextureSpaces rhs )
-		{
-			return checkFlag( lhs, TextureSpace::eAllowSRGB ) == checkFlag( rhs, TextureSpace::eAllowSRGB )
-				&& checkFlag( lhs, TextureSpace::eNormalised ) == checkFlag( rhs, TextureSpace::eNormalised );
-		}
-
-		static bool areMergeable( std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > const & animations
-			, Pass::PassTextureSource const & lhs
-			, Pass::PassTextureSource const & rhs )
-		{
-			auto lhsFlags = getFlags( lhs.second.config );
-			auto rhsFlags = getFlags( rhs.second.config );
-			auto lhsAnimIt = animations.find( lhs.first );
-			auto rhsAnimIt = animations.find( rhs.first );
-			auto lhsAnim = ( lhsAnimIt != animations.end()
-				? lhsAnimIt->second.get()
-				: nullptr );
-			auto rhsAnim = ( rhsAnimIt != animations.end()
-				? rhsAnimIt->second.get()
-				: nullptr );
-			return lhsFlags.size() == 1u
-				&& rhsFlags.size() == 1u
-				&& lhs.second.texcoordSet == rhs.second.texcoordSet
-				&& isMergeable( lhs.first, rhs.second, lhsAnim )
-				&& isMergeable( lhs.first, rhs.second, rhsAnim )
-				&& areFormatsCompatible( lhs.second.imageInfo->format, rhs.second.imageInfo->format )
-				&& areSpacesCompatible( lhs.second.config.textureSpace, rhs.second.config.textureSpace );
-		}
-
-		static TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
-			, TextureSourceInfo const & rhs )
-		{
-			auto folder = lhs.isFileImage()
-				? lhs.folder()
-				: ( rhs.isFileImage()
-					? rhs.folder()
-					: castor::Path{} );
-			auto lhsName = lhs.isFileImage()
-				? castor::Path{ lhs.relative() }.getFileName()
-				: castor::Path{ lhs.name() }.getFileName();
-			auto rhsName = rhs.isFileImage()
-				? castor::Path{ rhs.relative() }.getFileName()
-				: castor::Path{ rhs.name() }.getFileName();
-			auto name = castor::string::getLongestCommonSubstring( lhsName, rhsName );
-
-			if ( name.size() > 2 )
-			{
-				castor::string::replace( lhsName, name, castor::String{} );
-				castor::string::replace( rhsName, name, castor::String{} );
-			}
-			else
-			{
-				name.clear();
-			}
-
-			return TextureSourceInfo{ lhs.sampler()
-				, folder
-				, castor::Path{ name + lhsName + rhsName }
-				, lhs.config() };
-		}
-
 		using SortedTextureSources = std::map< PassComponentTextureFlag
 			, Pass::PassTextureSource >;
 
@@ -482,7 +385,7 @@ namespace castor3d
 				, m_realSources.end()
 				, [&sourceInfo]( auto & lookup )
 				{
-					return sourceInfo == lookup.first->sourceInfo;
+					return sourceInfo == lookup.first->base->sourceInfo;
 				} );
 
 			if ( srcIt != m_realSources.end() )
@@ -497,6 +400,10 @@ namespace castor3d
 	{
 		if ( !m_texturesReduced.exchange( true ) )
 		{
+			auto & engine = *getOwner()->getEngine();
+			auto & imgCache = engine.getImageCache();
+			auto & textureCache = engine.getTextureUnitCache();
+
 			auto oldSources = std::move( m_realSources );
 			//
 			//	Sort per used components, decrementally
@@ -533,15 +440,19 @@ namespace castor3d
 
 					if ( getFlags( lhs.second.config ).size() == 1u )
 					{
+						auto lhsFormat = convert( imgCache.getImageFormat( lhs.first.name() ) );
 						//
 						//	Fill with a one component texture
 						//
 						it = std::find_if( remaining.begin()
 							, remaining.end()
-							, [this, &lhs]( matpass::SortedTextureSources::value_type const & lookup )
+							, [this, &lhs, &imgCache, &textureCache, lhsFormat]( matpass::SortedTextureSources::value_type const & lookup )
 							{
+								auto rhsFormat = convert( imgCache.getImageFormat( lookup.second.first.name() ) );
 								return getPixelComponents( lookup.second.second.config ).size() == 1u
-									&& matpass::areMergeable( m_animations, lhs, lookup.second );
+									&& textureCache.areMergeable( m_animations
+										, lhs.first, lhs.second, lhsFormat
+										, lookup.second.first, lookup.second.second, rhsFormat );
 							} );
 
 						if ( it == remaining.end() )
@@ -576,16 +487,20 @@ namespace castor3d
 			{
 				CU_Require( getPixelComponents( it->second.second.config ).size() == 1u );
 				PassTextureSource lhs = std::move( it->second );
+				auto lhsFormat = convert( imgCache.getImageFormat( lhs.first.name() ) );
 				remaining.erase( it );
 				//
 				//	Group them by two.
 				//
 				it = std::find_if( remaining.begin()
 					, remaining.end()
-					, [this, &lhs]( matpass::SortedTextureSources::value_type const & lookup )
+					, [this, &lhs, &imgCache, &textureCache, lhsFormat]( matpass::SortedTextureSources::value_type const & lookup )
 					{
+						auto rhsFormat = convert( imgCache.getImageFormat( lookup.second.first.name() ) );
 						CU_Require( getPixelComponents( lookup.second.second.config ).size() == 1u );
-						return matpass::areMergeable( m_animations, lhs, lookup.second );
+						return textureCache.areMergeable( m_animations
+								, lhs.first, lhs.second, lhsFormat
+								, lookup.second.first, lookup.second.second, rhsFormat );
 					} );
 
 				if ( it == remaining.end() )
@@ -608,8 +523,7 @@ namespace castor3d
 			// Then add the other ones.
 			for ( auto & source : m_realSources )
 			{
-				auto & textureCache = getOwner()->getEngine()->getTextureUnitCache();
-				auto unit = textureCache.getTexture( *source.first );
+				auto unit = textureCache.getTextureUnit( *source.first );
 				doAddUnit( *source.first, unit, newUnits );
 			}
 
@@ -626,26 +540,12 @@ namespace castor3d
 	{
 		auto & engine = *getOwner()->getEngine();
 		auto & textureCache = engine.getTextureUnitCache();
-		auto & imgCache = engine.getImageCache();
-
-		if ( ( lhsIt.first.isFileImage() || lhsIt.first.isBufferImage() )
-			&& lhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
-		{
-			lhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( lhsIt.first.name() ) );
-		}
-
-		if ( ( rhsIt.first.isFileImage() || rhsIt.first.isBufferImage() )
-			&& rhsIt.second.imageInfo->format == VK_FORMAT_UNDEFINED )
-		{
-			rhsIt.second.imageInfo->format = convert( imgCache.getImageFormat( rhsIt.first.name() ) );
-		}
-
 		auto lhsFlags = getEnabledFlag( lhsIt.second.config );
 		auto rhsFlags = getEnabledFlag( rhsIt.second.config );
-		auto name = getTextureFlagsName( lhsFlags ) + getTextureFlagsName( rhsFlags );
+		auto name = getOwner()->getName() + getTextureFlagsName( lhsFlags ) + getTextureFlagsName( rhsFlags );
 
-		log::debug << getOwner()->getName() << name << cuT( " - Merging textures." ) << std::endl;
-		auto resultSourceInfo = matpass::mergeSourceInfos( lhsIt.first, rhsIt.first );
+		log::debug << cuT( " - Merging textures." ) << std::endl;
+		auto resultSourceInfo = textureCache.mergeSourceInfos( lhsIt.first, rhsIt.first );
 		PassTextureConfig resultConfig;
 		resultConfig.config.heightFactor = std::min( lhsIt.second.config.heightFactor
 			, rhsIt.second.config.heightFactor );
@@ -662,7 +562,7 @@ namespace castor3d
 				, rhsIt.second
 				, getComponentsMask( rhsIt.second.config, rhsFlags )
 				, rhsDstMask
-				, getOwner()->getName() + name
+				, name
 				, resultSourceInfo
 				, resultConfig )
 			, std::vector< TextureSourceInfo >{ lhsIt.first, rhsIt.first } );

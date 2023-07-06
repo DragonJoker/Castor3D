@@ -113,16 +113,14 @@ namespace castor3d
 		}
 
 		static std::vector< ashes::ImageView > createViews( Texture const & envMap
-			, ashes::ImagePtr & image )
+			, ashes::Image *& image )
 		{
 			std::vector< ashes::ImageView > result;
 			VkImageViewCreateInfo createInfo{ envMap.wholeViewId.data->info };
-			createInfo.image = envMap.image;
+			createInfo.image = *envMap.image;
 			createInfo.viewType = VK_IMAGE_VIEW_TYPE_CUBE;
 			createInfo.subresourceRange.layerCount = 6u;
-			image = std::make_unique< ashes::Image >( **envMap.device
-				, envMap.image
-				, envMap.imageId.data->info );
+			image = envMap.image.get();
 
 			for ( uint32_t i = 0u; i < MaxEnvironmentMapCount; ++i )
 			{
@@ -217,7 +215,7 @@ namespace castor3d
 		m_runnables.clear();
 		m_passes.clear();
 		m_environmentMapViews.clear();
-		m_image.reset();
+		m_image = {};
 		m_depthBuffer.destroy();
 		m_environmentMap.destroy();
 		m_graphs.clear();

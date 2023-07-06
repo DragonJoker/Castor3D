@@ -415,7 +415,7 @@ namespace castor3d
 			} );
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_texture->getLayerCubeView( 0u ).getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_texture->getLayerCubeTargetView( 0u ).makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		VkImageSubresourceLayers srcSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u };
 		VkImageSubresourceLayers dstSubresource{ VK_IMAGE_ASPECT_COLOR_BIT, 0u, 0u, 1u };
 
@@ -430,7 +430,7 @@ namespace castor3d
 
 			commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 				, VK_PIPELINE_STAGE_TRANSFER_BIT
-				, layer->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+				, layer->getDefaultTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 			commandBuffer->blitImage( layer->getTexture()
 				, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL
 				, m_texture->getTexture()
@@ -517,14 +517,14 @@ namespace castor3d
 
 		VkImageSubresourceLayers srcSubresource
 		{
-			m_crossTexture->getDefaultView().getTargetView()->subresourceRange.aspectMask,
+			m_crossTexture->getDefaultTargetView()->subresourceRange.aspectMask,
 			0,
 			0,
 			1,
 		};
 		VkImageSubresourceLayers dstSubresource
 		{
-			m_texture->getDefaultView().getTargetView()->subresourceRange.aspectMask,
+			m_texture->getDefaultTargetView()->subresourceRange.aspectMask,
 			0,
 			0,
 			1,
@@ -569,10 +569,10 @@ namespace castor3d
 			} );
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_crossTexture->getDefaultView().getTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_crossTexture->getDefaultTargetView().makeTransferSource( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT
 			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_texture->getLayerCubeView( 0u ).getTargetView().makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			, m_texture->getLayerCubeTargetView( 0u ).makeTransferDestination( VK_IMAGE_LAYOUT_UNDEFINED ) );
 		commandBuffer->copyImage( copyInfos
 			, m_crossTexture->getTexture()
 			, VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL

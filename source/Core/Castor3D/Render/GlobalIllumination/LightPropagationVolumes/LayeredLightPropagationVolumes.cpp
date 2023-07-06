@@ -104,7 +104,7 @@ namespace castor3d
 						, name
 						, cascade
 						, lpvGridSize )
-					: TexturePtr{} );
+					: Texture{} );
 			}
 
 			return result;
@@ -279,7 +279,7 @@ namespace castor3d
 		lpvLightConfigUbos[cascade].createPassBinding( result
 			, GeometryInjectionPass::LpvLightUboIdx );
 
-		result.addInOutColourView( geometry[cascade]->targetViewId );
+		result.addInOutColourView( geometry[cascade].targetViewId );
 		lastGeomPass = &result;
 		return result;
 	}
@@ -538,8 +538,8 @@ namespace castor3d
 				for ( auto & geometry : m_geometry )
 				{
 					visitor.visit( "Layered LPV Geometry" + std::to_string( layer )
-						, *geometry
-						, m_graph.getFinalLayoutState( geometry->wholeViewId ).layout
+						, geometry
+						, m_graph.getFinalLayoutState( geometry.wholeViewId ).layout
 						, TextureFactors::tex3D( &m_gridsSizes[layer] ) );
 					++layer;
 				}
@@ -594,7 +594,7 @@ namespace castor3d
 		{
 			for ( auto & texture : m_geometry )
 			{
-				result.addTransferOutputView( texture->wholeViewId );
+				result.addTransferOutputView( texture.wholeViewId );
 			}
 		}
 
@@ -652,7 +652,7 @@ namespace castor3d
 
 		if ( index > 0u && m_geometryVolumes )
 		{
-			result.addSampledView( m_geometry[cascade]->sampledViewId
+			result.addSampledView( m_geometry[cascade].sampledViewId
 				, LightPropagationPass::GpGridIdx
 				, crg::SamplerDesc{ VK_FILTER_LINEAR
 					, VK_FILTER_LINEAR

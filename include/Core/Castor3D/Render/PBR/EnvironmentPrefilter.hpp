@@ -128,7 +128,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		Texture const & m_srcView;
 		std::string m_prefix;
-		ashes::ImagePtr m_srcImage;
+		ashes::Image * m_srcImage;
 		ashes::ImageView m_srcImageView;
 		Texture m_result;
 		SamplerObs m_sampler{};

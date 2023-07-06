@@ -18,7 +18,7 @@ namespace castor3d
 	public:
 		C3D_API OpaquePassResult( crg::ResourcesCache & resources
 			, RenderDevice const & device
-			, TexturePtr nmlOccTexture );
+			, Texture const * nmlOccTexture );
 	};
 }
 

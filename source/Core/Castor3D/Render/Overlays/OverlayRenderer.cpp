@@ -706,7 +706,7 @@ namespace castor3d
 		{
 			auto result = textDescriptorPool->createDescriptorSet( "TextOverlays_" + std::to_string( intptr_t( &fontTexture ) ) );
 			result->createBinding( textDescriptorLayout->getBinding( 0u )
-				, fontTexture.getTexture()->getDefaultView().getSampledView()
+				, fontTexture.getTexture()->getDefaultSampledView()
 				, fontTexture.getSampler()->getSampler() );
 			result->update();
 			descriptorConnection.descriptorSet = std::move( result );

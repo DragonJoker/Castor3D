@@ -573,6 +573,15 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::TextureData">
+		<DisplayString >{sourceInfo}</DisplayString>
+		<Expand>
+			<Item Name="sourceInfo">sourceInfo</Item>
+			<Item Name="image">image</Item>
+			<Item Name="usage">usage</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Texture">
 		<DisplayString >{imageId} [{*sampler}]</DisplayString>
 		<Expand>
@@ -593,7 +602,9 @@
 	</Type>
 
 	<Type Name="castor3d::TextureUnitData">
+		<DisplayString >{*base}</DisplayString>
 		<Expand>
+			<Item Name="base">*base</Item>
 			<Item Name="passConfig">passConfig</Item>
 			<Item Name="animation">animation</Item>
 		</Expand>

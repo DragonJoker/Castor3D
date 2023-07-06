@@ -80,10 +80,11 @@ namespace castor3d
 		, RenderDevice const & device
 		, castor::Size const & size
 		, bool needsVisibility )
-		: GBufferT< PpTexture >{ resources
+		: TextureHolder{ needsVisibility ? nullptr : castor::makeUnique< Texture >() }
+		, GBufferT< PpTexture >{ resources
 			, device
 			, cuT( "PPResult" )
-			, { nullptr, ( needsVisibility ?  nullptr : std::make_shared< Texture >() ) }
+			, { nullptr, TextureHolder::getData().get() }
 			, 0u
 			, size }
 	{

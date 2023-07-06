@@ -679,13 +679,13 @@ namespace castor3d
 		visitor.visit( m_pixelShader );
 	}
 
-	TexturePtr GeometryInjectionPass::createResult( crg::ResourcesCache & resources
+	Texture GeometryInjectionPass::createResult( crg::ResourcesCache & resources
 		, RenderDevice const & device
 		, castor::String const & prefix
 		, uint32_t index
 		, uint32_t gridSize )
 	{
-		return std::make_shared< Texture >( device
+		return { device
 			, resources
 			, prefix + cuT( "GeometryInjection" ) + castor::string::toString( index )
 			, VK_IMAGE_CREATE_2D_ARRAY_COMPATIBLE_BIT
@@ -699,6 +699,6 @@ namespace castor3d
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK
 			, VK_COMPARE_OP_NEVER
-			, false );
+			, false };
 	}
 }

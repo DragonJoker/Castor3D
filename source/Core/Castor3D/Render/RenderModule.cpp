@@ -158,14 +158,6 @@ namespace castor3d
 		return ashes::Image{ device, image, data.data->info };
 	}
 
-	ashes::Image makeImage( ashes::Device const & device
-		, Texture const & texture )
-	{
-		return makeImage( device
-			, texture.image
-			, texture.imageId );
-	}
-
 	ashes::ImageView makeImageView( ashes::Device const & device
 		, ashes::Image const & image
 		, VkImageView view
@@ -175,31 +167,28 @@ namespace castor3d
 	}
 
 	ashes::ImageView makeTargetImageView( ashes::Device const & device
-		, ashes::Image const & image
 		, Texture const & texture )
 	{
 		return makeImageView( device
-			, image
+			, *texture.image
 			, texture.targetView
 			, texture.targetViewId );
 	}
 
 	ashes::ImageView makeSampledImageView( ashes::Device const & device
-		, ashes::Image const & image
 		, Texture const & texture )
 	{
 		return makeImageView( device
-			, image
+			, *texture.image
 			, texture.sampledView
 			, texture.sampledViewId );
 	}
 
 	ashes::ImageView makeWholeImageView( ashes::Device const & device
-		, ashes::Image const & image
 		, Texture const & texture )
 	{
 		return makeImageView( device
-			, image
+			, *texture.image
 			, texture.wholeView
 			, texture.wholeViewId );
 	}

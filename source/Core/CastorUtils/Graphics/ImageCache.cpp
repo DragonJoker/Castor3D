@@ -37,6 +37,18 @@ namespace castor
 			, params.loadConfig ) );
 	}
 
+	ResourceCacheTraitsT< Image, String >::ElementPtrT ResourceCacheTraitsT< Image, String >::makeElement( ResourceCacheBaseT< Image, String, ResourceCacheTraitsT< Image, String > > const & cache
+		, String const & name
+		, Path const & path
+		, ImageLayout layout
+		, PxBufferBaseUPtr buffer )
+	{
+		return makeResource< Image, String >( name
+			, path
+			, std::move( layout )
+			, std::move( buffer ) );
+	}
+
 	//*********************************************************************************************
 
 	ResourceCacheT< Image, String, ImageCacheTraits >::ResourceCacheT( LoggerInstance & logger

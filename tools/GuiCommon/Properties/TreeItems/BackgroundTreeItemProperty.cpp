@@ -268,7 +268,7 @@ namespace GuiCommon
 				, castor3d::TextureLayout const & texture )
 			{
 				CU_Require( texture.isStatic() );
-				auto source = texture.getDefaultView().toString();
+				auto source = texture.getDefaultSourceString();
 				m_properties.addProperty( &m_grid, name, source
 					, [&background]( wxVariant const & var )
 					{
@@ -287,7 +287,7 @@ namespace GuiCommon
 				, castor3d::CubeMapFace face )
 			{
 				CU_Require( texture.isStatic() );
-				auto source = castor::Path{ texture.getLayerCubeFaceView( 0u, face ).toString() };
+				auto source = castor::Path{ texture.getLayerCubeFaceSourceString( 0u, face ) };
 				m_properties.addProperty( &m_grid, name, source
 					, [&background, face]( wxVariant const & var )
 					{

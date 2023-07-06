@@ -229,7 +229,7 @@ namespace castor3d
 		, m_result{ radcomp::doCreateRadianceTexture( m_device, *srcTexture.resources, size ) }
 		, m_sampler{ radcomp::doCreateSampler( engine, m_device ) }
 		, m_srcView{ srcTexture }
-		, m_srcImage{ std::make_unique< ashes::Image >( *m_device, m_srcView.image, m_srcView.imageId.data->info ) }
+		, m_srcImage{ m_srcView.image.get() }
 		, m_srcImageView{ radcomp::doCreateSrcView( *m_srcImage ) }
 		, m_renderPass{ radcomp::doCreateRenderPass( m_device, m_result.getFormat() ) }
 		, m_commands{ m_device, *m_device.graphicsData(), "RadianceComputer" }

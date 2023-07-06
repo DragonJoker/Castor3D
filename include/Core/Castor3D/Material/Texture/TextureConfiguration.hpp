@@ -209,7 +209,6 @@ namespace castor3d
 
 	struct PassTextureConfig
 	{
-		ashes::ImageCreateInfo imageInfo{ {} };
 		TextureConfiguration config{};
 		uint32_t texcoordSet{};
 	};

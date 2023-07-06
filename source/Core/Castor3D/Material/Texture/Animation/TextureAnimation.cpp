@@ -34,7 +34,7 @@ namespace castor3d
 		{
 			m_length = 0_ms;
 			auto tiles = std::max( unit.getConfiguration().tiles
-				, unit.getTexture()->getImage().getPxBuffer().getTiles()->z );
+				, unit.getTextureImageTiles()->z );
 			auto tileSet = unit.getConfiguration().tileSet;
 			castor::Milliseconds timeIndex{};
 			castor::Milliseconds timeStep{ 25_ms };

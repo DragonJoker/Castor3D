@@ -4483,8 +4483,7 @@ namespace castor3d
 			if ( parsingContext.textureRenderTarget )
 			{
 				parsingContext.pass->registerTexture( std::move( sourceInfo )
-					, { { {} }
-						, std::move( parsingContext.textureConfiguration )
+					, { std::move( parsingContext.textureConfiguration )
 						, parsingContext.texcoordSet }
 					, std::move( parsingContext.textureAnimation ) );
 				parsingContext.textureRenderTarget = {};
@@ -4495,19 +4494,8 @@ namespace castor3d
 			}
 			else
 			{
-				if ( parsingContext.image )
-				{
-					parsingContext.imageInfo->format = VkFormat( parsingContext.image->getPixelFormat() );
-				}
-
-				if ( parsingContext.imageInfo->mipLevels == ashes::RemainingArrayLayers )
-				{
-					parsingContext.imageInfo->mipLevels = 20;
-				}
-
 				parsingContext.pass->registerTexture( std::move( sourceInfo )
-					, { std::move( parsingContext.imageInfo )
-						, std::move( parsingContext.textureConfiguration )
+					, { std::move( parsingContext.textureConfiguration )
 						, parsingContext.texcoordSet }
 					, std::move( parsingContext.textureAnimation ) );
 			}

@@ -93,7 +93,7 @@ namespace castor3d
 
 	OpaquePassResult::OpaquePassResult( crg::ResourcesCache & handler
 		, RenderDevice const & device
-		, TexturePtr nmlOccTexture )
+		, Texture const * nmlOccTexture )
 		: GBufferT< DsTexture >{ handler
 			, device
 			, cuT( "GPResult" )

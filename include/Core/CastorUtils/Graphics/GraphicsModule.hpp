@@ -189,6 +189,7 @@ namespace castor
 		bool allowCompression{};
 		bool generateMips{};
 		bool layersToTiles{};
+		bool allowSRGB{ true };
 	};
 	/**
 	\~english
