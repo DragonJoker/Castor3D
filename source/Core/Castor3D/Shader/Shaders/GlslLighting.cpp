@@ -910,10 +910,7 @@ namespace castor3d::shader
 		, LightSurface const & lightSurface
 		, sdw::Vec3 & output )
 	{
-		if ( m_enableVolumetric
-			&& m_directionalTransform
-			&& m_directionalCascadeIndex
-			&& m_directionalCascadeCount )
+		if ( m_enableVolumetric )
 		{
 			output = radiance;
 		}

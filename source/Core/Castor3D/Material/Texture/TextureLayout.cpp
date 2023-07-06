@@ -338,66 +338,6 @@ namespace castor3d
 			return result;
 		}
 
-		static void update( MipView & view
-			, VkImage image
-			, uint32_t baseArrayLayer
-			, uint32_t layerCount
-			, uint32_t baseMipLevel
-			, uint32_t levelCount )
-		{
-			view.view->update( image
-				, baseArrayLayer
-				, layerCount
-				, baseMipLevel
-				, levelCount );
-
-			for ( auto & level : view.levels )
-			{
-				level->update( image
-					, baseArrayLayer
-					, layerCount
-					, baseMipLevel++
-					, 1u );
-			}
-		}
-
-		static void update( MipView & view
-			, VkImage image
-			, uint32_t & baseArrayLayer
-			, uint32_t baseMipLevel
-			, uint32_t levelCount )
-		{
-			update( view
-				, image
-				, baseArrayLayer++
-				, 1u
-				, baseMipLevel
-				, levelCount );
-		}
-
-		static void update( CubeView & view
-			, VkImage image
-			, uint32_t & baseArrayLayer
-			, uint32_t baseMipLevel
-			, uint32_t levelCount )
-		{
-			update( view.view
-				, image
-				, baseArrayLayer
-				, 6u
-				, baseMipLevel
-				, levelCount );
-
-			for ( auto & face : view.faces )
-			{
-				update( face
-					, image
-					, baseArrayLayer
-					, baseMipLevel
-					, levelCount );
-			}
-		}
-
 		template< typename ViewT >
 		static void update( ArrayView< ViewT > & view
 			, VkImage image
@@ -567,7 +507,7 @@ namespace castor3d
 			return result;
 		}
 
-		castor::Image getFileImage( Engine & engine
+		static castor::Image getFileImage( Engine & engine
 			, castor::String const & name
 			, castor::Path const & folder
 			, castor::Path const & relative
@@ -608,16 +548,6 @@ namespace castor3d
 			{
 				mipView.view->setMipmapsGenerationNeeded( genNeeded );
 			}
-		}
-
-		static auto updateMipLevels( bool genNeeded
-			, uint32_t mipLevels
-			, MipView & mipView )
-		{
-			updateMipLevels( genNeeded
-				, mipLevels
-				, mipView.view->getLevelCount()
-				, mipView );
 		}
 
 		static castor::ImageLayout::Type convert( VkImageCreateFlags flags
