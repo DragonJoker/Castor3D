@@ -230,16 +230,11 @@ namespace castor3d::shader
 						, lightSurface
 						, radiance
 						, output );
-					doComputeScatteringTerm( radiance
-						, light.base().intensity()
-						, components
-						, lightSurface
-						, output.scattering );
+					auto shadows = m_writer.declLocale( "shadows"
+						, m_shadowModel.getDirectionalShadows() );
 
 					if ( m_shadowModel.isEnabled() )
 					{
-						auto shadows = m_writer.declLocale( "shadows"
-							, m_shadowModel.getDirectionalShadows() );
 						doApplyShadows( shadows
 							, light.shadowMapIndex()
 							, light.base().intensity()
@@ -249,6 +244,13 @@ namespace castor3d::shader
 							, output );
 					}
 
+					doComputeScatteringTerm( shadows.base()
+						, light.shadowMapIndex()
+						, radiance
+						, light.base().intensity()
+						, components
+						, lightSurface
+						, output.scattering );
 					parentOutput.diffuse += max( vec3( 0.0_f ), output.diffuse );
 					parentOutput.specular += max( vec3( 0.0_f ), output.specular );
 					parentOutput.scattering += max( vec3( 0.0_f ), output.scattering );
@@ -711,26 +713,6 @@ namespace castor3d::shader
 			}
 			FI;
 #endif
-
-			if ( m_enableVolumetric
-				&& m_directionalTransform
-				&& m_directionalCascadeIndex
-				&& m_directionalCascadeCount )
-			{
-				IF( m_writer, shadows.base().volumetricSteps() != 0_u
-					&& shadowMapIndex >= 0_i )
-				{
-					auto volumetric = m_writer.declLocale( "volumetric"
-						, m_shadowModel.computeVolumetric( shadows.base()
-							, lightSurface
-							, *m_directionalTransform
-							, *m_directionalCascadeIndex
-							, *m_directionalCascadeCount ) );
-					output.scattering *= volumetric
-						* lightIntensity.x();
-				}
-				FI;
-			}
 		}
 		FI;
 	}
@@ -885,6 +867,41 @@ namespace castor3d::shader
 		FI;
 	}
 
+	void LightingModel::doApplyVolumetric( ShadowData const & shadows
+		, sdw::Int const shadowMapIndex
+		, sdw::Vec2 const & lightIntensity
+		, LightSurface const & lightSurface
+		, sdw::Vec3 & output
+		, bool multiply )
+	{
+		if ( m_enableVolumetric
+			&& m_directionalTransform
+			&& m_directionalCascadeIndex
+			&& m_directionalCascadeCount )
+		{
+			IF( m_writer, shadows.volumetricSteps() != 0_u
+				&& shadowMapIndex >= 0_i )
+			{
+				auto volumetric = m_writer.declLocale( "volumetric"
+					, m_shadowModel.computeVolumetric( shadows
+						, lightSurface
+						, *m_directionalTransform
+						, *m_directionalCascadeIndex
+						, *m_directionalCascadeCount ) );
+
+				if ( multiply )
+				{
+					output *= vec3( volumetric * lightIntensity.x() );
+				}
+				else
+				{
+					output = vec3( volumetric * lightIntensity.x() );
+				}
+			}
+			FI;
+		}
+	}
+
 	void LightingModel::doInitialiseBackground( BackgroundModel & pbackground )
 	{
 	}
@@ -904,16 +921,20 @@ namespace castor3d::shader
 	{
 	}
 
-	void LightingModel::doComputeScatteringTerm( sdw::Vec3 const & radiance
+	void LightingModel::doComputeScatteringTerm( ShadowData const & shadows
+		, sdw::Int const shadowMapIndex
+		, sdw::Vec3 const & radiance
 		, sdw::Vec2 const & lightIntensity
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Vec3 & output )
 	{
-		if ( m_enableVolumetric )
-		{
-			output = radiance;
-		}
+		doApplyVolumetric( shadows
+			, shadowMapIndex
+			, lightIntensity
+			, lightSurface
+			, output
+			, false /*multiply*/ );
 	}
 
 	void LightingModel::doInitLightSpecifics( LightSurface const & lightSurface

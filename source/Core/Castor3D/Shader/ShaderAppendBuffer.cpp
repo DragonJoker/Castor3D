@@ -17,12 +17,10 @@ namespace castor3d
 	ShaderAppendBuffer::ShaderAppendBuffer( Engine & engine
 		, RenderDevice const & device
 		, VkDeviceSize size
-		, castor::String name
-		, crg::AccessState wantedState )
+		, castor::String name )
 		: m_device{ device }
 		, m_size{ ashes::getAlignedSize( size + sizeof( uint32_t )
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
-		, m_wantedState{ std::move( wantedState ) }
 		, m_buffer{ makeBufferBase( m_device
 			, m_size
 			, ( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT )

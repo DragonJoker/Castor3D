@@ -101,6 +101,7 @@ namespace castor3d
 		std::vector< ImageDataRange > * pendingImages;
 		traceUpload( "Start upload" << std::endl );
 		doPreprocess( pendingBuffers, pendingImages );
+#if C3D_DebugUpload
 		VkDeviceSize size{};
 
 		for ( auto & upload : *pendingBuffers )
@@ -115,6 +116,19 @@ namespace castor3d
 
 		doPostprocess();
 		traceUpload( "End upload, total size: " << size << std::endl );
+#else
+		for ( auto & upload : *pendingBuffers )
+		{
+			doUpload( upload );
+		}
+
+		for ( auto & upload : *pendingImages )
+		{
+			doUpload( upload );
+		}
+
+		doPostprocess();
+#endif
 		m_pendingBuffers.clear();
 		m_pendingImages.clear();
 	}

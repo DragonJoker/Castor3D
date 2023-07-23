@@ -105,13 +105,21 @@ namespace atmosphere_scattering
 		return compRadiance( lightDirection );
 	}
 
-	void AtmospherePhongLightingModel::doComputeScatteringTerm( sdw::Vec3 const & radiance
+	void AtmospherePhongLightingModel::doComputeScatteringTerm( c3d::ShadowData const & shadows
+		, sdw::Int const shadowMapIndex
+		, sdw::Vec3 const & radiance
 		, sdw::Vec2 const & lightIntensity
 		, c3d::BlendComponents const & components
 		, c3d::LightSurface const & lightSurface
 		, sdw::Vec3 & output )
 	{
 		compScatteringTerm( lightSurface, output );
+		doApplyVolumetric( shadows
+			, shadowMapIndex
+			, lightIntensity
+			, lightSurface
+			, output
+			, true /*multiply*/ );
 	}
 
 	//*********************************************************************************************
@@ -166,13 +174,21 @@ namespace atmosphere_scattering
 		return compRadiance( lightDirection );
 	}
 
-	void AtmospherePbrLightingModel::doComputeScatteringTerm( sdw::Vec3 const & radiance
+	void AtmospherePbrLightingModel::doComputeScatteringTerm( c3d::ShadowData const & shadows
+		, sdw::Int const shadowMapIndex
+		, sdw::Vec3 const & radiance
 		, sdw::Vec2 const & lightIntensity
 		, c3d::BlendComponents const & components
 		, c3d::LightSurface const & lightSurface
 		, sdw::Vec3 & output )
 	{
 		compScatteringTerm( lightSurface, output );
+		doApplyVolumetric( shadows
+			, shadowMapIndex
+			, lightIntensity
+			, lightSurface
+			, output
+			, true /*multiply*/ );
 	}
 
 	//*********************************************************************************************

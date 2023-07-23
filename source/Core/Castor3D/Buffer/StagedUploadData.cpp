@@ -42,7 +42,7 @@ namespace castor3d
 			totalSize += buffer->getSize();
 		}
 
-		m_buffers = {};
+		m_buffers = { FrameBuffers{}, FrameBuffers{} };
 		log::info << "  Staging Buffers total allocated size: " << totalSize << " bytes" << std::endl;
 	}
 

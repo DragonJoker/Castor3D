@@ -182,6 +182,12 @@ namespace castor3d::shader
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
 			, sdw::Vec3 & output );
+		C3D_API void doApplyVolumetric( ShadowData const & shadows
+			, sdw::Int const shadowMapIndex
+			, sdw::Vec2 const & lightIntensity
+			, LightSurface const & lightSurface
+			, sdw::Vec3 & output
+			, bool multiply );
 
 		C3D_API virtual void doInitialiseBackground( BackgroundModel & background );
 		C3D_API virtual sdw::Vec3 doComputeRadiance( Light const & light
@@ -192,7 +198,9 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
 			, sdw::Vec2 & output );
-		C3D_API virtual void doComputeScatteringTerm( sdw::Vec3 const & radiance
+		C3D_API virtual void doComputeScatteringTerm( ShadowData const & shadows
+			, sdw::Int const shadowMapIndex
+			, sdw::Vec3 const & radiance
 			, sdw::Vec2 const & lightIntensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface

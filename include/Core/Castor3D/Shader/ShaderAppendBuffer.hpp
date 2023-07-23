@@ -37,8 +37,7 @@ namespace castor3d
 		C3D_API ShaderAppendBuffer( Engine & engine
 			, RenderDevice const & device
 			, VkDeviceSize size
-			, castor::String name
-			, crg::AccessState wantedState = { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT } );
+			, castor::String name );
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor set layout binding at given point.
@@ -113,7 +112,6 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		VkDeviceSize m_size;
-		crg::AccessState m_wantedState;
 		ashes::BufferBasePtr m_buffer;
 	};
 }
