@@ -603,7 +603,6 @@ namespace castor3d
 	{
 		auto result = buffer.clone();
 		auto dstFormat = result->getFormat();
-		bool changed{};
 
 		switch ( dstFormat )
 		{
@@ -641,7 +640,6 @@ namespace castor3d
 				, result->getConstPtr()
 				, result->getFormat()
 				, result->getAlign() );
-			changed = true;
 		}
 
 		if ( generateMips

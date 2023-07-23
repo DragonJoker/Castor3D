@@ -107,7 +107,7 @@ namespace castor3d
 			VkDeviceSize currentSize{};
 			VkDeviceSize buffersCount{};
 
-			FrameBuffers( ashes::SemaphorePtr psemaphore = {}
+			explicit FrameBuffers( ashes::SemaphorePtr psemaphore = {}
 				, BuffersRanges pbuffers = {}
 				, bool pused = true )noexcept
 				: buffers{ std::move( pbuffers ) }

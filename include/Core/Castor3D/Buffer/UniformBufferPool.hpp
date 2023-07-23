@@ -94,9 +94,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		uint32_t m_maxUboElemCount{ 0u };
 		uint32_t m_maxUboSize{ 0u };
-		uint32_t m_maxPoolUboCount{ 100u };
 		uint32_t m_currentUboIndex{ 0u };
 		std::map< uint32_t, BufferArray > m_buffers;
 		castor::String m_debugName;

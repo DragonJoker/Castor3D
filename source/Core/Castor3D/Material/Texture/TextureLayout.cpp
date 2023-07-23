@@ -341,100 +341,6 @@ namespace castor3d
 		}
 
 		static void update( MipView & view
-			, VkImage image
-			, uint32_t baseArrayLayer
-			, uint32_t layerCount
-			, uint32_t baseMipLevel
-			, uint32_t levelCount )
-		{
-			view.view->update( image
-				, baseArrayLayer
-				, layerCount
-				, baseMipLevel
-				, levelCount );
-
-			for ( auto & level : view.levels )
-			{
-				level->update( image
-					, baseArrayLayer
-					, layerCount
-					, baseMipLevel++
-					, 1u );
-			}
-		}
-
-		static void update( MipView & view
-			, VkImage image
-			, uint32_t & baseArrayLayer
-			, uint32_t baseMipLevel
-			, uint32_t levelCount )
-		{
-			update( view
-				, image
-				, baseArrayLayer++
-				, 1u
-				, baseMipLevel
-				, levelCount );
-		}
-
-		static void update( CubeView & view
-			, VkImage image
-			, uint32_t & baseArrayLayer
-			, uint32_t baseMipLevel
-			, uint32_t levelCount )
-		{
-			update( view.view
-				, image
-				, baseArrayLayer
-				, 6u
-				, baseMipLevel
-				, levelCount );
-
-			for ( auto & face : view.faces )
-			{
-				update( face
-					, image
-					, baseArrayLayer
-					, baseMipLevel
-					, levelCount );
-			}
-		}
-
-		template< typename ViewT >
-		static void update( ArrayView< ViewT > & view
-			, VkImage image
-			, uint32_t levelCount )
-		{
-			uint32_t baseArrayLayer = 0u;
-
-			for ( auto & layer : view.layers )
-			{
-				update( layer
-					, image
-					, baseArrayLayer
-					, 0u
-					, levelCount );
-			}
-		}
-
-		template< typename ViewT >
-		static void update( SliceView< ViewT > & view
-			, VkImage image
-			, uint32_t levelCount )
-		{
-			uint32_t baseSlice = 0u;
-
-			for ( auto & layer : view.slices )
-			{
-				update( layer
-					, image
-					, baseSlice
-					, 0u
-					, levelCount );
-			}
-		}
-
-		static void update( MipView & view
 			, VkExtent3D const & extent
 			, VkFormat format
 			, uint32_t mipLevels
@@ -610,16 +516,6 @@ namespace castor3d
 			{
 				mipView.view->setMipmapsGenerationNeeded( genNeeded );
 			}
-		}
-
-		static auto updateMipLevels( bool genNeeded
-			, uint32_t mipLevels
-			, MipView & mipView )
-		{
-			updateMipLevels( genNeeded
-				, mipLevels
-				, mipView.view->getLevelCount()
-				, mipView );
 		}
 
 		static castor::ImageLayout::Type convert( VkImageCreateFlags flags
