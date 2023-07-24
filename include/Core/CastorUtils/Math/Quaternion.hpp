@@ -258,6 +258,24 @@ namespace castor
 		static inline QuaternionT< T > fromAxes( Point3d const & x, Point3d const & y, Point3d const & z );
 		/**
 		 *\~english
+		 *\brief		Updates this Quaternion from 4 components
+		 *\param[in]	x, y, z, w	The components
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir de 4 composantes
+		 *\param[in]	x, y, z, w	Les composantes
+		 */
+		static inline QuaternionT< T > fromComponents( float x, float y, float z, float w );
+		/**
+		 *\~english
+		 *\brief		Updates this Quaternion from 4 components
+		 *\param[in]	x, y, z, w	The components
+		 *\~french
+		 *\brief		Met à jour ce Quaternion à partir de 4 composantes
+		 *\param[in]	x, y, z, w	Les composantes
+		 */
+		static inline QuaternionT< T > fromComponents( double x, double y, double z, double w );
+		/**
+		 *\~english
 		 *\brief		Transforms a vector and gives the result
 		 *\param[in]	vector	The vector to transform
 		 *\param[out]	result	Receives the result

@@ -45,6 +45,9 @@ namespace c3d_assimp
 				skelNode->setTransform( { fromAssimp( position )
 					, fromAssimp( scaling )
 					, fromAssimp( rotate ) } );
+				castor3d::log::trace << "        Translation [" << skelNode->getTransform().translate << "]" << std::endl;
+				castor3d::log::trace << "        Rotation [" << skelNode->getTransform().rotate << "]" << std::endl;
+				castor3d::log::trace << "        Scale [" << skelNode->getTransform().scale << "]" << std::endl;
 
 				if ( parentSkelNode )
 				{

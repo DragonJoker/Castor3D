@@ -56,6 +56,7 @@ namespace castor
 		explicit SquareMatrix( std::array< Type, Count * Count > const & rhs );
 		template< typename Type >
 		explicit SquareMatrix( Type const * rhs );
+		explicit SquareMatrix( std::initializer_list< T > rhs );
 		/**@}*/
 		/**
 		 *\~english

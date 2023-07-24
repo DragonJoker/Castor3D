@@ -21,9 +21,9 @@ namespace c3d_assimp
 	using NodeAnimations = std::map< castor::String, std::pair< aiAnimation const *, aiNodeAnim const * > >;
 	using aiNodeArray = std::vector< aiNode const * >;
 
-	struct SkeletonData
+	struct AssimpSkeletonData
 	{
-		explicit SkeletonData( aiNode const * prootNode )
+		explicit AssimpSkeletonData( aiNode const * prootNode )
 			: rootNode{ prootNode }
 		{
 		}
@@ -32,9 +32,9 @@ namespace c3d_assimp
 		SkeletonAnimations anims;
 	};
 
-	struct SubmeshData
+	struct AssimpSubmeshData
 	{
-		SubmeshData( aiMesh const * pmesh
+		AssimpSubmeshData( aiMesh const * pmesh
 			, uint32_t pmeshIndex )
 			: mesh{ pmesh }
 			, meshIndex{ pmeshIndex }
@@ -46,44 +46,49 @@ namespace c3d_assimp
 		MeshAnimations anims;
 	};
 
-	struct MeshData
+	struct AssimpMeshData
 	{
-		explicit MeshData( aiNode const * pskelNode )
+		explicit AssimpMeshData( aiNode const * pskelNode )
 			: skelNode{ pskelNode }
 		{
 		}
 
 		aiNode const * skelNode;
-		std::vector< SubmeshData > submeshes;
+		std::vector< AssimpSubmeshData > submeshes;
 	};
 
-	struct NodeData
+	struct AssimpNodeData
+		: castor3d::ImporterFile::NodeData
 	{
-		NodeData( castor::String pparent
+		AssimpNodeData( castor::String pparent
 			, castor::String pname
 			, aiNode const * pnode
-			, castor::Matrix4x4f ptransform )
-			: parent{ std::move( pparent ) }
-			, name{ std::move( pname ) }
+			, castor::Point3f ptranslate
+			, castor::Quaternion protate
+			, castor::Point3f pscale )
+			: NodeData{ std::move( pparent )
+				, std::move( pname ) }
 			, node{ pnode }
-			, transform{ std::move( ptransform ) }
+			, translate{ std::move( ptranslate ) }
+			, rotate{ std::move( protate ) }
+			, scale{ std::move( pscale ) }
 		{
 		}
 
-		castor::String parent{};
-		castor::String name{};
 		aiNode const * node{};
-		castor::Matrix4x4f transform{};
-		std::vector< MeshData const * > meshes{};
+		castor::Point3f translate{};
+		castor::Quaternion rotate{};
+		castor::Point3f scale{};
+		std::vector< AssimpMeshData const * > meshes{};
 		NodeAnimations anims{};
 	};
 
-	struct SceneData
+	struct AssimpSceneData
 	{
 		std::map< castor::String, aiMaterial const * > materials;
-		std::vector< NodeData > nodes;
-		std::map< castor::String, MeshData > meshes;
-		std::map< castor::String, SkeletonData > skeletons;
+		std::vector< AssimpNodeData > nodes;
+		std::map< castor::String, AssimpMeshData > meshes;
+		std::map< castor::String, AssimpSkeletonData > skeletons;
 		std::map< castor::String, aiLight const * > lights;
 	};
 
@@ -104,10 +109,10 @@ namespace c3d_assimp
 		using castor3d::ImporterFile::getInternalName;
 
 		std::vector< castor::String > listMaterials()override;
-		std::vector< std::pair< castor::String, castor::String > > listMeshes()override;
+		std::vector< MeshData > listMeshes()override;
 		std::vector< castor::String > listSkeletons()override;
-		std::vector< castor::String > listSceneNodes()override;
-		std::vector< std::pair< castor::String, castor3d::LightType > > listLights()override;
+		std::vector< NodeData > listSceneNodes()override;
+		std::vector< LightData > listLights()override;
 		std::vector< GeometryData > listGeometries()override;
 		std::vector< castor::String > listMeshAnimations( castor3d::Mesh const & mesh )override;
 		std::vector< castor::String > listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
@@ -185,7 +190,7 @@ namespace c3d_assimp
 		std::map< aiMesh const *, aiNode const * > doPrelistSkeletons();
 		void doPrelistMeshes( std::map< aiMesh const *, aiNode const * > const & meshSkeletons );
 		void doPrelistSceneNodes( aiNode const & node
-			, std::map< MeshData const *, aiNodeArray > & processedMeshes
+			, std::map< AssimpMeshData const *, aiNodeArray > & processedMeshes
 			, std::map< aiNode const *, castor::Matrix4x4f > & cumulativeTransforms
 			, castor::String parentName = castor::String{}
 			, castor::Matrix4x4f transform = castor::Matrix4x4f{ 1.0f } );
@@ -199,7 +204,7 @@ namespace c3d_assimp
 		std::vector< castor::String > m_listedMeshes;
 		std::vector< castor::String > m_listedSkeletons;
 
-		SceneData m_sceneData;
+		AssimpSceneData m_sceneData;
 	};
 }
 

@@ -10,18 +10,21 @@
     "meshoptimizer",
     "mikktspace",
     "minizip",
+    "vulkan-headers",
     "zlib"
   ],
   "default-features": [
     "assimp",
     "freeimage",
     "glsl",
+    "gltf",
     "vkfft"
   ],
   "vcpkg-configuration": {
     "overlay-ports": [
       "./data/vcpkg/ports/ashes",
       "./data/vcpkg/ports/draco",
+      "./data/vcpkg/ports/fastgltf",
       "./data/vcpkg/ports/rendergraph",
       "./data/vcpkg/ports/shaderwriter",
       "./data/vcpkg/ports/vkfft"
@@ -45,6 +48,13 @@
       "dependencies": [
         "glslang",
         "spirv-cross"
+      ]
+    },
+    "gltf": {
+      "description": "Use fastgltf library to import glTF scenes.",
+      "dependencies": [
+        "fastgltf",
+        "simdjson"
       ]
     },
     "vkfft": {

@@ -110,27 +110,15 @@ namespace c3d_assimp
 
 		static castor::String decodeUri( castor::String uri )
 		{
-			castor::String escaped;
+			castor::String escaped{ uri };
 
-			for ( auto i = uri.begin(), nd = uri.end(); i < nd; ++i )
+			for ( auto i = escaped.begin(); i != escaped.end(); i++ )
 			{
-				auto c = ( *i );
-
-				switch ( c )
+				if ( *i == '%' )
 				{
-				case '%':
-					if ( i[1] && i[2] )
-					{
-						char hs[]{ i[1], i[2] };
-						escaped += static_cast< char >( strtol( hs, nullptr, 16 ) );
-						i += 2;
-					}
-					break;
-				case '+':
-					escaped += ' ';
-					break;
-				default:
-					escaped += c;
+					std::array< char, 3 > chars = { *( i + 1 ), *( i + 2 ), 0 };
+					*i = static_cast< char >( std::strtoul( chars.data(), nullptr, 16 ) );
+					escaped.erase( i + 1, i + 3 );
 				}
 			}
 

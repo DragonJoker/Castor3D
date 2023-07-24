@@ -28,11 +28,59 @@ namespace castor3d
 		: public castor::OwnedBy< Engine >
 	{
 	public:
+		struct NodeData
+		{
+			NodeData( castor::String pparent
+				, castor::String pname )
+				: parent{ std::move( pparent ) }
+				, name{ std::move( pname ) }
+			{
+			}
+
+			castor::String parent{};
+			castor::String name{};
+		};
+
 		struct GeometryData
 		{
+			GeometryData( castor::String pname
+				, castor::String pnode
+				, castor::String pmesh )
+				: name{ std::move( pname ) }
+				, node{ std::move( pnode ) }
+				, mesh{ std::move( pmesh ) }
+			{
+			}
+
 			castor::String name;
 			castor::String node;
 			castor::String mesh;
+		};
+
+		struct MeshData
+		{
+			MeshData( castor::String pname
+				, castor::String pskeleton )
+				: name{ std::move( pname ) }
+				, skeleton{ std::move( pskeleton ) }
+			{
+			}
+
+			castor::String name;
+			castor::String skeleton;
+		};
+
+		struct LightData
+		{
+			LightData( castor::String pname
+				, LightType ptype )
+				: name{ std::move( pname ) }
+				, type{ std::move( ptype ) }
+			{
+			}
+
+			castor::String name;
+			LightType type;
 		};
 
 	protected:
@@ -45,11 +93,11 @@ namespace castor3d
 		C3D_API virtual ~ImporterFile() = default;
 
 		C3D_API virtual std::vector< castor::String > listMaterials() = 0;
-		C3D_API virtual std::vector< std::pair< castor::String, castor::String > > listMeshes() = 0;
+		C3D_API virtual std::vector< MeshData > listMeshes() = 0;
 		C3D_API virtual std::vector< castor::String > listSkeletons() = 0;
-		C3D_API virtual std::vector< castor::String > listSceneNodes() = 0;
+		C3D_API virtual std::vector< NodeData > listSceneNodes() = 0;
 		C3D_API virtual std::vector< GeometryData > listGeometries() = 0;
-		C3D_API virtual std::vector< std::pair< castor::String, LightType > > listLights() = 0;
+		C3D_API virtual std::vector< LightData > listLights() = 0;
 		C3D_API virtual std::vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
 		C3D_API virtual std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;
 		C3D_API virtual std::vector< castor::String > listSceneNodeAnimations( SceneNode const & node ) = 0;
