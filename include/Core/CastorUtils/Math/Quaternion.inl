@@ -250,6 +250,18 @@ namespace castor
 	}
 
 	template< typename T >
+	QuaternionT< T > QuaternionT< T >::fromComponents( float x, float y, float z, float w )
+	{
+		return QuaternionT< T >{ T( x ), T( y ), T( z ), T( w ) };
+	}
+
+	template< typename T >
+	QuaternionT< T > QuaternionT< T >::fromComponents( double x, double y, double z, double w )
+	{
+		return QuaternionT< T >{ T(x), T(y), T(z), T(w) };
+	}
+
+	template< typename T >
 	template< Vector3fT PtT >
 	PtT & QuaternionT< T >::transform( PtT const & vector, PtT & result )const
 	{

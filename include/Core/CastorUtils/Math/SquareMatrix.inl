@@ -448,6 +448,12 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Count >
+	inline SquareMatrix< T, Count >::SquareMatrix( std::initializer_list< T > rhs )
+		: matrix_type( std::move( rhs ) )
+	{
+	}
+
+	template< typename T, uint32_t Count >
 	inline typename SquareMatrix< T, Count >::value_type SquareMatrix< T, Count >::getDeterminant()const
 	{
 		typename SquareMatrix< T, Count >::value_type result{};

@@ -34,16 +34,28 @@ namespace castor3d
 		C3D_API explicit MaterialImporter( Engine & engine );
 		/**
 		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	engine	The engine.
+		 *\param[in]	file	The file to import.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	engine	Le moteur.
+		 *\param[in]	file	Le fichier à importer.
+		 */
+		C3D_API explicit MaterialImporter( Engine & engine
+			, ImporterFile * file );
+		/**
+		 *\~english
 		 *\brief		Scene import Function.
 		 *\param[out]	material		Receives the imported data.
-		 *\param[in]	file			The location of the file to import.
+		 *\param[in]	file			The file to import.
 		 *\param[in]	parameters		Import configuration parameters.
 		 *\param[in]	textureRemaps	The imported textures remapping parameters.
 		 *\return		\p false if any problem occured.
 		 *\~french
 		 *\brief		Fonction d'import de Scene.
 		 *\param[out]	material		Reçoit les données importées.
-		 *\param[in]	file			Le chemin vers le fichier à importer.
+		 *\param[in]	file			Le fichier à importer.
 		 *\param[in]	parameters		Paramètres de configuration de l'import.
 		 *\param[in]	textureRemaps	Les paramètres de reaffectation des textures importées.
 		 *\return		\p false si un problème quelconque est survenu.
@@ -210,6 +222,11 @@ namespace castor3d
 		 */
 		C3D_API bool convertToNormalMap( castor::Path & path
 			, castor3d::TextureConfiguration & config )const;
+
+		ImporterFile const * getImporterFile()const noexcept
+		{
+			return m_file;
+		}
 
 	private:
 		virtual bool doImportMaterial( Material & material ) = 0;

@@ -56,9 +56,9 @@ namespace castor3d
 		return std::vector< castor::String >{};
 	}
 
-	std::vector< std::pair< castor::String, castor::String > > CmshImporterFile::listMeshes()
+	std::vector< ImporterFile::MeshData > CmshImporterFile::listMeshes()
 	{
-		std::vector< std::pair< castor::String, castor::String > > result;
+		std::vector< MeshData > result;
 
 		if ( getExtension() == CmshMeshImporter::Type )
 		{
@@ -80,14 +80,14 @@ namespace castor3d
 		return result;
 	}
 
-	std::vector< castor::String > CmshImporterFile::listSceneNodes()
+	std::vector< ImporterFile::NodeData > CmshImporterFile::listSceneNodes()
 	{
-		return std::vector< castor::String >{};
+		return std::vector< NodeData >{};
 	}
 
-	std::vector< std::pair< castor::String, LightType > > CmshImporterFile::listLights()
+	std::vector< ImporterFile::LightData > CmshImporterFile::listLights()
 	{
-		return std::vector< std::pair< castor::String, LightType > >{};
+		return std::vector< LightData >{};
 	}
 
 	std::vector< CmshImporterFile::GeometryData > CmshImporterFile::listGeometries()

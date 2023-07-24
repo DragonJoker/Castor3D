@@ -19,8 +19,15 @@ namespace GuiCommon
 
 	void SkeletonNodeTreeItemProperty::doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )
 	{
-		static wxString PROPERTY_CATEGORY_BONE = _( "Node: " );
+		static wxString PROPERTY_CATEGORY_NODE = _( "Node: " );
+		static wxString PROPERTY_CATEGORY_TRANSLATE = _( "Translate" );
+		static wxString PROPERTY_CATEGORY_ROTATE = _( "Rotate" );
+		static wxString PROPERTY_CATEGORY_SCALE = _( "Scale" );
 
-		addProperty( grid, PROPERTY_CATEGORY_BONE + wxString( m_node.getName() ) );
+		addProperty( grid, PROPERTY_CATEGORY_NODE + wxString( m_node.getName() ) );
+		addProperty( grid, PROPERTY_CATEGORY_TRANSLATE, m_node.getTransform().translate, [&]( wxVariant const & var ){} );
+		auto rotate = m_node.getTransform().rotate;
+		addProperty( grid, PROPERTY_CATEGORY_ROTATE, castor::Point4f{ rotate->x, rotate->y, rotate->z, rotate->w }, [&]( wxVariant const & var ){} );
+		addProperty( grid, PROPERTY_CATEGORY_SCALE, m_node.getTransform().scale, [&]( wxVariant const & var ){} );
 	}
 }

@@ -53,6 +53,7 @@ namespace castor3d
 		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
 		m_file = file;
+		m_file->setScene( scene );
 		doImportMaterials( scene, parameters, textureRemaps );
 		auto skeletons = doImportSkeletons( scene );
 		auto meshes = doImportMeshes( scene, skeletons );
@@ -183,24 +184,24 @@ namespace castor3d
 
 		if ( auto meshImporter = m_file->createMeshImporter() )
 		{
-			for ( auto [meshName, skeletonName] : m_file->listMeshes() )
+			for ( auto & data : m_file->listMeshes() )
 			{
-				auto mesh = scene.createMesh( meshName, scene );
+				auto mesh = scene.createMesh( data.name, scene );
 
 				if ( meshImporter->import( *mesh
 					, m_file
 					, emptyParams
 					, true ) )
 				{
-					if ( !skeletonName.empty() )
+					if ( !data.skeleton.empty() )
 					{
-						auto skelIt = skeletons.find( skeletonName );
+						auto skelIt = skeletons.find( data.skeleton );
 						CU_Require( skelIt != skeletons.end() );
 						mesh->setSkeleton( skelIt->second );
 					}
 
-					result.emplace( meshName, mesh.get() );
-					scene.addMesh( meshName, mesh, true );
+					result.emplace( data.name, mesh.get() );
+					scene.addMesh( data.name, mesh, true );
 				}
 			}
 		}
@@ -215,18 +216,27 @@ namespace castor3d
 
 		if ( auto nodeImporter = m_file->createSceneNodeImporter() )
 		{
-			for ( auto name : m_file->listSceneNodes() )
+			for ( auto & data : m_file->listSceneNodes() )
 			{
-				if ( !scene.hasSceneNode( name ) )
+				if ( !scene.hasSceneNode( data.name ) )
 				{
-					auto node = scene.createSceneNode( name, scene );
+					auto node = scene.createSceneNode( data.name, scene );
 
 					if ( nodeImporter->import( *node
 						, m_file
 						, emptyParams ) )
 					{
-						result.emplace( name, node.get() );
-						scene.addSceneNode( name, node, true );
+						if ( auto parent = scene.tryFindSceneNode( data.parent ) )
+						{
+							node->attachTo( *parent );
+						}
+						else
+						{
+							node->attachTo( *scene.getObjectRootNode() );
+						}
+
+						result.emplace( data.name, node.get() );
+						scene.addSceneNode( data.name, node, true );
 					}
 				}
 			}
@@ -241,19 +251,19 @@ namespace castor3d
 
 		if ( auto lightImporter = m_file->createLightImporter() )
 		{
-			for ( auto name : m_file->listLights() )
+			for ( auto & data : m_file->listLights() )
 			{
-				auto light = scene.createLight( name.first
+				auto light = scene.createLight( data.name
 					, scene
 					, *scene.getObjectRootNode()
 					, scene.getLightsFactory()
-					, name.second );
+					, data.type );
 
 				if ( lightImporter->import( *light
 					, m_file
 					, emptyParams ) )
 				{
-					scene.addLight( name.first, light, true );
+					scene.addLight( data.name, light, true );
 				}
 			}
 		}

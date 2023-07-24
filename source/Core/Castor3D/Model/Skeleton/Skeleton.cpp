@@ -18,7 +18,7 @@ namespace castor3d
 		: castor::Named{ name }
 		, Animable{ *scene.getEngine() }
 		, m_scene{ &scene }
-		, m_globalInverse{ 1 }
+		, m_globalInverse{ 1.0f }
 	{
 	}
 

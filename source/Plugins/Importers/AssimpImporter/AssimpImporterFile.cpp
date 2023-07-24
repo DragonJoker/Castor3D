@@ -106,12 +106,12 @@ namespace c3d_assimp
 			, aiMaterial const & aiMaterial
 			, uint32_t materialIndex )
 		{
-			castor::String result;
+			castor::String result = file.getExtension() + "-";
 			aiString name;
 
 			if ( aiMaterial.Get( AI_MATKEY_NAME, name ) == aiReturn_SUCCESS )
 			{
-				result += makeString( name );
+				result += makeString( name ) + cuT( "-" ) + castor::string::toString( materialIndex );
 			}
 			else
 			{
@@ -124,7 +124,7 @@ namespace c3d_assimp
 		static bool isSkeletonNode( aiNode const & node
 			, castor::String const & aiNodeName
 			, std::map< castor::String, castor::Matrix4x4f > const & bonesNodes
-			, std::map< castor::String, SkeletonData > const & skeletons )
+			, std::map< castor::String, AssimpSkeletonData > const & skeletons )
 		{
 			if ( bonesNodes.find( aiNodeName ) != bonesNodes.end() )
 			{
@@ -133,7 +133,7 @@ namespace c3d_assimp
 
 			return skeletons.end() != std::find_if( skeletons.begin()
 				, skeletons.end()
-				, [&aiNodeName]( std::map< castor::String, SkeletonData >::value_type const & lookup )
+				, [&aiNodeName]( std::map< castor::String, AssimpSkeletonData >::value_type const & lookup )
 				{
 					return lookup.second.rootNode->FindNode( aiNodeName.c_str() ) != nullptr;
 				} );
@@ -164,7 +164,7 @@ namespace c3d_assimp
 		}
 
 		static bool isAnimForSkeleton( aiAnimation const & animation
-			, SkeletonData const & skeleton )
+			, AssimpSkeletonData const & skeleton )
 		{
 			auto channels = castor::makeArrayView( animation.mChannels, animation.mNumChannels );
 			return // The skeleton root node is in the animated channels
@@ -176,10 +176,10 @@ namespace c3d_assimp
 					} ) );
 		}
 
-		static std::pair< SkeletonData *, castor3d::SkeletonRPtr > findSkeletonForAnim( castor3d::Scene * scene
+		static std::pair< AssimpSkeletonData *, castor3d::SkeletonRPtr > findSkeletonForAnim( castor3d::Scene * scene
 			, aiNode const & rootNode
 			, aiAnimation const & animation
-			, SceneData & sceneData )
+			, AssimpSceneData & sceneData )
 		{
 			for ( auto & skeleton : sceneData.skeletons )
 			{
@@ -196,7 +196,7 @@ namespace c3d_assimp
 					if ( auto node = rootNode.FindNode( skeleton.second->getRootNode()->getName().c_str() ) )
 					{
 						auto & data = sceneData.skeletons.emplace( skeleton.first
-							, SkeletonData{ node } ).first->second;
+							, AssimpSkeletonData{ node } ).first->second;
 
 						if ( isAnimForSkeleton( animation, data ) )
 						{
@@ -250,15 +250,15 @@ namespace c3d_assimp
 		}
 
 		static auto findNodeMesh( uint32_t meshIndex
-			, std::map< castor::String, MeshData > const & meshes )
+			, std::map< castor::String, AssimpMeshData > const & meshes )
 		{
 			return std::find_if( meshes.begin()
 				, meshes.end()
-				, [&meshIndex]( std::map< castor::String, MeshData >::value_type const & lookup )
+				, [&meshIndex]( std::map< castor::String, AssimpMeshData >::value_type const & lookup )
 				{
 					return lookup.second.submeshes.end() != std::find_if( lookup.second.submeshes.begin()
 						, lookup.second.submeshes.end()
-						, [&meshIndex]( SubmeshData const & submesh )
+						, [&meshIndex]( AssimpSubmeshData const & submesh )
 						{
 							return submesh.meshIndex == meshIndex;
 						} );
@@ -325,7 +325,7 @@ namespace c3d_assimp
 		}
 
 		static void accumulateTransformsRec( aiNode const * node
-			, std::vector< NodeData > const & nodes
+			, std::vector< AssimpNodeData > const & nodes
 			, std::vector< castor::Matrix4x4f > & transforms )
 		{
 			if ( !node )
@@ -335,7 +335,7 @@ namespace c3d_assimp
 
 			auto it = std::find_if( nodes.begin()
 				, nodes.end()
-				, [&node]( NodeData const & lookup )
+				, [&node]( AssimpNodeData const & lookup )
 				{
 					return node == lookup.node;
 				} );
@@ -347,14 +347,16 @@ namespace c3d_assimp
 			}
 			else
 			{
-				transforms.push_back( it->transform );
+				castor::Matrix4x4f matrix;
+				castor::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
+				transforms.push_back( matrix );
 			}
 		}
 
 		static castor::Matrix4x4f accumulateTransforms( AssimpImporterFile const & file
 			, castor::String const & name
 			, aiNode const & rootNode
-			, std::vector< NodeData > const & nodes
+			, std::vector< AssimpNodeData > const & nodes
 			, castor::Matrix4x4f transform )
 		{
 			auto node = rootNode.FindNode( file.getExternalName( name ).c_str() );
@@ -402,7 +404,7 @@ namespace c3d_assimp
 
 			doPrelistMaterials();
 			doPrelistMeshes( doPrelistSkeletons() );
-			std::map< MeshData const *, aiNodeArray > processed;
+			std::map< AssimpMeshData const *, aiNodeArray > processed;
 			std::map< aiNode const *, castor::Matrix4x4f > cumulativeTransforms;
 			doPrelistSceneNodes( *m_aiScene->mRootNode, processed, cumulativeTransforms );
 			doPrelistLights();
@@ -420,7 +422,7 @@ namespace c3d_assimp
 	{
 		auto it = std::find_if( m_sceneData.nodes.begin()
 			, m_sceneData.nodes.end()
-			, [&node]( NodeData const & lookup )
+			, [&node]( AssimpNodeData const & lookup )
 			{
 				return node.getName() == lookup.name;
 			} );
@@ -482,10 +484,10 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< std::pair< castor::String, castor::String > > AssimpImporterFile::listMeshes()
+	std::vector< castor3d::ImporterFile::MeshData > AssimpImporterFile::listMeshes()
 	{
 		m_listedMeshes.clear();
-		std::vector< std::pair< castor::String, castor::String > > result;
+		std::vector< MeshData > result;
 
 		for ( auto it : m_sceneData.meshes )
 		{
@@ -512,21 +514,21 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< castor::String > AssimpImporterFile::listSceneNodes()
+	std::vector< castor3d::ImporterFile::NodeData > AssimpImporterFile::listSceneNodes()
 	{
-		std::vector< castor::String > result;
+		std::vector< NodeData > result;
 
 		for ( auto & node : m_sceneData.nodes )
 		{
-			result.emplace_back( node.name );
+			result.emplace_back( node.parent, node.name );
 		}
 
 		return result;
 	}
 
-	std::vector< std::pair< castor::String, castor3d::LightType > > AssimpImporterFile::listLights()
+	std::vector< castor3d::ImporterFile::LightData > AssimpImporterFile::listLights()
 	{
-		std::vector< std::pair< castor::String, castor3d::LightType > > result;
+		std::vector< LightData > result;
 
 		for ( auto & light : m_sceneData.lights )
 		{
@@ -541,7 +543,7 @@ namespace c3d_assimp
 		return result;
 	}
 
-	std::vector< AssimpImporterFile::GeometryData > AssimpImporterFile::listGeometries()
+	std::vector< castor3d::ImporterFile::GeometryData > AssimpImporterFile::listGeometries()
 	{
 		std::vector< GeometryData > result;
 
@@ -551,7 +553,7 @@ namespace c3d_assimp
 			{
 				auto it = std::find_if( m_sceneData.meshes.begin()
 					, m_sceneData.meshes.end()
-					, [mesh]( std::map< castor::String, MeshData >::value_type const & lookup )
+					, [mesh]( std::map< castor::String, AssimpMeshData >::value_type const & lookup )
 					{
 						return mesh == &lookup.second;
 					} );
@@ -560,7 +562,7 @@ namespace c3d_assimp
 				auto name = node.name == meshName
 					? node.name
 					: node.name + meshName;
-				result.emplace_back( GeometryData{ name, node.name, it->first } );
+				result.emplace_back( name, node.name, it->first );
 			}
 		}
 
@@ -616,7 +618,7 @@ namespace c3d_assimp
 		std::vector< castor::String > result;
 		auto it = std::find_if( m_sceneData.nodes.begin()
 			, m_sceneData.nodes.end()
-			, [&node]( NodeData const & lookup )
+			, [&node]( AssimpNodeData const & lookup )
 			{
 				return node.getName() == lookup.name;
 			} );
@@ -704,7 +706,7 @@ namespace c3d_assimp
 						, meshNode );
 					auto skelName = getInternalName( findSkeletonName( m_bonesNodes
 						, *rootNode ) );
-					m_sceneData.skeletons.emplace( skelName, SkeletonData{ rootNode } );
+					m_sceneData.skeletons.emplace( skelName, AssimpSkeletonData{ rootNode } );
 					result.emplace( aiMesh, rootNode );
 				}
 			}
@@ -780,7 +782,7 @@ namespace c3d_assimp
 						skelNode = it->second;
 						regIt = std::find_if( m_sceneData.meshes.begin()
 							, m_sceneData.meshes.end()
-							, [&skelNode]( std::map< castor::String, MeshData >::value_type const & lookup )
+							, [&skelNode]( std::map< castor::String, AssimpMeshData >::value_type const & lookup )
 							{
 								return skelNode == lookup.second.skelNode;
 							} );
@@ -795,7 +797,7 @@ namespace c3d_assimp
 				if ( regIt == m_sceneData.meshes.end() )
 				{
 					regIt = m_sceneData.meshes.emplace( meshName
-						, MeshData{ skelNode } ).first;
+						, AssimpMeshData{ skelNode } ).first;
 				}
 
 				auto & submeshData = regIt->second.submeshes.emplace_back( aiMesh, meshIndex );
@@ -822,7 +824,7 @@ namespace c3d_assimp
 	}
 
 	void AssimpImporterFile::doPrelistSceneNodes( aiNode const & node
-		, std::map< MeshData const *, aiNodeArray > & processedMeshes
+		, std::map< AssimpMeshData const *, aiNodeArray > & processedMeshes
 		, std::map< aiNode const *, castor::Matrix4x4f > & cumulativeTransforms
 		, castor::String parentName
 		, castor::Matrix4x4f transform )
@@ -834,15 +836,20 @@ namespace c3d_assimp
 			return;
 		}
 
-		auto nodeTransform = fromAssimp( node.mTransformation );
-		transform *= nodeTransform;
+		aiVector3D translate;
+		aiVector3D scale;
+		aiQuaternion rotate;
+		node.mTransformation.Decompose( scale, rotate, translate );
+		transform *= fromAssimp( node.mTransformation );
 		cumulativeTransforms.emplace( &node, transform );
 		bool isSkeletonNode = file::isSkeletonNode( node, aiNodeName, m_bonesNodes, m_sceneData.skeletons );
 		auto nodeName = getInternalName( aiNodeName );
-		NodeData nodeData{ parentName
+		AssimpNodeData nodeData{ parentName
 			, nodeName
 			, &node
-			, nodeTransform };
+			, fromAssimp( translate )
+			, fromAssimp( rotate )
+			, fromAssimp( scale ) };
 
 		if ( !isSkeletonNode )
 		{
@@ -953,25 +960,35 @@ namespace c3d_assimp
 					, orientation );
 				auto it = std::find_if( m_sceneData.nodes.begin()
 					, m_sceneData.nodes.end()
-					, [&name]( NodeData const & lookup )
+					, [&name]( AssimpNodeData const & lookup )
 					{
 						return lookup.name == name;
 					} );
 
 				if ( it == m_sceneData.nodes.end() )
 				{
-					m_sceneData.nodes.push_back( NodeData{ castor::String{}
+					file::accumulateTransforms( *this
+						, name
+						, *m_aiScene->mRootNode
+						, m_sceneData.nodes
+						, transform );
+					castor::Point3f translate;
+					castor::Point3f scale;
+					castor::Quaternion rotate;
+					castor::matrix::decompose( transform, translate, scale, rotate );
+					m_sceneData.nodes.push_back( AssimpNodeData{ castor::String{}
 						, name
 						, nullptr
-						, file::accumulateTransforms( *this
-							, name
-							, *m_aiScene->mRootNode
-							, m_sceneData.nodes
-							, transform ) } );
+						, translate
+						, rotate
+						, scale } );
 				}
 				else
 				{
-					it->transform *= transform;
+					castor::Matrix4x4f matrix;
+					castor::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
+					matrix *= transform;
+					castor::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 				}
 			}
 		}

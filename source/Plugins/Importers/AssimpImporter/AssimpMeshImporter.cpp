@@ -1,8 +1,7 @@
 #include "AssimpImporter/AssimpMeshImporter.hpp"
 
-#include "AssimpImporter/AssimpMaterialImporter.hpp"
-
 #include <Castor3D/Engine.hpp>
+#include <Castor3D/Material/MaterialImporter.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
@@ -159,17 +158,19 @@ namespace c3d_assimp
 
 				if ( !materialRes )
 				{
-					AssimpMaterialImporter importer{ *scene.getEngine() };
-					auto mat = getOwner()->createMaterial( matName
-						, *getOwner()
-						, getOwner()->getDefaultLightingModel() );
-
-					if ( importer.import( *mat
-						, &file
-						, castor3d::Parameters{}
-						, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration >{} ) )
+					if ( auto importer = file.createMaterialImporter() )
 					{
-						scene.getMaterialView().add( matName, mat, true );
+						auto mat = getOwner()->createMaterial( matName
+							, *getOwner()
+							, getOwner()->getDefaultLightingModel() );
+
+						if ( importer->import( *mat
+							, &file
+							, castor3d::Parameters{}
+						, std::map< castor3d::PassComponentTextureFlag, castor3d::TextureConfiguration >{} ) )
+						{
+							scene.getMaterialView().add( matName, mat, true );
+						}
 					}
 				}
 

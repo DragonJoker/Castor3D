@@ -320,7 +320,7 @@ namespace castor
 		 *\brief		Opérateur de négation.
 		 *\return		Une référence sur cet angle.
 		 */
-		inline AngleT< Type > & operator-()noexcept;
+		inline AngleT< Type > operator-()const noexcept;
 		/**
 		 *\~english
 		 *\brief		addition assignment operator

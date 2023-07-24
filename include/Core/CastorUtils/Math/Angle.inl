@@ -129,10 +129,9 @@ namespace castor
 	}
 
 	template< typename Type >
-	AngleT< Type > & AngleT< Type >::operator-()noexcept
+	AngleT< Type > AngleT< Type >::operator-()const noexcept
 	{
-		m_radians = -m_radians;
-		return *this;
+		return AngleT{ -m_radians };
 	}
 
 	template< typename Type >

@@ -356,8 +356,8 @@ namespace CastorViewer
 
 		m_sceneTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_objectsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		//m_nodesTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
-		//m_lightsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_nodesTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
+		m_lightsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_materialsTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_overlaysTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_guiTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };

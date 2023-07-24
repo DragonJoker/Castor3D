@@ -72,12 +72,23 @@ namespace castor3d
 	{
 	}
 
+	MaterialImporter::MaterialImporter( Engine & engine
+		, ImporterFile * file )
+		: OwnedBy< Engine >{ engine }
+		, m_file{ file }
+	{
+	}
+
 	bool MaterialImporter::import( Material & material
 		, ImporterFile * file
 		, Parameters const & parameters
 		, std::map< PassComponentTextureFlag, TextureConfiguration > const & textureRemaps )
 	{
-		m_file = file;
+		if ( !m_file )
+		{
+			m_file = file;
+		}
+
 		m_textureRemaps = textureRemaps;
 		m_parameters = parameters;
 		return doImportMaterial( material );

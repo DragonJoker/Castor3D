@@ -1,8 +1,10 @@
 option( CASTOR_BUILDGRP_IMPORTER "Build Castor3D Importer plugins" TRUE )
 option( CASTOR_BUILD_IMPORTER_ASSIMP "Build Assimp Importer plugin (needs ASSIMP library)" TRUE )
+option( CASTOR_BUILD_IMPORTER_GLTF "Build GLTF Importer plugin (needs fastgltf library)" TRUE )
 
 function( ImportersInit )
 	set( Assimp "no (Not wanted)" PARENT_SCOPE )
+	set( Gltf "no (Not wanted)" PARENT_SCOPE )
 endfunction( ImportersInit )
 
 function( ImportersBuild )
@@ -17,6 +19,14 @@ function( ImportersBuild )
 		set( ImporterDependencies
 			${Castor3D_MATERIAL_DEPS}
 		)
+
+		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
+			set( Build ${Gltf} )
+			add_subdirectory( Plugins/Importers/GltfImporter )
+			set( Gltf ${Build} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_REL ${ADDITIONAL_DEPS_REL} PARENT_SCOPE )
+			set( ADDITIONAL_DEPS_DBG ${ADDITIONAL_DEPS_DBG} PARENT_SCOPE )
+		endif()
 
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( Build ${Assimp} )
@@ -51,6 +61,9 @@ function( ImportersSummary msg )
 		if( ${CASTOR_BUILD_IMPORTER_ASSIMP} )
 			set( msg_tmp "${msg_tmp}\n    Assimp               ${Assimp}" )
 		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
+			set( msg_tmp "${msg_tmp}\n    GLTF                 ${Gltf}" )
+		endif ()
 		set( msg "${msg}${msg_tmp}" PARENT_SCOPE )
 	endif ()
 endfunction( ImportersSummary )
@@ -61,6 +74,15 @@ function( ImportersSetup )
 			cpack_add_component( AssimpImporter
 				DISPLAY_NAME "AssimpImporter"
 				DESCRIPTION "Allows the mesh import using Assimp library in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+				INSTALL_TYPES Minimal Full
+			)
+		endif ()
+		if( ${CASTOR_BUILD_IMPORTER_GLTF} )
+			cpack_add_component( GltfImporter
+				DISPLAY_NAME "GltfImporter"
+				DESCRIPTION "Allows the mesh import using fastgltf library in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 				INSTALL_TYPES Minimal Full
