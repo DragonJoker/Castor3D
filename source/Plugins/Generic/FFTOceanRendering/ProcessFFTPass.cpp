@@ -227,8 +227,9 @@ namespace ocean_fft
 		{
 			static std::mutex mutex;
 			auto lock( castor::makeUniqueLock( mutex ) );
-			VkQueue vkQueue = *device.computeQueue;
-			VkCommandPool vkCommandPool = *device.computeCommandPool;
+			auto graphics = device.graphicsData();
+			VkQueue vkQueue = *graphics->queue;
+			VkCommandPool vkCommandPool = *graphics->commandPool;
 			VkFFTConfiguration fftConfig{};
 
 			fftConfig.physicalDevice = &config.vkPhysicalDevice;

@@ -250,6 +250,11 @@ namespace castor3d
 			m_billboardSize = value;
 		}
 
+		void setGpuFilled( bool value )
+		{
+			m_gpuFilled = value;
+		}
+
 		C3D_API void setMaterial( MaterialObs value );
 		C3D_API void setCount( uint32_t value );
 		/**@}*/
@@ -275,6 +280,7 @@ namespace castor3d
 		GeometryBuffers m_geometryBuffers;
 		bool m_needUpdate{ true };
 		bool m_initialised{ false };
+		bool m_gpuFilled{ false };
 		uint32_t m_count{ 0u };
 		uint32_t m_centerOffset{ 0u };
 		BillboardType m_billboardType{ BillboardType::eCylindrical };

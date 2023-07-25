@@ -167,6 +167,7 @@ namespace castor3d
 		{
 			log::info << cuT( "Using Compute Shader Particle System" ) << std::endl;
 			m_impl = m_csImpl.get();
+			m_particlesBillboard->setGpuFilled( true );
 		}
 		else
 		{

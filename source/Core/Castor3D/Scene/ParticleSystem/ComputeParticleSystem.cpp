@@ -36,7 +36,9 @@ namespace castor3d
 		{
 			auto blockSize = uint32_t( sizes[0] * sizes[1] * sizes[2] );
 			auto numBlocks = ( count + blockSize - 1 ) / blockSize;
-			return castor::Point3ui{ numBlocks, sizes[1] > 1 ? numBlocks : 1, sizes[2] > 1 ? numBlocks : 1 };
+			return castor::Point3ui{ numBlocks
+				, sizes[1] > 1 ? numBlocks : 1
+				, sizes[2] > 1 ? numBlocks : 1 };
 		}
 	}
 
@@ -115,73 +117,53 @@ namespace castor3d
 		auto particlesCount = std::max( 1u, m_particlesCount );
 		data.currentParticleCount = particlesCount;
 		data.emitterPosition = m_parent.getParent()->getDerivedPosition();
-
-		uint32_t counts[]{ 0u, 0u };
-
-		if ( auto buffer = m_generatedCountBuffer->lock( 0u, 2u, 0u ) )
-		{
-			buffer[0] = counts[0];
-			buffer[1] = counts[1];
-			m_generatedCountBuffer->flush( 0u, 2u );
-			m_generatedCountBuffer->unlock();
-		}
-
-		m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-		updater.timer->beginPass( *m_commandBuffer, updater.index + 0u );
-		// Put buffers in appropriate state for compute
-		auto flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
-		m_commandBuffer->memoryBarrier( flags
-			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
-		flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
-		m_commandBuffer->memoryBarrier( flags
-			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-			, m_particlesStorages[m_in]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT ) );
-		flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
-		m_commandBuffer->memoryBarrier( flags
-			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-			, m_particlesStorages[m_out]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_WRITE_BIT ) );
-		// Dispatch compute
-		m_commandBuffer->bindPipeline( *m_pipeline, VK_PIPELINE_BIND_POINT_COMPUTE );
-		m_commandBuffer->bindDescriptorSet( *m_descriptorSets[m_in]
-			, *m_pipelineLayout
-			, VK_PIPELINE_BIND_POINT_COMPUTE );
 		auto dispatch = compptcl::doDispatch( particlesCount, m_worgGroupSizes );
-		m_commandBuffer->dispatch( dispatch[0], dispatch[1], dispatch[2] );
-		// Put counts buffer to host visible state
-		flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
-		m_commandBuffer->memoryBarrier( flags
-			, VK_PIPELINE_STAGE_HOST_BIT
-			, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
-		flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
-		m_commandBuffer->memoryBarrier( flags
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_particlesStorages[m_in]->getBuffer().makeTransferSource() );
-		flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
-		m_commandBuffer->memoryBarrier( flags
-			, VK_PIPELINE_STAGE_TRANSFER_BIT
-			, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
-		updater.timer->endPass( *m_commandBuffer, updater.index + 0u );
-		m_commandBuffer->end();
 
-		device.computeQueue->submit( *m_commandBuffer, m_fence.get() );
-		updater.timer->notifyPassRender( updater.index + 0u );
-		m_fence->wait( ashes::MaxTimeout );
-		m_fence->reset();
-		m_commandBuffer->reset();
-
-		// Retrieve counts
-		if ( auto buffer = m_generatedCountBuffer->lock( 0u, 1u, 0u ) )
-		{
-			particlesCount = buffer[0];
-			m_generatedCountBuffer->unlock();
-			m_particlesCount = std::min( particlesCount, m_parent.getMaxParticlesCount() );
-		}
-
-		if ( m_particlesCount )
+		if ( dispatch->x )
 		{
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			updater.timer->beginPass( *m_commandBuffer, updater.index + 1u );
+			updater.timer->beginPass( *m_commandBuffer, updater.index );
+
+			// Initialise counts buffer to 0.
+			auto flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
+			m_commandBuffer->memoryBarrier( flags
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, m_generatedCountBuffer->getBuffer().makeTransferDestination() );
+			m_commandBuffer->fillBuffer( m_generatedCountBuffer->getBuffer()
+				, 0u
+				, m_generatedCountBuffer->getBuffer().getSize()
+				, 0u );
+			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
+				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+				, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT | VK_ACCESS_SHADER_WRITE_BIT ) );
+
+			// Put In and Out buffers to compute state.
+			flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
+			m_commandBuffer->memoryBarrier( flags
+				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+				, m_particlesStorages[m_in]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_READ_BIT ) );
+			flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
+			m_commandBuffer->memoryBarrier( flags
+				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+				, m_particlesStorages[m_out]->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_SHADER_WRITE_BIT ) );
+
+			// Dispatch compute
+			m_commandBuffer->bindPipeline( *m_pipeline, VK_PIPELINE_BIND_POINT_COMPUTE );
+			m_commandBuffer->bindDescriptorSet( *m_descriptorSets[m_in]
+				, *m_pipelineLayout
+				, VK_PIPELINE_BIND_POINT_COMPUTE );
+			m_commandBuffer->dispatch( dispatch[0], dispatch[1], dispatch[2] );
+
+			// Put In and Out buffers to transfer state.
+			flags = m_particlesStorages[m_in]->getBuffer().getCompatibleStageFlags();
+			m_commandBuffer->memoryBarrier( flags
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, m_particlesStorages[m_in]->getBuffer().makeTransferSource() );
+			flags = m_particlesStorages[m_out]->getBuffer().getCompatibleStageFlags();
+			m_commandBuffer->memoryBarrier( flags
+				, VK_PIPELINE_STAGE_TRANSFER_BIT
+				, m_particlesStorages[m_out]->getBuffer().makeTransferSource() );
+
 			// Copy output storage to billboard's vertex buffer
 			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().getCompatibleStageFlags();
 			m_commandBuffer->memoryBarrier( flags
@@ -189,26 +171,38 @@ namespace castor3d
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeTransferDestination() );
 			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
-				, m_particlesCount * m_inputs.stride()
+				, m_parent.getMaxParticlesCount() * m_inputs.stride()
 				, 0u
 				, 0u );
-			flags = m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().getCompatibleStageFlags();
-			m_commandBuffer->memoryBarrier( flags
+			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeVertexShaderInputResource() );
-			updater.timer->endPass( *m_commandBuffer, updater.index + 1u );
-			m_commandBuffer->end();
 
-			m_fence->reset();
-			device.computeQueue->submit( *m_commandBuffer, m_fence.get() );
-			updater.timer->notifyPassRender( updater.index + 1u );
+			// Put counts buffer to host visible state
+			flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
+			m_commandBuffer->memoryBarrier( flags
+				, VK_PIPELINE_STAGE_HOST_BIT
+				, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
+
+			updater.timer->endPass( *m_commandBuffer, updater.index );
+			m_commandBuffer->end();
+			device.graphicsData()->queue->submit( *m_commandBuffer, m_fence.get() );
+			updater.timer->notifyPassRender( updater.index );
 			m_fence->wait( ashes::MaxTimeout );
 			m_fence->reset();
-
 			m_commandBuffer->reset();
+
+			// Retrieve counts
+			if ( auto buffer = m_generatedCountBuffer->lock( 0u, 1u, 0u ) )
+			{
+				particlesCount = buffer[0];
+				m_generatedCountBuffer->unlock();
+				m_particlesCount = std::min( particlesCount, m_parent.getMaxParticlesCount() );
+			}
+
+			std::swap( m_in, m_out );
 		}
 
-		std::swap( m_in, m_out );
 		return m_particlesCount;
 	}
 
@@ -333,7 +327,7 @@ namespace castor3d
 
 	void ComputeParticleSystem::doPrepareCommandBuffers( RenderDevice const & device )
 	{
-		m_commandBuffer = device.computeCommandPool->createCommandBuffer( m_parent.getName() + "/Compute" );
+		m_commandBuffer = device.graphicsData()->commandPool->createCommandBuffer( m_parent.getName() + "/Compute" );
 		m_fence = device->createFence( m_parent.getName() + "/Compute" );
 	}
 }

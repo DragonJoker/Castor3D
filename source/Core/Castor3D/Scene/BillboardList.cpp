@@ -168,7 +168,7 @@ namespace castor3d
 
 	void BillboardBase::update( GpuUpdater & updater )
 	{
-		if ( m_count )
+		if ( m_count && !m_gpuFilled )
 		{
 			auto gpuBuffer = m_vertexBuffer.getData().data();
 			castor::ByteArray copy{ gpuBuffer
