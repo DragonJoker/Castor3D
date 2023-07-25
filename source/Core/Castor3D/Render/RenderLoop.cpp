@@ -186,16 +186,16 @@ namespace castor3d
 	{
 		if ( m_renderSystem.hasDevice() )
 		{
-			bool first = m_ignored == 5;
+			bool first = m_ignored > 0;
 			RenderInfo & info = m_debugOverlays->beginFrame();
 			doProcessEvents( EventType::ePreRender );
 			doGpuStep( info );
 			doProcessEvents( EventType::eQueueRender );
 			doCpuStep( tslf );
 			doProcessEvents( EventType::ePostRender );
-			m_lastFrameTime = m_debugOverlays->endFrame( m_ignored > 0 );
+			m_lastFrameTime = m_debugOverlays->endFrame( first );
 
-			if ( first )
+			if ( m_ignored == 1 )
 			{
 				log::info << "Initialisation time: " << ( float( m_lastFrameTime.load().count() ) / 1000.0f ) << " ms." << std::endl;
 			}
@@ -305,7 +305,7 @@ namespace castor3d
 		for ( auto & window : windows )
 		{
 			window.second->render( info
-				, m_ignored == 5
+				, m_ignored > 0
 				, toWait );
 		}
 
