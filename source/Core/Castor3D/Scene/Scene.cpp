@@ -1069,7 +1069,7 @@ namespace castor3d
 			return;
 		}
 
-		auto count = 4u * cache.getObjectCountNoLock();
+		auto count = 2u * cache.getObjectCountNoLock();
 
 		if ( m_timerParticlesGpu->getCount() < count )
 		{
