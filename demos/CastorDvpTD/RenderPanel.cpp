@@ -165,7 +165,7 @@ namespace castortd
 					{
 					case Cell::State::Empty:
 						freeCell = true;
-						m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+						m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 							, [this, geometry]()
 							{
 								if ( geometry && m_marker )
@@ -200,7 +200,7 @@ namespace castortd
 				}
 			}
 
-			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::GpuEventType::ePreUpload
 				, [this, freeCell]( castor3d::RenderDevice const & device
 					, castor3d::QueueData const & queueData )
 				{
@@ -216,7 +216,7 @@ namespace castortd
 	{
 		if ( m_game.isRunning() && m_selectedTower && m_selectedTower->canUpgradeDamage() && m_game.canAfford( m_selectedTower->getDamageUpgradeCost() ) )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_game.upgradeTowerDamage( *m_selectedTower );
@@ -228,7 +228,7 @@ namespace castortd
 	{
 		if ( m_game.isRunning() && m_selectedTower && m_selectedTower->canUpgradeSpeed() && m_game.canAfford( m_selectedTower->getSpeedUpgradeCost() ) )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_game.upgradeTowerSpeed( *m_selectedTower );
@@ -240,7 +240,7 @@ namespace castortd
 	{
 		if ( m_game.isRunning() && m_selectedTower && m_selectedTower->canUpgradeRange() && m_game.canAfford( m_selectedTower->getRangeUpgradeCost() ) )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_game.upgradeTowerRange( *m_selectedTower );
@@ -373,7 +373,7 @@ namespace castortd
 			break;
 
 		case WXK_F1:
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					if ( m_game.isRunning() )
@@ -385,7 +385,7 @@ namespace castortd
 
 		case WXK_RETURN:
 		case WXK_NUMPAD_ENTER:
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					if ( m_game.isEnded() )
@@ -401,7 +401,7 @@ namespace castortd
 			break;
 
 		case WXK_SPACE:
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					if ( m_game.isStarted() )
@@ -465,7 +465,7 @@ namespace castortd
 			m_y = doTransformY( event.GetY() );
 			m_oldX = m_x;
 			m_oldY = m_y;
-			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+			m_listener->postEvent( castor3d::makeGpuFunctorEvent( castor3d::GpuEventType::ePreUpload
 				, [this]( castor3d::RenderDevice const & device
 					, castor3d::QueueData const & queueData )
 				{
@@ -624,7 +624,7 @@ namespace castortd
 	{
 		if ( m_game.isRunning() )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					if ( m_game.buildTower( m_marker->getPosition(), std::make_unique< LongRangeTower >( m_longRange ) ) )
@@ -639,7 +639,7 @@ namespace castortd
 	{
 		if ( m_game.isRunning() )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					if ( m_game.buildTower( m_marker->getPosition(), std::make_unique< ShortRangeTower >( m_shortRange ) ) )

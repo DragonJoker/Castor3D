@@ -46,7 +46,7 @@ namespace castor3d
 	{
 		if ( !m_event )
 		{
-			m_event = m_container.getEngine().postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_event = m_container.getEngine().postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_event = nullptr;

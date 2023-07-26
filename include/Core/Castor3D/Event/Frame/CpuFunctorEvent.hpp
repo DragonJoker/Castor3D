@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in]	type	Le type d'évènement
 		 *\param[in]	functor	Le foncteur à exécuter
 		 */
-		CpuFunctorEvent( EventType type
+		CpuFunctorEvent( CpuEventType type
 			, Functor functor )
 			: CpuFrameEvent{ type }
 			, m_functor{ functor }
@@ -55,7 +55,7 @@ namespace castor3d
 	 *\param[in]	type	Le type d'évènement
 	 *\param[in]	functor	Le foncteur à exécuter
 	 */
-	inline CpuFrameEventUPtr makeCpuFunctorEvent( EventType type
+	inline CpuFrameEventUPtr makeCpuFunctorEvent( CpuEventType type
 		, CpuFunctorEvent::Functor functor )
 	{
 		return castor::makeUniqueDerived< CpuFrameEvent, CpuFunctorEvent >( type, functor );
@@ -71,7 +71,7 @@ namespace castor3d
 	template< typename T >
 	inline CpuFrameEventUPtr makeCpuCleanupEvent( T & object )
 	{
-		return makeCpuFunctorEvent( EventType::ePreRender
+		return makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 			, [&object]()
 			{
 				object.cleanup();
@@ -88,7 +88,7 @@ namespace castor3d
 	template< typename T >
 	inline CpuFrameEventUPtr makeCpuInitialiseEvent( T & object )
 	{
-		return makeCpuFunctorEvent( EventType::ePreRender
+		return makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 			, [&object]()
 			{
 				object.initialise();

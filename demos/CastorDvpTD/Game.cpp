@@ -76,7 +76,7 @@ namespace castortd
 
 		static void doUpdateMaterials( castor3d::Geometry & geometry
 			, Tower::Category::Kind kind
-			, castor3d::CacheViewT< castor3d::MaterialCache, castor3d::EventType::ePreRender > const & materials )
+			, castor3d::CacheViewT< castor3d::MaterialCache, castor3d::EventType( castor3d::GpuEventType::ePreUpload ) > const & materials )
 		{
 			if ( auto mesh = geometry.getMesh() )
 			{

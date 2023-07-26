@@ -52,13 +52,13 @@ namespace castor3d
 	void postPreRenderGpuEvent( Engine & engine
 		, std::function< void( RenderDevice const &, QueueData const & ) > event )
 	{
-		engine.postEvent( makeGpuFunctorEvent( EventType::ePreRender, event ) );
+		engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload, event ) );
 	}
 
 	void postQueueRenderCpuEvent( Engine & engine
 		, std::function< void() > event )
 	{
-		engine.postEvent( makeCpuFunctorEvent( EventType::eQueueRender, event ) );
+		engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreCpuStep, event ) );
 	}
 
 	//*********************************************************************************************

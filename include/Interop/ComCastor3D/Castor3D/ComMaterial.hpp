@@ -2,7 +2,7 @@
 #ifndef __COMC3D_COM_MATERIAL_H__
 #define __COMC3D_COM_MATERIAL_H__
 
-#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
+#include "ComCastor3D/Castor3D/ComPass.hpp"
 
 #include <Castor3D/Material/Material.hpp>
 

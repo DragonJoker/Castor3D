@@ -271,7 +271,7 @@ namespace castor
 			, group.onMeshAdded.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedMesh & mesh )
 				{
-					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &pgroup, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
@@ -291,7 +291,7 @@ namespace castor
 			, group.onMeshRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedMesh & mesh )
 				{
-					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &mesh]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
@@ -309,7 +309,7 @@ namespace castor
 			, group.onSkeletonAdded.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedSkeleton & skeleton )
 				{
-					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &pgroup, &skeleton]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
@@ -322,7 +322,7 @@ namespace castor
 			, group.onSkeletonRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedSkeleton & skeleton )
 				{
-					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &skeleton]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
@@ -334,7 +334,7 @@ namespace castor
 			, group.onTextureRemoved.connect( [this]( AnimatedObjectGroup const & pgroup
 				, AnimatedTexture & texture )
 				{
-					m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+					m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, &texture]( RenderDevice const & device
 							, QueueData const & queueData )
 						{
@@ -345,7 +345,7 @@ namespace castor
 
 	void ResourceCacheT< AnimatedObjectGroup, String, AnimatedObjectGroupCacheTraits >::doUnregister( AnimatedObjectGroup & group )
 	{
-		m_engine.sendEvent( makeGpuFunctorEvent( EventType::ePreRender
+		m_engine.sendEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 			, [this, &group]( RenderDevice const & device
 				, QueueData const & queueData )
 			{

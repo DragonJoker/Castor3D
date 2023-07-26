@@ -568,7 +568,7 @@ namespace castor3d
 
 				submesh->needsUpdate();
 				submesh->computeContainers();
-				scene.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				scene.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 					, [submesh]( RenderDevice const & device
 						, QueueData const & queueData )
 					{

@@ -333,7 +333,7 @@ namespace castor3d
 			m_lightPropagationPassesDesc = doCreatePropagationPasses();
 			m_runnable = m_graph.compile( m_device.makeContext() );
 			printGraph( *m_runnable );
-			m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [this]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
@@ -393,7 +393,7 @@ namespace castor3d
 					m_recordEvent->skip();
 				}
 
-				m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				m_recordEvent = m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 					, [this]( RenderDevice const & device
 						, QueueData const & queueData )
 					{

@@ -70,7 +70,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheViewT< OverlayCache, EventType::ePreRender >::clear()
+	inline void CacheViewT< OverlayCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
 	{
 		for ( auto name : m_createdElements )
 		{
@@ -81,7 +81,7 @@ namespace castor3d
 	//*************************************************************************************************
 
 	template<>
-	inline void CacheViewT< castor::FontCache, EventType::ePreRender >::clear()
+	inline void CacheViewT< castor::FontCache, EventType( CpuEventType::ePreGpuStep ) >::clear()
 	{
 		for ( auto name : m_createdElements )
 		{
@@ -142,7 +142,7 @@ namespace castor3d
 			{
 				auto & nodes = getRenderNodes();
 
-				getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				getListener().postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 					, [&element, &nodes]( RenderDevice const & device
 						, QueueData const & queueData )
 					{
@@ -170,7 +170,7 @@ namespace castor3d
 			, castor::DummyFunctorT< SkeletonCache >{}
 			, castor::ResourceMergerT< SkeletonCache >{ getName() } );
 
-		m_materialCacheView = makeCacheView< EventType::ePreRender >( getName()
+		m_materialCacheView = makeCacheView< EventType( GpuEventType::ePreUpload ) >( getName()
 			, getEngine()->getMaterialCache()
 			, [this]( MaterialCache::ElementT & element )
 			{
@@ -188,7 +188,7 @@ namespace castor3d
 				m_materialsListeners.erase( &element );
 				element.cleanup();
 			} );
-		m_samplerCacheView = makeCacheView< EventType::ePreRender >( getName()
+		m_samplerCacheView = makeCacheView< EventType( GpuEventType::ePreUpload ) >( getName()
 			, getEngine()->getSamplerCache()
 			, [this]( SamplerCache::ElementT & element )
 			{
@@ -199,7 +199,7 @@ namespace castor3d
 				element.cleanup();
 			} );
 		m_overlayCache = castor::makeCache< Overlay, castor::String, OverlayCacheTraits >( *getEngine() );
-		m_fontCacheView = makeCacheView< EventType::ePreRender >( getName()
+		m_fontCacheView = makeCacheView< EventType( CpuEventType::ePreGpuStep ) >( getName()
 			, getEngine()->getFontCache()
 			, []( castor::FontCache::ElementT & element )
 			{
@@ -396,7 +396,7 @@ namespace castor3d
 			m_cleanBackground = nullptr;
 		}
 
-		m_cleanBackground = getListener().postEvent( makeCpuFunctorEvent( EventType::ePreRender
+		m_cleanBackground = getListener().postEvent( makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 			, [this]()
 			{
 				m_background->cleanup();

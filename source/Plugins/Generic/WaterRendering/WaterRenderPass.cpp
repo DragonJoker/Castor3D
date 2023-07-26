@@ -123,7 +123,7 @@ namespace water
 					, img.data->info.format
 					, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, image.getLevels(), 0u, 1u } } );
 
-				engine.postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+				engine.postEvent( castor3d::makeGpuFunctorEvent( castor3d::GpuEventType::ePreUpload
 					, [format, dim, image, &img, &view, &result, &runnable]( castor3d::RenderDevice const & device
 						, castor3d::QueueData const & queue )
 					{

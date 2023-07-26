@@ -27,7 +27,7 @@ namespace castor3d
 		 *\brief		Constructeur.
 		 *\param[in]	type	Le type d'évènement.
 		 */
-		C3D_API explicit GpuFrameEvent( EventType type );
+		C3D_API explicit GpuFrameEvent( GpuEventType type );
 		/**
 		 *\~english
 		 *\brief		Destructor.
@@ -61,7 +61,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le type de l'évènement.
 		 */
-		EventType getType()const
+		GpuEventType getType()const
 		{
 			return m_type;
 		}
@@ -81,7 +81,7 @@ namespace castor3d
 			, QueueData const & queueData ) = 0;
 
 	private:
-		EventType m_type;
+		GpuEventType m_type;
 		std::atomic_bool m_skip{ false };
 
 #if !defined( NDEBUG )

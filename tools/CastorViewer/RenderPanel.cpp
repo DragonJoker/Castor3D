@@ -876,7 +876,7 @@ namespace CastorViewer
 
 		if ( m_listener )
 		{
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePreRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePreGpuStep
 				, [this]()
 				{
 					if ( m_renderWindow )
@@ -946,7 +946,7 @@ namespace CastorViewer
 		{
 			auto x = m_oldX;
 			auto y = m_oldY;
-			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePreRender
+			m_listener->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePreGpuStep
 				, [this, x, y]()
 				{
 					auto type = m_renderWindow->pick( castor::Position{ int( x ), int( y ) } );

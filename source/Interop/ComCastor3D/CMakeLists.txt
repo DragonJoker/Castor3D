@@ -74,7 +74,6 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSpotLight.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComSubmesh.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTextOverlay.cpp
-			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTextureLayout.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTextureUnit.cpp
 			${CASTOR_SOURCE_DIR}/source/Interop/${PROJECT_NAME}/Castor3D/ComTriFaceMapping.cpp
 		)
@@ -108,7 +107,6 @@ if ( MSVC )
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSpotLight.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComSubmesh.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTextOverlay.hpp
-			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTextureLayout.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTextureUnit.hpp
 			${CASTOR_SOURCE_DIR}/include/Interop/${PROJECT_NAME}/Castor3D/ComTriFaceMapping.hpp
 		)
@@ -232,7 +230,6 @@ if ( MSVC )
 		add_interface( "0819BA84-8671-454B-B9A3-84C8A3C5DB95" RESRC_LIST RESH_LIST RESOURCE_ID "SpotLight" )
 		add_interface( "E59360F1-2F5B-4011-A61F-32E1A77207C8" RESRC_LIST RESH_LIST RESOURCE_ID "Submesh" )
 		add_interface( "287EAF30-2165-49AC-BC96-8CF568D28CAE" RESRC_LIST RESH_LIST RESOURCE_ID "TextOverlay" )
-		add_interface( "0FF08968-9937-4771-8949-0E86E3615F98" RESRC_LIST RESH_LIST RESOURCE_ID "TextureLayout" )
 		add_interface( "E8DD6F29-F296-4687-AADD-F6FD1D0AC670" RESRC_LIST RESH_LIST RESOURCE_ID "TextureUnit" )
 		add_interface( "3357AAE2-E50A-47AB-A0FE-83833CE2944C" RESRC_LIST RESH_LIST RESOURCE_ID "TriFaceMapping" )
 

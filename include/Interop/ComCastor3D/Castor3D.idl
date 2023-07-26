@@ -700,7 +700,6 @@ interface ISkyboxBackground;
 interface ISpotLight;
 interface ISubmesh;
 interface ITextOverlay;
-interface ITextureLayout;
 interface ITextureUnit;
 interface ITriFaceMapping;
 
@@ -1192,25 +1191,6 @@ interface ISampler
 	[id( 13 ), helpstring( "Cleans the sampler up" )] HRESULT Cleanup();
 };
 
-// ITextureLayout
-[
-	uuid( 8985F532-34C0-4996-882C-8850D45C53F1 ),
-	helpstring( "Castor3D TextureLayout interface" ),
-	dual,
-	oleautomation
-]
-interface ITextureLayout
-	: IDispatch
-{
-	[propget, id( 1 ), helpstring( "The texture type" )] HRESULT Type( [out, retval] eIMAGE_TYPE * pVal );
-	[id( 3 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
-	[id( 4 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
-	[id( 5 ), helpstring( "Sets the static image source from a file" )] HRESULT InitFromFile( [in] BSTR path );
-	[id( 6 ), helpstring( "Sets the static image source from a buffer" )] HRESULT InitFromBuffer( [in] IPixelBuffer * val );
-	[id( 7 ), helpstring( "Sets the dynamic image source" )] HRESULT Init2D( [in] unsigned int w, [in] unsigned int h, [in] ePIXEL_FORMAT format );
-	[id( 8 ), helpstring( "Sets the dynamic image source" )] HRESULT Init3D( [in] unsigned int w, [in] unsigned int h, [in] unsigned int d, [in] ePIXEL_FORMAT format );
-};
-
 // ITextureUnit
 [
 	uuid( 224BAC64-C97E-4CB7-8A77-88284BDC4BA7 ),
@@ -1221,9 +1201,6 @@ interface ITextureLayout
 interface ITextureUnit
 	: IDispatch
 {
-	[propget, id( 1 ), helpstring( "The unit texture" )] HRESULT Texture( [out, retval] ITextureLayout ** pVal );
-	[propget, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [out, retval] ISampler ** pVal );
-	[propput, id( 2 ), helpstring( "The unit sampler" )] HRESULT Sampler( [in] ISampler * val );
 	[id( 5 ), helpstring( "Initialises the texture" )] HRESULT Initialise();
 	[id( 6 ), helpstring( "Cleans the texture up" )] HRESULT Cleanup();
 };
@@ -1969,15 +1946,6 @@ library Castor3D
 	coclass Sampler
 	{
 		[default] interface ISampler;
-	}
-
-	// TextureLayout
-	[
-		uuid( 0FF08968-9937-4771-8949-0E86E3615F98 )
-	]
-	coclass TextureLayout
-	{
-		[default] interface ITextureLayout;
 	}
 
 	// TextureUnit

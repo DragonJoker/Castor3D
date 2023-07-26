@@ -14,7 +14,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadImage( path.getPath(), path.getFileName( true ) );
+			m_internal->setImage( path.getPath(), path.getFileName( true ) );
 		}
 		else
 		{

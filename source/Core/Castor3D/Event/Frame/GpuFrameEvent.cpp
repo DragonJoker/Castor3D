@@ -46,7 +46,7 @@ namespace castor3d
 		return *this;
 	}
 
-	GpuFrameEvent::GpuFrameEvent( EventType type )
+	GpuFrameEvent::GpuFrameEvent( GpuEventType type )
 		: m_type{ type }
 	{
 #if !defined( NDEBUG )

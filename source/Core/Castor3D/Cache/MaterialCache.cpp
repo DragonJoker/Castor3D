@@ -201,7 +201,7 @@ namespace castor
 				m_passBuffer->cleanup();
 			}
 		}
-		m_engine.postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		m_engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 			, [this]()
 			{
 				auto lock( makeUniqueLock( *this ) );

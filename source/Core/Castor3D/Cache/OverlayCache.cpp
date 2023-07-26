@@ -159,7 +159,7 @@ namespace castor
 		{
 			auto result = castor::makeUnique< FontTexture >( m_engine, font );
 			auto tmp = result.get();
-			m_engine.postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			m_engine.postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [tmp]( RenderDevice const & device
 					, QueueData const & queueData )
 				{

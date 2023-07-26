@@ -59,6 +59,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Applies all events of a given type, then discards them.
+		 *\param[in]	type	The type of events to fire.
+		 *\return		\p true si tous les évènements se sont exécutés sans erreur.
+		 *\~french
+		 *\brief		Traite tous les évènements d'un type donné.
+		 *\param[in]	type	Le type des évènements à traiter.
+		 *\return		\p true if all events were processed successfully.
+		 */
+		C3D_API bool fireEvents( CpuEventType type );
+		/**
+		 *\~english
+		 *\brief		Applies all events of a given type, then discards them.
 		 *\param[in]	type		The type of events to fire.
 		 *\param[in]	device		The GPU device.
 		 *\param[in]	queueData	The queue receiving the GPU commands.
@@ -70,20 +81,9 @@ namespace castor3d
 		 *\param[in]	queueData	La queue recevant les commandes GPU.
 		 *\return		\p true if all events were processed successfully.
 		 */
-		C3D_API bool fireEvents( EventType type
+		C3D_API bool fireEvents( GpuEventType type
 			, RenderDevice const & device
 			, QueueData const & queueData );
-		/**
-		 *\~english
-		 *\brief		Applies all events of a given type, then discards them.
-		 *\param[in]	type	The type of events to fire.
-		 *\return		\p true si tous les évènements se sont exécutés sans erreur.
-		 *\~french
-		 *\brief		Traite tous les évènements d'un type donné.
-		 *\param[in]	type	Le type des évènements à traiter.
-		 *\return		\p true if all events were processed successfully.
-		 */
-		C3D_API bool fireEvents( EventType type );
 		/**
 		 *\~english
 		 *\brief		Discards all events of a given type.
@@ -92,7 +92,16 @@ namespace castor3d
 		 *\brief		Supprime tous les évènements d'un type donné.
 		 *\param[in]	type	Le type des évènements à traiter.
 		 */
-		C3D_API void flushEvents( EventType type );
+		C3D_API void flushEvents( CpuEventType type );
+		/**
+		 *\~english
+		 *\brief		Discards all events of a given type.
+		 *\param[in]	type	The type of events to fire.
+		 *\~french
+		 *\brief		Supprime tous les évènements d'un type donné.
+		 *\param[in]	type	Le type des évènements à traiter.
+		 */
+		C3D_API void flushEvents( GpuEventType type );
 
 	protected:
 		/**
@@ -106,10 +115,10 @@ namespace castor3d
 	protected:
 		//!\~english	The CPU events arrays.
 		//!\~french		Les tableaux d'évènements CPU.
-		std::array< CpuFrameEventPtrArray,	size_t( EventType::eCount ) > m_cpuEvents;
+		std::array< CpuFrameEventPtrArray,	size_t( CpuEventType::eCount ) > m_cpuEvents;
 		//!\~english	The GPU events arrays.
 		//!\~french		Les tableaux d'évènements GPU.
-		std::array< GpuFrameEventPtrArray,	size_t( EventType::eCount ) > m_gpuEvents;
+		std::array< GpuFrameEventPtrArray,	size_t( GpuEventType::eCount ) > m_gpuEvents;
 		//!\~english	Mutex to make this class thread safe.
 		//!\~french		Mutex pour rendre cette classe thread safe.
 		std::recursive_mutex m_mutex;

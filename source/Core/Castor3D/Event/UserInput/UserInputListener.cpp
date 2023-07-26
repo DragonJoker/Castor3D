@@ -26,7 +26,7 @@ namespace castor3d
 		m_keyboard.ctrl = false;
 		m_keyboard.alt = false;
 		m_keyboard.shift = false;
-		m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+		m_frameListener->postEvent( makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 			, [this]()
 			{
 				initialise();
@@ -39,7 +39,7 @@ namespace castor3d
 
 	bool UserInputListener::initialise()
 	{
-		m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		m_frameListener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 			, [this]()
 			{
 				processEvents();
@@ -80,7 +80,7 @@ namespace castor3d
 		if ( m_enabled )
 		{
 			// Push this method again, for next frame.
-			m_frameListener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			m_frameListener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					processEvents();

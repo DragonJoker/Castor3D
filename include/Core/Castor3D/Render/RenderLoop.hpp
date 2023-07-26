@@ -228,8 +228,8 @@ namespace castor3d
 		C3D_API void doRenderFrame( castor::Milliseconds tslf = 0_ms );
 
 	private:
-		void doProcessEvents( EventType eventType );
-		void doProcessEvents( EventType eventType
+		void doProcessEvents( CpuEventType eventType );
+		void doProcessEvents( GpuEventType eventType
 			, RenderDevice const & device
 			, QueueData const & queueData );
 		void doGpuStep( RenderInfo & info );
@@ -258,8 +258,8 @@ namespace castor3d
 		QueueData const * m_reservedQueue{};
 		std::unordered_set< ShaderBuffer const * > m_shaderBuffers;
 		std::mutex m_shaderBuffersMtx;
-		std::array< FramePassTimerUPtr, size_t( EventType::eCount ) > m_timerCpuEvents;
-		std::array< FramePassTimerUPtr, size_t( EventType::eCount ) > m_timerGpuEvents;
+		std::array< FramePassTimerUPtr, size_t( CpuEventType::eCount ) > m_timerCpuEvents;
+		std::array< FramePassTimerUPtr, size_t( GpuEventType::eCount ) > m_timerGpuEvents;
 		UploadDataUPtr m_uploadData{};
 		ashes::FencePtr m_uploadFence{};
 	};

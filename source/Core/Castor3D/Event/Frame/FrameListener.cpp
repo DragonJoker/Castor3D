@@ -90,7 +90,7 @@ namespace castor3d
 		return result;
 	}
 
-	bool FrameListener::fireEvents( EventType type )
+	bool FrameListener::fireEvents( CpuEventType type )
 	{
 		CpuFrameEventPtrArray arrayEvents;
 		{
@@ -100,7 +100,7 @@ namespace castor3d
 		return frmevtlstr::doFireEvents( arrayEvents );
 	}
 
-	bool FrameListener::fireEvents( EventType type
+	bool FrameListener::fireEvents( GpuEventType type
 		, RenderDevice const & device
 		, QueueData const & queueData )
 	{
@@ -112,13 +112,17 @@ namespace castor3d
 		return frmevtlstr::doFireEvents( arrayEvents, device, queueData );
 	}
 
-	void FrameListener::flushEvents( EventType type )
+	void FrameListener::flushEvents( CpuEventType type )
+	{
+		CpuFrameEventPtrArray cpuEvents;
+		auto lock( castor::makeUniqueLock( m_mutex ) );
+		std::swap( cpuEvents, m_cpuEvents[size_t( type )] );
+	}
+
+	void FrameListener::flushEvents( GpuEventType type )
 	{
 		GpuFrameEventPtrArray gpuEvents;
-		CpuFrameEventPtrArray cpuEvents;
-
 		auto lock( castor::makeUniqueLock( m_mutex ) );
 		std::swap( gpuEvents, m_gpuEvents[size_t( type )] );
-		std::swap( cpuEvents, m_cpuEvents[size_t( type )] );
 	}
 }

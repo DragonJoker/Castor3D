@@ -458,7 +458,7 @@ namespace castor3d
 
 		if ( auto runnable = m_clearLpvRunnable.get() )
 		{
-			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [runnable]( RenderDevice const &
 					, QueueData const & )
 				{

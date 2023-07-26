@@ -160,7 +160,7 @@ namespace castor3d
 			auto result = graph.compile( device.makeContext() );
 			auto runnable = result.get();
 			printGraph( *result );
-			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [runnable]( RenderDevice const &
 					, QueueData const & )
 				{

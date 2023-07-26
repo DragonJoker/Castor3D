@@ -16,26 +16,49 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Frame Event Type enumeration
+	*	CPU Frame Event Type enumeration
 	*\~french
 	*\brief
-	*	Enumération des types d'évènement de frame
+	*	Enumération des types d'évènement CPU de frame
 	*/
-	enum class EventType
+	enum class CpuEventType
 		: uint8_t
 	{
-		//!\~english	This kind of event happens before any render, device context is active (so be fast !!).
-		//!\~french		Ce type d'évènement est traité avant le rendu, le contexte de rendu est actif (donc soyez rapide !!)
-		ePreRender,
-		//!\~english	This kind of event happens after the render, before buffers' swap.
-		//!\~french		Ce type d'évènement est traité après le rendu, avant l'échange des tampons.
-		eQueueRender,
-		//!\~english	This kind of event happens after the buffer' swap.
-		//!\~french		Ce type d'évènement est traité après l'échange des tampons.
-		ePostRender,
-		CU_ScopedEnumBounds( ePreRender )
+		//!\~english	This kind of event happens before the GPU step.
+		//!\~french		Ce type d'évènement est traité avant la phase GPU
+		ePreGpuStep,
+		//!\~english	This kind of event happens after GPU step and before CPU step.
+		//!\~french		Ce type d'évènement est traité après la phase GPU et avant la phase CPU.
+		ePreCpuStep,
+		//!\~english	This kind of event happens after the CPU step.
+		//!\~french		Ce type d'évènement est traité après la phase CPU.
+		ePostCpuStep,
+		CU_ScopedEnumBounds( ePreGpuStep )
 	};
-	C3D_API castor::String getName( EventType value );
+	C3D_API castor::String getName( CpuEventType value );
+	/**
+	*\~english
+	*\brief
+	*	GPU Frame Event Type enumeration
+	*\~french
+	*\brief
+	*	Enumération des types d'évènement GPU de frame
+	*/
+	enum class GpuEventType
+		: uint8_t
+	{
+		//!\~english	This kind of event happens before the upload.
+		//!\~french		Ce type d'évènement est traité avant l'upload.
+		ePreUpload,
+		//!\~english	This kind of event happens after the upload and before render.
+		//!\~french		Ce type d'évènement est traité après l'upload et avant le rendu.
+		ePreRender,
+		//!\~english	This kind of event happens after the render.
+		//!\~french		Ce type d'évènement est traité après le rendu.
+		ePostRender,
+		CU_ScopedEnumBounds( ePreUpload )
+	};
+	C3D_API castor::String getName( GpuEventType value );
 	/**
 	*\~english
 	*\brief

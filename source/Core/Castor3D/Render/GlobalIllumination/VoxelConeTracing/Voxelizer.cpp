@@ -158,7 +158,7 @@ namespace castor3d
 		m_graph.addOutput( m_secondaryBounce.wholeViewId
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
 		auto runnable = m_runnable.get();
-		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+		m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 			, [runnable]( RenderDevice const &
 				, QueueData const & )
 			{
