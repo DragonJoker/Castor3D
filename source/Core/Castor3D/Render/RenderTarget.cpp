@@ -736,7 +736,7 @@ namespace castor3d
 
 		if ( m_toneMapping )
 		{
-			getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [this]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
@@ -995,7 +995,7 @@ namespace castor3d
 			m_velocity.create();
 			m_combined.create();
 			auto runnable = m_runnable.get();
-			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [runnable, result, this]( RenderDevice const &
 					, QueueData const & )
 				{

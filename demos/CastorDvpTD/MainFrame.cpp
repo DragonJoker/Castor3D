@@ -29,7 +29,7 @@ namespace castortd
 			if ( !engine.isCleaned() )
 			{
 				game.update();
-				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 					, [&game]()
 					{
 						doUpdate( game );
@@ -98,7 +98,7 @@ namespace castortd
 			if ( engine.isThreaded() )
 			{
 				engine.getRenderLoop().beginRendering();
-				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				engine.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 					, [this]()
 					{
 						main::doUpdate( *m_game );

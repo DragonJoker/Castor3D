@@ -49,7 +49,7 @@ namespace castor3d
 
 	void RenderQueue::initialise()
 	{
-		if ( auto event = getOwner()->getEngine()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+		if ( auto event = getOwner()->getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 			, [this]( RenderDevice const & device
 				, QueueData const & queueData )
 			{

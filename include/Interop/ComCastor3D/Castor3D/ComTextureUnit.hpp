@@ -2,9 +2,7 @@
 #ifndef __COMC3D_COM_TEXTURE_UNIT_H__
 #define __COMC3D_COM_TEXTURE_UNIT_H__
 
-#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
-#include "ComCastor3D/Castor3D/ComSampler.hpp"
-#include "ComCastor3D/CastorUtils/ComRgbaColour.hpp"
+#include "ComCastor3D/ComAtlObject.hpp"
 
 #include <Castor3D/Material/Texture/TextureUnit.hpp>
 
@@ -21,9 +19,6 @@ namespace CastorCom
 		: public CComAtlObject< TextureUnit, castor3d::TextureUnit >
 	{
 	public:
-		COMEX_PROPERTY_GET( Texture, ITextureLayout *, m_internal, &castor3d::TextureUnit::getTexture );
-		COMEX_PROPERTY( Sampler, ISampler *, m_internal, &castor3d::TextureUnit::getSampler, &castor3d::TextureUnit::setSampler );
-
 		STDMETHOD( Initialise )();
 		STDMETHOD( Cleanup )();
 	};

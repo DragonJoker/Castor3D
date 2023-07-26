@@ -79,7 +79,7 @@ namespace castor3d
 			auto lock( makeUniqueLock( *this ) );
 			doCleanupNoLock();
 		}
-		m_engine.postEvent( makeCpuFunctorEvent( EventType::ePreRender
+		m_engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 			, [this]()
 			{
 				m_lightBuffer.reset();

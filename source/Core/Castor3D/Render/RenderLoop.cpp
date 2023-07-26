@@ -87,13 +87,18 @@ namespace castor3d
 
 			getEngine()->getFrameListenerCache().forEach( [&device, data]( FrameListener & listener )
 				{
-					listener.fireEvents( EventType::ePreRender, device, *data );
-					listener.fireEvents( EventType::ePreRender );
+					listener.fireEvents( GpuEventType::ePreUpload, device, *data );
+					listener.fireEvents( CpuEventType::ePreGpuStep );
 				} );
 			getEngine()->getFrameListenerCache().forEach( [&device, data]( FrameListener & listener )
 				{
-					listener.fireEvents( EventType::eQueueRender, device, *data );
-					listener.fireEvents( EventType::eQueueRender );
+					listener.fireEvents( GpuEventType::ePreRender, device, *data );
+					listener.fireEvents( CpuEventType::ePreCpuStep );
+				} );
+			getEngine()->getFrameListenerCache().forEach( [&device, data]( FrameListener & listener )
+				{
+					listener.fireEvents( GpuEventType::ePostRender, device, *data );
+					listener.fireEvents( CpuEventType::ePostCpuStep );
 				} );
 
 			device->waitIdle();
@@ -110,15 +115,14 @@ namespace castor3d
 		{
 			getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
 				{
-					listener.flushEvents( EventType::ePreRender );
-					listener.flushEvents( EventType::eQueueRender );
+					listener.flushEvents( CpuEventType::ePreGpuStep );
+					listener.flushEvents( GpuEventType::ePreUpload );
+					listener.flushEvents( GpuEventType::ePreRender );
+					listener.flushEvents( GpuEventType::ePostRender );
+					listener.flushEvents( CpuEventType::ePreCpuStep );
+					listener.flushEvents( CpuEventType::ePostCpuStep );
 				} );
 		}
-
-		getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
-			{
-				listener.fireEvents( EventType::ePostRender );
-			} );
 	}
 
 	void RenderLoop::showDebugOverlays( bool show )
@@ -134,9 +138,12 @@ namespace castor3d
 	{
 		getEngine()->getFrameListenerCache().forEach( []( FrameListener & listener )
 			{
-				listener.flushEvents( EventType::ePreRender );
-				listener.flushEvents( EventType::eQueueRender );
-				listener.flushEvents( EventType::ePostRender );
+				listener.flushEvents( CpuEventType::ePreGpuStep );
+				listener.flushEvents( CpuEventType::ePreCpuStep );
+				listener.flushEvents( CpuEventType::ePostCpuStep );
+				listener.flushEvents( GpuEventType::ePreUpload );
+				listener.flushEvents( GpuEventType::ePreRender );
+				listener.flushEvents( GpuEventType::ePostRender );
 			} );
 	}
 
@@ -188,11 +195,11 @@ namespace castor3d
 		{
 			bool first = m_ignored > 0;
 			RenderInfo & info = m_debugOverlays->beginFrame();
-			doProcessEvents( EventType::ePreRender );
+			doProcessEvents( CpuEventType::ePreGpuStep );
 			doGpuStep( info );
-			doProcessEvents( EventType::eQueueRender );
+			doProcessEvents( CpuEventType::ePreCpuStep );
 			doCpuStep( tslf );
-			doProcessEvents( EventType::ePostRender );
+			doProcessEvents( CpuEventType::ePostCpuStep );
 			m_lastFrameTime = m_debugOverlays->endFrame( first );
 
 			if ( m_ignored == 1 )
@@ -204,7 +211,7 @@ namespace castor3d
 		}
 	}
 
-	void RenderLoop::doProcessEvents( EventType eventType )
+	void RenderLoop::doProcessEvents( CpuEventType eventType )
 	{
 		auto block = m_timerCpuEvents[size_t( eventType )]->start();
 		getEngine()->getFrameListenerCache().forEach( [eventType]( FrameListener & listener )
@@ -213,7 +220,7 @@ namespace castor3d
 			} );
 	}
 
-	void RenderLoop::doProcessEvents( EventType eventType
+	void RenderLoop::doProcessEvents( GpuEventType eventType
 		, RenderDevice const & device
 		, QueueData const & queueData )
 	{
@@ -269,7 +276,7 @@ namespace castor3d
 		auto & uploadData = *m_uploadData;
 
 		// Usually GPU initialisation
-		doProcessEvents( EventType::ePreRender, device, *data );
+		doProcessEvents( GpuEventType::ePreUpload, device, *data );
 
 		// GPU Update
 		GpuUpdater updater{ device, info };
@@ -293,7 +300,9 @@ namespace castor3d
 		getEngine()->getRenderTargetCache().upload( uploadData );
 		getEngine()->getTextureUnitCache().upload( uploadData );
 		uploadData.process();
-		auto used = uploadData.end( *data->queue, m_uploadFence.get() );
+		auto used = uploadData.end( *data->queue );
+
+		doProcessEvents( GpuEventType::ePreRender, device, *data );
 
 		// Render
 		toWait = getEngine()->getRenderTargetCache().render( device
@@ -314,7 +323,7 @@ namespace castor3d
 		info.stagingBuffersCount = uint32_t( used.buffersCount );
 
 		// Usually GPU cleanup
-		doProcessEvents( EventType::eQueueRender, device, *data );
+		doProcessEvents( GpuEventType::ePostRender, device, *data );
 
 		m_debugOverlays->endGpuTasks();
 

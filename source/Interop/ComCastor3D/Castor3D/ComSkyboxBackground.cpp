@@ -14,7 +14,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadLeftImage( path.getPath(), path.getFileName( true ) );
+			m_internal->setLeftImage( path.getPath(), path.getFileName( true ) );
 		}
 		else
 		{
@@ -37,7 +37,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadRightImage( path.getPath(), path.getFileName( true ) );
+			m_internal->setRightImage( path.getPath(), path.getFileName( true ) );
 		}
 		else
 		{
@@ -60,7 +60,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadTopImage( path.getPath(), path.getFileName( true ) );
+			m_internal->setTopImage( path.getPath(), path.getFileName( true ) );
 		}
 		else
 		{
@@ -83,7 +83,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadBottomImage( path.getPath(), path.getFileName( true ) );
+			m_internal->setBottomImage( path.getPath(), path.getFileName( true ) );
 		}
 		else
 		{
@@ -106,7 +106,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadFrontImage( path.getPath(), path.getFileName( true ) );
+			m_internal->setFrontImage( path.getPath(), path.getFileName( true ) );
 		}
 		else
 		{
@@ -129,7 +129,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadBackImage( path.getPath(), path.getFileName( true ) );
+			m_internal->setBackImage( path.getPath(), path.getFileName( true ) );
 		}
 		else
 		{
@@ -152,7 +152,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadCrossTexture( path.getPath(), path.getFileName( true ) );
+			m_internal->setCrossTexture( path.getPath(), path.getFileName( true ) );
 		}
 		else
 		{
@@ -175,7 +175,7 @@ namespace CastorCom
 		if ( m_internal )
 		{
 			auto path = castor::Path{ fromBstr( filePath ) };
-			m_internal->loadEquiTexture( path.getPath(), path.getFileName( true ), size );
+			m_internal->setEquiTexture( path.getPath(), path.getFileName( true ), size );
 		}
 		else
 		{

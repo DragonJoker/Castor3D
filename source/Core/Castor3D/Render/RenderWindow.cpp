@@ -426,7 +426,7 @@ namespace castor3d
 			auto progress = m_progressBar.get();
 			incProgressBarRange( progress
 				, int32_t( 6u + m_renderTarget->countInitialisationSteps() ) );
-			getEngine()->postEvent( makeCpuFunctorEvent( EventType::ePreRender
+			getEngine()->postEvent( makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 				, [this]()
 				{
 					if ( m_renderTarget )
@@ -447,7 +447,7 @@ namespace castor3d
 								doCreateSaveData( queue );
 								stepProgressBar( progress, "Finalising..." );
 
-								getListener()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+								getListener()->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 									, [this]()
 									{
 										if ( m_loadingScreen )
@@ -463,7 +463,7 @@ namespace castor3d
 					}
 					else
 					{
-						getListener()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+						getListener()->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 							, [this]()
 							{
 								if ( m_loadingScreen )
@@ -1526,7 +1526,7 @@ namespace castor3d
 	{
 		if ( !m_skip.exchange( true ) )
 		{
-			getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			getListener()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [this]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
@@ -1539,7 +1539,7 @@ namespace castor3d
 
 						if ( m_loading )
 						{
-							getListener()->postEvent( makeGpuFunctorEvent( EventType::ePreRender
+							getListener()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 								, [this]( RenderDevice const & pdevice
 									, QueueData const & pqueueData )
 								{

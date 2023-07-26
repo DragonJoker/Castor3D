@@ -128,7 +128,7 @@ namespace GuiCommon
 		, castor3d::Submesh const & submesh )
 	{
 		castor3d::Engine * engine = m_scene.getEngine();
-		engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+		engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 			, [this, &object, &submesh]()
 			{
 				m_object = &object;
@@ -170,7 +170,7 @@ namespace GuiCommon
 	{
 		CU_Require( object.getName() == m_object->getName() );
 		castor3d::Engine * engine = m_scene.getEngine();
-		engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+		engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 			, [this]()
 			{
 				m_sceneConnection.disconnect();
@@ -318,7 +318,7 @@ namespace GuiCommon
 			}
 
 			castor3d::Engine * engine = m_scene.getEngine();
-			engine->postEvent( castor3d::makeGpuFunctorEvent( castor3d::EventType::ePreRender
+			engine->postEvent( castor3d::makeGpuFunctorEvent( castor3d::GpuEventType::ePreUpload
 				, [aabbSubmesh, engine]( castor3d::RenderDevice const & device
 					, castor3d::QueueData const & queueData )
 				{

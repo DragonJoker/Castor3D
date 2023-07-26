@@ -57,7 +57,7 @@ namespace GuiCommon
 
 			if ( m_engine )
 			{
-				m_engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePreRender
+				m_engine->postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePreGpuStep
 					, [value, handler]()
 					{
 						handler( value );

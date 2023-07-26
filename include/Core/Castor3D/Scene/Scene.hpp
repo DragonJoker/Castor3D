@@ -495,9 +495,9 @@ namespace castor3d
 		DECLARE_CACHE_MEMBER( animatedObjectGroup, AnimatedObjectGroup );
 		DECLARE_CACHE_MEMBER( overlay, Overlay );
 		DECLARE_CACHE_MEMBER( skeleton, Skeleton );
-		DECLARE_CACHE_VIEW_MEMBER( material, Material, EventType::ePreRender );
-		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, EventType::ePreRender );
-		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font, EventType::ePreRender );
+		DECLARE_CACHE_VIEW_MEMBER( material, Material, GpuEventType::ePreUpload );
+		DECLARE_CACHE_VIEW_MEMBER( sampler, Sampler, GpuEventType::ePreUpload );
+		DECLARE_CU_CACHE_VIEW_MEMBER( font, Font, CpuEventType::ePreGpuStep );
 		bool m_changed{ false };
 		castor::RgbColour m_ambientLight{ 0.0f, 0.0f, 0.0f };
 		castor::RgbColour m_backgroundColour{ 0.0f, 0.0f, 0.0f };

@@ -2,7 +2,6 @@
 #ifndef __COMC3D_COM_SCENE_NODE_H__
 #define __COMC3D_COM_SCENE_NODE_H__
 
-#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
 #include "ComCastor3D/CastorUtils/ComRgbColour.hpp"
 #include "ComCastor3D/CastorUtils/ComVector3D.hpp"
 #include "ComCastor3D/CastorUtils/ComQuaternion.hpp"

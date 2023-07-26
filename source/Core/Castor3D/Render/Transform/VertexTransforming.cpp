@@ -810,7 +810,7 @@ namespace castor3d
 
 		if ( !m_pending.empty() )
 		{
-			getOwner()->getEngine()->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			getOwner()->getEngine()->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					doProcessPending();

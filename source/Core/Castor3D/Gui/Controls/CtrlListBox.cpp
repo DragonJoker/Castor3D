@@ -85,7 +85,7 @@ namespace castor3d
 		{
 			auto item = doCreateItemCtrl( value
 				, uint32_t( m_values.size() - 1u ) );
-			getEngine().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+			getEngine().postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 				, [this, item]( RenderDevice const & device
 					, QueueData const & queueData )
 				{
@@ -122,7 +122,7 @@ namespace castor3d
 				if ( getControlsManager() )
 				{
 					auto control = *it;
-					getEngine().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+					getEngine().postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 						, [this, control]( RenderDevice const & device
 							, QueueData const & queueData )
 						{

@@ -408,7 +408,7 @@ namespace castor3d
 				postEvent( makeCpuCleanupEvent( *m_defaultSampler ) );
 			}
 
-			postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_textureCache->clear();
@@ -991,7 +991,7 @@ namespace castor3d
 			listener->cleanup();
 			auto pwindow = &window;
 			log::trace << "Removing InputListener [0x" << std::hex << listener << "]" << std::endl;
-			listener->getFrameListener().postEvent( makeCpuFunctorEvent( EventType::ePostRender
+			listener->getFrameListener().postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 				, [this, listener, pwindow]()
 				{
 					m_windowInputListeners.erase( pwindow );
@@ -1051,7 +1051,7 @@ namespace castor3d
 			m_loadingScene->cleanup();
 			auto pending = m_loadingScene.release();
 			hadLoadingScene = true;
-			postEvent( makeCpuFunctorEvent( EventType::ePreRender
+			postEvent( makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 				, [pending]()
 				{
 					delete pending;

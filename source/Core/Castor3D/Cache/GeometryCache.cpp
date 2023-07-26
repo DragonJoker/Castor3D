@@ -95,7 +95,7 @@ namespace castor3d
 					}
 				}
 
-				scene.getListener().postEvent( makeGpuFunctorEvent( EventType::ePreRender
+				scene.getListener().postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
 					, [&element, this]( RenderDevice const & device
 						, QueueData const & queueData )
 					{

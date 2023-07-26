@@ -48,7 +48,7 @@ namespace castor3d
 		return *this;
 	}
 
-	CpuFrameEvent::CpuFrameEvent( EventType type )
+	CpuFrameEvent::CpuFrameEvent( CpuEventType type )
 		: m_type{ type }
 	{
 #if !defined( NDEBUG ) && C3D_UseEventsStack

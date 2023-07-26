@@ -66,7 +66,7 @@ namespace castor3d
 			m_rangeEvent = nullptr;
 		}
 
-		m_rangeEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		m_rangeEvent = m_listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 			, [this, value]()
 			{
 				m_rangeEvent = nullptr;
@@ -104,7 +104,7 @@ namespace castor3d
 			m_titleEvent = nullptr;
 		}
 
-		m_titleEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		m_titleEvent = m_listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 			, [this, value]()
 			{
 				m_titleEvent = nullptr;
@@ -124,7 +124,7 @@ namespace castor3d
 			m_labelEvent = nullptr;
 		}
 
-		m_labelEvent = m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		m_labelEvent = m_listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 			, [this, value]()
 			{
 				m_labelEvent = nullptr;
@@ -138,7 +138,7 @@ namespace castor3d
 
 	void ProgressBar::doStep()
 	{
-		m_listener->postEvent( makeCpuFunctorEvent( EventType::ePostRender
+		m_listener->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 			, [this]()
 			{
 				if ( m_progress )

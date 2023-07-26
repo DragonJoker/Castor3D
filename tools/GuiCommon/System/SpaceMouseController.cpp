@@ -650,7 +650,7 @@ namespace GuiCommon
 				// Recompute to full transform
 				orientation.transform( translate, translate );
 
-				m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+				m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 					, [this, &node, translate, rotation]()
 					{
 						node.translate( translate * m_speedFactor * 5.0f );

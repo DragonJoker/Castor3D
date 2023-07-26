@@ -646,9 +646,9 @@ namespace castor3d
 	using GeometryResPtr = CameraCacheTraits::ElementObsT;
 	using SceneNodeRes = CameraCacheTraits::ElementPtrT;
 	using SceneNodeResPtr = CameraCacheTraits::ElementObsT;
-	using MaterialCacheView = CacheViewT< MaterialCache, EventType::ePreRender >;
-	using SamplerCacheView = CacheViewT< SamplerCache, EventType::ePreRender >;
-	using FontCacheView = CacheViewT< castor::FontCache, EventType::ePreRender >;
+	using MaterialCacheView = CacheViewT< MaterialCache, EventType( GpuEventType::ePreUpload ) >;
+	using SamplerCacheView = CacheViewT< SamplerCache, EventType( GpuEventType::ePreUpload ) >;
+	using FontCacheView = CacheViewT< castor::FontCache, EventType( CpuEventType::ePreGpuStep ) >;
 
 	CU_DeclareSmartPtr( castor3d, SceneCache, C3D_API );
 	CU_DeclareSmartPtr( castor3d, BillboardListCache, C3D_API );

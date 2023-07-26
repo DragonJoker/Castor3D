@@ -61,7 +61,7 @@ namespace GuiCommon
 		m_scalarVelocityY = 0.0f;
 		m_scalarVelocityZ = 0.0f;
 
-		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 			, [this]()
 			{
 				m_node->setOrientation( m_originalOrientation );
@@ -109,7 +109,7 @@ namespace GuiCommon
 		if ( result )
 		{
 			angles = m_angles;
-			m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+			m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 			, [this, translate, angles]()
 			{
 				m_node->translate( translate );
@@ -154,7 +154,7 @@ namespace GuiCommon
 	{
 		m_angles[0] += value;
 		m_angularVelocityX = 0.00_degrees;
-		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 			, [this, value]()
 			{
 				castor::Quaternion orientation{ m_node->getOrientation() };
@@ -167,7 +167,7 @@ namespace GuiCommon
 	{
 		m_angles[1] += value;
 		m_angularVelocityY = 0.00_degrees;
-		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::EventType::ePostRender
+		m_listener.postEvent( castor3d::makeCpuFunctorEvent( castor3d::CpuEventType::ePostCpuStep
 			, [this, value]()
 			{
 				castor::Quaternion orientation{ m_node->getOrientation() };

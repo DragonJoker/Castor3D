@@ -1,5 +1,4 @@
 #include "ComCastor3D/Castor3D/ComTextureUnit.hpp"
-#include "ComCastor3D/Castor3D/ComTextureLayout.hpp"
 #include "ComCastor3D/ComUtils.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -18,9 +17,7 @@ namespace CastorCom
 
 		if ( m_internal )
 		{
-			auto & device = *m_internal->getOwner()->getRenderDevice();
-			auto queueData = device.graphicsData();
-			m_internal->initialise( device, *queueData );
+			m_internal->initialise();
 		}
 		else
 		{

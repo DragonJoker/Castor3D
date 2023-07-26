@@ -297,11 +297,11 @@ namespace castor3d
 
 #define DECLARE_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		castor3d::CacheViewT< className##Cache, eventType > & get##className##View()\
+		castor3d::CacheViewT< className##Cache, castor3d::EventType( eventType ) > & get##className##View()\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		castor3d::CacheViewT< className##Cache, eventType > const & get##className##View()const\
+		castor3d::CacheViewT< className##Cache, castor3d::EventType( eventType ) > const & get##className##View()const\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
@@ -335,15 +335,15 @@ namespace castor3d
 			return m_##memberName##CacheView->tryFind( key );\
 		}\
 	private:\
-		castor3d::CacheViewPtrT< className##Cache, eventType > m_##memberName##CacheView
+		castor3d::CacheViewPtrT< className##Cache, castor3d::EventType( eventType ) > m_##memberName##CacheView
 
 #define DECLARE_CU_CACHE_VIEW_MEMBER( memberName, className, eventType )\
 	public:\
-		castor3d::CacheViewT< castor::className##Cache, eventType > & get##className##View()\
+		castor3d::CacheViewT< castor::className##Cache, castor3d::EventType( eventType ) > & get##className##View()\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
-		castor3d::CacheViewT< castor::className##Cache, eventType > const & get##className##View()const\
+		castor3d::CacheViewT< castor::className##Cache, castor3d::EventType( eventType ) > const & get##className##View()const\
 		{\
 			return *m_##memberName##CacheView;\
 		}\
@@ -377,6 +377,6 @@ namespace castor3d
 			return m_##memberName##CacheView->tryFind( key );\
 		}\
 	private:\
-		castor3d::CacheViewPtrT< castor::className##Cache, eventType > m_##memberName##CacheView
+		castor3d::CacheViewPtrT< castor::className##Cache, castor3d::EventType( eventType ) > m_##memberName##CacheView
 
 #endif
