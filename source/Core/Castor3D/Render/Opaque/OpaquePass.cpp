@@ -70,6 +70,7 @@ namespace castor3d
 	ShaderFlags OpaquePass::getShaderFlags()const
 	{
 		return ShaderFlag::eTangentSpace
+			| ShaderFlag::eViewSpace
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eColour;
 	}
@@ -101,7 +102,7 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo OpaquePass::doCreateBlendState( PipelineFlags const & flags )const
 	{
-		return RenderNodesPass::createBlendState( flags.colourBlendMode, flags.alphaBlendMode, 6u );
+		return RenderNodesPass::createBlendState( flags.colourBlendMode, BlendMode::eNoBlend, 4u );
 	}
 
 	ShaderPtr OpaquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
