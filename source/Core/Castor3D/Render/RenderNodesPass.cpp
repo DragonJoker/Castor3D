@@ -1212,7 +1212,8 @@ namespace castor3d
 	ShaderPtr RenderNodesPass::doGetTaskShaderSource( PipelineFlags const & flags )const
 	{
 		sdw::TaskWriter writer;
-		bool checkCones = flags.hasSubmeshData( SubmeshFlag::eNormals )
+		bool checkCones = flags.isFrontCulled()
+			&& flags.hasSubmeshData( SubmeshFlag::eNormals )
 			&& !flags.hasWorldPosInputs();
 
 		C3D_Camera( writer
@@ -1267,7 +1268,7 @@ namespace castor3d
 					auto sphereRadius = writer.declLocale( "sphereRadius"
 						, cullData.sphere.w() );
 					auto coneNormal = writer.declLocale( "coneNormal"
-						, cullData.cone.xyz()
+						, flags.isFrontCulled() ? -cullData.cone.xyz() : cullData.cone.xyz()
 						, checkCones );
 					auto coneCutOff = writer.declLocale( "coneCutOff"
 						, cullData.cone.w()
@@ -1286,7 +1287,7 @@ namespace castor3d
 						, cullData.sphere.w() * meanScale );
 
 					auto coneNormal = writer.declLocale( "coneNormal"
-						, normalize( ( curMtxModel * vec4( cullData.cone.xyz(), 0.0 ) ).xyz() )
+						, normalize( ( curMtxModel * vec4( flags.isFrontCulled() ? -cullData.cone.xyz() : cullData.cone.xyz(), 0.0 ) ).xyz() )
 						, checkCones );
 					auto coneCutOff = writer.declLocale( "coneCutOff"
 						, cullData.cone.w()
