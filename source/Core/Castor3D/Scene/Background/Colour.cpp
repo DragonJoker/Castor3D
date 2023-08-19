@@ -84,6 +84,7 @@ namespace castor3d
 		auto data = device.graphicsData();
 		auto & value = m_scene.getBackgroundColour();
 		m_colour = castor::HdrRgbColour::fromComponents( value.red(), value.green(), value.blue() );
+		m_needsUpload = true;
 		return true;
 	}
 
