@@ -1419,13 +1419,13 @@ namespace castor3d
 			, frontCulled
 			, m_pipelines );
 
+		if ( pipelineFlags.usesMesh() )
+		{
+			node.createMeshletDescriptorSet();
+		}
+
 		if ( it == m_pipelines.end() )
 		{
-			if ( pipelineFlags.usesMesh() )
-			{
-				node.createMeshletDescriptorSet();
-			}
-
 			auto & result = frontCulled
 				? renderPass.prepareFrontPipeline( pipelineFlags
 					, node.getGeometryBuffers( pipelineFlags ).layouts
