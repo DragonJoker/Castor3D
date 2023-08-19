@@ -64,6 +64,7 @@ namespace castor3d
 	{
 		return ShaderFlag::eWorldSpace
 			| ShaderFlag::eTangentSpace
+			| ShaderFlag::eViewSpace
 			| ShaderFlag::eVelocity
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eDepth
