@@ -11,9 +11,32 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 
 #include <CastorUtils/Data/Text/TextPoint.hpp>
+#include <CastorUtils/Data/File.hpp>
 
 namespace castor
 {
+	namespace txtexunit
+	{
+		void reworkImageFileName( String texName, Path & path, bool & needsYInversion )
+		{
+			if ( path.getExtension() != "dds" )
+			{
+				needsYInversion = !needsYInversion;
+			}
+
+			// Remove TextureCache generated suffixes.
+			castor::string::replace( texName, "/Compressed", "" );
+			castor::string::replace( texName, "/Mipped", "" );
+			castor::string::replace( texName, "/Tiled", "" );
+			castor::string::replace( texName, "/RGBA", "" );
+			castor::string::replace( texName, "/HResampled", "" );
+			castor::string::replace( texName, "/WResampled", "" );
+
+			texName = File::normaliseFileName( texName );
+			path = Path{ Path{ texName }.getFileName() + cuT( ".dds" ) };
+		}
+	}
+
 	using namespace castor3d;
 
 	TextWriter< TextureUnit >::TextWriter( String const & tabs
@@ -45,12 +68,13 @@ namespace castor
 			{
 				hasTexture = true;
 				createImageFile = true;
-				image = Path{ Path{ unit.getTextureName() }.getFileName() + cuT( ".dds" ) };
-
-				if ( Path{ unit.getTextureName() }.getExtension() != "dds" )
-				{
-					config.needsYInversion = !config.needsYInversion;
-				}
+				txtexunit::reworkImageFileName( unit.getTextureName(), image, config.needsYInversion );
+			}
+			else if ( unit.isTextured()
+				&& ( ashes::isCompressedFormat( unit.getTexturePixelFormat() ) || unit.getTextureMipmapCount() > 1u ) )
+			{
+				createImageFile = true;
+				txtexunit::reworkImageFileName( unit.getTextureName(), image, config.needsYInversion );
 			}
 
 			if ( hasTexture )
