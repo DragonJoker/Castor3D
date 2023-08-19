@@ -53,6 +53,18 @@ namespace castor3d
 			, m_wantedState.pipelineStage );
 	}
 
+	void ShaderBuffer::upload( UploadData & uploader
+		, VkDeviceSize offset
+		, VkDeviceSize size )const
+	{
+		uploader.pushUpload( m_rawData
+			, size
+			, *m_buffer
+			, offset
+			, m_wantedState.access
+			, m_wantedState.pipelineStage );
+	}
+
 	VkDescriptorSetLayoutBinding ShaderBuffer::createLayoutBinding( uint32_t index
 		, VkShaderStageFlags stages )const
 	{
