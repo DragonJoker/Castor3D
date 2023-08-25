@@ -15,11 +15,13 @@ namespace c3d_assimp
 	{
 		auto & file = static_cast< AssimpImporterFile const & >( *m_file );
 		auto name = node.getName();
+		bool isDefaultName = name == cuT( "SceneNode_" ) + castor::string::toString( node.getId() );
 		auto it = std::find_if( file.getNodes().begin()
 			, file.getNodes().end()
-			, [&name]( NodeData const & lookup )
+			, [&name, isDefaultName]( NodeData const & lookup )
 			{
-				return name == lookup.name;
+				return name == lookup.name
+					|| ( isDefaultName && lookup.name.empty() );
 			} );
 
 		if ( it == file.getNodes().end() )
