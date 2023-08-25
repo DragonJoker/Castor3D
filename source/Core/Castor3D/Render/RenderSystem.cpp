@@ -346,6 +346,7 @@ namespace castor3d
 		uint32_t constexpr vk1_0 = ashes::makeVersion( 1, 0, 0 );
 		uint32_t constexpr vk1_1 = ashes::makeVersion( 1, 1, 0 );
 		uint32_t constexpr vk1_2 = ashes::makeVersion( 1, 2, 0 );
+		uint32_t constexpr vk1_3 = ashes::makeVersion( 1, 3, 0 );
 
 		//*************************************************************************
 
@@ -520,7 +521,11 @@ namespace castor3d
 		{
 			uint32_t result{ spirv::v1_0 };
 
-			if ( vkApiVersion >= vk1_2 )
+			if ( vkApiVersion >= vk1_3 )
+			{
+				result = spirv::v1_6;
+			}
+			else if ( vkApiVersion >= vk1_2 )
 			{
 				result = spirv::v1_5;
 			}
@@ -755,7 +760,6 @@ namespace castor3d
 			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeX, meshLimits.maxMeshWorkGroupSize[0] );
 			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeY, meshLimits.maxMeshWorkGroupSize[1] );
 			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeZ, meshLimits.maxMeshWorkGroupSize[2] );
-			m_gpuInformations.setValue( GpuMax::eMeshTotalMemorySize, meshLimits.maxMeshTotalMemorySize );
 			m_gpuInformations.setValue( GpuMax::eMeshOutputVertices, meshLimits.maxMeshOutputVertices );
 			m_gpuInformations.setValue( GpuMax::eMeshOutputPrimitives, meshLimits.maxMeshOutputPrimitives );
 		}
@@ -763,13 +767,10 @@ namespace castor3d
 		if ( m_device->hasTaskShaders() )
 		{
 			auto & meshLimits = m_device->getMeshProperties();
-			m_gpuInformations.setValue( GpuMax::eDrawMeshTasksCount, meshLimits.maxDrawMeshTasksCount );
 			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupInvocations, meshLimits.maxTaskWorkGroupInvocations );
 			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeX, meshLimits.maxTaskWorkGroupSize[0] );
 			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeY, meshLimits.maxTaskWorkGroupSize[1] );
 			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeZ, meshLimits.maxTaskWorkGroupSize[2] );
-			m_gpuInformations.setValue( GpuMax::eTaskTotalMemorySize, meshLimits.maxTaskTotalMemorySize );
-			m_gpuInformations.setValue( GpuMax::eTaskOutputCount, meshLimits.maxTaskOutputCount );
 		}
 #endif
 

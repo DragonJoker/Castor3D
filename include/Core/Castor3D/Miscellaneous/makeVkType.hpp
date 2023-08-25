@@ -545,6 +545,10 @@ namespace castor3d
 	template<> struct VkStructTraits< VkPhysicalDeviceMeshShaderFeaturesNV >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV; };
 	template<> struct VkStructTraits< VkPhysicalDeviceMeshShaderPropertiesNV >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV; };
 #endif
+#if VK_EXT_mesh_shader
+	template<> struct VkStructTraits< VkPhysicalDeviceMeshShaderFeaturesEXT >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_EXT; };
+	template<> struct VkStructTraits< VkPhysicalDeviceMeshShaderPropertiesEXT >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_EXT; };
+#endif
 #if VK_NV_fragment_shader_barycentric
 	template<> struct VkStructTraits< VkPhysicalDeviceFragmentShaderBarycentricFeaturesNV >{ static VkStructureType constexpr value = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FRAGMENT_SHADER_BARYCENTRIC_FEATURES_NV; };
 #endif

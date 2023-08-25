@@ -1369,7 +1369,7 @@ namespace castor3d
 
 				IF( writer, laneId == 0u )
 				{
-					payload.dispatchMesh( tasks );
+					payload.dispatchMesh( SDW_TaskLocalSize( tasks, 1_u, 1_u ) );
 				}
 				FI;
 
@@ -1497,6 +1497,7 @@ namespace castor3d
 
 			FOR( writer, sdw::UInt, i, laneId, i < indexCount, i += 32u )
 			{
+				//primOut[i].primitiveID = i;
 				primOut[i].primitiveIndex = uvec3( meshlet.indices[i * 3u + 0u]
 					, meshlet.indices[i * 3u + 1u]
 					, meshlet.indices[i * 3u + 2u] );

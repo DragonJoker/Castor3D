@@ -974,7 +974,7 @@ namespace castor3d
 		m_billboardIndirectCommands.reset();
 		m_submeshNIdxIndirectCommands.reset();
 		m_submeshIdxIndirectCommands.reset();
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		m_submeshMeshletIndirectCommands.reset();
 #endif
 	}
@@ -1118,7 +1118,7 @@ namespace castor3d
 		{
 			auto & queue = *getOwner();
 			auto & scene = queue.getCuller().getScene();
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 			auto renderPass = queue.getOwner();
 			auto origIndirectMshBuffer = m_submeshMeshletIndirectCommands
 				? m_submeshMeshletIndirectCommands->lock( 0u, ashes::WholeSize, 0u )
@@ -1144,7 +1144,7 @@ namespace castor3d
 
 					for ( auto & culled : bufferIt.second )
 					{
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 						queuerndnd::fillNodeCommands( *culled.node
 							, scene
 							, renderPass->isMeshShading()
@@ -1175,7 +1175,7 @@ namespace castor3d
 					{
 						for ( auto & submeshIt : passIt.second )
 						{
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 							queuerndnd::fillNodeCommands( submeshIt.second
 								, renderPass->isMeshShading()
 								, indirectMshBuffer
@@ -1194,7 +1194,7 @@ namespace castor3d
 				}
 			}
 
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 
 			if ( m_submeshMeshletIndirectCommands )
 			{
@@ -1260,7 +1260,7 @@ namespace castor3d
 				, 0u
 				, 0u ) );
 
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 
 		auto & submeshMshCommands = *m_submeshMeshletIndirectCommands;
 		auto & submeshIdxCommands = *m_submeshIdxIndirectCommands;

@@ -16,7 +16,7 @@ CU_ImplementSmartPtr( castor3d, MeshletComponent )
 
 namespace castor3d
 {
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 	namespace mshletcomp
 	{
 		static castor::String getName( MeshletComponent const & component )
@@ -45,7 +45,7 @@ namespace castor3d
 
 	void MeshletComponent::createDescriptorSet( Geometry const & geometry )
 	{
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		auto & baseBuffers = getOwner()->getFinalBufferOffsets( geometry );
 		auto descSetIt = m_descriptorSets.emplace( &geometry, nullptr ).first;
 
@@ -135,7 +135,7 @@ namespace castor3d
 
 	ProgramFlags MeshletComponent::getProgramFlags( Material const & material )const
 	{
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		return ProgramFlag::eHasMesh
 			| ( m_cull.empty()
 				? ProgramFlag::eNone
@@ -190,7 +190,7 @@ namespace castor3d
 
 	bool MeshletComponent::doInitialise( RenderDevice const & device )
 	{
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		if ( !m_meshlets.empty() )
 		{
 			for ( auto & finalCullBuffer : m_finalCullBuffers )
@@ -261,7 +261,7 @@ namespace castor3d
 			return;
 		}
 
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		auto count = uint32_t( m_meshlets.size() );
 
 		if ( count )
@@ -288,7 +288,7 @@ namespace castor3d
 
 	void MeshletComponent::doCreateDescriptorLayout( RenderDevice const & device )
 	{
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eMeshlets )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
