@@ -84,16 +84,12 @@ namespace castor3d
 		eMeshWorkGroupSizeX,
 		eMeshWorkGroupSizeY,
 		eMeshWorkGroupSizeZ,
-		eMeshTotalMemorySize,
 		eMeshOutputVertices,
 		eMeshOutputPrimitives,
-		eDrawMeshTasksCount,
 		eTaskWorkGroupInvocations,
 		eTaskWorkGroupSizeX,
 		eTaskWorkGroupSizeY,
 		eTaskWorkGroupSizeZ,
-		eTaskTotalMemorySize,
-		eTaskOutputCount,
 		CU_ScopedEnumBounds( eTexture1DSize )
 	};
 	/**

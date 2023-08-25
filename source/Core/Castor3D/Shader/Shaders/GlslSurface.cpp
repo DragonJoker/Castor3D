@@ -465,9 +465,9 @@ namespace castor3d::shader
 	void RasterizerSurfaceBase::fillType( sdw::type::BaseStruct & type )
 	{
 		SurfaceBase::fillType( type );
-		type.declMember( "nodeId", ast::type::Kind::eInt
+		type.declMember( "nodeId", ast::type::Kind::eUInt
 			, ast::type::NotArray );
-		type.declMember( "vertexId", ast::type::Kind::eInt
+		type.declMember( "vertexId", ast::type::Kind::eUInt
 			, ast::type::NotArray );
 		type.declMember( "curPosition", ast::type::Kind::eVec4F
 			, ast::type::NotArray );

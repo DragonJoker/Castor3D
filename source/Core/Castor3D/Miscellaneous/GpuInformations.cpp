@@ -43,16 +43,12 @@ namespace castor3d
 			"Max mesh work group size X",
 			"Max mesh work group size Y",
 			"Max mesh work group size Z",
-			"Max mesh total memory size",
 			"Max mesh output vertices",
 			"Max mesh output primitives",
-			"Max draw mesh tasks count",
 			"Max task work group invocations",
 			"Max task work group size X",
 			"Max task work group size Y",
 			"Max task work group size Z",
-			"Max task total memory size",
-			"Max task output count",
 		};
 		stream << "GPU informations:" << "\n";
 		stream << "    Vendor: " << object.getVendor() << "\n";

@@ -721,7 +721,7 @@ namespace castor3d
 
 	bool RenderDevice::hasMeshShaders()const
 	{
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		return m_meshShaderFeatures.meshShader == VK_TRUE;
 #else
 		return false;
@@ -730,7 +730,7 @@ namespace castor3d
 
 	bool RenderDevice::hasTaskShaders()const
 	{
-#if VK_NV_mesh_shader
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		return m_meshShaderFeatures.taskShader == VK_TRUE;
 #else
 		return false;
