@@ -315,6 +315,7 @@ namespace castor3d
 		, castor::Size const & size
 		, castor::PixelFormat pixelFormat )
 		: OwnedBy< Engine >{ engine }
+		, m_device{ getOwner()->getRenderSystem()->getRenderDevice() }
 		, m_type{ type }
 		, m_size{ size }
 		, m_safeBandedSize{ getSafeBandedSize( size ) }
@@ -326,7 +327,7 @@ namespace castor3d
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + castor::string::toString( m_index ) }
 		, m_graph{ m_resources.getHandler(), m_name }
-		, m_velocity{ getOwner()->getRenderSystem()->getRenderDevice()
+		, m_velocity{ m_device
 			, m_resources
 			, "Velocity"
 			, 0u
@@ -340,7 +341,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 				| VK_IMAGE_USAGE_STORAGE_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_srgbObjects{ Texture{ getOwner()->getRenderSystem()->getRenderDevice()
+		, m_srgbObjects{ Texture{ m_device
 				, m_resources
 				, "SRGBResult0"
 				, 0u
@@ -350,7 +351,7 @@ namespace castor3d
 				, getPixelFormat()
 				, rendtgt::objectsUsageFlags
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-			, Texture{ getOwner()->getRenderSystem()->getRenderDevice()
+			, Texture{ m_device
 				, m_resources
 				, "SRGBResult1"
 				, 0u
@@ -360,7 +361,7 @@ namespace castor3d
 				, getPixelFormat()
 				, rendtgt::objectsUsageFlags
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK } }
-		, m_hdrObjects{ Texture{ getOwner()->getRenderSystem()->getRenderDevice()
+		, m_hdrObjects{ Texture{ m_device
 				, m_resources
 				, "HDRResult0"
 				, 0u
@@ -370,7 +371,7 @@ namespace castor3d
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, rendtgt::objectsUsageFlags
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-			, Texture{ getOwner()->getRenderSystem()->getRenderDevice()
+			, Texture{ m_device
 				, m_resources
 				, "HDRResult1"
 				, 0u
@@ -380,7 +381,7 @@ namespace castor3d
 				, VK_FORMAT_R16G16B16A16_SFLOAT
 				, rendtgt::objectsUsageFlags
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK } }
-		, m_overlays{ getOwner()->getRenderSystem()->getRenderDevice()
+		, m_overlays{ m_device
 			, m_resources
 			, "Overlays"
 			, 0u
@@ -392,7 +393,7 @@ namespace castor3d
 				| VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
-		, m_combined{ getOwner()->getRenderSystem()->getRenderDevice()
+		, m_combined{ m_device
 			, m_resources
 			, "Target"
 			, 0u
@@ -437,14 +438,31 @@ namespace castor3d
 			}
 		}
 
-		for ( auto & texture : m_hdrObjects )
 		{
-			texture.create();
-		}
+			auto queueData = m_device.graphicsData();
+			auto fence = m_device->createFence();
+			auto commandBuffer = queueData->commandPool->createCommandBuffer();
+			commandBuffer->begin();
 
-		for ( auto & texture : m_srgbObjects )
-		{
-			texture.create();
+			for ( auto & texture : m_hdrObjects )
+			{
+				texture.create();
+				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, texture.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			}
+
+			for ( auto & texture : m_srgbObjects )
+			{
+				texture.create();
+				commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_HOST_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, texture.makeShaderInputResource( VK_IMAGE_LAYOUT_UNDEFINED ) );
+			}
+
+			commandBuffer->end();
+			queueData->queue->submit( *commandBuffer, *fence );
+			fence->wait( ashes::MaxTimeout );
 		}
 	}
 
@@ -1099,7 +1117,7 @@ namespace castor3d
 					, m_ssaoConfig
 					, progress
 					, C3D_UseDeferredRendering != 0
-					, C3D_UseVisibilityBuffer != 0 && C3D_UseMeshShaders == 0
+					, C3D_UseVisibilityBuffer != 0
 					, C3D_UseWeightedBlendedRendering != 0 );
 			}
 			catch ( castor::Exception & exc )

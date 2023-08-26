@@ -477,6 +477,7 @@ namespace castor3d
 
 	private:
 		static uint32_t sm_uiCount;
+		RenderDevice & m_device;
 		TargetType m_type{};
 		castor::Size m_size;
 		castor::Size m_safeBandedSize;
