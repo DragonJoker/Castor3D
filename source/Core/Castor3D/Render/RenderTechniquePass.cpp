@@ -488,11 +488,7 @@ namespace castor3d
 			return ashes::PipelineDepthStencilStateCreateInfo{ 0u
 				, VK_TRUE
 				, checkFlag( m_filters, RenderFilter::eAlphaBlend )
-				, ( checkFlag( m_filters, RenderFilter::eAlphaBlend )
-					? ( checkFlag( getComponentsMask(), ComponentModeFlag::eForward )
-						? VK_COMPARE_OP_GREATER
-						: VK_COMPARE_OP_GREATER_OR_EQUAL )
-					: VK_COMPARE_OP_GREATER_OR_EQUAL ) };
+				, VK_COMPARE_OP_GREATER_OR_EQUAL };
 		}
 	}
 
