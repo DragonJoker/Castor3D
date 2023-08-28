@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
@@ -220,7 +221,8 @@ namespace castor3d
 			, index };
 		shader::SssProfiles sssProfiles{ writer
 			, uint32_t( GlobalBuffersIdx::eSssProfiles )
-			, RenderPipeline::eBuffers };
+			, RenderPipeline::eBuffers
+				, !C3D_DisableSSSTransmittance };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers

@@ -1,5 +1,6 @@
 #include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
@@ -1079,7 +1080,8 @@ namespace castor3d
 				, index };
 			shader::SssProfiles sssProfiles{ writer
 				, InOutBindings::eSssProfiles
-				, Sets::eInOuts };
+				, Sets::eInOuts
+				, !C3D_DisableSSSTransmittance };
 			shader::TextureConfigurations textureConfigs{ writer
 				, InOutBindings::eTexConfigs
 				, Sets::eInOuts };

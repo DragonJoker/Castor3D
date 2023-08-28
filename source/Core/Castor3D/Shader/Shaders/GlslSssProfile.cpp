@@ -13,7 +13,7 @@ namespace castor3d::shader
 			, "c3d_sssProfiles"
 			, binding
 			, set
-			, enable && C3D_DisableSSSTransmittance != 0 }
+			, enable }
 	{
 	}
 }
