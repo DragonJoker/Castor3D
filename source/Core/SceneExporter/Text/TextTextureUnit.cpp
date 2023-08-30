@@ -17,7 +17,7 @@ namespace castor
 {
 	namespace txtexunit
 	{
-		void reworkImageFileName( String texName, Path & path, bool & needsYInversion )
+		static void reworkImageFileName( String texName, Path & path, bool & needsYInversion )
 		{
 			if ( path.getExtension() != "dds" )
 			{
