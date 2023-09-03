@@ -81,15 +81,66 @@ namespace c3d_gltf
 			}
 		}
 
-		size_t findSkinRootNode( fastgltf::Asset const & impAsset
+		template< typename FuncT >
+		static void findSkinRootNodeInSkeletonNodes( GltfImporterFile const & file
+			, std::set< size_t > & currentNodes
+			, std::set< size_t > & parentNodes
+			, FuncT findParentNode )
+		{
+			do
+			{
+				if ( !parentNodes.empty() )
+				{
+					currentNodes = parentNodes;
+					parentNodes.clear();
+				}
+
+				for ( auto nodeIndex : currentNodes )
+				{
+					auto parentIndex = findParentNode( nodeIndex );
+
+					if ( parentIndex != size_t{ ~0u }
+					&& file.isSkeletonNode( parentIndex ) )
+					{
+						parentNodes.insert( parentIndex );
+					}
+				}
+			}
+			while ( parentNodes.size() > 1 && currentNodes != parentNodes );
+		}
+
+		template< typename FuncT >
+		static void findSkinRootNodeInOtherNodes( GltfImporterFile const & file
+			, std::set< size_t > & currentNodes
+			, std::set< size_t > & parentNodes
+			, FuncT findParentNode )
+		{
+			do
+			{
+				if ( !parentNodes.empty() )
+				{
+					currentNodes = parentNodes;
+					parentNodes.clear();
+				}
+
+				for ( auto nodeIndex : currentNodes )
+				{
+					auto parentIndex = findParentNode( nodeIndex );
+
+					if ( parentIndex != size_t{ ~0u } )
+					{
+						parentNodes.insert( parentIndex );
+					}
+				}
+			}
+			while ( parentNodes.size() > 1 && currentNodes != parentNodes );
+		}
+
+		static size_t findSkinRootNode( GltfImporterFile const & file
 			, fastgltf::Skin const & impSkin )
 		{
-			if ( impSkin.skeleton )
-			{
-				return *impSkin.skeleton;
-			}
+			fastgltf::Asset const & impAsset = file.getAsset();
 
-			// Not found in skin nodes, lookup in parent nodes
 			auto findParentNode = [&impAsset]( size_t nodeIndex )
 			{
 				auto pit = std::find_if( impAsset.nodes.begin()
@@ -109,33 +160,39 @@ namespace c3d_gltf
 
 				return size_t{ ~0u };
 			};
-			std::vector< size_t > parentNodes;
-			std::vector< size_t > currentNodes;
-			currentNodes.insert( currentNodes.end(), impSkin.joints.begin(), impSkin.joints.end() );
+			std::set< size_t > currentNodes;
 
-			do
+			for ( auto nodeIndex : impSkin.joints )
 			{
-				if ( !parentNodes.empty() )
-				{
-					currentNodes = parentNodes;
-					parentNodes.clear();
-				}
-
-				for ( auto nodeIndex : currentNodes )
-				{
-					auto parentIndex = findParentNode( nodeIndex );
-
-					if ( parentIndex != size_t{ ~0u } )
-					{
-						parentNodes.push_back( parentIndex );
-					}
-				}
+				currentNodes.insert( nodeIndex );
 			}
-			while ( parentNodes.size() > 1 );
+
+			std::set< size_t > parentNodes;
+			findSkinRootNodeInSkeletonNodes( file, currentNodes, parentNodes, findParentNode );
+
+			if ( parentNodes.size() > 1 )
+			{
+				// Skeleton doesn't have a single common node within its bones.
+				// Recover common parent node to the remaining ones.
+				if ( impSkin.skeleton )
+				{
+					return *impSkin.skeleton;
+				}
+
+				findSkinRootNodeInOtherNodes( file, currentNodes, parentNodes, findParentNode );
+			}
 
 			return parentNodes.size() == 1u
-				? parentNodes.front()
-				: currentNodes.front();
+				? *parentNodes.begin()
+				: *currentNodes.begin();
+		}
+
+		static castor::Matrix4x4f getTransformMatrix( auto const & nodeTransform )
+		{
+			auto transform = convert( nodeTransform );
+			castor::Matrix4x4f result;
+			castor::matrix::setTransform( result, transform.translate, transform.scale, transform.rotate );
+			return result;
 		}
 	}
 
@@ -182,11 +239,16 @@ namespace c3d_gltf
 				, castor::Matrix4x4f{ 1.0f } );
 		}
 
-		auto skinRootNode = skeletons::findSkinRootNode( impAsset, impSkin );
-		auto jit = std::find( impSkin.joints.begin(), impSkin.joints.end(), skinRootNode );
+		auto skinRootNode = skeletons::findSkinRootNode( file, impSkin );
+		castor3d::log::info << cuT( "      Root Node: [" ) << file.getNodeName( skinRootNode, 0u ) << cuT( "]" ) << std::endl;
+		auto jit = std::find( impSkin.joints.begin()
+			, impSkin.joints.end()
+			, skinRootNode );
 		auto mit = skinOffsetMatrices.begin() + std::distance( impSkin.joints.begin(), jit );
 
-		skeleton.setGlobalInverseTransform( jit == impSkin.joints.end() ? castor::Matrix4x4f{ 1.0f } : *mit );
+		skeleton.setGlobalInverseTransform( impSkin.skeleton
+			? skeletons::getTransformMatrix( impAsset.nodes[*impSkin.skeleton].transform )
+			: castor::Matrix4x4f{ 1.0f } );
 		skeletons::processSkeletonNodes( file
 			, impSkin.joints
 			, skinOffsetMatrices

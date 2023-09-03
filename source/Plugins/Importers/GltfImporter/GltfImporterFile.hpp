@@ -94,12 +94,14 @@ namespace c3d_gltf
 			, castor::String pname
 			, size_t pindex
 			, size_t pinstance
+			, size_t pinstanceCount
 			, castor3d::NodeTransform ptransform
 			, fastgltf::Node const * pnode )
 			: NodeData{ std::move( pparent )
 				, std::move( pname ) }
 			, index{ pindex }
 			, instance{ pinstance }
+			, instanceCount{ pinstanceCount }
 			, transform{ std::move( ptransform ) }
 			, node{ pnode }
 		{
@@ -107,6 +109,7 @@ namespace c3d_gltf
 
 		size_t index;
 		size_t instance;
+		size_t instanceCount;
 		castor3d::NodeTransform transform{};
 		fastgltf::Node const * node;
 	};
@@ -145,6 +148,8 @@ namespace c3d_gltf
 		Animations getSkinAnimations( castor3d::Skeleton const & skeleton )const;
 		Animations getNodeAnimations( castor3d::SceneNode const & node )const;
 
+		bool isSkeletonNode( size_t nodeIndex )const;
+
 		std::vector< castor::String > listMaterials()override;
 		std::vector< MeshData > listMeshes()override;
 		std::vector< castor::String > listSkeletons()override;
@@ -169,22 +174,23 @@ namespace c3d_gltf
 
 		fastgltf::Asset const & getAsset()const noexcept
 		{
-			return m_asset.get< 1 >();
+			return *m_asset;
 		}
 
 		bool isValid()const noexcept
 		{
-			return m_asset.error() == fastgltf::Error::None;
+			return m_expAsset.error() == fastgltf::Error::None;
 		}
 
 	public:
 		static castor::String const Name;
 
 	private:
-		void doPrelistSkeletons();
+		void doPrelistNodes();
 
 	private:
-		fastgltf::Expected< fastgltf::Asset > m_asset;
+		fastgltf::Expected< fastgltf::Asset > m_expAsset;
+		fastgltf::Asset const * m_asset{};
 		std::vector< size_t > m_sceneIndices{};
 		std::vector< GltfNodeData > m_nodes;
 		std::vector< GltfNodeData > m_skeletonNodes;

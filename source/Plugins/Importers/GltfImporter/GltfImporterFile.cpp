@@ -83,9 +83,10 @@ namespace c3d_gltf
 		static void parseNodesRec( fastgltf::pmr::MaybeSmallVector< size_t > const & nodes
 			, size_t parentNodeIndex
 			, std::vector< fastgltf::Node > const & allNodes
-			, std::function< std::pair< size_t, bool >( fastgltf::Node const &, size_t, size_t, size_t ) > func
+			, std::function< std::tuple< size_t, bool, bool >( fastgltf::Node const &, size_t, size_t, size_t, bool ) > func
 			, std::set< size_t > & parsed
-			, size_t instanceCount )
+			, size_t instanceCount
+			, bool skeletonNode )
 		{
 			bool carryOn = true;
 
@@ -94,12 +95,12 @@ namespace c3d_gltf
 				if ( parsed.insert( nodeIndex ).second )
 				{
 					fastgltf::Node const & node = allNodes[nodeIndex];
-					auto [curInstanceCount, isOk] = func( node, nodeIndex, parentNodeIndex, instanceCount );
+					auto [curInstanceCount, isOk, isSkel] = func( node, nodeIndex, parentNodeIndex, instanceCount, skeletonNode );
 					carryOn = isOk;
 
 					if ( carryOn )
 					{
-						parseNodesRec( node.children, nodeIndex, allNodes, func, parsed, curInstanceCount );
+						parseNodesRec( node.children, nodeIndex, allNodes, func, parsed, curInstanceCount, isSkel );
 					}
 				}
 			}
@@ -107,11 +108,11 @@ namespace c3d_gltf
 
 		static void parseNodes( fastgltf::pmr::MaybeSmallVector< size_t > const & nodes
 			, std::vector< fastgltf::Node > const & allNodes
-			, std::function< std::pair< size_t, bool >( fastgltf::Node const &, size_t, size_t, size_t ) > func )
+			, std::function< std::tuple< size_t, bool, bool >( fastgltf::Node const &, size_t, size_t, size_t, bool ) > func )
 		{
 			std::set< size_t > parsed;
 			size_t parent = ~0u;
-			parseNodesRec( nodes, parent, allNodes, func, parsed, 1u );
+			parseNodesRec( nodes, parent, allNodes, func, parsed, 1u, false );
 		}
 
 		static std::vector< castor3d::NodeTransform > listInstances( fastgltf::Asset const & impAsset
@@ -192,29 +193,35 @@ namespace c3d_gltf
 			bool result{};
 			parseNodes( impAsset.nodes[rootIndex].children
 				, impAsset.nodes
-				, [&result, &lookupIndex]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount )
+				, [&result, &lookupIndex]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount, bool )
 				{
 					if ( nodeIndex == lookupIndex )
 					{
 						result = true;
-						return std::make_pair( size_t( 1u ), false );
+						return std::make_tuple( size_t( 1u ), false, false );
 					}
 
-					return std::make_pair( size_t( 1u ), true );
+					return std::make_tuple( size_t( 1u ), true, false );
 				} );
 			return result;
 		}
 
-		bool isSkeletonNode( auto const & skeletons
-			, size_t index )
+		bool isSkeletonNode( fastgltf::Asset const & impAsset
+			, auto const & skeletons
+			, size_t nodeIndex )
 		{
 			return std::any_of( skeletons.begin()
 				, skeletons.end()
-				, [index]( fastgltf::Skin const & lookup )
+				, [&impAsset, nodeIndex]( fastgltf::Skin const & lookup )
 				{
-					return lookup.joints.end() != std::find( lookup.joints.begin()
+					return /*( lookup.skeleton && *lookup.skeleton == nodeIndex )
+						|| */lookup.joints.end() != std::find_if( lookup.joints.begin()
 						, lookup.joints.end()
-						, index );
+						, [&impAsset, nodeIndex]( size_t lookupIndex )
+						{
+							return lookupIndex == nodeIndex
+								|| hasChildNode( impAsset, lookupIndex, nodeIndex );
+						} );
 				} );
 		}
 
@@ -274,29 +281,11 @@ namespace c3d_gltf
 		, castor3d::Parameters const & parameters
 		, fastgltf::Category category )
 		: castor3d::ImporterFile{ engine, scene, path, parameters }
-		, m_asset{ file::loadScene( getFileName(), getParameters(), category ) }
+		, m_expAsset{ file::loadScene( getFileName(), getParameters(), category ) }
 	{
-		uint32_t nodeIndex{};
-
-		for ( auto & node : m_asset->nodes )
-		{
-			GltfNodeData nodeData{ castor::String{}
-				, getNodeName( nodeIndex, 0u )
-				, nodeIndex
-				, 0u
-				, convert( node.transform )
-				, &node };
-
-			if ( file::isSkeletonNode( m_asset->skins, nodeIndex ) )
-			{
-				m_skeletonNodes.push_back( std::move( nodeData ) );
-			}
-
-			++nodeIndex;
-		}
-
 		if ( isValid() )
 		{
+			m_asset = &m_expAsset.get< 1 >();
 			uint32_t sceneIndex{};
 
 			if ( getParameters().get( "sceneIndex", sceneIndex ) )
@@ -312,6 +301,8 @@ namespace c3d_gltf
 				m_sceneIndices.resize( m_asset->scenes.size() );
 				std::iota( m_sceneIndices.begin(), m_sceneIndices.end(), 0u );
 			}
+
+			doPrelistNodes();
 		}
 	}
 
@@ -466,7 +457,7 @@ namespace c3d_gltf
 				if ( ( channel.path == fastgltf::AnimationPath::Rotation
 						|| channel.path == fastgltf::AnimationPath::Scale
 						|| channel.path == fastgltf::AnimationPath::Translation )
-					&& file::isSkeletonNode( m_asset->skins, channel.nodeIndex )
+					&& isSkeletonNode( channel.nodeIndex )
 					&& skeleton.findNode( getNodeName( channel.nodeIndex, 0u ) ) != nullptr )
 				{
 					auto & channelSamplers = result.emplace( getAnimationName( index ), AnimationChannelSamplers{} ).first->second;
@@ -493,7 +484,7 @@ namespace c3d_gltf
 				if ( ( channel.path == fastgltf::AnimationPath::Rotation
 						|| channel.path == fastgltf::AnimationPath::Scale
 						|| channel.path == fastgltf::AnimationPath::Translation )
-					&& !file::isSkeletonNode( m_asset->skins, channel.nodeIndex )
+					&& !isSkeletonNode( channel.nodeIndex )
 					&& getNodeName( channel.nodeIndex, 0u ) == node.getName() )
 				{
 					auto & channelSamplers = result.emplace( getAnimationName( index ), AnimationChannelSamplers{} ).first->second;
@@ -506,6 +497,14 @@ namespace c3d_gltf
 		}
 
 		return result;
+	}
+
+	bool GltfImporterFile::isSkeletonNode( size_t nodeIndex )const
+	{
+		return std::any_of( m_skeletonNodes.begin(), m_skeletonNodes.end(), [nodeIndex]( GltfNodeData const & lookup )
+			{
+				return lookup.index == nodeIndex;
+			} );
 	}
 
 	std::vector< castor::String > GltfImporterFile::listMaterials()
@@ -572,89 +571,9 @@ namespace c3d_gltf
 
 		if ( isValid() )
 		{
-			for ( auto & sceneIndex : m_sceneIndices )
+			for ( auto & nodeData : m_nodes )
 			{
-				file::parseNodes( m_asset->scenes[sceneIndex].nodeIndices
-					, m_asset->nodes
-					, [this, &result]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount )
-					{
-						if ( file::isSkeletonNode( m_asset->skins, nodeIndex ) )
-						{
-							return std::make_pair( parentInstanceCount, false );
-						}
-
-						auto transforms = file::listInstances( m_asset.get< 1 >(), node );
-
-						if ( !transforms.empty() )
-						{
-							auto instanceCount = transforms.size();
-
-							if ( parentInstanceCount > 1u )
-							{
-								size_t index{};
-
-								for ( size_t i = 0u; i < instanceCount; ++i )
-								{
-									for ( size_t j = 0u; j < parentInstanceCount; ++j )
-									{
-										m_nodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, j + 1u ) : std::string{}
-											, getNodeName( nodeIndex, index + 1u )
-											, nodeIndex
-											, index + 1u
-											, transforms[i]
-											, &node );
-										result.push_back( m_nodes.back() );
-										++index;
-									}
-								}
-							}
-							else
-							{
-								for ( size_t i = 0u; i < instanceCount; ++i )
-								{
-									m_nodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : std::string{}
-										, getNodeName( nodeIndex, i + 1u )
-										, nodeIndex
-										, i + 1u
-										, std::move( transforms[i] )
-										, &node );
-									result.push_back( m_nodes.back() );
-								}
-							}
-
-							parentInstanceCount *= instanceCount;
-						}
-						else
-						{
-							auto transform = convert( node.transform );
-
-							if ( parentInstanceCount > 1u )
-							{
-								for ( size_t i = 0u; i < parentInstanceCount; ++i )
-								{
-									m_nodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, i + 1u ) : std::string{}
-										, getNodeName( nodeIndex, 0u )
-										, nodeIndex
-										, i + 1u
-										, transform
-										, &node );
-									result.push_back( m_nodes.back() );
-								}
-							}
-							else
-							{
-								m_nodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : std::string{}
-									, getNodeName( nodeIndex, 0u )
-										, nodeIndex
-										, 0u
-										, std::move( transform )
-										, &node );
-								result.push_back( m_nodes.back() );
-							}
-						}
-
-						return std::make_pair( parentInstanceCount, true );
-					} );
+				result.push_back( nodeData );
 			}
 		}
 
@@ -689,38 +608,20 @@ namespace c3d_gltf
 
 		if ( isValid() )
 		{
-			for ( auto & sceneIndex : m_sceneIndices )
+			for ( auto & nodeData : m_nodes )
 			{
-				file::parseNodes( m_asset->scenes[sceneIndex].nodeIndices
-					, m_asset->nodes
-					, [this, &result]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount )
+				auto & node = *nodeData.node;
+
+				if ( node.meshIndex && *node.meshIndex < m_asset->meshes.size() )
+				{
+					if ( nodeData.instanceCount <= 1u
+						|| ( nodeData.instanceCount > 1u && nodeData.instance != 0u ) )
 					{
-						if ( node.meshIndex && *node.meshIndex < m_asset->meshes.size() )
-						{
-							bool processed{ false };
-
-							for ( auto & nodeData : m_nodes )
-							{
-								if ( nodeData.instance != 0u
-									&& nodeData.index == nodeIndex )
-								{
-									processed = true;
-									result.emplace_back( GeometryData{ getGeometryName( nodeIndex, *node.meshIndex, nodeData.instance )
-										, getNodeName( nodeIndex, nodeData.instance )
-										, getMeshName( *node.meshIndex ) } );
-								}
-							}
-
-							if ( !processed )
-							{
-								result.emplace_back( GeometryData{ getGeometryName( nodeIndex, *node.meshIndex, 0u )
-									, getNodeName( nodeIndex, 0u )
-									, getMeshName( *node.meshIndex ) } );
-							}
-						}
-
-						return std::make_pair( parentInstanceCount, true );
-					} );
+						result.emplace_back( GeometryData{ getGeometryName( nodeData.index, *node.meshIndex, nodeData.instance )
+							, getNodeName( nodeData.index, nodeData.instance )
+							, getMeshName( *node.meshIndex ) } );
+					}
+				}
 			}
 		}
 
@@ -769,7 +670,7 @@ namespace c3d_gltf
 					if ( ( channel.path == fastgltf::AnimationPath::Rotation
 							|| channel.path == fastgltf::AnimationPath::Scale
 							|| channel.path == fastgltf::AnimationPath::Translation )
-						&& file::isSkeletonNode( m_asset->skins, channel.nodeIndex ) )
+						&& isSkeletonNode( channel.nodeIndex ) )
 					{
 						result.insert( getAnimationName( index ) );
 					}
@@ -798,7 +699,7 @@ namespace c3d_gltf
 					if ( ( channel.path == fastgltf::AnimationPath::Rotation
 						|| channel.path == fastgltf::AnimationPath::Scale
 						|| channel.path == fastgltf::AnimationPath::Translation )
-						&& !file::isSkeletonNode( m_asset->skins, channel.nodeIndex )
+						&& !isSkeletonNode( channel.nodeIndex )
 						&& getNodeName( channel.nodeIndex, 0u ) == node.getName() )
 					{
 						result.insert( getAnimationName( index ) );
@@ -849,6 +750,107 @@ namespace c3d_gltf
 		, castor3d::Parameters const & parameters )
 	{
 		return castor::makeUniqueDerived< castor3d::ImporterFile, GltfImporterFile >( engine, scene, path, parameters );
+	}
+
+	void GltfImporterFile::doPrelistNodes()
+	{
+		for ( auto & sceneIndex : m_sceneIndices )
+		{
+			file::parseNodes( m_asset->scenes[sceneIndex].nodeIndices
+				, m_asset->nodes
+				, [this]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount, bool isParentSkeletonNode )
+				{
+					bool isSkeletonNode = isParentSkeletonNode || file::isSkeletonNode( *m_asset, m_asset->skins, nodeIndex );
+
+					if ( isSkeletonNode )
+					{
+						parentInstanceCount = 1u;
+						auto transform = convert( node.transform );
+						m_skeletonNodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : std::string{}
+							, getNodeName( nodeIndex, 0u )
+							, nodeIndex
+							, 0u
+							, 1u
+							, std::move( transform )
+							, &node );
+					}
+					else
+					{
+						auto transforms = file::listInstances( *m_asset, node );
+
+						if ( !transforms.empty() )
+						{
+							auto instanceCount = transforms.size();
+
+							if ( parentInstanceCount > 1u )
+							{
+								size_t index{};
+
+								for ( size_t i = 0u; i < instanceCount; ++i )
+								{
+									for ( size_t j = 0u; j < parentInstanceCount; ++j )
+									{
+										m_nodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, j + 1u ) : std::string{}
+											, getNodeName( nodeIndex, index + 1u )
+											, nodeIndex
+											, index + 1u
+											, parentInstanceCount * instanceCount
+											, transforms[i]
+											, &node );
+										++index;
+									}
+								}
+							}
+							else
+							{
+								for ( size_t i = 0u; i < instanceCount; ++i )
+								{
+									m_nodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : std::string{}
+										, getNodeName( nodeIndex, i + 1u )
+										, nodeIndex
+										, i + 1u
+										, instanceCount
+										, std::move( transforms[i] )
+										, &node );
+								}
+							}
+
+							parentInstanceCount *= instanceCount;
+						}
+						else
+						{
+							auto transform = convert( node.transform );
+
+							if ( parentInstanceCount > 1u )
+							{
+								for ( size_t i = 0u; i < parentInstanceCount; ++i )
+								{
+									m_nodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, i + 1u ) : std::string{}
+										, getNodeName( nodeIndex, i + 1u )
+										, nodeIndex
+										, i + 1u
+										, parentInstanceCount
+										, transform
+										, &node );
+								}
+							}
+							else
+							{
+								m_nodes.emplace_back( parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : std::string{}
+									, getNodeName( nodeIndex, 0u )
+									, nodeIndex
+									, 0u
+									, 1u
+									, std::move( transform )
+									, &node );
+							}
+						}
+					}
+
+
+					return std::make_tuple( parentInstanceCount, true, isSkeletonNode );
+				} );
+		}
 	}
 
 	//*********************************************************************************************
