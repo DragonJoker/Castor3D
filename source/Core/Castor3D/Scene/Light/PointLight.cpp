@@ -24,8 +24,9 @@ namespace castor3d
 
 		static float doCalcPointLightBSphere( const castor3d::PointLight & light )
 		{
-			return getMaxDistance( light
-				, light.getAttenuation() );
+			return light.getRange()
+				? light.getRange()
+				: getMaxDistance( light , light.getAttenuation() );
 		}
 	}
 
@@ -33,6 +34,9 @@ namespace castor3d
 
 	PointLight::PointLight( Light & light )
 		: LightCategory{ LightType::ePoint, light, LightDataComponents, ShadowDataComponents }
+		, m_attenuation{ m_dirtyData, castor::Point3f{ 1.0f, 0.0f, 0.0f } }
+		, m_range{ m_dirtyData, 0.0f }
+		, m_position{ m_dirtyData }
 	{
 	}
 
@@ -162,11 +166,22 @@ namespace castor3d
 
 		point.posDir = position;
 		point.attenuation = m_attenuation;
+
+		if ( m_range.value() )
+		{
+			point.radius = m_range;
+		}
 	}
 
 	void PointLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		m_attenuation = attenuation;
+		getLight().markDirty();
+	}
+
+	void PointLight::setRange( float value )
+	{
+		m_range = value;
 		getLight().markDirty();
 	}
 }

@@ -2187,6 +2187,34 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserLightRange )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !parsingContext.light )
+		{
+			CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
+		}
+		else if ( !params.empty() )
+		{
+			auto value = params[0]->get< float >();
+
+			if ( parsingContext.lightType == LightType::ePoint )
+			{
+				parsingContext.light->getPointLight()->setRange( value );
+			}
+			else if ( parsingContext.lightType == LightType::eSpot )
+			{
+				parsingContext.light->getSpotLight()->setRange( value );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Wrong type of light to apply attenuation components, needs spotlight or pointlight" ) );
+			}
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserLightCutOff )
 	{
 		auto & parsingContext = getParserContext( context );

@@ -1,4 +1,4 @@
-﻿#include "Castor3D/Scene/Light/SpotLight.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
 
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Opaque/Lighting/LightPass.hpp"
@@ -45,6 +45,7 @@ namespace castor3d
 	SpotLight::SpotLight( Light & light )
 		: LightCategory{ LightType::eSpot, light, LightDataComponents, ShadowDataComponents }
 		, m_attenuation{ m_dirtyData, castor::Point3f{ 1, 0, 0 } }
+		, m_range{ m_dirtyData, 0.0f }
 		, m_exponent{ m_dirtyData, 1.0f }
 		, m_innerCutOff{ m_dirtyData, 22.5_degrees }
 		, m_outerCutOff{ m_dirtyData, 45.0_degrees }
@@ -232,11 +233,26 @@ namespace castor3d
 		spot.innerCutoffSin = m_innerCutOff.value().sin();
 		spot.outerCutoffSin = m_outerCutOff.value().sin();
 
+		if ( m_range.value() )
+		{
+			spot.radius = m_range;
+		}
+
 	}
 
 	void SpotLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		m_attenuation = attenuation;
+
+		if ( m_dirtyData )
+		{
+			getLight().markDirty();
+		}
+	}
+
+	void SpotLight::setRange( float range )
+	{
+		m_range = range;
 
 		if ( m_dirtyData )
 		{
