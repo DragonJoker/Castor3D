@@ -9,23 +9,20 @@
 
 namespace GuiCommon
 {
-	namespace
-	{
-		static wxString PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
-	}
-
 	GeometryTreeItemProperty::GeometryTreeItemProperty( bool editable, castor3d::Geometry & geometry )
 		: TreeItemProperty( geometry.getScene()->getEngine(), editable )
 		, m_geometry( geometry )
 	{
-		PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
-
 		CreateTreeItemMenu();
 	}
 
 	void GeometryTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
+		static wxString PROPERTY_CATEGORY_GEOMETRY = _( "Geometry: " );
+		static wxString PROPERTY_CATEGORY_GEOMETRY_NODE = _( "Node: " );
+
 		addProperty( grid, PROPERTY_CATEGORY_GEOMETRY + wxString( m_geometry.getName() ) );
+		addProperty( grid, PROPERTY_CATEGORY_GEOMETRY_NODE + wxString( m_geometry.getParent()->getName() ) );
 	}
 }

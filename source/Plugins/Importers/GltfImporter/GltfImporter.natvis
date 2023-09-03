@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+
+	<Type Name="c3d_gltf::GltfImporterFile">
+		<DisplayString>{m_extension} {m_fileName}</DisplayString>
+		<Expand>
+			<Item Name="[ImpFile]">(castor3d::ImporterFile *)this,nd</Item>
+			<Item Name="asset">m_asset</Item>
+			<Item Name="sceneIndices">m_sceneIndices</Item>
+			<Item Name="nodes">m_nodes</Item>
+			<Item Name="skeletonNodes">m_skeletonNodes</Item>
+		</Expand>
+	</Type>
+
+</AutoVisualizer>
