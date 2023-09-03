@@ -102,6 +102,7 @@ namespace castor3d
 		 **/
 		/**@{*/
 		C3D_API void setAttenuation( castor::Point3f const & value );
+		C3D_API void setRange( float value );
 		C3D_API void setExponent( float value );
 		C3D_API void setInnerCutOff( castor::Angle const & value );
 		C3D_API void setOuterCutOff( castor::Angle const & value );
@@ -152,6 +153,11 @@ namespace castor3d
 		{
 			return m_outerCutOff.value();
 		}
+
+		float getRange()const noexcept
+		{
+			return m_range.value();
+		}
 		/**@}*/
 
 	private:
@@ -161,6 +167,7 @@ namespace castor3d
 		bool m_dirtyData{ false };
 		bool m_dirtyShadow{ true };
 		castor::GroupChangeTracked< castor::Point3f > m_attenuation;
+		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< float > m_exponent;
 		castor::GroupChangeTracked< castor::Angle > m_innerCutOff;
 		castor::GroupChangeTracked< castor::Angle > m_outerCutOff;

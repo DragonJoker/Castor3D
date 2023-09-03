@@ -26,22 +26,22 @@ namespace castor3d::shader
 
 	sdw::Float PointLight::getAttenuationFactor( sdw::Float const & distance )const
 	{
-		return sdw::fma( attenuation().z()
-			, distance * distance
-			, sdw::fma( attenuation().y()
-				, distance
-				, attenuation().x() ) );
+		auto sqDistance = distance * distance;
+		auto distOverRange = distance / radius();
+		auto sqDistOverRange = distOverRange * distOverRange;
+		auto qdDistOverRange = sqDistOverRange * sqDistOverRange;
+		return sdw::max( sdw::min( 1.0_f - qdDistOverRange, 1.0_f ), 0.0_f ) / sqDistance;
 	}
 
 	//*********************************************************************************************
 
 	sdw::Float SpotLight::getAttenuationFactor( sdw::Float const & distance )const
 	{
-		return sdw::fma( attenuation().z()
-			, distance * distance
-			, sdw::fma( attenuation().y()
-				, distance
-				, attenuation().x() ) );
+		auto sqDistance = distance * distance;
+		auto distOverRange = distance / radius();
+		auto sqDistOverRange = distOverRange * distOverRange;
+		auto qdDistOverRange = sqDistOverRange * sqDistOverRange;
+		return sdw::max( sdw::min( 1.0_f - qdDistOverRange, 1.0_f ), 0.0_f ) / sqDistance;
 	}
 
 	//*********************************************************************************************
