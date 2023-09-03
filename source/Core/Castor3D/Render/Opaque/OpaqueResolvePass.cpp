@@ -263,131 +263,139 @@ namespace castor3d
 
 					if ( auto lightingModel = lights.getLightingModel() )
 					{
-						shader::DebugOutput output{ debugConfig
-							, cuT( "Default" )
-							, c3d_cameraData.debugIndex()
-							, outColour
-							, true };
-
-						auto spcRgh = writer.declLocale( "spcRgh"
-							, c3d_mapSpcRgh.lod( vtx_texture, 0.0_f ) );
-						auto emsTrn = writer.declLocale( "emsTrn"
-							, c3d_mapEmsTrn.lod( vtx_texture, 0.0_f ) );
-
-						auto occlusion = writer.declLocale( "occlusion"
-							, ( config.hasSsao
-								? nmlOcc.w() * c3d_mapSsao.lod( vtx_texture, 0.0_f ).r()
-								: nmlOcc.w() ) );
-						auto emissive = writer.declLocale( "emissive"
-							, emsTrn.xyz() );
-						materials.fill( albedo, spcRgh, colMtl, material );
-						auto components = writer.declLocale( "components"
-							, shader::BlendComponents{ materials
-								, material
-								, surface } );
-						lightingModel->finish( passShaders
-							, surface
-							, utils
-							, c3d_cameraData.position()
-							, components );
-
-						auto directAmbient = writer.declLocale( "directAmbient"
-							, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
-						auto lightDiffuse = writer.declLocale( "lightDiffuse"
-							, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
-						output.registerOutput( "Clustered", "PointErrors", lightDiffuse );
-						output.registerOutput( "Clustered", "SpotErrors", lightDiffuse );
-						output.registerOutput( "Clustered", "ClusterIndex", lightDiffuse );
-						output.registerOutput( "Clustered", "PointLightsCount", lightDiffuse );
-						output.registerOutput( "Clustered", "SpotLightsCount", lightDiffuse );
-						output.registerOutput( "Lighting", "Diffuse", lightDiffuse );
-						output.registerOutput( "Lighting", "Specular", lightDiffuse );
-						output.registerOutput( "Lighting", "Scattering", lightDiffuse );
-						output.registerOutput( "Lighting", "CoatingSpecular", lightDiffuse );
-						output.registerOutput( "Lighting", "Sheen", lightDiffuse );
-						auto lightSpecular = writer.declLocale( "lightSpecular"
-							, c3d_mapLightSpecular.lod( vtx_texture, 0.0_f ).xyz() );
-						auto lightScattering = writer.declLocale( "lightScattering"
-							, c3d_mapLightScattering.lod( vtx_texture, 0.0_f ).xyz() );
-						auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
-							, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
-							, config.hasDiffuseGi );
-						output.registerOutput( "Indirect", "Raw Diffuse", lightIndirectDiffuse );
-						output.registerOutput( "Indirect", "Specular", lightIndirectDiffuse );
-						auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
-							, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
-							, config.hasSpecularGi );
-						auto lightSurface = shader::LightSurface::create( writer
-							, utils
-							, "lightSurface"
-							, c3d_cameraData.position()
-							, surface.worldPosition.xyz()
-							, surface.viewPosition.xyz()
-							, surface.clipPosition
-							, surface.normal
-							, components.f0
-							, components );
-
-						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() ) );
-						auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
-							, vec3( 0.0_f ) );
-						auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
-							, vec3( 0.0_f ) );
-						auto refracted = writer.declLocale( "refracted"
-							, vec3( 0.0_f ) );
-						reflections.computeCombined( components
-							, lightSurface
-							, *backgroundModel
-							, envMapIndex
-							, components.hasReflection
-							, components.hasRefraction
-							, components.refractionRatio
-							, reflectedDiffuse
-							, reflectedSpecular
-							, refracted
-							, output );
-						auto indirectAmbient = writer.declLocale( "indirectAmbient"
-							, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
-						output.registerOutput( "Indirect", "Ambient", indirectAmbient );
-						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
-							, ( config.hasDiffuseGi
-								? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse )
-									, length( lightIndirectDiffuse )
-									, lightSurface.difF()
-									, components.metalness )
-								: vec3( 0.0_f ) ) );
-
-						IF( writer, material.hasTransmission != 0_u )
+						IF( writer, material.lighting )
 						{
-							refracted = vec3( 0.0_f );
-							// Ignore transmission for the rest of the shader.
-							components.hasTransmission = 0_u;
-							components.transmission = 0.0_f;
-						}
-						FI;
+							shader::DebugOutput output{ debugConfig
+								, cuT( "Default" )
+								, c3d_cameraData.debugIndex()
+								, outColour
+								, true };
 
-						output.registerOutput( "Lighting", "Ambient", directAmbient );
-						output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
-						output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( "Occlusion", occlusion );
-						output.registerOutput( "Emissive", emissive );
+							auto spcRgh = writer.declLocale( "spcRgh"
+								, c3d_mapSpcRgh.lod( vtx_texture, 0.0_f ) );
+							auto emsTrn = writer.declLocale( "emsTrn"
+								, c3d_mapEmsTrn.lod( vtx_texture, 0.0_f ) );
 
-						outColour = vec4( lightScattering + lightingModel->combine( output
-								, components
-								, incident
-								, lightDiffuse
-								, indirectDiffuse
-								, lightSpecular
-								, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
-								, directAmbient
-								, indirectAmbient
-								, occlusion
-								, emissive
+							auto occlusion = writer.declLocale( "occlusion"
+								, ( config.hasSsao
+									? nmlOcc.w() * c3d_mapSsao.lod( vtx_texture, 0.0_f ).r()
+									: nmlOcc.w() ) );
+							auto emissive = writer.declLocale( "emissive"
+								, emsTrn.xyz() );
+							materials.fill( albedo, spcRgh, colMtl, material );
+							auto components = writer.declLocale( "components"
+								, shader::BlendComponents{ materials
+									, material
+									, surface } );
+							lightingModel->finish( passShaders
+								, surface
+								, utils
+								, c3d_cameraData.position()
+								, components );
+
+							auto directAmbient = writer.declLocale( "directAmbient"
+								, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
+							auto lightDiffuse = writer.declLocale( "lightDiffuse"
+								, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ).xyz() );
+							output.registerOutput( "Clustered", "PointErrors", lightDiffuse );
+							output.registerOutput( "Clustered", "SpotErrors", lightDiffuse );
+							output.registerOutput( "Clustered", "ClusterIndex", lightDiffuse );
+							output.registerOutput( "Clustered", "PointLightsCount", lightDiffuse );
+							output.registerOutput( "Clustered", "SpotLightsCount", lightDiffuse );
+							output.registerOutput( "Lighting", "Diffuse", lightDiffuse );
+							output.registerOutput( "Lighting", "Specular", lightDiffuse );
+							output.registerOutput( "Lighting", "Scattering", lightDiffuse );
+							output.registerOutput( "Lighting", "CoatingSpecular", lightDiffuse );
+							output.registerOutput( "Lighting", "Sheen", lightDiffuse );
+							auto lightSpecular = writer.declLocale( "lightSpecular"
+								, c3d_mapLightSpecular.lod( vtx_texture, 0.0_f ).xyz() );
+							auto lightScattering = writer.declLocale( "lightScattering"
+								, c3d_mapLightScattering.lod( vtx_texture, 0.0_f ).xyz() );
+							auto lightIndirectDiffuse = writer.declLocale( "lightIndirectDiffuse"
+								, c3d_mapLightIndirectDiffuse.lod( vtx_texture, 0.0_f ).rgb()
+								, config.hasDiffuseGi );
+							output.registerOutput( "Indirect", "Raw Diffuse", lightIndirectDiffuse );
+							output.registerOutput( "Indirect", "Specular", lightIndirectDiffuse );
+							auto lightIndirectSpecular = writer.declLocale( "lightIndirectSpecular"
+								, c3d_mapLightIndirectSpecular.lod( vtx_texture, 0.0_f ).rgb()
+								, config.hasSpecularGi );
+							auto lightSurface = shader::LightSurface::create( writer
+								, utils
+								, "lightSurface"
+								, c3d_cameraData.position()
+								, surface.worldPosition.xyz()
+								, surface.viewPosition.xyz()
+								, surface.clipPosition
+								, surface.normal
+								, components.f0
+								, components );
+
+							auto incident = writer.declLocale( "incident"
+								, reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() ) );
+							auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
+								, vec3( 0.0_f ) );
+							auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
+								, vec3( 0.0_f ) );
+							auto refracted = writer.declLocale( "refracted"
+								, vec3( 0.0_f ) );
+							reflections.computeCombined( components
+								, lightSurface
+								, *backgroundModel
+								, envMapIndex
+								, components.hasReflection
+								, components.hasRefraction
+								, components.refractionRatio
 								, reflectedDiffuse
 								, reflectedSpecular
-								, refracted )
-							, 1.0_f );
+								, refracted
+								, output );
+							auto indirectAmbient = writer.declLocale( "indirectAmbient"
+								, config.hasDiffuseGi ? lightIndirectDiffuse : vec3( 1.0_f ) );
+							output.registerOutput( "Indirect", "Ambient", indirectAmbient );
+							auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+								, ( config.hasDiffuseGi
+									? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse )
+										, length( lightIndirectDiffuse )
+										, lightSurface.difF()
+										, components.metalness )
+									: vec3( 0.0_f ) ) );
+
+							IF( writer, material.hasTransmission != 0_u )
+							{
+								refracted = vec3( 0.0_f );
+								// Ignore transmission for the rest of the shader.
+								components.hasTransmission = 0_u;
+								components.transmission = 0.0_f;
+							}
+							FI;
+
+							output.registerOutput( "Lighting", "Ambient", directAmbient );
+							output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
+							output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+							output.registerOutput( "Occlusion", occlusion );
+							output.registerOutput( "Emissive", emissive );
+
+							outColour = vec4( lightScattering + lightingModel->combine( output
+									, components
+									, incident
+									, lightDiffuse
+									, indirectDiffuse
+									, lightSpecular
+									, config.hasSpecularGi ? lightIndirectSpecular : vec3( 0.0_f )
+									, directAmbient
+									, indirectAmbient
+									, occlusion
+									, emissive
+									, reflectedDiffuse
+									, reflectedSpecular
+									, refracted )
+								, 1.0_f );
+						}
+						ELSE
+						{
+							outColour = vec4( albedo, 1.0_f );
+						}
+						FI;
 					}
 					else
 					{
