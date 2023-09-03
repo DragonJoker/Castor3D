@@ -410,6 +410,7 @@ namespace castor3d
 
 			if ( parent )
 			{
+				parent->doComputeMatrix();
 				m_derivedTransform = parent->getDerivedTransformationMatrix() * m_transform;
 			}
 			else

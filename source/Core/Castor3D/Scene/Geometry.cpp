@@ -293,6 +293,8 @@ namespace castor3d
 					submesh->instantiate( this, {}, material, true );
 				}
 			}
+
+			doUpdateContainers();
 		}
 		else
 		{
