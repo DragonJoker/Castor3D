@@ -17,14 +17,6 @@ namespace castor3d
 
 	namespace binsmsh
 	{
-		static bool check( castor::Point3f & value )
-		{
-			return !std::isnan( value->x )
-				&& !std::isnan( value->y )
-				&& !std::isnan( value->z )
-				&& value != castor::Point3f{};
-		}
-
 		static bool check( castor::Point4f & value )
 		{
 			return !std::isnan( value->x )

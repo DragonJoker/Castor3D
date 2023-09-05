@@ -19,18 +19,18 @@ namespace castor3d
 			castor::Point4fArray * tangents{};
 		};
 
-		int getNumFaces( SMikkTSpaceContext const * pContext )
+		static int getNumFaces( SMikkTSpaceContext const * pContext )
 		{
 			auto data = reinterpret_cast< SubmeshData * >( pContext->m_pUserData );
 			return int( data->faces->size() );
 		}
 
-		int getNumVerticesOfFace( SMikkTSpaceContext const * pContext, int const iFace )
+		static int getNumVerticesOfFace( SMikkTSpaceContext const * pContext, int const iFace )
 		{
 			return 3;
 		}
 
-		void getPosition( SMikkTSpaceContext const * pContext
+		static void getPosition( SMikkTSpaceContext const * pContext
 			, float fvPosOut[]
 			, int const iFace
 			, int const iVert )
@@ -43,7 +43,7 @@ namespace castor3d
 			fvPosOut[2] = pos->z;
 		}
 
-		void getNormal( SMikkTSpaceContext const * pContext
+		static void getNormal( SMikkTSpaceContext const * pContext
 			, float fvNormOut[]
 			, int const iFace
 			, int const iVert )
@@ -56,7 +56,7 @@ namespace castor3d
 			fvNormOut[2] = nml->z;
 		}
 
-		void getTexCoord( SMikkTSpaceContext const * pContext
+		static void getTexCoord( SMikkTSpaceContext const * pContext
 			, float fvTexcOut[]
 			, int const iFace
 			, int const iVert )
@@ -68,7 +68,7 @@ namespace castor3d
 			fvTexcOut[1] = tex->y;
 		}
 
-		void setTSpaceBasic( SMikkTSpaceContext const * pContext
+		static void setTSpaceBasic( SMikkTSpaceContext const * pContext
 			, float const fvTangent[]
 			, float const fSign
 			, int const iFace
@@ -113,16 +113,13 @@ namespace castor3d
 		, FaceArray const & faces
 		, bool reverted )
 	{
-		castor::Point3f pt30;
-		castor::Point4f pt40;
+		static const castor::Point3f pt0{};
 
 		// First we flush normals and tangents
 		for ( auto & pt : normals )
 		{
-			pt = pt30;
+			pt = pt0;
 		}
-
-		castor::Coords3f coord;
 
 		// Then we compute normals and tangents
 		if ( reverted )
