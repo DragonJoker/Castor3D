@@ -1,6 +1,9 @@
 #include "Castor3D/Binary/BinaryMorphComponent.hpp"
 #include "Castor3D/Binary/BinarySubmesh.hpp"
 
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/IndexMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 
 namespace castor3d
@@ -41,7 +44,7 @@ namespace castor3d
 			if ( result
 				&& !it.tangents.empty() )
 			{
-				result = doWriteChunk( it.tangents, ChunkType::eMorphTargetTangents, m_chunk );
+				result = doWriteChunk( it.tangents, ChunkType::eMorphTargetTangentsMikkt, m_chunk );
 			}
 
 			if ( result
@@ -126,14 +129,28 @@ namespace castor3d
 					buffer.normals = values;
 				}
 				break;
+#pragma warning( push )
+#pragma warning( disable: 4996 )
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 			case ChunkType::eMorphTargetTangents:
+#pragma GCC diagnostic pop
+#pragma warning( pop )
 				flags.insert( MorphFlag::eTangents );
-				result = doParseChunk( values, chunk );
-				checkError( result, "Couldn't parse keyframe tangents." );
-
-				if ( result )
+				buffer.tangents.resize( count );
+				break;
+			case ChunkType::eMorphTargetTangentsMikkt:
 				{
-					buffer.tangents = values;
+					flags.insert( MorphFlag::eTangents );
+					castor::Point4fArray tangents;
+					tangents.resize( count );
+					result = doParseChunk( tangents, chunk );
+					checkError( result, "Couldn't parse keyframe tangents." );
+
+					if ( result )
+					{
+						buffer.tangents = tangents;
+					}
 				}
 				break;
 			case ChunkType::eMorphTargetTexcoords0:
@@ -189,6 +206,22 @@ namespace castor3d
 			default:
 				result = false;
 				break;
+			}
+		}
+
+		if ( m_fileVersion < Version{ 1, 7, 0 }
+			&& flags.end() != flags.find( MorphFlag::eTangents ) )
+		{
+			if ( auto indexMapping = obj.getOwner()->getIndexMapping() )
+			{
+				if ( indexMapping->getType() == TriFaceMapping::Name )
+				{
+					SubmeshUtils::computeTangentsFromNormals( buffer.positions
+						, buffer.texcoords0
+						, buffer.normals
+						, buffer.tangents
+						, static_cast< TriFaceMapping const & >( *indexMapping ).getFaces() );
+				}
 			}
 		}
 

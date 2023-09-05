@@ -178,6 +178,9 @@ namespace diamond_square_terrain
 			submeshBuffers.normals.resize( submeshBuffers.positions.size() );
 			submeshBuffers.tangents.resize( submeshBuffers.positions.size() );
 			castor3d::SubmeshUtils::computeNormals( submeshBuffers.positions
+				, submeshBuffers.normals
+				, faces );
+			castor3d::SubmeshUtils::computeTangentsFromNormals( submeshBuffers.positions
 				, submeshBuffers.texcoords0
 				, submeshBuffers.normals
 				, submeshBuffers.tangents

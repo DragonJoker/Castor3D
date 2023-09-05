@@ -50,9 +50,7 @@ namespace castor3d
 		 *\param[in]	reverted	Dit si les normales doivent être inversées.
 		 */
 		C3D_API static void computeNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
 			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
 			, FaceArray const & triFace
 			, bool reverted = false );
 		/**
@@ -76,47 +74,8 @@ namespace castor3d
 		C3D_API static void computeTangentsFromNormals( castor::Point3fArray const & positions
 			, castor::Point3fArray const & texcoords
 			, castor::Point3fArray const & normals
-			, castor::Point3fArray & tangents
+			, castor::Point4fArray & tangents
 			, FaceArray const & faces );
-		/**
-		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face.
-		 *\param[in]	positions	The vertices positions.
-		 *\param[in]	texcoords	The vertices texture coordinates.
-		 *\param[out]	normals		The vertices normals.
-		 *\param[out]	tangents	The vertices tangents.
-		 *\param[in]	face		The face.
-		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	positions	Les positions des sommets.
-		 *\param[in]	texcoords	Les coordonnées de texture des sommets.
-		 *\param[out]	normals		Les normales des sommets.
-		 *\param[out]	tangents	Les tangentes des sommets.
-		 *\param[in]	face		La face.
-		 */
-		C3D_API static void computeNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
-			, Face const & face );
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the given face.
-		 *\param[in]	positions	The vertices positions.
-		 *\param[in]	texcoords	The vertices texture coordinates.
-		 *\param[out]	tangents	The vertices tangents.
-		 *\param[in]	face		The face.
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	positions	Les positions des sommets.
-		 *\param[in]	texcoords	Les coordonnées de texture des sommets.
-		 *\param[out]	tangents	Les tangentes des sommets.
-		 *\param[in]	face		La face.
-		 */
-		C3D_API static void computeTangents( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray & tangents
-			, Face const & face );
 	};
 }
 

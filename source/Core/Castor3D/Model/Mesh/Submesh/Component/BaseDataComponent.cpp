@@ -50,8 +50,8 @@ namespace castor3d
 
 	void uploadBaseData( SubmeshFlag submeshData
 		, Submesh const & submesh
-		, castor::Point3fArray const & data
-		, castor::Point4fArray & up
+		, castor::Point4fArray const & data
+		, castor::Point4fArray &
 		, UploadData & uploader )
 	{
 		auto count = uint32_t( data.size() );
@@ -60,14 +60,27 @@ namespace castor3d
 
 		if ( count && buffer.hasData() )
 		{
-			up = smshbase::convert( data );
-			uploader.pushUpload( up.data()
-				, up.size() * sizeof( castor::Point4f )
+			uploader.pushUpload( data.data()
+				, data.size() * sizeof( castor::Point4f )
 				, buffer.getBuffer()
 				, buffer.getOffset()
 				, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
+	}
+
+	void uploadBaseData( SubmeshFlag submeshData
+		, Submesh const & submesh
+		, castor::Point3fArray const & data
+		, castor::Point4fArray & up
+		, UploadData & uploader )
+	{
+		up = smshbase::convert( data );
+		uploadBaseData( submeshData
+			, submesh
+			, up
+			, up
+			, uploader );
 	}
 
 	void gatherBaseDataBuffer( SubmeshFlag submeshData

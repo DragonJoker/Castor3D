@@ -18,7 +18,7 @@ namespace castor3d::shader
 		// Base
 		, position{ this->getMember< sdw::Vec4 >( "position", true ) }
 		, normal{ this->getMember< sdw::Vec3 >( "normal", true ) }
-		, tangent{ this->getMember< sdw::Vec3 >( "tangent", true ) }
+		, tangent{ this->getMember< sdw::Vec4 >( "tangent", true ) }
 		, texture0{ this->getMember< sdw::Vec3 >( "texture0", true ) }
 		, texture1{ this->getMember< sdw::Vec3 >( "texture1", true ) }
 		, texture2{ this->getMember< sdw::Vec3 >( "texture2", true ) }
@@ -56,7 +56,7 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( flags.enableNormal() ? index++ : 0 )
 				, flags.enableNormal() );
-			result->declMember( "tangent", ast::type::Kind::eVec3F
+			result->declMember( "tangent", ast::type::Kind::eVec4F
 				, ast::type::NotArray
 				, ( flags.enableTangentSpace() ? index++ : 0 )
 				, flags.enableTangentSpace() );
@@ -123,7 +123,7 @@ namespace castor3d::shader
 				, ast::type::NotArray );
 			result->declMember( "normal", ast::type::Kind::eVec3F
 				, ast::type::NotArray );
-			result->declMember( "tangent", ast::type::Kind::eVec3F
+			result->declMember( "tangent", ast::type::Kind::eVec4F
 				, ast::type::NotArray );
 			result->declMember( "texture0", ast::type::Kind::eVec3F
 				, ast::type::NotArray );

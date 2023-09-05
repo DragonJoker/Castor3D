@@ -102,94 +102,19 @@ namespace castor3d
 	}
 
 	void TriFaceMapping::computeNormals( castor::Point3fArray const & positions
-		, castor::Point3fArray const & texcoords
 		, castor::Point3fArray & normals
-		, castor::Point3fArray & tangents
 		, bool reverted )const
 	{
 		SubmeshUtils::computeNormals( positions
-			, texcoords
 			, normals
-			, tangents
 			, getFaces()
 			, reverted );
-	}
-
-	void TriFaceMapping::computeNormals( Face const & face )
-	{
-		static castor::Point3fArray tan;
-		static castor::Point3fArray tex;
-		castor::Point3fArray * tangents = &tan;
-		castor::Point3fArray const * texcoords = &tex;
-
-		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
-		{
-			tangents = &tanComp->getData();
-		}
-
-		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
-		{
-			texcoords = &texComp->getData();
-		}
-
-		SubmeshUtils::computeNormals( getOwner()->getPositions()
-			, *texcoords
-			, getOwner()->getNormals()
-			, *tangents
-			, face );
-	}
-
-	void TriFaceMapping::computeNormals( castor::Point3fArray const & positions
-		, castor::Point3fArray const & texcoords
-		, castor::Point3fArray & normals
-		, castor::Point3fArray & tangents
-		, Face const & face )const
-	{
-		SubmeshUtils::computeNormals( positions
-			, texcoords
-			, normals
-			, tangents
-			, face );
-	}
-
-	void TriFaceMapping::computeTangents( Face const & face )
-	{
-		static castor::Point3fArray tan;
-		static castor::Point3fArray tex;
-		castor::Point3fArray * tangents = &tan;
-		castor::Point3fArray const * texcoords = &tex;
-
-		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
-		{
-			tangents = &tanComp->getData();
-		}
-
-		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
-		{
-			texcoords = &texComp->getData();
-		}
-
-		SubmeshUtils::computeTangents( getOwner()->getPositions()
-			, *texcoords
-			, *tangents
-			, face );
-	}
-
-	void TriFaceMapping::computeTangents( castor::Point3fArray const & positions
-		, castor::Point3fArray const & texcoords
-		, castor::Point3fArray & tangents
-		, Face const & face )const
-	{
-		SubmeshUtils::computeTangents( positions
-			, texcoords
-			, tangents
-			, face );
 	}
 
 	void TriFaceMapping::computeTangentsFromNormals( castor::Point3fArray const & positions
 		, castor::Point3fArray const & texcoords
 		, castor::Point3fArray const & normals
-		, castor::Point3fArray & tangents )const
+		, castor::Point4fArray & tangents )const
 	{
 		SubmeshUtils::computeTangentsFromNormals( positions
 			, texcoords
@@ -212,26 +137,9 @@ namespace castor3d
 	{
 		if ( !m_hasNormals )
 		{
-			static castor::Point3fArray tan;
-			static castor::Point3fArray tex;
-			castor::Point3fArray * tangents = &tan;
-			castor::Point3fArray const * texcoords = &tex;
-
-			if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
-			{
-				tangents = &tanComp->getData();
-			}
-
-			if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
-			{
-				texcoords = &texComp->getData();
-			}
-
 			getOwner()->getNormals().resize( getOwner()->getPositions().size() );
 			computeNormals( getOwner()->getPositions()
-				, *texcoords
 				, getOwner()->getNormals()
-				, *tangents
 				, reverted );
 			m_hasNormals = true;
 		}
@@ -239,9 +147,9 @@ namespace castor3d
 
 	void TriFaceMapping::computeTangents()
 	{
-		static castor::Point3fArray tan;
+		static castor::Point4fArray tan;
 		static castor::Point3fArray tex;
-		castor::Point3fArray * tangents = &tan;
+		castor::Point4fArray * tangents = &tan;
 		castor::Point3fArray const * texcoords = &tex;
 
 		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )

@@ -5,6 +5,7 @@
 #include "Castor3D/Animation/Animable.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
 
 namespace castor3d
 {
@@ -17,7 +18,7 @@ namespace castor3d
 
 		template< typename T >
 		void convert( OldInterleavedVertexTArray< T > const & in
-			, InterleavedVertexArray & out )
+			, InterleavedVertexNoMikkArray & out )
 		{
 			out.resize( in.size() );
 			auto it = out.begin();
@@ -46,22 +47,19 @@ namespace castor3d
 
 	namespace v1_5
 	{
-		inline void dispatchVertices( InterleavedVertexArray const & src
+		inline void dispatchVertices( InterleavedVertexNoMikkArray const & src
 			, castor::Point3fArray & pos
 			, castor::Point3fArray & nml
-			, castor::Point3fArray & tan
 			, castor::Point3fArray & tex )
 		{
 			pos.reserve( src.size() );
 			nml.reserve( src.size() );
-			tan.reserve( src.size() );
 			tex.reserve( src.size() );
 
 			for ( auto & vertex : src )
 			{
 				pos.push_back( vertex.pos );
 				nml.push_back( vertex.nml );
-				tan.push_back( vertex.tan );
 				tex.push_back( vertex.tex );
 			}
 		}
@@ -152,7 +150,7 @@ namespace castor3d
 		if ( m_fileVersion <= Version{ 1, 3, 0 } )
 		{
 			v1_3::OldInterleavedVertexTArray< double > pointsd;
-			InterleavedVertexArray points;
+			InterleavedVertexNoMikkArray points;
 			BinaryChunk chunk{ doIsLittleEndian() };
 
 			while ( result && doGetSubChunk( chunk ) )
@@ -176,9 +174,7 @@ namespace castor3d
 						v1_5::dispatchVertices( points
 							, buffer.positions
 							, buffer.normals
-							, buffer.tangents
 							, buffer.texcoords0 );
-						//obj.addSubmeshBuffer( *submesh, std::move( buffer ) );
 					}
 					break;
 				default:
@@ -197,7 +193,7 @@ namespace castor3d
 		if ( m_fileVersion <= Version{ 1, 5, 0 } )
 		{
 			v1_3::OldInterleavedVertexTArray< double > bufferd;
-			InterleavedVertexArray points;
+			InterleavedVertexNoMikkArray points;
 			BinaryChunk chunk{ doIsLittleEndian() };
 
 			while ( result && doGetSubChunk( chunk ) )
@@ -220,9 +216,7 @@ namespace castor3d
 						v1_5::dispatchVertices( points
 							, buffer.positions
 							, buffer.normals
-							, buffer.tangents
 							, buffer.texcoords0 );
-						//obj.addSubmeshBuffer( *submesh, std::move( buffer ) );
 					}
 					break;
 				default:

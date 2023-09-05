@@ -25,7 +25,17 @@ namespace castor3d
 				&& value != castor::Point3f{};
 		}
 
-		static void validate( Submesh & submesh )
+		static bool check( castor::Point4f & value )
+		{
+			return !std::isnan( value->x )
+				&& !std::isnan( value->y )
+				&& !std::isnan( value->z )
+				&& !std::isnan( value->w )
+				&& value != castor::Point4f{};
+		}
+
+		static void validate( Version const & fileVersion
+			, Submesh & submesh )
 		{
 			auto indexMapping = submesh.getIndexMapping();
 
@@ -34,9 +44,21 @@ namespace castor3d
 				return;
 			}
 
-			auto tanComp = submesh.getComponent< TangentsComponent >();
+			if ( fileVersion < Version{ 1, 7, 0 } )
+			{
+				// From v1.7.0, tangents use Mikktspace, hence recompute them.
+				if ( submesh.hasComponent( NormalsComponent::Name )
+					&& submesh.hasComponent( Texcoords0Component::Name ) )
+				{
+					if ( !submesh.hasComponent( TangentsComponent::Name ) )
+					{
+						submesh.createComponent< TangentsComponent >();
+					}
 
-			if ( tanComp )
+					indexMapping->computeTangents();
+				}
+			}
+			else if ( auto tanComp = submesh.getComponent< TangentsComponent >() )
 			{
 				auto valid = true;
 
@@ -60,7 +82,7 @@ namespace castor3d
 		template< typename T >
 		inline void copyVertices( uint32_t count
 			, OldInterleavedVertexT< T > const * src
-			, InterleavedVertex * dst )
+			, InterleavedVertexNoMikk * dst )
 		{
 			for ( uint32_t i{ 0u }; i < count; ++i )
 			{
@@ -70,9 +92,6 @@ namespace castor3d
 				dst->nml[0] = float( src->nml[0] );
 				dst->nml[1] = float( src->nml[1] );
 				dst->nml[2] = float( src->nml[2] );
-				dst->tan[0] = float( src->tan[0] );
-				dst->tan[1] = float( src->tan[1] );
-				dst->tan[2] = float( src->tan[2] );
 				dst->tex[0] = float( src->tex[0] );
 				dst->tex[1] = float( src->tex[1] );
 				dst->tex[2] = float( src->tex[2] );
@@ -86,22 +105,19 @@ namespace castor3d
 
 	namespace v1_5
 	{
-		inline void dispatchVertices( InterleavedVertexArray const & src
+		inline void dispatchVertices( InterleavedVertexNoMikkArray const & src
 			, castor::Point3fArray & pos
 			, castor::Point3fArray & nml
-			, castor::Point3fArray & tan
 			, castor::Point3fArray & tex )
 		{
 			pos.reserve( src.size() );
 			nml.reserve( src.size() );
-			tan.reserve( src.size() );
 			tex.reserve( src.size() );
 
 			for ( auto & vertex : src )
 			{
 				pos.push_back( vertex.pos );
 				nml.push_back( vertex.nml );
-				tan.push_back( vertex.tan );
 				tex.push_back( vertex.tex );
 			}
 		}
@@ -132,7 +148,7 @@ namespace castor3d
 			&& obj.hasComponent( TangentsComponent::Name ) )
 		{
 			auto & values = obj.getComponent< TangentsComponent >()->getData();
-			result = doWriteChunk( values, ChunkType::eSubmeshTangents, m_chunk );
+			result = doWriteChunk( values, ChunkType::eSubmeshTangentsMikkt, m_chunk );
 		}
 
 		if ( result
@@ -285,15 +301,17 @@ namespace castor3d
 					}
 				}
 				break;
-			case ChunkType::eSubmeshTangents:
+			case ChunkType::eSubmeshTangentsMikkt:
 				if ( auto component = castor::makeUnique< TangentsComponent >( obj ) )
 				{
-					result = doParseChunk( values, chunk );
+					castor::Point4fArray tangents;
+					tangents.resize( count );
+					result = doParseChunk( tangents, chunk );
 					checkError( result, "Couldn't parse vertex tangents." );
 
 					if ( result )
 					{
-						component->setData( values );
+						component->setData( tangents );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -441,7 +459,24 @@ namespace castor3d
 			}
 		}
 
-		binsmsh::validate( obj );
+		if ( m_fileVersion < Version{ 1, 7, 0 }
+			&& obj.hasComponent( NormalsComponent::Name )
+			&& obj.hasComponent( Texcoords0Component::Name )
+			&& !obj.hasComponent( TangentsComponent::Name ) )
+		{
+			if ( auto indexMapping = obj.getIndexMapping() )
+			{
+				if ( indexMapping->getType() == TriFaceMapping::Name )
+				{
+					auto component = castor::makeUnique< TangentsComponent >( obj );
+					component->getData().resize( count );
+					obj.addComponent( std::move( component ) );
+					indexMapping->computeTangents();
+				}
+			}
+		}
+
+		binsmsh::validate( m_fileVersion, obj );
 		return result;
 	}
 
@@ -484,16 +519,14 @@ namespace castor3d
 					checkError( result, "Couldn't parse vertex data." );
 					if ( result && !srcbuf.empty() )
 					{
-						std::vector< InterleavedVertex > dstbuf( srcbuf.size() );
+						InterleavedVertexNoMikkArray dstbuf( srcbuf.size() );
 						v1_3::copyVertices( uint32_t( srcbuf.size() ), srcbuf.data(), dstbuf.data() );
 						auto positions = obj.createComponent< PositionsComponent >();
 						auto normals = obj.createComponent< NormalsComponent >();
-						auto tangents = obj.createComponent< TangentsComponent >();
 						auto texcoords = obj.createComponent< Texcoords0Component >();
 						v1_5::dispatchVertices( dstbuf
 							, positions->getData()
 							, normals->getData()
-							, tangents->getData()
 							, texcoords->getData() );
 					}
 					break;
@@ -562,7 +595,7 @@ namespace castor3d
 				}
 			}
 
-			binsmsh::validate( obj );
+			binsmsh::validate( m_fileVersion, obj );
 		}
 
 		return result;
@@ -576,7 +609,7 @@ namespace castor3d
 		{
 			BinaryChunk chunk{ doIsLittleEndian() };
 			uint32_t count{};
-			std::vector< InterleavedVertex > vertices;
+			InterleavedVertexNoMikkArray vertices;
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -609,12 +642,10 @@ namespace castor3d
 						{
 							auto positions = obj.createComponent< PositionsComponent >();
 							auto normals = obj.createComponent< NormalsComponent >();
-							auto tangents = obj.createComponent< TangentsComponent >();
 							auto texcoords = obj.createComponent< Texcoords0Component >();
 							v1_5::dispatchVertices( vertices
 								, positions->getData()
 								, normals->getData()
-								, tangents->getData()
 								, texcoords->getData() );
 						}
 					}
@@ -623,6 +654,8 @@ namespace castor3d
 					break;
 				}
 			}
+
+			binsmsh::validate( m_fileVersion, obj );
 		}
 
 		return result;

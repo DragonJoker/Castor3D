@@ -5,6 +5,7 @@
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -115,13 +116,8 @@ namespace castor3d
 
 		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
-			auto tbn = shader::Utils::getTBN( components.clearcoatNormal
-				, components.getMember< sdw::Vec3 >( "tangent" )
-				, components.getMember< sdw::Vec3 >( "bitangent" ) );
-			components.clearcoatNormal = normalize( tbn
-				* fma( config.getVec3( sampled, imgCompConfig.z() )
-					, vec3( 2.0_f )
-					, -vec3( 1.0_f ) ) );
+			NormalMapComponent::ComponentsShader::computeMikktNormal( config, imgCompConfig, components, sampled
+				, components.clearcoatNormal );
 		}
 		FI;
 	}

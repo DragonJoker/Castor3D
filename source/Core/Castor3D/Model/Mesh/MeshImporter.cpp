@@ -26,9 +26,13 @@ namespace castor3d
 					vertex = transform * vertex;
 				}
 
-				static castor::Point3fArray tan;
+				SubmeshUtils::computeNormals( submesh->getPositions()
+					, submesh->getNormals()
+					, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getFaces() );
+
+				static castor::Point4fArray tan;
 				static castor::Point3fArray tex;
-				castor::Point3fArray * tangents = &tan;
+				castor::Point4fArray * tangents = &tan;
 				castor::Point3fArray const * texcoords = &tex;
 
 				if ( auto tanComp = submesh->getComponent< TangentsComponent >() )
@@ -41,7 +45,7 @@ namespace castor3d
 					texcoords = &texComp->getData();
 				}
 
-				SubmeshUtils::computeNormals( submesh->getPositions()
+				SubmeshUtils::computeTangentsFromNormals( submesh->getPositions()
 					, *texcoords
 					, submesh->getNormals()
 					, *tangents

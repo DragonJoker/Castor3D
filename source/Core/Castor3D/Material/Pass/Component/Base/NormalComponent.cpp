@@ -79,7 +79,7 @@ namespace castor3d
 		if ( !components.hasMember( "normal" ) )
 		{
 			components.declMember( "normal", sdw::type::Kind::eVec3F );
-			components.declMember( "tangent", sdw::type::Kind::eVec3F );
+			components.declMember( "tangent", sdw::type::Kind::eVec4F );
 			components.declMember( "bitangent", sdw::type::Kind::eVec3F );
 		}
 	}
@@ -99,13 +99,13 @@ namespace castor3d
 		if ( surface )
 		{
 			inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "normal", vec3( 0.0_f ) ) ) );
-			inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "tangent", vec3( 0.0_f ) ) ) );
+			inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec4 >( "tangent", vec4( 0.0_f ) ) ) );
 			inits.emplace_back( sdw::makeExpr( surface->getMember< sdw::Vec3 >( "bitangent", vec3( 0.0_f ) ) ) );
 		}
 		else
 		{
 			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
+			inits.emplace_back( sdw::makeExpr( vec4( 0.0_f ) ) );
 			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		}
 	}
@@ -118,7 +118,7 @@ namespace castor3d
 		if ( res.hasMember( "normal" ) )
 		{
 			res.getMember< sdw::Vec3 >( "normal" ) += src.getMember< sdw::Vec3 >( "normal" ) * passMultiplier;
-			res.getMember< sdw::Vec3 >( "tangent" ) += src.getMember< sdw::Vec3 >( "tangent" ) * passMultiplier;
+			res.getMember< sdw::Vec4 >( "tangent" ) += src.getMember< sdw::Vec4 >( "tangent" ) * passMultiplier;
 			res.getMember< sdw::Vec3 >( "bitangent" ) += src.getMember< sdw::Vec3 >( "bitangent" ) * passMultiplier;
 		}
 	}

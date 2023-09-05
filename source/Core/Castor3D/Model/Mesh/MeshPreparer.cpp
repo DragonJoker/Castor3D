@@ -26,6 +26,7 @@ namespace castor3d
 		{
 			FaceArray indices;
 			std::map< SubmeshData, castor::Point3fArray > baseBuffers;
+			castor::Point4fArray tangentBuffer;
 			std::vector< SubmeshAnimationBuffer > morphTargets;
 			VertexBoneDataArray skin;
 			std::vector< PassMasks > passMasks;
@@ -44,16 +45,23 @@ namespace castor3d
 
 				if ( submesh.hasComponent( getName( submeshData ) ) )
 				{
-					if ( submeshData == SubmeshData::ePositions
-						|| submeshData == SubmeshData::eNormals
-						|| submeshData == SubmeshData::eTexcoords0 )
+					if ( submeshData == SubmeshData::eTangents )
 					{
-						result.push_back( { submesh.getBaseData( submeshData ).data()
-							, sizeof( castor::Point3f )
-							, sizeof( castor::Point3f ) } );
+						remapped.tangentBuffer = submesh.getTangents();
 					}
+					else
+					{
+						if ( submeshData == SubmeshData::ePositions
+							|| submeshData == SubmeshData::eNormals
+							|| submeshData == SubmeshData::eTexcoords0 )
+						{
+							result.push_back( { submesh.getBaseData( submeshData ).data()
+								, sizeof( castor::Point3f )
+								, sizeof( castor::Point3f ) } );
+						}
 
-					remapped.baseBuffers.emplace( submeshData, submesh.getBaseData( submeshData ) );
+						remapped.baseBuffers.emplace( submeshData, submesh.getBaseData( submeshData ) );
+					}
 				}
 			}
 
@@ -83,7 +91,17 @@ namespace castor3d
 			return data.data()->ptr();
 		}
 
+		static void * getPtr( castor::Point4fArray & data )
+		{
+			return data.data()->ptr();
+		}
+
 		static void const * getConstPtr( castor::Point3fArray & data )
+		{
+			return data.data()->constPtr();
+		}
+
+		static void const * getConstPtr( castor::Point4fArray & data )
 		{
 			return data.data()->constPtr();
 		}
@@ -203,6 +221,14 @@ namespace castor3d
 					, destinationVertexCount
 					, remap
 					, data.second );
+			}
+
+			if ( !remapped.tangentBuffer.empty() )
+			{
+				applyRemap( originalVertexCount
+					, destinationVertexCount
+					, remap
+					, remapped.tangentBuffer );
 			}
 
 			if ( !remapped.skin.empty() )
@@ -416,6 +442,11 @@ namespace castor3d
 		for ( auto & data : remapped.baseBuffers )
 		{
 			submesh.setBaseData( data.first, std::move( data.second ) );
+		}
+
+		if ( auto tangents = submesh.getComponent< TangentsComponent >() )
+		{
+			tangents->getData() = std::move( remapped.tangentBuffer );
 		}
 
 		if ( auto skin = submesh.getComponent< SkinComponent >() )

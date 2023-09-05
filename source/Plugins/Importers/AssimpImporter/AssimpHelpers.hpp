@@ -167,7 +167,7 @@ namespace c3d_assimp
 	inline void createVertexBuffer( aiMeshType const & aiMesh
 		, castor::Point3fArray & positions
 		, castor::Point3fArray & normals
-		, castor::Point3fArray & tangents
+		, castor::Point4fArray & tangents
 		, castor::Point3fArray & texcoords0
 		, castor::Point3fArray & texcoords1
 		, castor::Point3fArray & texcoords2
@@ -294,7 +294,7 @@ namespace c3d_assimp
 
 	inline std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
 		, castor::Point3fArray const & normals
-		, castor::Point3fArray const & tangents
+		, castor::Point4fArray const & tangents
 		, castor::Point3fArray const & texcoords0
 		, castor::Point3fArray const & texcoords1
 		, castor::Point3fArray const & texcoords2

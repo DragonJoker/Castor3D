@@ -8,6 +8,7 @@
     "freetype",
     "gli",
     "meshoptimizer",
+    "mikktspace",
     "minizip",
     "zlib"
   ],

@@ -615,7 +615,7 @@ namespace water
 				auto normalMap2 = writer.declLocale( "normalMap2"
 					, ( c3d_waveNormals2.sample( normalMapCoords2 ).rgb() * 2.0_f ) - 1.0_f );
 				auto texSpace = writer.declLocale( "texSpace"
-					, mat3( tangent, bitangent, normal ) );
+					, mat3( tangent.xyz(), bitangent, normal));
 				auto finalNormal = writer.declLocale( "finalNormal"
 					, normalize( texSpace * normalMap1.xyz() ) );
 				finalNormal += normalize( texSpace * normalMap2.xyz() );

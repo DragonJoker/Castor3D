@@ -1513,7 +1513,7 @@ namespace castor3d
 				auto curNormal = writer.declLocale( "curNormal"
 					, c3d_normal[vertexIndex].xyz() );
 				auto curTangent = writer.declLocale( "curTangent"
-					, c3d_tangent[vertexIndex].xyz() );
+					, c3d_tangent[vertexIndex] );
 				vtxOut[i].texture0 = c3d_texcoord0[vertexIndex].xyz();
 				vtxOut[i].texture1 = c3d_texcoord1[vertexIndex].xyz();
 				vtxOut[i].texture2 = c3d_texcoord2[vertexIndex].xyz();
@@ -1854,7 +1854,7 @@ namespace castor3d
 					, c3d_cameraData.position()
 					, worldPos.xyz()
 					, curToCamera
-					, up
+					, vec4( up, 0.0_f )
 					, right );
 			} );
 

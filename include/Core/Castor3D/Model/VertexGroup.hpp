@@ -42,7 +42,7 @@ namespace castor3d
 		castor::Point3f nml{};
 		//!\~english	The vertex tangent.
 		//!\~french		La tangente du sommet.
-		castor::Point3f tan{};
+		castor::Point4f tan{};
 		//!\~english	The vertex texture coordinates.
 		//!\~french		La coordonnées de texture du sommet.
 		castor::Point3f tex{};

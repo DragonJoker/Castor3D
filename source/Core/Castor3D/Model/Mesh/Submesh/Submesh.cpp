@@ -514,6 +514,7 @@ namespace castor3d
 		if ( m_indexMapping )
 		{
 			m_indexMapping->computeNormals( reverted );
+			m_indexMapping->computeTangents();
 			m_needsNormalsCompute = false;
 		}
 	}
@@ -656,9 +657,6 @@ namespace castor3d
 		case castor3d::SubmeshData::eNormals:
 			getNormals() = std::move( data );
 			break;
-		case castor3d::SubmeshData::eTangents:
-			getTangents() = std::move( data );
-			break;
 		case castor3d::SubmeshData::eTexcoords0:
 			getTexcoords0() = std::move( data );
 			break;
@@ -673,6 +671,55 @@ namespace castor3d
 			break;
 		case castor3d::SubmeshData::eColours:
 			getColours() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTangents:
+			CU_Failure( "setBaseData: Can't set tangent data this way, use the Point4f variant" );
+			break;
+		case castor3d::SubmeshData::eIndex:
+			CU_Failure( "setBaseData: Can't set index data this way" );
+			break;
+		case castor3d::SubmeshData::eSkin:
+			CU_Failure( "setBaseData: Can't set skin data this way" );
+			break;
+		case castor3d::SubmeshData::ePassMasks:
+			CU_Failure( "setBaseData: Can't set skin data this way" );
+			break;
+		case castor3d::SubmeshData::eVelocity:
+			CU_Failure( "setBaseData: Can't set velocity data this way" );
+			break;
+		default:
+			CU_Failure( "setBaseData: Unsupported SubmeshData type" );
+			break;
+		}
+	}
+
+	void Submesh::setBaseData( SubmeshData submeshData, castor::Point4fArray data )
+	{
+		switch ( submeshData )
+		{
+		case castor3d::SubmeshData::ePositions:
+			CU_Failure( "setBaseData: Can't set positions data this way, use the Point3f variant" );
+			break;
+		case castor3d::SubmeshData::eNormals:
+			CU_Failure( "setBaseData: Can't set normals data this way, use the Point3f variant" );
+			break;
+		case castor3d::SubmeshData::eTangents:
+			getTangents() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eTexcoords0:
+			CU_Failure( "setBaseData: Can't set texcoords0 data this way, use the Point3f variant" );
+			break;
+		case castor3d::SubmeshData::eTexcoords1:
+			CU_Failure( "setBaseData: Can't set texcoords1 data this way, use the Point3f variant" );
+			break;
+		case castor3d::SubmeshData::eTexcoords2:
+			CU_Failure( "setBaseData: Can't set texcoords2 data this way, use the Point3f variant" );
+			break;
+		case castor3d::SubmeshData::eTexcoords3:
+			CU_Failure( "setBaseData: Can't set texcoords3 data this way, use the Point3f variant" );
+			break;
+		case castor3d::SubmeshData::eColours:
+			CU_Failure( "setBaseData: Can't set colours data this way, use the Point3f variant" );
 			break;
 		case castor3d::SubmeshData::eIndex:
 			CU_Failure( "setBaseData: Can't set index data this way" );
@@ -699,22 +746,22 @@ namespace castor3d
 
 		if ( auto positions = getComponent< PositionsComponent >() )
 		{
-			result.pos = castor::Point3f{ positions->getData()[index] };
+			result.pos = positions->getData()[index];
 		}
 
 		if ( auto normals = getComponent< NormalsComponent >() )
 		{
-			result.nml = castor::Point3f{ normals->getData()[index] };
+			result.nml = normals->getData()[index];
 		}
 
 		if ( auto tangents = getComponent< TangentsComponent >() )
 		{
-			result.tan = castor::Point3f{ tangents->getData()[index] };
+			result.tan = tangents->getData()[index];
 		}
 
 		if ( auto texcoords0 = getComponent< Texcoords0Component >() )
 		{
-			result.tex = castor::Point3f{ texcoords0->getData()[index] };
+			result.tex = texcoords0->getData()[index];
 		}
 
 		return result;
@@ -758,18 +805,18 @@ namespace castor3d
 		return component->getData();
 	}
 
-	castor::Point3fArray const & Submesh::getTangents()const
+	castor::Point4fArray const & Submesh::getTangents()const
 	{
 		if ( auto component = getComponent< TangentsComponent >() )
 		{
 			return component->getData();
 		}
 
-		static castor::Point3fArray const dummy;
+		static castor::Point4fArray const dummy;
 		return dummy;
 	}
 
-	castor::Point3fArray & Submesh::getTangents()
+	castor::Point4fArray & Submesh::getTangents()
 	{
 		m_dirty = true;
 		auto component = getComponent< TangentsComponent >();
@@ -880,8 +927,6 @@ namespace castor3d
 			return getPositions();
 		case castor3d::SubmeshData::eNormals:
 			return getNormals();
-		case castor3d::SubmeshData::eTangents:
-			return getTangents();
 		case castor3d::SubmeshData::eTexcoords0:
 			return getTexcoords0();
 		case castor3d::SubmeshData::eTexcoords1:
@@ -892,6 +937,9 @@ namespace castor3d
 			return getTexcoords3();
 		case castor3d::SubmeshData::eColours:
 			return getColours();
+		case castor3d::SubmeshData::eTangents:
+			CU_Failure( "getBaseData: Can't retrieve tangent data this way" );
+			break;
 		case castor3d::SubmeshData::eIndex:
 			CU_Failure( "getBaseData: Can't retrieve index data this way" );
 			break;
@@ -918,8 +966,6 @@ namespace castor3d
 			return getPositions();
 		case castor3d::SubmeshData::eNormals:
 			return getNormals();
-		case castor3d::SubmeshData::eTangents:
-			return getTangents();
 		case castor3d::SubmeshData::eTexcoords0:
 			return getTexcoords0();
 		case castor3d::SubmeshData::eTexcoords1:
@@ -930,6 +976,9 @@ namespace castor3d
 			return getTexcoords3();
 		case castor3d::SubmeshData::eColours:
 			return getColours();
+		case castor3d::SubmeshData::eTangents:
+			CU_Failure( "getBaseData: Can't retrieve tangent data this way" );
+			break;
 		case castor3d::SubmeshData::eIndex:
 			CU_Failure( "getBaseData: Can't retrieve index data this way" );
 			break;

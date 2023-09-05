@@ -482,7 +482,7 @@ namespace castor3d
 								auto result = writer.declLocale< shader::VertexSurface >( std::string( "result" ) );
 								result.position = c3d_inPosition[vertexId].position;
 								result.normal = c3d_inNormal[vertexId].xyz();
-								result.tangent = c3d_inTangent[vertexId].xyz();
+								result.tangent = c3d_inTangent[vertexId];
 								result.texture0 = c3d_inTexcoord0[vertexId].xyz();
 								result.texture1 = c3d_inTexcoord1[vertexId].xyz();
 								result.texture2 = c3d_inTexcoord2[vertexId].xyz();
@@ -556,21 +556,21 @@ namespace castor3d
 						v0.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
 						v0.texture0 = vec3( bbTexcoords[vertexId.x()], 0.0_f );
 						v0.normal = centerToCamera;
-						v0.tangent = up;
+						v0.tangent = vec4( up, 0.0_f );
 
 						scaledRight = right * bbPositions[vertexId.y()].x() * width;
 						scaledUp = up * bbPositions[vertexId.y()].y() * height;
 						v1.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
 						v1.texture0 = vec3( bbTexcoords[vertexId.y()], 0.0_f );
 						v1.normal = centerToCamera;
-						v1.tangent = up;
+						v1.tangent = vec4( up, 0.0_f );
 
 						scaledRight = right * bbPositions[vertexId.z()].x() * width;
 						scaledUp = up * bbPositions[vertexId.z()].y() * height;
 						v2.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
 						v2.texture0 = vec3( bbTexcoords[vertexId.z()], 0.0_f );
 						v2.normal = centerToCamera;
-						v2.tangent = up;
+						v2.tangent = vec4( up, 0.0_f );
 					}
 				}
 				, sdw::InUInt{ writer, "nodeId" }
@@ -596,7 +596,7 @@ namespace castor3d
 					result.tangentSpaceFragPosition = vec3( 0.0_f );
 					result.tangentSpaceViewPosition = vec3( 0.0_f );
 					result.normal = vec3( 0.0_f );
-					result.tangent = vec3( 0.0_f );
+					result.tangent = vec4( 0.0_f );
 					result.bitangent = vec3( 0.0_f );
 					result.texture0.uv() = vec2( 0.0_f );
 					result.texture1.uv() = vec2( 0.0_f );
@@ -678,7 +678,7 @@ namespace castor3d
 							, v2.colour.xyz() );
 					}
 
-					auto normal = writer.declLocale< sdw::Vec3 >( "normal"
+					auto normal = writer.declLocale( "normal"
 						, vec3( 0.0_f )
 						, flags.enableNormal() );
 
@@ -689,15 +689,15 @@ namespace castor3d
 							, v2.normal.xyz() ) );
 					}
 
-					auto tangent = writer.declLocale< sdw::Vec3 >( "tangent"
-						, vec3( 0.0_f )
+					auto tangent = writer.declLocale( "tangent"
+						, vec4( 0.0_f )
 						, flags.enableTangentSpace() );
 
 					if ( flags.enableTangentSpace() )
 					{
-						tangent = normalize( derivatives.interpolate( v0.tangent.xyz()
-							, v1.tangent.xyz()
-							, v2.tangent.xyz() ) );
+						tangent = normalize( derivatives.interpolate( v0.tangent
+							, v1.tangent
+							, v2.tangent ) );
 					}
 
 					if ( flags.enablePassMasks() )
@@ -766,7 +766,7 @@ namespace castor3d
 								auto prvMtxModel = writer.declLocale( "prvMtxModel"
 									, modelData.getPrvModelMtx( flags, curMtxModel ) );
 								prvPosition = prvMtxModel * curPosition;
-								tangent = normalize( mtxNormal * tangent );
+								tangent = vec4( normalize( mtxNormal * tangent.xyz() ), tangent.w() );
 							}
 						}
 					}
