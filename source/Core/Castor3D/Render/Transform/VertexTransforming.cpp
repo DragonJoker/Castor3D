@@ -476,7 +476,7 @@ namespace castor3d
 				auto curMtxNormal = writer.declLocale< Mat3 >( "curMtxNormal"
 					, modelData.getNormalMtx( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ), curMtxModel ) );
 				c3d_outNormal[index].xyz() = normalize( curMtxNormal * normal.xyz() );
-				c3d_outTangent[index].xyz() = normalize( curMtxNormal * tangent.xyz() );
+				c3d_outTangent[index] = vec4( normalize( curMtxNormal * tangent.xyz() ), tangent.w() );
 			} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

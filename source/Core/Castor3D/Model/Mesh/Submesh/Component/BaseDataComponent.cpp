@@ -26,7 +26,7 @@ namespace castor3d
 				, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, currentBinding
-				, ( submeshData == SubmeshFlag::ePositions
+				, ( ( submeshData == SubmeshFlag::ePositions || submeshData == SubmeshFlag::eTangents )
 					? VK_FORMAT_R32G32B32A32_SFLOAT
 					: VK_FORMAT_R32G32B32_SFLOAT )
 				, 0u } };
