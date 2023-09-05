@@ -82,6 +82,26 @@ namespace castor
 	}
 
 	template< typename T, uint32_t Columns, uint32_t Rows >
+	Matrix< T, Columns, Rows >::Matrix( std::initializer_list< T > rhs )
+	{
+		auto it = rhs.begin();
+
+		if ( rhs.size() == 1u )
+		{
+			initialise( *it );
+		}
+		else
+		{
+
+			for ( size_t i = 0; i < count; i++ )
+			{
+				m_data[i] = *it;
+				++it;
+			}
+		}
+	}
+
+	template< typename T, uint32_t Columns, uint32_t Rows >
 	Matrix< T, Columns, Rows >::~Matrix()
 	{
 	}
