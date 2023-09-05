@@ -291,7 +291,7 @@ namespace castor3d::shader
 		{
 			normal = nml;
 			tangent = tan;
-			bitangent = -tangent.w() * cross( normal, tangent.xyz() );
+			bitangent = tangent.w() * cross( normal, tangent.xyz() );
 
 			if ( flags.hasInvertNormals() )
 			{

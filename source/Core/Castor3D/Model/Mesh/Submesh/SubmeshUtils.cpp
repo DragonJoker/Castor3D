@@ -80,7 +80,7 @@ namespace castor3d
 			tan->x = fvTangent[0];
 			tan->y = fvTangent[1];
 			tan->z = fvTangent[2];
-			tan->w = fSign;
+			tan->w = -fSign;
 		}
 	}
 
