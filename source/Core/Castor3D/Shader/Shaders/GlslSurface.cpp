@@ -250,7 +250,7 @@ namespace castor3d::shader
 		, prvPosition{ this->getMember< sdw::Vec4 >( "prvPosition", true ) }
 		, tangentSpaceFragPosition{ this->getMember< sdw::Vec3 >( "tangentSpaceFragPosition", true ) }
 		, tangentSpaceViewPosition{ this->getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true ) }
-		, tangent{ this->getMember< sdw::Vec3 >( "tangent", true ) }
+		, tangent{ this->getMember< sdw::Vec4 >( "tangent", true ) }
 		, bitangent{ this->getMember< sdw::Vec3 >( "bitangent", true ) }
 		, colour{ this->getMember< sdw::Vec3 >( "colour", true ) }
 		, passMultipliers{ this->getMemberArray< sdw::Vec4 >( "passMultipliers", true ) }
@@ -285,19 +285,18 @@ namespace castor3d::shader
 		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
 		, sdw::Vec3 const & nml
-		, sdw::Vec3 const & tan )
+		, sdw::Vec4 const & tan )
 	{
 		if ( flags.enableTangentSpace() )
 		{
 			normal = nml;
 			tangent = tan;
-			tangent = normalize( sdw::fma( -normal, vec3( dot( tangent, normal ) ), tangent ) );
-			bitangent = cross( normal, tangent );
+			bitangent = -tangent.w() * cross( normal, tangent.xyz() );
 
 			if ( flags.hasInvertNormals() )
 			{
 				normal = -normal;
-				tangent = -tangent;
+				tangent.xyz() = -tangent.xyz();
 				bitangent = -bitangent;
 			}
 
@@ -306,7 +305,7 @@ namespace castor3d::shader
 				CU_Require( !worldPos.getExpr()->isDummy() );
 				CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
 				auto tbn = getWriter()->declLocale( "tbn"
-					, transpose( mat3( tangent, bitangent, normal ) ) );
+					, transpose( mat3( tangent.xyz(), bitangent, normal ) ) );
 				tangentSpaceFragPosition = tbn * worldPos;
 				tangentSpaceViewPosition = tbn * cameraPosition.xyz();
 			}
@@ -327,20 +326,20 @@ namespace castor3d::shader
 		, sdw::Vec3 const & worldPos
 		, sdw::Mat3 const & mtx
 		, sdw::Vec3 const & nml
-		, sdw::Vec3 const & tan )
+		, sdw::Vec4 const & tan )
 	{
 		return computeTangentSpace( flags
 			, cameraPosition
 			, worldPos
 			, normalize( mtx * nml )
-			, normalize( mtx * tan ) );
+			, vec4( normalize( mtx * tan.xyz() ), tan.w() ) );
 	}
 
 	void RasterizerSurfaceBase::computeTangentSpace( PipelineFlags const & flags
 		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
 		, sdw::Vec3 const & nml
-		, sdw::Vec3 const & tan
+		, sdw::Vec4 const & tan
 		, sdw::Vec3 const & bin )
 	{
 		if ( flags.enableTangentSpace() )
@@ -354,7 +353,7 @@ namespace castor3d::shader
 				CU_Require( !worldPos.getExpr()->isDummy() );
 				CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
 				auto tbn = getWriter()->declLocale( "tbn"
-					, transpose( mat3( tangent, bitangent, normal ) ) );
+					, transpose( mat3( tangent.xyz(), bitangent, normal ) ) );
 				tangentSpaceFragPosition = tbn * worldPos;
 				tangentSpaceViewPosition = tbn * cameraPosition.xyz();
 			}
@@ -401,7 +400,7 @@ namespace castor3d::shader
 			, ast::type::NotArray
 			, ( shaders.enableParallaxOcclusionMapping( flags) ? index++ : 0 )
 			, shaders.enableParallaxOcclusionMapping( flags ) );
-		type.declMember( "tangent", ast::type::Kind::eVec3F
+		type.declMember( "tangent", ast::type::Kind::eVec4F
 			, ast::type::NotArray
 			, ( flags.enableTangentSpace() ? index++ : 0 )
 			, flags.enableTangentSpace() );
@@ -448,7 +447,7 @@ namespace castor3d::shader
 			, ast::type::Kind::eVec3F
 			, ast::type::NotArray
 			, shaders.enableParallaxOcclusionMapping( flags ) );
-		type.declMember( "tangent", ast::type::Kind::eVec3F
+		type.declMember( "tangent", ast::type::Kind::eVec4F
 			, ast::type::NotArray
 			, flags.enableTangentSpace() );
 		type.declMember( "bitangent", ast::type::Kind::eVec3F
@@ -477,7 +476,7 @@ namespace castor3d::shader
 			, ast::type::NotArray );
 		type.declMember( "tangentSpaceViewPosition", ast::type::Kind::eVec3F
 			, ast::type::NotArray );
-		type.declMember( "tangent", ast::type::Kind::eVec3F
+		type.declMember( "tangent", ast::type::Kind::eVec4F
 			, ast::type::NotArray );
 		type.declMember( "bitangent", ast::type::Kind::eVec3F
 			, ast::type::NotArray );

@@ -35,6 +35,12 @@ namespace castor3d
 			{
 				return makeTextureFlag( getId(), Normal );
 			}
+
+			C3D_API static void computeMikktNormal( shader::TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
+				, shader::BlendComponents & components
+				, sdw::Vec4 const & sampled
+				, sdw::Vec3 normal );
 		};
 
 		class Plugin

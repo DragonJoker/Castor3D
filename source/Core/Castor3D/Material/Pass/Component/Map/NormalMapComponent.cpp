@@ -203,18 +203,29 @@ namespace castor3d
 
 		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
-			auto tbn = shader::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
-				, components.getMember< sdw::Vec3 >( "tangent" )
-				, components.getMember< sdw::Vec3 >( "bitangent" ) );
-			sampled[imgCompConfig.z() + 1u] = config.nmlGMul() * sampled[imgCompConfig.z() + 1u];
-			components.getMember< sdw::Vec3 >( "normal" ) = normalize( tbn
-				* fma( vec3( 2.0_f )
-					, writer.ternary( config.nml2Chan() != 0_u
-						, shader::Utils::reconstructNormal( sampled[imgCompConfig.z()], sampled[imgCompConfig.z() + 1u] )
-						, config.getVec3( sampled, imgCompConfig.z() ) )
-					, -vec3( 1.0_f ) ) );
+			computeMikktNormal( config, imgCompConfig, components, sampled
+				, components.getMember< sdw::Vec3 >( "normal" ) );
 		}
 		FI;
+	}
+
+	void NormalMapComponent::ComponentsShader::computeMikktNormal( shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
+		, shader::BlendComponents & components
+		, sdw::Vec4 const & sampled
+		, sdw::Vec3 normal )
+	{
+		auto & writer{ *sampled.getWriter() };
+		auto tbn = shader::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
+			, components.getMember< sdw::Vec4 >( "tangent" ).xyz()
+			, components.getMember< sdw::Vec3 >( "bitangent" ) );
+		sampled[imgCompConfig.z() + 1u] = config.nmlGMul() * sampled[imgCompConfig.z() + 1u];
+		components.getMember< sdw::Vec3 >( "normal" ) = normalize( tbn
+			* fma( vec3( 2.0_f )
+				, writer.ternary( config.nml2Chan() != 0_u
+					, shader::Utils::reconstructNormal( sampled[imgCompConfig.z()], sampled[imgCompConfig.z() + 1u] )
+					, config.getVec3( sampled, imgCompConfig.z() ) )
+				, -vec3( 1.0_f ) ) );
 	}
 
 	//*********************************************************************************************

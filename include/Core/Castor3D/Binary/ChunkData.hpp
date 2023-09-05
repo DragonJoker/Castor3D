@@ -34,6 +34,14 @@ namespace castor3d
 		castor::Point3< T > bin;
 		castor::Point3< T > tex;
 	};
+	struct InterleavedVertexNoMikk
+	{
+		castor::Point3f pos;
+		castor::Point3f nml;
+		castor::Point3f tan;
+		castor::Point3f tex;
+	};
+	using InterleavedVertexNoMikkArray = std::vector< InterleavedVertexNoMikk >;
 	/**
 	 *\~english
 	 *\brief		Retrieves the beginning of the buffer for given value.
@@ -1182,6 +1190,29 @@ namespace castor3d
 	 *\brief			Met la valeur donnée en big endian.
 	 *\param[in,out]	value	La valeur.
 	 */
+	static inline void prepareChunkData( InterleavedVertexNoMikk & value )
+	{
+		castor::switchEndianness( value.pos[0] );
+		castor::switchEndianness( value.pos[1] );
+		castor::switchEndianness( value.pos[2] );
+		castor::switchEndianness( value.nml[0] );
+		castor::switchEndianness( value.nml[1] );
+		castor::switchEndianness( value.nml[2] );
+		castor::switchEndianness( value.tan[0] );
+		castor::switchEndianness( value.tan[1] );
+		castor::switchEndianness( value.tan[2] );
+		castor::switchEndianness( value.tex[0] );
+		castor::switchEndianness( value.tex[1] );
+		castor::switchEndianness( value.tex[2] );
+	}
+	/**
+	 *\~english
+	 *\brief			Sets given value to big endian.
+	 *\param[in,out]	value	The value.
+	 *\~french
+	 *\brief			Met la valeur donnée en big endian.
+	 *\param[in,out]	value	La valeur.
+	 */
 	static inline void prepareChunkData( InterleavedVertex & value )
 	{
 		castor::switchEndianness( value.pos[0] );
@@ -1193,6 +1224,7 @@ namespace castor3d
 		castor::switchEndianness( value.tan[0] );
 		castor::switchEndianness( value.tan[1] );
 		castor::switchEndianness( value.tan[2] );
+		castor::switchEndianness( value.tan[3] );
 		castor::switchEndianness( value.tex[0] );
 		castor::switchEndianness( value.tex[1] );
 		castor::switchEndianness( value.tex[2] );

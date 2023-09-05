@@ -63,7 +63,7 @@ namespace castor3d
 		auto submesh4 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		auto submesh5 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
 		auto submesh6 = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-		static castor::Point3f const zero;
+		static castor::Point4f const zero;
 
 		// Face avant
 		submesh1->addPoints( {

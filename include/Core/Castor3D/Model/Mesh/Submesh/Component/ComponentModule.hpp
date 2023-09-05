@@ -23,7 +23,7 @@ namespace castor3d
 	\~french
 	\brief		Composant de sous-maillage détenant des données basiques d'un sous-maillage.
 	*/
-	template< SubmeshFlag SubmeshFlagT >
+	template< SubmeshFlag SubmeshFlagT, typename DataT = castor::Point3f >
 	class BaseDataComponentT;
 	/**
 	\~english
@@ -152,7 +152,7 @@ namespace castor3d
 	\~french
 	\brief		Le composant de sous-maillage contenant les tangents.
 	*/
-	using TangentsComponent = BaseDataComponentT< SubmeshFlag::eTangents >;
+	using TangentsComponent = BaseDataComponentT< SubmeshFlag::eTangents, castor::Point4f >;
 	/**
 	\~english
 	\brief		The submesh component holding texture coordinates.
@@ -199,8 +199,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, SubmeshComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TriFaceMapping, C3D_API );
 
-	CU_DeclareEnumTemplateSmartPtr( castor3d, BaseDataComponent, castor3d::SubmeshFlag );
-
 	//! Face array
 	CU_DeclareVector( Face, Face );
 	CU_DeclareMap( uint32_t, SubmeshComponentUPtr, SubmeshComponentID );
@@ -209,6 +207,25 @@ namespace castor3d
 	//@}
 	//@}
 	//@}
+}
+
+namespace castor
+{
+	template< castor3d::SubmeshFlag SubmeshFlagT, typename DataT >
+	struct Deleter< castor3d::BaseDataComponentT< SubmeshFlagT, DataT > >
+	{
+		void operator()( castor3d::BaseDataComponentT< SubmeshFlagT, DataT > * pointer )noexcept
+		{
+			delete pointer;
+		}
+	};
+}
+namespace castor3d
+{
+	template< castor3d::SubmeshFlag SubmeshFlagT, typename DataT >
+	using BaseDataComponentUPtrT = castor::UniquePtr< BaseDataComponentT< SubmeshFlagT, DataT > >;
+	template< castor3d::SubmeshFlag SubmeshFlagT, typename DataT >
+	using BaseDataComponentRPtrT = BaseDataComponentT< SubmeshFlagT, DataT > *;
 }
 
 #endif

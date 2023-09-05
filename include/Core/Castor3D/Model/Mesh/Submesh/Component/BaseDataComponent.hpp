@@ -16,6 +16,11 @@ namespace castor3d
 {
 	C3D_API void uploadBaseData( SubmeshFlag submeshData
 		, Submesh const & submesh
+		, castor::Point4fArray const & data
+		, castor::Point4fArray & up
+		, UploadData & uploader );
+	C3D_API void uploadBaseData( SubmeshFlag submeshData
+		, Submesh const & submesh
 		, castor::Point3fArray const & data
 		, castor::Point4fArray & up
 		, UploadData & uploader );
@@ -26,7 +31,7 @@ namespace castor3d
 		, uint32_t & currentLocation
 		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache );
 
-	template< SubmeshFlag SubmeshFlagT >
+	template< SubmeshFlag SubmeshFlagT, typename DataT >
 	class BaseDataComponentT
 		: public SubmeshComponent
 	{
@@ -78,17 +83,17 @@ namespace castor3d
 			return SubmeshFlagT;
 		}
 
-		void setData( castor::Point3fArray const & data )
+		void setData( std::vector< DataT > const & data )
 		{
 			m_data = data;
 		}
 
-		castor::Point3fArray & getData()
+		std::vector< DataT > & getData()
 		{
 			return m_data;
 		}
 
-		castor::Point3fArray const & getData()const
+		std::vector< DataT > const & getData()const
 		{
 			return m_data;
 		}
@@ -115,13 +120,13 @@ namespace castor3d
 
 
 	private:
-		castor::Point3fArray m_data;
+		std::vector< DataT > m_data;
 		castor::Point4fArray m_up;
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};
 
-	template< SubmeshFlag SubmeshFlagT >
-	castor::String const BaseDataComponentT< SubmeshFlagT >::Name{ []()
+	template< SubmeshFlag SubmeshFlagT, typename DataT >
+	castor::String const BaseDataComponentT< SubmeshFlagT, DataT >::Name{ []()
 		{
 			return castor3d::getName( castor3d::getData( SubmeshFlagT ) );
 		}() };

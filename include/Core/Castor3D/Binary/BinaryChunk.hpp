@@ -77,7 +77,7 @@ namespace castor3d
 	*\version 1.6
 	*	Updated to submesh components system.
 	*\version 1.7
-	*	Moved to little endian.
+	*	Moved to little endian, added support for Mikkelsen tangent space.
 	*\~french
 	*	La version actuelle du format.
 	*\version 1.2
@@ -89,7 +89,7 @@ namespace castor3d
 	*\version 1.6
 	*	Mise à jour pour les composants de submesh.
 	*\version 1.7
-	*	Passage à little endian.
+	*	Passage à little endian, ajout du support de l'espace tangent de Mikkelsen.
 	*/
 	uint32_t constexpr CurrentCmshVersion = makeCmshVersion( 0x01u, 0x07u, 0x0000u );
 	/**
@@ -178,7 +178,7 @@ namespace castor3d
 		eSubmeshVertex [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'V', 'R', 'T', 'X' ),
 		eSubmeshPositions = makeChunkID( 'S', 'M', 'S', 'H', 'P', 'O', 'S', 'I' ),
 		eSubmeshNormals = makeChunkID( 'S', 'M', 'S', 'H', 'N', 'O', 'R', 'M' ),
-		eSubmeshTangents = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'A', 'N', 'G' ),
+		eSubmeshTangents [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'A', 'N', 'G' ),
 		eSubmeshTexcoords0 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', 'C' ),
 		eSubmeshTexcoords1 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', '1' ),
 		eSubmeshTexcoords2 = makeChunkID( 'S', 'M', 'S', 'H', 'T', 'E', 'X', '2' ),
@@ -193,7 +193,7 @@ namespace castor3d
 		eMorphTargetBufferSize = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'S', 'Z' ),
 		eMorphTargetPositions = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'P', 'O' ),
 		eMorphTargetNormals = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'N', 'M' ),
-		eMorphTargetTangents = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', 'A' ),
+		eMorphTargetTangents [[deprecated]] = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', 'A' ),
 		eMorphTargetTexcoords0 = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', 'X' ),
 		eMorphTargetTexcoords1 = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', '1' ),
 		eMorphTargetTexcoords2 = makeChunkID( 'S', 'M', 'S', 'H', 'M', 'T', 'T', '2' ),
@@ -207,6 +207,10 @@ namespace castor3d
 		eSkeletonAnimationKeyFrameObjectTranslate = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'R' ),
 		eSkeletonAnimationKeyFrameObjectRotate = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'O' ),
 		eSkeletonAnimationKeyFrameObjectScale = makeChunkID( 'S', 'K', 'A', 'N', 'K', 'F', 'O', 'S' ),
+		// Version 1.7
+		// Tangents are now computed using Mikktspace.
+		eSubmeshTangentsMikkt = makeChunkID( 'S', 'M', 'S', 'M', 'K', 'T', 'A', 'N' ),
+		eMorphTargetTangentsMikkt = makeChunkID( 'S', 'M', 'S', 'M', 'K', 'M', 'T', 'A' ),
 	};
 	/**
 	 *\~english

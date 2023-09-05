@@ -38,6 +38,9 @@ namespace castor3d
 						}
 
 						SubmeshUtils::computeNormals( target.positions
+							, target.normals
+							, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getFaces() );
+						SubmeshUtils::computeTangentsFromNormals( target.positions
 							, target.texcoords0
 							, target.normals
 							, target.tangents

@@ -272,6 +272,7 @@ namespace castor3d
 		 */
 		C3D_API void enableSceneUpdate( bool updateScene );
 		C3D_API void setBaseData( SubmeshData submeshData, castor::Point3fArray data );
+		C3D_API void setBaseData( SubmeshData submeshData, castor::Point4fArray data );
 		inline void disableSceneUpdate();
 		inline void needsUpdate();
 		inline void addPoints( std::vector< InterleavedVertex > const & vertices );
@@ -300,8 +301,8 @@ namespace castor3d
 		C3D_API castor::Point3fArray & getPositions();
 		C3D_API castor::Point3fArray const & getNormals()const;
 		C3D_API castor::Point3fArray & getNormals();
-		C3D_API castor::Point3fArray const & getTangents()const;
-		C3D_API castor::Point3fArray & getTangents();
+		C3D_API castor::Point4fArray const & getTangents()const;
+		C3D_API castor::Point4fArray & getTangents();
 		C3D_API castor::Point3fArray const & getTexcoords0()const;
 		C3D_API castor::Point3fArray & getTexcoords0();
 		C3D_API castor::Point3fArray const & getTexcoords1()const;

@@ -2228,6 +2228,8 @@ else ()
 	endif ()
 endif ()
 
+find_package( mikktspace CONFIG REQUIRED )
+
 target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::CastorUtils
@@ -2238,6 +2240,7 @@ target_link_libraries( ${PROJECT_NAME}
 		sdw::CompilerSpirV
 		${glslang_LIBRARIES}
 		meshoptimizer::meshoptimizer
+		mikktspace::mikktspace
 )
 if ( CASTOR_DEBUG_TARGETS )
 	target_compile_definitions( ${PROJECT_NAME}

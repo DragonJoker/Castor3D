@@ -108,67 +108,8 @@ namespace castor3d
 		 *\param[in]	reverted	\p true pour inverser les normales.
 		 */
 		C3D_API void computeNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
 			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
 			, bool reverted = false )const;
-		/**
-		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face.
-		 *\param[in]	face	The face.
-		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	face	La face.
-		 */
-		C3D_API void computeNormals( Face const & face );
-		/**
-		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face.
-		 *\param[in]	positions	The vertices positions.
-		 *\param[in]	texcoords	The vertices texture coordinates.
-		 *\param[out]	normals		The vertices normals.
-		 *\param[out]	tangents	The vertices tangents.
-		 *\param[in]	face		The face.
-		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	positions	Les positions des sommets.
-		 *\param[in]	texcoords	Les coordonnées de texture des sommets.
-		 *\param[out]	normals		Les normales des sommets.
-		 *\param[out]	tangents	Les tangentes des sommets.
-		 *\param[in]	face		La face.
-		 */
-		C3D_API void computeNormals( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
-			, Face const & face )const;
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the given face.
-		 *\param[in]	face	The face.
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	face	La face.
-		 */
-		C3D_API void computeTangents( Face const & face );
-		/**
-		 *\~english
-		 *\brief		Computes tangent for each vertex of the given face.
-		 *\param[in]	positions	The vertices positions.
-		 *\param[in]	texcoords	The vertices texture coordinates.
-		 *\param[out]	tangents	The vertices tangents.
-		 *\param[in]	face		The face.
-		 *\~french
-		 *\brief		Calcule la tangente pour chaque vertex de la face donnée.
-		 *\param[in]	positions	Les positions des sommets.
-		 *\param[in]	texcoords	Les coordonnées de texture des sommets.
-		 *\param[out]	tangents	Les tangentes des sommets.
-		 *\param[in]	face		La face.
-		 */
-		C3D_API void computeTangents( castor::Point3fArray const & positions
-			, castor::Point3fArray const & texcoords
-			, castor::Point3fArray & tangents
-			, Face const & face )const;
 		/**
 		 *\~english
 		 *\brief		Computes tangent for each vertex of the submesh.
@@ -188,7 +129,7 @@ namespace castor3d
 		C3D_API void computeTangentsFromNormals( castor::Point3fArray const & positions
 			, castor::Point3fArray const & texcoords
 			, castor::Point3fArray const & normals
-			, castor::Point3fArray & tangents )const;
+			, castor::Point4fArray & tangents )const;
 		/**
 		 *\copydoc		castor3d::IndexMapping::getCount
 		 */

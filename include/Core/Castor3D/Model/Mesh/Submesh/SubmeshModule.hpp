@@ -328,7 +328,7 @@ namespace castor3d
 		castor::Point3fArray normals{};
 		//!\~english	The tangents buffer.
 		//!\~french		Le tampon de tangentes.
-		castor::Point3fArray tangents{};
+		castor::Point4fArray tangents{};
 		//!\~english	The texture coordinates buffer.
 		//!\~french		Le tampon de coordonnées de texture.
 		castor::Point3fArray texcoords0{};

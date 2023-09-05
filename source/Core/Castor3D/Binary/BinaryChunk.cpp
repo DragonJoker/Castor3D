@@ -62,7 +62,6 @@ namespace castor3d
 			case castor3d::ChunkType::eBoneId:
 			case castor3d::ChunkType::eSubmeshPositions:
 			case castor3d::ChunkType::eSubmeshNormals:
-			case castor3d::ChunkType::eSubmeshTangents:
 			case castor3d::ChunkType::eSubmeshTexcoords0:
 			case castor3d::ChunkType::eSubmeshTexcoords1:
 			case castor3d::ChunkType::eSubmeshTexcoords2:
@@ -72,7 +71,6 @@ namespace castor3d
 			case castor3d::ChunkType::eMorphTargetBufferSize:
 			case castor3d::ChunkType::eMorphTargetPositions:
 			case castor3d::ChunkType::eMorphTargetNormals:
-			case castor3d::ChunkType::eMorphTargetTangents:
 			case castor3d::ChunkType::eMorphTargetTexcoords0:
 			case castor3d::ChunkType::eMorphTargetTexcoords1:
 			case castor3d::ChunkType::eMorphTargetTexcoords2:
@@ -85,10 +83,14 @@ namespace castor3d
 			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectTranslate:
 			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectRotate:
 			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectScale:
+			case castor3d::ChunkType::eSubmeshTangentsMikkt:
+			case castor3d::ChunkType::eMorphTargetTangentsMikkt:
 #pragma warning( push )
 #pragma warning( disable: 4996 )
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+			case castor3d::ChunkType::eSubmeshTangents:
+			case castor3d::ChunkType::eMorphTargetTangents:
 			case castor3d::ChunkType::eKeyframeCount:
 			case castor3d::ChunkType::eKeyframes:
 			case castor3d::ChunkType::eSubmeshFaceCount:
