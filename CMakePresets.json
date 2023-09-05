@@ -148,10 +148,9 @@
 			}
 		},
 		{
-			"name": "ci-vcpkg",
+			"name": "ci-vcpkg-base",
 			"installDir": "${sourceDir}/package/Castor3D",
 			"cacheVariables": {
-				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;vkfft;vcpkg-deps",
 				"CASTOR_BUILD_PLUGINS": true,
 				"CASTOR_BUILDGRP_DEMO": false,
 				"CASTOR_BUILDGRP_INTEROP": false,
@@ -169,15 +168,17 @@
 			}
 		},
 		{
-			"name": "ci-vcpkg-msvc",
-			"inherits": "ci-vcpkg",
-			"displayName": "CI Visual Studio Config",
-			"description": "Build configuration for CI, using Visual Studio",
-			"generator": "Visual Studio 17 2022",
-			"condition": {
-				"type": "equals",
-				"lhs": "${hostSystemName}",
-				"rhs": "Windows"
+			"name": "ci-vcpkg-freeimage",
+			"inherits": "ci-vcpkg-base",
+			"cacheVariables": {
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;vkfft;vcpkg-deps"
+			}
+		},
+		{
+			"name": "ci-vcpkg",
+			"inherits": "ci-vcpkg-base",
+			"cacheVariables": {
+				"VCPKG_MANIFEST_FEATURES": "assimp;glsl;vkfft;vcpkg-deps"
 			}
 		}
 	]
