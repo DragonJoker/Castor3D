@@ -55,6 +55,7 @@ extern "C"
 		{
 			importer->addExtension( extension );
 			engine->getImporterFileFactory().registerType( castor::string::lowerCase( extension.first )
+				, cuT( "gltf" )
 				, &c3d_gltf::GltfImporterFile::create );
 		}
 	}
@@ -65,7 +66,8 @@ extern "C"
 
 		for ( auto const & extension : extensions )
 		{
-			engine->getImporterFileFactory().unregisterType( castor::string::lowerCase( extension.first ) );
+			engine->getImporterFileFactory().unregisterType( castor::string::lowerCase( extension.first )
+				, cuT( "gltf" ) );
 		}
 	}
 }

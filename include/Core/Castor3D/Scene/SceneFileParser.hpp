@@ -134,6 +134,7 @@ namespace castor3d
 			float emissiveMult{ 1.0f };
 			std::map< PassComponentTextureFlag, TextureConfiguration >::iterator textureRemapIt;
 			castor::String centerCamera;
+			castor::String preferredImporter{ cuT( "any" ) };
 		};
 
 		struct SceneNodeConfig

@@ -140,7 +140,10 @@ namespace castor3d
 			return false;
 		}
 
+		castor::String preferredImporter = cuT( "any" );
+		parameters.get( "preferred_importer", preferredImporter );
 		auto file = engine.getImporterFileFactory().create( extension
+			, preferredImporter
 			, engine
 			, path
 			, parameters );
