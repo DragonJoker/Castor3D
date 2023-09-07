@@ -18,6 +18,8 @@ See LICENSE file in root folder
 #include <CastorUtils/Math/Point.hpp>
 #include <CastorUtils/Math/Quaternion.hpp>
 
+#include <unordered_map>
+
 namespace castor3d
 {
 	bool parseImportParameters( Parameters const & parameters
@@ -173,27 +175,130 @@ namespace castor3d
 	};
 
 	class ImporterFileFactory
-		: public castor::Factory< ImporterFile
-			, castor::String
-			, ImporterFileUPtr
-			, std::function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const & ) > >
 	{
-		using MyFactory = castor::Factory< ImporterFile
-			, castor::String
-			, ImporterFileUPtr
-			, std::function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const & ) > >;
+		using Creator = std::function< ImporterFileUPtr( Engine &, Scene *, castor::Path const &, Parameters const & ) >;
 
 	public:
 		C3D_API ImporterFileFactory();
-
-		C3D_API ImporterFileUPtr create( castor::String const & key
+		/**
+		 *\~english
+		 *\brief		Creates an importer from a file type.
+		 *\param[in]	type		The file type
+		 *\param[in]	name		The preferred importer name
+		 *\param[in]	parameters	The import parameters.
+		 *\return		The created importer.
+		 *\~french
+		 *\brief		Crée un importeur à partir d'un type de fichier.
+		 *\param[in]	type		Le type de fichier.
+		 *\param[in]	name		Le nom de l'importeur préféré.
+		 *\param[in]	parameters	Les paramètres d'import.
+		 *\return		L'importeur créé
+		 */
+		C3D_API ImporterFileUPtr create( castor::String const & type
+			, castor::String const & name
 			, Engine & engine
 			, castor::Path const & file
 			, Parameters const & parameters );
-		C3D_API ImporterFileUPtr create( castor::String const & key
+		C3D_API ImporterFileUPtr create( castor::String const & type
+			, castor::String const & name
 			, Scene & scene
 			, castor::Path const & file
 			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		Creates an importer from a file type.
+		 *\param[in]	key			The file type.
+		 *\param[in]	parameters	The import parameters.
+		 *\return		The created importer.
+		 *\~french
+		 *\brief		Crée un importeur à partir d'un type de fichier.
+		 *\param[in]	type		Le type de fichier.
+		 *\param[in]	parameters	Les paramètres d'import.
+		 *\return		L'importeur créé
+		 */
+		C3D_API ImporterFileUPtr create( castor::String const & type
+			, Engine & engine
+			, castor::Path const & file
+			, Parameters const & parameters );
+		C3D_API ImporterFileUPtr create( castor::String const & type
+			, Scene & scene
+			, castor::Path const & file
+			, Parameters const & parameters );
+		/**
+		 *\~english
+		 *\brief		Registers an file type.
+		 *\param[in]	type	The file type.
+		 *\param[in]	name	The importer name.
+		 *\param[in]	create	The object creation function.
+		 *\~french
+		 *\brief		Enregistre un type de fichier.
+		 *\param[in]	type	Le type d'objet.
+		 *\param[in]	name	Le nom de l'importeur.
+		 *\param[in]	create	La fonction de création d'objet.
+		 */
+		void registerType( castor::String const & type
+			, castor::String const & name
+			, Creator create )
+		{
+			auto it = m_registered.emplace( type
+				, std::unordered_map< castor::String, Creator >{} ).first;
+			it->second.emplace( name, create );
+		}
+		/**
+		 *\~english
+		 *\brief		Unregisters an file type.
+		 *\param[in]	type	The file type.
+		 *\param[in]	name	The importer name.
+		 *\~french
+		 *\brief		Désenregistre un type de fichier.
+		 *\param[in]	type	Le type d'objet.
+		 *\param[in]	name	Le nom de l'importeur.
+		 */
+		void unregisterType( castor::String const & type
+			, castor::String const & name )
+		{
+			auto it = m_registered.find( type );
+
+			if ( it != m_registered.end() )
+			{
+				auto tit = it->second.find( name );
+
+				if ( tit != it->second.end() )
+				{
+					it->second.erase( tit );
+				}
+
+				if ( it->second.empty() )
+				{
+					m_registered.erase( it );
+				}
+			}
+		}
+		/**
+		 *\~english
+		 *\brief		Checks if the given file type is registered.
+		 *\param[in]	key	The file type.
+		 *\return		\p true if registered.
+		 *\~french
+		 *\brief		Vérifie si un type de fichier est enregistré.
+		 *\param[in]	key	Le type de fichier.
+		 *\return		\p true si enregistré.
+		 */
+		bool isTypeRegistered( castor::String const & type )const
+		{
+			return m_registered.end() != m_registered.find( type );
+		}
+
+	private:
+		ImporterFileUPtr doCreate( castor::String const & type
+			, castor::String const & name
+			, Engine & engine
+			, Scene * scene
+			, castor::Path const & file
+			, Parameters const & parameters )const;
+
+	private:
+		std::unordered_map< castor::String, std::unordered_map< castor::String, Creator > > m_registered;
 	};
 }
 

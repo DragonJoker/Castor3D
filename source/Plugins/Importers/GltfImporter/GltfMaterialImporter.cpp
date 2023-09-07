@@ -377,22 +377,6 @@ namespace c3d_gltf
 			return *result;
 		}
 
-		static bool hasAlphaChannel( castor::Image const & image )
-		{
-			auto alphaChannel = castor::extractComponent( image.getPixels()
-				, castor::PixelComponent::eAlpha );
-			auto data = alphaChannel->getConstPtr();
-			auto end = data + alphaChannel->getSize();
-			return !std::all_of( data, end, []( uint8_t byte )
-				{
-					return byte == 0x00;
-				} )
-				|| !std::all_of( data, end, []( uint8_t byte )
-					{
-						return byte == 0xFF;
-					} );
-		}
-
 		static void parseTransform( std::unique_ptr< fastgltf::TextureTransform > const & transform
 			, castor3d::TextureTransform & result
 			, uint32_t texCoordIndex )
@@ -411,7 +395,7 @@ namespace c3d_gltf
 				float const rcos( ( -result.rotate ).cos() );
 				float const rsin( ( -result.rotate ).sin() );
 				result.translate->x = ( 0.5f * result.scale->x ) * ( -rcos + rsin + 1 ) + transform->uvOffset[0];
-				result.translate->y = ( ( 0.5f * result.scale->y ) * ( rsin + rcos - 1 ) ) + 1 - result.scale->y - transform->uvOffset[1];
+				result.translate->y = ( 0.5f * result.scale->y ) * (  rsin + rcos - 1 ) + 1 - result.scale->y - transform->uvOffset[1];
 
 				if ( transform->texCoordIndex )
 				{

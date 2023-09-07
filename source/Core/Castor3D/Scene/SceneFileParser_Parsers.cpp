@@ -203,6 +203,30 @@ namespace castor3d
 				{
 					parameters.add( cuT( "invert_normals" ), true );
 				}
+				else if ( param.find( cuT( "preferred_importer" ) ) == 0 )
+				{
+					auto eqIndex = param.find( cuT( '=' ) );
+
+					if ( eqIndex != castor::String::npos )
+					{
+						castor::String value = param.substr( eqIndex + 1 );
+
+						if ( value.size() > 2
+							&& value.front() == '\"'
+							&& value.back() == '\"' )
+						{
+							parameters.add( cuT( "preferred_importer" ), value.substr( 1, value.size() - 2 ) );
+						}
+						else
+						{
+							CU_ParsingError( cuT( "Malformed parameter -preferred_importer=\"name\"." ) );
+						}
+					}
+					else
+					{
+						CU_ParsingError( cuT( "Malformed parameter -preferred_importer=\"name\"." ) );
+					}
+				}
 			}
 		}
 
@@ -1617,7 +1641,21 @@ namespace castor3d
 			parsingContext.sceneImportConfig.centerCamera = params[0]->get< castor::String >();
 		}
 	}
-	CU_EndAttributePush( CSCNSection::eTextureRemap )
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserSceneImportPreferredImporter )
+	{
+		auto & parsingContext = getParserContext( context );
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing name parameter" ) );
+		}
+		else
+		{
+			parsingContext.sceneImportConfig.preferredImporter = params[0]->get< castor::String >();
+		}
+	}
+	CU_EndAttribute()
 
 	CU_ImplementAttributeParser( parserSceneImportEnd )
 	{
@@ -1670,6 +1708,11 @@ namespace castor3d
 			if ( !parsingContext.sceneImportConfig.centerCamera.empty() )
 			{
 				parameters.add( cuT( "center_camera" ), parsingContext.sceneImportConfig.centerCamera );
+			}
+
+			if ( !parsingContext.sceneImportConfig.preferredImporter.empty() )
+			{
+				parameters.add( cuT( "preferred_importer" ), parsingContext.sceneImportConfig.preferredImporter );
 			}
 
 			SceneImporter importer{ *engine };
@@ -3182,7 +3225,10 @@ namespace castor3d
 			}
 			else
 			{
+				castor::String preferredImporter = cuT( "any" );
+				parameters.get( "preferred_importer", preferredImporter );
 				auto file = engine.getImporterFileFactory().create( extension
+					, preferredImporter
 					, *parsingContext.scene
 					, pathFile
 					, parameters );

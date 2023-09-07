@@ -79,37 +79,100 @@ namespace castor3d
 	//*********************************************************************************************
 
 	ImporterFileFactory::ImporterFileFactory()
-		: MyFactory{}
 	{
-		registerType( CmshMeshImporter::Type, CmshImporterFile::create );
-		registerType( CmshSkeletonImporter::Type, CmshImporterFile::create );
-		registerType( CmshAnimationImporter::MeshAnimType, CmshImporterFile::create );
-		registerType( CmshAnimationImporter::SkeletonAnimType, CmshImporterFile::create );
-		registerType( CmshAnimationImporter::NodeAnimType, CmshImporterFile::create );
+		registerType( CmshMeshImporter::Type, cuT( "cmsh" ), CmshImporterFile::create );
+		registerType( CmshSkeletonImporter::Type, cuT( "cmsh" ), CmshImporterFile::create );
+		registerType( CmshAnimationImporter::MeshAnimType, cuT( "cmsh" ), CmshImporterFile::create );
+		registerType( CmshAnimationImporter::SkeletonAnimType, cuT( "cmsh" ), CmshImporterFile::create );
+		registerType( CmshAnimationImporter::NodeAnimType, cuT( "cmsh" ), CmshImporterFile::create );
 	}
 
-	ImporterFileUPtr ImporterFileFactory::create( castor::String const & key
+	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
 		, Engine & engine
 		, castor::Path const & file
 		, Parameters const & parameters )
 	{
-		return MyFactory::create( key
+		return create( type
+			, "any"
+			, engine
+			, file
+			, parameters );
+	}
+
+	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
+		, Scene & scene
+		, castor::Path const & file
+		, Parameters const & parameters )
+	{
+		return create( type
+			, "any"
+			, scene
+			, file
+			, parameters );
+	}
+
+	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
+		, castor::String const & name
+		, Engine & engine
+		, castor::Path const & file
+		, Parameters const & parameters )
+	{
+		return doCreate( type
+			, name
 			, engine
 			, nullptr
 			, file
 			, parameters );
 	}
 
-	ImporterFileUPtr ImporterFileFactory::create( castor::String const & key
+	ImporterFileUPtr ImporterFileFactory::create( castor::String const & type
+		, castor::String const & name
 		, Scene & scene
 		, castor::Path const & file
 		, Parameters const & parameters )
 	{
-		return MyFactory::create( key
+		return doCreate( type
+			, name
 			, *scene.getEngine()
 			, &scene
 			, file
 			, parameters );
+	}
+
+	ImporterFileUPtr ImporterFileFactory::doCreate( castor::String const & type
+		, castor::String const & name
+		, Engine & engine
+		, Scene * scene
+		, castor::Path const & file
+		, Parameters const & parameters )const
+	{
+		auto it = m_registered.find( type );
+
+		if ( it == m_registered.end() )
+		{
+			CU_Exception( castor::ERROR_UNKNOWN_OBJECT );
+		}
+
+		if ( name == "any" )
+		{
+			auto tit = it->second.find( type );
+
+			if ( tit != it->second.end() )
+			{
+				return tit->second( engine, scene, file, parameters );
+			}
+
+			return it->second.begin()->second( engine, scene, file, parameters );
+		}
+
+		auto tit = it->second.find( name );
+
+		if ( tit == it->second.end() )
+		{
+			CU_Exception( castor::ERROR_UNKNOWN_OBJECT );
+		}
+
+		return tit->second( engine, scene, file, parameters );
 	}
 
 	//*********************************************************************************************

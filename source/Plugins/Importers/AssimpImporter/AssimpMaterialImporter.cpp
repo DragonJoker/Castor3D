@@ -784,7 +784,7 @@ namespace c3d_assimp
 									mixedInterpolative( true );
 								}
 
-								if ( !hasAlphaChannel( image ) )
+								if ( hasAlphaChannel( image ) )
 								{
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
 								}
