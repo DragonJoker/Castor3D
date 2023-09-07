@@ -1,4 +1,4 @@
-﻿#include "Castor3D/Model/Mesh/Generator/SphereSection.hpp"
+#include "Castor3D/Model/Mesh/Generator/SphereSection.hpp"
 
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Vertex.hpp"
@@ -145,6 +145,7 @@ namespace castor3d
 			}
 
 			sideIndexMapping->computeNormals();
+			sideIndexMapping->computeTangents();
 		}
 	}
 }

@@ -56,6 +56,7 @@ namespace castor
 		explicit Matrix( std::array< Type, Columns * Rows > const & rhs );
 		template< typename Type >
 		explicit Matrix( Matrix< Type, Columns, Rows > const & matrix );
+		explicit Matrix( std::initializer_list< T > rhs );
 		~Matrix();
 		/**@}*/
 		/**
