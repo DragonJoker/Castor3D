@@ -133,9 +133,16 @@ namespace castor3d
 	struct NodeTransform
 	{
 		castor::Point3f translate{};
-		castor::Point3f scale{};
+		castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
 		castor::Quaternion rotate{};
 	};
+
+	inline bool operator==( NodeTransform const & lhs, NodeTransform const & rhs )noexcept
+	{
+		return lhs.translate == rhs.translate
+			&& lhs.scale == rhs.scale
+			&& lhs.rotate == rhs.rotate;
+	}
 
 	//@}
 	//@}

@@ -79,11 +79,6 @@ namespace castor
 	}
 
 	template< typename T >
-	QuaternionT< T >::~QuaternionT()
-	{
-	}
-
-	template< typename T >
 	QuaternionT< T > & QuaternionT< T >::operator=( QuaternionT< T > const & rhs )
 	{
 		DataHolder::getData().x = rhs->x;
@@ -421,6 +416,11 @@ namespace castor
 	template< typename T >
 	inline AngleT< T > QuaternionT< T >::getPitch()const
 	{
+		if ( DataHolder::getData().w == 0.0f )
+		{
+			return AngleT< T >{};
+		}
+
 		auto pitch = *this;
 		pitch[1] = 0;
 		pitch[2] = 0;
@@ -433,6 +433,11 @@ namespace castor
 	template< typename T >
 	inline AngleT< T > QuaternionT< T >::getYaw()const
 	{
+		if ( DataHolder::getData().w == 0.0f )
+		{
+			return AngleT< T >{};
+		}
+
 		auto yaw = *this;
 		yaw[0] = 0;
 		yaw[2] = 0;
@@ -445,6 +450,11 @@ namespace castor
 	template< typename T >
 	inline AngleT< T > QuaternionT< T >::getRoll()const
 	{
+		if ( DataHolder::getData().w == 0.0f )
+		{
+			return AngleT< T >{};
+		}
+
 		auto roll = *this;
 		roll[0] = 0;
 		roll[1] = 0;
