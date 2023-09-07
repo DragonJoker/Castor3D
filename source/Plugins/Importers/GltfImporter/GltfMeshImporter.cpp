@@ -19,16 +19,16 @@ namespace c3d_gltf
 
 	namespace meshes
 	{
-		template< uint32_t IndexCountT, typename IndicesT, typename IndexT, typename MappingT >
-		static void parseIndicesList( fastgltf::Asset const & impAsset
+		template< typename IndexT >
+		static void parseLineList( fastgltf::Asset const & impAsset
 			, fastgltf::Accessor const & impAccessor
-			, MappingT & mapping )
+			, castor3d::LinesMapping & mapping )
 		{
 			auto count = impAccessor.count;
-			auto faceCount = count / IndexCountT;
-			std::vector< IndicesT > indicesGroup;
-			indicesGroup.reserve( faceCount );
-			IndicesT curIndices;
+			auto lineCount = count / 2u;
+			std::vector< castor3d::LineIndices > indicesGroup;
+			indicesGroup.reserve( lineCount );
+			castor3d::LineIndices curIndices;
 			uint32_t idx{};
 
 			fastgltf::iterateAccessor< IndexT >( impAsset
@@ -38,27 +38,13 @@ namespace c3d_gltf
 					curIndices[idx] = value;
 					++idx;
 
-					if ( idx == IndexCountT )
+					if ( idx == 2u )
 					{
 						idx = 0u;
-
-						if constexpr ( IndexCountT == 3u )
-						{
-							std::swap( curIndices[0], curIndices[1] );
-						}
-
 						indicesGroup.push_back( curIndices );
 					}
 				} );
-
-			if constexpr ( std::is_same_v< MappingT, castor3d::TriFaceMapping > )
-			{
-				mapping.addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
-			}
-			else
-			{
-				mapping.addLineGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
-			}
+			mapping.addLineGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
 		template< typename IndexT >
@@ -103,6 +89,35 @@ namespace c3d_gltf
 			}
 
 			mapping.addLineGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
+		}
+
+		template< typename IndexT >
+		static void parseTriangleList( fastgltf::Asset const & impAsset
+			, fastgltf::Accessor const & impAccessor
+			, castor3d::TriFaceMapping & mapping )
+		{
+			auto count = impAccessor.count;
+			auto faceCount = count / 3u;
+			std::vector< castor3d::FaceIndices > indicesGroup;
+			indicesGroup.reserve( faceCount );
+			castor3d::FaceIndices curIndices;
+			uint32_t idx{};
+
+			fastgltf::iterateAccessor< IndexT >( impAsset
+				, impAccessor
+				, [&curIndices, &indicesGroup, &idx]( IndexT value )
+				{
+					curIndices[idx] = value;
+					++idx;
+
+					if ( idx == 3u )
+					{
+						idx = 0u;
+						std::swap( curIndices[0], curIndices[1] );
+						indicesGroup.push_back( curIndices );
+					}
+				} );
+			mapping.addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
 		template< typename IndexT, bool IsStripT >
@@ -201,7 +216,7 @@ namespace c3d_gltf
 			, auto const & impAttributes
 			, castor::Point3fArray & positions
 			, castor::Point3fArray & normals
-			, castor::Point3fArray & tangents
+			, castor::Point4fArray & tangents
 			, castor::Point3fArray & texcoords0
 			, castor::Point3fArray & texcoords1
 			, castor::Point3fArray & texcoords2
@@ -215,7 +230,10 @@ namespace c3d_gltf
 
 			if ( meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "NORMAL", normals ) )
 			{
-				meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "TANGENT", tangents );
+				if ( !meshes::parseAttributeData< 4u, float >( impAsset, impAttributes, "TANGENT", tangents ) )
+				{
+					meshes::parseAttributeData< 3u, float >( impAsset, impAttributes, "TANGENT", tangents );
+				}
 			}
 
 			meshes::parseAttributeData< 2u, float, 3u, float, true >( impAsset, impAttributes, "TEXCOORD_0", texcoords0 );
@@ -310,77 +328,83 @@ namespace c3d_gltf
 	bool GltfMeshImporter::doImportMesh( castor3d::Mesh & mesh )
 	{
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
-		auto & impAsset = file.getAsset();
 		auto name = mesh.getName();
-		uint32_t index{};
-		auto it = std::find_if( impAsset.meshes.begin()
-			, impAsset.meshes.end()
-			, [&file, &name, &index]( fastgltf::Mesh const & lookup )
-			{
-				return name == file.getMeshName( index++ );
-			} );
+		auto it = file.getMeshes().find( name );
 
-		if ( it == impAsset.meshes.end() )
+		if ( it == file.getMeshes().end() )
 		{
 			return false;
 		}
 
 		castor3d::log::info << cuT( "  Mesh found: [" ) << name << cuT( "]" ) << std::endl;
-		fastgltf::Mesh const & impMesh = *it;
 		using PrimitiveMap = std::map< fastgltf::PrimitiveType, PrimitiveArray >;
-		std::map< castor3d::Material *, PrimitiveMap > submeshes;
+		using MaterialPrimitiveMap = std::map< castor3d::Material *, PrimitiveMap >;
+		std::map< fastgltf::Mesh const *, MaterialPrimitiveMap > submeshes;
 		auto & engine = *file.getOwner();
 
-		for ( auto & primitive : impMesh.primitives )
+		for ( auto & submesh : it->second.submeshes )
 		{
-			castor3d::MaterialRPtr material;
+			fastgltf::Mesh const & impMesh = *submesh.mesh;
 
-			if ( primitive.materialIndex )
+			for ( auto & primitive : impMesh.primitives )
 			{
-				material = engine.tryFindMaterial( file.getMaterialName( uint32_t( *primitive.materialIndex ) ) );
-			}
-			else
-			{
-				material = engine.tryFindMaterial( DefaultMaterial );
-				material->setSerialisable( true );
-			}
+				castor3d::MaterialRPtr material;
 
-			auto pit = submeshes.emplace( material, PrimitiveMap{} ).first;
-			auto mit = pit->second.emplace( primitive.type, PrimitiveArray{} ).first;
-			mit->second.push_back( &primitive );
+				if ( primitive.materialIndex )
+				{
+					material = engine.tryFindMaterial( file.getMaterialName( uint32_t( *primitive.materialIndex ) ) );
+				}
+				else
+				{
+					material = engine.tryFindMaterial( DefaultMaterial );
+					material->setSerialisable( true );
+				}
+
+				auto pit = submeshes.emplace( &impMesh, MaterialPrimitiveMap{} ).first;
+				auto mit = pit->second.emplace( material, PrimitiveMap{} ).first;
+				auto sit = mit->second.emplace( primitive.type, PrimitiveArray{} ).first;
+				sit->second.push_back( &primitive );
+			}
 		}
 
-		for ( auto & impSubmeshes : submeshes )
+		for ( auto & meshesIt : submeshes )
 		{
-			for ( auto & impSubmesh : impSubmeshes.second )
+			auto & impMesh = *meshesIt.first;
+
+			for ( auto & materialsIt : meshesIt.second )
 			{
-				for ( auto & impPrimitive : impSubmesh.second )
+				auto material = materialsIt.first;
+
+				for ( auto & submeshesIt : materialsIt.second )
 				{
-					switch ( impSubmesh.first )
+					for ( auto & impPrimitive : submeshesIt.second )
 					{
-					case fastgltf::PrimitiveType::Points:
-						doProcessPointsSubmesh( mesh, impSubmeshes.first, impMesh, *impPrimitive );
-						break;
-					case fastgltf::PrimitiveType::Lines:
-						doProcessLinesSubmesh( mesh, impSubmeshes.first, impMesh, *impPrimitive );
-						break;
-					case fastgltf::PrimitiveType::LineLoop:
-						doProcessLineStripSubmesh( mesh, impSubmeshes.first, impMesh, *impPrimitive, true );
-						break;
-					case fastgltf::PrimitiveType::LineStrip:
-						doProcessLineStripSubmesh( mesh, impSubmeshes.first, impMesh, *impPrimitive, false );
-						break;
-					case fastgltf::PrimitiveType::Triangles:
-						doProcessTrianglesSubmesh( mesh, impSubmeshes.first, impMesh, *impPrimitive );
-						break;
-					case fastgltf::PrimitiveType::TriangleStrip:
-						doProcessTriangleStripSubmesh( mesh, impSubmeshes.first, impMesh, *impPrimitive );
-						break;
-					case fastgltf::PrimitiveType::TriangleFan:
-						doProcessTriangleFanSubmesh( mesh, impSubmeshes.first, impMesh, *impPrimitive );
-						break;
-					default:
-						break;
+						switch ( submeshesIt.first )
+						{
+						case fastgltf::PrimitiveType::Points:
+							doProcessPointsSubmesh( mesh, material, impMesh, *impPrimitive );
+							break;
+						case fastgltf::PrimitiveType::Lines:
+							doProcessLinesSubmesh( mesh, material, impMesh, *impPrimitive );
+							break;
+						case fastgltf::PrimitiveType::LineLoop:
+							doProcessLineStripSubmesh( mesh, material, impMesh, *impPrimitive, true );
+							break;
+						case fastgltf::PrimitiveType::LineStrip:
+							doProcessLineStripSubmesh( mesh, material, impMesh, *impPrimitive, false );
+							break;
+						case fastgltf::PrimitiveType::Triangles:
+							doProcessTrianglesSubmesh( mesh, material, impMesh, *impPrimitive );
+							break;
+						case fastgltf::PrimitiveType::TriangleStrip:
+							doProcessTriangleStripSubmesh( mesh, material, impMesh, *impPrimitive );
+							break;
+						case fastgltf::PrimitiveType::TriangleFan:
+							doProcessTriangleFanSubmesh( mesh, material, impMesh, *impPrimitive );
+							break;
+						default:
+							break;
+						}
 					}
 				}
 			}
@@ -420,13 +444,13 @@ namespace c3d_gltf
 			switch ( impAccessor.componentType )
 			{
 			case fastgltf::ComponentType::UnsignedByte:
-				meshes::parseIndicesList< 2u, castor3d::LineIndices, uint8_t >( impAsset, impAccessor, *mapping );
+				meshes::parseLineList< uint8_t >( impAsset, impAccessor, *mapping );
 				break;
 			case fastgltf::ComponentType::UnsignedShort:
-				meshes::parseIndicesList< 2u, castor3d::LineIndices, uint16_t >( impAsset, impAccessor, *mapping );
+				meshes::parseLineList< uint16_t >( impAsset, impAccessor, *mapping );
 				break;
 			case fastgltf::ComponentType::UnsignedInt:
-				meshes::parseIndicesList< 2u, castor3d::LineIndices, uint32_t >( impAsset, impAccessor, *mapping );
+				meshes::parseLineList< uint32_t >( impAsset, impAccessor, *mapping );
 				break;
 			default:
 				mapping.reset();
@@ -501,13 +525,13 @@ namespace c3d_gltf
 			switch ( impAccessor.componentType )
 			{
 			case fastgltf::ComponentType::UnsignedByte:
-				meshes::parseIndicesList< 3u, castor3d::FaceIndices, uint8_t >( impAsset, impAccessor, *mapping );
+				meshes::parseTriangleList< uint8_t >( impAsset, impAccessor, *mapping );
 				break;
 			case fastgltf::ComponentType::UnsignedShort:
-				meshes::parseIndicesList< 3u, castor3d::FaceIndices, uint16_t >( impAsset, impAccessor, *mapping );
+				meshes::parseTriangleList< uint16_t >( impAsset, impAccessor, *mapping );
 				break;
 			case fastgltf::ComponentType::UnsignedInt:
-				meshes::parseIndicesList< 3u, castor3d::FaceIndices, uint32_t >( impAsset, impAccessor, *mapping );
+				meshes::parseTriangleList< uint32_t >( impAsset, impAccessor, *mapping );
 				break;
 			default:
 				mapping.reset();
@@ -682,14 +706,14 @@ namespace c3d_gltf
 		submesh.setDefaultMaterial( material );
 		auto positions = submesh.createComponent< castor3d::PositionsComponent >();
 		castor::Point3fArray nml;
-		castor::Point3fArray tan;
+		castor::Point4fArray tan;
 		castor::Point3fArray tex0;
 		castor::Point3fArray tex1;
 		castor::Point3fArray tex2;
 		castor::Point3fArray tex3;
 		castor::Point3fArray col;
 		castor::Point3fArray * normals = &nml;
-		castor::Point3fArray * tangents = &tan;
+		castor::Point4fArray * tangents = &tan;
 		castor::Point3fArray * texcoords0 = &tex0;
 		castor::Point3fArray * texcoords1 = &tex1;
 		castor::Point3fArray * texcoords2 = &tex2;
@@ -765,7 +789,8 @@ namespace c3d_gltf
 				, buffer.texcoords3
 				, buffer.colours );
 
-			if ( index < impMesh.weights.size() && impMesh.weights[index] )
+			if ( index < impMesh.weights.size()
+				&& impMesh.weights[index] != 0.0f )
 			{
 				meshes::applyWeight( buffer, impMesh.weights[index++] );
 			}
@@ -836,6 +861,7 @@ namespace c3d_gltf
 				}
 
 				mapping->computeNormals();
+				mapping->computeTangents();
 			}
 			else if ( !submesh.hasComponent( castor3d::TangentsComponent::Name )
 				&& submesh.hasComponent( castor3d::Texcoords0Component::Name ) )
@@ -881,6 +907,7 @@ namespace c3d_gltf
 
 				auto indexMapping = submesh->getIndexMapping();
 				indexMapping->computeNormals();
+				indexMapping->computeTangents();
 			}
 		}
 

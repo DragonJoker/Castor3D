@@ -174,7 +174,7 @@ namespace c3d_gltf
 			return result;
 		}
 
-		castor::String makeTextureName( size_t textureIndex
+		static castor::String makeTextureName( size_t textureIndex
 			, fastgltf::Texture const & impTexture
 			, size_t imageIndex
 			, fastgltf::Image const & impImage )
@@ -350,7 +350,7 @@ namespace c3d_gltf
 			return result;
 		}
 
-		castor::Image const & loadImage( castor3d::TextureSourceInfo const & source
+		static castor::Image const & loadImage( castor3d::TextureSourceInfo const & source
 			, castor3d::MaterialImporter & importer )
 		{
 			castor::ImageRPtr result{};
@@ -379,7 +379,7 @@ namespace c3d_gltf
 
 		static void parseTransform( std::unique_ptr< fastgltf::TextureTransform > const & transform
 			, castor3d::TextureTransform & result
-			, uint32_t texCoordIndex )
+			, uint32_t & texCoordIndex )
 		{
 			if ( transform )
 			{

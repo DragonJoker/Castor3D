@@ -7,8 +7,10 @@
 			<Item Name="[ImpFile]">(castor3d::ImporterFile *)this,nd</Item>
 			<Item Name="asset">m_asset</Item>
 			<Item Name="sceneIndices">m_sceneIndices</Item>
-			<Item Name="nodes">m_nodes</Item>
-			<Item Name="skeletonNodes">m_skeletonNodes</Item>
+			<Item Name="nodes">m_sceneData.nodes</Item>
+			<Item Name="skeletonNodes">m_sceneData.skeletonNodes</Item>
+			<Item Name="meshes">m_sceneData.meshes</Item>
+			<Item Name="skeletons">m_sceneData.skeletons</Item>
 		</Expand>
 	</Type>
 

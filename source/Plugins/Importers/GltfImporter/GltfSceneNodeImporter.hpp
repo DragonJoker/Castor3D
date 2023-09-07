@@ -14,14 +14,10 @@ namespace c3d_gltf
 		: public castor3d::SceneNodeImporter
 	{
 	public:
-		explicit GltfSceneNodeImporter( castor3d::Engine & engine
-			, uint32_t instanceIndex = 0u );
+		explicit GltfSceneNodeImporter( castor3d::Engine & engine );
 
 	private:
 		bool doImportSceneNode( castor3d::SceneNode & node )override;
-
-	private:
-		uint32_t m_instanceIndex;
 	};
 }
 

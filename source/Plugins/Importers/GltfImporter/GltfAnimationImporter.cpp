@@ -42,7 +42,7 @@ namespace c3d_gltf
 		using KeyDataTypeT = typename KeyDataTyperT< KeyT >::Type;
 
 		template< typename KeyFrameT, typename AnimationT >
-		inline KeyFrameT & getKeyFrame( castor::Milliseconds const & time
+		static KeyFrameT & getKeyFrame( castor::Milliseconds const & time
 			, AnimationT & animation
 			, std::map< castor::Milliseconds, castor::UniquePtr< KeyFrameT > > & keyframes )
 		{
@@ -58,7 +58,7 @@ namespace c3d_gltf
 		}
 
 		template< typename T >
-		inline void findValue( castor::Milliseconds time
+		static void findValue( castor::Milliseconds time
 			, typename std::map< castor::Milliseconds, T > const & map
 			, typename std::map< castor::Milliseconds, T >::const_iterator & prv
 			, typename std::map< castor::Milliseconds, T >::const_iterator & cur )
@@ -92,7 +92,7 @@ namespace c3d_gltf
 		}
 
 		template< typename T >
-		inline T interpolate( castor::Milliseconds const & time
+		static T interpolate( castor::Milliseconds const & time
 			, castor3d::Interpolator< T > const & interpolator
 			, std::map< castor::Milliseconds, T > const & values
 			, T const & defaultValue )
@@ -129,7 +129,7 @@ namespace c3d_gltf
 		}
 
 		template< typename AnimationT, typename KeyFrameT, typename FuncT >
-		inline void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > & translates
+		static void synchroniseKeys( std::map< castor::Milliseconds, castor::Point3f > & translates
 			, std::map< castor::Milliseconds, castor::Quaternion > & rotates
 			, std::map< castor::Milliseconds, castor::Point3f > & scales
 			, std::set< castor::Milliseconds > const & times
@@ -159,7 +159,7 @@ namespace c3d_gltf
 		}
 
 		template< typename KeyT >
-		inline castor::Milliseconds processKeys( fastgltf::Asset const & impAsset
+		static castor::Milliseconds processKeys( fastgltf::Asset const & impAsset
 			, NodeAnimationChannelSampler const & animChannels
 			, fastgltf::AnimationPath channel
 			, std::map< castor::Milliseconds, KeyT > & result
@@ -320,12 +320,13 @@ namespace c3d_gltf
 			}
 		}
 
-		size_t getMeshNodeIndex( GltfImporterFile const & file
+		static size_t getMeshNodeIndex( GltfImporterFile const & file
 			, AnimationChannelSamplers const & channelSamplers
-			, castor::String const & name )
+			, castor::String const & name
+			, uint32_t submeshIndex )
 		{
 			size_t result;
-			size_t meshIndex = file.getMeshIndex( name );
+			size_t meshIndex = file.getMeshIndex( name, submeshIndex );
 			auto it = std::find_if( channelSamplers.begin()
 				, channelSamplers.end()
 				, [&result, meshIndex, &file]( AnimationChannelSamplers::value_type const & lookup )
@@ -345,7 +346,12 @@ namespace c3d_gltf
 							return ret;
 						} );
 				} );
-			CU_Require( it != channelSamplers.end() );
+
+			if ( it == channelSamplers.end() )
+			{
+				CU_Failure( "Couldn't find node index for animated submesh in animation channels" );
+			}
+
 			return result;
 		}
 	}
@@ -409,7 +415,7 @@ namespace c3d_gltf
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
-		return true;
+		return keyframes.size() > 1u;
 	}
 
 	bool GltfAnimationImporter::doImportMesh( castor3d::MeshAnimation & animation )
@@ -418,21 +424,22 @@ namespace c3d_gltf
 		auto & impAsset = file.getAsset();
 		auto name = animation.getName();
 		auto & mesh = static_cast< castor3d::Mesh const & >( *animation.getAnimable() );
+		bool hasAnyKeyframes = false;
 
 		for ( auto & submesh : mesh )
 		{
 			auto index = submesh->getId();
-			auto animations = file.getMeshAnimations( mesh );
+			auto animations = file.getMeshAnimations( mesh, index );
 			auto animIt = animations.find( name );
 
 			if ( animIt != animations.end() )
 			{
 				castor3d::log::info << cuT( "  Mesh Animation found for mesh [" ) << mesh.getName() << cuT( "], submesh " ) << index << cuT( ": [" ) << name << cuT( "]" ) << std::endl;
 				castor3d::MeshAnimationSubmesh animSubmesh{ animation, * submesh };
-				animation.addChild( std::move( animSubmesh ) );
 				auto & animChannels = animIt->second;
-				size_t nodeIndex = anims::getMeshNodeIndex( file, animChannels, mesh.getName() );
+				size_t nodeIndex = anims::getMeshNodeIndex( file, animChannels, mesh.getName(), index );
 				auto impNodeAnim = anims::findNodeAnim( animChannels, nodeIndex );
+				bool hasKeyframes = false;
 
 				for ( AnimationChannelSampler & channelSampler : impNodeAnim )
 				{
@@ -460,40 +467,51 @@ namespace c3d_gltf
 						? 1u
 						: 0u;
 
-					for ( uint32_t i = 0u; i < uint32_t( times.size() ); ++i )
+					if ( !times.empty() && times.back() > 0 )
 					{
-						auto timeIndex = castor::Milliseconds{ uint64_t( times[i] * 1000u ) };
-						auto kfit = animation.find( timeIndex );
-						castor3d::MeshMorphTarget * kf{};
+						hasKeyframes = true;
 
-						if ( kfit == animation.end() )
+						for ( uint32_t i = 0u; i < uint32_t( times.size() ); ++i )
 						{
-							auto keyFrame = castor::makeUnique< castor3d::MeshMorphTarget >( animation, timeIndex );
-							kf = keyFrame.get();
-							animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame ) );
-						}
-						else
-						{
-							kf = &static_cast< castor3d::MeshMorphTarget & >( **kfit );
-						}
+							auto timeIndex = castor::Milliseconds{ uint64_t( times[i] * 1000u ) };
+							auto kfit = animation.find( timeIndex );
+							castor3d::MeshMorphTarget * kf{};
 
-						std::vector< float > res;
-						res.resize( submesh->getMorphTargetsCount() );
-						uint32_t k = weightStride * i + ii;
-						CU_Require( numMorphs <= submesh->getMorphTargetsCount() );
+							if ( kfit == animation.end() )
+							{
+								auto keyFrame = castor::makeUnique< castor3d::MeshMorphTarget >( animation, timeIndex );
+								kf = keyFrame.get();
+								animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame ) );
+							}
+							else
+							{
+								kf = &static_cast< castor3d::MeshMorphTarget & >( **kfit );
+							}
 
-						for ( uint32_t value = 0u; value < numMorphs; ++value, ++k )
-						{
-							res[value] = ( 0.f > values[k] ) ? 0.f : values[k];
+							std::vector< float > res;
+							res.resize( submesh->getMorphTargetsCount() );
+							uint32_t k = weightStride * i + ii;
+							CU_Require( numMorphs <= submesh->getMorphTargetsCount() );
+
+							for ( uint32_t value = 0u; value < numMorphs; ++value, ++k )
+							{
+								res[value] = ( 0.f > values[k] ) ? 0.f : values[k];
+							}
+
+							kf->setTargetsWeights( *submesh, res );
 						}
-
-						kf->setTargetsWeights( *submesh, res );
 					}
+				}
+
+				if ( hasKeyframes )
+				{
+					hasAnyKeyframes = true;
+					animation.addChild( std::move( animSubmesh ) );
 				}
 			}
 		}
 
-		return true;
+		return hasAnyKeyframes;
 	}
 
 	bool GltfAnimationImporter::doImportNode( castor3d::SceneNodeAnimation & animation )
@@ -533,6 +551,6 @@ namespace c3d_gltf
 			animation.addKeyFrame( castor::ptrRefCast< castor3d::AnimationKeyFrame >( keyFrame.second ) );
 		}
 
-		return true;
+		return keyFrames.size() > 1u;
 	}
 }
