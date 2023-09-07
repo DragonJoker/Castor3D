@@ -107,16 +107,6 @@ namespace c3d_assimp
 	{
 		static constexpr aiShadingMode ShadingMode_PBR_BRDF = aiShadingMode( 0xb );
 
-		static bool hasAlphaChannel( castor::Image const & image )
-		{
-			auto alphaChannel = castor::extractComponent( image.getPixels()
-				, castor::PixelComponent::eAlpha );
-			auto data = alphaChannel->getConstPtr();
-			auto end = data + alphaChannel->getSize();
-			return !std::all_of( data, end, []( uint8_t byte ) { return byte != 0x00; } )
-				|| !std::all_of( data, end, []( uint8_t byte ) { return byte != 0xFF; } );
-		}
-
 		static castor::String decodeUri( castor::String uri )
 		{
 			castor::String escaped;
@@ -795,7 +785,7 @@ namespace c3d_assimp
 									mixedInterpolative( true );
 								}
 
-								if ( !hasAlphaChannel( image ) )
+								if ( hasAlphaChannel( image ) )
 								{
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
 								}

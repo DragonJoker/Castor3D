@@ -1,4 +1,6 @@
 #include "CastorUtils/Graphics/PixelFormat.hpp"
+
+#include "CastorUtils/Graphics/Image.hpp"
 #include "CastorUtils/Graphics/PixelBuffer.hpp"
 #include "CastorUtils/Graphics/PxBufferCompression.hpp"
 
@@ -924,5 +926,22 @@ namespace castor
 		}
 
 		return result;
+	}
+
+	bool hasAlphaChannel( castor::Image const & image )
+	{
+		auto alphaChannel = castor::extractComponent( image.getPixels()
+			, castor::PixelComponent::eAlpha );
+		return alphaChannel
+			&& !std::all_of( alphaChannel->begin(), alphaChannel->end()
+				, []( uint8_t byte )
+				{
+					return byte == 0x00;
+				} )
+			&& !std::all_of( alphaChannel->begin(), alphaChannel->end()
+				, []( uint8_t byte )
+				{
+					return byte == 0xFF;
+				} );
 	}
 }
