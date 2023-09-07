@@ -860,6 +860,8 @@ namespace castor
 	using RgbaColour = RgbaColourT< ColourComponent >;
 	using HdrRgbColour = RgbColourT< HdrColourComponent >;
 	using HdrRgbaColour = RgbaColourT< HdrColourComponent >;
+
+	CU_API bool hasAlphaChannel( castor::Image const & image );
 	//@}
 }
 
