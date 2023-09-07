@@ -102,7 +102,7 @@ namespace castor
 		 *\~french
 		 *\brief		Destructeur
 		 */
-		inline ~QuaternionT();
+		inline ~QuaternionT()noexcept = default;
 		/**
 		 *\~english
 		 *\brief		Copy assignment operator

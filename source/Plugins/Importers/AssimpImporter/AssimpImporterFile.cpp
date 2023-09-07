@@ -838,10 +838,6 @@ namespace c3d_assimp
 		transform *= nodeTransform;
 		cumulativeTransforms.emplace( &node, transform );
 		bool isSkeletonNode = file::isSkeletonNode( node, aiNodeName, m_bonesNodes, m_sceneData.skeletons );
-		auto anims = ( node.mParent && isSkeletonNode )
-			? std::map< aiAnimation const *, aiNodeAnim const * >{}
-			: file::findNodeAnims( node
-				, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
 		auto nodeName = getInternalName( aiNodeName );
 		NodeData nodeData{ parentName
 			, nodeName
@@ -850,6 +846,9 @@ namespace c3d_assimp
 
 		if ( !isSkeletonNode )
 		{
+			auto anims = file::findNodeAnims( node
+				, castor::makeArrayView( m_aiScene->mAnimations, m_aiScene->mNumAnimations ) );
+
 			for ( auto anim : anims )
 			{
 				auto [frameCount, frameTicks] = getNodeAnimFrameTicks( *anim.second );

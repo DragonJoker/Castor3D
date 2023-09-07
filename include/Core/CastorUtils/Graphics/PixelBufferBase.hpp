@@ -270,6 +270,26 @@ namespace castor
 			return m_buffer.size();
 		}
 
+		uint8_t const * begin()const
+		{
+			return m_buffer.data();
+		}
+
+		uint8_t const * end()const
+		{
+			return begin() + getSize();
+		}
+
+		uint8_t const * cbegin()const
+		{
+			return m_buffer.data();
+		}
+
+		uint8_t const * cend()const
+		{
+			return cbegin() + getSize();
+		}
+
 		uint8_t const * getConstPtr()const
 		{
 			return m_buffer.data();
