@@ -206,7 +206,6 @@ namespace c3d_assimp
 		if ( aiMesh.HasTextureCoords( 0 ) )
 		{
 			texcoords0.resize( aiMesh.mNumVertices );
-			tangents.resize( aiMesh.mNumVertices );
 			index = 0u;
 
 			for ( auto & tex : texcoords0 )
@@ -221,7 +220,6 @@ namespace c3d_assimp
 		if ( aiMesh.HasTextureCoords( 1 ) )
 		{
 			texcoords1.resize( aiMesh.mNumVertices );
-			tangents.resize( aiMesh.mNumVertices );
 			index = 0u;
 
 			for ( auto & tex : texcoords1 )
@@ -236,7 +234,6 @@ namespace c3d_assimp
 		if ( aiMesh.HasTextureCoords( 2 ) )
 		{
 			texcoords2.resize( aiMesh.mNumVertices );
-			tangents.resize( aiMesh.mNumVertices );
 			index = 0u;
 
 			for ( auto & tex : texcoords2 )
@@ -251,7 +248,6 @@ namespace c3d_assimp
 		if ( aiMesh.HasTextureCoords( 3 ) )
 		{
 			texcoords3.resize( aiMesh.mNumVertices );
-			tangents.resize( aiMesh.mNumVertices );
 			index = 0u;
 
 			for ( auto & tex : texcoords3 )
@@ -259,20 +255,6 @@ namespace c3d_assimp
 				tex[0] = float( aiMesh.mTextureCoords[3][index].x );
 				tex[1] = float( aiMesh.mTextureCoords[3][index].y );
 				tex[2] = float( aiMesh.mTextureCoords[3][index].z );
-				++index;
-			}
-		}
-
-		if ( aiMesh.HasTangentsAndBitangents() )
-		{
-			tangents.resize( aiMesh.mNumVertices );
-			index = 0u;
-
-			for ( auto & tan : tangents )
-			{
-				tan[0] = float( aiMesh.mTangents[index].x );
-				tan[1] = float( aiMesh.mTangents[index].y );
-				tan[2] = float( aiMesh.mTangents[index].z );
 				++index;
 			}
 		}
@@ -287,6 +269,25 @@ namespace c3d_assimp
 				col[0] = float( aiMesh.mColors[0][index].r );
 				col[1] = float( aiMesh.mColors[0][index].g );
 				col[2] = float( aiMesh.mColors[0][index].b );
+				++index;
+			}
+		}
+
+		if ( aiMesh.HasTangentsAndBitangents()
+			&& ( aiMesh.HasTextureCoords( 0 )
+				|| aiMesh.HasTextureCoords( 1 )
+				|| aiMesh.HasTextureCoords( 2 )
+				|| aiMesh.HasTextureCoords( 3 ) ) )
+		{
+			tangents.resize( aiMesh.mNumVertices );
+			index = 0u;
+
+			for ( auto & tan : tangents )
+			{
+				tan[0] = float( aiMesh.mTangents[index].x );
+				tan[1] = float( aiMesh.mTangents[index].y );
+				tan[2] = float( aiMesh.mTangents[index].z );
+				tan[3] = 1.0f;
 				++index;
 			}
 		}

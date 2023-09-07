@@ -4135,6 +4135,7 @@ namespace castor3d
 				else
 				{
 					mapping->computeNormals();
+					mapping->computeTangents();
 				}
 			}
 

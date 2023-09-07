@@ -142,7 +142,9 @@ namespace castor3d
 			}
 
 			indexMappingBase->computeNormals();
+			indexMappingBase->computeTangents();
 			indexMappingSide->computeNormals();
+			indexMappingSide->computeTangents();
 
 			// Join the first and last edge of the cone, tangent space wise.
 			auto sideNormals = submeshSide.getComponent< NormalsComponent >();

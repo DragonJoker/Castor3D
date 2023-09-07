@@ -366,6 +366,7 @@ namespace c3d_assimp
 		if ( !aiMesh.HasNormals() )
 		{
 			mapping->computeNormals();
+			mapping->computeTangents();
 		}
 		else if ( !aiMesh.HasTangentsAndBitangents() )
 		{
@@ -395,6 +396,7 @@ namespace c3d_assimp
 
 				auto indexMapping = submesh->getIndexMapping();
 				indexMapping->computeNormals();
+				indexMapping->computeTangents();
 			}
 		}
 
