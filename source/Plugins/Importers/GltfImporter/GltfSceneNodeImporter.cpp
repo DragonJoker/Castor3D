@@ -6,9 +6,8 @@
 
 namespace c3d_gltf
 {
-	GltfSceneNodeImporter::GltfSceneNodeImporter( castor3d::Engine & engine, uint32_t instanceIndex )
+	GltfSceneNodeImporter::GltfSceneNodeImporter( castor3d::Engine & engine )
 		: castor3d::SceneNodeImporter{ engine }
-		, m_instanceIndex{ instanceIndex }
 	{
 	}
 

@@ -87,6 +87,33 @@ namespace c3d_gltf
 	using AnimationChannelSamplers = std::map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
 	using Animations = std::map< castor::String, AnimationChannelSamplers >;
 
+	struct GltfSubmeshData
+	{
+		GltfSubmeshData( fastgltf::Mesh const * pmesh
+			, uint32_t pmeshIndex )
+			: mesh{ pmesh }
+			, meshIndex{ pmeshIndex }
+		{
+		}
+
+		fastgltf::Mesh const * mesh;
+		uint32_t meshIndex;
+		Animations anims;
+	};
+
+	struct GltfMeshData
+	{
+		GltfMeshData( fastgltf::Skin const * pskin
+			, size_t pskinIndex )
+			: skin{ pskin }
+			, skinIndex{ pskinIndex }
+		{
+		}
+		std::vector< GltfSubmeshData > submeshes;
+		fastgltf::Skin const * skin{};
+		size_t skinIndex{};
+	};
+
 	struct GltfNodeData
 		: castor3d::ImporterFile::NodeData
 	{
@@ -112,6 +139,21 @@ namespace c3d_gltf
 		size_t instanceCount;
 		castor3d::NodeTransform transform{};
 		fastgltf::Node const * node;
+		std::vector< GltfMeshData const * > meshes{};
+		Animations anims;
+	};
+
+	struct GlSkeletonData
+	{
+		Animations anims;
+	};
+
+	struct GlSceneData
+	{
+		std::vector< GltfNodeData > nodes;
+		std::vector< GltfNodeData > skeletonNodes;
+		std::map< castor::String, GltfMeshData > meshes;
+		std::map< castor::String, GlSkeletonData > skeletons;
 	};
 
 	class GltfImporterFile
@@ -142,9 +184,9 @@ namespace c3d_gltf
 
 		size_t getNodeIndex( castor::String const & name )const;
 		size_t getSkeletonNodeIndex( castor::String const & name )const;
-		size_t getMeshIndex( castor::String const & name )const;
+		size_t getMeshIndex( castor::String const & name, uint32_t submeshIndex )const;
 
-		Animations getMeshAnimations( castor3d::Mesh const & mesh )const;
+		Animations getMeshAnimations( castor3d::Mesh const & mesh, uint32_t submeshIndex )const;
 		Animations getSkinAnimations( castor3d::Skeleton const & skeleton )const;
 		Animations getNodeAnimations( castor3d::SceneNode const & node )const;
 
@@ -169,7 +211,7 @@ namespace c3d_gltf
 
 		std::vector< GltfNodeData > const & getNodes()const noexcept
 		{
-			return m_nodes;
+			return m_sceneData.nodes;
 		}
 
 		fastgltf::Asset const & getAsset()const noexcept
@@ -182,18 +224,27 @@ namespace c3d_gltf
 			return m_expAsset.error() == fastgltf::Error::None;
 		}
 
+		auto const & getMeshes()const
+		{
+			return m_sceneData.meshes;
+		}
+
 	public:
 		static castor::String const Name;
 
 	private:
 		void doPrelistNodes();
+		void doPrelistMeshes();
+		void doAddNode( GltfNodeData nodeData
+			, bool isParentSkeletonNode
+			, size_t parentIndex
+			, size_t & parentInstanceCount );
 
 	private:
 		fastgltf::Expected< fastgltf::Asset > m_expAsset;
 		fastgltf::Asset const * m_asset{};
 		std::vector< size_t > m_sceneIndices{};
-		std::vector< GltfNodeData > m_nodes;
-		std::vector< GltfNodeData > m_skeletonNodes;
+		GlSceneData m_sceneData;
 	};
 }
 

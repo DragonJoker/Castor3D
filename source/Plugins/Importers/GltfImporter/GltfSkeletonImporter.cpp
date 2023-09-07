@@ -241,10 +241,6 @@ namespace c3d_gltf
 
 		auto skinRootNode = skeletons::findSkinRootNode( file, impSkin );
 		castor3d::log::info << cuT( "      Root Node: [" ) << file.getNodeName( skinRootNode, 0u ) << cuT( "]" ) << std::endl;
-		auto jit = std::find( impSkin.joints.begin()
-			, impSkin.joints.end()
-			, skinRootNode );
-		auto mit = skinOffsetMatrices.begin() + std::distance( impSkin.joints.begin(), jit );
 
 		skeleton.setGlobalInverseTransform( impSkin.skeleton
 			? skeletons::getTransformMatrix( impAsset.nodes[*impSkin.skeleton].transform )
