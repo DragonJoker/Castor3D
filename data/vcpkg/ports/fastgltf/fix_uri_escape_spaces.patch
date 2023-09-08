@@ -1,17 +1,8 @@
 diff --git a/src/fastgltf.cpp b/src/fastgltf.cpp
-index 6f69e86..1ed284d 100644
+index 9244fe1..f968f59 100644
 --- a/src/fastgltf.cpp
 +++ b/src/fastgltf.cpp
-@@ -610,7 +610,7 @@ fg::Expected<fg::DataSource> fg::Parser::decodeDataUri(URIView& uri) const noexc
- }
- 
- fg::Expected<fg::DataSource> fg::Parser::loadFileFromUri(URIView& uri) const noexcept {
--    auto path = directory / uri.path();
-+    auto path = directory / std::filesystem::u8path(uri.path().begin(), uri.path().end());
-     std::error_code error;
-     // If we were instructed to load external buffers and the files don't exist, we'll return an error.
-     if (!fs::exists(path, error) || error) {
-@@ -1452,7 +1452,8 @@ fg::Error fg::Parser::parseBuffers(simdjson::dom::array& buffers, Asset& asset)
+@@ -1487,7 +1487,8 @@ fg::Error fg::Parser::parseBuffers(simdjson::dom::array& buffers, Asset& asset)
          // file. Otherwise, data must be specified in the "uri" field.
          std::string_view uriString;
          if (bufferObject["uri"].get_string().get(uriString) == SUCCESS) {
@@ -21,7 +12,7 @@ index 6f69e86..1ed284d 100644
  
              if (!uriView.valid()) {
                  return Error::InvalidURI;
-@@ -1786,7 +1787,8 @@ fg::Error fg::Parser::parseImages(simdjson::dom::array& images, Asset& asset) {
+@@ -1821,7 +1822,8 @@ fg::Error fg::Parser::parseImages(simdjson::dom::array& images, Asset& asset) {
                  return Error::InvalidGltf;
              }
  
