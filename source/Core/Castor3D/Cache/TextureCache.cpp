@@ -262,6 +262,8 @@ namespace castor3d
 
 			// Generate mipmaps, if possible.
 			if ( !castor::isCompressed( buffer->getFormat() )
+				&& buffer->getWidth() > 1u
+				&& buffer->getHeight() > 1u
 				&& generateMips )
 			{
 				log::debug << name << cuT( " - Generating mipmaps.\n" );
@@ -272,8 +274,11 @@ namespace castor3d
 			// Compress result.
 			auto & loader = engine.getImageLoader();
 			auto compressedFormat = loader.getOptions().getCompressed( buffer->getFormat() );
+			auto compressedMinExtent = ashes::getMinimalExtent2D( convert( compressedFormat ) );
 
 			if ( compressedFormat != buffer->getFormat()
+				&& buffer->getWidth() >= compressedMinExtent.width
+				&& buffer->getHeight() >= compressedMinExtent.height
 				&& sourceInfo.allowCompression() )
 			{
 				log::debug << name << cuT( " - Compressing.\n" );

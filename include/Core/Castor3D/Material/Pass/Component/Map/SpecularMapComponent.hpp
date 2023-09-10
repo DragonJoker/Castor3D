@@ -88,6 +88,7 @@ namespace castor3d
 			{
 				result.textureSpace |= TextureSpace::eColour;
 				result.textureSpace |= TextureSpace::eNormalised;
+				result.textureSpace |= TextureSpace::eAllowSRGB;
 				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FFFFFFu : mask ) } );
 			}
 
