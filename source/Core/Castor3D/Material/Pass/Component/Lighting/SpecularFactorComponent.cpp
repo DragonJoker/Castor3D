@@ -119,6 +119,22 @@ namespace castor3d
 		res.getMember< sdw::Float >( "specularFactor", true ) += src.getMember< sdw::Float >( "specularFactor", true ) * passMultiplier;
 	}
 
+	void SpecularFactorComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
+		, sdw::StructInstance const & surface
+		, sdw::Vec4 & spcRgh
+		, sdw::Vec4 & colMtl
+		, sdw::Vec4 & emsTrn )const
+	{
+		if ( !components.hasMember( "specular" )
+			|| !components.hasMember( "specularFactor" ) )
+		{
+			return;
+		}
+
+		spcRgh.rgb() *= components.getMember< sdw::Float >( "specularFactor", 1.0_f );
+		colMtl.rgb() *= ( 1.0_f - components.getMember< sdw::Float >( "specularFactor", 0.0_f ) );
+	}
+
 	//*********************************************************************************************
 
 	SpecularFactorComponent::MaterialShader::MaterialShader()
