@@ -21,6 +21,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
@@ -173,6 +174,7 @@ namespace castor3d
 		registerComponent< RefractionComponent >();
 		registerComponent< MetalnessComponent >();
 		registerComponent< SpecularComponent >();
+		registerComponent< SpecularFactorComponent >();
 		registerComponent< RoughnessComponent >();
 		registerComponent< AlphaTestComponent >();
 		registerComponent< ReflectionComponent >();

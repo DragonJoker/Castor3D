@@ -21,6 +21,7 @@
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
@@ -268,6 +269,7 @@ namespace c3d_assimp
 				}
 
 				parseSpecular();
+				parseSpecularFactor();
 				parseEmissive();
 				parseAttenuation();
 				parseClearcoat();
@@ -558,16 +560,25 @@ namespace c3d_assimp
 			void parseSpecular()
 			{
 				aiColor3D colour = { 1, 1, 1 };
-				float factor{ 1.0f };
 				bool hasColour = m_material.Get( AI_MATKEY_COLOR_SPECULAR, colour ) == aiReturn_SUCCESS;
-				bool hasFactor = m_material.Get( AI_MATKEY_SPECULAR_FACTOR, factor ) == aiReturn_SUCCESS;
 
-				if ( hasColour || hasFactor )
+				if ( hasColour )
 				{
 					auto component = m_result.createComponent< castor3d::SpecularComponent >();
 					component->setSpecular( castor::RgbColour{ colour.r
 						, colour.g
 						, colour.b } );
+				}
+			}
+
+			void parseSpecularFactor()
+			{
+				float factor{ 1.0f };
+				bool hasFactor = m_material.Get( AI_MATKEY_SPECULAR_FACTOR, factor ) == aiReturn_SUCCESS;
+
+				if ( hasFactor )
+				{
+					auto component = m_result.createComponent< castor3d::SpecularFactorComponent >();
 					component->setFactor( factor );
 				}
 			}
@@ -785,7 +796,7 @@ namespace c3d_assimp
 									mixedInterpolative( true );
 								}
 
-								if ( hasAlphaChannel( image ) )
+								if ( !hasAlphaChannel( image ) )
 								{
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
 								}
