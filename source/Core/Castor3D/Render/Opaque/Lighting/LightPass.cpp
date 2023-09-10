@@ -189,7 +189,7 @@ namespace castor3d
 						, wsPosition
 						, wsNormal
 						, vec3( texCoord, 0.0_f ) } );
-					materials.fill( colMtl.rgb(), spcRgh, colMtl, material );
+					materials.fill( colMtl.rgb(), spcRgh, colMtl, emsTrn, material );
 					auto components = writer.declLocale( "components"
 						, shader::BlendComponents{ materials
 						, material
@@ -372,7 +372,7 @@ namespace castor3d
 							, wsPosition
 							, wsNormal
 							, vec3( texCoord, 0.0_f ) } );
-					materials.fill( colMtl.rgb(), spcRgh, colMtl, material );
+					materials.fill( colMtl.rgb(), spcRgh, colMtl, emsTrn, material );
 					auto components = writer.declLocale( "components"
 						, shader::BlendComponents{ materials
 							, material

@@ -280,9 +280,7 @@ namespace castor3d
 								, ( config.hasSsao
 									? nmlOcc.w() * c3d_mapSsao.lod( vtx_texture, 0.0_f ).r()
 									: nmlOcc.w() ) );
-							auto emissive = writer.declLocale( "emissive"
-								, emsTrn.xyz() );
-							materials.fill( albedo, spcRgh, colMtl, material );
+							materials.fill( albedo, spcRgh, colMtl, emsTrn, material );
 							auto components = writer.declLocale( "components"
 								, shader::BlendComponents{ materials
 									, material
@@ -372,7 +370,7 @@ namespace castor3d
 							output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
 							output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 							output.registerOutput( "Occlusion", occlusion );
-							output.registerOutput( "Emissive", emissive );
+							output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
 
 							outColour = vec4( lightScattering + lightingModel->combine( output
 									, components
@@ -384,7 +382,7 @@ namespace castor3d
 									, directAmbient
 									, indirectAmbient
 									, occlusion
-									, emissive
+									, components.emissiveColour * components.emissiveFactor
 									, reflectedDiffuse
 									, reflectedSpecular
 									, refracted )

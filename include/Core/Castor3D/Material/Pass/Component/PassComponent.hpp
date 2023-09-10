@@ -59,7 +59,8 @@ namespace castor3d
 			C3D_API virtual void updateOutputs( sdw::StructInstance const & components
 				, sdw::StructInstance const & surface
 				, sdw::Vec4 & spcRgh
-				, sdw::Vec4 & colMtl )const
+				, sdw::Vec4 & colMtl
+				, sdw::Vec4 & emsTrn )const
 			{
 			}
 		};
@@ -465,6 +466,7 @@ namespace castor3d
 			C3D_API virtual void updateMaterial( sdw::Vec3 const & colour
 				, sdw::Vec4 const & spcRgh
 				, sdw::Vec4 const & colMtl
+				, sdw::Vec4 const & emsTrn
 				, Material & material )const
 			{
 			}

@@ -837,8 +837,7 @@ namespace castor3d
 						, surface.passMultipliers
 						, components );
 					outNmlOcc = vec4( components.normal, components.occlusion );
-					passShaders.updateOutputs( components, surface, outSpcRgh, outColMtl );
-					outEmsTrn = vec4( components.emissiveColour * components.emissiveFactor, components.transmittance );
+					passShaders.updateOutputs( components, surface, outSpcRgh, outColMtl, outEmsTrn );
 					writer.returnStmt( 1_b );
 				}
 				, sdw::InIVec2{ writer, "ipixel" }
