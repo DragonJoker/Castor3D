@@ -86,16 +86,24 @@ namespace GuiCommon
 					Write( getMotionModelSettingsName(), "FreeCamera" );
 					Write( getLockHorizonSettingsName(), true );
 					Write( getMoveObjectsSettingsName(), false );
+					m_connected = true;
 				}
 				catch ( std::exception & exc )
 				{
 					castor::Logger::logError( "COuldn't initialise space mouse controller: " + std::string{ exc.what() } );
 				}
+				catch ( ... )
+				{
+					castor::Logger::logError( "COuldn't initialise space mouse controller: Unknown error" );
+				}
 			}
 
 			~SpaceMouseController()noexcept override
 			{
-				EnableNavigation( false );
+				if ( m_connected )
+				{
+					EnableNavigation( false );
+				}
 			}
 
 			static castor::String const & getSettingsName()
@@ -416,7 +424,7 @@ namespace GuiCommon
 				{
 					auto & viewport = m_camera->getViewport();
 					viewport.setFrustum( float( frustum.left ), float( frustum.right )
-						, float( frustum.bottom ), float( frustum.top ) 
+						, float( frustum.bottom ), float( frustum.top )
 						, float( frustum.nearVal ), float( frustum.farVal ) );
 					return 0;
 				}
@@ -659,6 +667,7 @@ namespace GuiCommon
 			}
 
 		private:
+			bool m_connected{};
 			castor3d::FrameListener & m_listener;
 			castor3d::CameraRPtr m_camera{};
 			castor3d::GeometryRPtr m_geometry{};
