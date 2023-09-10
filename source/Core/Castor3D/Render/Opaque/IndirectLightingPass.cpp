@@ -137,6 +137,8 @@ namespace castor3d
 						, c3d_mapColMtl.lod( texCoord, 0.0_f ) );
 					auto spcRgh = writer.declLocale( "spcRgh"
 						, c3d_mapSpcRgh.lod( texCoord, 0.0_f ) );
+					auto emsTrn = writer.declLocale( "emsTrn"
+						, vec4( 0.0_f ) );
 					auto depth = writer.declLocale( "depth"
 						, depthObj.x() );
 					auto vsPosition = writer.declLocale( "vsPosition"
@@ -153,7 +155,7 @@ namespace castor3d
 								, vsPosition
 								, wsPosition
 								, wsNormal } );
-						materials.fill( colMtl.rgb(), spcRgh, colMtl, material );
+						materials.fill( colMtl.rgb(), spcRgh, colMtl, emsTrn, material );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material

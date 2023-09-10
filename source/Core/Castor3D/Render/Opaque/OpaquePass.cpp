@@ -201,8 +201,7 @@ namespace castor3d
 				}
 
 				c3d_imgNmlOcc = vec4( components.normal, components.occlusion );
-				passShaders.updateOutputs( components, in, c3d_imgSpcRgh, c3d_imgColMtl );
-				c3d_imgEmsTrn = vec4( components.emissiveColour * components.emissiveFactor, components.transmittance );
+				passShaders.updateOutputs( components, in, c3d_imgSpcRgh, c3d_imgColMtl, c3d_imgEmsTrn );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
