@@ -61,23 +61,6 @@ namespace c3d_gltf
 {
 	inline const castor::String DefaultMaterial = cuT( "GLTF_DefaultMaterial" );
 
-	auto findAttribute( auto const & attributes
-		, std::pmr::string const & name )
-	{
-		return std::find_if( attributes.begin()
-			, attributes.end()
-			, [&name]( auto const & lookup )
-			{
-				return lookup.first == name;
-			} );
-	}
-
-	bool hasAttribute( auto const & attributes
-		, std::pmr::string const & name )
-	{
-		return findAttribute( attributes, name ) != attributes.end();
-	}
-
 	castor3d::NodeTransform convert( std::variant< fastgltf::Node::TRS, fastgltf::Node::TransformMatrix > const & transform );
 	castor::Point3f convert( std::array< float, 3u > const & value );
 	castor::Quaternion convert( std::array< float, 4u > const & value );
@@ -86,6 +69,9 @@ namespace c3d_gltf
 	using NodeAnimationChannelSampler = std::vector< AnimationChannelSampler >;
 	using AnimationChannelSamplers = std::map< fastgltf::AnimationPath, NodeAnimationChannelSampler >;
 	using Animations = std::map< castor::String, AnimationChannelSamplers >;
+
+	using IndexName = std::pair< size_t, castor::String >;
+	using NameContainer = std::vector< IndexName >;
 
 	struct GltfSubmeshData
 	{
@@ -245,6 +231,13 @@ namespace c3d_gltf
 		fastgltf::Asset const * m_asset{};
 		std::vector< size_t > m_sceneIndices{};
 		GlSceneData m_sceneData;
+		mutable NameContainer m_materialNames;
+		mutable NameContainer m_meshNames;
+		mutable NameContainer m_nodeNames;
+		mutable NameContainer m_skinNames;
+		mutable NameContainer m_lightNames;
+		mutable NameContainer m_samplerNames;
+		mutable NameContainer m_animationNames;
 	};
 }
 

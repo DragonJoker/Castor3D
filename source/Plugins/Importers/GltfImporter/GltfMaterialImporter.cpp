@@ -22,6 +22,7 @@
 #include <Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
@@ -597,9 +598,10 @@ namespace c3d_gltf
 
 			if ( impMaterial.specular )
 			{
-				auto component = pass->createComponent< castor3d::SpecularComponent >();
-				component->setFactor( impMaterial.specular->specularFactor );
-				component->setSpecular( castor::RgbColour::fromComponents( impMaterial.specular->specularColorFactor[0]
+				auto spcComponent = pass->createComponent< castor3d::SpecularComponent >();
+				auto fctComponent = pass->createComponent< castor3d::SpecularFactorComponent >();
+				fctComponent->setFactor( impMaterial.specular->specularFactor );
+				spcComponent->setSpecular( castor::RgbColour::fromComponents( impMaterial.specular->specularColorFactor[0]
 					, impMaterial.specular->specularColorFactor[1]
 					, impMaterial.specular->specularColorFactor[2] ) );
 				materials::parseTexture< castor3d::SpecularMapComponent >( file, *pass, impAsset, m_textureRemaps, impMaterial.specular->specularColorTexture, *this );
@@ -618,7 +620,8 @@ namespace c3d_gltf
 			}
 
 			auto spcComponent = pass->createComponent< castor3d::SpecularComponent >();
-			spcComponent->setFactor( 1.0f );
+			auto fctComponent = pass->createComponent< castor3d::SpecularFactorComponent >();
+			fctComponent->setFactor( 1.0f );
 			spcComponent->setSpecular( castor::RgbColour::fromComponents( impMaterial.specularGlossiness->specularFactor[0]
 				, impMaterial.specularGlossiness->specularFactor[1]
 				, impMaterial.specularGlossiness->specularFactor[2] ) );
