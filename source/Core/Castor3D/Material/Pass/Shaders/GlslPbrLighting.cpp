@@ -188,7 +188,7 @@ namespace castor3d::shader
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedDiffuse )
 	{
-		return  ( components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
+		return ( components.colour * ( directDiffuse + ( indirectDiffuse * ambientOcclusion ) )
 			+ ( reflectedDiffuse * ambientOcclusion * directAmbient ) );
 	}
 

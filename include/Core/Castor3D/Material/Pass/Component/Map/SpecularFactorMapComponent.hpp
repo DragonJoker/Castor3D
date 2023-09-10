@@ -88,7 +88,8 @@ namespace castor3d
 			{
 				result.textureSpace |= TextureSpace::eColour;
 				result.textureSpace |= TextureSpace::eNormalised;
-				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0x00FFFFFFu : mask ) } );
+				result.textureSpace |= TextureSpace::eAllowSRGB;
+				addFlagConfiguration( result, { getTextureFlags(), ( mask == 0 ? 0xFF000000u : mask ) } );
 			}
 
 			castor::String getTextureFlagsName( PassComponentTextureFlag const & flags )const override
