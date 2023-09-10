@@ -130,9 +130,7 @@ namespace castor3d
 			return;
 		}
 
-		spcRgh.rgb() = components.getMember< sdw::Vec3 >( "specular", true )
-			* components.getMember< sdw::Float >( "specularFactor", 1.0_f );
-		colMtl.rgb() *= ( 1.0_f - components.getMember< sdw::Float >( "specularFactor", 0.0_f ) );
+		spcRgh.rgb() = components.getMember< sdw::Vec3 >( "specular", true );
 	}
 
 	//*********************************************************************************************
