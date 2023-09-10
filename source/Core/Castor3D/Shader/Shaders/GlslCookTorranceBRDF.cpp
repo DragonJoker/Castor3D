@@ -84,16 +84,14 @@ namespace castor3d::shader
 
 	sdw::RetVec3 CookTorranceBRDF::computeDiffuse( sdw::Vec3 const & pradiance
 		, sdw::Float const & pintensity
-		, sdw::Vec3 const & pF
-		, sdw::Float const & pmetalness )
+		, sdw::Vec3 const & pF )
 	{
 		if ( !m_computeCookTorranceDiffuse )
 		{
 			m_computeCookTorranceDiffuse = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceDiffuse"
 				, [this]( sdw::Vec3 radiance
 					, sdw::Float const intensity
-					, sdw::Vec3 const & F
-					, sdw::Float const & metalness )
+					, sdw::Vec3 const & F )
 				{
 					// Lambertian BRDF
 					auto kD = m_writer.declLocale( "kD"
@@ -103,14 +101,12 @@ namespace castor3d::shader
 				}
 				, sdw::InVec3( m_writer, "radiance" )
 				, sdw::InFloat( m_writer, "intensity" )
-				, sdw::InVec3{ m_writer, "F" }
-				, sdw::InFloat{ m_writer, "metalness" } );
+				, sdw::InVec3{ m_writer, "F" } );
 		}
 
 		return m_computeCookTorranceDiffuse( pradiance
 			, pintensity
-			, pF
-			, pmetalness );
+			, pF );
 	}
 
 	//***********************************************************************************************

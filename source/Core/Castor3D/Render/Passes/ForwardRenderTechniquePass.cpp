@@ -450,8 +450,7 @@ namespace castor3d
 							, ( hasDiffuseGI
 								? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
 									, length( lightIndirectDiffuse.xyz() )
-									, lightSurface.difF()
-									, components.metalness )
+									, lightSurface.difF() )
 								: vec3( 0.0_f ) ) );
 
 						output.registerOutput( "Lighting", "Ambient", directAmbient );

@@ -118,8 +118,7 @@ namespace castor3d::shader
 		auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
 			, m_cookTorrance.computeDiffuse( radiance
 				, intensity
-				, lightSurface.difF()
-				, components.metalness ) );
+				, lightSurface.difF() ) );
 		output = doGetNdotL( lightSurface, components ) * rawDiffuse;
 		return rawDiffuse;
 	}

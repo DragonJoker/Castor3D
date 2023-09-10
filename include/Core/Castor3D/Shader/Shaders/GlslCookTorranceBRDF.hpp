@@ -22,8 +22,7 @@ namespace castor3d::shader
 			, sdw::Float const & roughness );
 		C3D_API sdw::RetVec3 computeDiffuse( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
-			, sdw::Vec3 const & F
-			, sdw::Float const & metalness );
+			, sdw::Vec3 const & F );
 
 	private:
 		sdw::ShaderWriter & m_writer;
@@ -40,8 +39,7 @@ namespace castor3d::shader
 		sdw::Function< sdw::Vec3
 			, sdw::InVec3
 			, sdw::InFloat
-			, sdw::InVec3
-			, sdw::InFloat > m_computeCookTorranceDiffuse;
+			, sdw::InVec3 > m_computeCookTorranceDiffuse;
 	};
 }
 
