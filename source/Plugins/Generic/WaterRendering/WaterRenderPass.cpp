@@ -706,8 +706,7 @@ namespace water
 						, ( hasDiffuseGI
 							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
 								, length( lightIndirectDiffuse.xyz() )
-								, lightSurface.difF()
-								, components.metalness )
+								, lightSurface.difF() )
 							: vec3( 0.0_f ) ) );
 					output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
 

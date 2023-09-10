@@ -356,8 +356,7 @@ namespace castor3d
 								, ( config.hasDiffuseGi
 									? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse )
 										, length( lightIndirectDiffuse )
-										, lightSurface.difF()
-										, components.metalness )
+										, lightSurface.difF() )
 									: vec3( 0.0_f ) ) );
 
 							IF( writer, material.hasTransmission != 0_u )
