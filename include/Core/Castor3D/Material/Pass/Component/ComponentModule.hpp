@@ -283,6 +283,13 @@ namespace castor3d
 	struct SpecularComponent;
 	/**
 	\~english
+	\brief		Component holding specular factor data.
+	\~french
+	\brief		Composant détenant les données de facteur de spéculaire.
+	*/
+	struct SpecularFactorComponent;
+	/**
+	\~english
 	\brief		Component holding subsurface scattering data.
 	\~french
 	\brief		Composant détenant les données de subsurface scattering.
@@ -313,6 +320,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, RoughnessComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SheenComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SpecularComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SpecularFactorComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SubsurfaceScatteringComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ThicknessComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TransmissionComponent, C3D_API );

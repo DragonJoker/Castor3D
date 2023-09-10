@@ -37,8 +37,7 @@ namespace castor
 		bool operator()( castor3d::SpecularComponent const & object
 			, StringStream & file )override
 		{
-			return writeNamedSubOpt( file, "specular_colour", object.getSpecular(), castor3d::SpecularComponent::Default )
-				&& writeOpt( file, "specular_factor", object.getFactor(), castor3d::SpecularComponent::DefaultFactor );
+			return writeNamedSubOpt( file, "specular_colour", object.getSpecular(), castor3d::SpecularComponent::Default );
 		}
 	};
 }
@@ -64,22 +63,6 @@ namespace castor3d
 			}
 		}
 		CU_EndAttribute()
-
-		static CU_ImplementAttributeParser( parserPassSpecularFactor )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( !params.empty() )
-			{
-				auto & component = getPassComponent< SpecularComponent >( parsingContext );
-				component.setFactor( params[0]->get< float >() );
-			}
-		}
-		CU_EndAttribute()
 	}
 
 	//*********************************************************************************************
@@ -98,7 +81,6 @@ namespace castor3d
 		if ( !components.hasMember( "specular" ) )
 		{
 			components.declMember( "specular", sdw::type::Kind::eVec3F );
-			components.declMember( "specularFactor", sdw::type::Kind::eFloat );
 		}
 	}
 
@@ -117,12 +99,10 @@ namespace castor3d
 		if ( material )
 		{
 			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "specular" ) ) );
-			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Float >( "specularFactor" ) ) );
 		}
 		else
 		{
 			inits.emplace_back( sdw::makeExpr( sdw::vec3( SpecularComponent::DefaultComponent ) ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ DefaultFactor } ) );
 		}
 	}
 
@@ -137,7 +117,6 @@ namespace castor3d
 		}
 
 		res.getMember< sdw::Vec3 >( "specular", true ) += src.getMember< sdw::Vec3 >( "specular", true ) * passMultiplier;
-		res.getMember< sdw::Float >( "specularFactor", true ) += src.getMember< sdw::Float >( "specularFactor", true ) * passMultiplier;
 	}
 
 	void SpecularComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
@@ -151,13 +130,14 @@ namespace castor3d
 		}
 
 		spcRgh.rgb() = components.getMember< sdw::Vec3 >( "specular", true )
-			* components.getMember< sdw::Float >( "specularFactor", true );
+			* components.getMember< sdw::Float >( "specularFactor", 1.0_f );
+		colMtl.rgb() *= ( 1.0_f - components.getMember< sdw::Float >( "specularFactor", 0.0_f ) );
 	}
 
 	//*********************************************************************************************
 
 	SpecularComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 16u }
+		: shader::PassMaterialShader{ 12u }
 	{
 	}
 
@@ -167,9 +147,7 @@ namespace castor3d
 		if ( !type.hasMember( "specular" ) )
 		{
 			type.declMember( "specular", ast::type::Kind::eVec3F );
-			type.declMember( "specularFactor", ast::type::Kind::eFloat );
 			inits.emplace_back( sdw::makeExpr( sdw::vec3( SpecularComponent::DefaultComponent ) ) );
-			inits.emplace_back( sdw::makeExpr( sdw::Float{ DefaultFactor } ) );
 		}
 	}
 
@@ -196,11 +174,6 @@ namespace castor3d
 			, cuT( "specular_colour" )
 			, spccmp::parserPassSpecular
 			, { castor::makeParameter< castor::ParameterType::eRgbColour >() } );
-		castor::addParserT( parsers
-			, CSCNSection::ePass
-			, cuT( "specular_factor" )
-			, spccmp::parserPassSpecularFactor
-			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
 	void SpecularComponent::Plugin::zeroBuffer( Pass const & pass
@@ -209,7 +182,6 @@ namespace castor3d
 	{
 		auto data = buffer.getData( pass.getId() );
 		data.write( materialShader.getMaterialChunk(), SpecularComponent::Default, 0u );
-		data.write( materialShader.getMaterialChunk(), SpecularComponent::DefaultFactor, 12u );
 	}
 
 	bool SpecularComponent::Plugin::isComponentNeeded( TextureCombine const & textures
@@ -232,8 +204,7 @@ namespace castor3d
 	void SpecularComponent::accept( PassVisitorBase & vis )
 	{
 		vis.visit( cuT( "Specular" ) );
-		vis.visit( cuT( "Factor" ), m_value.factor );
-		vis.visit( cuT( "Colour" ), m_value.colour );
+		vis.visit( cuT( "Colour" ), m_value );
 	}
 
 	PassComponentUPtr SpecularComponent::doClone( Pass & pass )const
@@ -255,7 +226,6 @@ namespace castor3d
 	{
 		auto data = buffer.getData( getOwner()->getId() );
 		data.write( m_materialShader->getMaterialChunk(), getSpecular(), 0u );
-		data.write( m_materialShader->getMaterialChunk(), getFactor(), 12u );
 	}
 
 	//*********************************************************************************************

@@ -7,7 +7,7 @@
 #include "Castor3D/Material/Pass/PassVisitor.hpp"
 #include "Castor3D/Material/Pass/PbrPass.hpp"
 #include "Castor3D/Material/Pass/Component/Map/MetalnessMapComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/SpecularFactorComponent.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
@@ -179,7 +179,7 @@ namespace castor3d
 		: PassMapComponent{ pass
 			, TypeName
 			, Specular
-			, { SpecularComponent::TypeName } }
+			, { SpecularFactorComponent::TypeName } }
 	{
 	}
 
