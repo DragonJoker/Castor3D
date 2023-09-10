@@ -174,6 +174,23 @@ namespace c3d_gltf
 			mapping.addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
+		auto findAttribute( auto const & attributes
+			, std::pmr::string const & name )
+		{
+			return std::find_if( attributes.begin()
+				, attributes.end()
+				, [&name]( auto const & lookup )
+				{
+					return lookup.first == name;
+				} );
+		}
+
+		bool hasAttribute( auto const & attributes
+			, std::pmr::string const & name )
+		{
+			return findAttribute( attributes, name ) != attributes.end();
+		}
+
 		template< uint32_t SrcCountT, typename SrcDataT, uint32_t DstCountT, typename DstDataT, bool InvYT = false >
 		static bool parseAttributeData( fastgltf::Asset const & impAsset
 			, auto const & impAttributes
@@ -720,43 +737,43 @@ namespace c3d_gltf
 		castor::Point3fArray * texcoords3 = &tex3;
 		castor::Point3fArray * colours = &col;
 
-		if ( hasAttribute( impPrimitive.attributes, "NORMAL" ) )
+		if ( meshes::hasAttribute( impPrimitive.attributes, "NORMAL" ) )
 		{
 			auto nmlComp = submesh.createComponent< castor3d::NormalsComponent >();
 			normals = &nmlComp->getData();
 
-			if ( hasAttribute( impPrimitive.attributes, "TANGENT" ) )
+			if ( meshes::hasAttribute( impPrimitive.attributes, "TANGENT" ) )
 			{
 				auto tanComp = submesh.createComponent< castor3d::TangentsComponent >();
 				tangents = &tanComp->getData();
 			}
 		}
 
-		if ( hasAttribute( impPrimitive.attributes, "TEXCOORD_0" ) )
+		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_0" ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords0Component >();
 			texcoords0 = &texComp->getData();
 		}
 
-		if ( hasAttribute( impPrimitive.attributes, "TEXCOORD_1" ) )
+		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_1" ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords1Component >();
 			texcoords1 = &texComp->getData();
 		}
 
-		if ( hasAttribute( impPrimitive.attributes, "TEXCOORD_2" ) )
+		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_2" ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords2Component >();
 			texcoords2 = &texComp->getData();
 		}
 
-		if ( hasAttribute( impPrimitive.attributes, "TEXCOORD_3" ) )
+		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_3" ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords3Component >();
 			texcoords3 = &texComp->getData();
 		}
 
-		if ( hasAttribute( impPrimitive.attributes, "COLOR_0" ) )
+		if ( meshes::hasAttribute( impPrimitive.attributes, "COLOR_0" ) )
 		{
 			auto colComp = submesh.createComponent< castor3d::ColoursComponent >();
 			colours = &colComp->getData();
