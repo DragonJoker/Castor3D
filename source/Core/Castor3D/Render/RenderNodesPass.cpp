@@ -24,6 +24,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
+#include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
@@ -51,9 +52,12 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
+#include "Castor3D/Shader/Ubos/LayeredLpvGridConfigUbo.hpp"
+#include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
 #include "Castor3D/Shader/Ubos/ObjectIdsUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
+#include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -98,6 +102,29 @@ namespace castor3d
 			auto nodeType = getRenderNodeType( flags.m_programFlags );
 			return size_t( nodeType )
 				| ( size_t( flags.m_sceneFlags ) << 8u );
+		}
+
+		static SceneFlags adjustSceneFlags( SceneFlags sceneFlags
+			, IndirectLightingData const & indirectLighting )
+		{
+			if ( !indirectLighting.vctConfigUbo
+				|| !indirectLighting.vctFirstBounce
+				|| !indirectLighting.vctSecondaryBounce )
+			{
+				remFlag( sceneFlags, SceneFlag::eVoxelConeTracing );
+			}
+
+			if ( !indirectLighting.lpvConfigUbo || !indirectLighting.lpvResult )
+			{
+				remFlag( sceneFlags, SceneFlag::eLpvGI );
+			}
+
+			if ( !indirectLighting.llpvConfigUbo || !indirectLighting.lpvResult )
+			{
+				remFlag( sceneFlags, SceneFlag::eLayeredLpvGI );
+			}
+
+			return sceneFlags;
 		}
 	}
 
@@ -520,11 +547,156 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::addBackgroundBindings( SceneBackground const & background
-		, PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )
 	{
-		background.addBindings( flags, bindings, index );
+		background.addBindings( bindings, index );
+	}
+
+	void RenderNodesPass::addGIBindings( SceneFlags sceneFlags
+		, IndirectLightingData const & indirectLighting
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )
+	{
+		sceneFlags = rendndpass::adjustSceneFlags( sceneFlags, indirectLighting );
+
+		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxelsFirstBounce
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxelsSecondaryBounce
+		}
+		else
+		{
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationG
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationB
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( indirectLighting.llpvResult );
+
+				for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
+				{
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationRn
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationGn
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationBn
+				}
+			}
+		}
+	}
+
+	void RenderNodesPass::addGIDescriptor( SceneFlags sceneFlags
+		, IndirectLightingData const & indirectLighting
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )
+	{
+		sceneFlags = rendndpass::adjustSceneFlags( sceneFlags, indirectLighting );
+
+		if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
+		{
+			CU_Require( indirectLighting.vctConfigUbo );
+			CU_Require( indirectLighting.vctFirstBounce );
+			CU_Require( indirectLighting.vctSecondaryBounce );
+			descriptorWrites.push_back( indirectLighting.vctConfigUbo->getDescriptorWrite( index++ ) );
+			bindTexture( indirectLighting.vctFirstBounce->wholeView
+				, *indirectLighting.vctFirstBounce->sampler
+				, descriptorWrites
+				, index );
+			bindTexture( indirectLighting.vctSecondaryBounce->wholeView
+				, *indirectLighting.vctSecondaryBounce->sampler
+				, descriptorWrites
+				, index );
+		}
+		else
+		{
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				CU_Require( indirectLighting.lpvConfigUbo );
+				descriptorWrites.push_back( indirectLighting.lpvConfigUbo->getDescriptorWrite( index++ ) );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( indirectLighting.llpvConfigUbo );
+				descriptorWrites.push_back( indirectLighting.llpvConfigUbo->getDescriptorWrite( index++ ) );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
+			{
+				CU_Require( indirectLighting.lpvResult );
+				auto & lpv = *indirectLighting.lpvResult;
+				bindTexture( lpv[LpvTexture::eR].wholeView
+					, *lpv[LpvTexture::eR].sampler
+					, descriptorWrites
+					, index );
+				bindTexture( lpv[LpvTexture::eG].wholeView
+					, *lpv[LpvTexture::eG].sampler
+					, descriptorWrites
+					, index );
+				bindTexture( lpv[LpvTexture::eB].wholeView
+					, *lpv[LpvTexture::eB].sampler
+					, descriptorWrites
+					, index );
+			}
+
+			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
+			{
+				CU_Require( indirectLighting.llpvResult );
+
+				for ( auto & plpv : *indirectLighting.llpvResult )
+				{
+					auto & lpv = *plpv;
+					bindTexture( lpv[LpvTexture::eR].wholeView
+						, *lpv[LpvTexture::eR].sampler
+						, descriptorWrites
+						, index );
+					bindTexture( lpv[LpvTexture::eG].wholeView
+						, *lpv[LpvTexture::eG].sampler
+						, descriptorWrites
+						, index );
+					bindTexture( lpv[LpvTexture::eB].wholeView
+						, *lpv[LpvTexture::eB].sampler
+						, descriptorWrites
+						, index );
+				}
+			}
+		}
 	}
 
 	void RenderNodesPass::addClusteredLightingBindings( FrustumClusters const & frustumClusters
@@ -596,13 +768,11 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::addBackgroundDescriptor( SceneBackground const & background
-		, PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )
 	{
-		background.addDescriptors( flags
-			, descriptorWrites
+		background.addDescriptors( descriptorWrites
 			, targetImage
 			, index );
 	}
@@ -884,14 +1054,12 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::doAddBackgroundBindings( Scene const & scene
-		, PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		if ( auto background = scene.getBackground() )
 		{
 			addBackgroundBindings( *background
-				, flags
 				, bindings
 				, index );
 		}
@@ -930,7 +1098,6 @@ namespace castor3d
 	}
 
 	void RenderNodesPass::doAddBackgroundDescriptor( Scene const & scene
-		, PipelineFlags const & flags
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
@@ -938,7 +1105,6 @@ namespace castor3d
 		if ( auto background = scene.getBackground() )
 		{
 			addBackgroundDescriptor( *background
-				, flags
 				, descriptorWrites
 				, targetImage
 				, index );

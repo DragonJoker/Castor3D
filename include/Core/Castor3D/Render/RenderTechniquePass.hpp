@@ -378,13 +378,7 @@ namespace castor3d
 		ShaderFlags m_shaderFlags{};
 		SsaoConfig m_ssaoConfig;
 		Texture const * m_ssao;
-		LpvGridConfigUbo const * m_lpvConfigUbo;
-		LayeredLpvGridConfigUbo const * m_llpvConfigUbo;
-		VoxelizerUbo const * m_vctConfigUbo;
-		LightVolumePassResult const * m_lpvResult;
-		LightVolumePassResultArray const * m_llpvResult;
-		Texture const * m_vctFirstBounce;
-		Texture const * m_vctSecondaryBounce;
+		IndirectLightingData m_indirectLighting;
 	};
 }
 

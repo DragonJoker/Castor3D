@@ -177,8 +177,28 @@ namespace castor3d::shader
 			, sdw::UInt const & materialId
 			, sdw::Array< sdw::Vec4 > const & passMultipliers
 			, BlendComponents & output )const;
+		C3D_API void blendMaterials( DebugOutput & debugOutput
+			, VkCompareOp alphaFunc
+			, PipelineFlags const & flags
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, Material & material
+			, sdw::UInt const & materialId
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, BlendComponents & output )const;
 		// Used by forward passes
 		C3D_API void blendMaterials( bool opaque
+			, PipelineFlags const & flags
+			, shader::TextureConfigurations const & textureConfigs
+			, shader::TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, Material & material
+			, sdw::UInt const & materialId
+			, sdw::Array< sdw::Vec4 > const & passMultipliers
+			, BlendComponents & output )const;
+		C3D_API void blendMaterials( DebugOutput & debugOutput
+			, bool opaque
 			, PipelineFlags const & flags
 			, shader::TextureConfigurations const & textureConfigs
 			, shader::TextureAnimations const & textureAnims
@@ -194,6 +214,10 @@ namespace castor3d::shader
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, Material const & material
 			, BlendComponents & components )const;
+
+	private:
+		void doDisplayDebug( DebugOutput & debugOutput
+			, BlendComponents const & components )const;
 
 	private:
 		PassShaders & m_passShaders;

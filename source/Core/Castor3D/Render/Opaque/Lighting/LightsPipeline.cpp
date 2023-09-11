@@ -214,7 +214,7 @@ namespace castor3d
 
 		auto index = uint32_t( LightPassLgtIdx::eCount );
 		PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };
-		m_scene.getBackground()->addBindings( flags, setLayoutBindings, index );
+		m_scene.getBackground()->addBindings( setLayoutBindings, index );
 
 		return m_device->createDescriptorSetLayout( std::move( setLayoutBindings ) );
 	}
@@ -271,7 +271,7 @@ namespace castor3d
 
 			auto index = uint32_t( LightPassLgtIdx::eCount );
 			PipelineFlags flags{ PassComponentCombine{}, m_config.lightingModelId, {} };
-			m_scene.getBackground()->addDescriptors( flags, writes, m_targetColourResult, index );
+			m_scene.getBackground()->addDescriptors( writes, m_targetColourResult, index );
 
 			result.descriptorSet = m_descriptorPool->createDescriptorSet( 1u );
 			result.descriptorSet->setBindings( writes );

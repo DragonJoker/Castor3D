@@ -492,7 +492,7 @@ namespace ocean
 		auto index = uint32_t( rdpass::WaveIdx::eBrdf ) + 1u;
 		doAddShadowBindings( m_scene, flags, bindings, index );
 		doAddEnvBindings( flags, bindings, index );
-		doAddBackgroundBindings( m_scene, flags, bindings, index );
+		doAddBackgroundBindings( m_scene, bindings, index );
 		doAddGIBindings( flags, bindings, index );
 		doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
 	}
@@ -551,7 +551,7 @@ namespace ocean
 			, index );
 		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
-		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
+		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
 		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
 	}

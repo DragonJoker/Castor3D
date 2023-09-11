@@ -4,6 +4,7 @@
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -379,6 +380,24 @@ namespace castor3d::shader
 			, output );
 	}
 
+	void Materials::blendMaterials( DebugOutput & debugOutput
+		, VkCompareOp alphaFunc
+		, PipelineFlags const & flags
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, Material & material
+		, sdw::UInt const & materialId
+		, sdw::Array< sdw::Vec4 > const & passMultipliers
+		, BlendComponents & output )const
+	{
+		blendMaterials( alphaFunc, flags
+			, textureConfigs, textureAnims, maps
+			, material, materialId, passMultipliers
+			, output );
+		doDisplayDebug( debugOutput, output );
+	}
+
 	void Materials::blendMaterials( bool opaque
 		, PipelineFlags const & flags
 		, shader::TextureConfigurations const & textureConfigs
@@ -395,6 +414,24 @@ namespace castor3d::shader
 			, output );
 	}
 
+	void Materials::blendMaterials( DebugOutput & debugOutput
+		, bool opaque
+		, PipelineFlags const & flags
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, Material & material
+		, sdw::UInt const & materialId
+		, sdw::Array< sdw::Vec4 > const & passMultipliers
+		, BlendComponents & output )const
+	{
+		blendMaterials( opaque, flags
+			, textureConfigs, textureAnims, maps
+			, material, materialId, passMultipliers
+			, output );
+		doDisplayDebug( debugOutput, output );
+	}
+
 	void Materials::applyMaterialMaps( PipelineFlags const & flags
 		, TextureConfigurations const & textureConfigs
 		, TextureAnimations const & textureAnims
@@ -408,6 +445,22 @@ namespace castor3d::shader
 			, maps
 			, material
 			, components );
+	}
+
+	void Materials::doDisplayDebug( DebugOutput & debugOutput
+		, BlendComponents const & components )const
+	{
+		debugOutput.registerOutput( cuT( "Material Base Colour" ), components.colour.rgb() );
+		debugOutput.registerOutput( cuT( "Material Opacity" ), components.opacity );
+		debugOutput.registerOutput( cuT( "Material Metalness" ), components.metalness );
+		debugOutput.registerOutput( cuT( "Material Roughness" ), components.roughness );
+		debugOutput.registerOutput( cuT( "Material Specular Colour" ), components.specular );
+		debugOutput.registerOutput( cuT( "Material Specular Factor" ), components.getMember< sdw::Float >( "specularFactor", 0.0_f ) );
+		debugOutput.registerOutput( cuT( "Material Occlusion" ), components.occlusion );
+		debugOutput.registerOutput( cuT( "Material Emissive Colour" ), components.emissiveColour );
+		debugOutput.registerOutput( cuT( "Material Emissive Factor" ), components.emissiveFactor );
+		debugOutput.registerOutput( cuT( "Material Ambient Colour" ), components.ambientColour );
+		debugOutput.registerOutput( cuT( "Material Ambient Factor" ), components.ambientFactor );
 	}
 
 	//*********************************************************************************************

@@ -208,7 +208,7 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		doAddShadowBindings( m_scene, flags, bindings, index );
-		doAddBackgroundBindings( m_scene, flags, bindings, index );
+		doAddBackgroundBindings( m_scene, bindings, index );
 	}
 
 	ashes::PipelineDepthStencilStateCreateInfo VoxelizePass::doCreateDepthStencilState( PipelineFlags const & flags )const
@@ -234,7 +234,7 @@ namespace castor3d
 		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
 		bindBuffer( m_voxels.getBuffer(), descriptorWrites, index );
 		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
-		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
+		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
 	}
 
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
