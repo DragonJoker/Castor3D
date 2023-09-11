@@ -28,7 +28,6 @@ namespace castor3d
 		 *\param[in]	queueData		The queue receiving the GPU commands.
 		 *\param[in]	previousPasses	The passes this pass depends on.
 		 *\param[in]	progress		The optional progress bar.
-		 *\param[in]	deferred		\p true to enable deferred rendering.
 		 *\param[in]	visbuffer		\p true to enable visibility buffer.
 		 *\~french
 		 *\brief		Constructeur
@@ -37,7 +36,6 @@ namespace castor3d
 		 *\param[in]	queueData		La queue recevant les commandes GPU.
 		 *\param[in]	previousPasses	Les passes dont celle-ci dépend.
 		 *\param[in]	progress		La barre de progression optionnelle.
-		 *\param[in]	deferred		\p true pour activer le deferred rendering.
 		 *\param[in]	visbuffer		\p true pour activer le buffer de visibilité.
 		 */
 		C3D_API PrepassRendering( RenderTechnique & parent
@@ -45,7 +43,6 @@ namespace castor3d
 			, QueueData const & queueData
 			, crg::FramePassArray const & previousPasses
 			, ProgressBar * progress
-			, bool deferred
 			, bool visbuffer );
 		/**
 		 *\~english
@@ -152,9 +149,7 @@ namespace castor3d
 	private:
 		crg::FramePass & doCreateVisibilityPass( ProgressBar * progress
 			, crg::FramePassArray const & previousPasses );
-		crg::FramePass & doCreateForwardDepthPass( ProgressBar * progress
-			, crg::FramePassArray const & previousPasses );
-		crg::FramePass & doCreateDeferredDepthPass( ProgressBar * progress
+		crg::FramePass & doCreateDepthPass( ProgressBar * progress
 			, crg::FramePassArray const & previousPasses );
 		crg::FramePass & doCreateComputeDepthRange( ProgressBar * progress );
 

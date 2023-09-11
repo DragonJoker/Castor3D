@@ -241,7 +241,7 @@ namespace castor3d
 	*\return
 	*	La valeur.
 	*/
-	float getMaxDistance( LightCategory const & light
+	C3D_API float getMaxDistance( LightCategory const & light
 		, castor::Point3f const & attenuation );
 	/**
 	*\~english
@@ -267,10 +267,9 @@ namespace castor3d
 	*\return
 	*	La valeur.
 	*/
-	float getMaxDistance( LightCategory const & light
+	C3D_API float getMaxDistance( LightCategory const & light
 		, castor::Point3f const & attenuation
 		, float max );
-
 
 	//@}
 	//@}

@@ -109,7 +109,20 @@ namespace castor3d
 			return;
 		}
 
-		if ( material )
+		if ( surface
+			&& surface->hasMember( "colour" ) )
+		{
+			if ( material )
+			{
+				inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "colour" )
+					* surface->getMember< sdw::Vec3 >( "colour", vec3( 1.0_f ) ) ) );
+			}
+			else
+			{
+				inits.emplace_back( sdw::makeExpr( pow( surface->getMember< sdw::Vec3 >( "colour", vec3( 1.0_f ) ), vec3( 2.2_f ) ) ) );
+			}
+		}
+		else if ( material )
 		{
 			inits.emplace_back( sdw::makeExpr( material->getMember< sdw::Vec3 >( "colour" ) ) );
 		}
@@ -132,21 +145,6 @@ namespace castor3d
 		res.getMember< sdw::Vec3 >( "colour", true ) += src.getMember< sdw::Vec3 >( "colour", true ) * passMultiplier;
 	}
 
-	void ColourComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
-		, sdw::StructInstance const & surface
-		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & emsTrn )const
-	{
-		if ( !components.hasMember( "colour" ) )
-		{
-			return;
-		}
-
-		colMtl.rgb() = components.getMember< sdw::Vec3 >( "colour", true );
-		colMtl.rgb() *= surface.getMember< sdw::Vec3 >( "colour", true );
-	}
-
 	//*********************************************************************************************
 
 	ColourComponent::MaterialShader::MaterialShader()
@@ -163,15 +161,6 @@ namespace castor3d
 			type.declMember( "colour", ast::type::Kind::eVec3F );
 			inits.emplace_back( sdw::makeExpr( vec3( pow( 1.0_f, 2.2_f ) ) ) );
 		}
-	}
-
-	void ColourComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
-		, sdw::Vec4 const & spcRgh
-		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & emsTrn
-		, shader::Material & material )const
-	{
-		material.getMember< sdw::Vec3 >( "colour", true ) = colMtl.rgb();
 	}
 
 	//*********************************************************************************************

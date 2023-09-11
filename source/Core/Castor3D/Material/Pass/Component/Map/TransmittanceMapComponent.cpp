@@ -170,18 +170,6 @@ namespace castor3d
 			, components );
 	}
 
-	void TransmittanceMapComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
-		, sdw::StructInstance const & surface
-		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & emsTrn )const
-	{
-		if ( components.hasMember( "transmittance" ) )
-		{
-			emsTrn.a() = components.getMember< sdw::Float >( "transmittance" );
-		}
-	}
-
 	//*********************************************************************************************
 
 	TransmittanceMapComponent::MaterialShader::MaterialShader()
@@ -197,15 +185,6 @@ namespace castor3d
 			type.declMember( "transmittance", ast::type::Kind::eFloat );
 			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
 		}
-	}
-
-	void TransmittanceMapComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
-		, sdw::Vec4 const & spcRgh
-		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & emsTrn
-		, shader::Material & material )const
-	{
-		material.getMember< sdw::Float >( "transmittance", true ) = emsTrn.a();
 	}
 
 	//*********************************************************************************************

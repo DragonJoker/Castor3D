@@ -15,7 +15,7 @@ namespace castor3d
 	public:
 		/**
 		 *\~english
-		 *\brief		Initialises deferred rendering related stuff.
+		 *\brief		Initialises weighted blended rendering related stuff.
 		 *\param[in]	graph					The frame graph.
 		 *\param[in]	device					The GPU device.
 		 *\param[in]	progress				The progress bar.
@@ -29,7 +29,7 @@ namespace castor3d
 		 *\param[in]	hdrConfigUbo			The HDR configuration UBO.
 		 *\param[in]	cameraUbo				The camera UBO.
 		 *\~french
-		 *\brief		Initialise les données liées au deferred rendering.
+		 *\brief		Initialise les données liées au weighted blended rendering.
 		 *\param[in]	graph					Le frame graph.
 		 *\param[in]	device					Le device GPU.
 		 *\param[in]	progress				La barre de progression.

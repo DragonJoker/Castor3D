@@ -53,7 +53,6 @@ namespace castor3d
 		 *\param[in]	intermediate	The intermediate colour image.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	progress		The optional progress bar.
-		 *\param[in]	deferred		\p true to enable deferred rendering.
 		 *\param[in]	visbuffer		\p true to enable visibility buffer.
 		 *\param[in]	weightedBlended	\p true to enable weighted blended rendering.
 		 *\~french
@@ -67,7 +66,6 @@ namespace castor3d
 		 *\param[in]	intermediate	L'image couleur intermédiaire.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	progress		La barre de progression optionnelle.
-		 *\param[in]	deferred		\p true pour activer le deferred rendering.
 		 *\param[in]	visbuffer		\p true pour activer le visibility buffer.
 		 *\param[in]	weightedBlended	\p true pour activer le weighed blended rendering.
 		 */
@@ -80,7 +78,6 @@ namespace castor3d
 			, Texture const & intermediate
 			, SsaoConfig const & ssaoConfig
 			, ProgressBar * progress
-			, bool deferred
 			, bool visbuffer
 			, bool weightedBlended );
 		/**
@@ -324,11 +321,6 @@ namespace castor3d
 		bool hasVisibility()const
 		{
 			return m_prepass.hasVisibility();
-		}
-
-		OpaquePassResult const & getOpaqueResult()const
-		{
-			return m_opaque.getOpaqueResult();
 		}
 
 		Texture const & getVisibilityResult()const

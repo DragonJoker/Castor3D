@@ -6,7 +6,6 @@ This file is generated through cmake configure.
 You can modify it, but it will be overwritten, hence prefer using the following cmake options:
 - CASTOR_USE_GLSLANG				Use glslang to allow using external GLSL programs.
 - CASTOR_USE_WEIGHED_BLENDED_OIT	Use Weighted Blended OIT for translucent objects.
-- CASTOR_USE_DEFERRED_RENDERING		Use deferred rendering for opaque objects.
 - CASTOR_USE_VISIBILITY				Use visibility buffer when rendering opaque objects.
 - CASTOR_USE_ALLOCATION_CALLBACKS	Use Vulkan allocation callbacks.
 - CASTOR_USE_MESH_SHADERS			Use mesh shaders.
@@ -21,9 +20,6 @@ You can modify it, but it will be overwritten, hence prefer using the following 
 
 // Use Weighted Blended OIT for translucent objects.
 #define C3D_UseWeightedBlendedRendering ${C3D_USE_WBOIT}
-
-// Use deferred rendering for opaque objects.
-#define C3D_UseDeferredRendering ${C3D_USE_DEFERRED}
 
 // Use visibility buffer when rendering opaque objects.
 #define C3D_UseVisibilityBuffer ${C3D_USE_VISIBILITY}

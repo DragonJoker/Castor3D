@@ -12,9 +12,6 @@ set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 if ( NOT DEFINED CASTOR_USE_WEIGHED_BLENDED_OIT )
 	option( CASTOR_USE_WEIGHED_BLENDED_OIT "Use Weighted Blended OIT for translucent objects" ON )
 endif ()
-if ( NOT DEFINED CASTOR_USE_DEFERRED_RENDERING )
-	option( CASTOR_USE_DEFERRED_RENDERING "Use deferred rendering for opaque objects" ON )
-endif ()
 if ( NOT DEFINED CASTOR_USE_VISIBILITY )
 	option( CASTOR_USE_VISIBILITY "Use visibility buffer when rendering opaque objects" ON )
 endif ()
@@ -28,12 +25,11 @@ if ( NOT DEFINED CASTOR_USE_TASK_SHADERS )
 	option( CASTOR_USE_TASK_SHADERS "Use task shaders along with mesh shaders" ON )
 endif ()
 if ( NOT DEFINED CASTOR_USE_CLUSTERED_RENDERING )
-	option( CASTOR_USE_CLUSTERED_RENDERING "Enable clustered forward/deferred rendering" ON )
+	option( CASTOR_USE_CLUSTERED_RENDERING "Enable clustered lighting" ON )
 endif ()
 
 set( C3D_USE_GLSLANG 0 )
 set( C3D_USE_WBOIT 0 )
-set( C3D_USE_DEFERRED 0 )
 set( C3D_USE_ALLOCCB 0 )
 set( C3D_USE_MESH 0 )
 set( C3D_USE_TASK 0 )
@@ -46,10 +42,6 @@ endif ()
 
 if ( CASTOR_USE_WEIGHED_BLENDED_OIT )
 	set( C3D_USE_WBOIT 1 )
-endif ()
-
-if ( CASTOR_USE_DEFERRED_RENDERING )
-	set( C3D_USE_DEFERRED 1 )
 endif ()
 
 if ( CASTOR_USE_VISIBILITY )
@@ -1315,25 +1307,13 @@ source_group( "Header Files\\Render\\Node" FILES ${${PROJECT_NAME}_FOLDER_HDR_FI
 source_group( "Source Files\\Render\\Node" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/DeferredRendering.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/IndirectLightingPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/LightingPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/OpaquePass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/OpaquePassResult.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/OpaqueRendering.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/OpaqueResolvePass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/VisibilityReorderPass.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/VisibilityResolvePass.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/DeferredRendering.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/IndirectLightingPass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/LightingPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/OpaqueModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/OpaquePass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/OpaquePassResult.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/OpaqueRendering.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/OpaqueResolvePass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/VisibilityReorderPass.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/VisibilityResolvePass.hpp
 )
@@ -1347,42 +1327,6 @@ set( ${PROJECT_NAME}_HDR_FILES
 )
 source_group( "Header Files\\Render\\Opaque" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
 source_group( "Source Files\\Render\\Opaque" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
-
-set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/ClusteredLightsPipeline.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/DirectionalLightPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightPassResult.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightPipeline.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightsPipeline.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/MeshLightPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/RunnableLightingPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/StencilPipeline.cpp
-	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Opaque/Lighting/SubsurfaceScatteringPass.cpp
-)
-set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/ClusteredLightsPipeline.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/DirectionalLightPass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightPass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightPassResult.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightPipeline.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightsPipeline.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/MeshLightPass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/LightingModule.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/RunnableLightingPass.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/StencilPipeline.hpp
-	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Render/Opaque/Lighting/SubsurfaceScatteringPass.hpp
-)
-set( ${PROJECT_NAME}_SRC_FILES
-	${${PROJECT_NAME}_SRC_FILES}
-	${${PROJECT_NAME}_FOLDER_SRC_FILES}
-)
-set( ${PROJECT_NAME}_HDR_FILES
-	${${PROJECT_NAME}_HDR_FILES}
-	${${PROJECT_NAME}_FOLDER_HDR_FILES}
-)
-source_group( "Header Files\\Render\\Opaque\\Lighting" FILES ${${PROJECT_NAME}_FOLDER_HDR_FILES} )
-source_group( "Source Files\\Render\\Opaque\\Lighting" FILES ${${PROJECT_NAME}_FOLDER_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Render/Overlays/OverlayPass.cpp

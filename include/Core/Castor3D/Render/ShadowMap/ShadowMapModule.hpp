@@ -20,10 +20,10 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Enumerator of textures used in deferred rendering.
+	*	Enumerator of textures used by shadow mapping.
 	*\~french
 	*\brief
-	*	Enumération des textures utilisées lors du rendu différé.
+	*	Enumération des textures utilisées par le shadow mapping.
 	*/
 	enum class SmTexture
 		: uint8_t

@@ -43,7 +43,6 @@ namespace castor3d
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	progress		The optional progress bar.
 		 *\param[in]	normal			The scene normals map.
-		 *\param[in]	deferred		\p true to enable deferred rendering.
 		 *\~french
 		 *\brief		Constructeur
 		 *\param[in]	parent			La technique parente.
@@ -54,7 +53,6 @@ namespace castor3d
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	progress		La barre de progression optionnelle.
 		 *\param[in]	normal			La texture de normales de la scène.
-		 *\param[in]	deferred		\p true pour activer le deferred rendering.
 		 */
 		C3D_API OpaqueRendering( RenderTechnique & parent
 			, RenderDevice const & device
@@ -63,8 +61,7 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, SsaoConfig const & ssaoConfig
 			, ProgressBar * progress
-			, Texture const * normal
-			, bool deferred );
+			, Texture const * normal );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -136,11 +133,6 @@ namespace castor3d
 		C3D_API Texture const & getBaseColourResult()const;
 		C3D_API bool isEnabled()const;
 
-		OpaquePassResult const & getOpaqueResult()const
-		{
-			return *m_opaquePassResult;
-		}
-
 		ashes::Buffer< uint32_t > const & getMaterialsCounts()const
 		{
 			return *m_materialsCounts1;
@@ -167,10 +159,7 @@ namespace castor3d
 		crg::FramePass & doCreateVisibilityResolve( ProgressBar * progress
 			, PrepassRendering const & previous
 			, crg::FramePassArray const & previousPasses );
-		crg::FramePass & doCreateForwardOpaquePass( ProgressBar * progress
-			, crg::FramePass const & lastPass
-			, crg::FramePassArray const & previousPasses );
-		crg::FramePass & doCreateDeferredOpaquePass( ProgressBar * progress
+		crg::FramePass & doCreateOpaquePass( ProgressBar * progress
 			, crg::FramePass const & lastPass
 			, crg::FramePassArray const & previousPasses );
 		bool doIsOpaquePassEnabled()const;
@@ -178,7 +167,6 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
-		OpaquePassResultUPtr m_opaquePassResult;
 		ashes::BufferPtr< uint32_t > m_materialsCounts1;
 		ashes::BufferPtr< uint32_t > m_materialsCounts2;
 		ashes::BufferPtr< uint32_t > m_materialsStarts;
@@ -191,7 +179,6 @@ namespace castor3d
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
 		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
-		DeferredRenderingUPtr m_deferredRendering;
 	};
 }
 

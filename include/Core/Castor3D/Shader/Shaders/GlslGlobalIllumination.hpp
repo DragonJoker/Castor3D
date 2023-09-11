@@ -20,37 +20,14 @@ namespace castor3d
 		{
 		public:
 			C3D_API explicit GlobalIllumination( sdw::ShaderWriter & writer
-				, Utils & utils
-				, bool deferred = false );
+				, Utils & utils );
 			C3D_API explicit GlobalIllumination( sdw::ShaderWriter & writer
 				, Utils & utils
 				, uint32_t & bindingIndex
 				, uint32_t setIndex
-				, SceneFlags sceneFlags
-				, bool deferred = false );
-			C3D_API explicit GlobalIllumination( sdw::ShaderWriter & writer
-				, Utils & utils
-				, uint32_t vctUboBindingIndex
-				, uint32_t lpvUboBindingIndex
-				, uint32_t llpvUboBindingIndex
-				, uint32_t & vctTexBindingIndex
-				, uint32_t & lpvTexBindingIndex
-				, uint32_t & llpvTexBindingIndex
-				, uint32_t texSetIndex
-				, SceneFlags sceneFlags
-				, bool deferred = false );
-			// Forward only
+				, SceneFlags sceneFlags );
 			C3D_API void declare( uint32_t & bindingIndex
 				, uint32_t setIndex
-				, SceneFlags sceneFlags );
-			// Deferred only
-			C3D_API void declare( uint32_t vctUboBindingIndex
-				, uint32_t lpvUboBindingIndex
-				, uint32_t llpvUboBindingIndex
-				, uint32_t & vctTexBindingIndex
-				, uint32_t & lpvTexBindingIndex
-				, uint32_t & llpvTexBindingIndex
-				, uint32_t texSetIndex
 				, SceneFlags sceneFlags );
 			C3D_API void declareVct( uint32_t & uboBindingIndex
 				, uint32_t & texBindingIndex
@@ -118,7 +95,6 @@ namespace castor3d
 		private:
 			sdw::ShaderWriter & m_writer;
 			Utils & m_utils;
-			bool m_deferred;
 			sdw::Function< sdw::Vec4
 				, sdw::InVec3 > m_evalSH;
 			sdw::Function< sdw::Vec4

@@ -9,7 +9,6 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/Passes/PassesModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
-#include "Castor3D/Render/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/SsaoConfigUbo.hpp"
 

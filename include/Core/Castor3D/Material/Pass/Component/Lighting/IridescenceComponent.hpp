@@ -95,11 +95,6 @@ namespace castor3d
 				return std::make_unique< MaterialShader >();
 			}
 
-			bool isNonDeferrable()const override
-			{
-				return true;
-			}
-
 		private:
 			static void finishComponent( shader::SurfaceBase const & surface
 				, sdw::Vec3 const worldEye

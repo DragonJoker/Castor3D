@@ -131,20 +131,6 @@ namespace castor3d
 		res.getMember< sdw::Float >( "emissiveFactor", true ) += src.getMember< sdw::Float >( "emissiveFactor", true ) * passMultiplier;
 	}
 
-	void EmissiveComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
-		, sdw::StructInstance const & surface
-		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & emsTrn )const
-	{
-		if ( components.hasMember( "emissiveColour" ) )
-		{
-			auto emissiveColour = components.getMember< sdw::Vec3 >( "emissiveColour" );
-			auto emissiveFactor = components.getMember< sdw::Float >( "emissiveFactor" );
-			emsTrn.rgb() = emissiveColour * emissiveFactor;
-		}
-	}
-
 	//*********************************************************************************************
 
 	EmissiveComponent::MaterialShader::MaterialShader()
@@ -162,16 +148,6 @@ namespace castor3d
 			inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 		}
-	}
-
-	void EmissiveComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
-		, sdw::Vec4 const & spcRgh
-		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & emsTrn
-		, shader::Material & material )const
-	{
-		material.getMember< sdw::Vec3 >( "emissiveColour", true ) = emsTrn.rgb();
-		material.getMember< sdw::Float >( "emissiveFactor", true ) = 1.0_f;
 	}
 
 	//*********************************************************************************************

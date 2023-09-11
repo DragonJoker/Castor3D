@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_VisibilityResolvePass_H___
@@ -31,6 +31,8 @@ namespace castor3d
 		 *\param[in]	category			The pass category name.
 		 *\param[in]	name				The pass name.
 		 *\param[in]	nodesPass			The visibility nodes pass.
+		 *\param[in]	targetImage			The image this pass renders to.
+		 *\param[in]	targetDepth			The depth image this pass renders to.
 		 *\param[in]	pipelinesIds		The pipelines IDs buffer.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
@@ -44,6 +46,8 @@ namespace castor3d
 		 *\param[in]	category			Le nom de la catégorie de la passe.
 		 *\param[in]	name				Le nom de la passe.
 		 *\param[in]	nodesPass			La passe de visibilité des noeuds.
+		 *\param[in]	targetImage			L'image dans laquelle cette passe fait son rendu.
+		 *\param[in]	targetDepth			L'image de profondeur dans laquelle cette passe fait son rendu.
 		 *\param[in]	pipelinesIds		Le buffer de pipeline IDs.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
@@ -56,6 +60,8 @@ namespace castor3d
 			, castor::String const & category
 			, castor::String const & name
 			, RenderNodesPass const & nodesPass
+			, crg::ImageViewIdArray targetImage
+			, crg::ImageViewIdArray targetDepth
 			, ShaderBuffer * pipelinesIds
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
@@ -161,6 +167,11 @@ namespace castor3d
 		ShaderBuffer * m_pipelinesIds;
 		CameraUbo const & m_cameraUbo;
 		SceneUbo const & m_sceneUbo;
+		bool m_allowClusteredLighting;
+		crg::ImageViewIdArray m_targetImage;
+		crg::ImageViewIdArray m_targetDepth;
+		Texture const * m_ssao{};
+		IndirectLightingData m_indirectLighting;
 		PassSortNodesSignalConnection m_onNodesPassSort;
 		ashes::DescriptorSetLayoutPtr m_inOutsDescriptorLayout{};
 		ashes::DescriptorSetPoolPtr m_inOutsDescriptorPool{};

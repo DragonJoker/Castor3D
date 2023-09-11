@@ -44,8 +44,7 @@ namespace castor3d
 		, RenderDevice const & device
 		, crg::ImageViewIdArray targetDepth
 		, SsaoConfig const & ssaoConfig
-		, RenderNodesPassDesc const & renderPassDesc
-		, bool deferred )
+		, RenderNodesPassDesc const & renderPassDesc )
 		: RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -56,7 +55,6 @@ namespace castor3d
 			, std::move( targetDepth )
 			, renderPassDesc
 			, { false, ssaoConfig } }
-		, m_deferred{ deferred }
 	{
 	}
 
@@ -68,7 +66,7 @@ namespace castor3d
 			| ShaderFlag::eVelocity
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eDepth
-			| ( m_deferred ? ShaderFlag::eNone : ShaderFlag::eNormal );
+			| ShaderFlag::eNormal;
 	}
 
 	ProgramFlags DepthPass::doAdjustProgramFlags( ProgramFlags flags )const
@@ -95,7 +93,7 @@ namespace castor3d
 	{
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, m_deferred ? 2u : 3u );
+			, 3u );
 	}
 
 	void DepthPass::doFillAdditionalBindings( PipelineFlags const & flags
@@ -159,7 +157,7 @@ namespace castor3d
 		// Outputs
 		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
-		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u, !m_deferred );
+		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u );
 
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId

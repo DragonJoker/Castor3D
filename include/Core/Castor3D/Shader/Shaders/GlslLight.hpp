@@ -476,20 +476,6 @@ namespace castor3d::shader
 		//\}
 		/**
 		*\name
-		*	Deferred renderring
-		*/
-		//\{
-		C3D_API void computeDifSpec( LightType lightType
-			, BlendComponents const & components
-			, BackgroundModel & backgroundModel
-			, LightSurface const & lightSurface
-			, sdw::UInt const lightOffset
-			, sdw::UInt const receivesShadows
-			, DebugOutput & debugOutput
-			, OutputComponents & output );
-		//\}
-		/**
-		*\name
 		*	Diffuse only.
 		*/
 		//\{

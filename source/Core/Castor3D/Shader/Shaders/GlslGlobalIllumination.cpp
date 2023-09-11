@@ -18,11 +18,9 @@ namespace castor3d
 	namespace shader
 	{
 		GlobalIllumination::GlobalIllumination( sdw::ShaderWriter & writer
-			, Utils & utils
-			, bool deferred )
+			, Utils & utils )
 			: m_writer{ writer }
 			, m_utils{ utils }
-			, m_deferred{ deferred }
 		{
 		}
 
@@ -30,35 +28,11 @@ namespace castor3d
 			, Utils & utils
 			, uint32_t & bindingIndex
 			, uint32_t setIndex
-			, SceneFlags sceneFlags
-			, bool deferred )
-			: GlobalIllumination{ writer, utils, deferred }
+			, SceneFlags sceneFlags )
+			: GlobalIllumination{ writer, utils }
 		{
 			declare( bindingIndex
 				, setIndex
-				, sceneFlags );
-		}
-
-		GlobalIllumination::GlobalIllumination( sdw::ShaderWriter & writer
-			, Utils & utils
-			, uint32_t vctUboBindingIndex
-			, uint32_t lpvUboBindingIndex
-			, uint32_t llpvUboBindingIndex
-			, uint32_t & vctTexBindingIndex
-			, uint32_t & lpvTexBindingIndex
-			, uint32_t & llpvTexBindingIndex
-			, uint32_t texSetIndex
-			, SceneFlags sceneFlags
-			, bool deferred )
-			: GlobalIllumination{ writer, utils, deferred }
-		{
-			declare( vctUboBindingIndex
-				, lpvUboBindingIndex
-				, llpvUboBindingIndex
-				, vctTexBindingIndex
-				, lpvTexBindingIndex
-				, llpvTexBindingIndex
-				, texSetIndex
 				, sceneFlags );
 		}
 
@@ -70,7 +44,7 @@ namespace castor3d
 			{
 				declareVct( bindingIndex, bindingIndex, setIndex, setIndex );
 			}
-			else if ( !m_deferred )
+			else
 			{
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
@@ -80,33 +54,6 @@ namespace castor3d
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
 					declareLayeredLpv( bindingIndex, bindingIndex, setIndex, setIndex );
-				}
-			}
-		}
-
-		void GlobalIllumination::declare( uint32_t vctUboBindingIndex
-			, uint32_t lpvUboBindingIndex
-			, uint32_t llpvUboBindingIndex
-			, uint32_t & vctTexBindingIndex
-			, uint32_t & lpvTexBindingIndex
-			, uint32_t & llpvTexBindingIndex
-			, uint32_t texSetIndex
-			, SceneFlags sceneFlags )
-		{
-			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
-			{
-				declareVct( vctUboBindingIndex, vctTexBindingIndex, 0u, texSetIndex );
-			}
-			else
-			{
-				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
-				{
-					declareLpv( lpvUboBindingIndex, lpvTexBindingIndex, 0u, texSetIndex );
-				}
-
-				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
-				{
-					declareLayeredLpv( llpvUboBindingIndex, llpvTexBindingIndex, 0u, texSetIndex );
 				}
 			}
 		}

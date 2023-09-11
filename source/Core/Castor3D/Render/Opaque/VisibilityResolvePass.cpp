@@ -9,20 +9,31 @@
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
-#include "Castor3D/Render/Culling/PipelineNodes.hpp"
-#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
-#include "Castor3D/Render/Opaque/OpaquePassResult.hpp"
-#include "Castor3D/Render/Opaque/Lighting/LightPass.hpp"
+#include "Castor3D/Render/Culling/PipelineNodes.hpp"
+#include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
+#include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBackground.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
+#include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
+#include "Castor3D/Shader/Shaders/GlslCookTorranceBRDF.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
+#include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslGlobalIllumination.hpp"
+#include "Castor3D/Shader/Shaders/GlslLight.hpp"
+#include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
+#include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -30,6 +41,7 @@
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
+#include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
@@ -42,14 +54,18 @@ namespace castor3d
 	//*********************************************************************************************
 
 #define DeclareSsbo( Name, Type, Binding, Enable )\
-	sdw::StorageBuffer Name##Buffer{ writer\
-		, #Name + std::string{ "Buffer" }\
-		, Binding\
-		, Sets::eVtx\
-		, ast::type::MemoryLayout::eStd430\
-		, Enable };\
-	auto Name = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
-	Name##Buffer.end()
+	[this]()\
+	{\
+		sdw::StorageBuffer Name##Buffer{ m_writer\
+			, #Name + std::string{ "Buffer" }\
+			, Binding\
+			, Sets::eVtx\
+			, ast::type::MemoryLayout::eStd430\
+			, Enable };\
+		auto result = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
+		Name##Buffer.end();\
+		return result;\
+	}()
 
 	//*********************************************************************************************
 
@@ -65,6 +81,7 @@ namespace castor3d
 		enum InOutBindings : uint32_t
 		{
 			eCamera,
+			eScene,
 			eModels,
 			eBillboards,
 			eMaterials,
@@ -74,13 +91,8 @@ namespace castor3d
 			eMaterialsCounts,
 			eMaterialsStarts,
 			ePixelsXY,
-			eOutNmlOcc,
-			eOutColMtl,
-			eOutSpcRgh,
-			eOutEmsTrn,
-			eOutClrCot,
-			eOutCrTsIr,
-			eOutSheen,
+			eOutResult,
+			eCount,
 		};
 
 		enum VtxBindings : uint32_t
@@ -290,11 +302,599 @@ namespace castor3d
 			sdw::Array< sdw::Vec4 > fill;
 		};
 
+		struct VisibilityHelpers
+		{
+			explicit VisibilityHelpers( sdw::ShaderWriter & writer
+				, shader::PassShaders & passShaders
+				, PipelineFlags const & flags
+				, uint32_t stride )
+				: m_writer{ writer }
+				, m_passShaders{ passShaders }
+				, m_flags{ flags }
+				, m_stride{ stride }
+				, m_inIndices{ DeclareSsbo( c3d_inIndices
+					, sdw::UInt
+					, VtxBindings::eInIndices
+					, m_flags.enableIndices() ) }
+				, m_inPosition{ [this]()
+					{
+						sdw::StorageBuffer c3d_inPositionBuffer{ m_writer
+							, std::string{ "c3d_inPositionBuffer" }
+						, VtxBindings::eInPosition
+							, Sets::eVtx
+							, ast::type::MemoryLayout::eStd430
+							, m_flags.enablePosition() };
+						auto result = c3d_inPositionBuffer.declMemberArray< Position >( "c3d_inPosition"
+							, m_flags.enablePosition()
+							, m_stride );
+						c3d_inPositionBuffer.end();
+						return result;
+					}() }
+				, m_inNormal{ DeclareSsbo( c3d_inNormal
+					, sdw::Vec4
+					, VtxBindings::eInNormal
+					, m_flags.enableNormal() ) }
+				, m_inTangent{ DeclareSsbo( c3d_inTangent
+					, sdw::Vec4
+					, VtxBindings::eInTangent
+					, m_flags.enableTangentSpace() ) }
+				, m_inTexcoord0{ DeclareSsbo( c3d_inTexcoord0
+					, sdw::Vec4
+					, VtxBindings::eInTexcoord0
+					, m_flags.enableTexcoord0() && ( m_stride == 0u ) ) }
+				, m_inTexcoord1{ DeclareSsbo( c3d_inTexcoord1
+					, sdw::Vec4
+					, VtxBindings::eInTexcoord1
+					, m_flags.enableTexcoord1() ) }
+				, m_inTexcoord2{ DeclareSsbo( c3d_inTexcoord2
+					, sdw::Vec4
+					, VtxBindings::eInTexcoord2
+					, m_flags.enableTexcoord2() ) }
+				, m_inTexcoord3{ DeclareSsbo( c3d_inTexcoord3
+					, sdw::Vec4
+					, VtxBindings::eInTexcoord3
+					, m_flags.enableTexcoord3() ) }
+				, m_inColour{ DeclareSsbo( c3d_inColour
+					, sdw::Vec4
+					, VtxBindings::eInColour
+					, m_flags.enableColours() ) }
+				, m_inPassMasks{ DeclareSsbo( c3d_inPassMasks
+					, sdw::UVec4
+					, VtxBindings::eInPassMasks
+					, m_flags.enablePassMasks() ) }
+				, m_inVelocity{ DeclareSsbo( c3d_inVelocity
+					, sdw::Vec4
+					, VtxBindings::eInVelocity
+					, m_flags.enableVelocity() ) }
+			{
+			}
+
+			BarycentricFullDerivatives calcFullBarycentric( sdw::Vec4 const & ppt0
+				, sdw::Vec4 const & ppt1
+				, sdw::Vec4 const & ppt2
+				, sdw::Vec2 const & ppixelNdc
+				, sdw::Vec2 const & pwinSize )
+			{
+				if ( !m_calcFullBarycentric )
+				{
+					m_calcFullBarycentric = m_writer.implementFunction< BarycentricFullDerivatives >( "calcFullBarycentric"
+						, [&]( sdw::Vec4 const & pt0
+							, sdw::Vec4 const & pt1
+							, sdw::Vec4 const & pt2
+							, sdw::Vec2 const & pixelNdc
+							, sdw::Vec2 const & winSize )
+						{
+							auto result = m_writer.declLocale< BarycentricFullDerivatives >( "result" );
+							result.dx() = vec3( 0.0_f );
+							result.dy() = vec3( 0.0_f );
+							result.lambda() = vec3( 0.0_f );
+							auto w = m_writer.declLocale( "w"
+								, vec3( pt0.w(), pt1.w(), pt2.w() ) );
+
+							IF( m_writer, !any( w == vec3( 0.0_f ) ) )
+							{
+								auto invW = m_writer.declLocale( "invW"
+									, vec3( 1.0_f ) / w );
+
+								auto ndc0 = m_writer.declLocale( "ndc0"
+									, pt0.xy() * invW.x() );
+								auto ndc1 = m_writer.declLocale( "ndc1"
+									, pt1.xy() * invW.y() );
+								auto ndc2 = m_writer.declLocale( "ndc2"
+									, pt2.xy() * invW.z() );
+
+								auto det = m_writer.declLocale( "det"
+									, determinant( mat2( ndc2 - ndc1, ndc0 - ndc1 ) ) );
+
+								IF( m_writer, det != 0.0_f )
+								{
+									auto invDet = m_writer.declLocale( "invDet"
+										, 1.0_f / det );
+									result.dx() = vec3( ndc1.y() - ndc2.y(), ndc2.y() - ndc0.y(), ndc0.y() - ndc1.y() ) * invDet * invW;
+									result.dy() = vec3( ndc2.x() - ndc1.x(), ndc0.x() - ndc2.x(), ndc1.x() - ndc0.x() ) * invDet * invW;
+									auto ddxSum = m_writer.declLocale( "ddxSum"
+										, dot( result.dx(), vec3( 1.0_f ) ) );
+									auto ddySum = m_writer.declLocale( "ddySum"
+										, dot( result.dy(), vec3( 1.0_f ) ) );
+
+									auto deltaVec = m_writer.declLocale( "deltaVec"
+										, pixelNdc - ndc0 );
+									auto interpInvW = m_writer.declLocale( "interpInvW"
+										, invW.x() + deltaVec.x() * ddxSum + deltaVec.y() * ddySum );
+									auto interpW = m_writer.declLocale( "interpW"
+										, 1.0_f / interpInvW );
+
+									result.lambda() = vec3( interpW * ( invW[0] + deltaVec.x() * result.dx().x() + deltaVec.y() * result.dy().x() )
+										, interpW * ( 0.0_f + deltaVec.x() * result.dx().y() + deltaVec.y() * result.dy().y() )
+										, interpW * ( 0.0_f + deltaVec.x() * result.dx().z() + deltaVec.y() * result.dy().z() ) );
+
+									result.dx() *= ( 2.0_f / winSize.x() );
+									result.dy() *= ( 2.0_f / winSize.y() );
+									ddxSum *= ( 2.0_f / winSize.x() );
+									ddySum *= ( 2.0_f / winSize.y() );
+
+									auto interpW_ddx = m_writer.declLocale( "interpW_ddx"
+										, 1.0_f / ( interpInvW + ddxSum ) );
+									auto interpW_ddy = m_writer.declLocale( "interpW_ddy"
+										, 1.0_f / ( interpInvW + ddySum ) );
+
+									result.dx() = interpW_ddx * ( result.lambda() * interpInvW + result.dx() ) - result.lambda();
+									result.dy() = interpW_ddy * ( result.lambda() * interpInvW + result.dy() ) - result.lambda();
+								}
+								FI;
+							}
+							FI;
+
+							m_writer.returnStmt( result );
+						}
+						, sdw::InVec4{ m_writer, "pt0" }
+						, sdw::InVec4{ m_writer, "pt1" }
+						, sdw::InVec4{ m_writer, "pt2" }
+						, sdw::InVec2{ m_writer, "pixelNdc" }
+						, sdw::InVec2{ m_writer, "winSize" } );
+				}
+
+				return m_calcFullBarycentric( ppt0, ppt1, ppt2, ppixelNdc, pwinSize );
+			}
+
+			void loadVertices( sdw::UInt const & pnodeId
+				, sdw::UInt const & pprimitiveId
+				, shader::ModelData const & pmodelData
+				, shader::VertexSurface & pv0
+				, shader::VertexSurface & pv1
+				, shader::VertexSurface & pv2 )
+			{
+				if ( !m_loadVertices )
+				{
+					m_loadVertices = m_writer.implementFunction< sdw::Void >( "loadVertices"
+						, [&]( sdw::UInt const & nodeId
+							, sdw::UInt const & primitiveId
+							, shader::ModelData const & modelData
+							, shader::VertexSurface v0
+							, shader::VertexSurface v1
+							, shader::VertexSurface v2 )
+						{
+							auto loadVertex = m_writer.implementFunction< shader::VertexSurface >( "loadVertex"
+								, [&]( sdw::UInt const & vertexId )
+								{
+									auto result = m_writer.declLocale< shader::VertexSurface >( std::string( "result" ) );
+									result.position = m_inPosition[vertexId].position;
+									result.normal = m_inNormal[vertexId].xyz();
+									result.tangent = m_inTangent[vertexId];
+									result.texture0 = m_inTexcoord0[vertexId].xyz();
+									result.texture1 = m_inTexcoord1[vertexId].xyz();
+									result.texture2 = m_inTexcoord2[vertexId].xyz();
+									result.texture3 = m_inTexcoord3[vertexId].xyz();
+									result.colour = m_inColour[vertexId].xyz();
+									result.passMasks = m_inPassMasks[vertexId];
+									result.velocity = m_inVelocity[vertexId].xyz();
+
+									m_writer.returnStmt( result );
+								}
+							, sdw::InUInt{ m_writer, "vertexId" } );
+
+							auto baseIndex = m_writer.declLocale( "baseIndex"
+								, modelData.getIndexOffset() + primitiveId * 3u );
+							auto indices = m_writer.declLocale( "indices"
+								, uvec3( m_inIndices[baseIndex + 0u]
+									, m_inIndices[baseIndex + 1u]
+									, m_inIndices[baseIndex + 2u] ) );
+							auto baseVertex = m_writer.declLocale( "baseVertex"
+								, modelData.getVertexOffset() );
+							v0 = loadVertex( baseVertex + indices.x() );
+							v1 = loadVertex( baseVertex + indices.y() );
+							v2 = loadVertex( baseVertex + indices.z() );
+						}
+						, sdw::InUInt{ m_writer, "nodeId" }
+						, sdw::InUInt{ m_writer, "primitiveId" }
+						, shader::InModelData{ m_writer, "modelData" }
+						, shader::OutVertexSurface{ m_writer, "v0" }
+						, shader::OutVertexSurface{ m_writer, "v1" }
+						, shader::OutVertexSurface{ m_writer, "v2" } );
+				}
+
+				m_loadVertices( pnodeId, pprimitiveId, pmodelData, pv0, pv1, pv2 );
+			}
+
+			void loadVertices( sdw::UInt const & pnodeId
+				, sdw::UInt const & pprimitiveId
+				, shader::ModelData const & pmodelData
+				, shader::VertexSurface & pv0
+				, shader::VertexSurface & pv1
+				, shader::VertexSurface & pv2
+				, shader::CameraData const & c3d_cameraData
+				, sdw::Array< shader::BillboardData > const & c3d_billboardData )
+			{
+				if ( !m_loadVertices )
+				{
+					m_loadVertices = m_writer.implementFunction< sdw::Void >( "loadVertices"
+						, [&]( sdw::UInt const & nodeId
+							, sdw::UInt const & primitiveId
+							, shader::ModelData const & modelData
+							, shader::VertexSurface v0
+							, shader::VertexSurface v1
+							, shader::VertexSurface v2 )
+						{
+							auto bbPositions = m_writer.declConstantArray( "bbPositions"
+								, std::vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
+								, vec3( -0.5_f, +0.5_f, 1.0_f )
+								, vec3( +0.5_f, -0.5_f, 1.0_f )
+								, vec3( +0.5_f, +0.5_f, 1.0_f ) } );
+							auto bbTexcoords = m_writer.declConstantArray( "bbTexcoords"
+								, std::vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
+								, vec2( 0.0_f, 1.0_f )
+								, vec2( 1.0_f, 0.0_f )
+								, vec2( 1.0_f, 1.0_f ) } );
+
+							auto instanceId = m_writer.declLocale( "instanceId"
+								, primitiveId / 2u );
+							auto firstTriangle = m_writer.declLocale( "firstTriangle"
+								, ( primitiveId % 2u ) == 0u );
+							auto center = m_writer.declLocale( "center"
+								, m_inPosition[instanceId].position );
+							auto bbcenter = m_writer.declLocale( "bbcenter"
+								, modelData.modelToCurWorld( center ).xyz() );
+							auto centerToCamera = m_writer.declLocale( "centerToCamera"
+								, c3d_cameraData.getPosToCamera( bbcenter ) );
+							centerToCamera.y() = 0.0_f;
+							centerToCamera = normalize( centerToCamera );
+
+							auto billboardData = m_writer.declLocale( "billboardData"
+								, c3d_billboardData[nodeId - 1u] );
+							auto right = m_writer.declLocale( "right"
+								, billboardData.getCameraRight( c3d_cameraData ) );
+							auto up = m_writer.declLocale( "up"
+								, billboardData.getCameraUp( c3d_cameraData ) );
+							auto width = m_writer.declLocale( "width"
+								, billboardData.getWidth( c3d_cameraData ) );
+							auto height = m_writer.declLocale( "height"
+								, billboardData.getHeight( c3d_cameraData ) );
+
+							auto vertexId = m_writer.declLocale( "vertexId"
+								, m_writer.ternary( firstTriangle
+									, uvec3( 0_u, 1_u, 2_u )
+									, uvec3( 1_u, 3_u, 2_u ) ) );
+							auto scaledRight = m_writer.declLocale( "scaledRight", vec3( 0.0_f ) );
+							auto scaledUp = m_writer.declLocale( "scaledUp", vec3( 0.0_f ) );
+
+							scaledRight = right * bbPositions[vertexId.x()].x() * width;
+							scaledUp = up * bbPositions[vertexId.x()].y() * height;
+							v0.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
+							v0.texture0 = vec3( bbTexcoords[vertexId.x()], 0.0_f );
+							v0.normal = centerToCamera;
+							v0.tangent = vec4( up, 0.0_f );
+
+							scaledRight = right * bbPositions[vertexId.y()].x() * width;
+							scaledUp = up * bbPositions[vertexId.y()].y() * height;
+							v1.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
+							v1.texture0 = vec3( bbTexcoords[vertexId.y()], 0.0_f );
+							v1.normal = centerToCamera;
+							v1.tangent = vec4( up, 0.0_f );
+
+							scaledRight = right * bbPositions[vertexId.z()].x() * width;
+							scaledUp = up * bbPositions[vertexId.z()].y() * height;
+							v2.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
+							v2.texture0 = vec3( bbTexcoords[vertexId.z()], 0.0_f );
+							v2.normal = centerToCamera;
+							v2.tangent = vec4( up, 0.0_f );
+						}
+						, sdw::InUInt{ m_writer, "nodeId" }
+						, sdw::InUInt{ m_writer, "primitiveId" }
+						, shader::InModelData{ m_writer, "modelData" }
+						, shader::OutVertexSurface{ m_writer, "v0" }
+						, shader::OutVertexSurface{ m_writer, "v1" }
+						, shader::OutVertexSurface{ m_writer, "v2" } );
+				}
+
+				m_loadVertices( pnodeId, pprimitiveId, pmodelData, pv0, pv1, pv2 );
+			}
+
+			shader::DerivFragmentSurface loadSurface( sdw::UInt const & pnodeId
+				, sdw::UInt const & pprimitiveId
+				, sdw::Vec2 const & ppixelCoord
+				, shader::ModelData const & pmodelData
+				, shader::Material const & pmaterial
+				, sdw::Float & pdepth
+				, shader::CameraData const & c3d_cameraData
+				, sdw::Array< shader::BillboardData > const & c3d_billboardData )
+			{
+				if ( !m_loadSurface )
+				{
+					m_loadSurface = m_writer.implementFunction< shader::DerivFragmentSurface >( "loadSurface"
+						, [&]( sdw::UInt const & nodeId
+							, sdw::UInt const & primitiveId
+							, sdw::Vec2 const & pixelCoord
+							, shader::ModelData const & modelData
+							, shader::Material const & material
+							, sdw::Float depth )
+						{
+							auto result = m_writer.declLocale< shader::DerivFragmentSurface >( "result" );
+							result.worldPosition = vec4( 0.0_f );
+							result.viewPosition = vec4( 0.0_f );
+							result.curPosition = vec4( 0.0_f );
+							result.prvPosition = vec4( 0.0_f );
+							result.tangentSpaceFragPosition = vec3( 0.0_f );
+							result.tangentSpaceViewPosition = vec3( 0.0_f );
+							result.normal = vec3( 0.0_f );
+							result.tangent = vec4( 0.0_f );
+							result.bitangent = vec3( 0.0_f );
+							result.texture0.uv() = vec2( 0.0_f );
+							result.texture1.uv() = vec2( 0.0_f );
+							result.texture2.uv() = vec2( 0.0_f );
+							result.texture3.uv() = vec2( 0.0_f );
+							result.texture0.dPdx() = vec2( 0.0_f );
+							result.texture1.dPdx() = vec2( 0.0_f );
+							result.texture2.dPdx() = vec2( 0.0_f );
+							result.texture3.dPdx() = vec2( 0.0_f );
+							result.texture0.dPdy() = vec2( 0.0_f );
+							result.texture1.dPdy() = vec2( 0.0_f );
+							result.texture2.dPdy() = vec2( 0.0_f );
+							result.texture3.dPdy() = vec2( 0.0_f );
+							result.colour = vec3( 1.0_f );
+
+							auto hdrCoords = m_writer.declLocale( "hdrCoords"
+								, pixelCoord / vec2( c3d_cameraData.renderSize() ) );
+							auto screenCoords = m_writer.declLocale( "screenCoords"
+								, fma( hdrCoords, vec2( 2.0_f ), vec2( -1.0_f ) ) );
+
+							auto v0 = m_writer.declLocale< shader::VertexSurface >( "v0" );
+							auto v1 = m_writer.declLocale< shader::VertexSurface >( "v1" );
+							auto v2 = m_writer.declLocale< shader::VertexSurface >( "v2" );
+
+							if ( m_stride == 0u )
+							{
+								loadVertices( nodeId, primitiveId, modelData, v0, v1, v2 );
+							}
+							else
+							{
+								loadVertices( nodeId, primitiveId, modelData, v0, v1, v2
+									, c3d_cameraData
+									, c3d_billboardData );
+							}
+
+							bool isWorldPos = m_flags.hasWorldPosInputs()
+								|| ( m_stride != 0u );
+
+							// Transform positions to clip space
+							auto p0 = m_writer.declLocale( "p0"
+								, c3d_cameraData.worldToCurProj( isWorldPos
+									? v0.position
+									: modelData.modelToCurWorld( v0.position ) ) );
+							auto p1 = m_writer.declLocale( "p1"
+								, c3d_cameraData.worldToCurProj( isWorldPos
+									? v1.position
+									: modelData.modelToCurWorld( v1.position ) ) );
+							auto p2 = m_writer.declLocale( "p2"
+								, c3d_cameraData.worldToCurProj( isWorldPos
+									? v2.position
+									: modelData.modelToCurWorld( v2.position ) ) );
+
+							auto derivatives = m_writer.declLocale( "derivatives"
+								, calcFullBarycentric( p0, p1, p2, screenCoords, vec2( c3d_cameraData.renderSize() ) ) );
+
+							// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
+							if ( m_flags.enableTexcoord0() )
+							{
+								result.texture0 = derivatives.computeGradient( v0.texture0
+									, v1.texture0
+									, v2.texture0 );
+							}
+
+							if ( m_flags.enableTexcoord1() )
+							{
+								result.texture1 = derivatives.computeGradient( v0.texture1
+									, v1.texture1
+									, v2.texture1 );
+							}
+
+							if ( m_flags.enableTexcoord2() )
+							{
+								result.texture2 = derivatives.computeGradient( v0.texture2
+									, v1.texture2
+									, v2.texture2 );
+							}
+
+							if ( m_flags.enableTexcoord3() )
+							{
+								result.texture3 = derivatives.computeGradient( v0.texture3
+									, v1.texture3
+									, v2.texture3 );
+							}
+
+							if ( m_flags.enableColours() )
+							{
+								result.colour = derivatives.interpolate( v0.colour.xyz()
+									, v1.colour.xyz()
+									, v2.colour.xyz() );
+							}
+
+							auto normal = m_writer.declLocale( "normal"
+								, vec3( 0.0_f )
+								, m_flags.enableNormal() );
+
+							if ( m_flags.enableNormal() )
+							{
+								normal = normalize( derivatives.interpolate( v0.normal.xyz()
+									, v1.normal.xyz()
+									, v2.normal.xyz() ) );
+							}
+
+							auto tangent = m_writer.declLocale( "tangent"
+								, vec4( 0.0_f )
+								, m_flags.enableTangentSpace() );
+
+							if ( m_flags.enableTangentSpace() )
+							{
+								tangent = normalize( derivatives.interpolate( v0.tangent
+									, v1.tangent
+									, v2.tangent ) );
+							}
+
+							if ( m_flags.enablePassMasks() )
+							{
+								auto passMultipliers0 = m_writer.declLocaleArray< sdw::Vec4 >( "passMultipliers0", 4u );
+								auto passMultipliers1 = m_writer.declLocaleArray< sdw::Vec4 >( "passMultipliers1", 4u );
+								auto passMultipliers2 = m_writer.declLocaleArray< sdw::Vec4 >( "passMultipliers2", 4u );
+								material.getPassMultipliers( m_flags
+									, v0.passMasks
+									, passMultipliers0 );
+								material.getPassMultipliers( m_flags
+									, v1.passMasks
+									, passMultipliers1 );
+								material.getPassMultipliers( m_flags
+									, v2.passMasks
+									, passMultipliers2 );
+
+								for ( uint32_t i = 0u; i < 4u; ++i )
+								{
+									result.passMultipliers[i] = derivatives.interpolate( passMultipliers0[i]
+										, passMultipliers1[i]
+										, passMultipliers2[i] );
+								}
+							}
+
+							auto curProjPosition = m_writer.declLocale( "curProjPosition"
+								, derivatives.interpolate( p0, p1, p2 ) );
+
+							IF( m_writer, curProjPosition.w() == 0.0_f )
+							{
+								curProjPosition.w() = 1.0_f;
+							}
+							FI;
+
+							depth = ( curProjPosition.z() / curProjPosition.w() );
+							auto curPosition = m_writer.declLocale( "curPosition"
+								, c3d_cameraData.projToView( curProjPosition ) );
+							result.viewPosition = curPosition;
+							curPosition = c3d_cameraData.curViewToWorld( curPosition );
+							result.worldPosition = curPosition;
+
+							auto prvPosition = m_writer.declLocale( "prvPosition"
+								, curPosition );
+							curPosition = modelData.worldToModel( curPosition );
+
+							if ( m_stride == 0u )
+							{
+								if ( m_flags.hasWorldPosInputs() )
+								{
+									auto velocity = m_writer.declLocale( "velocity"
+										, derivatives.interpolate( v0.velocity.xyz()
+											, v1.velocity.xyz()
+											, v2.velocity.xyz() ) );
+									prvPosition.xyz() += velocity;
+								}
+								else if ( m_flags.enableNormal() )
+								{
+									auto curMtxModel = m_writer.declLocale( "curMtxModel"
+										, modelData.getModelMtx() );
+									auto mtxNormal = m_writer.declLocale( "mtxNormal"
+										, modelData.getNormalMtx( m_flags, curMtxModel ) );
+									normal = normalize( mtxNormal * normal );
+
+									if ( m_flags.enableTangentSpace() )
+									{
+										auto prvMtxModel = m_writer.declLocale( "prvMtxModel"
+											, modelData.getPrvModelMtx( m_flags, curMtxModel ) );
+										prvPosition = prvMtxModel * curPosition;
+										tangent = vec4( normalize( mtxNormal * tangent.xyz() ), tangent.w() );
+									}
+								}
+							}
+
+							prvPosition = c3d_cameraData.worldToPrvProj( prvPosition );
+							result.computeVelocity( c3d_cameraData
+								, curProjPosition
+								, prvPosition );
+
+							if ( m_flags.enableNormal() )
+							{
+								result.computeTangentSpace( m_flags
+									, c3d_cameraData.position()
+									, result.worldPosition.xyz()
+									, normal
+									, tangent );
+							}
+
+							m_writer.returnStmt( result );
+						}
+						, sdw::InUInt{ m_writer, "nodeId" }
+						, sdw::InUInt{ m_writer, "primitiveId" }
+						, sdw::InVec2{ m_writer, "pixelCoord" }
+						, shader::InModelData{ m_writer, "modelData" }
+						, shader::InMaterial{ m_writer, "material", m_passShaders }
+						, sdw::OutFloat{ m_writer, "depth" } );
+				}
+
+				return m_loadSurface( pnodeId, pprimitiveId, ppixelCoord, pmodelData, pmaterial, pdepth );
+			}
+
+		private:
+			sdw::ShaderWriter & m_writer;
+			shader::PassShaders & m_passShaders;
+			PipelineFlags const & m_flags;
+			uint32_t m_stride;
+			sdw::UInt32Array m_inIndices;
+			sdw::Array< Position > m_inPosition;
+			sdw::Vec4Array m_inNormal;
+			sdw::Vec4Array m_inTangent;
+			sdw::Vec4Array m_inTexcoord0;
+			sdw::Vec4Array m_inTexcoord1;
+			sdw::Vec4Array m_inTexcoord2;
+			sdw::Vec4Array m_inTexcoord3;
+			sdw::Vec4Array m_inColour;
+			sdw::U32Vec4Array m_inPassMasks;
+			sdw::Vec4Array m_inVelocity;
+			sdw::Function< BarycentricFullDerivatives
+				, sdw::InVec4
+				, sdw::InVec4
+				, sdw::InVec4
+				, sdw::InVec2
+				, sdw::InVec2 > m_calcFullBarycentric;
+			sdw::Function< sdw::Void
+				, sdw::InUInt
+				, sdw::InUInt
+				, shader::InModelData
+				, shader::OutVertexSurface
+				, shader::OutVertexSurface
+				, shader::OutVertexSurface > m_loadVertices;
+			sdw::Function< shader::DerivFragmentSurface
+				, sdw::InUInt
+				, sdw::InUInt
+				, sdw::InVec2
+				, shader::InModelData
+				, shader::InMaterial
+				, sdw::OutFloat > m_loadSurface;
+		};
+
 		static ShaderPtr getProgram( RenderDevice const & device
+			, Scene const & scene
 			, VkExtent3D const & imageSize
 			, PipelineFlags const & flags
+			, DebugConfig & debugConfig
 			, uint32_t stride
-			, bool blend )
+			, bool blend
+			, bool hasSsao
+			, bool clusteredLighting )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer;
@@ -306,60 +906,14 @@ namespace castor3d
 				, ( ComponentModeFlag::eDerivTex
 					| VisibilityResolvePass::getComponentsMask() )
 				, utils };
+			shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 
-			DeclareSsbo( c3d_inIndices
-				, sdw::UInt
-				, VtxBindings::eInIndices
-				, flags.enableIndices() );
-			sdw::StorageBuffer c3d_inPositionBuffer{ writer
-				, std::string{ "c3d_inPositionBuffer" }
-				, VtxBindings::eInPosition
-				, Sets::eVtx
-				, ast::type::MemoryLayout::eStd430
-				, flags.enablePosition() };
-			auto c3d_inPosition = c3d_inPositionBuffer.declMemberArray< Position >( "c3d_inPosition"
-				, flags.enablePosition()
-				, stride );
-			c3d_inPositionBuffer.end();
-			DeclareSsbo( c3d_inNormal
-				, sdw::Vec4
-				, VtxBindings::eInNormal
-				, flags.enableNormal() );
-			DeclareSsbo( c3d_inTangent
-				, sdw::Vec4
-				, VtxBindings::eInTangent
-				, flags.enableTangentSpace() );
-			DeclareSsbo( c3d_inTexcoord0
-				, sdw::Vec4
-				, VtxBindings::eInTexcoord0
-				, flags.enableTexcoord0() && ( stride == 0u ) );
-			DeclareSsbo( c3d_inTexcoord1
-				, sdw::Vec4
-				, VtxBindings::eInTexcoord1
-				, flags.enableTexcoord1() );
-			DeclareSsbo( c3d_inTexcoord2
-				, sdw::Vec4
-				, VtxBindings::eInTexcoord2
-				, flags.enableTexcoord2() );
-			DeclareSsbo( c3d_inTexcoord3
-				, sdw::Vec4
-				, VtxBindings::eInTexcoord3
-				, flags.enableTexcoord3() );
-			DeclareSsbo( c3d_inColour
-				, sdw::Vec4
-				, VtxBindings::eInColour
-				, flags.enableColours() );
-			DeclareSsbo( c3d_inVelocity
-				, sdw::Vec4
-				, VtxBindings::eInVelocity
-				, flags.enableVelocity() );
-			DeclareSsbo( c3d_inPassMasks
-				, sdw::UVec4
-				, VtxBindings::eInPassMasks
-				, flags.enablePassMasks() );
-
+			auto index = uint32_t( InOutBindings::eCount );
 			C3D_Camera( writer
 				, InOutBindings::eCamera
+				, Sets::eInOuts );
+			C3D_Scene( writer
+				, InOutBindings::eScene
 				, Sets::eInOuts );
 			C3D_ModelsData( writer
 				, InOutBindings::eModels
@@ -368,16 +922,60 @@ namespace castor3d
 				, InOutBindings::eBillboards
 				, Sets::eInOuts
 				, stride != 0u );
-			shader::Materials materials{ writer
+			shader::Materials materials{ *scene.getEngine()
+				, writer
 				, passShaders
 				, InOutBindings::eMaterials
-				, Sets::eInOuts };
+				, Sets::eInOuts
+				, index };
 			shader::TextureConfigurations textureConfigs{ writer
 				, InOutBindings::eTexConfigs
 				, Sets::eInOuts };
 			shader::TextureAnimations textureAnims{ writer
 				, InOutBindings::eTexAnims
 				, Sets::eInOuts };
+			auto lightsIndex = index++;
+			auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
+				, ( hasSsao ? index++ : 0u )
+				, Sets::eInOuts
+				, hasSsao );
+			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
+				, index++
+				, Sets::eInOuts );
+			shader::Lights lights{ *scene.getEngine()
+				, flags.lightingModelId
+				, flags.backgroundModelId
+				, materials
+				, brdf
+				, utils
+				, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
+			, nullptr
+				, lightsIndex /* lightBinding */
+				, Sets::eInOuts /* lightSet */
+				, index /* shadowMapBinding */
+				, Sets::eInOuts /* shadowMapSet */
+				, true /* enableVolumetric */ };
+			shader::ReflectionModel reflections{ writer
+				, utils
+				, index
+				, uint32_t( Sets::eInOuts )
+				, lights.hasIblSupport() };
+			auto backgroundModel = shader::BackgroundModel::createModel( scene
+				, writer
+				, utils
+				, makeExtent2D( imageSize )
+				, true
+				, index
+				, Sets::eInOuts );
+			shader::GlobalIllumination indirect{ writer
+				, utils
+				, index
+				, Sets::eInOuts
+				, flags.getGlobalIlluminationFlags() };
+			shader::ClusteredLights clusteredLights{ writer
+				, index
+				, Sets::eInOuts
+				, clusteredLighting };
 
 			auto c3d_imgData = writer.declStorageImg< sdw::RUImage2DRg32 >( "c3d_imgData", InOutBindings::eInData, Sets::eInOuts );
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
@@ -390,464 +988,236 @@ namespace castor3d
 			auto billboardNodeId = pcb.declMember< sdw::UInt >( "billboardNodeId", stride != 0u );
 			pcb.end();
 
-			auto calcFullBarycentric = writer.implementFunction< BarycentricFullDerivatives >( "calcFullBarycentric"
-				, [&]( sdw::Vec4 const & pt0
-					, sdw::Vec4 const & pt1
-					, sdw::Vec4 const & pt2
-					, sdw::Vec2 const & pixelNdc
-					, sdw::Vec2 const & winSize )
-				{
-					auto result = writer.declLocale< BarycentricFullDerivatives >( "result" );
-					result.dx() = vec3( 0.0_f );
-					result.dy() = vec3( 0.0_f );
-					result.lambda() = vec3( 0.0_f );
-					auto w = writer.declLocale( "w"
-						, vec3( pt0.w(), pt1.w(), pt2.w() ) );
-
-					IF( writer, !any( w == vec3( 0.0_f ) ) )
-					{
-						auto invW = writer.declLocale( "invW"
-							, vec3( 1.0_f ) / w );
-
-						auto ndc0 = writer.declLocale( "ndc0"
-							, pt0.xy() * invW.x() );
-						auto ndc1 = writer.declLocale( "ndc1"
-							, pt1.xy() * invW.y() );
-						auto ndc2 = writer.declLocale( "ndc2"
-							, pt2.xy() * invW.z() );
-
-						auto det = writer.declLocale( "det"
-							, determinant( mat2( ndc2 - ndc1, ndc0 - ndc1 ) ) );
-
-						IF( writer, det != 0.0_f )
-						{
-							auto invDet = writer.declLocale( "invDet"
-								, 1.0_f / det );
-							result.dx() = vec3( ndc1.y() - ndc2.y(), ndc2.y() - ndc0.y(), ndc0.y() - ndc1.y() ) * invDet * invW;
-							result.dy() = vec3( ndc2.x() - ndc1.x(), ndc0.x() - ndc2.x(), ndc1.x() - ndc0.x() ) * invDet * invW;
-							auto ddxSum = writer.declLocale( "ddxSum"
-								, dot( result.dx(), vec3( 1.0_f ) ) );
-							auto ddySum = writer.declLocale( "ddySum"
-								, dot( result.dy(), vec3( 1.0_f ) ) );
-
-							auto deltaVec = writer.declLocale( "deltaVec"
-								, pixelNdc - ndc0 );
-							auto interpInvW = writer.declLocale( "interpInvW"
-								, invW.x() + deltaVec.x() * ddxSum + deltaVec.y() * ddySum );
-							auto interpW = writer.declLocale( "interpW"
-								, 1.0_f / interpInvW );
-
-							result.lambda() = vec3( interpW * ( invW[0] + deltaVec.x() * result.dx().x() + deltaVec.y() * result.dy().x() )
-								, interpW * ( 0.0_f + deltaVec.x() * result.dx().y() + deltaVec.y() * result.dy().y() )
-								, interpW * ( 0.0_f + deltaVec.x() * result.dx().z() + deltaVec.y() * result.dy().z() ) );
-
-							result.dx() *= ( 2.0_f / winSize.x() );
-							result.dy() *= ( 2.0_f / winSize.y() );
-							ddxSum *= ( 2.0_f / winSize.x() );
-							ddySum *= ( 2.0_f / winSize.y() );
-
-							auto interpW_ddx = writer.declLocale( "interpW_ddx"
-								, 1.0_f / ( interpInvW + ddxSum ) );
-							auto interpW_ddy = writer.declLocale( "interpW_ddy"
-								, 1.0_f / ( interpInvW + ddySum ) );
-
-							result.dx() = interpW_ddx * ( result.lambda() * interpInvW + result.dx() ) - result.lambda();
-							result.dy() = interpW_ddy * ( result.lambda() * interpInvW + result.dy() ) - result.lambda();
-						}
-						FI;
-					}
-					FI;
-
-					writer.returnStmt( result );
-				}
-				, sdw::InVec4{ writer, "pt0" }
-				, sdw::InVec4{ writer, "pt1" }
-				, sdw::InVec4{ writer, "pt2" }
-				, sdw::InVec2{ writer, "pixelNdc" }
-				, sdw::InVec2{ writer, "winSize" } );
-
-			auto loadVertices = writer.implementFunction< sdw::Void >( "loadVertices"
-				, [&]( sdw::UInt const & nodeId
-					, sdw::UInt const & primitiveId
-					, shader::ModelData const & modelData
-					, shader::VertexSurface v0
-					, shader::VertexSurface v1
-					, shader::VertexSurface v2 )
-				{
-					if ( stride == 0u )
-					{
-						auto loadVertex = writer.implementFunction< shader::VertexSurface >( "loadVertex"
-							, [&]( sdw::UInt const & vertexId )
-							{
-								auto result = writer.declLocale< shader::VertexSurface >( std::string( "result" ) );
-								result.position = c3d_inPosition[vertexId].position;
-								result.normal = c3d_inNormal[vertexId].xyz();
-								result.tangent = c3d_inTangent[vertexId];
-								result.texture0 = c3d_inTexcoord0[vertexId].xyz();
-								result.texture1 = c3d_inTexcoord1[vertexId].xyz();
-								result.texture2 = c3d_inTexcoord2[vertexId].xyz();
-								result.texture3 = c3d_inTexcoord3[vertexId].xyz();
-								result.colour = c3d_inColour[vertexId].xyz();
-								result.passMasks = c3d_inPassMasks[vertexId];
-								result.velocity = c3d_inVelocity[vertexId].xyz();
-
-								writer.returnStmt( result );
-							}
-							, sdw::InUInt{ writer, "vertexId" } );
-
-						auto baseIndex = writer.declLocale( "baseIndex"
-							, modelData.getIndexOffset() + primitiveId * 3u );
-						auto indices = writer.declLocale( "indices"
-							, uvec3( c3d_inIndices[baseIndex + 0u]
-								, c3d_inIndices[baseIndex + 1u]
-								, c3d_inIndices[baseIndex + 2u] ) );
-						auto baseVertex = writer.declLocale( "baseVertex"
-							, modelData.getVertexOffset() );
-						v0 = loadVertex( baseVertex + indices.x() );
-						v1 = loadVertex( baseVertex + indices.y() );
-						v2 = loadVertex( baseVertex + indices.z() );
-					}
-					else
-					{
-						auto bbPositions = writer.declConstantArray( "bbPositions"
-							, std::vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
-							  , vec3( -0.5_f, +0.5_f, 1.0_f )
-							  , vec3( +0.5_f, -0.5_f, 1.0_f )
-							  , vec3( +0.5_f, +0.5_f, 1.0_f ) } );
-						auto bbTexcoords = writer.declConstantArray( "bbTexcoords"
-							, std::vector< sdw::Vec2 >{ vec2( 0.0_f, 0.0_f )
-							  , vec2( 0.0_f, 1.0_f )
-							  , vec2( 1.0_f, 0.0_f )
-							  , vec2( 1.0_f, 1.0_f ) } );
-
-						auto instanceId = writer.declLocale( "instanceId"
-							, primitiveId / 2u );
-						auto firstTriangle = writer.declLocale( "firstTriangle"
-							, ( primitiveId % 2u ) == 0u );
-						auto center = writer.declLocale( "center"
-							, c3d_inPosition[instanceId].position );
-						auto bbcenter = writer.declLocale( "bbcenter"
-							, modelData.modelToCurWorld( center ).xyz() );
-						auto centerToCamera = writer.declLocale( "centerToCamera"
-							, c3d_cameraData.getPosToCamera( bbcenter ) );
-						centerToCamera.y() = 0.0_f;
-						centerToCamera = normalize( centerToCamera );
-
-						auto billboardData = writer.declLocale( "billboardData"
-							, c3d_billboardData[nodeId - 1u] );
-						auto right = writer.declLocale( "right"
-							, billboardData.getCameraRight( c3d_cameraData ) );
-						auto up = writer.declLocale( "up"
-							, billboardData.getCameraUp( c3d_cameraData ) );
-						auto width = writer.declLocale( "width"
-							, billboardData.getWidth( c3d_cameraData ) );
-						auto height = writer.declLocale( "height"
-							, billboardData.getHeight( c3d_cameraData ) );
-
-						auto vertexId = writer.declLocale( "vertexId"
-							, writer.ternary( firstTriangle
-								, uvec3( 0_u, 1_u, 2_u )
-								, uvec3( 1_u, 3_u, 2_u ) ) );
-						auto scaledRight = writer.declLocale( "scaledRight", vec3( 0.0_f ) );
-						auto scaledUp = writer.declLocale( "scaledUp", vec3( 0.0_f ) );
-
-						scaledRight = right * bbPositions[vertexId.x()].x() * width;
-						scaledUp = up * bbPositions[vertexId.x()].y() * height;
-						v0.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
-						v0.texture0 = vec3( bbTexcoords[vertexId.x()], 0.0_f );
-						v0.normal = centerToCamera;
-						v0.tangent = vec4( up, 0.0_f );
-
-						scaledRight = right * bbPositions[vertexId.y()].x() * width;
-						scaledUp = up * bbPositions[vertexId.y()].y() * height;
-						v1.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
-						v1.texture0 = vec3( bbTexcoords[vertexId.y()], 0.0_f );
-						v1.normal = centerToCamera;
-						v1.tangent = vec4( up, 0.0_f );
-
-						scaledRight = right * bbPositions[vertexId.z()].x() * width;
-						scaledUp = up * bbPositions[vertexId.z()].y() * height;
-						v2.position = vec4( ( bbcenter + scaledRight + scaledUp ), 1.0_f );
-						v2.texture0 = vec3( bbTexcoords[vertexId.z()], 0.0_f );
-						v2.normal = centerToCamera;
-						v2.tangent = vec4( up, 0.0_f );
-					}
-				}
-				, sdw::InUInt{ writer, "nodeId" }
-				, sdw::InUInt{ writer, "primitiveId" }
-				, shader::InModelData{ writer, "modelData" }
-				, shader::OutVertexSurface{ writer, "v0" }
-				, shader::OutVertexSurface{ writer, "v1" }
-				, shader::OutVertexSurface{ writer, "v2" } );
-
-			auto loadSurface = writer.implementFunction< shader::DerivFragmentSurface >( "loadSurface"
-				, [&]( sdw::UInt const & nodeId
-					, sdw::UInt const & primitiveId
-					, sdw::Vec2 const & pixelCoord
-					, shader::ModelData const & modelData
-					, shader::Material const & material
-					, sdw::Float depth )
-				{
-					auto result = writer.declLocale< shader::DerivFragmentSurface >( "result" );
-					result.worldPosition = vec4( 0.0_f );
-					result.viewPosition = vec4( 0.0_f );
-					result.curPosition = vec4( 0.0_f );
-					result.prvPosition = vec4( 0.0_f );
-					result.tangentSpaceFragPosition = vec3( 0.0_f );
-					result.tangentSpaceViewPosition = vec3( 0.0_f );
-					result.normal = vec3( 0.0_f );
-					result.tangent = vec4( 0.0_f );
-					result.bitangent = vec3( 0.0_f );
-					result.texture0.uv() = vec2( 0.0_f );
-					result.texture1.uv() = vec2( 0.0_f );
-					result.texture2.uv() = vec2( 0.0_f );
-					result.texture3.uv() = vec2( 0.0_f );
-					result.texture0.dPdx() = vec2( 0.0_f );
-					result.texture1.dPdx() = vec2( 0.0_f );
-					result.texture2.dPdx() = vec2( 0.0_f );
-					result.texture3.dPdx() = vec2( 0.0_f );
-					result.texture0.dPdy() = vec2( 0.0_f );
-					result.texture1.dPdy() = vec2( 0.0_f );
-					result.texture2.dPdy() = vec2( 0.0_f );
-					result.texture3.dPdy() = vec2( 0.0_f );
-					result.colour = vec3( 1.0_f );
-
-					auto hdrCoords = writer.declLocale( "hdrCoords"
-						, pixelCoord / vec2( c3d_cameraData.renderSize() ) );
-					auto screenCoords = writer.declLocale( "screenCoords"
-						, fma( hdrCoords, vec2( 2.0_f ), vec2( -1.0_f ) ) );
-
-					auto v0 = writer.declLocale< shader::VertexSurface >( "v0" );
-					auto v1 = writer.declLocale< shader::VertexSurface >( "v1" );
-					auto v2 = writer.declLocale< shader::VertexSurface >( "v2" );
-					loadVertices( nodeId, primitiveId, modelData, v0, v1, v2 );
-
-					bool isWorldPos = flags.hasWorldPosInputs()
-						|| ( stride != 0u );
-
-					// Transform positions to clip space
-					auto p0 = writer.declLocale( "p0"
-						, c3d_cameraData.worldToCurProj( isWorldPos
-							? v0.position
-							: modelData.modelToCurWorld( v0.position ) ) );
-					auto p1 = writer.declLocale( "p1"
-						, c3d_cameraData.worldToCurProj( isWorldPos
-							? v1.position
-							: modelData.modelToCurWorld( v1.position ) ) );
-					auto p2 = writer.declLocale( "p2"
-						, c3d_cameraData.worldToCurProj( isWorldPos
-							? v2.position
-							: modelData.modelToCurWorld( v2.position ) ) );
-
-					auto derivatives = writer.declLocale( "derivatives"
-						, calcFullBarycentric( p0, p1, p2, screenCoords, vec2( c3d_cameraData.renderSize() ) ) );
-
-					// Interpolate texture coordinates and calculate the gradients for texture sampling with mipmapping support
-					if ( flags.enableTexcoord0() )
-					{
-						result.texture0 = derivatives.computeGradient( v0.texture0
-							, v1.texture0
-							, v2.texture0 );
-					}
-
-					if ( flags.enableTexcoord1() )
-					{
-						result.texture1 = derivatives.computeGradient( v0.texture1
-							, v1.texture1
-							, v2.texture1 );
-					}
-
-					if ( flags.enableTexcoord2() )
-					{
-						result.texture2 = derivatives.computeGradient( v0.texture2
-							, v1.texture2
-							, v2.texture2 );
-					}
-
-					if ( flags.enableTexcoord3() )
-					{
-						result.texture3 = derivatives.computeGradient( v0.texture3
-							, v1.texture3
-							, v2.texture3 );
-					}
-
-					if ( flags.enableColours() )
-					{
-						result.colour = derivatives.interpolate( v0.colour.xyz()
-							, v1.colour.xyz()
-							, v2.colour.xyz() );
-					}
-
-					auto normal = writer.declLocale( "normal"
-						, vec3( 0.0_f )
-						, flags.enableNormal() );
-
-					if ( flags.enableNormal() )
-					{
-						normal = normalize( derivatives.interpolate( v0.normal.xyz()
-							, v1.normal.xyz()
-							, v2.normal.xyz() ) );
-					}
-
-					auto tangent = writer.declLocale( "tangent"
-						, vec4( 0.0_f )
-						, flags.enableTangentSpace() );
-
-					if ( flags.enableTangentSpace() )
-					{
-						tangent = normalize( derivatives.interpolate( v0.tangent
-							, v1.tangent
-							, v2.tangent ) );
-					}
-
-					if ( flags.enablePassMasks() )
-					{
-						auto passMultipliers0 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers0", 4u );
-						auto passMultipliers1 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers1", 4u );
-						auto passMultipliers2 = writer.declLocaleArray< sdw::Vec4 >( "passMultipliers2", 4u );
-						material.getPassMultipliers( flags
-							, v0.passMasks
-							, passMultipliers0 );
-						material.getPassMultipliers( flags
-							, v1.passMasks
-							, passMultipliers1 );
-						material.getPassMultipliers( flags
-							, v2.passMasks
-							, passMultipliers2 );
-
-						for ( uint32_t i = 0u; i < 4u; ++i )
-						{
-							result.passMultipliers[i] = derivatives.interpolate( passMultipliers0[i]
-								, passMultipliers1[i]
-								, passMultipliers2[i] );
-						}
-					}
-
-					auto curProjPosition = writer.declLocale( "curProjPosition"
-						, derivatives.interpolate( p0, p1, p2 ) );
-
-					IF( writer, curProjPosition.w() == 0.0_f )
-					{
-						curProjPosition.w() = 1.0_f;
-					}
-					FI;
-
-					depth = ( curProjPosition.z() / curProjPosition.w() );
-					auto curPosition = writer.declLocale( "curPosition"
-						, c3d_cameraData.projToView( curProjPosition ) );
-					result.viewPosition = curPosition;
-					curPosition = c3d_cameraData.curViewToWorld( curPosition );
-					result.worldPosition = curPosition;
-
-					auto prvPosition = writer.declLocale( "prvPosition"
-						, curPosition );
-					curPosition = modelData.worldToModel( curPosition );
-
-					if ( stride == 0u )
-					{
-						if ( flags.hasWorldPosInputs() )
-						{
-							auto velocity = writer.declLocale( "velocity"
-								, derivatives.interpolate( v0.velocity.xyz()
-									, v1.velocity.xyz()
-									, v2.velocity.xyz() ) );
-							prvPosition.xyz() += velocity;
-						}
-						else if ( flags.enableNormal() )
-						{
-							auto curMtxModel = writer.declLocale( "curMtxModel"
-								, modelData.getModelMtx() );
-							auto mtxNormal = writer.declLocale( "mtxNormal"
-								, modelData.getNormalMtx( flags, curMtxModel ) );
-							normal = normalize( mtxNormal * normal );
-
-							if ( flags.enableTangentSpace() )
-							{
-								auto prvMtxModel = writer.declLocale( "prvMtxModel"
-									, modelData.getPrvModelMtx( flags, curMtxModel ) );
-								prvPosition = prvMtxModel * curPosition;
-								tangent = vec4( normalize( mtxNormal * tangent.xyz() ), tangent.w() );
-							}
-						}
-					}
-
-					prvPosition = c3d_cameraData.worldToPrvProj( prvPosition );
-					result.computeVelocity( c3d_cameraData
-						, curProjPosition
-						, prvPosition );
-
-					if ( flags.enableNormal() )
-					{
-						result.computeTangentSpace( flags
-							, c3d_cameraData.position()
-							, result.worldPosition.xyz()
-							, normal
-							, tangent );
-					}
-
-					writer.returnStmt( result );
-				}
-				, sdw::InUInt{ writer, "nodeId" }
-				, sdw::InUInt{ writer, "primitiveId" }
-				, sdw::InVec2{ writer, "pixelCoord" }
-				, shader::InModelData{ writer, "modelData" }
-				, shader::InMaterial{ writer, "material", passShaders }
-				, sdw::OutFloat{ writer, "depth" } );
+			shader::Fog fog{ writer };
+			VisibilityHelpers visHelpers{ writer, passShaders, flags, stride };
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
 				, [&]( sdw::IVec2 const & ipixel
 					, sdw::UInt nodeId
 					, sdw::UInt pipeline
 					, sdw::UInt primitiveId
-					, sdw::Vec4 outNmlOcc
-					, sdw::Vec4 outColMtl
-					, sdw::Vec4 outSpcRgh
-					, sdw::Vec4 outEmsTrn )
+					, sdw::Vec4 outResult )
 				{
-					IF( writer, pipelineId != pipeline )
 					{
-						writer.returnStmt( 0_b );
-					}
-					FI;
+						shader::DebugOutput output{ debugConfig
+							, cuT( "Opaque" )
+							, c3d_cameraData.debugIndex()
+							, outResult
+							, true };
 
-					auto modelData = writer.declLocale( "modelData"
-						, c3d_modelsData[nodeId - 1u] );
-					auto material = writer.declLocale( "material"
-						, materials.getMaterial( modelData.getMaterialId() ) );
-					auto depth = writer.declLocale( "depth"
-						, 0.0_f );
-					auto surface = writer.declLocale( "surface"
-						, loadSurface( nodeId
-							, primitiveId
-							, vec2( ipixel )
-							, modelData
+						IF( writer, pipelineId != pipeline )
+						{
+							writer.returnStmt( 0_b );
+						}
+						FI;
+
+						auto modelData = writer.declLocale( "modelData"
+							, c3d_modelsData[nodeId - 1u] );
+						auto material = writer.declLocale( "material"
+							, materials.getMaterial( modelData.getMaterialId() ) );
+						auto depth = writer.declLocale( "depth"
+							, 0.0_f );
+						auto occlusion = writer.declLocale( "occlusion"
+							, ( hasSsao
+								? c3d_mapOcclusion.fetch( ipixel, 0_i )
+								: 1.0_f ) );
+						auto baseSurface = writer.declLocale( "baseSurface"
+							, visHelpers.loadSurface( nodeId
+								, primitiveId
+								, vec2( ipixel )
+								, modelData
+								, material
+								, depth
+								, c3d_cameraData
+								, c3d_billboardData ) );
+						auto components = writer.declLocale( "components"
+							, shader::BlendComponents{ materials
+								, material
+								, baseSurface } );
+						materials.blendMaterials( output
+							, VK_COMPARE_OP_ALWAYS
+							, flags
+							, textureConfigs
+							, textureAnims
+							, c3d_maps
 							, material
-							, depth ) );
-					auto components = writer.declLocale( "components"
-						, shader::BlendComponents{ materials
-							, material
-							, surface } );
-					materials.blendMaterials( VK_COMPARE_OP_ALWAYS
-						, flags
-						, textureConfigs
-						, textureAnims
-						, c3d_maps
-						, material
-						, modelData.getMaterialId()
-						, surface.passMultipliers
-						, components );
-					outNmlOcc = vec4( components.normal, components.occlusion );
-					passShaders.updateOutputs( components, surface, outSpcRgh, outColMtl, outEmsTrn );
+							, modelData.getMaterialId()
+							, baseSurface.passMultipliers
+							, components );
+
+						if ( components.occlusion )
+						{
+							occlusion *= components.occlusion;
+						}
+
+						auto incident = writer.declLocale( "incident"
+							, reflections.computeIncident( baseSurface.worldPosition.xyz(), c3d_cameraData.position() ) );
+
+						if ( components.transmission )
+						{
+							IF( writer, lights.getFinalTransmission( components, incident ) >= 0.1_f )
+							{
+								writer.demote();
+							}
+							FI;
+						}
+
+						if ( auto lightingModel = lights.getLightingModel() )
+						{
+							IF( writer, material.lighting )
+							{
+								shader::OutputComponents lighting{ writer, false };
+								auto surface = writer.declLocale( "surface"
+									, shader::Surface{ vec3( vec2( ipixel ), depth )
+										, baseSurface.viewPosition.xyz()
+										, baseSurface.worldPosition.xyz()
+										, normalize( components.normal ) } );
+
+								lightingModel->finish( passShaders
+									, surface
+									, utils
+									, c3d_cameraData.position()
+									, components );
+								auto lightSurface = shader::LightSurface::create( writer
+									, "lightSurface"
+									, c3d_cameraData.position()
+									, surface.worldPosition.xyz()
+									, surface.viewPosition.xyz()
+									, surface.clipPosition
+									, surface.normal );
+								lights.computeCombinedDifSpec( clusteredLights
+									, components
+									, *backgroundModel
+									, lightSurface
+									, modelData.isShadowReceiver()
+									, lightSurface.clipPosition().xy()
+									, lightSurface.viewPosition().z()
+									, output
+									, lighting );
+								auto directAmbient = writer.declLocale( "directAmbient"
+									, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
+								auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
+									, vec3( 0.0_f ) );
+								auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
+									, vec3( 0.0_f ) );
+								auto refracted = writer.declLocale( "refracted"
+									, vec3( 0.0_f ) );
+								auto coatReflected = writer.declLocale( "coatReflected"
+									, vec3( 0.0_f ) );
+								auto sheenReflected = writer.declLocale( "sheenReflected"
+									, vec3( 0.0_f ) );
+
+								if ( components.hasMember( "thicknessFactor" ) )
+								{
+									components.thicknessFactor *= length( modelData.getScale() );
+								}
+
+								lightSurface.updateN( utils
+									, components.normal
+									, components.f0
+									, components );
+								reflections.computeCombined( components
+									, lightSurface
+									, *backgroundModel
+									, modelData.getEnvMapIndex()
+									, components.hasReflection
+									, components.hasRefraction
+									, components.refractionRatio
+									, reflectedDiffuse
+									, reflectedSpecular
+									, refracted
+									, coatReflected
+									, sheenReflected
+									, output );
+								lightSurface.updateL( utils
+									, components.normal
+									, components.f0
+									, components );
+								auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
+									, lightSurface
+									, output );
+								auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
+									, lightSurface
+									, indirectOcclusion
+									, output );
+								auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
+									, lightSurface
+									, components.roughness
+									, indirectOcclusion
+									, lightIndirectDiffuse.w()
+									, c3d_mapBrdf
+									, output );
+								auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+									, lightIndirectDiffuse.xyz()
+									, output );
+								auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+									, ( flags.hasDiffuseGI()
+										? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
+											, length( lightIndirectDiffuse.xyz() )
+											, lightSurface.difF() )
+										: vec3( 0.0_f ) ) );
+
+								output.registerOutput( "Lighting", "Ambient", directAmbient );
+								output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
+								output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+								output.registerOutput( "Occlusion", occlusion );
+								output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
+
+								outResult = vec4( lightingModel->combine( output
+										, components
+										, incident
+										, lighting.diffuse
+										, indirectDiffuse
+										, lighting.specular
+										, lighting.scattering
+										, lighting.coatingSpecular
+										, lighting.sheen
+										, lightIndirectSpecular
+										, directAmbient
+										, indirectAmbient
+										, occlusion
+										, components.emissiveColour * components.emissiveFactor
+										, reflectedDiffuse
+										, reflectedSpecular
+										, refracted
+										, coatReflected
+										, sheenReflected )
+									, components.opacity );
+							}
+							ELSE
+							{
+								outResult = vec4( components.colour, components.opacity );
+							}
+							FI;
+						}
+						else
+						{
+							outResult = vec4( components.colour, components.opacity );
+						}
+
+						if ( flags.hasFog() )
+						{
+							outResult = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+								, outResult
+								, baseSurface.worldPosition.xyz()
+								, c3d_cameraData.position()
+								, c3d_sceneData );
+						}
+
+						backgroundModel->applyVolume( vec2( ipixel )
+							, utils.lineariseDepth( depth, c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() )
+							, vec2( c3d_cameraData.renderSize() )
+							, c3d_cameraData.depthPlanes()
+							, outResult );
+						outResult.a() = 1.0_f;
+					}
 					writer.returnStmt( 1_b );
 				}
 				, sdw::InIVec2{ writer, "ipixel" }
 				, sdw::InUInt{ writer, "nodeId" }
 				, sdw::InUInt{ writer, "pipeline" }
 				, sdw::InUInt{ writer, "primitiveId" }
-				, sdw::OutVec4{ writer, "outNmlOcc" }
-				, sdw::OutVec4{ writer, "outColMtl" }
-				, sdw::OutVec4{ writer, "outSpcRgh" }
-				, sdw::OutVec4{ writer, "outEmsTrn" } );
+				, sdw::OutVec4{ writer, "outResult" } );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
@@ -863,10 +1233,7 @@ namespace castor3d
 				auto pixelsXY = PixelsXY.declMemberArray< sdw::UVec2 >( "pixelsXY" );
 				PixelsXY.end();
 
-				auto c3d_imgOutNmlOcc = writer.declStorageImg< sdw::WImage2DRgba32 >( getImageName( DsTexture::eNmlOcc ), uint32_t( InOutBindings::eOutNmlOcc ), Sets::eInOuts );
-				auto c3d_imgOutColMtl = writer.declStorageImg< sdw::WImage2DRgba32 >( getImageName( DsTexture::eColMtl ), uint32_t( InOutBindings::eOutColMtl ), Sets::eInOuts );
-				auto c3d_imgOutSpcRgh = writer.declStorageImg< sdw::WImage2DRgba32 >( getImageName( DsTexture::eSpcRgh ), uint32_t( InOutBindings::eOutSpcRgh ), Sets::eInOuts );
-				auto c3d_imgOutEmsTrn = writer.declStorageImg< sdw::WImage2DRgba32 >( getImageName( DsTexture::eEmsTrn ), uint32_t( InOutBindings::eOutEmsTrn ), Sets::eInOuts );
+				auto c3d_imgOutResult = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutResult", uint32_t( InOutBindings::eOutResult ), Sets::eInOuts );
 
 				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
 					, [&]( sdw::UVec2 const & pos )
@@ -887,18 +1254,12 @@ namespace castor3d
 							, nodePipelineId & maxPipelinesMask );
 						auto primitiveId = writer.declLocale( "primitiveId"
 							, indata.y() );
-						auto nmlOcc = writer.declLocale( "nmlOcc", vec4( 0.0_f ) );
-						auto colMtl = writer.declLocale( "colMtl", vec4( 0.0_f ) );
-						auto spcRgh = writer.declLocale( "spcRgh", vec4( 0.0_f ) );
-						auto emsTrn = writer.declLocale( "emsTrn", vec4( 0.0_f ) );
+						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
 
 						IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
-							&& shade( ipixel, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn ) )
+							&& shade( ipixel, nodeId, pipeline, primitiveId, result ) )
 						{
-							c3d_imgOutNmlOcc.store( ipixel, nmlOcc );
-							c3d_imgOutColMtl.store( ipixel, colMtl );
-							c3d_imgOutSpcRgh.store( ipixel, spcRgh );
-							c3d_imgOutEmsTrn.store( ipixel, emsTrn );
+							c3d_imgOutResult.store( ipixel, result );
 						}
 						FI;
 					} );
@@ -906,18 +1267,11 @@ namespace castor3d
 			else
 			{
 				uint32_t idx = 0u;
-				auto c3d_imgOutNmlOcc = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eNmlOcc ), idx++ );
-				auto c3d_imgOutColMtl = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eColMtl ), idx++ );
-				auto c3d_imgOutSpcRgh = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eSpcRgh ), idx++ );
-				auto c3d_imgOutEmsTrn = writer.declOutput< sdw::Vec4 >( getImageName( DsTexture::eEmsTrn ), idx++ );
+				auto c3d_imgOutResult = writer.declOutput< sdw::Vec4 >( "c3d_imgOutResult", idx++ );
 
 				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
 					, [&]( sdw::IVec2 const & pos )
 					{
-						auto nmlOcc = writer.declLocale( "nmlOcc", vec4( 0.0_f ) );
-						auto colMtl = writer.declLocale( "colMtl", vec4( 0.0_f ) );
-						auto spcRgh = writer.declLocale( "spcRgh", vec4( 0.0_f ) );
-						auto emsTrn = writer.declLocale( "emsTrn", vec4( 0.0_f ) );
 						auto indata = writer.declLocale( "indata"
 							, c3d_imgData.load( pos ) );
 						auto nodePipelineId = writer.declLocale( "nodePipelineId"
@@ -928,43 +1282,16 @@ namespace castor3d
 							, nodePipelineId & maxPipelinesMask );
 						auto primitiveId = writer.declLocale( "primitiveId"
 							, indata.y() );
+						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
 
-						if ( blend )
+						IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
+							|| !shade( pos, nodeId, pipeline, primitiveId, result ) )
 						{
-							IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
-								|| !shade( pos, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn ) )
-							{
-								writer.demote();
-							}
-							FI;
+							writer.demote();
+						}
+						FI;
 
-							c3d_imgOutNmlOcc = nmlOcc;
-							c3d_imgOutColMtl = colMtl;
-							c3d_imgOutSpcRgh = spcRgh;
-							c3d_imgOutEmsTrn = emsTrn;
-						}
-						else
-						{
-							IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u ) )
-							{
-								c3d_imgOutNmlOcc = vec4( 0.0_f );
-								c3d_imgOutColMtl = vec4( 0.0_f );
-								c3d_imgOutSpcRgh = vec4( 0.0_f );
-								c3d_imgOutEmsTrn = vec4( 0.0_f );
-							}
-							ELSEIF( !shade( pos, nodeId, pipeline, primitiveId, nmlOcc, colMtl, spcRgh, emsTrn ) )
-							{
-								writer.demote();
-							}
-							ELSE
-							{
-								c3d_imgOutNmlOcc = nmlOcc;
-								c3d_imgOutColMtl = colMtl;
-								c3d_imgOutSpcRgh = spcRgh;
-								c3d_imgOutEmsTrn = emsTrn;
-							}
-							FI;
-						}
+						c3d_imgOutResult = result;
 					} );
 			}
 
@@ -973,13 +1300,22 @@ namespace castor3d
 
 		static ashes::DescriptorSetLayoutPtr createInDescriptorLayout( RenderDevice const & device
 			, std::string const & name
-			, MaterialCache const & matCache )
+			, MaterialCache const & matCache
+			, crg::ImageViewIdArray const & targetImage
+			, Scene const & scene
+			, RenderTarget const & target
+			, bool allowClusteredLighting
+			, Texture const * ssao
+			, IndirectLightingData const * indirectLighting )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
 			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eCamera
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, stages ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eScene
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eModels
@@ -1009,27 +1345,63 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::ePixelsXY
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutNmlOcc
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutResult
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutColMtl
+			}
+			else
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutResult
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutSpcRgh
-					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutEmsTrn
-					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutClrCot
-					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutCrTsIr
-					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutSheen
-					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, stages ) );
+			}
+
+			auto & engine = *device.renderSystem.getEngine();
+			auto index = uint32_t( InOutBindings::eCount );
+			engine.addSpecificsBuffersBindings( bindings
+				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, index );
+			bindings.emplace_back( scene.getLightCache().createLayoutBinding( index++ ) );
+
+			if ( ssao )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+			}
+
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
+
+			if ( scene.hasShadows() )
+			{
+				RenderNodesPass::addShadowBindings( scene.getFlags()
+					, bindings
+					, index );
+			}
+
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // c3d_mapEnvironment
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+
+			if ( auto background = scene.getBackground() )
+			{
+				RenderNodesPass::addBackgroundBindings( *background
+					, bindings
+					, index );
+			}
+
+			RenderNodesPass::addGIBindings( scene.getFlags()
+				, *indirectLighting
+				, bindings
+				, index );
+
+			if ( allowClusteredLighting )
+			{
+				RenderNodesPass::addClusteredLightingBindings( target.getFrustumClusters()
+					, bindings
+					, index );
 			}
 
 			return device->createDescriptorSetLayout( name + "InOut"
@@ -1038,14 +1410,21 @@ namespace castor3d
 
 		static ashes::DescriptorSetPtr createInDescriptorSet( std::string const & name
 			, ashes::DescriptorSetPool const & pool
+			, crg::RunnableGraph & graph
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, RenderTechnique const & technique
-			, Scene const & scene )
+			, Scene const & scene
+			, bool allowClusteredLighting
+			, crg::ImageViewIdArray const & targetImage
+			, Texture const * ssao
+			, IndirectLightingData const * indirectLighting )
 		{
-			auto & matCache = scene.getOwner()->getMaterialCache();
+			auto & engine = *scene.getOwner();
+			auto & matCache = engine.getMaterialCache();
 			ashes::WriteDescriptorSetArray writes;
 			writes.push_back( cameraUbo.getDescriptorWrite( InOutBindings::eCamera ) );
+			writes.push_back( sceneUbo.getDescriptorWrite( InOutBindings::eScene ) );
 			writes.push_back( makeDescriptorWrite( scene.getModelBuffer()
 				, InOutBindings::eModels
 				, 0u
@@ -1075,16 +1454,56 @@ namespace castor3d
 					, InOutBindings::ePixelsXY
 					, 0u
 					, technique.getPixelXY().getCount() ) );
+				writes.push_back( makeImageViewDescriptorWrite( graph.createImageView( targetImage.front() )
+					, InOutBindings::eOutResult ) );
+			}
 
-				auto & opaquePassResult = technique.getOpaqueResult();
-				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eNmlOcc].targetView
-					, InOutBindings::eOutNmlOcc ) );
-				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eColMtl].targetView
-					, InOutBindings::eOutColMtl ) );
-				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eSpcRgh].targetView
-					, InOutBindings::eOutSpcRgh ) );
-				writes.push_back( makeImageViewDescriptorWrite( opaquePassResult[DsTexture::eEmsTrn].targetView
-					, InOutBindings::eOutEmsTrn ) );
+			auto index = uint32_t( InOutBindings::eCount );
+			engine.addSpecificsBuffersDescriptors( writes, index );
+			writes.push_back( scene.getLightCache().getBinding( index++ ) );
+
+			if ( ssao )
+			{
+				bindTexture( ssao->wholeView
+					, *ssao->sampler
+					, writes
+					, index );
+			}
+
+			bindTexture( engine.getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+				, *engine.getRenderSystem()->getPrefilteredBrdfTexture().sampler
+				, writes
+				, index );
+			RenderNodesPass::addShadowDescriptor( *engine.getRenderSystem()
+				, graph
+				, scene.getFlags()
+				, writes
+				, technique.getShadowMaps()
+				, technique.getShadowBuffer()
+				, index );
+			bindTexture( scene.getEnvironmentMap().getColourId().sampledView
+				, *scene.getEnvironmentMap().getColourId().sampler
+				, writes
+				, index );
+
+			if ( auto background = scene.getBackground() )
+			{
+				RenderNodesPass::addBackgroundDescriptor( *background
+					, writes
+					, targetImage
+					, index );
+			}
+
+			RenderNodesPass::addGIDescriptor( scene.getFlags()
+				, *indirectLighting
+				, writes
+				, index );
+
+			if ( allowClusteredLighting )
+			{
+				RenderNodesPass::addClusteredLightingDescriptor( technique.getRenderTarget().getFrustumClusters()
+					, writes
+					, index );
 			}
 
 			auto result = pool.createDescriptorSet( name + "InOut"
@@ -1296,75 +1715,49 @@ namespace castor3d
 
 		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, std::string const & name
-			, bool blend )
+			, crg::ImageViewIdArray const & targetImage
+			, bool blend
+			, bool first = false )
 		{
 			auto loadOp = ( blend
 				? VK_ATTACHMENT_LOAD_OP_LOAD
 				: VK_ATTACHMENT_LOAD_OP_CLEAR );
 			auto srcLayout = ( blend
-				? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+				? ( first ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL )
 				: VK_IMAGE_LAYOUT_UNDEFINED );
-			ashes::VkAttachmentDescriptionArray attaches{ { 0u
-					, getFormat( device, DsTexture::eNmlOcc )
-					, VK_SAMPLE_COUNT_1_BIT
-					, loadOp
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, srcLayout
-					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-				, { 0u
-					, getFormat( device, DsTexture::eColMtl )
-					, VK_SAMPLE_COUNT_1_BIT
-					, loadOp
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, srcLayout
-					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-				, { 0u
-					, getFormat( device, DsTexture::eSpcRgh )
-					, VK_SAMPLE_COUNT_1_BIT
-					, loadOp
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, srcLayout
-					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-				, { 0u
-					, getFormat( device, DsTexture::eEmsTrn )
-					, VK_SAMPLE_COUNT_1_BIT
-					, loadOp
-					, VK_ATTACHMENT_STORE_OP_STORE
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
-					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, srcLayout
-					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } };
-			ashes::SubpassDescriptionArray subpasses;
-			subpasses.emplace_back( ashes::SubpassDescription{ 0u
+			ashes::VkAttachmentDescriptionArray attaches;
+			attaches.push_back( { 0u
+				, targetImage.front().data->info.format
+				, VK_SAMPLE_COUNT_1_BIT
+				, loadOp
+				, VK_ATTACHMENT_STORE_OP_STORE
+				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+				, VK_ATTACHMENT_STORE_OP_DONT_CARE
+				, srcLayout
+				, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+			ashes::SubpassDescription subpassesDesc{ 0u
 				, VK_PIPELINE_BIND_POINT_GRAPHICS
 				, {}
-				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-					, { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-					, { 2u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
-					, { 3u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
 				, {}
 				, ashes::nullopt
-				, {} } );
+				, {} };
+			ashes::SubpassDescriptionArray subpasses;
+			subpasses.push_back( std::move( subpassesDesc ) );
 			ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
-				, 0u
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_DEPENDENCY_BY_REGION_BIT }
+					, 0u
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT }
 				, { 0u
-				, VK_SUBPASS_EXTERNAL
-				, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-				, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
-				, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-				, VK_ACCESS_SHADER_READ_BIT
-				, VK_DEPENDENCY_BY_REGION_BIT } };
+					, VK_SUBPASS_EXTERNAL
+					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+					, VK_ACCESS_SHADER_READ_BIT
+					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, VK_DEPENDENCY_BY_REGION_BIT } };
 			ashes::RenderPassCreateInfo createInfo{ 0u
 				, std::move( attaches )
 				, std::move( subpasses )
@@ -1375,21 +1768,20 @@ namespace castor3d
 
 		static ashes::FrameBufferPtr createFrameBuffer( ashes::RenderPass const & renderPass
 			, std::string const & name
-			, RenderTechnique const & technique )
+			, RenderTechnique const & technique
+			, crg::RunnableGraph & graph
+			, crg::ImageViewIdArray const & targetImage )
 		{
-			auto & textures = technique.getOpaqueResult();
 			ashes::VkImageViewArray fbAttaches;
-			fbAttaches.emplace_back( textures[DsTexture::eNmlOcc].targetView );
-			fbAttaches.emplace_back( textures[DsTexture::eColMtl].targetView );
-			fbAttaches.emplace_back( textures[DsTexture::eSpcRgh].targetView );
-			fbAttaches.emplace_back( textures[DsTexture::eEmsTrn].targetView );
+			auto extent = getExtent( targetImage.front() );
+			fbAttaches.emplace_back( graph.createImageView( targetImage.front() ) );
 			return renderPass.createFrameBuffer( name
 				, makeVkStruct< VkFramebufferCreateInfo >( 0u
 					, renderPass
 					, uint32_t( fbAttaches.size() )
 					, fbAttaches.data()
-					, textures[DsTexture::eNmlOcc].getExtent().width
-					, textures[DsTexture::eNmlOcc].getExtent().height
+					, extent.width
+					, extent.height
 					, 1u ) );
 		}
 
@@ -1398,6 +1790,7 @@ namespace castor3d
 			, ashes::PipelineShaderStageCreateInfoArray stages
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
+			, crg::ImageViewIdArray const & targetImage
 			, bool blend )
 		{
 			auto blendState = blend
@@ -1406,16 +1799,13 @@ namespace castor3d
 					, VK_LOGIC_OP_COPY
 					, { { VK_TRUE
 						, VK_BLEND_FACTOR_ONE
-						, VK_BLEND_FACTOR_ONE
+						, VK_BLEND_FACTOR_ZERO
 						, VK_BLEND_OP_ADD
 						, VK_BLEND_FACTOR_ONE
-						, VK_BLEND_FACTOR_ONE
+						, VK_BLEND_FACTOR_ZERO
 						, VK_BLEND_OP_ADD
 						, VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT } }}
 				: ashes::PipelineColorBlendStateCreateInfo{};
-			blendState.attachments.push_back( blendState.attachments.front() );
-			blendState.attachments.push_back( blendState.attachments.front() );
-			blendState.attachments.push_back( blendState.attachments.front() );
 			ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u, {}, {} };
 			ashes::PipelineViewportStateCreateInfo viewportState{ 0u
 				, { makeViewport( castor::Point2ui{ extent.width, extent.height } ) }
@@ -1450,6 +1840,8 @@ namespace castor3d
 		, castor::String const & category
 		, castor::String const & name
 		, RenderNodesPass const & nodesPass
+		, crg::ImageViewIdArray targetImage
+		, crg::ImageViewIdArray targetDepth
 		, ShaderBuffer * pipelinesIds
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
@@ -1459,7 +1851,7 @@ namespace castor3d
 			, context
 			, graph
 			, { []( uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( useCompute ? VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT : VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT ); } )
 				, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
 				, GetPassIndexCallback( [](){ return 0u; } )
 				, IsEnabledCallback( [this](){ return doIsEnabled(); } )
@@ -1470,10 +1862,16 @@ namespace castor3d
 		, m_pipelinesIds{ pipelinesIds }
 		, m_cameraUbo{ renderPassDesc.m_cameraUbo }
 		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
+		, m_targetImage{ std::move( targetImage ) }
+		, m_targetDepth{ std::move( targetDepth ) }
+		, m_ssao{ techniquePassDesc.m_ssao }
+		, m_indirectLighting{ techniquePassDesc.m_indirectLighting }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
-		, m_inOutsDescriptorLayout{ visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache() ) }
+		, m_inOutsDescriptorLayout{ visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
+			, m_targetImage, getScene(), parent->getRenderTarget(), m_allowClusteredLighting, m_ssao, &m_indirectLighting ) }
 		, m_inOutsDescriptorPool{ m_inOutsDescriptorLayout->createPool( 1u ) }
-		, m_inOutsDescriptorSet{ visres::createInDescriptorSet( getName(), *m_inOutsDescriptorPool, m_cameraUbo, m_sceneUbo, *parent, getScene() ) }
+		, m_inOutsDescriptorSet{ visres::createInDescriptorSet( getName(), *m_inOutsDescriptorPool, graph, m_cameraUbo, m_sceneUbo, *parent, getScene()
+			, m_allowClusteredLighting, m_targetImage, m_ssao, &m_indirectLighting ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
 			, ( useCompute
@@ -1481,16 +1879,16 @@ namespace castor3d
 				: visres::ShaderWriter< false >::getVertexProgram() ) }
 		, m_firstRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), false ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, true, true ) ) }
 		, m_firstFramebuffer{ ( useCompute
 			? nullptr
-			: visres::createFrameBuffer( *m_firstRenderPass, getName(), *m_parent ) ) }
+			: visres::createFrameBuffer( *m_firstRenderPass, getName(), *m_parent, graph, m_targetImage ) ) }
 		, m_blendRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), true ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, true, false ) ) }
 		, m_blendFramebuffer{ ( useCompute
 			? nullptr
-			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent ) ) }
+			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage ) ) }
 	{
 	}
 
@@ -1523,6 +1921,7 @@ namespace castor3d
 				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
 					, pipelineHash
 					, getShaderFlags() ) };
+				pipelineFlags.backgroundModelId = getScene().getBackground()->getModelID();
 
 				if ( !pipelineFlags.isBillboard() )
 				{
@@ -1669,8 +2068,7 @@ namespace castor3d
 			| ComponentModeFlag::eSpecularLighting
 			| ComponentModeFlag::eNormals
 			| ComponentModeFlag::eGeometry
-			| ComponentModeFlag::eOcclusion
-			| ComponentModeFlag::eDeferred );
+			| ComponentModeFlag::eOcclusion );
 	}
 
 	bool VisibilityResolvePass::doIsEnabled()const
@@ -1697,41 +2095,13 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer )
 	{
 		m_drawCalls = {};
-		auto & opaqueResult = m_parent->getOpaqueResult();
 		auto size = uint32_t( m_parent->getMaterialsStarts().getCount() );
 		std::array< VkDescriptorSet, 3u > descriptorSets{ *m_inOutsDescriptorSet
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
-		static std::array< VkClearValue, size_t( DsTexture::eCount ) > clearValues{ getClearValue( DsTexture::eNmlOcc )
-			, getClearValue( DsTexture::eColMtl )
-			, getClearValue( DsTexture::eSpcRgh )
-			, getClearValue( DsTexture::eEmsTrn ) };
-
-		context.getContext().vkCmdClearColorImage( commandBuffer
-			, *opaqueResult[DsTexture::eNmlOcc].image
-			, VK_IMAGE_LAYOUT_GENERAL
-			, &clearValues[0u].color
-			, 1u
-			, &opaqueResult[DsTexture::eNmlOcc].targetViewId.data->info.subresourceRange );
-		context.getContext().vkCmdClearColorImage( commandBuffer
-			, *opaqueResult[DsTexture::eColMtl].image
-			, VK_IMAGE_LAYOUT_GENERAL
-			, &clearValues[1u].color
-			, 1u
-			, &opaqueResult[DsTexture::eColMtl].targetViewId.data->info.subresourceRange );
-		context.getContext().vkCmdClearColorImage( commandBuffer
-			, *opaqueResult[DsTexture::eSpcRgh].image
-			, VK_IMAGE_LAYOUT_GENERAL
-			, &clearValues[2u].color
-			, 1u
-			, &opaqueResult[DsTexture::eSpcRgh].targetViewId.data->info.subresourceRange );
-		context.getContext().vkCmdClearColorImage( commandBuffer
-			, *opaqueResult[DsTexture::eEmsTrn].image
-			, VK_IMAGE_LAYOUT_GENERAL
-			, &clearValues[3u].color
-			, 1u
-			, &opaqueResult[DsTexture::eEmsTrn].targetViewId.data->info.subresourceRange );
+		std::vector< VkClearValue > clearValues;
+		clearValues.push_back( transparentBlackClearColor );
 		bool first = true;
 
 		for ( auto & pipelineIt : m_activePipelines )
@@ -1799,21 +2169,14 @@ namespace castor3d
 			}
 		}
 
-		context.setLayoutState( opaqueResult[DsTexture::eNmlOcc].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_GENERAL ) );
-		context.setLayoutState( opaqueResult[DsTexture::eColMtl].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_GENERAL ) );
-		context.setLayoutState( opaqueResult[DsTexture::eSpcRgh].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_GENERAL ) );
-		context.setLayoutState( opaqueResult[DsTexture::eEmsTrn].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_GENERAL ) );
+		context.setLayoutState( m_targetImage.front()
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 	}
 
 	void VisibilityResolvePass::doRecordGraphics( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer )
 	{
 		m_drawCalls = {};
-		auto & opaqueResult = m_parent->getOpaqueResult();
 		std::array< VkDescriptorSet, 3u > descriptorSets{ *m_inOutsDescriptorSet
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
@@ -1826,10 +2189,8 @@ namespace castor3d
 		{
 			if ( !renderPassBound )
 			{
-				static std::array< VkClearValue, size_t( DsTexture::eCount ) > clearValues{ getClearValue( DsTexture::eNmlOcc )
-					, getClearValue( DsTexture::eColMtl )
-					, getClearValue( DsTexture::eSpcRgh )
-					, getClearValue( DsTexture::eEmsTrn ) };
+				std::vector< VkClearValue > clearValues;
+				clearValues.push_back( transparentBlackClearColor );
 				auto & extent = m_parent->getNormal().getExtent();
 				VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 					, nullptr
@@ -1941,13 +2302,7 @@ namespace castor3d
 			context.getContext().vkCmdEndRenderPass( commandBuffer );
 		}
 
-		context.setLayoutState( opaqueResult[DsTexture::eNmlOcc].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-		context.setLayoutState( opaqueResult[DsTexture::eColMtl].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-		context.setLayoutState( opaqueResult[DsTexture::eSpcRgh].targetViewId
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
-		context.setLayoutState( opaqueResult[DsTexture::eEmsTrn].targetViewId
+		context.setLayoutState( m_targetImage.front()
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 	}
 
@@ -1994,10 +2349,10 @@ namespace castor3d
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, extent, flags, stride, false ) };
+				, visres::getProgram( m_device, getScene(), extent, flags, getDebugConfig(), stride, false, m_ssao != nullptr, m_allowClusteredLighting ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, extent, flags, stride, true ) };
+				, visres::getProgram( m_device, getScene(), extent, flags, getDebugConfig(), stride, true, m_ssao != nullptr, m_allowClusteredLighting ) };
 
 			if constexpr ( useCompute )
 			{
@@ -2019,6 +2374,7 @@ namespace castor3d
 					, std::move( stages )
 					, *result->pipelineLayout
 					, *m_firstRenderPass
+					, m_targetImage
 					, false );
 				stages.push_back( makeShaderState( m_device, m_vertexShader ) );
 				stages.push_back( makeShaderState( m_device, result->shaders[1].shader ) );
@@ -2027,6 +2383,7 @@ namespace castor3d
 					, std::move( stages )
 					, *result->pipelineLayout
 					, *m_blendRenderPass
+					, m_targetImage
 					, true );
 			}
 

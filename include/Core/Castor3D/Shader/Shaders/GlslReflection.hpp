@@ -88,32 +88,6 @@ namespace castor3d::shader
 			, sdw::Vec3& coatReflected
 			, sdw::Vec3& sheenReflected
 			, DebugOutput & debugOutput );
-		C3D_API void computeCombined( BlendComponents & pcomponents
-			, LightSurface const & lightSurface
-			, BackgroundModel & background
-			, sdw::UInt const & envMapIndex
-			, sdw::UInt const & hasReflection
-			, sdw::UInt const & hasRefraction
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, DebugOutput & debugOutput );
-		C3D_API void computeCombined( BlendComponents & pcomponents
-			, sdw::Vec3 const & wsNormal
-			, sdw::Vec3 const & difF
-			, sdw::Vec3 const & spcF
-			, sdw::Vec3 const & V
-			, sdw::Float const & NdotV
-			, BackgroundModel & background
-			, sdw::UInt const & envMapIndex
-			, sdw::UInt const & hasReflection
-			, sdw::UInt const & hasRefraction
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, DebugOutput & debugOutput );
 		C3D_API void computeReflections( BlendComponents & components
 			, LightSurface const & lightSurface
 			, BackgroundModel & background
@@ -322,7 +296,7 @@ namespace castor3d::shader
 			, sdw::OutVec3
 			, sdw::OutVec3
 			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeForwardSceneRefr;
+			, sdw::OutVec3 > m_computeSceneRefr;
 		sdw::Function< sdw::Void
 			, InOutBlendComponents
 			, sdw::InVec3
@@ -338,22 +312,7 @@ namespace castor3d::shader
 			, sdw::OutVec3
 			, sdw::OutVec3
 			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeForwardEnvRefr;
-		sdw::Function< sdw::Void
-			, InOutBlendComponents
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InVec3
-			, sdw::InFloat
-			, sdw::InUInt
-			, sdw::InUInt
-			, sdw::InUInt
-			, sdw::InFloat
-			, sdw::OutVec3
-			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeDeferred;
-
+			, sdw::OutVec3 > m_computeEnvRefr;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3
 			, sdw::InVec3

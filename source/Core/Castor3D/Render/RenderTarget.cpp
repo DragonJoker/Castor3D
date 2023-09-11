@@ -1116,7 +1116,6 @@ namespace castor3d
 					, m_hdrObjects.back()
 					, m_ssaoConfig
 					, progress
-					, C3D_UseDeferredRendering != 0
 					, C3D_UseVisibilityBuffer != 0
 					, C3D_UseWeightedBlendedRendering != 0 );
 			}

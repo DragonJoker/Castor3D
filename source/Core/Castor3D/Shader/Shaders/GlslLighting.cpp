@@ -134,14 +134,19 @@ namespace castor3d::shader
 		, sdw::Vec3 reflectedSpecular
 		, sdw::Vec3 refracted )
 	{
+		auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
+			, m_utils.fresnelMix( incident
+				, components.normal
+				, components.refractionRatio )
+			, ( components.hasMember( "specularFactor" )
+				|| ( components.refractionRatio != 0.0_f
+					&& components.hasRefraction != 0_u
+					&& components.hasTransmission == 0_u ) ) );
+
 		IF( m_writer, components.refractionRatio != 0.0_f
 			&& components.hasRefraction != 0_u
 			&& components.hasTransmission == 0_u )
 		{
-			auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
-				, m_utils.fresnelMix( incident
-					, components.normal
-					, components.refractionRatio ) );
 			reflectedDiffuse = mix( vec3( 0.0_f )
 				, reflectedDiffuse
 				, vec3( fresnelFactor ) );
@@ -188,6 +193,14 @@ namespace castor3d::shader
 			debugOutput.registerOutput( "Transmission", 0.0_f );
 		}
 		FI;
+
+		if ( components.hasMember( "specularFactor" ) )
+		{
+			auto specularFactor = m_writer.declLocale( "c3d_specularFactor"
+				, clamp( components.getMember< sdw::Float >( "specularFactor" ), 0.0_f, 1.0_f ) );
+			specularBrdf *= specularFactor * fresnelFactor;
+			diffuseBrdf *= 1.0_f - specularFactor * fresnelFactor;
+		}
 
 		debugOutput.registerOutput( "Emissive", emissive );
 		auto combineResult = m_writer.declLocale( "c3d_combineResult"

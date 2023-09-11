@@ -415,68 +415,6 @@ namespace castor3d::shader
 		}
 	}
 
-	void Lights::computeDifSpec( LightType lightType
-		, BlendComponents const & components
-		, BackgroundModel & backgroundModel
-		, LightSurface const & lightSurface
-		, sdw::UInt const lightOffset
-		, sdw::UInt const receivesShadows
-		, DebugOutput & debugOutput
-		, OutputComponents & output )
-	{
-		if ( auto lightingModel = getLightingModel() )
-		{
-			switch ( lightType )
-			{
-			case LightType::eDirectional:
-				{
-					auto light = m_writer.declLocale( "light"
-						, getDirectionalLight( lightOffset ) );
-					lightingModel->compute( light
-						, components
-						, backgroundModel
-						, lightSurface
-						, receivesShadows
-						, output );
-					break;
-				}
-
-			case LightType::ePoint:
-				{
-					auto light = m_writer.declLocale( "light"
-						, getPointLight( lightOffset ) );
-					lightingModel->compute( light
-						, components
-						, lightSurface
-						, receivesShadows
-						, output );
-					break;
-				}
-
-			case LightType::eSpot:
-				{
-					auto light = m_writer.declLocale( "light"
-						, getSpotLight( lightOffset ) );
-					lightingModel->compute( light
-						, components
-						, lightSurface
-						, receivesShadows
-						, output );
-					break;
-				}
-
-			default:
-				break;
-			}
-
-			debugOutput.registerOutput( "Lighting", "Diffuse", output.diffuse );
-			debugOutput.registerOutput( "Lighting", "Specular", output.specular );
-			debugOutput.registerOutput( "Lighting", "Scattering", output.scattering );
-			debugOutput.registerOutput( "Lighting", "CoatingSpecular", output.coatingSpecular );
-			debugOutput.registerOutput( "Lighting", "Sheen", output.sheen );
-		}
-	}
-
 	sdw::Float Lights::getFinalTransmission( BlendComponents const & components
 		, sdw::Vec3 const incident )
 	{

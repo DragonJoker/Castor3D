@@ -790,12 +790,6 @@ namespace castor3d
 
 	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const
 	{
-		if ( handleDeferrable()
-			&& passFlags.hasNonDeferrableFlag == allowDeferrable() )
-		{
-			return false;
-		}
-
 		if ( passFlags.hasTransmissionFlag )
 		{
 			return !checkFlag( m_filters, RenderFilter::eTransmission );

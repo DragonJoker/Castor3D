@@ -26,7 +26,6 @@ namespace castor3d
 		, QueueData const & queueData
 		, crg::FramePassArray const & previousPasses
 		, ProgressBar * progress
-		, bool deferred
 		, bool visbuffer )
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
@@ -34,15 +33,13 @@ namespace castor3d
 		, m_result{ parent.getResources()
 			, device
 			, makeSize( parent.getTargetExtent() )
-			, visbuffer && m_device.hasBindless() && deferred }
+			, visbuffer && m_device.hasBindless() }
 		, m_visibilityPassDesc{ ( hasVisibility()
 			? &doCreateVisibilityPass( progress, previousPasses )
 			: nullptr ) }
 		, m_depthPassDesc{ hasVisibility()
 			? m_visibilityPassDesc
-			: ( deferred
-				? &doCreateDeferredDepthPass( progress, previousPasses )
-				: &doCreateForwardDepthPass( progress, previousPasses ) ) }
+			: &doCreateDepthPass( progress, previousPasses ) }
 		, m_depthRange{ makeBuffer< int32_t >( m_device
 			, 2u
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
@@ -185,7 +182,7 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & PrepassRendering::doCreateForwardDepthPass( ProgressBar * progress
+	crg::FramePass & PrepassRendering::doCreateDepthPass( ProgressBar * progress
 		, crg::FramePassArray const & previousPasses )
 	{
 		stepProgressBar( progress, "Creating forward depth pass" );
@@ -220,8 +217,7 @@ namespace castor3d
 						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
 						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) )
-						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *normalIt ) )
-					, false );
+						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *normalIt ) ) );
 				m_depthPass = res.get();
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -234,54 +230,7 @@ namespace castor3d
 			, getClearValue( PpTexture::eDepthObj ) );
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity().targetViewId );
 		result.addOutputColourView( getOwner()->getNormal().targetViewId
-			, getClearValue( DsTexture::eNmlOcc ) );
-		return result;
-	}
-
-	crg::FramePass & PrepassRendering::doCreateDeferredDepthPass( ProgressBar * progress
-		, crg::FramePassArray const & previousPasses )
-	{
-		stepProgressBar( progress, "Creating deferred depth pass" );
-		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( "Depth"
-			, [this, progress, targetDepth]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & runnableGraph )
-			{
-				auto depthIt = framePass.images.begin();
-				auto depthObjIt = std::next( depthIt );
-				auto velocityIt = std::next( depthObjIt );
-				stepProgressBar( progress, "Initialising deferred depth pass" );
-				auto res = std::make_unique< DepthPass >( getOwner()
-					, framePass
-					, context
-					, runnableGraph
-					, m_device
-					, targetDepth
-					, getOwner()->getSsaoConfig()
-					, RenderNodesPassDesc{ getExtent( targetDepth.front() )
-							, getOwner()->getCameraUbo()
-							, getOwner()->getSceneUbo()
-							, getOwner()->getRenderTarget().getCuller() }
-						.safeBand( true )
-						.meshShading( true )
-						.componentModeFlags( ComponentModeFlag::eOpacity
-							| ComponentModeFlag::eGeometry )
-						.implicitAction( depthIt->view(), crg::RecordContext::clearAttachment( *depthIt ) )
-						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
-						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) )
-					, true );
-				m_depthPass = res.get();
-				getEngine()->registerTimer( framePass.getFullName()
-					, res->getTimer() );
-				return res;
-			} );
-		result.addDependencies( previousPasses );
-		result.addOutputDepthStencilView( targetDepth
-			, defaultClearDepthStencil );
-		result.addOutputColourView( m_result[PpTexture::eDepthObj].targetViewId
-			, getClearValue( PpTexture::eDepthObj ) );
-		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity().targetViewId );
+			, transparentBlackClearColor );
 		return result;
 	}
 
