@@ -6,7 +6,6 @@ See LICENSE file in root folder
 
 #include "GuiCommon/Properties/TreeItems/TreeItemProperty.hpp"
 
-#include <Castor3D/Render/Opaque/Lighting/LightingModule.hpp>
 #include <Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp>
 
 namespace GuiCommon

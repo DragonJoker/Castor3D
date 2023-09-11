@@ -71,15 +71,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Deferred lighting Render technique pass.
-	*\~french
-	*\brief
-	*	Classe de passe de technique de rendu implémentant le Deferred lighting.
-	*/
-	class DepthPass;
-	/**
-	*\~english
-	*\brief
 	*	Downscales multiple views to a given dimension.
 	*\~french
 	*\brief

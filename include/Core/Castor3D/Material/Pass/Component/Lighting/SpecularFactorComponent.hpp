@@ -37,11 +37,6 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			C3D_API void updateOutputs( sdw::StructInstance const & components
-				, sdw::StructInstance const & surface
-				, sdw::Vec4 & spcRgh
-				, sdw::Vec4 & colMtl
-				, sdw::Vec4 & emsTrn )const override;
 		};
 
 		struct MaterialShader

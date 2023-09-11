@@ -253,7 +253,6 @@ namespace castor3d
 			it = std::next( m_componentCombines.begin(), idx );
 		}
 
-		combine.hasNonDeferrableFlag = hasAny( combine, m_nonDeferrableFlags );
 		combine.hasTransmissionFlag = hasAny( combine, m_transmissionFlag );
 		combine.hasAlphaTestFlag = hasAny( combine, m_alphaTestFlag );
 		combine.hasAlphaBlendingFlag = hasAny( combine, m_alphaBlendingFlag );
@@ -739,11 +738,6 @@ namespace castor3d
 		if ( componentDesc.plugin->getAlphaBlendingFlag() != 0u )
 		{
 			m_alphaBlendingFlag = componentDesc.plugin->getAlphaBlendingFlag();
-		}
-
-		if ( componentDesc.plugin->isNonDeferrable() != 0u )
-		{
-			m_nonDeferrableFlags.push_back( componentDesc.plugin->getComponentFlags() );
 		}
 
 		if ( componentDesc.plugin->getAlphaTestFlag() != 0u )

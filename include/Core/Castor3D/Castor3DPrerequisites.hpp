@@ -33,7 +33,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/Opaque/OpaqueModule.hpp"
-#include "Castor3D/Render/Opaque/Lighting/LightingModule.hpp"
 #include "Castor3D/Render/Passes/PassesModule.hpp"
 #include "Castor3D/Render/PBR/PbrModule.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"

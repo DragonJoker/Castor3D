@@ -24,9 +24,6 @@
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
-#include "Castor3D/Render/Opaque/OpaquePass.hpp"
-#include "Castor3D/Render/Opaque/OpaquePassResult.hpp"
-#include "Castor3D/Render/Opaque/DeferredRendering.hpp"
 #include "Castor3D/Render/Opaque/VisibilityReorderPass.hpp"
 #include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 #include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
@@ -311,7 +308,6 @@ namespace castor3d
 		, Texture const & intermediate
 		, SsaoConfig const & ssaoConfig
 		, ProgressBar * progress
-		, bool deferred
 		, bool visbuffer
 		, bool weightedBlended )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
@@ -334,14 +330,14 @@ namespace castor3d
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_normal{ m_device
 			, m_renderTarget.getResources()
-			, getName() + "/" + getTexName( DsTexture::eNmlOcc )
+			, getName() + "/Normal"
 			, 0u
 			, m_colour->getExtent()
 			, 1u
 			, 1u
-			, getFormat( m_device, DsTexture::eNmlOcc )
-			, getUsageFlags( DsTexture::eNmlOcc )
-			, getBorderColor( DsTexture::eNmlOcc ) }
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_cameraUbo{ m_device }
 		, m_sceneUbo{ m_device }
 		, m_lpvConfigUbo{ m_device }
@@ -406,7 +402,6 @@ namespace castor3d
 			, queueData
 			, doCreateRenderPasses( progress, TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ) )
 			, progress
-			, deferred
 			, visbuffer }
 		, m_lastDepthPass{ &m_prepass.getLastPass() }
 		, m_depthRangePass{ &m_prepass.getDepthRangePass() }
@@ -425,8 +420,7 @@ namespace castor3d
 			, doCreateRenderPasses( progress , TechniquePassEvent::eBeforeOpaque, &m_background->getPass() )
 			, getSsaoConfig()
 			, progress
-			, &m_normal
-			, deferred }
+			, &m_normal }
 		, m_lastOpaquePass{ &m_opaque.getLastPass() }
 		, m_transparent{ *this
 			, m_device

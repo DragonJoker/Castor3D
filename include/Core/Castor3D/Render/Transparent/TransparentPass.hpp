@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_DeferredTransparentPass_H___
-#define ___C3D_DeferredTransparentPass_H___
+#ifndef ___C3D_TransparentPass_H___
+#define ___C3D_TransparentPass_H___
 
 #include "TransparentModule.hpp"
 

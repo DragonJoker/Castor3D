@@ -16,10 +16,10 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Enumerator of textures used by the deferred renderer's GBUffer.
+	*	Enumerator of textures used by the visibility passes.
 	*\~french
 	*\brief
-	*	Enumération des textures utilisées par le GBuffer du rendu différé.
+	*	Enumération des textures utilisées par les passes de visibilité.
 	*/
 	enum class PpTexture
 		: uint8_t
@@ -47,10 +47,10 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Deferred lighting Render technique pass.
+	*	Depth prepass.
 	*\~french
 	*\brief
-	*	Classe de passe de technique de rendu implémentant le Deferred lighting.
+	*	Classe de prépasse de profondeur.
 	*/
 	class DepthPass;
 	/**

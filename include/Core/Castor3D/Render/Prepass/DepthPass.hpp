@@ -25,7 +25,6 @@ namespace castor3d
 		 *\param		targetDepth		The target depth textures.
 		 *\param[in]	ssaoConfig		The SSAO configuration.
 		 *\param[in]	renderPassDesc	The render pass description.
-		 *\param[in]	deferred		\p true if the opaque pass is using deferred rendering.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	parent			La technique parente.
@@ -36,7 +35,6 @@ namespace castor3d
 		 *\param		targetDepth		Les textures profondeur cibles.
 		 *\param[in]	ssaoConfig		La configuration du SSAO.
 		 *\param[in]	renderPassDesc	La description de la passe de rendu.
-		 *\param[in]	deferred		\p true si la passe opaque utilise le deferred rendering.
 		 */
 		C3D_API DepthPass( RenderTechnique * parent
 			, crg::FramePass const & pass
@@ -45,8 +43,7 @@ namespace castor3d
 			, RenderDevice const & device
 			, crg::ImageViewIdArray targetDepth
 			, SsaoConfig const & ssaoConfig
-			, RenderNodesPassDesc const & renderPassDesc
-			, bool deferred );
+			, RenderNodesPassDesc const & renderPassDesc );
 		/**
 		 *\copydoc		castor3d::RenderNodesPass::getShaderFlags
 		 */
@@ -68,7 +65,6 @@ namespace castor3d
 
 	public:
 		C3D_API static castor::String const Type;
-		bool m_deferred{ false };
 	};
 }
 

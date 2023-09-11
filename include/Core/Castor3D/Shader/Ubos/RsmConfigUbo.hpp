@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 
-#include "Castor3D/Render/Opaque/Lighting/LightingModule.hpp"
+#include "Castor3D/Render/Opaque/OpaqueModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"

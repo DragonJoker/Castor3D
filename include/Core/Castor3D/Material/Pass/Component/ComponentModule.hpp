@@ -63,8 +63,6 @@ namespace castor3d
 		eSpecifics,
 		eDerivTex,
 		eOcclusion,
-		eForward,
-		eDeferred,
 		CU_ScopedEnumBounds( eNone ),
 	};
 	enum class ComponentModeFlag : uint16_t
@@ -80,22 +78,9 @@ namespace castor3d
 		eSpecifics = 0x0001u << uint16_t( ComponentMode::eSpecifics ),
 		eDerivTex = 0x0001u << uint16_t( ComponentMode::eDerivTex ),
 		eOcclusion = 0x0001u << uint16_t( ComponentMode::eOcclusion ),
-		eAllButFwdDef = ( ( 0x0001u << uint16_t( ComponentMode::eForward ) ) - 1u ),
-		eForward = 0x0001u << uint16_t( ComponentMode::eForward ),
-		eDeferred = 0x0001u << uint16_t( ComponentMode::eDeferred ),
+		eAll = ( ( 0x0001u << ( uint16_t( ComponentMode::eOcclusion ) + 1u ) ) - 1u ),
 	};
 	CU_ImplementFlags( ComponentModeFlag )
-
-	inline constexpr bool allowDeferrable( ComponentModeFlags mask )noexcept
-	{
-		return checkFlag( mask, ComponentModeFlag::eDeferred );
-	}
-
-	inline constexpr bool handleDeferrable( ComponentModeFlags mask )noexcept
-	{
-		return checkFlag( mask, ComponentModeFlag::eForward )
-			|| checkFlag( mask, ComponentModeFlag::eDeferred );
-	}
 	/**
 	\~english
 	\brief		Pass component holding base pass data.
@@ -603,7 +588,6 @@ namespace castor3d
 		PassComponentCombineID baseId{};
 		PassComponentFlagsSet flags{};
 		// Computed from \p flags
-		bool hasNonDeferrableFlag{};
 		bool hasTransmissionFlag{};
 		bool hasAlphaTestFlag{};
 		bool hasAlphaBlendingFlag{};

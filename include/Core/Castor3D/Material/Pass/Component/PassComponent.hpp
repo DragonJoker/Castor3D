@@ -33,36 +33,6 @@ namespace castor3d
 			C3D_API PassShader( PassShader && ) = default;
 			C3D_API PassShader & operator=( PassShader && ) = default;
 			C3D_API virtual ~PassShader() = default;
-			/**
-			*\~english
-			*\brief
-			*	Updates the values needed for lighting (specular, metalness, roughness and colour).
-			*\param[in] components
-			*	The components used as source.
-			*\param[in] surface
-			*	The surface also used as source.
-			*\param[out] spcRgh
-			*	Receives Specular (RGB) and Roughness (A).
-			*\param[out] colMtl
-			*	Receives Colour (RGB) and Metalness (A).
-			*\~french
-			*\brief		Met à jour les valeurs nécessaires à l'éclairage (specular, metalness, roughness et colour).
-			*\param[in] components
-			*	Les composants source.
-			*\param[in] surface
-			*	La surface source.
-			*\param[out] spcRgh
-			*	Reçoit la Specular (RGB) et la Roughness (A).
-			*\param[out] colMtl
-			*	Reçoit la Colour (RGB) et la Metalness (A).
-			*/
-			C3D_API virtual void updateOutputs( sdw::StructInstance const & components
-				, sdw::StructInstance const & surface
-				, sdw::Vec4 & spcRgh
-				, sdw::Vec4 & colMtl
-				, sdw::Vec4 & emsTrn )const
-			{
-			}
 		};
 
 		struct PassComponentsShader
@@ -441,36 +411,6 @@ namespace castor3d
 			{
 			}
 			/**
-			*\~english
-			*\brief
-			*	Updates the material from values needed for lighting (specular, metalness, roughness and colour).
-			*\param[in] colour
-			*	The material colour.
-			*\param[in] spcRgh
-			*	Specular (RGB) and Roughness (A).
-			*\param[in] colMtl
-			*	Colour (RGB) and Metalness (A).
-			*\param[out] material
-			*	Receives the values necessary for this component.
-			*\~french
-			*\brief		Met à jour le matériau depuis les valeurs nécessaires à l'éclairage (specular, metalness, roughness et colour).
-			*\param[in] colour
-			*	La couleur du matériau.
-			*\param[out] spcRgh
-			*	Specular (RGB) et la Roughness (A).
-			*\param[out] colMtl
-			*	Colour (RGB) et la Metalness (A).
-			*\param[out] material
-			*	Reçoit les valeurs nécessaires pour ce composant.
-			*/
-			C3D_API virtual void updateMaterial( sdw::Vec3 const & colour
-				, sdw::Vec4 const & spcRgh
-				, sdw::Vec4 const & colMtl
-				, sdw::Vec4 const & emsTrn
-				, Material & material )const
-			{
-			}
-			/**
 			*\name
 			*	Getters.
 			*/
@@ -743,18 +683,6 @@ namespace castor3d
 		C3D_API virtual PassComponentFlag getParallaxOcclusionMappingRepeatFlag()const
 		{
 			return 0u;
-		}
-		/**
-		*\~english
-		*\return
-		*	\p true if this component can be processed through deferred rendering.
-		*\~french
-		*\return
-		*	\p true si le composant peut être traité via le deferred rendering.
-		*/
-		C3D_API virtual bool isNonDeferrable()const
-		{
-			return false;
 		}
 		/**@}*/
 		/**

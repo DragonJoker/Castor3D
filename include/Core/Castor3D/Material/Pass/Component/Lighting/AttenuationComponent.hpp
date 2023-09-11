@@ -90,11 +90,6 @@ namespace castor3d
 			{
 				return std::make_unique< MaterialShader >();
 			}
-
-			bool isNonDeferrable()const override
-			{
-				return true;
-			}
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )

@@ -92,7 +92,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & refraction )const = 0;
 		/**
 		*\name
-		*	Deferred renderring
+		*	Clustered lighting
 		*/
 		//\{
 		/**

@@ -117,28 +117,6 @@ namespace castor3d
 		res.getMember< sdw::Float >( "metalness", true ) += src.getMember< sdw::Float >( "metalness", true ) * passMultiplier;
 	}
 
-	void MetalnessComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
-		, sdw::StructInstance const & surface
-		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & emsTrn )const
-	{
-		if ( components.hasMember( "metalness" ) )
-		{
-			auto metalness = components.getMember< sdw::Float >( "metalness" );
-
-			if ( !components.hasMember( "colour" ) )
-			{
-				auto colour = ( vec3( pow( 1.0_f, 2.2_f ) ) );
-				colMtl = vec4( colour, metalness );
-			}
-			else
-			{
-				colMtl.a() = metalness;
-			}
-		}
-	}
-
 	//*********************************************************************************************
 
 	MetalnessComponent::MaterialShader::MaterialShader()
@@ -154,15 +132,6 @@ namespace castor3d
 			type.declMember( "metalness", ast::type::Kind::eFloat );
 			inits.emplace_back( sdw::makeExpr( sdw::Float{ MetalnessComponent::Default } ) );
 		}
-	}
-
-	void MetalnessComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
-		, sdw::Vec4 const & spcRgh
-		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & emsTrn
-		, shader::Material & material )const
-	{
-		material.getMember< sdw::Float >( "metalness", true ) = colMtl.a();
 	}
 
 	//*********************************************************************************************

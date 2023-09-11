@@ -92,9 +92,7 @@ namespace castor3d
 		, shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( ( castor3d::handleDeferrable( componentsMask )
-				&& !checkFlag( componentsMask, ComponentModeFlag::eForward ) )
-			|| !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting )
+		if ( !checkFlag( componentsMask, ComponentModeFlag::eSpecularLighting )
 			|| !checkFlag( materials.getFilter(), ComponentModeFlag::eSpecularLighting ) )
 		{
 			return;

@@ -119,20 +119,6 @@ namespace castor3d
 		res.getMember< sdw::Vec3 >( "specular", true ) += src.getMember< sdw::Vec3 >( "specular", true ) * passMultiplier;
 	}
 
-	void SpecularComponent::ComponentsShader::updateOutputs( sdw::StructInstance const & components
-		, sdw::StructInstance const & surface
-		, sdw::Vec4 & spcRgh
-		, sdw::Vec4 & colMtl
-		, sdw::Vec4 & emsTrn )const
-	{
-		if ( !components.hasMember( "specular" ) )
-		{
-			return;
-		}
-
-		spcRgh.rgb() = components.getMember< sdw::Vec3 >( "specular", true );
-	}
-
 	//*********************************************************************************************
 
 	SpecularComponent::MaterialShader::MaterialShader()
@@ -148,15 +134,6 @@ namespace castor3d
 			type.declMember( "specular", ast::type::Kind::eVec3F );
 			inits.emplace_back( sdw::makeExpr( sdw::vec3( SpecularComponent::DefaultComponent ) ) );
 		}
-	}
-
-	void SpecularComponent::MaterialShader::updateMaterial( sdw::Vec3 const & albedo
-		, sdw::Vec4 const & spcRgh
-		, sdw::Vec4 const & colMtl
-		, sdw::Vec4 const & emsTrn
-		, shader::Material & material )const
-	{
-		material.getMember< sdw::Vec3 >( "specular", true ) = spcRgh.rgb();
 	}
 
 	//*********************************************************************************************
