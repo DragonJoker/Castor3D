@@ -620,20 +620,37 @@ namespace castor3d
 		 *\~english
 		 *\brief			Adds background descriptor layout bindings to given list.
 		 *\param[in]		background	The background.
-		 *\param[in]		flags		The pipeline flags.
 		 *\param[in,out]	bindings	Receives the bindings.
 		 *\param[in,out]	index		The current binding index.
 		 *\return
 		 *\~french
 		 *\brief			Ajoute les bindings de descriptor layout du background à la liste donnée.
 		 *\param[in]		background	Le fond.
-		 *\param[in]		flags		Les indicateurs de pipeline.
 		 *\param[in,out]	bindings	Reçoit les bindings.
 		 *\param[in,out]	index		L'index de binding actuel.
 		 *\return
 		 */
 		C3D_API static void addBackgroundBindings( SceneBackground const & background
-			, PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index );
+		/**
+		 *\~english
+		 *\brief			Adds indirect lighting descriptor layout bindings to given list.
+		 *\param[in]		sceneFlags	The scene flags.
+		 *\param[in]		llpvResult	The Layered LPV result.
+		 *\param[in,out]	bindings	Receives the bindings.
+		 *\param[in,out]	index		The current binding index.
+		 *\return
+		 *\~french
+		 *\brief			Ajoute les bindings de descriptor layout de l'éclairage indirect à la liste donnée.
+		 *\param[in]		sceneFlags	Les indicateurs de scène.
+		 *\param[in]		llpvResult	Le résultat du Layered LPV.
+		 *\param[in,out]	bindings	Reçoit les bindings.
+		 *\param[in,out]	index		L'index de binding actuel.
+		 *\return
+		 */
+		C3D_API static void addGIBindings( SceneFlags flags
+			, IndirectLightingData const & indirectLighting
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index );
 		/**
@@ -661,9 +678,12 @@ namespace castor3d
 			, ShadowBuffer const & shadowBuffer
 			, uint32_t & index );
 		C3D_API static void addBackgroundDescriptor( SceneBackground const & background
-			, PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
+			, uint32_t & index );
+		C3D_API static void addGIDescriptor( SceneFlags sceneFlags
+			, IndirectLightingData const & indirectLighting
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index );
 		C3D_API static void addClusteredLightingDescriptor( FrustumClusters const & frustumClusters
 			, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -834,7 +854,6 @@ namespace castor3d
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundBindings( Scene const & scene
-			, PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		C3D_API void doAddClusteredLightingBindings( RenderTarget const & target
@@ -848,7 +867,6 @@ namespace castor3d
 			, ShadowBuffer const * shadowBuffer
 			, uint32_t & index )const;
 		C3D_API void doAddBackgroundDescriptor( Scene const & scene
-			, PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const;

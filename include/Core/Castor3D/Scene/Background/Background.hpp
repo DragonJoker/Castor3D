@@ -264,8 +264,6 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Adds the background specific bindings.
-		*\param	flags
-		*	The pipeline flags.
 		*\param	bindings
 		*	Receives the bindings.
 		*\param	index
@@ -273,15 +271,12 @@ namespace castor3d
 		*\~french
 		*\brief
 		*	Ajoute les bindings spécifiques au fond.
-		*\param	flags
-		*	Les indicateurs de pipeline.
 		*\param	bindings
 		*	Reçoit les bindings.
 		*\param	index
 		*	L'indice de départ des bindings.
 		*/
-		C3D_API void addBindings( PipelineFlags const & flags
-			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		C3D_API void addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index )const;
 		/**
 		*\~english
@@ -307,8 +302,7 @@ namespace castor3d
 		*\param	index
 		*	L'indice de départ des descripteurs.
 		*/
-		C3D_API void addDescriptors( PipelineFlags const & flags
-			, ashes::WriteDescriptorSetArray & descriptorWrites
+		C3D_API void addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const;
 		/**

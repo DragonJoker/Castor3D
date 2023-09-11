@@ -198,7 +198,7 @@ namespace castor3d
 			RenderNodesPass::addShadowBindings( m_scene.getFlags(), setLayoutBindings, index );
 		}
 
-		RenderNodesPass::addBackgroundBindings( *m_scene.getBackground(), flags, setLayoutBindings, index );
+		RenderNodesPass::addBackgroundBindings( *m_scene.getBackground(), setLayoutBindings, index );
 
 		return m_device->createDescriptorSetLayout( "ClusteredLights"
 			, std::move( setLayoutBindings ) );
@@ -221,7 +221,7 @@ namespace castor3d
 			RenderNodesPass::addShadowDescriptor( m_device.renderSystem, graph, m_scene.getFlags(), writes, shadowMaps, *shadowBuffer, index );
 		}
 
-		RenderNodesPass::addBackgroundDescriptor( *m_scene.getBackground(), flags, writes, m_targetColourResult, index );
+		RenderNodesPass::addBackgroundDescriptor( *m_scene.getBackground(), writes, m_targetColourResult, index );
 
 		auto result = m_descriptorPool->createDescriptorSet( "ClusteredLights"
 			, 1u );

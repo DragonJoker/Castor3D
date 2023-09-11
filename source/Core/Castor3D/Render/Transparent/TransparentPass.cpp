@@ -146,7 +146,7 @@ namespace castor3d
 
 		doAddShadowBindings( m_scene, flags, bindings, index );
 		doAddEnvBindings( flags, bindings, index );
-		doAddBackgroundBindings( m_scene, flags, bindings, index );
+		doAddBackgroundBindings( m_scene, bindings, index );
 		doAddGIBindings( flags, bindings, index );
 		doAddClusteredLightingBindings( m_parent->getRenderTarget(), flags, bindings, index );
 
@@ -178,7 +178,7 @@ namespace castor3d
 			, index );
 		doAddShadowDescriptor( m_scene, flags, descriptorWrites, shadowMaps, shadowBuffer, index );
 		doAddEnvDescriptor( flags, descriptorWrites, index );
-		doAddBackgroundDescriptor( m_scene, flags, descriptorWrites, m_targetImage, index );
+		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
 		doAddGIDescriptor( flags, descriptorWrites, index );
 		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
 
@@ -310,7 +310,8 @@ namespace castor3d
 					, ( m_ssao
 						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
 						: 1.0_f ) );
-				materials.blendMaterials( false
+				materials.blendMaterials( output
+					, false
 					, flags
 					, textureConfigs
 					, textureAnims

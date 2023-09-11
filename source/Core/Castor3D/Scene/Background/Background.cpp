@@ -534,8 +534,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneBackground::addBindings( PipelineFlags const & flags
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+	void SceneBackground::addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
 		doAddBindings( bindings, index );
@@ -554,8 +553,7 @@ namespace castor3d
 		}
 	}
 
-	void SceneBackground::addDescriptors( PipelineFlags const & flags
-		, ashes::WriteDescriptorSetArray & descriptorWrites
+	void SceneBackground::addDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 		, crg::ImageViewIdArray const & targetImage
 		, uint32_t & index )const
 	{
