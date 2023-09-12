@@ -15,6 +15,7 @@
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
 #include <RenderGraph/RunnablePasses/GenerateMipmaps.hpp>
+#include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
 CU_ImplementSmartPtr( castor3d, EnvironmentMapPass )
@@ -65,7 +66,8 @@ namespace castor3d
 		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ m_device }
-		, m_colourView{ environmentMap.getColourViewId( m_index, m_face ) }
+		, m_colourRenderView{ environmentMap.getTmpImage() }
+		, m_colourResultView{ environmentMap.getColourViewId( m_index, m_face ) }
 		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
 			, nullptr
 			, m_device
@@ -74,11 +76,9 @@ namespace castor3d
 			, m_background
 			, m_hdrConfigUbo
 			, m_sceneUbo
-			, m_colourView
+			, m_colourRenderView
 			, true /*clearColour*/
-			, true /*forceVisible*/
-			, getOwner()->getDepthViewId( m_index, m_face )
-			, nullptr ) }
+			, true /*forceVisible*/ ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
@@ -88,9 +88,9 @@ namespace castor3d
 			, m_camera->getProjection( false )
 			, 0u
 			, m_camera->getFrustum() );
-		m_graph.addOutput( m_colourView
+		m_graph.addOutput( m_colourResultView
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		m_graph.addGroupOutput( m_colourView );
+		m_graph.addGroupOutput( m_colourResultView );
 		log::trace << "Created EnvironmentMapPass " << m_graph.getName() + "/" + getName() << std::endl;
 	}
 
@@ -174,12 +174,13 @@ namespace castor3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, cuT( "Environment" )
-					, crg::ImageViewIdArray{ m_colourView }
+					, crg::ImageViewIdArray{ m_colourRenderView }
 					, crg::ImageViewIdArray{ depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
-					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
+					, RenderTechniquePassDesc{ true, SsaoConfig{} }
+					, nullptr );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				m_opaquePass = res.get();
@@ -191,8 +192,9 @@ namespace castor3d
 			result.addDependency( *previousPass );
 		}
 
-		result.addInOutDepthView( depthView );
-		result.addInOutColourView( m_colourView );
+		result.addOutputDepthView( depthView
+			, defaultClearDepthStencil );
+		result.addInOutColourView( m_colourRenderView );
 		return result;
 	}
 
@@ -211,12 +213,13 @@ namespace castor3d
 					, m_device
 					, ForwardRenderTechniquePass::Type
 					, cuT( "Environment" )
-					, crg::ImageViewIdArray{ m_colourView }
+					, crg::ImageViewIdArray{ m_colourRenderView }
 					, crg::ImageViewIdArray{ depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
-					, RenderTechniquePassDesc{ true, SsaoConfig{} } );
+					, RenderTechniquePassDesc{ true, SsaoConfig{} }
+					, nullptr );
 				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				m_transparentPass = res.get();
@@ -224,12 +227,29 @@ namespace castor3d
 			} );
 		result.addDependency( *previousPass );
 		result.addInputDepthView( depthView );
-		result.addInOutColourView( m_colourView );
+		result.addInOutColourView( m_colourRenderView );
 		return result;
 	}
 
 	void EnvironmentMapPass::doCreateGenMipmapsPass( crg::FramePass const * previousPass )
 	{
+		auto & imgCopy = m_graph.createPass( "CopyRenderToResult"
+			, [this]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< crg::ImageCopy >( framePass
+					, context
+					, graph
+					, getExtent( m_colourRenderView ) );
+				m_node->getScene()->getEngine()->registerTimer( framePass.getFullName()
+					, result->getTimer() );
+				return result;
+			} );
+		imgCopy.addDependency( *previousPass );
+		imgCopy.addTransferInputView( m_colourRenderView );
+		imgCopy.addTransferOutputView( m_colourResultView );
+
 		auto & mipsGen = m_graph.createPass( "GenMips"
 			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -243,7 +263,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		mipsGen.addDependency( *previousPass );
-		mipsGen.addTransferInOutView( m_colourView );
+		mipsGen.addDependency( imgCopy );
+		mipsGen.addTransferInOutView( m_colourResultView );
 	}
 }

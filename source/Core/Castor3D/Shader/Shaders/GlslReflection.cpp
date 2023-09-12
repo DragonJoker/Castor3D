@@ -16,12 +16,14 @@ namespace castor3d::shader
 		, Utils & utils
 		, uint32_t & envMapBinding
 		, uint32_t envMapSet
-		, bool hasIblSupport )
+		, bool hasIblSupport
+		, bool hasEnvMap )
 		: m_writer{ writer }
 		, m_utils{ utils }
 		, m_hasIblSupport{ hasIblSupport }
+		, m_hasEnvMap{ hasEnvMap }
 	{
-		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet );
+		m_writer.declCombinedImg< FImgCubeArrayRgba32 >( "c3d_mapEnvironment", envMapBinding++, envMapSet, m_hasEnvMap );
 	}
 
 	void ReflectionModel::computeCombined( BlendComponents & components
@@ -1266,17 +1268,20 @@ namespace castor3d::shader
 				reflectedDiffuse = vec3( 0.0_f );
 			}
 
-			// Specular reflection from environment map.
-			reflectedSpecular = computeSpecularReflEnvMaps( spcF
-				, -V
-				, wsNormal
-				, components.roughness
-				, envMapIndex
-				, components.f0
-				, NdotV
-				, envMap
-				, brdf
-				, background );
+			if ( m_hasEnvMap )
+			{
+				// Specular reflection from environment map.
+				reflectedSpecular = computeSpecularReflEnvMaps( spcF
+					, -V
+					, wsNormal
+					, components.roughness
+					, envMapIndex
+					, components.f0
+					, NdotV
+					, envMap
+					, brdf
+					, background );
+			}
 		}
 		ELSE
 		{
@@ -1311,26 +1316,36 @@ namespace castor3d::shader
 
 		IF( writer, refractionRatio != 0.0_f )
 		{
-			IF( writer, hasEnvMap )
+			if ( m_hasEnvMap )
 			{
-				refracted = computeRefrEnvMaps( -V
-					, wsNormal
-					, envMap
-					, envMapIndex
-					, refractionRatio
-					, components );
-			}
-			ELSE
-			{
-				if ( m_hasIblSupport )
+				IF( writer, hasEnvMap )
 				{
-					refracted = background.computeRefractions( wsNormal
-						, V
+					refracted = computeRefrEnvMaps( -V
+						, wsNormal
+						, envMap
+						, envMapIndex
 						, refractionRatio
 						, components );
 				}
+				ELSE
+				{
+					if ( m_hasIblSupport )
+					{
+						refracted = background.computeRefractions( wsNormal
+							, V
+							, refractionRatio
+							, components );
+					}
+				}
+				FI;
 			}
-			FI;
+			else if ( m_hasIblSupport )
+			{
+				refracted = background.computeRefractions( wsNormal
+					, V
+					, refractionRatio
+					, components );
+			}
 		}
 		FI;
 	}
@@ -1349,34 +1364,48 @@ namespace castor3d::shader
 	{
 		IF( m_writer, components.clearcoatFactor != 0.0_f )
 		{
-			IF( m_writer, hasEnvMap && hasReflection != 0_u )
+			if ( m_hasEnvMap )
 			{
-				coatReflected = computeSpecularReflEnvMaps( fresnel
-					, -V
-					, components.clearcoatNormal
-					, components.clearcoatRoughness
-					, envMapIndex
-					, components.f0
-					, NdotV
-					, envMap
-					, brdf
-					, background );
-			}
-			ELSE
-			{
-				if ( m_hasIblSupport )
+				IF( m_writer, hasEnvMap && hasReflection != 0_u )
 				{
-					auto NdotV = m_writer.declLocale( "NdotV"
-						, dot( components.clearcoatNormal, V ) );
-					coatReflected = background.computeSpecularReflections( m_utils.conductorFresnel( NdotV, components.f0, components.f90 )
+					coatReflected = computeSpecularReflEnvMaps( fresnel
+						, -V
 						, components.clearcoatNormal
-						, V
-						, NdotV
 						, components.clearcoatRoughness
-						, brdf );
+						, envMapIndex
+						, components.f0
+						, NdotV
+						, envMap
+						, brdf
+						, background );
 				}
+				ELSE
+				{
+					if ( m_hasIblSupport )
+					{
+						auto clearcoatNdotV = m_writer.declLocale( "clearcoatNdotV"
+							, dot( components.clearcoatNormal, V ) );
+						coatReflected = background.computeSpecularReflections( m_utils.conductorFresnel( clearcoatNdotV, components.f0, components.f90 )
+							, components.clearcoatNormal
+							, V
+							, clearcoatNdotV
+							, components.clearcoatRoughness
+							, brdf );
+					}
+				}
+				FI;
 			}
-			FI;
+			else if ( m_hasIblSupport )
+			{
+				auto clearcoatNdotV = m_writer.declLocale( "clearcoatNdotV"
+					, dot( components.clearcoatNormal, V ) );
+				coatReflected = background.computeSpecularReflections( m_utils.conductorFresnel( clearcoatNdotV, components.f0, components.f90 )
+					, components.clearcoatNormal
+					, V
+					, clearcoatNdotV
+					, components.clearcoatRoughness
+					, brdf );
+			}
 		}
 		FI;
 	}
@@ -1395,26 +1424,37 @@ namespace castor3d::shader
 	{
 		IF( m_writer, !all( components.sheenFactor == vec3( 0.0_f ) ) )
 		{
-			IF( m_writer, hasEnvMap && hasReflection != 0_u )
+			if ( m_hasEnvMap )
 			{
-				sheenReflected = computeSheenReflEnvMaps( -V
-					, wsNormal
-					, envMap
-					, envMapIndex
-					, components );
-			}
-			ELSE
-			{
-				if ( m_hasIblSupport )
+				IF( m_writer, hasEnvMap && hasReflection != 0_u )
 				{
-					sheenReflected = background.computeSheenReflections( wsNormal
-						, V
-						, NdotV
-						, components
-						, brdf );
+					sheenReflected = computeSheenReflEnvMaps( -V
+						, wsNormal
+						, envMap
+						, envMapIndex
+						, components );
 				}
+				ELSE
+				{
+					if ( m_hasIblSupport )
+					{
+						sheenReflected = background.computeSheenReflections( wsNormal
+							, V
+							, NdotV
+							, components
+							, brdf );
+					}
+				}
+				FI;
 			}
-			FI;
+			else if ( m_hasIblSupport )
+			{
+				sheenReflected = background.computeSheenReflections( wsNormal
+					, V
+					, NdotV
+					, components
+					, brdf );
+			}
 		}
 		FI;
 	}

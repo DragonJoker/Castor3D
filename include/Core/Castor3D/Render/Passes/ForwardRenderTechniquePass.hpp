@@ -62,7 +62,8 @@ namespace castor3d
 			, crg::ImageViewIdArray targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc
-			, Texture const * mippedColour = nullptr );
+			, Texture const * mippedColour = nullptr
+			, bool hasEnvMap = true );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
@@ -82,6 +83,7 @@ namespace castor3d
 
 	private:
 		Texture const * m_mippedColour;
+		bool m_hasEnvMap;
 		castor::String m_groupName;
 	};
 }

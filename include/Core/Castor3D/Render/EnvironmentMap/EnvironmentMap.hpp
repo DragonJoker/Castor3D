@@ -136,31 +136,36 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		VkExtent3D const & getSize()const
+		VkExtent3D const & getSize()const noexcept
 		{
 			return m_extent;
 		}
 
-		Texture const & getColourId()const
+		Texture const & getColourId()const noexcept
 		{
 			return m_environmentMap;
 		}
 
-		VkImageView getColourView( uint32_t index )const
+		VkImageView getColourView( uint32_t index )const noexcept
 		{
 			return m_environmentMapViews[index];
 		}
 
 		crg::ImageViewId getColourViewId( uint32_t index
-			, CubeMapFace face )const
+			, CubeMapFace face )const noexcept
 		{
 			return m_environmentMap.subViewsId[index * 6u + uint32_t( face )];
 		}
 
 		crg::ImageViewId getDepthViewId( uint32_t index
-			, CubeMapFace face )const
+			, CubeMapFace face )const noexcept
 		{
 			return m_depthBuffer.subViewsId[index * 6u + uint32_t( face )];
+		}
+
+		crg::ImageViewId getTmpImage()const noexcept
+		{
+			return m_tmpImage.targetViewId;
 		}
 		/**@}*/
 
@@ -173,6 +178,7 @@ namespace castor3d
 		std::vector< std::unique_ptr< crg::FrameGraph > > m_graphs;
 		Texture m_environmentMap;
 		Texture m_depthBuffer;
+		Texture m_tmpImage;
 		VkExtent3D m_extent;
 		std::set< SceneNode * > m_reflectionNodes;
 		std::set< SceneNode * > m_savedReflectionNodes;

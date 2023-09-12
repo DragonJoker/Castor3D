@@ -16,7 +16,8 @@ namespace castor3d::shader
 			, Utils & utils
 			, uint32_t & envMapBinding
 			, uint32_t envMapSet
-			, bool hasIblSupport );
+			, bool hasIblSupport
+			, bool hasEnvMap = true );
 
 		C3D_API sdw::RetVec3 computeIncident( sdw::Vec3 const & wsPosition
 			, sdw::Vec3 const & wsCamera )const;
@@ -278,6 +279,7 @@ namespace castor3d::shader
 		sdw::ShaderWriter & m_writer;
 		Utils & m_utils;
 		bool m_hasIblSupport;
+		bool m_hasEnvMap;
 		sdw::Function< sdw::Void
 			, InOutBlendComponents
 			, sdw::InVec3
