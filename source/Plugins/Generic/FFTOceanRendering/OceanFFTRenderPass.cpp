@@ -1083,10 +1083,11 @@ namespace ocean_fft
 			, true
 			, index
 			, RenderPipeline::eBuffers );
-		shader::GlobalIllumination indirect{ writer, utils };
-		indirect.declare( index
+		shader::GlobalIllumination indirect{ writer
+			, utils
+			, index
 			, RenderPipeline::eBuffers
-			, flags.getGlobalIlluminationFlags() );
+			, flags.getGlobalIlluminationFlags() };
 		shader::ClusteredLights clusteredLights{ writer
 			, index
 			, RenderPipeline::eBuffers

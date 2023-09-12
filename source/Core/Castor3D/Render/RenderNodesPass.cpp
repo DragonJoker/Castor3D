@@ -507,6 +507,35 @@ namespace castor3d
 		};
 	}
 
+	void RenderNodesPass::addShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )
+	{
+		for ( uint32_t j = 0u; j < uint32_t( LightType::eCount ); ++j )
+		{
+			// Depth
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			// Depth Compare
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			// Variance
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		}
+
+		// Shadow Buffer
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		// Random Storage
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+	}
+
 	void RenderNodesPass::addShadowBindings( SceneFlags const & sceneFlags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )
@@ -551,6 +580,69 @@ namespace castor3d
 		, uint32_t & index )
 	{
 		background.addBindings( bindings, index );
+	}
+
+	void RenderNodesPass::addGIBindings( IndirectLightingData const & indirectLighting
+		, ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, uint32_t & index )
+	{
+		if ( indirectLighting.vctConfigUbo )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxelsFirstBounce
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVoxelsSecondaryBounce
+		}
+		else
+		{
+			if ( indirectLighting.lpvConfigUbo )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+
+			if ( indirectLighting.llpvConfigUbo )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+			}
+
+			if ( indirectLighting.lpvResult )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationG
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationB
+			}
+
+			if ( indirectLighting.llpvResult )
+			{
+				for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
+				{
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationRn
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationGn
+					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationBn
+				}
+			}
+		}
 	}
 
 	void RenderNodesPass::addGIBindings( SceneFlags sceneFlags
@@ -616,6 +708,76 @@ namespace castor3d
 					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 						, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationBn
+				}
+			}
+		}
+	}
+
+	void RenderNodesPass::addGIDescriptor( IndirectLightingData const & indirectLighting
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, uint32_t & index )
+	{
+		if ( indirectLighting.vctConfigUbo )
+		{
+			CU_Require( indirectLighting.vctFirstBounce );
+			CU_Require( indirectLighting.vctSecondaryBounce );
+			descriptorWrites.push_back( indirectLighting.vctConfigUbo->getDescriptorWrite( index++ ) );
+			bindTexture( indirectLighting.vctFirstBounce->wholeView
+				, *indirectLighting.vctFirstBounce->sampler
+				, descriptorWrites
+				, index );
+			bindTexture( indirectLighting.vctSecondaryBounce->wholeView
+				, *indirectLighting.vctSecondaryBounce->sampler
+				, descriptorWrites
+				, index );
+		}
+		else
+		{
+			if ( indirectLighting.lpvConfigUbo )
+			{
+				descriptorWrites.push_back( indirectLighting.lpvConfigUbo->getDescriptorWrite( index++ ) );
+			}
+
+			if ( indirectLighting.llpvConfigUbo )
+			{
+				CU_Require( indirectLighting.llpvConfigUbo );
+				descriptorWrites.push_back( indirectLighting.llpvConfigUbo->getDescriptorWrite( index++ ) );
+			}
+
+			if ( indirectLighting.lpvResult )
+			{
+				auto & lpv = *indirectLighting.lpvResult;
+				bindTexture( lpv[LpvTexture::eR].wholeView
+					, *lpv[LpvTexture::eR].sampler
+					, descriptorWrites
+					, index );
+				bindTexture( lpv[LpvTexture::eG].wholeView
+					, *lpv[LpvTexture::eG].sampler
+					, descriptorWrites
+					, index );
+				bindTexture( lpv[LpvTexture::eB].wholeView
+					, *lpv[LpvTexture::eB].sampler
+					, descriptorWrites
+					, index );
+			}
+
+			if ( indirectLighting.llpvResult )
+			{
+				for ( auto & plpv : *indirectLighting.llpvResult )
+				{
+					auto & lpv = *plpv;
+					bindTexture( lpv[LpvTexture::eR].wholeView
+						, *lpv[LpvTexture::eR].sampler
+						, descriptorWrites
+						, index );
+					bindTexture( lpv[LpvTexture::eG].wholeView
+						, *lpv[LpvTexture::eG].sampler
+						, descriptorWrites
+						, index );
+					bindTexture( lpv[LpvTexture::eB].wholeView
+						, *lpv[LpvTexture::eB].sampler
+						, descriptorWrites
+						, index );
 				}
 			}
 		}
@@ -717,6 +879,44 @@ namespace castor3d
 		bindings.push_back( makeDescriptorSetLayoutBinding( index++ // SpotLightClusterBuffer
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+	}
+
+	void RenderNodesPass::addShadowDescriptor( RenderSystem const & renderSystem
+		, crg::RunnableGraph & graph
+		, ashes::WriteDescriptorSetArray & descriptorWrites
+		, ShadowMapLightTypeArray const & shadowMaps
+		, ShadowBuffer const & shadowBuffer
+		, uint32_t & index )
+	{
+#if !C3D_DebugDisableShadowMaps
+		for ( auto i = 0u; i < uint32_t( LightType::eCount ); ++i )
+		{
+			for ( auto & shadowMapRef : shadowMaps[i] )
+			{
+				auto & result = shadowMapRef.first.get().getShadowPassResult( false );
+				bindTexture( graph
+					, result[SmTexture::eLinearDepth].sampledViewId
+					, *result[SmTexture::eVariance].sampler
+					, descriptorWrites
+					, index );
+				bindTexture( graph
+					, result[SmTexture::eLinearDepth].sampledViewId
+					, *result[SmTexture::eLinearDepth].sampler // Compare sampler
+					, descriptorWrites
+					, index );
+				bindTexture( graph
+					, result[SmTexture::eVariance].sampledViewId
+					, *result[SmTexture::eVariance].sampler
+					, descriptorWrites
+					, index );
+			}
+		}
+
+		descriptorWrites.push_back( shadowBuffer.getBinding( index++ ) );
+		bindBuffer( renderSystem.getRandomStorage().getBuffer()
+			, descriptorWrites
+			, index );
+#endif
 	}
 
 	void RenderNodesPass::addShadowDescriptor( RenderSystem const & renderSystem

@@ -177,6 +177,7 @@ namespace castor3d
 
 	void SpecularFactorComponent::accept( PassVisitorBase & vis )
 	{
+		vis.visit( cuT( "Specular Factor" ) );
 		vis.visit( cuT( "Factor" ), m_value );
 	}
 

@@ -25,10 +25,12 @@ namespace castor3d
 				, Utils & utils
 				, uint32_t & bindingIndex
 				, uint32_t setIndex
-				, SceneFlags sceneFlags );
+				, SceneFlags sceneFlags
+				, IndirectLightingData const * indirectLighting = nullptr );
 			C3D_API void declare( uint32_t & bindingIndex
 				, uint32_t setIndex
-				, SceneFlags sceneFlags );
+				, SceneFlags sceneFlags
+				, IndirectLightingData const * indirectLighting );
 			C3D_API void declareVct( uint32_t & uboBindingIndex
 				, uint32_t & texBindingIndex
 				, uint32_t uboSetIndex = 0u
