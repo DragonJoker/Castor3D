@@ -21,21 +21,14 @@ namespace castor3d
 			matrices[4] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, +1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Positive Z */
 			matrices[5] = castor::matrix::lookAt( position, position + castor::Point3f{ +0.0f, +0.0f, -1.0f }, castor::Point3f{ +0.0f, -1.0f, +0.0f } ); /* Negative Z */
 		}
-
-		static float doCalcPointLightBSphere( const castor3d::PointLight & light )
-		{
-			return light.getRange()
-				? light.getRange()
-				: getMaxDistance( light , light.getAttenuation() );
-		}
 	}
 
 	//*************************************************************************************************
 
 	PointLight::PointLight( Light & light )
 		: LightCategory{ LightType::ePoint, light, LightDataComponents, ShadowDataComponents }
-		, m_attenuation{ m_dirtyData, castor::Point3f{ 1.0f, 0.0f, 0.0f } }
-		, m_range{ m_dirtyData, 0.0f }
+		, m_dirtyData{ true }
+		, m_range{ m_dirtyData, 10.0f }
 		, m_position{ m_dirtyData }
 	{
 	}
@@ -133,11 +126,9 @@ namespace castor3d
 	void PointLight::update()
 	{
 		PointLight::generateVertices();
-		auto scale = lgtpoint::doCalcPointLightBSphere( *this );
-		m_cubeBox.load( castor::Point3f{ -scale, -scale, -scale }
-			, castor::Point3f{ scale, scale, scale } );
-		m_farPlane = scale * 2.0f;
-		m_attenuation.reset();
+		m_cubeBox.load( castor::Point3f{ -m_range, -m_range, -m_range }
+			, castor::Point3f{ m_range, m_range, m_range } );
+		m_farPlane = m_range;
 	}
 
 	void PointLight::updateShadow( int32_t index )
@@ -165,17 +156,12 @@ namespace castor3d
 		auto position = getLight().getParent()->getDerivedPosition();
 
 		point.posDir = position;
-		point.attenuation = m_attenuation;
-
-		if ( m_range.value() )
-		{
-			point.radius = m_range;
-		}
+		point.radius = m_range;
 	}
 
 	void PointLight::setAttenuation( castor::Point3f const & attenuation )
 	{
-		m_attenuation = attenuation;
+		m_range = getMaxDistance( *this, attenuation );
 		getLight().markDirty();
 	}
 

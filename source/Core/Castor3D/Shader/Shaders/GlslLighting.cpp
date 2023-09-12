@@ -319,7 +319,7 @@ namespace castor3d::shader
 
 					auto attenuation = m_writer.declLocale( "attenuation"
 						, light.getAttenuationFactor( lightSurface.lengthL() ) );
-					doComputeAttenuation( attenuation, output );
+					doAttenuate( attenuation, output );
 					parentOutput.diffuse += max( vec3( 0.0_f ), output.diffuse );
 					parentOutput.specular += max( vec3( 0.0_f ), output.specular );
 					parentOutput.scattering += max( vec3( 0.0_f ), output.scattering );
@@ -400,7 +400,7 @@ namespace castor3d::shader
 									&& ( receivesShadows != 0_u )
 									&& ( material.sssProfileIndex != 0.0_f ) )
 								{
-									parentOutput.diffuse += ( output.diffuse / attenuation )
+									parentOutput.diffuse += ( output.diffuse * attenuation )
 										* m_sssTransmittance->compute( material
 											, light
 											, surface );
@@ -418,7 +418,7 @@ namespace castor3d::shader
 								, output );
 						}
 
-						doComputeAttenuation( attenuation, output );
+						doAttenuate( attenuation, output );
 						parentOutput.diffuse += max( vec3( 0.0_f ), output.diffuse );
 						parentOutput.specular += max( vec3( 0.0_f ), output.specular );
 						parentOutput.scattering += max( vec3( 0.0_f ), output.scattering );
@@ -526,7 +526,7 @@ namespace castor3d::shader
 
 					auto attenuation = m_writer.declLocale( "attenuation"
 						, light.getAttenuationFactor( lightSurface.lengthL() ) );
-					diffuse /= attenuation;
+					diffuse *= attenuation;
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
 				, InOutPointLight( m_writer, "light" )
@@ -586,7 +586,7 @@ namespace castor3d::shader
 
 						auto attenuation = m_writer.declLocale( "attenuation"
 							, light.getAttenuationFactor( lightSurface.lengthL() ) );
-						diffuse /= attenuation;
+						diffuse *= attenuation;
 						diffuse = max( vec3( 0.0_f ), diffuse );
 					}
 					FI;
@@ -605,14 +605,14 @@ namespace castor3d::shader
 			, preceivesShadows );
 	}
 
-	void LightingModel::doComputeAttenuation( sdw::Float const attenuation
+	void LightingModel::doAttenuate( sdw::Float const attenuation
 		, OutputComponents & output )
 	{
-		output.diffuse = output.diffuse / attenuation;
-		output.specular = output.specular / attenuation;
-		output.scattering = output.scattering / attenuation;
-		output.coatingSpecular = output.coatingSpecular / attenuation;
-		output.sheen.x() = output.sheen.x() / attenuation;
+		output.diffuse = output.diffuse * attenuation;
+		output.specular = output.specular * attenuation;
+		output.scattering = output.scattering * attenuation;
+		output.coatingSpecular = output.coatingSpecular * attenuation;
+		output.sheen.x() = output.sheen.x() * attenuation;
 	}
 
 	void LightingModel::doApplyShadows( DirectionalShadowData const & shadows

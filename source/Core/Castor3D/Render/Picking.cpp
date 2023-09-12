@@ -1,4 +1,4 @@
-﻿#include "Castor3D/Render/Picking.hpp"
+#include "Castor3D/Render/Picking.hpp"
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
@@ -30,10 +30,6 @@ namespace castor3d
 
 	namespace rendpick
 	{
-		static std::string const Picking = "Picking";
-		static std::string const DrawIndex = "c3d_iDrawIndex";
-		static std::string const NodeIndex = "c3d_iNodeIndex";
-
 		static int constexpr PickingOffset = int( PickingAreaWidth / 2 );
 		static int constexpr BufferOffset = ( PickingOffset * PickingAreaWidth ) + PickingOffset - 1;
 

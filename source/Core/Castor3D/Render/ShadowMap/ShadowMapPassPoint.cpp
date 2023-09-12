@@ -360,7 +360,7 @@ namespace castor3d
 							* light.base().colour()
 							* light.base().intensity().x()
 							* clamp( dot( lightToVertex / distance, components.normal ), 0.0_f, 1.0_f ) )
-						/ attenuation;
+						* attenuation;
 					outNormal.xyz() = components.normal;
 					outPosition.xyz() = in.worldPosition.xyz();
 				}

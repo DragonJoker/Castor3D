@@ -29,7 +29,7 @@ namespace castor3d
 
 		sdw::Float ShadowMapData::getNormalisedDepth( sdw::Vec3 const & pos )const
 		{
-			return 1.0f - ( length( pos - lightPosFarPlane().xyz() ) / lightPosFarPlane().w() );
+			return 1.0f - clamp( length( pos - lightPosFarPlane().xyz() ) / lightPosFarPlane().w(), 0.0_f, 1.0_f );
 		}
 
 		DirectionalLight ShadowMapData::getDirectionalLight( Lights & lights )const

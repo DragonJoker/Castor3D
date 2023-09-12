@@ -332,14 +332,14 @@ namespace Testing
 
 	bool C3DTestCase::compare( PointLight const & lhs, PointLight const & rhs )
 	{
-		bool result{ CT_EQUAL( lhs.getAttenuation(), rhs.getAttenuation() ) };
+		bool result{ CT_EQUAL( lhs.getRange(), rhs.getRange() ) };
 		return result;
 	}
 
 	bool C3DTestCase::compare( SpotLight const & lhs, SpotLight const & rhs )
 	{
 		bool result{ CT_EQUAL( lhs.getExponent(), rhs.getExponent() ) };
-		result = result && CT_EQUAL( lhs.getAttenuation(), rhs.getAttenuation() );
+		result = result && CT_EQUAL( lhs.getRange(), rhs.getRange() );
 		result = result && CT_EQUAL( lhs.getInnerCutOff(), rhs.getInnerCutOff() );
 		result = result && CT_EQUAL( lhs.getOuterCutOff(), rhs.getOuterCutOff() );
 		return result;

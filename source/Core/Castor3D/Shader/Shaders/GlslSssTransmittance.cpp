@@ -72,8 +72,8 @@ namespace castor3d
 								, sssProfileIndex
 								, wsNormal
 								, sssTransmittance
-								, -light.direction() // vertexTolight
-								, light.radius() );
+								, -light.direction() /* vertexTolight */
+								, 0.0_f/* lightFarPlane */ );
 						}
 						FI;
 
