@@ -67,6 +67,25 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
 		}
 
+		static Texture createTmpTexture( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, std::string const & name
+			, castor::Size const & size
+			, VkFormat format )
+		{
+			return Texture{ device
+				, resources
+				, name + "/Temp"
+				, 0u
+				, makeExtent3D( size )
+				, 1u
+				, 1u
+				, format
+				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+					| VK_IMAGE_USAGE_TRANSFER_SRC_BIT )
+				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
+		}
+
 		static EnvironmentMap::EnvironmentMapPasses createPass( crg::FrameGraph & graph
 			, RenderDevice const & device
 			, EnvironmentMap & map
@@ -157,6 +176,7 @@ namespace castor3d
 		, m_scene{ scene }
 		, m_environmentMap{ envmap::createTexture( device, resources, "Env" + scene.getName(), envmap::MapSize ) }
 		, m_depthBuffer{ envmap::createDepthBuffer( device, resources, "Env" + scene.getName(), envmap::MapSize ) }
+		, m_tmpImage{ envmap::createTmpTexture( device, resources, "Env" + scene.getName(), envmap::MapSize, m_environmentMap.getFormat() ) }
 		, m_extent{ getExtent( m_environmentMap.imageId ) }
 		, m_render{ 0u }
 		, m_onSetBackground{ scene.onSetBackground.connect( [this]( SceneBackground const & background )
@@ -189,6 +209,7 @@ namespace castor3d
 	{
 		m_environmentMap.create();
 		m_depthBuffer.create();
+		m_tmpImage.create();
 		m_environmentMapViews = envmap::createViews( m_environmentMap, m_image );
 		auto commandBuffer = queueData.commandPool->createCommandBuffer( "Env" + scene.getName() + "InitialiseViews" );
 		commandBuffer->begin();
@@ -224,6 +245,7 @@ namespace castor3d
 		m_passes.clear();
 		m_environmentMapViews.clear();
 		m_image = {};
+		m_tmpImage.destroy();
 		m_depthBuffer.destroy();
 		m_environmentMap.destroy();
 		m_graphs.clear();

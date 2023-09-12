@@ -60,7 +60,8 @@ namespace castor3d
 		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc
-		, Texture const * mippedColour )
+		, Texture const * mippedColour
+		, bool hasEnvMap )
 		: RenderTechniqueNodesPass{ parent
 			, pass
 			, context
@@ -72,6 +73,7 @@ namespace castor3d
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_mippedColour{ mippedColour }
+		, m_hasEnvMap{ hasEnvMap }
 		, m_groupName{ groupName }
 	{
 		if ( !checkFlag( m_filters, RenderFilter::eAlphaTest )
@@ -239,7 +241,8 @@ namespace castor3d
 			, utils
 			, index
 			, uint32_t( RenderPipeline::eBuffers )
-			, lights.hasIblSupport() };
+			, lights.hasIblSupport()
+			, m_hasEnvMap };
 		auto backgroundModel = shader::BackgroundModel::createModel( getScene()
 			, writer
 			, utils

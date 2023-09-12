@@ -489,18 +489,24 @@ namespace castor3d
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR } );
 
-		if ( !depth.empty() )
-		{
-			result.addInOutDepthStencilView( depth );
-		}
-
 		if ( clearColour )
 		{
+			if ( !depth.empty() )
+			{
+				result.addOutputDepthStencilView( depth
+					, defaultClearDepthStencil );
+			}
+
 			result.addOutputColourView( colour
 				, transparentBlackClearColor );
 		}
 		else
 		{
+			if ( !depth.empty() )
+			{
+				result.addInOutDepthStencilView( depth );
+			}
+
 			result.addInOutColourView( colour );
 		}
 

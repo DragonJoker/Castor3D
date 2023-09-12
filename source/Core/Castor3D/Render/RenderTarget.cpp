@@ -824,7 +824,7 @@ namespace castor3d
 
 	ShadowBuffer * RenderTarget::getShadowBuffer()const
 	{
-		if ( m_renderTechnique )
+		if ( m_renderTechnique && m_renderTechnique->hasShadowBuffer() )
 		{
 			return &m_renderTechnique->getShadowBuffer();
 		}
