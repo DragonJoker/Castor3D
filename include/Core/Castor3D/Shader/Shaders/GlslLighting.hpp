@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GlslLighting_H___
@@ -139,7 +139,7 @@ namespace castor3d::shader
 		//\}
 
 	protected:
-		C3D_API void doComputeAttenuation( sdw::Float const attenuation
+		C3D_API void doAttenuate( sdw::Float const attenuation
 			, OutputComponents & output );
 		C3D_API void doApplyShadows( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex

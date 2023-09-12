@@ -1,7 +1,6 @@
 #include "Castor3D/Scene/Light/SpotLight.hpp"
 
 #include "Castor3D/Render/Viewport.hpp"
-#include "Castor3D/Render/Opaque/Lighting/LightPass.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
@@ -14,12 +13,6 @@ namespace castor3d
 	namespace lgtspot
 	{
 		static uint32_t constexpr FaceCount = 40;
-
-		static float doCalcSpotLightBCone( const castor3d::SpotLight & light )
-		{
-			return getMaxDistance( light
-				, light.getAttenuation() );
-		}
 
 		static castor::BoundingBox computeAABB( castor::Point3fArray const & points )
 		{
@@ -44,8 +37,8 @@ namespace castor3d
 
 	SpotLight::SpotLight( Light & light )
 		: LightCategory{ LightType::eSpot, light, LightDataComponents, ShadowDataComponents }
-		, m_attenuation{ m_dirtyData, castor::Point3f{ 1, 0, 0 } }
-		, m_range{ m_dirtyData, 0.0f }
+		, m_dirtyData{ true }
+		, m_range{ m_dirtyData, 10.0f }
 		, m_exponent{ m_dirtyData, 1.0f }
 		, m_innerCutOff{ m_dirtyData, 22.5_degrees }
 		, m_outerCutOff{ m_dirtyData, 45.0_degrees }
@@ -176,10 +169,9 @@ namespace castor3d
 		node.getDerivedOrientation().transform( direction, direction );
 		m_direction = -direction;
 		auto aabb = lgtspot::computeAABB( SpotLight::generateVertices( uint32_t( std::ceil( getOuterCutOff().degrees() ) ) ) );
-		auto scale = lgtspot::doCalcSpotLightBCone( *this );
-		m_cubeBox.load( aabb.getMin() * scale
-			, aabb.getMax() * scale );
-		m_farPlane = scale;
+		m_cubeBox.load( aabb.getMin() * m_range.value()
+			, aabb.getMax() * m_range.value() );
+		m_farPlane = m_range.value();
 		m_dirtyData = false;
 	}
 
@@ -223,8 +215,8 @@ namespace castor3d
 		auto position = getLight().getParent()->getDerivedPosition();
 
 		spot.posDir = position;
+		spot.radius = m_range;
 		spot.exponent = m_exponent;
-		spot.attenuation = m_attenuation;
 		spot.direction = m_direction;
 		spot.innerCutoffCos = m_innerCutOff.value().cos();
 		spot.outerCutoffCos = m_outerCutOff.value().cos();
@@ -232,17 +224,11 @@ namespace castor3d
 		spot.outerCutoff = m_outerCutOff.value().radians();
 		spot.innerCutoffSin = m_innerCutOff.value().sin();
 		spot.outerCutoffSin = m_outerCutOff.value().sin();
-
-		if ( m_range.value() )
-		{
-			spot.radius = m_range;
-		}
-
 	}
 
 	void SpotLight::setAttenuation( castor::Point3f const & attenuation )
 	{
-		m_attenuation = attenuation;
+		m_range = getMaxDistance( *this, attenuation );
 
 		if ( m_dirtyData )
 		{

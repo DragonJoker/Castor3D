@@ -194,55 +194,6 @@ namespace castor3d
 	*	Passe de Subsurface scattering.
 	*/
 	class SubsurfaceScatteringPass;
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the maximum lit distance for given light and attenuation.
-	*\param[in] light
-	*	The light source.
-	*\param[in] attenuation
-	*	The attenuation values.
-	*\return
-	*	The value.
-	*\~french
-	*\brief
-	*	Calcule la distance maximale d'éclairage d'une source lumineuse selon son atténuation.
-	*\param[in] light
-	*	La source lumineuse.
-	*\param[in] attenuation
-	*	Les valeurs d'atténuation.
-	*\return
-	*	La valeur.
-	*/
-	float getMaxDistance( LightCategory const & light
-		, castor::Point3f const & attenuation );
-	/**
-	*\~english
-	*\brief
-	*	Retrieve the maximum lit distance for given light and attenuation.
-	*\param[in] light
-	*	The light source.
-	*\param[in] attenuation
-	*	The attenuation values.
-	*\param[in] max
-	*	The viewer max value.
-	*\return
-	*	The value.
-	*\~french
-	*\brief
-	*	Calcule la distance maximale d'éclairage d'une source lumineuse selon son atténuation.
-	*\param[in] light
-	*	La source lumineuse.
-	*\param[in] attenuation
-	*	Les valeurs d'atténuation.
-	*\param[in] max
-	*	La valeur maximale de l'observateur.
-	*\return
-	*	La valeur.
-	*/
-	float getMaxDistance( LightCategory const & light
-		, castor::Point3f const & attenuation
-		, float max );
 
 	CU_DeclareSmartPtr( castor3d, SubsurfaceScatteringPass, C3D_API );
 

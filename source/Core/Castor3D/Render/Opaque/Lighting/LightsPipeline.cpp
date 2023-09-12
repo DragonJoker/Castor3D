@@ -25,17 +25,13 @@ namespace castor3d
 		static float calcLightScale( const castor3d::SpotLight & light
 			, float max )
 		{
-			return getMaxDistance( light
-				, light.getAttenuation()
-				, max );
+			return std::min( max, light.getRange() );
 		}
 
 		static float calcLightScale( const castor3d::PointLight & light
 			, float max )
 		{
-			return getMaxDistance( light
-				, light.getAttenuation()
-				, max );
+			return std::min( max, light.getRange() );
 		}
 	}
 

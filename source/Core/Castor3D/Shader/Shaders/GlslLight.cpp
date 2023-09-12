@@ -26,10 +26,11 @@ namespace castor3d::shader
 
 	sdw::Float PointLight::getAttenuationFactor( sdw::Float const & distance )const
 	{
-		auto sqDistance = distance * distance;
-		auto distOverRange = distance / radius();
-		auto sqDistOverRange = distOverRange * distOverRange;
-		auto qdDistOverRange = sqDistOverRange * sqDistOverRange;
+		auto & writer = *distance.getWriter();
+		auto sqDistance = writer.declLocale( "sqDistance", distance * distance );
+		auto distOverRange = writer.declLocale( "distOverRange", distance / radius() );
+		auto sqDistOverRange = writer.declLocale( "sqDistOverRange", distOverRange * distOverRange );
+		auto qdDistOverRange = writer.declLocale( "qdDistOverRange", sqDistOverRange * sqDistOverRange );
 		return sdw::max( sdw::min( 1.0_f - qdDistOverRange, 1.0_f ), 0.0_f ) / sqDistance;
 	}
 
@@ -37,10 +38,11 @@ namespace castor3d::shader
 
 	sdw::Float SpotLight::getAttenuationFactor( sdw::Float const & distance )const
 	{
-		auto sqDistance = distance * distance;
-		auto distOverRange = distance / radius();
-		auto sqDistOverRange = distOverRange * distOverRange;
-		auto qdDistOverRange = sqDistOverRange * sqDistOverRange;
+		auto & writer = *distance.getWriter();
+		auto sqDistance = writer.declLocale( "sqDistance", distance * distance );
+		auto distOverRange = writer.declLocale( "distOverRange", distance / radius() );
+		auto sqDistOverRange = writer.declLocale( "sqDistOverRange", distOverRange * distOverRange );
+		auto qdDistOverRange = writer.declLocale( "qdDistOverRange", sqDistOverRange * sqDistOverRange );
 		return sdw::max( sdw::min( 1.0_f - qdDistOverRange, 1.0_f ), 0.0_f ) / sqDistance;
 	}
 
@@ -99,9 +101,6 @@ namespace castor3d::shader
 					auto result = m_writer.declLocale< PointLight >( "result" );
 					getBaseLight( lightData, result.base(), offset );
 
-					lightData = getLightData( offset );
-					result.attenuation() = lightData.xyz();
-
 					m_writer.returnStmt( result );
 				}
 				, sdw::InUInt{ m_writer, "baseOffset" } );
@@ -126,10 +125,6 @@ namespace castor3d::shader
 					getBaseLight( lightData, result.base(), offset );
 
 					lightData = getLightData( offset );
-					result.attenuation() = lightData.xyz();
-					result.innerCutOffCos() = lightData.w();
-
-					lightData = getLightData( offset );
 					result.direction() = normalize( lightData.xyz() );
 					result.outerCutOffCos() = lightData.w();
 
@@ -138,6 +133,9 @@ namespace castor3d::shader
 					result.outerCutOff() = lightData.y();
 					result.innerCutOffSin() = lightData.z();
 					result.outerCutOffSin() = lightData.w();
+
+					lightData = getLightData( offset );
+					result.innerCutOffCos() = lightData.x();
 
 					m_writer.returnStmt( result );
 				}

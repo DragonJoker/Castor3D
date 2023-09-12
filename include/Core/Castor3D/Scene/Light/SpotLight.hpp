@@ -24,14 +24,16 @@ namespace castor3d
 		struct LightData
 			: LightCategory::LightData
 		{
-			Float3 attenuation;
-			Float1 innerCutoffCos;
 			Float3 direction;
 			Float1 outerCutoffCos;
 			Float1 innerCutoff;
 			Float1 outerCutoff;
 			Float1 innerCutoffSin;
 			Float1 outerCutoffSin;
+			Float1 innerCutoffCos;
+			Float1 pad0;
+			Float1 pad1;
+			Float1 pad2;
 		};
 		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
 		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
@@ -134,11 +136,6 @@ namespace castor3d
 			return m_lightSpace;
 		}
 
-		castor::Point3f const & getAttenuation()const
-		{
-			return m_attenuation.value();
-		}
-
 		float getExponent()const
 		{
 			return m_exponent.value();
@@ -166,7 +163,6 @@ namespace castor3d
 	private:
 		bool m_dirtyData{ false };
 		bool m_dirtyShadow{ true };
-		castor::GroupChangeTracked< castor::Point3f > m_attenuation;
 		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< float > m_exponent;
 		castor::GroupChangeTracked< castor::Angle > m_innerCutOff;

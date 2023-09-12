@@ -99,22 +99,22 @@ namespace GuiCommon
 	void LightTreeItemProperty::doCreatePointLightProperties( wxPropertyGrid * grid, castor3d::PointLight & light )
 	{
 		static wxString PROPERTY_CATEGORY_POINT_LIGHT = _( "Point Light" );
-		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
+		static wxString PROPERTY_LIGHT_RANGE = _( "Range" );
 
 		addProperty( grid, PROPERTY_CATEGORY_POINT_LIGHT );
-		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &castor3d::PointLight::setAttenuation );
+		addPropertyT( grid, PROPERTY_LIGHT_RANGE, light.getRange(), &light, &castor3d::PointLight::setRange );
 	}
 
 	void LightTreeItemProperty::doCreateSpotLightProperties( wxPropertyGrid * grid, castor3d::SpotLight & light )
 	{
 		static wxString PROPERTY_CATEGORY_SPOT_LIGHT = _( "Spot Light" );
-		static wxString PROPERTY_LIGHT_ATTENUATION = _( "Attenuation" );
+		static wxString PROPERTY_LIGHT_RANGE = _( "Range" );
 		static wxString PROPERTY_LIGHT_INNER_CUT_OFF = _( "Inner cut off" );
 		static wxString PROPERTY_LIGHT_OUTER_CUT_OFF = _( "Outer cut off" );
 		static wxString PROPERTY_LIGHT_EXPONENT = _( "Exponent" );
 
 		addProperty( grid, PROPERTY_CATEGORY_SPOT_LIGHT );
-		addPropertyT( grid, PROPERTY_LIGHT_ATTENUATION, light.getAttenuation(), &light, &castor3d::SpotLight::setAttenuation );
+		addPropertyT( grid, PROPERTY_LIGHT_RANGE, light.getRange(), &light, &castor3d::SpotLight::setRange );
 		addPropertyT( grid, PROPERTY_LIGHT_INNER_CUT_OFF, light.getInnerCutOff(), &light, &castor3d::SpotLight::setInnerCutOff );
 		addPropertyT( grid, PROPERTY_LIGHT_OUTER_CUT_OFF, light.getOuterCutOff(), &light, &castor3d::SpotLight::setOuterCutOff );
 		addPropertyT( grid, PROPERTY_LIGHT_EXPONENT, light.getExponent(), &light, &castor3d::SpotLight::setExponent );

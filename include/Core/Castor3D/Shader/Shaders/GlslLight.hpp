@@ -68,7 +68,6 @@ namespace castor3d::shader
 
 		auto colour()const { return base().colour(); }
 		auto intensity()const { return base().intensity(); }
-		auto radius()const { return base().radius(); }
 		auto shadowMapIndex()const { return base().shadowMapIndex(); }
 		auto cascadeCount()const { return base().cascadeCount(); }
 
@@ -78,9 +77,7 @@ namespace castor3d::shader
 	struct PointLight
 		: public sdw::StructInstanceHelperT< "C3D_PointLight"
 			, sdw::type::MemoryLayout::eC
-			, sdw::StructFieldT< Light, "base" >
-			, sdw::Vec3Field< "attenuation" >
-			, sdw::FloatField< "pad" > >
+			, sdw::StructFieldT< Light, "base" > >
 	{
 		PointLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -100,21 +97,19 @@ namespace castor3d::shader
 		auto shadowMapIndex()const { return base().shadowMapIndex(); }
 
 		auto position()const { return base().posDir(); }
-		auto attenuation()const { return getMember< "attenuation" >(); }
 	};
 
 	struct SpotLight
 		: public sdw::StructInstanceHelperT< "C3D_SpotLight"
 			, sdw::type::MemoryLayout::eC
 			, sdw::StructFieldT< Light, "base" >
-			, sdw::Vec3Field< "attenuation" >
-			, sdw::FloatField< "innerCutOffCos" >
 			, sdw::Vec3Field< "direction" >
 			, sdw::FloatField< "outerCutOffCos" >
 			, sdw::FloatField< "innerCutOff" >
 			, sdw::FloatField< "outerCutOff" >
 			, sdw::FloatField< "innerCutOffSin" >
-			, sdw::FloatField< "outerCutOffSin" > >
+			, sdw::FloatField< "outerCutOffSin" >
+			, sdw::FloatField< "innerCutOffCos" > >
 	{
 		C3D_API SpotLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -135,7 +130,6 @@ namespace castor3d::shader
 
 		auto position()const { return base().posDir(); }
 		auto exponent()const { return base().exponent(); }
-		auto attenuation()const { return getMember< "attenuation" >(); }
 		auto direction()const { return getMember< "direction" >(); }
 		auto innerCutOff()const { return getMember< "innerCutOff" >(); }
 		auto outerCutOff()const { return getMember< "outerCutOff" >(); }

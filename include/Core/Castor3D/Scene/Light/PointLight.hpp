@@ -20,12 +20,6 @@ namespace castor3d
 		static constexpr uint32_t ShadowDataSize = uint32_t( ashes::getAlignedSize( sizeof( ShadowData ), LightMbrAlign ) );
 		static constexpr uint32_t ShadowDataComponents = ShadowDataSize / LightMbrAlign;
 
-		struct LightData
-			: LightCategory::LightData
-		{
-			Float3 attenuation;
-			Float1 pad;
-		};
 		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
 		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
 
@@ -106,11 +100,6 @@ namespace castor3d
 		 *\name Accesseurs.
 		 **/
 		/**@{*/
-		castor::Point3f const & getAttenuation()const noexcept
-		{
-			return m_attenuation.value();
-		}
-
 		float getRange()const noexcept
 		{
 			return m_range.value();
@@ -128,9 +117,6 @@ namespace castor3d
 	private:
 		friend class Scene;
 		bool m_dirtyData{ false };
-		//!\~english	The attenuation components : constant, linear and quadratic.
-		//!\~french		Les composantes d'attenuation : constante, linéaire et quadratique.
-		castor::GroupChangeTracked< castor::Point3f > m_attenuation;
 		castor::GroupChangeTracked< float > m_range;
 		castor::GroupChangeTracked< castor::Point3f > m_position;
 		std::array< castor::Matrix4x4f, size_t( CubeMapFace::eCount ) > m_lightViews;
