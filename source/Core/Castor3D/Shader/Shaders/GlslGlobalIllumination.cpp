@@ -28,17 +28,20 @@ namespace castor3d
 			, Utils & utils
 			, uint32_t & bindingIndex
 			, uint32_t setIndex
-			, SceneFlags sceneFlags )
+			, SceneFlags sceneFlags
+			, IndirectLightingData const * indirectLighting )
 			: GlobalIllumination{ writer, utils }
 		{
 			declare( bindingIndex
 				, setIndex
-				, sceneFlags );
+				, sceneFlags
+				, indirectLighting );
 		}
 
 		void GlobalIllumination::declare( uint32_t & bindingIndex
 			, uint32_t setIndex
-			, SceneFlags sceneFlags )
+			, SceneFlags sceneFlags
+			, IndirectLightingData const * indirectLighting )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -46,14 +49,30 @@ namespace castor3d
 			}
 			else
 			{
+				if ( indirectLighting && indirectLighting->vctConfigUbo )
+				{
+					bindingIndex += 3u; // VCT: UBO + FirstBounce + SecondBounce.
+				}
+
 				if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 				{
 					declareLpv( bindingIndex, bindingIndex, setIndex, setIndex );
+				}
+				else if ( indirectLighting && indirectLighting->lpvConfigUbo )
+				{
+					bindingIndex += 4u; // LPV: UBO + AccumR + AccumG + AccumB.
 				}
 
 				if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 				{
 					declareLayeredLpv( bindingIndex, bindingIndex, setIndex, setIndex );
+				}
+				else if ( indirectLighting && indirectLighting->llpvConfigUbo )
+				{
+					bindingIndex += 1u; // LLPV: UBO
+					bindingIndex += 3u; // LLPV: Accum1R + Accum1G + Accum1B.
+					bindingIndex += 3u; // LLPV: Accum2R + Accum2G + Accum2B.
+					bindingIndex += 3u; // LLPV: Accum3R + Accum3G + Accum3B.
 				}
 			}
 		}

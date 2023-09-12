@@ -358,8 +358,14 @@ namespace castor3d
 			return m_indirectLighting;
 		}
 
+		bool hasShadowBuffer()const noexcept
+		{
+			return m_shadowBuffer != nullptr;
+		}
+
 		ShadowBuffer & getShadowBuffer()const noexcept
 		{
+			CU_Require( hasShadowBuffer() );
 			return *m_shadowBuffer;
 		}
 		/**@}*/

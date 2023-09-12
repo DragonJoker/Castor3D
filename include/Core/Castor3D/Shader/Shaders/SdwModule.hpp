@@ -40,6 +40,8 @@ namespace castor3d::shader
 		bool vsm{ false };
 		// Use RSM result
 		bool rsm{ false };
+		// Reserve binding IDs even if shadows are disabled
+		bool reserveIds{ false };
 
 		ShadowOptions()
 			: type{ SceneFlag::eNone }
@@ -70,10 +72,12 @@ namespace castor3d::shader
 
 		ShadowOptions( SceneFlags sceneFlags
 			, bool vsm
-			, bool rsm )
+			, bool rsm
+			, bool reserveIds = false )
 			: type{ sceneFlags & SceneFlag::eShadowAny }
 			, vsm{ vsm }
 			, rsm{ rsm }
+			, reserveIds{ reserveIds }
 		{
 		}
 	};

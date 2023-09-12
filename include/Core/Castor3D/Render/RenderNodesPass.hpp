@@ -618,6 +618,20 @@ namespace castor3d
 			, uint32_t & index );
 		/**
 		 *\~english
+		 *\brief			Adds shadow maps descriptor layout bindings to given list.
+		 *\param[in,out]	bindings	Receives the bindings.
+		 *\param[in,out]	index		The current binding index.
+		 *\return
+		 *\~french
+		 *\brief			Ajoute les bindings de descriptor layout des shadow maps à la liste donnée.
+		 *\param[in,out]	bindings	Reçoit les bindings.
+		 *\param[in,out]	index		L'index de binding actuel.
+		 *\return
+		 */
+		C3D_API static void addShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index );
+		/**
+		 *\~english
 		 *\brief			Adds background descriptor layout bindings to given list.
 		 *\param[in]		background	The background.
 		 *\param[in,out]	bindings	Receives the bindings.
@@ -631,6 +645,23 @@ namespace castor3d
 		 *\return
 		 */
 		C3D_API static void addBackgroundBindings( SceneBackground const & background
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index );
+		/**
+		 *\~english
+		 *\brief			Adds indirect lighting descriptor layout bindings to given list.
+		 *\param[in]		llpvResult	The Layered LPV result.
+		 *\param[in,out]	bindings	Receives the bindings.
+		 *\param[in,out]	index		The current binding index.
+		 *\return
+		 *\~french
+		 *\brief			Ajoute les bindings de descriptor layout de l'éclairage indirect à la liste donnée.
+		 *\param[in]		llpvResult	Le résultat du Layered LPV.
+		 *\param[in,out]	bindings	Reçoit les bindings.
+		 *\param[in,out]	index		L'index de binding actuel.
+		 *\return
+		 */
+		C3D_API static void addGIBindings( IndirectLightingData const & indirectLighting
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
 			, uint32_t & index );
 		/**
@@ -672,6 +703,12 @@ namespace castor3d
 			, uint32_t & index );
 		C3D_API static void addShadowDescriptor( RenderSystem const & renderSystem
 			, crg::RunnableGraph & graph
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, ShadowMapLightTypeArray const & shadowMaps
+			, ShadowBuffer const & shadowBuffer
+			, uint32_t & index );
+		C3D_API static void addShadowDescriptor( RenderSystem const & renderSystem
+			, crg::RunnableGraph & graph
 			, SceneFlags const & sceneFlags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
@@ -680,6 +717,9 @@ namespace castor3d
 		C3D_API static void addBackgroundDescriptor( SceneBackground const & background
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
+			, uint32_t & index );
+		C3D_API static void addGIDescriptor( IndirectLightingData const & indirectLighting
+			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index );
 		C3D_API static void addGIDescriptor( SceneFlags sceneFlags
 			, IndirectLightingData const & indirectLighting

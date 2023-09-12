@@ -88,6 +88,7 @@ namespace castor3d
 			eTexConfigs,
 			eTexAnims,
 			eInData,
+			eMapBrdf,
 			eMaterialsCounts,
 			eMaterialsStarts,
 			ePixelsXY,
@@ -888,8 +889,10 @@ namespace castor3d
 
 		static ShaderPtr getProgram( RenderDevice const & device
 			, Scene const & scene
+			, RenderTechnique const & technique
 			, VkExtent3D const & imageSize
 			, PipelineFlags const & flags
+			, IndirectLightingData const * indirectLighting
 			, DebugConfig & debugConfig
 			, uint32_t stride
 			, bool blend
@@ -934,22 +937,25 @@ namespace castor3d
 			shader::TextureAnimations textureAnims{ writer
 				, InOutBindings::eTexAnims
 				, Sets::eInOuts };
+			auto c3d_imgData = writer.declStorageImg< sdw::RUImage2DRg32 >( "c3d_imgData"
+				, InOutBindings::eInData
+				, Sets::eInOuts );
+			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
+				, InOutBindings::eMapBrdf
+				, Sets::eInOuts );
 			auto lightsIndex = index++;
 			auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
 				, ( hasSsao ? index++ : 0u )
 				, Sets::eInOuts
 				, hasSsao );
-			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
-				, index++
-				, Sets::eInOuts );
 			shader::Lights lights{ *scene.getEngine()
 				, flags.lightingModelId
 				, flags.backgroundModelId
 				, materials
 				, brdf
 				, utils
-				, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
-			, nullptr
+				, shader::ShadowOptions{ flags.getShadowFlags(), true /* vsm */, false /* rsm */, technique.hasShadowBuffer() /* reserveIds */ }
+				, nullptr
 				, lightsIndex /* lightBinding */
 				, Sets::eInOuts /* lightSet */
 				, index /* shadowMapBinding */
@@ -971,13 +977,13 @@ namespace castor3d
 				, utils
 				, index
 				, Sets::eInOuts
-				, flags.getGlobalIlluminationFlags() };
+				, flags.getGlobalIlluminationFlags()
+				, indirectLighting };
 			shader::ClusteredLights clusteredLights{ writer
 				, index
 				, Sets::eInOuts
 				, clusteredLighting };
 
-			auto c3d_imgData = writer.declStorageImg< sdw::RUImage2DRg32 >( "c3d_imgData", InOutBindings::eInData, Sets::eInOuts );
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
 
@@ -1303,7 +1309,7 @@ namespace castor3d
 			, MaterialCache const & matCache
 			, crg::ImageViewIdArray const & targetImage
 			, Scene const & scene
-			, RenderTarget const & target
+			, RenderTechnique const & technique
 			, bool allowClusteredLighting
 			, Texture const * ssao
 			, IndirectLightingData const * indirectLighting )
@@ -1333,6 +1339,9 @@ namespace castor3d
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eInData
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 				, stages ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMapBrdf
+				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
@@ -1345,12 +1354,6 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::ePixelsXY
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutResult
-					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
-					, stages ) );
-			}
-			else
-			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutResult
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages ) );
@@ -1370,14 +1373,9 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
 			}
 
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBrdf
-
-			if ( scene.hasShadows() )
+			if ( technique.hasShadowBuffer() )
 			{
-				RenderNodesPass::addShadowBindings( scene.getFlags()
-					, bindings
+				RenderNodesPass::addShadowBindings( bindings
 					, index );
 			}
 
@@ -1392,14 +1390,13 @@ namespace castor3d
 					, index );
 			}
 
-			RenderNodesPass::addGIBindings( scene.getFlags()
-				, *indirectLighting
+			RenderNodesPass::addGIBindings( *indirectLighting
 				, bindings
 				, index );
 
 			if ( allowClusteredLighting )
 			{
-				RenderNodesPass::addClusteredLightingBindings( target.getFrustumClusters()
+				RenderNodesPass::addClusteredLightingBindings( technique.getRenderTarget().getFrustumClusters()
 					, bindings
 					, index );
 			}
@@ -1439,6 +1436,9 @@ namespace castor3d
 			auto & visibilityPassResult = technique.getVisibilityResult();
 			writes.push_back( makeImageViewDescriptorWrite( visibilityPassResult.targetView
 				, InOutBindings::eInData ) );
+			writes.push_back( makeImageViewDescriptorWrite( engine.getRenderSystem()->getPrefilteredBrdfTexture().wholeView
+				, *engine.getRenderSystem()->getPrefilteredBrdfTexture().sampler
+				, InOutBindings::eMapBrdf ) );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
@@ -1470,17 +1470,16 @@ namespace castor3d
 					, index );
 			}
 
-			bindTexture( engine.getRenderSystem()->getPrefilteredBrdfTexture().wholeView
-				, *engine.getRenderSystem()->getPrefilteredBrdfTexture().sampler
-				, writes
-				, index );
-			RenderNodesPass::addShadowDescriptor( *engine.getRenderSystem()
-				, graph
-				, scene.getFlags()
-				, writes
-				, technique.getShadowMaps()
-				, technique.getShadowBuffer()
-				, index );
+			if ( technique.hasShadowBuffer() )
+			{
+				RenderNodesPass::addShadowDescriptor( *engine.getRenderSystem()
+					, graph
+					, writes
+					, technique.getShadowMaps()
+					, technique.getShadowBuffer()
+					, index );
+			}
+
 			bindTexture( scene.getEnvironmentMap().getColourId().sampledView
 				, *scene.getEnvironmentMap().getColourId().sampler
 				, writes
@@ -1494,8 +1493,7 @@ namespace castor3d
 					, index );
 			}
 
-			RenderNodesPass::addGIDescriptor( scene.getFlags()
-				, *indirectLighting
+			RenderNodesPass::addGIDescriptor( *indirectLighting
 				, writes
 				, index );
 
@@ -1716,20 +1714,28 @@ namespace castor3d
 		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, std::string const & name
 			, crg::ImageViewIdArray const & targetImage
-			, bool blend
-			, bool first = false )
+			, bool first )
 		{
-			auto loadOp = ( blend
-				? VK_ATTACHMENT_LOAD_OP_LOAD
-				: VK_ATTACHMENT_LOAD_OP_CLEAR );
-			auto srcLayout = ( blend
-				? ( first ? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL )
-				: VK_IMAGE_LAYOUT_UNDEFINED );
+			auto srcLayout = ( first
+				? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+				: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
+			auto srcStage = VkPipelineStageFlags( first
+				? VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+				: VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT );
+			auto dstStage = VkPipelineStageFlags( first
+				? VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
+				: VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT );
+			auto srcAccess = VkAccessFlags( first
+				? VK_ACCESS_SHADER_READ_BIT
+				: VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT );
+			auto dstAccess = VkAccessFlags( first
+				? VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+				: VK_ACCESS_SHADER_READ_BIT );
 			ashes::VkAttachmentDescriptionArray attaches;
 			attaches.push_back( { 0u
 				, targetImage.front().data->info.format
 				, VK_SAMPLE_COUNT_1_BIT
-				, loadOp
+				, VK_ATTACHMENT_LOAD_OP_LOAD
 				, VK_ATTACHMENT_STORE_OP_STORE
 				, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
@@ -1746,17 +1752,17 @@ namespace castor3d
 			subpasses.push_back( std::move( subpassesDesc ) );
 			ashes::VkSubpassDependencyArray dependencies{ { VK_SUBPASS_EXTERNAL
 					, 0u
+					, srcStage
 					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
+					, srcAccess
 					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
-					, VK_ACCESS_SHADER_READ_BIT
 					, VK_DEPENDENCY_BY_REGION_BIT }
 				, { 0u
 					, VK_SUBPASS_EXTERNAL
-					, VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT
 					, VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
-					, VK_ACCESS_SHADER_READ_BIT
+					, dstStage
 					, VK_ACCESS_COLOR_ATTACHMENT_WRITE_BIT
+					, dstAccess
 					, VK_DEPENDENCY_BY_REGION_BIT } };
 			ashes::RenderPassCreateInfo createInfo{ 0u
 				, std::move( attaches )
@@ -1868,9 +1874,9 @@ namespace castor3d
 		, m_indirectLighting{ techniquePassDesc.m_indirectLighting }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
 		, m_inOutsDescriptorLayout{ visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
-			, m_targetImage, getScene(), parent->getRenderTarget(), m_allowClusteredLighting, m_ssao, &m_indirectLighting ) }
+			, m_targetImage, getScene(), *m_parent, m_allowClusteredLighting, m_ssao, &m_indirectLighting ) }
 		, m_inOutsDescriptorPool{ m_inOutsDescriptorLayout->createPool( 1u ) }
-		, m_inOutsDescriptorSet{ visres::createInDescriptorSet( getName(), *m_inOutsDescriptorPool, graph, m_cameraUbo, m_sceneUbo, *parent, getScene()
+		, m_inOutsDescriptorSet{ visres::createInDescriptorSet( getName(), *m_inOutsDescriptorPool, graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
 			, m_allowClusteredLighting, m_targetImage, m_ssao, &m_indirectLighting ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
@@ -1879,13 +1885,13 @@ namespace castor3d
 				: visres::ShaderWriter< false >::getVertexProgram() ) }
 		, m_firstRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, true, true ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, true ) ) }
 		, m_firstFramebuffer{ ( useCompute
 			? nullptr
 			: visres::createFrameBuffer( *m_firstRenderPass, getName(), *m_parent, graph, m_targetImage ) ) }
 		, m_blendRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, true, false ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, false ) ) }
 		, m_blendFramebuffer{ ( useCompute
 			? nullptr
 			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage ) ) }
@@ -1921,7 +1927,9 @@ namespace castor3d
 				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
 					, pipelineHash
 					, getShaderFlags() ) };
+				pipelineFlags.m_sceneFlags = getScene().getFlags();
 				pipelineFlags.backgroundModelId = getScene().getBackground()->getModelID();
+				//pipelineHash = getPipelineBaseHash( getEngine()->getPassComponentsRegister(), pipelineFlags );
 
 				if ( !pipelineFlags.isBillboard() )
 				{
@@ -2333,7 +2341,7 @@ namespace castor3d
 		auto it = pipelines.find( hash );
 
 		if ( it == pipelines.end() )
-		{;
+		{
 			auto stageBit = VisibilityResolvePass::useCompute
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
@@ -2349,10 +2357,10 @@ namespace castor3d
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), extent, flags, getDebugConfig(), stride, false, m_ssao != nullptr, m_allowClusteredLighting ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_indirectLighting, getDebugConfig(), stride, false, m_ssao != nullptr, m_allowClusteredLighting ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), extent, flags, getDebugConfig(), stride, true, m_ssao != nullptr, m_allowClusteredLighting ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_indirectLighting, getDebugConfig(), stride, true, m_ssao != nullptr, m_allowClusteredLighting ) };
 
 			if constexpr ( useCompute )
 			{
