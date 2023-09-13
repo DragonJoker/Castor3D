@@ -124,16 +124,19 @@ namespace castor3d
 				ShaderModule shader;
 				ashes::PipelinePtr pipeline{};
 			};
-			ashes::DescriptorSetLayoutPtr descriptorLayout{};
+			ashes::DescriptorSetLayoutPtr vtxDescriptorLayout{};
+			ashes::DescriptorSetLayoutPtr ioDescriptorLayout{};
 			ashes::PipelineLayoutPtr pipelineLayout{};
-			ashes::DescriptorSetPoolPtr descriptorPool{};
+			ashes::DescriptorSetPoolPtr vtxDescriptorPool{};
+			ashes::DescriptorSetPoolPtr ioDescriptorPool{};
 			std::array< ShaderStages, 2u > shaders;
-			std::unordered_map< size_t, ashes::DescriptorSetPtr > descriptorSets{};
+			std::unordered_map< size_t, ashes::DescriptorSetPtr > vtxDescriptorSets{};
+			ashes::DescriptorSetPtr ioDescriptorSet{};
 		};
 		struct PipelineNodesDescriptors
 		{
 			uint32_t pipelineId{};
-			ashes::DescriptorSet const * descriptorSet{};
+			ashes::DescriptorSet const * vtxDescriptorSet{};
 		};
 		using PipelinePtr = std::unique_ptr< Pipeline >;
 		using SubmeshPipelinesNodesDescriptors = std::map< ashes::DescriptorSet const *, uint32_t >;
@@ -171,11 +174,7 @@ namespace castor3d
 		crg::ImageViewIdArray m_targetImage;
 		crg::ImageViewIdArray m_targetDepth;
 		Texture const * m_ssao{};
-		IndirectLightingData m_indirectLighting;
 		PassSortNodesSignalConnection m_onNodesPassSort;
-		ashes::DescriptorSetLayoutPtr m_inOutsDescriptorLayout{};
-		ashes::DescriptorSetPoolPtr m_inOutsDescriptorPool{};
-		ashes::DescriptorSetPtr m_inOutsDescriptorSet{};
 		bool m_commandsChanged{};
 		ShaderModule m_vertexShader;
 		ashes::RenderPassPtr m_firstRenderPass;

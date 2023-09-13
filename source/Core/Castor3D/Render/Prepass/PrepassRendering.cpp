@@ -143,6 +143,7 @@ namespace castor3d
 				auto depthObjIt = std::next( depthIt );
 				auto dataIt = std::next( depthObjIt );
 				auto velocityIt = std::next( dataIt );
+				auto normalIt = std::next( velocityIt );
 				stepProgressBar( progress, "Initialising depth/visibility pass" );
 				auto res = std::make_unique< VisibilityPass >( getOwner()
 					, framePass
@@ -164,6 +165,7 @@ namespace castor3d
 						.implicitAction( depthObjIt->view(), crg::RecordContext::clearAttachment( *depthObjIt ) )
 						.implicitAction( dataIt->view(), crg::RecordContext::clearAttachment( *dataIt ) )
 						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *velocityIt ) )
+						.implicitAction( velocityIt->view(), crg::RecordContext::clearAttachment( *normalIt ) )
 					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() }
 						.hasVelocity( true ) );
 				m_visibilityPass = res.get();
@@ -179,6 +181,8 @@ namespace castor3d
 		result.addOutputColourView( m_result[PpTexture::eVisibility].targetViewId
 			, opaqueBlackClearColor );
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity().targetViewId );
+		result.addOutputColourView( getOwner()->getNormal().targetViewId
+			, transparentBlackClearColor );
 		return result;
 	}
 

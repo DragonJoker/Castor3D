@@ -78,7 +78,8 @@ namespace castor3d
 			| ShaderFlag::eTangentSpace
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eVelocity
-			| ShaderFlag::eVisibility;
+			| ShaderFlag::eVisibility
+			| ShaderFlag::eNormal;
 	}
 
 	ProgramFlags VisibilityPass::doAdjustProgramFlags( ProgramFlags flags )const
@@ -117,7 +118,7 @@ namespace castor3d
 	{
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend
 			, BlendMode::eNoBlend
-			, 3u );
+			, 4u );
 	}
 
 	ShaderPtr VisibilityPass::doGetPixelShaderSource( PipelineFlags const & flags )const
@@ -167,6 +168,7 @@ namespace castor3d
 		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
 		auto data = writer.declOutput< UVec2 >( "data", 1u );
 		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u, flags.writeVelocity() );
+		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 3u );
 
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
@@ -222,6 +224,7 @@ namespace castor3d
 						? in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID )
 						: writer.cast< sdw::UInt >( in.primitiveID ) ) );
 				velocity = in.getVelocity();
+				nmlOcc = vec4( components.normal, components.occlusion );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
