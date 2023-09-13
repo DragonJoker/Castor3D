@@ -438,6 +438,7 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, SceneUbo const & sceneUbo
 		, bool clearColour
+		, bool clearDepth
 		, bool forceVisible
 		, BackgroundPassBase *& backgroundPass )
 	{
@@ -489,24 +490,26 @@ namespace castor3d
 			, crg::SamplerDesc{ VK_FILTER_LINEAR
 				, VK_FILTER_LINEAR } );
 
-		if ( clearColour )
+		if ( !depth.empty() )
 		{
-			if ( !depth.empty() )
+			if ( clearDepth )
 			{
 				result.addOutputDepthStencilView( depth
 					, defaultClearDepthStencil );
 			}
+			else
+			{
+				result.addInOutDepthStencilView( depth );
+			}
+		}
 
+		if ( clearColour )
+		{
 			result.addOutputColourView( colour
 				, transparentBlackClearColor );
 		}
 		else
 		{
-			if ( !depth.empty() )
-			{
-				result.addInOutDepthStencilView( depth );
-			}
-
 			result.addInOutColourView( colour );
 		}
 

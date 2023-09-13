@@ -74,6 +74,7 @@ namespace atmosphere_scattering
 			, castor3d::HdrConfigUbo const & hdrConfigUbo
 			, castor3d::SceneUbo const & sceneUbo
 			, bool clearColour
+			, bool clearDepth
 			, bool forceVisible
 			, castor3d::BackgroundPassBase *& backgroundPass )override;
 		/**
