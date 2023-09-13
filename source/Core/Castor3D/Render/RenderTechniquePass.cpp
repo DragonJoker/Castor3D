@@ -290,7 +290,7 @@ namespace castor3d
 		doAddPassSpecificsBindings( flags, bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 
-		if ( m_ssao )
+		if ( hasSsao() )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -321,7 +321,7 @@ namespace castor3d
 		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 
-		if ( m_ssao )
+		if ( hasSsao() )
 		{
 			bindTexture( m_ssao->wholeView
 				, *m_ssao->sampler

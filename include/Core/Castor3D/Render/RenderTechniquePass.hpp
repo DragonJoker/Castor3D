@@ -337,6 +337,11 @@ namespace castor3d
 		{
 			return RenderTechniquePass::getDebugConfig();
 		}
+
+		bool hasSsao()const noexcept
+		{
+			return m_ssao && m_ssaoConfig.enabled;
+		}
 		/**@}*/
 
 	protected:

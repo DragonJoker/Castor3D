@@ -133,7 +133,7 @@ namespace castor3d
 		doAddPassSpecificsBindings( flags, bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
 
-		if ( m_ssao )
+		if ( hasSsao() )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
@@ -164,7 +164,7 @@ namespace castor3d
 		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 
-		if ( m_ssao )
+		if ( hasSsao() )
 		{
 			bindTexture( m_ssao->wholeView
 				, *m_ssao->sampler
@@ -229,9 +229,9 @@ namespace castor3d
 			, enableTextures };
 		auto lightsIndex = index++;
 		auto c3d_mapOcclusion = writer.declCombinedImg< FImg2DR32 >( "c3d_mapOcclusion"
-			, ( m_ssao ? index++ : 0u )
+			, ( hasSsao() ? index++ : 0u )
 			, RenderPipeline::eBuffers
-			, m_ssao != nullptr );
+			, hasSsao() );
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 			, index++
 			, RenderPipeline::eBuffers );
@@ -307,7 +307,7 @@ namespace castor3d
 						, material
 						, in } );
 				auto occlusion = writer.declLocale( "occlusion"
-					, ( m_ssao
+					, ( hasSsao()
 						? c3d_mapOcclusion.fetch( ivec2( in.fragCoord.xy() ), 0_i )
 						: 1.0_f ) );
 				materials.blendMaterials( output
