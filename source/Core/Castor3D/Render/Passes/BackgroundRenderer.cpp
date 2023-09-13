@@ -31,6 +31,7 @@ namespace castor3d
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewIdArray const & colour
 		, bool clearColour
+		, bool clearDepth
 		, bool forceVisible
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj )
@@ -46,6 +47,7 @@ namespace castor3d
 			, sceneUbo
 			, m_colour
 			, clearColour
+			, clearDepth
 			, forceVisible
 			, depth
 			, depthObj
@@ -93,6 +95,7 @@ namespace castor3d
 		, SceneUbo const & sceneUbo
 		, crg::ImageViewIdArray const & colour
 		, bool clearColour
+		, bool clearDepth
 		, bool forceVisible
 		, crg::ImageViewIdArray const & depth
 		, crg::ImageViewId const * depthObj
@@ -112,6 +115,7 @@ namespace castor3d
 			, hdrConfigUbo
 			, sceneUbo
 			, clearColour
+			, clearDepth
 			, forceVisible
 			, m_backgroundPass );
 		result.addDependencies( previousPasses );

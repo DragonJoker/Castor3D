@@ -22,6 +22,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
+			, bool clearDepth
 			, bool forceVisible
 			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj );
@@ -49,6 +50,7 @@ namespace castor3d
 				, sceneUbo
 				, crg::ImageViewIdArray{ colour }
 				, clearColour
+				, false
 				, forceVisible
 				, crg::ImageViewIdArray{}
 				, nullptr }
@@ -65,6 +67,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewId const & colour
 			, bool clearColour
+			, bool clearDepth
 			, bool forceVisible
 			, crg::ImageViewId const & depth
 			, crg::ImageViewId const * depthObj )
@@ -80,6 +83,7 @@ namespace castor3d
 				, sceneUbo
 				, crg::ImageViewIdArray{ colour }
 				, clearColour
+				, clearDepth
 				, forceVisible
 				, crg::ImageViewIdArray{ depth }
 				, depthObj }
@@ -96,6 +100,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
+			, bool clearDepth
 			, bool forceVisible
 			, crg::ImageViewId const & depth
 			, crg::ImageViewId const * depthObj )
@@ -109,6 +114,7 @@ namespace castor3d
 				, sceneUbo
 				, colour
 				, clearColour
+				, clearDepth
 				, forceVisible
 				, crg::ImageViewIdArray{ depth }
 				, depthObj }
@@ -149,6 +155,7 @@ namespace castor3d
 			, SceneUbo const & sceneUbo
 			, crg::ImageViewIdArray const & colour
 			, bool clearColour
+			, bool clearDepth
 			, bool forceVisible
 			, crg::ImageViewIdArray const & depth
 			, crg::ImageViewId const * depthObj

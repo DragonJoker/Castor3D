@@ -187,6 +187,8 @@ namespace castor3d
 		*	The scene UBO.
 		*\param clearColour
 		*	\p true to clear the colour result.
+		*\param clearDepth
+		*	\p true to clear the depth result.
 		*\param forceVisible
 		*	\p true to force display of background.
 		*\param[out] backgroundPass
@@ -218,6 +220,8 @@ namespace castor3d
 		*	L'UBO de scène.
 		*\param clearColour
 		*	\p true pour vider le résultat de couleur.
+		*\param clearDepth
+		*	\p true pour vider le résultat de profondeur.
 		*\param forceVisible
 		*	\p true pour forcer l'affichage du fond.
 		*\param[out] backgroundPass
@@ -235,6 +239,7 @@ namespace castor3d
 			, HdrConfigUbo const & hdrConfigUbo
 			, SceneUbo const & sceneUbo
 			, bool clearColour
+			, bool clearDepth
 			, bool forceVisible
 			, BackgroundPassBase *& backgroundPass );
 		/**

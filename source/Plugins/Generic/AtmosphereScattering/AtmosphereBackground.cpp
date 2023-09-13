@@ -580,6 +580,7 @@ namespace atmosphere_scattering
 		, castor3d::HdrConfigUbo const & hdrConfigUbo
 		, castor3d::SceneUbo const & sceneUbo
 		, bool clearColour
+		, bool clearDepth
 		, bool forceVisible
 		, castor3d::BackgroundPassBase *& backgroundPass )
 	{
@@ -657,9 +658,29 @@ namespace atmosphere_scattering
 			pass.addDependency( m_weatherPass->getLastPass() );
 			pass.addImplicitDepthStencilView( depth
 				, VK_IMAGE_LAYOUT_DEPTH_STENCIL_ATTACHMENT_OPTIMAL );
-			pass.addOutputColourView( colour
-				, castor3d::transparentBlackClearColor );
-			pass.addInOutDepthStencilView( depth );
+
+			if ( !depth.empty() )
+			{
+				if ( clearDepth )
+				{
+					pass.addOutputDepthStencilView( depth
+						, castor3d::defaultClearDepthStencil );
+				}
+				else
+				{
+					pass.addInOutDepthStencilView( depth );
+				}
+			}
+
+			if ( clearColour )
+			{
+				pass.addOutputColourView( colour
+					, castor3d::transparentBlackClearColor );
+			}
+			else
+			{
+				pass.addInOutColourView( colour );
+			}
 		}
 
 		return *it->second->lastPass;
