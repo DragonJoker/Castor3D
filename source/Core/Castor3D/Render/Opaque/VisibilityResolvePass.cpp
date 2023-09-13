@@ -1871,13 +1871,7 @@ namespace castor3d
 		, m_targetImage{ std::move( targetImage ) }
 		, m_targetDepth{ std::move( targetDepth ) }
 		, m_ssao{ techniquePassDesc.m_ssao }
-		, m_indirectLighting{ techniquePassDesc.m_indirectLighting }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
-		, m_inOutsDescriptorLayout{ visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
-			, m_targetImage, getScene(), *m_parent, m_allowClusteredLighting, m_ssao, &m_indirectLighting ) }
-		, m_inOutsDescriptorPool{ m_inOutsDescriptorLayout->createPool( 1u ) }
-		, m_inOutsDescriptorSet{ visres::createInDescriptorSet( getName(), *m_inOutsDescriptorPool, graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
-			, m_allowClusteredLighting, m_targetImage, m_ssao, &m_indirectLighting ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
 			, ( useCompute
@@ -1939,7 +1933,7 @@ namespace castor3d
 
 					size_t hash = 0u;
 					hash = castor::hashCombinePtr( hash, *buffer );
-					auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+					auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
 
 					if ( ires.second )
 					{
@@ -1953,7 +1947,7 @@ namespace castor3d
 
 						ires.first->second = visres::createVtxDescriptorSet( getName()
 							, pipelineFlags
-							, *pipeline.descriptorPool
+							, *pipeline.vtxDescriptorPool
 							, modelBuffers
 							, indexBuffer );
 					}
@@ -1978,14 +1972,14 @@ namespace castor3d
 							, BillboardPipelinesNodesDescriptors{} ).first;
 						auto hash = size_t( positionsBuffer.getOffset() );
 						hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
-						auto ires = pipeline.descriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+						auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
 						auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash
 							, *itBuffer.first );
 
 						if ( ires.second )
 						{
 							ires.first->second = visres::createVtxDescriptorSet( getName()
-								, *pipeline.descriptorPool
+								, *pipeline.vtxDescriptorPool
 								, positionsBuffer.getBuffer().getBuffer()
 								, positionsBuffer.getOffset()
 								, positionsBuffer.getSize() );
@@ -2104,7 +2098,7 @@ namespace castor3d
 	{
 		m_drawCalls = {};
 		auto size = uint32_t( m_parent->getMaterialsStarts().getCount() );
-		std::array< VkDescriptorSet, 3u > descriptorSets{ *m_inOutsDescriptorSet
+		std::array< VkDescriptorSet, 3u > descriptorSets{ VkDescriptorSet{}
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
@@ -2119,6 +2113,7 @@ namespace castor3d
 				, ( first
 					? *pipelineIt.first->shaders[0].pipeline
 					: *pipelineIt.first->shaders[1].pipeline ) );
+			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
 
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
@@ -2151,10 +2146,11 @@ namespace castor3d
 				, ( first
 					? *pipelineIt.first->shaders[0].pipeline
 					: *pipelineIt.first->shaders[1].pipeline ) );
+			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
 
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
-				descriptorSets[1] = *descriptorSetIt.second.descriptorSet;
+				descriptorSets[1] = *descriptorSetIt.second.vtxDescriptorSet;
 				pushData.pipelineId = descriptorSetIt.second.pipelineId;
 				pushData.billboardNodeId = descriptorSetIt.first;
 				context.getContext().vkCmdPushConstants( commandBuffer
@@ -2185,7 +2181,7 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer )
 	{
 		m_drawCalls = {};
-		std::array< VkDescriptorSet, 3u > descriptorSets{ *m_inOutsDescriptorSet
+		std::array< VkDescriptorSet, 3u > descriptorSets{ VkDescriptorSet{}
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		bool first = true;
@@ -2246,6 +2242,8 @@ namespace castor3d
 
 		for ( auto & pipelineIt : m_activePipelines )
 		{
+			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
+
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
 				descriptorSets[1] = *descriptorSetIt.first;
@@ -2276,9 +2274,11 @@ namespace castor3d
 
 		for ( auto & pipelineIt : m_activeBillboardPipelines )
 		{
+			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
+
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
-				descriptorSets[1] = *descriptorSetIt.second.descriptorSet;
+				descriptorSets[1] = *descriptorSetIt.second.vtxDescriptorSet;
 				pushData.pipelineId = descriptorSetIt.second.pipelineId;
 				pushData.billboardNodeId = descriptorSetIt.first;
 				bind( *pipelineIt.first, true );
@@ -2348,19 +2348,21 @@ namespace castor3d
 			auto stageFlags = VkShaderStageFlags( stageBit );
 			auto extent = m_parent->getNormal().getExtent();
 			auto result = std::make_unique< Pipeline >();
-			result->descriptorLayout = stride == 0u
+			result->vtxDescriptorLayout = stride == 0u
 				? visres::createVtxDescriptorLayout( m_device, getName(), flags )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
+			result->ioDescriptorLayout = visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
+				, m_targetImage, getScene(), *m_parent, m_allowClusteredLighting, m_ssao, &m_parent->getIndirectLighting() );
 			result->pipelineLayout = m_device->createPipelineLayout( getName()
-				, { *m_inOutsDescriptorLayout, *result->descriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
+				, { *result->ioDescriptorLayout, *result->vtxDescriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_indirectLighting, getDebugConfig(), stride, false, m_ssao != nullptr, m_allowClusteredLighting ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, m_ssao != nullptr, m_allowClusteredLighting ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_indirectLighting, getDebugConfig(), stride, true, m_ssao != nullptr, m_allowClusteredLighting ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, m_ssao != nullptr, m_allowClusteredLighting ) };
 
 			if constexpr ( useCompute )
 			{
@@ -2395,7 +2397,10 @@ namespace castor3d
 					, true );
 			}
 
-			result->descriptorPool = result->descriptorLayout->createPool( MaxPipelines );
+			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
+			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
+			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
+				, m_allowClusteredLighting, m_targetImage, m_ssao, &m_parent->getIndirectLighting() );
 			it = pipelines.emplace( hash, std::move( result ) ).first;
 		}
 
