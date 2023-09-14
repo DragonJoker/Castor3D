@@ -125,6 +125,13 @@ namespace castor3d::shader
 		C3D_API void computeTangentSpace( PipelineFlags const & flags
 			, sdw::Vec3 const & cameraPosition
 			, sdw::Vec3 const & worldPos
+			, sdw::Mat3 const & mtx
+			, sdw::Vec3 const & nml
+			, sdw::Vec4 const & tan
+			, sdw::Vec3 const & bin );
+		C3D_API void computeTangentSpace( PipelineFlags const & flags
+			, sdw::Vec3 const & cameraPosition
+			, sdw::Vec3 const & worldPos
 			, sdw::Vec3 const & nml
 			, sdw::Vec4 const & tan
 			, sdw::Vec3 const & bin );
@@ -172,6 +179,7 @@ namespace castor3d::shader
 		sdw::Vec4 position;
 		sdw::Vec3 normal;
 		sdw::Vec4 tangent;
+		sdw::Vec3 bitangent;
 		sdw::Vec3 texture0;
 		sdw::Vec3 texture1;
 		sdw::Vec3 texture2;

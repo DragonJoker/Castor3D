@@ -158,6 +158,11 @@ namespace castor3d
 			createComponent< TangentsComponent >();
 		}
 
+		if ( checkFlag( flags, SubmeshFlag::eBitangents ) )
+		{
+			createComponent< BitangentsComponent >();
+		}
+
 		if ( checkFlag( flags, SubmeshFlag::eTexcoords0 ) )
 		{
 			createComponent< Texcoords0Component >();
@@ -431,6 +436,7 @@ namespace castor3d
 		return std::max( { smsh::getComponentCount< PositionsComponent >( *this )
 			, smsh::getComponentCount< NormalsComponent >( *this )
 			, smsh::getComponentCount< TangentsComponent >( *this )
+			, smsh::getComponentCount< BitangentsComponent >( *this )
 			, smsh::getComponentCount< Texcoords0Component >( *this )
 			, smsh::getComponentCount< Texcoords1Component >( *this )
 			, smsh::getComponentCount< Texcoords2Component >( *this )
@@ -672,6 +678,9 @@ namespace castor3d
 		case castor3d::SubmeshData::eColours:
 			getColours() = std::move( data );
 			break;
+		case castor3d::SubmeshData::eBitangents:
+			getBitangents() = std::move( data );
+			break;
 		case castor3d::SubmeshData::eTangents:
 			CU_Failure( "setBaseData: Can't set tangent data this way, use the Point4f variant" );
 			break;
@@ -705,6 +714,9 @@ namespace castor3d
 			break;
 		case castor3d::SubmeshData::eTangents:
 			getTangents() = std::move( data );
+			break;
+		case castor3d::SubmeshData::eBitangents:
+			CU_Failure( "setBaseData: Can't set bitangents data this way, use the Point3f variant" );
 			break;
 		case castor3d::SubmeshData::eTexcoords0:
 			CU_Failure( "setBaseData: Can't set texcoords0 data this way, use the Point3f variant" );
@@ -824,6 +836,25 @@ namespace castor3d
 		return component->getData();
 	}
 
+	castor::Point3fArray const & Submesh::getBitangents()const
+	{
+		if ( auto component = getComponent< BitangentsComponent >() )
+		{
+			return component->getData();
+		}
+
+		static castor::Point3fArray const dummy;
+		return dummy;
+	}
+
+	castor::Point3fArray & Submesh::getBitangents()
+	{
+		m_dirty = true;
+		auto component = getComponent< BitangentsComponent >();
+		CU_Require( component );
+		return component->getData();
+	}
+
 	castor::Point3fArray const & Submesh::getTexcoords0()const
 	{
 		if ( auto component = getComponent< Texcoords0Component >() )
@@ -927,6 +958,8 @@ namespace castor3d
 			return getPositions();
 		case castor3d::SubmeshData::eNormals:
 			return getNormals();
+		case castor3d::SubmeshData::eBitangents:
+			return getBitangents();
 		case castor3d::SubmeshData::eTexcoords0:
 			return getTexcoords0();
 		case castor3d::SubmeshData::eTexcoords1:
@@ -966,6 +999,8 @@ namespace castor3d
 			return getPositions();
 		case castor3d::SubmeshData::eNormals:
 			return getNormals();
+		case castor3d::SubmeshData::eBitangents:
+			return getBitangents();
 		case castor3d::SubmeshData::eTexcoords0:
 			return getTexcoords0();
 		case castor3d::SubmeshData::eTexcoords1:

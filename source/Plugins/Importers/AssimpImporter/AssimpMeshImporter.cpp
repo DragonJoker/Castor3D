@@ -46,6 +46,11 @@ namespace c3d_assimp
 				result |= castor3d::MorphFlag::eTangents;
 			}
 
+			if ( !buffer.bitangents.empty() )
+			{
+				result |= castor3d::MorphFlag::eBitangents;
+			}
+
 			if ( !buffer.texcoords0.empty() )
 			{
 				result |= castor3d::MorphFlag::eTexcoords0;
@@ -239,12 +244,14 @@ namespace c3d_assimp
 		auto positions = submesh.createComponent< castor3d::PositionsComponent >();
 		auto normals = submesh.createComponent< castor3d::NormalsComponent >();
 		castor::Point4fArray tan;
+		castor::Point3fArray bit;
 		castor::Point3fArray tex0;
 		castor::Point3fArray tex1;
 		castor::Point3fArray tex2;
 		castor::Point3fArray tex3;
 		castor::Point3fArray col;
 		castor::Point4fArray * tangents = &tan;
+		castor::Point3fArray * bitangents = &bit;
 		castor::Point3fArray * texcoords0 = &tex0;
 		castor::Point3fArray * texcoords1 = &tex1;
 		castor::Point3fArray * texcoords2 = &tex2;
@@ -283,10 +290,17 @@ namespace c3d_assimp
 			colours = &colComp->getData();
 		}
 
+		if ( aiMesh.HasTangentsAndBitangents() )
+		{
+			auto bitComp = submesh.createComponent< castor3d::BitangentsComponent >();
+			bitangents = &bitComp->getData();
+		}
+
 		createVertexBuffer( aiMesh
 			, positions->getData()
 			, normals->getData()
 			, *tangents
+			, *bitangents
 			, *texcoords0
 			, *texcoords1
 			, *texcoords2
@@ -295,6 +309,7 @@ namespace c3d_assimp
 		auto animBuffers = gatherMeshAnimBuffers( positions->getData()
 			, normals->getData()
 			, *tangents
+			, *bitangents
 			, *texcoords0
 			, *texcoords1
 			, *texcoords2

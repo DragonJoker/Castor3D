@@ -77,6 +77,12 @@ namespace castor3d
 					, uint32_t( MeshBuffersIdx::eTangent ) ) );
 			}
 
+			if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+			{
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eBitangents
+					, uint32_t( MeshBuffersIdx::eBitangent ) ) );
+			}
+
 			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
 			{
 				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eTexcoords0
@@ -315,6 +321,13 @@ namespace castor3d
 		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTangent )
+				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+				, VK_SHADER_STAGE_MESH_BIT_NV ) );
+		}
+
+		if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eBitangent )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}

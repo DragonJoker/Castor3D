@@ -102,6 +102,7 @@ namespace castor3d
 			eInPosition,
 			eInNormal,
 			eInTangent,
+			eInBitangent,
 			eInTexcoord0,
 			eInTexcoord1,
 			eInTexcoord2,
@@ -339,6 +340,10 @@ namespace castor3d
 					, sdw::Vec4
 					, VtxBindings::eInTangent
 					, m_flags.enableTangentSpace() ) }
+				, m_inBitangent{ DeclareSsbo( c3d_inBitangent
+					, sdw::Vec4
+					, VtxBindings::eInBitangent
+					, m_flags.enableBitangent() ) }
 				, m_inTexcoord0{ DeclareSsbo( c3d_inTexcoord0
 					, sdw::Vec4
 					, VtxBindings::eInTexcoord0
@@ -482,6 +487,7 @@ namespace castor3d
 									result.position = m_inPosition[vertexId].position;
 									result.normal = m_inNormal[vertexId].xyz();
 									result.tangent = m_inTangent[vertexId];
+									result.bitangent = m_inBitangent[vertexId].xyz();
 									result.texture0 = m_inTexcoord0[vertexId].xyz();
 									result.texture1 = m_inTexcoord1[vertexId].xyz();
 									result.texture2 = m_inTexcoord2[vertexId].xyz();
@@ -751,6 +757,17 @@ namespace castor3d
 									, v2.tangent ) );
 							}
 
+							auto bitangent = m_writer.declLocale( "bitangent"
+								, vec3( 0.0_f )
+								, m_flags.enableBitangent() );
+
+							if ( m_flags.enableBitangent() )
+							{
+								bitangent = normalize( derivatives.interpolate( v0.bitangent
+									, v1.bitangent
+									, v2.bitangent ) );
+							}
+
 							if ( m_flags.enablePassMasks() )
 							{
 								auto passMultipliers0 = m_writer.declLocaleArray< sdw::Vec4 >( "passMultipliers0", 4u );
@@ -818,6 +835,7 @@ namespace castor3d
 											, modelData.getPrvModelMtx( m_flags, curMtxModel ) );
 										prvPosition = prvMtxModel * curPosition;
 										tangent = vec4( normalize( mtxNormal * tangent.xyz() ), tangent.w() );
+										bitangent = normalize( mtxNormal * bitangent );
 									}
 								}
 							}
@@ -833,7 +851,8 @@ namespace castor3d
 									, c3d_cameraData.position()
 									, result.worldPosition.xyz()
 									, normal
-									, tangent );
+									, tangent
+									, bitangent );
 							}
 
 							m_writer.returnStmt( result );
@@ -858,6 +877,7 @@ namespace castor3d
 			sdw::Array< Position > m_inPosition;
 			sdw::Vec4Array m_inNormal;
 			sdw::Vec4Array m_inTangent;
+			sdw::Vec4Array m_inBitangent;
 			sdw::Vec4Array m_inTexcoord0;
 			sdw::Vec4Array m_inTexcoord1;
 			sdw::Vec4Array m_inTexcoord2;
@@ -1562,6 +1582,13 @@ namespace castor3d
 					, stages ) );
 			}
 
+			if ( flags.enableBitangent() )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInBitangent
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, stages ) );
+			}
+
 			if ( flags.enableTexcoord0() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInTexcoord0
@@ -1660,6 +1687,12 @@ namespace castor3d
 			{
 				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eTangents )]->getBuffer();
 				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInTangent, 0u, buffer.getSize() ) );
+			}
+
+			if ( flags.enableBitangent() )
+			{
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eBitangents )]->getBuffer();
+				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInBitangent, 0u, buffer.getSize() ) );
 			}
 
 			if ( flags.enableTexcoord0() )
@@ -2010,7 +2043,6 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
-		, bool invertNormals
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
@@ -2028,7 +2060,6 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, isFrontCulled
-			, invertNormals
 			, passLayerIndex
 			, morphTargets );
 		result.m_shaderFlags = getShaderFlags();

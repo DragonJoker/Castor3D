@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_ModelMeshSubmeshModule_H___
@@ -51,6 +51,9 @@ namespace castor3d
 		//!\~english	The submesh has tangents.
 		//!\~french		Le submesh a des tangentes.
 		eTangents,
+		//!\~english	The submesh has bitangents.
+		//!\~french		Le submesh a des bitangentes.
+		eBitangents,
 		//!\~english	Submesh has texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture.
 		eTexcoords0,
@@ -93,6 +96,8 @@ namespace castor3d
 			return cuT( "Normals" );
 		case castor3d::SubmeshData::eTangents:
 			return cuT( "Tangents" );
+		case castor3d::SubmeshData::eBitangents:
+			return cuT( "Bitangents" );
 		case castor3d::SubmeshData::eTexcoords0:
 			return cuT( "Texcoords0" );
 		case castor3d::SubmeshData::eTexcoords1:
@@ -121,6 +126,7 @@ namespace castor3d
 			, sizeof( castor::Point4f ) /* SubmeshFlag::ePositions */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eNormals */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTangents */
+			, sizeof( castor::Point4f ) /* SubmeshFlag::eBitangents */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords0 */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords1 */
 			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords2 */
@@ -155,6 +161,9 @@ namespace castor3d
 		//!\~english	The submesh has tangents.
 		//!\~french		Le submesh a des tangentes.
 		eTangents = 0x0001 << int( SubmeshData::eTangents ),
+		//!\~english	The submesh has bitangents.
+		//!\~french		Le submesh a des bitangentes.
+		eBitangents = 0x0001 << int( SubmeshData::eBitangents ),
 		//!\~english	Submesh has texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture.
 		eTexcoords0 = 0x0001 << int( SubmeshData::eTexcoords0 ),
@@ -220,6 +229,9 @@ namespace castor3d
 		//!\~english	The submesh has morphing tangents.
 		//!\~french		Le submesh a des tangentes de morphing.
 		eTangents,
+		//!\~english	The submesh has morphing bitangents.
+		//!\~french		Le submesh a des bitangentes de morphing.
+		eBitangents,
 		//!\~english	The submesh has morphing texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture de morphing.
 		eTexcoords0,
@@ -248,6 +260,8 @@ namespace castor3d
 			return cuT( "MorphNormals" );
 		case castor3d::MorphData::eTangents:
 			return cuT( "MorphTangents" );
+		case castor3d::MorphData::eBitangents:
+			return cuT( "MorphBitangents" );
 		case castor3d::MorphData::eTexcoords0:
 			return cuT( "MorphTexcoords0" );
 		case castor3d::MorphData::eTexcoords1:
@@ -284,6 +298,9 @@ namespace castor3d
 		//!\~english	The submesh has morphing tangents.
 		//!\~french		Le submesh a des tangentes de morphing.
 		eTangents = 0x01 << size_t( MorphData::eTangents ),
+		//!\~english	The submesh has morphing tangents.
+		//!\~french		Le submesh a des tangentes de morphing.
+		eBitangents = 0x01 << size_t( MorphData::eBitangents),
 		//!\~english	The submesh has morphing texture coordinates.
 		//!\~french		Le submesh a des coordonnées de texture de morphing.
 		eTexcoords0 = 0x01 << size_t( MorphData::eTexcoords0 ),
@@ -329,6 +346,9 @@ namespace castor3d
 		//!\~english	The tangents buffer.
 		//!\~french		Le tampon de tangentes.
 		castor::Point4fArray tangents{};
+		//!\~english	The tangents buffer.
+		//!\~french		Le tampon de tangentes.
+		castor::Point3fArray bitangents{};
 		//!\~english	The texture coordinates buffer.
 		//!\~french		Le tampon de coordonnées de texture.
 		castor::Point3fArray texcoords0{};

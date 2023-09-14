@@ -418,6 +418,14 @@ namespace Testing
 		return result;
 	}
 
+	bool C3DTestCase::compare( castor3d::BitangentsComponent const & lhs, castor3d::BitangentsComponent const & rhs )
+	{
+		auto lhsData = lhs.getData();
+		auto rhsData = rhs.getData();
+		auto result = CT_EQUAL( lhsData, rhsData );
+		return result;
+	}
+
 	bool C3DTestCase::compare( castor3d::Texcoords0Component const & lhs, castor3d::Texcoords0Component const & rhs )
 	{
 		auto lhsData = lhs.getData();
@@ -510,6 +518,11 @@ namespace Testing
 			{
 				result = CT_EQUAL( static_cast< TangentsComponent const & >( lhs )
 					, static_cast< TangentsComponent const & >( rhs ) );
+			}
+			else if ( lhs.getType() == BitangentsComponent::Name )
+			{
+				result = CT_EQUAL( static_cast< BitangentsComponent const & >( lhs )
+					, static_cast< BitangentsComponent const & >( rhs ) );
 			}
 			else if ( lhs.getType() == Texcoords0Component::Name )
 			{

@@ -143,6 +143,7 @@ namespace castor3d
 		{
 			remFlag( flags, SubmeshFlag::eNormals );
 			remFlag( flags, SubmeshFlag::eTangents );
+			remFlag( flags, SubmeshFlag::eBitangents );
 		}
 
 		return flags;

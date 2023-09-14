@@ -182,6 +182,10 @@ namespace castor3d
 			applyRemap( originalVertexCount
 				, destinationVertexCount
 				, remap
+				, buffers.bitangents );
+			applyRemap( originalVertexCount
+				, destinationVertexCount
+				, remap
 				, buffers.texcoords0 );
 			applyRemap( originalVertexCount
 				, destinationVertexCount

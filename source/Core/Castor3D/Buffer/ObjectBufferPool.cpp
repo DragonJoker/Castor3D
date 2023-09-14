@@ -38,14 +38,19 @@ namespace castor3d
 				result += "P";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
-			{
-				result += "N";
-			}
-
 			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
 			{
 				result += "T";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+			{
+				result += "B";
+			}
+
+			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+			{
+				result += "N";
 			}
 
 			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )

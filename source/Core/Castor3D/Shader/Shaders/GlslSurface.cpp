@@ -293,7 +293,7 @@ namespace castor3d::shader
 			tangent = tan;
 			bitangent = tangent.w() * cross( normal, tangent.xyz() );
 
-			if ( flags.hasInvertNormals() )
+			if ( flags.isFrontCulled() )
 			{
 				normal = -normal;
 				tangent.xyz() = -tangent.xyz();
@@ -314,7 +314,7 @@ namespace castor3d::shader
 		{
 			normal = nml;
 
-			if ( flags.hasInvertNormals() )
+			if ( flags.isFrontCulled() )
 			{
 				normal = -normal;
 			}
@@ -338,29 +338,73 @@ namespace castor3d::shader
 	void RasterizerSurfaceBase::computeTangentSpace( PipelineFlags const & flags
 		, sdw::Vec3 const & cameraPosition
 		, sdw::Vec3 const & worldPos
+		, sdw::Mat3 const & mtx
 		, sdw::Vec3 const & nml
 		, sdw::Vec4 const & tan
 		, sdw::Vec3 const & bin )
 	{
-		if ( flags.enableTangentSpace() )
+		if ( bin.isEnabled() )
 		{
-			normal = nml;
-			tangent = tan;
-			bitangent = bin;
+			return computeTangentSpace( flags
+				, cameraPosition
+				, worldPos
+				, normalize( mtx * nml )
+				, vec4( normalize( mtx * tan.xyz() ), tan.w() )
+				, vec3( normalize( mtx * bin ) ) );
+		}
 
-			if ( !tangentSpaceFragPosition.getExpr()->isDummy() )
+		return computeTangentSpace( flags
+			, cameraPosition
+			, worldPos
+			, normalize( mtx * nml )
+			, vec4( normalize( mtx * tan.xyz() ), tan.w() ) );
+	}
+
+	void RasterizerSurfaceBase::computeTangentSpace( PipelineFlags const & flags
+		, sdw::Vec3 const & cameraPosition
+		, sdw::Vec3 const & worldPos
+		, sdw::Vec3 const & nml
+		, sdw::Vec4 const & tan
+		, sdw::Vec3 const & bin )
+	{
+		if ( bin.isEnabled() )
+		{
+			if ( flags.enableTangentSpace() )
 			{
-				CU_Require( !worldPos.getExpr()->isDummy() );
-				CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
-				auto tbn = getWriter()->declLocale( "tbn"
-					, transpose( mat3( tangent.xyz(), bitangent, normal ) ) );
-				tangentSpaceFragPosition = tbn * worldPos;
-				tangentSpaceViewPosition = tbn * cameraPosition.xyz();
+				normal = nml;
+				tangent = tan;
+				bitangent = bin;
+
+				if ( flags.isFrontCulled() )
+				{
+					normal = -normal;
+					tangent.xyz() = -tangent.xyz();
+					bitangent = -bitangent;
+				}
+
+				if ( !tangentSpaceFragPosition.getExpr()->isDummy() )
+				{
+					CU_Require( !worldPos.getExpr()->isDummy() );
+					CU_Require( !tangentSpaceViewPosition.getExpr()->isDummy() );
+					auto tbn = getWriter()->declLocale( "tbn"
+						, transpose( mat3( tangent.xyz(), bitangent, normal ) ) );
+					tangentSpaceFragPosition = tbn * worldPos;
+					tangentSpaceViewPosition = tbn * cameraPosition.xyz();
+				}
+			}
+			else
+			{
+				normal = nml;
+
+				if ( flags.isFrontCulled() )
+				{
+					normal = -normal;
+				}
 			}
 		}
 		else
 		{
-			normal = nml;
+			computeTangentSpace( flags, cameraPosition, worldPos, nml, tan );
 		}
 	}
 

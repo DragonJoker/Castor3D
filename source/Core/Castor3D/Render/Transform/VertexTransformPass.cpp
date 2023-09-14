@@ -78,6 +78,14 @@ namespace castor3d
 					, VertexTransformPass::eOutTangent ) );
 			}
 
+			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eBitangents ) )
+			{
+				writes.push_back( input.getStorageBinding( SubmeshFlag::eBitangents
+					, VertexTransformPass::eInBitangent ) );
+				writes.push_back( output.getStorageBinding( SubmeshFlag::eBitangents
+					, VertexTransformPass::eOutBitangent ) );
+			}
+
 			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords0 ) )
 			{
 				writes.push_back( input.getStorageBinding( SubmeshFlag::eTexcoords0

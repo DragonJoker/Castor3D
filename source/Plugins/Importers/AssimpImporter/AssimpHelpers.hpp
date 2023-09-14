@@ -168,6 +168,7 @@ namespace c3d_assimp
 		, castor::Point3fArray & positions
 		, castor::Point3fArray & normals
 		, castor::Point4fArray & tangents
+		, castor::Point3fArray & bitangents
 		, castor::Point3fArray & texcoords0
 		, castor::Point3fArray & texcoords1
 		, castor::Point3fArray & texcoords2
@@ -290,12 +291,24 @@ namespace c3d_assimp
 				tan[3] = 1.0f;
 				++index;
 			}
+
+			bitangents.resize( aiMesh.mNumVertices );
+			index = 0u;
+
+			for ( auto & bit : bitangents )
+			{
+				bit[0] = float( aiMesh.mBitangents[index].x );
+				bit[1] = float( aiMesh.mBitangents[index].y );
+				bit[2] = float( aiMesh.mBitangents[index].z );
+				++index;
+			}
 		}
 	}
 
 	inline std::vector< castor3d::SubmeshAnimationBuffer > gatherMeshAnimBuffers( castor::Point3fArray const & positions
 		, castor::Point3fArray const & normals
 		, castor::Point4fArray const & tangents
+		, castor::Point3fArray const & bitangents
 		, castor::Point3fArray const & texcoords0
 		, castor::Point3fArray const & texcoords1
 		, castor::Point3fArray const & texcoords2
@@ -312,6 +325,7 @@ namespace c3d_assimp
 				, buffer.positions
 				, buffer.normals
 				, buffer.tangents
+				, buffer.bitangents
 				, buffer.texcoords0
 				, buffer.texcoords1
 				, buffer.texcoords2
@@ -386,12 +400,20 @@ namespace c3d_assimp
 
 			if ( aiAnimMesh->HasTangentsAndBitangents() )
 			{
-				auto it = buffer.tangents.begin();
+				auto tit = buffer.tangents.begin();
 
 				for ( auto & ref : tangents )
 				{
-					*it -= ref;
-					++it;
+					*tit -= ref;
+					++tit;
+				}
+
+				auto bit = buffer.bitangents.begin();
+
+				for ( auto & ref : bitangents )
+				{
+					*bit -= ref;
+					++bit;
 				}
 			}
 

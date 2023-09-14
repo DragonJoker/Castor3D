@@ -30,6 +30,8 @@ namespace castor3d
 			eOutNormal,
 			eInTangent,
 			eOutTangent,
+			eInBitangent,
+			eOutBitangent,
 			eInTexcoord0,
 			eOutTexcoord0,
 			eInTexcoord1,

@@ -303,6 +303,8 @@ namespace castor3d
 		C3D_API castor::Point3fArray & getNormals();
 		C3D_API castor::Point4fArray const & getTangents()const;
 		C3D_API castor::Point4fArray & getTangents();
+		C3D_API castor::Point3fArray const & getBitangents()const;
+		C3D_API castor::Point3fArray & getBitangents();
 		C3D_API castor::Point3fArray const & getTexcoords0()const;
 		C3D_API castor::Point3fArray & getTexcoords0();
 		C3D_API castor::Point3fArray const & getTexcoords1()const;

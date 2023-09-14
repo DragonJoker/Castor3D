@@ -165,6 +165,16 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
+			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eBitangents ) )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInBitangent
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, VK_SHADER_STAGE_COMPUTE_BIT ) );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eOutBitangent
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, VK_SHADER_STAGE_COMPUTE_BIT ) );
+			}
+
 			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords0 ) )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInTexcoord0
@@ -334,6 +344,10 @@ namespace castor3d
 				, sdw::Vec4
 				, VertexTransformPass::eInTangent
 				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTangents ) );
+			DeclareSsbo( c3d_inBitangent
+				, sdw::Vec4
+				, VertexTransformPass::eInBitangent
+				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eBitangents ) );
 			DeclareSsbo( c3d_inTexcoord0
 				, sdw::Vec4
 				, VertexTransformPass::eInTexcoord0
@@ -373,6 +387,10 @@ namespace castor3d
 				, sdw::Vec4
 				, VertexTransformPass::eOutTangent
 				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTangents ) );
+			DeclareSsbo( c3d_outBitangent
+				, sdw::Vec4
+				, VertexTransformPass::eOutBitangent
+				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eBitangents ) );
 			DeclareSsbo( c3d_outTexcoord0
 				, sdw::Vec4
 				, VertexTransformPass::eOutTexcoord0
@@ -412,6 +430,8 @@ namespace castor3d
 					, c3d_inNormal[index] );
 				auto tangent = writer.declLocale( "tangent"
 					, c3d_inTangent[index] );
+				auto bitangent = writer.declLocale( "bitangent"
+					, c3d_inBitangent[index] );
 				auto texcoord0 = writer.declLocale( "texture0"
 					, c3d_inTexcoord0[index].xyz() );
 				auto texcoord1 = writer.declLocale( "texture1"
@@ -432,6 +452,7 @@ namespace castor3d
 						, position
 						, normal
 						, tangent
+						, bitangent
 						, texcoord0
 						, texcoord1
 						, texcoord2
@@ -445,6 +466,7 @@ namespace castor3d
 						, position
 						, normal
 						, tangent
+						, bitangent
 						, texcoord0
 						, texcoord1
 						, texcoord2
@@ -477,6 +499,7 @@ namespace castor3d
 					, modelData.getNormalMtx( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ), curMtxModel ) );
 				c3d_outNormal[index].xyz() = normalize( curMtxNormal * normal.xyz() );
 				c3d_outTangent[index] = vec4( normalize( curMtxNormal * tangent.xyz() ), tangent.w() );
+				c3d_outBitangent[index].xyz() = normalize( curMtxNormal * bitangent.xyz() );
 			} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}

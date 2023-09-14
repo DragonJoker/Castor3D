@@ -52,11 +52,22 @@ namespace castor3d
 				, sdw::Vec3 & uvw3
 				, sdw::Vec3 & col
 				, sdw::Float const & weight )const;
+			C3D_API void morph( sdw::Vec4 & pos
+				, sdw::Vec4 & nml
+				, sdw::Vec4 & tan
+				, sdw::Vec4 & bit
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 & col
+				, sdw::Float const & weight )const;
 
 		public:
 			sdw::Vec4 morphPosition;
 			sdw::Vec4 morphNormal;
 			sdw::Vec4 morphTangent;
+			sdw::Vec4 morphBitangent;
 			sdw::Vec4 morphTexture0;
 			sdw::Vec4 morphTexture1;
 			sdw::Vec4 morphTexture2;
@@ -125,6 +136,17 @@ namespace castor3d
 				, sdw::Vec3 & uvw2
 				, sdw::Vec3 & uvw3
 				, sdw::Vec3 & col )const;
+			C3D_API void morph( sdw::Array< shader::MorphTargetsData > const & targets
+				, sdw::UInt vertexId
+				, sdw::Vec4 & pos
+				, sdw::Vec4 & nml
+				, sdw::Vec4 & tan
+				, sdw::Vec4 & bit
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 & col )const;
 			C3D_API void morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
 				, sdw::UInt vertexId
 				, sdw::Vec4 & pos
@@ -135,11 +157,23 @@ namespace castor3d
 				, sdw::Vec3 & uvw2
 				, sdw::Vec3 & uvw3
 				, sdw::Vec3 & col )const;
+			C3D_API void morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
+				, sdw::UInt vertexId
+				, sdw::Vec4 & pos
+				, sdw::Vec4 & nml
+				, sdw::Vec4 & tan
+				, sdw::Vec4 & bit
+				, sdw::Vec3 & uvw0
+				, sdw::Vec3 & uvw1
+				, sdw::Vec3 & uvw2
+				, sdw::Vec3 & uvw3
+				, sdw::Vec3 & col )const;
 			C3D_API static void morphNoAnim( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
 				, sdw::UInt vertexId
 				, sdw::Vec4 & pos
 				, sdw::Vec4 & nml
 				, sdw::Vec4 & tan
+				, sdw::Vec4 & bit
 				, sdw::Vec3 & uvw0
 				, sdw::Vec3 & uvw1
 				, sdw::Vec3 & uvw2

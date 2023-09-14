@@ -203,6 +203,11 @@ namespace castor3d
 				return pipelineFlags.enableTangentSpace();
 			}
 
+			if ( submeshFlagIndex == getIndex( SubmeshFlag::eBitangents ) )
+			{
+				return pipelineFlags.enableBitangent();
+			}
+
 			if ( submeshFlagIndex == getIndex( SubmeshFlag::eTexcoords0 ) )
 			{
 				return pipelineFlags.enableTexcoord0();
@@ -658,6 +663,9 @@ namespace castor3d
 			auto tanBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
 				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
 				: nullptr;
+			auto bitBuffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eBitangents )
+				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eBitangents )
+				: nullptr;
 			auto tex0Buffer = firstNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
 				? &firstNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )
 				: nullptr;
@@ -691,6 +699,9 @@ namespace castor3d
 				: nullptr ) );
 			CU_Require( tanBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTangents )
 				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTangents )
+				: nullptr ) );
+			CU_Require( bitBuffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eBitangents )
+				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eBitangents )
 				: nullptr ) );
 			CU_Require( tex0Buffer == ( currentNode.getFinalBufferOffsets().hasData( SubmeshFlag::eTexcoords0 )
 				? &currentNode.getFinalBufferOffsets().getBuffer( SubmeshFlag::eTexcoords0 )

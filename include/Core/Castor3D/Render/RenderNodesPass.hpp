@@ -446,7 +446,6 @@ namespace castor3d
 		 *\param[in]	sceneFlags			Scene related flags.
 		 *\param[in]	topology			The render topology.
 		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
-		 *\param[in]	invertNormals		\p true to invert normals.
 		 *\param[in]	passLayerIndex		The material pass layer index.
 		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\~french
@@ -465,7 +464,6 @@ namespace castor3d
 		 *\param[in]	sceneFlags			Les indicateurs relatifs à la scène.
 		 *\param[in]	topology			La topologie de rendu.
 		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
-		 *\param[in]	invertNormals		\p true pour inverser les normales.
 		 *\param[in]	passLayerIndex		L'indice de la couche de la passe de matériau.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
@@ -483,7 +481,6 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
-			, bool invertNormals
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const;
 		/**

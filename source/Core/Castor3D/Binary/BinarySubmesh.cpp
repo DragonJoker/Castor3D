@@ -144,6 +144,13 @@ namespace castor3d
 		}
 
 		if ( result
+			&& obj.hasComponent( BitangentsComponent::Name ) )
+		{
+			auto & values = obj.getComponent< BitangentsComponent >()->getData();
+			result = doWriteChunk( values, ChunkType::eSubmeshBitangents, m_chunk );
+		}
+
+		if ( result
 			&& obj.hasComponent( Texcoords0Component::Name ) )
 		{
 			auto & values = obj.getComponent< Texcoords0Component >()->getData();
@@ -304,6 +311,19 @@ namespace castor3d
 					if ( result )
 					{
 						component->setData( tangents );
+						obj.addComponent( std::move( component ) );
+					}
+				}
+				break;
+			case ChunkType::eSubmeshBitangents:
+				if ( auto component = castor::makeUnique< BitangentsComponent >( obj ) )
+				{
+					result = doParseChunk( values, chunk );
+					checkError( result, "Couldn't parse vertex bitangents." );
+
+					if ( result )
+					{
+						component->setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -485,7 +505,6 @@ namespace castor3d
 			BinaryChunk chunk{ doIsLittleEndian() };
 			uint32_t boneCount{ 0u };
 			std::vector< VertexBoneData > bones;
-			castor::UniquePtr< SkinComponent > bonesComponent;
 
 			while ( result && doGetSubChunk( chunk ) )
 			{
@@ -560,11 +579,6 @@ namespace castor3d
 					faceCount = 0u;
 					break;
 				case ChunkType::eSubmeshBoneCount:
-					if ( !bonesComponent )
-					{
-						bonesComponent = castor::makeUnique< SkinComponent >( obj );
-						obj.addComponent( std::move( bonesComponent ) );
-					}
 					result = doParseChunk( count, chunk );
 					checkError( result, "Couldn't parse bones count." );
 					if ( result )
@@ -578,6 +592,7 @@ namespace castor3d
 					checkError( result, "Couldn't parse bones data." );
 					if ( result && boneCount > 0 )
 					{
+						auto bonesComponent = obj.createComponent< SkinComponent >();
 						bonesComponent->addDatas( bones );
 					}
 					boneCount = 0u;

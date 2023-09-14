@@ -623,7 +623,7 @@ namespace water
 				finalNormal = normalize( finalNormal );
 				output.registerOutput( "Final Normal", finalNormal );
 
-				if ( flags.hasInvertNormals() )
+				if ( flags.isFrontCulled() )
 				{
 					finalNormal = -finalNormal;
 				}

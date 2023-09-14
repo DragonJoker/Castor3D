@@ -148,7 +148,6 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
-			, bool invertNormals
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const = 0;
 		/**
@@ -278,7 +277,6 @@ namespace castor3d
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
-			, bool invertNormals
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const override;
 		/**

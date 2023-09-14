@@ -85,6 +85,8 @@ namespace castor3d
 			case castor3d::ChunkType::eSkeletonAnimationKeyFrameObjectScale:
 			case castor3d::ChunkType::eSubmeshTangentsMikkt:
 			case castor3d::ChunkType::eMorphTargetTangentsMikkt:
+			case castor3d::ChunkType::eSubmeshBitangents:
+			case castor3d::ChunkType::eMorphTargetBitangents:
 #pragma warning( push )
 #pragma warning( disable: 4996 )
 #pragma GCC diagnostic push

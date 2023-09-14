@@ -93,18 +93,14 @@ namespace castor3d
 		C3D_API void computeFacesFromPolygonVertex();
 		/**
 		 *\~english
-		 *\brief		Computes normal and tangent for each vertex of the given face.
+		 *\brief		Computes normal for each vertex of the given face.
 		 *\param[in]	positions	The vertices positions.
-		 *\param[in]	texcoords	The vertices texture coordinates.
 		 *\param[out]	normals		The vertices normals.
-		 *\param[out]	tangents	The vertices tangents.
 		 *\param[in]	reverted	\p true to invert normals.
 		 *\~french
-		 *\brief		Calcule la normale et la tangente pour chaque vertex de la face donnée.
+		 *\brief		Calcule la normale pour chaque vertex de la face donnée.
 		 *\param[in]	positions	Les positions des sommets.
-		 *\param[in]	texcoords	Les coordonnées de texture des sommets.
 		 *\param[out]	normals		Les normales des sommets.
-		 *\param[out]	tangents	Les tangentes des sommets.
 		 *\param[in]	reverted	\p true pour inverser les normales.
 		 */
 		C3D_API void computeNormals( castor::Point3fArray const & positions

@@ -757,16 +757,6 @@ namespace castor3d
 		return VK_COMPARE_OP_ALWAYS;
 	}
 
-	bool Pass::areNormalsInverted()const
-	{
-		if ( auto comp = getComponent< NormalComponent >() )
-		{
-			return comp->areNormalsInverted();
-		}
-
-		return false;
-	}
-
 	bool Pass::hasAlphaBlending()const
 	{
 		return needsAlphaProcessing()
