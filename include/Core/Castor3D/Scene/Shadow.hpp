@@ -28,6 +28,29 @@ namespace castor3d
 		RsmConfig rsmConfig;
 		LpvConfig lpvConfig;
 	};
+
+	inline bool operator==( RsmConfig const & lhs, RsmConfig const & rhs )noexcept
+	{
+		return lhs.intensity == rhs.intensity
+			&& lhs.maxRadius == rhs.maxRadius
+			&& lhs.sampleCount == rhs.sampleCount;
+	}
+
+	inline bool operator==( ShadowConfig const & lhs, ShadowConfig const & rhs )noexcept
+	{
+		return lhs.filterType == rhs.filterType
+			&& lhs.globalIllumination == rhs.globalIllumination
+			&& lhs.volumetricSteps == rhs.volumetricSteps
+			&& lhs.volumetricScattering == rhs.volumetricScattering
+			&& lhs.rawOffsets == rhs.rawOffsets
+			&& lhs.pcfOffsets == rhs.pcfOffsets
+			&& lhs.vsmMinVariance == rhs.vsmMinVariance
+			&& lhs.vsmLightBleedingReduction == rhs.vsmLightBleedingReduction
+			&& lhs.pcfFilterSize == rhs.pcfFilterSize
+			&& lhs.pcfSampleCount == rhs.pcfSampleCount
+			&& lhs.rsmConfig == rhs.rsmConfig
+			&& lhs.lpvConfig == rhs.lpvConfig;
+	}
 }
 
 #endif

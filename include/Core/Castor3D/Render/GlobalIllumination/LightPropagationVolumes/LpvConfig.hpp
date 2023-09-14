@@ -20,6 +20,12 @@ namespace castor3d
 		castor::ChangeTracked< float > indirectAttenuation;
 		castor::ChangeTracked< float > texelAreaModifier;
 	};
+
+	inline bool operator==( LpvConfig const & lhs, LpvConfig const & rhs )noexcept
+	{
+		return lhs.indirectAttenuation == rhs.indirectAttenuation
+			&& lhs.texelAreaModifier == rhs.texelAreaModifier;
+	}
 }
 
 #endif
