@@ -370,10 +370,21 @@ namespace c3d_gltf
 				if ( primitive.materialIndex )
 				{
 					material = engine.tryFindMaterial( file.getMaterialName( uint32_t( *primitive.materialIndex ) ) );
+
+					if ( !material )
+					{
+						CU_LoaderError( "glTF Material not found." );
+					}
 				}
 				else
 				{
 					material = engine.tryFindMaterial( DefaultMaterial );
+
+					if ( !material )
+					{
+						CU_LoaderError( "Default glTF material not found." );
+					}
+
 					material->setSerialisable( true );
 				}
 
