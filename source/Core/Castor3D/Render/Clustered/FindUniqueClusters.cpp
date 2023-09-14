@@ -105,7 +105,7 @@ namespace castor3d
 					, graph
 					, crg::ru::Config{}
 					, crg::cp::Config{}
-						.isEnabled( IsEnabledCallback( [&clusters]() { return clusters.getCamera().getScene()->getLightCache().hasClusteredLights(); } ) )
+						.isEnabled( IsEnabledCallback( [&clusters]() { return clusters.getConfig().parseDepthBuffer && clusters.getCamera().getScene()->getLightCache().hasClusteredLights(); } ) )
 						.groupCountX( uint32_t( std::ceil( float( clusters.getDimensions()->x * clusters.getDimensions()->y * clusters.getDimensions()->z ) / float( NumThreads ) ) ) )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) ) }
 			{

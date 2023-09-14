@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "RenderModule.hpp"
 
 #include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightPropagationVolumesModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizeModule.hpp"
@@ -168,6 +169,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API crg::FramePass const & getLastPass()const;
 		C3D_API SsaoConfig const & getSsaoConfig()const;
+		C3D_API ClustersConfig & getClustersConfig()const;
 		C3D_API SsaoConfig & getSsaoConfig();
 		C3D_API Texture const & getSsaoResult()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;

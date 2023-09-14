@@ -176,16 +176,6 @@ namespace castor3d
 			using ShaderHolder = DataHolderT< ShaderModule >;
 			using CreateInfoHolder = DataHolderT< ashes::PipelineShaderStageCreateInfoArray >;
 
-			void doInitClustersBuffersIndices()const
-			{
-#if C3D_DebugSortLightsMortonCode
-				m_clusters.initPointLightMortonIndicesIO();
-				m_clusters.initSpotLightMortonIndicesIO();
-				m_clusters.swapPointLightMortonIndicesIO();
-				m_clusters.swapSpotLightMortonIndicesIO();
-#endif
-			}
-
 		public:
 			FramePass( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -198,15 +188,14 @@ namespace castor3d
 				, crg::ComputePass{framePass
 					, context
 					, graph
-					, crg::ru::Config{}
+					, crg::ru::Config{ 2u }
 					, config
-						.getPassIndex( GetPassIndexCallback{ [this]() { doInitClustersBuffersIndices(); return 0u; } } )
-						.initialise( InitialiseCallback{ [this]( uint32_t idx ) { doInitClustersBuffersIndices(); } } )
+						.enabled( &clusters.getConfig().sortLights )
+						.getPassIndex( GetPassIndexCallback{ [this]() { return doGetPassIndex(); } } )
 						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( CreateInfoHolder::getData() ) )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
 				, m_clusters{ clusters }
 			{
-				doInitClustersBuffersIndices();
 			}
 
 		private:
@@ -233,10 +222,22 @@ namespace castor3d
 					}
 				}
 
-				doInitClustersBuffersIndices();
+				m_index = 0u;
 			}
 
+			uint32_t doGetPassIndex()const
+			{
+				if ( m_clusters.getConfig().sortLights )
+				{
+					m_index = 1u - m_index;
+				}
+
+				return m_index;
+			}
+
+		private:
 			FrustumClusters & m_clusters;
+			mutable u32 m_index{};
 		};
 	}
 
@@ -272,18 +273,16 @@ namespace castor3d
 		lights.createPassBinding( pass, cmpmrt::eLights );
 		clusters.getClustersUbo().createPassBinding( pass, cmpmrt::eClusters );
 		createInputStoragePassBinding( pass, uint32_t( cmpmrt::eLightsAABB ), "C3D_LightsAABB", clusters.getLightsAABBBuffer(), 0u, ashes::WholeSize );
-#if C3D_DebugSortLightsMortonCode
+
 		clusters.initPointLightMortonIndicesIO();
 		clusters.initSpotLightMortonIndicesIO();
-#endif
-		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::ePointLightMortonCodes ), "C3D_PointLightMortonCodes", clusters.getOutputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::ePointLightMortonCodes ), "C3D_PointLightMortonCodes", clusters.getOutputPointLightMortonCodesBuffers(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::eSpotLightMortonCodes ), "C3D_SpotLightMortonCodes", clusters.getOutputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::ePointLightIndices ), "C3D_PointLightIndices", clusters.getOutputPointLightIndicesBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::eSpotLightIndices ), "C3D_SpotLightIndices", clusters.getOutputSpotLightIndicesBuffer(), 0u, ashes::WholeSize );
-#if C3D_DebugSortLightsMortonCode
+		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::ePointLightIndices ), "C3D_PointLightIndices", clusters.getOutputPointLightIndicesBuffers(), 0u, ashes::WholeSize );
+		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::eSpotLightIndices ), "C3D_SpotLightIndices", clusters.getOutputSpotLightIndicesBuffers(), 0u, ashes::WholeSize );
 		clusters.swapPointLightMortonIndicesIO();
 		clusters.swapSpotLightMortonIndicesIO();
-#endif
+
 		return pass;
 	}
 

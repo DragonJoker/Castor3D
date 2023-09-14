@@ -14,6 +14,8 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderTechnique.hpp>
 #include <Castor3D/Render/RenderTechniquePass.hpp>
+#include <Castor3D/Render/Clustered/ClustersConfig.hpp>
+#include <Castor3D/Render/Clustered/FrustumClusters.hpp>
 #include <Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
@@ -111,6 +113,8 @@ namespace GuiCommon
 			doCreateVctProperties( editor, grid );
 		}
 
+		doCreateClustersProperties( editor, grid );
+
 		for ( auto & renderPass : target.getCustomRenderPasses() )
 		{
 			if ( renderPass->isPassEnabled() )
@@ -149,5 +153,16 @@ namespace GuiCommon
 		addPropertyT( grid, PROPERTY_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
 		addPropertyT( grid, PROPERTY_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
 		addPropertyT( grid, PROPERTY_VCT_VOXEL_SIZE, &vctConfig.voxelSizeFactor );
+	}
+
+	void RenderTargetTreeItemProperty::doCreateClustersProperties( wxPGEditor * editor
+		, wxPropertyGrid * grid )
+	{
+		auto & config = getRenderTarget().getFrustumClusters().getConfig();
+		addProperty( grid, _( "Clusters" ) );
+		addPropertyT( grid, _( "Enable Clustered Lighting" ), &config.enabled );
+		addPropertyT( grid, _( "Use BVH" ), &config.useLightsBVH );
+		addPropertyT( grid, _( "Sort Lights" ), &config.sortLights );
+		addPropertyT( grid, _( "Use Depth Buffer" ), &config.parseDepthBuffer );
 	}
 }
