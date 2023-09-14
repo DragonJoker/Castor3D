@@ -190,6 +190,14 @@
 			"cacheVariables": {
 				"VCPKG_MANIFEST_FEATURES": "assimp;glsl;gltf;vkfft;vcpkg-deps"
 			}
+		},
+		{
+			"name": "ci-vcpkg-osx",
+			"inherits": "ci-vcpkg-base",
+			"cacheVariables": {
+				"VCPKG_MANIFEST_FEATURES": "assimp;glsl;vkfft;vcpkg-deps",
+				"CASTOR_BUILD_IMPORTER_GLTF": false
+			}
 		}
 	]
 }

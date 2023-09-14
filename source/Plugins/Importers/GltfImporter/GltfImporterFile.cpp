@@ -89,15 +89,12 @@ namespace c3d_gltf
 			, size_t instanceCount
 			, bool skeletonNode )
 		{
-			bool carryOn = true;
-
 			for ( auto & nodeIndex : nodes )
 			{
 				if ( parsed.insert( nodeIndex ).second )
 				{
 					fastgltf::Node const & node = allNodes[nodeIndex];
-					auto [curInstanceCount, isOk, isSkel] = func( node, nodeIndex, parentNodeIndex, instanceCount, skeletonNode );
-					carryOn = isOk;
+					auto [curInstanceCount, carryOn, isSkel] = func( node, nodeIndex, parentNodeIndex, instanceCount, skeletonNode );
 
 					if ( carryOn )
 					{
@@ -875,8 +872,7 @@ namespace c3d_gltf
 			{
 				for ( auto & meshData : nodeData.meshes )
 				{
-					if ( nodeData.instanceCount <= 1u
-						|| ( nodeData.instanceCount > 1u && nodeData.instance != 0u ) )
+					if ( nodeData.instanceCount <= 1u || nodeData.instance != 0u )
 					{
 						auto it = std::find_if( m_sceneData.meshes.begin()
 							, m_sceneData.meshes.end()
