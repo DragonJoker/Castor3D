@@ -240,7 +240,7 @@ namespace c3d_gltf
 		static NodeAnimationChannelSampler findNodeAnim( AnimationChannelSamplers const & animChannels
 			, size_t nodeIndex )
 		{
-			NodeAnimationChannelSampler result;
+			NodeAnimationChannelSampler result{};
 
 			for ( auto & itPath : animChannels )
 			{
@@ -325,7 +325,7 @@ namespace c3d_gltf
 			, castor::String const & name
 			, uint32_t submeshIndex )
 		{
-			size_t result;
+			size_t result{};
 			size_t meshIndex = file.getMeshIndex( name, submeshIndex );
 			auto it = std::find_if( channelSamplers.begin()
 				, channelSamplers.end()
@@ -349,7 +349,7 @@ namespace c3d_gltf
 
 			if ( it == channelSamplers.end() )
 			{
-				CU_Failure( "Couldn't find node index for animated submesh in animation channels" );
+				CU_LoaderError( "Couldn't find node index for animated submesh in animation channels" );
 			}
 
 			return result;
