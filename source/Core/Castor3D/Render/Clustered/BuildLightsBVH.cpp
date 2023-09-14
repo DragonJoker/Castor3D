@@ -431,7 +431,6 @@ namespace castor3d
 						result = ( ( numChunks - 1u ) % 2u );
 					}
 
-					result <<= 1u;
 					result += 1u;
 				}
 
