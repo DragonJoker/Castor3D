@@ -1750,7 +1750,7 @@ namespace castor3d
 			, bool first )
 		{
 			auto srcLayout = ( first
-				? VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL
+				? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
 			auto srcStage = VkPipelineStageFlags( first
 				? VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT
