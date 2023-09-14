@@ -53,8 +53,14 @@
     "gltf": {
       "description": "Use fastgltf library to import glTF scenes.",
       "dependencies": [
-        "fastgltf",
-        "simdjson"
+        {
+          "name": "fastgltf",
+          "platform": "!osx"
+        },
+        {
+          "name": "simdjson",
+          "platform": "!osx"
+        }
       ]
     },
     "vkfft": {
