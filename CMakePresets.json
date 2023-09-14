@@ -24,7 +24,8 @@
 				"CASTOR_USE_TASK_SHADERS": false,
 				"PROJECTS_OUTPUT_DIR": "${sourceDir}",
 				"PROJECTS_UNITY_BUILD": true,
-				"PROJECTS_USE_PRECOMPILED_HEADERS": false
+				"PROJECTS_USE_PRECOMPILED_HEADERS": false,
+				"CMAKE_TOOLCHAIN_FILE": "${sourceDir}/external/vcpkg/scripts/buildsystems/vcpkg.cmake"
 			}
 		},
 		{
@@ -37,6 +38,9 @@
 				"type": "equals",
 				"lhs": "${hostSystemName}",
 				"rhs": "Windows"
+			},
+			"cacheVariables": {
+				"VCPKG_MANIFEST_FEATURES": "assimp;freeimage;glsl;gltf;vkfft;tools"
 			}
 		},
 		{
@@ -44,7 +48,13 @@
 			"displayName": "Castor3D User Ninja Config",
 			"description": "Build configuration using Ninja, for Castor3D users",
 			"inherits": "user-base",
-			"generator": "Ninja"
+			"generator": "Ninja",
+			"cacheVariables": {
+				"VCPKG_MANIFEST_FEATURES": "freeimage;glsl;gltf;vkfft;tools",
+				"CASTOR_USE_SYSTEM_ASSIMP": true,
+				"CASTOR_USE_SYSTEM_WXWIDGETS": true,
+				"CMAKE_BUILD_TYPE": "Release"
+			}
 		},
 		{
 			"name": "dev-base",
