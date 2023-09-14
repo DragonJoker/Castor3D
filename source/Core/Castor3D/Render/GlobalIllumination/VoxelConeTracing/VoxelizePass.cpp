@@ -178,6 +178,7 @@ namespace castor3d
 	SubmeshFlags VoxelizePass::doAdjustSubmeshFlags( SubmeshFlags flags )const
 	{
 		remFlag( flags, SubmeshFlag::eTangents );
+		remFlag( flags, SubmeshFlag::eBitangents );
 		return flags;
 	}
 

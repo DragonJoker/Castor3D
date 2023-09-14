@@ -21,6 +21,7 @@ namespace castor3d
 				auto size = uint32_t( std::max( { it.positions.size()
 					, it.normals.size()
 					, it.tangents.size()
+					, it.bitangents.size()
 					, it.texcoords0.size()
 					, it.texcoords1.size()
 					, it.texcoords2.size()
@@ -45,6 +46,12 @@ namespace castor3d
 				&& !it.tangents.empty() )
 			{
 				result = doWriteChunk( it.tangents, ChunkType::eMorphTargetTangentsMikkt, m_chunk );
+			}
+
+			if ( result
+				&& !it.bitangents.empty() )
+			{
+				result = doWriteChunk( it.bitangents, ChunkType::eMorphTargetBitangents, m_chunk );
 			}
 
 			if ( result
@@ -151,6 +158,16 @@ namespace castor3d
 					{
 						buffer.tangents = tangents;
 					}
+				}
+				break;
+			case ChunkType::eMorphTargetBitangents:
+				flags.insert( MorphFlag::eBitangents );
+				result = doParseChunk( values, chunk );
+				checkError( result, "Couldn't parse keyframe bitangents." );
+
+				if ( result )
+				{
+					buffer.bitangents = values;
 				}
 				break;
 			case ChunkType::eMorphTargetTexcoords0:

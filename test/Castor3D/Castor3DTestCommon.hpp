@@ -336,6 +336,7 @@ namespace Testing
 				{ castor3d::SubmeshFlag::ePositions, "ePositions" },
 				{ castor3d::SubmeshFlag::eNormals, "eNormals" },
 				{ castor3d::SubmeshFlag::eTangents, "eTangents" },
+				{ castor3d::SubmeshFlag::eBitangents, "eBitangents" },
 				{ castor3d::SubmeshFlag::eTexcoords0, "eTexcoords0" },
 				{ castor3d::SubmeshFlag::eTexcoords1, "eTexcoords1" },
 				{ castor3d::SubmeshFlag::eTexcoords2, "eTexcoords2" },
@@ -357,6 +358,7 @@ namespace Testing
 				{ castor3d::MorphFlag::ePositions, "ePositions" },
 				{ castor3d::MorphFlag::eNormals, "eNormals" },
 				{ castor3d::MorphFlag::eTangents, "eTangents" },
+				{ castor3d::MorphFlag::eBitangents, "eBitangents" },
 				{ castor3d::MorphFlag::eTexcoords0, "eTexcoords0" },
 				{ castor3d::MorphFlag::eTexcoords1, "eTexcoords1" },
 				{ castor3d::MorphFlag::eTexcoords2, "eTexcoords2" },
@@ -408,7 +410,6 @@ namespace Testing
 				{ castor3d::ProgramFlag::eInstantiation, "eInstantiation" },
 				{ castor3d::ProgramFlag::eBillboards, "eBillboards" },
 				{ castor3d::ProgramFlag::eFrontCulled, "eFrontCulled" },
-				{ castor3d::ProgramFlag::eInvertNormals, "eInvertNormals" },
 				{ castor3d::ProgramFlag::eHasMesh, "eHasMesh" },
 				{ castor3d::ProgramFlag::eHasTask, "eHasTask" },
 			};
@@ -638,6 +639,15 @@ namespace Testing
 		static std::string get( castor3d::TangentsComponent const & value )
 		{
 			return std::string{ "castor3d::TangentsComponent" };
+		}
+	};
+
+	template<>
+	struct Stringifier< castor3d::BitangentsComponent >
+	{
+		static std::string get( castor3d::BitangentsComponent const & value )
+		{
+			return std::string{ "castor3d::BitangentsComponent" };
 		}
 	};
 
@@ -887,6 +897,7 @@ namespace Testing
 		bool compare( castor3d::PositionsComponent const & lhs, castor3d::PositionsComponent const & rhs );
 		bool compare( castor3d::NormalsComponent const & lhs, castor3d::NormalsComponent const & rhs );
 		bool compare( castor3d::TangentsComponent const & lhs, castor3d::TangentsComponent const & rhs );
+		bool compare( castor3d::BitangentsComponent const & lhs, castor3d::BitangentsComponent const & rhs );
 		bool compare( castor3d::Texcoords0Component const & lhs, castor3d::Texcoords0Component const & rhs );
 		bool compare( castor3d::Texcoords1Component const & lhs, castor3d::Texcoords1Component const & rhs );
 		bool compare( castor3d::Texcoords2Component const & lhs, castor3d::Texcoords2Component const & rhs );

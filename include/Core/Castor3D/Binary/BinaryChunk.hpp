@@ -211,6 +211,8 @@ namespace castor3d
 		// Tangents are now computed using Mikktspace.
 		eSubmeshTangentsMikkt = makeChunkID( 'S', 'M', 'S', 'M', 'K', 'T', 'A', 'N' ),
 		eMorphTargetTangentsMikkt = makeChunkID( 'S', 'M', 'S', 'M', 'K', 'M', 'T', 'A' ),
+		eSubmeshBitangents = makeChunkID( 'S', 'M', 'S', 'M', 'K', 'B', 'I', 'T' ),
+		eMorphTargetBitangents = makeChunkID( 'S', 'M', 'S', 'M', 'K', 'M', 'B', 'I' ),
 	};
 	/**
 	 *\~english

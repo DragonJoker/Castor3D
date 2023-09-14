@@ -44,10 +44,10 @@ namespace castor3d
 		C3D_API virtual uint32_t getComponentsCount()const = 0;
 		/**
 		 *\~english
-		 *\brief		Generates normals and tangents.
+		 *\brief		Generates normals.
 		 *\param[in]	reverted	Tells if normals are inverted.
 		 *\~french
-		 *\brief		Génère les normales et les tangentes.
+		 *\brief		Génère les normales.
 		 *\param[in]	reverted	Dit si les normales sont inversées.
 		 */
 		C3D_API virtual void computeNormals( bool reverted = false ) = 0;

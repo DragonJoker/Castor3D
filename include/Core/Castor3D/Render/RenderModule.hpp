@@ -181,6 +181,7 @@ namespace castor3d
 		ePosition,
 		eNormal,
 		eTangent,
+		eBitangent,
 		eTexcoord0,
 		eTexcoord1,
 		eTexcoord2,

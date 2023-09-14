@@ -729,6 +729,11 @@ namespace castor3d::exporter
 								dstSubmesh->addComponent( tangents->clone( *dstSubmesh ) );
 							}
 
+							if ( auto bitangents = srcSubmesh->getComponent< castor3d::BitangentsComponent >() )
+							{
+								dstSubmesh->addComponent( bitangents->clone( *dstSubmesh ) );
+							}
+
 							if ( auto texcoords = srcSubmesh->getComponent< castor3d::Texcoords0Component >() )
 							{
 								dstSubmesh->addComponent( texcoords->clone( *dstSubmesh ) );

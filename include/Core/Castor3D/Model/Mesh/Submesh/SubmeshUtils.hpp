@@ -33,19 +33,15 @@ namespace castor3d
 			, TriFaceMapping & triFace );
 		/**
 		 *\~english
-		 *\brief		Generates normals and tangents.
+		 *\brief		Generates normals.
 		 *\param[in]	positions	The vertices positions.
-		 *\param[in]	texcoords	The vertices texture coordinates.
 		 *\param[out]	normals		The vertices normals.
-		 *\param[out]	tangents	The vertices tangents.
 		 *\param[in]	triFace		The triangles.
 		 *\param[in]	reverted	Tells if the normals must be inverted.
 		 *\~french
-		 *\brief		Génère les normales et les tangentes.
+		 *\brief		Génère les normales.
 		 *\param[in]	positions	Les positions des sommets.
-		 *\param[in]	texcoords	Les coordonnées de texture des sommets.
 		 *\param[out]	normals		Les normales des sommets.
-		 *\param[out]	tangents	Les tangentes des sommets.
 		 *\param[in]	triFace		Les triangles.
 		 *\param[in]	reverted	Dit si les normales doivent être inversées.
 		 */

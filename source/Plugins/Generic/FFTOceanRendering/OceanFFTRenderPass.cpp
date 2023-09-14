@@ -597,6 +597,7 @@ namespace ocean_fft
 	{
 		remFlag( flags, castor3d::SubmeshFlag::eNormals );
 		remFlag( flags, castor3d::SubmeshFlag::eTangents );
+		remFlag( flags, castor3d::SubmeshFlag::eBitangents );
 		remFlag( flags, castor3d::SubmeshFlag::eTexcoords );
 		return flags;
 	}
@@ -1146,7 +1147,7 @@ namespace ocean_fft
 				finalNormal.xz() -= noiseGradient;
 				finalNormal = normalize( finalNormal );
 
-				if ( flags.hasInvertNormals() )
+				if ( flags.isFrontCulled() )
 				{
 					finalNormal = -finalNormal;
 				}

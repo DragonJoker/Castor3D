@@ -16,6 +16,7 @@ namespace castor3d
 			, morphPosition{ this->getMember< sdw::Vec4 >( "morphPosition", true ) }
 			, morphNormal{ this->getMember< sdw::Vec4 >( "morphNormal", true ) }
 			, morphTangent{ this->getMember< sdw::Vec4 >( "morphTangent", true ) }
+			, morphBitangent{ this->getMember< sdw::Vec4 >( "morphBitangent", true ) }
 			, morphTexture0{ this->getMember< sdw::Vec4 >( "morphTexcoord0", true ) }
 			, morphTexture1{ this->getMember< sdw::Vec4 >( "morphTexcoord1", true ) }
 			, morphTexture2{ this->getMember< sdw::Vec4 >( "morphTexcoord2", true ) }
@@ -41,6 +42,9 @@ namespace castor3d
 				result->declMember( "morphTangent", ast::type::Kind::eVec4F
 					, ast::type::NotArray
 					, checkFlag( morphFlags, MorphFlag::eTangents ) );
+				result->declMember( "morphBitangent", ast::type::Kind::eVec4F
+					, ast::type::NotArray
+					, checkFlag( morphFlags, MorphFlag::eBitangents ) );
 				result->declMember( "morphTexcoord0", ast::type::Kind::eVec4F
 					, ast::type::NotArray
 					, checkFlag( morphFlags, MorphFlag::eTexcoords0 ) );
@@ -130,6 +134,34 @@ namespace castor3d
 				, col
 				, weight );
 			tan.xyz() += morphTangent.xyz() * weight;
+		}
+
+		void MorphTargetData::morph( sdw::Vec4 & pos
+			, sdw::Vec4 & nml
+			, sdw::Vec4 & tan
+			, sdw::Vec4 & bit
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col
+			, sdw::Float const & weight )const
+		{
+			if ( !isEnabled() )
+			{
+				return;
+			}
+
+			morph( pos
+				, nml
+				, tan
+				, uvw0
+				, uvw1
+				, uvw2
+				, uvw3
+				, col
+				, weight );
+			bit.xyz() += morphBitangent.xyz() * weight;
 		}
 
 		//*****************************************************************************************
@@ -315,6 +347,51 @@ namespace castor3d
 			ROF;
 		}
 
+		void MorphingWeightsData::morph( sdw::Array< shader::MorphTargetsData > const & targets
+			, sdw::UInt vertexId
+			, sdw::Vec4 & pos
+			, sdw::Vec4 & nml
+			, sdw::Vec4 & tan
+			, sdw::Vec4 & bit
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const
+		{
+			if ( !targets.isEnabled() )
+			{
+				return;
+			}
+
+			auto & writer = *targets.getWriter();
+			auto morphTargets = writer.declLocale( "morphTargets"
+				, targets[vertexId] );
+			auto morphWeight = writer.declLocale( "morphWeight"
+				, 0.0_f );
+			auto morphIndex = writer.declLocale( "morphIndex"
+				, 0_u );
+
+			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			{
+				morphWeight = weight( mphIndex );
+				morphIndex = index( mphIndex );
+				auto target = writer.declLocale( "morphTarget"
+					, morphTargets[morphIndex] );
+				target.morph( pos
+					, nml
+					, tan
+					, bit
+					, uvw0
+					, uvw1
+					, uvw2
+					, uvw3
+					, col
+					, morphWeight );
+			}
+			ROF;
+		}
+
 		void MorphingWeightsData::morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
 			, sdw::UInt vertexId
 			, sdw::Vec4 & pos
@@ -358,11 +435,57 @@ namespace castor3d
 			ROF;
 		}
 
+		void MorphingWeightsData::morph( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
+			, sdw::UInt vertexId
+			, sdw::Vec4 & pos
+			, sdw::Vec4 & nml
+			, sdw::Vec4 & tan
+			, sdw::Vec4 & bit
+			, sdw::Vec3 & uvw0
+			, sdw::Vec3 & uvw1
+			, sdw::Vec3 & uvw2
+			, sdw::Vec3 & uvw3
+			, sdw::Vec3 & col )const
+		{
+			if ( !targets.isEnabled() )
+			{
+				return;
+			}
+
+			auto & writer = *getWriter();
+			auto morphTargets = writer.declLocale( "morphTargets"
+				, targets[vertexId] );
+			auto morphWeight = writer.declLocale( "morphWeight"
+				, 0.0_f );
+			auto morphIndex = writer.declLocale( "morphIndex"
+				, 0_u );
+
+			FOR( writer, sdw::UInt, mphIndex, 0_u, mphIndex < morphTargetsCount, ++mphIndex )
+			{
+				morphWeight = weight( mphIndex );
+				morphIndex = index( mphIndex );
+				auto target = writer.declLocale( "morphTarget"
+					, morphTargets[morphIndex] );
+				target.morph( pos
+					, nml
+					, tan
+					, bit
+					, uvw0
+					, uvw1
+					, uvw2
+					, uvw3
+					, col
+					, morphWeight );
+			}
+			ROF;
+		}
+
 		void MorphingWeightsData::morphNoAnim( sdw::ArrayStorageBufferT< shader::MorphTargetsData > const & targets
 			, sdw::UInt vertexId
 			, sdw::Vec4 & pos
 			, sdw::Vec4 & nml
 			, sdw::Vec4 & tan
+			, sdw::Vec4 & bit
 			, sdw::Vec3 & uvw0
 			, sdw::Vec3 & uvw1
 			, sdw::Vec3 & uvw2
@@ -388,6 +511,7 @@ namespace castor3d
 			target.morph( pos
 				, nml
 				, tan
+				, bit
 				, uvw0
 				, uvw1
 				, uvw2

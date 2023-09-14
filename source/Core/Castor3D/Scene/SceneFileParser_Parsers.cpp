@@ -249,6 +249,11 @@ namespace castor3d
 				result |= MorphFlag::eTangents;
 			}
 
+			if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+			{
+				result |= MorphFlag::eBitangents;
+			}
+
 			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
 			{
 				result |= MorphFlag::eTexcoords0;
@@ -3473,6 +3478,17 @@ namespace castor3d
 						}
 					}
 
+					if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+					{
+						buffer.bitangents = morphSubmesh->getBitangents();
+						uint32_t index = 0u;
+
+						for ( auto & bitangent : buffer.bitangents )
+						{
+							bitangent -= submesh->getBitangents()[index++];
+						}
+					}
+
 					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
 					{
 						buffer.texcoords0 = morphSubmesh->getTexcoords0();
@@ -3865,11 +3881,12 @@ namespace castor3d
 		}
 		else if ( !params.empty() )
 		{
-			castor::Point3f value;
+			castor::Point4f value;
 			params[0]->get( value );
 			parsingContext.vertexTan.push_back( value[0] );
 			parsingContext.vertexTan.push_back( value[1] );
 			parsingContext.vertexTan.push_back( value[2] );
+			parsingContext.vertexTan.push_back( value[3] );
 		}
 	}
 	CU_EndAttribute()
@@ -3996,12 +4013,12 @@ namespace castor3d
 
 			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
 			{
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
-				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
-				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
-				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
+				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
+				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
+				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
 				parsingContext.vertexTex[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
 				parsingContext.vertexTex[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
 				parsingContext.vertexTex[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
@@ -4079,30 +4096,36 @@ namespace castor3d
 
 			auto arrayValues = castor::string::split( strParams, cuT( " " ), 20 );
 
-			if ( arrayValues.size() >= 9 && parsingContext.face1 != -1 )
+			if ( arrayValues.size() >= 12 && parsingContext.face1 != -1 )
 			{
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[0] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[1] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[2] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[3] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[4] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[5] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[6] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[7] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[8] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
+				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face1 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 3] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 4] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 5] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
+				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face1 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
+				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face1 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
 			}
 
-			if ( arrayValues.size() >= 12 && parsingContext.face2 != -1 )
+			if ( arrayValues.size() >= 16 && parsingContext.face2 != -1 )
 			{
 				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 0] );
 				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 1] );
 				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 2] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 6] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 7] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
-				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
-				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[10] );
-				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[11] );
+				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face2 + 0 )] * 3] = castor::string::toFloat( arrayValues[ 3] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 8] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[ 9] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[10] );
+				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face2 + 1 )] * 3] = castor::string::toFloat( arrayValues[11] );
+				parsingContext.vertexTan[0 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[12] );
+				parsingContext.vertexTan[1 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[13] );
+				parsingContext.vertexTan[2 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[14] );
+				parsingContext.vertexTan[3 + parsingContext.faces[size_t( parsingContext.face2 + 2 )] * 3] = castor::string::toFloat( arrayValues[15] );
 			}
 		}
 	}

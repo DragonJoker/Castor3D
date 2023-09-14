@@ -185,6 +185,7 @@ namespace castor3d
 		C3D_API bool enablePosition()const;
 		C3D_API bool enableNormal()const;
 		C3D_API bool enableTangentSpace()const;
+		C3D_API bool enableBitangent()const;
 		C3D_API bool enableColours()const;
 		C3D_API bool enablePassMasks()const;
 		C3D_API bool enableTexcoord0()const;
@@ -324,11 +325,6 @@ namespace castor3d
 		bool isFrontCulled()const
 		{
 			return checkFlag( m_programFlags, ProgramFlag::eFrontCulled );
-		}
-
-		bool hasInvertNormals()const
-		{
-			return checkFlag( m_programFlags, ProgramFlag::eInvertNormals );
 		}
 
 		bool usesMesh()const

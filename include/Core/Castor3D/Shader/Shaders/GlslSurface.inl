@@ -19,6 +19,7 @@ namespace castor3d::shader
 		, position{ this->getMember< sdw::Vec4 >( "position", true ) }
 		, normal{ this->getMember< sdw::Vec3 >( "normal", true ) }
 		, tangent{ this->getMember< sdw::Vec4 >( "tangent", true ) }
+		, bitangent{ this->getMember< sdw::Vec3 >( "bitangent", true ) }
 		, texture0{ this->getMember< sdw::Vec3 >( "texture0", true ) }
 		, texture1{ this->getMember< sdw::Vec3 >( "texture1", true ) }
 		, texture2{ this->getMember< sdw::Vec3 >( "texture2", true ) }
@@ -60,6 +61,10 @@ namespace castor3d::shader
 				, ast::type::NotArray
 				, ( flags.enableTangentSpace() ? index++ : 0 )
 				, flags.enableTangentSpace() );
+			result->declMember( "bitangent", ast::type::Kind::eVec3F
+				, ast::type::NotArray
+				, ( flags.enableBitangent() ? index++ : 0 )
+				, flags.enableBitangent() );
 			result->declMember( "texture0", ast::type::Kind::eVec3F
 				, ast::type::NotArray
 				, ( flags.enableTexcoord0() ? index++ : 0 )
@@ -124,6 +129,8 @@ namespace castor3d::shader
 			result->declMember( "normal", ast::type::Kind::eVec3F
 				, ast::type::NotArray );
 			result->declMember( "tangent", ast::type::Kind::eVec4F
+				, ast::type::NotArray );
+			result->declMember( "bitangent", ast::type::Kind::eVec3F
 				, ast::type::NotArray );
 			result->declMember( "texture0", ast::type::Kind::eVec3F
 				, ast::type::NotArray );

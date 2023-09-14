@@ -134,6 +134,13 @@ namespace castor3d
 	class TriFaceMapping;
 	/**
 	\~english
+	\brief		The submesh component holding bitangents.
+	\~french
+	\brief		Le composant de sous-maillage contenant les bitangentes.
+	*/
+	using BitangentsComponent = BaseDataComponentT< SubmeshFlag::eBitangents >;
+	/**
+	\~english
 	\brief		The submesh component holding normals.
 	\~french
 	\brief		Le composant de sous-maillage contenant les normales.
@@ -150,7 +157,7 @@ namespace castor3d
 	\~english
 	\brief		The submesh component holding tangents.
 	\~french
-	\brief		Le composant de sous-maillage contenant les tangents.
+	\brief		Le composant de sous-maillage contenant les tangentes.
 	*/
 	using TangentsComponent = BaseDataComponentT< SubmeshFlag::eTangents, castor::Point4f >;
 	/**

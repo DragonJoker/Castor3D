@@ -11,10 +11,8 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	struct NormalComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >
+		: public PassComponent
 	{
-		static constexpr PassFlag eInvertNormals = PassFlag( 0x01u );
-
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
@@ -53,9 +51,6 @@ namespace castor3d
 				return castor::makeUniqueDerived< PassComponent, NormalComponent >( pass );
 			}
 
-			void createParsers( castor::AttributeParsers & parsers
-				, ChannelFillers & channelFillers )const override;
-
 			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override
 			{
@@ -82,30 +77,13 @@ namespace castor3d
 
 		C3D_API PassComponentFlag getPassFlags()const override
 		{
-			return makePassComponentFlag( getId()
-				, ( areNormalsInverted()
-					? eInvertNormals
-					: PassFlag::eNone ) );
-		}
-
-		bool areNormalsInverted()const override
-		{
-			return getData();
-		}
-
-		void setNormalsInverted( bool v )
-		{
-			setData( v );
+			return makePassComponentFlag( getId(), PassFlag::eNone );
 		}
 
 		C3D_API static castor::String const TypeName;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
 	};
 }
 

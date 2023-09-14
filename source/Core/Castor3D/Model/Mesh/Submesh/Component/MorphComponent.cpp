@@ -72,6 +72,11 @@ namespace castor3d
 			++m_targetDataCount;
 		}
 
+		if ( checkFlag( m_flags, MorphFlag::eBitangents ) )
+		{
+			++m_targetDataCount;
+		}
+
 		if ( checkFlag( m_flags, MorphFlag::eTexcoords0 ) )
 		{
 			++m_targetDataCount;
@@ -175,6 +180,14 @@ namespace castor3d
 				{
 					tanIt += index;
 					*bufIt = castor::Point4f{ *tanIt };
+					++bufIt;
+				}
+
+				if ( auto binIt = target.bitangents.begin();
+					binIt != target.bitangents.end() )
+				{
+					binIt += index;
+					*bufIt = castor::Point4f{ *binIt };
 					++bufIt;
 				}
 

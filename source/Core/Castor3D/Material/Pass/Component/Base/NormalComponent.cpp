@@ -14,55 +14,8 @@
 
 CU_ImplementSmartPtr( castor3d, NormalComponent )
 
-namespace castor
-{
-	template<>
-	class TextWriter< castor3d::NormalComponent >
-		: public TextWriterT< castor3d::NormalComponent >
-	{
-	public:
-		explicit TextWriter( String const & tabs )
-			: TextWriterT< castor3d::NormalComponent >{ tabs }
-		{
-		}
-
-		bool operator()( castor3d::NormalComponent const & object
-			, StringStream & file )override
-		{
-			return writeOpt( file, cuT( "invert_normals" ), object.areNormalsInverted() );
-		}
-	};
-}
-
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	namespace normal
-	{
-		static CU_ImplementAttributeParser( parserPassInvertNormals )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.pass )
-			{
-				CU_ParsingError( cuT( "No Pass initialised." ) );
-			}
-			else if ( params.empty() )
-			{
-				CU_ParsingError( cuT( "Missing parameter." ) );
-			}
-			else
-			{
-				bool value{ false };
-				params[0]->get( value );
-				auto & component = getPassComponent< NormalComponent >( parsingContext );
-				component.setNormalsInverted( value );
-			}
-		}
-		CU_EndAttribute()
-	}
-
 	//*********************************************************************************************
 
 	void NormalComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
@@ -125,43 +78,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void NormalComponent::Plugin::createParsers( castor::AttributeParsers & parsers
-		, ChannelFillers & channelFillers )const
-	{
-		castor::addParserT( parsers
-			, CSCNSection::ePass
-			, cuT( "invert_normals" )
-			, normal::parserPassInvertNormals
-			, { castor::makeDefaultedParameter< castor::ParameterType::eBool >( true ) } );
-	}
-
-	//*********************************************************************************************
-
 	castor::String const NormalComponent::TypeName = C3D_MakePassBaseComponentName( "normal" );
 
 	NormalComponent::NormalComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
+		: PassComponent{ pass, TypeName }
 	{
 	}
 
 	void NormalComponent::accept( PassVisitorBase & vis )
 	{
-		vis.visit( cuT( "Invert Normals" ), m_value );
 	}
 
 	PassComponentUPtr NormalComponent::doClone( Pass & pass )const
 	{
 		auto result = castor::makeUnique< NormalComponent >( pass );
-		result->setData( getData() );
 		return castor::ptrRefCast< PassComponent >( result );
-	}
-
-	bool NormalComponent::doWriteText( castor::String const & tabs
-		, castor::Path const & folder
-		, castor::String const & subfolder
-		, castor::StringStream & file )const
-	{
-		return castor::TextWriter< NormalComponent >{ tabs }( *this, file );
 	}
 
 	//*********************************************************************************************

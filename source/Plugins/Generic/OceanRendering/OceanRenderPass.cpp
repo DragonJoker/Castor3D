@@ -973,7 +973,7 @@ namespace ocean
 				out.texture0 = texcoord;
 				out.nodeId = nodeId;
 				out.normal = normalize( mtxNormal * finalWaveResult.normal );
-				out.tangent = vec4( normalize( mtxNormal * finalWaveResult.tangent ) , 0.0_f );
+				out.tangent = vec4( normalize( mtxNormal * finalWaveResult.tangent ), 1.0_f );
 				out.bitangent = normalize( mtxNormal * finalWaveResult.bitangent );
 				out.worldPosition = mtxModel * vec4( finalWaveResult.position, 1.0_f );
 				out.viewPosition = c3d_cameraData.worldToCurView( out.worldPosition );
@@ -1099,7 +1099,7 @@ namespace ocean
 				auto normal = writer.declLocale( "normal"
 					, normalize( in.normal ) );
 				auto tangent = writer.declLocale( "tangent"
-					, normalize( in.tangent ) );
+					, normalize( in.tangent.xyz() ) );
 				auto bitangent = writer.declLocale( "bitangent"
 					, normalize( in.bitangent ) );
 
@@ -1122,7 +1122,7 @@ namespace ocean
 				finalNormal = normalize( finalNormal );
 				output.registerOutput( "FinalNormal", finalNormal );
 
-				if ( flags.hasInvertNormals() )
+				if ( flags.isFrontCulled() )
 				{
 					finalNormal = -finalNormal;
 				}

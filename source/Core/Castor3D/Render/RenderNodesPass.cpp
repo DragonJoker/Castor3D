@@ -306,7 +306,6 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
-		, bool invertNormals
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
@@ -330,13 +329,7 @@ namespace castor3d
 
 		if ( isFrontCulled )
 		{
-			invertNormals = !invertNormals;
 			addFlag( result.m_programFlags, ProgramFlag::eFrontCulled );
-		}
-
-		if ( invertNormals )
-		{
-			addFlag( result.m_programFlags, ProgramFlag::eInvertNormals );
 		}
 
 		doUpdateFlags( result );
@@ -374,7 +367,6 @@ namespace castor3d
 			, sceneFlags
 			, topology
 			, isFrontCulled
-			, pass.areNormalsInverted()
 			, pass.getIndex()
 			, morphTargets );
 	}
@@ -1794,6 +1786,10 @@ namespace castor3d
 			, sdw::Vec4
 			, MeshBuffersIdx::eTangent
 			, flags.enableTangentSpace() );
+		DeclareSsbo( c3d_bitangent
+			, sdw::Vec4
+			, MeshBuffersIdx::eBitangent
+			, flags.enableTangentSpace() );
 		DeclareSsbo( c3d_texcoord0
 			, sdw::Vec4
 			, MeshBuffersIdx::eTexcoord0
@@ -1874,6 +1870,8 @@ namespace castor3d
 					, c3d_normal[vertexIndex].xyz() );
 				auto curTangent = writer.declLocale( "curTangent"
 					, c3d_tangent[vertexIndex] );
+				auto curBitangent = writer.declLocale( "curBitangent"
+					, c3d_bitangent[vertexIndex].xyz() );
 				vtxOut[i].texture0 = c3d_texcoord0[vertexIndex].xyz();
 				vtxOut[i].texture1 = c3d_texcoord1[vertexIndex].xyz();
 				vtxOut[i].texture2 = c3d_texcoord2[vertexIndex].xyz();
@@ -1912,7 +1910,8 @@ namespace castor3d
 						, c3d_cameraData.position()
 						, worldPos.xyz()
 						, curNormal
-						, curTangent );
+						, curTangent
+						, curBitangent );
 				}
 				else
 				{
@@ -1928,7 +1927,8 @@ namespace castor3d
 						, worldPos.xyz()
 						, mtxNormal
 						, curNormal
-						, curTangent );
+						, curTangent
+						, curBitangent );
 				}
 
 				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );
@@ -2038,6 +2038,8 @@ namespace castor3d
 					, in.normal );
 				auto curTangent = writer.declLocale( "curTangent"
 					, in.tangent );
+				auto curBitangent = writer.declLocale( "curBitangent"
+					, in.bitangent );
 				out.texture0 = in.texture0;
 				out.texture1 = in.texture1;
 				out.texture2 = in.texture2;
@@ -2066,7 +2068,8 @@ namespace castor3d
 						, c3d_cameraData.position()
 						, worldPos.xyz()
 						, curNormal
-						, curTangent );
+						, curTangent
+						, curBitangent );
 				}
 				else
 				{
@@ -2082,7 +2085,8 @@ namespace castor3d
 						, worldPos.xyz()
 						, mtxNormal
 						, curNormal
-						, curTangent );
+						, curTangent
+						, curBitangent );
 				}
 
 				auto worldPos = writer.getVariable< sdw::Vec4 >( "worldPos" );

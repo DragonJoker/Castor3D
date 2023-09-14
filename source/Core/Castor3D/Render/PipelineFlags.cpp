@@ -27,6 +27,7 @@ namespace castor3d
 			case castor3d::SubmeshFlag::eNormals:
 				return checkFlag( shaderFlags, ShaderFlag::eNormal );
 			case castor3d::SubmeshFlag::eTangents:
+			case castor3d::SubmeshFlag::eBitangents:
 				return checkFlag( shaderFlags, ShaderFlag::eTangent );
 			case castor3d::SubmeshFlag::eVelocity:
 				return checkFlag( shaderFlags, ShaderFlag::eVelocity );
@@ -266,6 +267,11 @@ namespace castor3d
 	bool PipelineFlags::enableTangentSpace()const
 	{
 		return enableVertexInput( SubmeshFlag::eTangents );
+	}
+
+	bool PipelineFlags::enableBitangent()const
+	{
+		return enableVertexInput( SubmeshFlag::eBitangents );
 	}
 
 	bool PipelineFlags::enableColours()const
