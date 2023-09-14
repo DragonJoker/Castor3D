@@ -78,7 +78,8 @@ namespace castor3d
 
 			bool isPassEnabled()const override
 			{
-				return hasNodes()
+				return m_parent->getClustersConfig().parseDepthBuffer
+					&& hasNodes()
 					&& getScene().getLightCache().hasClusteredLights();
 			}
 

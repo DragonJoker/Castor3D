@@ -196,7 +196,7 @@ namespace castor3d
 	*	Clustered rendering.
 	*/
 	//@{
-	static uint32_t constexpr MaxLightsPerCluster = 2'048u;
+	static uint32_t constexpr MaxLightsPerCluster = 1'024u;
 	//@}
 }
 

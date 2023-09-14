@@ -223,6 +223,38 @@ namespace castor3d
 						// to reduce to a single element. If there was only a single thread group
 						// in this dispatch, then this will reduce to a single element.
 						logStepReduction( groupIndex, groupID );
+
+//						IF( writer, groupIndex == 0_u )
+//						{
+//							auto lightsMin = writer.declLocale( "lightsMin", gsAABBMin[groupIndex] );
+//							auto lightsMax = writer.declLocale( "lightsMax", gsAABBMax[groupIndex] );
+//							auto nearZ = writer.declLocale( "nearZ", c3d_cameraData.nearPlane() );
+//							auto farZ = writer.declLocale( "farZ", c3d_cameraData.farPlane() );
+//
+//#if imCLUSTERED_INTERSECT_AABBS
+//							lightsMin.z() = max( c3d_cameraData.nearPlane(), lightsMin.z() );
+//
+//							lightsMax.z() = min( max( lightsMin.z() + 0.00001, lightsMax.z() ), c3d_cameraData.farPlane() );
+//#	if !imCLUSTERED_CLUSTERGRID_TRUNCATE
+//							lightsMax.z() = max( lightsMax.z(), 10000.0f );
+//#	endif
+//
+//							nearZ = lightsMin.z();
+//							farZ = lightsMax.z();
+//#else
+//#endif
+//							auto multiply = writer.declLocale( "multiply"
+//								, writer.cast< sdw::Float >( c3d_clustersData.dimensions().z() ) / sdw::log( farZ / nearZ ) );
+//							auto add = writer.declLocale( "add"
+//								, multiply * sdw::log( nearZ ) );
+//
+//							imBufferStore( bufReducedLightsAABB, imCLUSTERS_REDLIGHTSAABB_CLUSTERSDATA, vec4( nearZ, farZ, multiply, add ) );
+//
+//							auto aabbRange = writer.declLocale( "aabbRange", vec3( 1.0_f ) / vec3( ( lightsMax - lightsMin ).xyz() ) );
+//							imBufferStore( bufReducedLightsAABB, imCLUSTERS_REDLIGHTSAABB_AABBRANGE
+//								, vec4( aabbRange, writer.cast< sdw::Float >( c3d_clustersData.dimensions().z() ) ) );
+//						}
+//						FI;
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

@@ -1,13 +1,13 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_FrustumClusters_H___
 #define ___C3D_FrustumClusters_H___
 
-#include "ClusteredModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
 #include "Castor3D/Buffer/GpuBufferOffset.hpp"
+#include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Shader/Ubos/ClustersUbo.hpp"
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
@@ -189,6 +189,18 @@ namespace castor3d
 			return getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput );
 		}
 
+		std::vector< ashes::BufferBase const * > getOutputPointLightIndicesBuffers()const noexcept
+		{
+			return { &getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput )
+				, &getPointLightIndicesBuffer( m_pointLightMortonIndicesInput ) };
+		}
+
+		std::vector< ashes::BufferBase const * > getOutputSpotLightIndicesBuffers()const noexcept
+		{
+			return { &getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput )
+				, &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput ) };
+		}
+
 		ashes::BufferBase & getOutputPointLightIndicesBuffer()const noexcept
 		{
 			return getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput );
@@ -207,6 +219,18 @@ namespace castor3d
 		ashes::BufferBase & getInputSpotLightMortonCodesBuffer()const noexcept
 		{
 			return getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput );
+		}
+
+		std::vector< ashes::BufferBase const * > getOutputPointLightMortonCodesBuffers()const noexcept
+		{
+			return { &getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput )
+				, &getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput ) };
+		}
+
+		std::vector< ashes::BufferBase const * > getOutputSpotLightMortonCodesBuffers()const noexcept
+		{
+			return { &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput )
+				, &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput ) };
 		}
 
 		ashes::BufferBase & getOutputPointLightMortonCodesBuffer()const noexcept
@@ -244,6 +268,16 @@ namespace castor3d
 			return m_camera;
 		}
 
+		auto & getConfig()const noexcept
+		{
+			return m_config;
+		}
+
+		auto & getConfig()noexcept
+		{
+			return m_config;
+		}
+
 		OnClustersBuffersChanged onClusterBuffersChanged;
 
 	private:
@@ -271,6 +305,7 @@ namespace castor3d
 		castor::GroupChangeTracked< float > m_nearK;
 		ClustersUbo m_clustersUbo;
 		ashes::BufferPtr< VkDispatchIndirectCommand > m_clustersIndirect;
+		ClustersConfig m_config;
 
 		// Fixed size buffers, related to lights
 		ashes::BufferPtr< AABB > m_lightsAABBBuffer;

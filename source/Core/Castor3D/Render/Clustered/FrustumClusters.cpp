@@ -63,14 +63,11 @@ namespace castor3d
 		, m_cameraView{ m_clustersDirty, {} }
 		, m_nearK{ m_clustersDirty, 0.0f }
 		, m_clustersUbo{ m_device }
-#if C3D_DebugUseDepthClusteredSamples
 		, m_clustersIndirect{ makeBuffer< VkDispatchIndirectCommand >( m_device
 			, getNumNodes( MaxLightsCount )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_ClustersIndirect" ) }
-#endif
-#if C3D_DebugUseLightsBVH
 		, m_lightsAABBBuffer{ makeBuffer< AABB >( m_device
 			, MaxLightsCount
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -126,10 +123,7 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_SpotLightBVH" ) }
-#endif
 	{
-#if C3D_DebugUseLightsBVH
-#	if C3D_DebugSortLightsMortonCode
 		static uint32_t constexpr NumThreadsPerThreadGroup = 256u;
 		static uint32_t constexpr ElementsPerThread = 8u;
 
@@ -159,8 +153,6 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_MergePathPartitions" );
-#	endif
-#endif
 
 		doUpdate();
 	}
@@ -196,27 +188,21 @@ namespace castor3d
 	{
 		auto & graph = parentGraph.createPassGroup( "Clusters" );
 		crg::FramePassArray lastPasses{ 1u, previousPass };
-#if C3D_DebugUseDepthClusteredSamples
 		lastPasses = { &createClustersMaskPass( graph, *lastPasses.front()
 			, m_device, cameraUbo, *this
 			, technique, nodesPass ) };
 		lastPasses = { &createFindUniqueClustersPass( graph, *lastPasses.front()
 			, m_device, cameraUbo, *this ) };
-#endif
 		lastPasses = { &createComputeClustersAABBPass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this ) };
-#if C3D_DebugUseLightsBVH
 		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this ) };
 		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this ) };
-#	if C3D_DebugSortLightsMortonCode
 		lastPasses = createSortLightsMortonCodePass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this );
-#	endif
 		lastPasses = { &createBuildLightsBVHPass( graph, lastPasses
 			, m_device, cameraUbo, *this ) };
-#endif
 		return createAssignLightsToClustersPass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this );
 	}
@@ -311,10 +297,8 @@ namespace castor3d
 			frscls::updateBuffer< castor::Point2ui >( m_device, cellCount, "SpotLightClusterGrid", m_spotLightClusterGridBuffer, m_toDelete );
 			frscls::updateBuffer< u32 >( m_device, indexCount, "PointLightClusterIndex", m_pointLightClusterIndexBuffer, m_toDelete );
 			frscls::updateBuffer< u32 >( m_device, indexCount, "SpotLightClusterIndex", m_spotLightClusterIndexBuffer, m_toDelete );
-#if C3D_DebugUseDepthClusteredSamples
 			frscls::updateBuffer< u32 >( m_device, cellCount, "ClusterFlags", m_clusterFlags, m_toDelete );
 			frscls::updateBuffer< u32 >( m_device, cellCount, "UniqueClusters", m_uniqueClusters, m_toDelete );
-#endif
 			onClusterBuffersChanged( *this );
 		}
 	}

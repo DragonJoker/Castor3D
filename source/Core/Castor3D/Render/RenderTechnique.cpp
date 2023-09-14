@@ -760,6 +760,11 @@ namespace castor3d
 		return m_renderTarget.getSsaoConfig();
 	}
 
+	ClustersConfig & RenderTechnique::getClustersConfig()const
+	{
+		return m_renderTarget.getFrustumClusters().getConfig();
+	}
+
 	Texture const & RenderTechnique::getSsaoResult()const
 	{
 		return m_opaque.getSsaoResult();

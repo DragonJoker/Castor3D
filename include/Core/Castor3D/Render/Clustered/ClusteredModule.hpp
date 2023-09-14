@@ -27,6 +27,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Clusters configuration.
+	*\~french
+	*\brief
+	*	Configuration des clusters.
+	*/
+	struct ClustersConfig;
+	/**
+	*\~english
+	*\brief
 	*	The buffer containing the clusters.
 	*\~french
 	*\brief

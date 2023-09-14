@@ -52,9 +52,9 @@ namespace GuiCommon
 		 */
 		void doCreateProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid )override;
-		void doCreateSsaoProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
 		void doCreateVctProperties( wxPGEditor * editor
+			, wxPropertyGrid * grid );
+		void doCreateClustersProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid );
 
 	private:
