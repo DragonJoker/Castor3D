@@ -26,7 +26,6 @@ namespace castor3d
 	{
 		auto & base = *reinterpret_cast< LightData * >( data->ptr() );
 		base.colour = getColour();
-		base.radius = getFarPlane();
 
 		base.intensity = getIntensity();
 		base.shadowMapIndex = float( m_light.getShadowMapIndex() );

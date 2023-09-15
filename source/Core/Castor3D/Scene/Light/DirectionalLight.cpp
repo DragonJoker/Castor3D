@@ -232,5 +232,6 @@ namespace castor3d
 		auto & directional = *reinterpret_cast< LightData * >( data->ptr() );
 		directional.cascadeCount = float( m_cascades.size() );
 		directional.posDir = m_direction;
+		directional.range = getFarPlane();
 	}
 }

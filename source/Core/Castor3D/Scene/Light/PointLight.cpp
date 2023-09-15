@@ -125,8 +125,9 @@ namespace castor3d
 	void PointLight::update()
 	{
 		PointLight::generateVertices();
-		m_cubeBox.load( castor::Point3f{ -m_range, -m_range, -m_range }
-			, castor::Point3f{ m_range, m_range, m_range } );
+		auto range = computeRange( getIntensity(), m_range.value() );
+		m_cubeBox.load( castor::Point3f{ -range, -range, -range }
+			, castor::Point3f{ range, range, range } );
 		m_farPlane = m_range;
 	}
 
@@ -155,18 +156,26 @@ namespace castor3d
 		auto position = getLight().getParent()->getDerivedPosition();
 
 		point.posDir = position;
-		point.radius = m_range;
+		point.range = m_range.value();
 	}
 
 	void PointLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		m_range = getMaxDistance( *this, attenuation );
-		getLight().markDirty();
+
+		if ( m_dirtyData )
+		{
+			getLight().markDirty();
+		}
 	}
 
 	void PointLight::setRange( float value )
 	{
 		m_range = value;
-		getLight().markDirty();
+
+		if ( m_dirtyData )
+		{
+			getLight().markDirty();
+		}
 	}
 }

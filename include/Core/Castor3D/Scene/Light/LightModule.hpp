@@ -271,6 +271,9 @@ namespace castor3d
 		, castor::Point3f const & attenuation
 		, float max );
 
+	C3D_API float computeRange( castor::Point2f const & intensity
+		, float range );
+
 	//@}
 	//@}
 }

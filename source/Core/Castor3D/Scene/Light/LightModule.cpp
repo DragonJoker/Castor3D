@@ -98,4 +98,12 @@ namespace castor3d
 	{
 		return std::min( max, getMaxDistance( light, attenuation ) );
 	}
+
+	float computeRange( castor::Point2f const & intensity
+		, float range )
+	{
+		return range <= 0.0f
+			? sqrt( std::max( intensity->x, intensity->y ) ) / 0.00001f
+			: range;
+	}
 }

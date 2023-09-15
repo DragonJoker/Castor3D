@@ -323,15 +323,15 @@ namespace castor3d::shader
 							, m_shadowModel.getPointShadows( light.shadowMapIndex() ) );
 						doApplyShadows( shadows
 							, light.shadowMapIndex()
-							, light.radius()
+							, computeRange( light )
 							, lightSurface
 							, radiance
 							, receivesShadows
 							, output );
 					}
 
-					auto attenuation = m_writer.declLocale( "attenuation"
-						, light.getAttenuationFactor( lightSurface.lengthL() ) );
+					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
+					light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
 					doAttenuate( attenuation, output );
 					parentOutput.diffuse += max( vec3( 0.0_f ), output.diffuse );
 					parentOutput.specular += max( vec3( 0.0_f ), output.specular );
@@ -396,8 +396,8 @@ namespace castor3d::shader
 						output.scattering = spotFactor * output.scattering;
 						output.coatingSpecular = spotFactor * output.coatingSpecular;
 						output.sheen.x() = spotFactor * output.sheen.x();
-						auto attenuation = m_writer.declLocale( "attenuation"
-							, light.getAttenuationFactor( lightSurface.lengthL() ) );
+						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
+						light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
 
 						if ( m_shadowModel.isEnabled() )
 						{
@@ -424,7 +424,7 @@ namespace castor3d::shader
 
 							doApplyShadows( shadows
 								, light.shadowMapIndex()
-								, light.radius()
+								, computeRange( light )
 								, lightSurface
 								, radiance
 								, receivesShadows
@@ -530,15 +530,15 @@ namespace castor3d::shader
 							, m_shadowModel.getPointShadows( light.shadowMapIndex() ) );
 						doApplyShadowsDiffuse( shadows
 							, light.shadowMapIndex()
-							, light.radius()
+							, computeRange( light )
 							, lightSurface
 							, radiance
 							, receivesShadows
 							, diffuse );
 					}
 
-					auto attenuation = m_writer.declLocale( "attenuation"
-						, light.getAttenuationFactor( lightSurface.lengthL() ) );
+					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
+					light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
 					diffuse *= attenuation;
 					m_writer.returnStmt( max( vec3( 0.0_f ), diffuse ) );
 				}
@@ -590,15 +590,15 @@ namespace castor3d::shader
 								, m_shadowModel.getSpotShadows( light.shadowMapIndex() ) );
 							doApplyShadowsDiffuse( shadows
 								, light.shadowMapIndex()
-								, light.radius()
+								, computeRange( light )
 								, lightSurface
 								, radiance
 								, receivesShadows
 								, diffuse );
 						}
 
-						auto attenuation = m_writer.declLocale( "attenuation"
-							, light.getAttenuationFactor( lightSurface.lengthL() ) );
+						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
+						light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
 						diffuse *= attenuation;
 						diffuse = max( vec3( 0.0_f ), diffuse );
 					}

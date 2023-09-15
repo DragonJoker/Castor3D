@@ -24,26 +24,53 @@ namespace castor3d::shader
 {
 	//*********************************************************************************************
 
-	sdw::Float PointLight::getAttenuationFactor( sdw::Float const & distance )const
+	namespace lights
 	{
-		auto & writer = *distance.getWriter();
-		auto sqDistance = writer.declLocale( "sqDistance", distance * distance );
-		auto distOverRange = writer.declLocale( "distOverRange", distance / radius() );
-		auto sqDistOverRange = writer.declLocale( "sqDistOverRange", distOverRange * distOverRange );
-		auto qdDistOverRange = writer.declLocale( "qdDistOverRange", sqDistOverRange * sqDistOverRange );
-		return sdw::max( sdw::min( 1.0_f - qdDistOverRange, 1.0_f ), 0.0_f ) / sqDistance;
+		void computeAttenuationFactor( sdw::Float const & distance
+			, sdw::Float const & range
+			, sdw::Float & attenuation )
+		{
+			auto & writer = *distance.getWriter();
+			auto sqDistance = writer.declLocale( "sqDistance", distance * distance );
+
+			IF( writer, range <= 0.0_f )
+			{
+				attenuation = 1.0_f / sqDistance;
+			}
+			ELSE
+			{
+				auto distOverRange = writer.declLocale( "distOverRange", distance / range );
+				auto sqDistOverRange = writer.declLocale( "sqDistOverRange", distOverRange * distOverRange );
+				auto qdDistOverRange = writer.declLocale( "qdDistOverRange", sqDistOverRange * sqDistOverRange );
+				attenuation = sdw::max( sdw::min( 1.0_f - qdDistOverRange, 1.0_f ), 0.0_f ) / sqDistance;
+			}
+			FI;
+		}
 	}
 
 	//*********************************************************************************************
 
-	sdw::Float SpotLight::getAttenuationFactor( sdw::Float const & distance )const
+	void PointLight::getAttenuationFactor( sdw::Float const & distance
+		, sdw::Float & attenuation )const
 	{
-		auto & writer = *distance.getWriter();
-		auto sqDistance = writer.declLocale( "sqDistance", distance * distance );
-		auto distOverRange = writer.declLocale( "distOverRange", distance / radius() );
-		auto sqDistOverRange = writer.declLocale( "sqDistOverRange", distOverRange * distOverRange );
-		auto qdDistOverRange = writer.declLocale( "qdDistOverRange", sqDistOverRange * sqDistOverRange );
-		return sdw::max( sdw::min( 1.0_f - qdDistOverRange, 1.0_f ), 0.0_f ) / sqDistance;
+		lights::computeAttenuationFactor( distance, range(), attenuation );
+	}
+
+	//*********************************************************************************************
+
+	void SpotLight::getAttenuationFactor( sdw::Float const & distance
+		, sdw::Float & attenuation )const
+	{
+		lights::computeAttenuationFactor( distance, range(), attenuation );
+	}
+
+	//*********************************************************************************************
+
+	sdw::Float computeRange( Light const & light )
+	{
+		return light.getWriter()->ternary( light.range() <= 0.0_f
+			, sqrt( max( light.intensity().x(), light.intensity().y() ) / 0.00001_f )
+			, light.range() );
 	}
 
 	//*********************************************************************************************
@@ -157,7 +184,7 @@ namespace castor3d::shader
 	{
 		lightData = getLightData( offset );
 		light.colour() = lightData.xyz();
-		light.radius() = lightData.w();
+		light.range() = lightData.w();
 
 		lightData = getLightData( offset );
 		light.intensity() = lightData.xy();
