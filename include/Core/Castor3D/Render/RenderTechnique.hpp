@@ -169,7 +169,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API crg::FramePass const & getLastPass()const;
 		C3D_API SsaoConfig const & getSsaoConfig()const;
-		C3D_API ClustersConfig & getClustersConfig()const;
+		C3D_API ClustersConfig * getClustersConfig()const;
 		C3D_API SsaoConfig & getSsaoConfig();
 		C3D_API Texture const & getSsaoResult()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;

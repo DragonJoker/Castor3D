@@ -268,6 +268,7 @@ namespace castor3d
 		shader::ClusteredLights clusteredLights{ writer
 			, index
 			, RenderPipeline::eBuffers
+			, getClustersConfig()
 			, m_allowClusteredLighting };
 		auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene"
 			, index++

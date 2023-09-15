@@ -61,7 +61,8 @@ namespace castor3d
 				, first };
 			C3D_Clusters( writer
 				, eClusters
-				, 0u );
+				, 0u
+				, &config );
 			C3D_ReducedLightsAABB( writer
 				, eReducedLightsAABB
 				, 0u );

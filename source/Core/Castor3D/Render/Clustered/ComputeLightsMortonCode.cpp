@@ -55,7 +55,7 @@ namespace castor3d
 		// to produce the final morton code.
 		static float constexpr coordinateScale = float( ( 1u << kBitMortonCode ) - 1u ); // This is equivalent to 2^k-1 which results in a value that when scaled by 1 will produce a number that is exactly k bits.
 
-		static ShaderPtr createShader()
+		static ShaderPtr createShader( ClustersConfig const & config )
 		{
 			sdw::ComputeWriter writer;
 
@@ -68,7 +68,8 @@ namespace castor3d
 				, 0u };
 			C3D_Clusters( writer
 				, eClusters
-				, 0u );
+				, 0u
+				, &config );
 			C3D_ReducedLightsAABB( writer
 				, eReducedLightsAABB
 				, 0u );
@@ -181,7 +182,7 @@ namespace castor3d
 				, RenderDevice const & device
 				, FrustumClusters & clusters
 				, crg::cp::Config config )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeLightsMortonCode", createShader() } }
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeLightsMortonCode", createShader( clusters.getConfig() ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, crg::ComputePass{framePass
 					, context

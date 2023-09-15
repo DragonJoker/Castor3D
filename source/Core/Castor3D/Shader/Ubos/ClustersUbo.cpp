@@ -2,6 +2,7 @@
 
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -134,16 +135,28 @@ namespace castor3d
 						, sdw::Vec4 clustersLightsData
 						, sdw::Vec4 lightsAABBRange )
 					{
-#if 0
-						lightsMin.z() = max( nearPlane, lightsMin.z() );
-						lightsMax.z() = min( max( lightsMin.z() + 0.00001_f, lightsMax.z() ), farPlane );
+						if ( m_config && m_config->limitClustersToLightsAABB )
+						{
+							// Right handed means Z will be negative, hence minZ and maxZ are inverted.
+							auto nearZ = writer.declLocale( "nearZ"
+								, -lightsMax.z() );
+							auto farZ = writer.declLocale( "farZ"
+								, -lightsMin.z() );
+							nearZ = max( nearPlane, nearZ );
+							farZ = min( max( nearZ + 0.00001_f, farZ ), farPlane );
+							lightsMax.z() = -nearZ;
+							lightsMin.z() = -farZ;
+						}
+						else
+						{
+							auto nearZ = writer.declLocale( "nearZ"
+								, nearPlane );
+							auto farZ = writer.declLocale( "farZ"
+								, farPlane );
+						}
 
-						auto nearZ = lightsMin.z();
-						auto farZ = lightsMax.z();
-#else
-						auto nearZ = nearPlane;
-						auto farZ = farPlane;
-#endif
+						auto nearZ = writer.getVariable < sdw::Float >( "nearZ" );
+						auto farZ = writer.getVariable < sdw::Float >( "farZ" );
 						auto multiply = writer.declLocale( "multiply"
 							, writer.cast< sdw::Float >( dimensions().z() ) / sdw::log( farZ / nearZ ) );
 						auto add = writer.declLocale( "add"
@@ -162,7 +175,7 @@ namespace castor3d
 
 			return m_computeGlobalLightsData( plightsMin, plightsMax
 				, pnearPlane, pfarPlane
-				, pclustersLightsData , plightsAABBRange );
+				, pclustersLightsData, plightsAABBRange );
 		}
 	}
 

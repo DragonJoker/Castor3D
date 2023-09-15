@@ -118,6 +118,11 @@ namespace castor3d
 			return m_ssao && m_ssaoConfig && m_ssaoConfig->enabled;
 		}
 
+		ClustersConfig const * getClustersConfig()const override
+		{
+			return m_clustersConfig;
+		}
+
 		static constexpr bool useCompute{ false };
 
 	private:
@@ -189,6 +194,7 @@ namespace castor3d
 		PipelineContainer m_billboardPipelines;
 		SubmeshPipelinesMap m_activePipelines;
 		BillboardPipelinesMap m_activeBillboardPipelines;
+		ClustersConfig const * m_clustersConfig{};
 	};
 }
 

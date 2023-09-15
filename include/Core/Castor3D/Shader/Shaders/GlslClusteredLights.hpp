@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslClusteredLights_H___
 #define ___C3D_GlslClusteredLights_H___
 
-#include "SdwModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -15,10 +16,19 @@ namespace castor3d::shader
 	class ClusteredLights
 	{
 	public:
-		C3D_API explicit ClusteredLights( sdw::ShaderWriter & writer
+		C3D_API ClusteredLights( sdw::ShaderWriter & writer
 			, uint32_t & binding
 			, uint32_t set
-			, bool enabled = true );
+			, ClustersConfig const * config
+			, bool enabled );
+
+		ClusteredLights( sdw::ShaderWriter & writer
+			, uint32_t & binding
+			, uint32_t set
+			, ClustersConfig const * config )
+			: ClusteredLights{ writer, binding, set, config, true }
+		{
+		}
 
 		C3D_API void computeCombinedDifSpec( Lights & lights
 			, LightingModel & lightingModel
@@ -112,13 +122,13 @@ namespace castor3d::shader
 
 #define C3D_ReducedLightsAABBEx( writer, binding, set, enabled ) \
 	auto reducedLightsAABBBuffer = writer.declStorageBuffer( "c3d_reducedLightsAABBBuffer" \
-		, uint32_t( binding ) \
+		, ( enabled ? uint32_t( binding ) : 0u ) \
 		, set \
 		, sdw::type::MemoryLayout::eStd430 \
 		, enabled ); \
 	auto c3d_clustersLightsData = reducedLightsAABBBuffer.declMember< sdw::Vec4 >( "c3d_clustersLightsData", enabled ); \
 	auto c3d_lightsAABBRange = reducedLightsAABBBuffer.declMember< sdw::Vec4 >( "c3d_lightsAABBRange", enabled ); \
-	auto c3d_reducedLightsAABB = reducedLightsAABBBuffer.declMemberArray< shader::AABB >( "cb", enabled ); \
+	auto c3d_reducedLightsAABB = reducedLightsAABBBuffer.declMemberArray< shader::AABB >( "rb", enabled ); \
 	reducedLightsAABBBuffer.end()
 
 #define C3D_ReducedLightsAABB( writer, binding, set ) \

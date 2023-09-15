@@ -172,7 +172,7 @@ namespace castor3d
 		, m_index{ desc.m_index }
 		, m_handleStatic{ desc.m_handleStatic }
 		, m_componentsMask{ desc.m_componentModeFlags }
-		, m_allowClusteredLighting{ desc.m_allowClusteredLighting && ( C3D_UseClusteredRendering != 0 ) }
+		, m_allowClusteredLighting{ desc.m_allowClusteredLighting }
 	{
 	}
 
@@ -1034,6 +1034,11 @@ namespace castor3d
 				|| ( filtersNonStatic() && node.isStatic() ) );
 	}
 
+	bool RenderNodesPass::allowClusteredLighting( ClustersConfig const & config )const
+	{
+		return m_allowClusteredLighting && config.enabled;
+	}
+
 	bool RenderNodesPass::hasNodes()const
 	{
 		return m_renderQueue->hasNodes();
@@ -1260,9 +1265,10 @@ namespace castor3d
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
 		, uint32_t & index )const
 	{
-		if ( m_allowClusteredLighting )
+		if (target.getFrustumClusters()
+			&& allowClusteredLighting( target.getFrustumClusters()->getConfig() ) )
 		{
-			addClusteredLightingBindings( target.getFrustumClusters()
+			addClusteredLightingBindings( *target.getFrustumClusters()
 				, bindings
 				, index );
 		}
@@ -1306,9 +1312,10 @@ namespace castor3d
 		, ashes::WriteDescriptorSetArray & descriptorWrites
 		, uint32_t & index )const
 	{
-		if ( m_allowClusteredLighting )
+		if ( target.getFrustumClusters()
+			&& allowClusteredLighting( target.getFrustumClusters()->getConfig() ) )
 		{
-			addClusteredLightingDescriptor( target.getFrustumClusters()
+			addClusteredLightingDescriptor( *target.getFrustumClusters()
 				, descriptorWrites
 				, index );
 		}

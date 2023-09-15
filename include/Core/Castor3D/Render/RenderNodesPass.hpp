@@ -740,6 +740,7 @@ namespace castor3d
 		C3D_API bool isValidPass( Pass const & pass )const;
 		C3D_API bool isValidRenderable( RenderedObject const & object )const;
 		C3D_API bool isValidNode( SceneNode const & node )const;
+		C3D_API bool allowClusteredLighting( ClustersConfig const & config )const;
 		C3D_API bool hasNodes()const;
 		C3D_API Scene & getScene()const;
 		C3D_API SceneNode const * getIgnoredNode()const;

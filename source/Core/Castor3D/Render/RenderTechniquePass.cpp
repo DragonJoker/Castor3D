@@ -154,6 +154,7 @@ namespace castor3d
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
 		, m_indirectLighting{ techniquePassDesc.m_indirectLighting }
+		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
 	{
 	}
 

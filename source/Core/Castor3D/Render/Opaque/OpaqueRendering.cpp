@@ -243,7 +243,8 @@ namespace castor3d
 					.allowClusteredLighting();
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				techniquePassDesc.ssao( m_ssao->getResult() )
-					.indirect( getOwner()->getIndirectLighting() );
+					.indirect( getOwner()->getIndirectLighting() )
+					.clustersConfig( getOwner()->getClustersConfig() );
 
 				if ( !VisibilityResolvePass::useCompute )
 				{
@@ -263,7 +264,7 @@ namespace castor3d
 					, targetDepth
 					, m_visibilityPipelinesIds.get()
 					, std::move( renderPassDesc )
-					, RenderTechniquePassDesc{ false, getOwner()->getSsaoConfig() } );
+					, std::move( techniquePassDesc ) );
 				m_opaquePass = res.get();
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
@@ -322,7 +323,8 @@ namespace castor3d
 					.allowClusteredLighting()
 					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags );
 				techniquePassDesc.ssao( m_ssao->getResult() )
-					.indirect( getOwner()->getIndirectLighting() );
+					.indirect( getOwner()->getIndirectLighting() )
+					.clustersConfig( getOwner()->getClustersConfig() );
 				auto res = std::make_unique< ForwardRenderTechniquePass >( getOwner()
 					, framePass
 					, context

@@ -252,6 +252,7 @@ namespace ocean_fft
 						, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 							.ssao( technique.getSsaoResult() )
 							.indirect( technique.getIndirectLighting() )
+							.clustersConfig( technique.getClustersConfig() )
 						, castor3d::IsRenderPassEnabledUPtr( isEnabled ) );
 					renderPasses[size_t( OceanRenderPass::Event )].push_back( res.get() );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
@@ -1072,7 +1073,7 @@ namespace ocean_fft
 		shader::ClusteredLights clusteredLights{ writer
 			, index
 			, RenderPipeline::eBuffers
-			, m_allowClusteredLighting };
+			, getClustersConfig() };
 
 		// Fragment Outputs
 		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );

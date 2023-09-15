@@ -31,7 +31,7 @@ namespace castor3d
 			eClustersAABB,
 		};
 
-		static ShaderPtr createShader()
+		static ShaderPtr createShader( ClustersConfig const & config )
 		{
 			using namespace sdw;
 			ComputeWriter writer;
@@ -42,7 +42,8 @@ namespace castor3d
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
-				, 0u );
+				, 0u
+				, &config );
 			C3D_ReducedLightsAABB( writer
 				, eReducedLightsAABB
 				, 0u );
@@ -150,8 +151,9 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
-				, crg::cp::Config config )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeClustersAABB", createShader() } }
+				, crg::cp::Config config
+				, ClustersConfig const & clustersConfig )
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeClustersAABB", createShader( clustersConfig ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, crg::ComputePass{framePass
 					, context
@@ -211,7 +213,8 @@ namespace castor3d
 						.groupCountX( clusters.getDimensions()->x )
 						.groupCountY( clusters.getDimensions()->y )
 						.groupCountZ( clusters.getDimensions()->z )
-						.enabled( &clusters.needsClustersUpdate() ) );
+						.enabled( &clusters.needsClustersUpdate() )
+					, clusters.getConfig() );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;

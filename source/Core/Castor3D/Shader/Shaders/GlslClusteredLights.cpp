@@ -1,5 +1,6 @@
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 
+#include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -16,14 +17,16 @@ namespace castor3d::shader
 	ClusteredLights::ClusteredLights( sdw::ShaderWriter & writer
 		, uint32_t & binding
 		, uint32_t set
+		, ClustersConfig const * config
 		, bool enabled )
 		: m_writer{ writer }
-		, m_enabled{ enabled }
+		, m_enabled{ enabled && config && config->enabled }
 	{
 		C3D_ClustersEx( writer
 			, binding++
 			, set
-			, m_enabled );
+			, m_enabled
+			, config );
 		C3D_ReducedLightsAABBEx( writer
 			, binding++
 			, set
