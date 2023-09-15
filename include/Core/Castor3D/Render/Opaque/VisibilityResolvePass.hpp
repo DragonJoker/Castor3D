@@ -169,7 +169,6 @@ namespace castor3d
 		ShaderBuffer * m_pipelinesIds;
 		CameraUbo const & m_cameraUbo;
 		SceneUbo const & m_sceneUbo;
-		bool m_allowClusteredLighting;
 		crg::ImageViewIdArray m_targetImage;
 		crg::ImageViewIdArray m_targetDepth;
 		Texture const * m_ssao{};
