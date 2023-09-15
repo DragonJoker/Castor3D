@@ -14,7 +14,7 @@ namespace castor3d
 
 	namespace shader
 	{
-		C3D_API sdw::RetU32Vec3 ClustersData::computeClusterIndex3D( sdw::UInt32 const pindex )
+		sdw::RetU32Vec3 ClustersData::computeClusterIndex3D( sdw::UInt32 const pindex )
 		{
 			if ( !m_computeClusterIndex3DIdx )
 			{
@@ -37,35 +37,38 @@ namespace castor3d
 			return m_computeClusterIndex3DIdx( pindex );
 		}
 
-		C3D_API sdw::RetU32Vec3 ClustersData::computeClusterIndex3D( sdw::Vec2 const pscreenPos
-			, sdw::Float pviewZ )
+		sdw::RetU32Vec3 ClustersData::computeClusterIndex3D( sdw::Vec2 const pscreenPos
+			, sdw::Float pviewZ
+			, sdw::Vec4 const pclustersLightsData )
 		{
 			if ( !m_computeClusterIndex3DPos )
 			{
 				auto & writer = *getWriter();
 				m_computeClusterIndex3DPos = writer.implementFunction< sdw::U32Vec3 >( "c3d_computeClusterIndex3DPos"
 					, [&]( sdw::Vec2 const screenPos
-						, sdw::Float viewZ )
+						, sdw::Float viewZ
+						, sdw::Vec4 const clustersLightsData )
 					{
 						auto i = writer.declLocale( "i"
 							, screenPos.x() / writer.cast< sdw::Float >( clusterSize().x() ) );
 						auto j = writer.declLocale( "j"
 							, screenPos.y() / writer.cast< sdw::Float >( clusterSize().y() ) );
-						// It is assumed that view space z is negative (right-handed coordinate system)
-						// so the view-space z coordinate needs to be negated to make it positive.
 						auto k = writer.declLocale( "k"
-							, sdw::log( -viewZ / viewNear() ) * logGridDimY() );
+							, floor( sdw::log( -viewZ ) * clustersLightsData.z() - clustersLightsData.w() ) );
 
 						writer.returnStmt( u32vec3( i, j, k ) );
 					}
 					, sdw::InVec2{ writer, "screenPos" }
-					, sdw::InFloat{ writer, "viewZ" } );
+					, sdw::InFloat{ writer, "viewZ" }
+					, sdw::InVec4{ writer, "clustersLightsData" } );
 			}
 
-			return m_computeClusterIndex3DPos( pscreenPos, pviewZ );
+			return m_computeClusterIndex3DPos( pscreenPos
+				, pviewZ
+				, pclustersLightsData );
 		}
 
-		C3D_API sdw::RetUInt32 ClustersData::computeClusterIndex1D( sdw::U32Vec3 const pclusterIndex3D )
+		sdw::RetUInt32 ClustersData::computeClusterIndex1D( sdw::U32Vec3 const pclusterIndex3D )
 		{
 			if ( !m_computeClusterIndex1D )
 			{
@@ -79,6 +82,87 @@ namespace castor3d
 			}
 
 			return m_computeClusterIndex1D( pclusterIndex3D );
+		}
+
+		sdw::RetVec2 ClustersData::getClusterDepthBounds( sdw::U32Vec3 const pclusterIndex3D
+			, sdw::Vec4 const pclustersLightsData
+			, sdw::Vec4 const plightsAABBRange )
+		{
+			if ( !m_getClusterDepthBounds )
+			{
+				auto & writer = *getWriter();
+				m_getClusterDepthBounds = writer.implementFunction< sdw::Vec2 >( "c3d_getClusterDepthBounds"
+					, [&]( sdw::U32Vec3 const clusterIndex3D
+						, sdw::Vec4 const clustersLightsData
+						, sdw::Vec4 const lightsAABBRange )
+					{
+						auto nearZ = writer.declLocale( "nearZ"
+							, clustersLightsData.x() );
+						auto farZ = writer.declLocale( "farZ"
+							, clustersLightsData.y() );
+
+						auto nearTile = writer.declLocale( "nearTile"
+							, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() ) / writer.cast< sdw::Float >( dimensions().z() ) ) );
+						auto farTile = writer.declLocale( "farTile"
+							, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) / writer.cast< sdw::Float >( dimensions().z() ) ) );
+
+						writer.returnStmt( vec2( nearTile, farTile ) );
+					}
+					, sdw::InU32Vec3{ writer, "clusterIndex3D" }
+					, sdw::InVec4{ writer, "clustersLightsData" }
+					, sdw::InVec4{ writer, "lightsAABBRange" } );
+			}
+
+			return m_getClusterDepthBounds( pclusterIndex3D, pclustersLightsData, plightsAABBRange );
+		}
+
+		sdw::RetVoid ClustersData::computeGlobalLightsData( sdw::Vec4 const plightsMin
+			, sdw::Vec4 const plightsMax
+			, sdw::Float const pnearPlane
+			, sdw::Float const pfarPlane
+			, sdw::Vec4 & pclustersLightsData
+			, sdw::Vec4 & plightsAABBRange )
+		{
+			if ( !m_computeGlobalLightsData )
+			{
+				auto & writer = *getWriter();
+				m_computeGlobalLightsData = writer.implementFunction< sdw::Void >( "c3d_computeGlobalLightsData"
+					, [&]( sdw::Vec4 lightsMin
+						, sdw::Vec4 lightsMax
+						, sdw::Float const nearPlane
+						, sdw::Float const farPlane
+						, sdw::Vec4 clustersLightsData
+						, sdw::Vec4 lightsAABBRange )
+					{
+#if 0
+						lightsMin.z() = max( nearPlane, lightsMin.z() );
+						lightsMax.z() = min( max( lightsMin.z() + 0.00001_f, lightsMax.z() ), farPlane );
+
+						auto nearZ = lightsMin.z();
+						auto farZ = lightsMax.z();
+#else
+						auto nearZ = nearPlane;
+						auto farZ = farPlane;
+#endif
+						auto multiply = writer.declLocale( "multiply"
+							, writer.cast< sdw::Float >( dimensions().z() ) / sdw::log( farZ / nearZ ) );
+						auto add = writer.declLocale( "add"
+							, multiply * sdw::log( nearZ ) );
+						clustersLightsData = vec4( nearZ, farZ, multiply, add );
+
+						lightsAABBRange = vec4( vec3( 1.0_f ) / ( lightsMax - lightsMin ).xyz(), 1.0_f );
+					}
+					, sdw::PVec4{ writer, "lightsMin" }
+					, sdw::PVec4{ writer, "lightsMax" }
+					, sdw::InFloat{ writer, "nearPlane" }
+					, sdw::InFloat{ writer, "farPlane" }
+					, sdw::OutVec4{ writer, "clustersLightsData" }
+					, sdw::OutVec4{ writer, "lightsAABBRange" } );
+			}
+
+			return m_computeGlobalLightsData( plightsMin, plightsMax
+				, pnearPlane, pfarPlane
+				, pclustersLightsData , plightsAABBRange );
 		}
 	}
 
@@ -96,19 +180,17 @@ namespace castor3d
 	}
 
 	void ClustersUbo::cpuUpdate( castor::Point3ui gridDim
+		, castor::Point2ui clusterSize
 		, float viewNear
-		, uint32_t clusterSize
-		, float nearK
+		, float viewFar
 		, uint32_t pointLightsCount
 		, uint32_t spotLightsCount )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
 		configuration.gridDim = gridDim;
-		configuration.clusterSize = { clusterSize, clusterSize };
-		configuration.viewNear = viewNear;
-		configuration.nearK = nearK;
-		configuration.logGridDimY = 1.0f / std::log( nearK );
+		configuration.clusterSize = clusterSize;
+		configuration.viewNearFar = { viewNear, viewFar };
 		configuration.pointLightsCount = pointLightsCount;
 		configuration.spotLightsCount = spotLightsCount;
 		configuration.pointLightLevelsCount = FrustumClusters::getNumLevels( pointLightsCount );

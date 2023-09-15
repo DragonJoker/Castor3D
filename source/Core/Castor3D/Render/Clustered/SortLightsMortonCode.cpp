@@ -323,7 +323,8 @@ namespace castor3d
 
 				bool doIsEnabled()const
 				{
-					return m_clusters.needsLightsUpdate()
+					return m_clusters.getConfig().sortLights
+						&& m_clusters.needsLightsUpdate()
 						&& m_lightCache.getLightsBufferCount( m_lightData.lightType ) > 0;
 				}
 
@@ -746,7 +747,8 @@ namespace castor3d
 
 				bool doIsEnabled()const
 				{
-					return m_clusters.needsLightsUpdate()
+					return m_clusters.getConfig().sortLights
+						&& m_clusters.needsLightsUpdate()
 						&& m_lightCache.getLightsBufferCount( m_lightData.lightType ) > 0;
 				}
 
@@ -886,10 +888,10 @@ namespace castor3d
 					return result;
 				} );
 			radix.addDependency( *previousPass );
-			createInputStoragePassBinding( radix, uint32_t( radix::eInputKeys ), "C3D_In" + lightData.name + "LightMortonCodes", lightData.inMortonCodes( clusters ), 0u, ashes::WholeSize );
-			createInputStoragePassBinding( radix, uint32_t( radix::eInputValues ), "C3D_In" + lightData.name + "LightIndices", lightData.inIndices( clusters ), 0u, ashes::WholeSize );
-			createClearableOutputStorageBinding( radix, uint32_t( radix::eOutputKeys ), "C3D_Out" + lightData.name + "LightMortonCodes", lightData.outMortonCodes( clusters ), 0u, ashes::WholeSize );
-			createClearableOutputStorageBinding( radix, uint32_t( radix::eOutputValues ), "C3D_Out" + lightData.name + "LightIndices", lightData.outIndices( clusters ), 0u, ashes::WholeSize );
+			createInputStoragePassBinding( radix, uint32_t( radix::eInputKeys ), "C3D_In" + lightData.name + "LightMortonCodes", lightData.outMortonCodes( clusters ), 0u, ashes::WholeSize );
+			createInputStoragePassBinding( radix, uint32_t( radix::eInputValues ), "C3D_In" + lightData.name + "LightIndices", lightData.outIndices( clusters ), 0u, ashes::WholeSize );
+			createClearableOutputStorageBinding( radix, uint32_t( radix::eOutputKeys ), "C3D_Out" + lightData.name + "LightMortonCodes", lightData.inMortonCodes( clusters ), 0u, ashes::WholeSize );
+			createClearableOutputStorageBinding( radix, uint32_t( radix::eOutputValues ), "C3D_Out" + lightData.name + "LightIndices", lightData.inIndices( clusters ), 0u, ashes::WholeSize );
 
 			// Create Merge sort pass
 			auto & mergeSort = graph.createPass( "MergeSort" + lightData.name
@@ -908,11 +910,11 @@ namespace castor3d
 					return result;
 				} );
 			mergeSort.addDependency( radix );
-			createInOutStoragePassBinding( mergeSort, uint32_t( merge::eInputKeys ), "C3D_In" + lightData.name + "MortonCodes", { &lightData.outMortonCodes( clusters ), &lightData.inMortonCodes( clusters ) }, 0u, ashes::WholeSize );
-			createInOutStoragePassBinding( mergeSort, uint32_t( merge::eInputValues ), "C3D_In" + lightData.name + "LightIndices", { &lightData.outIndices( clusters ), &lightData.inIndices( clusters ) }, 0u, ashes::WholeSize );
+			createInOutStoragePassBinding( mergeSort, uint32_t( merge::eInputKeys ), "C3D_In" + lightData.name + "MortonCodes", { &lightData.inMortonCodes( clusters ), &lightData.outMortonCodes( clusters ) }, 0u, ashes::WholeSize );
+			createInOutStoragePassBinding( mergeSort, uint32_t( merge::eInputValues ), "C3D_In" + lightData.name + "LightIndices", { &lightData.inIndices( clusters ), &lightData.outIndices( clusters ) }, 0u, ashes::WholeSize );
 			createInputStoragePassBinding( mergeSort, uint32_t( merge::eInputMergePathPartitions ), "C3D_In" + lightData.name + "MergePathPartitions", clusters.getMergePathPartitionsBuffer(), 0u, ashes::WholeSize );
-			createInOutStoragePassBinding( mergeSort, uint32_t( merge::eOutputKeys ), "C3D_Out" + lightData.name + "MortonCodes", { &lightData.inMortonCodes( clusters ), &lightData.outMortonCodes( clusters ) }, 0u, ashes::WholeSize );
-			createInOutStoragePassBinding( mergeSort, uint32_t( merge::eOutputValues ), "C3D_Out" + lightData.name + "LightIndices", { &lightData.inIndices( clusters ), &lightData.outIndices( clusters ) }, 0u, ashes::WholeSize );
+			createInOutStoragePassBinding( mergeSort, uint32_t( merge::eOutputKeys ), "C3D_Out" + lightData.name + "MortonCodes", { &lightData.outMortonCodes( clusters ), &lightData.inMortonCodes( clusters ) }, 0u, ashes::WholeSize );
+			createInOutStoragePassBinding( mergeSort, uint32_t( merge::eOutputValues ), "C3D_Out" + lightData.name + "LightIndices", { &lightData.outIndices( clusters ), &lightData.inIndices( clusters ) }, 0u, ashes::WholeSize );
 			createClearableOutputStorageBinding( mergeSort, uint32_t( merge::eOutputMergePathPartitions ), "C3D_Out" + lightData.name + "MergePathPartitions", clusters.getMergePathPartitionsBuffer(), 0u, ashes::WholeSize );
 
 			return mergeSort;
@@ -946,7 +948,7 @@ namespace castor3d
 			, { LightType::ePoint
 				, "Point"
 				, &FrustumClusters::getInputPointLightMortonCodesBuffer
-				, & FrustumClusters::getOutputPointLightMortonCodesBuffer
+				, &FrustumClusters::getOutputPointLightMortonCodesBuffer
 				, &FrustumClusters::getInputPointLightIndicesBuffer
 				, &FrustumClusters::getOutputPointLightIndicesBuffer } );
 
@@ -959,7 +961,7 @@ namespace castor3d
 			, { LightType::eSpot
 				, "Spot"
 				, &FrustumClusters::getInputSpotLightMortonCodesBuffer
-				, & FrustumClusters::getOutputSpotLightMortonCodesBuffer
+				, &FrustumClusters::getOutputSpotLightMortonCodesBuffer
 				, &FrustumClusters::getInputSpotLightIndicesBuffer
 				, &FrustumClusters::getOutputSpotLightIndicesBuffer } );
 

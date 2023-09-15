@@ -124,9 +124,9 @@ namespace castor3d
 			return *m_spotLightClusterIndexBuffer;
 		}
 
-		auto & getLightsAABBBuffer()const noexcept
+		auto & getReducedLightsAABBBuffer()const noexcept
 		{
-			return m_lightsAABBBuffer->getBuffer();
+			return m_reducedLightsAABBBuffer->getBuffer();
 		}
 
 		auto & getPointLightBVHBuffer()const noexcept
@@ -137,26 +137,6 @@ namespace castor3d
 		auto & getSpotLightBVHBuffer()const noexcept
 		{
 			return m_spotBVHBuffer->getBuffer();
-		}
-
-		void initPointLightMortonIndicesIO()noexcept
-		{
-			m_pointLightMortonIndicesInput = 1u;
-		}
-
-		void initSpotLightMortonIndicesIO()noexcept
-		{
-			m_spotLightMortonIndicesInput = 1u;
-		}
-
-		void swapPointLightMortonIndicesIO()noexcept
-		{
-			m_pointLightMortonIndicesInput = 1u - m_pointLightMortonIndicesInput;
-		}
-
-		void swapSpotLightMortonIndicesIO()noexcept
-		{
-			m_spotLightMortonIndicesInput = 1u - m_spotLightMortonIndicesInput;
 		}
 
 		ashes::BufferBase & getPointLightIndicesBuffer( uint32_t index )const noexcept
@@ -201,6 +181,18 @@ namespace castor3d
 				, &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput ) };
 		}
 
+		std::vector< ashes::BufferBase const * > getInputPointLightIndicesBuffers()const noexcept
+		{
+			return { &getPointLightIndicesBuffer( m_pointLightMortonIndicesInput )
+				, &getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput ) };
+		}
+
+		std::vector< ashes::BufferBase const * > getInputSpotLightIndicesBuffers()const noexcept
+		{
+			return { &getSpotLightIndicesBuffer( m_spotLightMortonIndicesInput )
+				, &getSpotLightIndicesBuffer( 1u - m_spotLightMortonIndicesInput ) };
+		}
+
 		ashes::BufferBase & getOutputPointLightIndicesBuffer()const noexcept
 		{
 			return getPointLightIndicesBuffer( 1u - m_pointLightMortonIndicesInput );
@@ -231,6 +223,18 @@ namespace castor3d
 		{
 			return { &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput )
 				, &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput ) };
+		}
+
+		std::vector< ashes::BufferBase const * > getInputPointLightMortonCodesBuffers()const noexcept
+		{
+			return { &getPointLightMortonCodesBuffer( m_pointLightMortonIndicesInput )
+				, &getPointLightMortonCodesBuffer( 1u - m_pointLightMortonIndicesInput ) };
+		}
+
+		std::vector< ashes::BufferBase const * > getInputSpotLightMortonCodesBuffers()const noexcept
+		{
+			return { &getSpotLightMortonCodesBuffer( m_spotLightMortonIndicesInput )
+				, &getSpotLightMortonCodesBuffer( 1u - m_spotLightMortonIndicesInput ) };
 		}
 
 		ashes::BufferBase & getOutputPointLightMortonCodesBuffer()const noexcept
@@ -299,16 +303,15 @@ namespace castor3d
 		uint32_t m_pointLightMortonIndicesInput{ 1u };
 		uint32_t m_spotLightMortonIndicesInput{ 1u };
 		castor::GroupChangeTracked< castor::Point3ui > m_dimensions;
-		castor::GroupChangeTracked< uint32_t > m_clusterSize;
+		castor::GroupChangeTracked< castor::Point2ui > m_clusterSize;
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_cameraProjection;
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_cameraView;
-		castor::GroupChangeTracked< float > m_nearK;
 		ClustersUbo m_clustersUbo;
 		ashes::BufferPtr< VkDispatchIndirectCommand > m_clustersIndirect;
 		ClustersConfig m_config;
 
 		// Fixed size buffers, related to lights
-		ashes::BufferPtr< AABB > m_lightsAABBBuffer;
+		ashes::BufferPtr< AABB > m_reducedLightsAABBBuffer;
 		std::array< ashes::BufferPtr< u32 >, 2u > m_pointMortonCodesBuffers;
 		std::array< ashes::BufferPtr< u32 >, 2u > m_spotMortonCodesBuffers;
 		std::array< ashes::BufferPtr< u32 >, 2u > m_pointIndicesBuffers;

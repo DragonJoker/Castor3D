@@ -57,22 +57,21 @@ namespace castor3d
 		, Camera const & camera )
 		: m_device{ device }
 		, m_camera{ camera }
-		, m_dimensions{ m_clustersDirty, {} }
-		, m_clusterSize{ m_clustersDirty, 64u }
+		, m_dimensions{ m_clustersDirty, { 32u, 16u, 64u } }
+		, m_clusterSize{ m_clustersDirty, {} }
 		, m_cameraProjection{ m_clustersDirty, {} }
 		, m_cameraView{ m_clustersDirty, {} }
-		, m_nearK{ m_clustersDirty, 0.0f }
 		, m_clustersUbo{ m_device }
 		, m_clustersIndirect{ makeBuffer< VkDispatchIndirectCommand >( m_device
 			, getNumNodes( MaxLightsCount )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_ClustersIndirect" ) }
-		, m_lightsAABBBuffer{ makeBuffer< AABB >( m_device
-			, MaxLightsCount
+		, m_reducedLightsAABBBuffer{ makeBuffer< AABB >( m_device
+			, 513u
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
-			, "C3D_LightsAABB" ) }
+			, "C3D_ReducedLightsAABB" ) }
 		, m_pointMortonCodesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -165,9 +164,9 @@ namespace castor3d
 			&& m_first > 0;
 		doUpdate();
 		m_clustersUbo.cpuUpdate( m_dimensions.value()
-			, m_camera.getNear()
 			, m_clusterSize.value()
-			, m_nearK.value()
+			, m_camera.getNear()
+			, m_camera.getFar()
 			, lightCache.getLightsBufferCount( LightType::ePoint )
 			, lightCache.getLightsBufferCount( LightType::eSpot ) );
 		auto it = updater.dirtyScenes.find( scene );
@@ -175,9 +174,9 @@ namespace castor3d
 			&& ( m_clustersDirty
 				|| lightCache.isDirty()
 				|| ( it != updater.dirtyScenes.end() && !it->second.isEmpty() ) );
-		m_first = m_camera.getEngine()->areUpdateOptimisationsEnabled()
-			? std::max( 0, m_first - 1 )
-			: 5;
+		//m_first = m_camera.getEngine()->areUpdateOptimisationsEnabled()
+		//	? std::max( 0, m_first - 1 )
+		//	: 5;
 	}
 
 	crg::FramePass const & FrustumClusters::createFramePasses( crg::FramePassGroup & parentGraph
@@ -188,14 +187,14 @@ namespace castor3d
 	{
 		auto & graph = parentGraph.createPassGroup( "Clusters" );
 		crg::FramePassArray lastPasses{ 1u, previousPass };
+		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
+			, m_device, cameraUbo, *this ) };
 		lastPasses = { &createClustersMaskPass( graph, *lastPasses.front()
 			, m_device, cameraUbo, *this
 			, technique, nodesPass ) };
 		lastPasses = { &createFindUniqueClustersPass( graph, *lastPasses.front()
 			, m_device, cameraUbo, *this ) };
 		lastPasses = { &createComputeClustersAABBPass( graph, lastPasses.front()
-			, m_device, cameraUbo, *this ) };
-		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this ) };
 		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this ) };
@@ -214,7 +213,7 @@ namespace castor3d
 
 		if ( numLeaves > 0 )
 		{
-			numLevels = uint32_t( std::ceil( std::log( numLeaves ) / log32f ) );
+			numLevels = std::max( 1u, uint32_t( std::ceil( std::log( numLeaves ) / log32f ) ) );
 		}
 
 		return numLevels;
@@ -261,32 +260,13 @@ namespace castor3d
 	{
 		m_toDelete.clear();
 
-		// The half-angle of the field of view in the Y-direction.
-		auto fieldOfViewY = m_camera.getFovY() * 0.5f;
-		f32 zNear = m_camera.getNear();
-		f32 zFar = m_camera.getFar();
-		u32 clusterSize = m_clusterSize.value();
 		auto renderSize = getSafeBandedSize( m_camera.getSize() );
-
-		// Number of clusters in the screen X direction.
-		u32 clusterDimX = u32( std::ceil( f32( renderSize->x ) / f32( clusterSize ) ) );
-		// Number of clusters in the screen Y direction.
-		u32 clusterDimY = u32( std::ceil( f32( renderSize->y ) / f32( clusterSize ) ) );
-
-		// The depth of the cluster grid during clustered rendering is dependent on the 
-		// number of clusters subdivisions in the screen Y direction.
-		// Source: Clustered Deferred and Forward Shading (2012) (Ola Olsson, Markus Billeter, Ulf Assarsson).
-		f32 sD = 2.0f * fieldOfViewY.tan() / f32( clusterDimY );
-		m_nearK = 1.0f + sD;
-		auto logDimY = 1.0f / std::log( m_nearK.value() );
-
-		f32 logDepth = std::log( zFar / zNear );
-		u32 clusterDimZ = u32( std::floor( logDepth * logDimY ) );
-
-		m_dimensions = { clusterDimX, clusterDimY, clusterDimZ };
+		auto dimensions = m_dimensions.value();
+		( *m_clusterSize )->x = u32( std::ceil( float( renderSize->x ) / float( dimensions->x ) ) );
+		( *m_clusterSize )->y = u32( std::ceil( float( renderSize->y ) / float( dimensions->y ) ) );
 		m_cameraProjection = m_camera.getProjection( true );
 		m_cameraView = m_camera.getView();
-		auto cellCount = clusterDimX * clusterDimY * clusterDimZ;
+		auto cellCount = dimensions->x * dimensions->y * dimensions->z;
 
 		if ( !m_aabbBuffer
 			|| m_aabbBuffer->getSize() < cellCount * sizeof( AABB ) )

@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Shader/Shaders/GlslAABB.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
@@ -19,11 +20,10 @@ namespace castor3d
 		struct ClustersData
 			: public sdw::StructInstanceHelperT< "C3D_ClustersData"
 				, sdw::type::MemoryLayout::eStd140
-				, sdw::U32Vec3Field< "dimensions" > // 3D grid dimensions
-				, sdw::FloatField< "viewNear" > // Distance to the near clipping plane.
-				, sdw::U32Vec2Field< "clusterSize" > // Screenspace size of a cluster
-				, sdw::FloatField< "nearK" > // ( 1 + ( 2 * tan( fov * 0.5 ) / dimensions.y ) ) // Used to compute the near plane for clusters at depth k.
-				, sdw::FloatField< "logGridDimY" > // 1.0f / log( 1 + ( tan( fov * 0.5 ) / dimensions.y )
+				, sdw::U32Vec3Field< "dimensions" >
+				, sdw::FloatField< "pad0" >
+				, sdw::U32Vec2Field< "clusterSize" >
+				, sdw::Vec2Field< "viewNearFar" >
 				, sdw::UIntField< "pointLightLevels" >
 				, sdw::UIntField< "spotLightLevels" >
 				, sdw::UIntField< "pointLightCount" >
@@ -37,10 +37,9 @@ namespace castor3d
 			}
 
 			auto dimensions()const { return getMember< "dimensions" >(); }
-			auto viewNear()const { return getMember< "viewNear" >(); }
 			auto clusterSize()const { return getMember< "clusterSize" >(); }
-			auto nearK()const { return getMember< "nearK" >(); }
-			auto logGridDimY()const { return getMember< "logGridDimY" >(); }
+			auto viewNear()const { return getMember< "viewNearFar" >().x(); }
+			auto viewFar()const { return getMember< "viewNearFar" >().y(); }
 			auto pointLightLevels()const { return getMember< "pointLightLevels" >(); }
 			auto spotLightLevels()const { return getMember< "spotLightLevels" >(); }
 			auto pointLightCount()const { return getMember< "pointLightCount" >(); }
@@ -48,17 +47,39 @@ namespace castor3d
 
 			C3D_API sdw::RetU32Vec3 computeClusterIndex3D( sdw::UInt32 const index );
 			C3D_API sdw::RetU32Vec3 computeClusterIndex3D( sdw::Vec2 const screenPos
-				, sdw::Float viewZ );
+				, sdw::Float viewZ
+				, sdw::Vec4 const clustersLightsData );
 			C3D_API sdw::RetUInt32 computeClusterIndex1D( sdw::U32Vec3 const clusterIndex3D );
-		private:
+			C3D_API sdw::RetVec2 getClusterDepthBounds( sdw::U32Vec3 const clusterIndex3D
+				, sdw::Vec4 const clustersLightsData
+				, sdw::Vec4 const lightsAABBRange );
+			C3D_API sdw::RetVoid computeGlobalLightsData( sdw::Vec4 const lightsMin
+				, sdw::Vec4 const lightsMax
+				, sdw::Float const nearPlane
+				, sdw::Float const farPlane
+				, sdw::Vec4 & clustersLightsData
+				, sdw::Vec4 & lightsAABBRange );
 
+		private:
 			sdw::Function< sdw::U32Vec3
 				, sdw::InUInt32 > m_computeClusterIndex3DIdx;
 			sdw::Function< sdw::U32Vec3
 				, sdw::InVec2
-				, sdw::InFloat > m_computeClusterIndex3DPos;
+				, sdw::InFloat
+				, sdw::InVec4 > m_computeClusterIndex3DPos;
 			sdw::Function< sdw::UInt32
 				, sdw::InU32Vec3 > m_computeClusterIndex1D;
+			sdw::Function< sdw::Vec2
+				, sdw::InU32Vec3
+				, sdw::InVec4
+				, sdw::InVec4 > m_getClusterDepthBounds;
+			sdw::Function< sdw::Void
+				, sdw::PVec4
+				, sdw::PVec4
+				, sdw::InFloat
+				, sdw::InFloat
+				, sdw::OutVec4
+				, sdw::OutVec4 > m_computeGlobalLightsData;
 		};
 	}
 
@@ -75,9 +96,9 @@ namespace castor3d
 		C3D_API ~ClustersUbo();
 
 		C3D_API void cpuUpdate( castor::Point3ui gridDim
+			, castor::Point2ui clusterSize
 			, float viewNear
-			, uint32_t clusterSize
-			, float nearK
+			, float viewFar
 			, uint32_t pointLightsCount
 			, uint32_t spotLightsCount );
 
