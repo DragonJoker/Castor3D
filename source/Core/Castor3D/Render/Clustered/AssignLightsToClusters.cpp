@@ -102,17 +102,17 @@ namespace castor3d
 			C3D_PointLightIndicesEx( writer
 				, ePointLightIndices
 				, 0u
-				, config.useLightsBVH );
+				, config.sortLights );
 			C3D_SpotLightIndicesEx( writer
 				, eSpotLightIndices
 				, 0u
-				, config.useLightsBVH );
+				, config.sortLights );
 			C3D_UniqueClustersEx( writer
 				, eUniqueClusters
 				, 0u
 				, config.parseDepthBuffer );
 
-			static constexpr s32 MaxValues = 2048;
+			static constexpr s32 MaxValues = 1024;
 
 			// Using a stack of node IDs to traverse the BVH was inspired by:
 			// Source: https://devblogs.nvidia.com/parallelforall/thinking-parallel-part-ii-tree-traversal-gpu/
@@ -284,6 +284,51 @@ namespace castor3d
 				{
 					auto groupIndex = in.localInvocationIndex;
 
+					auto processPointLightAABB = [&]( sdw::UInt const leafIndex )
+					{
+						auto lightOffset = ( config.sortLights
+							? c3d_pointLightIndices[leafIndex]
+							: lights.getDirectionalsEnd() + leafIndex * PointLight::LightDataComponents );
+						auto point = writer.declLocale( "point"
+							, lights.getPointLight( lightOffset ) );
+
+						IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz()
+							, computeRange( point )
+							, gsClusterAABB ) )
+						{
+							gsPointLights.appendData( lightOffset, MaxLightsPerCluster );
+						}
+						FI;
+					};
+
+					auto processSpotLightAABB = [&]( sdw::UInt const leafIndex )
+					{
+						auto lightOffset = writer.declLocale( "lightOffset"
+							, ( config.sortLights
+								? c3d_spotLightIndices[leafIndex]
+								: lights.getPointsEnd() + leafIndex * SpotLight::LightDataComponents ) );
+						auto spot = writer.declLocale( "spot"
+							, lights.getSpotLight( lightOffset ) );
+
+#if 1
+						IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
+							, computeRange( spot )
+							, gsClusterAABB ) )
+#else
+						IF( writer, coneInsideSphere( shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
+							, spot.direction()
+							, computeRange( spot )
+							, spot.outerCutOff()
+							, spot.outerCutOffCos()
+							, spot.outerCutOffSin() }
+						, gsClusterSphere ) )
+#endif
+						{
+							gsSpotLights.appendData( lightOffset, MaxLightsPerCluster );
+						}
+						FI;
+					};
+
 					IF( writer, groupIndex == 0_u )
 					{
 						gsPointLights.resetCount();
@@ -325,18 +370,7 @@ namespace castor3d
 
 								IF( writer, leafIndex < c3d_clustersData.pointLightCount() )
 								{
-									auto lightOffset = writer.declLocale( "lightOffset"
-										, c3d_pointLightIndices[leafIndex] );
-									auto point = writer.declLocale( "point"
-										, lights.getPointLight( lightOffset ) );
-
-									IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz()
-										, computeRange( point )
-										, gsClusterAABB ) )
-									{
-										gsPointLights.appendData( lightOffset, MaxLightsPerCluster );
-									}
-									FI;
+									processPointLightAABB( leafIndex );
 								}
 								FI;
 							}
@@ -386,28 +420,7 @@ namespace castor3d
 
 								IF( writer, leafIndex < c3d_clustersData.spotLightCount() )
 								{
-									auto lightOffset = writer.declLocale( "lightOffset"
-										, c3d_spotLightIndices[leafIndex] );
-									auto spot = writer.declLocale( "spot"
-										, lights.getSpotLight( lightOffset ) );
-
-#if 1
-									IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-										, computeRange( spot )
-										, gsClusterAABB ) )
-#else
-									IF( writer, coneInsideSphere( shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-											, spot.direction()
-											, computeRange( spot )
-											, spot.outerCutOff()
-											, spot.outerCutOffCos()
-											, spot.outerCutOffSin() }
-										, gsClusterSphere ) )
-#endif
-									{
-										gsSpotLights.appendData( lightOffset, MaxLightsPerCluster );
-									}
-									FI;
+									processSpotLightAABB( leafIndex );
 								}
 								FI;
 							}
@@ -434,58 +447,18 @@ namespace castor3d
 					else
 					{
 						// Intersect point lights against AABB.
-						auto cur = writer.declLocale( "cur"
-							, lights.getDirectionalsEnd() + groupIndex * PointLight::LightDataComponents );
-						auto end = writer.declLocale( "end"
-							, lights.getPointsEnd() );
-
-						WHILE( writer, cur < lights.getPointsEnd() )
+						FOR( writer, sdw::UInt, i, groupIndex, i < c3d_clustersData.pointLightCount(), i += NumThreads )
 						{
-							auto point = writer.declLocale( "point"
-								, lights.getPointLight( cur ) );
-
-							IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz()
-								, computeRange( point )
-								, gsClusterAABB ) )
-							{
-								gsPointLights.appendData( cur, MaxLightsPerCluster );
-							}
-							FI;
-
-							cur += PointLight::LightDataComponents * MaxLightsPerCluster;
+							processPointLightAABB( i );
 						}
-						ELIHW;
+						ROF;
 
 						// Intersect spot lights against AABB.
-						cur = end + groupIndex * SpotLight::LightDataComponents;
-						end = lights.getSpotsEnd();
-
-						WHILE( writer, cur < end )
+						FOR( writer, sdw::UInt, i, groupIndex, i < c3d_clustersData.spotLightCount(), i += NumThreads )
 						{
-							auto spot = writer.declLocale( "spot"
-								, lights.getSpotLight( cur ) );
-
-#if 1
-							IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-								, computeRange( spot )
-								, gsClusterAABB ) )
-#else
-							IF( writer, coneInsideSphere( shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-									, spot.direction()
-									, computeRange( spot )
-									, spot.outerCutOff()
-									, spot.outerCutOffCos()
-									, spot.outerCutOffSin() }
-								, gsClusterSphere ) )
-#endif
-							{
-								gsSpotLights.appendData( cur, MaxLightsPerCluster );
-							}
-							FI;
-
-							cur += SpotLight::LightDataComponents * MaxLightsPerCluster;
+							processSpotLightAABB( i );
 						}
-						ELIHW;
+						ROF;
 
 						shader::groupMemoryBarrierWithGroupSync( writer );
 					}
@@ -534,11 +507,11 @@ namespace castor3d
 				: crg::ComputePass{framePass
 					, context
 					, graph
-					, crg::ru::Config{ 3u }
+					, crg::ru::Config{ 6u }
 					, config
 						.isEnabled( IsEnabledCallback( [this, &clusters]() { return doIsEnabled( clusters ); } ) )
 						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
-						.programCreator( { 3u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.programCreator( { 6u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
 				, m_device{ device }
 				, m_config{ clusters.getConfig() }
@@ -557,7 +530,12 @@ namespace castor3d
 			{
 				u32 result = {};
 
-				if ( m_config.useLightsBVH && m_config.sortLights )
+				if ( m_config.useLightsBVH )
+				{
+					result += 3u;
+				}
+
+				if ( m_config.sortLights )
 				{
 					auto & lightCache = clusters.getCamera().getScene()->getLightCache();
 
@@ -568,7 +546,7 @@ namespace castor3d
 
 					if ( numChunks > 1u )
 					{
-						result = ( ( numChunks - 1u ) % 2u );
+						result += ( ( numChunks - 1u ) % 2u );
 					}
 
 					result += 1u;
@@ -640,11 +618,11 @@ namespace castor3d
 				: crg::ComputePass{framePass
 					, context
 					, graph
-					, crg::ru::Config{ 3u }
+					, crg::ru::Config{ 6u }
 					, config
 						.isEnabled( IsEnabledCallback( [this, &clusters]() { return doIsEnabled( clusters ); } ) )
 						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
-						.programCreator( { 3u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.programCreator( { 6u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
 						.recordInto( RunnablePass::RecordCallback( [this, &clusters]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx, clusters ); } ) )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
 				, m_device{ device }
@@ -664,7 +642,12 @@ namespace castor3d
 			{
 				u32 result = {};
 
-				if ( m_config.useLightsBVH && m_config.sortLights )
+				if ( m_config.useLightsBVH )
+				{
+					result += 3u;
+				}
+
+				if ( m_config.sortLights )
 				{
 					auto & lightCache = clusters.getCamera().getScene()->getLightCache();
 
@@ -675,7 +658,7 @@ namespace castor3d
 
 					if ( numChunks > 1u )
 					{
-						result = ( ( numChunks - 1u ) % 2u );
+						result += ( ( numChunks - 1u ) % 2u );
 					}
 
 					result += 1u;
@@ -790,10 +773,12 @@ namespace castor3d
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::ePointLightBVH ), "C3D_PointLightsBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eSpotLightBVH ), "C3D_SpotLightsBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices"
-			, { &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer() }
+			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
+				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices"
-			, { &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer() }
+			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
+				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 
 		auto & passDepth = graph.createPass( "AssignLightsToClustersDepth"
@@ -824,10 +809,12 @@ namespace castor3d
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::ePointLightBVH ), "C3D_PointLightsBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eSpotLightBVH ), "C3D_SpotLightsBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices"
-			, { &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer() }
+			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
+				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices"
-			, { &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer() }
+			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
+				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eUniqueClusters ), "C3D_UniqueClusters", clusters.getUniqueClustersBuffer(), 0u, ashes::WholeSize );
 

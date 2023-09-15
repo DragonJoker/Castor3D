@@ -40,31 +40,30 @@ namespace castor3d
 			eCamera,
 			eLights,
 			eClusters,
-			eLightsAABB,
+			eReducedLightsAABB,
 		};
 
 		static uint32_t constexpr NumThreads = 512u;
 		static float constexpr FltMax = std::numeric_limits< float >::max();
 
-		static ShaderPtr createShader( bool first )
+		static ShaderPtr createShader( bool first
+			, ClustersConfig const & config )
 		{
 			sdw::ComputeWriter writer;
 
 			// Inputs
-			C3D_CameraEx( writer
+			C3D_Camera( writer
 				, eCamera
-				, 0u
-				, first );
+				, 0u );
 			shader::LightsBuffer lights{ writer
 				, eLights
 				, 0u
 				, first };
-			C3D_ClustersEx( writer
+			C3D_Clusters( writer
 				, eClusters
-				, 0u
-				, first );
-			C3D_LightsAABB( writer
-				, eLightsAABB
+				, 0u );
+			C3D_ReducedLightsAABB( writer
+				, eReducedLightsAABB
 				, 0u );
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DispatchData", "c3d_dispatchData" };
@@ -88,7 +87,7 @@ namespace castor3d
 #if C3D_DebugEnableWarpOptimisation
 				while ( reduceIndex > 32u )
 #else
-				while ( reduceIndex > 1u )
+				while ( reduceIndex > 0u )
 #endif
 				{
 					IF( writer, groupIndex < reduceIndex )
@@ -130,8 +129,8 @@ namespace castor3d
 
 					IF( writer, groupIndex == 0_u )
 					{
-						c3d_lightsAABB[groupID].min() = gsAABBMin[groupIndex];
-						c3d_lightsAABB[groupID].max() = gsAABBMax[groupIndex];
+						c3d_reducedLightsAABB[groupID].min() = gsAABBMin[groupIndex];
+						c3d_reducedLightsAABB[groupID].max() = gsAABBMax[groupIndex];
 					}
 					FI;
 				}
@@ -139,8 +138,8 @@ namespace castor3d
 #else
 				IF( writer, groupIndex == 0_u )
 				{
-					c3d_lightsAABB[groupID].min() = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
-					c3d_lightsAABB[groupID].max() = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
+					c3d_reducedLightsAABB[groupID].min() = gsAABBMin[groupIndex];
+					c3d_reducedLightsAABB[groupID].max() = gsAABBMax[groupIndex];
 				}
 				FI;
 #endif
@@ -157,6 +156,19 @@ namespace castor3d
 						, vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f ) );
 					auto aabbMax = writer.declLocale( "aabbMax"
 						, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) );
+
+					IF( writer, groupIndex == 0_u )
+					{
+						FOR( writer, sdw::UInt, n, 0_u, n < NumThreads, ++n )
+						{
+							gsAABBMin[n] = aabbMin;
+							gsAABBMax[n] = aabbMax;
+						}
+						ROF;
+					}
+					FI;
+
+					shader::groupMemoryBarrierWithGroupSync( writer );
 
 					if ( first )
 					{
@@ -212,8 +224,8 @@ namespace castor3d
 						// This step is repeated until we are reduced to a single thread group.
 						FOR( writer, sdw::UInt, i, groupIndex, i < c3d_reduceNumElements, i += NumThreads * c3d_numThreadGroups )
 						{
-							aabbMin = min( aabbMin, c3d_lightsAABB[i].min() );
-							aabbMax = max( aabbMax, c3d_lightsAABB[i].max() );
+							aabbMin = min( aabbMin, c3d_reducedLightsAABB[i].min() );
+							aabbMax = max( aabbMax, c3d_reducedLightsAABB[i].max() );
 						}
 						ROF;
 
@@ -227,106 +239,119 @@ namespace castor3d
 						// to reduce to a single element. If there was only a single thread group
 						// in this dispatch, then this will reduce to a single element.
 						logStepReduction( groupIndex, groupID );
-
 					}
+
+					IF( writer, groupIndex == 0_u )
+					{
+						auto lightsMin = writer.declLocale( "lightsMin"
+							, gsAABBMin[groupIndex] );
+						auto lightsMax = writer.declLocale( "lightsMax"
+							, gsAABBMax[groupIndex] );
+						auto clustersLightsData = writer.declLocale< sdw::Vec4 >( "clustersLightsData" );
+						auto lightsAABBRange = writer.declLocale< sdw::Vec4 >( "lightsAABBRange" );
+						c3d_clustersData.computeGlobalLightsData( lightsMin
+							, lightsMax
+							, c3d_cameraData.nearPlane()
+							, c3d_cameraData.farPlane()
+							, clustersLightsData
+							, lightsAABBRange );
+						c3d_clustersLightsData = clustersLightsData;
+						c3d_lightsAABBRange = lightsAABBRange;
+					}
+					FI;
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		class FramePass
-			: public crg::RunnablePass
+		static u32 computeThreadGroupsCount( LightCache const & cache )
+		{
+			auto pointLightsCount = cache.getLightsBufferCount( LightType::ePoint );
+			auto spoLightsCount = cache.getLightsBufferCount( LightType::eSpot );
+			auto maxLightsCount = std::max( pointLightsCount, spoLightsCount );
+
+			// Don't dispatch more than 512 thread groups. The reduction algorithm depends on the
+			// number of thread groups to be no more than 512. The buffer which stores the reduced AABB is sized
+			// for a maximum of 512 thread groups.
+			return std::min( 512u
+				, uint32_t( std::ceil( float( maxLightsCount ) / 512.0f ) ) );
+		}
+
+		class FirstFramePass
+			: public crg::ComputePass
 		{
 		public:
-			FramePass( crg::FramePass const & framePass
+			FirstFramePass( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
-				, FrustumClusters const & clusters )
-				: crg::RunnablePass{ framePass
+				, FrustumClusters const & clusters
+				, crg::cp::Config config )
+				: crg::ComputePass{ framePass
 					, context
 					, graph
-					, { [this]( uint32_t index ){ doInitialise( index ); }
-						, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT ); } )
-						, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
-						, GetPassIndexCallback( [](){ return 0u; } )
-						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
-						, IsComputePassCallback( [](){ return true; } ) }
-					, crg::ru::Config{ 1u, true /* resettable */ } }
-				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
-				, m_first{ framePass, context, graph, device, true, clusters }
-				, m_second{ framePass, context, graph, device, false, clusters }
+					, crg::ru::Config{ 2u }
+					, config
+						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
+						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx ); } ) )
+						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } )
+						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } )
+						.getGroupCountX( crg::cp::GetGroupCountCallback( [this]() { return doGetGroupsCountX(); } ) ) }
+				, m_device{ device }
+				, m_clusters{ clusters }
+				, m_lightCache{ m_clusters.getCamera().getScene()->getLightCache() }
 			{
-			}
-
-			CRG_API void resetPipeline( crg::VkPipelineShaderStageCreateInfoArray config
-				, uint32_t index )
-			{
-				resetCommandBuffer( index );
-				m_first.pipeline.resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_first.createInfo ), index );
-				m_second.pipeline.resetPipeline( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( m_second.createInfo ), index );
-				doCreatePipeline( index, m_first );
-				doCreatePipeline( index, m_second );
-				reRecordCurrent();
 			}
 
 		private:
-			struct Pipeline
+			struct ProgramData
 			{
-				ShaderModule shader;
-				ashes::PipelineShaderStageCreateInfoArray createInfo;
-				crg::cp::ConfigData cpConfig;
-				crg::PipelineHolder pipeline;
-
-				Pipeline( crg::FramePass const & framePass
-					, crg::GraphContext & context
-					, crg::RunnableGraph & graph
-					, RenderDevice const & device
-					, bool first
-					, FrustumClusters const & clusters )
-					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB" + ( first ? std::string{ "/First" } : std::string{ "/Second" } ), createShader( first ) }
-					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
-					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
-						, nullptr
-						, IsEnabledCallback( [&clusters]() { return clusters.needsLightsUpdate(); } )
-						, crg::getDefaultV< GetPassIndexCallback >()
-						, crg::getDefaultV< RecordCallback >()
-						, crg::getDefaultV< RecordCallback >()
-						, 1u
-						, 1u
-						, 1u }
-					, pipeline{ framePass
-						, context
-						, graph
-						, crg::pp::Config{}
-							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( createInfo ) )
-							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } )
-						, VK_PIPELINE_BIND_POINT_COMPUTE
-						, 1u }
-				{
-				}
+				ShaderModule module;
+				ashes::PipelineShaderStageCreateInfoArray stages;
 			};
 
 		private:
+			RenderDevice const & m_device;
+			FrustumClusters const & m_clusters;
 			LightCache const & m_lightCache;
-			Pipeline m_first;
-			Pipeline m_second;
+			std::map< uint32_t, ProgramData > m_programs;
+			uint32_t m_dispatchCount{};
 
 		private:
-			void doInitialise( uint32_t index )
+			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
 			{
-				m_first.pipeline.initialise();
-				m_second.pipeline.initialise();
-				doCreatePipeline( index, m_first );
-				doCreatePipeline( index, m_second );
+				auto ires = m_programs.emplace( passIndex, ProgramData{} );
+
+				if ( ires.second )
+				{
+					auto & program = ires.first->second;
+					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/First", createShader( true, m_clusters.getConfig() ) };
+					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
+				}
+
+				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
 			}
 
 			bool doIsEnabled()const
 			{
-				return ( m_first.cpConfig.isEnabled ? ( *m_first.cpConfig.isEnabled )() : false )
-					|| ( m_second.cpConfig.isEnabled ? ( *m_second.cpConfig.isEnabled )() : false );
+				return m_clusters.getConfig().enabled;
 			}
 
-			void doRecordInto( crg::RecordContext & context
+			uint32_t doGetPassIndex()
+			{
+				uint32_t result{ m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u };
+				uint32_t count{ computeThreadGroupsCount( m_lightCache ) };
+
+				if ( m_dispatchCount && count != m_dispatchCount )
+				{
+					setToReset( result );
+				}
+
+				return result;
+			}
+
+			void doSubRecordInto( crg::RecordContext & context
 				, VkCommandBuffer commandBuffer
 				, uint32_t index )
 			{
@@ -336,48 +361,132 @@ namespace castor3d
 					uint32_t reduceNumElements{};
 				} dispatchData;
 
-				auto pointLightsCount = m_lightCache.getLightsBufferCount( LightType::ePoint );
-				auto spoLightsCount = m_lightCache.getLightsBufferCount( LightType::eSpot );
-				auto maxLightsCount = std::max( pointLightsCount, spoLightsCount );
+				m_dispatchCount = computeThreadGroupsCount( m_lightCache );
+				dispatchData.numThreadGroups = m_dispatchCount;
+				m_context.vkCmdPushConstants( commandBuffer, getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
+			}
 
-				// Don't dispatch more than 512 thread groups. The reduction algorithm depends on the
-				// number of thread groups to be no more than 512. The buffer which stores the reduced AABB is sized
-				// for a maximum of 512 thread groups.
-				dispatchData.numThreadGroups = std::min( 512u
-					, uint32_t( std::ceil( float( maxLightsCount ) / 512.0f ) ) );
-
-				// First pass
-				m_first.pipeline.recordInto( context, commandBuffer, index );
-				m_context.vkCmdPushConstants( commandBuffer, m_first.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
-				m_context.vkCmdDispatch( commandBuffer, dispatchData.numThreadGroups, 1u, 1u );
-
-				if ( dispatchData.numThreadGroups > 1u )
+			void doPostRecord( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, uint32_t index )
+			{
+				if ( computeThreadGroupsCount( m_lightCache ) <= 1u )
 				{
-					// In the first pass, the number of lights determines the number of
-					// elements to be reduced.
-					// In the second pass, the number of elements to be reduced is the 
-					// number of thread groups from the first pass.
-					dispatchData.reduceNumElements = dispatchData.numThreadGroups;
-					dispatchData.numThreadGroups = 1u;
-					// Second pass
-					m_second.pipeline.recordInto( context, commandBuffer, index );
-					m_context.vkCmdPushConstants( commandBuffer, m_second.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
-					m_context.vkCmdDispatch( commandBuffer, dispatchData.numThreadGroups, 1u, 1u );
+					auto & attach = m_pass.buffers.back();
+					auto & buffer = attach.buffer;
+
+					auto currentState = context.getAccessState( buffer.buffer.buffer( index )
+						, buffer.range );
+					context.memoryBarrier( commandBuffer
+						, buffer.buffer.buffer( index )
+						, buffer.range
+						, currentState.access
+						, currentState.pipelineStage
+						, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
 				}
 			}
 
-			void doCreatePipeline( uint32_t index
-				, Pipeline & pipeline )
+			uint32_t doGetGroupsCountX()const
 			{
-				auto & program = pipeline.pipeline.getProgram( index );
-				VkComputePipelineCreateInfo createInfo{ VK_STRUCTURE_TYPE_COMPUTE_PIPELINE_CREATE_INFO
-					, nullptr
-					, 0u
-					, program.front()
-					, pipeline.pipeline.getPipelineLayout()
-					, VkPipeline{}
-					, 0u };
-				pipeline.pipeline.createPipeline( index, createInfo );
+				return computeThreadGroupsCount( m_lightCache );
+			}
+		};
+
+		class SecondFramePass
+			: public crg::ComputePass
+		{
+		public:
+			SecondFramePass( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph
+				, RenderDevice const & device
+				, FrustumClusters const & clusters
+				, crg::cp::Config config )
+				: crg::ComputePass{ framePass
+					, context
+					, graph
+					, crg::ru::Config{ 2u }
+					, config
+						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
+						.getPassIndex( GetPassIndexCallback( [&clusters]() { return clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u; } ) )
+						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx ); } ) )
+						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } )
+						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } ) }
+				, m_device{ device }
+				, m_clusters{ clusters }
+				, m_lightCache{ m_clusters.getCamera().getScene()->getLightCache() }
+			{
+			}
+
+		private:
+			struct ProgramData
+			{
+				ShaderModule module;
+				ashes::PipelineShaderStageCreateInfoArray stages;
+			};
+
+		private:
+			RenderDevice const & m_device;
+			FrustumClusters const & m_clusters;
+			LightCache const & m_lightCache;
+			std::map< uint32_t, ProgramData > m_programs;
+
+		private:
+			crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( uint32_t passIndex )
+			{
+				auto ires = m_programs.emplace( passIndex, ProgramData{} );
+
+				if ( ires.second )
+				{
+					auto & program = ires.first->second;
+					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/Second", createShader( false, m_clusters.getConfig() ) };
+					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
+				}
+
+				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
+			}
+
+			bool doIsEnabled()const
+			{
+				return m_clusters.getConfig().enabled;
+			}
+
+			void doSubRecordInto( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, uint32_t index )
+			{
+				struct
+				{
+					uint32_t numThreadGroups{};
+					uint32_t reduceNumElements{};
+				} dispatchData;
+
+				// In the first pass, the number of lights determines the number of
+				// elements to be reduced.
+				// In the second pass, the number of elements to be reduced is the 
+				// number of thread groups from the first pass.
+				dispatchData.reduceNumElements = computeThreadGroupsCount( m_lightCache );
+				dispatchData.numThreadGroups = 1u;
+
+				m_context.vkCmdPushConstants( commandBuffer, getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
+			}
+
+			void doPostRecord( crg::RecordContext & context
+				, VkCommandBuffer commandBuffer
+				, uint32_t index )
+			{
+				auto & attach = m_pass.buffers.back();
+				auto & buffer = attach.buffer;
+
+				auto currentState = context.getAccessState( buffer.buffer.buffer( index )
+					, buffer.range );
+				context.memoryBarrier( commandBuffer
+					, buffer.buffer.buffer( index )
+					, buffer.range
+					, currentState.access
+					, currentState.pipelineStage
+					, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
 			}
 		};
 	}
@@ -390,27 +499,49 @@ namespace castor3d
 		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters )
 	{
-		auto & pass = graph.createPass( "ReduceLightsAABB"
+		auto & first = graph.createPass( "ReduceLightsAABB/First"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				auto result = std::make_unique< rdclgb::FramePass >( framePass
+				auto result = std::make_unique< rdclgb::FirstFramePass >( framePass
 					, context
 					, graph
 					, device
-					, clusters );
+					, clusters
+					, crg::cp::Config{} );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependency( *previousPass );
-		cameraUbo.createPassBinding( pass, rdclgb::eCamera );
+		first.addDependency( *previousPass );
 		auto & lights = clusters.getCamera().getScene()->getLightCache();
-		lights.createPassBinding( pass, rdclgb::eLights );
-		clusters.getClustersUbo().createPassBinding( pass, rdclgb::eClusters );
-		createClearableOutputStorageBinding( pass, uint32_t( rdclgb::eLightsAABB ), "C3D_LightsAABB", clusters.getLightsAABBBuffer(), 0u, ashes::WholeSize );
-		return pass;
+		cameraUbo.createPassBinding( first, rdclgb::eCamera );
+		lights.createPassBinding( first, rdclgb::eLights );
+		clusters.getClustersUbo().createPassBinding( first, rdclgb::eClusters );
+		createClearableOutputStorageBinding( first, uint32_t( rdclgb::eReducedLightsAABB ), "C3D_ReducedLightsAABB", clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
+
+		auto & second = graph.createPass( "ReduceLightsAABB/Second"
+			, [&clusters, &device]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< rdclgb::SecondFramePass >( framePass
+					, context
+					, graph
+					, device
+					, clusters
+					, crg::cp::Config{} );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, result->getTimer() );
+				return result;
+			} );
+		second.addDependency( first );
+		cameraUbo.createPassBinding( second, rdclgb::eCamera );
+		clusters.getClustersUbo().createPassBinding( second, rdclgb::eClusters );
+		createInOutStoragePassBinding( second, uint32_t( rdclgb::eReducedLightsAABB ), "C3D_ReducedLightsAABB", clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
+
+		return second;
 	}
 
 	//*********************************************************************************************

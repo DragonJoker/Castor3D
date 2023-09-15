@@ -26,6 +26,9 @@ namespace castor3d
 		//!\~english	Tells if the depth buffer is used to reduce affected clusters.
 		//!\~french		Dit si le buffer de profondeur est utlisé pour réduire le nombre de clusters affectés.
 		bool parseDepthBuffer{ true };
+		//!\~english	Clusters grid Z will be limited to lights AABB depth boundaries.
+		//!\~french		Les Z de la grille de clusters seront limités aux limites de profondeur des AABB des sources lumineuses.
+		bool limitClustersToLightsAABB{ true };
 	};
 }
 

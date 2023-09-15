@@ -7,6 +7,10 @@ namespace castor3d
 {
 	ClustersConfig::ClustersConfig()
 		: enabled{ C3D_UseClusteredRendering }
+		, useLightsBVH{ true }
+		, sortLights{ true }
+		, parseDepthBuffer{ false }
+		, limitClustersToLightsAABB{ false }
 	{
 	}
 
@@ -18,6 +22,7 @@ namespace castor3d
 			visitor.visit( cuT( "Use BVH" ), useLightsBVH );
 			visitor.visit( cuT( "Sort Lights" ), sortLights );
 			visitor.visit( cuT( "Use Depth Buffer" ), parseDepthBuffer );
+			visitor.visit( cuT( "Limit Clusters To Lights AABB" ), limitClustersToLightsAABB );
 		}
 	}
 }

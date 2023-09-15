@@ -27,6 +27,7 @@ namespace castor3d
 		{
 			eCamera,
 			eClusters,
+			eReducedLightsAABB,
 			eClustersAABB,
 		};
 
@@ -41,6 +42,9 @@ namespace castor3d
 				, 0u );
 			C3D_Clusters( writer
 				, eClusters
+				, 0u );
+			C3D_ReducedLightsAABB( writer
+				, eReducedLightsAABB
 				, 0u );
 			C3D_ClustersAABB( writer
 				, eClustersAABB
@@ -65,33 +69,20 @@ namespace castor3d
 				}
 				, sdw::InVec4{ writer, "screen" } );
 
-			auto intersectLinePlane = writer.implementFunction< sdw::Boolean >( "c3d_intersectLinePlane"
+			auto intersectLinePlane = writer.implementFunction< sdw::Vec3 >( "c3d_intersectLinePlane"
 				, [&]( sdw::Vec3 const a
 					, sdw::Vec3 const b
-					, shader::Plane const p
-					, sdw::Vec3 q )
+					, sdw::Float const d )
 				{
 					auto ab = b - a;
+					auto normal = vec3( 0.0_f, 0.0_f, 1.0_f );
 					auto t = writer.declLocale( "t"
-						, ( p.distance() - dot( p.normal(), a ) ) / dot( p.normal(), ab ) );
-
-					auto intersect = writer.declLocale( "intersect"
-						, ( t >= 0.0f && t <= 1.0f ) );
-
-					q = vec3( 0.0_f );
-
-					IF( writer, intersect )
-					{
-						q = a + ab * t;
-					}
-					FI;
-
-					writer.returnStmt( intersect );
+						, ( d - dot( normal, a ) ) / dot( normal, ab ) );
+					writer.returnStmt( a + ab * t );
 				}
 				, sdw::InVec3{ writer, "a" }
 				, sdw::InVec3{ writer, "b" }
-				, shader::InPlane{ writer, "p" }
-				, sdw::OutVec3{ writer, "q" } );
+				, sdw::InFloat{ writer, "d" } );
 
 			writer.implementMainT< VoidT >( 1u, 1u, 1u
 				, [&]( ComputeIn in )
@@ -101,12 +92,10 @@ namespace castor3d
 						, c3d_clustersData.computeClusterIndex1D( clusterIndex3D ) );
 
 					// Compute the near and far planes for cluster K.
-					auto nearPlane = writer.declLocale( "nearPlane"
-						, shader::Plane{ vec3( 0.0_f, 0.0f, 1.0f )
-							, writer.cast< sdw::Float >( -c3d_clustersData.viewNear() * pow( abs( c3d_clustersData.nearK() ), writer.cast< sdw::Float >( clusterIndex3D.z() ) ) ) } );
-					auto farPlane = writer.declLocale( "farPlane"
-						, shader::Plane{ vec3( 0.0_f, 0.0f, 1.0f )
-							, writer.cast< sdw::Float >( -c3d_clustersData.viewNear() * pow( abs( c3d_clustersData.nearK() ), writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) ) ) } );
+					auto tileNearFar = writer.declLocale( "tileNearFar"
+						, c3d_clustersData.getClusterDepthBounds( clusterIndex3D
+							, c3d_clustersLightsData
+							, c3d_lightsAABBRange ) );
 
 					// Reversed depth implies maxZ is 0.0f instead of 1.0f.
 					float constexpr maxZ = 0.0f;
@@ -122,16 +111,17 @@ namespace castor3d
 					pMax = screenToView( pMax );
 
 					// Find the min and max points on the near and far planes.
-					auto nearMin = writer.declLocale< sdw::Vec3 >( "nearMin" );
-					auto nearMax = writer.declLocale< sdw::Vec3 >( "nearMax" );
-					auto farMin = writer.declLocale< sdw::Vec3 >( "farMin" );
-					auto farMax = writer.declLocale< sdw::Vec3 >( "farMax" );
 					// Origin (camera eye position)
-					auto eye = writer.declLocale< sdw::Vec3 >( "eye", vec3( 0.0_f ) );
-					intersectLinePlane( eye, pMin.xyz(), nearPlane, nearMin );
-					intersectLinePlane( eye, pMax.xyz(), nearPlane, nearMax );
-					intersectLinePlane( eye, pMin.xyz(), farPlane, farMin );
-					intersectLinePlane( eye, pMax.xyz(), farPlane, farMax );
+					auto eye = writer.declLocale< sdw::Vec3 >( "eye"
+						, vec3( 0.0_f ) );
+					auto nearMin = writer.declLocale( "nearMin"
+						, intersectLinePlane( eye, pMin.xyz(), tileNearFar.x() ) );
+					auto nearMax = writer.declLocale( "nearMax"
+						, intersectLinePlane( eye, pMax.xyz(), tileNearFar.x() ) );
+					auto farMin = writer.declLocale( "farMin"
+						, intersectLinePlane( eye, pMin.xyz(), tileNearFar.y() ) );
+					auto farMax = writer.declLocale( "farMax"
+						, intersectLinePlane( eye, pMax.xyz(), tileNearFar.y() ) );
 
 					auto aabbMin = writer.declLocale( "aabbMin"
 						, min( nearMin, min( nearMax, min( farMin, farMax ) ) ) );
@@ -229,6 +219,7 @@ namespace castor3d
 		pass.addDependency( *previousPass );
 		cameraUbo.createPassBinding( pass, cptclsb::eCamera );
 		clusters.getClustersUbo().createPassBinding( pass, cptclsb::eClusters );
+		createInputStoragePassBinding( pass, uint32_t( cptclsb::eReducedLightsAABB ), "C3D_ReducedLightsAABB", clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( cptclsb::eClustersAABB ), "C3D_ClustersAABB", clusters.getClustersAABBBuffer(), 0u, ashes::WholeSize );
 		return pass;
 	}

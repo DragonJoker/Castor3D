@@ -230,14 +230,11 @@ namespace castor3d
 	{
 		// The 3D dimensions of the cluster grid.
 		castor::Point3ui gridDim;
-		// The distance to the near clipping plane. (Used for computing the index in the cluster grid)
-		float viewNear;
+		float pad0;
 		// The size of a cluster in screen space (pixels).
 		castor::Point2ui clusterSize;
-		// ( 1 + ( 2 * tan( fov * 0.5 ) / ClusterGridDim.y ) ) // Used to compute the near plane for clusters at depth k.
-		float nearK;
-		// 1.0f / log( 1 + ( tan( fov * 0.5 ) / ClusterGridDim.y )
-		float logGridDimY;
+		// The distance to the near and far clipping plane. (Used for computing the index in the cluster grid)
+		castor::Point2f viewNearFar;
 		// The number of BVH levels for point lights.
 		uint32_t pointLightLevelsCount;
 		// The number of BVH levels for spot lights.

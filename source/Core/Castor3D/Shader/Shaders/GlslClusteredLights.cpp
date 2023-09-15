@@ -24,6 +24,10 @@ namespace castor3d::shader
 			, binding++
 			, set
 			, m_enabled );
+		C3D_ReducedLightsAABBEx( writer
+			, binding++
+			, set
+			, m_enabled );
 		C3D_PointLightClusterIndexEx( writer
 			, binding++
 			, set
@@ -42,6 +46,7 @@ namespace castor3d::shader
 			, m_enabled );
 
 		m_clusterData = castor::makeUnique< shader::ClustersData >( c3d_clustersData );
+		m_clustersLightsData = std::make_unique< sdw::Vec4 >( c3d_clustersLightsData );
 		m_pointLightIndices = std::make_unique< sdw::UInt32Array >( c3d_pointLightClusterIndex );
 		m_pointLightClusters = std::make_unique< sdw::U32Vec2Array >( c3d_pointLightClusterGrid );
 		m_spotLightIndices = std::make_unique< sdw::UInt32Array >( c3d_spotLightClusterIndex );
@@ -65,7 +70,9 @@ namespace castor3d::shader
 		}
 
 		auto clusterIndex3D = m_writer.declLocale( "clusterIndex3D"
-			, m_clusterData->computeClusterIndex3D( screenPosition, viewDepth ) );
+			, m_clusterData->computeClusterIndex3D( screenPosition
+				, viewDepth
+				, *m_clustersLightsData ) );
 		auto clusterIndex1D = m_writer.declLocale( "clusterIndex1D"
 			, m_clusterData->computeClusterIndex1D( clusterIndex3D ) );
 

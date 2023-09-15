@@ -859,6 +859,9 @@ namespace castor3d
 	{
 		bindings.push_back( frustumClusters.getClustersUbo().createLayoutBinding( index++
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+		bindings.push_back( makeDescriptorSetLayoutBinding( index++ // ReducedLightsAABBBuffer
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		bindings.push_back( makeDescriptorSetLayoutBinding( index++ // PointLightIndexBuffer
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -974,6 +977,7 @@ namespace castor3d
 		, uint32_t & index )
 	{
 		descriptorWrites.push_back( frustumClusters.getClustersUbo().getDescriptorWrite( index++ ) );
+		bindBuffer( frustumClusters.getReducedLightsAABBBuffer(), descriptorWrites, index );
 		bindBuffer( frustumClusters.getPointLightClusterIndexBuffer(), descriptorWrites, index );
 		bindBuffer( frustumClusters.getPointLightClusterGridBuffer(), descriptorWrites, index );
 		bindBuffer( frustumClusters.getSpotLightClusterIndexBuffer(), descriptorWrites, index );

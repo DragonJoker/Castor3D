@@ -101,6 +101,9 @@ namespace castor3d
 				auto & frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
 				bindings.emplace_back( frustumClusters.getClustersUbo().createLayoutBinding( index++ // ClustersUbo
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // LightsAABB
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // ClustersFlags
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -114,6 +117,7 @@ namespace castor3d
 				auto index = uint32_t( GlobalBuffersIdx::eCount );
 				auto & frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
 				descriptorWrites.emplace_back( frustumClusters.getClustersUbo().getDescriptorWrite( index++ ) );
+				bindBuffer( frustumClusters.getReducedLightsAABBBuffer(), descriptorWrites, index );
 				bindBuffer( frustumClusters.getClusterFlagsBuffer(), descriptorWrites, index );
 			}
 
@@ -166,8 +170,11 @@ namespace castor3d
 				C3D_Clusters( writer
 					, GlobalBuffersIdx::eCount
 					, RenderPipeline::eBuffers );
-				C3D_ClusterFlags( writer
+				C3D_ReducedLightsAABB( writer
 					, uint32_t( GlobalBuffersIdx::eCount ) + 1u
+					, RenderPipeline::eBuffers );
+				C3D_ClusterFlags( writer
+					, uint32_t( GlobalBuffersIdx::eCount ) + 2u
 					, RenderPipeline::eBuffers );
 
 				auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
@@ -203,7 +210,9 @@ namespace castor3d
 							, in.passMultipliers
 							, components );
 						auto clusterIndex3D = writer.declLocale( "clusterIndex3D"
-							, c3d_clustersData.computeClusterIndex3D( in.fragCoord.xy(), in.viewPosition.z() ) );
+							, c3d_clustersData.computeClusterIndex3D( in.fragCoord.xy()
+								, in.viewPosition.z()
+								, c3d_clustersLightsData ) );
 						auto clusterIndex1D = writer.declLocale( "clusterIndex1D"
 							, c3d_clustersData.computeClusterIndex1D( clusterIndex3D ) );
 						c3d_clusterFlags[clusterIndex1D] = 1_u;
