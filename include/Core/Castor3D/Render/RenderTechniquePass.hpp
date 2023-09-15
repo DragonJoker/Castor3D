@@ -89,6 +89,17 @@ namespace castor3d
 			m_shaderFlags = value;
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	The clusters configuration.
+		 *\~french
+		 *\param[in]	value	La configuration des clusters.
+		 */
+		RenderTechniquePassDesc & clustersConfig( ClustersConfig const * value )
+		{
+			m_clustersConfig = value;
+			return *this;
+		}
 
 		SsaoConfig const * m_ssaoConfig{};
 		Texture const * m_ssao{};
@@ -99,6 +110,7 @@ namespace castor3d
 			| ShaderFlag::eLighting
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eColour };
+		ClustersConfig const * m_clustersConfig{};
 	};
 
 	class RenderTechniquePass
@@ -179,6 +191,7 @@ namespace castor3d
 		/**@{*/
 		C3D_API Engine * getEngine()const;
 		C3D_API DebugConfig & getDebugConfig()const;
+		C3D_API virtual ClustersConfig const * getClustersConfig()const = 0;
 
 		Scene const & getScene()
 		{
@@ -338,6 +351,11 @@ namespace castor3d
 			return RenderTechniquePass::getDebugConfig();
 		}
 
+		ClustersConfig const * getClustersConfig()const override
+		{
+			return m_clustersConfig;
+		}
+
 		bool hasSsao()const noexcept override
 		{
 			return m_ssao && m_ssaoConfig && m_ssaoConfig->enabled;
@@ -384,6 +402,7 @@ namespace castor3d
 		SsaoConfig const * m_ssaoConfig{};
 		Texture const * m_ssao{};
 		IndirectLightingData m_indirectLighting;
+		ClustersConfig const * m_clustersConfig{};
 	};
 }
 

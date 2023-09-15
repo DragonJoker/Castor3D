@@ -273,6 +273,7 @@ namespace water
 						| castor3d::ComponentModeFlag::eSpecifics )
 				, castor3d::RenderTechniquePassDesc{ false, technique.getSsaoConfig() }
 					.indirect( technique.getIndirectLighting() )
+					.clustersConfig( technique.getClustersConfig() )
 				, castor3d::IsRenderPassEnabledUPtr( isEnabled ) );
 			renderPasses[size_t( Event )].push_back( res.get() );
 			device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
@@ -549,7 +550,7 @@ namespace water
 		shader::ClusteredLights clusteredLights{ writer
 			, index
 			, RenderPipeline::eBuffers
-			, m_allowClusteredLighting };
+			, getClustersConfig() };
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u

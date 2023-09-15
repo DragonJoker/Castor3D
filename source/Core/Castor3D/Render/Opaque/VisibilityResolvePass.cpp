@@ -918,7 +918,7 @@ namespace castor3d
 			, uint32_t stride
 			, bool blend
 			, bool hasSsao
-			, bool clusteredLighting )
+			, ClustersConfig const & clustersConfig )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer;
@@ -1003,7 +1003,7 @@ namespace castor3d
 			shader::ClusteredLights clusteredLights{ writer
 				, index
 				, Sets::eInOuts
-				, clusteredLighting };
+				, &clustersConfig };
 
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
@@ -1415,9 +1415,10 @@ namespace castor3d
 				, bindings
 				, index );
 
-			if ( allowClusteredLighting )
+			if ( allowClusteredLighting
+				&& technique.getRenderTarget().getFrustumClusters() )
 			{
-				RenderNodesPass::addClusteredLightingBindings( technique.getRenderTarget().getFrustumClusters()
+				RenderNodesPass::addClusteredLightingBindings( *technique.getRenderTarget().getFrustumClusters()
 					, bindings
 					, index );
 			}
@@ -1518,9 +1519,10 @@ namespace castor3d
 				, writes
 				, index );
 
-			if ( allowClusteredLighting )
+			if ( allowClusteredLighting
+				&& technique.getRenderTarget().getFrustumClusters() )
 			{
-				RenderNodesPass::addClusteredLightingDescriptor( technique.getRenderTarget().getFrustumClusters()
+				RenderNodesPass::addClusteredLightingDescriptor( *technique.getRenderTarget().getFrustumClusters()
 					, writes
 					, index );
 			}
@@ -1924,6 +1926,7 @@ namespace castor3d
 		, m_blendFramebuffer{ ( useCompute
 			? nullptr
 			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage ) ) }
+		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
 	{
 	}
 
@@ -2385,17 +2388,17 @@ namespace castor3d
 				? visres::createVtxDescriptorLayout( m_device, getName(), flags )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
 			result->ioDescriptorLayout = visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
-				, m_targetImage, getScene(), *m_parent, m_parent->getClustersConfig().enabled, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting() );
+				, m_targetImage, getScene(), *m_parent, getClustersConfig()->enabled, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting() );
 			result->pipelineLayout = m_device->createPipelineLayout( getName()
 				, { *result->ioDescriptorLayout, *result->vtxDescriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), m_parent->getClustersConfig().enabled ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig() ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), m_parent->getClustersConfig().enabled ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig() ) };
 
 			if constexpr ( useCompute )
 			{
@@ -2433,7 +2436,7 @@ namespace castor3d
 			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
-				, m_parent->getClustersConfig().enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting() );
+				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting() );
 			it = pipelines.emplace( hash, std::move( result ) ).first;
 		}
 

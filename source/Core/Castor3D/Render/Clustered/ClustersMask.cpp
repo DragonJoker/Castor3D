@@ -78,7 +78,8 @@ namespace castor3d
 
 			bool isPassEnabled()const override
 			{
-				return m_parent->getClustersConfig().parseDepthBuffer
+				return m_parent->getClustersConfig()
+					&& m_parent->getClustersConfig()->parseDepthBuffer
 					&& hasNodes()
 					&& getScene().getLightCache().hasClusteredLights();
 			}
@@ -98,8 +99,9 @@ namespace castor3d
 				, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override
 			{
 				auto index = uint32_t( GlobalBuffersIdx::eCount );
-				auto & frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
-				bindings.emplace_back( frustumClusters.getClustersUbo().createLayoutBinding( index++ // ClustersUbo
+				auto frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
+				CU_Require( frustumClusters );
+				bindings.emplace_back( frustumClusters->getClustersUbo().createLayoutBinding( index++ // ClustersUbo
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // LightsAABB
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -115,10 +117,11 @@ namespace castor3d
 				, ShadowBuffer const * shadowBuffer )override
 			{
 				auto index = uint32_t( GlobalBuffersIdx::eCount );
-				auto & frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
-				descriptorWrites.emplace_back( frustumClusters.getClustersUbo().getDescriptorWrite( index++ ) );
-				bindBuffer( frustumClusters.getReducedLightsAABBBuffer(), descriptorWrites, index );
-				bindBuffer( frustumClusters.getClusterFlagsBuffer(), descriptorWrites, index );
+				auto frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
+				CU_Require( frustumClusters );
+				descriptorWrites.emplace_back( frustumClusters->getClustersUbo().getDescriptorWrite( index++ ) );
+				bindBuffer( frustumClusters->getReducedLightsAABBBuffer(), descriptorWrites, index );
+				bindBuffer( frustumClusters->getClusterFlagsBuffer(), descriptorWrites, index );
 			}
 
 			ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override
@@ -169,7 +172,8 @@ namespace castor3d
 
 				C3D_Clusters( writer
 					, GlobalBuffersIdx::eCount
-					, RenderPipeline::eBuffers );
+					, RenderPipeline::eBuffers
+					, m_parent->getClustersConfig() );
 				C3D_ReducedLightsAABB( writer
 					, uint32_t( GlobalBuffersIdx::eCount ) + 1u
 					, RenderPipeline::eBuffers );

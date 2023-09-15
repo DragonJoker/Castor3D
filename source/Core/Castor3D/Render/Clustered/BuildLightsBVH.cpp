@@ -80,7 +80,8 @@ namespace castor3d
 				, bottomLevel };
 			C3D_Clusters( writer
 				, eClusters
-				, 0u );
+				, 0u
+				, &config );
 			C3D_PointLightIndicesEx( writer
 				, ePointLightIndices
 				, 0u

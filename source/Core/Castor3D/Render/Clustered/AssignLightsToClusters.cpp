@@ -75,7 +75,8 @@ namespace castor3d
 				, 0u };
 			C3D_Clusters( writer
 				, eClusters
-				, 0u );
+				, 0u
+				, &config );
 			C3D_ClustersAABB( writer
 				, eClustersAABB
 				, 0u );

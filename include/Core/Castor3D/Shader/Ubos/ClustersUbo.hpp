@@ -4,7 +4,8 @@ See LICENSE file in root folder
 #ifndef ___C3D_ClustersUbo_H___
 #define ___C3D_ClustersUbo_H___
 
-#include "UbosModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
+#include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Shader/Shaders/GlslAABB.hpp"
@@ -36,6 +37,11 @@ namespace castor3d
 			{
 			}
 
+			void setConfig( ClustersConfig const * config )
+			{
+				m_config = config;
+			}
+
 			auto dimensions()const { return getMember< "dimensions" >(); }
 			auto clusterSize()const { return getMember< "clusterSize" >(); }
 			auto viewNear()const { return getMember< "viewNearFar" >().x(); }
@@ -61,6 +67,7 @@ namespace castor3d
 				, sdw::Vec4 & lightsAABBRange );
 
 		private:
+			ClustersConfig const * m_config{};
 			sdw::Function< sdw::U32Vec3
 				, sdw::InUInt32 > m_computeClusterIndex3DIdx;
 			sdw::Function< sdw::U32Vec3
@@ -139,7 +146,7 @@ namespace castor3d
 	};
 }
 
-#define C3D_ClustersEx( writer, binding, set, enabled ) \
+#define C3D_ClustersEx( writer, binding, set, enabled, config ) \
 	sdw::UniformBuffer clusters{ writer \
 		, "C3D_Clusters" \
 		, "c3d_clusters" \
@@ -148,9 +155,10 @@ namespace castor3d
 		, ast::type::MemoryLayout::eStd140 \
 		, enabled }; \
 	auto c3d_clustersData = clusters.declMember< castor3d::shader::ClustersData >( "c", enabled ); \
+	c3d_clustersData.setConfig( config ); \
 	clusters.end()
 
-#define C3D_Clusters( writer, binding, set ) \
-	C3D_ClustersEx( writer, binding, set, true )
+#define C3D_Clusters( writer, binding, set, config ) \
+	C3D_ClustersEx( writer, binding, set, true, config )
 
 #endif

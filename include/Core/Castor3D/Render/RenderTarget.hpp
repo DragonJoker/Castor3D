@@ -432,10 +432,9 @@ namespace castor3d
 			return m_debugConfig;
 		}
 
-		FrustumClusters & getFrustumClusters()const noexcept
+		FrustumClusters * getFrustumClusters()const noexcept
 		{
-			CU_Require( m_frustumClusters );
-			return *m_frustumClusters;
+			return m_frustumClusters.get();
 		}
 
 		void enableFullLoading( bool value )noexcept
