@@ -20,7 +20,7 @@ namespace castor3d::shader
 		: public sdw::StructInstanceHelperT< "C3D_Light"
 			, sdw::type::MemoryLayout::eC
 			, sdw::Vec3Field< "colour" >
-			, sdw::FloatField< "radius" >
+			, sdw::FloatField< "range" >
 			, sdw::Vec2Field< "intensity" >
 			, sdw::IntField< "shadowMapIndex" >
 			, sdw::UIntField< "cascadeCount" >
@@ -42,7 +42,7 @@ namespace castor3d::shader
 	public:
 		auto colour()const { return getMember< "colour" >(); }
 		auto intensity()const { return getMember< "intensity" >(); }
-		auto radius()const { return getMember< "radius" >(); }
+		auto range()const { return getMember< "range" >(); }
 		auto shadowMapIndex()const { return getMember< "shadowMapIndex" >(); }
 
 	private:
@@ -86,14 +86,15 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API sdw::Float getAttenuationFactor( sdw::Float const & distance )const;
+		C3D_API void getAttenuationFactor( sdw::Float const & distance
+			, sdw::Float & attenuation )const;
 
 	public:
 		auto base()const { return getMember< "base" >(); }
 
 		auto colour()const { return base().colour(); }
 		auto intensity()const { return base().intensity(); }
-		auto radius()const { return base().radius(); }
+		auto range()const { return base().range(); }
 		auto shadowMapIndex()const { return base().shadowMapIndex(); }
 
 		auto position()const { return base().posDir(); }
@@ -118,14 +119,15 @@ namespace castor3d::shader
 		{
 		}
 
-		C3D_API sdw::Float getAttenuationFactor( sdw::Float const & distance )const;
+		C3D_API void getAttenuationFactor( sdw::Float const & distance
+			, sdw::Float & attenuation )const;
 
 	public:
 		auto base()const { return getMember< "base" >(); }
 
 		auto colour()const { return base().colour(); }
 		auto intensity()const { return base().intensity(); }
-		auto radius()const { return base().radius(); }
+		auto range()const { return base().range(); }
 		auto shadowMapIndex()const { return base().shadowMapIndex(); }
 
 		auto position()const { return base().posDir(); }
@@ -140,6 +142,18 @@ namespace castor3d::shader
 		// SpecificValues
 		auto cutOffsCosDiff()const { return innerCutOffCos() - outerCutOffCos(); }
 	};
+
+	C3D_API sdw::Float computeRange( Light const & light );
+
+	inline sdw::Float computeRange( PointLight const & light )
+	{
+		return computeRange( light.base() );
+	}
+
+	inline sdw::Float computeRange( SpotLight const & light )
+	{
+		return computeRange( light.base() );
+	}
 
 	class LightsBuffer
 		: public BufferT< BufferData >

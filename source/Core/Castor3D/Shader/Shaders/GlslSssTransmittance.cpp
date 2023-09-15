@@ -140,7 +140,7 @@ namespace castor3d
 								, wsNormal
 								, sssTransmittance
 								, -lightToVertex
-								, light.radius() );
+								, computeRange( light ) );
 						}
 						FI;
 
@@ -213,7 +213,7 @@ namespace castor3d
 								, wsNormal
 								, sssTransmittance
 								, light.position() - wsPosition
-								, light.radius() );
+								, computeRange( light ) );
 							//result = vec3( shrinkedPos );
 						}
 						FI;

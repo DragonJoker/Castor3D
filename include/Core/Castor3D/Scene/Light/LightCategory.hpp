@@ -43,7 +43,7 @@ namespace castor3d
 			: ShaderBufferTypes
 		{
 			Float3 colour;
-			Float1 radius;
+			Float1 range;
 			Float2 intensity;
 			Float1 shadowMapIndex;
 			Float1 cascadeCount;

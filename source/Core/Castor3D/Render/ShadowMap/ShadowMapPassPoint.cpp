@@ -357,8 +357,8 @@ namespace castor3d
 						, light.position() - in.worldPosition.xyz() );
 					auto distance = writer.declLocale( "distance"
 						, length( lightToVertex ) );
-					auto attenuation = writer.declLocale( "attenuation"
-						, light.getAttenuationFactor( distance ) );
+					auto attenuation = writer.declLocale( "attenuation", 1.0_f );
+					light.getAttenuationFactor( distance, attenuation );
 					components.colour *= in.colour;
 					outFlux.rgb() = ( components.colour
 							* light.base().colour()

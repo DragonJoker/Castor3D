@@ -168,10 +168,11 @@ namespace castor3d
 		auto direction = castor::Point3f{ 0, 0, 1 };
 		node.getDerivedOrientation().transform( direction, direction );
 		m_direction = -direction;
+		auto range = computeRange( getIntensity(), m_range.value() );
 		auto aabb = lgtspot::computeAABB( SpotLight::generateVertices( uint32_t( std::ceil( getOuterCutOff().degrees() ) ) ) );
-		m_cubeBox.load( aabb.getMin() * m_range.value()
-			, aabb.getMax() * m_range.value() );
-		m_farPlane = m_range.value();
+		m_cubeBox.load( aabb.getMin() * range
+			, aabb.getMax() * range );
+		m_farPlane = range;
 		m_dirtyData = false;
 	}
 
@@ -215,7 +216,7 @@ namespace castor3d
 		auto position = getLight().getParent()->getDerivedPosition();
 
 		spot.posDir = position;
-		spot.radius = m_range;
+		spot.range = m_range.value();
 		spot.exponent = m_exponent;
 		spot.direction = m_direction;
 		spot.innerCutoffCos = m_innerCutOff.value().cos();
