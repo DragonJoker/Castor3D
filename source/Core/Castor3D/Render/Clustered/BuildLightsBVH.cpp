@@ -35,9 +35,8 @@ namespace castor3d
 	{
 		enum BindingPoints
 		{
-			eCamera,
-			eLights,
 			eClusters,
+			eAllLightsAABB,
 			ePointLightIndices,
 			eSpotLightIndices,
 			ePointLightBVH,
@@ -70,14 +69,9 @@ namespace castor3d
 				, 34636833_u	/* Level 6 */ } );
 
 			// Inputs
-			C3D_CameraEx( writer
-				, eCamera
-				, 0u
-				, bottomLevel );
-			shader::LightsBuffer lights{ writer
-				, eLights
-				, 0u
-				, bottomLevel };
+			C3D_AllLightsAABB( writer
+				, eAllLightsAABB
+				, 0u );
 			C3D_Clusters( writer
 				, eClusters
 				, 0u
@@ -130,10 +124,25 @@ namespace castor3d
 			writer.implementMainT< sdw::VoidT >( NumThreads
 				, [&]( sdw::ComputeIn in )
 				{
-					auto aabbMin = writer.declLocale< sdw::Vec4 >( "aabbMin" );
-					auto aabbMax = writer.declLocale< sdw::Vec4 >( "aabbMax" );
 					auto groupIndex = in.localInvocationIndex;
 					auto threadIndex = in.globalInvocationID.x();
+					auto aabbMin = writer.declLocale( "aabbMin"
+						, vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f ) );
+					auto aabbMax = writer.declLocale( "aabbMax"
+						, vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f ) );
+
+					IF( writer, groupIndex == 0_u )
+					{
+						FOR( writer, sdw::UInt, n, 0_u, n < NumThreads, ++n )
+						{
+							gsAABBMin[n] = aabbMin;
+							gsAABBMax[n] = aabbMax;
+						}
+						ROF;
+					}
+					FI;
+
+					shader::groupMemoryBarrierWithGroupSync( writer );
 
 					if ( bottomLevel )
 					{
@@ -141,89 +150,15 @@ namespace castor3d
 						auto leafIndex = writer.declLocale( "leafIndex"
 							, threadIndex );
 
-						auto loadPointLightAABB = writer.implementFunction< shader::AABB >( "loadPointLightAABB"
-							, [&]( sdw::UInt lightIndex )
-							{
-								auto lightOffset = ( config.sortLights
-									? c3d_pointLightIndices[lightIndex]
-									: lights.getDirectionalsEnd() + lightIndex * PointLight::LightDataComponents );
-								auto point = writer.declLocale( "point"
-									, lights.getPointLight( lightOffset ) );
-								auto vsPosition = writer.declLocale( "vsPosition"
-									, c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
-
-								writer.returnStmt( shader::AABB{ vsPosition, computeRange( point ) } );
-							}
-							, sdw::InUInt{ writer, "leafIndex" } );
-
-						auto getConeAABB = writer.implementFunction< shader::AABB >( "getConeAABB"
-							, [&]( sdw::Vec3 const vsApex
-								, sdw::Vec3 const vsBase
-								, sdw::Float const fBaseRadius )
-							{
-								auto a = writer.declLocale( "a"
-									, vsBase - vsApex );
-								auto e = writer.declLocale( "e"
-									, sqrt( vec3( 1.0_f ) - a * a / dot( a, a ) ) );
-
-								writer.returnStmt( shader::AABB( vec4( min( vsApex, vsBase - e * fBaseRadius ), 1.0f )
-									, vec4( max( vsApex, vsBase + e * fBaseRadius ), 1.0f ) ) );
-							}
-							, sdw::InVec3{ writer, "vsApex" }
-							, sdw::InVec3{ writer, "vsBase" }
-							, sdw::InFloat{ writer, "fBaseRadius" } );
-
-						auto loadSpotLightAABB = writer.implementFunction< shader::AABB >( "loadSpotLightAABB"
-							, [&]( sdw::UInt lightIndex )
-							{
-								auto lightOffset = ( config.sortLights
-									? c3d_spotLightIndices[lightIndex]
-									: lights.getPointsEnd() + lightIndex * SpotLight::LightDataComponents );
-								auto spot = writer.declLocale( "spot"
-									, lights.getSpotLight( lightOffset ) );
-
-								if ( config.useSpotTightBoundingBox )
-								{
-									auto vsApex = writer.declLocale( "vsApex"
-										, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
-									auto vsDirection = writer.declLocale( "vsDirection"
-										, c3d_cameraData.worldToCurView( -spot.direction() ) );
-									auto largeRange = writer.declLocale( "range"
-										, computeRange( spot ) );
-									auto smallRange = writer.declLocale( "smallRange"
-										, largeRange * spot.outerCutOffCos() );
-									auto baseRadius = writer.declLocale( "baseRadius"
-										, smallRange * spot.outerCutOffTan() );
-
-									auto smallBase = writer.declLocale( "smallBase"
-										, vsApex + smallRange * vsDirection );
-									auto smallAABB = writer.declLocale( "smallAABB"
-										, getConeAABB( vsApex, smallBase, baseRadius ) );
-
-									auto largeBase = writer.declLocale( "largeBase"
-										, vsApex + largeRange * vsDirection );
-									auto largeAABB = writer.declLocale( "largeAABB"
-										, getConeAABB( vsApex, largeBase, baseRadius ) );
-
-									writer.returnStmt( shader::AABB{ min( smallAABB.min(), largeAABB.min() )
-										, max( smallAABB.max(), largeAABB.max() ) } );
-								}
-								else
-								{
-									auto vsPosition = writer.declLocale( "vsPosition"
-										, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
-
-									writer.returnStmt( shader::AABB{ vsPosition, computeRange( spot ) } );
-								}
-							}
-							, sdw::InUInt{ writer, "lightIndex" } );
-
 						IF( writer, c3d_clustersData.pointLightCount() > 0_u )
 						{
 							IF( writer, leafIndex < c3d_clustersData.pointLightCount() )
 							{
+								auto lightIndex = writer.declLocale( "lightIndex"
+									, config.sortLights ? c3d_pointLightIndices[leafIndex] : leafIndex );
 								auto aabb = writer.declLocale( "aabb"
-									, loadPointLightAABB( leafIndex ) );
+									, c3d_allLightsAABB[lightIndex] );
+
 								aabbMin = aabb.min();
 								aabbMax = aabb.max();
 							}
@@ -269,8 +204,11 @@ namespace castor3d
 							// Now compute BVH nodes for spot lights.
 							IF( writer, leafIndex < c3d_clustersData.spotLightCount() )
 							{
+								auto lightAABBIndex = writer.declLocale( "lightAABBIndex"
+									, c3d_clustersData.pointLightCount() + ( config.sortLights ? c3d_spotLightIndices[leafIndex] : leafIndex ) );
 								auto aabb = writer.declLocale( "aabb"
-									, loadSpotLightAABB( leafIndex ) );
+									, c3d_allLightsAABB[lightAABBIndex] );
+
 								aabbMin = aabb.min();
 								aabbMax = aabb.max();
 							}
@@ -325,6 +263,15 @@ namespace castor3d
 
 							aabbMin = c3d_pointLightBVH[childIndex].min();
 							aabbMax = c3d_pointLightBVH[childIndex].max();
+
+							IF( writer, aabbMin.x() == aabbMax.x()
+								&& aabbMin.y() == aabbMax.y()
+								&& aabbMin.z() == aabbMax.z() )
+							{
+								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
+								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
+							}
+							FI;
 						}
 						ELSE
 						{
@@ -367,6 +314,15 @@ namespace castor3d
 
 							aabbMin = c3d_spotLightBVH[childIndex].min();
 							aabbMax = c3d_spotLightBVH[childIndex].max();
+
+							IF( writer, aabbMin.x() == aabbMax.x()
+								&& aabbMin.y() == aabbMax.y()
+								&& aabbMin.z() == aabbMax.z() )
+							{
+								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
+								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
+							}
+							FI;
 						}
 						ELSE
 						{
@@ -421,7 +377,7 @@ namespace castor3d
 						, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
 						, IsComputePassCallback( [](){ return true; } ) }
-					, crg::ru::Config{ 6u, true /* resettable */ } }
+					, crg::ru::Config{ 3u, true /* resettable */ } }
 				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
 				, m_bottom{ framePass, context, graph, device, clusters.getConfig(), true, this }
@@ -472,10 +428,10 @@ namespace castor3d
 						, context
 						, graph
 						, crg::pp::Config{}
-							.programCreator( { 6u, [this, &device, &config, bottomLevel]( uint32_t passIndex ){ return doCreateProgram( device, config, passIndex, bottomLevel ); } } )
+							.programCreator( { 3u, [this, &device, &config, bottomLevel]( uint32_t passIndex ){ return doCreateProgram( device, config, passIndex, bottomLevel ); } } )
 							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u } )
 						, VK_PIPELINE_BIND_POINT_COMPUTE
-						, 6u }
+						, 3u }
 				{
 				}
 
@@ -516,11 +472,6 @@ namespace castor3d
 			uint32_t doGetPassIndex()
 			{
 				u32 result = {};
-
-				if ( m_clusters.getConfig().useSpotTightBoundingBox )
-				{
-					result += 3u;
-				}
 
 				if ( m_clusters.getConfig().sortLights )
 				{
@@ -628,7 +579,6 @@ namespace castor3d
 	crg::FramePass const & createBuildLightsBVHPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters )
 	{
 		auto & pass = graph.createPass( "BuildLightsBVH"
@@ -646,17 +596,13 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependencies( previousPasses );
-		cameraUbo.createPassBinding( pass, lgtbvh::eCamera );
-		auto & lights = clusters.getCamera().getScene()->getLightCache();
-		lights.createPassBinding( pass, lgtbvh::eLights );
 		clusters.getClustersUbo().createPassBinding( pass, lgtbvh::eClusters );
+		createInputStoragePassBinding( pass, uint32_t( lgtbvh::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( pass, uint32_t( lgtbvh::ePointLightIndices ), "C3D_PointLightIndices"
-			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
-				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
+			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createInputStoragePassBinding( pass, uint32_t( lgtbvh::eSpotLightIndices ), "C3D_SpotLightIndices"
-			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
-				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
+			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( lgtbvh::ePointLightBVH ), "C3D_PointLightBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( lgtbvh::eSpotLightBVH ), "C3D_SpotLightBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );

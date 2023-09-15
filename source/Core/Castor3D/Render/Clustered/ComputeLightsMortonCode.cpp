@@ -34,9 +34,8 @@ namespace castor3d
 	{
 		enum BindingPoints
 		{
-			eCamera,
-			eLights,
 			eClusters,
+			eAllLightsAABB,
 			eReducedLightsAABB,
 			ePointLightMortonCodes,
 			eSpotLightMortonCodes,
@@ -60,16 +59,13 @@ namespace castor3d
 			sdw::ComputeWriter writer;
 
 			// Inputs
-			C3D_Camera( writer
-				, eCamera
-				, 0u );
-			shader::LightsBuffer lights{ writer
-				, eLights
-				, 0u };
 			C3D_Clusters( writer
 				, eClusters
 				, 0u
 				, &config );
+			C3D_AllLightsAABB( writer
+				, eAllLightsAABB
+				, 0u );
 			C3D_ReducedLightsAABB( writer
 				, eReducedLightsAABB
 				, 0u );
@@ -132,35 +128,31 @@ namespace castor3d
 
 					IF( writer, threadIndex < c3d_clustersData.pointLightCount() )
 					{
-						auto lightOffset = writer.declLocale( "lightOffset"
-							, lights.getDirectionalsEnd() + threadIndex * PointLight::LightDataComponents );
-						auto point = writer.declLocale( "point"
-							, lights.getPointLight( lightOffset ) );
+						auto aabb = writer.declLocale( "threadIndex"
+							, c3d_allLightsAABB[threadIndex] );
 						auto vsPosition = writer.declLocale( "vsPosition"
-							, c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ).xyz() );
+							, ( aabb.min() + ( aabb.max() - aabb.min() ) / 2.0_f ).xyz() );
 						// Normalize and scale the position of the light to produce the quantized coordinate.
 						auto quantized = writer.declLocale( "quantized"
 							, sdw::uvec3( ( vsPosition - gsAABB.min().xyz() ) * gsAABBRange * coordScale ) );
 
 						c3d_pointLightMortonCodes[threadIndex] = getMortonCode( quantized );
-						c3d_pointLightIndices[threadIndex] = lightOffset;
+						c3d_pointLightIndices[threadIndex] = threadIndex;
 					}
 					FI;
 
 					IF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 					{
-						auto lightOffset = writer.declLocale( "lightOffset"
-							, lights.getPointsEnd() + threadIndex * SpotLight::LightDataComponents );
-						auto spot = writer.declLocale( "spot"
-							, lights.getSpotLight( lightOffset ) );
+						auto aabb = writer.declLocale( "threadIndex"
+							, c3d_allLightsAABB[c3d_clustersData.pointLightCount() + threadIndex] );
 						auto vsPosition = writer.declLocale( "vsPosition"
-							, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz() );
+							, ( aabb.min() + ( aabb.max() - aabb.min() ) / 2.0_f ).xyz() );
 						// Normalize and scale the position of the light to produce the quantized coordinate.
 						auto quantized = writer.declLocale( "quantized"
 							, sdw::uvec3( ( vsPosition - gsAABB.min().xyz() ) * gsAABBRange * coordScale ) );
 
 						c3d_spotLightMortonCodes[threadIndex] = getMortonCode( quantized );
-						c3d_spotLightIndices[threadIndex] = lightOffset;
+						c3d_spotLightIndices[threadIndex] = threadIndex;
 					}
 					FI;
 				} );
@@ -238,7 +230,6 @@ namespace castor3d
 	crg::FramePass const & createComputeLightsMortonCodePass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters )
 	{
 		auto & pass = graph.createPass( "ComputeLightsMortonCode"
@@ -259,10 +250,8 @@ namespace castor3d
 				return result;
 			} );
 		pass.addDependency( *previousPass );
-		cameraUbo.createPassBinding( pass, cmpmrt::eCamera );
-		auto & lights = clusters.getCamera().getScene()->getLightCache();
-		lights.createPassBinding( pass, cmpmrt::eLights );
 		clusters.getClustersUbo().createPassBinding( pass, cmpmrt::eClusters );
+		createInputStoragePassBinding( pass, uint32_t( cmpmrt::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( pass, uint32_t( cmpmrt::eReducedLightsAABB ), "C3D_ReducedLightsAABB", clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::ePointLightMortonCodes ), "C3D_PointLightMortonCodes", clusters.getOutputPointLightMortonCodesBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( pass, uint32_t( cmpmrt::eSpotLightMortonCodes ), "C3D_SpotLightMortonCodes", clusters.getOutputSpotLightMortonCodesBuffer(), 0u, ashes::WholeSize );

@@ -1,6 +1,8 @@
 #include "Castor3D/Shader/Shaders/GlslClusteredLights.hpp"
 
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
+#include "Castor3D/Scene/Light/PointLight.hpp"
+#include "Castor3D/Scene/Light/SpotLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
@@ -87,7 +89,7 @@ namespace castor3d::shader
 		FOR( m_writer, sdw::UInt, i, 0_u, i < pointLightCount, ++i )
 		{
 			auto lightOffset = m_writer.declLocale( "lightOffset"
-				, ( *m_pointLightIndices )[pointStartOffset + i] );
+				, lights.getDirectionalsEnd() + ( *m_pointLightIndices )[pointStartOffset + i] * castor3d::PointLight::LightDataComponents );
 			auto light = m_writer.declLocale( "point", lights.getPointLight( lightOffset ) );
 			lightingModel.compute( light
 				, components
@@ -105,7 +107,7 @@ namespace castor3d::shader
 		FOR( m_writer, sdw::UInt, i, 0_u, i < spotLightCount, ++i )
 		{
 			auto lightOffset = m_writer.declLocale( "lightOffset"
-				, ( *m_spotLightIndices )[spotStartOffset + i] );
+				, lights.getPointsEnd() + ( *m_spotLightIndices )[spotStartOffset + i] * castor3d::SpotLight::LightDataComponents );
 			auto light = m_writer.declLocale( "spot", lights.getSpotLight( lightOffset ) );
 			lightingModel.compute( light
 				, components
