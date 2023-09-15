@@ -38,8 +38,8 @@ namespace castor3d
 		enum BindingPoints
 		{
 			eCamera,
-			eLights,
 			eClusters,
+			eAllLightsAABB,
 			eReducedLightsAABB,
 		};
 
@@ -55,14 +55,14 @@ namespace castor3d
 			C3D_Camera( writer
 				, eCamera
 				, 0u );
-			shader::LightsBuffer lights{ writer
-				, eLights
-				, 0u
-				, first };
 			C3D_Clusters( writer
 				, eClusters
 				, 0u
 				, &config );
+			C3D_AllLightsAABBEx( writer
+				, eAllLightsAABB
+				, 0u
+				, first );
 			C3D_ReducedLightsAABB( writer
 				, eReducedLightsAABB
 				, 0u );
@@ -113,7 +113,7 @@ namespace castor3d
 				// Source: The CUDA Handbook (2013), Nicholas Wilt
 				IF( writer, groupIndex < 32_u )
 				{
-					while ( writer, reduceIndex > 0u )
+					while ( reduceIndex > 0u )
 					{
 						// To avoid out-of-bounds memory access, the number of threads in the 
 						// group must be at least 2x the reduce index. For example, the 
@@ -130,8 +130,7 @@ namespace castor3d
 
 					IF( writer, groupIndex == 0_u )
 					{
-						c3d_reducedLightsAABB[groupID].min() = gsAABBMin[groupIndex];
-						c3d_reducedLightsAABB[groupID].max() = gsAABBMax[groupIndex];
+						c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 					}
 					FI;
 				}
@@ -139,8 +138,7 @@ namespace castor3d
 #else
 				IF( writer, groupIndex == 0_u )
 				{
-					c3d_reducedLightsAABB[groupID].min() = gsAABBMin[groupIndex];
-					c3d_reducedLightsAABB[groupID].max() = gsAABBMax[groupIndex];
+					c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
 				}
 				FI;
 #endif
@@ -175,38 +173,24 @@ namespace castor3d
 					{
 						// The 1st pass of the reduction operates on the light buffers.
 						// First compute point lights AABB.
-						FOR( writer, sdw::UInt, i, threadIndex, i < c3d_clustersData.pointLightCount(), i += c3d_numThreadGroups * NumThreads )
+						IF( writer, threadIndex < c3d_clustersData.pointLightCount() )
 						{
-							auto lightOffset = writer.declLocale( "lightOffset"
-								, lights.getDirectionalsEnd() + i * PointLight::LightDataComponents );
-							auto point = writer.declLocale( "point"
-								, lights.getPointLight( lightOffset ) );
-							auto vsPosition = writer.declLocale( "vsPosition"
-								, c3d_cameraData.worldToCurView( vec4( point.position(), 1.0_f ) ) );
-							auto range = writer.declLocale( "range"
-								, computeRange( point ) );
+							auto aabb = c3d_allLightsAABB[threadIndex];
 
-							aabbMin = min( aabbMin, vsPosition - range );
-							aabbMax = max( aabbMax, vsPosition + range );
+							aabbMin = min( aabbMin, aabb.min() );
+							aabbMax = max( aabbMax, aabb.max() );
 						}
-						ROF;
+						FI;
 
 						// Next, expand AABB for spot lights.
-						FOR( writer, sdw::UInt, i, threadIndex, i < c3d_clustersData.spotLightCount(), i += c3d_numThreadGroups * NumThreads )
+						IF( writer, threadIndex < c3d_clustersData.spotLightCount() )
 						{
-							auto lightOffset = writer.declLocale( "lightOffset"
-								, lights.getPointsEnd() + i * SpotLight::LightDataComponents );
-							auto spot = writer.declLocale( "spot"
-								, lights.getSpotLight( lightOffset ) );
-							auto vsPosition = writer.declLocale( "vsPosition"
-								, c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ) );
-							auto range = writer.declLocale( "range"
-								, computeRange( spot ) );
+							auto aabb = c3d_allLightsAABB[c3d_clustersData.pointLightCount() + threadIndex];
 
-							aabbMin = min( aabbMin, vsPosition - range );
-							aabbMax = max( aabbMax, vsPosition + range );
+							aabbMin = min( aabbMin, aabb.min() );
+							aabbMax = max( aabbMax, aabb.max() );
 						}
-						ROF;
+						FI;
 
 						gsAABBMin[groupIndex] = aabbMin;
 						gsAABBMax[groupIndex] = aabbMax;
@@ -516,10 +500,9 @@ namespace castor3d
 				return result;
 			} );
 		first.addDependency( *previousPass );
-		auto & lights = clusters.getCamera().getScene()->getLightCache();
 		cameraUbo.createPassBinding( first, rdclgb::eCamera );
-		lights.createPassBinding( first, rdclgb::eLights );
 		clusters.getClustersUbo().createPassBinding( first, rdclgb::eClusters );
+		createInputStoragePassBinding( first, uint32_t( rdclgb::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( first, uint32_t( rdclgb::eReducedLightsAABB ), "C3D_ReducedLightsAABB", clusters.getReducedLightsAABBBuffer(), 0u, ashes::WholeSize );
 
 		auto & second = graph.createPass( "ReduceLightsAABB/Second"

@@ -127,7 +127,7 @@ namespace castor3d
 				auto gsE = writer.declSharedVariable< sdw::UInt >( "gsE", NumThreads );				// Set a 1 for all false sort keys (b == 0) and a 0 for all true sort keys (b == 1)     (1,024 Bytes)
 				auto gsF = writer.declSharedVariable< sdw::UInt >( "gsF", NumThreads );				// Scan the splits. This results in the output index of all false sort keys (b == 0)    (1,024 Bytes)
 				auto gsD = writer.declSharedVariable< sdw::UInt >( "gsD", NumThreads );				// The desination index for the ouput key and value.                                    (1,024 Bytes)
-				auto gsTotalFalses = writer.declSharedVariable< sdw::UInt >( "gsTotalFalses" );				// The result of e[NUM_THREADS - 1] + f[NUM_THREADS - 1];                               (4 Bytes)
+				auto gsTotalFalses = writer.declSharedVariable< sdw::UInt >( "gsTotalFalses" );		// The result of e[NUM_THREADS - 1] + f[NUM_THREADS - 1];                               (4 Bytes)
 
 				writer.implementMainT< sdw::VoidT >( NumThreads
 					, [&]( sdw::ComputeIn in )
@@ -581,14 +581,16 @@ namespace castor3d
 							auto sortGroup = writer.declLocale( "sortGroup", groupID / numThreadGroupsPerSortGroup );
 							// The merge path partition within the sort group.
 							auto partition = writer.declLocale( "partition", groupID % numThreadGroupsPerSortGroup );
+							// num values for the current sort group, clamped to avoid out of bounds access
+							auto numValuesThisSortGroup = writer.declLocale( "numValuesThisSortGroup", min( numValuesPerSortGroup, c3d_numElements - sortGroup * numValuesPerSortGroup ) );
 
 							auto globalPartition = writer.declLocale( "globalPartition", ( sortGroup * numPartitionsPerSortGroup ) + partition );
 
 							// Load the keys into shared memory based on the mergepath for this thread group.
 							auto mergePath0 = writer.declLocale( "mergePath0", c3d_inputMergePathPartitions[globalPartition] );
 							auto mergePath1 = writer.declLocale( "mergePath1", c3d_inputMergePathPartitions[globalPartition + 1_u] );
-							auto diag0 = writer.declLocale( "diag0", writer.cast< sdw::Int >( min( partition * NumValuesPerThreadGroup, numValuesPerSortGroup ) ) );
-							auto diag1 = writer.declLocale( "diag1", writer.cast< sdw::Int >( min( ( partition + 1_u ) * NumValuesPerThreadGroup, numValuesPerSortGroup ) ) );
+							auto diag0 = writer.declLocale( "diag0", writer.cast< sdw::Int >( min( partition * NumValuesPerThreadGroup, numValuesThisSortGroup ) ) );
+							auto diag1 = writer.declLocale( "diag1", writer.cast< sdw::Int >( min( ( partition + 1_u ) * NumValuesPerThreadGroup, numValuesThisSortGroup ) ) );
 
 							// Compute the chunk ranges in the input set.
 							auto chunkOffsetA0 = writer.declLocale( "chunkOffsetA0", writer.cast< sdw::Int >( min( sortGroup * numValuesPerSortGroup, c3d_numElements ) ) );
@@ -867,7 +869,6 @@ namespace castor3d
 		static crg::FramePass const & createSortLightMortonCodesPasses( crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
 			, RenderDevice const & device
-			, CameraUbo const & cameraUbo
 			, FrustumClusters & clusters
 			, LightData lightData )
 		{
@@ -936,14 +937,12 @@ namespace castor3d
 	crg::FramePassArray createSortLightsMortonCodePass( crg::FramePassGroup & graph
 		, crg::FramePass const * previousPass
 		, RenderDevice const & device
-		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters )
 	{
 		// Radix sort
 		auto & point = srtmrt::createSortLightMortonCodesPasses( graph
 			, previousPass
 			, device
-			, cameraUbo
 			, clusters
 			, { LightType::ePoint
 				, "Point"
@@ -956,7 +955,6 @@ namespace castor3d
 		auto & spot =  srtmrt::createSortLightMortonCodesPasses( graph
 			, previousPass
 			, device
-			, cameraUbo
 			, clusters
 			, { LightType::eSpot
 				, "Spot"

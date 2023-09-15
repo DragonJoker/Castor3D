@@ -531,6 +531,24 @@ namespace castor3d::shader
 			return *m_shadowModel;
 		}
 
+		sdw::UInt getDirectionalsEnd()const
+		{
+			CU_Require( m_lightsBuffer );
+			return m_lightsBuffer->getDirectionalsEnd();
+		}
+
+		sdw::UInt getPointsEnd()const
+		{
+			CU_Require( m_lightsBuffer );
+			return m_lightsBuffer->getPointsEnd();
+		}
+
+		sdw::UInt getSpotsEnd()const
+		{
+			CU_Require( m_lightsBuffer );
+			return m_lightsBuffer->getSpotsEnd();
+		}
+
 		sdw::UInt getClusteredGridScale()const noexcept
 		{
 			CU_Require( m_lightsBuffer );

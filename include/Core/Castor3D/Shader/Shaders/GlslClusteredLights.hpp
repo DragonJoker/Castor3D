@@ -120,6 +120,20 @@ namespace castor3d::shader
 
 
 
+#define C3D_AllLightsAABBEx( writer, binding, set, enabled ) \
+	auto allLightsAABBBuffer = writer.declStorageBuffer( "c3d_allLightsAABBBuffer" \
+		, ( enabled ? uint32_t( binding ) : 0u ) \
+		, set \
+		, sdw::type::MemoryLayout::eStd430 \
+		, enabled ); \
+	auto c3d_allLightsAABB = allLightsAABBBuffer.declMemberArray< shader::AABB >( "ab", enabled ); \
+	allLightsAABBBuffer.end()
+
+#define C3D_AllLightsAABB( writer, binding, set ) \
+	C3D_AllLightsAABBEx( writer, binding, set, true )
+
+
+
 #define C3D_ReducedLightsAABBEx( writer, binding, set, enabled ) \
 	auto reducedLightsAABBBuffer = writer.declStorageBuffer( "c3d_reducedLightsAABBBuffer" \
 		, ( enabled ? uint32_t( binding ) : 0u ) \

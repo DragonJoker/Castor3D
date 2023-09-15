@@ -9,6 +9,7 @@
 #include "Castor3D/Render/Clustered/BuildLightsBVH.hpp"
 #include "Castor3D/Render/Clustered/ClustersMask.hpp"
 #include "Castor3D/Render/Clustered/ComputeClustersAABB.hpp"
+#include "Castor3D/Render/Clustered/ComputeLightsAABB.hpp"
 #include "Castor3D/Render/Clustered/ComputeLightsMortonCode.hpp"
 #include "Castor3D/Render/Clustered/FindUniqueClusters.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
@@ -67,6 +68,11 @@ namespace castor3d
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 			, "C3D_ClustersIndirect" ) }
+		, m_allLightsAABBBuffer{ makeBuffer< AABB >( m_device
+			, MaxLightsCount
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+			, "C3D_AllLightsAABB" ) }
 		, m_reducedLightsAABBBuffer{ makeBuffer< AABB >( m_device
 			, 513u
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -187,21 +193,23 @@ namespace castor3d
 	{
 		auto & graph = parentGraph.createPassGroup( "Clusters" );
 		crg::FramePassArray lastPasses{ 1u, previousPass };
+		lastPasses = { &createComputeLightsAABBPass( graph, lastPasses.front()
+			, m_device, cameraUbo, *this ) };
 		lastPasses = { &createReduceLightsAABBPass( graph, lastPasses.front()
+			, m_device, cameraUbo, *this ) };
+		lastPasses = { &createComputeClustersAABBPass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this ) };
 		lastPasses = { &createClustersMaskPass( graph, *lastPasses.front()
 			, m_device, cameraUbo, *this
 			, technique, nodesPass ) };
 		lastPasses = { &createFindUniqueClustersPass( graph, *lastPasses.front()
 			, m_device, cameraUbo, *this ) };
-		lastPasses = { &createComputeClustersAABBPass( graph, lastPasses.front()
-			, m_device, cameraUbo, *this ) };
 		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
-			, m_device, cameraUbo, *this ) };
+			, m_device, *this ) };
 		lastPasses = createSortLightsMortonCodePass( graph, lastPasses.front()
-			, m_device, cameraUbo, *this );
+			, m_device, *this );
 		lastPasses = { &createBuildLightsBVHPass( graph, lastPasses
-			, m_device, cameraUbo, *this ) };
+			, m_device, *this ) };
 		return createAssignLightsToClustersPass( graph, lastPasses.front()
 			, m_device, cameraUbo, *this );
 	}

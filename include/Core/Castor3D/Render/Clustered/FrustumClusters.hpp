@@ -124,6 +124,11 @@ namespace castor3d
 			return *m_spotLightClusterIndexBuffer;
 		}
 
+		auto & getAllLightsAABBBuffer()const noexcept
+		{
+			return m_allLightsAABBBuffer->getBuffer();
+		}
+
 		auto & getReducedLightsAABBBuffer()const noexcept
 		{
 			return m_reducedLightsAABBBuffer->getBuffer();
@@ -311,6 +316,7 @@ namespace castor3d
 		ClustersConfig m_config;
 
 		// Fixed size buffers, related to lights
+		ashes::BufferPtr< AABB > m_allLightsAABBBuffer;
 		ashes::BufferPtr< AABB > m_reducedLightsAABBBuffer;
 		std::array< ashes::BufferPtr< u32 >, 2u > m_pointMortonCodesBuffers;
 		std::array< ashes::BufferPtr< u32 >, 2u > m_spotMortonCodesBuffers;
