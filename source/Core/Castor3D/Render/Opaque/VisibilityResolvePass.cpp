@@ -11,6 +11,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
+#include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Render/Culling/PipelineNodes.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
@@ -2383,17 +2384,17 @@ namespace castor3d
 				? visres::createVtxDescriptorLayout( m_device, getName(), flags )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
 			result->ioDescriptorLayout = visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
-				, m_targetImage, getScene(), *m_parent, m_allowClusteredLighting, m_ssao, &m_parent->getIndirectLighting() );
+				, m_targetImage, getScene(), *m_parent, m_parent->getClustersConfig().enabled, m_ssao, &m_parent->getIndirectLighting() );
 			result->pipelineLayout = m_device->createPipelineLayout( getName()
 				, { *result->ioDescriptorLayout, *result->vtxDescriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, m_ssao != nullptr, m_allowClusteredLighting ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, m_ssao != nullptr, m_parent->getClustersConfig().enabled ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, m_ssao != nullptr, m_allowClusteredLighting ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, m_ssao != nullptr, m_parent->getClustersConfig().enabled ) };
 
 			if constexpr ( useCompute )
 			{
@@ -2431,7 +2432,7 @@ namespace castor3d
 			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
-				, m_allowClusteredLighting, m_targetImage, m_ssao, &m_parent->getIndirectLighting() );
+				, m_parent->getClustersConfig().enabled, m_targetImage, m_ssao, &m_parent->getIndirectLighting() );
 			it = pipelines.emplace( hash, std::move( result ) ).first;
 		}
 
