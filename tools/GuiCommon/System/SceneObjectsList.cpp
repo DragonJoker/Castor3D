@@ -404,11 +404,12 @@ namespace GuiCommon
 				, eBMP_RENDER_WINDOW
 				, eBMP_RENDER_WINDOW_SEL
 				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+			uint32_t count{};
 			auto rootNode = scene->getRootNode();
 
 			if ( rootNode )
 			{
-				doAddNode( rootId, *rootNode );
+				doAddNode( rootId, *rootNode, count );
 			}
 
 			CollapseAll();
@@ -429,10 +430,14 @@ namespace GuiCommon
 				, eBMP_RENDER_WINDOW
 				, eBMP_RENDER_WINDOW_SEL
 				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+			uint32_t count{};
 
-			scene->getLightCache().forEach( [this, rootId]( castor3d::Light & elem )
+			scene->getLightCache().forEach( [this, rootId, &count]( castor3d::Light & elem )
 				{
-					doAddLight( rootId, elem );
+					if ( ++count <= 500u )
+					{
+						doAddLight( rootId, elem );
+					}
 				} );
 
 			CollapseAll();
@@ -453,10 +458,14 @@ namespace GuiCommon
 				, eBMP_RENDER_WINDOW
 				, eBMP_RENDER_WINDOW_SEL
 				, new RenderWindowTreeItemProperty( m_propertiesHolder->isEditable(), window ) );
+			uint32_t count{};
 
-			scene->getGeometryCache().forEach( [this, rootId]( castor3d::Geometry & elem )
+			scene->getGeometryCache().forEach( [this, rootId, &count]( castor3d::Geometry & elem )
 				{
-					doAddGeometry( rootId, elem );
+					if ( ++count <= 500u )
+					{
+						doAddGeometry( rootId, elem );
+					}
 				} );
 
 			CollapseAll();
@@ -642,16 +651,21 @@ namespace GuiCommon
 	}
 
 	void SceneObjectsList::doAddNode( wxTreeItemId id
-		, castor3d::SceneNode & node )
+		, castor3d::SceneNode & node
+		, uint32_t & count )
 	{
 		for ( auto pair : node.getChildren() )
 		{
-			doAddNode( AppendItem( id
-					, pair.first
-					, eBMP_NODE
-					, eBMP_NODE_SEL
-					, new NodeTreeItemProperty( m_propertiesHolder->isEditable(), m_engine, *pair.second ) )
-				, *pair.second );
+			if ( ++count <= 500u )
+			{
+				doAddNode( AppendItem( id
+						, pair.first
+						, eBMP_NODE
+						, eBMP_NODE_SEL
+						, new NodeTreeItemProperty( m_propertiesHolder->isEditable(), m_engine, *pair.second ) )
+					, *pair.second
+					, count );
+			}
 		}
 	}
 
