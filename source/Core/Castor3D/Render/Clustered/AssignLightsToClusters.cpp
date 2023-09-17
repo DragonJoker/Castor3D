@@ -262,16 +262,16 @@ namespace castor3d
 					, sdw::Vec4 const & sphere )
 				{
 					auto V = writer.declLocale( "V"
-						, sphere.xyz() - cone.origin() );
+						, sphere.xyz() - cone.apex() );
 					auto lenSqV = writer.declLocale( "lenSqV"
 						, dot( V, V ) );
 					auto lenV1 = writer.declLocale( "lenV1"
 						, dot( V, cone.direction() ) );
 					auto distanceClosestPoint = writer.declLocale( "distanceClosestPoint"
-						, cos( 2.0f * cone.aperture() ) * sqrt( lenSqV - lenV1 * lenV1 ) - lenV1 * sin( 2.0f * cone.aperture() ) );
+						, cone.apertureCos() * sqrt( lenSqV - lenV1 * lenV1 ) - lenV1 * cone.apertureSin() );
 
 					auto angleCull = distanceClosestPoint > sphere.w();
-					auto frontCull = lenV1 > sphere.w() + cone.size();
+					auto frontCull = lenV1 > sphere.w() + cone.range();
 					auto backCull = lenV1 < -sphere.w();
 
 					writer.returnStmt( !( angleCull || frontCull || backCull ) );

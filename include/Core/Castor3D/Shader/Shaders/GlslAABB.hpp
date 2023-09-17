@@ -41,12 +41,12 @@ namespace castor3d::shader
 	struct Cone
 		: public sdw::StructInstanceHelperT< "C3D_Cone"
 		, sdw::type::MemoryLayout::eC
-		, sdw::Vec3Field< "origin" >
-		, sdw::FloatField< "size" >
+		, sdw::Vec3Field< "apex" >
+		, sdw::FloatField< "range" >
 		, sdw::Vec3Field< "direction" >
-		, sdw::FloatField< "aperture" >
 		, sdw::FloatField< "apertureCos" >
-		, sdw::FloatField< "apertureSin" > >
+		, sdw::FloatField< "apertureSin" >
+		, sdw::FloatField< "apertureTan" > >
 	{
 		Cone( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
@@ -55,27 +55,27 @@ namespace castor3d::shader
 		{
 		}
 
-		Cone( sdw::Vec3 const origin
-			, sdw::Vec3 const direction
-			, sdw::Float const size
-			, sdw::Float const aperture
-			, sdw::Float const apertureCos
-			, sdw::Float const apertureSin
+		Cone( sdw::Vec3 const papex
+			, sdw::Vec3 const pdirection
+			, sdw::Float const prange
+			, sdw::Float const papertureCos
+			, sdw::Float const papertureSin
+			, sdw::Float const papertureTan
 			, bool enabled = true )
-			: Cone{ sdw::findWriterMandat( origin, size, direction, aperture, apertureCos, apertureSin )
-				, sdw::makeAggrInit( makeType( sdw::findTypesCache( origin, size, direction, aperture, apertureCos, apertureSin ) )
-					, makeExprList( sdw::makeExpr( origin ), sdw::makeExpr( size ), sdw::makeExpr( direction )
-						, sdw::makeExpr( aperture ), sdw::makeExpr( apertureCos ), sdw::makeExpr( apertureSin ) ) )
+			: Cone{ sdw::findWriterMandat( papex, prange, pdirection, papertureCos, papertureSin, papertureTan )
+				, sdw::makeAggrInit( makeType( sdw::findTypesCache( papex, prange, pdirection, papertureCos, papertureSin, papertureTan ) )
+					, makeExprList( sdw::makeExpr( papex ), sdw::makeExpr( prange ), sdw::makeExpr( pdirection )
+						, sdw::makeExpr( papertureCos ), sdw::makeExpr( papertureSin ), sdw::makeExpr( papertureTan ) ) )
 				, enabled }
 		{
 		}
 
-		auto origin()const { return getMember< "origin" >(); }
-		auto size()const { return getMember< "size" >(); }
+		auto apex()const { return getMember< "apex" >(); }
+		auto range()const { return getMember< "range" >(); }
 		auto direction()const { return getMember< "direction" >(); }
-		auto aperture()const { return getMember< "aperture" >(); }
 		auto apertureCos()const { return getMember< "apertureCos" >(); }
 		auto apertureSin()const { return getMember< "apertureSin" >(); }
+		auto apertureTan()const { return getMember< "apertureTan" >(); }
 	};
 
 	struct AABB
