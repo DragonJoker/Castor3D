@@ -19,7 +19,7 @@ namespace castor3d
 	{
 		RenderTechniquePassDesc( bool environment
 			, SsaoConfig const & ssaoConfig )
-			: m_ssaoConfig{ ssaoConfig }
+			: m_ssaoConfig{ &ssaoConfig }
 		{
 			if ( environment )
 			{
@@ -90,7 +90,7 @@ namespace castor3d
 			return *this;
 		}
 
-		SsaoConfig const & m_ssaoConfig;
+		SsaoConfig const * m_ssaoConfig{};
 		Texture const * m_ssao{};
 		IndirectLightingData m_indirectLighting;
 		ShaderFlags m_shaderFlags{ ShaderFlag::eWorldSpace
@@ -166,6 +166,8 @@ namespace castor3d
 		 *\copydoc	RenderNodesPass::isPassEnabled
 		 */
 		C3D_API virtual bool isPassEnabled()const = 0;
+
+		C3D_API virtual bool hasSsao()const = 0;
 		/**
 		*\~english
 		*name
@@ -336,9 +338,9 @@ namespace castor3d
 			return RenderTechniquePass::getDebugConfig();
 		}
 
-		bool hasSsao()const noexcept
+		bool hasSsao()const noexcept override
 		{
-			return m_ssao && m_ssaoConfig.enabled;
+			return m_ssao && m_ssaoConfig && m_ssaoConfig->enabled;
 		}
 		/**@}*/
 
@@ -379,8 +381,8 @@ namespace castor3d
 	protected:
 		Camera * m_camera{ nullptr };
 		ShaderFlags m_shaderFlags{};
-		SsaoConfig m_ssaoConfig;
-		Texture const * m_ssao;
+		SsaoConfig const * m_ssaoConfig{};
+		Texture const * m_ssao{};
 		IndirectLightingData m_indirectLighting;
 	};
 }

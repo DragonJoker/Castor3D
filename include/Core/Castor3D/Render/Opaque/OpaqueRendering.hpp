@@ -173,9 +173,9 @@ namespace castor3d
 		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
 		ShaderBufferUPtr m_visibilityPipelinesIds;
 		VisibilityReorderPassUPtr m_visibilityReorder;
+		SsaoPassUPtr m_ssao;
 		crg::FramePass * m_visibilityResolveDesc{};
 		VisibilityResolvePass * m_visibilityResolve{};
-		SsaoPassUPtr m_ssao;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
 		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
