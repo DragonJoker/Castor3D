@@ -132,6 +132,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/BillboardTreeItemProperty.cpp
 	Properties/TreeItems/BoneTreeItemProperty.cpp
 	Properties/TreeItems/CameraTreeItemProperty.cpp
+	Properties/TreeItems/ClustersConfigTreeItemProperty.cpp
 	Properties/TreeItems/ControlTreeItemProperty.cpp
 	Properties/TreeItems/ExportOptionsTreeItemProperty.cpp
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.cpp
@@ -158,6 +159,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/TreeHolder.cpp
 	Properties/TreeItems/TreeItemProperty.cpp
 	Properties/TreeItems/ViewportTreeItemProperty.cpp
+	Properties/TreeItems/VCTConfigTreeItemProperty.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/AnimatedObjectGroupTreeItemProperty.hpp
@@ -167,6 +169,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/BillboardTreeItemProperty.hpp
 	Properties/TreeItems/BoneTreeItemProperty.hpp
 	Properties/TreeItems/CameraTreeItemProperty.hpp
+	Properties/TreeItems/ClustersConfigTreeItemProperty.hpp
 	Properties/TreeItems/ControlTreeItemProperty.hpp
 	Properties/TreeItems/ExportOptionsTreeItemProperty.hpp
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.hpp
@@ -194,6 +197,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/TreeItemProperty.hpp
 	Properties/TreeItems/TreeItemProperty.inl
 	Properties/TreeItems/ViewportTreeItemProperty.hpp
+	Properties/TreeItems/VCTConfigTreeItemProperty.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${${PROJECT_NAME}_SRC_FILES}

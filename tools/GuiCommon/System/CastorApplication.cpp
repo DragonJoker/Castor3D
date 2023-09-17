@@ -609,6 +609,10 @@ namespace GuiCommon
 		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, app::frame_variable_buffer_sel_xpm );
 		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG, app::ssao_config_xpm );
 		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG_SEL, app::ssao_config_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_CLUSTERS_CONFIG, app::ssao_config_xpm );
+		m_imagesLoader.addBitmap( eBMP_CLUSTERS_CONFIG_SEL, app::ssao_config_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_VCT_CONFIG, app::ssao_config_xpm );
+		m_imagesLoader.addBitmap( eBMP_VCT_CONFIG_SEL, app::ssao_config_sel_xpm );
 		m_imagesLoader.addBitmap( eBMP_BACKGROUND, app::background_xpm );
 		m_imagesLoader.addBitmap( eBMP_BACKGROUND_SEL, app::background_sel_xpm );
 		m_imagesLoader.addBitmap( eBMP_COLLAPSE_ALL, app::collapse_all_xpm );

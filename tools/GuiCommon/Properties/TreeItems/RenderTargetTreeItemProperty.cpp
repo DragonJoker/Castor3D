@@ -1,10 +1,12 @@
 #include "GuiCommon/Properties/TreeItems/RenderTargetTreeItemProperty.hpp"
 
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
+#include "GuiCommon/Properties/TreeItems/ClustersConfigTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/PostEffectTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderPassTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SsaoConfigTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/ToneMappingTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/VCTConfigTreeItemProperty.hpp"
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -14,9 +16,6 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderTechnique.hpp>
 #include <Castor3D/Render/RenderTechniquePass.hpp>
-#include <Castor3D/Render/Clustered/ClustersConfig.hpp>
-#include <Castor3D/Render/Clustered/FrustumClusters.hpp>
-#include <Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 
 #include <wx/propgrid/advprops.h>
@@ -41,6 +40,25 @@ namespace GuiCommon
 			, new SsaoConfigTreeItemProperty{ editable
 				, target.getEngine()
 				, target.getSsaoConfig() } );
+		list->AppendItem( targetId
+			, _( "Clusters Configuration" )
+			, eBMP_CLUSTERS_CONFIG
+			, eBMP_CLUSTERS_CONFIG_SEL
+			, new ClustersConfigTreeItemProperty{ editable
+			, target.getEngine()
+			, target } );
+
+		if ( target.isFullLoadingEnabled()
+			|| target.getScene()->getVoxelConeTracingConfig().enabled )
+		{
+			list->AppendItem( targetId
+				, _( "VCT Configuration" )
+				, eBMP_VCT_CONFIG
+				, eBMP_VCT_CONFIG_SEL
+				, new VCTConfigTreeItemProperty{ editable
+				, target.getEngine()
+				, target.getScene()->getVoxelConeTracingConfig() } );
+		}
 
 		for ( auto & postEffect : target.getHDRPostEffects() )
 		{
@@ -107,14 +125,6 @@ namespace GuiCommon
 		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE, make_wxArrayString( debugConfig.getIntermediateValues() ), &debugConfig.intermediateShaderValueIndex );
 #endif
 
-		if ( target.isFullLoadingEnabled()
-			|| target.getScene()->getVoxelConeTracingConfig().enabled )
-		{
-			doCreateVctProperties( editor, grid );
-		}
-
-		doCreateClustersProperties( editor, grid );
-
 		for ( auto & renderPass : target.getCustomRenderPasses() )
 		{
 			if ( renderPass->isPassEnabled() )
@@ -126,43 +136,5 @@ namespace GuiCommon
 		}
 
 		setPrefix( {} );
-	}
-
-	void RenderTargetTreeItemProperty::doCreateVctProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
-	{
-		static wxString PROPERTY_VCT = _( "Voxel Cone Tracing" );
-		static wxString PROPERTY_VCT_ENABLED = _( "Enable VCT" );
-		static wxString PROPERTY_VCT_CONSERVATIVE_RASTERIZATION = _( "Conservative Rasterization" );
-		static wxString PROPERTY_VCT_OCCLUSION = _( "Occlusion" );
-		static wxString PROPERTY_VCT_TEMPORAL_SMOOTHING = _( "Temporal Smoothing" );
-		static wxString PROPERTY_VCT_SECONDARY_BOUNCE = _( "Secondary Bounce" );
-		static wxString PROPERTY_VCT_NUM_CONES = _( "Num. Cones" );
-		static wxString PROPERTY_VCT_MAX_DISTANCE = _( "Max. Distance" );
-		static wxString PROPERTY_VCT_RAY_STEP_SIZE = _( "Ray Step Size" );
-		static wxString PROPERTY_VCT_VOXEL_SIZE = _( "Voxel Size" );
-
-		auto & vctConfig = getRenderTarget().getScene()->getVoxelConeTracingConfig();
-		addProperty( grid, PROPERTY_VCT );
-		addPropertyT( grid, PROPERTY_VCT_ENABLED, &vctConfig.enabled );
-		addPropertyT( grid, PROPERTY_VCT_CONSERVATIVE_RASTERIZATION, &vctConfig.enableConservativeRasterization );
-		addPropertyT( grid, PROPERTY_VCT_OCCLUSION, &vctConfig.enableOcclusion );
-		addPropertyT( grid, PROPERTY_VCT_SECONDARY_BOUNCE, &vctConfig.enableSecondaryBounce );
-		addPropertyT( grid, PROPERTY_VCT_TEMPORAL_SMOOTHING, &vctConfig.enableTemporalSmoothing );
-		addPropertyT( grid, PROPERTY_VCT_NUM_CONES, &vctConfig.numCones );
-		addPropertyT( grid, PROPERTY_VCT_MAX_DISTANCE, &vctConfig.maxDistance );
-		addPropertyT( grid, PROPERTY_VCT_RAY_STEP_SIZE, &vctConfig.rayStepSize );
-		addPropertyT( grid, PROPERTY_VCT_VOXEL_SIZE, &vctConfig.voxelSizeFactor );
-	}
-
-	void RenderTargetTreeItemProperty::doCreateClustersProperties( wxPGEditor * editor
-		, wxPropertyGrid * grid )
-	{
-		auto & config = getRenderTarget().getFrustumClusters().getConfig();
-		addProperty( grid, _( "Clusters" ) );
-		addPropertyT( grid, _( "Enable Clustered Lighting" ), &config.enabled );
-		addPropertyT( grid, _( "Use BVH" ), &config.useLightsBVH );
-		addPropertyT( grid, _( "Sort Lights" ), &config.sortLights );
-		addPropertyT( grid, _( "Use Depth Buffer" ), &config.parseDepthBuffer );
 	}
 }
