@@ -113,6 +113,11 @@ namespace castor3d
 		 */
 		C3D_API static ComponentModeFlags getComponentsMask();
 
+		bool hasSsao()const noexcept override
+		{
+			return m_ssao && m_ssaoConfig && m_ssaoConfig->enabled;
+		}
+
 		static constexpr bool useCompute{ false };
 
 	private:
@@ -171,6 +176,7 @@ namespace castor3d
 		SceneUbo const & m_sceneUbo;
 		crg::ImageViewIdArray m_targetImage;
 		crg::ImageViewIdArray m_targetDepth;
+		SsaoConfig const * m_ssaoConfig{};
 		Texture const * m_ssao{};
 		PassSortNodesSignalConnection m_onNodesPassSort;
 		bool m_commandsChanged{};

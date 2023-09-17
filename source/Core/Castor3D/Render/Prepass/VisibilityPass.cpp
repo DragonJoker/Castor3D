@@ -165,10 +165,10 @@ namespace castor3d
 		auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 
 		// Outputs
-		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
-		auto data = writer.declOutput< UVec2 >( "data", 1u );
-		auto velocity = writer.declOutput< Vec2 >( "velocity", 2u, flags.writeVelocity() );
-		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 3u );
+		auto outDepthObj = writer.declOutput< Vec4 >( "outDepthObj", 0u );
+		auto outData = writer.declOutput< UVec2 >( "outData", 1u );
+		auto outVelocity = writer.declOutput< Vec2 >( "outVelocity", 2u, flags.writeVelocity() );
+		auto outNmlOcc = writer.declOutput< Vec4 >( "outNmlOcc", 3u );
 
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
@@ -215,16 +215,16 @@ namespace castor3d
 					FI;
 				}
 
-				depthObj = vec4( in.fragCoord.z()
+				outDepthObj = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_cameraData.position() )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, writer.cast< sdw::Float >( material.lightingModel ) );
-				data = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
+				outData = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
 					, ( flags.isBillboard()
 						? in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID )
 						: writer.cast< sdw::UInt >( in.primitiveID ) ) );
-				velocity = in.getVelocity();
-				nmlOcc = vec4( components.normal, components.occlusion );
+				outVelocity = in.getVelocity();
+				outNmlOcc = vec4( components.normal, components.occlusion );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

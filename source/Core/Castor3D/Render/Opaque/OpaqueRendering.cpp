@@ -89,10 +89,10 @@ namespace castor3d
 				, *m_materialsStarts
 				, *m_pixelsXY )
 			: nullptr ) }
+		, m_ssao{ doCreateSsaoPass( progress, previous.getLastPass(), previousPasses ) }
 		, m_visibilityResolveDesc{ ( previous.hasVisibility()
-			? &doCreateVisibilityResolve( progress, previous, previousPasses )
+			? &doCreateVisibilityResolve( progress, previous, { &m_ssao->getLastPass() } )
 			: nullptr ) }
-		, m_ssao{ doCreateSsaoPass( progress, *m_visibilityResolveDesc, {} ) }
 		, m_opaquePassDesc{ ( m_visibilityResolveDesc
 			? m_visibilityResolveDesc
 			: &doCreateOpaquePass( progress, previous.getLastPass(), previousPasses ) ) }
