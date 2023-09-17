@@ -362,7 +362,11 @@ namespace CastorViewer
 		m_overlaysTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_guiTree = new GuiCommon::TreeListContainerT< GuiCommon::SceneObjectsList >{ m_sceneTabsContainer, wxDefaultPosition, wxDefaultSize };
 		m_sceneTabsContainer->AddPage( m_sceneTree, _( "Scene" ), true );
-		m_sceneTabsContainer->AddPage( m_objectsTree, _( "Objects" ), false );
+
+		if ( m_objectsTree )
+		{
+			m_sceneTabsContainer->AddPage( m_objectsTree, _( "Objects" ), false );
+		}
 
 		if ( m_nodesTree )
 		{
@@ -374,9 +378,20 @@ namespace CastorViewer
 			m_sceneTabsContainer->AddPage( m_lightsTree, _( "Lights" ), false );
 		}
 
-		m_sceneTabsContainer->AddPage( m_materialsTree, _( "Materials" ), false );
-		m_sceneTabsContainer->AddPage( m_overlaysTree, _( "Overlays" ), false );
-		m_sceneTabsContainer->AddPage( m_guiTree, _( "GUI" ), false );
+		if ( m_materialsTree )
+		{
+			m_sceneTabsContainer->AddPage( m_materialsTree, _( "Materials" ), false );
+		}
+
+		if ( m_overlaysTree )
+		{
+			m_sceneTabsContainer->AddPage( m_overlaysTree, _( "Overlays" ), false );
+		}
+
+		if ( m_guiTree )
+		{
+			m_sceneTabsContainer->AddPage( m_guiTree, _( "GUI" ), false );
+		}
 
 		m_auiManager.Update();
 	}
@@ -534,8 +549,15 @@ namespace CastorViewer
 		{
 			auto engine = wxGetApp().getCastor();
 
-			m_sceneTree->getList()->unloadScene();
-			m_objectsTree->getList()->unloadScene();
+			if ( m_sceneTree )
+			{
+				m_sceneTree->getList()->unloadScene();
+			}
+
+			if ( m_objectsTree )
+			{
+				m_objectsTree->getList()->unloadScene();
+			}
 
 			if ( m_nodesTree )
 			{
@@ -547,9 +569,21 @@ namespace CastorViewer
 				m_lightsTree->getList()->unloadScene();
 			}
 
-			m_materialsTree->getList()->unloadScene();
-			m_overlaysTree->getList()->unloadScene();
-			m_guiTree->getList()->unloadScene();
+			if ( m_materialsTree )
+			{
+				m_materialsTree->getList()->unloadScene();
+			}
+
+			if ( m_overlaysTree )
+			{
+				m_overlaysTree->getList()->unloadScene();
+			}
+
+			if ( m_guiTree )
+			{
+				m_guiTree->getList()->unloadScene();
+			}
+
 			m_mainCamera = {};
 			m_sceneNode = {};
 
@@ -755,8 +789,15 @@ namespace CastorViewer
 
 		if ( m_mainScene )
 		{
-			m_sceneTree->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), m_mainScene );
-			m_objectsTree->getList()->loadSceneObjects(engine, m_renderPanel->getRenderWindow(), m_mainScene);
+			if ( m_sceneTree )
+			{
+				m_sceneTree->getList()->loadScene( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			}
+
+			if ( m_objectsTree )
+			{
+				m_objectsTree->getList()->loadSceneObjects( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			}
 
 			if ( m_nodesTree )
 			{
@@ -768,9 +809,20 @@ namespace CastorViewer
 				m_lightsTree->getList()->loadSceneLights( engine, m_renderPanel->getRenderWindow(), m_mainScene );
 			}
 
-			m_materialsTree->getList()->loadSceneMaterials( engine, m_renderPanel->getRenderWindow(), m_mainScene );
-			m_overlaysTree->getList()->loadSceneOverlays( engine, m_renderPanel->getRenderWindow(), m_mainScene );
-			m_guiTree->getList()->loadSceneGui( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			if ( m_materialsTree )
+			{
+				m_materialsTree->getList()->loadSceneMaterials( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			}
+
+			if ( m_overlaysTree )
+			{
+				m_overlaysTree->getList()->loadSceneOverlays( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			}
+
+			if ( m_guiTree )
+			{
+				m_guiTree->getList()->loadSceneGui( engine, m_renderPanel->getRenderWindow(), m_mainScene );
+			}
 		}
 
 #if CV_MainFrameToolbar
