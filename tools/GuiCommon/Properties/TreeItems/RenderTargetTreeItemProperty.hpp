@@ -52,10 +52,6 @@ namespace GuiCommon
 		 */
 		void doCreateProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid )override;
-		void doCreateVctProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
-		void doCreateClustersProperties( wxPGEditor * editor
-			, wxPropertyGrid * grid );
 
 	private:
 		castor3d::RenderTarget & m_target;
