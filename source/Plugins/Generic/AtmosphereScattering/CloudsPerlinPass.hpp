@@ -21,7 +21,7 @@ namespace atmosphere_scattering
 			, castor3d::RenderDevice const & device
 			, crg::ImageViewId const & resultView
 			, bool & enabled );
-		void accept( castor3d::PipelineVisitor & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getLastPass()const
 		{

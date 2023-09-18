@@ -80,7 +80,7 @@ namespace castor3d
 
 		C3D_API explicit BlendComponent( Pass & pass );
 
-		C3D_API void accept( PassVisitorBase & vis )override;
+		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
 		C3D_API PassComponentFlag getPassFlags()const override
 		{

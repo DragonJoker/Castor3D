@@ -357,83 +357,35 @@ namespace ocean
 	{
 		if ( visitor.getFlags().renderPassType == m_typeID )
 		{
-			visitor.visit( cuT( "Tessellation factor" )
-				, m_configuration.tessellationFactor
-				, nullptr );
-			visitor.visit( cuT( "Dampening factor" )
-				, m_configuration.dampeningFactor
-				, nullptr );
-			visitor.visit( cuT( "Refraction ratio" )
-				, m_configuration.refractionRatio
-				, nullptr );
-			visitor.visit( cuT( "Refraction distortion factor" )
-				, m_configuration.refractionDistortionFactor
-				, nullptr );
-			visitor.visit( cuT( "Refraction height factor" )
-				, m_configuration.refractionHeightFactor
-				, nullptr );
-			visitor.visit( cuT( "Refraction distance factor" )
-				, m_configuration.refractionDistanceFactor
-				, nullptr );
-			visitor.visit( cuT( "Depth softening distance" )
-				, m_configuration.depthSofteningDistance
-				, nullptr );
-			visitor.visit( cuT( "Foam height start" )
-				, m_configuration.foamHeightStart
-				, nullptr );
-			visitor.visit( cuT( "Foam fade distance" )
-				, m_configuration.foamFadeDistance
-				, nullptr );
-			visitor.visit( cuT( "Foam tiling" )
-				, m_configuration.foamTiling
-				, nullptr );
-			visitor.visit( cuT( "Foam angle exponent" )
-				, m_configuration.foamAngleExponent
-				, nullptr );
-			visitor.visit( cuT( "Foam brightness" )
-				, m_configuration.foamBrightness
-				, nullptr );
-			visitor.visit( cuT( "Normal map scroll speed" )
-				, m_configuration.normalMapScrollSpeed
-				, nullptr );
-			visitor.visit( cuT( "Normal map scroll" )
-				, m_configuration.normalMapScroll
-				, nullptr );
-			visitor.visit( cuT( "SSR step size" )
-				, m_configuration.ssrStepSize
-				, nullptr );
-			visitor.visit( cuT( "SSR forward steps count" )
-				, m_configuration.ssrForwardStepsCount
-				, nullptr );
-			visitor.visit( cuT( "SSR backward steps count" )
-				, m_configuration.ssrBackwardStepsCount
-				, nullptr );
-			visitor.visit( cuT( "SSR depth mult." )
-				, m_configuration.ssrDepthMult
-				, nullptr );
-			visitor.visit( cuT( "Wave count" )
-				, m_configuration.numWaves
-				, nullptr );
+			visitor.visit( cuT( "Tessellation factor" ), m_configuration.tessellationFactor );
+			visitor.visit( cuT( "Dampening factor" ), m_configuration.dampeningFactor );
+			visitor.visit( cuT( "Refraction ratio" ), m_configuration.refractionRatio );
+			visitor.visit( cuT( "Refraction distortion factor" ), m_configuration.refractionDistortionFactor );
+			visitor.visit( cuT( "Refraction height factor" ), m_configuration.refractionHeightFactor );
+			visitor.visit( cuT( "Refraction distance factor" ), m_configuration.refractionDistanceFactor );
+			visitor.visit( cuT( "Depth softening distance" ), m_configuration.depthSofteningDistance );
+			visitor.visit( cuT( "Foam height start" ), m_configuration.foamHeightStart );
+			visitor.visit( cuT( "Foam fade distance" ), m_configuration.foamFadeDistance );
+			visitor.visit( cuT( "Foam tiling" ), m_configuration.foamTiling );
+			visitor.visit( cuT( "Foam angle exponent" ), m_configuration.foamAngleExponent );
+			visitor.visit( cuT( "Foam brightness" ), m_configuration.foamBrightness );
+			visitor.visit( cuT( "Normal map scroll speed" ), m_configuration.normalMapScrollSpeed );
+			visitor.visit( cuT( "Normal map scroll" ), m_configuration.normalMapScroll );
+			visitor.visit( cuT( "SSR step size" ), m_configuration.ssrStepSize );
+			visitor.visit( cuT( "SSR forward steps count" ), m_configuration.ssrForwardStepsCount );
+			visitor.visit( cuT( "SSR backward steps count" ), m_configuration.ssrBackwardStepsCount );
+			visitor.visit( cuT( "SSR depth mult." ), m_configuration.ssrDepthMult );
+			visitor.visit( cuT( "Wave count" ), m_configuration.numWaves );
 			uint32_t index = 0u;
 
 			for ( auto & wave : m_configuration.waves )
 			{
 				auto prefix = cuT( "Wave " ) + castor::string::toString( index++ );
-				visitor.visit( prefix + cuT( " direction" )
-					, wave.direction
-					, nullptr );
-				visitor.visit( prefix + cuT( " steepness" )
-					, wave.steepness
-					, nullptr );
-				visitor.visit( prefix + cuT( " length" )
-					, wave.length
-					, nullptr );
-				visitor.visit( prefix + cuT( " amplitude" )
-					, wave.amplitude
-					, nullptr );
-				visitor.visit( prefix + cuT( " speed" )
-					, wave.speed
-					, nullptr );
+				visitor.visit( prefix + cuT( " direction" ), wave.direction );
+				visitor.visit( prefix + cuT( " steepness" ), wave.steepness );
+				visitor.visit( prefix + cuT( " length" ), wave.length );
+				visitor.visit( prefix + cuT( " amplitude" ), wave.amplitude );
+				visitor.visit( prefix + cuT( " speed" ), wave.speed );
 			}
 		}
 	}

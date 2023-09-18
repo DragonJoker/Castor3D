@@ -28,7 +28,7 @@ namespace castor3d
 			, ashes::Buffer< uint32_t > const & counts2
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::Buffer< castor::Point2ui > const & pixels );
-		void accept( PipelineVisitor & visitor );
+		void accept( ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getLastPass()const
 		{

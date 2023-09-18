@@ -35,7 +35,7 @@ namespace Bloom
 			, uint32_t blurPassesCount
 			, bool isVertical
 			, bool const * enabled );
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		void update( uint32_t kernelSize );
 

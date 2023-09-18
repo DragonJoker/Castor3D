@@ -93,7 +93,7 @@ namespace castor3d
 		C3D_API explicit TransmissionComponent( Pass & pass
 			, float defaultValue = 0.0f );
 
-		C3D_API void accept( PassVisitorBase & vis )override;
+		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
 		float const & getTransmission()const
 		{

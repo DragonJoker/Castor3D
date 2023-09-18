@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 
@@ -111,7 +111,7 @@ namespace castor3d
 	{
 	}
 
-	void BlendComponent::accept( PassVisitorBase & vis )
+	void BlendComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Colour blend mode" ), m_value.colourBlendMode );
 		vis.visit( cuT( "Alpha blend mode" ), m_value.alphaBlendMode );

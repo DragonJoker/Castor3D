@@ -6,16 +6,16 @@ See LICENSE file in root folder
 
 #include "ToneMappingModule.hpp"
 
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
 namespace castor3d
 {
 	class ToneMappingVisitor
-		: public PipelineVisitor
+		: public ConfigurationVisitor
 	{
 	protected:
-		ToneMappingVisitor( Config config = { false, true, false } )
-			: PipelineVisitor{ std::move( config ) }
+		ToneMappingVisitor( Config config = { false } )
+			: ConfigurationVisitor{ std::move( config ) }
 		{
 		}
 
@@ -32,7 +32,7 @@ namespace castor3d
 		virtual void visit( castor::String const & name
 			, VkShaderStageFlags shaders
 			, HdrConfig & value ) = 0;
-		using PipelineVisitor::visit;
+		using ConfigurationVisitor::visit;
 		/**@}*/
 	};
 }

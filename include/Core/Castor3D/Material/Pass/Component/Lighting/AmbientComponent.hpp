@@ -99,7 +99,7 @@ namespace castor3d
 
 		C3D_API explicit AmbientComponent( Pass & pass );
 
-		C3D_API void accept( PassVisitorBase & vis )override;
+		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
 		castor::RgbColour const & getAmbientColour()const
 		{

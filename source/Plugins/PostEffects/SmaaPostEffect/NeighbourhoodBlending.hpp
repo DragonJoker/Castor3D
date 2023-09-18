@@ -32,7 +32,7 @@ namespace smaa
 			, uint32_t const * passIndex );
 		~NeighbourhoodBlending();
 
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewIdArray const & getResult()const
 		{

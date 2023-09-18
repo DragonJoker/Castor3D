@@ -19,7 +19,7 @@ namespace castor3d
 		using OnChangedConnection = OnChanged::connection;
 
 	public:
-		C3D_API void accept( PassVisitorBase & vis );
+		C3D_API void accept( ConfigurationVisitorBase & vis );
 		/**
 		 *\~english
 		 *name Getters.

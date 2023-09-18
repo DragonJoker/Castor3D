@@ -4,7 +4,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/PbrPass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
@@ -219,7 +219,7 @@ namespace castor3d
 	}
 
 	void GlossinessMapComponent::doFillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
+		, ConfigurationVisitorBase & vis )const
 	{
 		vis.visit( cuT( "Glossiness" ) );
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );

@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Other/HeightComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
@@ -146,7 +146,7 @@ namespace castor3d
 	{
 	}
 
-	void HeightComponent::accept( PassVisitorBase & vis )
+	void HeightComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Parallax Occlusion" ) );
 		vis.visit( cuT( "Mode" ), m_value );

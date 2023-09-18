@@ -106,7 +106,7 @@ namespace toon
 			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >( passComponents );
 		}
 
-		C3D_ToonMaterial_API void accept( castor3d::PassVisitorBase & vis )override;
+		C3D_ToonMaterial_API void accept( castor3d::ConfigurationVisitorBase & vis )override;
 
 		C3D_ToonMaterial_API void fillProfileBuffer( ToonProfileData & buffer )const;
 

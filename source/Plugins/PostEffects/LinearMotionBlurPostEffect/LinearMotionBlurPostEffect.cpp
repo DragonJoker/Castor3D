@@ -142,7 +142,7 @@ namespace motion_blur
 		return castor::makeUniqueDerived< castor3d::PostEffect, PostEffect >( renderTarget, renderSystem, params );
 	}
 
-	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

@@ -440,7 +440,7 @@ namespace castor3d
 			, m_pixelsStages );
 	}
 
-	void VisibilityReorderPass::accept( PipelineVisitor & visitor )
+	void VisibilityReorderPass::accept( ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_computeCountsShader );
 		visitor.visit( m_computeStartsShader );

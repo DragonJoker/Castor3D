@@ -164,7 +164,7 @@ namespace castor3d
 		void doFillBuffer( PassBuffer & buffer )const override;
 		mutable castor::AtomicGroupChangeTracked< float > m_transmittance;
 		void doFillConfig( TextureConfiguration & configuration
-			, PassVisitorBase & vis )const override;
+			, ConfigurationVisitorBase & vis )const override;
 	};
 }
 

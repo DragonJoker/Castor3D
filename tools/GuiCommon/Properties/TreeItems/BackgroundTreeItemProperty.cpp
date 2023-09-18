@@ -113,7 +113,8 @@ namespace GuiCommon
 				}
 			}
 
-			void visit( castor::String const & category )override
+			void visit( castor::String const & category
+				, ControlsList controls )override
 			{
 				m_properties.addProperty( &m_grid, category );
 			}
@@ -129,138 +130,138 @@ namespace GuiCommon
 
 			void visit( castor::String const & name
 				, float & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Matrix4x4f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< float > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< int32_t > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< uint32_t > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, control );
+				m_properties.addPropertyT( &m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, float & value
 				, castor::Range< float > const & range
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, range, control );
+				m_properties.addPropertyT( &m_grid, name, &value, range, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
 				, castor::Range< int32_t > const & range
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, range, control );
+				m_properties.addPropertyT( &m_grid, name, &value, range, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
 				, castor::Range< uint32_t > const & range
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_properties.addPropertyT( &m_grid, name, &value, range, control );
+				m_properties.addPropertyT( &m_grid, name, &value, range, std::move( controls ) );
 			}
 
 			void doCreateTextureImageProperty( castor3d::ImageBackground & background
@@ -300,7 +301,7 @@ namespace GuiCommon
 					} );
 			}
 
-			using PipelineVisitor::visit;
+			using ConfigurationVisitorBase::visit;
 
 		private:
 			TreeItemProperty & m_properties;

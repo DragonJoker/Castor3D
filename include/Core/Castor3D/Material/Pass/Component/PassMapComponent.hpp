@@ -85,7 +85,7 @@ namespace castor3d
 		}
 
 		C3D_API void fillConfig( TextureConfiguration & config
-			, PassVisitorBase & vis )const override;
+			, ConfigurationVisitorBase & vis )const override;
 
 		void fillChannel( TextureConfiguration & configuration
 			, uint32_t mask )const
@@ -96,7 +96,7 @@ namespace castor3d
 
 	private:
 		virtual void doFillConfig( TextureConfiguration & configuration
-			, PassVisitorBase & vis )const
+			, ConfigurationVisitorBase & vis )const
 		{
 		}
 

@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -173,7 +173,7 @@ namespace castor3d
 	{
 	}
 
-	void ThicknessComponent::accept( PassVisitorBase & vis )
+	void ThicknessComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Thickness" ) );
 		vis.visit( cuT( "Factor" ), m_value );

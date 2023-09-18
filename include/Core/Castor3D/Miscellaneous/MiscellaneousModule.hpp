@@ -231,7 +231,7 @@ namespace castor3d
 	*\brief
 	*	Classe de base d'un visiteur de pipeline.
 	*/
-	class PipelineVisitorBase;
+	class ConfigurationVisitorBase;
 	/**
 	*\~english
 	*\brief
@@ -240,7 +240,7 @@ namespace castor3d
 	*\brief
 	*	Classe de base d'un visiteur de pipeline.
 	*/
-	class PipelineVisitor;
+	class ConfigurationVisitor;
 	/**
 	*\~english
 	*\brief

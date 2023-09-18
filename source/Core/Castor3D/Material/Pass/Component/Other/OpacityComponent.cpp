@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Base/BlendComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
@@ -245,7 +245,7 @@ namespace castor3d
 	{
 	}
 
-	void OpacityComponent::accept( PassVisitorBase & vis )
+	void OpacityComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Opacity" ) );
 		vis.visit( cuT( "Factor" ), m_value.opacity );

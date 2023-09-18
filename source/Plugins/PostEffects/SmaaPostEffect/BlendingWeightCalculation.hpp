@@ -28,7 +28,7 @@ namespace smaa
 			, SmaaConfig const & config
 			, bool const * enabled );
 		~BlendingWeightCalculation();
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const
 		{

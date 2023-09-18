@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/RoughnessComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/SpecularComponent.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
@@ -237,7 +237,7 @@ namespace castor3d
 		setGlossiness( v / MaxPhongShininess );
 	}
 
-	void RoughnessComponent::accept( PassVisitorBase & vis )
+	void RoughnessComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Roughness" ) );
 		vis.visit( cuT( "Factor" ), m_value );

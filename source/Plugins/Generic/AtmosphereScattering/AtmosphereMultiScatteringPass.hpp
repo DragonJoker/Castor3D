@@ -22,7 +22,7 @@ namespace atmosphere_scattering
 			, crg::ImageViewId const & transmittanceLut
 			, crg::ImageViewId const & resultView
 			, bool const & enabled );
-		void accept( castor3d::PipelineVisitor & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getLastPass()const
 		{

@@ -5,6 +5,10 @@
 /build
 /build*
 /setup
+/data/Aria/
+/data/Scenes/
+/data/TestAnalysis/
+/data/TestScenes/
 /data/Castor3D/Core
 /data/CastorDvpTD/Data
 /data/CastorDvpTD/HUD_Source.jpg

@@ -215,7 +215,7 @@ namespace castor3d
 		}
 	}
 
-	void LineariseDepthPass::accept( PipelineVisitorBase & visitor )
+	void LineariseDepthPass::accept( ConfigurationVisitorBase & visitor )
 	{
 		uint32_t index = 0u;
 

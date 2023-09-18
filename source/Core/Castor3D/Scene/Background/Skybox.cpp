@@ -162,7 +162,7 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	void SkyboxBackground::accept( PipelineVisitor & visitor )
+	void SkyboxBackground::accept( ConfigurationVisitorBase & visitor )
 	{
 	}
 

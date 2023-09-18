@@ -473,7 +473,7 @@ namespace atmosphere_scattering
 		m_lastPass = &mipsPass;
 	}
 
-	void CloudsPerlinPass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsPerlinPass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

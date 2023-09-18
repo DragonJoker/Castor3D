@@ -212,7 +212,7 @@ namespace smaa
 			, parameters );
 	}
 
-	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		if ( m_edgeDetection )
 		{

@@ -125,7 +125,7 @@ namespace Bloom
 		m_pass.addOutputColourView( result );
 	}
 
-	void CombinePass::accept( castor3d::PipelineVisitorBase & visitor )
+	void CombinePass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

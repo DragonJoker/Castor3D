@@ -12,6 +12,8 @@ namespace castor3d
 	{
 		ClustersConfig();
 
+		C3D_API void accept( ConfigurationVisitorBase & visitor );
+
 		//!\~english	The activation status.
 		//!\~french		Le statut d'activation.
 		bool enabled{ true };

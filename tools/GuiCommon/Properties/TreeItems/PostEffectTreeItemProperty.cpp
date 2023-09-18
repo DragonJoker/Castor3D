@@ -1,6 +1,7 @@
 #pragma GCC diagnostic ignored "-Woverloaded-virtual"
 
 #include "GuiCommon/Properties/TreeItems/PostEffectTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/TreeItemConfigurationBuilder.hpp"
 
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
@@ -17,11 +18,11 @@ namespace GuiCommon
 	namespace
 	{
 		class PostEffectShaderGatherer
-			: public castor3d::PipelineVisitor
+			: public castor3d::ConfigurationVisitor
 		{
 		private:
 			explicit PostEffectShaderGatherer( ShaderSources & sources )
-				: castor3d::PipelineVisitor{ { false, true, true } }
+				: castor3d::ConfigurationVisitor{ { true } }
 				, m_sources{ sources }
 			{
 			}
@@ -72,11 +73,11 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, T & value
-				, bool * control )
+				, ControlsList controls )
 			{
 				auto & source = doGetSource( name );
 				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, control ) );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, std::move( controls ) ) );
 			}
 
 			template< typename T >
@@ -85,21 +86,21 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< T > & value
-				, bool * control )
+				, ControlsList controls )
 			{
 				auto & source = doGetSource( name );
 				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, control ) );
+				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, std::move( controls ) ) );
 			}
 
 			template< typename ValueT, typename ... ParamsT >
 			void doVisitT( ValueT & value
-				, bool * control
+				, ControlsList controls
 				, ParamsT ... params )
 			{
-				if ( control )
+				if ( !controls.empty() )
 				{
-					doVisitTrackedT< ValueT >( params..., value, control );
+					doVisitTrackedT< ValueT >( params..., value, std::move( controls ) );
 				}
 				else
 				{
@@ -112,9 +113,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, float & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -122,9 +123,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, int32_t & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -132,9 +133,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, uint32_t & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -142,9 +143,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -152,9 +153,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -162,9 +163,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point2ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -172,9 +173,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -182,9 +183,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -192,9 +193,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point3ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -202,9 +203,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -212,9 +213,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -222,9 +223,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Point4ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -232,9 +233,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::Matrix4x4f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -242,9 +243,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< float > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -252,9 +253,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< int32_t > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 			void visit( castor::String const & name
@@ -262,9 +263,9 @@ namespace GuiCommon
 				, castor::String const & ubo
 				, castor::String const & uniform
 				, castor::RangedValue< uint32_t > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				doVisitT( value, control, name, shaders, ubo, uniform );
+				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
 			}
 
 		private:
@@ -312,163 +313,6 @@ namespace GuiCommon
 		private:
 			ShaderSources & m_sources;
 		};
-
-		struct PostEffectConfigurationBuilder
-			: public castor3d::PipelineVisitor
-		{
-		private:
-			explicit PostEffectConfigurationBuilder( wxPropertyGrid * grid
-				, TreeItemProperty & prop )
-				: castor3d::PipelineVisitor{ { false, false, false } }
-				, m_grid{ grid }
-				, m_prop{ prop }
-			{
-			}
-
-		public:
-			static void submit( wxPropertyGrid * grid
-				, TreeItemProperty & prop
-				, castor3d::PostEffect & postEffect )
-			{
-				PostEffectConfigurationBuilder vis{ grid, prop };
-				postEffect.accept( vis );
-			}
-
-		private:
-			void visit( castor::String const & name
-				, float & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, int32_t & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, uint32_t & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point2f & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point2i & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point2ui & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point3f & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point3i & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point3ui & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point4f & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point4i & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Point4ui & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::Matrix4x4f & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::RangedValue< float > & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::RangedValue< int32_t > & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, castor::RangedValue< uint32_t > & value
-				, bool * control )override
-			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
-			}
-
-			void visit( castor::String const & name
-				, int32_t & enumValue
-				, castor::StringArray const & enumNames
-				, OnSEnumValueChange onChange
-				, bool * control )override
-			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, control, onChange );
-			}
-
-			void visit( castor::String const & name
-				, uint32_t & enumValue
-				, castor::StringArray const & enumNames
-				, OnUEnumValueChange onChange
-				, bool * control )override
-			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, control, onChange );
-			}
-
-		private:
-			wxPropertyGrid * m_grid;
-			TreeItemProperty & m_prop;
-		};
 	}
 
 	PostEffectTreeItemProperty::PostEffectTreeItemProperty( bool editable
@@ -501,6 +345,6 @@ namespace GuiCommon
 					, m_parent };
 				editor->Show();
 			} );
-		PostEffectConfigurationBuilder::submit( grid, *this, m_effect );
+		TreeItemConfigurationBuilder::submit( grid, *this, m_effect );
 	}
 }

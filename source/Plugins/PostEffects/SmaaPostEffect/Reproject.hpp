@@ -29,7 +29,7 @@ namespace smaa
 			, bool const * enabled );
 		~Reproject();
 
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const
 		{

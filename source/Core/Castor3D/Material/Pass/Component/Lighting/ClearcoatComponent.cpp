@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -230,7 +230,7 @@ namespace castor3d
 	{
 	}
 
-	void ClearcoatComponent::accept( PassVisitorBase & vis )
+	void ClearcoatComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Clearcoat" ) );
 		vis.visit( cuT( "Factor" ), m_value.factor );

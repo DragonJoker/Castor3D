@@ -129,7 +129,7 @@ namespace castor3d
 		*\param visitor
 		*	Le visiteur.
 		*/
-		C3D_API void accept( PipelineVisitorBase & visitor );
+		C3D_API void accept( ConfigurationVisitorBase & visitor );
 		/**
 		 *\~english
 		 *\brief			Updates the render pass, CPU wise.

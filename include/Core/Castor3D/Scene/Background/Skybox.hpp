@@ -50,7 +50,7 @@ namespace castor3d
 		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
-		C3D_API void accept( PipelineVisitor & visitor )override;
+		C3D_API void accept( ConfigurationVisitorBase & visitor )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::write
 		*/

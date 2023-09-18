@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
@@ -201,7 +201,7 @@ namespace castor3d
 	}
 
 	void MetalnessMapComponent::doFillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
+		, ConfigurationVisitorBase & vis )const
 	{
 		vis.visit( cuT( "Metalness" ) );
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );

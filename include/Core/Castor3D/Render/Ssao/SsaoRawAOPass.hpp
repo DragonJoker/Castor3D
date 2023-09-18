@@ -72,7 +72,7 @@ namespace castor3d
 		 *\param[in]	visitor		Le visiteur.
 		 */
 		C3D_API void accept( SsaoConfig & config
-			, PipelineVisitorBase & visitor );
+			, ConfigurationVisitorBase & visitor );
 		/**
 		*\~english
 		*name

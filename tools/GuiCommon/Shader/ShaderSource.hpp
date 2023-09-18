@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
+#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
+
 #include <CastorUtils/Design/ChangeTracked.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
 
@@ -334,19 +336,19 @@ namespace GuiCommon
 		bool * m_control;
 	};
 
-	template< typename T >
+	template< typename ValueT >
 	std::unique_ptr< UniformValueBase > makeUniformValue( wxString const & name
-		, T & value )
+		, ValueT & value )
 	{
-		return std::make_unique< UniformValue< T > >( name, value );
+		return std::make_unique< UniformValue< ValueT > >( name, value );
 	}
 	
-	template< typename T >
+	template< typename ValueT, typename ControlT >
 	std::unique_ptr< UniformValueBase > makeUniformValue( wxString const & name
-		, T & value
-		, bool * control )
+		, ValueT & value
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > control )
 	{
-		return std::make_unique< UniformValue< T > >( name, value );
+		return std::make_unique< UniformValue< ValueT > >( name, value );
 	}
 
 	struct UniformBufferValues

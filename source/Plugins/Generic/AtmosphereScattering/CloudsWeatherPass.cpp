@@ -294,7 +294,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void CloudsWeatherPass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsWeatherPass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

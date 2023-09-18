@@ -165,7 +165,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -177,7 +177,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -213,7 +213,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->Append( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 
@@ -225,7 +225,7 @@ namespace GuiCommon
 	{
 		auto prop = grid->AppendChild( new wxStringProperty{ _( "View shaders..." ), wxPG_LABEL, name } );
 		prop->SetEditor( editor );
-		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::PassVisitorBase::makeControlsList( control ) ) } );
+		prop->SetClientObject( new ButtonData{ doGetHandler( handler, castor3d::ConfigurationVisitorBase::makeControlsList( control ) ) } );
 		return prop;
 	}
 	
@@ -268,7 +268,7 @@ namespace GuiCommon
 	}
 
 	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
-		, castor3d::PassVisitorBase::ControlsList controls )
+		, castor3d::ConfigurationVisitorBase::ControlsList controls )
 	{
 		if ( controls.empty() )
 		{
@@ -287,7 +287,7 @@ namespace GuiCommon
 	}
 
 	TreeItemProperty::PropertyChangeHandler TreeItemProperty::doGetHandler( TreeItemProperty::PropertyChangeHandler handler
-		, castor3d::PassVisitorBase::AtomicControlsList controls )
+		, castor3d::ConfigurationVisitorBase::AtomicControlsList controls )
 	{
 		if ( controls.empty() )
 		{

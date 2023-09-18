@@ -137,7 +137,7 @@ namespace castor3d
 				, Scene const & scene
 				, ImageViewCache & cache
 				, IntermediateViewArray & result )
-				: RenderTechniqueVisitor{ flags, scene, { true, false, false } }
+				: RenderTechniqueVisitor{ flags, scene, { false } }
 				, m_handler{ scene.getEngine()->getGraphResourceHandler() }
 				, m_result{ result }
 				, m_cache{ cache }

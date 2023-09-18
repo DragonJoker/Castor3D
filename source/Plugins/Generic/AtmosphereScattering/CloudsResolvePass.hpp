@@ -29,7 +29,7 @@ namespace atmosphere_scattering
 			, crg::ImageViewId const & clouds
 			, crg::ImageViewId const & resultView
 			, uint32_t index );
-		void accept( castor3d::PipelineVisitor & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getLastPass()const
 		{

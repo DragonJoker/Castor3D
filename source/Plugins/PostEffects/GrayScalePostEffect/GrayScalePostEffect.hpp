@@ -28,7 +28,7 @@ namespace grayscale
 		/**
 		 *\copydoc		castor3d::PostEffect::accept
 		 */
-		void accept( castor3d::PipelineVisitorBase & visitor )override;
+		void accept( castor3d::ConfigurationVisitorBase & visitor )override;
 		/**
 		 *\copydoc		castor3d::PostEffect::setParameters
 		 */

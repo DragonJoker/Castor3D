@@ -5,7 +5,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/MetalnessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/SpecularMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponent.hpp"
@@ -178,7 +178,7 @@ namespace castor3d
 	{
 	}
 
-	void SpecularComponent::accept( PassVisitorBase & vis )
+	void SpecularComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Specular" ) );
 		vis.visit( cuT( "Colour" ), m_value );

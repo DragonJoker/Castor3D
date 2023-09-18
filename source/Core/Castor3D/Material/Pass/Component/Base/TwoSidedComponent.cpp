@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
@@ -75,7 +75,7 @@ namespace castor3d
 	{
 	}
 
-	void TwoSidedComponent::accept( PassVisitorBase & vis )
+	void TwoSidedComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Two sided" ), m_value );
 	}

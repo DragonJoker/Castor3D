@@ -158,7 +158,7 @@ namespace castor3d
 		*\param visitor
 		*	Le visiteur.
 		*/
-		C3D_API virtual void accept( PipelineVisitor & visitor ) = 0;
+		C3D_API virtual void accept( ConfigurationVisitorBase & visitor ) = 0;
 		/**
 		*\~english
 		*\brief

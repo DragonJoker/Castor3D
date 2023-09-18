@@ -7,7 +7,7 @@ See LICENSE file in root folder
 #include "PostEffectModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 
@@ -133,7 +133,7 @@ namespace castor3d
 		 *\brief		Fonction d'acceptation de visiteur.
 		 *\param		visitor	Le ... visiteur.
 		 */
-		C3D_API virtual void accept( PipelineVisitorBase & visitor ) = 0;
+		C3D_API virtual void accept( ConfigurationVisitorBase & visitor ) = 0;
 		/**
 		*\~english
 		*name
