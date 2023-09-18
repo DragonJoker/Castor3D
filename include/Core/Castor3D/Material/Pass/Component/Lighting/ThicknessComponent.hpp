@@ -87,7 +87,7 @@ namespace castor3d
 
 		C3D_API explicit ThicknessComponent( Pass & pass );
 
-		C3D_API void accept( PassVisitorBase & vis )override;
+		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
 		float const & getThicknessFactor()const
 		{

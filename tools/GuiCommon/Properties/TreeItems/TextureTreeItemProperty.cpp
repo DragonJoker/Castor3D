@@ -5,7 +5,7 @@
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
-#include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Material/Pass/Component/PassComponentRegister.hpp>
 #include <Castor3D/Material/Pass/Component/PassMapComponent.hpp>
 #include <Castor3D/Material/Texture/TextureLayout.hpp>
@@ -87,7 +87,7 @@ namespace GuiCommon
 			, castor::String const & compName ) >;
 
 		class UnitTreeGatherer
-			: public castor3d::PassVisitor
+			: public castor3d::ConfigurationVisitor
 		{
 		public:
 			static TextureTreeItemProperty::PropertiesArray submit( castor3d::Pass & pass
@@ -169,7 +169,7 @@ namespace GuiCommon
 				, wxPropertyGrid * grid
 				, onEnabledChange onEnabled
 				, onMaskChange onChange )
-				: castor3d::PassVisitor{ {} }
+				: castor3d::ConfigurationVisitor{}
 				, m_pass{ pass }
 				, m_format{ format }
 				, m_properties{ properties }
@@ -180,83 +180,83 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, castor3d::PassVisitor::ControlsList controls )override
+				, castor3d::ConfigurationVisitor::ControlsList controls )override
 			{
 				doVisit( name );
 			}
 
 			void visit( castor::String const & name
-				, castor3d::PassVisitor::AtomicControlsList controls )override
+				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
 				doVisit( name );
 			}
 
 			void visit( castor::String const & name
 				, bool & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int16_t & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint16_t & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, int64_t & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, uint64_t & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, float & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, double & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor3d::BlendMode & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				wxArrayString choices;
 				choices.push_back( _( "No Blend" ) );
@@ -268,7 +268,7 @@ namespace GuiCommon
 
 			void visit( castor::String const & name
 				, castor3d::ParallaxOcclusionMode & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				wxArrayString choices;
 				choices.push_back( _( "None" ) );
@@ -279,7 +279,7 @@ namespace GuiCommon
 
 			void visit( castor::String const & name
 				, VkCompareOp & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				wxArrayString choices;
 				choices.push_back( _( "Never" ) );
@@ -295,35 +295,35 @@ namespace GuiCommon
 
 			void visit( castor::String const & name
 				, castor::RgbColour & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RgbaColour & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< float > & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< int32_t > & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< uint32_t > & value
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
@@ -332,7 +332,7 @@ namespace GuiCommon
 				, castor3d::PassComponentTextureFlag textureFlag
 				, castor3d::TextureFlagConfiguration & configuration
 				, uint32_t componentsCount
-				, PassVisitor::ControlsList controls )override
+				, ConfigurationVisitor::ControlsList controls )override
 			{
 				doAddProperty( name
 					, name + _( " Map" )

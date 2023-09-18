@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Scene/Camera.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Passes/LineariseDepthPass.hpp"
 #include "Castor3D/Render/Ssao/SsaoBlurPass.hpp"
@@ -99,7 +99,7 @@ namespace castor3d
 		m_ssaoConfig.blurRadius.reset();
 	}
 
-	void SsaoPass::accept( PipelineVisitorBase & visitor )
+	void SsaoPass::accept( ConfigurationVisitorBase & visitor )
 	{
 		m_linearisePass->accept( visitor );
 		m_rawAoPass->accept( m_ssaoConfig, visitor );

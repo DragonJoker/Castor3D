@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -85,7 +85,7 @@ namespace castor3d
 	{
 	}
 
-	void NormalComponent::accept( PassVisitorBase & vis )
+	void NormalComponent::accept( ConfigurationVisitorBase & vis )
 	{
 	}
 

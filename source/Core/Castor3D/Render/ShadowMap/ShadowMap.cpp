@@ -2,7 +2,7 @@
 
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPass.hpp"
@@ -215,7 +215,7 @@ namespace castor3d
 		doUpdate( updater, myPasses.otherNodes );
 	}
 
-	void ShadowMap::accept( PipelineVisitorBase & visitor )
+	void ShadowMap::accept( ConfigurationVisitorBase & visitor )
 	{
 		for ( uint32_t i = 1u; i < uint32_t( SmTexture::eCount ); ++i )
 		{

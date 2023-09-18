@@ -67,7 +67,7 @@ namespace castor3d
 		visitor.visit( *this );
 	}
 
-	void ColourBackground::accept( PipelineVisitor & visitor )
+	void ColourBackground::accept( ConfigurationVisitorBase & visitor )
 	{
 	}
 

@@ -126,7 +126,7 @@ namespace PbrBloom
 	}
 
 
-	void UpsamplePass::accept( castor3d::PipelineVisitorBase & visitor )
+	void UpsamplePass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

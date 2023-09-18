@@ -1,11 +1,11 @@
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
 
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
 namespace castor3d
 {
 	void LpvConfig::accept( castor::String const & name
-		, PipelineVisitorBase & visitor )
+		, ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( name
 			, VK_SHADER_STAGE_FRAGMENT_BIT

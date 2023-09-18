@@ -16,8 +16,8 @@ See LICENSE file in root folder
 #include "GuiCommon/Properties/Math/SizeProperties.hpp"
 
 #include <Castor3D/Render/RenderModule.hpp>
-#include <Castor3D/Material/Pass/PassVisitor.hpp>
-#include <Castor3D/Miscellaneous/PipelineVisitor.hpp>
+#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
+#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 
 #include <CastorUtils/Graphics/Font.hpp>
 #include <CastorUtils/Math/RangedValue.hpp>
@@ -126,20 +126,20 @@ namespace GuiCommon
 			, wxString const & name
 			, MyValueT && value
 			, PropertyChangeHandler handler
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls );
 		template< typename ParentT, typename EnumT, typename FuncT, typename ControlT = bool >
 		wxPGProperty * addPropertyE( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, FuncT func
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename EnumT, typename FuncT, typename ControlT = bool >
 		wxPGProperty * addPropertyE( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT selected
 			, FuncT func
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name
 			, wxArrayString const & choices
@@ -157,21 +157,21 @@ namespace GuiCommon
 			, wxString const & name
 			, ValueT const & value
 			, PropertyChangeHandler handler
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addProperty( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
 			, castor::Range< ValueT > const & range
 			, PropertyChangeHandler handler
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addProperty( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
 			, ValueT const & step
 			, PropertyChangeHandler handler
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name
 			, wxPGEditor * editor
@@ -215,36 +215,36 @@ namespace GuiCommon
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, castor::RangedValue< ValueT > * value
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT * value
 			, castor::Range< ValueT > const & range
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, castor::ChangeTracked< castor::RangedValue< ValueT > > * value
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT * value
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT * value
 			, ValueT step
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT value
 			, ObjectT * object
 			, ValueSetterT< ObjectU, ValueT > setter
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
@@ -252,28 +252,28 @@ namespace GuiCommon
 			, ValueT step
 			, ObjectT * object
 			, ValueSetterT< ObjectU, ValueT > setter
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, ValueT const & value
 			, ObjectT * object
 			, ValueRefSetterT< ObjectU, ValueT > setter
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
 			, castor::RangedValue< ValueT > const & value
 			, ObjectT * object
 			, ValueSetterT< ObjectU, ValueT > setter
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT = bool >
 		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, ObjectT * object
 			, ValueSetterT< ObjectU, EnumT > setter
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT = bool >
 		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
@@ -281,14 +281,14 @@ namespace GuiCommon
 			, EnumT selected
 			, ObjectT * object
 			, ValueSetterT< ObjectU, EnumT > setter
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		template< typename ParentT, typename EnumT, typename ControlT = bool >
 		wxPGProperty * addPropertyET( ParentT * parent
 			, wxString const & name
 			, wxArrayString const & choices
 			, EnumT * value
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{}
-			, castor3d::PipelineVisitor::OnEnumValueChangeT< EnumT > onChange = []( EnumT, EnumT ) {} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{}
+			, castor3d::ConfigurationVisitorBase::OnEnumValueChangeT< EnumT > onChange = []( EnumT, EnumT ) {} );
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT = bool >
 		wxPGProperty * addPropertyT( ParentT * parent
 			, wxString const & name
@@ -296,7 +296,7 @@ namespace GuiCommon
 			, wxString const & selected
 			, ObjectT * object
 			, ValueSetterT< ObjectU, EnumT > setter
-			, castor3d::PassVisitorBase::ControlsListT< ControlT > controls = castor3d::PassVisitorBase::ControlsListT< ControlT >{} );
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 
 		template< typename ParentT, typename MyValueT, typename ControlT >
 		wxPGProperty * createProperty( ParentT * parent
@@ -309,7 +309,7 @@ namespace GuiCommon
 				, name
 				, std::forward< MyValueT >( value )
 				, handler
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename EnumT, typename FuncT, typename ControlT >
@@ -323,7 +323,7 @@ namespace GuiCommon
 				, name
 				, choices
 				, func
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename EnumT, typename FuncT, typename ControlT >
@@ -339,7 +339,7 @@ namespace GuiCommon
 				, choices
 				, selected
 				, func
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ValueT, typename ControlT >
@@ -353,7 +353,7 @@ namespace GuiCommon
 				, name
 				, value
 				, handler
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ValueT, typename ControlT >
@@ -369,7 +369,7 @@ namespace GuiCommon
 				, value
 				, range
 				, handler
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ValueT, typename ControlT >
@@ -385,7 +385,7 @@ namespace GuiCommon
 				, value
 				, step
 				, handler
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 
@@ -398,7 +398,7 @@ namespace GuiCommon
 			return addPropertyT( parent
 				, name
 				, value
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ValueT, typename ControlT >
@@ -412,7 +412,7 @@ namespace GuiCommon
 				, name
 				, value
 				, range
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ValueT, typename ControlT >
@@ -424,7 +424,7 @@ namespace GuiCommon
 			return addPropertyT( parent
 				, name
 				, value
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ValueT, typename ControlT >
@@ -436,7 +436,7 @@ namespace GuiCommon
 			return addPropertyT( parent
 				, name
 				, value
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ValueT, typename ControlT >
@@ -450,7 +450,7 @@ namespace GuiCommon
 				, name
 				, value
 				, step
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT >
@@ -466,7 +466,7 @@ namespace GuiCommon
 				, value
 				, object
 				, setter
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT >
@@ -484,7 +484,7 @@ namespace GuiCommon
 				, step
 				, object
 				, setter
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT >
@@ -500,7 +500,7 @@ namespace GuiCommon
 				, value
 				, object
 				, setter
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename ValueT, typename ControlT >
@@ -516,7 +516,7 @@ namespace GuiCommon
 				, value
 				, object
 				, setter
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT >
@@ -532,7 +532,7 @@ namespace GuiCommon
 				, choices
 				, object
 				, setter
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename ObjectT, typename ObjectU, typename EnumT, typename ControlT >
@@ -550,7 +550,7 @@ namespace GuiCommon
 				, selected
 				, object
 				, setter
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 		template< typename ParentT, typename EnumT, typename ControlT >
@@ -559,13 +559,13 @@ namespace GuiCommon
 			, wxArrayString const & choices
 			, EnumT * value
 			, ControlT * control
-			, castor3d::PipelineVisitor::OnEnumValueChangeT< EnumT > onChange = []( EnumT, EnumT ) {} )
+			, castor3d::ConfigurationVisitorBase::OnEnumValueChangeT< EnumT > onChange = []( EnumT, EnumT ) {} )
 		{
 			return addPropertyET( parent
 				, name
 				, choices
 				, value
-				, castor3d::PassVisitorBase::makeControlsList( control )
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control )
 				, onChange);
 		}
 
@@ -584,14 +584,14 @@ namespace GuiCommon
 				, selected
 				, object
 				, setter
-				, castor3d::PassVisitorBase::makeControlsList( control ) );
+				, castor3d::ConfigurationVisitorBase::makeControlsList( control ) );
 		}
 
 	private:
 		PropertyChangeHandler doGetHandler( PropertyChangeHandler handler
-			, castor3d::PassVisitorBase::ControlsList controls );
+			, castor3d::ConfigurationVisitorBase::ControlsList controls );
 		PropertyChangeHandler doGetHandler( PropertyChangeHandler handler
-			, castor3d::PassVisitorBase::AtomicControlsList controls );
+			, castor3d::ConfigurationVisitorBase::AtomicControlsList controls );
 
 	protected:
 		wxMenu * m_menu;

@@ -351,7 +351,7 @@ namespace atmosphere_scattering
 		cloudsResult.destroy();
 	}
 
-	void AtmosphereBackground::CameraPasses::accept( castor3d::PipelineVisitor & visitor )
+	void AtmosphereBackground::CameraPasses::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( "Atmosphere SkyView"
 			, skyView.sampledViewId
@@ -424,10 +424,10 @@ namespace atmosphere_scattering
 
 	void AtmosphereBackground::accept( castor3d::BackgroundVisitor & visitor )
 	{
-		accept( static_cast< castor3d::PipelineVisitor & >( visitor ) );
+		accept( static_cast< castor3d::ConfigurationVisitorBase & >( visitor ) );
 	}
 
-	void AtmosphereBackground::accept( castor3d::PipelineVisitor & visitor )
+	void AtmosphereBackground::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Atmosphere Configuration" ) );
 		visitor.visit( cuT( "Solar Irradiance" )

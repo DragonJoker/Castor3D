@@ -1,7 +1,7 @@
 #include "Castor3D/Render/Passes/DownscalePass.hpp"
 
 #include "Castor3D/Engine.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -124,7 +124,7 @@ namespace castor3d
 		//m_commandBuffer->end();
 	}
 
-	void DownscalePass::accept( PipelineVisitorBase & visitor )
+	void DownscalePass::accept( ConfigurationVisitorBase & visitor )
 	{
 		uint32_t index{};
 

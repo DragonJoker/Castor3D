@@ -4,7 +4,7 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Buffer/UniformBuffer.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
@@ -565,7 +565,7 @@ namespace castor3d
 
 	void SsaoBlurPass::accept( bool horizontal
 		, SsaoConfig & config
-		, PipelineVisitorBase & visitor )
+		, ConfigurationVisitorBase & visitor )
 	{
 		if ( horizontal )
 		{
@@ -608,6 +608,6 @@ namespace castor3d
 			visitor.visit( m_programs[0].pixelShader );
 		}
 
-		config.accept( "SsaoBlur", visitor );
+		config.accept( visitor );
 	}
 }

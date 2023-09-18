@@ -136,7 +136,7 @@ namespace atmosphere_scattering
 		m_lastPass = &pass;
 	}
 
-	void AtmosphereTransmittancePass::accept( castor3d::PipelineVisitor & visitor )
+	void AtmosphereTransmittancePass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

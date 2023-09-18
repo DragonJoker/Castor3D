@@ -2,7 +2,7 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Map/NormalMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/HeightComponent.hpp"
@@ -582,7 +582,7 @@ namespace castor3d
 	}
 
 	void HeightMapComponent::doFillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
+		, ConfigurationVisitorBase & vis )const
 	{
 		vis.visit( cuT( "Height" ) );
 		vis.visit( cuT( "Map" ), getTextureFlags(), getFlagConfiguration( configuration, getTextureFlags() ), 1u );

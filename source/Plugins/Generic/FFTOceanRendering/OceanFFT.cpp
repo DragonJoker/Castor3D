@@ -374,30 +374,14 @@ namespace ocean_fft
 
 	void OceanFFT::accept( castor3d::RenderTechniqueVisitor & visitor )
 	{
-		visitor.visit( cuT( "Tile XZ size" )
-			, m_config.size
-			, nullptr );
-		visitor.visit( cuT( "Amplitude" )
-			, m_config.amplitude
-			, nullptr );
-		visitor.visit( cuT( "Wind XZ direction" )
-			, m_config.windDirection
-			, nullptr );
-		visitor.visit( cuT( "Wind velocity" )
-			, m_config.windVelocity
-			, nullptr );
-		visitor.visit( cuT( "Normal Freq. Mod." )
-			, m_config.normalFreqMod
-			, nullptr );
-		visitor.visit( cuT( "Patch XZ size" )
-			, m_config.patchSize
-			, nullptr );
-		visitor.visit( cuT( "Blocks XZ Count" )
-			, m_config.blocksCount
-			, nullptr );
-		visitor.visit( cuT( "LOD 0 Distance" )
-			, m_config.lod0Distance
-			, nullptr );
+		visitor.visit( cuT( "Tile XZ size" ), m_config.size );
+		visitor.visit( cuT( "Amplitude" ), m_config.amplitude );
+		visitor.visit( cuT( "Wind XZ direction" ), m_config.windDirection );
+		visitor.visit( cuT( "Wind velocity" ), m_config.windVelocity );
+		visitor.visit( cuT( "Normal Freq. Mod." ), m_config.normalFreqMod );
+		visitor.visit( cuT( "Patch XZ size" ), m_config.patchSize );
+		visitor.visit( cuT( "Blocks XZ Count" ), m_config.blocksCount );
+		visitor.visit( cuT( "LOD 0 Distance" ), m_config.lod0Distance );
 	}
 
 	crg::FramePassArray OceanFFT::getLastPasses()

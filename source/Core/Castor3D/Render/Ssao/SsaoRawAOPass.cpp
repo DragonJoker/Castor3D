@@ -5,7 +5,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/PoolUniformBuffer.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -636,7 +636,7 @@ namespace castor3d
 	}
 
 	void SsaoRawAOPass::accept( SsaoConfig & config
-		, PipelineVisitorBase & visitor )
+		, ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( "SSAO Raw AO"
 			, getResult()

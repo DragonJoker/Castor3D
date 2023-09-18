@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
@@ -313,7 +313,7 @@ namespace castor3d
 	{
 	}
 
-	void SubsurfaceScatteringComponent::accept( PassVisitorBase & vis )
+	void SubsurfaceScatteringComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Subsurface Scattering" ) );
 

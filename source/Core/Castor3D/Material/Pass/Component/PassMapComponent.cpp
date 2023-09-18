@@ -33,7 +33,7 @@ namespace castor3d
 	}
 
 	void PassMapComponent::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )const
+		, ConfigurationVisitorBase & vis )const
 	{
 		if ( hasAny( configuration.components, getTextureFlags() ) )
 		{

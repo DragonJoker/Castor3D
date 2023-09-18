@@ -1033,16 +1033,16 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	PassVisitor acceptance function.
+		*	ConfigurationVisitorBase acceptance function.
 		*\param vis
 		*	The ... visitor.
 		*\~french
 		*\brief
-		*	Fonction d'acceptation de PassVisitor.
+		*	Fonction d'acceptation de ConfigurationVisitorBase.
 		*\param vis
 		*	Le ... visiteur.
 		*/
-		C3D_API virtual void accept( PassVisitorBase & vis )
+		C3D_API virtual void accept( ConfigurationVisitorBase & vis )
 		{
 		}
 
@@ -1075,21 +1075,21 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
-		*	PassVisitor acceptance function, for a specific texture configuration.
+		*	ConfigurationVisitorBase acceptance function, for a specific texture configuration.
 		*\param config
 		*	The texture configuration.
 		*\param vis
 		*	The ... visitor.
 		*\~french
 		*\brief
-		*	Fonction d'acceptation de PassVisitor, pour une configuration de texture.
+		*	Fonction d'acceptation de ConfigurationVisitorBase, pour une configuration de texture.
 		*\param config
 		*	La configuration de texture.
 		*\param vis
 		*	Le ... visiteur.
 		*/
 		C3D_API virtual void fillConfig( TextureConfiguration & config
-			, PassVisitorBase & vis )const
+			, ConfigurationVisitorBase & vis )const
 		{
 		}
 		/**@}*/

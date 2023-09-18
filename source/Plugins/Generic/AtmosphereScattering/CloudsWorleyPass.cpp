@@ -436,7 +436,7 @@ namespace atmosphere_scattering
 		m_lastPass = &mipsPass;
 	}
 
-	void CloudsWorleyPass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsWorleyPass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

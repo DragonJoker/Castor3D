@@ -25,7 +25,7 @@ namespace draw_edges
 			, bool const * enabled );
 		~ObjectIDEdgeDetection();
 
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewId const & getResult()const
 		{

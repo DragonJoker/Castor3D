@@ -25,7 +25,7 @@ namespace GuiCommon
 		, wxString const & name
 		, MyValueT && value
 		, PropertyChangeHandler handler
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		using ValueT = std::remove_cv_t< std::remove_reference_t< MyValueT > >;
 		m_handlers.emplace( m_prefix + name, doGetHandler( handler, std::move( controls ) ) );
@@ -315,7 +315,7 @@ namespace GuiCommon
 		, wxString const & name
 		, wxArrayString const & choices
 		, FuncT func
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		wxPGProperty * prop = createProperty( parent
 			, name
@@ -334,7 +334,7 @@ namespace GuiCommon
 		, wxArrayString const & choices
 		, EnumT selected
 		, FuncT func
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		wxPGProperty * prop = addPropertyE< ParentT, EnumT, FuncT >( parent
 			, name
@@ -350,7 +350,7 @@ namespace GuiCommon
 		, wxString const & name
 		, ValueT const & value
 		, PropertyChangeHandler handler
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		wxPGProperty * prop = createProperty( parent
 			, name
@@ -366,7 +366,7 @@ namespace GuiCommon
 		, ValueT const & value
 		, castor::Range< ValueT > const & range
 		, PropertyChangeHandler handler
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		wxPGProperty * prop = createProperty( parent
 			, name
@@ -388,7 +388,7 @@ namespace GuiCommon
 		, ValueT const & value
 		, ValueT const & step
 		, PropertyChangeHandler handler
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		wxPGProperty * prop = addProperty( parent, name, value, handler );
 		prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, getVariant< ValueT >( step ) );
@@ -399,7 +399,7 @@ namespace GuiCommon
 	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, castor::RangedValue< ValueT > * value
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		return addProperty( parent
 			, name
@@ -416,7 +416,7 @@ namespace GuiCommon
 		, wxString const & name
 		, ValueT * value
 		, castor::Range< ValueT > const & range
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		return addProperty( parent
 			, name
@@ -433,7 +433,7 @@ namespace GuiCommon
 	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, castor::ChangeTracked< castor::RangedValue< ValueT > > * value
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		return addProperty( parent
 			, name
@@ -451,7 +451,7 @@ namespace GuiCommon
 	wxPGProperty * TreeItemProperty::addPropertyT( ParentT * parent
 		, wxString const & name
 		, ValueT * value
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		return addProperty( parent
 			, name
@@ -468,7 +468,7 @@ namespace GuiCommon
 		, wxString const & name
 		, ValueT * value
 		, ValueT step
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		return addProperty( parent
 			, name
@@ -487,7 +487,7 @@ namespace GuiCommon
 		, ValueT value
 		, ObjectT * object
 		, ValueSetterT< ObjectU, ValueT > setter
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
 		return addProperty( parent
@@ -507,7 +507,7 @@ namespace GuiCommon
 		, ValueT step
 		, ObjectT * object
 		, ValueSetterT< ObjectU, ValueT > setter
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
 		return addProperty( parent
@@ -527,7 +527,7 @@ namespace GuiCommon
 		, ValueT const & value
 		, ObjectT * object
 		, ValueRefSetterT< ObjectU, ValueT > setter
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
 		return addProperty( parent
@@ -546,7 +546,7 @@ namespace GuiCommon
 		, castor::RangedValue< ValueT > const & value
 		, ObjectT * object
 		, ValueSetterT< ObjectU, ValueT > setter
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
 		return addProperty( parent
@@ -565,7 +565,7 @@ namespace GuiCommon
 		, wxArrayString const & choices
 		, ObjectT * object
 		, ValueSetterT< ObjectU, EnumT > setter
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
 		return addPropertyE( parent
@@ -585,7 +585,7 @@ namespace GuiCommon
 		, EnumT selected
 		, ObjectT * object
 		, ValueSetterT< ObjectU, EnumT > setter
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
 		return addPropertyE( parent
@@ -604,8 +604,8 @@ namespace GuiCommon
 		, wxString const & name
 		, wxArrayString const & choices
 		, EnumT * value
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls
-		, castor3d::PipelineVisitor::OnEnumValueChangeT< EnumT > onChange )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls
+		, castor3d::ConfigurationVisitorBase::OnEnumValueChangeT< EnumT > onChange )
 	{
 		return addPropertyE( parent
 			, name
@@ -627,7 +627,7 @@ namespace GuiCommon
 		, wxString const & selected
 		, ObjectT * object
 		, ValueSetterT< ObjectU, EnumT > setter
-		, castor3d::PassVisitorBase::ControlsListT< ControlT > controls )
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
 	{
 		static_assert( std::is_base_of_v< ObjectU, ObjectT > || std::is_same_v< ObjectU, ObjectT >, "Can't call a function on unrelated types" );
 		return addProperty( parent

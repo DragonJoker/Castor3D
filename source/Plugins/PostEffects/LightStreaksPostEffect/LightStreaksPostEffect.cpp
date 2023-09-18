@@ -53,7 +53,7 @@ namespace light_streaks
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		m_hiPass->accept( visitor );
 		m_kawasePass->accept( visitor );

@@ -19,7 +19,7 @@ namespace light_streaks
 			, VkExtent2D size
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePassArray const & getLastPasses()const
 		{

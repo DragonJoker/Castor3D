@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
@@ -215,7 +215,7 @@ namespace castor3d
 	{
 	}
 
-	void AlphaTestComponent::accept( PassVisitorBase & vis )
+	void AlphaTestComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Alpha Test" ) );
 		vis.visit( cuT( "Alpha func" ), m_value.alphaFunc );

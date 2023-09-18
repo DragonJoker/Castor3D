@@ -58,7 +58,7 @@ namespace atmosphere_scattering
 		/**
 		*\copydoc	castor3d::SceneBackground::accept
 		*/
-		void accept( castor3d::PipelineVisitor & visitor )override;
+		void accept( castor3d::ConfigurationVisitorBase & visitor )override;
 		/**
 		*\copydoc	castor3d::SceneBackground::createBackgroundPass
 		*/
@@ -265,7 +265,7 @@ namespace atmosphere_scattering
 				, castor3d::BackgroundPassBase *& backgroundPass );
 			~CameraPasses();
 
-			void accept( castor3d::PipelineVisitor & visitor );
+			void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 			void update( castor3d::CpuUpdater & updater
 				, castor::Point3f const & sunDirection

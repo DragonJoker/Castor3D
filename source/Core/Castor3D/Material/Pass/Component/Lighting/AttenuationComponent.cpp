@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -209,7 +209,7 @@ namespace castor3d
 	{
 	}
 
-	void AttenuationComponent::accept( PassVisitorBase & vis )
+	void AttenuationComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Attenuation" ) );
 		vis.visit( cuT( "Colour" ), m_value.colour );

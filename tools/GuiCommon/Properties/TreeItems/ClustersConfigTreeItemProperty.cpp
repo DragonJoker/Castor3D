@@ -1,5 +1,7 @@
 #include "GuiCommon/Properties/TreeItems/ClustersConfigTreeItemProperty.hpp"
 
+#include "GuiCommon/Properties/TreeItems/TreeItemConfigurationBuilder.hpp"
+
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/Clustered/ClustersConfig.hpp>
 #include <Castor3D/Render/Clustered/FrustumClusters.hpp>
@@ -20,14 +22,9 @@ namespace GuiCommon
 	void ClustersConfigTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
-		auto & config = m_target.getFrustumClusters().getConfig();
-
-		if ( config.enabled )
+		if ( m_target.getFrustumClusters() )
 		{
-			addProperty( grid, _( "Clusters" ) );
-			addPropertyT( grid, _( "Use BVH" ), &config.useLightsBVH );
-			addPropertyT( grid, _( "Sort Lights" ), &config.sortLights );
-			addPropertyT( grid, _( "Use Depth Buffer" ), &config.parseDepthBuffer );
+			TreeItemConfigurationBuilder::submit( grid, *this, m_target.getFrustumClusters()->getConfig() );
 		}
 	}
 }

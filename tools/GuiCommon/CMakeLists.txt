@@ -194,6 +194,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/TextureTreeItemProperty.hpp
 	Properties/TreeItems/ToneMappingTreeItemProperty.hpp
 	Properties/TreeItems/TreeHolder.hpp
+	Properties/TreeItems/TreeItemConfigurationBuilder.hpp
 	Properties/TreeItems/TreeItemProperty.hpp
 	Properties/TreeItems/TreeItemProperty.inl
 	Properties/TreeItems/ViewportTreeItemProperty.hpp

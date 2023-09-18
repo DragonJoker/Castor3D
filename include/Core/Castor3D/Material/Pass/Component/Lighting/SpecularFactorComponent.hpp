@@ -88,7 +88,7 @@ namespace castor3d
 		C3D_API explicit SpecularFactorComponent( Pass & pass
 			, float defaultValue = Default );
 
-		C3D_API void accept( PassVisitorBase & vis )override;
+		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
 		float getFactor()const
 		{

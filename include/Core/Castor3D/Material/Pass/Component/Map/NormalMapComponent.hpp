@@ -133,7 +133,7 @@ namespace castor3d
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
 		void doFillConfig( TextureConfiguration & configuration
-			, PassVisitorBase & vis )const override;
+			, ConfigurationVisitorBase & vis )const override;
 
 		private:
 			bool m_needsConversion{};

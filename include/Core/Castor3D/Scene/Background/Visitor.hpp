@@ -5,12 +5,12 @@ See LICENSE file in root folder
 #define ___C3D_BackgroundVisitor_H___
 
 #include "BackgroundModule.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
 namespace castor3d
 {
 	class BackgroundVisitor
-		: public PipelineVisitor
+		: public ConfigurationVisitor
 	{
 	public:
 		/**
@@ -48,7 +48,7 @@ namespace castor3d
 		*/
 		C3D_API virtual void visit( ImageBackground & background ) = 0;
 
-		using PipelineVisitor::visit;
+		using ConfigurationVisitor::visit;
 	};
 }
 

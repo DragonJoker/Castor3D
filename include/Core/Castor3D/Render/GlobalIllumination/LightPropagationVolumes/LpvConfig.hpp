@@ -15,7 +15,7 @@ namespace castor3d
 	struct LpvConfig
 	{
 		C3D_API void accept( castor::String const & name
-			, PipelineVisitorBase & visitor );
+			, ConfigurationVisitorBase & visitor );
 
 		castor::ChangeTracked< float > indirectAttenuation;
 		castor::ChangeTracked< float > texelAreaModifier;

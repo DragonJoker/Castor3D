@@ -18,7 +18,7 @@ namespace PbrBloom
 			, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
 			, uint32_t passesCount
 			, bool const * enabled );
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getPass()const
 		{

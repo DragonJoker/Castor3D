@@ -31,7 +31,7 @@ namespace smaa
 			, uint32_t passCount );
 		~EdgeDetection();
 
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewId const & getColourResult()const
 		{

@@ -21,7 +21,7 @@ namespace Bloom
 			, uint32_t blurPassesCount
 			, bool const * enabled
 			, uint32_t const * passIndex );
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::ImageViewIdArray const & getResult()const
 		{

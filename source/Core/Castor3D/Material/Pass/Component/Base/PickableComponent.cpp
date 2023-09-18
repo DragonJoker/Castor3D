@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
@@ -76,7 +76,7 @@ namespace castor3d
 	{
 	}
 
-	void PickableComponent::accept( PassVisitorBase & vis )
+	void PickableComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Pickable" ), m_value );
 	}

@@ -92,7 +92,7 @@ namespace castor3d
 		C3D_API float getShininess()const;
 		C3D_API void setShininess( float v );
 
-		C3D_API void accept( PassVisitorBase & vis )override;
+		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
 		float getRoughness()const
 		{

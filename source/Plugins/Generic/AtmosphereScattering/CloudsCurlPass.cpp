@@ -1,4 +1,4 @@
-﻿#include "AtmosphereScattering/CloudsCurlPass.hpp"
+#include "AtmosphereScattering/CloudsCurlPass.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
@@ -138,7 +138,7 @@ namespace atmosphere_scattering
 		m_lastPass = &computePass;
 	}
 
-	void CloudsCurlPass::accept( castor3d::PipelineVisitor & visitor )
+	void CloudsCurlPass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_computeShader );
 	}

@@ -2,7 +2,7 @@
 
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
 namespace castor3d
@@ -24,7 +24,7 @@ namespace castor3d
 	}
 
 	void RsmConfig::accept( castor::String const & name
-		, PipelineVisitorBase & visitor )
+		, ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( name
 			, VK_SHADER_STAGE_FRAGMENT_BIT

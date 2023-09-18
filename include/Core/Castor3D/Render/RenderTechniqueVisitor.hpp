@@ -7,18 +7,18 @@ See LICENSE file in root folder
 #include "RenderModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 
 namespace castor3d
 {
 	class RenderTechniqueVisitor
-		: public PipelineVisitor
+		: public ConfigurationVisitor
 	{
 	protected:
 		inline RenderTechniqueVisitor( PipelineFlags flags
 			, Scene const & scene
-			, Config config = { false, true, false } )
-			: PipelineVisitor{ std::move( config ) }
+			, Config config = { false } )
+			: ConfigurationVisitor{ std::move( config ) }
 			, m_flags{ std::move( flags ) }
 			, m_scene{ scene }
 		{
@@ -59,7 +59,7 @@ namespace castor3d
 		}
 		/**@}*/
 
-		using PipelineVisitor::visit;
+		using ConfigurationVisitor::visit;
 
 	private:
 		PipelineFlags m_flags;

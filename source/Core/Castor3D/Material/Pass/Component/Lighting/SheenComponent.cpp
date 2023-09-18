@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/SheenComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -206,7 +206,7 @@ namespace castor3d
 	{
 	}
 
-	void SheenComponent::accept( PassVisitorBase & vis )
+	void SheenComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Sheen" ) );
 		vis.visit( cuT( "Colour" ), m_value.factor );

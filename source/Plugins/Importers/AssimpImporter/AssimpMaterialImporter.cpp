@@ -5,7 +5,7 @@
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
 #include <Castor3D/Material/Pass/PassFactory.hpp>
-#include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Material/Pass/PhongPass.hpp>
 #include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>

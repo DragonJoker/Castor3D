@@ -104,7 +104,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		C3D_API void accept( PipelineVisitorBase & visitor );
+		C3D_API void accept( ConfigurationVisitorBase & visitor );
 		/**
 		 *\~english
 		 *\brief		Creates the geometry injection pass result.

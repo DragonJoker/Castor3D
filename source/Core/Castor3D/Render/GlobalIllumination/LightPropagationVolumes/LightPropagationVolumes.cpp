@@ -4,7 +4,7 @@
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightInjectionPass.hpp"
@@ -636,7 +636,7 @@ namespace castor3d
 		return m_runnable->run( toWait, queue );
 	}
 
-	void LightPropagationVolumesBase::accept( PipelineVisitorBase & visitor )
+	void LightPropagationVolumesBase::accept( ConfigurationVisitorBase & visitor )
 	{
 		if ( m_initialised )
 		{

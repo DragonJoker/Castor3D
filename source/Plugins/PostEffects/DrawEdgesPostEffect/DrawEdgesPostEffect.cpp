@@ -216,7 +216,7 @@ namespace draw_edges
 			, params );
 	}
 
-	void PostEffect::accept( castor3d::PipelineVisitorBase & visitor )
+	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		if ( m_depthNormal )
 		{

@@ -100,15 +100,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Pass visitor.
-	*\~french
-	*\brief
-	*	Visiteur de passe.
-	*/
-	class PassVisitorBase;
-	/**
-	*\~english
-	*\brief
 	*	Extended pass information, related to subsurface scattering.
 	*\~french
 	*\brief

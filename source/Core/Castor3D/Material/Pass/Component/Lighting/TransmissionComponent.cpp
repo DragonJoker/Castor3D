@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
@@ -181,7 +181,7 @@ namespace castor3d
 	{
 	}
 
-	void TransmissionComponent::accept( PassVisitorBase & vis )
+	void TransmissionComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Transmission" ) );
 		vis.visit( cuT( "Factor" ), m_value );

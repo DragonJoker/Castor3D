@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -548,7 +548,7 @@ namespace castor3d
 		m_context.vkCmdDraw( commandBuffer, vplCount, 1u, 0u, 0u );
 	}
 
-	void LightPropagationPass::accept( PipelineVisitorBase & visitor )
+	void LightPropagationPass::accept( ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_geometryShader );

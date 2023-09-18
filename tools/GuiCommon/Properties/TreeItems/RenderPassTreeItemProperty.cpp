@@ -26,7 +26,7 @@ namespace GuiCommon
 				, castor3d::Scene const & scene
 				, wxPropertyGrid * grid
 				, TreeItemProperty & prop )
-				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene, { false, true, false } }
+				: castor3d::RenderTechniqueVisitor{ std::move( flags ), scene, { false } }
 				, m_grid{ grid }
 				, m_prop{ prop }
 			{
@@ -64,132 +64,132 @@ namespace GuiCommon
 		private:
 			void visit( castor::String const & name
 				, float & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, int32_t & enumValue
 				, castor::StringArray const & enumNames
 				, OnSEnumValueChange onChange
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, control, onChange );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, std::move( controls ), onChange );
 			}
 
 			void visit( castor::String const & name
 				, uint32_t & enumValue
 				, castor::StringArray const & enumNames
 				, OnUEnumValueChange onChange
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, control, onChange );
+				m_prop.addPropertyET( m_grid, name, make_wxArrayString( enumNames ), &enumValue, std::move( controls ), onChange );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point2ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point3ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4i & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Point4ui & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::Matrix4x4f & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< float > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< int32_t > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 			void visit( castor::String const & name
 				, castor::RangedValue< uint32_t > & value
-				, bool * control )override
+				, ControlsList controls )override
 			{
-				m_prop.addPropertyT( m_grid, name, &value, control );
+				m_prop.addPropertyT( m_grid, name, &value, std::move( controls ) );
 			}
 
 		private:

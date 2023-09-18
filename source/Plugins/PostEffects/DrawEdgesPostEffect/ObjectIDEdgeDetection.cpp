@@ -247,7 +247,7 @@ namespace draw_edges
 		m_result.destroy();
 	}
 
-	void ObjectIDEdgeDetection::accept( castor3d::PipelineVisitorBase & visitor )
+	void ObjectIDEdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_vertexShader );
 		visitor.visit( m_pixelShader );

@@ -6,7 +6,7 @@
 #include "Castor3D/Cache/ShaderCache.hpp"
 #include "Castor3D/Cache/TextureCache.hpp"
 #include "Castor3D/Material/Material.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/BlendComponent.hpp"
@@ -634,7 +634,7 @@ namespace castor3d
 		return m_componentCombine;
 	}
 
-	void Pass::accept( PassVisitorBase & vis )
+	void Pass::accept( ConfigurationVisitorBase & vis )
 	{
 		for ( auto & component : m_components )
 		{
@@ -670,7 +670,7 @@ namespace castor3d
 	}
 
 	void Pass::fillConfig( TextureConfiguration & configuration
-		, PassVisitorBase & vis )
+		, ConfigurationVisitorBase & vis )
 	{
 		for ( auto & component : m_components )
 		{

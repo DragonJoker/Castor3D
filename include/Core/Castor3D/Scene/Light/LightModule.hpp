@@ -144,7 +144,7 @@ namespace castor3d
 	struct RsmConfig
 	{
 		C3D_API void accept( castor::String const & name
-			, PipelineVisitorBase & visitor );
+			, ConfigurationVisitorBase & visitor );
 
 		castor::ChangeTracked< float > intensity;
 		castor::ChangeTracked< float > maxRadius;

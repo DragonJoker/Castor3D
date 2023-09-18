@@ -1,7 +1,7 @@
 #include "Castor3D/Material/Pass/Component/Base/FractalMappingComponent.hpp"
 
 #include "Castor3D/Material/Pass/Pass.hpp"
-#include "Castor3D/Material/Pass/PassVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
@@ -224,7 +224,7 @@ namespace castor3d
 	{
 	}
 
-	void FractalMappingComponent::accept( PassVisitorBase & vis )
+	void FractalMappingComponent::accept( ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Fractal mapping" ) );
 		vis.visit( cuT( "Fractal" ), m_value );

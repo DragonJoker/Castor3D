@@ -25,7 +25,7 @@ namespace light_streaks
 			, KawaseUbo & kawaseUbo
 			, VkExtent2D dimensions
 			, bool const * enabled );
-		void accept( castor3d::PipelineVisitorBase & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		crg::FramePassArray const & getLastPasses()const
 		{

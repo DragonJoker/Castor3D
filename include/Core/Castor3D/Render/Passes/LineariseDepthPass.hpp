@@ -9,7 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Ssao/SsaoModule.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 
 #include <CastorUtils/Design/ChangeTracked.hpp>
@@ -77,7 +77,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		C3D_API void accept( PipelineVisitorBase & visitor );
+		C3D_API void accept( ConfigurationVisitorBase & visitor );
 		/**
 		*\~english
 		*name

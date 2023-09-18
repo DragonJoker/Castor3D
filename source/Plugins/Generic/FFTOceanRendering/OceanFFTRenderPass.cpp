@@ -433,36 +433,16 @@ namespace ocean_fft
 	{
 		if ( visitor.getFlags().renderPassType == m_typeID )
 		{
-			visitor.visit( cuT( "Refraction ratio" )
-				, m_configuration.refractionRatio
-				, nullptr );
-			visitor.visit( cuT( "Refraction distortion factor" )
-				, m_configuration.refractionDistortionFactor
-				, nullptr );
-			visitor.visit( cuT( "Refraction height factor" )
-				, m_configuration.refractionHeightFactor
-				, nullptr );
-			visitor.visit( cuT( "Refraction distance factor" )
-				, m_configuration.refractionDistanceFactor
-				, nullptr );
-			visitor.visit( cuT( "Depth softening distance" )
-				, m_configuration.depthSofteningDistance
-				, nullptr );
-			visitor.visit( cuT( "SSR step size" )
-				, m_configuration.ssrStepSize
-				, nullptr );
-			visitor.visit( cuT( "SSR forward steps count" )
-				, m_configuration.ssrForwardStepsCount
-				, nullptr );
-			visitor.visit( cuT( "SSR backward steps count" )
-				, m_configuration.ssrBackwardStepsCount
-				, nullptr );
-			visitor.visit( cuT( "SSR depth mult." )
-				, m_configuration.ssrDepthMult
-				, nullptr );
-			visitor.visit( cuT( "Water density" )
-				, m_configuration.density
-				, nullptr );
+			visitor.visit( cuT( "Refraction ratio" ), m_configuration.refractionRatio );
+			visitor.visit( cuT( "Refraction distortion factor" ), m_configuration.refractionDistortionFactor );
+			visitor.visit( cuT( "Refraction height factor" ), m_configuration.refractionHeightFactor );
+			visitor.visit( cuT( "Refraction distance factor" ), m_configuration.refractionDistanceFactor );
+			visitor.visit( cuT( "Depth softening distance" ), m_configuration.depthSofteningDistance );
+			visitor.visit( cuT( "SSR step size" ), m_configuration.ssrStepSize );
+			visitor.visit( cuT( "SSR forward steps count" ), m_configuration.ssrForwardStepsCount );
+			visitor.visit( cuT( "SSR backward steps count" ), m_configuration.ssrBackwardStepsCount );
+			visitor.visit( cuT( "SSR depth mult." ), m_configuration.ssrDepthMult );
+			visitor.visit( cuT( "Water density" ), m_configuration.density );
 
 			m_oceanFFT->accept( visitor );
 		}

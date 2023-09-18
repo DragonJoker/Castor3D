@@ -91,7 +91,7 @@ namespace castor3d
 		 */
 		C3D_API void accept( bool horizontal
 			, SsaoConfig & config
-			, PipelineVisitorBase & visitor );
+			, ConfigurationVisitorBase & visitor );
 		/**
 		*\~english
 		*name

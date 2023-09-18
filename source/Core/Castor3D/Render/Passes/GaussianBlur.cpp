@@ -3,7 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Miscellaneous/DebugName.hpp"
-#include "Castor3D/Miscellaneous/PipelineVisitor.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
 #include "Castor3D/Shader/Program.hpp"
@@ -406,7 +406,7 @@ namespace castor3d
 	{
 	}
 
-	void GaussianBlur::accept( PipelineVisitorBase & visitor )
+	void GaussianBlur::accept( ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( m_prefix + " GaussianBlur Intermediate"
 			, m_intermediateView

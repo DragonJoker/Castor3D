@@ -2,7 +2,7 @@
 
 #include "Shaders/GlslToonProfile.hpp"
 
-#include <Castor3D/Material/Pass/PassVisitor.hpp>
+#include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
 #include <Castor3D/Shader/Shaders/GlslBlendComponents.hpp>
@@ -290,7 +290,7 @@ namespace toon
 	{
 	}
 
-	void EdgesComponent::accept( castor3d::PassVisitorBase & vis )
+	void EdgesComponent::accept( castor3d::ConfigurationVisitorBase & vis )
 	{
 		vis.visit( cuT( "Toon" ) );
 		vis.visit( cuT( "Edge colour" )
