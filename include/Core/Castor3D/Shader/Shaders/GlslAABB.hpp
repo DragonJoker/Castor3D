@@ -13,9 +13,9 @@ namespace castor3d::shader
 {
 	struct Plane
 		: public sdw::StructInstanceHelperT< "C3D_Plane"
-		, sdw::type::MemoryLayout::eC
-		, sdw::Vec3Field< "normal" >
-		, sdw::FloatField< "distance" > >
+			, sdw::type::MemoryLayout::eC
+			, sdw::Vec3Field< "normal" >
+			, sdw::FloatField< "distance" > >
 	{
 		Plane( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
@@ -24,15 +24,9 @@ namespace castor3d::shader
 		{
 		}
 
-		Plane( sdw::Vec3 const normal
+		C3D_API Plane( sdw::Vec3 const normal
 			, sdw::Float const distance
-			, bool enabled = true )
-			: Plane{ sdw::findWriterMandat( normal, distance )
-				, sdw::makeAggrInit( makeType( sdw::findTypesCache( normal, distance ) )
-					, makeExprList( sdw::makeExpr( normal ), sdw::makeExpr( distance ) ) )
-				, enabled }
-		{
-		}
+			, bool enabled = true );
 
 		auto normal()const { return getMember< "normal" >(); }
 		auto distance()const { return getMember< "distance" >(); }
@@ -40,13 +34,13 @@ namespace castor3d::shader
 
 	struct Cone
 		: public sdw::StructInstanceHelperT< "C3D_Cone"
-		, sdw::type::MemoryLayout::eC
-		, sdw::Vec3Field< "apex" >
-		, sdw::FloatField< "range" >
-		, sdw::Vec3Field< "direction" >
-		, sdw::FloatField< "apertureCos" >
-		, sdw::FloatField< "apertureSin" >
-		, sdw::FloatField< "apertureTan" > >
+			, sdw::type::MemoryLayout::eC
+			, sdw::Vec3Field< "apex" >
+			, sdw::FloatField< "range" >
+			, sdw::Vec3Field< "direction" >
+			, sdw::FloatField< "apertureCos" >
+			, sdw::FloatField< "apertureSin" >
+			, sdw::FloatField< "apertureTan" > >
 	{
 		Cone( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
@@ -55,20 +49,13 @@ namespace castor3d::shader
 		{
 		}
 
-		Cone( sdw::Vec3 const papex
-			, sdw::Vec3 const pdirection
-			, sdw::Float const prange
-			, sdw::Float const papertureCos
-			, sdw::Float const papertureSin
-			, sdw::Float const papertureTan
-			, bool enabled = true )
-			: Cone{ sdw::findWriterMandat( papex, prange, pdirection, papertureCos, papertureSin, papertureTan )
-				, sdw::makeAggrInit( makeType( sdw::findTypesCache( papex, prange, pdirection, papertureCos, papertureSin, papertureTan ) )
-					, makeExprList( sdw::makeExpr( papex ), sdw::makeExpr( prange ), sdw::makeExpr( pdirection )
-						, sdw::makeExpr( papertureCos ), sdw::makeExpr( papertureSin ), sdw::makeExpr( papertureTan ) ) )
-				, enabled }
-		{
-		}
+		C3D_API Cone( sdw::Vec3 const apex
+			, sdw::Vec3 const direction
+			, sdw::Float const range
+			, sdw::Float const apertureCos
+			, sdw::Float const apertureSin
+			, sdw::Float const apertureTan
+			, bool enabled = true );
 
 		auto apex()const { return getMember< "apex" >(); }
 		auto range()const { return getMember< "range" >(); }
@@ -80,9 +67,9 @@ namespace castor3d::shader
 
 	struct AABB
 		: public sdw::StructInstanceHelperT< "C3D_AABB"
-		, sdw::type::MemoryLayout::eStd430
-		, sdw::Vec4Field< "bmin" >
-		, sdw::Vec4Field< "bmax" > >
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::Vec4Field< "bmin" >
+			, sdw::Vec4Field< "bmax" > >
 	{
 		AABB( sdw::ShaderWriter & writer
 			, sdw::expr::ExprPtr expr
@@ -91,15 +78,12 @@ namespace castor3d::shader
 		{
 		}
 
-		AABB( sdw::Vec4 const pmin
-			, sdw::Vec4 const pmax
-			, bool enabled = true )
-			: AABB{ sdw::findWriterMandat( pmin, pmax )
-				, sdw::makeAggrInit( makeType( sdw::findTypesCache( pmin, pmax ) )
-					, makeExprList( sdw::makeExpr( pmin ), sdw::makeExpr( pmax ) ) )
-				, enabled }
-		{
-		}
+		C3D_API AABB(sdw::Vec4 const min
+			, sdw::Vec4 const max
+			, bool enabled = true );
+		C3D_API AABB( sdw::Vec3 const position
+			, sdw::Float range
+			, bool enabled = true );
 
 		auto min()const { return getMember< "bmin" >(); }
 		auto max()const { return getMember< "bmax" >(); }
