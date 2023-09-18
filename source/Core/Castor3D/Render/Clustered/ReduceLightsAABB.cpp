@@ -85,46 +85,69 @@ namespace castor3d
 				// operation.
 				auto reduceIndex = NumThreads >> 1u;
 
-#if C3D_DebugEnableWarpOptimisation
-				while ( reduceIndex > 32u )
-#else
-				while ( reduceIndex > 0u )
-#endif
+				if ( config.enableWarpOptimisation )
 				{
-					IF( writer, groupIndex < reduceIndex )
+					while ( reduceIndex > 32u )
 					{
-						gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
-						gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
-					}
-					FI;
-
-					// Sync group shared memory writes.
-					shader::groupMemoryBarrierWithGroupSync( writer );
-
-					// Halve the number of threads that participate in the reduction.
-					reduceIndex >>= 1u;
-				}
-
-#if C3D_DebugEnableWarpOptimisation
-				// Within a warp (of 32 threads), instructions are warp-synchronous
-				// and the GroupMemoryBarrierWithGroupSync() is no longer needed to ensure
-				// the previous writes to groups shared memory have completed.
-				// Source: DirectCompute Optimizations and Best Practices (2010), Eric Young.
-				// Source: The CUDA Handbook (2013), Nicholas Wilt
-				IF( writer, groupIndex < 32_u )
-				{
-					while ( reduceIndex > 0u )
-					{
-						// To avoid out-of-bounds memory access, the number of threads in the 
-						// group must be at least 2x the reduce index. For example, the 
-						// thread at index 31 will access elements 31 and 63 so the size of the thread group
-						// must be at least 64.
-						if ( NumThreads >= ( reduceIndex << 1u ) )
+						IF( writer, groupIndex < reduceIndex )
 						{
 							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
 							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
 						}
+						FI;
 
+						// Sync group shared memory writes.
+						shader::groupMemoryBarrierWithGroupSync( writer );
+
+						// Halve the number of threads that participate in the reduction.
+						reduceIndex >>= 1u;
+					}
+
+					// Within a warp (of 32 threads), instructions are warp-synchronous
+					// and the GroupMemoryBarrierWithGroupSync() is no longer needed to ensure
+					// the previous writes to groups shared memory have completed.
+					// Source: DirectCompute Optimizations and Best Practices (2010), Eric Young.
+					// Source: The CUDA Handbook (2013), Nicholas Wilt
+					IF( writer, groupIndex < 32_u )
+					{
+						while ( reduceIndex > 0u )
+						{
+							// To avoid out-of-bounds memory access, the number of threads in the 
+							// group must be at least 2x the reduce index. For example, the 
+							// thread at index 31 will access elements 31 and 63 so the size of the thread group
+							// must be at least 64.
+							if ( NumThreads >= ( reduceIndex << 1u ) )
+							{
+								gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
+								gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
+							}
+
+							reduceIndex >>= 1u;
+						}
+
+						IF( writer, groupIndex == 0_u )
+						{
+							c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
+						}
+						FI;
+					}
+					FI;
+				}
+				else
+				{
+					while ( reduceIndex > 0u )
+					{
+						IF( writer, groupIndex < reduceIndex )
+						{
+							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
+							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
+						}
+						FI;
+
+						// Sync group shared memory writes.
+						shader::groupMemoryBarrierWithGroupSync( writer );
+
+						// Halve the number of threads that participate in the reduction.
 						reduceIndex >>= 1u;
 					}
 
@@ -134,14 +157,6 @@ namespace castor3d
 					}
 					FI;
 				}
-				FI;
-#else
-				IF( writer, groupIndex == 0_u )
-				{
-					c3d_reducedLightsAABB[groupID] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
-				}
-				FI;
-#endif
 			};
 
 			writer.implementMainT< sdw::VoidT >( NumThreads
@@ -274,11 +289,11 @@ namespace castor3d
 				: crg::ComputePass{ framePass
 					, context
 					, graph
-					, crg::ru::Config{ 2u }
+					, crg::ru::Config{ 4u }
 					, config
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
 						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
-						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.programCreator( { 4u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
 						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx ); } ) )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } )
@@ -325,7 +340,8 @@ namespace castor3d
 
 			uint32_t doGetPassIndex()
 			{
-				uint32_t result{ m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u };
+				uint32_t result{ ( m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u )
+					+ ( m_clusters.getConfig().enableWarpOptimisation ? 2u : 0u ) };
 				uint32_t count{ computeThreadGroupsCount( m_lightCache ) };
 
 				if ( m_dispatchCount && count != m_dispatchCount )
@@ -346,6 +362,8 @@ namespace castor3d
 					uint32_t reduceNumElements{};
 				} dispatchData;
 
+				// In the first pass, the number of lights determines the number of
+				// elements to be reduced.
 				m_dispatchCount = computeThreadGroupsCount( m_lightCache );
 				dispatchData.numThreadGroups = m_dispatchCount;
 				m_context.vkCmdPushConstants( commandBuffer, getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &dispatchData );
@@ -390,11 +408,11 @@ namespace castor3d
 				: crg::ComputePass{ framePass
 					, context
 					, graph
-					, crg::ru::Config{ 2u }
+					, crg::ru::Config{ 4u }
 					, config
 						.isEnabled( IsEnabledCallback( [this](){ return doIsEnabled(); } ) )
-						.getPassIndex( GetPassIndexCallback( [&clusters]() { return clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u; } ) )
-						.programCreator( { 2u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.getPassIndex( GetPassIndexCallback( [this]() { return doGetPassIndex(); } ) )
+						.programCreator( { 4u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
 						.recordInto( RunnablePass::RecordCallback( [this]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx ); } ) )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } )
 						.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u } ) }
@@ -432,6 +450,12 @@ namespace castor3d
 				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( ires.first->second.stages );
 			}
 
+			uint32_t doGetPassIndex()
+			{
+				uint32_t result = m_clusters.getConfig().enableWarpOptimisation ? 2u : 0u;
+				return result + ( m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u );
+			}
+
 			bool doIsEnabled()const
 			{
 				return m_clusters.getConfig().enabled;
@@ -447,8 +471,6 @@ namespace castor3d
 					uint32_t reduceNumElements{};
 				} dispatchData;
 
-				// In the first pass, the number of lights determines the number of
-				// elements to be reduced.
 				// In the second pass, the number of elements to be reduced is the 
 				// number of thread groups from the first pass.
 				dispatchData.reduceNumElements = computeThreadGroupsCount( m_lightCache );

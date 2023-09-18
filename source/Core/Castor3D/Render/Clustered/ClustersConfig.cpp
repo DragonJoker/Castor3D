@@ -13,6 +13,7 @@ namespace castor3d
 		, limitClustersToLightsAABB{ false }
 		, useSpotBoundingCone{ true }
 		, useSpotTightBoundingBox{ true }
+		, enableWarpOptimisation{ true }
 	{
 	}
 
@@ -26,7 +27,8 @@ namespace castor3d
 			visitor.visit( cuT( "Use Depth Buffer" ), parseDepthBuffer );
 			visitor.visit( cuT( "Limit Clusters To Lights AABB" ), limitClustersToLightsAABB );
 			visitor.visit( cuT( "Use Spot Bounding Cone" ), useSpotBoundingCone );
-			visitor.visit( cuT( "Use Spot Tight Bounding Bos" ), useSpotTightBoundingBox );
+			visitor.visit( cuT( "Use Spot Tight Bounding Box" ), useSpotTightBoundingBox );
+			visitor.visit( cuT( "Enable Warp Optimisation" ), enableWarpOptimisation );
 		}
 	}
 }
