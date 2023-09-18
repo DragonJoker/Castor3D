@@ -10,7 +10,7 @@ namespace castor3d
 {
 	struct ClustersConfig
 	{
-		ClustersConfig();
+		C3D_API ClustersConfig();
 
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
 
@@ -35,6 +35,9 @@ namespace castor3d
 		//!\~english	Use spot light tight bounding box when computing lights AABB.
 		//!\~french		Utiliser la bounding box la plus petite possible lors du calcul des AABB des ousrces lumineuses.
 		bool useSpotTightBoundingBox{ false };
+		//!\~english	Enable use of warp optimisation in the reduce lights AABB pass.
+		//!\~french		Autoriser l'utilisation de l'optimisation des warps dans la passe de réduction des AABB des sources lumineuses.
+		bool enableWarpOptimisation{ true };
 	};
 }
 
