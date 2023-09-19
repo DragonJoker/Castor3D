@@ -509,6 +509,7 @@ namespace castor3d
 		bufferPool = castor::makeUnique< GpuBufferPool >( *this, cuT( "GlobalBufferPool" ) );
 		geometryPools = castor::makeUnique< ObjectBufferPool >( *this, cuT( "ModelBuffersPool" ) );
 		vertexPools = castor::makeUnique< VertexBufferPool >( *this, cuT( "VertexBuffersPool" ) );
+		indexPools = castor::makeUnique< IndexBufferPool >( *this, cuT( "IndexBuffersPool" ) );
 		uboPool = castor::makeUnique< UniformBufferPool >( *this, cuT( "UniformBufferPool" ) );
 	}
 
@@ -520,6 +521,7 @@ namespace castor3d
 		}
 		uboPool.reset();
 		uboPool.reset();
+		indexPools.reset();
 		vertexPools.reset();
 		geometryPools.reset();
 		bufferPool.reset();

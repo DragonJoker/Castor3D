@@ -1,4 +1,4 @@
-﻿#include "Castor3D/Overlay/DebugOverlays.hpp"
+#include "Castor3D/Overlay/DebugOverlays.hpp"
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
@@ -1105,10 +1105,6 @@ namespace castor3d
 			getEngine()->getRenderSystem()->resetGpuTime();
 		}
 
-		fprintf( stdout
-			, "\r%0.2f ms, %0.2f fps                           "
-			, float( result.count() ) / 1000.0f
-			, m_fps );
 		return result;
 	}
 

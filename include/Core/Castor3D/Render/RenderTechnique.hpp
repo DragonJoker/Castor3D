@@ -210,6 +210,11 @@ namespace castor3d
 			return { m_depth.targetViewId };
 		}
 
+		Texture const & getDepth()const
+		{
+			return m_depth;
+		}
+
 		Texture const & getResult()const
 		{
 			return *m_colour;

@@ -34,7 +34,7 @@ namespace castor
 				&& write( file, cuT( "exponent" ), light.getExponent() )
 				&& write( file, cuT( "inner_cut_off" ), light.getInnerCutOff().degrees() )
 				&& write( file, cuT( "outer_cut_off" ), light.getOuterCutOff().degrees() )
-				&& writeSub( file, light.getShadowConfig() );
+				&& writeSubOpt( file, light.getShadowConfig(), ShadowConfig{} );
 		}
 
 		return result;

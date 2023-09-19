@@ -9,6 +9,7 @@
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Sync/Fence.hpp>
 
+CU_ImplementSmartPtr( castor3d, IndexBufferPool )
 CU_ImplementSmartPtr( castor3d, VertexBufferPool )
 CU_ImplementSmartPtr( castor3d, ObjectBufferPool )
 
@@ -121,6 +122,48 @@ namespace castor3d
 
 	VertexBufferPool::BufferArray::iterator VertexBufferPool::doFindBuffer( VkDeviceSize size
 		, VertexBufferPool::BufferArray & array )
+	{
+		CU_Require( size <= 65536u );
+		auto it = array.begin();
+
+		while ( it != array.end()
+			&& !it->vertex->hasAvailable( size ) )
+		{
+			++it;
+		}
+
+		return it;
+	}
+
+	//*********************************************************************************************
+
+	IndexBufferPool::IndexBufferPool( RenderDevice const & device
+		, castor::String debugName )
+		: OwnedBy< RenderSystem >{ device.renderSystem }
+		, m_device{ device }
+		, m_debugName{ std::move( debugName ) }
+	{
+	}
+
+	void IndexBufferPool::cleanup()
+	{
+		m_buffers.clear();
+	}
+
+	void IndexBufferPool::putBuffer( ObjectBufferOffset const & bufferOffset )
+	{
+		auto it = std::find_if( m_buffers.begin()
+			, m_buffers.end()
+			, [&bufferOffset]( ModelBuffers const & lookup )
+			{
+				return &lookup.vertex->getBuffer() == &bufferOffset.getBuffer( SubmeshFlag::eIndex );
+			} );
+		CU_Require( it != m_buffers.end() );
+		it->vertex->deallocate( bufferOffset.buffers[getIndex( SubmeshFlag::eIndex )].chunk );
+	}
+
+	IndexBufferPool::BufferArray::iterator IndexBufferPool::doFindBuffer( VkDeviceSize size
+		, IndexBufferPool::BufferArray & array )
 	{
 		CU_Require( size <= 65536u );
 		auto it = array.begin();

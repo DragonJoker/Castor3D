@@ -18,6 +18,7 @@
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
+#include "Castor3D/Render/Debug/DebugDrawer.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Render/Overlays/OverlayPass.hpp"
@@ -561,6 +562,7 @@ namespace castor3d
 			getEngine()->unregisterTimer( m_runnable->getName() + "/Graph"
 				, m_runnable->getTimer() );
 			m_runnable.reset();
+			m_debugDrawer.reset();
 			m_combinePassSource = {};
 			m_combinePass = {};
 
@@ -688,14 +690,16 @@ namespace castor3d
 		crg::SemaphoreWaitArray result{};
 		auto scene = getScene();
 
-		if ( scene )
+		if ( m_initialised
+			&& scene
+			&& scene->isInitialised()
+			&& getCamera() )
 		{
-			if ( m_initialised && scene->isInitialised() )
+			result = doRender( queue, signalsToWait );
+
+			if ( m_debugDrawer )
 			{
-				if ( getCamera() )
-				{
-					result = doRender( queue, signalsToWait );
-				}
+				result = m_debugDrawer->render( queue, std::move( result ) );
 			}
 		}
 
@@ -1024,6 +1028,7 @@ namespace castor3d
 					runnable->record();
 					m_initialised = result;
 				} ) );
+			m_debugDrawer = castor::makeUnique< DebugDrawer >(*this, device, m_combined, m_renderTechnique->getDepth() );
 		}
 
 		stepProgressBar( progress, "Creating overlay renderer" );

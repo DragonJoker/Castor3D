@@ -80,6 +80,73 @@ namespace castor3d
 		BufferArray m_buffers;
 	};
 
+	class IndexBufferPool
+		: public castor::OwnedBy< RenderSystem >
+	{
+	public:
+		struct ModelBuffers
+		{
+			explicit ModelBuffers( GpuPackedBaseBufferUPtr vtx )
+				: vertex{ std::move( vtx ) }
+			{
+			}
+
+			GpuPackedBaseBufferUPtr vertex;
+		};
+		using BufferArray = std::vector< ModelBuffers >;
+
+	public:
+		/**
+		 *\~english
+		 *\brief		Constructor.
+		 *\param[in]	device			The GPU device.
+		 *\param[in]	debugName		The debug name.
+		 *\~french
+		 *\brief		Constructeur.
+		 *\param[in]	device			Le device GPU.
+		 *\param[in]	debugName		Le nom debug.
+		 */
+		C3D_API explicit IndexBufferPool( RenderDevice const & device
+			, castor::String debugName );
+		/**
+		 *\~english
+		 *\brief		Cleans up all GPU buffers.
+		 *\~french
+		 *\brief		Nettoie tous les tampons GPU.
+		 */
+		C3D_API void cleanup();
+		/**
+		 *\~english
+		 *\brief		Retrieves a GPU buffer with the given size.
+		 *\param[in]	vertexCount	The wanted buffer element count.
+		 *\return		The GPU buffer.
+		 *\~french
+		 *\brief		Récupère un tampon GPU avec la taille donnée.
+		 *\param[in]	vertexCount	Le nombre d'éléments voulu pour le tampon.
+		 *\return		Le tampon GPU.
+		 */
+		template< typename IndexT >
+		ObjectBufferOffset getBuffer( VkDeviceSize vertexCount );
+		/**
+		 *\~english
+		 *\brief		Releases a GPU buffer.
+		 *\param[in]	bufferOffset	The buffer offset to release.
+		 *\~french
+		 *\brief		Libère un tampon GPU.
+		 *\param[in]	bufferOffset	Le tampon à libérer.
+		 */
+		C3D_API void putBuffer( ObjectBufferOffset const & bufferOffset );
+
+	private:
+		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize size
+			, BufferArray & array );
+
+	private:
+		RenderDevice const & m_device;
+		castor::String m_debugName;
+		BufferArray m_buffers;
+	};
+
 	class ObjectBufferPool
 		: public castor::OwnedBy< RenderSystem >
 	{

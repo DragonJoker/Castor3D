@@ -371,6 +371,7 @@ namespace castor3d
 		ashes::Queue * transferQueue{};
 		GpuBufferPoolUPtr bufferPool;
 		VertexBufferPoolUPtr vertexPools;
+		IndexBufferPoolUPtr indexPools;
 		ObjectBufferPoolUPtr geometryPools;
 		UniformBufferPoolUPtr uboPool;
 
