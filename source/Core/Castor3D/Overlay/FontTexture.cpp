@@ -29,7 +29,7 @@ namespace castor3d
 
 			uint32_t const maxWidth = font->getMaxWidth();
 			uint32_t const maxHeight = font->getMaxHeight();
-			uint32_t const count = uint32_t( std::ceil( double( std::distance( font->begin(), font->end() ) ) / 16.0 ) );
+			uint32_t const count = castor::divRoundUp( uint32_t( std::distance( font->begin(), font->end() ) ), 16u );
 
 			ashes::ImageCreateInfo image{ 0u
 				, VK_IMAGE_TYPE_2D
@@ -176,7 +176,7 @@ namespace castor3d
 			auto & glyphPositions = front ? m_frontGlyphsPositions : m_backGlyphsPositions;
 			uint32_t const maxWidth = font->getMaxWidth();
 			uint32_t const maxHeight = font->getMaxHeight();
-			uint32_t const count = uint32_t( std::ceil( float( std::distance( font->begin(), font->end() ) ) / 16.0 ) );
+			uint32_t const count = castor::divRoundUp( uint32_t( std::distance( font->begin(), font->end() ) ), 16u );
 			castor::Size size{ maxWidth * 16, maxHeight * count };
 			m_buffer->setMaxHeight( font->getMaxHeight() );
 			m_buffer->setImgWidth( size.getWidth() );

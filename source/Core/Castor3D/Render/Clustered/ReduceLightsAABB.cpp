@@ -272,8 +272,7 @@ namespace castor3d
 			// Don't dispatch more than 512 thread groups. The reduction algorithm depends on the
 			// number of thread groups to be no more than 512. The buffer which stores the reduced AABB is sized
 			// for a maximum of 512 thread groups.
-			return std::min( 512u
-				, uint32_t( std::ceil( float( maxLightsCount ) / 512.0f ) ) );
+			return std::min( 512u, castor::divRoundUp( maxLightsCount, 512u ) );
 		}
 
 		class FirstFramePass

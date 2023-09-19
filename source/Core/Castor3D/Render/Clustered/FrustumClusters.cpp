@@ -138,7 +138,7 @@ namespace castor3d
 		// Radix sort will sort Morton codes (keys) into chunks of SORT_NUM_THREADS_PER_THREAD_GROUP size.
 		uint32_t chunkSize = NumThreadsPerThreadGroup;
 		// The number of chunks that need to be merge sorted after Radix sort finishes.
-		uint32_t numChunks = uint32_t( std::ceil( float( maxElements ) / float( chunkSize ) ) );
+		uint32_t numChunks = castor::divRoundUp( maxElements, chunkSize );
 		// The number of sort groups that are needed to sort the first set of chunks.
 		// Each sort group will sort 2 chunks. So the maximum number of sort groups is 1/2 of the 
 		// number of chunks.
@@ -147,7 +147,7 @@ namespace castor3d
 		// to be sorted per sort group (2 chunks) divided by the number of elements 
 		// that can be sorted per thread group. One is added to account for the 
 		// merge path partition at the END of the chunk.
-		uint32_t numMergePathPartitionsPerSortGroup = uint32_t( std::ceil( float( chunkSize * 2u ) / float( ElementsPerThread * NumThreadsPerThreadGroup ) ) ) + 1u;
+		uint32_t numMergePathPartitionsPerSortGroup = castor::divRoundUp( chunkSize * 2u, ElementsPerThread * NumThreadsPerThreadGroup ) + 1u;
 
 		// The maximum number of merge path partitions is the number of merge path partitions
 		// needed by a single sort group multiplied by the maximum number of sort groups.
@@ -270,8 +270,8 @@ namespace castor3d
 
 		auto renderSize = getSafeBandedSize( m_camera.getSize() );
 		auto dimensions = m_dimensions.value();
-		( *m_clusterSize )->x = u32( std::ceil( float( renderSize->x ) / float( dimensions->x ) ) );
-		( *m_clusterSize )->y = u32( std::ceil( float( renderSize->y ) / float( dimensions->y ) ) );
+		( *m_clusterSize )->x = castor::divRoundUp( renderSize->x, dimensions->x );
+		( *m_clusterSize )->y = castor::divRoundUp( renderSize->y, dimensions->y );
 		m_cameraProjection = m_camera.getProjection( true );
 		m_cameraView = m_camera.getView();
 		auto cellCount = dimensions->x * dimensions->y * dimensions->z;

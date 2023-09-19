@@ -506,7 +506,7 @@ namespace castor3d
 				auto pointLightsCount = m_lightCache.getLightsBufferCount( LightType::ePoint );
 				auto spoLightsCount = m_lightCache.getLightsBufferCount( LightType::eSpot );
 				auto maxLeaves = std::max( pointLightsCount, spoLightsCount );
-				auto numThreadGroups = uint32_t( std::ceil( float( maxLeaves ) / float( NumThreads ) ) );
+				auto numThreadGroups = castor::divRoundUp( maxLeaves, NumThreads );
 				m_bottom.pipeline.recordInto( context, commandBuffer, index );
 				m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
 				uint32_t maxLevels = FrustumClusters::getNumLevels( maxLeaves );
@@ -522,7 +522,7 @@ namespace castor3d
 						doBarriers( context, commandBuffer, index, 1 );
 						m_context.vkCmdPushConstants( commandBuffer, m_top.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u, &level );
 						uint32_t numChildNodes = FrustumClusters::getNumLevelNodes( level );
-						numThreadGroups = uint32_t( std::ceil( float( numChildNodes ) / float( NumThreads ) ) );
+						numThreadGroups = castor::divRoundUp( numChildNodes, NumThreads );
 						m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
 					}
 				}

@@ -237,7 +237,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				uint32_t numThreadGroups = uint32_t( std::ceil( float( MaxLightsCount ) / 1024.0f ) );
+				constexpr uint32_t numThreadGroups = castor::divRoundUp( MaxLightsCount, 1024u );
 				auto result = std::make_unique< cmpmrt::FramePass >( framePass
 					, context
 					, graph
