@@ -31,7 +31,7 @@ namespace castor
 				&& writeNamedSub( file, cuT( "colour" ), light.getColour() )
 				&& writeNamedSub( file, cuT( "intensity" ), light.getIntensity() )
 				&& writeNamedSub( file, cuT( "range" ), light.getRange() )
-				&& writeSub( file, light.getShadowConfig() );
+				&& writeSubOpt( file, light.getShadowConfig(), ShadowConfig{} );
 		}
 
 		return result;

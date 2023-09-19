@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
+#include "Castor3D/Render/Debug/DebugModule.hpp"
 #include "Castor3D/Render/Overlays/OverlaysModule.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
@@ -529,6 +530,7 @@ namespace castor3d
 		TargetDebugConfig m_debugConfig;
 		FrustumClustersUPtr m_frustumClusters;
 		bool m_enableFullLoading{ false };
+		DebugDrawerUPtr m_debugDrawer{};
 
 		struct StereoConfig
 		{
