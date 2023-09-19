@@ -8,8 +8,8 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API crg::FramePass const & createBuildLightsBVHPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	C3D_API crg::FramePassArray createBuildLightsBVHPass( crg::FramePassGroup & graph
+		, crg::FramePassArray previousPasses
 		, RenderDevice const & device
 		, FrustumClusters & clusters );
 }
