@@ -174,6 +174,18 @@ namespace castor3d::shader
 #define C3D_SpotLightBVH( writer, binding, set ) \
 	C3D_SpotLightBVHEx( writer, binding, set, true )
 
+#define C3D_LightBVHEx( writer, binding, set, enabled ) \
+	auto lightBVHBuffer = writer.declStorageBuffer( "c3d_lightBVHBuffer" \
+		, uint32_t( binding ) \
+		, set \
+		, sdw::type::MemoryLayout::eStd430 \
+		, enabled ); \
+	auto c3d_lightBVH = lightBVHBuffer.declMemberArray< shader::AABB >( "lb", enabled ); \
+	lightBVHBuffer.end()
+
+#define C3D_LightBVH( writer, binding, set ) \
+	C3D_LightBVHEx( writer, binding, set, true )
+
 
 
 #define C3D_PointLightIndicesEx( writer, binding, set, enabled ) \
@@ -199,6 +211,18 @@ namespace castor3d::shader
 
 #define C3D_SpotLightIndices( writer, binding, set ) \
 	C3D_SpotLightIndicesEx( writer, binding, set, true )
+
+#define C3D_LightIndicesEx( writer, binding, set, enabled ) \
+	auto lightIndicesBuffer = writer.declStorageBuffer( "c3d_lightIndicesBuffer" \
+		, ( enabled ? uint32_t( binding ) : 0u ) \
+		, set \
+		, sdw::type::MemoryLayout::eStd430 \
+		, enabled ); \
+	auto c3d_lightIndices = lightIndicesBuffer.declMemberArray< sdw::UInt >( "li" , enabled ); \
+	lightIndicesBuffer.end()
+
+#define C3D_LightIndices( writer, binding, set ) \
+	C3D_LightIndicesEx( writer, binding, set, true )
 
 
 

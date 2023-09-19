@@ -208,9 +208,9 @@ namespace castor3d
 			, m_device, *this ) };
 		lastPasses = createSortLightsMortonCodePass( graph, lastPasses.front()
 			, m_device, *this );
-		lastPasses = { &createBuildLightsBVHPass( graph, lastPasses
-			, m_device, *this ) };
-		return createAssignLightsToClustersPass( graph, lastPasses.front()
+		lastPasses = createBuildLightsBVHPass( graph, std::move( lastPasses )
+			, m_device, *this );
+		return createAssignLightsToClustersPass( graph, std::move( lastPasses )
 			, m_device, cameraUbo, *this );
 	}
 

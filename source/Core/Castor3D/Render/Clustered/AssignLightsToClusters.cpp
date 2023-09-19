@@ -760,7 +760,7 @@ namespace castor3d
 	//*********************************************************************************************
 
 	crg::FramePass const & createAssignLightsToClustersPass( crg::FramePassGroup & graph
-		, crg::FramePass const * previousPass
+		, crg::FramePassArray previousPasses
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
 		, FrustumClusters & clusters )
@@ -785,7 +785,7 @@ namespace castor3d
 					, result->getTimer() );
 				return result;
 			} );
-		passNoDepth.addDependency( *previousPass );
+		passNoDepth.addDependencies( previousPasses );
 		cameraUbo.createPassBinding( passNoDepth, dspclst::eCamera );
 		lights.createPassBinding( passNoDepth, dspclst::eLights );
 		clusters.getClustersUbo().createPassBinding( passNoDepth, dspclst::eClusters );

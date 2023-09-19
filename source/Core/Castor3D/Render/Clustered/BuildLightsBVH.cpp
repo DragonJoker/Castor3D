@@ -37,17 +37,16 @@ namespace castor3d
 		{
 			eClusters,
 			eAllLightsAABB,
-			ePointLightIndices,
-			eSpotLightIndices,
-			ePointLightBVH,
-			eSpotLightBVH,
+			eLightIndices,
+			eLightBVH,
 		};
 
 		static uint32_t constexpr NumThreads = 32u * 16u;
 		static float constexpr FltMax = std::numeric_limits< float >::max();
 
 		static ShaderPtr createShader( bool bottomLevel
-			, ClustersConfig const & config )
+			, ClustersConfig const & config
+			, LightType lightType )
 		{
 			sdw::ComputeWriter writer;
 
@@ -69,26 +68,20 @@ namespace castor3d
 				, 34636833_u	/* Level 6 */ } );
 
 			// Inputs
-			C3D_AllLightsAABB( writer
+			C3D_AllLightsAABBEx( writer
 				, eAllLightsAABB
-				, 0u );
+				, 0u
+				, bottomLevel );
 			C3D_Clusters( writer
 				, eClusters
 				, 0u
 				, &config );
-			C3D_PointLightIndicesEx( writer
-				, ePointLightIndices
+			C3D_LightIndicesEx( writer
+				, eLightIndices
 				, 0u
 				, bottomLevel && config.sortLights );
-			C3D_SpotLightIndicesEx( writer
-				, eSpotLightIndices
-				, 0u
-				, bottomLevel && config.sortLights );
-			C3D_PointLightBVH( writer
-				, ePointLightBVH
-				, 0u );
-			C3D_SpotLightBVH( writer
-				, eSpotLightBVH
+			C3D_LightBVH( writer
+				, eLightBVH
 				, 0u );
 
 			sdw::PushConstantBuffer pcb{ writer
@@ -144,18 +137,49 @@ namespace castor3d
 
 					shader::groupMemoryBarrierWithGroupSync( writer );
 
+					// Number of levels in the BVH
+					auto numLevels = writer.declLocale( "numLevels"
+						, ( lightType == LightType::ePoint
+							? c3d_clustersData.pointLightLevels()
+							: c3d_clustersData.spotLightLevels() ) );
+
+					auto writeToGlobalMemory = [&]( sdw::UInt childLevel, sdw::UInt currentLevel )
+					{
+						// The first thread of each warp will write the AABB to global memory.
+						IF( writer, threadIndex % 32_u == 0_u )
+						{
+							// Offset of the node in the BVH at the last level of child nodes.
+							auto nodeOffset = writer.declLocale( "nodeOffset"
+								, threadIndex / 32_u );
+
+							IF( writer, childLevel < numLevels && nodeOffset < c3d_numLevelNodes[currentLevel - 1_u] )
+							{
+								auto nodeIndex = writer.declLocale( "nodeIndex"
+									, c3d_firstNodeIndex[currentLevel - 1_u] + nodeOffset );
+								c3d_lightBVH[nodeIndex] = shader::AABB{ gsAABBMin[groupIndex], gsAABBMax[groupIndex] };
+							}
+							FI;
+						}
+						FI;
+					};
+
 					if ( bottomLevel )
 					{
-						// First compute BVH AABB for point lights.
+						// Compute BVH AABB for lights.
 						auto leafIndex = writer.declLocale( "leafIndex"
 							, threadIndex );
+						auto lightCount = lightType == LightType::ePoint
+							? c3d_clustersData.pointLightCount()
+							: c3d_clustersData.spotLightCount();
 
-						IF( writer, c3d_clustersData.pointLightCount() > 0_u )
+						IF( writer, lightCount > 0_u )
 						{
-							IF( writer, leafIndex < c3d_clustersData.pointLightCount() )
+							IF( writer, leafIndex < lightCount )
 							{
 								auto lightIndex = writer.declLocale( "lightIndex"
-									, config.sortLights ? c3d_pointLightIndices[leafIndex] : leafIndex );
+									, ( lightType == LightType::ePoint
+										? ( config.sortLights ? c3d_lightIndices[leafIndex] : leafIndex )
+										: c3d_clustersData.pointLightCount() + ( config.sortLights ? c3d_lightIndices[leafIndex] : leafIndex ) ) );
 								auto aabb = writer.declLocale( "aabb"
 									, c3d_allLightsAABB[lightIndex] );
 
@@ -176,83 +200,13 @@ namespace castor3d
 							// a group sync barrier.
 							logStepReduction( groupIndex );
 
-							// The first thread of each warp will write the AABB to global memory.
-							IF( writer, threadIndex % 32_u == 0_u )
-							{
-								// Number of levels in the BVH
-								auto numLevels = writer.declLocale( "numLevels"
-									, c3d_clustersData.pointLightLevels() );
-								// Offset of the node in the BVH at the last level of child nodes.
-								auto nodeOffset = writer.declLocale( "nodeOffset"
-									, threadIndex / 32_u );
-
-								IF( writer, numLevels > 0_u && nodeOffset < c3d_numLevelNodes[numLevels - 1_u] )
-								{
-									auto nodeIndex = writer.declLocale( "nodeIndex"
-										, c3d_firstNodeIndex[numLevels - 1_u] + nodeOffset );
-									c3d_pointLightBVH[nodeIndex].min() = gsAABBMin[groupIndex];
-									c3d_pointLightBVH[nodeIndex].max() = gsAABBMax[groupIndex];
-								}
-								FI;
-							}
-							FI;
-						}
-						FI;
-
-						IF( writer, c3d_clustersData.spotLightCount() > 0_u )
-						{
-							// Now compute BVH nodes for spot lights.
-							IF( writer, leafIndex < c3d_clustersData.spotLightCount() )
-							{
-								auto lightAABBIndex = writer.declLocale( "lightAABBIndex"
-									, c3d_clustersData.pointLightCount() + ( config.sortLights ? c3d_spotLightIndices[leafIndex] : leafIndex ) );
-								auto aabb = writer.declLocale( "aabb"
-									, c3d_allLightsAABB[lightAABBIndex] );
-
-								aabbMin = aabb.min();
-								aabbMax = aabb.max();
-							}
-							ELSE
-							{
-								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
-								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
-							}
-							FI;
-
-							gsAABBMin[groupIndex] = aabbMin;
-							gsAABBMax[groupIndex] = aabbMax;
-
-							logStepReduction( groupIndex );
-
-							// The first thread of each warp will write the AABB to global memory.
-							IF( writer, threadIndex % 32_u == 0_u )
-							{
-								// Number of levels in the BVH
-								auto numLevels = writer.declLocale( "numLevels"
-									, c3d_clustersData.spotLightLevels() );
-								// Offset of the node in the BVH at the last level of child nodes.
-								auto nodeOffset = writer.declLocale( "nodeOffset"
-									, threadIndex / 32_u );
-
-								IF( writer, numLevels > 0_u && nodeOffset < c3d_numLevelNodes[numLevels - 1_u] )
-								{
-									auto nodeIndex = writer.declLocale( "nodeIndex"
-										, c3d_firstNodeIndex[numLevels - 1_u] + nodeOffset );
-
-									c3d_spotLightBVH[nodeIndex].min() = gsAABBMin[groupIndex];
-									c3d_spotLightBVH[nodeIndex].max() = gsAABBMax[groupIndex];
-								}
-								FI;
-							}
-							FI;
+							writeToGlobalMemory( 0_u, numLevels );
 						}
 						FI;
 					}
 					else
 					{
-						// First build upper BVH for point light BVH.
-						auto numLevels = writer.declLocale( "numLevels"
-							, c3d_clustersData.pointLightLevels() );
+						// Build upper BVH for light BVH.
 						auto childOffset = writer.declLocale( "childOffset"
 							, threadIndex );
 
@@ -261,8 +215,8 @@ namespace castor3d
 							auto childIndex = writer.declLocale( "childIndex"
 								, c3d_firstNodeIndex[c3d_childLevel] + childOffset );
 
-							aabbMin = c3d_pointLightBVH[childIndex].min();
-							aabbMax = c3d_pointLightBVH[childIndex].max();
+							aabbMin = c3d_lightBVH[childIndex].min();
+							aabbMax = c3d_lightBVH[childIndex].max();
 
 							IF( writer, aabbMin.x() == aabbMax.x()
 								&& aabbMin.y() == aabbMax.y()
@@ -287,73 +241,7 @@ namespace castor3d
 						// a group sync barrier.
 						logStepReduction( groupIndex );
 
-						// The first thread of each warp will write the AABB to global memory.
-						IF( writer, threadIndex % 32_u == 0_u )
-						{
-							auto nodeOffset = writer.declLocale( "nodeOffset"
-								, threadIndex / 32_u );
-
-							IF( writer, c3d_childLevel < numLevels && nodeOffset < c3d_numLevelNodes[c3d_childLevel - 1_u] )
-							{
-								auto nodeIndex = writer.declLocale( "nodeIndex"
-									, c3d_firstNodeIndex[c3d_childLevel - 1_u] + nodeOffset );
-								c3d_pointLightBVH[nodeIndex].min() = gsAABBMin[groupIndex];
-								c3d_pointLightBVH[nodeIndex].max() = gsAABBMax[groupIndex];
-							}
-							FI;
-						}
-						FI;
-
-						// Now build upper BVH for spot light BVH.
-						numLevels = c3d_clustersData.spotLightLevels();
-
-						IF( writer, c3d_childLevel < numLevels && childOffset < c3d_numLevelNodes[c3d_childLevel] )
-						{
-							auto childIndex = writer.declLocale( "childIndex"
-								, c3d_firstNodeIndex[c3d_childLevel] + childOffset );
-
-							aabbMin = c3d_spotLightBVH[childIndex].min();
-							aabbMax = c3d_spotLightBVH[childIndex].max();
-
-							IF( writer, aabbMin.x() == aabbMax.x()
-								&& aabbMin.y() == aabbMax.y()
-								&& aabbMin.z() == aabbMax.z() )
-							{
-								aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
-								aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
-							}
-							FI;
-						}
-						ELSE
-						{
-							aabbMin = vec4( sdw::Float{ FltMax }, FltMax, FltMax, 1.0f );
-							aabbMax = vec4( sdw::Float{ -FltMax }, -FltMax, -FltMax, 1.0f );
-						}
-						FI;
-
-						gsAABBMin[groupIndex] = aabbMin;
-						gsAABBMax[groupIndex] = aabbMax;
-
-						// Log-step reduction is performed warp-syncronous and thus does not require
-						// a group sync barrier.
-						logStepReduction( groupIndex );
-
-						// The first thread of each warp will write the AABB to global memory.
-						IF( writer, threadIndex % 32_u == 0_u )
-						{
-							auto nodeOffset = writer.declLocale( "nodeOffset"
-								, threadIndex / 32_u );
-
-							IF( writer, c3d_childLevel < numLevels && nodeOffset < c3d_numLevelNodes[c3d_childLevel - 1_u] )
-							{
-								auto nodeIndex = writer.declLocale( "nodeIndex"
-									, c3d_firstNodeIndex[c3d_childLevel - 1_u] + nodeOffset );
-								c3d_spotLightBVH[nodeIndex].min() = gsAABBMin[groupIndex];
-								c3d_spotLightBVH[nodeIndex].max() = gsAABBMax[groupIndex];
-							}
-							FI;
-						}
-						FI;
+						writeToGlobalMemory( c3d_childLevel, c3d_childLevel );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -367,7 +255,8 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
-				, FrustumClusters const & clusters )
+				, FrustumClusters const & clusters
+				, LightType lightType )
 				: crg::RunnablePass{ framePass
 					, context
 					, graph
@@ -380,8 +269,9 @@ namespace castor3d
 					, crg::ru::Config{ 3u, true /* resettable */ } }
 				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
-				, m_bottom{ framePass, context, graph, device, clusters.getConfig(), true, this }
-				, m_top{ framePass, context, graph, device, clusters.getConfig(), false, this }
+				, m_lightType{ lightType }
+				, m_bottom{ framePass, context, graph, device, clusters.getConfig(), true, this, m_lightType }
+				, m_top{ framePass, context, graph, device, clusters.getConfig(), false, this, m_lightType }
 			{
 			}
 
@@ -414,7 +304,8 @@ namespace castor3d
 					, RenderDevice const & device
 					, ClustersConfig const & config
 					, bool bottomLevel
-					, FramePass * parent )
+					, FramePass * parent
+					, LightType lightType )
 					: cpConfig{ crg::getDefaultV< InitialiseCallback >()
 						, nullptr
 						, IsEnabledCallback( [parent]() { return parent->m_clusters.needsLightsUpdate(); } )
@@ -428,7 +319,7 @@ namespace castor3d
 						, context
 						, graph
 						, crg::pp::Config{}
-							.programCreator( { 3u, [this, &device, &config, bottomLevel]( uint32_t passIndex ){ return doCreateProgram( device, config, passIndex, bottomLevel ); } } )
+							.programCreator( { 3u, [this, &device, &config, bottomLevel, lightType]( uint32_t passIndex ){ return doCreateProgram( device, config, passIndex, bottomLevel, lightType ); } } )
 							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u } )
 						, VK_PIPELINE_BIND_POINT_COMPUTE
 						, 3u }
@@ -439,14 +330,17 @@ namespace castor3d
 				crg::VkPipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 					, ClustersConfig const & config
 					, uint32_t passIndex
-					, bool bottomLevel )
+					, bool bottomLevel
+					, LightType lightType )
 				{
 					auto ires = programs.emplace( passIndex, ProgramData{} );
 
 					if ( ires.second )
 					{
 						auto & program = ires.first->second;
-						program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "BuildLightsBVH", createShader( bottomLevel, config ) };
+						program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT
+							, "BuildLightsBVH/" + ( bottomLevel ? castor::String{ "Bottom/" } : castor::String{ "Top/" } ) + getName( lightType )
+							, createShader( bottomLevel, config, lightType ) };
 						program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.module ) };
 					}
 
@@ -457,6 +351,7 @@ namespace castor3d
 		private:
 			FrustumClusters const & m_clusters;
 			LightCache const & m_lightCache;
+			LightType m_lightType;
 			Pipeline m_bottom;
 			Pipeline m_top;
 
@@ -475,9 +370,7 @@ namespace castor3d
 
 				if ( m_clusters.getConfig().sortLights )
 				{
-					auto pointLightsCount = m_lightCache.getLightsBufferCount( LightType::ePoint );
-					auto spoLightsCount = m_lightCache.getLightsBufferCount( LightType::eSpot );
-					auto totalValues = std::max( pointLightsCount, spoLightsCount );
+					auto totalValues = m_lightCache.getLightsBufferCount( m_lightType );
 					auto numChunks = getLightsMortonCodeChunkCount( totalValues );
 
 					if ( numChunks > 1u )
@@ -494,6 +387,7 @@ namespace castor3d
 			bool doIsEnabled()const
 			{
 				return m_clusters.getConfig().useLightsBVH
+					&& m_lightCache.getLightsCount( m_lightType ) > 0u
 					&& ( ( m_bottom.cpConfig.isEnabled ? ( *m_bottom.cpConfig.isEnabled )() : false )
 						|| ( m_top.cpConfig.isEnabled ? ( *m_top.cpConfig.isEnabled )() : false ) );
 			}
@@ -503,9 +397,7 @@ namespace castor3d
 				, uint32_t index )
 			{
 				// Build bottom level of the BVH.
-				auto pointLightsCount = m_lightCache.getLightsBufferCount( LightType::ePoint );
-				auto spoLightsCount = m_lightCache.getLightsBufferCount( LightType::eSpot );
-				auto maxLeaves = std::max( pointLightsCount, spoLightsCount );
+				auto maxLeaves = m_lightCache.getLightsBufferCount( m_lightType );
 				auto numThreadGroups = castor::divRoundUp( maxLeaves, NumThreads );
 				m_bottom.pipeline.recordInto( context, commandBuffer, index );
 				m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
@@ -576,12 +468,13 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	crg::FramePass const & createBuildLightsBVHPass( crg::FramePassGroup & graph
-		, crg::FramePassArray const & previousPasses
+	crg::FramePassArray createBuildLightsBVHPass( crg::FramePassGroup & graph
+		, crg::FramePassArray previousPasses
 		, RenderDevice const & device
 		, FrustumClusters & clusters )
 	{
-		auto & pass = graph.createPass( "BuildLightsBVH"
+		// Point lights
+		auto & point = graph.createPass( "BuildLightsBVH/Point"
 			, [&clusters, &device]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -590,23 +483,45 @@ namespace castor3d
 					, context
 					, graph
 					, device
-					, clusters );
+					, clusters
+					, LightType::ePoint );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, result->getTimer() );
 				return result;
 			} );
-		pass.addDependencies( previousPasses );
-		clusters.getClustersUbo().createPassBinding( pass, lgtbvh::eClusters );
-		createInputStoragePassBinding( pass, uint32_t( lgtbvh::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
-		createInputStoragePassBinding( pass, uint32_t( lgtbvh::ePointLightIndices ), "C3D_PointLightIndices"
+		point.addDependency( *previousPasses.front() );
+		clusters.getClustersUbo().createPassBinding( point, lgtbvh::eClusters );
+		createInputStoragePassBinding( point, uint32_t( lgtbvh::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( point, uint32_t( lgtbvh::eLightIndices ), "C3D_PointLightIndices"
 			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
-		createInputStoragePassBinding( pass, uint32_t( lgtbvh::eSpotLightIndices ), "C3D_SpotLightIndices"
+		createClearableOutputStorageBinding( point, uint32_t( lgtbvh::eLightBVH ), "C3D_PointLightBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
+
+		// Spot lights
+		auto & spot = graph.createPass( "BuildLightsBVH/Spot"
+			, [&clusters, &device]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & graph )
+			{
+				auto result = std::make_unique< lgtbvh::FramePass >( framePass
+					, context
+					, graph
+					, device
+					, clusters
+					, LightType::eSpot );
+				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
+					, result->getTimer() );
+				return result;
+			} );
+		spot.addDependency( *previousPasses.back() );
+		clusters.getClustersUbo().createPassBinding( spot, lgtbvh::eClusters );
+		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
+		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eLightIndices ), "C3D_SpotLightIndices"
 			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( lgtbvh::ePointLightBVH ), "C3D_PointLightBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
-		createClearableOutputStorageBinding( pass, uint32_t( lgtbvh::eSpotLightBVH ), "C3D_SpotLightBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
-		return pass;
+		createClearableOutputStorageBinding( spot, uint32_t( lgtbvh::eLightBVH ), "C3D_SpotLightBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
+
+		return { &point, &spot };
 	}
 
 	//*********************************************************************************************
