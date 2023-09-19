@@ -334,7 +334,7 @@ namespace castor3d
 				{
 					// Build bottom level of the BVH.
 					auto lightsCount = m_lightCache.getLightsBufferCount( m_lightData.lightType );
-					auto numThreadGroups = uint32_t( std::ceil( float( lightsCount ) / float( NumThreadsPerThreadGroup ) ) );
+					auto numThreadGroups = castor::divRoundUp( lightsCount, NumThreadsPerThreadGroup );
 					DispatchData data{ lightsCount, 0u };
 					m_pipeline.pipeline.recordInto( context, commandBuffer, index );
 					m_context.vkCmdPushConstants( commandBuffer, m_pipeline.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
@@ -778,14 +778,14 @@ namespace castor3d
 							m_partitions.pipeline.recordInto( context, commandBuffer, index );
 
 							// The number of thread groups that are required per sort group.
-							auto numThreadGroupsPerSortGroup = uint32_t( std::ceil( float( chunkSize * 2u ) / float( NumValuesPerThreadGroup ) ) );
+							auto numThreadGroupsPerSortGroup = castor::divRoundUp( chunkSize * 2u, NumValuesPerThreadGroup );
 
 							// The number of merge path partitions that need to be computed.
 							auto numMergePathPartitionsPerSortGroup = numThreadGroupsPerSortGroup + 1u;
 							auto totalMergePathPartitions = numMergePathPartitionsPerSortGroup * numSortGroups;
 
 							// The number of thread groups needed to compute all merge path partitions.
-							auto numThreadGroups = uint32_t( std::ceil( float( totalMergePathPartitions ) / float( NumThreadsPerThreadGroup ) ) );
+							auto numThreadGroups = castor::divRoundUp( totalMergePathPartitions, NumThreadsPerThreadGroup );
 
 							m_context.vkCmdPushConstants( commandBuffer, m_partitions.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
 							m_context.vkCmdDispatch( commandBuffer, numThreadGroups, 1u, 1u );
@@ -809,7 +809,7 @@ namespace castor3d
 							auto numValuesPerSortGroup = std::min( chunkSize * 2u, totalValues );
 
 							// The number of thread groups required to sort all values.
-							auto numThreadGroupsPerSortGroup = uint32_t( std::ceil( float( numValuesPerSortGroup ) / float( NumValuesPerThreadGroup ) ) );
+							auto numThreadGroupsPerSortGroup = castor::divRoundUp( numValuesPerSortGroup, NumValuesPerThreadGroup );
 
 							m_context.vkCmdPushConstants( commandBuffer, m_merge.pipeline.getPipelineLayout(), VK_SHADER_STAGE_COMPUTE_BIT, 0u, 8u, &data );
 							m_context.vkCmdDispatch( commandBuffer, numThreadGroupsPerSortGroup * numSortGroups, 1u, 1u );
@@ -819,7 +819,7 @@ namespace castor3d
 						index = 1u - index;
 
 						chunkSize *= 2;
-						numChunks = uint32_t( std::ceil( float( totalValues ) / float( chunkSize ) ) );
+						numChunks = castor::divRoundUp( totalValues, chunkSize );
 					}
 				}
 
@@ -929,7 +929,7 @@ namespace castor3d
 		auto chunkSize = srtmrt::NumThreadsPerThreadGroup;
 
 		// The total number of complete chunks to sort.
-		auto numChunks = uint32_t( std::ceil( float( lightCount ) / float( chunkSize ) ) );
+		auto numChunks = castor::divRoundUp( lightCount, chunkSize );
 
 		return numChunks;
 	}

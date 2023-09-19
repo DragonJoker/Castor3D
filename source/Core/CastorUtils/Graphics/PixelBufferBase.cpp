@@ -654,7 +654,7 @@ namespace castor
 			tilesX = ( tilesX + ( m_layers % tilesY ) ) / tilesY;
 		}
 
-		tilesY = uint32_t( std::ceil( float( m_layers ) / float( tilesX ) ) );
+		tilesY = divRoundUp( m_layers, tilesX );
 		VkExtent2D dstSize{ m_size.getWidth() * tilesX, m_size.getHeight() * tilesY };
 		PxArray result;
 		result.resize( size_t( ashes::getLevelsSize( dstSize

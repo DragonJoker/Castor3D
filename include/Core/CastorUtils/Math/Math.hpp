@@ -223,6 +223,17 @@ namespace castor
 			return 0;
 		}
 	}
+	/**
+	 *\~english
+	 *\brief		Division rounded up.
+	 *\~french
+	 *\brief		Division arrondie au supérieur.
+	 */
+	template< std::integral TypeT >
+	inline constexpr TypeT divRoundUp( TypeT num, TypeT denom )
+	{
+		return num / denom + ( num % denom != 0 );
+	}
 }
 
 #endif

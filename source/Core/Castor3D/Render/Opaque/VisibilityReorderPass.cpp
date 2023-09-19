@@ -115,8 +115,8 @@ namespace castor3d
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
-							.groupCountX( uint32_t( std::ceil( float( renderSize.width ) / 16.0f ) ) )
-							.groupCountY( uint32_t( std::ceil( float( renderSize.height ) / 16.0f ) ) )
+							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
+							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, result->getTimer() );
@@ -301,9 +301,9 @@ namespace castor3d
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
-							.groupCountX( uint32_t( std::ceil( float( renderSize.width ) / 16.0f ) ) )
-							.groupCountY( uint32_t( std::ceil( float( renderSize.height ) / 16.0f ) ) )
-						.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
+							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
+							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
+							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, result->getTimer() );
 					return result;
