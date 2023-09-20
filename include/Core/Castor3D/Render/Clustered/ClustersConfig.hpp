@@ -29,6 +29,12 @@ namespace castor3d
 		//!\~english	Clusters grid Z will be limited to lights AABB depth boundaries.
 		//!\~french		Les Z de la grille de clusters seront limités aux limites de profondeur des AABB des sources lumineuses.
 		bool limitClustersToLightsAABB{ true };
+		//!\~english	Use spot light bounding cone when assigning lights to clusters.
+		//!\~french		Utiliser le cône englobant les spot lights lors de l'affectation des sources lumineuses aux clusters.
+		bool useSpotBoundingCone{ false };
+		//!\~english	Use spot light tight bounding box when computing lights AABB.
+		//!\~french		Utiliser la bounding box la plus petite possible lors du calcul des AABB des ousrces lumineuses.
+		bool useSpotTightBoundingBox{ false };
 	};
 }
 

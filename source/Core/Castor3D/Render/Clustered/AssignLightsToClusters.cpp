@@ -138,7 +138,6 @@ namespace castor3d
 			shader::Utils utils{ writer };
 			sdw::Function< sdw::Void, sdw::InUInt > pushNode;
 			sdw::Function< sdw::UInt > popNode;
-			sdw::Function< sdw::Boolean, shader::InAABB, shader::InAABB > aabbIntersectAABB;
 
 			std::function< sdw::UInt( sdw::UInt, sdw::UInt ) > getFirstChild;
 			std::function< sdw::Boolean( sdw::UInt, sdw::UInt ) > isLeafNode;
@@ -177,27 +176,6 @@ namespace castor3d
 						writer.returnStmt( nodeIndex );
 					} );
 
-				// Check to see if on AABB intersects another AABB.
-				// Source: Real-time collision detection, Christer Ericson (2005)
-				aabbIntersectAABB = writer.implementFunction< sdw::Boolean >( "aabbIntersectAABB"
-					, [&]( shader::AABB const & a
-						, shader::AABB const & b )
-					{
-						auto result = writer.declLocale( "result"
-							, 1_b );
-
-						for ( int i = 0; i < 3; ++i )
-						{
-							result = result
-								&& ( a.max()[i] >= b.min()[i]
-									&& a.min()[i] <= b.max()[i] );
-						}
-
-						writer.returnStmt( result );
-					}
-					, shader::InAABB{ writer, "a" }
-					, shader::InAABB{ writer, "b" } );
-
 				// Get the index of the the first child node in the BVH.
 				getFirstChild = [&]( sdw::UInt const parentIndex
 					, sdw::UInt const numLevels )
@@ -225,6 +203,27 @@ namespace castor3d
 						, nodeIndex );
 				};
 			}
+
+			// Check to see if on AABB intersects another AABB.
+			// Source: Real-time collision detection, Christer Ericson (2005)
+			auto aabbIntersectAABB = writer.implementFunction< sdw::Boolean >( "aabbIntersectAABB"
+				, [&]( shader::AABB const & a
+					, shader::AABB const & b )
+				{
+					auto result = writer.declLocale( "result"
+						, 1_b );
+
+					for ( int i = 0; i < 3; ++i )
+					{
+						result = result
+							&& ( a.max()[i] >= b.min()[i]
+								&& a.min()[i] <= b.max()[i] );
+					}
+
+					writer.returnStmt( result );
+				}
+				, shader::InAABB{ writer, "a" }
+				, shader::InAABB{ writer, "b" } );
 
 			auto sphereInsideAABB = writer.implementFunction< sdw::Boolean >( "sphereInsideAABB"
 				, [&]( sdw::Vec3 const & sphereCenter
@@ -304,28 +303,36 @@ namespace castor3d
 
 					auto processSpotLightAABB = [&]( sdw::UInt const leafIndex )
 					{
-						auto lightOffset = writer.declLocale( "lightOffset"
-							, ( config.sortLights
+						auto lightOffset = ( config.sortLights
 								? c3d_spotLightIndices[leafIndex]
-								: lights.getPointsEnd() + leafIndex * SpotLight::LightDataComponents ) );
+								: lights.getPointsEnd() + leafIndex * SpotLight::LightDataComponents );
 						auto spot = writer.declLocale( "spot"
 							, lights.getSpotLight( lightOffset ) );
+						auto aabb = writer.declLocale( "aabb"
+							, shader::AABB{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz(), computeRange( spot ) } );
 
-#if 1
-						IF( writer, sphereInsideAABB( c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-							, computeRange( spot )
-							, gsClusterAABB ) )
-#else
-						IF( writer, coneInsideSphere( shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
-							, spot.direction()
-							, computeRange( spot )
-							, spot.outerCutOff()
-							, spot.outerCutOffCos()
-							, spot.outerCutOffSin() }
-						, gsClusterSphere ) )
-#endif
+						IF( writer, aabbIntersectAABB( aabb, gsClusterAABB ) )
 						{
-							gsSpotLights.appendData( lightOffset, MaxLightsPerCluster );
+							if ( config.useSpotBoundingCone )
+							{
+								auto cone = writer.declLocale( "cone"
+									, shader::Cone{ c3d_cameraData.worldToCurView( vec4( spot.position(), 1.0_f ) ).xyz()
+										, c3d_cameraData.worldToCurView( -spot.direction() )
+										, computeRange( spot )
+										, spot.outerCutOffCos()
+										, spot.outerCutOffSin()
+										, spot.outerCutOffTan() } );
+
+								IF( writer, coneInsideSphere( cone, gsClusterSphere ) )
+								{
+									gsSpotLights.appendData( lightOffset, MaxLightsPerCluster );
+								}
+								FI;
+							}
+							else
+							{
+								gsSpotLights.appendData( lightOffset, MaxLightsPerCluster );
+							}
 						}
 						FI;
 					};
@@ -467,13 +474,21 @@ namespace castor3d
 					// Now update the global light grids with the light lists and light counts.
 					IF( writer, groupIndex == 0u )
 					{
-						gsPointLights.getCount() = min( sdw::UInt{ MaxLightsPerCluster }, gsPointLights.getCount() );
-						gsPointLightStartOffset = sdw::atomicAdd( c3d_pointLightClusterListCount, gsPointLights.getCount() );
-						c3d_pointLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsPointLightStartOffset, gsPointLights.getCount() );
+						IF( writer, gsPointLights.getCount() > 0_u )
+						{
+							gsPointLights.getCount() = min( sdw::UInt{ MaxLightsPerCluster }, gsPointLights.getCount() );
+							gsPointLightStartOffset = sdw::atomicAdd( c3d_pointLightClusterListCount, gsPointLights.getCount() );
+							c3d_pointLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsPointLightStartOffset, gsPointLights.getCount() );
+						}
+						FI;
 
-						gsSpotLights.getCount() = min( sdw::UInt{ MaxLightsPerCluster }, gsSpotLights.getCount() );
-						gsSpotLightStartOffset = sdw::atomicAdd( c3d_spotLightClusterListCount, gsSpotLights.getCount() );
-						c3d_spotLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsSpotLightStartOffset, gsSpotLights.getCount() );
+						IF( writer, gsSpotLights.getCount() > 0_u )
+						{
+							gsSpotLights.getCount() = min( sdw::UInt{ MaxLightsPerCluster }, gsSpotLights.getCount() );
+							gsSpotLightStartOffset = sdw::atomicAdd( c3d_spotLightClusterListCount, gsSpotLights.getCount() );
+							c3d_spotLightClusterGrid[gsClusterIndex1D] = sdw::uvec2( gsSpotLightStartOffset, gsSpotLights.getCount() );
+						}
+						FI;
 					}
 					FI;
 
@@ -508,11 +523,11 @@ namespace castor3d
 				: crg::ComputePass{framePass
 					, context
 					, graph
-					, crg::ru::Config{ 6u }
+					, crg::ru::Config{ 12u }
 					, config
 						.isEnabled( IsEnabledCallback( [this, &clusters]() { return doIsEnabled( clusters ); } ) )
 						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
-						.programCreator( { 6u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.programCreator( { 12u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
 				, m_device{ device }
 				, m_config{ clusters.getConfig() }
@@ -530,6 +545,11 @@ namespace castor3d
 			uint32_t doGetPassIndex( FrustumClusters const & clusters )
 			{
 				u32 result = {};
+
+				if ( m_config.useSpotBoundingCone )
+				{
+					result += 6u;
+				}
 
 				if ( m_config.useLightsBVH )
 				{
@@ -619,11 +639,11 @@ namespace castor3d
 				: crg::ComputePass{framePass
 					, context
 					, graph
-					, crg::ru::Config{ 6u }
+					, crg::ru::Config{ 12u }
 					, config
 						.isEnabled( IsEnabledCallback( [this, &clusters]() { return doIsEnabled( clusters ); } ) )
 						.getPassIndex( RunnablePass::GetPassIndexCallback( [this, &clusters](){ return doGetPassIndex( clusters ); } ) )
-						.programCreator( { 6u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
+						.programCreator( { 12u, [this]( uint32_t passIndex ){ return doCreateProgram( passIndex ); } } )
 						.recordInto( RunnablePass::RecordCallback( [this, &clusters]( crg::RecordContext & ctx, VkCommandBuffer cmd, uint32_t idx ){ doSubRecordInto( ctx, cmd, idx, clusters ); } ) )
 						.end( RecordCallback{ [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t idx ) { doPostRecord( ctx, cb, idx ); } } ) }
 				, m_device{ device }
@@ -642,6 +662,11 @@ namespace castor3d
 			uint32_t doGetPassIndex( FrustumClusters const & clusters )
 			{
 				u32 result = {};
+
+				if ( m_config.useSpotBoundingCone )
+				{
+					result += 6u;
+				}
 
 				if ( m_config.useLightsBVH )
 				{
@@ -775,10 +800,14 @@ namespace castor3d
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eSpotLightBVH ), "C3D_SpotLightsBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices"
 			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
+				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
+				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passNoDepth, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices"
 			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
+				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
+				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
 				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 
@@ -811,10 +840,14 @@ namespace castor3d
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eSpotLightBVH ), "C3D_SpotLightsBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::ePointLightIndices ), "C3D_PointLightIndices"
 			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
+				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
+				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
 				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eSpotLightIndices ), "C3D_SpotLightIndices"
 			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
+				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
+				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
 				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createInputStoragePassBinding( passDepth, uint32_t( dspclst::eUniqueClusters ), "C3D_UniqueClusters", clusters.getUniqueClustersBuffer(), 0u, ashes::WholeSize );

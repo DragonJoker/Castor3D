@@ -26,6 +26,11 @@ namespace castor3d
 			return projection() * vsPosition;
 		}
 
+		sdw::Vec3 CameraData::worldToCurView( sdw::Vec3 const & wsPosition )const
+		{
+			return mat3x3( curView() ) * wsPosition;
+		}
+
 		sdw::Vec4 CameraData::worldToCurView( sdw::Vec4 const & wsPosition )const
 		{
 			return curView() * wsPosition;

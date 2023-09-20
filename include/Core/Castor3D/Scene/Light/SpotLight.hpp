@@ -31,9 +31,9 @@ namespace castor3d
 			Float1 innerCutoffSin;
 			Float1 outerCutoffSin;
 			Float1 innerCutoffCos;
+			Float1 outerCutOffTan;
 			Float1 pad0;
 			Float1 pad1;
-			Float1 pad2;
 		};
 		static constexpr uint32_t LightDataSize = uint32_t( ashes::getAlignedSize( sizeof( LightData ), LightMbrAlign ) );
 		static constexpr uint32_t LightDataComponents = LightDataSize / LightMbrAlign;
