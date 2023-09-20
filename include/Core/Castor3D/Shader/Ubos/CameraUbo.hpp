@@ -52,6 +52,7 @@ namespace castor3d
 
 			C3D_API sdw::Vec4 projToView( sdw::Vec4 const & psPosition )const;
 			C3D_API sdw::Vec4 viewToProj( sdw::Vec4 const & vsPosition )const;
+			C3D_API sdw::Vec3 worldToCurView( sdw::Vec3 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToCurView( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 worldToPrvView( sdw::Vec4 const & wsPosition )const;
 			C3D_API sdw::Vec4 curViewToWorld( sdw::Vec4 const & vsPosition )const;

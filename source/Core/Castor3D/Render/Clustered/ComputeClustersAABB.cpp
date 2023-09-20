@@ -128,8 +128,6 @@ namespace castor3d
 						, min( nearMin, min( nearMax, min( farMin, farMax ) ) ) );
 					auto aabbMax = writer.declLocale( "aabbMax"
 						, max( nearMin, max( nearMax, max( farMin, farMax ) ) ) );
-					auto aabbCenter = writer.declLocale( "aabbCenter"
-						, aabbMin + ( aabbMax - aabbMin ) / 2.0f );
 
 					c3D_clustersAABB[clusterIndex1D] = shader::AABB{ vec4( aabbMin, 1.0f )
 						, vec4( aabbMax, 1.0f ) };

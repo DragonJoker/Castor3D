@@ -11,6 +11,8 @@ namespace castor3d
 		, sortLights{ true }
 		, parseDepthBuffer{ false }
 		, limitClustersToLightsAABB{ false }
+		, useSpotBoundingCone{ true }
+		, useSpotTightBoundingBox{ true }
 	{
 	}
 
@@ -23,6 +25,8 @@ namespace castor3d
 			visitor.visit( cuT( "Sort Lights" ), sortLights );
 			visitor.visit( cuT( "Use Depth Buffer" ), parseDepthBuffer );
 			visitor.visit( cuT( "Limit Clusters To Lights AABB" ), limitClustersToLightsAABB );
+			visitor.visit( cuT( "Use Spot Bounding Cone" ), useSpotBoundingCone );
+			visitor.visit( cuT( "Use Spot Tight Bounding Bos" ), useSpotTightBoundingBox );
 		}
 	}
 }

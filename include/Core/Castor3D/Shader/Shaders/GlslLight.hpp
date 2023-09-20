@@ -110,7 +110,8 @@ namespace castor3d::shader
 			, sdw::FloatField< "outerCutOff" >
 			, sdw::FloatField< "innerCutOffSin" >
 			, sdw::FloatField< "outerCutOffSin" >
-			, sdw::FloatField< "innerCutOffCos" > >
+			, sdw::FloatField< "innerCutOffCos" >
+			, sdw::FloatField< "outerCutOffTan" > >
 	{
 		C3D_API SpotLight( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
@@ -139,6 +140,7 @@ namespace castor3d::shader
 		auto outerCutOffCos()const { return getMember< "outerCutOffCos" >(); }
 		auto innerCutOffSin()const { return getMember< "innerCutOffSin" >(); }
 		auto outerCutOffSin()const { return getMember< "outerCutOffSin" >(); }
+		auto outerCutOffTan()const { return getMember< "outerCutOffTan" >(); }
 		// SpecificValues
 		auto cutOffsCosDiff()const { return innerCutOffCos() - outerCutOffCos(); }
 	};

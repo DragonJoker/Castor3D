@@ -163,6 +163,7 @@ namespace castor3d::shader
 
 					lightData = getLightData( offset );
 					result.innerCutOffCos() = lightData.x();
+					result.outerCutOffTan() = lightData.y();
 
 					m_writer.returnStmt( result );
 				}

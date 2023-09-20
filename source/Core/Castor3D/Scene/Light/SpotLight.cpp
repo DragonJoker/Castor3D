@@ -225,6 +225,7 @@ namespace castor3d
 		spot.outerCutoff = m_outerCutOff.value().radians();
 		spot.innerCutoffSin = m_innerCutOff.value().sin();
 		spot.outerCutoffSin = m_outerCutOff.value().sin();
+		spot.outerCutOffTan = m_outerCutOff.value().tan();
 	}
 
 	void SpotLight::setAttenuation( castor::Point3f const & attenuation )
