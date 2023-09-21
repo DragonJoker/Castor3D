@@ -12,8 +12,9 @@
 #include "Castor3D/Render/Clustered/ComputeLightsAABB.hpp"
 #include "Castor3D/Render/Clustered/ComputeLightsMortonCode.hpp"
 #include "Castor3D/Render/Clustered/FindUniqueClusters.hpp"
+#include "Castor3D/Render/Clustered/MergeSortLights.hpp"
+#include "Castor3D/Render/Clustered/RadixSortLights.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
-#include "Castor3D/Render/Clustered/SortLightsMortonCode.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
@@ -80,42 +81,42 @@ namespace castor3d
 			, "C3D_ReducedLightsAABB" ) }
 		, m_pointMortonCodesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_PointLightMortonCodesA" )
 			, makeBuffer< u32 >( m_device
 				, MaxLightsCount
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_PointLightMortonCodesB" ) } }
 		, m_spotMortonCodesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_SpotLightMortonCodesA" )
 			, makeBuffer< u32 >( m_device
 				, MaxLightsCount
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_SpotLightMortonCodesB" ) } }
 		, m_pointIndicesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_PointLightIndicesA" )
 			, makeBuffer< u32 >( m_device
 				, MaxLightsCount
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_PointLightIndicesB" ) } }
 		, m_spotIndicesBuffers{ { makeBuffer< u32 >( m_device
 				, MaxLightsCount
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_SpotLightIndicesA" )
 			, makeBuffer< u32 >( m_device
 				, MaxLightsCount
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, "C3D_SpotLightIndicesB" ) } }
 		, m_pointBVHBuffer{ makeBuffer< AABB >( m_device
@@ -206,7 +207,9 @@ namespace castor3d
 			, m_device, cameraUbo, *this ) };
 		lastPasses = { &createComputeLightsMortonCodePass( graph, lastPasses.front()
 			, m_device, *this ) };
-		lastPasses = createSortLightsMortonCodePass( graph, lastPasses.front()
+		lastPasses = createRadixSortLightsPass( graph, lastPasses.front()
+			, m_device, *this );
+		lastPasses = createMergeSortLightsPass( graph, std::move( lastPasses )
 			, m_device, *this );
 		lastPasses = createBuildLightsBVHPass( graph, std::move( lastPasses )
 			, m_device, *this );
