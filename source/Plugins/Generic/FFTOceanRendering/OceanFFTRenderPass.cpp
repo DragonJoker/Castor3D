@@ -195,8 +195,6 @@ namespace ocean_fft
 			eSceneNormals,
 			eSceneDepth,
 			eSceneResult,
-			eSceneBaseColour,
-			eSceneDiffuseLighting,
 			eBrdf,
 			eCount,
 		};
@@ -272,10 +270,6 @@ namespace ocean_fft
 			result.addImplicitColourView( technique.getDepthObj().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitColourView( technique.getNormal().sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitColourView( technique.getBaseColourResult().sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-			result.addImplicitDepthView( technique.getDiffuseLightingResult().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 			result.addImplicitColourView( ocFFT->getNormals().sampledViewId
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
@@ -496,12 +490,6 @@ namespace ocean_fft
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eSceneResult
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eSceneBaseColour
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eSceneDiffuseLighting
-			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eBrdf
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );
@@ -561,8 +549,6 @@ namespace ocean_fft
 		rdpass::bindTexture( m_parent->getNormal().sampledView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( getTechnique().getDepthObj().wholeView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( getTechnique().getIntermediate().wholeView, *m_pointClampSampler, descriptorWrites, index );
-		rdpass::bindTexture( m_parent->getBaseColourResult().sampledView, *m_pointClampSampler, descriptorWrites, index );
-		rdpass::bindTexture( m_parent->getDiffuseLightingResult().sampledView, *m_pointClampSampler, descriptorWrites, index );
 		rdpass::bindTexture( getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampledView
 			, *getOwner()->getRenderSystem()->getPrefilteredBrdfTexture().sampler
 			, descriptorWrites
@@ -1029,12 +1015,6 @@ namespace ocean_fft
 			, index++
 			, RenderPipeline::eBuffers );
 		auto c3d_sceneColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneColour"
-			, index++
-			, RenderPipeline::eBuffers );
-		auto c3d_sceneBaseColour = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneBaseColour"
-			, index++
-			, RenderPipeline::eBuffers );
-		auto c3d_sceneDiffuseLighting = writer.declCombinedImg< FImg2DRgba32 >( "c3d_sceneDiffuseLighting"
 			, index++
 			, RenderPipeline::eBuffers );
 		auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"

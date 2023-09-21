@@ -173,8 +173,6 @@ namespace castor3d
 		C3D_API SsaoConfig & getSsaoConfig();
 		C3D_API Texture const & getSsaoResult()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
-		C3D_API Texture const & getDiffuseLightingResult()const;
-		C3D_API Texture const & getBaseColourResult()const;
 		C3D_API crg::ResourcesCache & getResources()const;
 		C3D_API bool isOpaqueEnabled()const;
 		C3D_API DebugConfig & getDebugConfig()const;
