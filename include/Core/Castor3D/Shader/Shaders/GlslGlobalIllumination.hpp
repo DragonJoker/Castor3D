@@ -38,13 +38,11 @@ namespace castor3d
 			C3D_API void declareLpv( uint32_t & uboBindingIndex
 				, uint32_t & texBindingIndex
 				, uint32_t uboSetIndex = 0u
-				, uint32_t texSetIndex = 0u
-				, bool declUbo = true );
+				, uint32_t texSetIndex = 0u );
 			C3D_API void declareLayeredLpv( uint32_t & uboBindingIndex
 				, uint32_t & texBindingIndex
 				, uint32_t uboSetIndex = 0u
-				, uint32_t texSetIndex = 0u
-				, bool declUbo = true );
+				, uint32_t texSetIndex = 0u );
 			C3D_API sdw::Vec4 computeVCTRadiance( LightSurface const & lightSurface
 				, VoxelData const & voxelData
 				, sdw::Float const & indirectOcclusion );
