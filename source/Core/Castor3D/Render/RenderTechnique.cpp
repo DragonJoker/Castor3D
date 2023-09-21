@@ -800,16 +800,6 @@ namespace castor3d
 		return result;
 	}
 
-	Texture const & RenderTechnique::getDiffuseLightingResult()const
-	{
-		return m_opaque.getDiffuseLightingResult();
-	}
-
-	Texture const & RenderTechnique::getBaseColourResult()const
-	{
-		return m_opaque.getBaseColourResult();
-	}
-
 	crg::ResourcesCache & RenderTechnique::getResources()const
 	{
 		return m_renderTarget.getResources();

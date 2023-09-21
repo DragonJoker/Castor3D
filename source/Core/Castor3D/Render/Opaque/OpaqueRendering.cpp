@@ -201,16 +201,6 @@ namespace castor3d
 		return m_ssao->getResult();
 	}
 
-	Texture const & OpaqueRendering::getDiffuseLightingResult()const
-	{
-		return getOwner()->getResult();
-	}
-
-	Texture const & OpaqueRendering::getBaseColourResult()const
-	{
-		return getOwner()->getResult();
-	}
-
 	bool OpaqueRendering::isEnabled()const
 	{
 		return m_opaquePassEnabled();
