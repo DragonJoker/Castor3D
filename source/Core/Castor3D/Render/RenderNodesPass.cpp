@@ -592,22 +592,12 @@ namespace castor3d
 		}
 		else
 		{
-			if ( indirectLighting.lpvConfigUbo )
+			if ( indirectLighting.lpvConfigUbo
+				&& indirectLighting.lpvResult )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-
-			if ( indirectLighting.llpvConfigUbo )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-
-			if ( indirectLighting.lpvResult )
-			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
@@ -619,8 +609,13 @@ namespace castor3d
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationB
 			}
 
-			if ( indirectLighting.llpvResult )
+			if ( indirectLighting.llpvConfigUbo
+				&& indirectLighting.llpvResult )
 			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+
 				for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
 				{
 					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -663,17 +658,6 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-
-			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
-			}
-
-			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
-			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_lpvAccumulationR
@@ -688,6 +672,9 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				CU_Require( indirectLighting.llpvResult );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+					, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 
 				for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
 				{
@@ -725,39 +712,16 @@ namespace castor3d
 		}
 		else
 		{
-			if ( indirectLighting.lpvConfigUbo )
+			if ( indirectLighting.lpvConfigUbo
+				&& indirectLighting.lpvResult )
 			{
 				descriptorWrites.push_back( indirectLighting.lpvConfigUbo->getDescriptorWrite( index++ ) );
-			}
-
-			if ( indirectLighting.llpvConfigUbo )
-			{
-				CU_Require( indirectLighting.llpvConfigUbo );
-				descriptorWrites.push_back( indirectLighting.llpvConfigUbo->getDescriptorWrite( index++ ) );
-			}
-
-			if ( indirectLighting.lpvResult )
-			{
 				auto & lpv = *indirectLighting.lpvResult;
-				bindTexture( lpv[LpvTexture::eR].wholeView
-					, *lpv[LpvTexture::eR].sampler
-					, descriptorWrites
-					, index );
-				bindTexture( lpv[LpvTexture::eG].wholeView
-					, *lpv[LpvTexture::eG].sampler
-					, descriptorWrites
-					, index );
-				bindTexture( lpv[LpvTexture::eB].wholeView
-					, *lpv[LpvTexture::eB].sampler
-					, descriptorWrites
-					, index );
-			}
 
-			if ( indirectLighting.llpvResult )
-			{
-				for ( auto & plpv : *indirectLighting.llpvResult )
+				if ( lpv[LpvTexture::eR].wholeView
+					&& lpv[LpvTexture::eG].wholeView
+					&& lpv[LpvTexture::eB].wholeView )
 				{
-					auto & lpv = *plpv;
 					bindTexture( lpv[LpvTexture::eR].wholeView
 						, *lpv[LpvTexture::eR].sampler
 						, descriptorWrites
@@ -770,6 +734,43 @@ namespace castor3d
 						, *lpv[LpvTexture::eB].sampler
 						, descriptorWrites
 						, index );
+				}
+				else
+				{
+					index += 3u;
+				}
+			}
+
+			if ( indirectLighting.llpvConfigUbo
+				&& indirectLighting.llpvResult )
+			{
+				descriptorWrites.push_back( indirectLighting.llpvConfigUbo->getDescriptorWrite( index++ ) );
+
+				for ( auto & plpv : *indirectLighting.llpvResult )
+				{
+					auto & lpv = *plpv;
+
+					if ( lpv[LpvTexture::eR].wholeView
+						&& lpv[LpvTexture::eG].wholeView
+						&& lpv[LpvTexture::eB].wholeView )
+					{
+						bindTexture( lpv[LpvTexture::eR].wholeView
+							, *lpv[LpvTexture::eR].sampler
+							, descriptorWrites
+							, index );
+						bindTexture( lpv[LpvTexture::eG].wholeView
+							, *lpv[LpvTexture::eG].sampler
+							, descriptorWrites
+							, index );
+						bindTexture( lpv[LpvTexture::eB].wholeView
+							, *lpv[LpvTexture::eB].sampler
+							, descriptorWrites
+							, index );
+					}
+					else
+					{
+						index += 3u;
+					}
 				}
 			}
 		}
@@ -802,18 +803,8 @@ namespace castor3d
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				CU_Require( indirectLighting.lpvConfigUbo );
-				descriptorWrites.push_back( indirectLighting.lpvConfigUbo->getDescriptorWrite( index++ ) );
-			}
-
-			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
-			{
-				CU_Require( indirectLighting.llpvConfigUbo );
-				descriptorWrites.push_back( indirectLighting.llpvConfigUbo->getDescriptorWrite( index++ ) );
-			}
-
-			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
-			{
 				CU_Require( indirectLighting.lpvResult );
+				descriptorWrites.push_back( indirectLighting.lpvConfigUbo->getDescriptorWrite( index++ ) );
 				auto & lpv = *indirectLighting.lpvResult;
 				bindTexture( lpv[LpvTexture::eR].wholeView
 					, *lpv[LpvTexture::eR].sampler
@@ -831,7 +822,9 @@ namespace castor3d
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
+				CU_Require( indirectLighting.llpvConfigUbo );
 				CU_Require( indirectLighting.llpvResult );
+				descriptorWrites.push_back( indirectLighting.llpvConfigUbo->getDescriptorWrite( index++ ) );
 
 				for ( auto & plpv : *indirectLighting.llpvResult )
 				{
