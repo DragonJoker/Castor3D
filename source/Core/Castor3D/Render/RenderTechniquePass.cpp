@@ -112,9 +112,11 @@ namespace castor3d
 	//*************************************************************************************************
 
 	RenderTechniquePass::RenderTechniquePass( RenderTechnique * parent
-		, Scene const & scene )
+		, Scene const & scene
+		, bool outputScattering )
 		: m_parent{ parent }
 		, m_scene{ scene }
+		, m_outputScattering{ outputScattering }
 	{
 	}
 
@@ -148,7 +150,7 @@ namespace castor3d
 			, std::move( targetImage )
 			, std::move( targetDepth )
 			, renderPassDesc }
-		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene() }
+		, RenderTechniquePass{ parent, renderPassDesc.m_culler.getScene(), techniquePassDesc.m_outputScattering }
 		, m_camera{ renderPassDesc.m_culler.hasCamera() ? &renderPassDesc.m_culler.getCamera() : nullptr }
 		, m_shaderFlags{ techniquePassDesc.m_shaderFlags }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
@@ -363,8 +365,11 @@ namespace castor3d
 
 	ashes::PipelineColorBlendStateCreateInfo RenderTechniqueNodesPass::doCreateBlendState( PipelineFlags const & flags )const
 	{
+		uint32_t count = 1u
+			+ ( flags.writeVelocity() ? 1u : 0u )
+			+ ( m_outputScattering ? 1u : 0u );
 		return RenderNodesPass::createBlendState( flags.colourBlendMode
 			, flags.alphaBlendMode
-			, flags.writeVelocity() ? 2u : 1u );
+			, count );
 	}
 }

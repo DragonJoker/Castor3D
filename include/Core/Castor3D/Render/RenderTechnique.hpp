@@ -174,7 +174,6 @@ namespace castor3d
 		C3D_API Texture const & getSsaoResult()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
 		C3D_API Texture const & getDiffuseLightingResult()const;
-		C3D_API Texture const & getScatteringLightingResult()const;
 		C3D_API Texture const & getBaseColourResult()const;
 		C3D_API crg::ResourcesCache & getResources()const;
 		C3D_API bool isOpaqueEnabled()const;
@@ -238,6 +237,11 @@ namespace castor3d
 		Texture const & getNormal()const
 		{
 			return m_normal;
+		}
+
+		Texture const & getScattering()const
+		{
+			return m_scattering;
 		}
 
 		Texture const & getDepthObj()const
@@ -412,6 +416,7 @@ namespace castor3d
 		Texture const * m_intermediate;
 		Texture m_depth;
 		Texture m_normal;
+		Texture m_scattering;
 		CameraUbo m_cameraUbo;
 		SceneUbo m_sceneUbo;
 		LpvGridConfigUbo m_lpvConfigUbo;

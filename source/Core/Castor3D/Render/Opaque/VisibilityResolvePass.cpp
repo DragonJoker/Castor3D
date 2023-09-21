@@ -94,6 +94,7 @@ namespace castor3d
 			eMaterialsStarts,
 			ePixelsXY,
 			eOutResult,
+			eOutScattering,
 			eCount,
 		};
 
@@ -918,7 +919,8 @@ namespace castor3d
 			, uint32_t stride
 			, bool blend
 			, bool hasSsao
-			, ClustersConfig const & clustersConfig )
+			, ClustersConfig const & clustersConfig
+			, bool outputScattering )
 		{
 			auto & engine = *device.renderSystem.getEngine();
 			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer;
@@ -1023,7 +1025,8 @@ namespace castor3d
 					, sdw::UInt nodeId
 					, sdw::UInt pipeline
 					, sdw::UInt primitiveId
-					, sdw::Vec4 outResult )
+					, sdw::Vec4 outResult
+					, sdw::Vec4 outScattering )
 				{
 					{
 						shader::DebugOutput output{ debugConfig
@@ -1210,16 +1213,19 @@ namespace castor3d
 										, coatReflected
 										, sheenReflected )
 									, components.opacity );
+								outScattering = vec4( lighting.scattering, 1.0_f );
 							}
 							ELSE
 							{
 								outResult = vec4( components.colour, components.opacity );
+								outScattering = vec4( 0.0_f );
 							}
 							FI;
 						}
 						else
 						{
 							outResult = vec4( components.colour, components.opacity );
+							outScattering = vec4( 0.0_f );
 						}
 
 						if ( flags.hasFog() )
@@ -1229,13 +1235,34 @@ namespace castor3d
 								, baseSurface.worldPosition.xyz()
 								, c3d_cameraData.position()
 								, c3d_sceneData );
+
+							if ( outputScattering )
+							{
+								outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+									, outScattering
+									, baseSurface.worldPosition.xyz()
+									, c3d_cameraData.position()
+									, c3d_sceneData );
+							}
 						}
 
+						auto linearDepth = writer.declLocale( "linearDepth"
+							, utils.lineariseDepth( depth, c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() ) );
 						backgroundModel->applyVolume( vec2( ipixel )
-							, utils.lineariseDepth( depth, c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() )
+							, linearDepth
 							, vec2( c3d_cameraData.renderSize() )
 							, c3d_cameraData.depthPlanes()
 							, outResult );
+
+						if ( outputScattering )
+						{
+							backgroundModel->applyVolume( vec2( ipixel )
+								, linearDepth
+								, vec2( c3d_cameraData.renderSize() )
+								, c3d_cameraData.depthPlanes()
+								, outScattering );
+						}
+
 						outResult.a() = 1.0_f;
 					}
 					writer.returnStmt( 1_b );
@@ -1244,7 +1271,8 @@ namespace castor3d
 				, sdw::InUInt{ writer, "nodeId" }
 				, sdw::InUInt{ writer, "pipeline" }
 				, sdw::InUInt{ writer, "primitiveId" }
-				, sdw::OutVec4{ writer, "outResult" } );
+				, sdw::OutVec4{ writer, "outResult" }
+				, sdw::OutVec4{ writer, "outScattering" } );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
@@ -1261,6 +1289,7 @@ namespace castor3d
 				PixelsXY.end();
 
 				auto c3d_imgOutResult = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutResult", uint32_t( InOutBindings::eOutResult ), Sets::eInOuts );
+				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
 
 				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
 					, [&]( sdw::UVec2 const & pos )
@@ -1282,11 +1311,13 @@ namespace castor3d
 						auto primitiveId = writer.declLocale( "primitiveId"
 							, indata.y() );
 						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
+						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
 
 						IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
-							&& shade( ipixel, nodeId, pipeline, primitiveId, result ) )
+							&& shade( ipixel, nodeId, pipeline, primitiveId, result, scattering ) )
 						{
 							c3d_imgOutResult.store( ipixel, result );
+							c3d_imgOutScattering.store( ipixel, scattering );
 						}
 						FI;
 					} );
@@ -1295,6 +1326,7 @@ namespace castor3d
 			{
 				uint32_t idx = 0u;
 				auto c3d_imgOutResult = writer.declOutput< sdw::Vec4 >( "c3d_imgOutResult", idx++ );
+				auto c3d_imgOutScattering = writer.declOutput< sdw::Vec4 >( "c3d_imgOutScattering", idx++, outputScattering );
 
 				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
 					, [&]( sdw::IVec2 const & pos )
@@ -1310,15 +1342,17 @@ namespace castor3d
 						auto primitiveId = writer.declLocale( "primitiveId"
 							, indata.y() );
 						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
+						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
 
 						IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
-							|| !shade( pos, nodeId, pipeline, primitiveId, result ) )
+							|| !shade( pos, nodeId, pipeline, primitiveId, result, scattering ) )
 						{
 							writer.demote();
 						}
 						FI;
 
 						c3d_imgOutResult = result;
+						c3d_imgOutScattering = scattering;
 					} );
 			}
 
@@ -1750,6 +1784,7 @@ namespace castor3d
 		static ashes::RenderPassPtr createRenderPass( RenderDevice const & device
 			, std::string const & name
 			, crg::ImageViewIdArray const & targetImage
+			, Texture const * scattering
 			, bool first )
 		{
 			auto srcLayout = ( first
@@ -1777,10 +1812,25 @@ namespace castor3d
 				, VK_ATTACHMENT_STORE_OP_DONT_CARE
 				, srcLayout
 				, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+
+			if ( scattering )
+			{
+				attaches.push_back( { 0u
+					, scattering->getFormat()
+					, VK_SAMPLE_COUNT_1_BIT
+					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+					, VK_ATTACHMENT_STORE_OP_STORE
+					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+					, VK_ATTACHMENT_STORE_OP_DONT_CARE
+					, VK_IMAGE_LAYOUT_UNDEFINED
+					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
+			}
+
 			ashes::SubpassDescription subpassesDesc{ 0u
 				, VK_PIPELINE_BIND_POINT_GRAPHICS
 				, {}
-				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
+				, { { 0u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL }
+					, { 1u, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } }
 				, {}
 				, ashes::nullopt
 				, {} };
@@ -1812,11 +1862,18 @@ namespace castor3d
 			, std::string const & name
 			, RenderTechnique const & technique
 			, crg::RunnableGraph & graph
-			, crg::ImageViewIdArray const & targetImage )
+			, crg::ImageViewIdArray const & targetImage
+			, Texture const * scattering )
 		{
 			ashes::VkImageViewArray fbAttaches;
 			auto extent = getExtent( targetImage.front() );
 			fbAttaches.emplace_back( graph.createImageView( targetImage.front() ) );
+
+			if ( scattering )
+			{
+				fbAttaches.emplace_back( scattering->targetView );
+			}
+
 			return renderPass.createFrameBuffer( name
 				, makeVkStruct< VkFramebufferCreateInfo >( 0u
 					, renderPass
@@ -1833,6 +1890,7 @@ namespace castor3d
 			, ashes::PipelineLayout const & pipelineLayout
 			, ashes::RenderPass const & renderPass
 			, crg::ImageViewIdArray const & targetImage
+			, Texture const * scattering
 			, bool blend )
 		{
 			auto blendState = blend
@@ -1848,6 +1906,12 @@ namespace castor3d
 						, VK_BLEND_OP_ADD
 						, VK_COLOR_COMPONENT_R_BIT | VK_COLOR_COMPONENT_G_BIT | VK_COLOR_COMPONENT_B_BIT | VK_COLOR_COMPONENT_A_BIT } }}
 				: ashes::PipelineColorBlendStateCreateInfo{};
+
+			if ( scattering )
+			{
+				blendState.attachments.push_back( blendState.attachments.back() );
+			}
+
 			ashes::PipelineVertexInputStateCreateInfo vertexState{ 0u, {}, {} };
 			ashes::PipelineViewportStateCreateInfo viewportState{ 0u
 				, { makeViewport( castor::Point2ui{ extent.width, extent.height } ) }
@@ -1888,7 +1952,7 @@ namespace castor3d
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: castor::Named{ category + cuT( "/" ) + name }
-		, RenderTechniquePass{ parent, *parent->getRenderTarget().getScene() }
+		, RenderTechniquePass{ parent, *parent->getRenderTarget().getScene(), techniquePassDesc.m_outputScattering }
 		, crg::RunnablePass{ pass
 			, context
 			, graph
@@ -1916,16 +1980,16 @@ namespace castor3d
 				: visres::ShaderWriter< false >::getVertexProgram() ) }
 		, m_firstRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, true ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true ) ) }
 		, m_firstFramebuffer{ ( useCompute
 			? nullptr
-			: visres::createFrameBuffer( *m_firstRenderPass, getName(), *m_parent, graph, m_targetImage ) ) }
+			: visres::createFrameBuffer( *m_firstRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_blendRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, false ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, false ) ) }
 		, m_blendFramebuffer{ ( useCompute
 			? nullptr
-			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage ) ) }
+			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
 	{
 	}
@@ -2395,10 +2459,10 @@ namespace castor3d
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig() ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig() ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering ) };
 
 			if constexpr ( useCompute )
 			{
@@ -2421,6 +2485,7 @@ namespace castor3d
 					, *result->pipelineLayout
 					, *m_firstRenderPass
 					, m_targetImage
+					, m_outputScattering ? &getTechnique().getScattering() : nullptr
 					, false );
 				stages.push_back( makeShaderState( m_device, m_vertexShader ) );
 				stages.push_back( makeShaderState( m_device, result->shaders[1].shader ) );
@@ -2430,6 +2495,7 @@ namespace castor3d
 					, *result->pipelineLayout
 					, *m_blendRenderPass
 					, m_targetImage
+					, m_outputScattering ? &getTechnique().getScattering() : nullptr
 					, true );
 			}
 
