@@ -313,7 +313,7 @@ namespace draw_edges
 			, uint32_t( modelBuffer.getSize() ) );
 		pass.addSampledView( depthObj, px::eDepthObj );
 		pass.addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }, px::eSource );
-		pass.addSampledView( technique.getScatteringLightingResult().sampledViewId, px::eScattering );
+		pass.addSampledView( technique.getScattering().sampledViewId, px::eScattering );
 		pass.addSampledView( m_depthNormal->getResult(), px::eEdgeDN );
 		pass.addSampledView( m_objectID->getResult(), px::eEdgeO );
 		m_ubo.createPassBinding( pass, px::eDrawEdges );

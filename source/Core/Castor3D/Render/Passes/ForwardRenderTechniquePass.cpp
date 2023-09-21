@@ -279,6 +279,7 @@ namespace castor3d
 		// Fragment Outputs
 		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
 		auto outVelocity( writer.declOutput< Vec4 >( "outVelocity", 1, flags.writeVelocity() ) );
+		auto outScattering( writer.declOutput< Vec4 >( "outScattering", 2, m_outputScattering ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -484,16 +485,19 @@ namespace castor3d
 								, coatReflected
 								, sheenReflected )
 							, components.opacity );
+						outScattering = vec4( lighting.scattering, 1.0_f );
 					}
 					ELSE
 					{
 						outColour = vec4( components.colour, components.opacity );
+						outScattering = vec4( 0.0_f );
 					}
 					FI;
 				}
 				else
 				{
 					outColour = vec4( components.colour, components.opacity );
+					outScattering = vec4( 0.0_f );
 				}
 
 				if ( flags.hasFog() )
@@ -503,13 +507,34 @@ namespace castor3d
 						, in.worldPosition.xyz()
 						, c3d_cameraData.position()
 						, c3d_sceneData );
+
+					if ( m_outputScattering )
+					{
+						outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+							, outScattering
+							, in.worldPosition.xyz()
+							, c3d_cameraData.position()
+							, c3d_sceneData );
+					}
 				}
 
+				auto linearDepth = writer.declLocale( "linearDepth"
+					, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() ) );
 				backgroundModel->applyVolume( in.fragCoord.xy()
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() )
+					, linearDepth
 					, vec2( c3d_cameraData.renderSize() )
 					, c3d_cameraData.depthPlanes()
 					, outColour );
+
+				if ( m_outputScattering )
+				{
+					backgroundModel->applyVolume( in.fragCoord.xy()
+						, linearDepth
+						, vec2( c3d_cameraData.renderSize() )
+						, c3d_cameraData.depthPlanes()
+						, outScattering );
+				}
+
 				outVelocity.xy() = in.getVelocity();
 			} );
 

@@ -100,6 +100,17 @@ namespace castor3d
 			m_clustersConfig = value;
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	\p true to output light scattering.
+		 *\~french
+		 *\param[in]	value	\p true pour écrire le light scattering.
+		 */
+		RenderTechniquePassDesc & outputScattering( bool value = true )
+		{
+			m_outputScattering = value;
+			return *this;
+		}
 
 		SsaoConfig const * m_ssaoConfig{};
 		Texture const * m_ssao{};
@@ -111,6 +122,7 @@ namespace castor3d
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eColour };
 		ClustersConfig const * m_clustersConfig{};
+		bool m_outputScattering{};
 	};
 
 	class RenderTechniquePass
@@ -127,7 +139,8 @@ namespace castor3d
 		 *\param[in]	scene	La scène.
 		 */
 		C3D_API RenderTechniquePass( RenderTechnique * parent
-			, Scene const & scene );
+			, Scene const & scene
+			, bool outputScattering );
 
 	public:
 		C3D_API virtual ~RenderTechniquePass() = default;
@@ -213,6 +226,7 @@ namespace castor3d
 		RenderTechnique * m_parent{};
 		Scene const & m_scene;
 		uint32_t m_drawCalls{};
+		bool m_outputScattering{};
 	};
 
 	class RenderTechniqueNodesPass

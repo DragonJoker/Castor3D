@@ -295,6 +295,9 @@ namespace castor3d
 			| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 			| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 			| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
+		static VkImageUsageFlags constexpr scatteringUsageFlags = ( VK_IMAGE_USAGE_TRANSFER_DST_BIT
+			| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+			| VK_IMAGE_USAGE_SAMPLED_BIT );
 	}
 
 	//*************************************************************************************************
@@ -337,6 +340,16 @@ namespace castor3d
 			, 1u
 			, VK_FORMAT_R16G16B16A16_SFLOAT
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT )
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_scattering{ m_device
+			, m_renderTarget.getResources()
+			, getName() + "/Scattering"
+			, 0u
+			, m_colour->getExtent()
+			, 1u
+			, 1u
+			, device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( rendtech::scatteringUsageFlags ) )
+			, rendtech::scatteringUsageFlags
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_cameraUbo{ m_device }
 		, m_sceneUbo{ m_device }
@@ -455,6 +468,7 @@ namespace castor3d
 
 		m_depth.create();
 		m_normal.create();
+		m_scattering.create();
 
 		if ( auto runnable = m_clearLpvRunnable.get() )
 		{
@@ -497,6 +511,7 @@ namespace castor3d
 		m_llpvResult.clear();
 		m_lpvResult.reset();
 		m_voxelizer.reset();
+		m_scattering.destroy();
 		m_normal.destroy();
 		m_depth.destroy();
 
@@ -788,11 +803,6 @@ namespace castor3d
 	Texture const & RenderTechnique::getDiffuseLightingResult()const
 	{
 		return m_opaque.getDiffuseLightingResult();
-	}
-
-	Texture const & RenderTechnique::getScatteringLightingResult()const
-	{
-		return m_opaque.getScatteringLightingResult();
 	}
 
 	Texture const & RenderTechnique::getBaseColourResult()const

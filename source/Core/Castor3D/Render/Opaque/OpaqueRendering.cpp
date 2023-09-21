@@ -206,11 +206,6 @@ namespace castor3d
 		return getOwner()->getResult();
 	}
 
-	Texture const & OpaqueRendering::getScatteringLightingResult()const
-	{
-		return getOwner()->getResult();
-	}
-
 	Texture const & OpaqueRendering::getBaseColourResult()const
 	{
 		return getOwner()->getResult();
@@ -244,7 +239,8 @@ namespace castor3d
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.indirect( getOwner()->getIndirectLighting() )
-					.clustersConfig( getOwner()->getClustersConfig() );
+					.clustersConfig( getOwner()->getClustersConfig() )
+					.outputScattering();
 
 				if ( !VisibilityResolvePass::useCompute )
 				{
@@ -291,10 +287,12 @@ namespace castor3d
 				, 0u
 				, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
 			result.addOutputStorageView( targetResult, index++ );
+			result.addOutputStorageView( getOwner()->getScattering().targetViewId, index++ );
 		}
 		else
 		{
 			result.addInOutColourView( targetResult );
+			result.addOutputColourView( getOwner()->getScattering().targetViewId );
 		}
 
 		return result;
@@ -324,7 +322,8 @@ namespace castor3d
 					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags );
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.indirect( getOwner()->getIndirectLighting() )
-					.clustersConfig( getOwner()->getClustersConfig() );
+					.clustersConfig( getOwner()->getClustersConfig() )
+					.outputScattering();
 				auto res = std::make_unique< ForwardRenderTechniquePass >( getOwner()
 					, framePass
 					, context
@@ -347,6 +346,7 @@ namespace castor3d
 		result.addSampledView( m_ssao->getResult().sampledViewId, 0u );
 		result.addInOutDepthStencilView( targetDepth );
 		result.addInOutColourView( targetResult );
+		result.addOutputColourView( getOwner()->getScattering().targetViewId );
 		return result;
 	}
 
