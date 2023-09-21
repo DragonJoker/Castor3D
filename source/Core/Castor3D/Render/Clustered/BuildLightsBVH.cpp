@@ -98,19 +98,39 @@ namespace castor3d
 			auto logStepReduction = writer.implementFunction< sdw::Void >( "logStepReduction"
 				, [&]( sdw::UInt groupIndex )
 				{
-					auto reduceIndex = writer.declLocale( "reduceIndex"
-						, 32_u >> 1_u );
 					auto mod32GroupIndex = writer.declLocale( "mod32GroupIndex"
 						, groupIndex % 32_u );
 
-					WHILE( writer, mod32GroupIndex < reduceIndex )
+					if ( config.enableBVHWarpOptimisation )
 					{
-						gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
-						gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
+						auto reduceIndex = writer.declLocale( "reduceIndex"
+							, 32_u >> 1_u );
 
-						reduceIndex >>= 1_u;
+						WHILE( writer, mod32GroupIndex < reduceIndex )
+						{
+							gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + reduceIndex] );
+							gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + reduceIndex] );
+
+							reduceIndex >>= 1_u;
+						}
+						ELIHW;
 					}
-					ELIHW;
+					else
+					{
+						shader::groupMemoryBarrierWithGroupSync( writer );
+
+						IF( writer, mod32GroupIndex == 0_u )
+						{
+							for ( uint32_t i = 1u; i < 32u; ++i )
+							{
+								gsAABBMin[groupIndex] = min( gsAABBMin[groupIndex], gsAABBMin[groupIndex + i] );
+								gsAABBMax[groupIndex] = max( gsAABBMax[groupIndex], gsAABBMax[groupIndex + i] );
+							}
+						}
+						FI;
+
+						shader::groupMemoryBarrierWithGroupSync( writer );
+					}
 				}
 				, sdw::InUInt{ writer, "groupIndex" } );
 
@@ -266,7 +286,7 @@ namespace castor3d
 						, GetPassIndexCallback( [this](){ return doGetPassIndex(); } )
 						, IsEnabledCallback( [this](){ return doIsEnabled(); } )
 						, IsComputePassCallback( [](){ return true; } ) }
-					, crg::ru::Config{ 3u, true /* resettable */ } }
+					, crg::ru::Config{ 6u, true /* resettable */ } }
 				, m_clusters{ clusters }
 				, m_lightCache{ clusters.getCamera().getScene()->getLightCache() }
 				, m_lightType{ lightType }
@@ -319,10 +339,10 @@ namespace castor3d
 						, context
 						, graph
 						, crg::pp::Config{}
-							.programCreator( { 3u, [this, &device, &config, bottomLevel, lightType]( uint32_t passIndex ){ return doCreateProgram( device, config, passIndex, bottomLevel, lightType ); } } )
+							.programCreator( { 6u, [this, &device, &config, bottomLevel, lightType]( uint32_t passIndex ){ return doCreateProgram( device, config, passIndex, bottomLevel, lightType ); } } )
 							.pushConstants( VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, 4u } )
 						, VK_PIPELINE_BIND_POINT_COMPUTE
-						, 3u }
+						, 6u }
 				{
 				}
 
@@ -367,6 +387,11 @@ namespace castor3d
 			uint32_t doGetPassIndex()
 			{
 				u32 result = {};
+
+				if ( m_clusters.getConfig().enableBVHWarpOptimisation )
+				{
+					result += 3u;
+				}
 
 				if ( m_clusters.getConfig().sortLights )
 				{
@@ -493,7 +518,8 @@ namespace castor3d
 		clusters.getClustersUbo().createPassBinding( point, lgtbvh::eClusters );
 		createInputStoragePassBinding( point, uint32_t( lgtbvh::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( point, uint32_t( lgtbvh::eLightIndices ), "C3D_PointLightIndices"
-			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
+			, { &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer()
+				, &clusters.getOutputPointLightIndicesBuffer(), &clusters.getInputPointLightIndicesBuffer(), &clusters.getOutputPointLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( point, uint32_t( lgtbvh::eLightBVH ), "C3D_PointLightBVH", clusters.getPointLightBVHBuffer(), 0u, ashes::WholeSize );
 
@@ -517,7 +543,8 @@ namespace castor3d
 		clusters.getClustersUbo().createPassBinding( spot, lgtbvh::eClusters );
 		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eAllLightsAABB ), "C3D_AllLightsAABB", clusters.getAllLightsAABBBuffer(), 0u, ashes::WholeSize );
 		createInputStoragePassBinding( spot, uint32_t( lgtbvh::eLightIndices ), "C3D_SpotLightIndices"
-			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
+			, { &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer()
+				, &clusters.getOutputSpotLightIndicesBuffer(), &clusters.getInputSpotLightIndicesBuffer(), &clusters.getOutputSpotLightIndicesBuffer() }
 			, 0u, ashes::WholeSize );
 		createClearableOutputStorageBinding( spot, uint32_t( lgtbvh::eLightBVH ), "C3D_SpotLightBVH", clusters.getSpotLightBVHBuffer(), 0u, ashes::WholeSize );
 

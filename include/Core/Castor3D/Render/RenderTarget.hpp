@@ -4,21 +4,22 @@ See LICENSE file in root folder
 #ifndef ___C3D_RENDER_TARGET_H___
 #define ___C3D_RENDER_TARGET_H___
 
-#include "RenderModule.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/Culling/CullingModule.hpp"
 #include "Castor3D/Render/Debug/DebugModule.hpp"
 #include "Castor3D/Render/Overlays/OverlaysModule.hpp"
-#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/PostEffect/PostEffectModule.hpp"
+#include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
+
+#include "Castor3D/Render/Clustered/ClustersConfig.hpp"
+#include "Castor3D/Miscellaneous/Parameter.hpp"
+#include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
-#include "Castor3D/Render/ToTexture/RenderToTextureModule.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
@@ -394,6 +395,11 @@ namespace castor3d
 		{
 			return m_enableFullLoading;
 		}
+
+		ClustersConfig const & getClustersConfig()const noexcept
+		{
+			return m_clustersConfig;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -437,9 +443,19 @@ namespace castor3d
 			return m_frustumClusters.get();
 		}
 
+		ClustersConfig & getClustersConfig()noexcept
+		{
+			return m_clustersConfig;
+		}
+
 		void enableFullLoading( bool value )noexcept
 		{
 			m_enableFullLoading = value;
+		}
+
+		void setClustersConfig( ClustersConfig config )noexcept
+		{
+			m_clustersConfig = std::move( config );
 		}
 		/**@}*/
 
@@ -527,6 +543,7 @@ namespace castor3d
 		std::vector< OnInitialisedConnection > m_onTargetInitialised;
 		IntermediateViewArray m_intermediates;
 		TargetDebugConfig m_debugConfig;
+		ClustersConfig m_clustersConfig;
 		FrustumClustersUPtr m_frustumClusters;
 		bool m_enableFullLoading{ false };
 		DebugDrawerUPtr m_debugDrawer{};

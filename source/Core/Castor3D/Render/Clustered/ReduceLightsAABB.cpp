@@ -85,7 +85,7 @@ namespace castor3d
 				// operation.
 				auto reduceIndex = NumThreads >> 1u;
 
-				if ( config.enableWarpOptimisation )
+				if ( config.enableReduceWarpOptimisation )
 				{
 					while ( reduceIndex > 32u )
 					{
@@ -340,7 +340,7 @@ namespace castor3d
 			uint32_t doGetPassIndex()
 			{
 				uint32_t result{ ( m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u )
-					+ ( m_clusters.getConfig().enableWarpOptimisation ? 2u : 0u ) };
+					+ ( m_clusters.getConfig().enableReduceWarpOptimisation ? 2u : 0u ) };
 				uint32_t count{ computeThreadGroupsCount( m_lightCache ) };
 
 				if ( m_dispatchCount && count != m_dispatchCount )
@@ -451,8 +451,8 @@ namespace castor3d
 
 			uint32_t doGetPassIndex()
 			{
-				uint32_t result = m_clusters.getConfig().enableWarpOptimisation ? 2u : 0u;
-				return result + ( m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u );
+				return ( m_clusters.getConfig().limitClustersToLightsAABB ? 1u : 0u )
+					+ ( m_clusters.getConfig().enableReduceWarpOptimisation ? 2u : 0u );
 			}
 
 			bool doIsEnabled()const

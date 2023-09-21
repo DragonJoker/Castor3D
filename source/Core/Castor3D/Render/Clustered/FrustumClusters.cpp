@@ -56,9 +56,11 @@ namespace castor3d
 	//*********************************************************************************************
 
 	FrustumClusters::FrustumClusters( RenderDevice const & device
-		, Camera const & camera )
+		, Camera const & camera
+		, ClustersConfig const & config )
 		: m_device{ device }
 		, m_camera{ camera }
+		, m_config{ config }
 		, m_dimensions{ m_clustersDirty, { 32u, 16u, 64u } }
 		, m_clusterSize{ m_clustersDirty, {} }
 		, m_cameraProjection{ m_clustersDirty, {} }

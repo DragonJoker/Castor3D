@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
+#include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
@@ -94,6 +95,7 @@ namespace castor3d
 		eMorphAnimation = CU_MakeSectionName( 'M', 'T', 'A', 'N' ),
 		eTextureRemapChannel = CU_MakeSectionName( 'T', 'X', 'R', 'C' ),
 		eTextureRemap = CU_MakeSectionName( 'T', 'X', 'R', 'P' ),
+		eClusters = CU_MakeSectionName( 'C', 'L', 'S', 'T' ),
 	};
 
 	class SceneFileContext
@@ -242,6 +244,7 @@ namespace castor3d
 		uint32_t texcoordSet{};
 		SceneImportConfig sceneImportConfig;
 		MeshImporterUPtr importer;
+		ClustersConfigUPtr clustersConfig;
 	};
 
 	C3D_API SceneFileContext & getSceneParserContext( castor::FileParserContext & context );

@@ -907,9 +907,11 @@ namespace castor3d
 	{
 		m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 		m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
-#if C3D_UseClusteredRendering
-		m_frustumClusters = castor::makeUnique< FrustumClusters >( device, *getCamera() );
-#endif
+
+		if ( m_clustersConfig.enabled || isFullLoadingEnabled() )
+		{
+			m_frustumClusters = castor::makeUnique< FrustumClusters >( device, *getCamera(), m_clustersConfig );
+		}
 
 		doInitCombineProgram( progress );
 		auto result = doInitialiseTechnique( device, queueData, progress );

@@ -405,7 +405,7 @@ namespace castor3d
 			, visbuffer }
 		, m_lastDepthPass{ &m_prepass.getLastPass() }
 		, m_depthRangePass{ &m_prepass.getDepthRangePass() }
-		, m_clustersLastPass{ ( C3D_UseClusteredRendering && m_renderTarget.getFrustumClusters()
+		, m_clustersLastPass{ ( m_renderTarget.getFrustumClusters() && m_renderTarget.getClustersConfig().enabled
 			? &m_renderTarget.getFrustumClusters()->createFramePasses( m_graph
 				, m_depthRangePass
 				, *this
@@ -760,11 +760,9 @@ namespace castor3d
 		return m_renderTarget.getSsaoConfig();
 	}
 
-	ClustersConfig * RenderTechnique::getClustersConfig()const
+	ClustersConfig const * RenderTechnique::getClustersConfig()const
 	{
-		return m_renderTarget.getFrustumClusters()
-			? &m_renderTarget.getFrustumClusters()->getConfig()
-			: nullptr;
+		return &m_renderTarget.getClustersConfig();
 	}
 
 	Texture const & RenderTechnique::getSsaoResult()const
