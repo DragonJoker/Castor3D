@@ -43,6 +43,7 @@ namespace castor3d
 	*/
 	class FrustumClusters;
 
+	CU_DeclareSmartPtr( castor3d, ClustersConfig, C3D_API );
 	CU_DeclareSmartPtr( castor3d, FrustumClusters, C3D_API );
 
 	using ClustersBuffersChangedFunction = std::function< void( FrustumClusters const & ) >;

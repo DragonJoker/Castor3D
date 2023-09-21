@@ -10,7 +10,6 @@ You can modify it, but it will be overwritten, hence prefer using the following 
 - CASTOR_USE_ALLOCATION_CALLBACKS	Use Vulkan allocation callbacks.
 - CASTOR_USE_MESH_SHADERS			Use mesh shaders.
 - CASTOR_USE_TASK_SHADERS			Use task shaders along with mesh shaders.
-- CASTOR_USE_CLUSTERED_RENDERING	Enable clustered forward/deferred rendering.
 */
 #ifndef ___C3D_Config_H___
 #define ___C3D_Config_H___
@@ -32,8 +31,5 @@ You can modify it, but it will be overwritten, hence prefer using the following 
 
 // Use task shaders along with mesh shaders.
 #define C3D_UseTaskShaders ${C3D_USE_TASK}
-
-// Use clustered rendering in forward/deferred passes.
-#define C3D_UseClusteredRendering ${C3D_USE_CLUSTERED_RENDERING}
 
 #endif

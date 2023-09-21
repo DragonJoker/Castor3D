@@ -1,8 +1,10 @@
 #include "TextRenderTarget.hpp"
 
+#include "TextClustersConfig.hpp"
 #include "TextSsaoConfig.hpp"
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
+#include <Castor3D/Render/Clustered/FrustumClusters.hpp>
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/ToneMapping/ToneMapping.hpp>
 #include <Castor3D/Scene/Camera.hpp>
@@ -69,6 +71,11 @@ namespace castor
 			if ( result )
 			{
 				result = writeSub( file, target.getSsaoConfig() );
+			}
+
+			if ( result && target.getFrustumClusters() )
+			{
+				result = writeSub( file, target.getFrustumClusters()->getConfig() );
 			}
 		}
 

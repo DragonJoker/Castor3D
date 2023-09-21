@@ -4,6 +4,7 @@
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
+#include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
@@ -636,6 +637,7 @@ namespace castor3d
 			addSceneImportParsers( result );
 			addSkeletonParsers( result );
 			addMorphAnimationParsers( result );
+			ClustersConfig::addParsers( result );
 
 			return result;
 		}
@@ -689,7 +691,8 @@ namespace castor3d
 				, { uint32_t( CSCNSection::eSkeleton ), cuT( "skeleton" ) }
 				, { uint32_t( CSCNSection::eMorphAnimation ), cuT( "morph_animation" ) }
 				, { uint32_t( CSCNSection::eTextureRemapChannel ), cuT( "texture_remap_channel" ) }
-				, { uint32_t( CSCNSection::eTextureRemap ), cuT( "texture_remap" ) } };
+				, { uint32_t( CSCNSection::eTextureRemap ), cuT( "texture_remap" ) }
+				, { uint32_t( CSCNSection::eClusters ), cuT( "clusters" ) } };
 		}
 
 		static void * createContext( castor::FileParserContext & context )

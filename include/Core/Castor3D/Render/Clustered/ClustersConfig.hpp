@@ -6,6 +6,8 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 
+#include <CastorUtils/FileParser/FileParserModule.hpp>
+
 namespace castor3d
 {
 	struct ClustersConfig
@@ -13,6 +15,8 @@ namespace castor3d
 		C3D_API ClustersConfig();
 
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 
 		//!\~english	The activation status.
 		//!\~french		Le statut d'activation.
@@ -25,7 +29,7 @@ namespace castor3d
 		bool sortLights{ true };
 		//!\~english	Tells if the depth buffer is used to reduce affected clusters.
 		//!\~french		Dit si le buffer de profondeur est utlisé pour réduire le nombre de clusters affectés.
-		bool parseDepthBuffer{ true };
+		bool parseDepthBuffer{ false };
 		//!\~english	Clusters grid Z will be limited to lights AABB depth boundaries.
 		//!\~french		Les Z de la grille de clusters seront limités aux limites de profondeur des AABB des sources lumineuses.
 		bool limitClustersToLightsAABB{ true };
@@ -34,10 +38,13 @@ namespace castor3d
 		bool useSpotBoundingCone{ false };
 		//!\~english	Use spot light tight bounding box when computing lights AABB.
 		//!\~french		Utiliser la bounding box la plus petite possible lors du calcul des AABB des ousrces lumineuses.
-		bool useSpotTightBoundingBox{ false };
+		bool useSpotTightBoundingBox{ true };
 		//!\~english	Enable use of warp optimisation in the reduce lights AABB pass.
 		//!\~french		Autoriser l'utilisation de l'optimisation des warps dans la passe de réduction des AABB des sources lumineuses.
-		bool enableWarpOptimisation{ true };
+		bool enableReduceWarpOptimisation{ false };
+		//!\~english	Enable use of warp optimisation in the build BVH pass.
+		//!\~french		Autoriser l'utilisation de l'optimisation des warps dans la passe de construction du BVH.
+		bool enableBVHWarpOptimisation{ true };
 	};
 }
 

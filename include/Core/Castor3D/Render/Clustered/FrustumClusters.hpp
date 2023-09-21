@@ -25,7 +25,8 @@ namespace castor3d
 		C3D_API FrustumClusters & operator=( FrustumClusters const & ) = delete;
 		C3D_API FrustumClusters & operator=( FrustumClusters && ) = delete;
 		C3D_API FrustumClusters( RenderDevice const & device
-			, Camera const & camera );
+			, Camera const & camera
+			, ClustersConfig const & config );
 		/**
 		 *\~english
 		 *\brief			CPU side update.
@@ -282,11 +283,6 @@ namespace castor3d
 			return m_config;
 		}
 
-		auto & getConfig()noexcept
-		{
-			return m_config;
-		}
-
 		OnClustersBuffersChanged onClusterBuffersChanged;
 
 	private:
@@ -302,6 +298,7 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Camera const & m_camera;
+		ClustersConfig const & m_config;
 		bool m_clustersDirty{ true };
 		bool m_lightsDirty{ true };
 		int32_t m_first{ 5 };
@@ -313,7 +310,6 @@ namespace castor3d
 		castor::GroupChangeTracked< castor::Matrix4x4f > m_cameraView;
 		ClustersUbo m_clustersUbo;
 		ashes::BufferPtr< VkDispatchIndirectCommand > m_clustersIndirect;
-		ClustersConfig m_config;
 
 		// Fixed size buffers, related to lights
 		ashes::BufferPtr< AABB > m_allLightsAABBBuffer;

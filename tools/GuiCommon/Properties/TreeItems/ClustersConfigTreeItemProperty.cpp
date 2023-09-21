@@ -22,9 +22,6 @@ namespace GuiCommon
 	void ClustersConfigTreeItemProperty::doCreateProperties( wxPGEditor * editor
 		, wxPropertyGrid * grid )
 	{
-		if ( m_target.getFrustumClusters() )
-		{
-			TreeItemConfigurationBuilder::submit( grid, *this, m_target.getFrustumClusters()->getConfig() );
-		}
+		TreeItemConfigurationBuilder::submit( grid, *this, m_target.getClustersConfig() );
 	}
 }
