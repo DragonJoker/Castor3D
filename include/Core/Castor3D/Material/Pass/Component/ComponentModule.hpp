@@ -593,6 +593,7 @@ namespace castor3d
 		bool hasAlphaBlendingFlag{};
 		bool hasParallaxOcclusionMappingOneFlag{};
 		bool hasParallaxOcclusionMappingRepeatFlag{};
+		bool hasDeferredDiffuseLightingFlag{};
 	};
 
 	C3D_API bool operator==( PassComponentCombine const & lhs, PassComponentCombine const & rhs )noexcept;

@@ -335,7 +335,6 @@ namespace castor3d::shader
 				clusteredLights.computeCombinedDifSpec( *this
 					, *lightingModel
 					, components
-					, backgroundModel
 					, lightSurface
 					, receivesShadows
 					, screenPosition
@@ -381,6 +380,187 @@ namespace castor3d::shader
 			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering );
 			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular );
 			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen );
+		}
+	}
+
+	void Lights::computeCombinedAllButDif( ClusteredLights & clusteredLights
+		, BlendComponents const & components
+		, BackgroundModel & backgroundModel
+		, LightSurface const & lightSurface
+		, sdw::UInt const receivesShadows
+		, sdw::Vec2 const screenPosition
+		, sdw::Float const viewDepth
+		, sdw::Vec3 const diffuse
+		, DebugOutput & debugOutput
+		, OutputComponents & parentOutput )
+	{
+		if ( auto lightingModel = getLightingModel() )
+		{
+			if ( clusteredLights.isEnabled() )
+			{
+				parentOutput.diffuse = diffuse;
+				auto cur = m_writer.declLocale( "c3d_cur"
+					, 0_u );
+				auto end = m_writer.declLocale( "c3d_end"
+					, m_lightsBuffer->getDirectionalsEnd() );
+
+				WHILE( m_writer, cur < end )
+				{
+					auto directionalLight = m_writer.declLocale( "directionalLight"
+						, getDirectionalLight( cur ) );
+					lightingModel->computeAllButDiffuse( directionalLight
+						, components
+						, backgroundModel
+						, lightSurface
+						, receivesShadows
+						, parentOutput );
+					cur += castor3d::DirectionalLight::LightDataComponents;
+				}
+				ELIHW;
+
+				clusteredLights.computeCombinedAllButDif( *this
+					, *lightingModel
+					, components
+					, lightSurface
+					, receivesShadows
+					, screenPosition
+					, viewDepth
+					, debugOutput
+					, parentOutput );
+			}
+			else
+			{
+				computeCombinedAllButDif( components
+					, backgroundModel
+					, lightSurface
+					, receivesShadows
+					, diffuse
+					, debugOutput
+					, parentOutput );
+			}
+
+			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse );
+			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.specular );
+			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering );
+			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular );
+			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen );
+		}
+	}
+
+	void Lights::computeCombinedDif( ClusteredLights & clusteredLights
+		, BlendComponents const & components
+		, BackgroundModel & backgroundModel
+		, LightSurface const & lightSurface
+		, sdw::UInt const receivesShadows
+		, sdw::Vec2 const screenPosition
+		, sdw::Float const viewDepth
+		, DebugOutput & debugOutput
+		, sdw::Vec3 & output )
+	{
+		if ( auto lightingModel = getLightingModel() )
+		{
+			if ( clusteredLights.isEnabled() )
+			{
+				auto cur = m_writer.declLocale( "c3d_cur"
+					, 0_u );
+				auto end = m_writer.declLocale( "c3d_end"
+					, m_lightsBuffer->getDirectionalsEnd() );
+
+				WHILE( m_writer, cur < end )
+				{
+					auto directionalLight = m_writer.declLocale( "directionalLight"
+						, getDirectionalLight( cur ) );
+					output += lightingModel->computeDiffuse( directionalLight
+						, components
+						, backgroundModel
+						, lightSurface
+						, receivesShadows );
+					cur += castor3d::DirectionalLight::LightDataComponents;
+				}
+				ELIHW;
+
+				clusteredLights.computeCombinedDif( *this
+					, *lightingModel
+					, components
+					, lightSurface
+					, receivesShadows
+					, screenPosition
+					, viewDepth
+					, output );
+			}
+			else
+			{
+				computeCombinedDif( components
+					, backgroundModel
+					, lightSurface
+					, receivesShadows
+					, debugOutput
+					, output );
+			}
+
+			debugOutput.registerOutput( "Lighting", "Diffuse", output );
+		}
+	}
+
+	void Lights::computeCombinedAllButDif( BlendComponents const & components
+		, BackgroundModel & backgroundModel
+		, LightSurface const & lightSurface
+		, sdw::UInt const receivesShadows
+		, sdw::Vec3 const diffuse
+		, DebugOutput & debugOutput
+		, OutputComponents & parentOutput )
+	{
+		if ( auto lightingModel = getLightingModel() )
+		{
+			parentOutput.diffuse = diffuse;
+			auto cur = m_writer.declLocale( "c3d_cur"
+				, 0_u );
+			auto end = m_writer.declLocale( "c3d_end"
+				, m_lightsBuffer->getDirectionalsEnd() );
+
+			WHILE( m_writer, cur < end )
+			{
+				auto directionalLight = m_writer.declLocale( "directionalLight"
+					, getDirectionalLight( cur ) );
+				lightingModel->computeAllButDiffuse( directionalLight
+					, components
+					, backgroundModel
+					, lightSurface
+					, receivesShadows
+					, parentOutput );
+				cur += castor3d::DirectionalLight::LightDataComponents;
+			}
+			ELIHW;
+
+			end = m_lightsBuffer->getPointsEnd();
+
+			WHILE( m_writer, cur < end )
+			{
+				auto pointLight = m_writer.declLocale( "pointLight"
+					, getPointLight( cur ) );
+				lightingModel->computeAllButDiffuse( pointLight
+					, components
+					, lightSurface
+					, receivesShadows
+					, parentOutput );
+				cur += castor3d::PointLight::LightDataComponents;
+			}
+			ELIHW;
+
+			end = m_lightsBuffer->getSpotsEnd();
+
+			WHILE( m_writer, cur < end )
+			{
+				auto spotLight = m_writer.declLocale( "spotLight"
+					, getSpotLight( cur ) );
+				lightingModel->computeAllButDiffuse( spotLight
+					, components
+					, lightSurface
+					, receivesShadows
+					, parentOutput );
+				cur += castor3d::SpotLight::LightDataComponents;
+			}
+			ELIHW;
 		}
 	}
 

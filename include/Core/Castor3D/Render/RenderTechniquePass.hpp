@@ -191,8 +191,6 @@ namespace castor3d
 		 *\copydoc	RenderNodesPass::isPassEnabled
 		 */
 		C3D_API virtual bool isPassEnabled()const = 0;
-
-		C3D_API virtual bool hasSsao()const = 0;
 		/**
 		*\~english
 		*name
@@ -205,6 +203,7 @@ namespace castor3d
 		C3D_API Engine * getEngine()const;
 		C3D_API DebugConfig & getDebugConfig()const;
 		C3D_API virtual ClustersConfig const * getClustersConfig()const = 0;
+		C3D_API virtual bool hasSsao()const = 0;
 
 		Scene const & getScene()
 		{

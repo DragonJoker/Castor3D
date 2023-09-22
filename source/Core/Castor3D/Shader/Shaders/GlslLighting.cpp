@@ -463,7 +463,7 @@ namespace castor3d::shader
 		if ( !m_computeDirectionalDiffuse )
 		{
 			doInitialiseBackground( background );
-			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLight"
+			m_computeDirectionalDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeDirectionalLightDiffuse"
 				, [this]( DirectionalLight const & light
 					, BlendComponents const & components
 					, LightSurface lightSurface
@@ -510,7 +510,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computePointDiffuse )
 		{
-			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLight"
+			m_computePointDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computePointLightDiffuse"
 				, [this]( PointLight light
 					, BlendComponents const & components
 					, LightSurface lightSurface
@@ -561,7 +561,7 @@ namespace castor3d::shader
 	{
 		if ( !m_computeSpotDiffuse )
 		{
-			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLight"
+			m_computeSpotDiffuse = m_writer.implementFunction< sdw::Vec3 >( m_prefix + "computeSpotLightDiffuse"
 				, [this]( SpotLight light
 					, BlendComponents const & components
 					, LightSurface lightSurface
@@ -618,10 +618,257 @@ namespace castor3d::shader
 			, preceivesShadows );
 	}
 
-	void LightingModel::doAttenuate( sdw::Float const attenuation
-		, OutputComponents & output )
+	void LightingModel::computeAllButDiffuse( DirectionalLight const & plight
+		, BlendComponents const & pcomponents
+		, BackgroundModel & background
+		, LightSurface const & plightSurface
+		, sdw::UInt const & preceivesShadows
+		, OutputComponents & pparentOutput )
 	{
-		output.diffuse = output.diffuse * attenuation;
+		if ( !m_computeDirectionalAllButDiffuse )
+		{
+			doInitialiseBackground( background );
+			OutputComponents outputs{ m_writer };
+			m_computeDirectionalAllButDiffuse = m_writer.implementFunction< sdw::Void >( m_prefix + "computeDirectionalLightAllButDiffuse"
+				, [this]( DirectionalLight light
+					, BlendComponents const & components
+					, LightSurface lightSurface
+					, sdw::UInt const & receivesShadows
+					, OutputComponents & parentOutput )
+				{
+					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightSheen", vec2( 0.0_f ) ) };
+					auto radiance = m_writer.declLocale( "radiance"
+						, vec3( 0.0_f ) );
+					lightSurface.updateL( m_utils
+						, -light.direction()
+						, components.f0
+						, components );
+					doComputeLightAllButDiffuse( light.base()
+						, components
+						, lightSurface
+						, radiance
+						, output );
+					auto shadows = m_writer.declLocale( "shadows"
+						, m_shadowModel.getDirectionalShadows() );
+
+					if ( m_shadowModel.isEnabled() )
+					{
+						doApplyShadows( shadows
+							, light.shadowMapIndex()
+							, light.base().intensity()
+							, lightSurface
+							, radiance
+							, receivesShadows
+							, output
+							, false );
+					}
+
+					doComputeScatteringTerm( shadows.base()
+						, light.shadowMapIndex()
+						, radiance
+						, light.base().intensity()
+						, components
+						, lightSurface
+						, output.scattering );
+					parentOutput.specular += max( vec3( 0.0_f ), output.specular );
+					parentOutput.scattering += max( vec3( 0.0_f ), output.scattering );
+					parentOutput.coatingSpecular += max( vec3( 0.0_f ), output.coatingSpecular );
+					parentOutput.sheen += max( vec2( 0.0_f ), output.sheen );
+				}
+				, PDirectionalLight( m_writer, "light" )
+				, InBlendComponents{ m_writer, "components", m_materials }
+				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
+				, sdw::InUInt( m_writer, "receivesShadows" )
+				, outputs );
+		}
+
+		m_computeDirectionalAllButDiffuse( plight
+			, pcomponents
+			, plightSurface
+			, preceivesShadows
+			, pparentOutput );
+	}
+
+	void LightingModel::computeAllButDiffuse( PointLight const & plight
+		, BlendComponents const & pcomponents
+		, LightSurface const & plightSurface
+		, sdw::UInt const & preceivesShadows
+		, OutputComponents & pparentOutput )
+	{
+		if ( !m_computePointAllButDiffuse )
+		{
+			OutputComponents outputs{ m_writer };
+			m_computePointAllButDiffuse = m_writer.implementFunction< sdw::Void >( m_prefix + "computePointLightLightAllButDiffuse"
+				, [this]( PointLight light
+					, BlendComponents const & components
+					, LightSurface lightSurface
+					, sdw::UInt const & receivesShadows
+					, OutputComponents & parentOutput )
+				{
+					OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) )
+						, m_writer.declLocale( "lightSheen", vec2( 0.0_f ) ) };
+					auto radiance = m_writer.declLocale( "radiance"
+						, vec3( 0.0_f ) );
+					lightSurface.updateL( m_utils
+						, light.position() - lightSurface.worldPosition()
+						, components.f0
+						, components );
+					doComputeLightAllButDiffuse( light.base()
+						, components
+						, lightSurface
+						, radiance
+						, output );
+
+					if ( m_shadowModel.isEnabled() )
+					{
+						auto shadows = m_writer.declLocale( "shadows"
+							, m_shadowModel.getPointShadows( light.shadowMapIndex() ) );
+						doApplyShadows( shadows
+							, light.shadowMapIndex()
+							, computeRange( light )
+							, lightSurface
+							, radiance
+							, receivesShadows
+							, output
+							, false );
+					}
+
+					auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
+					light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
+					doAttenuate( attenuation, output, false );
+					parentOutput.specular += max( vec3( 0.0_f ), output.specular );
+					parentOutput.scattering += max( vec3( 0.0_f ), output.scattering );
+					parentOutput.coatingSpecular += max( vec3( 0.0_f ), output.coatingSpecular );
+					parentOutput.sheen += max( vec2( 0.0_f ), output.sheen );
+				}
+				, PPointLight( m_writer, "light" )
+				, InBlendComponents{ m_writer, "components", m_materials }
+				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
+				, sdw::InUInt( m_writer, "receivesShadows" )
+				, outputs );
+		}
+
+		m_computePointAllButDiffuse( plight
+			, pcomponents
+			, plightSurface
+			, preceivesShadows
+			, pparentOutput );
+	}
+
+	void LightingModel::computeAllButDiffuse( SpotLight const & plight
+		, BlendComponents const & pcomponents
+		, LightSurface const & plightSurface
+		, sdw::UInt const & preceivesShadows
+		, OutputComponents & pparentOutput )
+	{
+		if ( !m_computeSpotAllButDiffuse )
+		{
+			OutputComponents outputs{ m_writer };
+			m_computeSpotAllButDiffuse = m_writer.implementFunction< sdw::Void >( m_prefix + "computeSpotLightLightAllButDiffuse"
+				, [this]( SpotLight light
+					, BlendComponents const & components
+					, LightSurface lightSurface
+					, sdw::UInt const & receivesShadows
+					, OutputComponents & parentOutput )
+				{
+					lightSurface.updateL( m_utils
+						, light.position() - lightSurface.worldPosition()
+						, components.f0
+						, components );
+					auto spotFactor = m_writer.declLocale( "spotFactor"
+						, dot( lightSurface.L(), light.direction() ) );
+
+					IF( m_writer, spotFactor > light.outerCutOffCos() )
+					{
+						OutputComponents output{ m_writer.declLocale( "lightDiffuse", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightSpecular", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightScattering", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightCoatingSpecular", vec3( 0.0_f ) )
+							, m_writer.declLocale( "lightSheen", vec2( 0.0_f ) ) };
+						auto radiance = m_writer.declLocale( "radiance"
+							, vec3( 0.0_f ) );
+						doComputeLightAllButDiffuse( light.base()
+							, components
+							, lightSurface
+							, radiance
+							, output );
+						spotFactor = clamp( ( spotFactor - light.outerCutOffCos() ) / light.cutOffsCosDiff(), 0.0_f, 1.0_f );
+						output.specular = spotFactor * output.specular;
+						output.scattering = spotFactor * output.scattering;
+						output.coatingSpecular = spotFactor * output.coatingSpecular;
+						output.sheen.x() = spotFactor * output.sheen.x();
+						auto attenuation = m_writer.declLocale( "attenuation", 1.0_f );
+						light.getAttenuationFactor( lightSurface.lengthL(), attenuation );
+
+						if ( m_shadowModel.isEnabled() )
+						{
+							auto shadows = m_writer.declLocale( "shadows"
+								, m_shadowModel.getSpotShadows( light.shadowMapIndex() ) );
+#if !C3D_DisableSSSTransmittance
+							if ( m_sssTransmittance )
+							{
+								IF( m_writer
+									, ( light.shadowMapIndex() >= 0_i )
+									&& ( shadows.shadowType() != sdw::UInt( int( ShadowType::eNone ) ) )
+									&& ( receivesShadows != 0_u )
+									&& ( material.sssProfileIndex != 0.0_f ) )
+								{
+									parentOutput.diffuse += ( output.diffuse * attenuation )
+										* m_sssTransmittance->compute( material
+											, light
+											, surface );
+								}
+								FI;
+							}
+#endif
+							doApplyShadows( shadows
+								, light.shadowMapIndex()
+								, computeRange( light )
+								, lightSurface
+								, radiance
+								, receivesShadows
+								, output
+								, false );
+						}
+
+						doAttenuate( attenuation, output, false );
+						parentOutput.specular += max( vec3( 0.0_f ), output.specular );
+						parentOutput.scattering += max( vec3( 0.0_f ), output.scattering );
+						parentOutput.coatingSpecular += max( vec3( 0.0_f ), output.coatingSpecular );
+						parentOutput.sheen += max( vec2( 0.0_f ), output.sheen );
+					}
+					FI;
+				}
+				, PSpotLight( m_writer, "light" )
+				, InBlendComponents{ m_writer, "components", m_materials }
+				, InLightSurface{ m_writer, "lightSurface", plightSurface.getType() }
+				, sdw::InUInt( m_writer, "receivesShadows" )
+				, outputs );
+		}
+
+		m_computeSpotAllButDiffuse( plight
+			, pcomponents
+			, plightSurface
+			, preceivesShadows
+			, pparentOutput );
+	}
+
+	void LightingModel::doAttenuate( sdw::Float const attenuation
+		, OutputComponents & output
+		, bool withDiffuse )
+	{
+		if ( withDiffuse )
+		{
+			output.diffuse = output.diffuse * attenuation;
+		}
+
 		output.specular = output.specular * attenuation;
 		output.scattering = output.scattering * attenuation;
 		output.coatingSpecular = output.coatingSpecular * attenuation;
@@ -634,7 +881,8 @@ namespace castor3d::shader
 		, LightSurface const & lightSurface
 		, sdw::Vec3 const & radiance
 		, sdw::UInt const & receivesShadows
-		, OutputComponents & output )
+		, OutputComponents & output
+		, bool withDiffuse )
 	{
 		m_directionalCascadeIndex = std::make_unique< sdw::UInt >( m_writer.declLocale( "cascadeIndex"
 			, 0_u ) );
@@ -692,7 +940,11 @@ namespace castor3d::shader
 				}
 				FI;
 
-				output.diffuse *= shadowFactor;
+				if ( withDiffuse )
+				{
+					output.diffuse *= shadowFactor;
+				}
+
 				output.specular *= shadowFactor;
 				output.coatingSpecular *= shadowFactor;
 				output.sheen.x() *= shadowFactor;
@@ -736,7 +988,8 @@ namespace castor3d::shader
 		, LightSurface const & lightSurface
 		, sdw::Vec3 const & radiance
 		, sdw::UInt const & receivesShadows
-		, OutputComponents & output )
+		, OutputComponents & output
+		, bool withDiffuse )
 	{
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
@@ -751,7 +1004,12 @@ namespace castor3d::shader
 					, shadowMapIndex
 					, lightSurface
 					, 1.0_f - ( length( -lightSurface.vertexToLight() ) / lightRange ) ) );
-			output.diffuse *= shadowFactor;
+
+			if ( withDiffuse )
+			{
+				output.diffuse *= shadowFactor;
+			}
+
 			output.specular *= shadowFactor;
 			output.coatingSpecular *= shadowFactor;
 			output.sheen.x() *= shadowFactor;
@@ -765,7 +1023,8 @@ namespace castor3d::shader
 		, LightSurface const & lightSurface
 		, sdw::Vec3 const & radiance
 		, sdw::UInt const & receivesShadows
-		, OutputComponents & output )
+		, OutputComponents & output
+		, bool withDiffuse )
 	{
 		auto baseShadows = m_writer.declLocale( "baseShadows"
 			, shadows.base() );
@@ -781,7 +1040,12 @@ namespace castor3d::shader
 					, lightSurface
 					, shadows.transform()
 					, length( -lightSurface.vertexToLight() ) / lightRange ) );
-			output.diffuse *= shadowFactor;
+
+			if ( withDiffuse )
+			{
+				output.diffuse *= shadowFactor;
+			}
+
 			output.specular *= shadowFactor;
 			output.coatingSpecular *= shadowFactor;
 			output.sheen.x() *= shadowFactor;
@@ -1019,6 +1283,35 @@ namespace castor3d::shader
 			, isLit
 			, result );
 		return result;
+	}
+
+	void LightingModel::doComputeLightAllButDiffuse( Light light
+		, BlendComponents const & components
+		, LightSurface const & lightSurface
+		, sdw::Vec3 & radiance
+		, OutputComponents & output )
+	{
+		radiance = doComputeRadiance( light, lightSurface.L() );
+		auto isLit = m_writer.declLocale( "isLit", 0.0_f );
+		doInitLightSpecifics( lightSurface, components );
+		doComputeSpecularTerm( radiance
+			, light.intensity().y()
+			, components
+			, lightSurface
+			, isLit
+			, output.specular );
+		doComputeSheenTerm( radiance
+			, light.intensity().y()
+			, components
+			, lightSurface
+			, isLit
+			, output.sheen );
+		doComputeCoatingTerm( radiance
+			, light.intensity().y()
+			, components
+			, lightSurface
+			, isLit
+			, output.coatingSpecular );
 	}
 
 	//*********************************************************************************************

@@ -136,32 +136,58 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows );
 		//\}
+		/**
+		*\name
+		*	All but diffuse
+		*/
+		//\{
+		C3D_API void computeAllButDiffuse( DirectionalLight const & light
+			, BlendComponents const & components
+			, BackgroundModel & background
+			, LightSurface const & lightSurface
+			, sdw::UInt const & receivesShadows
+			, OutputComponents & output );
+		C3D_API void computeAllButDiffuse( PointLight const & light
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::UInt const & receivesShadows
+			, OutputComponents & output );
+		C3D_API void computeAllButDiffuse( SpotLight const & light
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::UInt const & receivesShadows
+			, OutputComponents & output );
+		//\}
 		//\}
 
 	protected:
 		C3D_API void doAttenuate( sdw::Float const attenuation
-			, OutputComponents & output );
+			, OutputComponents & output
+			, bool withDiffuse = true );
 		C3D_API void doApplyShadows( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec2 const & lightIntensity
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, OutputComponents & output
+			, bool withDiffuse = true );
 		C3D_API void doApplyShadows( PointShadowData const & light
 			, sdw::Int const shadowMapIndex
 			, sdw::Float const lightRange
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, OutputComponents & output
+			, bool withDiffuse = true );
 		C3D_API void doApplyShadows( SpotShadowData const & light
 			, sdw::Int const shadowMapIndex
 			, sdw::Float const lightRange
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, OutputComponents & output
+			, bool withDiffuse = true );
 		C3D_API void doApplyShadowsDiffuse( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex
 			, LightSurface const & lightSurface
@@ -256,6 +282,11 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 & radiance );
+		C3D_API virtual void doComputeLightAllButDiffuse( Light light
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::Vec3 & radiance
+			, OutputComponents & output );
 
 	protected:
 		LightingModelID m_lightingModelId;
@@ -304,6 +335,24 @@ namespace castor3d::shader
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt > m_computeSpotDiffuse;
+		sdw::Function< sdw::Void
+			, PDirectionalLight
+			, InBlendComponents
+			, InLightSurface
+			, sdw::InUInt
+			, OutputComponents & > m_computeDirectionalAllButDiffuse;
+		sdw::Function< sdw::Void
+			, PPointLight
+			, InBlendComponents
+			, InLightSurface
+			, sdw::InUInt
+			, OutputComponents & > m_computePointAllButDiffuse;
+		sdw::Function< sdw::Void
+			, PSpotLight
+			, InBlendComponents
+			, InLightSurface
+			, sdw::InUInt
+			, OutputComponents & > m_computeSpotAllButDiffuse;
 	};
 }
 

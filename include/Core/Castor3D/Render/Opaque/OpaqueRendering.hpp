@@ -128,6 +128,7 @@ namespace castor3d
 		C3D_API Engine * getEngine()const;
 		C3D_API crg::FramePass const & getLastPass()const;
 		C3D_API Texture const & getSsaoResult()const;
+		C3D_API Texture const & getSssDiffuse()const;
 		C3D_API bool isEnabled()const;
 
 		ashes::Buffer< uint32_t > const & getMaterialsCounts()const
@@ -155,11 +156,14 @@ namespace castor3d
 			, crg::FramePassArray previousPasses )const;
 		crg::FramePass & doCreateVisibilityResolve( ProgressBar * progress
 			, PrepassRendering const & previous
-			, crg::FramePassArray const & previousPasses );
+			, crg::FramePassArray const & previousPasses
+			, bool isDeferredLighting );
 		crg::FramePass & doCreateOpaquePass( ProgressBar * progress
 			, crg::FramePass const & lastPass
-			, crg::FramePassArray const & previousPasses );
+			, crg::FramePassArray const & previousPasses
+			, bool isDeferredLighting );
 		bool doIsOpaquePassEnabled()const;
+		bool doIsDeferredOpaquePassEnabled()const;
 
 	private:
 		RenderDevice const & m_device;
@@ -171,11 +175,15 @@ namespace castor3d
 		ShaderBufferUPtr m_visibilityPipelinesIds;
 		VisibilityReorderPassUPtr m_visibilityReorder;
 		SsaoPassUPtr m_ssao;
+		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
+		crg::RunnablePass::IsEnabledCallback m_deferredOpaquePassEnabled;
 		crg::FramePass * m_visibilityResolveDesc{};
-		VisibilityResolvePass * m_visibilityResolve{};
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
-		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
+		SubsurfaceScatteringPassUPtr m_subsurfaceScattering{};
+		crg::FramePass * m_deferredVisibilityResolveDesc{};
+		crg::FramePass * m_deferredOpaquePassDesc{};
+		RenderTechniquePass * m_deferredOpaquePass{};
 	};
 }
 

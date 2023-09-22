@@ -135,6 +135,14 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
 		}
+
+		if ( flags.components.hasDeferredDiffuseLightingFlag
+			&& m_deferredLighting == DeferredLightingMode::eDeferredOnly )
+		{
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_imgDiffuse
+		}
 	}
 
 	void ForwardRenderTechniquePass::doFillAdditionalDescriptor( PipelineFlags const & flags
@@ -172,6 +180,14 @@ namespace castor3d
 		{
 			bindTexture( m_mippedColour->wholeView
 				, *m_mippedColour->sampler
+				, descriptorWrites
+				, index );
+		}
+
+		if ( flags.components.hasDeferredDiffuseLightingFlag
+			&& m_deferredLighting == DeferredLightingMode::eDeferredOnly )
+		{
+			bindImage( getTechnique().getSssDiffuse().targetView
 				, descriptorWrites
 				, index );
 		}
@@ -264,6 +280,10 @@ namespace castor3d
 			, ( m_mippedColour ? index++ : 0u )
 			, RenderPipeline::eBuffers
 			, m_mippedColour != nullptr );
+		auto c3d_imgDiffuse = writer.declStorageImg< sdw::RImage2DRgba32 >( "c3d_imgDiffuse"
+			, ( ( flags.components.hasDeferredDiffuseLightingFlag && ( m_deferredLighting == DeferredLightingMode::eDeferredOnly ) ) ? index++ : 0u )
+			, RenderPipeline::eBuffers
+			, flags.components.hasDeferredDiffuseLightingFlag && ( m_deferredLighting == DeferredLightingMode::eDeferredOnly ) );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -277,9 +297,11 @@ namespace castor3d
 		shader::Fog fog{ writer };
 
 		// Fragment Outputs
-		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
-		auto outVelocity( writer.declOutput< Vec4 >( "outVelocity", 1, flags.writeVelocity() ) );
-		auto outScattering( writer.declOutput< Vec4 >( "outScattering", 2, m_outputScattering ) );
+		uint32_t outIndex{};
+		auto outColour( writer.declOutput< Vec4 >( "outColour", outIndex++ ) );
+		auto outVelocity( writer.declOutput< Vec4 >( "outVelocity", ( flags.writeVelocity() ? outIndex++ : 0u ), flags.writeVelocity() ) );
+		auto outScattering( writer.declOutput< Vec4 >( "outScattering", ( m_outputScattering ? outIndex++ : 0u ), m_outputScattering ) );
+		auto outDiffuse( writer.declOutput< Vec4 >( "outDiffuse", ( m_deferredLighting == DeferredLightingMode::eDeferLighting ? outIndex++ : 0u ), m_deferredLighting == DeferredLightingMode::eDeferLighting ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -340,7 +362,6 @@ namespace castor3d
 				{
 					IF( writer, material.lighting )
 					{
-						shader::OutputComponents lighting{ writer, false };
 						auto surface = writer.declLocale( "surface"
 							, shader::Surface{ in.fragCoord.xyz()
 								, in.viewPosition.xyz()
@@ -359,138 +380,189 @@ namespace castor3d
 							, surface.viewPosition.xyz()
 							, surface.clipPosition
 							, surface.normal );
-						lights.computeCombinedDifSpec( clusteredLights
-							, components
-							, *backgroundModel
-							, lightSurface
-							, modelData.isShadowReceiver()
-							, lightSurface.clipPosition().xy()
-							, lightSurface.viewPosition().z()
-							, output
-							, lighting );
-						auto directAmbient = writer.declLocale( "directAmbient"
-							, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
-						auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
-							, vec3( 0.0_f ) );
-						auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
-							, vec3( 0.0_f ) );
-						auto refracted = writer.declLocale( "refracted"
-							, vec3( 0.0_f ) );
-						auto coatReflected = writer.declLocale( "coatReflected"
-							, vec3( 0.0_f ) );
-						auto sheenReflected = writer.declLocale( "sheenReflected"
-							, vec3( 0.0_f ) );
-						auto sceneUv = writer.declLocale( "sceneUv"
-							, in.fragCoord.xy() / vec2( c3d_cameraData.renderSize() )
-							, m_mippedColour != nullptr );
 
-						if ( components.hasMember( "thicknessFactor" ) )
+						if ( flags.components.hasDeferredDiffuseLightingFlag
+							&& m_deferredLighting == DeferredLightingMode::eDeferLighting )
 						{
-							components.thicknessFactor *= length( modelData.getScale() );
-						}
-
-						lightSurface.updateN( utils
-							, components.normal
-							, components.f0
-							, components );
-
-						if ( m_mippedColour )
-						{
-							reflections.computeCombined( components
-								, lightSurface
-								, lightSurface.worldPosition()
+							auto diffuse = writer.declLocale( "diffuse", vec3( 0.0_f ) );
+							lights.computeCombinedDif( clusteredLights
+								, components
 								, *backgroundModel
-								, c3d_mapScene
-								, c3d_cameraData
-								, sceneUv
-								, modelData.getEnvMapIndex()
-								, components.hasReflection
-								, components.hasRefraction
-								, components.refractionRatio
-								, reflectedDiffuse
-								, reflectedSpecular
-								, refracted
-								, coatReflected
-								, sheenReflected
-								, output );
+								, lightSurface
+								, modelData.isShadowReceiver()
+								, lightSurface.clipPosition().xy()
+								, lightSurface.viewPosition().z()
+								, output
+								, diffuse );
+							outDiffuse = vec4( diffuse, components.transmittance );
+							outScattering = vec4( 0.0_f );
+							outColour = vec4( 0.0_f );
 						}
 						else
 						{
-							reflections.computeCombined( components
+							shader::OutputComponents lighting{ writer, false };
+
+							if ( flags.components.hasDeferredDiffuseLightingFlag
+								&& m_deferredLighting == DeferredLightingMode::eDeferredOnly )
+							{
+								lights.computeCombinedAllButDif( clusteredLights
+									, components
+									, *backgroundModel
+									, lightSurface
+									, modelData.isShadowReceiver()
+									, lightSurface.clipPosition().xy()
+									, lightSurface.viewPosition().z()
+									, c3d_imgDiffuse.load( ivec2( in.fragCoord.xy() ) ).rgb()
+									, output
+									, lighting );
+							}
+							else
+							{
+								lights.computeCombinedDifSpec( clusteredLights
+									, components
+									, *backgroundModel
+									, lightSurface
+									, modelData.isShadowReceiver()
+									, lightSurface.clipPosition().xy()
+									, lightSurface.viewPosition().z()
+									, output
+									, lighting );
+							}
+
+							auto directAmbient = writer.declLocale( "directAmbient"
+								, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
+							auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
+								, vec3( 0.0_f ) );
+							auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
+								, vec3( 0.0_f ) );
+							auto refracted = writer.declLocale( "refracted"
+								, vec3( 0.0_f ) );
+							auto coatReflected = writer.declLocale( "coatReflected"
+								, vec3( 0.0_f ) );
+							auto sheenReflected = writer.declLocale( "sheenReflected"
+								, vec3( 0.0_f ) );
+							auto sceneUv = writer.declLocale( "sceneUv"
+								, in.fragCoord.xy() / vec2( c3d_cameraData.renderSize() )
+								, m_mippedColour != nullptr );
+
+							if ( components.hasMember( "thicknessFactor" ) )
+							{
+								components.thicknessFactor *= length( modelData.getScale() );
+							}
+
+							lightSurface.updateN( utils
+								, components.normal
+								, components.f0
+								, components );
+
+							if ( m_mippedColour )
+							{
+								reflections.computeCombined( components
+									, lightSurface
+									, lightSurface.worldPosition()
+									, *backgroundModel
+									, c3d_mapScene
+									, c3d_cameraData
+									, sceneUv
+									, modelData.getEnvMapIndex()
+									, components.hasReflection
+									, components.hasRefraction
+									, components.refractionRatio
+									, reflectedDiffuse
+									, reflectedSpecular
+									, refracted
+									, coatReflected
+									, sheenReflected
+									, output );
+							}
+							else
+							{
+								reflections.computeCombined( components
+									, lightSurface
+									, *backgroundModel
+									, modelData.getEnvMapIndex()
+									, components.hasReflection
+									, components.hasRefraction
+									, components.refractionRatio
+									, reflectedDiffuse
+									, reflectedSpecular
+									, refracted
+									, coatReflected
+									, sheenReflected
+									, output );
+							}
+
+							lightSurface.updateL( utils
+								, components.normal
+								, components.f0
+								, components );
+							auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
 								, lightSurface
-								, *backgroundModel
-								, modelData.getEnvMapIndex()
-								, components.hasReflection
-								, components.hasRefraction
-								, components.refractionRatio
-								, reflectedDiffuse
-								, reflectedSpecular
-								, refracted
-								, coatReflected
-								, sheenReflected
 								, output );
+							auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
+								, lightSurface
+								, indirectOcclusion
+								, output );
+							auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
+								, lightSurface
+								, components.roughness
+								, indirectOcclusion
+								, lightIndirectDiffuse.w()
+								, c3d_mapBrdf
+								, output );
+							auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+								, lightIndirectDiffuse.xyz()
+								, output );
+							auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+								, ( hasDiffuseGI
+									? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
+										, length( lightIndirectDiffuse.xyz() )
+										, lightSurface.difF() )
+									: vec3( 0.0_f ) ) );
+
+							output.registerOutput( "Lighting", "Ambient", directAmbient );
+							output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
+							output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+							output.registerOutput( "Occlusion", occlusion );
+							output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
+
+							outColour = vec4( lightingModel->combine( output
+									, components
+									, incident
+									, lighting.diffuse
+									, indirectDiffuse
+									, lighting.specular
+									, lighting.scattering
+									, lighting.coatingSpecular
+									, lighting.sheen
+									, lightIndirectSpecular
+									, directAmbient
+									, indirectAmbient
+									, occlusion
+									, components.emissiveColour * components.emissiveFactor
+									, reflectedDiffuse
+									, reflectedSpecular
+									, refracted
+									, coatReflected
+									, sheenReflected )
+								, components.opacity );
+							outScattering = vec4( lighting.scattering, 1.0_f );
+
+							if ( m_deferredLighting == DeferredLightingMode::eDeferLighting )
+							{
+								outDiffuse = vec4( 0.0_f );
+							}
 						}
-
-						lightSurface.updateL( utils
-							, components.normal
-							, components.f0
-							, components );
-						auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
-							, lightSurface
-							, output );
-						auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-							, lightSurface
-							, indirectOcclusion
-							, output );
-						auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
-							, lightSurface
-							, components.roughness
-							, indirectOcclusion
-							, lightIndirectDiffuse.w()
-							, c3d_mapBrdf
-							, output );
-						auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-							, lightIndirectDiffuse.xyz()
-							, output );
-						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
-							, ( hasDiffuseGI
-								? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
-									, length( lightIndirectDiffuse.xyz() )
-									, lightSurface.difF() )
-								: vec3( 0.0_f ) ) );
-
-						output.registerOutput( "Lighting", "Ambient", directAmbient );
-						output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
-						output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( "Occlusion", occlusion );
-						output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
-
-						outColour = vec4( lightingModel->combine( output
-								, components
-								, incident
-								, lighting.diffuse
-								, indirectDiffuse
-								, lighting.specular
-								, lighting.scattering
-								, lighting.coatingSpecular
-								, lighting.sheen
-								, lightIndirectSpecular
-								, directAmbient
-								, indirectAmbient
-								, occlusion
-								, components.emissiveColour * components.emissiveFactor
-								, reflectedDiffuse
-								, reflectedSpecular
-								, refracted
-								, coatReflected
-								, sheenReflected )
-							, components.opacity );
-						outScattering = vec4( lighting.scattering, 1.0_f );
 					}
 					ELSE
 					{
 						outColour = vec4( components.colour, components.opacity );
 						outScattering = vec4( 0.0_f );
+
+						if ( m_deferredLighting == DeferredLightingMode::eDeferLighting )
+						{
+							outDiffuse = vec4( 0.0_f );
+						}
 					}
 					FI;
 				}
@@ -498,44 +570,53 @@ namespace castor3d
 				{
 					outColour = vec4( components.colour, components.opacity );
 					outScattering = vec4( 0.0_f );
-				}
 
-				if ( flags.hasFog() )
-				{
-					outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
-						, outColour
-						, in.worldPosition.xyz()
-						, c3d_cameraData.position()
-						, c3d_sceneData );
-
-					if ( m_outputScattering )
+					if ( m_deferredLighting == DeferredLightingMode::eDeferLighting )
 					{
-						outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
-							, outScattering
-							, in.worldPosition.xyz()
-							, c3d_cameraData.position()
-							, c3d_sceneData );
+						outDiffuse = vec4( 0.0_f );
 					}
 				}
 
-				auto linearDepth = writer.declLocale( "linearDepth"
-					, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() ) );
-				backgroundModel->applyVolume( in.fragCoord.xy()
-					, linearDepth
-					, vec2( c3d_cameraData.renderSize() )
-					, c3d_cameraData.depthPlanes()
-					, outColour );
-
-				if ( m_outputScattering )
+				if ( !flags.components.hasDeferredDiffuseLightingFlag
+					|| m_deferredLighting != DeferredLightingMode::eDeferLighting )
 				{
+					if ( flags.hasFog() )
+					{
+						outColour = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+							, outColour
+							, in.worldPosition.xyz()
+							, c3d_cameraData.position()
+							, c3d_sceneData );
+
+						if ( m_outputScattering )
+						{
+							outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+								, outScattering
+								, in.worldPosition.xyz()
+								, c3d_cameraData.position()
+								, c3d_sceneData );
+						}
+					}
+
+					auto linearDepth = writer.declLocale( "linearDepth"
+						, utils.lineariseDepth( in.fragCoord.z(), c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() ) );
 					backgroundModel->applyVolume( in.fragCoord.xy()
 						, linearDepth
 						, vec2( c3d_cameraData.renderSize() )
 						, c3d_cameraData.depthPlanes()
-						, outScattering );
-				}
+						, outColour );
 
-				outVelocity.xy() = in.getVelocity();
+					if ( m_outputScattering )
+					{
+						backgroundModel->applyVolume( in.fragCoord.xy()
+							, linearDepth
+							, vec2( c3d_cameraData.renderSize() )
+							, c3d_cameraData.depthPlanes()
+							, outScattering );
+					}
+
+					outVelocity.xy() = in.getVelocity();
+				}
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

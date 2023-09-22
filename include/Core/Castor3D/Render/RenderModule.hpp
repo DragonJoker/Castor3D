@@ -394,6 +394,26 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Determines what kind of lighting the pass handles.
+	*\~french
+	*\brief
+	*	Détermine le type d'éclairage géré par la passe.
+	*/
+	enum class DeferredLightingMode
+		: uint8_t
+	{
+		eIgnore = 0,
+		//!\~english	Defers lighting to a next pass.
+		//\~french		Diffère l'éclairage à une autre passe.
+		eDeferLighting,
+		//!\~english	Only processes deferred lighting.
+		//\~french		N'effectue que l'éclairage différé.
+		eDeferredOnly,
+		CU_ScopedEnumBounds( eIgnore )
+	};
+	/**
+	*\~english
+	*\brief
 	*	Filters out the opacity channels a render pass doesn't use.
 	*\~french
 	*\brief
@@ -921,6 +941,24 @@ namespace castor3d
 	C3D_API ashes::ImageView makeWholeImageView( ashes::Device const & device
 		, Texture const & texture );
 	C3D_API void printGraph( crg::RunnableGraph const & graph );
+	/**
+	*\~english
+	*\brief
+	*	Writes the storage image view descriptor to the given writes.
+	*\~french
+	*\brief
+	*	Ecrit le descripteur de la storage image dans les writes donnés.
+	*/
+	C3D_API void bindImage( VkImageView view
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
+	C3D_API void bindImage( ashes::ImageView const & view
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
+	C3D_API void bindImage( crg::RunnableGraph & graph
+		, crg::ImageViewId const & view
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index );
 	/**
 	*\~english
 	*\brief

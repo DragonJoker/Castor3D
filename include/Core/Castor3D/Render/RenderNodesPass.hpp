@@ -247,6 +247,17 @@ namespace castor3d
 			m_allowClusteredLighting = value;
 			return *this;
 		}
+		/**
+		 *\~english
+		 *\param[in]	value	The deferred lighting mode.
+		 *\~french
+		 *\param[in]	value	Le mode d'éclairage différé.
+		 */
+		RenderNodesPassDesc & deferredLightingMode( DeferredLightingMode value )
+		{
+			m_deferredLighting = value;
+			return *this;
+		}
 
 		VkExtent3D m_size;
 		CameraUbo const & m_cameraUbo;
@@ -263,6 +274,7 @@ namespace castor3d
 		crg::ru::Config m_ruConfig{ 1u, true };
 		ComponentModeFlags m_componentModeFlags{ ComponentModeFlag::eAll };
 		bool m_allowClusteredLighting{};
+		DeferredLightingMode m_deferredLighting{ DeferredLightingMode::eIgnore };
 	};
 
 	class RenderNodesPass
@@ -754,72 +766,77 @@ namespace castor3d
 			, ashes::BufferBase const & buffer )const;
 		C3D_API uint32_t getDrawCallsCount()const;
 
-		ComponentModeFlags getComponentsMask()const
+		ComponentModeFlags getComponentsMask()const noexcept
 		{
 			return m_componentsMask;
 		}
 
-		bool isOrderIndependent()const
+		bool isOrderIndependent()const noexcept
 		{
 			return m_oit;
 		}
 
-		SceneCuller & getCuller()const
+		SceneCuller & getCuller()const noexcept
 		{
 			return m_culler;
 		}
 
-		CameraUbo const & getMatrixUbo()const
+		CameraUbo const & getMatrixUbo()const noexcept
 		{
 			return m_cameraUbo;
 		}
 
-		uint32_t getPipelinesCount()const
+		uint32_t getPipelinesCount()const noexcept
 		{
 			return uint32_t( m_backPipelines.size()
 				+ m_frontPipelines.size() );
 		}
 
-		bool isDirty()const
+		bool isDirty()const noexcept
 		{
 			return m_isDirty;
 		}
 
-		bool forceTwoSided()const
+		bool forceTwoSided()const noexcept
 		{
 			return m_forceTwoSided;
 		}
 
-		RenderFilters getRenderFilters()const
+		RenderFilters getRenderFilters()const noexcept
 		{
 			return m_filters;
 		}
 
-		castor::String const & getTypeName()const
+		castor::String const & getTypeName()const noexcept
 		{
 			return m_typeName;
 		}
 
-		RenderPassTypeID getTypeID()const
+		RenderPassTypeID getTypeID()const noexcept
 		{
 			return m_typeID;
 		}
 
-		bool filtersStatic()const
+		bool filtersStatic()const noexcept
 		{
 			return handleStatic()
 				&& !*m_handleStatic;
 		}
 
-		bool filtersNonStatic()const
+		bool filtersNonStatic()const noexcept
 		{
 			return handleStatic()
 				&& *m_handleStatic;
 		}
 
-		bool handleStatic()const
+		bool handleStatic()const noexcept
 		{
 			return m_handleStatic != std::nullopt;
+		}
+
+		DeferredLightingMode getDeferredLightingMode()const noexcept
+		{
+			return m_deferredLighting;
 		}
 		/**@}*/
 
@@ -1074,8 +1091,9 @@ namespace castor3d
 		SceneUbo const * m_sceneUbo{};
 		uint32_t m_index{ 0u };
 		std::optional< bool > m_handleStatic{ std::nullopt };
-		ComponentModeFlags m_componentsMask;
-		bool m_allowClusteredLighting;
+		ComponentModeFlags m_componentsMask{};
+		bool m_allowClusteredLighting{};
+		DeferredLightingMode m_deferredLighting{};
 
 	private:
 		struct PassDescriptors

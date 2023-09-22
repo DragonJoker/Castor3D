@@ -112,6 +112,7 @@ namespace castor3d
 			, PassComponentCombine const & combine )const;
 		C3D_API bool hasOpacity( PipelineFlags const & flags )const;
 		C3D_API bool needsEnvironmentMapping( PassComponentCombineID combineID )const;
+		C3D_API bool hasDeferredLighting( PassComponentFlagsSet const & combineID )const;
 
 		PassComponentFlag getAlphaBlendingFlag()const
 		{
@@ -255,6 +256,7 @@ namespace castor3d
 			, PassComponentPluginUPtr componentPlugin );
 		void unregisterComponent( PassComponentID id );
 		void reorderBuffer();
+		void fillPassComponentCombine( PassComponentCombine & combine );
 
 		using FillMaterialType = std::function< void ( sdw::type::BaseStruct & type
 			, sdw::expr::ExprList & inits
@@ -276,6 +278,7 @@ namespace castor3d
 		PassComponentFlag m_transmissionFlag{};
 		PassComponentFlag m_parallaxOcclusionMappingOneFlag{};
 		PassComponentFlag m_parallaxOcclusionMappingRepeatFlag{};
+		PassComponentFlag m_deferredDiffuseLightingFlag{};
 	};
 }
 

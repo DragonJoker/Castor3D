@@ -295,8 +295,16 @@ namespace castor3d
 			| VK_IMAGE_USAGE_TRANSFER_DST_BIT
 			| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
 			| VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT );
+		static VkImageUsageFlags constexpr normalUsageFlags = ( VK_IMAGE_USAGE_SAMPLED_BIT
+			| VK_IMAGE_USAGE_TRANSFER_DST_BIT
+			| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+			| VK_IMAGE_USAGE_TRANSFER_SRC_BIT
+			| VK_IMAGE_USAGE_STORAGE_BIT );
 		static VkImageUsageFlags constexpr scatteringUsageFlags = ( VK_IMAGE_USAGE_TRANSFER_DST_BIT
 			| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
+			| VK_IMAGE_USAGE_SAMPLED_BIT );
+		static VkImageUsageFlags constexpr diffuseUsageFlags = ( VK_IMAGE_USAGE_TRANSFER_DST_BIT
+			| VK_IMAGE_USAGE_STORAGE_BIT
 			| VK_IMAGE_USAGE_SAMPLED_BIT );
 	}
 
@@ -339,7 +347,7 @@ namespace castor3d
 			, 1u
 			, 1u
 			, VK_FORMAT_R16G16B16A16_SFLOAT
-			, ( VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT | VK_IMAGE_USAGE_TRANSFER_SRC_BIT | VK_IMAGE_USAGE_STORAGE_BIT )
+			, rendtech::normalUsageFlags
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_scattering{ m_device
 			, m_renderTarget.getResources()
@@ -350,6 +358,16 @@ namespace castor3d
 			, 1u
 			, device.selectSmallestFormatRGBUFloatFormat( getFeatureFlags( rendtech::scatteringUsageFlags ) )
 			, rendtech::scatteringUsageFlags
+			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
+		, m_diffuse{ m_device
+			, m_renderTarget.getResources()
+			, getName() + "/Diffuse"
+			, 0u
+			, m_colour->getExtent()
+			, 1u
+			, 1u
+			, VK_FORMAT_R16G16B16A16_SFLOAT
+			, rendtech::diffuseUsageFlags | ( C3D_UseVisibilityBuffer ? VkImageUsageFlagBits{} : VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT )
 			, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK }
 		, m_cameraUbo{ m_device }
 		, m_sceneUbo{ m_device }
@@ -469,6 +487,7 @@ namespace castor3d
 		m_depth.create();
 		m_normal.create();
 		m_scattering.create();
+		m_diffuse.create();
 
 		if ( auto runnable = m_clearLpvRunnable.get() )
 		{
@@ -511,6 +530,7 @@ namespace castor3d
 		m_llpvResult.clear();
 		m_lpvResult.reset();
 		m_voxelizer.reset();
+		m_diffuse.destroy();
 		m_scattering.destroy();
 		m_normal.destroy();
 		m_depth.destroy();
@@ -783,6 +803,11 @@ namespace castor3d
 	Texture const & RenderTechnique::getSsaoResult()const
 	{
 		return m_opaque.getSsaoResult();
+	}
+
+	Texture const & RenderTechnique::getSssDiffuse()const
+	{
+		return m_opaque.getSssDiffuse();
 	}
 
 	TechniquePassVector RenderTechnique::getCustomRenderPasses()const

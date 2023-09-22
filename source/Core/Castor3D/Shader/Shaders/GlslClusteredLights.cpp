@@ -61,7 +61,6 @@ namespace castor3d::shader
 	void ClusteredLights::computeCombinedDifSpec( shader::Lights & lights
 		, LightingModel & lightingModel
 		, BlendComponents const & components
-		, BackgroundModel & background
 		, LightSurface const & lightSurface
 		, sdw::UInt const receivesShadows
 		, sdw::Vec2 const screenPosition
@@ -117,6 +116,131 @@ namespace castor3d::shader
 		}
 		ROF;
 
+		doPrintDebug( debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
+	}
+
+	void ClusteredLights::computeCombinedAllButDif( shader::Lights & lights
+		, LightingModel & lightingModel
+		, BlendComponents const & components
+		, LightSurface const & lightSurface
+		, sdw::UInt const receivesShadows
+		, sdw::Vec2 const screenPosition
+		, sdw::Float const viewDepth
+		, DebugOutput & debugOutput
+		, OutputComponents & output )
+	{
+		if ( !m_enabled )
+		{
+			return;
+		}
+
+		auto clusterIndex3D = m_writer.declLocale( "clusterIndex3D"
+			, m_clusterData->computeClusterIndex3D( screenPosition
+				, viewDepth
+				, *m_clustersLightsData ) );
+		auto clusterIndex1D = m_writer.declLocale( "clusterIndex1D"
+			, m_clusterData->computeClusterIndex1D( clusterIndex3D ) );
+
+		auto pointStartOffset = m_writer.declLocale( "pointStartOffset"
+			, ( *m_pointLightClusters )[clusterIndex1D].x() );
+		auto pointLightCount = m_writer.declLocale( "pointLightCount"
+			, ( *m_pointLightClusters )[clusterIndex1D].y() );
+
+		FOR( m_writer, sdw::UInt, i, 0_u, i < pointLightCount, ++i )
+		{
+			auto lightOffset = m_writer.declLocale( "lightOffset"
+				, lights.getDirectionalsEnd() + ( *m_pointLightIndices )[pointStartOffset + i] * castor3d::PointLight::LightDataComponents );
+			auto light = m_writer.declLocale( "point", lights.getPointLight( lightOffset ) );
+			lightingModel.computeAllButDiffuse( light
+				, components
+				, lightSurface
+				, receivesShadows
+				, output );
+		}
+		ROF;
+
+		auto spotStartOffset = m_writer.declLocale( "spotStartOffset"
+			, ( *m_spotLightClusters )[clusterIndex1D].x() );
+		auto spotLightCount = m_writer.declLocale( "spotLightCount"
+			, ( *m_spotLightClusters )[clusterIndex1D].y() );
+
+		FOR( m_writer, sdw::UInt, i, 0_u, i < spotLightCount, ++i )
+		{
+			auto lightOffset = m_writer.declLocale( "lightOffset"
+				, lights.getPointsEnd() + ( *m_spotLightIndices )[spotStartOffset + i] * castor3d::SpotLight::LightDataComponents );
+			auto light = m_writer.declLocale( "spot", lights.getSpotLight( lightOffset ) );
+			lightingModel.computeAllButDiffuse( light
+				, components
+				, lightSurface
+				, receivesShadows
+				, output );
+		}
+		ROF;
+
+		doPrintDebug( debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
+	}
+
+	void ClusteredLights::computeCombinedDif( Lights & lights
+		, LightingModel & lightingModel
+		, BlendComponents const & components
+		, LightSurface const & lightSurface
+		, sdw::UInt const receivesShadows
+		, sdw::Vec2 const screenPosition
+		, sdw::Float const viewDepth
+		, sdw::Vec3 & output )
+	{
+		if ( !m_enabled )
+		{
+			return;
+		}
+
+		auto clusterIndex3D = m_writer.declLocale( "clusterIndex3D"
+			, m_clusterData->computeClusterIndex3D( screenPosition
+				, viewDepth
+				, *m_clustersLightsData ) );
+		auto clusterIndex1D = m_writer.declLocale( "clusterIndex1D"
+			, m_clusterData->computeClusterIndex1D( clusterIndex3D ) );
+
+		auto pointStartOffset = m_writer.declLocale( "pointStartOffset"
+			, ( *m_pointLightClusters )[clusterIndex1D].x() );
+		auto pointLightCount = m_writer.declLocale( "pointLightCount"
+			, ( *m_pointLightClusters )[clusterIndex1D].y() );
+
+		FOR( m_writer, sdw::UInt, i, 0_u, i < pointLightCount, ++i )
+		{
+			auto lightOffset = m_writer.declLocale( "lightOffset"
+				, lights.getDirectionalsEnd() + ( *m_pointLightIndices )[pointStartOffset + i] * castor3d::PointLight::LightDataComponents );
+			auto light = m_writer.declLocale( "point", lights.getPointLight( lightOffset ) );
+			output += lightingModel.computeDiffuse( light
+				, components
+				, lightSurface
+				, receivesShadows );
+		}
+		ROF;
+
+		auto spotStartOffset = m_writer.declLocale( "spotStartOffset"
+			, ( *m_spotLightClusters )[clusterIndex1D].x() );
+		auto spotLightCount = m_writer.declLocale( "spotLightCount"
+			, ( *m_spotLightClusters )[clusterIndex1D].y() );
+
+		FOR( m_writer, sdw::UInt, i, 0_u, i < spotLightCount, ++i )
+		{
+			auto lightOffset = m_writer.declLocale( "lightOffset"
+				, lights.getPointsEnd() + ( *m_spotLightIndices )[spotStartOffset + i] * castor3d::SpotLight::LightDataComponents );
+			auto light = m_writer.declLocale( "spot", lights.getSpotLight( lightOffset ) );
+			output += lightingModel.computeDiffuse( light
+				, components
+				, lightSurface
+				, receivesShadows );
+		}
+		ROF;
+	}
+
+	void ClusteredLights::doPrintDebug( DebugOutput & debugOutput
+		, sdw::UVec3 const & clusterIndex3D
+		, sdw::UInt const & pointLightCount
+		, sdw::UInt const & spotLightCount )
+	{
 		debugOutput.registerOutput( "Clustered"
 			, "PointErrors"
 			, vec3( m_writer.ternary( pointLightCount > MaxLightsPerCluster, 1.0_f, 0.0_f ), 0.0_f, 0.0_f ) );

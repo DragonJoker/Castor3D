@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_SubsurfaceScatteringComponent_H___
@@ -89,6 +89,11 @@ namespace castor3d
 			PassComponentFlag getComponentFlags()const override
 			{
 				return makePassComponentFlag( getId(), eAll );
+			}
+
+			PassComponentFlag getDeferredDiffuseLightingFlag()const override
+			{
+				return makePassComponentFlag( getId(), eSubsurfaceScattering );
 			}
 
 			void filterComponentFlags( ComponentModeFlags filter
