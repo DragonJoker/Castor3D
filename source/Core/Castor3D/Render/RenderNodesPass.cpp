@@ -99,9 +99,10 @@ namespace castor3d
 
 		static size_t makeHash( PipelineFlags const & flags )
 		{
-			auto nodeType = getRenderNodeType( flags.m_programFlags );
-			return size_t( nodeType )
-				| ( size_t( flags.m_sceneFlags ) << 8u );
+			auto result = size_t( getRenderNodeType( flags.m_programFlags ) );
+			castor::hashCombine( result, size_t( flags.m_sceneFlags ) );
+			castor::hashCombine( result, flags.components.hasDeferredDiffuseLightingFlag );
+			return result;
 		}
 
 		static SceneFlags adjustSceneFlags( SceneFlags sceneFlags
@@ -173,6 +174,7 @@ namespace castor3d
 		, m_handleStatic{ desc.m_handleStatic }
 		, m_componentsMask{ desc.m_componentModeFlags }
 		, m_allowClusteredLighting{ desc.m_allowClusteredLighting }
+		, m_deferredLighting{ desc.m_deferredLighting }
 	{
 	}
 
@@ -979,6 +981,12 @@ namespace castor3d
 
 	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const
 	{
+		if ( !passFlags.hasDeferredDiffuseLightingFlag
+			&& ( m_deferredLighting == DeferredLightingMode::eDeferredOnly ) )
+		{
+			return false;
+		}
+
 		if ( passFlags.hasTransmissionFlag )
 		{
 			return !checkFlag( m_filters, RenderFilter::eTransmission );

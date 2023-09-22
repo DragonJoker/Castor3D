@@ -16,6 +16,7 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
+#include "Castor3D/Render/Opaque/SubsurfaceScatteringPass.hpp"
 #include "Castor3D/Render/Opaque/VisibilityReorderPass.hpp"
 #include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
@@ -90,13 +91,29 @@ namespace castor3d
 				, *m_pixelsXY )
 			: nullptr ) }
 		, m_ssao{ doCreateSsaoPass( progress, previous.getLastPass(), previousPasses ) }
+		, m_opaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled(); } } }
+		, m_deferredOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsDeferredOpaquePassEnabled(); } } }
 		, m_visibilityResolveDesc{ ( previous.hasVisibility()
-			? &doCreateVisibilityResolve( progress, previous, { &m_ssao->getLastPass() } )
+			? &doCreateVisibilityResolve( progress, previous, { &m_ssao->getLastPass() }, false )
 			: nullptr ) }
 		, m_opaquePassDesc{ ( m_visibilityResolveDesc
 			? m_visibilityResolveDesc
-			: &doCreateOpaquePass( progress, previous.getLastPass(), previousPasses ) ) }
-		, m_opaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled(); } } }
+			: &doCreateOpaquePass( progress, previous.getLastPass(), previousPasses, false ) ) }
+		, m_subsurfaceScattering{ castor::makeUnique< SubsurfaceScatteringPass >( m_graph
+			, *m_opaquePassDesc
+			, m_device
+			, progress
+			, *getOwner()->getRenderTarget().getScene()
+			, getOwner()->getCameraUbo()
+			, getOwner()->getDepthObj()
+			, getOwner()->getDiffuse()
+			, m_deferredOpaquePassEnabled ) }
+		, m_deferredVisibilityResolveDesc{ ( m_visibilityResolveDesc
+			? &doCreateVisibilityResolve( progress, previous, { &m_subsurfaceScattering->getLastPass() }, true )
+			: nullptr ) }
+		, m_deferredOpaquePassDesc{ ( m_deferredVisibilityResolveDesc
+			? m_deferredVisibilityResolveDesc
+			: &doCreateOpaquePass( progress, m_subsurfaceScattering->getLastPass(), previousPasses, true ) ) }
 	{
 		if ( m_visibilityPipelinesIds )
 		{
@@ -143,7 +160,7 @@ namespace castor3d
 
 	void OpaqueRendering::update( CpuUpdater & updater )
 	{
-		if ( !m_opaquePass && !m_visibilityResolve )
+		if ( !m_opaquePass )
 		{
 			return;
 		}
@@ -160,11 +177,16 @@ namespace castor3d
 		{
 			m_opaquePass->update( updater );
 		}
+
+		if ( m_deferredOpaquePass )
+		{
+			m_deferredOpaquePass->update( updater );
+		}
 	}
 
 	void OpaqueRendering::update( GpuUpdater & updater )
 	{
-		if ( !m_opaquePass && !m_visibilityResolve )
+		if ( !m_opaquePass )
 		{
 			return;
 		}
@@ -172,6 +194,11 @@ namespace castor3d
 		if ( m_opaquePass )
 		{
 			m_opaquePass->countNodes( updater.info );
+		}
+
+		if ( m_deferredOpaquePass )
+		{
+			m_deferredOpaquePass->countNodes( updater.info );
 		}
 	}
 
@@ -184,6 +211,12 @@ namespace castor3d
 		{
 			m_opaquePass->accept( visitor );
 		}
+
+		if ( m_deferredOpaquePass
+			&& m_deferredOpaquePass->areValidPassFlags( visitor.getFlags().components ) )
+		{
+			m_deferredOpaquePass->accept( visitor );
+		}
 	}
 
 	Engine * OpaqueRendering::getEngine()const
@@ -193,7 +226,7 @@ namespace castor3d
 
 	crg::FramePass const & OpaqueRendering::getLastPass()const
 	{
-		return *m_opaquePassDesc;
+		return *m_deferredOpaquePassDesc;
 	}
 
 	Texture const & OpaqueRendering::getSsaoResult()const
@@ -201,31 +234,55 @@ namespace castor3d
 		return m_ssao->getResult();
 	}
 
+	Texture const & OpaqueRendering::getSssDiffuse()const
+	{
+		return m_subsurfaceScattering->getResult();
+	}
+
 	bool OpaqueRendering::isEnabled()const
 	{
-		return m_opaquePassEnabled();
+		return m_opaquePassEnabled()
+			|| m_deferredOpaquePassEnabled();
 	}
 
 	crg::FramePass & OpaqueRendering::doCreateVisibilityResolve( ProgressBar * progress
 		, PrepassRendering const & previous
-		, crg::FramePassArray const & previousPasses )
+		, crg::FramePassArray const & previousPasses
+		, bool isDeferredLighting )
 	{
-		stepProgressBar( progress, "Creating visibility resolve pass" );
+		if ( isDeferredLighting )
+		{
+			stepProgressBar( progress, "Creating deferred visibility resolve pass" );
+		}
+		else
+		{
+			stepProgressBar( progress, "Creating visibility resolve pass" );
+		}
+
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( "Visibility"
-			, [this, targetResult, targetDepth, progress, &previous]( crg::FramePass const & framePass
+		auto & result = m_graph.createPass( isDeferredLighting ? std::string{ "DeferredVisibility" } : std::string{ "Visibility" }
+			, [this, targetResult, targetDepth, progress, isDeferredLighting, &previous]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising visibility resolve pass" );
+				if ( isDeferredLighting )
+				{
+					stepProgressBar( progress, "Initialising deferred visibility resolve pass" );
+				}
+				else
+				{
+					stepProgressBar( progress, "Initialising visibility resolve pass" );
+				}
+
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getCameraUbo()
 					, getOwner()->getSceneUbo()
 					, getOwner()->getRenderTarget().getCuller() };
 				renderPassDesc.safeBand( true )
 					.meshShading( true )
-					.allowClusteredLighting();
+					.allowClusteredLighting()
+					.deferredLightingMode( isDeferredLighting ? DeferredLightingMode::eDeferredOnly : DeferredLightingMode::eDeferLighting );
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.indirect( getOwner()->getIndirectLighting() )
@@ -237,6 +294,12 @@ namespace castor3d
 					auto resultIt = framePass.images.begin();
 					renderPassDesc.implicitAction( resultIt->view(), crg::RecordContext::clearAttachment( *resultIt ) );
 				}
+				else if ( !isDeferredLighting )
+				{
+					auto resultIt = framePass.images.begin();
+					auto diffuseIt = std::next( resultIt );
+					renderPassDesc.implicitAction( diffuseIt->view(), crg::RecordContext::clearAttachment( *diffuseIt ) );
+				}
 
 				auto res = std::make_unique< VisibilityResolvePass >( getOwner()
 					, framePass
@@ -244,22 +307,52 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, cuT( "Visibility" )
-					, cuT( "Resolve" )
+					, ( isDeferredLighting
+						? castor::String{ cuT( "DeferredResolve" ) }
+						: castor::String{ cuT( "Resolve" ) } )
 					, previous.getVisibilityPass()
 					, targetResult
 					, targetDepth
 					, m_visibilityPipelinesIds.get()
 					, std::move( renderPassDesc )
 					, std::move( techniquePassDesc ) );
-				m_opaquePass = res.get();
+
+				if ( isDeferredLighting )
+				{
+					m_deferredOpaquePass = res.get();
+				}
+				else
+				{
+					m_opaquePass = res.get();
+				}
+
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
 		result.addDependencies( previousPasses );
 		uint32_t index = 0u;
+
+		if ( m_ssao )
+		{
+			result.addDependency( m_ssao->getLastPass() );
+			result.addImplicitColourView( m_ssao->getResult().sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		}
+
 		result.addInputStorageView( previous.getVisibility().targetViewId
 			, index++ );
+
+		if ( isDeferredLighting )
+		{
+			result.addInputStorageView( getOwner()->getSssDiffuse().targetViewId
+				, index++ );
+		}
+		else
+		{
+			result.addClearableOutputStorageView( getOwner()->getDiffuse().targetViewId
+				, index++ );
+		}
 
 		if constexpr ( VisibilityResolvePass::useCompute )
 		{
@@ -282,7 +375,15 @@ namespace castor3d
 		else
 		{
 			result.addInOutColourView( targetResult );
-			result.addOutputColourView( getOwner()->getScattering().targetViewId );
+
+			if ( isDeferredLighting )
+			{
+				result.addInOutColourView( getOwner()->getScattering().targetViewId );
+			}
+			else
+			{
+				result.addOutputColourView( getOwner()->getScattering().targetViewId );
+			}
 		}
 
 		return result;
@@ -290,17 +391,34 @@ namespace castor3d
 
 	crg::FramePass & OpaqueRendering::doCreateOpaquePass( ProgressBar * progress
 		, crg::FramePass const & lastPass
-		, crg::FramePassArray const & previousPasses )
+		, crg::FramePassArray const & previousPasses
+		, bool isDeferredLighting )
 	{
-		stepProgressBar( progress, "Creating opaque pass" );
+		if ( isDeferredLighting )
+		{
+			stepProgressBar( progress, "Creating deferred opaque pass" );
+		}
+		else
+		{
+			stepProgressBar( progress, "Creating opaque pass" );
+		}
+
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
-		auto & result = m_graph.createPass( "NodesPass"
-			, [this, targetResult, targetDepth, progress]( crg::FramePass const & framePass
+		auto & result = m_graph.createPass( isDeferredLighting ? std::string{ "DeferredNodesPass" } : std::string{ "NodesPass" }
+			, [this, targetResult, targetDepth, progress, isDeferredLighting]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising opaque pass" );
+				if ( isDeferredLighting )
+				{
+					stepProgressBar( progress, "Initialising deferred opaque pass" );
+				}
+				else
+				{
+					stepProgressBar( progress, "Initialising opaque pass" );
+				}
+
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getCameraUbo()
@@ -309,11 +427,19 @@ namespace castor3d
 				renderPassDesc.safeBand( true )
 					.meshShading( true )
 					.allowClusteredLighting()
-					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags );
+					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
+					.deferredLightingMode( isDeferredLighting ? DeferredLightingMode::eDeferredOnly : DeferredLightingMode::eDeferLighting );
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.indirect( getOwner()->getIndirectLighting() )
 					.clustersConfig( getOwner()->getClustersConfig() )
 					.outputScattering();
+
+				if ( !isDeferredLighting )
+				{
+					auto diffuseIt = framePass.images.rbegin();
+					renderPassDesc.implicitAction( diffuseIt->view(), crg::RecordContext::clearAttachment( *diffuseIt ) );
+				}
+
 				auto res = std::make_unique< ForwardRenderTechniquePass >( getOwner()
 					, framePass
 					, context
@@ -325,24 +451,60 @@ namespace castor3d
 					, targetDepth
 					, std::move( renderPassDesc )
 					, std::move( techniquePassDesc ) );
-				m_opaquePass = res.get();
+
+				if ( isDeferredLighting )
+				{
+					m_deferredOpaquePass = res.get();
+				}
+				else
+				{
+					m_opaquePass = res.get();
+				}
+
 				getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
 			} );
 		result.addDependency( lastPass );
 		result.addDependencies( previousPasses );
-		result.addDependency( m_ssao->getLastPass() );
-		result.addSampledView( m_ssao->getResult().sampledViewId, 0u );
+
+		if ( m_ssao )
+		{
+			result.addDependency( m_ssao->getLastPass() );
+			result.addImplicitColourView( m_ssao->getResult().sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		}
+
+		if ( isDeferredLighting )
+		{
+			result.addInputStorageView( getOwner()->getSssDiffuse().targetViewId, 0u );
+		}
+
 		result.addInOutDepthStencilView( targetDepth );
 		result.addInOutColourView( targetResult );
-		result.addOutputColourView( getOwner()->getScattering().targetViewId );
+
+		if ( isDeferredLighting )
+		{
+			result.addInOutColourView( getOwner()->getScattering().targetViewId );
+		}
+		else
+		{
+			result.addOutputColourView( getOwner()->getScattering().targetViewId );
+			result.addOutputColourView( getOwner()->getDiffuse().targetViewId );
+		}
+
 		return result;
 	}
 
 	bool OpaqueRendering::doIsOpaquePassEnabled()const
 	{
 		CU_Require( m_opaquePass );
-		return m_opaquePass->isPassEnabled();
+		return m_opaquePass && m_opaquePass->isPassEnabled();
+	}
+
+	bool OpaqueRendering::doIsDeferredOpaquePassEnabled()const
+	{
+		CU_Require( m_deferredOpaquePass );
+		return m_deferredOpaquePass && m_deferredOpaquePass->isPassEnabled();
 	}
 }

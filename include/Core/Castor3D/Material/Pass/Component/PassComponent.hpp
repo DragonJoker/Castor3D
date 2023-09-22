@@ -684,6 +684,18 @@ namespace castor3d
 		{
 			return 0u;
 		}
+		/**
+		*\~english
+		*\return
+		*	The flags for pass that need deferred diffuse lighting (such as subsurface scattering).
+		*\~french
+		*\return
+		*	Les indicateurs pour les passes ayant besoin de l'éclairage diffus différé (tel le subsurface scattering).
+		*/
+		C3D_API virtual PassComponentFlag getDeferredDiffuseLightingFlag()const
+		{
+			return 0u;
+		}
 		/**@}*/
 		/**
 		*\name

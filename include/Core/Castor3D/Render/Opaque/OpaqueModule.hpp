@@ -29,6 +29,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Subsurface scattering pass.
+	*\~french
+	*\brief
+	*	Passe de Subsurface scattering.
+	*/
+	class SubsurfaceScatteringPass;
+	/**
+	*\~english
+	*\brief
 	*	Pass used to count materials use in a visibility buffer.
 	*\~french
 	*\brief
@@ -46,6 +55,7 @@ namespace castor3d
 	class VisibilityResolvePass;
 
 	CU_DeclareSmartPtr( castor3d, OpaqueRendering, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubsurfaceScatteringPass, C3D_API );
 	CU_DeclareSmartPtr( castor3d, VisibilityReorderPass, C3D_API );
 
 	//@}

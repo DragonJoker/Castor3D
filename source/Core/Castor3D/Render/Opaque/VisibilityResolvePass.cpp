@@ -5,6 +5,7 @@
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -89,6 +90,7 @@ namespace castor3d
 			eTexConfigs,
 			eTexAnims,
 			eInData,
+			eInOutDiffuse,
 			eMapBrdf,
 			eMaterialsCounts,
 			eMaterialsStarts,
@@ -920,8 +922,10 @@ namespace castor3d
 			, bool blend
 			, bool hasSsao
 			, ClustersConfig const & clustersConfig
-			, bool outputScattering )
+			, bool outputScattering
+			, DeferredLightingMode deferredLighting )
 		{
+			bool isDeferredLighting = ( deferredLighting == DeferredLightingMode::eDeferredOnly );
 			auto & engine = *device.renderSystem.getEngine();
 			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer;
 
@@ -963,6 +967,10 @@ namespace castor3d
 			auto c3d_imgData = writer.declStorageImg< sdw::RUImage2DRg32 >( "c3d_imgData"
 				, InOutBindings::eInData
 				, Sets::eInOuts );
+			auto c3d_imgDiffuse = writer.declStorageImg< sdw::RWImage2DRgba32 >( "c3d_imgDiffuse"
+				, InOutBindings::eInOutDiffuse
+				, Sets::eInOuts
+				, flags.components.hasDeferredDiffuseLightingFlag );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 				, InOutBindings::eMapBrdf
 				, Sets::eInOuts );
@@ -1026,6 +1034,7 @@ namespace castor3d
 					, sdw::UInt pipeline
 					, sdw::UInt primitiveId
 					, sdw::Vec4 outResult
+					, sdw::Vec4 inoutDiffuse
 					, sdw::Vec4 outScattering )
 				{
 					{
@@ -1096,7 +1105,6 @@ namespace castor3d
 						{
 							IF( writer, material.lighting )
 							{
-								shader::OutputComponents lighting{ writer, false };
 								auto surface = writer.declLocale( "surface"
 									, shader::Surface{ vec3( vec2( ipixel ), depth )
 										, baseSurface.viewPosition.xyz()
@@ -1115,110 +1123,155 @@ namespace castor3d
 									, surface.viewPosition.xyz()
 									, surface.clipPosition
 									, surface.normal );
-								lights.computeCombinedDifSpec( clusteredLights
-									, components
-									, *backgroundModel
-									, lightSurface
-									, modelData.isShadowReceiver()
-									, lightSurface.clipPosition().xy()
-									, lightSurface.viewPosition().z()
-									, output
-									, lighting );
-								auto directAmbient = writer.declLocale( "directAmbient"
-									, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
-								auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
-									, vec3( 0.0_f ) );
-								auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
-									, vec3( 0.0_f ) );
-								auto refracted = writer.declLocale( "refracted"
-									, vec3( 0.0_f ) );
-								auto coatReflected = writer.declLocale( "coatReflected"
-									, vec3( 0.0_f ) );
-								auto sheenReflected = writer.declLocale( "sheenReflected"
-									, vec3( 0.0_f ) );
 
-								if ( components.hasMember( "thicknessFactor" ) )
+								if ( flags.components.hasDeferredDiffuseLightingFlag
+									&& !isDeferredLighting )
 								{
-									components.thicknessFactor *= length( modelData.getScale() );
-								}
-
-								lightSurface.updateN( utils
-									, components.normal
-									, components.f0
-									, components );
-								reflections.computeCombined( components
-									, lightSurface
-									, *backgroundModel
-									, modelData.getEnvMapIndex()
-									, components.hasReflection
-									, components.hasRefraction
-									, components.refractionRatio
-									, reflectedDiffuse
-									, reflectedSpecular
-									, refracted
-									, coatReflected
-									, sheenReflected
-									, output );
-								lightSurface.updateL( utils
-									, components.normal
-									, components.f0
-									, components );
-								auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
-									, lightSurface
-									, output );
-								auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-									, lightSurface
-									, indirectOcclusion
-									, output );
-								auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
-									, lightSurface
-									, components.roughness
-									, indirectOcclusion
-									, lightIndirectDiffuse.w()
-									, c3d_mapBrdf
-									, output );
-								auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-									, lightIndirectDiffuse.xyz()
-									, output );
-								auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
-									, ( flags.hasDiffuseGI()
-										? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
-											, length( lightIndirectDiffuse.xyz() )
-											, lightSurface.difF() )
-										: vec3( 0.0_f ) ) );
-
-								output.registerOutput( "Lighting", "Ambient", directAmbient );
-								output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
-								output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-								output.registerOutput( "Occlusion", occlusion );
-								output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
-
-								outResult = vec4( lightingModel->combine( output
+									auto diffuse = writer.declLocale( "diffuse", vec3( 0.0_f ) );
+									lights.computeCombinedDif( clusteredLights
 										, components
-										, incident
-										, lighting.diffuse
-										, indirectDiffuse
-										, lighting.specular
-										, lighting.scattering
-										, lighting.coatingSpecular
-										, lighting.sheen
-										, lightIndirectSpecular
-										, directAmbient
-										, indirectAmbient
-										, occlusion
-										, components.emissiveColour * components.emissiveFactor
+										, *backgroundModel
+										, lightSurface
+										, modelData.isShadowReceiver()
+										, lightSurface.clipPosition().xy()
+										, lightSurface.viewPosition().z()
+										, output
+										, diffuse );
+									inoutDiffuse = vec4( diffuse, components.transmittance );
+									outScattering = vec4( 0.0_f );
+								}
+								else
+								{
+									shader::OutputComponents lighting{ writer, false };
+
+									if ( isDeferredLighting )
+									{
+										lights.computeCombinedAllButDif( clusteredLights
+											, components
+											, *backgroundModel
+											, lightSurface
+											, modelData.isShadowReceiver()
+											, lightSurface.clipPosition().xy()
+											, lightSurface.viewPosition().z()
+											, inoutDiffuse.rgb()
+											, output
+											, lighting );
+									}
+									else
+									{
+										lights.computeCombinedDifSpec( clusteredLights
+											, components
+											, *backgroundModel
+											, lightSurface
+											, modelData.isShadowReceiver()
+											, lightSurface.clipPosition().xy()
+											, lightSurface.viewPosition().z()
+											, output
+											, lighting );
+									}
+
+									auto directAmbient = writer.declLocale( "directAmbient"
+										, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
+									auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
+										, vec3( 0.0_f ) );
+									auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
+										, vec3( 0.0_f ) );
+									auto refracted = writer.declLocale( "refracted"
+										, vec3( 0.0_f ) );
+									auto coatReflected = writer.declLocale( "coatReflected"
+										, vec3( 0.0_f ) );
+									auto sheenReflected = writer.declLocale( "sheenReflected"
+										, vec3( 0.0_f ) );
+
+									if ( components.hasMember( "thicknessFactor" ) )
+									{
+										components.thicknessFactor *= length( modelData.getScale() );
+									}
+
+									lightSurface.updateN( utils
+										, components.normal
+										, components.f0
+										, components );
+									reflections.computeCombined( components
+										, lightSurface
+										, *backgroundModel
+										, modelData.getEnvMapIndex()
+										, components.hasReflection
+										, components.hasRefraction
+										, components.refractionRatio
 										, reflectedDiffuse
 										, reflectedSpecular
 										, refracted
 										, coatReflected
-										, sheenReflected )
-									, components.opacity );
-								outScattering = vec4( lighting.scattering, 1.0_f );
+										, sheenReflected
+										, output );
+									lightSurface.updateL( utils
+										, components.normal
+										, components.f0
+										, components );
+									auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
+										, lightSurface
+										, output );
+									auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
+										, lightSurface
+										, indirectOcclusion
+										, output );
+									auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
+										, lightSurface
+										, components.roughness
+										, indirectOcclusion
+										, lightIndirectDiffuse.w()
+										, c3d_mapBrdf
+										, output );
+									auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+										, lightIndirectDiffuse.xyz()
+										, output );
+									auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+										, ( flags.hasDiffuseGI()
+											? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
+												, length( lightIndirectDiffuse.xyz() )
+												, lightSurface.difF() )
+											: vec3( 0.0_f ) ) );
+
+									output.registerOutput( "Lighting", "Ambient", directAmbient );
+									output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
+									output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+									output.registerOutput( "Occlusion", occlusion );
+									output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
+
+									outResult = vec4( lightingModel->combine( output
+											, components
+											, incident
+											, lighting.diffuse
+											, indirectDiffuse
+											, lighting.specular
+											, lighting.scattering
+											, lighting.coatingSpecular
+											, lighting.sheen
+											, lightIndirectSpecular
+											, directAmbient
+											, indirectAmbient
+											, occlusion
+											, components.emissiveColour * components.emissiveFactor
+											, reflectedDiffuse
+											, reflectedSpecular
+											, refracted
+											, coatReflected
+											, sheenReflected )
+										, components.opacity );
+									outScattering = vec4( lighting.scattering, 1.0_f );
+								}
 							}
 							ELSE
 							{
 								outResult = vec4( components.colour, components.opacity );
 								outScattering = vec4( 0.0_f );
+
+								if ( flags.components.hasDeferredDiffuseLightingFlag
+									&& !isDeferredLighting )
+								{
+									inoutDiffuse = vec4( 0.0_f );
+								}
 							}
 							FI;
 						}
@@ -1226,41 +1279,51 @@ namespace castor3d
 						{
 							outResult = vec4( components.colour, components.opacity );
 							outScattering = vec4( 0.0_f );
-						}
 
-						if ( flags.hasFog() )
-						{
-							outResult = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
-								, outResult
-								, baseSurface.worldPosition.xyz()
-								, c3d_cameraData.position()
-								, c3d_sceneData );
-
-							if ( outputScattering )
+							if ( flags.components.hasDeferredDiffuseLightingFlag
+								&& !isDeferredLighting )
 							{
-								outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
-									, outScattering
-									, baseSurface.worldPosition.xyz()
-									, c3d_cameraData.position()
-									, c3d_sceneData );
+								inoutDiffuse = vec4( 0.0_f );
 							}
 						}
 
-						auto linearDepth = writer.declLocale( "linearDepth"
-							, utils.lineariseDepth( depth, c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() ) );
-						backgroundModel->applyVolume( vec2( ipixel )
-							, linearDepth
-							, vec2( c3d_cameraData.renderSize() )
-							, c3d_cameraData.depthPlanes()
-							, outResult );
-
-						if ( outputScattering )
+						if ( !flags.components.hasDeferredDiffuseLightingFlag
+							|| deferredLighting != DeferredLightingMode::eDeferLighting )
 						{
+							if ( flags.hasFog() )
+							{
+								outResult = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+									, outResult
+									, baseSurface.worldPosition.xyz()
+									, c3d_cameraData.position()
+									, c3d_sceneData );
+
+								if ( outputScattering )
+								{
+									outScattering = fog.apply( c3d_sceneData.getBackgroundColour( utils, c3d_cameraData.gamma() )
+										, outScattering
+										, baseSurface.worldPosition.xyz()
+										, c3d_cameraData.position()
+										, c3d_sceneData );
+								}
+							}
+
+							auto linearDepth = writer.declLocale( "linearDepth"
+								, utils.lineariseDepth( depth, c3d_cameraData.nearPlane(), c3d_cameraData.farPlane() ) );
 							backgroundModel->applyVolume( vec2( ipixel )
 								, linearDepth
 								, vec2( c3d_cameraData.renderSize() )
 								, c3d_cameraData.depthPlanes()
-								, outScattering );
+								, outResult );
+
+							if ( outputScattering )
+							{
+								backgroundModel->applyVolume( vec2( ipixel )
+									, linearDepth
+									, vec2( c3d_cameraData.renderSize() )
+									, c3d_cameraData.depthPlanes()
+									, outScattering );
+							}
 						}
 
 						outResult.a() = 1.0_f;
@@ -1272,6 +1335,7 @@ namespace castor3d
 				, sdw::InUInt{ writer, "pipeline" }
 				, sdw::InUInt{ writer, "primitiveId" }
 				, sdw::OutVec4{ writer, "outResult" }
+				, sdw::InOutVec4{ writer, "inoutDiffuse" }
 				, sdw::OutVec4{ writer, "outScattering" } );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
@@ -1312,12 +1376,22 @@ namespace castor3d
 							, indata.y() );
 						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
 						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
+						auto diffuse = writer.declLocale( "diffuse"
+							, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
+								? c3d_imgDiffuse.load( ipixel )
+								: vec4( 0.0_f ) ) );
 
 						IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
-							&& shade( ipixel, nodeId, pipeline, primitiveId, result, scattering ) )
+							&& shade( ipixel, nodeId, pipeline, primitiveId, result, diffuse, scattering ) )
 						{
 							c3d_imgOutResult.store( ipixel, result );
 							c3d_imgOutScattering.store( ipixel, scattering );
+
+							if ( flags.components.hasDeferredDiffuseLightingFlag
+								&& !isDeferredLighting )
+							{
+								c3d_imgDiffuse.store( ipixel, diffuse );
+							}
 						}
 						FI;
 					} );
@@ -1343,9 +1417,13 @@ namespace castor3d
 							, indata.y() );
 						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
 						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
+						auto diffuse = writer.declLocale( "diffuse"
+							, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
+								? c3d_imgDiffuse.load( pos )
+								: vec4( 0.0_f ) ) );
 
 						IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
-							|| !shade( pos, nodeId, pipeline, primitiveId, result, scattering ) )
+							|| !shade( pos, nodeId, pipeline, primitiveId, result, diffuse, scattering ) )
 						{
 							writer.demote();
 						}
@@ -1353,6 +1431,12 @@ namespace castor3d
 
 						c3d_imgOutResult = result;
 						c3d_imgOutScattering = scattering;
+
+						if ( flags.components.hasDeferredDiffuseLightingFlag
+							&& !isDeferredLighting )
+						{
+							c3d_imgDiffuse.store( pos, diffuse );
+						}
 					} );
 			}
 
@@ -1392,6 +1476,9 @@ namespace castor3d
 			bindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( InOutBindings::eTexAnims
 				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eInData
+				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+				, stages ) );
+			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eInOutDiffuse
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMapBrdf
@@ -1471,7 +1558,8 @@ namespace castor3d
 			, bool allowClusteredLighting
 			, crg::ImageViewIdArray const & targetImage
 			, Texture const * ssao
-			, IndirectLightingData const * indirectLighting )
+			, IndirectLightingData const * indirectLighting
+			, DeferredLightingMode deferredLighting )
 		{
 			auto & engine = *scene.getOwner();
 			auto & matCache = engine.getMaterialCache();
@@ -1492,6 +1580,18 @@ namespace castor3d
 			auto & visibilityPassResult = technique.getVisibilityResult();
 			writes.push_back( makeImageViewDescriptorWrite( visibilityPassResult.targetView
 				, InOutBindings::eInData ) );
+
+			if ( deferredLighting == DeferredLightingMode::eDeferredOnly )
+			{
+				writes.push_back( makeImageViewDescriptorWrite( technique.getSssDiffuse().targetView
+					, InOutBindings::eInOutDiffuse ) );
+			}
+			else
+			{
+				writes.push_back( makeImageViewDescriptorWrite( technique.getDiffuse().targetView
+					, InOutBindings::eInOutDiffuse ) );
+			}
+
 			writes.push_back( makeImageViewDescriptorWrite( engine.getRenderSystem()->getPrefilteredBrdfTexture().wholeView
 				, *engine.getRenderSystem()->getPrefilteredBrdfTexture().sampler
 				, InOutBindings::eMapBrdf ) );
@@ -1785,9 +1885,10 @@ namespace castor3d
 			, std::string const & name
 			, crg::ImageViewIdArray const & targetImage
 			, Texture const * scattering
-			, bool first )
+			, bool first
+			, DeferredLightingMode deferredLighting )
 		{
-			auto srcLayout = ( first
+			auto srcLayout = ( ( first && deferredLighting == DeferredLightingMode::eDeferLighting )
 				? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
 			auto srcStage = VkPipelineStageFlags( first
@@ -1818,11 +1919,11 @@ namespace castor3d
 				attaches.push_back( { 0u
 					, scattering->getFormat()
 					, VK_SAMPLE_COUNT_1_BIT
-					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
+					, ( first ? VK_ATTACHMENT_LOAD_OP_CLEAR : VK_ATTACHMENT_LOAD_OP_LOAD )
 					, VK_ATTACHMENT_STORE_OP_STORE
 					, VK_ATTACHMENT_LOAD_OP_DONT_CARE
 					, VK_ATTACHMENT_STORE_OP_DONT_CARE
-					, VK_IMAGE_LAYOUT_UNDEFINED
+					, ( first ? VK_IMAGE_LAYOUT_UNDEFINED : VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL )
 					, VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL } );
 			}
 
@@ -1972,6 +2073,7 @@ namespace castor3d
 		, m_targetDepth{ std::move( targetDepth ) }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
+		, m_deferredLighting{ renderPassDesc.m_deferredLighting }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
@@ -1980,13 +2082,13 @@ namespace castor3d
 				: visres::ShaderWriter< false >::getVertexProgram() ) }
 		, m_firstRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLighting ) ) }
 		, m_firstFramebuffer{ ( useCompute
 			? nullptr
 			: visres::createFrameBuffer( *m_firstRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_blendRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, false ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, false, m_deferredLighting ) ) }
 		, m_blendFramebuffer{ ( useCompute
 			? nullptr
 			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
@@ -2023,9 +2125,16 @@ namespace castor3d
 				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
 					, pipelineHash
 					, getShaderFlags() ) };
+				getEngine()->getPassComponentsRegister().registerPassComponentCombine( pipelineFlags.components );
 				pipelineFlags.m_sceneFlags = getScene().getFlags();
 				pipelineFlags.backgroundModelId = getScene().getBackground()->getModelID();
-				//pipelineHash = getPipelineBaseHash( getEngine()->getPassComponentsRegister(), pipelineFlags );
+
+				if ( m_deferredLighting == DeferredLightingMode::eDeferredOnly
+					&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag )
+				{
+					// Ignore nodes that don't support deferred lighting
+					continue;
+				}
 
 				if ( !pipelineFlags.isBillboard() )
 				{
@@ -2295,6 +2404,7 @@ namespace castor3d
 			{
 				std::vector< VkClearValue > clearValues;
 				clearValues.push_back( transparentBlackClearColor );
+				clearValues.push_back( transparentBlackClearColor );
 				auto & extent = m_parent->getNormal().getExtent();
 				VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
 					, nullptr
@@ -2459,10 +2569,10 @@ namespace castor3d
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLighting ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLighting ) };
 
 			if constexpr ( useCompute )
 			{
@@ -2502,7 +2612,7 @@ namespace castor3d
 			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
-				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting() );
+				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting(), m_deferredLighting );
 			it = pipelines.emplace( hash, std::move( result ) ).first;
 		}
 

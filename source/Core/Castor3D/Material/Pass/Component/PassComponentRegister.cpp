@@ -251,13 +251,10 @@ namespace castor3d
 		{
 			auto idx = passcompreg::addCombine( combine, m_componentCombines );
 			it = std::next( m_componentCombines.begin(), idx );
+			fillPassComponentCombine( *it );
 		}
 
-		combine.hasTransmissionFlag = hasAny( combine, m_transmissionFlag );
-		combine.hasAlphaTestFlag = hasAny( combine, m_alphaTestFlag );
-		combine.hasAlphaBlendingFlag = hasAny( combine, m_alphaBlendingFlag );
-		combine.hasParallaxOcclusionMappingOneFlag = hasAny( combine, m_parallaxOcclusionMappingOneFlag );
-		combine.hasParallaxOcclusionMappingRepeatFlag = hasAny( combine, m_parallaxOcclusionMappingRepeatFlag );
+		fillPassComponentCombine( combine );
 		return PassComponentCombineID( std::distance( m_componentCombines.begin(), it ) + 1 );
 	}
 
@@ -421,6 +418,11 @@ namespace castor3d
 		return ( hasAny( components, getPlugin( ReflectionComponent::TypeName ).getComponentFlags() )
 			|| ( hasAny( components, getPlugin( RefractionComponent::TypeName ).getComponentFlags() )
 				&& !hasAny( components, getPlugin( TransmissionComponent::TypeName ).getComponentFlags() ) ) );
+	}
+
+	bool PassComponentRegister::hasDeferredLighting( PassComponentFlagsSet const & components )const
+	{
+		return components.end() != components.find( getPlugin( SubsurfaceScatteringComponent::TypeName ).getComponentFlags() );
 	}
 
 	void PassComponentRegister::updateMapComponents( std::vector< TextureFlagConfiguration > const & texConfigs
@@ -760,6 +762,11 @@ namespace castor3d
 			m_parallaxOcclusionMappingRepeatFlag = componentDesc.plugin->getParallaxOcclusionMappingRepeatFlag();
 		}
 
+		if ( componentDesc.plugin->getDeferredDiffuseLightingFlag() != 0u )
+		{
+			m_deferredDiffuseLightingFlag = componentDesc.plugin->getDeferredDiffuseLightingFlag();
+		}
+
 		if ( auto shader = componentDesc.plugin->createMaterialShader() )
 		{
 			m_materialShaders.emplace( componentDesc.id, std::move( shader ) );
@@ -1033,5 +1040,15 @@ namespace castor3d
 					} );
 			}
 		}
+	}
+
+	void PassComponentRegister::fillPassComponentCombine( PassComponentCombine & combine )
+	{
+		combine.hasTransmissionFlag = hasAny( combine, m_transmissionFlag );
+		combine.hasAlphaTestFlag = hasAny( combine, m_alphaTestFlag );
+		combine.hasAlphaBlendingFlag = hasAny( combine, m_alphaBlendingFlag );
+		combine.hasParallaxOcclusionMappingOneFlag = hasAny( combine, m_parallaxOcclusionMappingOneFlag );
+		combine.hasParallaxOcclusionMappingRepeatFlag = hasAny( combine, m_parallaxOcclusionMappingRepeatFlag );
+		combine.hasDeferredDiffuseLightingFlag = hasAny( combine, m_deferredDiffuseLightingFlag );
 	}
 }

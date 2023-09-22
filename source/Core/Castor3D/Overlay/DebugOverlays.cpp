@@ -740,19 +740,28 @@ namespace castor3d
 					return lookup->getName() == name;
 				} );
 
-			if ( it == m_passes.end() )
+			try
 			{
-				auto index = uint32_t( m_passes.size() );
-				m_passes.emplace_back( std::make_unique< PassOverlays >( *m_engine
-					, *m_container->getContent()
-					, name
-					, m_leftOffset + 5u
-					, index ) );
-				it = std::next( m_passes.begin()
-					, ptrdiff_t( m_passes.size() - 1 ) );
-			}
+				if ( it == m_passes.end() )
+				{
+					auto index = uint32_t( m_passes.size() );
 
-			( *it )->addTimer( timer );
+						auto passOverlays = std::make_unique< PassOverlays >( *m_engine
+							, *m_container->getContent()
+							, name
+							, m_leftOffset + 5u
+							, index );
+						m_passes.push_back( std::move( passOverlays ) );
+						it = std::next( m_passes.begin()
+							, ptrdiff_t( m_passes.size() - 1 ) );
+				}
+
+				( *it )->addTimer( timer );
+			}
+			catch ( std::exception & exc )
+			{
+				log::warn << exc.what() << std::endl;
+			}
 		}
 		else
 		{
@@ -765,17 +774,24 @@ namespace castor3d
 					return lookup->getName() == current;
 				} );
 
-			if ( it == m_categories.end() )
+			try
 			{
-				m_categories.emplace_back( std::make_unique< CategoryOverlays >( current
-					, *m_engine
-					, *m_container->getContent()
-					, m_leftOffset + 5u ) );
-				it = std::next( m_categories.begin()
-					, ptrdiff_t( m_categories.size() - 1 ) );
-			}
+				if ( it == m_categories.end() )
+				{
+					m_categories.emplace_back( std::make_unique< CategoryOverlays >( current
+						, *m_engine
+						, *m_container->getContent()
+						, m_leftOffset + 5u ) );
+					it = std::next( m_categories.begin()
+						, ptrdiff_t( m_categories.size() - 1 ) );
+				}
 
-			( *it )->addTimer( name, categories, timer );
+				( *it )->addTimer( name, categories, timer );
+			}
+			catch ( std::exception & exc )
+			{
+				log::warn << exc.what() << std::endl;
+			}
 		}
 	}
 

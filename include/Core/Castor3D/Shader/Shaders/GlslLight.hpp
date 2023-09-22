@@ -489,12 +489,38 @@ namespace castor3d::shader
 			, sdw::Float const viewDepth
 			, DebugOutput & debugOutput
 			, OutputComponents & output );
+		C3D_API void computeCombinedAllButDif( ClusteredLights & clusteredLights
+			, BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, sdw::Vec2 const screenPosition
+			, sdw::Float const viewDepth
+			, sdw::Vec3 const diffuse
+			, DebugOutput & debugOutput
+			, OutputComponents & output );
+		C3D_API void computeCombinedDif( ClusteredLights & clusteredLights
+			, BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, sdw::Vec2 const screenPosition
+			, sdw::Float const viewDepth
+			, DebugOutput & debugOutput
+			, sdw::Vec3 & output );
 		//\}
 		/**
 		*\name
 		*	Diffuse only.
 		*/
 		//\{
+		C3D_API void computeCombinedAllButDif( BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, sdw::Vec3 const diffuse
+			, DebugOutput & debugOutput
+			, OutputComponents & output );
 		C3D_API void computeCombinedDif( BlendComponents const & components
 			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface

@@ -33,20 +33,42 @@ namespace castor3d::shader
 		C3D_API void computeCombinedDifSpec( Lights & lights
 			, LightingModel & lightingModel
 			, BlendComponents const & components
-			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const receivesShadows
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
 			, DebugOutput & debugOutput
 			, OutputComponents & output );
+		C3D_API void computeCombinedAllButDif( Lights & lights
+			, LightingModel & lightingModel
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, sdw::Vec2 const screenPosition
+			, sdw::Float const viewDepth
+			, DebugOutput & debugOutput
+			, OutputComponents & output );
+		C3D_API void computeCombinedDif( Lights & lights
+			, LightingModel & lightingModel
+			, BlendComponents const & components
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, sdw::Vec2 const screenPosition
+			, sdw::Float const viewDepth
+			, sdw::Vec3 & output );
 
 		bool isEnabled()const noexcept
 		{
 			return m_enabled;
 		}
 
-	protected:
+	private:
+		void doPrintDebug( DebugOutput & debugOutput
+			, sdw::UVec3 const & clusterIndex3D
+			, sdw::UInt const & pointLightCount
+			, sdw::UInt const & spotLightCount );
+
+	private:
 		sdw::ShaderWriter & m_writer;
 		bool m_enabled;
 		ClustersDataUPtr m_clusterData;

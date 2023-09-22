@@ -46,6 +46,38 @@ namespace castor3d
 {
 	//*************************************************************************************************
 
+	void bindImage( VkImageView view
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index )
+	{
+		CU_Require( view != VkImageView{} );
+		writes.push_back( { index++
+			, 0u
+			, VkDescriptorType{ VK_DESCRIPTOR_TYPE_STORAGE_IMAGE }
+			, ashes::VkDescriptorImageInfoArray{ VkDescriptorImageInfo{ VK_NULL_HANDLE
+				, view
+				, VK_IMAGE_LAYOUT_GENERAL } } } );
+	}
+
+	void bindImage( ashes::ImageView const & view
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index )
+	{
+		bindImage( VkImageView( view )
+			, writes
+			, index );
+	}
+
+	void bindImage( crg::RunnableGraph & graph
+		, crg::ImageViewId const & view
+		, ashes::WriteDescriptorSetArray & writes
+		, uint32_t & index )
+	{
+		bindImage( graph.createImageView( view )
+			, writes
+			, index );
+	}
+
 	void bindTexture( VkImageView view
 		, VkSampler sampler
 		, ashes::WriteDescriptorSetArray & writes
@@ -367,7 +399,8 @@ namespace castor3d
 	{
 		uint32_t count = 1u
 			+ ( flags.writeVelocity() ? 1u : 0u )
-			+ ( m_outputScattering ? 1u : 0u );
+			+ ( m_outputScattering ? 1u : 0u )
+			+ ( ( m_deferredLighting == DeferredLightingMode::eDeferLighting ) ? 1u : 0u );
 		return RenderNodesPass::createBlendState( flags.colourBlendMode
 			, flags.alphaBlendMode
 			, count );
