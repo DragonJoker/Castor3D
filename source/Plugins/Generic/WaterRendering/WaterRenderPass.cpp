@@ -344,7 +344,8 @@ namespace water
 	void WaterRenderPass::doFillAdditionalBindings( castor3d::PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( WaterIdx::eLightBuffer ) );
+		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
+			, WaterIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( WaterIdx::eWaterUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_VERTEX_BIT

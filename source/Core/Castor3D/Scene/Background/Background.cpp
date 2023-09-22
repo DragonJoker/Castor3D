@@ -544,21 +544,22 @@ namespace castor3d
 	}
 
 	void SceneBackground::addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
-		doAddBindings( bindings, index );
+		doAddBindings( bindings, shaderStages, index );
 
 		if ( hasIbl() )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapIrradiance
+				, shaderStages ) );	// c3d_mapIrradiance
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefiltered
+				, shaderStages ) );	// c3d_mapPrefiltered
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapPrefilteredSheen
+				, shaderStages ) );	// c3d_mapPrefilteredSheen
 		}
 	}
 

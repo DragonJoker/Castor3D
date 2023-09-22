@@ -89,6 +89,7 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const override;
 		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const override;
 		void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage

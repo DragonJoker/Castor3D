@@ -152,11 +152,12 @@ namespace castor3d
 	}
 
 	void ColourBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapBackground
+			, shaderStages ) );	// c3d_mapBackground
 	}
 
 	void ColourBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites

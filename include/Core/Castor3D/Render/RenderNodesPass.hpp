@@ -624,6 +624,7 @@ namespace castor3d
 		 */
 		C3D_API static void addShadowBindings( SceneFlags const & sceneFlags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
 		/**
 		 *\~english
@@ -638,6 +639,7 @@ namespace castor3d
 		 *\return
 		 */
 		C3D_API static void addShadowBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
 		/**
 		 *\~english
@@ -655,6 +657,7 @@ namespace castor3d
 		 */
 		C3D_API static void addBackgroundBindings( SceneBackground const & background
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
 		/**
 		 *\~english
@@ -672,6 +675,7 @@ namespace castor3d
 		 */
 		C3D_API static void addGIBindings( IndirectLightingData const & indirectLighting
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
 		/**
 		 *\~english
@@ -692,6 +696,7 @@ namespace castor3d
 		C3D_API static void addGIBindings( SceneFlags flags
 			, IndirectLightingData const & indirectLighting
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
 		/**
 		 *\~english
@@ -709,6 +714,7 @@ namespace castor3d
 		 */
 		C3D_API static void addClusteredLightingBindings( FrustumClusters const & frustumClusters
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index );
 		C3D_API static void addShadowDescriptor( RenderSystem const & renderSystem
 			, crg::RunnableGraph & graph

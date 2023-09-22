@@ -277,6 +277,7 @@ namespace castor3d
 		addGIBindings( doAdjustSceneFlags( m_scene.getFlags() )
 			, m_indirectLighting
 			, bindings
+			, VK_SHADER_STAGE_FRAGMENT_BIT
 			, index );
 	}
 
@@ -321,7 +322,8 @@ namespace castor3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		doAddPassSpecificsBindings( flags, bindings, index );
-		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
+		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
+			, index++ ) );
 
 		if ( hasSsao() )
 		{

@@ -137,10 +137,11 @@ namespace castor3d
 		m_lightBuffer->createPassBinding( pass, binding );
 	}
 
-	VkDescriptorSetLayoutBinding ObjectCacheT< Light, castor::String, LightCacheTraits >::createLayoutBinding( uint32_t index )const
+	VkDescriptorSetLayoutBinding ObjectCacheT< Light, castor::String, LightCacheTraits >::createLayoutBinding( VkShaderStageFlags stages
+		, uint32_t index )const
 	{
 		CU_Require( m_lightBuffer );
-		return m_lightBuffer->createLayoutBinding( index );
+		return m_lightBuffer->createLayoutBinding( stages, index );
 	}
 
 	ashes::WriteDescriptorSet ObjectCacheT< Light, castor::String, LightCacheTraits >::getBinding( uint32_t binding )const

@@ -282,6 +282,7 @@ namespace castor3d
 		*	L'indice de départ des bindings.
 		*/
 		C3D_API void addBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const;
 		/**
 		*\~english
@@ -481,6 +482,7 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetImage
 			, uint32_t & index )const = 0;
 		virtual void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const = 0;
 		virtual void doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites
 			, crg::ImageViewIdArray const & targetImage
