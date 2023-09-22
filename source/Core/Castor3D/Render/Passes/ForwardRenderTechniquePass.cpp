@@ -106,7 +106,8 @@ namespace castor3d
 	{
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 		doAddPassSpecificsBindings( flags, bindings, index );
-		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( index++ ) );
+		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
+			, index++ ) );
 
 		if ( hasSsao() )
 		{

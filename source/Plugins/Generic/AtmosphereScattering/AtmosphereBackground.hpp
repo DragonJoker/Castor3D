@@ -213,6 +213,7 @@ namespace atmosphere_scattering
 		*\copydoc	castor3d::SceneBackground::doAddBindings
 		*/
 		void doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, VkShaderStageFlags shaderStages
 			, uint32_t & index )const override;
 		/**
 		*\copydoc	castor3d::SceneBackground::doAddDescriptors

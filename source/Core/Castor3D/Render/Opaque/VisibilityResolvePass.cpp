@@ -1483,7 +1483,7 @@ namespace castor3d
 				, stages ) );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMapBrdf
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				, stages ) );
 
 			if constexpr ( VisibilityResolvePass::useCompute )
 			{
@@ -1504,36 +1504,40 @@ namespace castor3d
 			auto & engine = *device.renderSystem.getEngine();
 			auto index = uint32_t( InOutBindings::eCount );
 			engine.addSpecificsBuffersBindings( bindings
-				, VK_SHADER_STAGE_FRAGMENT_BIT
+				, stages
 				, index );
-			bindings.emplace_back( scene.getLightCache().createLayoutBinding( index++ ) );
+			bindings.emplace_back( scene.getLightCache().createLayoutBinding( stages
+				, index++ ) );
 
 			if ( ssao )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+					, stages ) ); // c3d_mapOcclusion
 			}
 
 			if ( technique.hasShadowBuffer() )
 			{
 				RenderNodesPass::addShadowBindings( bindings
+					, stages
 					, index );
 			}
 
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++ // c3d_mapEnvironment
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
+				, stages ) );
 
 			if ( auto background = scene.getBackground() )
 			{
 				RenderNodesPass::addBackgroundBindings( *background
 					, bindings
+					, stages
 					, index );
 			}
 
 			RenderNodesPass::addGIBindings( *indirectLighting
 				, bindings
+				, stages
 				, index );
 
 			if ( allowClusteredLighting
@@ -1541,6 +1545,7 @@ namespace castor3d
 			{
 				RenderNodesPass::addClusteredLightingBindings( *technique.getRenderTarget().getFrustumClusters()
 					, bindings
+					, stages
 					, index );
 			}
 

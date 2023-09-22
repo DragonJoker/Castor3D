@@ -124,7 +124,8 @@ namespace castor3d
 		 *\brief		Crée une attache de layout de set de descripteurs au point donné.
 		 *\param[in]	index	L'indice du point d'attache.
 		 */
-		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( uint32_t index = 0u )const;
+		C3D_API VkDescriptorSetLayoutBinding createLayoutBinding( VkShaderStageFlags stages
+			, uint32_t index )const;
 		/**
 		 *\~english
 		 *\brief		Creates the descriptor write for the lights buffer.

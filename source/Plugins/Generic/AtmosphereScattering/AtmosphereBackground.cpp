@@ -950,32 +950,33 @@ namespace atmosphere_scattering
 	}
 
 	void AtmosphereBackground::doAddBindings( ashes::VkDescriptorSetLayoutBindingArray & bindings
+		, VkShaderStageFlags shaderStages
 		, uint32_t & index )const
 	{
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// CameraBuffer
+			, shaderStages ) );	// CameraBuffer
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// AtmosphereBuffer
+			, shaderStages ) );	// AtmosphereBuffer
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// CloudsBuffer
+			, shaderStages ) );	// CloudsBuffer
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapTransmittance
+			, shaderStages ) );	// c3d_mapTransmittance
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapMultiScatter
+			, shaderStages ) );	// c3d_mapMultiScatter
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapSkyView
+			, shaderStages ) );	// c3d_mapSkyView
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapVolume
+			, shaderStages ) );	// c3d_mapVolume
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapClouds
+			, shaderStages ) );	// c3d_mapClouds
 	}
 
 	void AtmosphereBackground::doAddDescriptors( ashes::WriteDescriptorSetArray & descriptorWrites

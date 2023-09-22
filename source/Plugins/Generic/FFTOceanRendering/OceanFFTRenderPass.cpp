@@ -464,7 +464,8 @@ namespace ocean_fft
 	void OceanRenderPass::doFillAdditionalBindings( castor3d::PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( rdpass::OceanFFTIdx::eLightBuffer ) );
+		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
+			, rdpass::OceanFFTIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::OceanFFTIdx::eOceanUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_VERTEX_BIT

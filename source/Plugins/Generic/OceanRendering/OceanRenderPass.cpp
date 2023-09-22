@@ -410,7 +410,8 @@ namespace ocean
 	void OceanRenderPass::doFillAdditionalBindings( castor3d::PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( rdpass::WaveIdx::eLightBuffer ) );
+		bindings.emplace_back( getCuller().getScene().getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
+			, rdpass::WaveIdx::eLightBuffer ) );
 		bindings.emplace_back( castor3d::makeDescriptorSetLayoutBinding( rdpass::WaveIdx::eWavesUbo
 			, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 			, ( VK_SHADER_STAGE_VERTEX_BIT

@@ -120,9 +120,10 @@ namespace castor3d
 		}
 	}
 
-	VkDescriptorSetLayoutBinding LightBuffer::createLayoutBinding( uint32_t binding )const
+	VkDescriptorSetLayoutBinding LightBuffer::createLayoutBinding( VkShaderStageFlags stages
+		, uint32_t binding )const
 	{
-		return m_buffer.createLayoutBinding( binding );
+		return m_buffer.createLayoutBinding( binding, stages );
 	}
 
 	void LightBuffer::createPassBinding( crg::FramePass & pass, uint32_t binding )const
