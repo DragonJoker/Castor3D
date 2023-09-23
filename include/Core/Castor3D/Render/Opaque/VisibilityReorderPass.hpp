@@ -24,8 +24,8 @@ namespace castor3d
 			, RenderDevice const & device
 			, crg::ImageViewId const & data
 			, ShaderBuffer const & pipelinesIds
-			, ashes::Buffer< uint32_t > const & counts1
-			, ashes::Buffer< uint32_t > const & counts2
+			, ashes::Buffer< uint32_t > const & counts
+			, ashes::Buffer< castor::Point3ui > const & indirectCounts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::Buffer< castor::Point2ui > const & pixels );
 		void accept( ConfigurationVisitorBase & visitor );

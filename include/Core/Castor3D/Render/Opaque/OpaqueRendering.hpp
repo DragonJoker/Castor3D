@@ -133,7 +133,12 @@ namespace castor3d
 
 		ashes::Buffer< uint32_t > const & getMaterialsCounts()const
 		{
-			return *m_materialsCounts1;
+			return *m_materialsCounts;
+		}
+
+		ashes::Buffer< castor::Point3ui > const & getMaterialsIndirectCounts()const
+		{
+			return *m_materialsIndirectCounts;
 		}
 
 		ashes::Buffer< uint32_t > const & getMaterialsStarts()const
@@ -168,8 +173,8 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		crg::FramePassGroup & m_graph;
-		ashes::BufferPtr< uint32_t > m_materialsCounts1;
-		ashes::BufferPtr< uint32_t > m_materialsCounts2;
+		ashes::BufferPtr< uint32_t > m_materialsCounts;
+		ashes::BufferPtr< castor::Point3ui > m_materialsIndirectCounts;
 		ashes::BufferPtr< uint32_t > m_materialsStarts;
 		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
 		ShaderBufferUPtr m_visibilityPipelinesIds;

@@ -98,6 +98,7 @@ namespace castor3d
 
 		static crg::FramePass const & createPass( castor::String const & name
 			, crg::FramePassGroup & graph
+			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, crg::ImageViewId const & data
@@ -122,9 +123,15 @@ namespace castor3d
 						, result->getTimer() );
 					return result;
 				} );
-			pass.addDependency( *previousPass );
+			pass.addDependencies( previousPasses );
+
+			if ( previousPass )
+			{
+				pass.addDependency( *previousPass );
+			}
+
 			pass.addInputStorageView( data, Bindings::eData );
-			pass.addOutputStorageBuffer( { counts, "MaterialsCount" }
+			pass.addClearableOutputStorageBuffer( { counts, "MaterialsCount" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
 				, uint32_t( counts.getBuffer().getSize() ) );
@@ -141,6 +148,7 @@ namespace castor3d
 		{
 			eNodesPipelines,
 			eMaterialsCounts,
+			eIndirectCounts,
 			eMaterialsStarts,
 		};
 
@@ -153,6 +161,10 @@ namespace castor3d
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
 			MaterialsCounts.end();
+
+			auto IndirectCounts = writer.declStorageBuffer<>( "IndirectCounts", Bindings::eIndirectCounts, 0u );
+			auto indirectCounts = IndirectCounts.declMemberArray< sdw::UVec3 >( "indirectCounts" );
+			IndirectCounts.end();
 
 			auto MaterialsStarts = writer.declStorageBuffer<>( "MaterialsStarts", Bindings::eMaterialsStarts, 0u );
 			auto materialStarts = MaterialsStarts.declMemberArray< sdw::UInt >( "materialsStarts" );
@@ -174,6 +186,7 @@ namespace castor3d
 						}
 						ROF;
 
+						indirectCounts[pipelineId] = uvec3( writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 64.0_f ) ), 1u, 1u );
 						materialStarts[pipelineId] = result;
 					}
 					FI;
@@ -184,10 +197,12 @@ namespace castor3d
 
 		static crg::FramePass const & createPass( castor::String const & name
 			, crg::FramePassGroup & graph
+			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, ShaderBuffer const & pipelinesIds
-			, ashes::Buffer< uint32_t > const & counts
+			, ashes::Buffer< uint32_t > const & materialsCounts
+			, ashes::Buffer< castor::Point3ui > const & indirectCounts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
@@ -207,13 +222,23 @@ namespace castor3d
 						, result->getTimer() );
 					return result;
 				} );
-			pass.addDependency( *previousPass );
+			pass.addDependencies( previousPasses );
+
+			if ( previousPass )
+			{
+				pass.addDependency( *previousPass );
+			}
+
 			pipelinesIds.createPassBinding( pass, "NodesPipelines", Bindings::eNodesPipelines );
-			pass.addInputStorageBuffer( { counts, "MaterialsCounts" }
+			pass.addInputStorageBuffer( { materialsCounts, "MaterialsCounts" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
-				, uint32_t( counts.getBuffer().getSize() ) );
-			pass.addOutputStorageBuffer( { starts, "MaterialsStart" }
+				, uint32_t( materialsCounts.getBuffer().getSize() ) );
+			pass.addClearableOutputStorageBuffer( { indirectCounts, "IndirectCounts" }
+				, uint32_t( Bindings::eIndirectCounts )
+				, 0u
+				, uint32_t( indirectCounts.getBuffer().getSize() ) );
+			pass.addClearableOutputStorageBuffer( { starts, "MaterialsStart" }
 				, uint32_t( Bindings::eMaterialsStarts )
 				, 0u
 				, uint32_t( starts.getBuffer().getSize() ) );
@@ -229,8 +254,8 @@ namespace castor3d
 		enum Bindings : uint32_t
 		{
 			eData,
-			eMaterialsCounts,
 			eMaterialsStarts,
+			eMaterialsCounts,
 			ePixelsXY,
 		};
 
@@ -242,13 +267,13 @@ namespace castor3d
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
 
-			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
-			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
-			MaterialsCounts.end();
-
 			auto MaterialsStarts = writer.declStorageBuffer<>( "MaterialsStarts", Bindings::eMaterialsStarts, 0u );
 			auto materialsStarts = MaterialsStarts.declMemberArray< sdw::UInt >( "materialsStarts" );
 			MaterialsStarts.end();
+
+			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
+			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
+			MaterialsCounts.end();
 
 			auto PixelsXY = writer.declStorageBuffer<>( "PixelsXY", Bindings::ePixelsXY, 0u );
 			auto pixelsXY = PixelsXY.declMemberArray< sdw::UVec2 >( "pixelsXY" );
@@ -282,6 +307,7 @@ namespace castor3d
 
 		static crg::FramePass const & createPass( castor::String const & name
 			, crg::FramePassGroup & graph
+			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, crg::ImageViewId const & data
@@ -308,17 +334,23 @@ namespace castor3d
 						, result->getTimer() );
 					return result;
 				} );
-			pass.addDependency( *previousPass );
+			pass.addDependencies( previousPasses );
+
+			if ( previousPass )
+			{
+				pass.addDependency( *previousPass );
+			}
+
 			pass.addInputStorageView( data, Bindings::eData );
-			pass.addOutputStorageBuffer( { counts, "MaterialsCounts" }
-				, uint32_t( Bindings::eMaterialsCounts )
-				, 0u
-				, uint32_t( counts.getBuffer().getSize() ) );
 			pass.addInputStorageBuffer( { starts, "MaterialsStart" }
 				, uint32_t( Bindings::eMaterialsStarts )
 				, 0u
 				, uint32_t( starts.getBuffer().getSize() ) );
-			pass.addOutputStorageBuffer( { pixels, "PixelsXY" }
+			pass.addClearableOutputStorageBuffer( { counts, "MaterialsCounts" }
+				, uint32_t( Bindings::eMaterialsCounts )
+				, 0u
+				, uint32_t( counts.getBuffer().getSize() ) );
+			pass.addClearableOutputStorageBuffer( { pixels, "PixelsXY" }
 				, uint32_t( Bindings::ePixelsXY )
 				, 0u
 				, uint32_t( pixels.getBuffer().getSize() ) );
@@ -329,51 +361,16 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	class BuffersClearPass
-		: public crg::RunnablePass
-	{
-	public:
-		BuffersClearPass( crg::FramePass const & pass
-			, crg::GraphContext & context
-			, crg::RunnableGraph & graph )
-			: crg::RunnablePass{ pass
-			, context
-			, graph
-			, { []( uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( VK_PIPELINE_STAGE_TRANSFER_BIT ); } )
-				, [this]( crg::RecordContext & ctx, VkCommandBuffer cb, uint32_t i ){ doRecordInto( ctx, cb, i ); } } }
-		{
-		}
-
-	private:
-		void doRecordInto( crg::RecordContext & context
-			, VkCommandBuffer commandBuffer
-			, uint32_t index )
-		{
-			for ( auto & attach : m_pass.buffers )
-			{
-				auto buffer = attach.buffer.buffer;
-				m_context.vkCmdFillBuffer( commandBuffer
-					, buffer.buffer( index )
-					, 0u
-					, ashes::WholeSize
-					, 0u );
-			}
-		}
-	};
-
-	//*********************************************************************************************
-
 	VisibilityReorderPass::VisibilityReorderPass( crg::FramePassGroup & graph
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, crg::ImageViewId const & data
 		, ShaderBuffer const & pipelinesIds
-		, ashes::Buffer< uint32_t > const & counts1
-		, ashes::Buffer< uint32_t > const & counts2
+		, ashes::Buffer< uint32_t > const & materialsCounts
+		, ashes::Buffer< castor::Point3ui > const & indirectCounts
 		, ashes::Buffer< uint32_t > const & starts
 		, ashes::Buffer< castor::Point2ui > const & pixels )
-		: castor::Named{ "VisibilityPass" }
+		: castor::Named{ "VisibilityReorder" }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
 			, matcount::getProgram( getExtent( data ) ) }
@@ -387,54 +384,32 @@ namespace castor3d
 			, pixelxy::getProgram( getExtent( data ) ) }
 		, m_pixelsStages{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computePixelsShader ) } }
 	{
-		auto & clear = graph.createPass( getName() + "/Clear"
-			, [&device]( crg::FramePass const & framePass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				auto result = std::make_unique< BuffersClearPass >( framePass
-					, context
-					, graph );
-				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
-					, result->getTimer() );
-				return result;
-			} );
-		clear.addDependencies( previousPasses );
-		clear.addOutputStorageBuffer( { counts1, "MaterialsCounts1" }
-			, 0u
-			, 0u
-			, uint32_t( counts1.getBuffer().getSize() ) );
-		clear.addOutputStorageBuffer( { counts2, "MaterialsCounts2" }
-			, 0u
-			, 0u
-			, uint32_t( counts2.getBuffer().getSize() ) );
-		clear.addOutputStorageBuffer( { starts, "MaterialsStarts" }
-			, 0u
-			, 0u
-			, uint32_t( starts.getBuffer().getSize() ) );
-		crg::FramePass const * ppreviousPass = &clear;
-
-		m_lastPass = &matcount::createPass( getName()
+		crg::FramePass const * previousPass{};
+		m_lastPass = &matcount::createPass( getName() + cuT( "/Counts" )
 			, graph
-			, ppreviousPass
+			, previousPasses
+			, previousPass
 			, device
 			, data
-			, counts1
+			, materialsCounts
 			, m_countsStages );
-		m_lastPass = &matstart::createPass( getName()
+		m_lastPass = &matstart::createPass( getName() + cuT( "/Starts" )
 			, graph
-			, ppreviousPass
+			, previousPasses
+			, previousPass
 			, device
 			, pipelinesIds
-			, counts1
+			, materialsCounts
+			, indirectCounts
 			, starts
 			, m_startsStages );
-		m_lastPass = &pixelxy::createPass( getName()
+		m_lastPass = &pixelxy::createPass( getName() + cuT( "/Pixels" )
 			, graph
-			, ppreviousPass
+			, previousPasses
+			, previousPass
 			, device
 			, data
-			, counts2
+			, materialsCounts
 			, starts
 			, pixels
 			, m_pixelsStages );

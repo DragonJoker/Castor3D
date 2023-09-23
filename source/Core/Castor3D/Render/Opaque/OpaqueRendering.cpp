@@ -45,17 +45,17 @@ namespace castor3d
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Opaque" ) }
-		, m_materialsCounts1{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
+		, m_materialsCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
 			? makeBuffer< uint32_t >( m_device
 				, getEngine()->getMaxPassTypeCount()
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/MaterialsCounts1" )
 			: nullptr ) }
-		, m_materialsCounts2{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
-			? makeBuffer< uint32_t >( m_device
+		, m_materialsIndirectCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
+			? makeBuffer< castor::Point3ui >( m_device
 				, getEngine()->getMaxPassTypeCount()
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
+				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/MaterialsCounts2" )
 			: nullptr ) }
@@ -76,7 +76,7 @@ namespace castor3d
 		, m_visibilityPipelinesIds{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
 			? castor::makeUnique< ShaderBuffer >( *getOwner()->getEngine()
 				, m_device
-				, MaxObjectNodesCount * sizeof( uint32_t )
+				, MaxPipelines * sizeof( uint32_t )
 				, getOwner()->getName() + "/MaterialsPipelinesIds" )
 			: nullptr ) }
 		, m_visibilityReorder{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
@@ -85,8 +85,8 @@ namespace castor3d
 				, m_device
 				, previous.getVisibility().sampledViewId
 				, *m_visibilityPipelinesIds.get()
-				, *m_materialsCounts1
-				, *m_materialsCounts2
+				, * m_materialsCounts
+				, * m_materialsIndirectCounts
 				, *m_materialsStarts
 				, *m_pixelsXY )
 			: nullptr ) }
@@ -288,18 +288,9 @@ namespace castor3d
 					.indirect( getOwner()->getIndirectLighting() )
 					.clustersConfig( getOwner()->getClustersConfig() )
 					.outputScattering();
-
-				if ( !VisibilityResolvePass::useCompute )
-				{
-					auto resultIt = framePass.images.begin();
-					renderPassDesc.implicitAction( resultIt->view(), crg::RecordContext::clearAttachment( *resultIt ) );
-				}
-				else if ( !isDeferredLighting )
-				{
-					auto resultIt = framePass.images.begin();
-					auto diffuseIt = std::next( resultIt );
-					renderPassDesc.implicitAction( diffuseIt->view(), crg::RecordContext::clearAttachment( *diffuseIt ) );
-				}
+				auto resultIt = framePass.images.begin();
+				auto diffuseIt = std::next( resultIt );
+				renderPassDesc.implicitAction( diffuseIt->view(), crg::RecordContext::clearAttachment( *diffuseIt ) );
 
 				auto res = std::make_unique< VisibilityResolvePass >( getOwner()
 					, framePass
@@ -332,14 +323,6 @@ namespace castor3d
 			} );
 		result.addDependencies( previousPasses );
 		uint32_t index = 0u;
-
-		if ( m_ssao )
-		{
-			result.addDependency( m_ssao->getLastPass() );
-			result.addImplicitColourView( m_ssao->getResult().sampledViewId
-				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
-		}
-
 		result.addInputStorageView( previous.getVisibility().targetViewId
 			, index++ );
 
@@ -354,13 +337,20 @@ namespace castor3d
 				, index++ );
 		}
 
+		if ( m_ssao )
+		{
+			result.addDependency( m_ssao->getLastPass() );
+			result.addImplicitColourView( m_ssao->getResult().sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		}
+
 		if constexpr ( VisibilityResolvePass::useCompute )
 		{
 			result.addDependency( m_visibilityReorder->getLastPass() );
-			result.addInputStorageBuffer( { m_materialsCounts1->getBuffer(), "MaterialsCount" }
+			result.addInputStorageBuffer( { m_materialsCounts->getBuffer(), "MaterialsCounts" }
 				, index++
 				, 0u
-				, uint32_t( m_materialsCounts1->getBuffer().getSize() ) );
+				, uint32_t( m_materialsCounts->getBuffer().getSize() ) );
 			result.addInputStorageBuffer( { m_materialsStarts->getBuffer(), "MaterialsStarts" }
 				, index++
 				, 0u
@@ -369,8 +359,16 @@ namespace castor3d
 				, index++
 				, 0u
 				, uint32_t( m_pixelsXY->getBuffer().getSize() ) );
-			result.addOutputStorageView( targetResult, index++ );
-			result.addOutputStorageView( getOwner()->getScattering().targetViewId, index++ );
+			result.addInOutStorageView( targetResult, index++ );
+
+			if ( isDeferredLighting )
+			{
+				result.addInOutStorageView( getOwner()->getScattering().targetViewId, index++ );
+			}
+			else
+			{
+				result.addOutputStorageView( getOwner()->getScattering().targetViewId, index++ );
+			}
 		}
 		else
 		{

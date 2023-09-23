@@ -121,6 +121,6 @@ namespace castor3d::shader
 		auto brdfSamplePoint = clamp( vec2( NdotV, roughness )
 			, vec2( 0.0_f, 0.0_f )
 			, vec2( 1.0_f, 1.0_f ) );
-		return brdfMap.sample( brdfSamplePoint ).rgb();
+		return brdfMap.lod( brdfSamplePoint, 0.0_f ).rgb();
 	}
 }
