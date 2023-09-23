@@ -297,33 +297,21 @@ namespace castor3d
 	void TexturesComponent::doFillBuffer( PassBuffer & buffer )const
 	{
 		uint32_t index = 0u;
-		uint32_t nmlHgtIndex = 0u;
+		std::map< PassComponentTextureFlag, uint32_t > idsFlags;
 
 		for ( auto & unit : *getOwner() )
 		{
-			m_textures[index % MaxPassTextures] = unit->getId();
-			auto flags = unit->getFlags();
+			idsFlags.emplace( *unit->getFlags().begin(), unit->getId() );
+		}
 
-			if ( hasAny( flags, getOwner()->getNormalMapFlags() )
-				|| hasAny( flags, getOwner()->getHeightMapFlags() ) )
+		for ( auto & idFlag : idsFlags )
+		{
+			if ( index < MaxPassTextures )
 			{
-				nmlHgtIndex = index;
+				m_textures[index] = idFlag.second;
 			}
 
 			++index;
-		}
-
-		if ( nmlHgtIndex != 0 )
-		{
-			auto id = m_textures[nmlHgtIndex % MaxPassTextures];
-
-			while ( nmlHgtIndex > 0 )
-			{
-				m_textures[nmlHgtIndex % MaxPassTextures] = m_textures[( nmlHgtIndex - 1u ) % MaxPassTextures];
-				--nmlHgtIndex;
-			}
-
-			m_textures[0] = id;
 		}
 
 		auto data = buffer.getData( getOwner()->getId() );
