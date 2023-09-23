@@ -1116,11 +1116,11 @@ namespace castor3d
 		return dummy;
 	}
 
-	std::pair< uint32_t, uint32_t > RenderNodesPass::fillPipelinesIds( castor::ArrayView< uint32_t > nodesPipelinesIds )const
+	uint32_t RenderNodesPass::getMaxPipelineId()const
 	{
 		if ( m_renderQueue )
 		{
-			return m_renderQueue->getRenderNodes().fillPipelinesIds( std::move( nodesPipelinesIds ) );
+			return m_renderQueue->getRenderNodes().getMaxPipelineId();
 		}
 
 		return {};

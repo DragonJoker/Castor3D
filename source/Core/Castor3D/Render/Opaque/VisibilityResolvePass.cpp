@@ -2067,7 +2067,6 @@ namespace castor3d
 		, RenderNodesPass const & nodesPass
 		, crg::ImageViewIdArray targetImage
 		, crg::ImageViewIdArray targetDepth
-		, ShaderBuffer * pipelinesIds
 		, RenderNodesPassDesc const & renderPassDesc
 		, RenderTechniquePassDesc const & techniquePassDesc )
 		: castor::Named{ category + cuT( "/" ) + name }
@@ -2084,7 +2083,6 @@ namespace castor3d
 			, renderPassDesc.m_ruConfig }
 		, m_device{ device }
 		, m_nodesPass{ nodesPass }
-		, m_pipelinesIds{ pipelinesIds }
 		, m_cameraUbo{ renderPassDesc.m_cameraUbo }
 		, m_sceneUbo{ *renderPassDesc.m_sceneUbo }
 		, m_targetImage{ std::move( targetImage ) }
@@ -2122,13 +2120,9 @@ namespace castor3d
 
 	void VisibilityResolvePass::update( CpuUpdater & updater )
 	{
-		if ( m_pipelinesIds )
+		if constexpr ( useCompute )
 		{
-			auto [count, maxPipelineId] = m_nodesPass.fillPipelinesIds( castor::makeArrayView( reinterpret_cast< uint32_t * >( m_pipelinesIds->getPtr() )
-				, MaxPipelines ) );
-			m_pipelinesIds->setCount( count );
-			m_pipelinesIds->setSecondCount( maxPipelineId + 1u );
-			m_maxPipelineId = maxPipelineId;
+			m_maxPipelineId = m_nodesPass.getMaxPipelineId();
 		}
 
 		if ( m_commandsChanged || m_maxPipelineId.isDirty() )

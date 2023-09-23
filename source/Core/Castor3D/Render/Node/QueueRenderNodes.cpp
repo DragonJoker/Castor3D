@@ -1367,19 +1367,16 @@ namespace castor3d
 			, instance );
 	}
 
-	std::pair< uint32_t, uint32_t > QueueRenderNodes::fillPipelinesIds( castor::ArrayView< uint32_t > nodesPipelinesIds )const
+	uint32_t QueueRenderNodes::getMaxPipelineId()const
 	{
 		uint32_t maxId{};
-		uint32_t count{};
 
 		for ( auto & nodeIt : m_nodesPipelinesIds )
 		{
-			nodesPipelinesIds[nodeIt.first] = nodeIt.second;
 			maxId = std::max( nodeIt.second, maxId );
-			++count;
 		}
 
-		return { count, maxId };
+		return maxId;
 	}
 
 	void QueueRenderNodes::registerNodePipeline( uint32_t nodeId

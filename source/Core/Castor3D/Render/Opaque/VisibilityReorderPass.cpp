@@ -23,35 +23,6 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	namespace vissort
-	{
-		class NodesPipelines
-			: public shader::BufferT< sdw::UVec4 >
-		{
-		public:
-			NodesPipelines( sdw::ShaderWriter & writer
-				, uint32_t binding
-				, uint32_t set )
-				: BufferT{ writer
-					, "C3D_NodesPipelines"
-					, "c3d_nodesPipelines"
-					, binding
-					, set }
-			{
-			}
-
-			sdw::UInt getPipelinesCount()const
-			{
-				return this->getSecondCount();
-			}
-
-			sdw::UInt operator[]( sdw::UInt const & index )const
-			{
-				return getData( index / 4u )[index % 4u];
-			}
-		};
-	}
-
 	namespace matcount
 	{
 		enum Bindings : uint32_t
@@ -102,7 +73,7 @@ namespace castor3d
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, crg::ImageViewId const & data
-			, ashes::Buffer< uint32_t > const & counts
+			, ashes::Buffer< uint32_t > const & materialsCounts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto renderSize = getExtent( data );
@@ -131,10 +102,10 @@ namespace castor3d
 			}
 
 			pass.addInputStorageView( data, Bindings::eData );
-			pass.addClearableOutputStorageBuffer( { counts, "MaterialsCount" }
+			pass.addClearableOutputStorageBuffer( { materialsCounts, "MaterialsCount" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
-				, uint32_t( counts.getBuffer().getSize() ) );
+				, uint32_t( materialsCounts.getBuffer().getSize() ) );
 			previousPass = &pass;
 			return pass;
 		}
@@ -146,7 +117,6 @@ namespace castor3d
 	{
 		enum Bindings : uint32_t
 		{
-			eNodesPipelines,
 			eMaterialsCounts,
 			eIndirectCounts,
 			eMaterialsStarts,
@@ -155,8 +125,6 @@ namespace castor3d
 		static ShaderPtr getProgram()
 		{
 			sdw::ComputeWriter writer;
-
-			vissort::NodesPipelines nodesPipelines{ writer, Bindings::eNodesPipelines, 0u };
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
@@ -176,7 +144,7 @@ namespace castor3d
 					auto pipelineId = writer.declLocale( "pipelineId"
 						, in.globalInvocationID.x() );
 
-					IF( writer, pipelineId < nodesPipelines.getPipelinesCount() )
+					IF( writer, materialsCounts[pipelineId] > 0_u )
 					{
 						auto result = writer.declLocale( "result", 0_u );
 
@@ -200,7 +168,6 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
-			, ShaderBuffer const & pipelinesIds
 			, ashes::Buffer< uint32_t > const & materialsCounts
 			, ashes::Buffer< castor::Point3ui > const & indirectCounts
 			, ashes::Buffer< uint32_t > const & starts
@@ -229,7 +196,6 @@ namespace castor3d
 				pass.addDependency( *previousPass );
 			}
 
-			pipelinesIds.createPassBinding( pass, "NodesPipelines", Bindings::eNodesPipelines );
 			pass.addInputStorageBuffer( { materialsCounts, "MaterialsCounts" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
@@ -311,8 +277,8 @@ namespace castor3d
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
 			, crg::ImageViewId const & data
-			, ashes::Buffer< uint32_t > const & counts
-			, ashes::Buffer< uint32_t > const & starts
+			, ashes::Buffer< uint32_t > const & materialsCounts
+			, ashes::Buffer< uint32_t > const & materialsStarts
 			, ashes::Buffer< castor::Point2ui > const & pixels
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
@@ -342,14 +308,14 @@ namespace castor3d
 			}
 
 			pass.addInputStorageView( data, Bindings::eData );
-			pass.addInputStorageBuffer( { starts, "MaterialsStart" }
+			pass.addInputStorageBuffer( { materialsStarts, "MaterialsStart" }
 				, uint32_t( Bindings::eMaterialsStarts )
 				, 0u
-				, uint32_t( starts.getBuffer().getSize() ) );
-			pass.addClearableOutputStorageBuffer( { counts, "MaterialsCounts" }
+				, uint32_t( materialsStarts.getBuffer().getSize() ) );
+			pass.addClearableOutputStorageBuffer( { materialsCounts, "MaterialsCounts" }
 				, uint32_t( Bindings::eMaterialsCounts )
 				, 0u
-				, uint32_t( counts.getBuffer().getSize() ) );
+				, uint32_t( materialsCounts.getBuffer().getSize() ) );
 			pass.addClearableOutputStorageBuffer( { pixels, "PixelsXY" }
 				, uint32_t( Bindings::ePixelsXY )
 				, 0u
@@ -365,10 +331,9 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses
 		, RenderDevice const & device
 		, crg::ImageViewId const & data
-		, ShaderBuffer const & pipelinesIds
 		, ashes::Buffer< uint32_t > const & materialsCounts
 		, ashes::Buffer< castor::Point3ui > const & indirectCounts
-		, ashes::Buffer< uint32_t > const & starts
+		, ashes::Buffer< uint32_t > const & materialsStarts
 		, ashes::Buffer< castor::Point2ui > const & pixels )
 		: castor::Named{ "VisibilityReorder" }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
@@ -398,10 +363,9 @@ namespace castor3d
 			, previousPasses
 			, previousPass
 			, device
-			, pipelinesIds
 			, materialsCounts
 			, indirectCounts
-			, starts
+			, materialsStarts
 			, m_startsStages );
 		m_lastPass = &pixelxy::createPass( getName() + cuT( "/Pixels" )
 			, graph
@@ -410,7 +374,7 @@ namespace castor3d
 			, device
 			, data
 			, materialsCounts
-			, starts
+			, materialsStarts
 			, pixels
 			, m_pixelsStages );
 	}

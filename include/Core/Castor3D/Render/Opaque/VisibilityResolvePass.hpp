@@ -33,7 +33,6 @@ namespace castor3d
 		 *\param[in]	nodesPass			The visibility nodes pass.
 		 *\param[in]	targetImage			The image this pass renders to.
 		 *\param[in]	targetDepth			The depth image this pass renders to.
-		 *\param[in]	pipelinesIds		The pipelines IDs buffer.
 		 *\param[in]	renderPassDesc		The scene render pass construction data.
 		 *\param[in]	techniquePassDesc	The technique render pass construction data.
 		 *\~french
@@ -48,7 +47,6 @@ namespace castor3d
 		 *\param[in]	nodesPass			La passe de visibilité des noeuds.
 		 *\param[in]	targetImage			L'image dans laquelle cette passe fait son rendu.
 		 *\param[in]	targetDepth			L'image de profondeur dans laquelle cette passe fait son rendu.
-		 *\param[in]	pipelinesIds		Le buffer de pipeline IDs.
 		 *\param[in]	renderPassDesc		Les données de construction de passe de rendu de scène.
 		 *\param[in]	techniquePassDesc	Les données de construction de passe de rendu de technique.
 		 */
@@ -62,7 +60,6 @@ namespace castor3d
 			, RenderNodesPass const & nodesPass
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
-			, ShaderBuffer * pipelinesIds
 			, RenderNodesPassDesc const & renderPassDesc
 			, RenderTechniquePassDesc const & techniquePassDesc );
 		/**
@@ -190,7 +187,6 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		RenderNodesPass const & m_nodesPass;
-		ShaderBuffer * m_pipelinesIds;
 		CameraUbo const & m_cameraUbo;
 		SceneUbo const & m_sceneUbo;
 		crg::ImageViewIdArray m_targetImage;
