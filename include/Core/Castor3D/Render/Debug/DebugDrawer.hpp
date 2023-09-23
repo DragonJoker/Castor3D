@@ -89,6 +89,20 @@ namespace castor3d
 
 		struct AABBBuffer
 		{
+			AABBBuffer( VkBuffer pbuffer
+				, VkDeviceSize poffset
+				, VkDeviceSize psize
+				, VkDeviceSize pcount
+				, Pipeline * ppipeline )
+				: buffer{ pbuffer }
+				, offset{ poffset }
+				, size{ psize }
+				, count{ pcount }
+				, pipeline{ ppipeline }
+
+			{
+			}
+
 			VkBuffer buffer;
 			VkDeviceSize offset;
 			VkDeviceSize size;

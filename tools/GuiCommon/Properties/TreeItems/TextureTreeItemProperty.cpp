@@ -15,6 +15,9 @@
 
 #include <wx/propgrid/advprops.h>
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Woverloaded-virtual"
+
 namespace GuiCommon
 {
 	//*********************************************************************************************
@@ -759,3 +762,5 @@ namespace GuiCommon
 
 	//*********************************************************************************************
 }
+
+#pragma GCC diagnostic pop

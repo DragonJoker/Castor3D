@@ -103,7 +103,7 @@ namespace castor3d
 		, float range )
 	{
 		return range <= 0.0f
-			? sqrt( std::max( intensity->x, intensity->y ) ) / 0.00001f
+			? float( sqrt( std::max( intensity->x, intensity->y ) ) / 0.00001f )
 			: range;
 	}
 }

@@ -98,7 +98,7 @@ namespace castor3d
 					, 1u ) );
 		}
 
-		size_t hash( VkPipelineShaderStageCreateInfo const & shader )
+		static size_t hash( VkPipelineShaderStageCreateInfo const & shader )
 		{
 			size_t result = std::hash< VkFlags >{}( shader.flags );
 			castor::hashCombine( result, shader.module );
@@ -106,7 +106,7 @@ namespace castor3d
 			return result;
 		}
 
-		size_t hash( VkBuffer buffer
+		static size_t hash( VkBuffer buffer
 			, VkDeviceSize offset
 			, VkDeviceSize size
 			, ashes::PipelineShaderStageCreateInfoArray const & shaders )

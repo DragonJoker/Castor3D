@@ -26,7 +26,7 @@ namespace castor3d::shader
 
 	namespace lights
 	{
-		void computeAttenuationFactor( sdw::Float const & distance
+		static void computeAttenuationFactor( sdw::Float const & distance
 			, sdw::Float const & range
 			, sdw::Float & attenuation )
 		{
