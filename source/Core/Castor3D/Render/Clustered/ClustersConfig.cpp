@@ -5,13 +5,15 @@
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
+#include <CastorUtils/FileParser/ParserParameter.hpp>
+
 CU_ImplementSmartPtr( castor3d, ClustersConfig )
 
 namespace castor3d
 {
 	namespace clscfg
 	{
-		CU_ImplementAttributeParser( parserRenderTargetClusters )
+		static CU_ImplementAttributeParser( parserRenderTargetClusters )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -26,7 +28,7 @@ namespace castor3d
 		}
 		CU_EndAttributePush( CSCNSection::eClusters )
 
-		CU_ImplementAttributeParser( parserClustersEnabled )
+		static CU_ImplementAttributeParser( parserClustersEnabled )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -45,7 +47,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersUseBVH )
+		static CU_ImplementAttributeParser( parserClustersUseBVH )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -64,7 +66,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersSortLights )
+		static CU_ImplementAttributeParser( parserClustersSortLights )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -83,7 +85,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersLimitClusters )
+		static CU_ImplementAttributeParser( parserClustersLimitClusters )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -102,7 +104,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersParseDepth )
+		static CU_ImplementAttributeParser( parserClustersParseDepth )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -121,7 +123,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersSpotCone )
+		static CU_ImplementAttributeParser( parserClustersSpotCone )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -140,7 +142,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersSpotTightAABB )
+		static CU_ImplementAttributeParser( parserClustersSpotTightAABB )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -159,7 +161,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersReduceWarpOptimisation )
+		static CU_ImplementAttributeParser( parserClustersReduceWarpOptimisation )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -178,7 +180,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersBVHWarpOptimisation )
+		static CU_ImplementAttributeParser( parserClustersBVHWarpOptimisation )
 		{
 			auto & parsingContext = getParserContext( context );
 
@@ -197,7 +199,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		CU_ImplementAttributeParser( parserClustersEnd )
+		static CU_ImplementAttributeParser( parserClustersEnd )
 		{
 			auto & parsingContext = getParserContext( context );
 

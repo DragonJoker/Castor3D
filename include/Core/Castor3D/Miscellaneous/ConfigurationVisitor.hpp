@@ -46,7 +46,7 @@ namespace castor3d
 		}
 
 	protected:
-		explicit ConfigurationVisitorBase( Config config = {} )
+		explicit ConfigurationVisitorBase( Config config = { false } )
 			: config{ std::move( config ) }
 		{
 		}

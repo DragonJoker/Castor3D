@@ -508,7 +508,7 @@ namespace castor3d
 							// copy last chunk, there is no merging required but we still need data in the destination buffer
 							// note: no additional barriers as we are still doing read from source-> write to dest, so that should be good
 							u32 lastChunkOffset = chunkSize * ( numChunks - 1 ) * sizeof( u32 );
-							u32 lastChunkSize = totalValues * sizeof( u32 ) - lastChunkOffset;
+							u32 lastChunkSize = u32( totalValues * sizeof( u32 ) - lastChunkOffset );
 							auto & srcMorton = m_pass.buffers[0].buffer.buffer.buffer( index );
 							auto & srcIndices = m_pass.buffers[1].buffer.buffer.buffer( index );
 							auto & dstMorton = m_pass.buffers[0].buffer.buffer.buffer( 1u - index );
