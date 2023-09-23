@@ -73,18 +73,11 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/PixelsXY" )
 			: nullptr ) }
-		, m_visibilityPipelinesIds{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
-			? castor::makeUnique< ShaderBuffer >( *getOwner()->getEngine()
-				, m_device
-				, MaxPipelines * sizeof( uint32_t )
-				, getOwner()->getName() + "/MaterialsPipelinesIds" )
-			: nullptr ) }
 		, m_visibilityReorder{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
 			? castor::makeUnique< VisibilityReorderPass >( m_graph
 				, crg::FramePassArray{ &previous.getLastPass() }
 				, m_device
 				, previous.getVisibility().sampledViewId
-				, *m_visibilityPipelinesIds.get()
 				, * m_materialsCounts
 				, * m_materialsIndirectCounts
 				, *m_materialsStarts
@@ -119,22 +112,12 @@ namespace castor3d
 			? &doCreateVisibilityOpaquePass( progress, *m_deferredVisibilityResolveDesc, previousPasses )
 			: nullptr ) }
 	{
-		if ( m_visibilityPipelinesIds )
-		{
-			getEngine()->registerBuffer( *m_visibilityPipelinesIds );
-		}
-
 		m_graph.addGroupOutput( getOwner()->getTargetResult().front() );
 		m_graph.addGroupOutput( getOwner()->getTargetResult().back() );
 	}
 
 	OpaqueRendering::~OpaqueRendering()
 	{
-		if ( m_visibilityPipelinesIds )
-		{
-			getEngine()->unregisterBuffer( *m_visibilityPipelinesIds );
-		}
-
 		m_visibilityReorder.reset();
 	}
 
@@ -328,7 +311,6 @@ namespace castor3d
 					, previous.getVisibilityPass()
 					, targetResult
 					, targetDepth
-					, m_visibilityPipelinesIds.get()
 					, std::move( renderPassDesc )
 					, std::move( techniquePassDesc ) );
 

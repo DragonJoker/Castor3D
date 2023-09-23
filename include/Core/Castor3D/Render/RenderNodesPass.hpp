@@ -778,7 +778,7 @@ namespace castor3d
 		C3D_API NodePtrByPipelineMapT< SubmeshRenderNode > const & getSubmeshNodes()const;
 		C3D_API ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > const & getInstancedSubmeshNodes()const;
 		C3D_API NodePtrByPipelineMapT< BillboardRenderNode > const & getBillboardNodes()const;
-		C3D_API std::pair< uint32_t, uint32_t > fillPipelinesIds( castor::ArrayView< uint32_t > nodesPipelinesIds )const;
+		C3D_API uint32_t getMaxPipelineId()const;
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
 			, ashes::BufferBase const & buffer )const;

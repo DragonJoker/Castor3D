@@ -23,10 +23,9 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, RenderDevice const & device
 			, crg::ImageViewId const & data
-			, ShaderBuffer const & pipelinesIds
-			, ashes::Buffer< uint32_t > const & counts
+			, ashes::Buffer< uint32_t > const & materialsCounts
 			, ashes::Buffer< castor::Point3ui > const & indirectCounts
-			, ashes::Buffer< uint32_t > const & starts
+			, ashes::Buffer< uint32_t > const & materialsStarts
 			, ashes::Buffer< castor::Point2ui > const & pixels );
 		void accept( ConfigurationVisitorBase & visitor );
 

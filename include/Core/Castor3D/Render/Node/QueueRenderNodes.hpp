@@ -44,7 +44,7 @@ namespace castor3d
 		C3D_API BillboardRenderNode & createNode( Pass & pass
 			, BillboardBase & instance );
 
-		C3D_API std::pair< uint32_t, uint32_t > fillPipelinesIds( castor::ArrayView< uint32_t > nodesPipelinesIds )const;
+		C3D_API uint32_t getMaxPipelineId()const;
 		C3D_API void registerNodePipeline( uint32_t nodeId
 			, uint32_t pipelineId );
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;

@@ -181,7 +181,6 @@ namespace castor3d
 		ashes::BufferPtr< castor::Point3ui > m_materialsIndirectCounts;
 		ashes::BufferPtr< uint32_t > m_materialsStarts;
 		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
-		ShaderBufferUPtr m_visibilityPipelinesIds;
 		VisibilityReorderPassUPtr m_visibilityReorder;
 		SsaoPassUPtr m_ssao;
 		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
