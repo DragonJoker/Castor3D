@@ -323,6 +323,11 @@ namespace castor3d
 			return m_opaque.getMaterialsCounts();
 		}
 
+		ashes::Buffer< castor::Point3ui > const & getMaterialsIndirectCounts()const
+		{
+			return m_opaque.getMaterialsIndirectCounts();
+		}
+
 		ashes::Buffer< uint32_t > const & getMaterialsStarts()const
 		{
 			return m_opaque.getMaterialsStarts();

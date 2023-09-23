@@ -77,7 +77,7 @@ namespace castor3d::shader
 						, vec3( 1.0_f ) - fresnel );
 					kD *= 1.0_f - metalness;
 					auto irradiance = m_writer.declLocale( "irradiance"
-						, irradianceMap.sample( vec3( wsNormal.x(), -wsNormal.y(), wsNormal.z() ) ).rgb() );
+						, irradianceMap.lod( vec3( wsNormal.x(), -wsNormal.y(), wsNormal.z() ), 0.0_f ).rgb() );
 					m_writer.returnStmt( kD * irradiance * albedo );
 				}
 				, sdw::InVec3{ m_writer, "albedo" }

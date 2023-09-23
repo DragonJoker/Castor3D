@@ -26,7 +26,7 @@ namespace castor3d
 		, castor::String name
 		, crg::AccessState wantedState )
 		: m_device{ device }
-		, m_size{ ashes::getAlignedSize( size + 4 * sizeof( uint32_t )
+		, m_size{ ashes::getAlignedSize( size + shdbuf::HeaderSize
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) }
 		, m_wantedState{ std::move( wantedState ) }
 		, m_buffer{ makeBufferBase( m_device

@@ -1191,7 +1191,7 @@ namespace castor3d::shader
 							auto brdfSamplePoint = m_writer.declLocale( "brdfSamplePoint"
 								, vec2( NdotV, roughness ) );
 							auto brdf = m_writer.declLocale( "brdf"
-								, brdfMap.sample( brdfSamplePoint ) );
+								, brdfMap.lod( brdfSamplePoint, 0.0_f ) );
 							auto F = m_writer.declLocale( "F"
 								, m_utils.conductorFresnel( NdotV, f0 ) );
 							auto specularColor = m_writer.declLocale( "specularColor"

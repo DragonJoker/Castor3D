@@ -130,7 +130,7 @@ namespace castor3d
 			return m_clustersConfig;
 		}
 
-		static constexpr bool useCompute{ false };
+		static constexpr bool useCompute{ true };
 
 	private:
 		struct Pipeline
@@ -203,6 +203,7 @@ namespace castor3d
 		SubmeshPipelinesMap m_activePipelines;
 		BillboardPipelinesMap m_activeBillboardPipelines;
 		ClustersConfig const * m_clustersConfig{};
+		castor::ChangeTracked< uint32_t > m_maxPipelineId;
 	};
 }
 

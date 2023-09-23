@@ -1044,11 +1044,14 @@ namespace castor3d
 							, outResult
 							, true };
 
-						IF( writer, pipelineId != pipeline )
+						if ( !VisibilityResolvePass::useCompute )
 						{
-							writer.returnStmt( 0_b );
+							IF( writer, pipelineId != pipeline )
+							{
+								writer.returnStmt( 0_b );
+							}
+							FI;
 						}
-						FI;
 
 						auto modelData = writer.declLocale( "modelData"
 							, c3d_modelsData[nodeId - 1u] );
@@ -1358,40 +1361,45 @@ namespace castor3d
 				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
 					, [&]( sdw::UVec2 const & pos )
 					{
-						auto pixelID = writer.declLocale( "pixelID"
-							, materialsStarts[pipelineId] + pos.x() );
-						auto pixel = writer.declLocale( "pixel"
-							, pixelsXY[pixelID] );
-						auto ipixel = writer.declLocale( "ipixel"
-							, ivec2( pixel ) );
-						auto indata = writer.declLocale( "indata"
-							, c3d_imgData.load( ipixel ) );
-						auto nodePipelineId = writer.declLocale( "nodePipelineId"
-							, indata.x() );
-						auto nodeId = writer.declLocale( "nodeId"
-							, nodePipelineId >> maxPipelinesSize );
-						auto pipeline = writer.declLocale( "pipeline"
-							, nodePipelineId & maxPipelinesMask );
-						auto primitiveId = writer.declLocale( "primitiveId"
-							, indata.y() );
-						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
-						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
-						auto diffuse = writer.declLocale( "diffuse"
-							, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
-								? c3d_imgDiffuse.load( ipixel )
-								: vec4( 0.0_f ) ) );
+						auto materialsStart = writer.declLocale( "materialsStart"
+							, materialsStarts[pipelineId] );
 
-						IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
-							&& shade( ipixel, nodeId, pipeline, primitiveId, result, diffuse, scattering ) )
+						IF( writer, pos.x() < materialsCounts[pipelineId] )
 						{
-							c3d_imgOutResult.store( ipixel, result );
-							c3d_imgOutScattering.store( ipixel, scattering );
+							auto pixelIndex = writer.declLocale( "pixelIndex"
+								, materialsStart + pos.x() );
+							auto pixel = writer.declLocale( "pixel"
+								, pixelsXY[pixelIndex] );
+							auto ipixel = writer.declLocale( "ipixel"
+								, ivec2( pixel ) );
+							auto indata = writer.declLocale( "indata"
+								, c3d_imgData.load( ipixel ) );
+							auto nodePipelineId = writer.declLocale( "nodePipelineId"
+								, indata.x() );
+							auto nodeId = writer.declLocale( "nodeId"
+								, nodePipelineId >> maxPipelinesSize );
+							auto primitiveId = writer.declLocale( "primitiveId"
+								, indata.y() );
+							auto result = writer.declLocale( "result", vec4( 0.0_f ) );
+							auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
+							auto diffuse = writer.declLocale( "diffuse"
+								, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
+									? c3d_imgDiffuse.load( ipixel )
+									: vec4( 0.0_f ) ) );
 
-							if ( flags.components.hasDeferredDiffuseLightingFlag
-								&& !isDeferredLighting )
+							IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
+								&& shade( ipixel, nodeId, pipelineId, primitiveId, result, diffuse, scattering ) )
 							{
-								c3d_imgDiffuse.store( ipixel, diffuse );
+								c3d_imgOutResult.store( ipixel, result );
+								c3d_imgOutScattering.store( ipixel, scattering );
+
+								if ( flags.components.hasDeferredDiffuseLightingFlag
+									&& !isDeferredLighting )
+								{
+									c3d_imgDiffuse.store( ipixel, diffuse );
+								}
 							}
+							FI;
 						}
 						FI;
 					} );
@@ -1497,6 +1505,9 @@ namespace castor3d
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, stages ) );
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutResult
+					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
+					, stages ) );
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eOutScattering
 					, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
 					, stages ) );
 			}
@@ -1617,6 +1628,8 @@ namespace castor3d
 					, technique.getPixelXY().getCount() ) );
 				writes.push_back( makeImageViewDescriptorWrite( graph.createImageView( targetImage.front() )
 					, InOutBindings::eOutResult ) );
+				writes.push_back( makeImageViewDescriptorWrite( technique.getScattering().sampledView
+					, InOutBindings::eOutScattering ) );
 			}
 
 			auto index = uint32_t( InOutBindings::eCount );
@@ -2098,6 +2111,7 @@ namespace castor3d
 			? nullptr
 			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
+		, m_maxPipelineId{}
 	{
 	}
 
@@ -2107,18 +2121,20 @@ namespace castor3d
 
 	void VisibilityResolvePass::update( CpuUpdater & updater )
 	{
-		if ( m_commandsChanged )
+		if ( m_pipelinesIds )
 		{
+			auto [count, maxPipelineId] = m_nodesPass.fillPipelinesIds( castor::makeArrayView( reinterpret_cast< uint32_t * >( m_pipelinesIds->getPtr() )
+				, MaxPipelines ) );
+			m_pipelinesIds->setCount( count );
+			m_pipelinesIds->setSecondCount( maxPipelineId + 1u );
+			m_maxPipelineId = maxPipelineId;
+		}
+
+		if ( m_commandsChanged || m_maxPipelineId.isDirty() )
+		{
+			m_maxPipelineId.reset();
 			m_activePipelines.clear();
 			m_activeBillboardPipelines.clear();
-
-			if ( m_pipelinesIds )
-			{
-				auto [count, maxPipelineId] = m_nodesPass.fillPipelinesIds( castor::makeArrayView( reinterpret_cast< uint32_t * >( m_pipelinesIds->getPtr() )
-					, MaxObjectNodesCount ) );
-				m_pipelinesIds->setCount( count );
-				m_pipelinesIds->setSecondCount( maxPipelineId );
-			}
 
 			uint32_t index = 0u;
 
@@ -2311,7 +2327,6 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer )
 	{
 		m_drawCalls = {};
-		auto size = uint32_t( m_parent->getMaterialsStarts().getCount() );
 		std::array< VkDescriptorSet, 3u > descriptorSets{ VkDescriptorSet{}
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
@@ -2347,7 +2362,7 @@ namespace castor3d
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
-				context.getContext().vkCmdDispatch( commandBuffer, size / 64u, 1u, 1u );
+				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point4ui ) );
 				++m_drawCalls;
 				first = false;
 			}
@@ -2381,14 +2396,11 @@ namespace castor3d
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
-				context.getContext().vkCmdDispatch( commandBuffer, size / 64u, 1u, 1u );
+				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point4ui ) );
 				++m_drawCalls;
 				first = false;
 			}
 		}
-
-		context.setLayoutState( m_targetImage.front()
-			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 	}
 
 	void VisibilityResolvePass::doRecordGraphics( crg::RecordContext & context
