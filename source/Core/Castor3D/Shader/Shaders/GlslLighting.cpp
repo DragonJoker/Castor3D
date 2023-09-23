@@ -139,25 +139,28 @@ namespace castor3d::shader
 				, components.normal
 				, components.refractionRatio )
 			, ( components.hasMember( "specularFactor" )
-				|| ( components.refractionRatio != 0.0_f
-					&& components.hasRefraction != 0_u
-					&& components.hasTransmission == 0_u ) ) );
+				|| components.hasMember( "refractionRatio" )
+				|| components.hasMember( "hasRefraction" )
+				|| components.hasMember( "hasTransmission" ) ) );
 
-		IF( m_writer, components.refractionRatio != 0.0_f
-			&& components.hasRefraction != 0_u
-			&& components.hasTransmission == 0_u )
+		if ( fresnelFactor.isEnabled() )
 		{
-			reflectedDiffuse = mix( vec3( 0.0_f )
-				, reflectedDiffuse
-				, vec3( fresnelFactor ) );
-			reflectedSpecular = mix( vec3( 0.0_f )
-				, reflectedSpecular
-				, vec3( fresnelFactor ) );
-			refracted = mix( refracted
-				, vec3( 0.0_f )
-				, vec3( fresnelFactor ) );
+			IF( m_writer, components.refractionRatio != 0.0_f
+				&& components.hasRefraction != 0_u
+				&& components.hasTransmission == 0_u )
+			{
+				reflectedDiffuse = mix( vec3( 0.0_f )
+					, reflectedDiffuse
+					, vec3( fresnelFactor ) );
+				reflectedSpecular = mix( vec3( 0.0_f )
+					, reflectedSpecular
+					, vec3( fresnelFactor ) );
+				refracted = mix( refracted
+					, vec3( 0.0_f )
+					, vec3( fresnelFactor ) );
+			}
+			FI;
 		}
-		FI;
 
 		auto finalAmbient = m_writer.declLocale( "c3d_directAmbient"
 			, adjustDirectAmbient( components, directAmbient ) );

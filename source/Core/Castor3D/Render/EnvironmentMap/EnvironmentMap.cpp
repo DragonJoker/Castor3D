@@ -284,7 +284,7 @@ namespace castor3d
 			m_first = true;
 		}
 
-		if ( m_first )
+		if ( m_first || !getEngine()->areUpdateOptimisationsEnabled() )
 		{
 			uint32_t index = 0u;
 
@@ -319,7 +319,7 @@ namespace castor3d
 			return;
 		}
 
-		if ( m_first )
+		if ( m_first || !getEngine()->areUpdateOptimisationsEnabled() )
 		{
 			uint32_t index = 0u;
 
@@ -357,7 +357,7 @@ namespace castor3d
 
 		crg::SemaphoreWaitArray result = toWait;
 
-		if ( m_first )
+		if ( m_first || !getEngine()->areUpdateOptimisationsEnabled() )
 		{
 			uint32_t index = 0u;
 			// On first run, render all env maps.
