@@ -298,7 +298,7 @@ namespace castor3d::shader
 			, sdw::OutVec3
 			, sdw::OutVec3
 			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeSceneRefr;
+			, sdw::OutVec3 > m_computeSceneReflRefr;
 		sdw::Function< sdw::Void
 			, InOutBlendComponents
 			, sdw::InVec3
@@ -314,7 +314,7 @@ namespace castor3d::shader
 			, sdw::OutVec3
 			, sdw::OutVec3
 			, sdw::OutVec3
-			, sdw::OutVec3 > m_computeEnvRefr;
+			, sdw::OutVec3 > m_computeEnvReflRefr;
 		sdw::Function< sdw::Boolean
 			, sdw::InVec3
 			, sdw::InVec3

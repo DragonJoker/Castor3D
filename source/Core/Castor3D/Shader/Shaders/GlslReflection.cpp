@@ -89,9 +89,9 @@ namespace castor3d::shader
 		, sdw::Vec3 & psheenReflected
 		, DebugOutput & debugOutput )
 	{
-		if ( !m_computeSceneRefr )
+		if ( !m_computeSceneReflRefr )
 		{
-			m_computeSceneRefr = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
+			m_computeSceneReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
 				, [&]( BlendComponents components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & difF
@@ -199,7 +199,7 @@ namespace castor3d::shader
 				, sdw::OutVec3{ m_writer, "sheenReflected" } );
 		}
 
-		m_computeSceneRefr( pcomponents
+		m_computeSceneReflRefr( pcomponents
 			, pwsNormal
 			, pdifF
 			, pspcF
@@ -275,9 +275,9 @@ namespace castor3d::shader
 		, sdw::Vec3 & psheenReflected
 		, DebugOutput & debugOutput )
 	{
-		if ( !m_computeEnvRefr)
+		if ( !m_computeEnvReflRefr )
 		{
-			m_computeEnvRefr = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
+			m_computeEnvReflRefr = m_writer.implementFunction< sdw::Void >( "c3d_computeReflRefr"
 				, [&]( BlendComponents components
 					, sdw::Vec3 const & wsNormal
 					, sdw::Vec3 const & difF
@@ -368,7 +368,7 @@ namespace castor3d::shader
 				, sdw::OutVec3{ m_writer, "sheenReflected" } );
 		}
 
-		m_computeEnvRefr( pcomponents
+		m_computeEnvReflRefr( pcomponents
 			, pwsNormal
 			, pdifF
 			, pspcF
