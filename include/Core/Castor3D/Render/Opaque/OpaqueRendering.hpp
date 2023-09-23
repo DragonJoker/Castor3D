@@ -163,12 +163,16 @@ namespace castor3d
 			, PrepassRendering const & previous
 			, crg::FramePassArray const & previousPasses
 			, bool isDeferredLighting );
+		crg::FramePass & doCreateVisibilityOpaquePass( ProgressBar * progress
+			, crg::FramePass const & lastPass
+			, crg::FramePassArray const & previousPasses );
 		crg::FramePass & doCreateOpaquePass( ProgressBar * progress
 			, crg::FramePass const & lastPass
 			, crg::FramePassArray const & previousPasses
 			, bool isDeferredLighting );
 		bool doIsOpaquePassEnabled()const;
 		bool doIsDeferredOpaquePassEnabled()const;
+		bool doIsVisibilityOpaquePassEnabled()const;
 
 	private:
 		RenderDevice const & m_device;
@@ -182,6 +186,7 @@ namespace castor3d
 		SsaoPassUPtr m_ssao;
 		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
 		crg::RunnablePass::IsEnabledCallback m_deferredOpaquePassEnabled;
+		crg::RunnablePass::IsEnabledCallback m_visibilityOpaquePassEnabled;
 		crg::FramePass * m_visibilityResolveDesc{};
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
@@ -189,6 +194,8 @@ namespace castor3d
 		crg::FramePass * m_deferredVisibilityResolveDesc{};
 		crg::FramePass * m_deferredOpaquePassDesc{};
 		RenderTechniquePass * m_deferredOpaquePass{};
+		crg::FramePass * m_visibilityOpaquePassDesc{};
+		RenderTechniquePass * m_visibilityOpaquePass{};
 	};
 }
 

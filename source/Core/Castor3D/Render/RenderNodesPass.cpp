@@ -174,7 +174,8 @@ namespace castor3d
 		, m_handleStatic{ desc.m_handleStatic }
 		, m_componentsMask{ desc.m_componentModeFlags }
 		, m_allowClusteredLighting{ desc.m_allowClusteredLighting }
-		, m_deferredLighting{ desc.m_deferredLighting }
+		, m_deferredLightingFilter{ desc.m_deferredLightingFilter }
+		, m_parallaxOcclusionFilter{ desc.m_parallaxOcclusionFilter }
 	{
 	}
 
@@ -988,7 +989,19 @@ namespace castor3d
 	bool RenderNodesPass::areValidPassFlags( PassComponentCombine const & passFlags )const
 	{
 		if ( !passFlags.hasDeferredDiffuseLightingFlag
-			&& ( m_deferredLighting == DeferredLightingMode::eDeferredOnly ) )
+			&& ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly ) )
+		{
+			return false;
+		}
+
+		if ( ( passFlags.hasParallaxOcclusionMappingOneFlag || passFlags.hasParallaxOcclusionMappingRepeatFlag )
+			&& ( m_parallaxOcclusionFilter == ParallaxOcclusionFilter::eDisabled ) )
+		{
+			return false;
+		}
+
+		if ( !( passFlags.hasParallaxOcclusionMappingOneFlag || passFlags.hasParallaxOcclusionMappingRepeatFlag )
+			&& ( m_parallaxOcclusionFilter == ParallaxOcclusionFilter::eEnabled ) )
 		{
 			return false;
 		}

@@ -399,7 +399,7 @@ namespace castor3d
 	*\brief
 	*	Détermine le type d'éclairage géré par la passe.
 	*/
-	enum class DeferredLightingMode
+	enum class DeferredLightingFilter
 		: uint8_t
 	{
 		eIgnore = 0,
@@ -409,6 +409,26 @@ namespace castor3d
 		//!\~english	Only processes deferred lighting.
 		//\~french		N'effectue que l'éclairage différé.
 		eDeferredOnly,
+		CU_ScopedEnumBounds( eIgnore )
+	};
+	/**
+	*\~english
+	*\brief
+	*	Determines what kind of lighting the pass handles.
+	*\~french
+	*\brief
+	*	Détermine le type d'éclairage géré par la passe.
+	*/
+	enum class ParallaxOcclusionFilter
+		: uint8_t
+	{
+		eIgnore = 0,
+		//!\~english	Only process nodes without parallax occlusion.
+		//\~french		Prend en compte uniquement les noeuds sans parallax occlusion.
+		eDisabled,
+		//!\~english	Only process nodes with parallax occlusion.
+		//\~french		Prend en compte uniquement les noeuds avec parallax occlusion.
+		eEnabled,
 		CU_ScopedEnumBounds( eIgnore )
 	};
 	/**
