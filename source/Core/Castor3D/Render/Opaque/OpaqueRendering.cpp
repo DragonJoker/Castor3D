@@ -93,6 +93,7 @@ namespace castor3d
 		, m_ssao{ doCreateSsaoPass( progress, previous.getLastPass(), previousPasses ) }
 		, m_opaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled(); } } }
 		, m_deferredOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsDeferredOpaquePassEnabled(); } } }
+		, m_visibilityOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsVisibilityOpaquePassEnabled(); } } }
 		, m_visibilityResolveDesc{ ( previous.hasVisibility()
 			? &doCreateVisibilityResolve( progress, previous, { &m_ssao->getLastPass() }, false )
 			: nullptr ) }
@@ -114,6 +115,9 @@ namespace castor3d
 		, m_deferredOpaquePassDesc{ ( m_deferredVisibilityResolveDesc
 			? m_deferredVisibilityResolveDesc
 			: &doCreateOpaquePass( progress, m_subsurfaceScattering->getLastPass(), previousPasses, true ) ) }
+		, m_visibilityOpaquePassDesc{ ( m_deferredVisibilityResolveDesc
+			? &doCreateVisibilityOpaquePass( progress, *m_deferredVisibilityResolveDesc, previousPasses )
+			: nullptr ) }
 	{
 		if ( m_visibilityPipelinesIds )
 		{
@@ -182,6 +186,11 @@ namespace castor3d
 		{
 			m_deferredOpaquePass->update( updater );
 		}
+
+		if ( m_visibilityOpaquePass )
+		{
+			m_visibilityOpaquePass->update( updater );
+		}
 	}
 
 	void OpaqueRendering::update( GpuUpdater & updater )
@@ -200,6 +209,11 @@ namespace castor3d
 		{
 			m_deferredOpaquePass->countNodes( updater.info );
 		}
+
+		if ( m_visibilityOpaquePass )
+		{
+			m_visibilityOpaquePass->countNodes( updater.info );
+		}
 	}
 
 	void OpaqueRendering::accept( RenderTechniqueVisitor & visitor )
@@ -217,6 +231,12 @@ namespace castor3d
 		{
 			m_deferredOpaquePass->accept( visitor );
 		}
+
+		if ( m_visibilityOpaquePass
+			&& m_visibilityOpaquePass->areValidPassFlags( visitor.getFlags().components ) )
+		{
+			m_visibilityOpaquePass->accept( visitor );
+		}
 	}
 
 	Engine * OpaqueRendering::getEngine()const
@@ -226,7 +246,9 @@ namespace castor3d
 
 	crg::FramePass const & OpaqueRendering::getLastPass()const
 	{
-		return *m_deferredOpaquePassDesc;
+		return m_visibilityOpaquePassDesc
+			? *m_visibilityOpaquePassDesc
+			: *m_deferredOpaquePassDesc;
 	}
 
 	Texture const & OpaqueRendering::getSsaoResult()const
@@ -242,7 +264,8 @@ namespace castor3d
 	bool OpaqueRendering::isEnabled()const
 	{
 		return m_opaquePassEnabled()
-			|| m_deferredOpaquePassEnabled();
+			|| m_deferredOpaquePassEnabled()
+			|| m_visibilityOpaquePassEnabled();
 	}
 
 	crg::FramePass & OpaqueRendering::doCreateVisibilityResolve( ProgressBar * progress
@@ -282,7 +305,8 @@ namespace castor3d
 				renderPassDesc.safeBand( true )
 					.meshShading( true )
 					.allowClusteredLighting()
-					.deferredLightingMode( isDeferredLighting ? DeferredLightingMode::eDeferredOnly : DeferredLightingMode::eDeferLighting );
+					.parallaxOcclusionFilter( ParallaxOcclusionFilter::eDisabled )
+					.deferredLightingFilter( isDeferredLighting ? DeferredLightingFilter::eDeferredOnly : DeferredLightingFilter::eDeferLighting );
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.indirect( getOwner()->getIndirectLighting() )
@@ -387,6 +411,66 @@ namespace castor3d
 		return result;
 	}
 
+	crg::FramePass & OpaqueRendering::doCreateVisibilityOpaquePass( ProgressBar * progress
+		, crg::FramePass const & lastPass
+		, crg::FramePassArray const & previousPasses )
+	{
+		stepProgressBar( progress, "Creating visibility opaque pass" );
+		auto targetResult = getOwner()->getTargetResult();
+		auto targetDepth = getOwner()->getTargetDepth();
+		auto & result = m_graph.createPass( "PostVisibilityNodesPass"
+			, [this, targetResult, targetDepth, progress]( crg::FramePass const & framePass
+				, crg::GraphContext & context
+				, crg::RunnableGraph & runnableGraph )
+			{
+				stepProgressBar( progress, "Initialising visibility opaque pass" );
+				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
+				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
+					, getOwner()->getCameraUbo()
+					, getOwner()->getSceneUbo()
+					, getOwner()->getRenderTarget().getCuller() };
+				renderPassDesc.safeBand( true )
+					.meshShading( true )
+					.allowClusteredLighting()
+					.parallaxOcclusionFilter( ParallaxOcclusionFilter::eEnabled )
+					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags );
+				techniquePassDesc.ssao( m_ssao->getResult() )
+					.indirect( getOwner()->getIndirectLighting() )
+					.clustersConfig( getOwner()->getClustersConfig() )
+					.outputScattering();
+				auto res = std::make_unique< ForwardRenderTechniquePass >( getOwner()
+					, framePass
+					, context
+					, runnableGraph
+					, m_device
+					, ForwardRenderTechniquePass::Type
+					, cuT( "Default" )
+					, targetResult
+					, targetDepth
+					, std::move( renderPassDesc )
+					, std::move( techniquePassDesc ) );
+				m_visibilityOpaquePass = res.get();
+				getEngine()->registerTimer( framePass.getFullName()
+					, res->getTimer() );
+				return res;
+			} );
+		result.addDependency( lastPass );
+		result.addDependencies( previousPasses );
+
+		if ( m_ssao )
+		{
+			result.addDependency( m_ssao->getLastPass() );
+			result.addImplicitColourView( m_ssao->getResult().sampledViewId
+				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		}
+
+		result.addInOutDepthStencilView( targetDepth );
+		result.addInOutColourView( targetResult );
+		result.addInOutColourView( getOwner()->getScattering().targetViewId );
+
+		return result;
+	}
+
 	crg::FramePass & OpaqueRendering::doCreateOpaquePass( ProgressBar * progress
 		, crg::FramePass const & lastPass
 		, crg::FramePassArray const & previousPasses
@@ -426,7 +510,7 @@ namespace castor3d
 					.meshShading( true )
 					.allowClusteredLighting()
 					.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
-					.deferredLightingMode( isDeferredLighting ? DeferredLightingMode::eDeferredOnly : DeferredLightingMode::eDeferLighting );
+					.deferredLightingFilter( isDeferredLighting ? DeferredLightingFilter::eDeferredOnly : DeferredLightingFilter::eDeferLighting );
 				techniquePassDesc.ssao( m_ssao->getResult() )
 					.indirect( getOwner()->getIndirectLighting() )
 					.clustersConfig( getOwner()->getClustersConfig() )
@@ -504,5 +588,10 @@ namespace castor3d
 	{
 		CU_Require( m_deferredOpaquePass );
 		return m_deferredOpaquePass && m_deferredOpaquePass->isPassEnabled();
+	}
+
+	bool OpaqueRendering::doIsVisibilityOpaquePassEnabled()const
+	{
+		return m_visibilityOpaquePass && m_visibilityOpaquePass->isPassEnabled();
 	}
 }

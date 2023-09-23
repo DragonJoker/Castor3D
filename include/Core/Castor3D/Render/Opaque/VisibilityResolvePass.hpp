@@ -109,11 +109,18 @@ namespace castor3d
 		 */
 		C3D_API bool isPassEnabled()const override;
 		/**
-		 *\copydoc	castor3d::RenderNodesPass::getDeferredLightingMode
+		 *\copydoc	castor3d::RenderNodesPass::getDeferredLightingFilter
 		 */
-		DeferredLightingMode getDeferredLightingMode()const noexcept
+		DeferredLightingFilter getDeferredLightingFilter()const noexcept
 		{
-			return m_deferredLighting;
+			return m_deferredLightingFilter;
+		}
+		/**
+		 *\copydoc	castor3d::RenderNodesPass::getParallaxOcclusionFilter
+		 */
+		ParallaxOcclusionFilter getParallaxOcclusionFilter()const noexcept
+		{
+			return m_parallaxOcclusionFilter;
 		}
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::getComponentsMask
@@ -190,7 +197,8 @@ namespace castor3d
 		crg::ImageViewIdArray m_targetDepth;
 		SsaoConfig const * m_ssaoConfig{};
 		Texture const * m_ssao{};
-		DeferredLightingMode m_deferredLighting;
+		DeferredLightingFilter m_deferredLightingFilter;
+		ParallaxOcclusionFilter m_parallaxOcclusionFilter;
 		PassSortNodesSignalConnection m_onNodesPassSort;
 		bool m_commandsChanged{};
 		ShaderModule m_vertexShader;

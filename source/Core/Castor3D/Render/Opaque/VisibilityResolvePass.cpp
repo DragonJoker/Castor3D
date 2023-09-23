@@ -923,9 +923,9 @@ namespace castor3d
 			, bool hasSsao
 			, ClustersConfig const & clustersConfig
 			, bool outputScattering
-			, DeferredLightingMode deferredLighting )
+			, DeferredLightingFilter deferredLighting )
 		{
-			bool isDeferredLighting = ( deferredLighting == DeferredLightingMode::eDeferredOnly );
+			bool isDeferredLighting = ( deferredLighting == DeferredLightingFilter::eDeferredOnly );
 			auto & engine = *device.renderSystem.getEngine();
 			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer;
 
@@ -1291,7 +1291,7 @@ namespace castor3d
 						}
 
 						if ( !flags.components.hasDeferredDiffuseLightingFlag
-							|| deferredLighting != DeferredLightingMode::eDeferLighting )
+							|| deferredLighting != DeferredLightingFilter::eDeferLighting )
 						{
 							if ( flags.hasFog() )
 							{
@@ -1575,7 +1575,7 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetImage
 			, Texture const * ssao
 			, IndirectLightingData const * indirectLighting
-			, DeferredLightingMode deferredLighting )
+			, DeferredLightingFilter deferredLighting )
 		{
 			auto & engine = *scene.getOwner();
 			auto & matCache = engine.getMaterialCache();
@@ -1597,7 +1597,7 @@ namespace castor3d
 			writes.push_back( makeImageViewDescriptorWrite( visibilityPassResult.targetView
 				, InOutBindings::eInData ) );
 
-			if ( deferredLighting == DeferredLightingMode::eDeferredOnly )
+			if ( deferredLighting == DeferredLightingFilter::eDeferredOnly )
 			{
 				writes.push_back( makeImageViewDescriptorWrite( technique.getSssDiffuse().targetView
 					, InOutBindings::eInOutDiffuse ) );
@@ -1904,9 +1904,9 @@ namespace castor3d
 			, crg::ImageViewIdArray const & targetImage
 			, Texture const * scattering
 			, bool first
-			, DeferredLightingMode deferredLighting )
+			, DeferredLightingFilter deferredLighting )
 		{
-			auto srcLayout = ( ( first && deferredLighting == DeferredLightingMode::eDeferLighting )
+			auto srcLayout = ( ( first && deferredLighting == DeferredLightingFilter::eDeferLighting )
 				? VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 				: VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL );
 			auto srcStage = VkPipelineStageFlags( first
@@ -2091,7 +2091,8 @@ namespace castor3d
 		, m_targetDepth{ std::move( targetDepth ) }
 		, m_ssaoConfig{ techniquePassDesc.m_ssaoConfig }
 		, m_ssao{ techniquePassDesc.m_ssao }
-		, m_deferredLighting{ renderPassDesc.m_deferredLighting }
+		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }
+		, m_parallaxOcclusionFilter{ renderPassDesc.m_parallaxOcclusionFilter }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
@@ -2100,13 +2101,13 @@ namespace castor3d
 				: visres::ShaderWriter< false >::getVertexProgram() ) }
 		, m_firstRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLighting ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
 		, m_firstFramebuffer{ ( useCompute
 			? nullptr
 			: visres::createFrameBuffer( *m_firstRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_blendRenderPass{ ( useCompute
 			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, false, m_deferredLighting ) ) }
+			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, false, m_deferredLightingFilter ) ) }
 		, m_blendFramebuffer{ ( useCompute
 			? nullptr
 			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
@@ -2150,8 +2151,10 @@ namespace castor3d
 				pipelineFlags.m_sceneFlags = getScene().getFlags();
 				pipelineFlags.backgroundModelId = getScene().getBackground()->getModelID();
 
-				if ( m_deferredLighting == DeferredLightingMode::eDeferredOnly
-					&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag )
+				if ( pipelineFlags.components.hasParallaxOcclusionMappingOneFlag
+					|| pipelineFlags.components.hasParallaxOcclusionMappingRepeatFlag
+					|| ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly
+						&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag ) )
 				{
 					// Ignore nodes that don't support deferred lighting
 					continue;
@@ -2586,10 +2589,10 @@ namespace castor3d
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLighting ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLighting ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter ) };
 
 			if constexpr ( useCompute )
 			{
@@ -2629,7 +2632,7 @@ namespace castor3d
 			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
-				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting(), m_deferredLighting );
+				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting(), m_deferredLightingFilter );
 			it = pipelines.emplace( hash, std::move( result ) ).first;
 		}
 

@@ -138,7 +138,7 @@ namespace castor3d
 		}
 
 		if ( flags.components.hasDeferredDiffuseLightingFlag
-			&& m_deferredLighting == DeferredLightingMode::eDeferredOnly )
+			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_STORAGE_IMAGE
@@ -186,7 +186,7 @@ namespace castor3d
 		}
 
 		if ( flags.components.hasDeferredDiffuseLightingFlag
-			&& m_deferredLighting == DeferredLightingMode::eDeferredOnly )
+			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 		{
 			bindImage( getTechnique().getSssDiffuse().targetView
 				, descriptorWrites
@@ -282,9 +282,9 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, m_mippedColour != nullptr );
 		auto c3d_imgDiffuse = writer.declStorageImg< sdw::RImage2DRgba32 >( "c3d_imgDiffuse"
-			, ( ( flags.components.hasDeferredDiffuseLightingFlag && ( m_deferredLighting == DeferredLightingMode::eDeferredOnly ) ) ? index++ : 0u )
+			, ( ( flags.components.hasDeferredDiffuseLightingFlag && ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly ) ) ? index++ : 0u )
 			, RenderPipeline::eBuffers
-			, flags.components.hasDeferredDiffuseLightingFlag && ( m_deferredLighting == DeferredLightingMode::eDeferredOnly ) );
+			, flags.components.hasDeferredDiffuseLightingFlag && ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly ) );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -302,7 +302,7 @@ namespace castor3d
 		auto outColour( writer.declOutput< Vec4 >( "outColour", outIndex++ ) );
 		auto outVelocity( writer.declOutput< Vec4 >( "outVelocity", ( flags.writeVelocity() ? outIndex++ : 0u ), flags.writeVelocity() ) );
 		auto outScattering( writer.declOutput< Vec4 >( "outScattering", ( m_outputScattering ? outIndex++ : 0u ), m_outputScattering ) );
-		auto outDiffuse( writer.declOutput< Vec4 >( "outDiffuse", ( m_deferredLighting == DeferredLightingMode::eDeferLighting ? outIndex++ : 0u ), m_deferredLighting == DeferredLightingMode::eDeferLighting ) );
+		auto outDiffuse( writer.declOutput< Vec4 >( "outDiffuse", ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ? outIndex++ : 0u ), m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
@@ -383,7 +383,7 @@ namespace castor3d
 							, surface.normal );
 
 						if ( flags.components.hasDeferredDiffuseLightingFlag
-							&& m_deferredLighting == DeferredLightingMode::eDeferLighting )
+							&& m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )
 						{
 							auto diffuse = writer.declLocale( "diffuse", vec3( 0.0_f ) );
 							lights.computeCombinedDif( clusteredLights
@@ -404,7 +404,7 @@ namespace castor3d
 							shader::OutputComponents lighting{ writer, false };
 
 							if ( flags.components.hasDeferredDiffuseLightingFlag
-								&& m_deferredLighting == DeferredLightingMode::eDeferredOnly )
+								&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 							{
 								lights.computeCombinedAllButDif( clusteredLights
 									, components
@@ -549,7 +549,7 @@ namespace castor3d
 								, components.opacity );
 							outScattering = vec4( lighting.scattering, 1.0_f );
 
-							if ( m_deferredLighting == DeferredLightingMode::eDeferLighting )
+							if ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )
 							{
 								outDiffuse = vec4( 0.0_f );
 							}
@@ -560,7 +560,7 @@ namespace castor3d
 						outColour = vec4( components.colour, components.opacity );
 						outScattering = vec4( 0.0_f );
 
-						if ( m_deferredLighting == DeferredLightingMode::eDeferLighting )
+						if ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )
 						{
 							outDiffuse = vec4( 0.0_f );
 						}
@@ -572,14 +572,14 @@ namespace castor3d
 					outColour = vec4( components.colour, components.opacity );
 					outScattering = vec4( 0.0_f );
 
-					if ( m_deferredLighting == DeferredLightingMode::eDeferLighting )
+					if ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )
 					{
 						outDiffuse = vec4( 0.0_f );
 					}
 				}
 
 				if ( !flags.components.hasDeferredDiffuseLightingFlag
-					|| m_deferredLighting != DeferredLightingMode::eDeferLighting )
+					|| m_deferredLightingFilter != DeferredLightingFilter::eDeferLighting )
 				{
 					if ( flags.hasFog() )
 					{

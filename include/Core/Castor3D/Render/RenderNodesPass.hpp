@@ -249,13 +249,24 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\param[in]	value	The deferred lighting mode.
+		 *\param[in]	value	The deferred lighting filtering mode.
 		 *\~french
-		 *\param[in]	value	Le mode d'éclairage différé.
+		 *\param[in]	value	Le mode de filtrage de l'éclairage différé.
 		 */
-		RenderNodesPassDesc & deferredLightingMode( DeferredLightingMode value )
+		RenderNodesPassDesc & deferredLightingFilter( DeferredLightingFilter value )
 		{
-			m_deferredLighting = value;
+			m_deferredLightingFilter = value;
+			return *this;
+		}
+		/**
+		 *\~english
+		 *\param[in]	value	The parallax occlusion filtering mode.
+		 *\~french
+		 *\param[in]	value	Le mode de filtrage du parallax occlusion.
+		 */
+		RenderNodesPassDesc & parallaxOcclusionFilter( ParallaxOcclusionFilter value )
+		{
+			m_parallaxOcclusionFilter = value;
 			return *this;
 		}
 
@@ -274,7 +285,8 @@ namespace castor3d
 		crg::ru::Config m_ruConfig{ 1u, true };
 		ComponentModeFlags m_componentModeFlags{ ComponentModeFlag::eAll };
 		bool m_allowClusteredLighting{};
-		DeferredLightingMode m_deferredLighting{ DeferredLightingMode::eIgnore };
+		DeferredLightingFilter m_deferredLightingFilter{ DeferredLightingFilter::eIgnore };
+		ParallaxOcclusionFilter m_parallaxOcclusionFilter{ ParallaxOcclusionFilter::eIgnore };
 	};
 
 	class RenderNodesPass
@@ -840,9 +852,14 @@ namespace castor3d
 			return m_handleStatic != std::nullopt;
 		}
 
-		DeferredLightingMode getDeferredLightingMode()const noexcept
+		DeferredLightingFilter getDeferredLightingFilter()const noexcept
 		{
-			return m_deferredLighting;
+			return m_deferredLightingFilter;
+		}
+
+		ParallaxOcclusionFilter getParallaxOcclusionFilter()const noexcept
+		{
+			return m_parallaxOcclusionFilter;
 		}
 		/**@}*/
 
@@ -1099,7 +1116,8 @@ namespace castor3d
 		std::optional< bool > m_handleStatic{ std::nullopt };
 		ComponentModeFlags m_componentsMask{};
 		bool m_allowClusteredLighting{};
-		DeferredLightingMode m_deferredLighting{};
+		DeferredLightingFilter m_deferredLightingFilter{};
+		ParallaxOcclusionFilter m_parallaxOcclusionFilter{};
 
 	private:
 		struct PassDescriptors

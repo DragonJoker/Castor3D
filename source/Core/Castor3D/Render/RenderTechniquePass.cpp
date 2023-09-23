@@ -402,7 +402,7 @@ namespace castor3d
 		uint32_t count = 1u
 			+ ( flags.writeVelocity() ? 1u : 0u )
 			+ ( m_outputScattering ? 1u : 0u )
-			+ ( ( m_deferredLighting == DeferredLightingMode::eDeferLighting ) ? 1u : 0u );
+			+ ( ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ) ? 1u : 0u );
 		return RenderNodesPass::createBlendState( flags.colourBlendMode
 			, flags.alphaBlendMode
 			, count );
