@@ -1099,7 +1099,7 @@ namespace castor3d
 						{
 							IF( writer, lights.getFinalTransmission( components, incident ) >= 0.1_f )
 							{
-								writer.demote();
+								writer.returnStmt( 0_b );
 							}
 							FI;
 						}
