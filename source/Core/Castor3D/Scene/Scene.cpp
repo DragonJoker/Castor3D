@@ -1069,13 +1069,6 @@ namespace castor3d
 			return;
 		}
 
-		auto count = 2u * cache.getObjectCountNoLock();
-
-		if ( m_timerParticlesGpu->getCount() < count )
-		{
-			m_timerParticlesGpu->updateCount( count );
-		}
-
 		auto timerBlock( m_timerParticlesGpu->start() );
 		updater.index = 0u;
 		updater.timer = m_timerParticlesGpu.get();

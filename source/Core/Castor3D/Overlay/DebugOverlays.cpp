@@ -481,7 +481,13 @@ namespace castor3d
 
 	bool DebugOverlays::PassOverlays::update( uint32_t & top )
 	{
-		m_visible = dbgovl::areRelevantTimes( m_cpu.time, m_gpu.time, 100_us );
+		m_visible = m_visibleCount > 100u
+			|| dbgovl::areRelevantTimes( m_cpu.time, m_gpu.time, 100_us );
+
+		if ( m_visible )
+		{
+			++m_visibleCount;
+		}
 
 		if ( m_panel->isVisible() != m_visible )
 		{
