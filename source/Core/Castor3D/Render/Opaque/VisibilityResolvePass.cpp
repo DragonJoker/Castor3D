@@ -339,15 +339,15 @@ namespace castor3d
 				, m_inNormal{ DeclareSsbo( c3d_inNormal
 					, sdw::Vec4
 					, VtxBindings::eInNormal
-					, m_flags.enableNormal() ) }
+					, m_flags.enableNormal() && m_stride == 0u ) }
 				, m_inTangent{ DeclareSsbo( c3d_inTangent
 					, sdw::Vec4
 					, VtxBindings::eInTangent
-					, m_flags.enableTangentSpace() ) }
+					, m_flags.enableTangentSpace() && m_stride == 0u ) }
 				, m_inBitangent{ DeclareSsbo( c3d_inBitangent
 					, sdw::Vec4
 					, VtxBindings::eInBitangent
-					, m_flags.enableBitangent() ) }
+					, m_flags.enableBitangent() && m_stride == 0u ) }
 				, m_inTexcoord0{ DeclareSsbo( c3d_inTexcoord0
 					, sdw::Vec4
 					, VtxBindings::eInTexcoord0
@@ -355,27 +355,27 @@ namespace castor3d
 				, m_inTexcoord1{ DeclareSsbo( c3d_inTexcoord1
 					, sdw::Vec4
 					, VtxBindings::eInTexcoord1
-					, m_flags.enableTexcoord1() ) }
+					, m_flags.enableTexcoord1() && m_stride == 0u ) }
 				, m_inTexcoord2{ DeclareSsbo( c3d_inTexcoord2
 					, sdw::Vec4
 					, VtxBindings::eInTexcoord2
-					, m_flags.enableTexcoord2() ) }
+					, m_flags.enableTexcoord2() && m_stride == 0u ) }
 				, m_inTexcoord3{ DeclareSsbo( c3d_inTexcoord3
 					, sdw::Vec4
 					, VtxBindings::eInTexcoord3
-					, m_flags.enableTexcoord3() ) }
+					, m_flags.enableTexcoord3() && m_stride == 0u ) }
 				, m_inColour{ DeclareSsbo( c3d_inColour
 					, sdw::Vec4
 					, VtxBindings::eInColour
-					, m_flags.enableColours() ) }
+					, m_flags.enableColours() && m_stride == 0u ) }
 				, m_inPassMasks{ DeclareSsbo( c3d_inPassMasks
 					, sdw::UVec4
 					, VtxBindings::eInPassMasks
-					, m_flags.enablePassMasks() ) }
+					, m_flags.enablePassMasks() && m_stride == 0u ) }
 				, m_inVelocity{ DeclareSsbo( c3d_inVelocity
 					, sdw::Vec4
 					, VtxBindings::eInVelocity
-					, m_flags.enableVelocity() ) }
+					, m_flags.enableVelocity() && m_stride == 0u ) }
 			{
 			}
 
@@ -2187,12 +2187,22 @@ namespace castor3d
 
 			for ( auto & itPipeline : m_nodesPass.getBillboardNodes() )
 			{
+				auto & pipelineFlags = itPipeline.first->getFlags();
+
+				if ( pipelineFlags.components.hasParallaxOcclusionMappingOneFlag
+					|| pipelineFlags.components.hasParallaxOcclusionMappingRepeatFlag
+					|| ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly
+						&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag ) )
+				{
+					// Ignore nodes that don't support deferred lighting
+					continue;
+				}
+
 				for ( auto & itBuffer : itPipeline.second )
 				{
 					for ( auto & culled : itBuffer.second )
 					{
 						auto & positionsBuffer = culled.node->data.getVertexBuffer();
-						auto & pipelineFlags = itPipeline.first->getFlags();
 						auto pipelineHash = itPipeline.first->getFlagsHash();
 						auto & pipeline = doCreatePipeline( pipelineHash
 							, pipelineFlags
