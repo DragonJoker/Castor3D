@@ -22,6 +22,9 @@ See LICENSE file in root folder
 #include <ashespp/RenderPass/FrameBuffer.hpp>
 #include <ashespp/Sync/Semaphore.hpp>
 
+#include <RenderGraph/FrameGraph.hpp>
+#include <RenderGraph/RunnableGraph.hpp>
+
 namespace castor3d
 {
 	class EnvironmentMapPass
@@ -49,8 +52,7 @@ namespace castor3d
 		 *\param[in]	face			La face du cube que cette passe dessine.
 		 *\param[in]	background		Le fond de la scène.
 		 */
-		C3D_API EnvironmentMapPass( crg::FrameGraph & graph
-			, RenderDevice const & device
+		C3D_API EnvironmentMapPass( RenderDevice const & device
 			, EnvironmentMap & environmentMap
 			, SceneNodeUPtr faceNode
 			, uint32_t index
@@ -75,6 +77,33 @@ namespace castor3d
 		 *\param[in, out]	updater	Les données d'update.
 		 */
 		C3D_API void update( GpuUpdater & updater );
+		/**
+		 *\~english
+		 *\brief		Renders the environment map.
+		 *\param[in]	toWait	The semaphores to wait.
+		 *\param[in]	queue	The queue receiving the render commands.
+		 *\return		The semaphores signaled by this render.
+		 *\~french
+		 *\brief		Dessine la texture d'environnement.
+		 *\param[in]	toWait	Les sémaphores à attendre.
+		 *\param[in]	queue	The queue recevant les commandes de dessin.
+		 *\return		Les sémaphores signalés par ce dessin.
+		 */
+		C3D_API void record();
+		/**
+		 *\~english
+		 *\brief		Renders the environment map.
+		 *\param[in]	toWait	The semaphores to wait.
+		 *\param[in]	queue	The queue receiving the render commands.
+		 *\return		The semaphores signaled by this render.
+		 *\~french
+		 *\brief		Dessine la texture d'environnement.
+		 *\param[in]	toWait	Les sémaphores à attendre.
+		 *\param[in]	queue	The queue recevant les commandes de dessin.
+		 *\return		Les sémaphores signalés par ce dessin.
+		 */
+		C3D_API crg::SemaphoreWaitArray render( crg::SemaphoreWaitArray const & toWait
+			, ashes::Queue const & queue );
 		/**
 		 *\~english
 		 *\brief		Attaches this pass to given node.
@@ -108,7 +137,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		crg::FramePassGroup & m_graph;
+		crg::FrameGraph m_graph;
 		SceneBackground & m_background;
 		SceneNodeUPtr m_node;
 		uint32_t m_index;
@@ -121,11 +150,13 @@ namespace castor3d
 		SceneUbo m_sceneUbo;
 		crg::ImageViewId m_colourRenderView;
 		crg::ImageViewId m_colourResultView;
+		crg::ImageViewId m_depthView;
 		BackgroundRendererUPtr m_backgroundRenderer;
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniqueNodesPass * m_opaquePass{};
 		crg::FramePass * m_transparentPassDesc{};
 		RenderTechniqueNodesPass * m_transparentPass{};
+		crg::RunnableGraphPtr m_runnable;
 	};
 }
 

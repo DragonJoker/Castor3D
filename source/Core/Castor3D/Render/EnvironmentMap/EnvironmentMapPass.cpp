@@ -1,6 +1,7 @@
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMapPass.hpp"
 
 #include "Castor3D/Engine.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Render/Culling/FrustumCuller.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
@@ -46,17 +47,16 @@ namespace castor3d
 		}
 	}
 
-	EnvironmentMapPass::EnvironmentMapPass( crg::FrameGraph & graph
-		, RenderDevice const & device
+	EnvironmentMapPass::EnvironmentMapPass( RenderDevice const & device
 		, EnvironmentMap & environmentMap
 		, SceneNodeUPtr faceNode
 		, uint32_t index
 		, CubeMapFace face
 		, SceneBackground & background )
 		: OwnedBy< EnvironmentMap >{ environmentMap }
-		, castor::Named{ castor3d::getName( face ) }
+		, castor::Named{ "Env" + environmentMap.getScene().getName() + castor::string::toString( index ) + "/" + castor3d::getName( face ) }
 		, m_device{ device }
-		, m_graph{ graph.createPassGroup( getName() ) }
+		, m_graph{ device.renderSystem.getEngine()->getGraphResourceHandler(), getName() }
 		, m_background{ background }
 		, m_node{ std::move( faceNode ) }
 		, m_index{ index }
@@ -66,9 +66,10 @@ namespace castor3d
 		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ m_device }
-		, m_colourRenderView{ environmentMap.getTmpImage() }
+		, m_colourRenderView{ environmentMap.getTmpImage( m_index, m_face ) }
 		, m_colourResultView{ environmentMap.getColourViewId( m_index, m_face ) }
-		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph
+		, m_depthView{ getOwner()->getDepthViewId( m_index, m_face ) }
+		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
 			, nullptr
 			, m_device
 			, nullptr
@@ -78,7 +79,10 @@ namespace castor3d
 			, m_sceneUbo
 			, m_colourRenderView
 			, true /*clearColour*/
-			, true /*forceVisible*/ ) }
+			, true /*clearDepth*/
+			, true /*forceVisible*/
+			, m_depthView
+			, nullptr ) }
 		, m_opaquePassDesc{ &doCreateOpaquePass( &m_backgroundRenderer->getPass() ) }
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 	{
@@ -90,12 +94,19 @@ namespace castor3d
 			, m_camera->getFrustum() );
 		m_graph.addOutput( m_colourResultView
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
-		m_graph.addGroupOutput( m_colourResultView );
-		log::trace << "Created EnvironmentMapPass " << m_graph.getName() + "/" + getName() << std::endl;
+		m_runnable = m_graph.compile( m_device.makeContext() );
+		environmentMap.getScene().getEngine()->registerTimer( getName(), m_runnable->getTimer() );
+		printGraph( *m_runnable );
+		log::trace << "Created EnvironmentMapPass " << getName() << std::endl;
 	}
 
 	EnvironmentMapPass::~EnvironmentMapPass()
 	{
+		if ( m_runnable )
+		{
+			getOwner()->getScene().getEngine()->unregisterTimer( getName(), m_runnable->getTimer() );
+		}
+
 		m_camera->getParent()->detach( true );
 	}
 
@@ -144,6 +155,17 @@ namespace castor3d
 		updater.camera = oldCamera;
 	}
 
+	void EnvironmentMapPass::record()
+	{
+		m_runnable->record();
+	}
+
+	crg::SemaphoreWaitArray EnvironmentMapPass::render( crg::SemaphoreWaitArray const & toWait
+		, ashes::Queue const & queue )
+	{
+		return m_runnable->run( toWait, queue );
+	}
+
 	void EnvironmentMapPass::attachTo( SceneNode & node )
 	{
 		m_currentNode = &node;
@@ -161,9 +183,8 @@ namespace castor3d
 
 	crg::FramePass & EnvironmentMapPass::doCreateOpaquePass( crg::FramePass const * previousPass )
 	{
-		auto depthView = getOwner()->getDepthViewId( m_index, m_face );
 		auto & result = m_graph.createPass( "OpaquePass"
-			, [this, depthView]( crg::FramePass const & framePass
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -175,7 +196,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, cuT( "Environment" )
 					, crg::ImageViewIdArray{ m_colourRenderView }
-					, crg::ImageViewIdArray{ depthView }
+					, crg::ImageViewIdArray{ m_depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
@@ -192,17 +213,15 @@ namespace castor3d
 			result.addDependency( *previousPass );
 		}
 
-		result.addOutputDepthView( depthView
-			, defaultClearDepthStencil );
+		result.addInOutDepthView( m_depthView );
 		result.addInOutColourView( m_colourRenderView );
 		return result;
 	}
 
 	crg::FramePass & EnvironmentMapPass::doCreateTransparentPass( crg::FramePass const * previousPass )
 	{
-		auto depthView = getOwner()->getDepthViewId( m_index, m_face );
 		auto & result = m_graph.createPass( "TransparentPass"
-			, [this, depthView]( crg::FramePass const & framePass
+			, [this]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
@@ -214,7 +233,7 @@ namespace castor3d
 					, ForwardRenderTechniquePass::Type
 					, cuT( "Environment" )
 					, crg::ImageViewIdArray{ m_colourRenderView }
-					, crg::ImageViewIdArray{ depthView }
+					, crg::ImageViewIdArray{ m_depthView }
 					, RenderNodesPassDesc{ getOwner()->getSize(), m_cameraUbo, m_sceneUbo, *m_culler, false }
 						.meshShading( true )
 						.componentModeFlags( ForwardRenderTechniquePass::DefaultComponentFlags )
@@ -226,7 +245,7 @@ namespace castor3d
 				return res;
 			} );
 		result.addDependency( *previousPass );
-		result.addInputDepthView( depthView );
+		result.addInputDepthView( m_depthView );
 		result.addInOutColourView( m_colourRenderView );
 		return result;
 	}
