@@ -78,7 +78,7 @@ namespace castor3d
 				, name + "/Temp"
 				, 0u
 				, makeExtent3D( size )
-				, 1u
+				, 6u * MaxEnvironmentMapCount
 				, 1u
 				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
@@ -86,8 +86,7 @@ namespace castor3d
 				, VK_BORDER_COLOR_FLOAT_OPAQUE_BLACK };
 		}
 
-		static EnvironmentMap::EnvironmentMapPasses createPass( crg::FrameGraph & graph
-			, RenderDevice const & device
+		static EnvironmentMap::EnvironmentMapPasses createPass( RenderDevice const & device
 			, EnvironmentMap & map
 			, uint32_t index
 			, SceneBackground & background )
@@ -123,12 +122,12 @@ namespace castor3d
 				++i;
 			}
 
-			return { castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[0] ), index, CubeMapFace::ePositiveX, background )
-				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[1] ), index, CubeMapFace::eNegativeX, background )
-				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[2] ), index, CubeMapFace::ePositiveY, background )
-				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[3] ), index, CubeMapFace::eNegativeY, background )
-				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[4] ), index, CubeMapFace::ePositiveZ, background )
-				, castor::makeUnique< EnvironmentMapPass >( graph, device, map, std::move( nodes[5] ), index, CubeMapFace::eNegativeZ, background ) };
+			return { castor::makeUnique< EnvironmentMapPass >( device, map, std::move( nodes[0] ), index, CubeMapFace::ePositiveX, background )
+				, castor::makeUnique< EnvironmentMapPass >( device, map, std::move( nodes[1] ), index, CubeMapFace::eNegativeX, background )
+				, castor::makeUnique< EnvironmentMapPass >( device, map, std::move( nodes[2] ), index, CubeMapFace::ePositiveY, background )
+				, castor::makeUnique< EnvironmentMapPass >( device, map, std::move( nodes[3] ), index, CubeMapFace::eNegativeY, background )
+				, castor::makeUnique< EnvironmentMapPass >( device, map, std::move( nodes[4] ), index, CubeMapFace::ePositiveZ, background )
+				, castor::makeUnique< EnvironmentMapPass >( device, map, std::move( nodes[5] ), index, CubeMapFace::eNegativeZ, background ) };
 		}
 
 		static std::vector< ashes::ImageView > createViews( Texture const & envMap
@@ -183,26 +182,20 @@ namespace castor3d
 			{
 				for ( uint32_t index = 0; index < m_passes.size(); ++index )
 				{
-					m_graphs[index] = std::make_unique< crg::FrameGraph >( getEngine()->getGraphResourceHandler()
-						, "Environment" + m_scene.getName() + std::to_string( index ) );
-					m_runnables[index].reset();
-					auto & graph = *m_graphs[index];
 					m_passes[index] = {};
-					m_passes[index] = envmap::createPass( graph
-						, m_device
+					m_passes[index] = envmap::createPass( m_device
 						, *this
 						, index
 						, *m_scene.getBackground() );
-					m_runnables[index] = graph.compile( m_device.makeContext() );
-					m_scene.getEngine()->registerTimer( m_runnables[index]->getName() + "/Graph"
-						, m_runnables[index]->getTimer() );
-					printGraph( *m_runnables[index] );
-					auto runnable = m_runnables[index].get();
+					auto & passes = m_passes[index];
 					m_device.renderSystem.getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-						, [runnable]( RenderDevice const &
+						, [&passes]( RenderDevice const &
 							, QueueData const & )
 						{
-							runnable->record();
+							for ( auto & pass : passes )
+							{
+								pass->record();
+							}
 						} ) );
 				}
 			} ) }
@@ -235,20 +228,12 @@ namespace castor3d
 
 	void EnvironmentMap::cleanup()
 	{
-		for ( auto & runnable : m_runnables )
-		{
-			m_scene.getEngine()->unregisterTimer( runnable->getName() + "/Graph"
-				, runnable->getTimer() );
-		}
-
-		m_runnables.clear();
 		m_passes.clear();
 		m_environmentMapViews.clear();
 		m_image = {};
 		m_tmpImage.destroy();
 		m_depthBuffer.destroy();
 		m_environmentMap.destroy();
-		m_graphs.clear();
 		m_sortedNodes.clear();
 		m_reflectionNodes.clear();
 		m_savedReflectionNodes.clear();
@@ -361,11 +346,14 @@ namespace castor3d
 		{
 			uint32_t index = 0u;
 			// On first run, render all env maps.
-			for ( auto & runnable : m_runnables )
-			{
+			for ( auto & passes : m_passes )
+			{	
 				if ( index < m_count )
 				{
-					result = runnable->run( result, queue );
+					for ( auto & pass : passes )
+					{
+						result = pass->render( result, queue );
+					}
 				}
 
 				++index;
@@ -374,7 +362,11 @@ namespace castor3d
 		else
 		{
 			// Else render only one (rolling)
-			result = m_runnables[m_render]->run( result, queue );
+			for ( auto & pass : m_passes[m_render] )
+			{
+				result = pass->render( result, queue );
+			}
+
 			++m_render;
 
 			if ( m_render >= m_count )
@@ -427,18 +419,15 @@ namespace castor3d
 
 	void EnvironmentMap::doAddPass()
 	{
-		auto index = uint32_t( m_graphs.size() );
-		m_graphs.emplace_back( std::make_unique< crg::FrameGraph >( getEngine()->getGraphResourceHandler(), "Env" + m_scene.getName() + std::to_string( index ) ) );
-		auto & graph = *m_graphs.back();
-		m_passes.emplace_back( envmap::createPass( graph
-			, m_device
+		auto index = uint32_t( m_passes.size() );
+		m_passes.emplace_back( envmap::createPass( m_device
 			, *this
 			, index
 			, *m_scene.getBackground() ) );
-		m_runnables.emplace_back( graph.compile( m_device.makeContext() ) );
-		m_scene.getEngine()->registerTimer( graph.getName()
-			, m_runnables.back()->getTimer() );
-		printGraph( *m_runnables.back() );
-		m_runnables.back()->record();
+
+		for ( auto & pass : m_passes.back() )
+		{
+			pass->record();
+		}
 	}
 }

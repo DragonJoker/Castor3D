@@ -141,6 +141,11 @@ namespace castor3d
 			return m_extent;
 		}
 
+		Scene & getScene()const noexcept
+		{
+			return m_scene;
+		}
+
 		Texture const & getColourId()const noexcept
 		{
 			return m_environmentMap;
@@ -163,9 +168,10 @@ namespace castor3d
 			return m_depthBuffer.subViewsId[index * 6u + uint32_t( face )];
 		}
 
-		crg::ImageViewId getTmpImage()const noexcept
+		crg::ImageViewId getTmpImage( uint32_t index
+			, CubeMapFace face )const noexcept
 		{
-			return m_tmpImage.targetViewId;
+			return m_tmpImage.subViewsId[index * 6u + uint32_t( face )];
 		}
 		/**@}*/
 
@@ -175,7 +181,6 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		Scene & m_scene;
-		std::vector< std::unique_ptr< crg::FrameGraph > > m_graphs;
 		Texture m_environmentMap;
 		Texture m_depthBuffer;
 		Texture m_tmpImage;
@@ -188,7 +193,6 @@ namespace castor3d
 		uint32_t m_render{ 0u };
 		uint32_t m_count{ 0u };
 		OnSceneNodeChangedConnection m_onNodeChanged;
-		std::vector< crg::RunnableGraphPtr > m_runnables;
 		ashes::Image * m_image;
 		std::vector< ashes::ImageView > m_environmentMapViews;
 		OnBackgroundChangedConnection m_onSetBackground;
