@@ -1244,9 +1244,9 @@ namespace castor3d
 				, FragmentOut out )
 				{
 					auto lhsColor = writer.declLocale( "lhsColor"
-						, c3d_mapLhs.sample( vtx_textureLhs ) );
+						, c3d_mapLhs.lod( vtx_textureLhs, 0.0_f ) );
 					auto rhsColor = writer.declLocale( "rhsColor"
-						, c3d_mapRhs.sample( vtx_textureRhs ) );
+						, c3d_mapRhs.lod( vtx_textureRhs, 0.0_f ) );
 					lhsColor.rgb() *= 1.0_f - rhsColor.a();
 					outColour = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );

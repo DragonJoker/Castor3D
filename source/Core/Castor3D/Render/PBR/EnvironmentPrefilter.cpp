@@ -169,7 +169,7 @@ namespace castor3d
 										, 0.0_f
 										, 0.5_f * log2( omegaS / omegaP ) ) );
 
-								prefilteredColor += c3d_mapEnvironment.sample( L, lod ).rgb() * NdotL;
+								prefilteredColor += c3d_mapEnvironment.lod( L, lod ).rgb() * NdotL;
 								totalWeight += NdotL;
 							}
 							FI;
