@@ -954,7 +954,7 @@ namespace castor3d
 
 					if ( textOverlay )
 					{
-						material.opacity *= c3d_mapText.sample( in.fontUV, 0.0_f );
+						material.opacity *= c3d_mapText.lod( in.fontUV, 0.0_f );
 					}
 
 					auto outComponents = writer.declLocale< ovrlrend::OverlayBlendComponents >( "outComponents"

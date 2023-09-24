@@ -131,9 +131,9 @@ namespace castor3d
 					auto lpvCellCoords = m_writer.declLocale( "lpvCellCoords"
 						, lpvGridData.worldToTex( wsPosition ) );
 					auto lpvIntensity = m_writer.declLocale( "lpvIntensity"
-						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.sample( lpvCellCoords ) )
-							, dot( SHintensity, c3d_lpvAccumulatorG.sample( lpvCellCoords ) )
-							, dot( SHintensity, c3d_lpvAccumulatorB.sample( lpvCellCoords ) ) ) );
+						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.lod( lpvCellCoords, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulatorG.lod( lpvCellCoords, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulatorB.lod( lpvCellCoords, 0.0_f ) ) ) );
 					m_writer.returnStmt( vec4( max( lpvIntensity, vec3( 0.0_f ) ), 1.0f ) );
 				}
 				, sdw::InVec3{ m_writer, "wsNormal" }
@@ -205,17 +205,17 @@ namespace castor3d
 						, ( wsPosition - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
 
 					auto lpvIntensity1 = m_writer.declLocale( "lpvIntensity1"
-						, vec3( dot( SHintensity, c3d_lpvAccumulator1R.sample( lpvCellCoords1 ) )
-							, dot( SHintensity, c3d_lpvAccumulator1G.sample( lpvCellCoords1 ) )
-							, dot( SHintensity, c3d_lpvAccumulator1B.sample( lpvCellCoords1 ) ) ) );
+						, vec3( dot( SHintensity, c3d_lpvAccumulator1R.lod( lpvCellCoords1, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator1G.lod( lpvCellCoords1, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator1B.lod( lpvCellCoords1, 0.0_f ) ) ) );
 					auto lpvIntensity2 = m_writer.declLocale( "lpvIntensity2"
-						, vec3( dot( SHintensity, c3d_lpvAccumulator2R.sample( lpvCellCoords2 ) )
-							, dot( SHintensity, c3d_lpvAccumulator2G.sample( lpvCellCoords2 ) )
-							, dot( SHintensity, c3d_lpvAccumulator2B.sample( lpvCellCoords2 ) ) ) );
+						, vec3( dot( SHintensity, c3d_lpvAccumulator2R.lod( lpvCellCoords2, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator2G.lod( lpvCellCoords2, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator2B.lod( lpvCellCoords2, 0.0_f ) ) ) );
 					auto lpvIntensity3 = m_writer.declLocale( "lpvIntensity3"
-						, vec3( dot( SHintensity, c3d_lpvAccumulator3R.sample( lpvCellCoords3 ) )
-							, dot( SHintensity, c3d_lpvAccumulator3G.sample( lpvCellCoords3 ) )
-							, dot( SHintensity, c3d_lpvAccumulator3B.sample( lpvCellCoords3 ) ) ) );
+						, vec3( dot( SHintensity, c3d_lpvAccumulator3R.lod( lpvCellCoords3, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator3G.lod( lpvCellCoords3, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator3B.lod( lpvCellCoords3, 0.0_f ) ) ) );
 
 					m_writer.returnStmt( vec4( max( lpvIntensity1 + lpvIntensity2 + lpvIntensity3, vec3( 0.0_f ) ), 1.0f ) );
 				}
@@ -420,7 +420,7 @@ namespace castor3d
 					, indirectBlend
 					, voxelData );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
-					, brdfMap.sample( vec2( lightSurface.NdotV(), roughness ) ) );
+					, brdfMap.lod( vec2( lightSurface.NdotV(), roughness ), 0.0_f ) );
 				indirectSpecular *= sdw::fma( m_utils.conductorFresnel( lightSurface.NdotV(), indirectSpecular.xyz() )
 					, vec3( envBRDF.x() )
 					, vec3( envBRDF.y() ) );

@@ -145,7 +145,7 @@ namespace castor3d
 								auto sampleVec = writer.declLocale( "sampleVec"
 									, right * tangentSample.x() + up * tangentSample.y() + normal * tangentSample.z() );
 
-								irradiance += c3d_mapEnvironment.sample( sampleVec ).rgb() * cos( theta ) * sin( theta );
+								irradiance += c3d_mapEnvironment.lod( sampleVec, 0.0_f ).rgb() * cos( theta ) * sin( theta );
 								nrSamples = nrSamples + 1;
 							}
 							ROF;
