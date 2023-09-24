@@ -289,6 +289,7 @@ namespace castor3d
 			PanelCtrl * m_parent{};
 			castor::String m_name;
 			bool m_visible{ true };
+			uint32_t m_visibleCount{};
 			std::map< FramePassTimer *, crg::OnFramePassDestroyConnection > m_timers;
 			PanelCtrlRPtr m_panel;
 			StaticCtrlRPtr m_passName;
