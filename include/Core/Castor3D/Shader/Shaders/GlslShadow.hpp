@@ -241,14 +241,14 @@ namespace castor3d::shader
 			, sdw::Float const & minOffset
 			, sdw::Float const & maxSlopeOffset );
 		sdw::RetFloat filterPCF( sdw::Vec3 const & lightSpacePosition
-			, sdw::CombinedImage2DArrayShadowR32 const & shadowMap
+			, sdw::CombinedImage2DArrayR32 const & shadowMap
 			, sdw::Vec2 const & invTexDim
 			, sdw::UInt const & arrayIndex
 			, sdw::Float const & depthBias
 			, sdw::UInt const & sampleCount
 			, sdw::Float const & filterSize );
 		sdw::RetFloat filterPCF( sdw::Vec3 const & lightToVertex
-			, sdw::CombinedImageCubeArrayShadowR32 const & shadowMap
+			, sdw::CombinedImageCubeArrayR32 const & shadowMap
 			, sdw::Vec2 const & invTexDim
 			, sdw::UInt const & cubeIndex
 			, sdw::Float const & depth
@@ -278,7 +278,7 @@ namespace castor3d::shader
 			, sdw::InFloat > m_chebyshevUpperBound;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
-			, sdw::InCombinedImage2DArrayShadowR32
+			, sdw::InCombinedImage2DArrayR32
 			, sdw::InVec2
 			, sdw::InUInt
 			, sdw::InFloat
@@ -286,7 +286,7 @@ namespace castor3d::shader
 			, sdw::InFloat > m_filterPCFArray;
 		sdw::Function< sdw::Float
 			, sdw::InVec3
-			, sdw::InCombinedImageCubeArrayShadowR32
+			, sdw::InCombinedImageCubeArrayR32
 			, sdw::InVec2
 			, sdw::InUInt
 			, sdw::InFloat
