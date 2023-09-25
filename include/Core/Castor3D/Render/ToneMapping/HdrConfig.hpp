@@ -10,9 +10,12 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class HdrConfig
+	struct HdrConfig
 	{
-	public:
+		C3D_API void accept( ConfigurationVisitorBase & visitor );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
+
 		//!\~english	The exposure value.
 		//!\~french		La valeur d'exposition.
 		float exposure{ 1.0f };

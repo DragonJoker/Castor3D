@@ -56,6 +56,7 @@ namespace castor3d
 	*	Enumération des types de filtrage des ombres.
 	*/
 	enum class ShadowType
+		: uint32_t
 	{
 		//!\~english	No shadows at all.
 		//!\~french		Pas d'ombres du tout.
@@ -361,6 +362,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, Scene, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SceneImporter, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SceneNodeImporter, C3D_API );
+	CU_DeclareSmartPtr( castor3d, ShadowConfig, C3D_API );
 
 	//! SceneNode pointer array.
 	CU_DeclareVector( SceneNodeRPtr, SceneNodePtr );

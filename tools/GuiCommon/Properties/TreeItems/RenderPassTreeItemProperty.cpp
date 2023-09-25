@@ -193,6 +193,12 @@ namespace GuiCommon
 			}
 
 		private:
+			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			{
+				return std::unique_ptr< ConfigurationVisitorBase >( new RenderPassConfigurationBuilder{ getFlags(), getScene(), m_grid, m_prop } );
+			}
+
+		private:
 			wxPropertyGrid * m_grid;
 			TreeItemProperty & m_prop;
 		};

@@ -22,7 +22,7 @@ namespace castor3d
 	*	Enumération des algorithmes de global illumination supportés.
 	*/
 	enum class GlobalIlluminationType
-		: uint8_t
+		: uint32_t
 	{
 		eNone,
 		// Reflective shadow maps.

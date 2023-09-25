@@ -88,6 +88,19 @@ namespace castor3d
 		C3D_API virtual void fillShadowBuffer( AllShadowData & data )const = 0;
 		/**
 		*\~english
+		*\brief
+		*	ConfigurationVisitorBase acceptance function.
+		*\param vis
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de ConfigurationVisitorBase.
+		*\param vis
+		*	Le ... visiteur.
+		*/
+		C3D_API void accept( ConfigurationVisitorBase & vis );
+		/**
+		*\~english
 		*name
 		*	Getters.
 		*\~french
@@ -104,7 +117,6 @@ namespace castor3d
 		C3D_API castor::RangedValue< uint32_t > getShadowPcfFilterSize()const;
 		C3D_API castor::RangedValue< uint32_t > getShadowPcfSampleCount()const;
 		C3D_API ShadowConfig const & getShadowConfig()const;
-		C3D_API RsmConfig const & getRsmConfig()const;
 		C3D_API LpvConfig const & getLpvConfig()const;
 
 		LightType getLightType()const
@@ -213,6 +225,19 @@ namespace castor3d
 		 *\param[out]	data	Reçoit les données de la source lumineuse.
 		 */
 		C3D_API virtual void doFillLightBuffer( castor::Point4f * data )const = 0;
+		/**
+		*\~english
+		*\brief
+		*	ConfigurationVisitorBase acceptance function.
+		*\param vis
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de ConfigurationVisitorBase.
+		*\param vis
+		*	Le ... visiteur.
+		*/
+		C3D_API virtual void doAccept( ConfigurationVisitorBase & vis ) = 0;
 
 	protected:
 		//!\~english	The cube box for the light volume of effect.

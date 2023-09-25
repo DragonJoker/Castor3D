@@ -12,7 +12,7 @@
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
-#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -49,7 +49,7 @@ namespace castor3d
 
 	namespace vxlzpass
 	{
-		static RenderNodesPassDesc buildDesc( VoxelSceneData const & voxelConfig
+		static RenderNodesPassDesc buildDesc( VctConfig const & voxelConfig
 			, CameraUbo const & cameraUbo
 			, SceneUbo const & sceneUbo
 			, SceneCuller & culler
@@ -86,7 +86,7 @@ namespace castor3d
 		, SceneCuller & culler
 		, VoxelizerUbo const & voxelizerUbo
 		, ashes::Buffer< Voxel > const & voxels
-		, VoxelSceneData const & voxelConfig
+		, VctConfig const & voxelConfig
 		, bool isStatic )
 		: RenderNodesPass{ pass
 			, context

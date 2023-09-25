@@ -250,14 +250,9 @@ namespace castor3d
 			markDirty();
 		}
 
-		void setExposure( float value )
+		void setHdrConfig( HdrConfig value )
 		{
-			m_hdrConfig.exposure = value;
-		}
-
-		void setGamma( float value )
-		{
-			m_hdrConfig.gamma = value;
+			m_hdrConfig = std::move( value );
 		}
 		/**@}*/
 

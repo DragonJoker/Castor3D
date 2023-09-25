@@ -234,15 +234,13 @@ namespace smaa
 			m_reproject->accept( visitor );
 		}
 
-		m_presetIndex = int32_t( m_config.data.preset );
 		visitor.visit( cuT( "Preset" )
-			, m_presetIndex
+			, m_config.data.preset
 			, castor::StringArray{ "Low", "Medium", "High", "Ultra", "Custom" }
-			, [this]( int32_t oldV, int32_t newV )
+			, castor3d::ConfigurationVisitorBase::OnEnumValueChangeT< Preset >( [this]( Preset oldV, Preset newV )
 			{
-				m_config.data.preset = Preset( m_presetIndex );
 				m_config.updatePreset();
-			} );
+			} ) );
 
 		visitor.visit( cuT( "Disable diagonal detection" )
 			, m_config.data.disableDiagonalDetection );

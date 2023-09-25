@@ -1,8 +1,8 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_VoxelSceneData_H___
-#define ___C3D_VoxelSceneData_H___
+#ifndef ___C3D_VctConfig_H___
+#define ___C3D_VctConfig_H___
 
 #include "VoxelizeModule.hpp"
 
@@ -13,9 +13,12 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	class VoxelSceneData
+	struct VctConfig
 	{
-	public:
+		C3D_API void accept( ConfigurationVisitorBase & visitor );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
+
 		bool enabled{ false };
 		bool enableConservativeRasterization{ false };
 		bool enableOcclusion{ false };

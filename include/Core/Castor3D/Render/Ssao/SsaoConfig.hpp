@@ -16,9 +16,9 @@ namespace castor3d
 {
 	struct SsaoConfig
 	{
-		C3D_API void accept( castor::String const & name
-			, ConfigurationVisitorBase & visitor );
 		C3D_API void accept( ConfigurationVisitorBase & visitor );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 
 		//!\~english	The effect activation status.
 		//!\~french		Le statut d'activation de l'effet.

@@ -113,8 +113,24 @@ namespace castor3d
 
 	void BlendComponent::accept( ConfigurationVisitorBase & vis )
 	{
-		vis.visit( cuT( "Colour blend mode" ), m_value.colourBlendMode );
-		vis.visit( cuT( "Alpha blend mode" ), m_value.alphaBlendMode );
+		static castor::StringArray names{ cuT( "NoBlend" )
+			, cuT( "Additive" )
+			, cuT( "Multiplicative" )
+			, cuT( "Interpolative" ) };
+		vis.visit( cuT( "Colour blend mode" )
+			, m_value.colourBlendMode
+			, names
+			, ConfigurationVisitorBase::OnEnumValueChangeT< BlendMode >( [this]( BlendMode oldV, BlendMode newV )
+			{
+				m_value.colourBlendMode = newV;
+			} ) );
+		vis.visit( cuT( "Alpha blend mode" )
+			, m_value.alphaBlendMode
+			, names
+			, ConfigurationVisitorBase::OnEnumValueChangeT< BlendMode >( [this]( BlendMode oldV, BlendMode newV )
+			{
+				m_value.alphaBlendMode = newV;
+			} ) );
 	}
 
 	PassComponentUPtr BlendComponent::doClone( Pass & pass )const

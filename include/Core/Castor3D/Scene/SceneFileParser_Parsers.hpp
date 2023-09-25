@@ -85,7 +85,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSkeleton )
 	CU_DeclareAttributeParser( parserMesh )
 	CU_DeclareAttributeParser( parserDirectionalShadowCascades )
-	CU_DeclareAttributeParser( parserLpvIndirectAttenuation )
 	CU_DeclareAttributeParser( parserVoxelConeTracing )
 	CU_DeclareAttributeParser( parserSceneEnd )
 
@@ -131,40 +130,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserLightShadows )
 	CU_DeclareAttributeParser( parserLightShadowProducer )
 	CU_DeclareAttributeParser( parserLightEnd )
-
-	// Shadows parsers
-	CU_DeclareAttributeParser( parserShadowsProducer )
-	CU_DeclareAttributeParser( parserShadowsFilter )
-	CU_DeclareAttributeParser( parserShadowsGlobalIllumination )
-	CU_DeclareAttributeParser( parserShadowsVolumetricSteps )
-	CU_DeclareAttributeParser( parserShadowsVolumetricScatteringFactor )
-	CU_DeclareAttributeParser( parserShadowsRawConfig )
-	CU_DeclareAttributeParser( parserShadowsPcfConfig )
-	CU_DeclareAttributeParser( parserShadowsVsmConfig )
-	CU_DeclareAttributeParser( parserShadowsRsmConfig )
-	CU_DeclareAttributeParser( parserShadowsLpvConfig )
-
-	// Raw filter shadow parsers
-	CU_DeclareAttributeParser( parserShadowsRawMinOffset )
-	CU_DeclareAttributeParser( parserShadowsRawMaxSlopeOffset )
-
-	// PCF shadow parsers
-	CU_DeclareAttributeParser( parserShadowsPcfMinOffset )
-	CU_DeclareAttributeParser( parserShadowsPcfMaxSlopeOffset )
-	CU_DeclareAttributeParser( parserShadowsPcfFilterSize )
-	CU_DeclareAttributeParser( parserShadowsPcfSampleCount )
-
-	// VSM shadow parsers
-	CU_DeclareAttributeParser( parserShadowsVsmMinVariance )
-	CU_DeclareAttributeParser( parserShadowsVsmLightBleedingReduction )
-
-	// RSM parsers
-	CU_DeclareAttributeParser( parserRsmIntensity )
-	CU_DeclareAttributeParser( parserRsmMaxRadius )
-	CU_DeclareAttributeParser( parserRsmSampleCount )
-
-	// LPV parsers
-	CU_DeclareAttributeParser( parserLpvTexelAreaModifier )
 
 	// Scene node parsers
 	CU_DeclareAttributeParser( parserNodeStatic )
@@ -384,41 +349,8 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSkyboxBack )
 	CU_DeclareAttributeParser( parserSkyboxEnd )
 
-	// SSAO parsers
-	CU_DeclareAttributeParser( parserSsaoEnabled )
-	CU_DeclareAttributeParser( parserSsaoHighQuality )
-	CU_DeclareAttributeParser( parserSsaoUseNormalsBuffer )
-	CU_DeclareAttributeParser( parserSsaoRadius )
-	CU_DeclareAttributeParser( parserSsaoMinRadius )
-	CU_DeclareAttributeParser( parserSsaoBias )
-	CU_DeclareAttributeParser( parserSsaoIntensity )
-	CU_DeclareAttributeParser( parserSsaoNumSamples )
-	CU_DeclareAttributeParser( parserSsaoEdgeSharpness )
-	CU_DeclareAttributeParser( parserSsaoBlurHighQuality )
-	CU_DeclareAttributeParser( parserSsaoBlurStepSize )
-	CU_DeclareAttributeParser( parserSsaoBlurRadius )
-	CU_DeclareAttributeParser( parserSsaoBendStepCount )
-	CU_DeclareAttributeParser( parserSsaoBendStepSize )
-	CU_DeclareAttributeParser( parserSsaoEnd )
-
 	// Transmittance Profile parsers
 	CU_DeclareAttributeParser( parserTransmittanceProfileFactor )
-
-	// HDR config parsers
-	CU_DeclareAttributeParser( parserHdrExponent )
-	CU_DeclareAttributeParser( parserHdrGamma )
-
-	// Voxel Cone Tracing config parsers
-	CU_DeclareAttributeParser( parserVctEnabled )
-	CU_DeclareAttributeParser( parserVctGridSize )
-	CU_DeclareAttributeParser( parserVctNumCones )
-	CU_DeclareAttributeParser( parserVctMaxDistance )
-	CU_DeclareAttributeParser( parserVctRayStepSize )
-	CU_DeclareAttributeParser( parserVctVoxelSize )
-	CU_DeclareAttributeParser( parserVctConservativeRasterization )
-	CU_DeclareAttributeParser( parserVctTemporalSmoothing )
-	CU_DeclareAttributeParser( parserVctOcclusion )
-	CU_DeclareAttributeParser( parserVctSecondaryBounce )
 }
 
 #endif

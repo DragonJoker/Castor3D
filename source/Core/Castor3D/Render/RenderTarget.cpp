@@ -133,6 +133,12 @@ namespace castor3d
 				value.accept( vis );
 			}
 
+		protected:
+			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			{
+				return std::unique_ptr< ConfigurationVisitorBase >( new IntermediatesLister{ getFlags(), getScene(), m_cache, m_result } );
+			}
+
 		private:
 			IntermediatesLister( PipelineFlags const & flags
 				, Scene const & scene
@@ -869,22 +875,6 @@ namespace castor3d
 	{
 		return getScene()->needsSubsurfaceScattering()
 			|| isFullLoadingEnabled();
-	}
-
-	void RenderTarget::setExposure( float value )
-	{
-		if ( auto camera = getCamera() )
-		{
-			camera->setExposure( value );
-		}
-	}
-
-	void RenderTarget::setGamma( float value )
-	{
-		if ( auto camera = getCamera() )
-		{
-			camera->setGamma( value );
-		}
 	}
 
 	void RenderTarget::addTechniqueParameters( Parameters const & parameters )

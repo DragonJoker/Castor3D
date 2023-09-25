@@ -1,4 +1,4 @@
-#include "TextVoxelSceneData.hpp"
+#include "TextVctConfig.hpp"
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
@@ -8,15 +8,15 @@ namespace castor
 {
 	using namespace castor3d;
 
-	TextWriter< VoxelSceneData >::TextWriter( String const & tabs )
-		: TextWriterT< VoxelSceneData >{ tabs }
+	TextWriter< VctConfig >::TextWriter( String const & tabs )
+		: TextWriterT< VctConfig >{ tabs }
 	{
 	}
 
-	bool TextWriter< VoxelSceneData >::operator()( VoxelSceneData const & obj
+	bool TextWriter< VctConfig >::operator()( VctConfig const & obj
 		, StringStream & file )
 	{
-		log::info << tabs() << cuT( "Writing VoxelSceneData" ) << std::endl;
+		log::info << tabs() << cuT( "Writing VctConfig" ) << std::endl;
 		auto result = writeText( file, cuT( "\n" ) + tabs() + cuT( "//Voxel Cone Tracing\n" ) );
 
 		if ( result )

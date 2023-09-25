@@ -60,7 +60,7 @@ namespace castor3d
 	*\brief
 	*	Configuration des voxels.
 	*/
-	class VoxelSceneData;
+	struct VctConfig;
 
 	CU_DeclareSmartPtr( castor3d, VoxelBufferToTexture, C3D_API );
 	CU_DeclareSmartPtr( castor3d, VoxelizePass, C3D_API );

@@ -23,26 +23,6 @@ namespace castor3d
 		}
 	}
 
-	void RsmConfig::accept( castor::String const & name
-		, ConfigurationVisitorBase & visitor )
-	{
-		visitor.visit( name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "RSM" )
-			, cuT( "Intensity" )
-			, intensity );
-		visitor.visit( name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "RSM" )
-			, cuT( "Max Radius" )
-			, maxRadius );
-		visitor.visit( name
-			, VK_SHADER_STAGE_FRAGMENT_BIT
-			, cuT( "RSM" )
-			, cuT( "Sample Count" )
-			, sampleCount );
-	}
-
 	float getMaxDistance( LightCategory const & light
 		, castor::Point3f const & attenuation )
 	{

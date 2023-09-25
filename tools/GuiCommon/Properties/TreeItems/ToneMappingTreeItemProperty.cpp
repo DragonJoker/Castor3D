@@ -55,6 +55,11 @@ namespace GuiCommon
 			}
 
 		private:
+			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			{
+				return std::unique_ptr< ConfigurationVisitorBase >( new ToneMappingShaderGatherer{ m_sources } );
+			}
+
 			ShaderSource & doGetSource( castor::String const & name )
 			{
 				auto it = std::find_if( m_sources.begin()

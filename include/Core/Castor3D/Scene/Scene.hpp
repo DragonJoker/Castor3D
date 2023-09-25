@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
-#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
@@ -389,12 +389,12 @@ namespace castor3d
 			return m_lpvIndirectAttenuation;
 		}
 
-		VoxelSceneData const & getVoxelConeTracingConfig()const noexcept
+		VctConfig const & getVoxelConeTracingConfig()const noexcept
 		{
 			return m_voxelConfig;
 		}
 
-		VoxelSceneData & getVoxelConeTracingConfig()noexcept
+		VctConfig & getVoxelConeTracingConfig()noexcept
 		{
 			return m_voxelConfig;
 		}
@@ -518,7 +518,7 @@ namespace castor3d
 		std::array< std::set< GlobalIlluminationType >, size_t( LightType::eCount ) > m_giTypes;
 		std::atomic_bool m_hasAnyShadows;
 		float m_lpvIndirectAttenuation{ 1.7f };
-		VoxelSceneData m_voxelConfig;
+		VctConfig m_voxelConfig;
 		SceneRenderNodesUPtr m_renderNodes;
 		FramePassTimerUPtr m_timerSceneNodes;
 		FramePassTimerUPtr m_timerBoundingBox;

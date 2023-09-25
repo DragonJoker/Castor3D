@@ -1,7 +1,6 @@
 #include "TextShadow.hpp"
 
 #include "TextLpvConfig.hpp"
-#include "TextRsmConfig.hpp"
 
 #include <Castor3D/Miscellaneous/Logger.hpp>
 

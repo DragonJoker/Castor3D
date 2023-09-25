@@ -7,9 +7,9 @@
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderTechniqueVisitor.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelBufferToTexture.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelizePass.hpp"
-#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSecondaryBounce.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Scene/Camera.hpp"
@@ -118,7 +118,7 @@ namespace castor3d
 		, Scene & scene
 		, Camera & camera
 		, VoxelizerUbo & voxelizerUbo
-		, VoxelSceneData const & voxelConfig )
+		, VctConfig const & voxelConfig )
 		: m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }

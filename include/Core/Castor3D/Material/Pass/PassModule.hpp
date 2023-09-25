@@ -56,7 +56,7 @@ namespace castor3d
 	*	Enumération des modes de mélange
 	*/
 	enum class BlendMode
-		: uint8_t
+		: uint32_t
 	{
 		//!\~english Order dependent blending.
 		//!\~french Mélange dépendant de l'ordre.

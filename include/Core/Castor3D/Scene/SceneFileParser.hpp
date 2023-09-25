@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
+#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
@@ -245,6 +246,8 @@ namespace castor3d
 		SceneImportConfig sceneImportConfig;
 		MeshImporterUPtr importer;
 		ClustersConfigUPtr clustersConfig;
+		HdrConfig hdrConfig;
+		ShadowConfigUPtr shadowConfig;
 	};
 
 	C3D_API SceneFileContext & getSceneParserContext( castor::FileParserContext & context );

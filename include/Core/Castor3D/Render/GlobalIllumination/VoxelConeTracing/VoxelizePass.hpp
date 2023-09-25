@@ -56,7 +56,7 @@ namespace castor3d
 			, SceneCuller & culler
 			, VoxelizerUbo const & voxelizerUbo
 			, ashes::Buffer< Voxel > const & voxels
-			, VoxelSceneData const & voxelConfig
+			, VctConfig const & voxelConfig
 			, bool isStatic );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -112,7 +112,7 @@ namespace castor3d
 		Scene const & m_scene;
 		ashes::Buffer< Voxel > const & m_voxels;
 		VoxelizerUbo const & m_voxelizerUbo;
-		VoxelSceneData const & m_voxelConfig;
+		VctConfig const & m_voxelConfig;
 		bool m_outOfDate{ true };
 	};
 }

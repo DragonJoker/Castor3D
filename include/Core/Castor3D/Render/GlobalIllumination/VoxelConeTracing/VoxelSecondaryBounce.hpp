@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_VoxelSecondaryBounce_H___
@@ -45,7 +45,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, VoxelSceneData const & voxelConfig
+			, VctConfig const & voxelConfig
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -59,7 +59,7 @@ namespace castor3d
 		bool doIsComputePass()const;
 
 	private:
-		VoxelSceneData const & m_vctConfig;
+		VctConfig const & m_vctConfig;
 		ShaderModule m_shader;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;

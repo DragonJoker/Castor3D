@@ -652,6 +652,6 @@ namespace castor3d
 			: 0u;
 		visitor.visit( m_programs[index].vertexShader );
 		visitor.visit( m_programs[index].pixelShader );
-		config.accept( m_programs[index].pixelShader.name, visitor );
+		config.accept( visitor );
 	}
 }

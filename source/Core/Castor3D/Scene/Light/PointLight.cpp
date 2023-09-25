@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Light/PointLight.hpp"
 
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/Viewport.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
@@ -150,15 +151,6 @@ namespace castor3d
 		LightCategory::doFillBaseShadowData( point );
 	}
 
-	void PointLight::doFillLightBuffer( castor::Point4f * data )const
-	{
-		auto & point = *reinterpret_cast< LightData * >( data->ptr() );
-		auto position = getLight().getParent()->getDerivedPosition();
-
-		point.posDir = position;
-		point.range = m_range.value();
-	}
-
 	void PointLight::setAttenuation( castor::Point3f const & attenuation )
 	{
 		m_range = getMaxDistance( *this, attenuation );
@@ -177,5 +169,19 @@ namespace castor3d
 		{
 			getLight().markDirty();
 		}
+	}
+
+	void PointLight::doFillLightBuffer( castor::Point4f * data )const
+	{
+		auto & point = *reinterpret_cast< LightData * >( data->ptr() );
+		auto position = getLight().getParent()->getDerivedPosition();
+
+		point.posDir = position;
+		point.range = m_range.value();
+	}
+
+	void PointLight::doAccept( ConfigurationVisitorBase & vis )
+	{
+		vis.visit( cuT( "Range" ), m_range );
 	}
 }

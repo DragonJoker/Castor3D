@@ -410,12 +410,9 @@ namespace castor3d
 		*	Mutateurs.
 		**/
 		/**@{*/
-		C3D_API void setExposure( float value );
-		C3D_API void setGamma( float value );
-
-		void setSsaoConfig( SsaoConfig const & config )noexcept
+		void setSsaoConfig( SsaoConfig config )noexcept
 		{
-			m_ssaoConfig = config;
+			m_ssaoConfig = std::move( config );
 		}
 
 		void setJitter( castor::Point2f const & value )noexcept

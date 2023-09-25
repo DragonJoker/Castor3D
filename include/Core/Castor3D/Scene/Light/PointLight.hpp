@@ -113,6 +113,7 @@ namespace castor3d
 
 	private:
 		void doFillLightBuffer( castor::Point4f * data )const override;
+		void doAccept( ConfigurationVisitorBase & vis )override;
 
 	private:
 		friend class Scene;
