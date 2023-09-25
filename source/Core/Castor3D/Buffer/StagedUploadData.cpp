@@ -26,7 +26,7 @@ namespace castor3d
 			, FrameBuffers{ device->createSemaphore( m_debugName ) } }
 		, m_cpuBuffers{ &m_buffers[0] }
 		, m_gpuBuffers{ &m_buffers[0] }
-		, m_timer{ castor::makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload", 2u ) }
+		, m_timer{ castor::makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload" ) }
 	{
 		m_device.renderSystem.getEngine()->registerTimer( "Upload", *m_timer );
 	}
@@ -58,7 +58,7 @@ namespace castor3d
 		auto & engine = *m_device.renderSystem.getEngine();
 		m_commandBuffer->beginDebugBlock( { "Buffers Upload"
 			, makeFloatArray( engine.getNextRainbowColour() ) } );
-		m_timer->beginPass( *m_commandBuffer, m_frameIndex );
+		m_timer->beginPass( *m_commandBuffer );
 
 		for ( auto & offset : m_cpuBuffers->bufferOffsets )
 		{
@@ -281,7 +281,7 @@ namespace castor3d
 			}
 		}
 
-		m_timer->endPass( *m_commandBuffer, m_frameIndex );
+		m_timer->endPass( *m_commandBuffer );
 		m_commandBuffer->endDebugBlock();
 		m_timer->notifyPassRender( m_frameIndex );
 	}

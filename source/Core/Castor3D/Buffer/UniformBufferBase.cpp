@@ -76,11 +76,11 @@ namespace castor3d
 			, VkDeviceSize count
 			, VkDeviceSize offset
 			, VkPipelineStageFlags flags
-			, FramePassTimer const & timer
+			, FramePassTimer & timer
 			, uint32_t index )
 		{
 			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			timer.beginPass( commandBuffer, index );
+			timer.beginPass( commandBuffer );
 			doCopyBuffer( src
 				, dst
 				, ubo
@@ -89,7 +89,7 @@ namespace castor3d
 				, count
 				, offset
 				, flags );
-			timer.endPass( commandBuffer, index );
+			timer.endPass( commandBuffer );
 			commandBuffer.end();
 		}
 
@@ -250,7 +250,7 @@ namespace castor3d
 		, size_t size
 		, uint32_t offset
 		, VkPipelineStageFlags flags
-		, FramePassTimer const & timer
+		, FramePassTimer & timer
 		, uint32_t index )const
 	{
 		auto commandBuffer = commandPool.createCommandBuffer( "UniformBufferUpload"
@@ -275,7 +275,7 @@ namespace castor3d
 		, size_t size
 		, uint32_t offset
 		, VkPipelineStageFlags flags
-		, FramePassTimer const & timer
+		, FramePassTimer & timer
 		, uint32_t index )const
 	{
 		auto elemAlignedSize = getBuffer().getAlignedSize( m_elemSize );
@@ -320,7 +320,7 @@ namespace castor3d
 		, size_t size
 		, uint32_t offset
 		, VkPipelineStageFlags flags
-		, FramePassTimer const & timer
+		, FramePassTimer & timer
 		, uint32_t index )const
 	{
 		CU_Require( size >= size_t( m_elemCount ) * m_elemSize

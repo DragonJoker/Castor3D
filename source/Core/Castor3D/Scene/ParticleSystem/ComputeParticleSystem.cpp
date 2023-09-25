@@ -122,7 +122,7 @@ namespace castor3d
 		if ( dispatch->x )
 		{
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
-			updater.timer->beginPass( *m_commandBuffer, updater.index );
+			updater.timer->beginPass( *m_commandBuffer );
 
 			// Initialise counts buffer to 0.
 			auto flags = m_generatedCountBuffer->getBuffer().getCompatibleStageFlags();
@@ -184,7 +184,7 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_HOST_BIT
 				, m_generatedCountBuffer->getBuffer().makeMemoryTransitionBarrier( VK_ACCESS_HOST_READ_BIT ) );
 
-			updater.timer->endPass( *m_commandBuffer, updater.index );
+			updater.timer->endPass( *m_commandBuffer );
 			m_commandBuffer->end();
 			device.graphicsData()->queue->submit( *m_commandBuffer, m_fence.get() );
 			updater.timer->notifyPassRender( updater.index );
