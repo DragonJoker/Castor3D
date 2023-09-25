@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Light/Light.hpp"
 
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
@@ -26,7 +27,7 @@ namespace castor3d
 		m_category->update();
 		onGPUChanged( *this );
 		m_currentGlobalIllumination = m_shadows.globalIllumination;
-		m_currentShadowCaster = m_shadowCaster;
+		m_currentShadowCaster = m_shadows.enabled;
 	}
 
 	void Light::fillLightBuffer( uint32_t index
@@ -41,6 +42,14 @@ namespace castor3d
 	void Light::fillShadowBuffer( AllShadowData & data )
 	{
 		m_category->fillShadowBuffer( data );
+	}
+
+	void Light::accept( ConfigurationVisitorBase & vis )
+	{
+		vis.visit( cuT( "Light" ) );
+		vis.visit( cuT( "Enabled" ), m_enabled );
+		m_category->accept( vis );
+		m_shadows.accept( vis, getLightType() );
 	}
 
 	DirectionalLightRPtr Light::getDirectionalLight()const

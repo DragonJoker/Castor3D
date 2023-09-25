@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_VoxelBufferToTexture_H___
@@ -49,7 +49,7 @@ namespace castor3d
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
-			, VoxelSceneData const & vctConfig
+			, VctConfig const & vctConfig
 			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
@@ -65,7 +65,7 @@ namespace castor3d
 
 	private:
 		RenderDevice const & m_device;
-		VoxelSceneData const & m_vctConfig;
+		VctConfig const & m_vctConfig;
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayout;
 		ashes::PipelineLayoutPtr m_pipelineLayout;
 		std::array< Pipeline, 4u > m_pipelines;

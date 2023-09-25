@@ -22,14 +22,14 @@ namespace GuiCommon
 	public:
 		VCTConfigTreeItemProperty( bool editable
 			, castor3d::Engine * engine
-			, castor3d::VoxelSceneData & config );
+			, castor3d::VctConfig & config );
 
 	private:
 		void doCreateProperties( wxPGEditor * editor
 			, wxPropertyGrid * grid )override;
 
 	private:
-		castor3d::VoxelSceneData & m_config;
+		castor3d::VctConfig & m_config;
 	};
 }
 

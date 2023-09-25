@@ -62,15 +62,7 @@ namespace GuiCommon
 		void doCreateProperties( wxPGEditor * editor, wxPropertyGrid * grid )override;
 
 	private:
-		void doCreateDirectionalLightProperties( wxPropertyGrid * grid, castor3d::DirectionalLight & light );
-		void doCreatePointLightProperties( wxPropertyGrid * grid, castor3d::PointLight & light );
-		void doCreateSpotLightProperties( wxPropertyGrid * grid, castor3d::SpotLight & light );
-		void doCreateShadowProperties( wxPropertyGrid * grid );
-		void doUpdateGIProperties( GIType type );
-
-	private:
 		castor3d::Light & m_light;
-		wxPGProperty * m_rsmProperties{};
 		wxPGProperty * m_lpvProperties{};
 	};
 }

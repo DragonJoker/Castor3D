@@ -140,16 +140,6 @@ namespace castor3d
 	using OnLightChangedFunction = std::function< void( Light & ) >;
 	using OnLightChanged = castor::SignalT< OnLightChangedFunction >;
 	using OnLightChangedConnection = OnLightChanged::connection;
-
-	struct RsmConfig
-	{
-		C3D_API void accept( castor::String const & name
-			, ConfigurationVisitorBase & visitor );
-
-		castor::ChangeTracked< float > intensity;
-		castor::ChangeTracked< float > maxRadius;
-		castor::ChangeTracked< castor::RangedValue< uint32_t > > sampleCount{ castor::makeRangedValue( 100u, 20u, MaxRsmRange ) };
-	};
 	/**
 	*\~english
 	*	Helper structure to specialise a scene objects cache behaviour.

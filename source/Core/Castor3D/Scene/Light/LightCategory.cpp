@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/Light/LightCategory.hpp"
 
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Scene/Light/Light.hpp"
 
@@ -31,6 +32,14 @@ namespace castor3d
 		base.shadowMapIndex = float( m_light.getShadowMapIndex() );
 
 		doFillLightBuffer( data );
+	}
+
+	void LightCategory::accept( ConfigurationVisitorBase & vis )
+	{
+		vis.visit( cuT( "Colour" ), m_colour );
+		vis.visit( cuT( "Diffuse Intensity" ), m_intensity->x );
+		vis.visit( cuT( "Specular Intensity" ), m_intensity->y );
+		doAccept( vis );
 	}
 
 	uint32_t LightCategory::getVolumetricSteps()const
@@ -76,11 +85,6 @@ namespace castor3d
 	ShadowConfig const & LightCategory::getShadowConfig()const
 	{
 		return m_light.getShadowConfig();
-	}
-
-	RsmConfig const & LightCategory::getRsmConfig()const
-	{
-		return m_light.getRsmConfig();
 	}
 
 	LpvConfig const & LightCategory::getLpvConfig()const

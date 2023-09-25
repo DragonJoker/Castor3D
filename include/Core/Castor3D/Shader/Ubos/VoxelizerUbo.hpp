@@ -109,7 +109,7 @@ namespace castor3d
 		C3D_API explicit VoxelizerUbo( RenderDevice const & device );
 		C3D_API ~VoxelizerUbo();
 
-		C3D_API void cpuUpdate( VoxelSceneData const & voxelConfig
+		C3D_API void cpuUpdate( VctConfig const & voxelConfig
 			, float worldToGrid
 			, uint32_t voxelGridSize );
 

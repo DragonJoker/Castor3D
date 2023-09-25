@@ -217,9 +217,29 @@ namespace castor3d
 
 	void AlphaTestComponent::accept( ConfigurationVisitorBase & vis )
 	{
+		static castor::StringArray names{ cuT( "Never" )
+			, cuT( "Less" )
+			, cuT( "Equal" )
+			, cuT( "Less Or Equal" )
+			, cuT( "Greater" )
+			, cuT( "Not Equal" )
+			, cuT( "Greater Or Equal" )
+			, cuT( "Always" ) };
 		vis.visit( cuT( "Alpha Test" ) );
-		vis.visit( cuT( "Alpha func" ), m_value.alphaFunc );
-		vis.visit( cuT( "Blend alpha func" ), m_value.blendAlphaFunc );
+		vis.visit( cuT( "Alpha func" )
+			, m_value.alphaFunc
+			, names
+			, ConfigurationVisitorBase::OnEnumValueChangeT< VkCompareOp >( [this]( VkCompareOp oldV, VkCompareOp newV )
+			{
+				m_value.alphaFunc = newV;
+			} ) );
+		vis.visit( cuT( "Blend alpha func" )
+			, m_value.blendAlphaFunc
+			, names
+			, ConfigurationVisitorBase::OnEnumValueChangeT< VkCompareOp >( [this]( VkCompareOp oldV, VkCompareOp newV )
+			{
+				m_value.blendAlphaFunc = newV;
+			} ) );
 		vis.visit( cuT( "Alpha ref. value" ), m_value.alphaRefValue );
 	}
 

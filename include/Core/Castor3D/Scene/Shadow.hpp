@@ -15,6 +15,12 @@ namespace castor3d
 {
 	struct ShadowConfig
 	{
+		C3D_API void accept( ConfigurationVisitorBase & visitor
+			, LightType lightType );
+
+		C3D_API static void addParsers( castor::AttributeParsers & result );
+
+		bool enabled{};
 		ShadowType filterType{ ShadowType::eNone };
 		GlobalIlluminationType globalIllumination{ GlobalIlluminationType::eNone };
 		uint32_t volumetricSteps{ 0u };
@@ -25,16 +31,8 @@ namespace castor3d
 		float vsmLightBleedingReduction{};
 		castor::RangedValue< uint32_t > pcfFilterSize{ 4u, castor::makeRange( 0u, MaxPcfFilterSize ) };
 		castor::RangedValue< uint32_t > pcfSampleCount{ 8u, castor::makeRange( 0u, MaxPcfSampleCount ) };
-		RsmConfig rsmConfig;
 		LpvConfig lpvConfig;
 	};
-
-	inline bool operator==( RsmConfig const & lhs, RsmConfig const & rhs )noexcept
-	{
-		return lhs.intensity == rhs.intensity
-			&& lhs.maxRadius == rhs.maxRadius
-			&& lhs.sampleCount == rhs.sampleCount;
-	}
 
 	inline bool operator==( ShadowConfig const & lhs, ShadowConfig const & rhs )noexcept
 	{
@@ -48,7 +46,6 @@ namespace castor3d
 			&& lhs.vsmLightBleedingReduction == rhs.vsmLightBleedingReduction
 			&& lhs.pcfFilterSize == rhs.pcfFilterSize
 			&& lhs.pcfSampleCount == rhs.pcfSampleCount
-			&& lhs.rsmConfig == rhs.rsmConfig
 			&& lhs.lpvConfig == rhs.lpvConfig;
 	}
 }

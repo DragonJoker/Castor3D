@@ -49,7 +49,7 @@ namespace castor3d
 			, Scene & scene
 			, Camera & camera
 			, VoxelizerUbo & voxelizerUbo
-			, VoxelSceneData const & voxelConfig );
+			, VctConfig const & voxelConfig );
 		C3D_API ~Voxelizer();
 		/**
 		 *\~english
@@ -142,7 +142,7 @@ namespace castor3d
 	private:
 		Engine & m_engine;
 		RenderDevice const & m_device;
-		VoxelSceneData const & m_voxelConfig;
+		VctConfig const & m_voxelConfig;
 		Scene & m_scene;
 		Camera & m_camera;
 		SceneCullerUPtr m_staticsCuller;

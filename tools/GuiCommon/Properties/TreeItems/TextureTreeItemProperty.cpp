@@ -183,18 +183,6 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
-			{
-				doVisit( name );
-			}
-
-			void visit( castor::String const & name
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
-			{
-				doVisit( name );
-			}
-
-			void visit( castor::String const & name
 				, bool & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
@@ -258,42 +246,10 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, castor3d::BlendMode & value
+				, castor::Angle & value
 				, ConfigurationVisitor::ControlsList controls )override
 			{
-				wxArrayString choices;
-				choices.push_back( _( "No Blend" ) );
-				choices.push_back( _( "Additive" ) );
-				choices.push_back( _( "Multiplicative" ) );
-				choices.push_back( _( "Interpolative" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
-			}
-
-			void visit( castor::String const & name
-				, castor3d::ParallaxOcclusionMode & value
-				, ConfigurationVisitor::ControlsList controls )override
-			{
-				wxArrayString choices;
-				choices.push_back( _( "None" ) );
-				choices.push_back( _( "One" ) );
-				choices.push_back( _( "Repeat" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
-			}
-
-			void visit( castor::String const & name
-				, VkCompareOp & value
-				, ConfigurationVisitor::ControlsList controls )override
-			{
-				wxArrayString choices;
-				choices.push_back( _( "Never" ) );
-				choices.push_back( _( "Less" ) );
-				choices.push_back( _( "Equal" ) );
-				choices.push_back( _( "Less Equal" ) );
-				choices.push_back( _( "Greater" ) );
-				choices.push_back( _( "Not Equal" ) );
-				choices.push_back( _( "Greater Equal" ) );
-				choices.push_back( _( "Always" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -346,6 +302,17 @@ namespace GuiCommon
 			}
 
 		private:
+			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			{
+				doVisit( category );
+				return std::unique_ptr< ConfigurationVisitorBase >( new UnitTreeGatherer{ m_pass
+					, m_format
+					, m_properties
+					, m_grid
+					, m_onEnabled
+					, m_onChange } );
+			}
+
 			void doVisit( wxString const & name )
 			{
 				m_properties->setPrefix( make_String( name ) );

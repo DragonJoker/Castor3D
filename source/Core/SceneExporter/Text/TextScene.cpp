@@ -15,7 +15,7 @@
 #include "TextSampler.hpp"
 #include "TextSceneNode.hpp"
 #include "TextSkeleton.hpp"
-#include "TextVoxelSceneData.hpp"
+#include "TextVctConfig.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/AnimatedObjectGroupCache.hpp>

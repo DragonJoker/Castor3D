@@ -113,12 +113,6 @@ namespace GuiCommon
 				}
 			}
 
-			void visit( castor::String const & category
-				, ControlsList controls )override
-			{
-				m_properties.addProperty( &m_grid, category );
-			}
-
 			void visit( castor3d::ImageBackground & background )override
 			{
 				static wxString PROPERTY_BACKGROUND_IMAGE_IMAGE = _( "Image" );
@@ -302,6 +296,13 @@ namespace GuiCommon
 			}
 
 			using ConfigurationVisitorBase::visit;
+
+		private:
+			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			{
+				m_properties.addProperty( &m_grid, category );
+				return std::unique_ptr< ConfigurationVisitorBase >( new BackgroundDisplayer{ m_properties, m_grid } );
+			}
 
 		private:
 			TreeItemProperty & m_properties;

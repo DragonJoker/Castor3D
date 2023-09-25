@@ -133,6 +133,9 @@ namespace castor3d
 
 	private:
 		void doFillLightBuffer( castor::Point4f * data )const override;
+		void doAccept( ConfigurationVisitorBase & vis )override
+		{
+		}
 
 	private:
 		castor::Point3f m_direction;

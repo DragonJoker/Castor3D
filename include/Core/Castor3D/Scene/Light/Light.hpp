@@ -86,6 +86,19 @@ namespace castor3d
 		C3D_API void fillShadowBuffer( AllShadowData & data );
 		/**
 		*\~english
+		*\brief
+		*	ConfigurationVisitorBase acceptance function.
+		*\param vis
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de ConfigurationVisitorBase.
+		*\param vis
+		*	Le ... visiteur.
+		*/
+		C3D_API void accept( ConfigurationVisitorBase & vis );
+		/**
+		*\~english
 		*name
 		*	Getters.
 		*\~french
@@ -159,7 +172,7 @@ namespace castor3d
 
 		bool isExpectedShadowProducer()const
 		{
-			return m_shadowCaster;
+			return m_shadows.enabled;
 		}
 
 		ShadowType getShadowType()const
@@ -201,16 +214,6 @@ namespace castor3d
 		GlobalIlluminationType getExpectedGlobalIlluminationType()const
 		{
 			return m_shadows.globalIllumination;
-		}
-
-		RsmConfig const & getRsmConfig()const
-		{
-			return m_shadows.rsmConfig;
-		}
-
-		RsmConfig & getRsmConfig()
-		{
-			return m_shadows.rsmConfig;
 		}
 
 		LpvConfig const & getLpvConfig()const
@@ -264,6 +267,11 @@ namespace castor3d
 		}
 
 		ShadowConfig const & getShadowConfig()const
+		{
+			return m_shadows;
+		}
+
+		ShadowConfig & getShadowConfig()
 		{
 			return m_shadows;
 		}
@@ -339,7 +347,13 @@ namespace castor3d
 
 		void setShadowProducer( bool value )
 		{
-			m_shadowCaster = value;
+			m_shadows.enabled = value;
+			markDirty();
+		}
+
+		void setShadowConfig( ShadowConfig config )
+		{
+			m_shadows = std::move( config );
 			markDirty();
 		}
 
@@ -431,7 +445,6 @@ namespace castor3d
 
 	protected:
 		bool m_enabled{};
-		bool m_shadowCaster{};
 		std::atomic_bool m_currentShadowCaster{};
 		bool m_dirty{ true };
 		ShadowConfig m_shadows;

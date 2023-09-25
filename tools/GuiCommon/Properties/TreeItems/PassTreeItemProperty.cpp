@@ -106,18 +106,6 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
-			{
-				doVisit( name );
-			}
-
-			void visit( castor::String const & name
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
-			{
-				doVisit( name );
-			}
-
-			void visit( castor::String const & name
 				, bool & value
 				, castor3d::ConfigurationVisitor::ControlsList controls )override
 			{
@@ -181,42 +169,10 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
-				, castor3d::BlendMode & value
+				, castor::Angle & value
 				, castor3d::ConfigurationVisitor::ControlsList controls )override
 			{
-				wxArrayString choices;
-				choices.push_back( _( "No Blend" ) );
-				choices.push_back( _( "Additive" ) );
-				choices.push_back( _( "Multiplicative" ) );
-				choices.push_back( _( "Interpolative" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
-			}
-
-			void visit( castor::String const & name
-				, castor3d::ParallaxOcclusionMode & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
-			{
-				wxArrayString choices;
-				choices.push_back( _( "None" ) );
-				choices.push_back( _( "One" ) );
-				choices.push_back( _( "Repeat" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
-			}
-
-			void visit( castor::String const & name
-				, VkCompareOp & value
-				, castor3d::ConfigurationVisitor::ControlsList controls )override
-			{
-				wxArrayString choices;
-				choices.push_back( _( "Never" ) );
-				choices.push_back( _( "Less" ) );
-				choices.push_back( _( "Equal" ) );
-				choices.push_back( _( "Less Equal" ) );
-				choices.push_back( _( "Greater" ) );
-				choices.push_back( _( "Not Equal" ) );
-				choices.push_back( _( "Greater Equal" ) );
-				choices.push_back( _( "Always" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
+				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -329,45 +285,6 @@ namespace GuiCommon
 				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
-			}
-
-			void visit( castor::String const & name
-				, castor3d::BlendMode & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
-			{
-				wxArrayString choices;
-				choices.push_back( _( "No Blend" ) );
-				choices.push_back( _( "Additive" ) );
-				choices.push_back( _( "Multiplicative" ) );
-				choices.push_back( _( "Interpolative" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
-			}
-
-			void visit( castor::String const & name
-				, castor3d::ParallaxOcclusionMode & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
-			{
-				wxArrayString choices;
-				choices.push_back( _( "None" ) );
-				choices.push_back( _( "One" ) );
-				choices.push_back( _( "Repeat" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
-			}
-
-			void visit( castor::String const & name
-				, VkCompareOp & value
-				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
-			{
-				wxArrayString choices;
-				choices.push_back( _( "Never" ) );
-				choices.push_back( _( "Less" ) );
-				choices.push_back( _( "Equal" ) );
-				choices.push_back( _( "Less Equal" ) );
-				choices.push_back( _( "Greater" ) );
-				choices.push_back( _( "Not Equal" ) );
-				choices.push_back( _( "Greater Equal" ) );
-				choices.push_back( _( "Always" ) );
-				m_result->push_back( m_properties->addPropertyET( m_compProps->container, name, choices, &value, std::move( controls ) ) );
 			}
 
 			void visit( castor::String const & name
@@ -420,6 +337,15 @@ namespace GuiCommon
 			}
 
 		private:
+			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
+			{
+				doVisit( category );
+				return std::unique_ptr< ConfigurationVisitorBase >( new PassTreeGatherer{ m_pass
+					, m_properties
+					, m_grid
+					, m_onEnabled } );
+			}
+
 			void doVisit( castor::String const & name )
 			{
 				m_properties->setPrefix( make_String( name ) );
@@ -500,231 +426,6 @@ namespace GuiCommon
 				doGetSource( module.name ).sources[module.stage] = &module;
 			}
 
-			template< typename T >
-			void doVisitUntrackedT( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, T & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
-			template< typename T >
-			void doVisitUntrackedT( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::RangedValue< T > & value )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value ) );
-			}
-
-			template< typename T >
-			void doVisitTrackedT( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, T & value
-				, ControlsList controls )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, std::move( controls ) ) );
-			}
-
-			template< typename T >
-			void doVisitTrackedT( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::RangedValue< T > & value
-				, ControlsList controls )
-			{
-				auto & source = doGetSource( name );
-				auto & uboValues = doGetUbo( source, shaders, ubo );
-				uboValues.uniforms.emplace_back( makeUniformValue( uniform, value, std::move( controls ) ) );
-			}
-
-			template< typename ValueT, typename ... ParamsT >
-			void doVisitT( ValueT & value
-				, ControlsList controls
-				, ParamsT ... params )
-			{
-				if ( !controls.empty() )
-				{
-					doVisitTrackedT< ValueT >( params..., value, std::move( controls ) );
-				}
-				else
-				{
-					doVisitUntrackedT( params..., value );
-				}
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, float & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, int32_t & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, uint32_t & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point2f & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point2i & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point2ui & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point3f & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point3i & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point3ui & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point4f & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point4i & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Point4ui & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::Matrix4x4f & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::RangedValue< float > & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::RangedValue< int32_t > & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
-			void visit( castor::String const & name
-				, VkShaderStageFlags shaders
-				, castor::String const & ubo
-				, castor::String const & uniform
-				, castor::RangedValue< uint32_t > & value
-				, ControlsList controls )override
-			{
-				doVisitT( value, std::move( controls ), name, shaders, ubo, uniform );
-			}
-
 		private:
 			ShaderSource & doGetSource( castor::String const & name )
 			{
@@ -745,26 +446,10 @@ namespace GuiCommon
 				return m_sources.back();
 			}
 
-			UniformBufferValues & doGetUbo( ShaderSource & source
-				, VkShaderStageFlags stages
-				, castor::String const & name )
+		private:
+			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
 			{
-				auto it = std::find_if( source.ubos.begin()
-					, source.ubos.end()
-					, [&name, &stages]( UniformBufferValues const & lookup )
-					{
-						return lookup.name == name
-							&& lookup.stages == stages;
-					} );
-
-				if ( it != source.ubos.end() )
-				{
-					return *it;
-				}
-
-				UniformBufferValues ubo{ name, stages };
-				source.ubos.emplace_back( std::move( ubo ) );
-				return source.ubos.back();
+				return std::unique_ptr< ConfigurationVisitorBase >( new PassShaderGatherer{ getFlags(), getScene(), m_sources } );
 			}
 
 		private:

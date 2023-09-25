@@ -27,7 +27,7 @@ namespace castor3d
 	*\brief
 	*	Configuration HDR (exposition et correction gamma).
 	*/
-	class HdrConfig;
+	struct HdrConfig;
 	/**
 	*\~english
 	*\brief

@@ -2,7 +2,7 @@
 
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
-#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VoxelSceneData.hpp"
+#include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -102,7 +102,7 @@ namespace castor3d
 		m_device.uboPool->putBuffer( m_ubo );
 	}
 
-	void VoxelizerUbo::cpuUpdate( VoxelSceneData const & voxelConfig
+	void VoxelizerUbo::cpuUpdate( VctConfig const & voxelConfig
 		, float worldToGrid
 		, uint32_t voxelGridSize )
 	{
