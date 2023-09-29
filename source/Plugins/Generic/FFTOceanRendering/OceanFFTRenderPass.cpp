@@ -586,7 +586,7 @@ namespace ocean_fft
 	{
 		using namespace sdw;
 		using namespace castor3d;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
@@ -635,7 +635,7 @@ namespace ocean_fft
 	{
 		using namespace sdw;
 		using namespace castor3d;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 		// Shader inputs
 		auto position = writer.declInput< Vec4 >( "position", 0u );
@@ -714,7 +714,7 @@ namespace ocean_fft
 	{
 		using namespace sdw;
 		using namespace castor3d;
-		TessellationControlWriter writer;
+		TessellationControlWriter writer{ &getEngine()->getShaderAllocator() };
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
@@ -849,7 +849,7 @@ namespace ocean_fft
 	{
 		using namespace sdw;
 		using namespace castor3d;
-		TessellationEvaluationWriter writer;
+		TessellationEvaluationWriter writer{ &getEngine()->getShaderAllocator() };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -969,7 +969,7 @@ namespace ocean_fft
 	{
 		using namespace sdw;
 		using namespace castor3d;
-		FragmentWriter writer;
+		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 

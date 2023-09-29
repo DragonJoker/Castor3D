@@ -680,6 +680,19 @@ namespace castor3d
 		return m_renderLoop->getUploadData();
 	}
 
+	ast::ShaderAllocator & Engine::getShaderAllocator()
+	{
+		auto lock = castor::makeUniqueLock( m_allocMutex );
+		auto ires = m_shaderAllocators.emplace( std::this_thread::get_id(), nullptr );
+
+		if ( ires.second )
+		{
+			ires.first->second = std::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eFragmented );
+		}
+
+		return *ires.first->second;
+	}
+
 	castor::RgbaColour Engine::getNextRainbowColour()const
 	{
 		static float currentColourHue{ 0.0f };

@@ -92,9 +92,10 @@ namespace ocean_fft
 					, pipelineLayout ) );
 		}
 
-		static castor3d::ShaderPtr createShader( bool normals )
+		static castor3d::ShaderPtr createShader( castor3d::RenderDevice const & device
+			, bool normals )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 			auto const G = writer.declConstant( "G", 9.81_f );
 
 			C3D_FftOcean( writer, GenerateDistributionPass::eConfig, 0u );
@@ -201,7 +202,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ gendstr::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ gendstr::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, gendstr::createShader( normals ) }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, gendstr::createShader( device, normals ) }
 		, m_pipeline{ gendstr::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ gendstr::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }

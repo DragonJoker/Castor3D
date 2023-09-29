@@ -34,9 +34,10 @@ namespace castor3d
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, VkFormat format )
 		{
+			auto & engine = *device.renderSystem.getEngine();
 			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "EquirectangularToCube" };
 			{
-				sdw::VertexWriter writer;
+				sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 
 				// Inputs
 				auto position = writer.declInput< sdw::Vec4 >( "position", 0u );
@@ -58,7 +59,7 @@ namespace castor3d
 
 			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "EquirectangularToCube" };
 			{
-				sdw::FragmentWriter writer;
+				sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
 
 				// Inputs
 				auto mapColour = writer.declCombinedImg< FImg2DRgba32 >( "mapColour", 1u, 0u );

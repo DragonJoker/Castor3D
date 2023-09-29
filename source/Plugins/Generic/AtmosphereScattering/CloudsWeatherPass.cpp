@@ -30,9 +30,9 @@ namespace atmosphere_scattering
 		{
 			using Type = sdw::FragmentWriter;
 
-			static castor3d::ShaderPtr getVertexProgram()
+			static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
 			{
-				sdw::VertexWriter writer;
+				sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 				sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
 
 				writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
@@ -83,9 +83,10 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( uint32_t dimension )
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
+			, uint32_t dimension )
 		{
-			ShaderWriter< useCompute >::Type writer;
+			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
 
 			C3D_Weather( writer
 				, uint32_t( Bindings::eWeather )
@@ -227,18 +228,18 @@ namespace atmosphere_scattering
 		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, "Clouds/WeatherPass"
 			, ( weather::useCompute
-				? weather::getProgram( getExtent( resultView ).width )
+				? weather::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width )
 				: nullptr ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, "Clouds/WeatherPass"
 			, ( weather::useCompute
 				? nullptr
-				: weather::ShaderWriter< false >::getVertexProgram() ) }
+				: weather::ShaderWriter< false >::getVertexProgram( *device.renderSystem.getEngine() ) ) }
 		, m_fragmentShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, "Clouds/WeatherPass"
 			, ( weather::useCompute
 				? nullptr
-				: weather::getProgram( getExtent( resultView ).width ) ) }
+				: weather::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width ) ) }
 		, m_stages{ ( weather::useCompute
 			? ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeShader ) }
 			: ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_vertexShader )

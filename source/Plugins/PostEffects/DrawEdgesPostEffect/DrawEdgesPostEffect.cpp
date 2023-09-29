@@ -38,10 +38,10 @@ namespace draw_edges
 			eSpecifics,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::Engine & engine )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -59,11 +59,11 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine const & engine
+		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine & engine
 			, VkExtent3D const & extent )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 			castor3d::shader::Utils utils{ writer };
 			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, castor3d::TextureCombine{}
@@ -193,7 +193,7 @@ namespace draw_edges
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DECombine", px::getVertexProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DECombine", px::getVertexProgram( *renderTarget.getEngine() ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", px::getFragmentProgram( *renderTarget.getEngine()
 			, castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )

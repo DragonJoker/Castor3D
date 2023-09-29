@@ -188,7 +188,7 @@ namespace castor3d
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "BRDFPrefilter" };
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &m_renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -209,7 +209,7 @@ namespace castor3d
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "BRDFPrefilter" };
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &m_renderSystem.getEngine()->getShaderAllocator() };
 			shader::BRDFHelpers brdf{ writer };
 
 			// Inputs

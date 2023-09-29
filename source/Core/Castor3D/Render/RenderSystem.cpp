@@ -944,7 +944,7 @@ namespace castor3d
 		}
 	}
 
-	SpirVShader const & RenderSystem::compileShader( castor3d::ShaderModule & module )const
+	SpirVShader const & RenderSystem::compileShader( castor3d::ShaderModule & module )
 	{
 		SpirVShader result;
 
@@ -970,18 +970,20 @@ namespace castor3d
 
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
 		, castor::String const & name
-		, ast::Shader const & shader )const
+		, ast::Shader const & shader )
 	{
 		log::debug << "Compiling " << ashes::getName( stage ) << " shader [" << name << "] ...";
 		SpirVShader result;
 		auto availableExtensions = rendsys::listSpirVExtensions( *m_device );
 		spirv::SpirVConfig spirvConfig{ rendsys::getSpirVVersion( m_properties.apiVersion )
 			, &availableExtensions };
+		auto & shaderAllocator = doGetShaderAllocator();
+		spirvConfig.allocator = &shaderAllocator;
 		log::debug << " SPV ...";
 		result.spirv = spirv::serialiseSpirv( shader, spirvConfig );
 		std::string glsl;
 
-		if ( getEngine()->isValidationEnabled() )
+		if ( getEngine()->isShaderValidationEnabled() )
 		{
 			auto shadersDir = Engine::getEngineDirectory() / cuT( "Shaders" );
 			auto fileBaseName = castor::File::normaliseFileName( name + "_" + ashes::getName( stage ) );
@@ -1017,6 +1019,7 @@ namespace castor3d
 					, true
 					, true
 					, true };
+				config.allocator = &shaderAllocator;
 				glsl = glsl::compileGlsl( shader
 					, ast::SpecialisationInfo{}
 					, config );
@@ -1091,7 +1094,7 @@ namespace castor3d
 
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
 		, castor::String const & name
-		, castor::String const & glsl )const
+		, castor::String const & glsl )
 	{
 		SpirVShader result;
 		CU_Require( !glsl.empty() );
@@ -1171,6 +1174,19 @@ namespace castor3d
 		}
 
 		return true;
+	}
+
+	ast::ShaderAllocator & RenderSystem::doGetShaderAllocator()
+	{
+		auto lock = castor::makeUniqueLock( m_allocMutex );
+		auto ires = m_shaderCompileAllocator.emplace( std::this_thread::get_id(), nullptr );
+
+		if ( ires.second )
+		{
+			ires.first->second = std::make_unique< ast::ShaderAllocator >( ast::AllocationMode::eIncremental );
+		}
+
+		return *ires.first->second;
 	}
 
 	//*************************************************************************

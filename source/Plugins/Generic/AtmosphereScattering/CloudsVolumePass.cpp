@@ -37,9 +37,9 @@ namespace atmosphere_scattering
 		{
 			using Type = sdw::FragmentWriter;
 
-			static castor3d::ShaderPtr getVertexProgram()
+			static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
 			{
-				sdw::VertexWriter writer;
+				sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 				sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
 
 				writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
@@ -102,12 +102,12 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine const & engine
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
 			, VkExtent3D renderSize
 			, VkExtent3D const & transmittanceExtent
 			, bool hasDepth )
 		{
-			ShaderWriter< useCompute >::Type writer;
+			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
 
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )
@@ -290,7 +290,7 @@ namespace atmosphere_scattering
 			, getName()
 			, ( volclouds::useCompute
 				? nullptr
-				: volclouds::ShaderWriter< false >::getVertexProgram() ) }
+				: volclouds::ShaderWriter< false >::getVertexProgram( *device.renderSystem.getEngine() ) ) }
 		, m_fragmentShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, getName()
 			, ( volclouds::useCompute

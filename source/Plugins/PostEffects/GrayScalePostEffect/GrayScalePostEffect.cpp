@@ -41,10 +41,10 @@ namespace grayscale
 			ColorTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram()
+		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::Engine & engine )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
@@ -62,10 +62,10 @@ namespace grayscale
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		std::unique_ptr< ast::Shader > getFragmentProgram()
+		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine & engine )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			auto configUbo = UniformBuffer{ writer, "Configuration", GrayCfgUboIdx, 0u };
@@ -103,8 +103,8 @@ namespace grayscale
 			, renderSystem
 			, params }
 		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< castor::Point3f >( 0u ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GrayScale", getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GrayScale", getFragmentProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GrayScale", getVertexProgram( *renderTarget.getEngine() ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GrayScale", getFragmentProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 	{

@@ -29,10 +29,10 @@ namespace smaa
 			DepthTexIdx = SmaaUboIdx + 1,
 		};
 
-		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::Engine const & engine )
+		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::Engine & engine )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 			castor3d::shader::Utils utils{ writer };
 
 			// Shader inputs

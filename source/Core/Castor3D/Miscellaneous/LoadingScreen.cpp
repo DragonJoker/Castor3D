@@ -1,5 +1,6 @@
 #include "Castor3D/Miscellaneous/LoadingScreen.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Cache/OverlayCache.hpp"
@@ -119,10 +120,10 @@ namespace castor3d
 			return SceneUbo{ device };
 		}
 
-		static ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram( Engine & engine )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -135,10 +136,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgram()
+		static ShaderPtr getPixelProgram( Engine & engine )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", 0u, 0u );
@@ -187,8 +188,8 @@ namespace castor3d
 			, { 1u, true } }
 		, m_renderSize{ renderSize }
 		, m_renderPass{ renderPass }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, SceneName, loadscreen::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, SceneName, loadscreen::getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, SceneName, loadscreen::getVertexProgram( *device.renderSystem.getEngine() ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, SceneName, loadscreen::getPixelProgram( *device.renderSystem.getEngine() ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_renderQuad{ pass

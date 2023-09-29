@@ -138,7 +138,7 @@ namespace castor3d
 			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
 				, GeometryInjectionPass::RsmNormalsIdx
@@ -214,7 +214,7 @@ namespace castor3d
 			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormal )
 				, GeometryInjectionPass::RsmNormalsIdx
@@ -288,7 +288,7 @@ namespace castor3d
 			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormal )
 				, GeometryInjectionPass::RsmNormalsIdx
@@ -373,10 +373,10 @@ namespace castor3d
 			}
 		}
 
-		static std::unique_ptr< ast::Shader > getGeometryProgram()
+		static std::unique_ptr< ast::Shader > getGeometryProgram( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			GeometryWriter writer;
+			GeometryWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			writer.implementMainT< 1u, PointListT< lpvgeom::SurfaceT >, PointStreamT< lpvgeom::SurfaceT > >( [&]( GeometryIn in
 				, PointListT< lpvgeom::SurfaceT > list
@@ -398,10 +398,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgram()
+		static ShaderPtr getPixelProgram( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
@@ -609,8 +609,8 @@ namespace castor3d
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ lpvgeom::createVertexBuffer( getName(), m_device, m_rsmSize ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), lpvgeom::getVertexProgram( lightType, m_rsmSize, device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), lpvgeom::getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), lpvgeom::getPixelProgram() }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), lpvgeom::getGeometryProgram( device.renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), lpvgeom::getPixelProgram( device.renderSystem ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }
@@ -641,8 +641,8 @@ namespace castor3d
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ lpvgeom::createVertexBuffer( getName(), m_device, m_rsmSize ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), lpvgeom::getPointVertexProgram( face, m_rsmSize, device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), lpvgeom::getGeometryProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), lpvgeom::getPixelProgram() }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), lpvgeom::getGeometryProgram( device.renderSystem ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), lpvgeom::getPixelProgram( device.renderSystem ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }

@@ -88,10 +88,10 @@ namespace castor3d
 			sdw::IVec3 cellIndex;
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			auto inPosition = writer.declInput< Vec3 >( "inPosition", 0u );
 
@@ -108,10 +108,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getGeometryProgram()
+		static std::unique_ptr< ast::Shader > getGeometryProgram( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			GeometryWriter writer;
+			GeometryWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			writer.implementMainT< 1u, PointListT< lpvprop::SurfaceT >, PointStreamT< lpvprop::SurfaceT > >( [&]( GeometryIn in
 				, PointListT< lpvprop::SurfaceT > list
@@ -130,10 +130,11 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgram( bool occlusion )
+		static ShaderPtr getPixelProgram( RenderSystem const & renderSystem
+			, bool occlusion )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
@@ -511,13 +512,13 @@ namespace castor3d
 		, m_vertexBuffer{ lpvprop::createVertexBuffer( device, getName(), m_gridSize ) }
 		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, getName()
-			, lpvprop::getVertexProgram() }
+			, lpvprop::getVertexProgram( device.renderSystem ) }
 		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT
 			, getName()
-			, lpvprop::getGeometryProgram() }
+			, lpvprop::getGeometryProgram( device.renderSystem ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, getName()
-			, lpvprop::getPixelProgram( occlusion ) }
+			, lpvprop::getPixelProgram( device.renderSystem, occlusion ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )
 			, makeShaderState( device, m_pixelShader ) }

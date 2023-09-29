@@ -67,10 +67,10 @@ namespace castor3d
 			CombLgtDiffImgId,
 		};
 
-		static ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram( Engine & engine )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -88,11 +88,11 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getBlurProgram( Engine const & engine
+		static ShaderPtr getBlurProgram( Engine & engine
 			, bool isVertic )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			shader::Utils utils{ writer };
@@ -216,10 +216,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getCombineProgram( Engine const & engine )
+		static ShaderPtr getCombineProgram( Engine & engine )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			shader::Utils utils{ writer };
@@ -373,15 +373,15 @@ namespace castor3d
 		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSResult" ) }
 		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( 0u ) }
 		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( 0u ) }
-		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", sssss::getVertexProgram() }
+		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", sssss::getVertexProgram( *device.renderSystem.getEngine() ) }
 		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurX", sssss::getBlurProgram( *device.renderSystem.getEngine(), false ) }
 		, m_blurXShader{ makeShaderState( m_device, m_blurHorizVertexShader )
 			, makeShaderState( m_device, m_blurHorizPixelShader ) }
-		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurY", sssss::getVertexProgram() }
+		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurY", sssss::getVertexProgram( *device.renderSystem.getEngine() ) }
 		, m_blurVerticPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurY", sssss::getBlurProgram( *device.renderSystem.getEngine(), true ) }
 		, m_blurYShader{ makeShaderState( m_device, m_blurVerticVertexShader )
 			, makeShaderState( m_device, m_blurVerticPixelShader ) }
-		, m_combineVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSCombine", sssss::getVertexProgram() }
+		, m_combineVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSCombine", sssss::getVertexProgram( *device.renderSystem.getEngine() ) }
 		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSCombine", sssss::getCombineProgram( *device.renderSystem.getEngine() ) }
 		, m_combineShader{ makeShaderState( m_device, m_combineVertexShader )
 			, makeShaderState( m_device, m_combinePixelShader ) }

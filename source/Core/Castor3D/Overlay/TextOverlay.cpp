@@ -207,163 +207,164 @@ namespace castor3d
 	ashes::PipelineShaderStageCreateInfo TextOverlay::createProgram( RenderDevice const & device )
 	{
 		ShaderModule comp{ VK_SHADER_STAGE_COMPUTE_BIT, "TextOverlayCompute" };
-		sdw::ComputeWriter writer;
-
-		C3D_Camera( writer
-			, TextOverlay::ComputeBindingIdx::eCamera
-			, 0u );
-		C3D_Overlays( writer
-			, TextOverlay::ComputeBindingIdx::eOverlays
-			, 0u );
-		C3D_Chars( writer
-			, TextOverlay::ComputeBindingIdx::eChars
-			, 0u );
-		C3D_Words( writer
-			, TextOverlay::ComputeBindingIdx::eWords
-			, 0u );
-		C3D_Lines( writer
-			, TextOverlay::ComputeBindingIdx::eLines
-			, 0u );
-		shader::FontData c3d_fontData{ writer
-			, uint32_t( TextOverlay::ComputeBindingIdx::eFont )
-			, 0u };
-		C3D_OverlaysSurfaces( writer
-			, TextOverlay::ComputeBindingIdx::eVertex
-			, 0u
-			, true
-			, true );
-
-		auto batchData = writer.declPushConstantsBuffer( "BatchData" );
-		auto c3d_batchOffset = batchData.declMember< sdw::UInt >( "c3d_batchOffset" );
-		auto c3d_charCount = batchData.declMember< sdw::UInt >( "c3d_charCount" );
-		batchData.end();
-
-		auto processChar = [&]( shader::OverlayData & overlay
-			, ovrltxt::TextChar const & character
-			, sdw::Vec2 const & texDim
-			, std::function< sdw::Vec4( sdw::Vec2 const
-				, sdw::Vec4 const ) > generateUvs )
+		sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 		{
-			auto offset = writer.declLocale( "offset"
-				, overlay.vertexOffset() + ( character.index() * 6u ) );
-			auto word = writer.declLocale( "word"
-				, c3d_words[overlay.textWordOffset() + character.word()] );
-			auto line = writer.declLocale( "line"
-				, c3d_lines[overlay.textLineOffset() + word.line()] );
-			auto renderSize = writer.declLocale( "renderSize"
-				, vec2( c3d_cameraData.renderSize() ) );
-			auto ssAbsParentSize = writer.declLocale( "ssAbsParentSize"
-				, overlay.parentRect().zw() - overlay.parentRect().xy() );
-			auto ssAbsSize = writer.declLocale( "ssAbsSize"
-				, overlay.relativeSize() * ssAbsParentSize );
+			C3D_Camera( writer
+				, TextOverlay::ComputeBindingIdx::eCamera
+				, 0u );
+			C3D_Overlays( writer
+				, TextOverlay::ComputeBindingIdx::eOverlays
+				, 0u );
+			C3D_Chars( writer
+				, TextOverlay::ComputeBindingIdx::eChars
+				, 0u );
+			C3D_Words( writer
+				, TextOverlay::ComputeBindingIdx::eWords
+				, 0u );
+			C3D_Lines( writer
+				, TextOverlay::ComputeBindingIdx::eLines
+				, 0u );
+			shader::FontData c3d_fontData{ writer
+				, uint32_t( TextOverlay::ComputeBindingIdx::eFont )
+				, 0u };
+			C3D_OverlaysSurfaces( writer
+				, TextOverlay::ComputeBindingIdx::eVertex
+				, 0u
+				, true
+				, true );
 
-			auto ssRelBounds = writer.declLocale( "ssRelBounds"
-				, vec4( line.position().x() + word.left() + character.left() + character.bearing().x()
-					, overlay.textTopOffset() + line.position().y() - character.bearing().y()
-					, 0, 0 ) );
-			ssRelBounds.z() = ssRelBounds.x() + character.size().x();
-			ssRelBounds.w() = ssRelBounds.y() + character.size().y();
-			ssRelBounds /= vec4( renderSize.xy(), renderSize.xy() );
-			auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
-				, overlay.relativePosition() * ssAbsParentSize );
-			auto ssAbsOvPosition = writer.declLocale( "ssAbsOvPosition"
-				, ssRelOvPosition + overlay.parentRect().xy() );
+			auto batchData = writer.declPushConstantsBuffer( "BatchData" );
+			auto c3d_batchOffset = batchData.declMember< sdw::UInt >( "c3d_batchOffset" );
+			auto c3d_charCount = batchData.declMember< sdw::UInt >( "c3d_charCount" );
+			batchData.end();
 
-			auto texUv = writer.declLocale( "texUv", vec4( 0.0_f ) );
-			auto fontUv = writer.declLocale( "fontUv", vec4( 0.0_f ) );
-
-			// check for full underflow/overflow
-			IF( writer, ssAbsOvPosition.x() + ssRelBounds.x() < overlay.scissorRect().z()
-				&& ssAbsOvPosition.y() + ssRelBounds.y() < overlay.scissorRect().w()
-				&& ssAbsOvPosition.x() + ssRelBounds.z() > overlay.scissorRect().x()
-				&& ssAbsOvPosition.y() + ssRelBounds.w() > overlay.scissorRect().y() )
+			auto processChar = [&]( shader::OverlayData & overlay
+				, ovrltxt::TextChar const & character
+				, sdw::Vec2 const & texDim
+				, std::function< sdw::Vec4( sdw::Vec2 const
+					, sdw::Vec4 const ) > generateUvs )
 			{
-				//
-				// Compute Letter's Font UV.
-				//
-				fontUv = vec4( character.uvPosition().x() / texDim.x()
-					, 0.0, 0.0
-					, character.uvPosition().y() / texDim.y() );
-				fontUv.z() = fontUv.x() + ( character.size().x() / texDim.x() );
-				fontUv.y() = fontUv.w() + ( character.size().y() / texDim.y() );
-				//
-				// Compute Letter's Texture UV.
-				//
-				texUv = generateUvs( ssAbsSize, ssRelBounds );
+				auto offset = writer.declLocale( "offset"
+					, overlay.vertexOffset() + ( character.index() * 6u ) );
+				auto word = writer.declLocale( "word"
+					, c3d_words[overlay.textWordOffset() + character.word()] );
+				auto line = writer.declLocale( "line"
+					, c3d_lines[overlay.textLineOffset() + word.line()] );
+				auto renderSize = writer.declLocale( "renderSize"
+					, vec2( c3d_cameraData.renderSize() ) );
+				auto ssAbsParentSize = writer.declLocale( "ssAbsParentSize"
+					, overlay.parentRect().zw() - overlay.parentRect().xy() );
+				auto ssAbsSize = writer.declLocale( "ssAbsSize"
+					, overlay.relativeSize() * ssAbsParentSize );
 
-				auto ssAbsCharSize = writer.declLocale( "ssAbsCharSize"
-					, ssRelBounds.zw() - ssRelBounds.xy() );
-				auto srcUv = writer.declLocale( "srcUv"
-					, texUv );
-				auto srcFontUv = writer.declLocale( "srcFontUv"
-					, fontUv );
-				overlay.cropMinMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.scissorRect().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.x(), texUv.x(), fontUv.x() );
-				overlay.cropMinMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.scissorRect().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.y(), texUv.y(), fontUv.y() );
-				overlay.cropMaxMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.scissorRect().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.z(), texUv.z(), fontUv.z() );
-				overlay.cropMaxMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.scissorRect().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.w(), texUv.w(), fontUv.w() );
-			}
-			ELSE
-			{
-				ssRelBounds.z() = ssRelBounds.x();
-				ssRelBounds.w() = ssRelBounds.y();
-			}
-			FI;
-			//
-			// Fill buffer
-			//
-			uint32_t index = 0;
-			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xy(), texUv.xy(), fontUv.xy() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xw(), texUv.xw(), fontUv.xw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zw(), texUv.zw(), fontUv.zw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xy(), texUv.xy(), fontUv.xy() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zw(), texUv.zw(), fontUv.zw() ); ++index;
-			c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zy(), texUv.zy(), fontUv.zy() ); ++index;
-		};
+				auto ssRelBounds = writer.declLocale( "ssRelBounds"
+					, vec4( line.position().x() + word.left() + character.left() + character.bearing().x()
+						, overlay.textTopOffset() + line.position().y() - character.bearing().y()
+						, 0, 0 ) );
+				ssRelBounds.z() = ssRelBounds.x() + character.size().x();
+				ssRelBounds.w() = ssRelBounds.y() + character.size().y();
+				ssRelBounds /= vec4( renderSize.xy(), renderSize.xy() );
+				auto ssRelOvPosition = writer.declLocale( "ssRelOvPosition"
+					, overlay.relativePosition() * ssAbsParentSize );
+				auto ssAbsOvPosition = writer.declLocale( "ssAbsOvPosition"
+					, ssRelOvPosition + overlay.parentRect().xy() );
 
-		writer.implementMain( 1u, 1u
-			, [&]( sdw::ComputeIn in )
-			{
-				auto charIndex = writer.declLocale( "charIndex"
-					, c3d_batchOffset + in.globalInvocationID.x() * 16u + in.globalInvocationID.y() );
+				auto texUv = writer.declLocale( "texUv", vec4( 0.0_f ) );
+				auto fontUv = writer.declLocale( "fontUv", vec4( 0.0_f ) );
 
-				IF( writer, charIndex < MaxCharsPerBuffer
-					&& charIndex < c3d_charCount )
+				// check for full underflow/overflow
+				IF( writer, ssAbsOvPosition.x() + ssRelBounds.x() < overlay.scissorRect().z()
+					&& ssAbsOvPosition.y() + ssRelBounds.y() < overlay.scissorRect().w()
+					&& ssAbsOvPosition.x() + ssRelBounds.z() > overlay.scissorRect().x()
+					&& ssAbsOvPosition.y() + ssRelBounds.w() > overlay.scissorRect().y() )
 				{
-					auto character = writer.declLocale( "character"
-						, c3d_chars[charIndex] );
-					auto overlay = writer.declLocale( "overlay"
-						, c3d_overlaysData[character.overlay()] );
-					auto texDim = writer.declLocale( "texDim"
-						, vec2( c3d_fontData.imgWidth(), c3d_fontData.imgHeight() ) );
+					//
+					// Compute Letter's Font UV.
+					//
+					fontUv = vec4( character.uvPosition().x() / texDim.x()
+						, 0.0, 0.0
+						, character.uvPosition().y() / texDim.y() );
+					fontUv.z() = fontUv.x() + ( character.size().x() / texDim.x() );
+					fontUv.y() = fontUv.w() + ( character.size().y() / texDim.y() );
+					//
+					// Compute Letter's Texture UV.
+					//
+					texUv = generateUvs( ssAbsSize, ssRelBounds );
 
-					IF( writer, overlay.textTexturingMode() == uint32_t( TextTexturingMode::eLetter ) )
-					{
-						processChar( overlay
-							, character
-							, texDim
-							, []( sdw::Vec2 const ratio
-								, sdw::Vec4 const absolute )
-							{
-								return vec4( 0.0_f, 0.0_f, 1.0_f, 1.0_f );
-							} );
-					}
-					ELSE
-					{
-						processChar( overlay
-							, character
-							, texDim
-							, []( sdw::Vec2 const ratio
-								, sdw::Vec4 const absolute )
-							{
-								return vec4( absolute ) / vec4( ratio, ratio );
-							} );
-					}
-					FI;
+					auto ssAbsCharSize = writer.declLocale( "ssAbsCharSize"
+						, ssRelBounds.zw() - ssRelBounds.xy() );
+					auto srcUv = writer.declLocale( "srcUv"
+						, texUv );
+					auto srcFontUv = writer.declLocale( "srcFontUv"
+						, fontUv );
+					overlay.cropMinMinValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.scissorRect().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.x(), texUv.x(), fontUv.x() );
+					overlay.cropMinMaxValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.scissorRect().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.y(), texUv.y(), fontUv.y() );
+					overlay.cropMaxMaxValue( ssAbsOvPosition.x(), ssAbsParentSize.x(), ssAbsSize.x(), ssAbsCharSize.x(), overlay.scissorRect().xz(), srcUv.xz(), srcFontUv.xz(), ssRelBounds.z(), texUv.z(), fontUv.z() );
+					overlay.cropMaxMinValue( ssAbsOvPosition.y(), ssAbsParentSize.y(), ssAbsSize.y(), ssAbsCharSize.y(), overlay.scissorRect().yw(), srcUv.yw(), srcFontUv.wy(), ssRelBounds.w(), texUv.w(), fontUv.w() );
+				}
+				ELSE
+				{
+					ssRelBounds.z() = ssRelBounds.x();
+					ssRelBounds.w() = ssRelBounds.y();
 				}
 				FI;
-			} );
+				//
+				// Fill buffer
+				//
+				uint32_t index = 0;
+				c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xy(), texUv.xy(), fontUv.xy() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xw(), texUv.xw(), fontUv.xw() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zw(), texUv.zw(), fontUv.zw() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( ssRelBounds.xy(), texUv.xy(), fontUv.xy() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zw(), texUv.zw(), fontUv.zw() ); ++index;
+				c3d_overlaysSurfaces[offset + index].set( ssRelBounds.zy(), texUv.zy(), fontUv.zy() ); ++index;
+			};
 
-		comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			writer.implementMain( 1u, 1u
+				, [&]( sdw::ComputeIn in )
+				{
+					auto charIndex = writer.declLocale( "charIndex"
+						, c3d_batchOffset + in.globalInvocationID.x() * 16u + in.globalInvocationID.y() );
+
+					IF( writer, charIndex < MaxCharsPerBuffer
+						&& charIndex < c3d_charCount )
+					{
+						auto character = writer.declLocale( "character"
+							, c3d_chars[charIndex] );
+						auto overlay = writer.declLocale( "overlay"
+							, c3d_overlaysData[character.overlay()] );
+						auto texDim = writer.declLocale( "texDim"
+							, vec2( c3d_fontData.imgWidth(), c3d_fontData.imgHeight() ) );
+
+						IF( writer, overlay.textTexturingMode() == uint32_t( TextTexturingMode::eLetter ) )
+						{
+							processChar( overlay
+								, character
+								, texDim
+								, []( sdw::Vec2 const ratio
+									, sdw::Vec4 const absolute )
+								{
+									return vec4( 0.0_f, 0.0_f, 1.0_f, 1.0_f );
+								} );
+						}
+						ELSE
+						{
+							processChar( overlay
+								, character
+								, texDim
+								, []( sdw::Vec2 const ratio
+									, sdw::Vec4 const absolute )
+								{
+									return vec4( absolute ) / vec4( ratio, ratio );
+								} );
+						}
+						FI;
+					}
+					FI;
+				} );
+
+			comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		}
 		return makeShaderState( device, comp );
 	}
 

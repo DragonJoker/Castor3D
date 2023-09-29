@@ -197,7 +197,7 @@ namespace castor3d
 	ShaderPtr ForwardRenderTechniquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		FragmentWriter writer;
+		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 		bool enableTextures = flags.enableTextures();
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 

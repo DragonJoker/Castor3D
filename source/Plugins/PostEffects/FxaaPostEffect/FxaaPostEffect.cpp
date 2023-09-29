@@ -33,10 +33,10 @@ namespace fxaa
 			ColorTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::Engine & engine )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			C3D_Fxaa( writer, 0u, 0u );
@@ -58,10 +58,10 @@ namespace fxaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getFragmentProgram()
+		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine & engine )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			C3D_Fxaa( writer, FxaaCfgUboIdx, 0u );
@@ -162,8 +162,8 @@ namespace fxaa
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa", postfx::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa", postfx::getFragmentProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa", postfx::getVertexProgram( *renderTarget.getEngine() ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa", postfx::getFragmentProgram( *renderTarget.getEngine() ) }
 		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 		, m_fxaaUbo{ renderSystem.getRenderDevice(), m_renderTarget.getSize() }

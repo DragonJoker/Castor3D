@@ -155,7 +155,7 @@ namespace castor3d
 
 	C3D_API SpirVShader const & compileShader( RenderDevice const & device
 		, ShaderModule & module );
-	C3D_API SpirVShader const & compileShader( RenderSystem const & renderSystem
+	C3D_API SpirVShader const & compileShader( RenderSystem & renderSystem
 		, ShaderModule & module );
 
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( ashes::Device const & device

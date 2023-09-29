@@ -14,6 +14,8 @@ See LICENSE file in root folder
 
 #include <ashespp/Core/WindowHandle.hpp>
 
+#include <ShaderAST/ShaderAllocator.hpp>
+
 #include <stack>
 
 namespace castor3d
@@ -137,7 +139,7 @@ namespace castor3d
 		 */
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
 			, castor::String const & name
-			, ast::Shader const & shader )const;
+			, ast::Shader const & shader );
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
@@ -154,7 +156,7 @@ namespace castor3d
 		 */
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
 			, castor::String const & name
-			, castor::String const & glsl )const;
+			, castor::String const & glsl );
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
@@ -165,7 +167,7 @@ namespace castor3d
 		 *\param[in]	module	Le shader à compiler.
 		 *\return		Le shader compilé.
 		 */
-		C3D_API SpirVShader const & compileShader( ShaderModule & module )const;
+		C3D_API SpirVShader const & compileShader( ShaderModule & module );
 		/**
 		*\~english
 		*\brief
@@ -403,6 +405,7 @@ namespace castor3d
 
 	private:
 		bool doCreateRandomStorage( RenderDevice const & device );
+		ast::ShaderAllocator & doGetShaderAllocator();
 
 	private:
 		std::recursive_mutex m_mutex;
@@ -416,6 +419,8 @@ namespace castor3d
 		std::stack< SceneRPtr > m_stackScenes;
 		castor::Nanoseconds m_gpuTime;
 		ashes::BufferPtr< castor::Point4f > m_randomStorage;
+		std::mutex m_allocMutex;
+		std::unordered_map< std::thread::id, std::unique_ptr< ast::ShaderAllocator > > m_shaderCompileAllocator;
 	};
 }
 

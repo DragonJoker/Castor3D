@@ -29,9 +29,9 @@ namespace atmosphere_scattering
 			eAtmosphere,
 		};
 
-		static castor3d::ShaderPtr getVertexProgram()
+		static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
 		{
-			sdw::VertexWriter writer;
+			sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 			sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
 
 			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
@@ -44,10 +44,10 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine const & engine
+		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine & engine
 			, VkExtent3D renderSize )
 		{
-			sdw::FragmentWriter writer;
+			sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			C3D_AtmosphereScattering( writer
 				, eAtmosphere
@@ -109,7 +109,7 @@ namespace atmosphere_scattering
 		, AtmosphereScatteringUbo const & atmosphereUbo
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
-		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransmittancePass", transmittance::getVertexProgram() }
+		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransmittancePass", transmittance::getVertexProgram( *device.renderSystem.getEngine() ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransmittancePass", transmittance::getPixelProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }

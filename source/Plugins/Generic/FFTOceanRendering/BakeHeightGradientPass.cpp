@@ -117,9 +117,9 @@ namespace ocean_fft
 					, pipelineLayout ) );
 		}
 
-		static castor3d::ShaderPtr createShader()
+		static castor3d::ShaderPtr createShader( castor3d::RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto pcb = writer.declPushConstantsBuffer( "BakeData" );
 			auto invSize = pcb.declMember< sdw::Vec4 >( "invSize" );
@@ -252,7 +252,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ bakehg::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ bakehg::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, bakehg::createShader() }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, bakehg::createShader( device ) }
 		, m_pipeline{ bakehg::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ bakehg::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }

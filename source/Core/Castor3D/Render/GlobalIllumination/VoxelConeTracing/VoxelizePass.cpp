@@ -242,7 +242,7 @@ namespace castor3d
 	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
@@ -320,7 +320,7 @@ namespace castor3d
 	ShaderPtr VoxelizePass::doGetBillboardShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 		// Shader inputs
 		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
@@ -403,7 +403,7 @@ namespace castor3d
 	ShaderPtr VoxelizePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		GeometryWriter writer;
+		GeometryWriter writer{ &getEngine()->getShaderAllocator() };
 
 		C3D_Voxelizer( writer
 			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
@@ -487,7 +487,7 @@ namespace castor3d
 	ShaderPtr VoxelizePass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		FragmentWriter writer;
+		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 		bool enableTextures = flags.enableTextures();
 		shader::Utils utils{ writer };
 		shader::BRDFHelpers brdf{ writer };

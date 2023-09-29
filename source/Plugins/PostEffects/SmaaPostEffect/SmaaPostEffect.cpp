@@ -35,10 +35,10 @@ namespace smaa
 
 	namespace
 	{
-		castor3d::ShaderPtr doGetCopyVertexShader()
+		castor3d::ShaderPtr doGetCopyVertexShader( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -56,10 +56,11 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		castor3d::ShaderPtr doGetCopyPixelShader( SmaaConfig const & config )
+		castor3d::ShaderPtr doGetCopyPixelShader( castor3d::RenderDevice const & device
+			, SmaaConfig const & config )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -192,8 +193,8 @@ namespace smaa
 			, Kind::eSRGB }
 		, m_config{ parameters }
 		, m_ubo{ renderSystem.getRenderDevice() }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( m_config ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader( renderSystem.getRenderDevice() ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( renderSystem.getRenderDevice(), m_config ) }
 		, m_stages{ castor3d::makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
 			, castor3d::makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
 	{

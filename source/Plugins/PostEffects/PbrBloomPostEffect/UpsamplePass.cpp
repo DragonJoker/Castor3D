@@ -19,10 +19,10 @@ namespace PbrBloom
 {
 	namespace up
 	{
-		static std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
@@ -40,10 +40,10 @@ namespace PbrBloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
@@ -116,8 +116,8 @@ namespace PbrBloom
 		, uint32_t passesCount
 		, bool const * enabled )
 		: m_graph{ graph }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "PbrBloomUpsample", up::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "PbrBloomUpsample", up::getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "PbrBloomUpsample", up::getVertexProgram( device ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "PbrBloomUpsample", up::getPixelProgram( device ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_resultViews{ doCreateResultViews( graph, image, passesCount ) }

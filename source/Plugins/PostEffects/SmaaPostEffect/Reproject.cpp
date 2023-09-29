@@ -34,10 +34,10 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > doGetReprojectVP()
+		static std::unique_ptr< ast::Shader > doGetReprojectVP( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -55,10 +55,11 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > doGetReprojectFP( bool reprojection )
+		static std::unique_ptr< ast::Shader > doGetReprojectFP( castor3d::RenderDevice const & device
+			, bool reprojection )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -141,8 +142,8 @@ namespace smaa
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", reproj::doGetReprojectVP() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", reproj::doGetReprojectFP( velocityView != nullptr ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", reproj::doGetReprojectVP( device ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", reproj::doGetReprojectFP( device, velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_result{ m_device

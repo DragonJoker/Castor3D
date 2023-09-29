@@ -53,10 +53,10 @@ namespace castor3d
 			NormalMapIdx,
 		};
 
-		static ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram( RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -69,10 +69,11 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgram( bool useNormalsBuffer )
+		static ShaderPtr getPixelProgram( RenderDevice const & device
+			, bool useNormalsBuffer )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			//////////////////////////////////////////////////
 
@@ -552,10 +553,10 @@ namespace castor3d
 		, castor::String const & prefix )
 		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
 			, prefix + "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
-			, ssaoraw::getVertexProgram() }
+			, ssaoraw::getVertexProgram( device ) }
 		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
 			, prefix + "SsaoRawAO" + ( useNormalsBuffer ? std::string{ "Normals" } : std::string{} )
-			, ssaoraw::getPixelProgram( useNormalsBuffer ) }
+			, ssaoraw::getPixelProgram( device, useNormalsBuffer ) }
 		, stages{ makeShaderState( device, vertexShader )
 			, makeShaderState( device, pixelShader ) }
 	{

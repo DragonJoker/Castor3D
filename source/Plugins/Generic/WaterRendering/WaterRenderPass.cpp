@@ -457,7 +457,7 @@ namespace water
 	castor3d::ShaderPtr WaterRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const
 	{
 		using namespace castor3d;
-		sdw::FragmentWriter writer;
+		sdw::FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 
 		bool enableTextures = flags.enableTextures();
 		bool hasDiffuseGI = flags.hasDiffuseGI();

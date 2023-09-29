@@ -31,11 +31,11 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( castor3d::Engine const & engine
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
 			, uint32_t renderSize
 			, VkExtent3D const & transmittanceExtent )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &engine.getShaderAllocator() };
 
 			C3D_AtmosphereScattering( writer
 				, uint32_t( Bindings::eAtmosphere )

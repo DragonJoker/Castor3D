@@ -89,11 +89,12 @@ namespace castor3d
 					, pipelineLayout ) );
 		}
 
-		static ShaderPtr createShader( bool temporalSmoothing
+		static ShaderPtr createShader( RenderDevice const & device
+			, bool temporalSmoothing
 			, uint32_t voxelGridSize )
 		{
 			using namespace sdw;
-			ComputeWriter writer;
+			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			auto voxels( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
@@ -145,7 +146,7 @@ namespace castor3d
 			auto temporalSmoothing = ( ( index >> 0 ) % 2 ) == 1u;
 			VoxelBufferToTexture::Pipeline result{ { VK_SHADER_STAGE_COMPUTE_BIT
 				, "VoxelBufferToTexture"
-				, createShader( temporalSmoothing, voxelGridSize ) } };
+				, createShader( device, temporalSmoothing, voxelGridSize ) } };
 			result.pipeline = createPipeline( device, pipelineLayout, result.shader );
 			return result;
 		}

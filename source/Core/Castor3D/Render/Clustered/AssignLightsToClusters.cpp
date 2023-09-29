@@ -51,13 +51,14 @@ namespace castor3d
 			eUniqueClusters,
 		};
 
-		static ShaderPtr createShader( ClustersConfig const & config )
+		static ShaderPtr createShader( RenderDevice const & device
+			, ClustersConfig const & config )
 		{
 			uint32_t NumThreads = config.useLightsBVH
 				? 32u
 				: MaxLightsPerCluster;
 
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto c3d_numChildNodes = writer.declConstantArray< sdw::UInt >( "c3d_numChildNodes"
 				, { 1_u			/* 1 level   =32^0 */
@@ -581,7 +582,7 @@ namespace castor3d
 				if ( ires.second )
 				{
 					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_config ) };
+					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_device, m_config ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
 				}
 
@@ -698,7 +699,7 @@ namespace castor3d
 				if ( ires.second )
 				{
 					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_config ) };
+					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", dspclst::createShader( m_device, m_config ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
 				}
 

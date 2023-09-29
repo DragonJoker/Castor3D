@@ -124,7 +124,7 @@ namespace castor3d
 	ShaderPtr ShadowMapPassSpot::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -232,7 +232,7 @@ namespace castor3d
 	ShaderPtr ShadowMapPassSpot::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		FragmentWriter writer;
+		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 		bool enableTextures = flags.enableTextures();
 		auto needsVsm = flags.writeShadowVSM();
 		auto needsRsm = flags.writeShadowRSM();

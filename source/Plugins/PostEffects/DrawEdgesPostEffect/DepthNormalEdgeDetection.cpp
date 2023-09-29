@@ -28,10 +28,11 @@ namespace draw_edges
 {
 	namespace dned
 	{
-		static std::unique_ptr< ast::Shader > getVertexShader( VkExtent3D const & size )
+		static std::unique_ptr< ast::Shader > getVertexShader( castor3d::RenderDevice const & device
+			, VkExtent3D const & size )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -49,11 +50,11 @@ namespace draw_edges
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine const & engine
+		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine & engine
 			, VkExtent3D const & extent )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 			castor3d::shader::Utils utils{ writer };
 			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, castor3d::TextureCombine{}
@@ -226,7 +227,7 @@ namespace draw_edges
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DNEdgesDetection", dned::getVertexShader( m_extent ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DNEdgesDetection", dned::getVertexShader( device, m_extent ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DNEdgesDetection", dned::getFragmentProgram( *renderTarget.getEngine()
 			, m_extent ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )

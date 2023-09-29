@@ -24,10 +24,10 @@ namespace light_streaks
 			DifImgIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
@@ -45,10 +45,10 @@ namespace light_streaks
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			C3D_Kawase( writer, KawaseUboIdx, 0u );
@@ -201,8 +201,8 @@ namespace light_streaks
 		, bool const * enabled )
 		: m_device{ device }
 		, m_kawaseUbo{ kawaseUbo }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksKawasePass", kawase::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksKawasePass", kawase::getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksKawasePass", kawase::getVertexProgram( device ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksKawasePass", kawase::getPixelProgram( device ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_subpasses{ kawase::doCreateSubpasses( graph

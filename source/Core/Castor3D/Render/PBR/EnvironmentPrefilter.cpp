@@ -86,7 +86,7 @@ namespace castor3d
 			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, prefix + "EnvironmentPrefilter" };
 			{
 				using namespace sdw;
-				VertexWriter writer;
+				VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 				// Inputs
 				auto position = writer.declInput< Vec3 >( "position", 0u );
@@ -109,7 +109,7 @@ namespace castor3d
 			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, prefix + "EnvironmentPrefilter" };
 			{
 				using namespace sdw;
-				FragmentWriter writer;
+				FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 				shader::BRDFHelpers brdf{ writer };
 
 				// Inputs

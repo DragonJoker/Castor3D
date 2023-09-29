@@ -129,9 +129,9 @@ namespace castor3d
 		{
 			using Type = sdw::FragmentWriter;
 
-			static castor3d::ShaderPtr getVertexProgram()
+			static castor3d::ShaderPtr getVertexProgram( Engine & engine )
 			{
-				sdw::VertexWriter writer;
+				sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 
 				writer.implementMain( [&]( sdw::VertexIn in
 					, sdw::VertexOut out )
@@ -927,7 +927,7 @@ namespace castor3d
 		{
 			bool isDeferredLighting = ( deferredLighting == DeferredLightingFilter::eDeferredOnly );
 			auto & engine = *device.renderSystem.getEngine();
-			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer;
+			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer{ &engine.getShaderAllocator() };
 
 			shader::Utils utils{ writer };
 			shader::BRDFHelpers brdf{ writer };
@@ -2096,7 +2096,7 @@ namespace castor3d
 			, getName()
 			, ( useCompute
 				? nullptr
-				: visres::ShaderWriter< false >::getVertexProgram() ) }
+				: visres::ShaderWriter< false >::getVertexProgram( *getEngine() ) ) }
 		, m_firstRenderPass{ ( useCompute
 			? nullptr
 			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }

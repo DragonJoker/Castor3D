@@ -36,10 +36,10 @@ namespace castor3d
 			RevealTexIndex,
 		};
 
-		static ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram( RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -53,10 +53,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgram()
+		static ShaderPtr getPixelProgram( RenderDevice const & device )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			C3D_Camera( writer, CameraUboIndex, 0u );
@@ -148,8 +148,8 @@ namespace castor3d
 		, m_enabled{ enabled }
 		, m_transparentPassResult{ transparentPassResult }
 		, m_size{ size }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", wboit::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", wboit::getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", wboit::getVertexProgram( device ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", wboit::getPixelProgram( device ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_finalCombinePassDesc{ doCreateFinalCombine( graph

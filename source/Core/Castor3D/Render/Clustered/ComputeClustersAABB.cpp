@@ -31,10 +31,11 @@ namespace castor3d
 			eClustersAABB,
 		};
 
-		static ShaderPtr createShader( ClustersConfig const & config )
+		static ShaderPtr createShader( RenderDevice const & device
+			, ClustersConfig const & config )
 		{
 			using namespace sdw;
-			ComputeWriter writer;
+			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			C3D_Camera( writer
@@ -151,7 +152,7 @@ namespace castor3d
 				, RenderDevice const & device
 				, crg::cp::Config config
 				, ClustersConfig const & clustersConfig )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeClustersAABB", createShader( clustersConfig ) } }
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeClustersAABB", createShader( device, clustersConfig ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, crg::ComputePass{framePass
 					, context

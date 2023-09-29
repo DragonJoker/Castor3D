@@ -192,7 +192,7 @@ namespace castor3d
 	ShaderPtr TransparentPass::doGetPixelShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		FragmentWriter writer;
+		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 		bool enableTextures = flags.enableTextures();
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 
@@ -265,7 +265,8 @@ namespace castor3d
 			, utils
 			, index
 			, RenderPipeline::eBuffers
-			, flags.getGlobalIlluminationFlags() };
+			, flags.getGlobalIlluminationFlags()
+			, getTechnique().getIndirectLighting() };
 		shader::ClusteredLights clusteredLights{ writer
 			, index
 			, RenderPipeline::eBuffers

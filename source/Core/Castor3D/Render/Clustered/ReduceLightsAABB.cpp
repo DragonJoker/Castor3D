@@ -46,10 +46,11 @@ namespace castor3d
 		static uint32_t constexpr NumThreads = 512u;
 		static float constexpr FltMax = std::numeric_limits< float >::max();
 
-		static ShaderPtr createShader( bool first
-			, ClustersConfig const & config )
+		static ShaderPtr createShader( RenderDevice const & device
+			, ClustersConfig const & config
+			, bool first )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			C3D_Camera( writer
@@ -325,7 +326,7 @@ namespace castor3d
 				if ( ires.second )
 				{
 					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/First", createShader( true, m_clusters.getConfig() ) };
+					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/First", createShader( m_device, m_clusters.getConfig(), true ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
 				}
 
@@ -442,7 +443,7 @@ namespace castor3d
 				if ( ires.second )
 				{
 					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/Second", createShader( false, m_clusters.getConfig() ) };
+					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ReduceLightsAABB/Second", createShader( m_device, m_clusters.getConfig(), false ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( m_device, program.module ) };
 				}
 

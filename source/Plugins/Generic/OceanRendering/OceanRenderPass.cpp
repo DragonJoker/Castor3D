@@ -535,7 +535,7 @@ namespace ocean
 	{
 		using namespace sdw;
 		using namespace castor3d;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -610,7 +610,7 @@ namespace ocean
 	{
 		using namespace sdw;
 		using namespace castor3d;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -697,7 +697,7 @@ namespace ocean
 #else
 		using namespace sdw;
 		using namespace castor3d;
-		TessellationControlWriter writer;
+		TessellationControlWriter writer{ &getEngine()->getShaderAllocator() };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -760,7 +760,7 @@ namespace ocean
 #else
 		using namespace sdw;
 		using namespace castor3d;
-		TessellationEvaluationWriter writer;
+		TessellationEvaluationWriter writer{ &getEngine()->getShaderAllocator() };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -943,7 +943,7 @@ namespace ocean
 	{
 		using namespace sdw;
 		using namespace castor3d;
-		FragmentWriter writer;
+		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 

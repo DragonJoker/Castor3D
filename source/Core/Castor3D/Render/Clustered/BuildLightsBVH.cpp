@@ -44,11 +44,12 @@ namespace castor3d
 		static uint32_t constexpr NumThreads = 32u * 16u;
 		static float constexpr FltMax = std::numeric_limits< float >::max();
 
-		static ShaderPtr createShader( bool bottomLevel
+		static ShaderPtr createShader( RenderDevice const & device
 			, ClustersConfig const & config
-			, LightType lightType )
+			, LightType lightType
+			, bool bottomLevel )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto c3d_numLevelNodes = writer.declConstantArray< sdw::UInt >( "c3d_numLevelNodes"
 				, { 1_u			/* Level 0 ( 32^0 ) */
@@ -360,7 +361,7 @@ namespace castor3d
 						auto & program = ires.first->second;
 						program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT
 							, "BuildLightsBVH/" + ( bottomLevel ? castor::String{ "Bottom/" } : castor::String{ "Top/" } ) + getName( lightType )
-							, createShader( bottomLevel, config, lightType ) };
+							, createShader( device, config, lightType, bottomLevel ) };
 						program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.module ) };
 					}
 

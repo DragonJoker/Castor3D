@@ -29,10 +29,10 @@ namespace smaa
 			PredicationTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication()
+		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -167,10 +167,10 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication()
+		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -300,8 +300,8 @@ namespace smaa
 			, ubo
 			, config
 			, ( predication
-				? coled::doGetEdgeDetectionFPPredication()
-				: coled::doGetEdgeDetectionFPNoPredication() )
+				? coled::doGetEdgeDetectionFPPredication( device )
+				: coled::doGetEdgeDetectionFPNoPredication( device ) )
 			, enabled
 			, passIndex
 			, uint32_t( colourView.size() ) }

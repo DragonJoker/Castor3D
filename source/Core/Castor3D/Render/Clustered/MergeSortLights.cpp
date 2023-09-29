@@ -45,9 +45,10 @@ namespace castor3d
 			eMergePathPartitions,
 		};
 
-		static ShaderPtr createShader( bool mergePathPartitions )
+		static ShaderPtr createShader( RenderDevice const & device
+			, bool mergePathPartitions )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto inputKeysBuffer = writer.declStorageBuffer( "c3d_inputKeysBuffer"
 				, uint32_t( eInputKeys )
@@ -378,7 +379,7 @@ namespace castor3d
 					, LightType lightType )
 					: shader{ VK_SHADER_STAGE_COMPUTE_BIT
 						, ( mergePathPartitions ? std::string{ "MergePathPartitions/" } : std::string{ "MergeSort/" } ) + getName( lightType )
-						, createShader( mergePathPartitions ) }
+						, createShader( device, mergePathPartitions ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
 					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
 						, nullptr

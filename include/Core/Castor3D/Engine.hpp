@@ -53,6 +53,8 @@ See LICENSE file in root folder
 
 #include <RenderGraph/ResourceHandler.hpp>
 
+#include <ShaderAST/ShaderAllocator.hpp>
+
 #include <unordered_map>
 #include <unordered_set>
 
@@ -686,6 +688,7 @@ namespace castor3d
 		C3D_API RenderDevice * getRenderDevice()const;
 		C3D_API ControlsManager * getControlsManager()const;
 		C3D_API UploadData & getUploadData()const noexcept;
+		C3D_API ast::ShaderAllocator & getShaderAllocator();
 
 		castor::String const & getAppName()const noexcept
 		{
@@ -745,6 +748,11 @@ namespace castor3d
 		Version const & getVersion()const noexcept
 		{
 			return m_version;
+		}
+
+		bool isShaderValidationEnabled()const noexcept
+		{
+			return m_enableShaderValidation;
 		}
 
 		bool isValidationEnabled()const noexcept
@@ -1100,6 +1108,7 @@ namespace castor3d
 		castor::CpuInformations m_cpuInformations;
 		LightingModelID m_lightingModelId{};
 		bool m_enableValidation{ false };
+		bool m_enableShaderValidation{ false };
 		bool m_enableApiTrace{ false };
 		bool m_enableUpdateOptimisations{ true };
 		bool m_enableRandom{ true };
@@ -1114,6 +1123,8 @@ namespace castor3d
 		std::unordered_map< castor::String, castor::UniquePtr< RenderPassRegisterInfo > > m_passRenderPassTypes;
 		std::unordered_map< castor::String, std::pair< RenderPassTypeID, Parameters > > m_renderPassTypes;
 		castor::LengthUnit m_unit{ castor::LengthUnit::eMetre };
+		mutable std::mutex m_allocMutex;
+		std::unordered_map< std::thread::id, std::unique_ptr< ast::ShaderAllocator > > m_shaderAllocators;
 	};
 }
 

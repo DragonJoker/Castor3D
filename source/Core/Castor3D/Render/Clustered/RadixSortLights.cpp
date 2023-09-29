@@ -42,9 +42,9 @@ namespace castor3d
 			eOutputValues,
 		};
 
-		static ShaderPtr createShader()
+		static ShaderPtr createShader( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto inputKeysBuffer = writer.declStorageBuffer( "c3d_inputKeysBuffer"
 				, uint32_t( eInputKeys )
@@ -239,7 +239,7 @@ namespace castor3d
 					, RenderDevice const & device
 					, FramePass * parent
 					, LightType lightType )
-					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "RadixSort/" + getName( lightType ), createShader() }
+					: shader{ VK_SHADER_STAGE_COMPUTE_BIT, "RadixSort/" + getName( lightType ), createShader( device ) }
 					, createInfo{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, shader ) } }
 					, cpConfig{ crg::getDefaultV< InitialiseCallback >()
 						, nullptr
