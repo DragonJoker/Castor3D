@@ -438,9 +438,9 @@ namespace castor3d
 
 						output.registerOutput( "Lighting", "Ambient", directAmbient );
 						output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
-						output.registerOutput( "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( "Occlusion", occlusion );
-						output.registerOutput( "Emissive", components.emissiveColour * components.emissiveFactor );
+						output.registerOutput( "Lighting", "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+						output.registerOutput( "Lighting", "Occlusion", occlusion );
+						output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
 
 						colour = lightingModel->combine( output
 							, components
