@@ -271,7 +271,8 @@ namespace castor3d
 			, utils
 			, index
 			, RenderPipeline::eBuffers
-			, flags.getGlobalIlluminationFlags() };
+			, flags.getGlobalIlluminationFlags()
+			, getTechnique().getIndirectLighting() };
 		shader::ClusteredLights clusteredLights{ writer
 			, index
 			, RenderPipeline::eBuffers

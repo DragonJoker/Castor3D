@@ -1009,7 +1009,7 @@ namespace castor3d
 				, index
 				, Sets::eInOuts
 				, flags.getGlobalIlluminationFlags()
-				, indirectLighting };
+				, *indirectLighting };
 			shader::ClusteredLights clusteredLights{ writer
 				, index
 				, Sets::eInOuts
@@ -1546,7 +1546,8 @@ namespace castor3d
 					, index );
 			}
 
-			RenderNodesPass::addGIBindings( *indirectLighting
+			RenderNodesPass::addGIBindings( scene.getFlags()
+				, *indirectLighting
 				, bindings
 				, stages
 				, index );
@@ -1667,7 +1668,8 @@ namespace castor3d
 					, index );
 			}
 
-			RenderNodesPass::addGIDescriptor( *indirectLighting
+			RenderNodesPass::addGIDescriptor( scene.getFlags()
+				, *indirectLighting
 				, writes
 				, index );
 
@@ -2572,7 +2574,12 @@ namespace castor3d
 		, uint32_t stride
 		, PipelineContainer & pipelines )
 	{
-		auto it = pipelines.find( hash );
+		auto it = std::find_if( pipelines.begin()
+			, pipelines.end()
+			, [&flags]( auto & lookup )
+			{
+				return lookup->flags == flags;
+			} );
 
 		if ( it == pipelines.end() )
 		{
@@ -2581,7 +2588,8 @@ namespace castor3d
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
 			auto stageFlags = VkShaderStageFlags( stageBit );
 			auto extent = m_parent->getNormal().getExtent();
-			auto result = std::make_unique< Pipeline >();
+			auto result = std::make_unique< Pipeline >( flags );
+			result->flags = flags;
 			result->vtxDescriptorLayout = stride == 0u
 				? visres::createVtxDescriptorLayout( m_device, getName(), flags )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
@@ -2637,9 +2645,10 @@ namespace castor3d
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
 				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting(), m_deferredLightingFilter );
-			it = pipelines.emplace( hash, std::move( result ) ).first;
+			pipelines.push_back( std::move( result ) );
+			it = std::next( pipelines.begin(), ptrdiff_t( pipelines.size() - 1u ) );
 		}
 
-		return *it->second;
+		return **it;
 	}
 }

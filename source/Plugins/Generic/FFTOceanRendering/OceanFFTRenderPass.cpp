@@ -1050,7 +1050,8 @@ namespace ocean_fft
 			, utils
 			, index
 			, RenderPipeline::eBuffers
-			, flags.getGlobalIlluminationFlags() };
+			, flags.getGlobalIlluminationFlags()
+			, getTechnique().getIndirectLighting() };
 		shader::ClusteredLights clusteredLights{ writer
 			, index
 			, RenderPipeline::eBuffers

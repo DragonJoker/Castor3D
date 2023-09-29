@@ -144,6 +144,13 @@ namespace castor3d
 				ShaderModule shader;
 				ashes::PipelinePtr pipeline{};
 			};
+
+			Pipeline( PipelineFlags pflags )
+				: flags{ std::move( pflags ) }
+			{
+			}
+
+			PipelineFlags flags;
 			ashes::DescriptorSetLayoutPtr vtxDescriptorLayout{};
 			ashes::DescriptorSetLayoutPtr ioDescriptorLayout{};
 			ashes::PipelineLayoutPtr pipelineLayout{};
@@ -163,7 +170,7 @@ namespace castor3d
 		using SubmeshPipelinesMap = std::map< Pipeline const *, SubmeshPipelinesNodesDescriptors >;
 		using BillboardPipelinesNodesDescriptors = std::map< uint32_t, PipelineNodesDescriptors >;
 		using BillboardPipelinesMap = std::map< Pipeline const *, BillboardPipelinesNodesDescriptors >;
-		using PipelineContainer = std::map< PipelineBaseHash, PipelinePtr >;
+		using PipelineContainer = std::vector< PipelinePtr >;
 
 	private:
 		bool doIsEnabled()const;

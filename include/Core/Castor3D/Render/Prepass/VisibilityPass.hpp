@@ -54,8 +54,6 @@ namespace castor3d
 		C3D_API ShaderFlags getShaderFlags()const override;
 
 	private:
-		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
-		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags

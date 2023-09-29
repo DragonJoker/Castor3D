@@ -82,16 +82,6 @@ namespace castor3d
 			| ShaderFlag::eNormal;
 	}
 
-	ProgramFlags VisibilityPass::doAdjustProgramFlags( ProgramFlags flags )const
-	{
-		return flags;
-	}
-
-	SceneFlags VisibilityPass::doAdjustSceneFlags( SceneFlags flags )const
-	{
-		return SceneFlag::eNone;
-	}
-
 	void VisibilityPass::doFillAdditionalBindings( PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
