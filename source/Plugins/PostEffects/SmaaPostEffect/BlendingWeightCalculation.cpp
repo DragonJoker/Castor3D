@@ -35,10 +35,10 @@ namespace smaa
 			EdgesTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP()
+		static std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -86,10 +86,10 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP()
+		static std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
@@ -889,8 +889,8 @@ namespace smaa
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationVP() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationFP() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationVP( device ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationFP( device ) }
 		, m_stages{ makeShaderState( m_device, m_vertexShader )
 			, makeShaderState( m_device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "BlendingWeight"

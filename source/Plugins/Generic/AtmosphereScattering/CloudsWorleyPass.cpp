@@ -26,9 +26,10 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getProgram( uint32_t dimension )
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+			, uint32_t dimension )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto outputTexture = writer.declStorageImg< sdw::WImage3DRgba32 >("outputTexture"
 				, uint32_t( Bindings::eOutput )
@@ -389,7 +390,7 @@ namespace atmosphere_scattering
 		, castor3d::RenderDevice const & device
 		, crg::ImageViewId const & resultView
 		, bool & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "Clouds/WorleyPass", worley::getProgram( getExtent( resultView ).width ) }
+		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT, "Clouds/WorleyPass", worley::getProgram( device, getExtent( resultView ).width ) }
 		, m_stages{ makeShaderState( device, m_computeShader ) }
 	{
 		auto renderSize = getExtent( resultView );

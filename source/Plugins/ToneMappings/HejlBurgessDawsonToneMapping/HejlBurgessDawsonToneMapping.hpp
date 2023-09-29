@@ -18,7 +18,7 @@ namespace HejlBurgessDawson
 	{
 		static castor::String Type;
 		static castor::String Name;
-		static castor3d::ShaderPtr create();
+		static castor3d::ShaderPtr create( castor3d::Engine & engine );
 	};
 }
 

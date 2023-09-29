@@ -12,10 +12,10 @@ namespace HaarmPieterDuiker
 	castor::String ToneMapping::Type = cuT( "haarm" );
 	castor::String ToneMapping::Name = cuT( "Haarm Pieter Duiker Tone Mapping" );
 
-	castor3d::ShaderPtr ToneMapping::create()
+	castor3d::ShaderPtr ToneMapping::create( castor3d::Engine & engine )
 	{
 		using namespace sdw;
-		FragmentWriter writer;
+		FragmentWriter writer{ &engine.getShaderAllocator() };
 
 		// Shader inputs
 		C3D_HdrConfig( writer, 0u, 0u );

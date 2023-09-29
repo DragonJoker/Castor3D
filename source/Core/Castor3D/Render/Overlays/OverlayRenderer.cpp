@@ -849,7 +849,7 @@ namespace castor3d
 		// Vertex shader
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Overlay" };
 		{
-			VertexWriter writer;
+			VertexWriter writer{ &engine.getShaderAllocator() };
 
 			C3D_Camera( writer
 				, OverlayBindingId::eCamera
@@ -909,7 +909,7 @@ namespace castor3d
 		// Pixel shader
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Overlay" };
 		{
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			shader::Utils utils{ writer };
 			shader::PassShaders passShaders{ engine.getPassComponentsRegister()

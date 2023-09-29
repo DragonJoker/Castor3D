@@ -83,10 +83,10 @@ namespace castor3d
 			, scattering{ pscattering }
 			, coatingSpecular{ pcoatingSpecular }
 			, sheen{ psheen }
-			, m_expr{ sdw::expr::makeComma( makeExpr( diffuse )
-				, sdw::expr::makeComma( makeExpr( specular )
-					, sdw::expr::makeComma( makeExpr( scattering )
-						, sdw::expr::makeComma( makeExpr( coatingSpecular )
+			, m_expr{ findExprCache( pdiffuse, pspecular, pscattering, pcoatingSpecular, psheen ).makeComma( makeExpr( diffuse )
+				, findExprCache( pdiffuse, pspecular, pscattering, pcoatingSpecular, psheen ).makeComma( makeExpr( specular )
+					, findExprCache( pdiffuse, pspecular, pscattering, pcoatingSpecular, psheen ).makeComma( makeExpr( scattering )
+						, findExprCache( pdiffuse, pspecular, pscattering, pcoatingSpecular, psheen ).makeComma( makeExpr( coatingSpecular )
 							, makeExpr( sheen ) ) ) ) ) }
 		{
 		}

@@ -31,10 +31,10 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP()
+		static std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader constants
 			// Shader inputs
@@ -68,10 +68,11 @@ namespace smaa
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( bool reprojection )
+		static std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( castor3d::RenderDevice const & device
+			, bool reprojection )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
@@ -222,8 +223,8 @@ namespace smaa
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", neighblend::doGetNeighbourhoodBlendingVP() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", neighblend::doGetNeighbourhoodBlendingFP( velocityView != nullptr ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", neighblend::doGetNeighbourhoodBlendingVP( device ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", neighblend::doGetNeighbourhoodBlendingFP( device, velocityView != nullptr ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"

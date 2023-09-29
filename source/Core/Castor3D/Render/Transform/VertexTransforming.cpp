@@ -306,7 +306,7 @@ namespace castor3d
 		{
 			using namespace sdw;
 
-			ComputeWriter writer;
+			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Common
 			auto objectIDs = writer.declPushConstantsBuffer<>( "ObjectIDs" );
@@ -508,7 +508,7 @@ namespace castor3d
 			, BoundsTransformPipeline const & pipeline )
 		{
 			using namespace sdw;
-			ComputeWriter writer;
+			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 			bool computeCones = pipeline.normals;
 
 			// Inputs

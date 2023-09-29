@@ -1015,7 +1015,7 @@ namespace castor3d
 		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, getName() };
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -1036,7 +1036,7 @@ namespace castor3d
 		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() };
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );

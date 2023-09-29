@@ -31,9 +31,9 @@ namespace castor3d
 			eMaterialsCounts,
 		};
 
-		static ShaderPtr getProgram( VkExtent3D sourceSize )
+		static ShaderPtr getProgram( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
@@ -122,9 +122,9 @@ namespace castor3d
 			eMaterialsStarts,
 		};
 
-		static ShaderPtr getProgram()
+		static ShaderPtr getProgram( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", Bindings::eMaterialsCounts, 0u );
 			auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
@@ -225,9 +225,9 @@ namespace castor3d
 			ePixelsXY,
 		};
 
-		static ShaderPtr getProgram( VkExtent3D sourceSize )
+		static ShaderPtr getProgram( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto dataMap = writer.declStorageImg< sdw::RUImage2DRg32 >( "dataMap", Bindings::eData, 0u );
 			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
@@ -338,15 +338,15 @@ namespace castor3d
 		: castor::Named{ "VisibilityReorder" }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
-			, matcount::getProgram( getExtent( data ) ) }
+			, matcount::getProgram( device ) }
 		, m_countsStages{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeCountsShader ) } }
 		, m_computeStartsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName() + cuT( "Starts" )
-			, matstart::getProgram() }
+			, matstart::getProgram( device ) }
 		, m_startsStages{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeStartsShader ) } }
 		, m_computePixelsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName() + cuT( "PixelsXY" )
-			, pixelxy::getProgram( getExtent( data ) ) }
+			, pixelxy::getProgram( device ) }
 		, m_pixelsStages{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computePixelsShader ) } }
 	{
 		crg::FramePass const * previousPass{};

@@ -152,7 +152,7 @@ namespace castor3d
 			&& !it->second.shader->spirv.empty();
 	}
 
-	SpirVShader const & compileShader( RenderSystem const & renderSystem
+	SpirVShader const & compileShader( RenderSystem & renderSystem
 		, ShaderModule & module )
 	{
 		return renderSystem.compileShader( module );

@@ -1181,7 +1181,7 @@ namespace castor3d
 
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -1218,7 +1218,7 @@ namespace castor3d
 		}
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto c3d_mapLhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLhs", rendtgt::CombineLhsIdx, 0u );

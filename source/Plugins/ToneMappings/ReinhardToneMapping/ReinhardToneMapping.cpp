@@ -13,10 +13,10 @@ namespace Reinhard
 	castor::String ToneMapping::Type = cuT( "reinhard" );
 	castor::String ToneMapping::Name = cuT( "Reinhard Tone Mapping" );
 
-	castor3d::ShaderPtr ToneMapping::create()
+	castor3d::ShaderPtr ToneMapping::create( castor3d::Engine & engine )
 	{
 		using namespace sdw;
-		FragmentWriter writer;
+		FragmentWriter writer{ &engine.getShaderAllocator() };
 
 		// Shader inputs
 		C3D_HdrConfig( writer, 0u, 0u );

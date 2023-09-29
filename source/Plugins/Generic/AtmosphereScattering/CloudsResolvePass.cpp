@@ -38,9 +38,9 @@ namespace atmosphere_scattering
 			eCount,
 		};
 
-		static castor3d::ShaderPtr getVertexProgram()
+		static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
 		{
-			sdw::VertexWriter writer;
+			sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 
 			sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
 
@@ -54,10 +54,10 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine const & engine
+		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine & engine
 			, VkExtent3D renderSize )
 		{
-			sdw::FragmentWriter writer;
+			sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
 			castor3d::shader::Utils utils{ writer };
 
 			ATM_Camera( writer
@@ -197,7 +197,7 @@ namespace atmosphere_scattering
 		, crg::ImageViewId const & resultView
 		, uint32_t index )
 		: castor::Named{ "Clouds/ResolvePass" + castor::string::toString( index ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), cloudsres::getVertexProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), cloudsres::getVertexProgram( *device.renderSystem.getEngine() ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), cloudsres::getPixelProgram( *device.renderSystem.getEngine(), getExtent( resultView ) ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }

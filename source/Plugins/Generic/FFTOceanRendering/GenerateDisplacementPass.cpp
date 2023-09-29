@@ -6,6 +6,7 @@
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
@@ -89,9 +90,9 @@ namespace ocean_fft
 					, pipelineLayout ) );
 		}
 
-		static castor3d::ShaderPtr createShader()
+		static castor3d::ShaderPtr createShader( castor3d::RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 			auto const G = writer.declConstant( "G", 9.81_f );
 
 			C3D_FftOcean( writer, GenerateDisplacementPass::eConfig, 0u );
@@ -208,7 +209,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ gendspl::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ gendspl::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, gendspl::createShader() }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, gendspl::createShader( device ) }
 		, m_pipeline{ gendspl::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ gendspl::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }

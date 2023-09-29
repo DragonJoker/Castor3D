@@ -20,10 +20,10 @@ namespace PbrBloom
 {
 	namespace combine
 	{
-		static std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
@@ -40,10 +40,10 @@ namespace PbrBloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto c3d_mapPasses = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapPasses, 0u, 0u );
@@ -84,8 +84,8 @@ namespace PbrBloom
 		, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
 		, bool const * enabled
 		, uint32_t const * passIndex )
-		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "PbrBloomCombine", combine::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "PbrBloomCombine", combine::getPixelProgram() }
+		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "PbrBloomCombine", combine::getVertexProgram( device ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "PbrBloomCombine", combine::getPixelProgram( device ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_pass{ graph.createPass( "Combine"

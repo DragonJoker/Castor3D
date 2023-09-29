@@ -55,10 +55,10 @@ namespace castor3d
 		static uint32_t constexpr ClipInfoUboIdx = 1u;
 		static uint32_t constexpr PrevLvlUboIdx = 1u;
 
-		static ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram( Engine & engine )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -71,10 +71,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getLinearisePixelProgram()
+		static ShaderPtr getLinearisePixelProgram( Engine & engine )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			shader::Utils utils{ writer };
 
@@ -99,10 +99,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getMinifyPixelProgram()
+		static ShaderPtr getMinifyPixelProgram( Engine & engine )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			UniformBuffer previousLevel{ writer, "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
@@ -167,13 +167,13 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ passlindpth::doCreateTexture( m_device, resources, m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPool->getBuffer< castor::Point3f >( 0u ) }
-		, m_extractVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "ExtractDepth", passlindpth::getVertexProgram() }
-		, m_extractPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "ExtractDepth", passlindpth::getLinearisePixelProgram() }
+		, m_extractVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "ExtractDepth", passlindpth::getVertexProgram( *device.renderSystem.getEngine() ) }
+		, m_extractPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "ExtractDepth", passlindpth::getLinearisePixelProgram( *device.renderSystem.getEngine() ) }
 		, m_extractStages{ makeShaderState( m_device, m_extractVertexShader )
 			, makeShaderState( m_device, m_extractPixelShader ) }
 		, m_extractPass{ doInitialiseExtractPass( progress, previousPasses, depthObj ) }
-		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", passlindpth::getVertexProgram() }
-		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", passlindpth::getMinifyPixelProgram() }
+		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", passlindpth::getVertexProgram( *device.renderSystem.getEngine() ) }
+		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", passlindpth::getMinifyPixelProgram( *device.renderSystem.getEngine() ) }
 		, m_minifyStages{ makeShaderState( m_device, m_minifyVertexShader )
 			, makeShaderState( m_device, m_minifyPixelShader ) }
 	{

@@ -42,9 +42,9 @@ namespace castor3d
 
 		static uint32_t constexpr NumThreads = 1024u;
 
-		static ShaderPtr createShader()
+		static ShaderPtr createShader( RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			C3D_ClusterFlags( writer
@@ -97,7 +97,7 @@ namespace castor3d
 				, crg::RunnableGraph & graph
 				, RenderDevice const & device
 				, FrustumClusters const & clusters )
-				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "FindUniqueClusters", createShader() } }
+				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "FindUniqueClusters", createShader( device ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
 				, EnabledHolder{ true }
 				, crg::ComputePass{framePass

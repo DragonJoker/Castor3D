@@ -214,9 +214,10 @@ namespace castor3d
 
 				if ( program.stages.empty() )
 				{
+					auto & engine = *device.renderSystem.getEngine();
 					program.vertexShader = { VK_SHADER_STAGE_VERTEX_BIT, "Background" };
 					{
-						sdw::VertexWriter writer;
+						sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 
 						// Inputs
 						auto position = writer.declInput< sdw::Vec3 >( "position", 0u );
@@ -238,7 +239,7 @@ namespace castor3d
 
 					program.pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT, "Background" };
 					{
-						sdw::FragmentWriter writer;
+						sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
 
 						// Inputs
 						C3D_Scene( writer, Bindings::eScene, 0u );

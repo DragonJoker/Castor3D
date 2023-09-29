@@ -24,9 +24,9 @@ namespace atmosphere_scattering
 	{
 		castor::String const Name{ "Atmosphere" };
 
-		static castor3d::ShaderPtr getVertexProgram()
+		static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
 		{
-			sdw::VertexWriter writer;
+			sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 			sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
 
 			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
@@ -39,10 +39,11 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getPixelProgram( VkExtent2D const & renderSize
+		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine & engine
+			, VkExtent2D const & renderSize
 			, bool isVisible )
 		{
-			sdw::FragmentWriter writer;
+			sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			C3D_Scene( writer, AtmosphereBackgroundPass::eScene, 0u );
 			C3D_HdrConfig( writer, AtmosphereBackgroundPass::eHdrConfig, 0u );
@@ -119,12 +120,13 @@ namespace atmosphere_scattering
 		, VkExtent2D const & size
 		, uint32_t passIndex )
 	{
+		auto & engine = *device.renderSystem.getEngine();
 		castor::DataHolderT< Shaders >::getData().vertexShader = { VK_SHADER_STAGE_VERTEX_BIT
 			, atmos::Name
-			, atmos::getVertexProgram() };
+			, atmos::getVertexProgram( engine ) };
 		castor::DataHolderT< Shaders >::getData().pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT
 			, atmos::Name
-			, atmos::getPixelProgram( size, passIndex == 0u ) };
+			, atmos::getPixelProgram( engine, size, passIndex == 0u ) };
 		castor::DataHolderT< Shaders >::getData().stages =
 		{
 			makeShaderState( device, castor::DataHolderT< Shaders >::getData().vertexShader ),

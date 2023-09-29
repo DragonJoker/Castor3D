@@ -123,7 +123,7 @@ namespace castor3d
 			, RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			ComputeWriter writer;
+			ComputeWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			auto voxels( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"

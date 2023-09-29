@@ -449,7 +449,7 @@ namespace castor3d
 		static ShaderPtr getVertexProgramVolume( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
@@ -472,10 +472,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getGeometryProgramVolume()
+		static ShaderPtr getGeometryProgramVolume( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			GeometryWriter writer;
+			GeometryWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
@@ -531,10 +531,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgramVolume()
+		static ShaderPtr getPixelProgramVolume( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader outputs
 			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
@@ -558,7 +558,7 @@ namespace castor3d
 		static ShaderPtr getVertexProgramSlice( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader outputs
 			auto outUV = writer.declOutput< sdw::Vec2 >( "outUV", 0u );
@@ -574,10 +574,10 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getPixelProgramSlice()
+		static ShaderPtr getPixelProgramSlice( RenderSystem const & renderSystem )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
@@ -655,14 +655,14 @@ namespace castor3d
 		, m_descriptorSetLayoutVolume{ t3dto2d::createDescriptorLayout( device, false ) }
 		, m_pipelineLayoutVolume{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutVolume ) }
 		, m_vertexShaderVolume{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", t3dto2d::getVertexProgramVolume( device.renderSystem ) }
-		, m_geometryShaderVolume{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", t3dto2d::getGeometryProgramVolume() }
-		, m_pixelShaderVolume{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgramVolume() }
+		, m_geometryShaderVolume{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", t3dto2d::getGeometryProgramVolume( device.renderSystem ) }
+		, m_pixelShaderVolume{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgramVolume( device.renderSystem ) }
 		, m_pipelineVolume{ t3dto2d::createPipeline( device, *m_pipelineLayoutVolume, *m_renderPass, m_vertexShaderVolume, m_geometryShaderVolume, m_pixelShaderVolume, m_target ) }
 
 		, m_descriptorSetLayoutSlice{ t3dto2d::createDescriptorLayout( device, true ) }
 		, m_pipelineLayoutSlice{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutSlice ) }
 		, m_vertexShaderSlice{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", t3dto2d::getVertexProgramSlice( device.renderSystem ) }
-		, m_pixelShaderSlice{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgramSlice() }
+		, m_pixelShaderSlice{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgramSlice( device.renderSystem ) }
 		, m_pipelineSlice{ t3dto2d::createPipeline( device, *m_pipelineLayoutSlice, *m_renderPass, m_vertexShaderSlice, m_pixelShaderSlice, m_target ) }
 	{
 		m_sampler->initialise( device );

@@ -80,9 +80,9 @@ namespace atmosphere_scattering
 			sdw::Int sliceId;
 		};
 
-		static castor3d::ShaderPtr getVertexProgram()
+		static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
 		{
-			sdw::VertexWriter writer;
+			sdw::VertexWriter writer{ &engine.getShaderAllocator() };
 
 			auto inPosition = writer.declInput< sdw::Vec4 >( "inPosition", 0u );
 
@@ -97,9 +97,9 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getGeometryProgram()
+		static castor3d::ShaderPtr getGeometryProgram( castor3d::Engine & engine )
 		{
-			sdw::GeometryWriter writer;
+			sdw::GeometryWriter writer{ &engine.getShaderAllocator() };
 			writer.implementMainT< sdw::TriangleListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( sdw::TriangleListT< SurfaceT >{ writer }
 			, sdw::TriangleStreamT< SurfaceT >{ writer, 3u }
 			, [&]( sdw::GeometryIn in
@@ -120,11 +120,11 @@ namespace atmosphere_scattering
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine const & engine
+		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine & engine
 			, VkExtent3D const & renderSize
 			, VkExtent3D const & transmittanceExtent )
 		{
-			sdw::FragmentWriter writer;
+			sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			ATM_Camera( writer
 				, Bindings::eCamera
@@ -273,8 +273,8 @@ namespace atmosphere_scattering
 		, uint32_t index
 		, bool const & enabled )
 		: castor::Named{ "CameraVolumePass" + castor::string::toString( index ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), volume::getVertexProgram() }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), volume::getGeometryProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), volume::getVertexProgram( *device.renderSystem.getEngine() ) }
+		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), volume::getGeometryProgram( *device.renderSystem.getEngine() ) }
 		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), volume::getPixelProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_geometryShader )

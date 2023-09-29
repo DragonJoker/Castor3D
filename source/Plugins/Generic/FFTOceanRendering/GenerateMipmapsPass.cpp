@@ -4,6 +4,7 @@
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Render/RenderDevice.hpp>
+#include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
 
@@ -104,9 +105,9 @@ namespace ocean_fft
 					, pipelineLayout ) );
 		}
 
-		static castor3d::ShaderPtr createShader()
+		static castor3d::ShaderPtr createShader( castor3d::RenderDevice const & device )
 		{
-			sdw::ComputeWriter writer;
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 			auto const G = writer.declConstant( "G", 9.81_f );
 
 			auto pcb = writer.declPushConstantsBuffer( "MipmapsData" );
@@ -161,7 +162,7 @@ namespace ocean_fft
 		, m_device{ device }
 		, m_descriptorSetLayout{ genmips::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ genmips::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, genmips::createShader() }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, Name, genmips::createShader( device ) }
 		, m_pipeline{ genmips::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( crg::getMipLevels( m_pass.images.front().image.view() ) + crg::getMipLevels( m_pass.images.back().image.view() ) ) }
 		, m_descriptorSets{ genmips::createDescriptorSets( m_graph, *m_descriptorSetPool, m_pass ) }

@@ -36,10 +36,11 @@ namespace castor3d
 			eAllLightsAABB,
 		};
 
-		static ShaderPtr createShader( ClustersConfig const & config )
+		static ShaderPtr createShader( RenderDevice const & device
+			, ClustersConfig const & config )
 		{
 			using namespace sdw;
-			ComputeWriter writer;
+			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			C3D_Camera( writer
@@ -213,7 +214,7 @@ namespace castor3d
 				if ( ires.second )
 				{
 					auto & program = ires.first->second;
-					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", createShader( clustersConfig ) };
+					program.module = ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "AssignLightsToClusters", createShader( device, clustersConfig ) };
 					program.stages = ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, program.module ) };
 				}
 

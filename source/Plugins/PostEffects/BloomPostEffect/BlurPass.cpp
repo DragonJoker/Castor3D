@@ -24,10 +24,10 @@ namespace Bloom
 			DifImgIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram()
+		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
@@ -44,10 +44,10 @@ namespace Bloom
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getPixelProgram()
+		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			UniformBuffer config{ writer, castor3d::GaussianBlur::Config, GaussCfgUboIdx, 0u };
@@ -252,8 +252,8 @@ namespace Bloom
 		: m_device{ device }
 		, m_blurPassesCount{ blurPassesCount }
 		, m_blurUbo{ blur::doCreateUbo( m_device, dimensions, blurKernelSize, m_blurPassesCount, isVertical ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomBlurPass", blur::getVertexProgram() }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomBlurPass", blur::getPixelProgram() }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomBlurPass", blur::getVertexProgram( device ) }
+		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomBlurPass", blur::getPixelProgram( device ) }
 		, m_stages{ makeShaderState( device, m_vertexShader )
 			, makeShaderState( device, m_pixelShader ) }
 		, m_passes{ previousPasses }

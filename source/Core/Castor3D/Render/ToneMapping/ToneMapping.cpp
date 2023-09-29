@@ -119,7 +119,7 @@ namespace castor3d
 	{
 		m_name = name;
 		{
-			sdw::VertexWriter writer;
+			sdw::VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< sdw::Vec2 >( "position", 0u );
@@ -138,7 +138,7 @@ namespace castor3d
 			m_vertexShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_pixelShader.shader = getEngine()->getToneMappingFactory().create( name );
+		m_pixelShader.shader = getEngine()->getToneMappingFactory().create( name, *getEngine() );
 		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
 		m_program =
 		{

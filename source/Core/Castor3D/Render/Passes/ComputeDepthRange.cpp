@@ -81,10 +81,10 @@ namespace castor3d
 					, pipelineLayout ) );
 		}
 
-		static ShaderPtr createShader()
+		static ShaderPtr createShader( RenderDevice const & device )
 		{
 			using namespace sdw;
-			ComputeWriter writer;
+			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			auto input( writer.declStorageImg< RFImg2DRgba32 >( "input"
@@ -146,7 +146,7 @@ namespace castor3d
 		, m_device{ device }
 		, m_descriptorSetLayout{ passcompdr::createDescriptorLayout( m_device ) }
 		, m_pipelineLayout{ passcompdr::createPipelineLayout( m_device, *m_descriptorSetLayout ) }
-		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeDepthRange", passcompdr::createShader() }
+		, m_shader{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeDepthRange", passcompdr::createShader( device ) }
 		, m_pipeline{ passcompdr::createPipeline( device, *m_pipelineLayout, m_shader ) }
 		, m_descriptorSetPool{ m_descriptorSetLayout->createPool( 1u ) }
 		, m_descriptorSet{ passcompdr::createDescriptorSet( m_graph, *m_descriptorSetPool, m_pass ) }

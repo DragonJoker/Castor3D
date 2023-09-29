@@ -13,10 +13,10 @@ namespace aces
 	castor::String ToneMapping::Type = cuT( "aces" );
 	castor::String ToneMapping::Name = cuT( "ACES Tone Mapping" );
 
-	castor3d::ShaderPtr ToneMapping::create()
+	castor3d::ShaderPtr ToneMapping::create( castor3d::Engine & engine )
 	{
 		using namespace sdw;
-		FragmentWriter writer;
+		FragmentWriter writer{ &engine.getShaderAllocator() };
 
 		// Shader inputs
 		C3D_HdrConfig( writer, 0u, 0u );

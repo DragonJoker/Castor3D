@@ -252,7 +252,7 @@ namespace castor3d::shader
 			, sdw::Vec2 const & pdPdx
 			, sdw::Vec2 const & pdPdy )
 			: DerivTex{ sdw::findWriterMandat( puv, pdPdx, pdPdy )
-				, sdw::makeAggrInit( makeType( puv.getType()->getCache() )
+				, sdw::makeAggrInit( makeType( puv.getType()->getTypesCache() )
 					, [&puv, &pdPdx, &pdPdy]()
 					{
 						sdw::expr::ExprList result;

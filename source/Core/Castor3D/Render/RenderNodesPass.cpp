@@ -1597,7 +1597,7 @@ namespace castor3d
 
 	ShaderPtr RenderNodesPass::doGetTaskShaderSource( PipelineFlags const & flags )const
 	{
-		sdw::TaskWriter writer;
+		sdw::TaskWriter writer{ &getEngine()->getShaderAllocator() };
 		bool checkCones = flags.isFrontCulled()
 			&& flags.hasSubmeshData( SubmeshFlag::eNormals )
 			&& !flags.hasWorldPosInputs();
@@ -1765,7 +1765,7 @@ namespace castor3d
 
 	ShaderPtr RenderNodesPass::doGetMeshShaderSource( PipelineFlags const & flags )const
 	{
-		sdw::MeshWriter writer;
+		sdw::MeshWriter writer{ &getEngine()->getShaderAllocator() };
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -2025,7 +2025,7 @@ namespace castor3d
 	ShaderPtr RenderNodesPass::doGetVertexShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -2155,7 +2155,7 @@ namespace castor3d
 	ShaderPtr RenderNodesPass::doGetBillboardShaderSource( PipelineFlags const & flags )const
 	{
 		using namespace sdw;
-		VertexWriter writer;
+		VertexWriter writer{ &getEngine()->getShaderAllocator() };
 		bool enableTexcoords = flags.enableTexcoords();
 
 		shader::Utils utils{ writer };

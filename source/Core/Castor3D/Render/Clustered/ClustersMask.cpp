@@ -145,7 +145,7 @@ namespace castor3d
 			ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override
 			{
 				using namespace sdw;
-				FragmentWriter writer;
+				FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 				bool enableTextures = flags.enableTextures();
 
 				shader::Utils utils{ writer };

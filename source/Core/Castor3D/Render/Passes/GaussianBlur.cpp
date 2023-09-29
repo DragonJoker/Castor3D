@@ -33,10 +33,10 @@ namespace castor3d
 			DifImgIdx,
 		};
 
-		static ShaderPtr getVertexProgram()
+		static ShaderPtr getVertexProgram( Engine & engine )
 		{
 			using namespace sdw;
-			VertexWriter writer;
+			VertexWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			auto position = writer.declInput< Vec2 >( "position", 0u );
@@ -54,10 +54,11 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getBlurXProgram( bool isDepth )
+		static ShaderPtr getBlurXProgram( Engine & engine
+			, bool isDepth )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			UniformBuffer config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
@@ -95,10 +96,11 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getBlurYProgram( bool isDepth )
+		static ShaderPtr getBlurYProgram( Engine & engine
+			, bool isDepth )
 		{
 			using namespace sdw;
-			FragmentWriter writer;
+			FragmentWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			UniformBuffer config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
@@ -274,9 +276,9 @@ namespace castor3d
 		, m_intermediateView{ intermediateView }
 		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_kernel{ passgauss::getHalfPascal( kernelSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + cuT( "GB" ), passgauss::getVertexProgram() }
-		, m_pixelShaderX{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBX" ), passgauss::getBlurXProgram( ashes::isDepthFormat( m_format ) ) }
-		, m_pixelShaderY{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBY" ), passgauss::getBlurYProgram( ashes::isDepthFormat( m_format ) ) }
+		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + cuT( "GB" ), passgauss::getVertexProgram( *device.renderSystem.getEngine() ) }
+		, m_pixelShaderX{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBX" ), passgauss::getBlurXProgram( *device.renderSystem.getEngine(), ashes::isDepthFormat( m_format ) ) }
+		, m_pixelShaderY{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBY" ), passgauss::getBlurYProgram( *device.renderSystem.getEngine(), ashes::isDepthFormat( m_format ) ) }
 		, m_stagesX{ makeShaderState( device, m_vertexShader ), makeShaderState( device, m_pixelShaderX ) }
 		, m_stagesY{ makeShaderState( device, m_vertexShader ), makeShaderState( device, m_pixelShaderY ) }
 	{
