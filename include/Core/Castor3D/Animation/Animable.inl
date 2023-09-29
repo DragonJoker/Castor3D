@@ -62,7 +62,13 @@ namespace castor3d
 
 		if ( it->second )
 		{
-			CU_Exception( cuT( "Already an animation named [" ) + animation->getName() + "]" );
+			uint32_t index{};
+
+			while ( it->second )
+			{
+				auto name = animation->getName() + castor::string::toString( index++ );
+				it = m_animations.emplace( name, nullptr ).first;
+			}
 		}
 
 		it->second = std::move( animation );
