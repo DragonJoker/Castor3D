@@ -61,12 +61,12 @@ namespace castor3d
 			}
 			else
 			{
-				result = 4000.0f;
+				result = 0.0f;
 			}
 		}
 		else
 		{
-			log::error << cuT( "Light's attenuation is set to (0.0, 0.0, 0.0), which results in infinite litten distance, not representable." ) << std::endl;
+			result = 0.0f;
 		}
 
 		return result;
