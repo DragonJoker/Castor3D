@@ -164,36 +164,36 @@ namespace castor3d::shader
 
 		auto finalAmbient = m_writer.declLocale( "c3d_directAmbient"
 			, adjustDirectAmbient( components, directAmbient ) );
-		debugOutput.registerOutput( "Final Ambient", finalAmbient );
+		debugOutput.registerOutput( "Combine", "Final Ambient", finalAmbient );
 		 // Fresnel already included in both diffuse and specular.
 		auto diffuseBrdf = m_writer.declLocale( "c3d_diffuseBrdf"
 			, doGetDiffuseBrdf( components
 				, directDiffuse, indirectDiffuse
 				, finalAmbient, indirectAmbient, ambientOcclusion
 				, reflectedDiffuse ) );
-		debugOutput.registerOutput( "Diffuse BRDF", diffuseBrdf );
+		debugOutput.registerOutput( "Combine", "Diffuse BRDF", diffuseBrdf );
 		auto specularBrdf = m_writer.declLocale( "c3d_specularBrdf"
 			, doGetSpecularBrdf( components
 				, directSpecular, indirectSpecular
 				, finalAmbient, indirectAmbient, ambientOcclusion
 				, reflectedSpecular ) );
-		debugOutput.registerOutput( "Specular BRDF", specularBrdf );
+		debugOutput.registerOutput( "Combine", "Specular BRDF", specularBrdf );
 
 		IF( m_writer, components.hasTransmission )
 		{
 			auto specularBtdf = m_writer.declLocale( "c3d_specularBtdf"
 				, adjustRefraction( components, refracted ) );
-			debugOutput.registerOutput( "Specular BTDF", specularBtdf );
+			debugOutput.registerOutput( "Combine", "Specular BTDF", specularBtdf );
 			diffuseBrdf = mix( diffuseBrdf, specularBtdf, vec3( components.transmission ) );
-			debugOutput.registerOutput( "Transmission", components.transmission );
-			debugOutput.registerOutput( "Transmission BRDF", diffuseBrdf );
+			debugOutput.registerOutput( "Combine", "Transmission", components.transmission );
+			debugOutput.registerOutput( "Combine", "Transmission BRDF", diffuseBrdf );
 		}
 		ELSE
 		{
 			diffuseBrdf += refracted;
-			debugOutput.registerOutput( "Specular BTDF", 0.0_f );
-			debugOutput.registerOutput( "Transmission BRDF", 0.0_f );
-			debugOutput.registerOutput( "Transmission", 0.0_f );
+			debugOutput.registerOutput( "Combine", "Specular BTDF", 0.0_f );
+			debugOutput.registerOutput( "Combine", "Transmission BRDF", 0.0_f );
+			debugOutput.registerOutput( "Combine", "Transmission", 0.0_f );
 		}
 		FI;
 
@@ -205,10 +205,10 @@ namespace castor3d::shader
 			diffuseBrdf *= 1.0_f - specularFactor * fresnelFactor;
 		}
 
-		debugOutput.registerOutput( "Emissive", emissive );
+		debugOutput.registerOutput( "Combine", "Emissive", emissive );
 		auto combineResult = m_writer.declLocale( "c3d_combineResult"
 			, emissive + specularBrdf + diffuseBrdf );
-		debugOutput.registerOutput( "Combine Result", combineResult );
+		debugOutput.registerOutput( "Combine", "Combine Result", combineResult );
 		return combineResult;
 	}
 

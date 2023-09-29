@@ -418,17 +418,17 @@ namespace castor3d::shader
 	void Materials::doDisplayDebug( DebugOutput & debugOutput
 		, BlendComponents const & components )const
 	{
-		debugOutput.registerOutput( cuT( "Material Base Colour" ), components.colour.rgb() );
-		debugOutput.registerOutput( cuT( "Material Opacity" ), components.opacity );
-		debugOutput.registerOutput( cuT( "Material Metalness" ), components.metalness );
-		debugOutput.registerOutput( cuT( "Material Roughness" ), components.roughness );
-		debugOutput.registerOutput( cuT( "Material Specular Colour" ), components.specular );
-		debugOutput.registerOutput( cuT( "Material Specular Factor" ), components.getMember< sdw::Float >( "specularFactor", 0.0_f ) );
-		debugOutput.registerOutput( cuT( "Material Occlusion" ), components.occlusion );
-		debugOutput.registerOutput( cuT( "Material Emissive Colour" ), components.emissiveColour );
-		debugOutput.registerOutput( cuT( "Material Emissive Factor" ), components.emissiveFactor );
-		debugOutput.registerOutput( cuT( "Material Ambient Colour" ), components.ambientColour );
-		debugOutput.registerOutput( cuT( "Material Ambient Factor" ), components.ambientFactor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Base Colour" ), components.colour.rgb() );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Opacity" ), components.opacity );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Metalness" ), components.metalness );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Roughness" ), components.roughness );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Specular Colour" ), components.specular );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Specular Factor" ), components.getMember< sdw::Float >( "specularFactor", 0.0_f ) );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Occlusion" ), components.occlusion );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Emissive Colour" ), components.emissiveColour );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Emissive Factor" ), components.emissiveFactor );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Ambient Colour" ), components.ambientColour );
+		debugOutput.registerOutput( cuT( "Material" ), cuT( "Ambient Factor" ), components.ambientFactor );
 	}
 
 	//*********************************************************************************************
