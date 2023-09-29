@@ -1341,7 +1341,16 @@ namespace castor3d
 		{
 			auto & frameBuffer = *m_frameBuffers[index];
 			auto name = getName() + castor::string::toString( index );
-			commandBuffer = m_commandBufferPool->createCommandBuffer( name );
+
+			if ( !commandBuffer )
+			{
+				commandBuffer = m_commandBufferPool->createCommandBuffer( name );
+			}
+			else
+			{
+				commandBuffer->reset();
+			}
+
 			commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT );
 			commandBuffer->beginDebugBlock( { "RenderWindow " + name
 				, makeFloatArray( getEngine()->getNextRainbowColour() ) } );
