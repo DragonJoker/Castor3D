@@ -26,35 +26,7 @@ namespace castor3d
 				, uint32_t & bindingIndex
 				, uint32_t setIndex
 				, SceneFlags sceneFlags
-				, IndirectLightingData const * indirectLighting = nullptr );
-			C3D_API void declare( uint32_t & bindingIndex
-				, uint32_t setIndex
-				, SceneFlags sceneFlags
-				, IndirectLightingData const * indirectLighting );
-			C3D_API void declareVct( uint32_t & uboBindingIndex
-				, uint32_t & texBindingIndex
-				, uint32_t uboSetIndex = 0u
-				, uint32_t texSetIndex = 0u );
-			C3D_API void declareLpv( uint32_t & uboBindingIndex
-				, uint32_t & texBindingIndex
-				, uint32_t uboSetIndex = 0u
-				, uint32_t texSetIndex = 0u );
-			C3D_API void declareLayeredLpv( uint32_t & uboBindingIndex
-				, uint32_t & texBindingIndex
-				, uint32_t uboSetIndex = 0u
-				, uint32_t texSetIndex = 0u );
-			C3D_API sdw::Vec4 computeVCTRadiance( LightSurface const & lightSurface
-				, VoxelData const & voxelData
-				, sdw::Float const & indirectOcclusion );
-			C3D_API sdw::Vec3 computeVCTSpecular( LightSurface const & lightSurface
-				, sdw::Float const & roughness
-				, sdw::Float const & indirectOcclusion
-				, sdw::Float const & indirectBlend
-				, VoxelData const & voxelData );
-			C3D_API sdw::Vec4 computeLPVRadiance( LightSurface surface
-				, LpvGridData lpvGridData );
-			C3D_API sdw::Vec4 computeLLPVRadiance( LightSurface surface
-				, LayeredLpvGridData llpvGridData );
+				, IndirectLightingData const & indirectLighting );
 
 			C3D_API sdw::Float computeOcclusion( SceneFlags sceneFlags
 				, LightSurface lightSurface
@@ -73,11 +45,35 @@ namespace castor3d
 				, sdw::Float indirectBlend
 				, sdw::CombinedImage2DRgba32 brdfMap
 				, DebugOutput & debugOutput );
-			sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
+			C3D_API sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 				, LightSurface lightSurface
 				, VoxelData const & voxelData );
 
 		private:
+			void declareVct( uint32_t & uboBindingIndex
+				, uint32_t & texBindingIndex
+				, uint32_t uboSetIndex = 0u
+				, uint32_t texSetIndex = 0u );
+			void declareLpv( uint32_t & uboBindingIndex
+				, uint32_t & texBindingIndex
+				, uint32_t uboSetIndex = 0u
+				, uint32_t texSetIndex = 0u );
+			void declareLayeredLpv( uint32_t & uboBindingIndex
+				, uint32_t & texBindingIndex
+				, uint32_t uboSetIndex = 0u
+				, uint32_t texSetIndex = 0u );
+			sdw::Vec4 computeVCTRadiance( LightSurface const & lightSurface
+				, VoxelData const & voxelData
+				, sdw::Float const & indirectOcclusion );
+			sdw::Vec3 computeVCTSpecular( LightSurface const & lightSurface
+				, sdw::Float const & roughness
+				, sdw::Float const & indirectOcclusion
+				, sdw::Float const & indirectBlend
+				, VoxelData const & voxelData );
+			sdw::Vec4 computeLPVRadiance( LightSurface surface
+				, LpvGridData lpvGridData );
+			sdw::Vec4 computeLLPVRadiance( LightSurface surface
+				, LayeredLpvGridData llpvGridData );
 			sdw::Vec4 traceCone( sdw::CombinedImage3DRgba32 const & voxels
 				, sdw::Vec3 const & wsNormal
 				, sdw::Vec3 const & wsPosition

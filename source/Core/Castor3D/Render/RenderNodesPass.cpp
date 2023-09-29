@@ -580,65 +580,6 @@ namespace castor3d
 		background.addBindings( bindings, shaderStages, index );
 	}
 
-	void RenderNodesPass::addGIBindings( IndirectLightingData const & indirectLighting
-		, ashes::VkDescriptorSetLayoutBindingArray & bindings
-		, VkShaderStageFlags shaderStages
-		, uint32_t & index )
-	{
-		if ( indirectLighting.vctConfigUbo )
-		{
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-				, shaderStages ) );
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );	// c3d_mapVoxelsFirstBounce
-			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, shaderStages ) );	// c3d_mapVoxelsSecondaryBounce
-		}
-		else
-		{
-			if ( indirectLighting.lpvConfigUbo
-				&& indirectLighting.lpvResult )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, shaderStages ) );
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );	// c3d_lpvAccumulationR
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );	// c3d_lpvAccumulationG
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-					, shaderStages ) );	// c3d_lpvAccumulationB
-			}
-
-			if ( indirectLighting.llpvConfigUbo
-				&& indirectLighting.llpvResult )
-			{
-				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-					, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
-					, shaderStages ) );
-
-				for ( size_t i = 0u; i < indirectLighting.llpvResult->size(); ++i )
-				{
-					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages ) );	// c3d_lpvAccumulationRn
-					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages ) );	// c3d_lpvAccumulationGn
-					bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
-						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-						, shaderStages ) );	// c3d_lpvAccumulationBn
-				}
-			}
-		}
-	}
-
 	void RenderNodesPass::addGIBindings( SceneFlags sceneFlags
 		, IndirectLightingData const & indirectLighting
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings
@@ -661,6 +602,11 @@ namespace castor3d
 		}
 		else
 		{
+			if ( indirectLighting.vctConfigUbo )
+			{
+				index += 3u; // VCT: UBO + FirstBounce + SecondBounce.
+			}
+
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -675,6 +621,10 @@ namespace castor3d
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 					, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 					, shaderStages ) );	// c3d_lpvAccumulationB
+			}
+			else if ( indirectLighting.lpvConfigUbo )
+			{
+				index += 4u; // LPV: UBO + AccumR + AccumG + AccumB.
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
@@ -696,6 +646,13 @@ namespace castor3d
 						, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 						, shaderStages ) );	// c3d_lpvAccumulationBn
 				}
+			}
+			else if ( indirectLighting.llpvConfigUbo )
+			{
+				index += 1u; // LLPV: UBO
+				index += 3u; // LLPV: Accum1R + Accum1G + Accum1B.
+				index += 3u; // LLPV: Accum2R + Accum2G + Accum2B.
+				index += 3u; // LLPV: Accum3R + Accum3G + Accum3B.
 			}
 		}
 	}
@@ -820,90 +777,6 @@ namespace castor3d
 			, index );
 	}
 
-	void RenderNodesPass::addGIDescriptor( IndirectLightingData const & indirectLighting
-		, ashes::WriteDescriptorSetArray & descriptorWrites
-		, uint32_t & index )
-	{
-		if ( indirectLighting.vctConfigUbo )
-		{
-			CU_Require( indirectLighting.vctFirstBounce );
-			CU_Require( indirectLighting.vctSecondaryBounce );
-			descriptorWrites.push_back( indirectLighting.vctConfigUbo->getDescriptorWrite( index++ ) );
-			bindTexture( indirectLighting.vctFirstBounce->wholeView
-				, *indirectLighting.vctFirstBounce->sampler
-				, descriptorWrites
-				, index );
-			bindTexture( indirectLighting.vctSecondaryBounce->wholeView
-				, *indirectLighting.vctSecondaryBounce->sampler
-				, descriptorWrites
-				, index );
-		}
-		else
-		{
-			if ( indirectLighting.lpvConfigUbo
-				&& indirectLighting.lpvResult )
-			{
-				descriptorWrites.push_back( indirectLighting.lpvConfigUbo->getDescriptorWrite( index++ ) );
-				auto & lpv = *indirectLighting.lpvResult;
-
-				if ( lpv[LpvTexture::eR].wholeView
-					&& lpv[LpvTexture::eG].wholeView
-					&& lpv[LpvTexture::eB].wholeView )
-				{
-					bindTexture( lpv[LpvTexture::eR].wholeView
-						, *lpv[LpvTexture::eR].sampler
-						, descriptorWrites
-						, index );
-					bindTexture( lpv[LpvTexture::eG].wholeView
-						, *lpv[LpvTexture::eG].sampler
-						, descriptorWrites
-						, index );
-					bindTexture( lpv[LpvTexture::eB].wholeView
-						, *lpv[LpvTexture::eB].sampler
-						, descriptorWrites
-						, index );
-				}
-				else
-				{
-					index += 3u;
-				}
-			}
-
-			if ( indirectLighting.llpvConfigUbo
-				&& indirectLighting.llpvResult )
-			{
-				descriptorWrites.push_back( indirectLighting.llpvConfigUbo->getDescriptorWrite( index++ ) );
-
-				for ( auto & plpv : *indirectLighting.llpvResult )
-				{
-					auto & lpv = *plpv;
-
-					if ( lpv[LpvTexture::eR].wholeView
-						&& lpv[LpvTexture::eG].wholeView
-						&& lpv[LpvTexture::eB].wholeView )
-					{
-						bindTexture( lpv[LpvTexture::eR].wholeView
-							, *lpv[LpvTexture::eR].sampler
-							, descriptorWrites
-							, index );
-						bindTexture( lpv[LpvTexture::eG].wholeView
-							, *lpv[LpvTexture::eG].sampler
-							, descriptorWrites
-							, index );
-						bindTexture( lpv[LpvTexture::eB].wholeView
-							, *lpv[LpvTexture::eB].sampler
-							, descriptorWrites
-							, index );
-					}
-					else
-					{
-						index += 3u;
-					}
-				}
-			}
-		}
-	}
-
 	void RenderNodesPass::addGIDescriptor( SceneFlags sceneFlags
 		, IndirectLightingData const & indirectLighting
 		, ashes::WriteDescriptorSetArray & descriptorWrites
@@ -928,6 +801,11 @@ namespace castor3d
 		}
 		else
 		{
+			if ( indirectLighting.vctConfigUbo )
+			{
+				index += 3u; // VCT: UBO + FirstBounce + SecondBounce.
+			}
+
 			if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				CU_Require( indirectLighting.lpvConfigUbo );
@@ -946,6 +824,10 @@ namespace castor3d
 					, *lpv[LpvTexture::eB].sampler
 					, descriptorWrites
 					, index );
+			}
+			else if ( indirectLighting.lpvConfigUbo )
+			{
+				index += 4u; // LPV: UBO + AccumR + AccumG + AccumB.
 			}
 
 			if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
@@ -970,6 +852,13 @@ namespace castor3d
 						, descriptorWrites
 						, index );
 				}
+			}
+			else if ( indirectLighting.llpvConfigUbo )
+			{
+				index += 1u; // LLPV: UBO
+				index += 3u; // LLPV: Accum1R + Accum1G + Accum1B.
+				index += 3u; // LLPV: Accum2R + Accum2G + Accum2B.
+				index += 3u; // LLPV: Accum3R + Accum3G + Accum3B.
 			}
 		}
 	}

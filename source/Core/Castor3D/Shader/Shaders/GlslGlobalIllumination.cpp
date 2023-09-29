@@ -29,19 +29,8 @@ namespace castor3d
 			, uint32_t & bindingIndex
 			, uint32_t setIndex
 			, SceneFlags sceneFlags
-			, IndirectLightingData const * indirectLighting )
+			, IndirectLightingData const & indirectLighting )
 			: GlobalIllumination{ writer, utils }
-		{
-			declare( bindingIndex
-				, setIndex
-				, sceneFlags
-				, indirectLighting );
-		}
-
-		void GlobalIllumination::declare( uint32_t & bindingIndex
-			, uint32_t setIndex
-			, SceneFlags sceneFlags
-			, IndirectLightingData const * indirectLighting )
 		{
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
@@ -49,7 +38,7 @@ namespace castor3d
 			}
 			else
 			{
-				if ( indirectLighting && indirectLighting->vctConfigUbo )
+				if ( indirectLighting.vctConfigUbo )
 				{
 					bindingIndex += 3u; // VCT: UBO + FirstBounce + SecondBounce.
 				}
@@ -58,7 +47,7 @@ namespace castor3d
 				{
 					declareLpv( bindingIndex, bindingIndex, setIndex, setIndex );
 				}
-				else if ( indirectLighting && indirectLighting->lpvConfigUbo )
+				else if ( indirectLighting.lpvConfigUbo )
 				{
 					bindingIndex += 4u; // LPV: UBO + AccumR + AccumG + AccumB.
 				}
@@ -67,7 +56,7 @@ namespace castor3d
 				{
 					declareLayeredLpv( bindingIndex, bindingIndex, setIndex, setIndex );
 				}
-				else if ( indirectLighting && indirectLighting->llpvConfigUbo )
+				else if ( indirectLighting.llpvConfigUbo )
 				{
 					bindingIndex += 1u; // LLPV: UBO
 					bindingIndex += 3u; // LLPV: Accum1R + Accum1G + Accum1B.
@@ -75,171 +64,6 @@ namespace castor3d
 					bindingIndex += 3u; // LLPV: Accum3R + Accum3G + Accum3B.
 				}
 			}
-		}
-
-		void GlobalIllumination::declareVct( uint32_t & uboBindingIndex
-			, uint32_t & texBindingIndex
-			, uint32_t uboSetIndex
-			, uint32_t texSetIndex )
-		{
-			C3D_Voxelizer( m_writer, uboBindingIndex++, uboSetIndex, true );
-			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", texBindingIndex++, texSetIndex );
-			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", texBindingIndex++, texSetIndex );
-		}
-
-		void GlobalIllumination::declareLpv( uint32_t & uboBindingIndex
-			, uint32_t & texBindingIndex
-			, uint32_t uboSetIndex
-			, uint32_t texSetIndex )
-		{
-			C3D_LpvGridConfig( m_writer, uboBindingIndex++, uboSetIndex, true );
-			auto c3d_lpvAccumulatorR = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulatorG = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulatorB = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), texBindingIndex++, texSetIndex );
-
-			/*Spherical harmonics coefficients - precomputed*/
-			auto SH_C0 = m_writer.declConstant( "SH_C0"
-				, sdw::Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
-			auto SH_C1 = m_writer.declConstant( "SH_C1"
-				, sdw::Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
-
-			// no normalization
-			m_evalSH = m_writer.implementFunction< sdw::Vec4 >( "evalSH"
-				, [this]( sdw::Vec3 direction )
-				{
-					auto SH_C0 = m_writer.getVariable< sdw::Float >( "SH_C0" );
-					auto SH_C1 = m_writer.getVariable< sdw::Float >( "SH_C1" );
-
-					m_writer.returnStmt( vec4( SH_C0
-						, -SH_C1 * direction.y()
-						, SH_C1 * direction.z()
-						, -SH_C1 * direction.x() ) );
-				}
-				, sdw::InVec3{ m_writer, "direction" } );
-
-			m_computeLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLPVRadiance"
-				, [this]( sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & wsPosition
-					, LpvGridData lpvGridData )
-				{
-					auto c3d_lpvAccumulatorR = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
-					auto c3d_lpvAccumulatorG = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) );
-					auto c3d_lpvAccumulatorB = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
-
-					auto SHintensity = m_writer.declLocale( "SHintensity"
-						, m_evalSH( -wsNormal ) );
-					auto lpvCellCoords = m_writer.declLocale( "lpvCellCoords"
-						, lpvGridData.worldToTex( wsPosition ) );
-					auto lpvIntensity = m_writer.declLocale( "lpvIntensity"
-						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.lod( lpvCellCoords, 0.0_f ) )
-							, dot( SHintensity, c3d_lpvAccumulatorG.lod( lpvCellCoords, 0.0_f ) )
-							, dot( SHintensity, c3d_lpvAccumulatorB.lod( lpvCellCoords, 0.0_f ) ) ) );
-					m_writer.returnStmt( vec4( max( lpvIntensity, vec3( 0.0_f ) ), 1.0f ) );
-				}
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InVec3{ m_writer, "wsPosition" }
-				, InLpvGridData{ m_writer, "lpvGridData" } );
-		}
-
-		void GlobalIllumination::declareLayeredLpv( uint32_t & uboBindingIndex
-			, uint32_t & texBindingIndex
-			, uint32_t uboSetIndex
-			, uint32_t texSetIndex )
-		{
-			C3D_LayeredLpvGridConfig( m_writer, uboBindingIndex++, uboSetIndex, true );
-			auto c3d_lpvAccumulator1R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator1G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator1B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator2B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ), texBindingIndex++, texSetIndex );
-			auto c3d_lpvAccumulator3B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ), texBindingIndex++, texSetIndex );
-
-			/*Spherical harmonics coefficients - precomputed*/
-			auto SH_C0 = m_writer.declConstant( "SH_C0"
-				, sdw::Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
-			auto SH_C1 = m_writer.declConstant( "SH_C1"
-				, sdw::Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
-
-			// no normalization
-			if ( !m_evalSH )
-			{
-				m_evalSH = m_writer.implementFunction< sdw::Vec4 >( "evalSH"
-					, [this]( sdw::Vec3 direction )
-					{
-						auto SH_C0 = m_writer.getVariable< sdw::Float >( "SH_C0" );
-						auto SH_C1 = m_writer.getVariable< sdw::Float >( "SH_C1" );
-
-						m_writer.returnStmt( vec4( SH_C0
-							, -SH_C1 * direction.y()
-							, SH_C1 * direction.z()
-							, -SH_C1 * direction.x() ) );
-					}
-					, sdw::InVec3{ m_writer, "direction" } );
-			}
-
-			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLLPVRadiance"
-				, [this]( sdw::Vec3 const & wsNormal
-					, sdw::Vec3 const & wsPosition
-					, LayeredLpvGridData llpvGridData )
-				{
-					auto c3d_lpvAccumulator1R = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ) );
-					auto c3d_lpvAccumulator1G = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ) );
-					auto c3d_lpvAccumulator1B = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ) );
-					auto c3d_lpvAccumulator2R = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ) );
-					auto c3d_lpvAccumulator2G = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ) );
-					auto c3d_lpvAccumulator2B = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ) );
-					auto c3d_lpvAccumulator3R = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ) );
-					auto c3d_lpvAccumulator3G = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ) );
-					auto c3d_lpvAccumulator3B = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ) );
-
-					auto SHintensity = m_writer.declLocale( "SHintensity"
-						, m_evalSH( -wsNormal ) );
-					auto lpvCellCoords1 = m_writer.declLocale( "lpvCellCoords1"
-						, ( wsPosition - llpvGridData.allMinVolumeCorners[0].xyz() ) / llpvGridData.allCellSizes.x() / llpvGridData.gridSizes );
-					auto lpvCellCoords2 = m_writer.declLocale( "lpvCellCoords2"
-						, ( wsPosition - llpvGridData.allMinVolumeCorners[1].xyz() ) / llpvGridData.allCellSizes.y() / llpvGridData.gridSizes );
-					auto lpvCellCoords3 = m_writer.declLocale( "lpvCellCoords3"
-						, ( wsPosition - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
-
-					auto lpvIntensity1 = m_writer.declLocale( "lpvIntensity1"
-						, vec3( dot( SHintensity, c3d_lpvAccumulator1R.lod( lpvCellCoords1, 0.0_f ) )
-							, dot( SHintensity, c3d_lpvAccumulator1G.lod( lpvCellCoords1, 0.0_f ) )
-							, dot( SHintensity, c3d_lpvAccumulator1B.lod( lpvCellCoords1, 0.0_f ) ) ) );
-					auto lpvIntensity2 = m_writer.declLocale( "lpvIntensity2"
-						, vec3( dot( SHintensity, c3d_lpvAccumulator2R.lod( lpvCellCoords2, 0.0_f ) )
-							, dot( SHintensity, c3d_lpvAccumulator2G.lod( lpvCellCoords2, 0.0_f ) )
-							, dot( SHintensity, c3d_lpvAccumulator2B.lod( lpvCellCoords2, 0.0_f ) ) ) );
-					auto lpvIntensity3 = m_writer.declLocale( "lpvIntensity3"
-						, vec3( dot( SHintensity, c3d_lpvAccumulator3R.lod( lpvCellCoords3, 0.0_f ) )
-							, dot( SHintensity, c3d_lpvAccumulator3G.lod( lpvCellCoords3, 0.0_f ) )
-							, dot( SHintensity, c3d_lpvAccumulator3B.lod( lpvCellCoords3, 0.0_f ) ) ) );
-
-					m_writer.returnStmt( vec4( max( lpvIntensity1 + lpvIntensity2 + lpvIntensity3, vec3( 0.0_f ) ), 1.0f ) );
-				}
-				, sdw::InVec3{ m_writer, "wsNormal" }
-				, sdw::InVec3{ m_writer, "wsPosition" }
-				, InLayeredLpvGridData{ m_writer, "llpvGridData" } );
-		}
-
-		sdw::Vec4 GlobalIllumination::computeLPVRadiance( LightSurface lightSurface
-			, LpvGridData lpvGridData )
-		{
-			CU_Require( m_computeLPVRadiance );
-			return m_computeLPVRadiance( lightSurface.N()
-				, lightSurface.worldPosition()
-				, lpvGridData );
-		}
-
-		sdw::Vec4 GlobalIllumination::computeLLPVRadiance( LightSurface lightSurface
-			, LayeredLpvGridData llpvGridData )
-		{
-			CU_Require( m_computeLLPVRadiance );
-			return m_computeLLPVRadiance( lightSurface.N()
-				, lightSurface.worldPosition()
-				, llpvGridData );
 		}
 
 		sdw::Float GlobalIllumination::computeOcclusion( SceneFlags sceneFlags
@@ -276,70 +100,6 @@ namespace castor3d
 
 			debugOutput.registerOutput( "Indirect", "Occlusion", indirectOcclusion );
 			return indirectOcclusion;
-		}
-
-		sdw::Vec4 GlobalIllumination::computeVCTRadiance( LightSurface const & lightSurface
-			, VoxelData const & voxelData
-			, sdw::Float const & indirectOcclusion )
-		{
-			auto mapVoxelsFirstBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-			auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
-
-			auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
-
-			IF( m_writer, voxelData.enableSecondaryBounce )
-			{
-				vxlRadiance = traceConeRadiance( mapVoxelsSecondaryBounce
-					, lightSurface
-					, voxelData );
-			}
-			ELSE
-			{
-				vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
-					, lightSurface
-					, voxelData );
-			}
-			FI;
-
-			auto vxlPosition = m_writer.declLocale( "vxlPosition"
-				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
-			auto vxlBlend = m_writer.declLocale( "vxlBlend"
-				, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
-			return vec4( mix( vec3( 0.0_f )
-					, vxlRadiance.xyz() * indirectOcclusion
-					, vec3( vxlRadiance.a() * vxlBlend * indirectOcclusion ) )
-				, vxlBlend );
-		}
-
-		sdw::Vec3 GlobalIllumination::computeVCTSpecular( LightSurface const & lightSurface
-			, sdw::Float const & roughness
-			, sdw::Float const & indirectOcclusion
-			, sdw::Float const & indirectBlend
-			, VoxelData const & voxelData )
-		{
-			auto mapVoxelsFirstBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
-			auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
-			auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
-
-			IF( m_writer, voxelData.enableSecondaryBounce )
-			{
-				vxlReflection = traceConeReflection( mapVoxelsSecondaryBounce
-					, lightSurface
-					, roughness
-					, voxelData );
-			}
-			ELSE
-			{
-				vxlReflection = traceConeReflection( mapVoxelsFirstBounce
-					, lightSurface
-					, roughness
-					, voxelData );
-			}
-			FI;
-
-			return mix( vec3( 0.0_f )
-					, vxlReflection.xyz()
-					, vec3( vxlReflection.a() * indirectBlend * indirectOcclusion ) );
 		}
 
 		sdw::Vec4 GlobalIllumination::computeDiffuse( SceneFlags sceneFlags
@@ -497,6 +257,235 @@ namespace castor3d
 				, plightSurface.N()
 				, plightSurface.worldPosition()
 				, pvoxelData );
+		}
+
+		void GlobalIllumination::declareVct( uint32_t & uboBindingIndex
+			, uint32_t & texBindingIndex
+			, uint32_t uboSetIndex
+			, uint32_t texSetIndex )
+		{
+			C3D_Voxelizer( m_writer, uboBindingIndex++, uboSetIndex, true );
+			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsFirstBounce", texBindingIndex++, texSetIndex );
+			m_writer.declCombinedImg< FImg3DRgba32 >( "c3d_mapVoxelsSecondaryBounce", texBindingIndex++, texSetIndex );
+		}
+
+		void GlobalIllumination::declareLpv( uint32_t & uboBindingIndex
+			, uint32_t & texBindingIndex
+			, uint32_t uboSetIndex
+			, uint32_t texSetIndex )
+		{
+			C3D_LpvGridConfig( m_writer, uboBindingIndex++, uboSetIndex, true );
+			auto c3d_lpvAccumulatorR = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulatorG = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulatorB = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ), texBindingIndex++, texSetIndex );
+
+			/*Spherical harmonics coefficients - precomputed*/
+			auto SH_C0 = m_writer.declConstant( "SH_C0"
+				, sdw::Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
+			auto SH_C1 = m_writer.declConstant( "SH_C1"
+				, sdw::Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
+
+			// no normalization
+			m_evalSH = m_writer.implementFunction< sdw::Vec4 >( "evalSH"
+				, [this]( sdw::Vec3 direction )
+				{
+					auto SH_C0 = m_writer.getVariable< sdw::Float >( "SH_C0" );
+					auto SH_C1 = m_writer.getVariable< sdw::Float >( "SH_C1" );
+
+					m_writer.returnStmt( vec4( SH_C0
+						, -SH_C1 * direction.y()
+						, SH_C1 * direction.z()
+						, -SH_C1 * direction.x() ) );
+				}
+				, sdw::InVec3{ m_writer, "direction" } );
+
+			m_computeLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLPVRadiance"
+				, [this]( sdw::Vec3 const & wsNormal
+					, sdw::Vec3 const & wsPosition
+					, LpvGridData lpvGridData )
+				{
+					auto c3d_lpvAccumulatorR = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator" ) );
+					auto c3d_lpvAccumulatorG = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator" ) );
+					auto c3d_lpvAccumulatorB = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator" ) );
+
+					auto SHintensity = m_writer.declLocale( "SHintensity"
+						, m_evalSH( -wsNormal ) );
+					auto lpvCellCoords = m_writer.declLocale( "lpvCellCoords"
+						, lpvGridData.worldToTex( wsPosition ) );
+					auto lpvIntensity = m_writer.declLocale( "lpvIntensity"
+						, vec3( dot( SHintensity, c3d_lpvAccumulatorR.lod( lpvCellCoords, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulatorG.lod( lpvCellCoords, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulatorB.lod( lpvCellCoords, 0.0_f ) ) ) );
+					m_writer.returnStmt( vec4( max( lpvIntensity, vec3( 0.0_f ) ), 1.0f ) );
+				}
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InVec3{ m_writer, "wsPosition" }
+				, InLpvGridData{ m_writer, "lpvGridData" } );
+		}
+
+		void GlobalIllumination::declareLayeredLpv( uint32_t & uboBindingIndex
+			, uint32_t & texBindingIndex
+			, uint32_t uboSetIndex
+			, uint32_t texSetIndex )
+		{
+			C3D_LayeredLpvGridConfig( m_writer, uboBindingIndex++, uboSetIndex, true );
+			auto c3d_lpvAccumulator1R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator1G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator1B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator2B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3R = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3G = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ), texBindingIndex++, texSetIndex );
+			auto c3d_lpvAccumulator3B = m_writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ), texBindingIndex++, texSetIndex );
+
+			/*Spherical harmonics coefficients - precomputed*/
+			auto SH_C0 = m_writer.declConstant( "SH_C0"
+				, sdw::Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
+			auto SH_C1 = m_writer.declConstant( "SH_C1"
+				, sdw::Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
+
+			// no normalization
+			if ( !m_evalSH )
+			{
+				m_evalSH = m_writer.implementFunction< sdw::Vec4 >( "evalSH"
+					, [this]( sdw::Vec3 direction )
+					{
+						auto SH_C0 = m_writer.getVariable< sdw::Float >( "SH_C0" );
+						auto SH_C1 = m_writer.getVariable< sdw::Float >( "SH_C1" );
+
+						m_writer.returnStmt( vec4( SH_C0
+							, -SH_C1 * direction.y()
+							, SH_C1 * direction.z()
+							, -SH_C1 * direction.x() ) );
+					}
+					, sdw::InVec3{ m_writer, "direction" } );
+			}
+
+			m_computeLLPVRadiance = m_writer.implementFunction< sdw::Vec4 >( "computeLLPVRadiance"
+				, [this]( sdw::Vec3 const & wsNormal
+					, sdw::Vec3 const & wsPosition
+					, LayeredLpvGridData llpvGridData )
+				{
+					auto c3d_lpvAccumulator1R = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator1" ) );
+					auto c3d_lpvAccumulator1G = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator1" ) );
+					auto c3d_lpvAccumulator1B = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator1" ) );
+					auto c3d_lpvAccumulator2R = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator2" ) );
+					auto c3d_lpvAccumulator2G = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator2" ) );
+					auto c3d_lpvAccumulator2B = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator2" ) );
+					auto c3d_lpvAccumulator3R = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eR, "Accumulator3" ) );
+					auto c3d_lpvAccumulator3G = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eG, "Accumulator3" ) );
+					auto c3d_lpvAccumulator3B = m_writer.getVariable< sdw::CombinedImage3DRgba16 >( getTextureName( LpvTexture::eB, "Accumulator3" ) );
+
+					auto SHintensity = m_writer.declLocale( "SHintensity"
+						, m_evalSH( -wsNormal ) );
+					auto lpvCellCoords1 = m_writer.declLocale( "lpvCellCoords1"
+						, ( wsPosition - llpvGridData.allMinVolumeCorners[0].xyz() ) / llpvGridData.allCellSizes.x() / llpvGridData.gridSizes );
+					auto lpvCellCoords2 = m_writer.declLocale( "lpvCellCoords2"
+						, ( wsPosition - llpvGridData.allMinVolumeCorners[1].xyz() ) / llpvGridData.allCellSizes.y() / llpvGridData.gridSizes );
+					auto lpvCellCoords3 = m_writer.declLocale( "lpvCellCoords3"
+						, ( wsPosition - llpvGridData.allMinVolumeCorners[2].xyz() ) / llpvGridData.allCellSizes.z() / llpvGridData.gridSizes );
+
+					auto lpvIntensity1 = m_writer.declLocale( "lpvIntensity1"
+						, vec3( dot( SHintensity, c3d_lpvAccumulator1R.lod( lpvCellCoords1, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator1G.lod( lpvCellCoords1, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator1B.lod( lpvCellCoords1, 0.0_f ) ) ) );
+					auto lpvIntensity2 = m_writer.declLocale( "lpvIntensity2"
+						, vec3( dot( SHintensity, c3d_lpvAccumulator2R.lod( lpvCellCoords2, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator2G.lod( lpvCellCoords2, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator2B.lod( lpvCellCoords2, 0.0_f ) ) ) );
+					auto lpvIntensity3 = m_writer.declLocale( "lpvIntensity3"
+						, vec3( dot( SHintensity, c3d_lpvAccumulator3R.lod( lpvCellCoords3, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator3G.lod( lpvCellCoords3, 0.0_f ) )
+							, dot( SHintensity, c3d_lpvAccumulator3B.lod( lpvCellCoords3, 0.0_f ) ) ) );
+
+					m_writer.returnStmt( vec4( max( lpvIntensity1 + lpvIntensity2 + lpvIntensity3, vec3( 0.0_f ) ), 1.0f ) );
+				}
+				, sdw::InVec3{ m_writer, "wsNormal" }
+				, sdw::InVec3{ m_writer, "wsPosition" }
+				, InLayeredLpvGridData{ m_writer, "llpvGridData" } );
+		}
+
+		sdw::Vec4 GlobalIllumination::computeVCTRadiance( LightSurface const & lightSurface
+			, VoxelData const & voxelData
+			, sdw::Float const & indirectOcclusion )
+		{
+			auto mapVoxelsFirstBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+			auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+
+			auto vxlRadiance( m_writer.declLocale< sdw::Vec4 >( "vxlRadiance" ) );
+
+			IF( m_writer, voxelData.enableSecondaryBounce )
+			{
+				vxlRadiance = traceConeRadiance( mapVoxelsSecondaryBounce
+					, lightSurface
+					, voxelData );
+			}
+			ELSE
+			{
+				vxlRadiance = traceConeRadiance( mapVoxelsFirstBounce
+					, lightSurface
+					, voxelData );
+			}
+			FI;
+
+			auto vxlPosition = m_writer.declLocale( "vxlPosition"
+				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
+			auto vxlBlend = m_writer.declLocale( "vxlBlend"
+				, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
+			return vec4( mix( vec3( 0.0_f )
+					, vxlRadiance.xyz() * indirectOcclusion
+					, vec3( vxlRadiance.a() * vxlBlend * indirectOcclusion ) )
+				, vxlBlend );
+		}
+
+		sdw::Vec3 GlobalIllumination::computeVCTSpecular( LightSurface const & lightSurface
+			, sdw::Float const & roughness
+			, sdw::Float const & indirectOcclusion
+			, sdw::Float const & indirectBlend
+			, VoxelData const & voxelData )
+		{
+			auto mapVoxelsFirstBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsFirstBounce" );
+			auto mapVoxelsSecondaryBounce = m_writer.getVariable< sdw::CombinedImage3DRgba32 >( "c3d_mapVoxelsSecondaryBounce" );
+			auto vxlReflection( m_writer.declLocale< sdw::Vec4 >( "vxlReflection" ) );
+
+			IF( m_writer, voxelData.enableSecondaryBounce )
+			{
+				vxlReflection = traceConeReflection( mapVoxelsSecondaryBounce
+					, lightSurface
+					, roughness
+					, voxelData );
+			}
+			ELSE
+			{
+				vxlReflection = traceConeReflection( mapVoxelsFirstBounce
+					, lightSurface
+					, roughness
+					, voxelData );
+			}
+			FI;
+
+			return mix( vec3( 0.0_f )
+					, vxlReflection.xyz()
+					, vec3( vxlReflection.a() * indirectBlend * indirectOcclusion ) );
+		}
+
+		sdw::Vec4 GlobalIllumination::computeLPVRadiance( LightSurface lightSurface
+			, LpvGridData lpvGridData )
+		{
+			CU_Require( m_computeLPVRadiance );
+			return m_computeLPVRadiance( lightSurface.N()
+				, lightSurface.worldPosition()
+				, lpvGridData );
+		}
+
+		sdw::Vec4 GlobalIllumination::computeLLPVRadiance( LightSurface lightSurface
+			, LayeredLpvGridData llpvGridData )
+		{
+			CU_Require( m_computeLLPVRadiance );
+			return m_computeLLPVRadiance( lightSurface.N()
+				, lightSurface.worldPosition()
+				, llpvGridData );
 		}
 
 		sdw::Vec4 GlobalIllumination::traceCone( sdw::CombinedImage3DRgba32 const & pvoxels

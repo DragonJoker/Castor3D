@@ -253,7 +253,7 @@ namespace castor3d
 			remFlag( flags, SceneFlag::eLpvGI );
 		}
 
-		if ( !m_indirectLighting.llpvConfigUbo || !m_indirectLighting.lpvResult )
+		if ( !m_indirectLighting.llpvConfigUbo || !m_indirectLighting.llpvResult )
 		{
 			remFlag( flags, SceneFlag::eLayeredLpvGI );
 		}
