@@ -548,7 +548,7 @@ namespace water
 			, index
 			, RenderPipeline::eBuffers
 			, flags.getGlobalIlluminationFlags()
-			, getTechnique().getIndirectLighting() };
+			, getIndirectLighting() };
 		shader::ClusteredLights clusteredLights{ writer
 			, index
 			, RenderPipeline::eBuffers

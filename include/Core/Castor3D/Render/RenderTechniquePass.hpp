@@ -201,6 +201,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		C3D_API Engine * getEngine()const;
+		C3D_API IndirectLightingData const & getIndirectLighting()const noexcept;
 		C3D_API DebugConfig & getDebugConfig()const;
 		C3D_API virtual ClustersConfig const * getClustersConfig()const = 0;
 		C3D_API virtual bool hasSsao()const = 0;

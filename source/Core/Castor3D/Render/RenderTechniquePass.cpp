@@ -157,6 +157,14 @@ namespace castor3d
 		return m_scene.getOwner();
 	}
 
+	IndirectLightingData const & RenderTechniquePass::getIndirectLighting()const noexcept
+	{
+		static IndirectLightingData const dummy{};
+		return m_parent
+			? m_parent->getIndirectLighting()
+			: dummy;
+	}
+
 	DebugConfig & RenderTechniquePass::getDebugConfig()const
 	{
 		return m_scene.getDebugConfig();

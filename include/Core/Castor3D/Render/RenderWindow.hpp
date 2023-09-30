@@ -527,6 +527,7 @@ namespace castor3d
 		void doInitialiseTransferCommands( QueueData const & queueData
 			, CommandsSemaphore & commands
 			, uint32_t index );
+		void doProcessDeviceLost();
 
 	private:
 		static uint32_t s_nbRenderWindows;

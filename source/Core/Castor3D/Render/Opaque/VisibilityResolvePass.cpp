@@ -2594,17 +2594,17 @@ namespace castor3d
 				? visres::createVtxDescriptorLayout( m_device, getName(), flags )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
 			result->ioDescriptorLayout = visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
-				, m_targetImage, getScene(), *m_parent, getClustersConfig()->enabled, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting() );
+				, m_targetImage, getScene(), *m_parent, getClustersConfig()->enabled, hasSsao() ? m_ssao : nullptr, &getIndirectLighting() );
 			result->pipelineLayout = m_device->createPipelineLayout( getName()
 				, { *result->ioDescriptorLayout, *result->vtxDescriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &m_parent->getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter ) };
 
 			if constexpr ( useCompute )
 			{
@@ -2644,7 +2644,7 @@ namespace castor3d
 			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
 			result->ioDescriptorPool = result->ioDescriptorLayout->createPool( 1u );
 			result->ioDescriptorSet = visres::createInDescriptorSet( getName(), *result->ioDescriptorPool, m_graph, m_cameraUbo, m_sceneUbo, *m_parent, getScene()
-				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &m_parent->getIndirectLighting(), m_deferredLightingFilter );
+				, getClustersConfig()->enabled, m_targetImage, hasSsao() ? m_ssao : nullptr, &getIndirectLighting(), m_deferredLightingFilter );
 			pipelines.push_back( std::move( result ) );
 			it = std::next( pipelines.begin(), ptrdiff_t( pipelines.size() - 1u ) );
 		}
