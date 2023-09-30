@@ -345,12 +345,6 @@ namespace castor3d
 			setEnabled( false );
 		}
 
-		void setShadowProducer( bool value )
-		{
-			m_shadows.enabled = value;
-			markDirty();
-		}
-
 		void setShadowConfig( ShadowConfig config )
 		{
 			m_shadows = std::move( config );
