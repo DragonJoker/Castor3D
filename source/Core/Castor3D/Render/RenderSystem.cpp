@@ -920,7 +920,7 @@ namespace castor3d
 		log::debug << "Enabled extensions count: " << uint32_t( extensionNames.size() ) << std::endl;
 		return std::make_unique< ashes::Instance >( std::move( plugin )
 #if C3D_UseAllocationCallbacks
-			, ashes::makeAllocator< AlignedBuddyAllocatorTraits >()
+			, ashes::makeAllocator< rendsys::AlignedBuddyAllocatorTraits >()
 #else
 			, nullptr
 #endif

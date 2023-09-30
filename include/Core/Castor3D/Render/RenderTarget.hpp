@@ -400,6 +400,11 @@ namespace castor3d
 		{
 			return m_clustersConfig;
 		}
+
+		bool areDebugTargetsEnabled()const noexcept
+		{
+			return m_debugTargets;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -544,6 +549,7 @@ namespace castor3d
 		FrustumClustersUPtr m_frustumClusters;
 		bool m_enableFullLoading{ false };
 		DebugDrawerUPtr m_debugDrawer{};
+		bool m_debugTargets{};
 
 		struct StereoConfig
 		{

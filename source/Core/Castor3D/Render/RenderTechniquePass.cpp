@@ -1,5 +1,6 @@
 #include "Castor3D/Render/RenderTechniquePass.hpp"
 
+#include "Castor3D/Config.hpp"
 #include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
@@ -163,6 +164,13 @@ namespace castor3d
 		return m_parent
 			? m_parent->getIndirectLighting()
 			: dummy;
+	}
+
+	bool RenderTechniquePass::areDebugTargetsEnabled()const noexcept
+	{
+		return m_parent
+			? m_parent->areDebugTargetsEnabled()
+			: C3D_EnableDebugTargets != 0;
 	}
 
 	DebugConfig & RenderTechniquePass::getDebugConfig()const

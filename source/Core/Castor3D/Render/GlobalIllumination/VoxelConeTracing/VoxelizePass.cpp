@@ -589,7 +589,7 @@ namespace castor3d
 						, cuT( "Default" )
 						, c3d_cameraData.debugIndex()
 						, color
-						, true };
+						, areDebugTargetsEnabled() };
 
 					IF( writer, material.lighting != 0_u )
 					{

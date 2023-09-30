@@ -316,7 +316,7 @@ namespace castor3d
 					, m_groupName
 					, c3d_cameraData.debugIndex()
 					, outColour
-					, true };
+					, areDebugTargetsEnabled() };
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto material = writer.declLocale( "material"

@@ -31,6 +31,7 @@ set( C3D_USE_ALLOCCB 0 )
 set( C3D_USE_MESH 0 )
 set( C3D_USE_TASK 0 )
 set( C3D_USE_VISIBILITY 0 )
+set( C3D_DEBUG_QUADS 0 )
 
 if ( CASTOR_USE_GLSLANG )
 	set( C3D_USE_GLSLANG 1 )
@@ -54,6 +55,10 @@ endif ()
 
 if ( CASTOR_USE_TASK_SHADERS )
 	set( C3D_USE_TASK 1 )
+endif ()
+
+if ( CASTOR_DEBUG_TARGETS )
+	set( C3D_DEBUG_QUADS 1 )
 endif ()
 
 set( ExternalIncludes )
@@ -2202,12 +2207,6 @@ target_link_libraries( ${PROJECT_NAME}
 		meshoptimizer::meshoptimizer
 		mikktspace::mikktspace
 )
-if ( CASTOR_DEBUG_TARGETS )
-	target_compile_definitions( ${PROJECT_NAME}
-		PUBLIC
-			C3D_DebugQuads
-	)
-endif ()
 if ( CASTOR_C3D_NEEDS_GLSL )
 	target_compile_definitions( ${PROJECT_NAME}
 		PUBLIC

@@ -843,6 +843,11 @@ namespace castor3d
 		return m_renderTarget.getScene()->getDebugConfig();
 	}
 
+	bool RenderTechnique::areDebugTargetsEnabled()const noexcept
+	{
+		return m_renderTarget.areDebugTargetsEnabled();
+	}
+
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
 		, TechniquePassEvent event
 		, crg::FramePass const * previousPass )

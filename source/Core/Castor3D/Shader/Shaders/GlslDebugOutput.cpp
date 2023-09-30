@@ -1,9 +1,35 @@
 #include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 
+#include <CastorUtils/Data/Path.hpp>
+
 #include <ShaderWriter/Source.hpp>
 
 namespace castor3d::shader
 {
+	namespace debug
+	{
+		static castor::String normaliseName( castor::String const & name )
+		{
+			auto result = name;
+			castor::string::replace( result, "\\", "" );
+			castor::string::replace( result, "/", "" );
+			castor::string::replace( result, ":", "" );
+			castor::string::replace( result, "*", "" );
+			castor::string::replace( result, "?", "" );
+			castor::string::replace( result, "\"", "" );
+			castor::string::replace( result, "<", "" );
+			castor::string::replace( result, ">", "" );
+			castor::string::replace( result, "|", "" );
+			castor::string::replace( result, ".", "" );
+			castor::string::replace( result, ",", "" );
+			castor::string::replace( result, "\t", "" );
+			castor::string::replace( result, "\r", "" );
+			castor::string::replace( result, "\n", "" );
+			castor::string::replace( result, " ", "" );
+			return result;
+		}
+	}
+
 	DebugOutput::DebugOutput( DebugConfig & config
 		, castor::String category
 		, sdw::UInt const index
@@ -39,9 +65,9 @@ namespace castor3d::shader
 		, sdw::Vec4 const value )
 	{
 		auto & writer = sdw::findWriterMandat( value );
-		auto index = m_config.registerValue( category, std::move( name ) );
+		auto index = m_config.registerValue( category, name );
 		m_values.emplace_back( index
-			, writer.declLocale( "debugValue" + castor::string::toString( index )
+			, writer.declLocale( "debug" + castor::string::toString( index ) + debug::normaliseName( name )
 				, value ) );
 	}
 
