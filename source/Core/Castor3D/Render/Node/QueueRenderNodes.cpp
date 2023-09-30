@@ -1042,6 +1042,12 @@ namespace castor3d
 		m_instancedSubmeshNodes.clear();
 		m_billboardNodes.clear();
 
+		auto count = culler.getSubmeshes().size();
+		m_nodesIds.reserve( count );
+		m_submeshNodes.reserve( count );
+		m_instancedSubmeshNodes.reserve( count );
+		m_billboardNodes.reserve( count );
+
 		for ( auto & culled : culler.getSubmeshes() )
 		{
 			auto & node = *culled.node;

@@ -925,6 +925,11 @@ namespace castor3d
 			| ShaderFlag::eColour;
 	}
 
+	bool RenderNodesPass::areDebugTargetsEnabled()const noexcept
+	{
+		return C3D_EnableDebugTargets != 0;
+	}
+
 	bool RenderNodesPass::isValidPass( Pass const & pass )const
 	{
 		return doIsValidPass( pass );

@@ -580,7 +580,7 @@ namespace castor3d
 
 			if ( m_initialised )
 			{
-#if ( !C3D_DebugQuads ) || C3D_DebugPicking || C3D_DebugBackgroundPicking
+#if ( C3D_EnableDebugTargets == 0 ) || C3D_DebugPicking || C3D_DebugBackgroundPicking
 				updater.combineIndex = 0u;
 				updater.cellSize = 0.0f;
 				updater.gridCenter = {};
@@ -1472,7 +1472,7 @@ namespace castor3d
 			, m_texture3Dto2D->getTarget().sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) };
-#if C3D_DebugQuads
+#if C3D_EnableDebugTargets != 0
 		auto intermediates = target->getIntermediateViews();
 #else
 		IntermediateViewArray intermediates{ target->getIntermediateViews()[0] };
@@ -1847,7 +1847,7 @@ namespace castor3d
 		doRecordCommandBuffer( queueData, passIndex );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-#	if C3D_DebugQuads
+#	if C3D_EnableDebugTargets != 0
 		m_texture3Dto2D->render( *queueData.queue
 			, semaphores
 			, stages );

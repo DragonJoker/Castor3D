@@ -47,8 +47,6 @@
 
 #include <ashespp/Image/StagingTexture.hpp>
 
-#define Water_Debug 1
-
 namespace water
 {
 	namespace
@@ -573,7 +571,7 @@ namespace water
 					, cuT( "Water" )
 					, c3d_cameraData.debugIndex()
 					, outColour
-					, Water_Debug != 0 };
+					, areDebugTargetsEnabled() };
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto normal = writer.declLocale( "normal"

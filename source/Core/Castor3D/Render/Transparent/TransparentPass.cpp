@@ -300,7 +300,7 @@ namespace castor3d
 					, cuT( "Default" )
 					, c3d_cameraData.debugIndex()
 					, outAccumulation
-					, true };
+					, areDebugTargetsEnabled() };
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto material = writer.declLocale( "material"

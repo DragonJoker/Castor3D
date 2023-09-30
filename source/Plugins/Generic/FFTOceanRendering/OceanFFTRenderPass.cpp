@@ -46,7 +46,6 @@
 
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
 
-#define Ocean_Debug 1
 #define Ocean_DebugFFTGraph 0
 
 namespace ocean_fft
@@ -1084,7 +1083,7 @@ namespace ocean_fft
 					, cuT( "FFTOcean" )
 					, c3d_cameraData.debugIndex()
 					, outColour
-					, Ocean_Debug != 0 };
+					, areDebugTargetsEnabled() };
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto hdrCoords = writer.declLocale( "hdrCoords"

@@ -923,7 +923,8 @@ namespace castor3d
 			, bool hasSsao
 			, ClustersConfig const & clustersConfig
 			, bool outputScattering
-			, DeferredLightingFilter deferredLighting )
+			, DeferredLightingFilter deferredLighting
+			, bool areDebugTargetsEnabled )
 		{
 			bool isDeferredLighting = ( deferredLighting == DeferredLightingFilter::eDeferredOnly );
 			auto & engine = *device.renderSystem.getEngine();
@@ -1042,7 +1043,7 @@ namespace castor3d
 							, cuT( "Opaque" )
 							, c3d_cameraData.debugIndex()
 							, outResult
-							, true };
+							, areDebugTargetsEnabled };
 
 						if ( !VisibilityResolvePass::useCompute )
 						{
@@ -2601,10 +2602,10 @@ namespace castor3d
 
 			result->shaders[0].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter, areDebugTargetsEnabled() ) };
 			result->shaders[1].shader = ShaderModule{ stageBit
 				, getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter ) };
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter, areDebugTargetsEnabled() ) };
 
 			if constexpr ( useCompute )
 			{

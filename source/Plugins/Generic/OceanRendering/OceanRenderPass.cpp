@@ -47,7 +47,6 @@
 
 #pragma clang diagnostic ignored "-Wunused-member-function"
 
-#define Ocean_Debug 1
 #define Ocean_DebugPixelShader 0
 
 namespace ocean
@@ -1048,7 +1047,7 @@ namespace ocean
 					, cuT( "Waves" )
 					, c3d_cameraData.debugIndex()
 					, outColour
-					, Ocean_Debug != 0 };
+					, areDebugTargetsEnabled() };
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto normal = writer.declLocale( "normal"

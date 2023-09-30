@@ -9,6 +9,7 @@
 #include "GuiCommon/Properties/TreeItems/VCTConfigTreeItemProperty.hpp"
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 
+#include <Castor3D/Config.hpp>
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Plugin/ToneMappingPlugin.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
@@ -115,7 +116,7 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target.getTargetType() )] );
 
-#if C3D_DebugQuads
+#if C3D_EnableDebugTargets != 0
 		static wxString PROPERTY_RENDER_WINDOW_DEBUG_VIEW = _( "Debug View" );
 		static wxString PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE = _( "Debug Value" );
 
