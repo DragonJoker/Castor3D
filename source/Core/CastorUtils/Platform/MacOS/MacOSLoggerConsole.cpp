@@ -6,7 +6,7 @@
 
 namespace castor
 {
-	class DebugConsole
+	class MacOSConsole
 		: public ConsoleImpl
 	{
 	public:
@@ -55,38 +55,10 @@ namespace castor
 
 	//************************************************************************************************
 
-	class ReleaseConsole
-		: public ConsoleImpl
+	ProgramConsole::ProgramConsole( bool CU_UnusedParam( showConsole ) )
 	{
-	public:
-		explicit ReleaseConsole( bool /*showConsole*/ )
-		{
-		}
-
-		void beginLog( LogType logLevel )override
-		{
-		}
-
-		void print( String const & toLog, bool newLine )override
-		{
-			printf( "%s", toLog.c_str() );
-
-			if ( newLine )
-			{
-				printf( "\n" );
-			}
-		}
-	};
-
-	//************************************************************************************************
-
-	ProgramConsole::ProgramConsole( bool showConsole )
-	{
-#if defined( NDEBUG )
-		m_console = std::make_unique< ReleaseConsole >( showConsole );
-#else
-		m_console = std::make_unique< DebugConsole >();
-#endif
+		std::ios::sync_with_stdio( false );
+		m_console = std::make_unique< MacOSConsole >();
 	}
 
 	ProgramConsole::~ProgramConsole()

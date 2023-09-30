@@ -8,6 +8,8 @@
 
 namespace castor
 {
+	//************************************************************************************************
+
 	class LogcatConsole
 		: public ConsoleImpl
 	{
@@ -52,8 +54,11 @@ namespace castor
 		android_LogPriority m_logLevel;
 	};
 
-	ProgramConsole::ProgramConsole( bool p_showConsole )
+	//************************************************************************************************
+
+	ProgramConsole::ProgramConsole( bool CU_UnusedParam( showConsole ) )
 	{
+		std::ios::sync_with_stdio( false );
 		m_console = std::make_unique< LogcatConsole >();
 	}
 
