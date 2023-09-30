@@ -340,6 +340,7 @@ namespace castor3d
 		bool hasVulkan1_1 = false;
 		bool hasFloatControls = false;
 		bool hasSpirv1_4 = false;
+		bool hasDeviceFault = false;
 
 #if VK_VERSION_1_2
 		if ( apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
@@ -378,6 +379,12 @@ namespace castor3d
 			if ( !hasFloatControls )
 			{
 				hasFloatControls = doTryAddExtension( VK_KHR_SHADER_FLOAT_CONTROLS_EXTENSION_NAME );
+			}
+#endif
+#if VK_EXT_device_fault
+			if ( !hasDeviceFault )
+			{
+				hasDeviceFault = doTryAddExtension( VK_EXT_DEVICE_FAULT_EXTENSION_NAME );
 			}
 #endif
 #if VK_KHR_spirv_1_4

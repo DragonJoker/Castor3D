@@ -317,6 +317,31 @@ namespace castor3d
 			castor::System::getScreenSize( 0u, result );
 			return result;
 		}
+
+#ifdef VK_EXT_device_fault
+		static castor::StringView getAddressTypeName( VkDeviceFaultAddressTypeEXT v )
+		{
+			switch ( v )
+			{
+			case VK_DEVICE_FAULT_ADDRESS_TYPE_NONE_EXT:
+				return "None";
+			case VK_DEVICE_FAULT_ADDRESS_TYPE_READ_INVALID_EXT:
+				return "Read Invalid";
+			case VK_DEVICE_FAULT_ADDRESS_TYPE_WRITE_INVALID_EXT:
+				return "Write Invalid";
+			case VK_DEVICE_FAULT_ADDRESS_TYPE_EXECUTE_INVALID_EXT:
+				return "Execute Invalid";
+			case VK_DEVICE_FAULT_ADDRESS_TYPE_INSTRUCTION_POINTER_UNKNOWN_EXT:
+				return "Instruction Pointer Unknown";
+			case VK_DEVICE_FAULT_ADDRESS_TYPE_INSTRUCTION_POINTER_INVALID_EXT:
+				return "Instruction Pointer  Invalid";
+			case VK_DEVICE_FAULT_ADDRESS_TYPE_INSTRUCTION_POINTER_FAULT_EXT:
+				return "Instruction Pointer Fault";
+			default:
+				return "Unknown";
+			};
+		}
+#endif
 	}
 
 	//*************************************************************************************************
@@ -1909,7 +1934,6 @@ namespace castor3d
 		case VK_SUCCESS:
 			result = true;
 			break;
-
 		case VK_ERROR_OUT_OF_DATE_KHR:
 			if ( !acquisition )
 			{
@@ -1920,9 +1944,11 @@ namespace castor3d
 				result = true;
 			}
 			break;
-
 		case VK_SUBOPTIMAL_KHR:
 			doResetSwapChainAndCommands();
+			break;
+		case VK_ERROR_DEVICE_LOST:
+			doProcessDeviceLost();
 			break;
 
 		default:
@@ -1930,5 +1956,38 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void RenderWindow::doProcessDeviceLost()
+	{
+#ifdef VK_EXT_device_fault
+		auto [faultCounts, faultInfo] = m_device->getDeviceFaultInfo();
+		log::error << "Device lost error: " << faultInfo.description << "\n";
+
+		if ( faultInfo.pAddressInfos )
+		{
+			log::error << "  Addresses: \n";
+
+			for ( uint32_t i = 0u; i < faultCounts.addressInfoCount; ++i )
+			{
+				auto & info = faultInfo.pAddressInfos[i];
+				log::error << "    From 0x" << std::hex << std::setw( 8u ) << std::setfill( '0' ) << ( info.reportedAddress & ~( info.addressPrecision - 1 ) )
+					<< " to 0x" << std::hex << std::setw( 8u ) << ( info.reportedAddress | ( info.addressPrecision - 1 ) )
+					<< ": " << rendwndw::getAddressTypeName( info.addressType ) << "\n";
+			}
+		}
+
+		if ( faultInfo.pVendorInfos )
+		{
+			log::error << "  Vendor Infos: \n";
+
+			for ( uint32_t i = 0u; i < faultCounts.vendorInfoCount; ++i )
+			{
+				auto & info = faultInfo.pVendorInfos[i];
+				log::error << "    " << std::setw( 8u ) << std::setfill( '0' ) << info.vendorFaultCode
+					<< ": " << info.description << "\n";
+			}
+		}
+#endif
 	}
 }
