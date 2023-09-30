@@ -21,7 +21,7 @@ namespace castor3d
 			{
 				CU_ParsingError( cuT( "No Light initialised. Have you set it's type?" ) );
 			}
-			else
+			else if ( !parsingContext.shadowConfig )
 			{
 				parsingContext.shadowConfig = castor::makeUnique< ShadowConfig >();
 			}
@@ -38,9 +38,9 @@ namespace castor3d
 			}
 			else if ( !params.empty() )
 			{
-				bool value;
-				params[0]->get( value );
-				parsingContext.light->setShadowProducer( value );
+				parsingContext.shadowConfig = castor::makeUnique< ShadowConfig >();
+				params[0]->get( parsingContext.shadowConfig->enabled );
+				parsingContext.light->setShadowConfig( *parsingContext.shadowConfig );
 			}
 		}
 		CU_EndAttribute()
