@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_TextureSourceInfo_H___
 #define ___C3D_TextureSourceInfo_H___
 
-#include "TextureModule.hpp"
+#include "TextureConfiguration.hpp"
 
 #include "Castor3D/Render/RenderModule.hpp"
 
@@ -17,24 +17,25 @@ namespace castor3d
 	class TextureSourceInfo
 	{
 	public:
-		C3D_API TextureSourceInfo( SamplerObs sampler
+		C3D_API TextureSourceInfo() = default;
+		C3D_API TextureSourceInfo( TextureSourceInfo const & rhs
+			, TextureConfiguration textureConfig );
+		C3D_API TextureSourceInfo( castor::String name
+			, TextureConfiguration textureConfig
 			, castor::Path folder
 			, castor::Path relative
 			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
-		C3D_API TextureSourceInfo( SamplerObs sampler
-			, castor::String name
+		C3D_API TextureSourceInfo( castor::String name
+			, TextureConfiguration textureConfig
 			, castor::String type
 			, castor::ByteArray data
 			, castor::ImageLoaderConfig loadConfig = { true, true, true } );
-		C3D_API TextureSourceInfo( SamplerObs sampler
+		C3D_API TextureSourceInfo( castor::String name
+			, TextureConfiguration textureConfig
 			, RenderTargetRPtr renderTarget );
-		C3D_API TextureSourceInfo( SamplerObs sampler
+		C3D_API TextureSourceInfo( castor::String name
+			, TextureConfiguration textureConfig
 			, ashes::ImageCreateInfo const & createInfo );
-
-		SamplerObs sampler()const
-		{
-			return m_sampler;
-		}
 
 		bool isRenderTarget()const
 		{
@@ -54,6 +55,11 @@ namespace castor3d
 		bool isVulkanImage()const
 		{
 			return m_createInfo->format != VK_FORMAT_UNDEFINED;
+		}
+
+		TextureConfiguration const & textureConfig()const
+		{
+			return m_textureConfig;
 		}
 
 		RenderTargetRPtr renderTarget()const
@@ -76,10 +82,7 @@ namespace castor3d
 
 		castor::String name()const
 		{
-			CU_Require( isFileImage() || isBufferImage() );
-			return ( isBufferImage()
-				? m_name
-				: relative().getFileName() );
+			return m_name;
 		}
 
 		castor::String const & type()const
@@ -128,7 +131,7 @@ namespace castor3d
 			return m_loadConfig.layersToTiles;
 		}
 
-		castor::ImageLoaderConfig const & config()const
+		castor::ImageLoaderConfig const & loadConfig()const
 		{
 			CU_Require( isFileImage() || isBufferImage() );
 			return m_loadConfig;
@@ -147,7 +150,8 @@ namespace castor3d
 		}
 
 	private:
-		SamplerObs m_sampler{};
+		castor::String m_name{};
+		TextureConfiguration m_textureConfig{};
 		// Render target mode.
 		RenderTargetRPtr m_renderTarget{};
 		// Image file mode.
@@ -155,7 +159,6 @@ namespace castor3d
 		castor::Path m_relative{};
 		castor::ImageLoaderConfig m_loadConfig{};
 		// Image buffer mode
-		castor::String m_name{};
 		castor::String m_type{};
 		castor::ByteArray m_data{};
 		// Vulkan image mode.

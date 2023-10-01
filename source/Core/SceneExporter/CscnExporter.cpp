@@ -11,6 +11,7 @@
 #include "Text/TextSceneNode.hpp"
 #include "Text/TextSkeleton.hpp"
 #include "Text/TextStylesHolder.hpp"
+#include "Text/TextTextureData.hpp"
 #include "Text/TextTheme.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -23,6 +24,7 @@
 #include <Castor3D/Cache/LightCache.hpp>
 #include <Castor3D/Cache/MaterialCache.hpp>
 #include <Castor3D/Cache/PluginCache.hpp>
+#include <Castor3D/Cache/TextureCache.hpp>
 #include <Castor3D/Gui/ControlsManager.hpp>
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
@@ -857,6 +859,48 @@ namespace castor3d::exporter
 
 	namespace
 	{
+		bool writeTextures( bool ignoreFailures
+			, castor::Path const & folder
+			, castor::Path const & filePath
+			, Scene const & scene
+			, castor::TextWriter< Scene >::Options & options )
+		{
+			log::info << cuT( "SceneExporter::write - Textures\n" );
+			castor::StringStream sceneStream;
+			std::map< castor::String, castor3d::TextureData const * > sorted;
+
+			for ( auto & [hash, textureData] : scene.getEngine()->getTextureUnitCache() )
+			{
+				auto name = textureData->sourceInfo.name();
+				if ( name.find( "C3D_Default" ) == castor::String::npos )
+				{
+					sorted.emplace( name, textureData.get() );
+				}
+			}
+
+			castor::TextWriter< castor3d::TextureData > writer{ castor::cuEmptyString
+				, *scene.getEngine()
+				, options.rootFolder
+				, options.subfolder };
+			bool result = true;
+
+			for ( auto [name, sourceData] : sorted )
+			{
+				result = carryOn( result, ignoreFailures ) && writer( *sourceData, sceneStream );
+			}
+
+			if ( carryOn( result, ignoreFailures ) && !sceneStream.str().empty() )
+			{
+				options.sceneTexturesFile = cuT( "Helpers" ) / castor::Path( filePath.getFileName( false ) + cuT( "-Textures.cscn" ) );
+				castor::TextFile file{ folder / options.sceneTexturesFile
+					, castor::File::OpenMode::eWrite };
+				result = file.writeText( "// Textures\n" ) > 0
+					&& file.writeText( sceneStream.str() ) > 0;
+			}
+
+			return result;
+		}
+
 		bool writeSamplers( bool ignoreFailures
 			, castor::Path const & folder
 			, castor::Path const & filePath
@@ -1752,11 +1796,20 @@ namespace castor3d::exporter
 			, filePath
 			, skeletonFolder
 			, meshFolder );
-		bool result = writeSamplers( m_options.ignoreFailures
+		bool result = writeTextures( m_options.ignoreFailures
 			, folder
 			, filePath
 			, scene
 			, options );
+
+		if ( carryOn( result ) )
+		{
+			result = writeSamplers( m_options.ignoreFailures
+				, folder
+				, filePath
+				, scene
+				, options );
+		}
 
 		if ( carryOn( result ) )
 		{

@@ -333,32 +333,13 @@ namespace castor3d
 			return TextureSourceInfoHasher{}( sourceInfo );
 		}
 
-		static size_t makeHash( TextureSourceInfo const & sourceInfo
-			, PassTextureConfig const & config )
-		{
-			auto result = makeHash( sourceInfo );
-			auto flags = getFlags( config.config );
-
-			for ( auto flag : flags )
-			{
-				castor::hashCombine( result, flag );
-			}
-
-			castor::hashCombine( result, config.config.transform.translate->x );
-			castor::hashCombine( result, config.config.transform.translate->y );
-			castor::hashCombine( result, config.config.transform.rotate.radians() );
-			castor::hashCombine( result, config.config.transform.scale->x );
-			castor::hashCombine( result, config.config.transform.scale->y );
-			return result;
-		}
-
 		static bool findUnit( Engine & engine
 			, castor::CheckedMutex & loadMtx
 			, std::unordered_map< size_t, TextureUnitUPtr > & loaded
 			, TextureUnitData & data
 			, TextureUnitRPtr & result )
 		{
-			auto hash = makeHash( data.base->sourceInfo, data.passConfig );
+			auto hash = makeHash( data.base->sourceInfo );
 			auto lock( makeUniqueLock( loadMtx ) );
 			auto ires = loaded.emplace( hash, nullptr );
 			auto it = ires.first;
@@ -366,11 +347,11 @@ namespace castor3d
 			if ( ires.second )
 			{
 				it->second = castor::makeUnique< TextureUnit >( engine, data );
-				it->second->setConfiguration( data.passConfig.config );
+				it->second->setConfiguration( data.base->sourceInfo.textureConfig() );
 			}
 			else
 			{
-				auto merged = data.passConfig.config;
+				auto merged = data.base->sourceInfo.textureConfig();
 
 				if ( it->second->isTextured() )
 				{
@@ -550,9 +531,21 @@ namespace castor3d
 
 	void TextureUnitCache::stopLoad()
 	{
-		for ( auto & data : m_loading )
+		auto it = m_loading.begin();
+
+		while ( it != m_loading.end() )
 		{
-			data->interrupted.exchange( true );
+			auto & data = *it;
+
+			if ( data->expected )
+			{
+				data->interrupted.exchange( true );
+				++it;
+			}
+			else
+			{
+				it = m_loading.erase( it );
+			}
 		}
 	}
 
@@ -620,6 +613,11 @@ namespace castor3d
 
 	void TextureUnitCache::clear()
 	{
+		for ( auto & loading : m_loading )
+		{
+			loading->interrupted.exchange( true );
+		}
+
 		while ( cachetex::hasElems( m_loadMtx, m_loading ) )
 		{
 			std::this_thread::sleep_for( 1_ms );
@@ -650,53 +648,20 @@ namespace castor3d
 		m_texturesCombines.clear();
 	}
 
-	TextureSourceInfo TextureUnitCache::mergeSourceInfos( TextureSourceInfo const & lhs
-		, TextureSourceInfo const & rhs )
-	{
-		auto folder = lhs.isFileImage()
-			? lhs.folder()
-			: ( rhs.isFileImage()
-				? rhs.folder()
-				: castor::Path{} );
-		auto lhsName = lhs.isFileImage()
-			? castor::Path{ lhs.relative() }.getFileName()
-			: castor::Path{ lhs.name() }.getFileName();
-		auto rhsName = rhs.isFileImage()
-			? castor::Path{ rhs.relative() }.getFileName()
-			: castor::Path{ rhs.name() }.getFileName();
-		auto name = castor::string::getLongestCommonSubstring( lhsName, rhsName );
-
-		if ( name.size() > 2 )
-		{
-			castor::string::replace( lhsName, name, castor::String{} );
-			castor::string::replace( rhsName, name, castor::String{} );
-		}
-		else
-		{
-			name.clear();
-		}
-
-		return TextureSourceInfo{ lhs.sampler()
-			, folder
-			, castor::Path{ name + lhsName + rhsName }
-			, lhs.config() };
-	}
-
-	Texture const * TextureUnitCache::getTexture( TextureData & data )
-	{
-		return doGetTexture( data, []( TextureData const &, Texture const * ){} );
-	}
-
 	TextureData & TextureUnitCache::getSourceData( TextureSourceInfo const & sourceInfo )
 	{
-		auto hash = cachetex::makeHash( sourceInfo );
+		auto realSource = sourceInfo;
+		realSource.allowSRGB( realSource.allowSRGB()
+			&& checkFlag( sourceInfo.textureConfig().textureSpace, TextureSpace::eAllowSRGB ) );
+		realSource.allowCompression( realSource.allowCompression()
+			&& !checkFlag( sourceInfo.textureConfig().textureSpace, TextureSpace::eTangentSpace ) );
+		auto hash = cachetex::makeHash( realSource );
 		auto ires = m_datas.emplace( hash, nullptr );
-		auto it = ires.first;
 
 		if ( ires.second )
 		{
-			it->second = castor::makeUnique< TextureData >( sourceInfo );
-			auto result = it->second.get();
+			ires.first->second = castor::makeUnique< TextureData >( realSource );
+			auto result = ires.first->second.get();
 
 			if ( !result->sourceInfo.isRenderTarget() )
 			{
@@ -709,84 +674,17 @@ namespace castor3d
 							, true );
 						auto name = image->getName();
 						log::info << "Loaded image [" << name << "] (" << *image << ")" << std::endl;
-						data.data->image = getEngine()->addImage( name, image );
+						data.data->image = getEngine()->tryFindImage( name );
+
+						if ( !data.data->image )
+						{
+							data.data->image = getEngine()->addImage( name, image );
+						}
 					} );
 			}
 		}
-		else
-		{
-			log::info << "TextureCache: Reusing existing TextureData for [" << sourceInfo.name() << "]" << std::endl;
-		}
 
-		return *it->second;
-	}
-
-	TextureData & TextureUnitCache::mergeSources( TextureSourceInfo const & lhsSourceInfo
-		, uint32_t lhsSrcMask
-		, uint32_t lhsDstMask
-		, TextureSourceInfo const & rhsSourceInfo
-		, uint32_t rhsSrcMask
-		, uint32_t rhsDstMask
-		, castor::String const & name
-		, TextureSourceInfo const & resultSourceInfo )
-	{
-		auto hash = cachetex::makeHash( resultSourceInfo );
-		auto ires = m_datas.emplace( hash, nullptr );
-		auto it = ires.first;
-
-		if ( ires.second )
-		{
-			it->second = castor::makeUnique< TextureData >( resultSourceInfo );
-			auto result = it->second.get();
-			auto & data = doCreateThreadData( *result );
-
-			getEngine()->pushCpuJob( [this, &data, name, lhsSrcMask, lhsDstMask, lhsSourceInfo, rhsSrcMask, rhsDstMask, rhsSourceInfo]()
-				{
-					// Merge CPU buffers on CPU thread.
-					auto realLhsSource = lhsSourceInfo;
-					realLhsSource.allowCompression( false );
-					auto lhsImage = cachetex::loadSource( *getEngine()
-						, data.interrupted
-						, realLhsSource
-						, false );
-
-					auto realRhsSource = rhsSourceInfo;
-					realRhsSource.allowCompression( false );
-					auto rhsImage = cachetex::loadSource( *getEngine()
-						, data.interrupted
-						, realRhsSource
-						, false );
-
-					data.data->image = cachetex::mergeBuffers( *getEngine()
-						, data.interrupted
-						, *lhsImage
-						, lhsSrcMask
-						, lhsDstMask
-						, *rhsImage
-						, rhsSrcMask
-						, rhsDstMask
-						, name );
-				} );
-		}
-
-		return *it->second;
-	}
-
-	bool TextureUnitCache::areMergeable( std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > const & animations
-		, TextureSourceInfo const & lhsSource
-		, PassTextureConfig const & lhsConfig
-		, VkFormat lhsFormat
-		, TextureSourceInfo const & rhsSource
-		, PassTextureConfig const & rhsConfig
-		, VkFormat rhsFormat )
-	{
-		return lhsConfig.texcoordSet == rhsConfig.texcoordSet
-			&& getFlags( lhsConfig.config ).size() == 1u
-			&& getFlags( rhsConfig.config ).size() == 1u
-			&& cachetex::isMergeable( lhsSource, lhsFormat, animations.find( lhsSource ) != animations.end() )
-			&& cachetex::isMergeable( rhsSource, rhsFormat, animations.find( rhsSource ) != animations.end() )
-			&& cachetex::areFormatsCompatible( lhsFormat, rhsFormat )
-			&& cachetex::areSpacesCompatible( lhsConfig.config.textureSpace, rhsConfig.config.textureSpace );
+		return *ires.first->second;
 	}
 
 	TextureUnitRPtr TextureUnitCache::getTextureUnit( TextureUnitData & unitData )
@@ -799,7 +697,7 @@ namespace castor3d
 				, [this, &unitData, result]( TextureData const & data
 					, Texture const * texture )
 				{
-					auto config = unitData.passConfig.config;
+					auto config = unitData.base->sourceInfo.textureConfig();
 
 					if ( data.sourceInfo.isRenderTarget() )
 					{
@@ -833,6 +731,7 @@ namespace castor3d
 						}
 					}
 
+					result->setSampler( unitData.passConfig.sampler );
 					result->setTexture( texture );
 					result->setConfiguration( std::move( config ) );
 
@@ -861,72 +760,18 @@ namespace castor3d
 		, PassTextureConfig const & passConfig
 		, TextureAnimationUPtr animation )
 	{
-		auto realSource = sourceInfo;
-		realSource.allowSRGB( realSource.allowSRGB()
-			&& checkFlag( passConfig.config.textureSpace, TextureSpace::eAllowSRGB ) );
-		realSource.allowCompression( realSource.allowCompression()
-			&& !checkFlag( passConfig.config.textureSpace, TextureSpace::eTangentSpace ) );
-
-		auto hash = cachetex::makeHash( realSource, passConfig );
+		auto & sourceData = getSourceData( sourceInfo );
+		auto hash = cachetex::makeHash( sourceInfo );
 		auto ires = m_unitDatas.emplace( hash, nullptr );
-		auto it = ires.first;
 
 		if ( ires.second )
 		{
-			it->second = castor::makeUnique< TextureUnitData >( &getSourceData( realSource )
+			ires.first->second = castor::makeUnique< TextureUnitData >( &sourceData
 				, passConfig
 				, std::move( animation ) );
 		}
 
-		return *it->second;
-	}
-
-	TextureUnitData & TextureUnitCache::mergeSources( TextureSourceInfo const & lhsSourceInfo
-		, PassTextureConfig const & lhsPassConfig
-		, uint32_t lhsSrcMask
-		, uint32_t lhsDstMask
-		, TextureSourceInfo const & rhsSourceInfo
-		, PassTextureConfig const & rhsPassConfig
-		, uint32_t rhsSrcMask
-		, uint32_t rhsDstMask
-		, castor::String const & name
-		, TextureSourceInfo const & resultSourceInfo
-		, PassTextureConfig const & resultPassConfig )
-	{
-		auto realLhsSource = lhsSourceInfo;
-		realLhsSource.allowSRGB( realLhsSource.allowSRGB()
-			&& checkFlag( lhsPassConfig.config.textureSpace, TextureSpace::eAllowSRGB ) );
-		realLhsSource.allowCompression( realLhsSource.allowCompression()
-			&& !checkFlag( lhsPassConfig.config.textureSpace, TextureSpace::eTangentSpace ) );
-		auto realRhsSource = rhsSourceInfo;
-		realRhsSource.allowSRGB( realRhsSource.allowSRGB()
-			&& checkFlag( rhsPassConfig.config.textureSpace, TextureSpace::eAllowSRGB ) );
-		realRhsSource.allowCompression( realRhsSource.allowCompression()
-			&& !checkFlag( rhsPassConfig.config.textureSpace, TextureSpace::eTangentSpace ) );
-		auto realResultSource = resultSourceInfo;
-		realResultSource.allowSRGB( realResultSource.allowSRGB()
-			&& checkFlag( resultPassConfig.config.textureSpace, TextureSpace::eAllowSRGB ) );
-		realResultSource.allowCompression( realResultSource.allowCompression()
-			&& !checkFlag( resultPassConfig.config.textureSpace, TextureSpace::eTangentSpace ) );
-
-		auto hash = cachetex::makeHash( realResultSource, resultPassConfig );
-		auto ires = m_unitDatas.emplace( hash, nullptr );
-		auto it = ires.first;
-
-		if ( ires.second )
-		{
-			it->second = castor::makeUnique< TextureUnitData >( &mergeSources( realLhsSource
-				, lhsSrcMask
-				, lhsDstMask
-				, realRhsSource
-				, rhsSrcMask
-				, rhsDstMask
-				, name
-				, realResultSource )
-				, resultPassConfig );
-		}
-
-		return *it->second;
+		return *ires.first->second;
 	}
 
 	Texture const * TextureUnitCache::doGetTexture( TextureData & data
@@ -965,6 +810,7 @@ namespace castor3d
 		{
 			auto & threadData = doFindThreadData( data );
 			threadData.texture = result;
+			threadData.expected = true;
 			getEngine()->pushCpuJob( [this, onEndCpuLoad, &threadData]()
 				{
 					// Wait for interruption or image CPU loading end
@@ -1016,9 +862,7 @@ namespace castor3d
 		if ( !data.interrupted )
 		{
 			auto & device = *getEngine()->getRenderDevice();
-			auto & sourceInfo = data.data->sourceInfo;
 			auto & layout = data.data->image->getLayout();
-			sourceInfo.sampler()->initialise( device );
 			*data.texture = Texture{ device
 				, m_resources
 				, data.data->image->getName()
@@ -1028,7 +872,7 @@ namespace castor3d
 				, layout.levels
 				, convert( layout.format )
 				, data.data->usage
-				, &sourceInfo.sampler()->getSampler() };
+				, nullptr };
 			data.texture->create();
 			{
 				auto lock( castor::makeUniqueLock( m_uploadMtx ) );

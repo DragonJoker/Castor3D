@@ -101,6 +101,17 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
+		C3D_API static void addParsers( castor::AttributeParsers & result );
+		/**@}*/
+		/**
+		*\~english
+		*name
+		*	Getters.
+		*\~french
+		*name
+		*	Accesseurs.
+		*/
+		/**@{*/
 		C3D_API bool hasAlphaBlending()const;
 		C3D_API bool hasEnvironmentMapping()const;
 		C3D_API bool hasSubsurfaceScattering()const;

@@ -6,11 +6,101 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/PassFactory.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
+#include "Castor3D/Scene/Scene.hpp"
+#include "Castor3D/Scene/SceneFileParser.hpp"
 
 CU_ImplementSmartPtr( castor3d, Material )
 
 namespace castor3d
 {
+	namespace mat
+	{
+		static CU_ImplementAttributeParser( parserPass )
+		{
+			auto & parsingContext = getParserContext( context );
+			parsingContext.strName.clear();
+
+			if ( parsingContext.material )
+			{
+				if ( parsingContext.createMaterial
+					|| parsingContext.material->getPassCount() < parsingContext.passIndex )
+				{
+					parsingContext.pass = parsingContext.material->createPass();
+					parsingContext.createPass = true;
+
+				}
+				else
+				{
+					parsingContext.pass = parsingContext.material->getPass( parsingContext.passIndex );
+					parsingContext.createPass = false;
+				}
+
+				++parsingContext.passIndex;
+				parsingContext.unitIndex = 0u;
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Material not initialised" ) );
+			}
+		}
+		CU_EndAttributePush( CSCNSection::ePass )
+
+		static CU_ImplementAttributeParser( parserRenderPass )
+		{
+			auto & parsingContext = getParserContext( context );
+			parsingContext.strName.clear();
+
+			if ( !parsingContext.material )
+			{
+				CU_ParsingError( cuT( "Material not initialised" ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameters" ) );
+			}
+			else
+			{
+				castor::String typeName;
+				params[0]->get( typeName );
+				parsingContext.material->setRenderPassInfo( parsingContext.parser->getEngine()->getRenderPassInfo( typeName ) );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserEnd )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( !parsingContext.ownMaterial
+				&& !parsingContext.material )
+			{
+				CU_ParsingError( cuT( "Material not initialised" ) );
+			}
+			else if ( parsingContext.ownMaterial )
+			{
+				log::info << "Loaded material [" << parsingContext.material->getName() << "]" << std::endl;
+
+				if ( parsingContext.scene )
+				{
+					parsingContext.scene->addMaterial( parsingContext.material->getName()
+						, parsingContext.ownMaterial
+						, true );
+				}
+				else
+				{
+					parsingContext.parser->getEngine()->addMaterial( parsingContext.material->getName()
+						, parsingContext.ownMaterial
+						, true );
+				}
+			}
+
+			parsingContext.material = {};
+			parsingContext.createMaterial = false;
+			parsingContext.passIndex = 0u;
+		}
+		CU_EndAttributePop()
+	}
+
 	const castor::String Material::DefaultMaterialName = cuT( "C3D_DefaultMaterial" );
 
 	Material::Material( castor::String const & name
@@ -171,5 +261,13 @@ namespace castor3d
 	void Material::onPassChanged( Pass const & pass )
 	{
 		onChanged( *this );
+	}
+
+	void Material::addParsers( castor::AttributeParsers & result )
+	{
+		using namespace castor;
+		addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "pass" ), mat::parserPass );
+		addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "render_pass" ), mat::parserRenderPass, { makeParameter< ParameterType::eText >() } );
+		addParser( result, uint32_t( CSCNSection::eMaterial ), cuT( "}" ), mat::parserEnd );
 	}
 }

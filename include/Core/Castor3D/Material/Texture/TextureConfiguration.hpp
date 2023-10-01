@@ -88,6 +88,17 @@ namespace castor3d
 		return !( lhs == rhs );
 	}
 	/**@}*/
+	/**
+	*\~english
+	*name
+	*	Other functions.
+	*\~french
+	*name
+	*	Autres fonctions.
+	*/
+	/**@{*/
+	C3D_API size_t getHash( TextureFlagConfiguration const & config );
+	/**@}*/
 	struct TextureConfiguration
 	{
 		/**
@@ -174,6 +185,7 @@ namespace castor3d
 	*	Autres fonctions.
 	*/
 	/**@{*/
+	C3D_API size_t getHash( TextureConfiguration const & config );
 	C3D_API TextureFlagsSet getFlags( TextureConfiguration const & config );
 	C3D_API castor::PixelComponents getPixelComponents( uint32_t mask );
 	C3D_API castor::PixelComponents getPixelComponents( castor::PixelFormat format );
@@ -186,7 +198,7 @@ namespace castor3d
 		, PassComponentTextureFlag rhs );
 	C3D_API bool hasAny( TextureFlagConfigurations const & lhs
 		, PassComponentTextureFlag rhs );
-	C3D_API void removeFlag( TextureConfiguration & config
+	C3D_API bool removeFlag( TextureConfiguration & config
 		, PassComponentTextureFlag rhs );
 	C3D_API void removeFlagConfiguration( TextureConfiguration & config
 		, TextureFlagConfiguration const & flagConfiguration );
@@ -209,7 +221,7 @@ namespace castor3d
 
 	struct PassTextureConfig
 	{
-		TextureConfiguration config{};
+		SamplerObs sampler{};
 		uint32_t texcoordSet{};
 	};
 }

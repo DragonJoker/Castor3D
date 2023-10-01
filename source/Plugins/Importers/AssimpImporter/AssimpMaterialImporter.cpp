@@ -740,8 +740,7 @@ namespace c3d_assimp
 								castor::ByteArray data;
 								data.resize( texture->mWidth );
 								std::memcpy( data.data(), texture->pcData, data.size() );
-								sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.sampler
-									, "Image" + castor::string::toString( id )
+								sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( "Image" + castor::string::toString( id )
 									, texture->achFormatHint
 									, std::move( data )
 									, texConfig ) );
@@ -752,8 +751,7 @@ namespace c3d_assimp
 							castor::ByteArray data;
 							data.resize( texture->mWidth );
 							std::memcpy( data.data(), texture->pcData, data.size() );
-							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.sampler
-								, info.name
+							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.name
 								, texture->achFormatHint
 								, std::move( data )
 								, texConfig ) );
@@ -761,8 +759,7 @@ namespace c3d_assimp
 						else
 						{
 							auto name = decodeUri( info.name );
-							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( info.sampler
-								, castor::Path{ name }
+							sourceInfo = std::make_unique< castor3d::TextureSourceInfo >( m_importer.loadTexture( castor::Path{ name }
 								, texConfig ) );
 						}
 
@@ -804,14 +801,14 @@ namespace c3d_assimp
 							}
 
 							m_result.registerTexture( std::move( *sourceInfo )
-								, { texConfig, info.texcoordSet } );
+								, { info.sampler, info.texcoordSet } );
 						}
 					}
 					catch ( std::exception & )
 					{
-						m_importer.loadTexture( info.sampler
-							, castor::Path{ info.name }
-							, { texConfig }
+						m_importer.loadTexture( castor::Path{ info.name }
+							, texConfig
+							, castor3d::PassTextureConfig{ info.sampler }
 						, m_result );
 					}
 				}

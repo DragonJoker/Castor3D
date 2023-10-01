@@ -116,6 +116,37 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	size_t getHash( TextureFlagConfiguration const & config )
+	{
+		size_t result = std::hash< PassComponentTextureFlag >{}( config.flag );
+		castor::hashCombine( result, config.startIndex );
+		castor::hashCombine( result, config.componentsMask );
+		return result;
+	}
+
+	size_t getHash( TextureConfiguration const & config )
+	{
+		auto flags = getFlags( config );
+		size_t result{};
+
+		for ( auto flag : flags )
+		{
+			castor::hashCombine( result, flag );
+		}
+
+		castor::hashCombine( result, config.normalFactor );
+		castor::hashCombine( result, config.heightFactor );
+		castor::hashCombine( result, config.normalDirectX );
+		castor::hashCombine( result, config.needsYInversion );
+		castor::hashCombine( result, config.normal2Channels );
+		castor::hashCombine( result, config.transform.translate->x );
+		castor::hashCombine( result, config.transform.translate->y );
+		castor::hashCombine( result, config.transform.rotate.radians() );
+		castor::hashCombine( result, config.transform.scale->x );
+		castor::hashCombine( result, config.transform.scale->y );
+		return result;
+	}
+
 	TextureFlagsSet getFlags( TextureConfiguration const & config )
 	{
 		TextureFlagsSet result;
@@ -220,13 +251,15 @@ namespace castor3d
 		return it != lhs.end();
 	}
 
-	void removeFlag( TextureConfiguration & config
+	bool removeFlag( TextureConfiguration & config
 		, PassComponentTextureFlag rhs )
 	{
+		bool found{};
 		auto it = checkFlag( config.components, rhs );
 
 		if ( it != config.components.end() )
 		{
+			found = true;
 			auto nxt = std::next( it );
 
 			while ( nxt != config.components.end() )
@@ -236,6 +269,8 @@ namespace castor3d
 				++nxt;
 			}
 		}
+
+		return found;
 	}
 
 	void removeFlagConfiguration( TextureConfiguration & config

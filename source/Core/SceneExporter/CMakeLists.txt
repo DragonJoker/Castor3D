@@ -69,6 +69,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSubsurfaceScattering.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextOverlay.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureConfiguration.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureData.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureUnit.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureView.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTheme.cpp
@@ -123,6 +124,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextSubsurfaceScattering.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextOverlay.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureConfiguration.hpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureData.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureUnit.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTextureView.hpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Text/TextTheme.hpp

@@ -60,28 +60,88 @@ namespace castor3d
 
 			for ( auto & source : sources )
 			{
- 				result.emplace( *getFlags( source.second.config ).begin()
+ 				result.emplace( *getFlags( source.first.textureConfig() ).begin()
 					, source );
 			}
 
 			return result;
 		}
 
-		template< typename MapT, typename IterT >
-		IterT removeConfiguration( PassComponentTextureFlag flag
-			, TextureConfiguration & config
-			, IterT it
-			, MapT & map )
+		TextureSourceMap::iterator removeConfiguration( PassComponentTextureFlag flag
+			, TextureConfiguration config
+			, TextureSourceMap::iterator it
+			, TextureSourceMap & map )
 		{
-			removeFlag( config, flag );
-
-			if ( config.components.end() == findFirstNonEmpty( config ) )
+			if ( removeFlag( config, flag ) )
 			{
-				return map.erase( it );
+				if ( config.components.end() == findFirstNonEmpty( config ) )
+				{
+					return map.erase( it );
+				}
+
+				auto passConfig = it->second;
+				map.emplace( TextureSourceInfo{ it->first, config }, passConfig );
+				return map.begin();
 			}
 
 			return std::next( it );
 		}
+
+		TextureUnitDataRefs::iterator removeConfiguration( PassComponentTextureFlag flag
+			, TextureConfiguration config
+			, TextureUnitDataRefs::iterator it
+			, TextureUnitDataRefs & array )
+		{
+			if ( removeFlag( config, flag ) )
+			{
+				if ( config.components.end() == findFirstNonEmpty( config ) )
+				{
+					return array.erase( it );
+				}
+
+				( *it )->base->sourceInfo = { ( *it )->base->sourceInfo, config };
+			}
+
+			return std::next( it );
+		}
+
+		static CU_ImplementAttributeParser( parserShader )
+		{
+			auto & parsingContext = getParserContext( context );
+			parsingContext.shaderProgram = {};
+			parsingContext.shaderStage = VkShaderStageFlagBits( 0u );
+
+			if ( parsingContext.pass )
+			{
+				auto & cache = parsingContext.parser->getEngine()->getShaderProgramCache();
+				parsingContext.shaderProgram = cache.getNewProgram( parsingContext.material->getName() + castor::string::toString( parsingContext.pass->getId() )
+					, true );
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Pass not initialised" ) );
+			}
+		}
+		CU_EndAttributePush( CSCNSection::eShaderProgram )
+
+		static CU_ImplementAttributeParser( parserEnd )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else
+			{
+				parsingContext.pass->prepareTextures();
+				log::info << "Loaded pass [" << parsingContext.material->getName()
+					<< ", " << parsingContext.pass->getIndex() << "]" << std::endl;
+				parsingContext.pass = {};
+				parsingContext.passComponent = nullptr;
+			}
+		}
+		CU_EndAttributePop()
 	}
 
 	//*********************************************************************************************
@@ -305,11 +365,7 @@ namespace castor3d
 	{
 		auto it = m_sources.find( sourceInfo );
 
-		if ( it != m_sources.end() )
-		{
-			mergeConfigs( std::move( configuration.config ), it->second.config );
-		}
-		else
+		if ( it == m_sources.end() )
 		{
 			m_maxTexcoordSet = std::max( m_maxTexcoordSet, configuration.texcoordSet );
 			m_sources.emplace( std::move( sourceInfo )
@@ -346,20 +402,15 @@ namespace castor3d
 		, TextureSourceInfo dstSourceInfo )
 	{
 		auto it = m_sources.find( srcSourceInfo );
-		PassTextureConfig configuration;
 
 		if ( it != m_sources.end() )
 		{
-			configuration = it->second;
+			auto configuration = it->second;
 			m_sources.erase( it );
 
 			it = m_sources.find( dstSourceInfo );
 
-			if ( it != m_sources.end() )
-			{
-				mergeConfigs( std::move( configuration.config ), it->second.config );
-			}
-			else
+			if ( it == m_sources.end() )
 			{
 				it = m_sources.emplace( std::move( dstSourceInfo )
 					, std::move( configuration ) ).first;
@@ -372,236 +423,34 @@ namespace castor3d
 	void Pass::updateConfig( TextureSourceInfo const & sourceInfo
 		, TextureConfiguration configuration )
 	{
-		auto it = m_sources.find( sourceInfo );
-
-		if ( it != m_sources.end() )
-		{
-			it->second.config = std::move( configuration );
-			doUpdateTextureFlags();
-		}
-		else
-		{
-			auto srcIt = std::find_if( m_realSources.begin()
-				, m_realSources.end()
-				, [&sourceInfo]( auto & lookup )
-				{
-					return sourceInfo == lookup.first->base->sourceInfo;
-				} );
-
-			if ( srcIt != m_realSources.end() )
-			{
-				srcIt->first->passConfig.config = std::move( configuration );
-				doUpdateTextureFlags();
-			}
-		}
+		resetTexture( sourceInfo
+			, { sourceInfo, configuration } );
 	}
 
 	void Pass::prepareTextures()
 	{
 		if ( !m_texturesReduced.exchange( true ) )
 		{
+			auto sorted = matpass::sortSources( m_sources );
+			m_prepared.clear();
+
+			for ( auto & [flag, source] : sorted )
+			{
+				doPrepareImage( source );
+			}
+
+			m_textureUnits.clear();
 			auto & engine = *getOwner()->getEngine();
-			auto & imgCache = engine.getImageCache();
 			auto & textureCache = engine.getTextureUnitCache();
 
-			auto oldSources = std::move( m_realSources );
-			//
-			//	Sort per used components, decrementally
-			//
-			auto remaining = matpass::sortSources( m_sources );
-			//
-			//		Four and two component images are not merged with others,
-			//		hence get rid of them first
-			//
-			auto it = remaining.begin();
-			while ( it != remaining.end() )
+			for ( auto & prepared : m_prepared )
 			{
-				if ( getPixelComponents( it->second.second.config ).size() == 4u
-					|| getPixelComponents( it->second.second.config ).size() == 2u )
-				{
-					doPrepareImage( std::move( it->second ) );
-					it = remaining.erase( it );
-				}
-				else
-				{
-					++it;
-				}
-			}
-			//
-			//		Then three components
-			//
-			it = remaining.begin();
-			while ( it != remaining.end() )
-			{
-				if ( getPixelComponents( it->second.second.config ).size() == 3u )
-				{
-					PassTextureSource lhs = std::move( it->second );
-					remaining.erase( it );
-
-					if ( getFlags( lhs.second.config ).size() == 1u )
-					{
-						auto lhsFormat = convert( imgCache.getImageFormat( lhs.first.name() ) );
-						//
-						//	Fill with a one component texture
-						//
-						it = std::find_if( remaining.begin()
-							, remaining.end()
-							, [this, &lhs, &imgCache, &textureCache, lhsFormat]( matpass::SortedTextureSources::value_type const & lookup )
-							{
-								auto rhsFormat = convert( imgCache.getImageFormat( lookup.second.first.name() ) );
-								return getPixelComponents( lookup.second.second.config ).size() == 1u
-									&& textureCache.areMergeable( m_animations
-										, lhs.first, lhs.second, lhsFormat
-										, lookup.second.first, lookup.second.second, rhsFormat );
-							} );
-
-						if ( it == remaining.end() )
-						{
-							doPrepareImage( std::move( lhs ) );
-						}
-						else
-						{
-							doMergeImages( std::move( lhs ), 0x00FFFFFFu
-								, std::move( it->second ), 0xFF000000u
-								, oldSources );
-							remaining.erase( it );
-						}
-					}
-					else
-					{
-						doPrepareImage( lhs );
-					}
-
-					it = remaining.begin();
-				}
-				else
-				{
-					++it;
-				}
-			}
-			//
-			//		Then one component
-			//
-			it = remaining.begin();
-			while ( it != remaining.end() )
-			{
-				CU_Require( getPixelComponents( it->second.second.config ).size() == 1u );
-				PassTextureSource lhs = std::move( it->second );
-				auto lhsFormat = convert( imgCache.getImageFormat( lhs.first.name() ) );
-				remaining.erase( it );
-				//
-				//	Group them by two.
-				//
-				it = std::find_if( remaining.begin()
-					, remaining.end()
-					, [this, &lhs, &imgCache, &textureCache, lhsFormat]( matpass::SortedTextureSources::value_type const & lookup )
-					{
-						auto rhsFormat = convert( imgCache.getImageFormat( lookup.second.first.name() ) );
-						CU_Require( getPixelComponents( lookup.second.second.config ).size() == 1u );
-						return textureCache.areMergeable( m_animations
-								, lhs.first, lhs.second, lhsFormat
-								, lookup.second.first, lookup.second.second, rhsFormat );
-					} );
-
-				if ( it == remaining.end() )
-				{
-					doPrepareImage( std::move( lhs ) );
-				}
-				else
-				{
-					doMergeImages( std::move( lhs ), 0x00FF0000u
-						, std::move( it->second ), 0x0000FF00u
-						, oldSources );
-					remaining.erase( it );
-				}
-
-				it = remaining.begin();
+				auto unit = textureCache.getTextureUnit( *prepared );
+				doAddUnit( *prepared, unit, m_textureUnits );
 			}
 
-			Pass::UnitArray newUnits;
-
-			// Then add the other ones.
-			for ( auto & source : m_realSources )
-			{
-				auto unit = textureCache.getTextureUnit( *source.first );
-				doAddUnit( *source.first, unit, newUnits );
-			}
-
-			m_textureUnits = newUnits;
 			m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
 		}
-	}
-
-	void Pass::doMergeImages( PassTextureSource lhsIt
-		, uint32_t lhsDstMask
-		, PassTextureSource rhsIt
-		, uint32_t rhsDstMask
-		, UnitDataSources const & configs )
-	{
-		auto & engine = *getOwner()->getEngine();
-		auto & textureCache = engine.getTextureUnitCache();
-		auto lhsFlags = getEnabledFlag( lhsIt.second.config );
-		auto rhsFlags = getEnabledFlag( rhsIt.second.config );
-		auto name = getOwner()->getName() + getTextureFlagsName( lhsFlags ) + getTextureFlagsName( rhsFlags );
-
-		log::debug << cuT( " - Merging textures." ) << std::endl;
-		auto resultSourceInfo = textureCache.mergeSourceInfos( lhsIt.first, rhsIt.first );
-		PassTextureConfig resultConfig;
-		resultConfig.config.heightFactor = std::min( lhsIt.second.config.heightFactor
-			, rhsIt.second.config.heightFactor );
-		addFlagConfiguration( resultConfig.config, { lhsFlags, lhsDstMask } );
-		addFlagConfiguration( resultConfig.config, { rhsFlags, rhsDstMask } );
-		mergeConfigsBase( lhsIt.second.config, resultConfig.config );
-		mergeConfigsBase( rhsIt.second.config, resultConfig.config );
-		auto flags = getFlags( resultConfig.config );
-		auto ires = m_realSources.emplace( &textureCache.mergeSources( lhsIt.first
-				, lhsIt.second
-				, getComponentsMask( lhsIt.second.config, lhsFlags )
-				, lhsDstMask
-				, rhsIt.first
-				, rhsIt.second
-				, getComponentsMask( rhsIt.second.config, rhsFlags )
-				, rhsDstMask
-				, name
-				, resultSourceInfo
-				, resultConfig )
-			, std::vector< TextureSourceInfo >{ lhsIt.first, rhsIt.first } );
-		auto configIt = configs.find( ires.first->first );
-
-		if ( configs.end() != configIt )
-		{
-			ires.first->first->passConfig.config = configIt->first->passConfig.config;
-		}
-
-#if !defined( NDEBUG )
-		auto it = m_realSources.begin();
-
-		while ( it != m_realSources.end() )
-		{
-			auto nit = std::find_if( std::next( it )
-				, m_realSources.end()
-				, [it]( auto & lookup )
-				{
-					return shallowEqual( it->first->passConfig.config, lookup.first->passConfig.config );
-				} );
-			bool ok = ( nit == m_realSources.end() );
-			CU_Ensure( ok );
-			++it;
-		}
-#endif
-	}
-
-	void Pass::doPrepareImage( PassTextureSource cfg )
-	{
-		auto & engine = *getOwner()->getEngine();
-		auto & textureCache = engine.getTextureUnitCache();
-		auto animIt = m_animations.find( cfg.first );
-		auto anim = ( animIt != m_animations.end()
-			? std::move( animIt->second )
-			: nullptr );
-		auto flags = getFlags( cfg.second.config );
-		m_realSources.emplace( &textureCache.getSourceData( cfg.first, cfg.second, std::move( anim ) )
-			, std::vector< TextureSourceInfo >{ cfg.first } );
 	}
 
 	void Pass::setColour( castor::HdrRgbColour const & value )
@@ -678,11 +527,11 @@ namespace castor3d
 		}
 	}
 
-	void Pass::parseError( castor::String const & error )
+	void Pass::addParsers( castor::AttributeParsers & result )
 	{
-		castor::StringStream stream{ castor::makeStringStream() };
-		stream << cuT( "Error, : " ) << error;
-		castor::Logger::logError( stream.str() );
+		using namespace castor;
+		addParser( result, uint32_t( CSCNSection::ePass ), cuT( "shader_program" ), matpass::parserShader );
+		addParser( result, uint32_t( CSCNSection::ePass ), cuT( "}" ), matpass::parserEnd );
 	}
 
 	float Pass::computeRoughnessFromGlossiness( float glossiness )
@@ -962,6 +811,19 @@ namespace castor3d
 		}
 	}
 
+	void Pass::doPrepareImage( PassTextureSource cfg )
+	{
+		auto & [sourceInfo, passConfig] = cfg;
+		auto & engine = *getOwner()->getEngine();
+		auto & textureCache = engine.getTextureUnitCache();
+		auto animIt = m_animations.find( sourceInfo );
+		auto anim = ( animIt != m_animations.end()
+			? std::move( animIt->second )
+			: nullptr );
+		auto flags = getFlags( sourceInfo.textureConfig() );
+		m_prepared.emplace_back( &textureCache.getSourceData( sourceInfo, passConfig, std::move( anim ) ) );
+	}
+
 	void Pass::doAddUnit( TextureUnitData & unitData
 		, TextureUnitRPtr unit
 		, Pass::UnitArray & result )
@@ -977,7 +839,7 @@ namespace castor3d
 			, result.end()
 			, [&unitData]( TextureUnitRPtr lookup )
 			{
-				return shallowEqual( unitData.passConfig.config, lookup->getConfiguration() );
+				return shallowEqual( unitData.base->sourceInfo.textureConfig(), lookup->getConfiguration() );
 			} );
 
 		if ( it == result.end() )
@@ -993,12 +855,11 @@ namespace castor3d
 		if ( m_texturesReduced.exchange( false ) )
 		{
 			prepareTextures();
-			m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
 			onChanged( *this, m_componentCombine.baseId, m_componentCombine.baseId );
 
-			for ( auto & source : m_realSources )
+			for ( auto & prepared : m_prepared )
 			{
-				for ( auto & component : source.first->passConfig.config.components )
+				for ( auto & component : prepared->base->sourceInfo.textureConfig().components )
 				{
 					if ( component.componentsMask )
 					{
@@ -1011,7 +872,7 @@ namespace castor3d
 		{
 			for ( auto & source : m_sources )
 			{
-				for ( auto & component : source.second.config.components )
+				for ( auto & component : source.first.textureConfig().components )
 				{
 					if ( component.componentsMask )
 					{
@@ -1068,19 +929,19 @@ namespace castor3d
 		while ( srcIt != m_sources.end() )
 		{
 			srcIt = matpass::removeConfiguration( flag
-				, srcIt->second.config
+				, srcIt->first.textureConfig()
 				, srcIt
 				, m_sources );
 		}
 
-		auto datIt = m_realSources.begin();
+		auto datIt = m_prepared.begin();
 
-		while ( datIt != m_realSources.end() )
+		while ( datIt != m_prepared.end() )
 		{
 			datIt = matpass::removeConfiguration( flag
-				, datIt->first->passConfig.config
+				, ( *datIt )->base->sourceInfo.textureConfig()
 				, datIt
-				, m_realSources );
+				, m_prepared );
 		}
 
 		doUpdateTextureFlags();

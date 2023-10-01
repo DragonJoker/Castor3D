@@ -202,7 +202,6 @@ namespace c3d_gltf
 			, fastgltf::Image const & impImage
 			, fastgltf::DataSource const & impDataSource
 			, castor3d::TextureConfiguration const & texConfig
-			, castor3d::SamplerRPtr sampler
 			, castor3d::MaterialImporter & importer
 			, size_t offset = 0u
 			, size_t size = 0xFFFFFFFFFFFFFFFF )
@@ -211,7 +210,7 @@ namespace c3d_gltf
 			{
 				fastgltf::BufferView const & impBufferView = impAsset.bufferViews[std::get< 1 >( impDataSource ).bufferViewIndex];
 				fastgltf::Buffer const & impBuffer = impAsset.buffers[impBufferView.bufferIndex];
-				return loadTexture( impAsset, name, impTexture, impImage, impBuffer.data, texConfig, sampler, importer, offset + impBufferView.byteOffset, impBufferView.byteLength );
+				return loadTexture( impAsset, name, impTexture, impImage, impBuffer.data, texConfig, importer, offset + impBufferView.byteOffset, impBufferView.byteLength );
 			}
 
 			fastgltf::MimeType mimeType{};
@@ -241,8 +240,7 @@ namespace c3d_gltf
 
 			if ( !data.empty() )
 			{
-				return std::make_unique< castor3d::TextureSourceInfo >( importer.loadTexture( sampler
-					, name
+				return std::make_unique< castor3d::TextureSourceInfo >( importer.loadTexture( name
 					, getFormatName( mimeType )
 					, std::move( data )
 					, texConfig ) );
@@ -344,7 +342,6 @@ namespace c3d_gltf
 					, impImage
 					, impImage.data
 					, texConfig
-					, loadSampler( file, impAsset, impTexture.samplerIndex )
 					, importer );
 			}
 
@@ -425,9 +422,10 @@ namespace c3d_gltf
 						addFlagConfiguration( texConfig, { pass.getComponentPlugin< castor3d::OpacityMapComponent >().getTextureFlags(), 0xFF000000 } );
 					}
 
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo->textureIndex];
 					auto texCoordIndex = uint32_t( texInfo->texCoordIndex );
 					parseTransform( texInfo->transform, texConfig.transform, texCoordIndex );
-					castor3d::PassTextureConfig passTexConfig{ texConfig, texCoordIndex };
+					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
 					pass.registerTexture( std::move( *sourceInfo ), passTexConfig );
 				}
 			}
@@ -449,9 +447,10 @@ namespace c3d_gltf
 
 				if ( auto sourceInfo = loadTexture( file, impAsset, *texInfo, texConfig, importer ) )
 				{
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo->textureIndex];
 					auto texCoordIndex = uint32_t( texInfo->texCoordIndex );
 					parseTransform( texInfo->transform, texConfig.transform, texCoordIndex );
-					castor3d::PassTextureConfig passTexConfig{ texConfig, texCoordIndex };
+					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
 					pass.registerTexture( std::move( *sourceInfo ), passTexConfig );
 				}
 			}
@@ -473,9 +472,10 @@ namespace c3d_gltf
 
 				if ( auto sourceInfo = loadTexture( file, impAsset, *texInfo, texConfig, importer ) )
 				{
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo->textureIndex];
 					auto texCoordIndex = uint32_t( texInfo->texCoordIndex );
 					parseTransform( texInfo->transform, texConfig.transform, texCoordIndex );
-					castor3d::PassTextureConfig passTexConfig{ texConfig, texCoordIndex };
+					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
 					pass.registerTexture( std::move( *sourceInfo ), passTexConfig );
 				}
 			}
@@ -495,9 +495,10 @@ namespace c3d_gltf
 
 				if ( auto sourceInfo = loadTexture( file, impAsset, *texInfo, texConfig, importer ) )
 				{
+					fastgltf::Texture const & impTexture = impAsset.textures[texInfo->textureIndex];
 					auto texCoordIndex = uint32_t( texInfo->texCoordIndex );
 					parseTransform( texInfo->transform, texConfig.transform, texCoordIndex );
-					castor3d::PassTextureConfig passTexConfig{ texConfig, texCoordIndex };
+					castor3d::PassTextureConfig passTexConfig{ loadSampler( file, impAsset, impTexture.samplerIndex ), texCoordIndex };
 					pass.registerTexture( std::move( *sourceInfo ), passTexConfig );
 				}
 			}

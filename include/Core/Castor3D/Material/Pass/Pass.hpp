@@ -328,7 +328,7 @@ namespace castor3d
 		C3D_API void fillConfig( TextureConfiguration & config
 			, ConfigurationVisitorBase & vis );
 
-		C3D_API static castor::AttributeParsers createParsers( Engine const & engine );
+		C3D_API static void addParsers( castor::AttributeParsers & result );
 
 		C3D_API static float computeRoughnessFromGlossiness( float glossiness );
 		C3D_API static float computeGlossinessFromRoughness( float roughness );
@@ -500,17 +500,10 @@ namespace castor3d
 		/**@}*/
 
 	protected:
-		C3D_API static void parseError( castor::String const & error );
-
 		mutable std::atomic_bool m_dirty{ true };
 
 	private:
 		void onSssChanged( SubsurfaceScattering const & sss );
-		void doMergeImages( PassTextureSource lhs
-			, uint32_t lhsDstMask
-			, PassTextureSource rhs
-			, uint32_t rhsDstMask
-			, UnitDataSources const & configs );
 		void doPrepareImage( PassTextureSource cfg );
 		void doAddUnit( TextureUnitData & unitData
 			, TextureUnitRPtr unit
@@ -525,7 +518,7 @@ namespace castor3d
 		uint32_t m_index;
 		PassComponentMap m_components;
 		TextureSourceMap m_sources;
-		UnitDataSources m_realSources;
+		TextureUnitDataRefs m_prepared;
 		std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};
 		std::atomic_bool m_texturesReduced{ false };

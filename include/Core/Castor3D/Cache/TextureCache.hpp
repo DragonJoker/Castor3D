@@ -32,6 +32,7 @@ namespace castor3d
 			TextureData * data;
 			Texture * texture{};
 			std::atomic_bool interrupted{ false };
+			std::atomic_bool expected{ false };
 		};
 
 	public:
@@ -88,18 +89,7 @@ namespace castor3d
 		 *	Fonctions de gestion de textures.
 		 */
 		/**@{*/
-		C3D_API TextureSourceInfo mergeSourceInfos( TextureSourceInfo const & lhs
-			, TextureSourceInfo const & rhs );
-		C3D_API Texture const * getTexture( TextureData & unitData );
 		C3D_API TextureData & getSourceData( TextureSourceInfo const & sourceInfo );
-		C3D_API TextureData & mergeSources( TextureSourceInfo const & lhsSourceInfo
-			, uint32_t lhsSrcMask
-			, uint32_t lhsDstMask
-			, TextureSourceInfo const & rhsSourceInfo
-			, uint32_t rhsSrcMask
-			, uint32_t rhsDstMask
-			, castor::String const & name
-			, TextureSourceInfo const & resultSourceInfo );
 		/**@}*/
 		/**
 		 *\~english
@@ -110,28 +100,10 @@ namespace castor3d
 		 *	Fonctions de gestion d'unités de texture.
 		 */
 		/**@{*/
-		C3D_API bool areMergeable( std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > const & animations
-			, TextureSourceInfo const & lhsSource
-			, PassTextureConfig const & lhsConfig
-			, VkFormat lhsFormat
-			, TextureSourceInfo const & rhsSource
-			, PassTextureConfig const & rhsConfig
-			, VkFormat rhsFormat );
 		C3D_API TextureUnitRPtr getTextureUnit( TextureUnitData & unitData );
 		C3D_API TextureUnitData & getSourceData( TextureSourceInfo const & sourceInfo
 			, PassTextureConfig const & config
 			, TextureAnimationUPtr animation );
-		C3D_API TextureUnitData & mergeSources( TextureSourceInfo const & lhsSourceInfo
-			, PassTextureConfig const & lhsPassConfig
-			, uint32_t lhsSrcMask
-			, uint32_t lhsDstMask
-			, TextureSourceInfo const & rhsSourceInfo
-			, PassTextureConfig const & rhsPassConfig
-			, uint32_t rhsSrcMask
-			, uint32_t rhsDstMask
-			, castor::String const & name
-			, TextureSourceInfo const & resultSourceInfo
-			, PassTextureConfig const & resultPassConfig );
 		/**@}*/
 		/**
 		 *\name
@@ -151,6 +123,16 @@ namespace castor3d
 		ashes::DescriptorSet * getDescriptorSet()const
 		{
 			return m_bindlessTexSet.get();
+		}
+
+		auto begin()const
+		{
+			return m_datas.begin();
+		}
+
+		auto end()const
+		{
+			return m_datas.end();
 		}
 		/**@}*/
 

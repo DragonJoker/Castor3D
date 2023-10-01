@@ -99,6 +99,15 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		Sets the sampler.
+		 *\param[in]	sampler	The sampler.
+		 *\~french
+		 *\brief		Définit le sampler.
+		 *\param[in]	sampler	Le sampler.
+		 */
+		C3D_API void setSampler( SamplerObs sampler );
+		/**
+		 *\~english
 		 *\brief		Sets the texture.
 		 *\param[in]	texture	The texture.
 		 *\~french
@@ -145,6 +154,14 @@ namespace castor3d
 		 *\return		L'animation.
 		 */
 		C3D_API TextureAnimation const & getAnimation()const;
+		/**@}*/
+		/**
+		*name
+		*	Parsers.
+		*/
+		/**@{*/
+		C3D_API static void addParsers( castor::AttributeParsers & result
+			, castor::UInt32StrMap const & textureChannels );
 		/**@}*/
 		/**
 		*\~english
@@ -293,6 +310,7 @@ namespace castor3d
 		TextureTransform m_transform{};
 		castor::Matrix4x4f m_transformations;
 		ashes::Image * m_gpuImage{};
+		SamplerObs m_sampler{};
 		Texture const * m_texture{};
 		ashes::WriteDescriptorSet m_descriptor;
 		uint32_t m_id{ 0u };
