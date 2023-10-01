@@ -389,6 +389,7 @@ namespace castor
 						&& writeNamedSub( file, cuT( "background_colour" ), scene.getBackgroundColour() )
 						&& write( file, cuT( "lpv_indirect_attenuation" ), scene.getLpvIndirectAttenuation() )
 						&& txtscn::writeIncludedView( file, scene.getFontView(), cuT( "Fonts" ), m_options.sceneFontsFile, *this, txtscn::writable< castor::Font >, m_options.rootFolder )
+						&& txtscn::writeInclude( file, m_options.sceneTexturesFile, *this )
 						&& txtscn::writeInclude( file, m_options.sceneSamplersFile, *this )
 						&& txtscn::writeInclude( file, m_options.sceneMaterialsFile, *this )
 						&& txtscn::writeInclude( file, m_options.sceneThemesFile, *this )

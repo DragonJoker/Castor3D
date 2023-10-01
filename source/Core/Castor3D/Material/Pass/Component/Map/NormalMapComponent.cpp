@@ -69,10 +69,16 @@ namespace castor3d
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
+			else if ( !parsingContext.pass )
+			{
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( NormalMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+					, params[0]->get< uint32_t >() );
+			}
 			else
 			{
-				auto & component = getPassComponent< NormalMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				auto & plugin = parsingContext.pass->getComponentPlugin( NormalMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.texture.configuration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -89,7 +95,7 @@ namespace castor3d
 			else
 			{
 				getPassComponent< NormalMapComponent >( parsingContext );
-				params[0]->get( parsingContext.textureConfiguration.normalFactor );
+				params[0]->get( parsingContext.texture.configuration.normalFactor );
 			}
 		}
 		CU_EndAttribute()
@@ -105,7 +111,7 @@ namespace castor3d
 			else
 			{
 				getPassComponent< NormalMapComponent >( parsingContext );
-				params[0]->get( parsingContext.textureConfiguration.normalDirectX );
+				params[0]->get( parsingContext.texture.configuration.normalDirectX );
 			}
 		}
 		CU_EndAttribute()
@@ -121,7 +127,7 @@ namespace castor3d
 			else
 			{
 				getPassComponent< NormalMapComponent >( parsingContext );
-				params[0]->get( parsingContext.textureConfiguration.normal2Channels );
+				params[0]->get( parsingContext.texture.configuration.normal2Channels );
 			}
 		}
 		CU_EndAttribute()
@@ -237,9 +243,30 @@ namespace castor3d
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< NormalMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				component.fillChannel( parsingContext.texture.configuration
 					, 0x00FFFFFF );
 			} } );
+
+		castor::addParserT( parsers
+			, CSCNSection::eTexture
+			, cuT( "normal_mask" )
+			, nmlcmp::parserUnitNormalMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTexture
+			, cuT( "normal_factor" )
+			, nmlcmp::parserUnitNormalFactor
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTexture
+			, cuT( "normal_directx" )
+			, nmlcmp::parserUnitNormalDirectX
+			, { castor::makeParameter< castor::ParameterType::eBool >() } );
+		castor::addParserT( parsers
+			, CSCNSection::eTexture
+			, cuT( "normal_2channels" )
+			, nmlcmp::parserUnitNormal2Channels
+			, { castor::makeParameter< castor::ParameterType::eBool >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit

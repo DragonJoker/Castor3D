@@ -519,10 +519,11 @@ namespace GuiCommon
 					{
 						auto & sourceInfo = unit->getSourceInfo();
 						m_pass.resetTexture( sourceInfo
-							, castor3d::TextureSourceInfo{ sourceInfo.sampler()
-							, path.getPath()
-							, path.getFileName( true )
-							, sourceInfo.config() } );
+							, castor3d::TextureSourceInfo{ path.getFileName( true )
+								, sourceInfo.textureConfig()
+								, path.getPath()
+								, path.getFileName( true )
+								, sourceInfo.loadConfig() } );
 					}
 				} );
 		}

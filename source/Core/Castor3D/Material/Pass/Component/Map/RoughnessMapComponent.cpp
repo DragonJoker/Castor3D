@@ -62,10 +62,16 @@ namespace castor3d
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
+			else if ( !parsingContext.pass )
+			{
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( RoughnessMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+					, params[0]->get< uint32_t >() );
+			}
 			else
 			{
 				auto & plugin = parsingContext.pass->getComponentPlugin( RoughnessMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
+				plugin.fillTextureConfiguration( parsingContext.texture.configuration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -124,9 +130,15 @@ namespace castor3d
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< RoughnessMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				component.fillChannel( parsingContext.texture.configuration
 					, 0x00FF0000 );
 			} } );
+
+		castor::addParserT( parsers
+			, CSCNSection::eTexture
+			, cuT( "roughness_mask" )
+			, rghcmp::parserUnitRoughnessMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit

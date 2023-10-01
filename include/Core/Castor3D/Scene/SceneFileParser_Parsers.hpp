@@ -86,6 +86,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserMesh )
 	CU_DeclareAttributeParser( parserDirectionalShadowCascades )
 	CU_DeclareAttributeParser( parserVoxelConeTracing )
+	CU_DeclareAttributeParser( parserTexture )
 	CU_DeclareAttributeParser( parserSceneEnd )
 
 	// Scene import parsers
@@ -191,43 +192,6 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserSubmeshFaceNormals )
 	CU_DeclareAttributeParser( parserSubmeshFaceTangents )
 	CU_DeclareAttributeParser( parserSubmeshEnd )
-
-	// Material Parsers
-	CU_DeclareAttributeParser( parserMaterialType )
-	CU_DeclareAttributeParser( parserMaterialPass )
-	CU_DeclareAttributeParser( parserMaterialRenderPass )
-	CU_DeclareAttributeParser( parserMaterialEnd )
-
-	// Pass Parsers
-	CU_DeclareAttributeParser( parserPassTextureUnit )
-	CU_DeclareAttributeParser( parserPassShader )
-	CU_DeclareAttributeParser( parserPassEnd )
-
-	// Texture Unit Parsers
-	CU_DeclareAttributeParser( parserUnitChannel )
-	CU_DeclareAttributeParser( parserUnitImage )
-	CU_DeclareAttributeParser( parserUnitLevelsCount )
-	CU_DeclareAttributeParser( parserUnitRenderTarget )
-	CU_DeclareAttributeParser( parserUnitSampler )
-	CU_DeclareAttributeParser( parserUnitInvertY )
-	CU_DeclareAttributeParser( parserUnitTransform )
-	CU_DeclareAttributeParser( parserUnitTileSet )
-	CU_DeclareAttributeParser( parserUnitTiles )
-	CU_DeclareAttributeParser( parserUnitAnimation )
-	CU_DeclareAttributeParser( parserUnitTexcoordSet )
-	CU_DeclareAttributeParser( parserUnitEnd )
-
-	// Texture Config Parsers
-	CU_DeclareAttributeParser( parserTexTransformRotate )
-	CU_DeclareAttributeParser( parserTexTransformTranslate )
-	CU_DeclareAttributeParser( parserTexTransformScale )
-	CU_DeclareAttributeParser( parserTexTile )
-
-	// Texture Animation Parsers
-	CU_DeclareAttributeParser( parserTexAnimRotate )
-	CU_DeclareAttributeParser( parserTexAnimTranslate )
-	CU_DeclareAttributeParser( parserTexAnimScale )
-	CU_DeclareAttributeParser( parserTexAnimTile )
 
 	// Shader Parsers
 	CU_DeclareAttributeParser( parserVertexShader )

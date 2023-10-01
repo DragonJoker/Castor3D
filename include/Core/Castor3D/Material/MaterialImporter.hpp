@@ -140,8 +140,7 @@ namespace castor3d
 		 *\param[in]	config	La configuration de la texture.
 		 *\return		L'unité de texture.
 		 */
-		C3D_API TextureSourceInfo loadTexture( castor3d::SamplerObs sampler
-			, castor::Path const & path
+		C3D_API TextureSourceInfo loadTexture( castor::Path const & path
 			, TextureConfiguration const & config )const;
 		/**
 		 *\~english
@@ -161,8 +160,7 @@ namespace castor3d
 		 *\param[in]	config	La configuration de la texture.
 		 *\return		L'unité de texture.
 		 */
-		C3D_API TextureSourceInfo loadTexture( castor3d::SamplerObs sampler
-			, castor::String name
+		C3D_API TextureSourceInfo loadTexture( castor::String name
 			, castor::String type
 			, castor::ByteArray data
 			, TextureConfiguration const & config )const;
@@ -180,9 +178,9 @@ namespace castor3d
 		 *\param[in]		config	La configuration de la texture.
 		 *\param[in,out]	pass	Reçoit l'image chargée.
 		 */
-		C3D_API void loadTexture( castor3d::SamplerObs sampler
-			, castor::Path const & path
-			, PassTextureConfig const & config
+		C3D_API void loadTexture( castor::Path const & path
+			, TextureConfiguration const & config
+			, PassTextureConfig const & passConfig
 			, Pass & pass )const;
 		/**
 		 *\~english
@@ -202,11 +200,11 @@ namespace castor3d
 		 *\param[in]		config	La configuration de la texture.
 		 *\param[in,out]	pass	Reçoit l'image chargée.
 		 */
-		C3D_API void loadTexture( castor3d::SamplerObs sampler
-			, castor::String name
+		C3D_API void loadTexture( castor::String name
 			, castor::String type
 			, castor::ByteArray data
-			, PassTextureConfig const & config
+			, TextureConfiguration const & config
+			, PassTextureConfig const & passConfig
 			, Pass & pass )const;
 		/**
 		 *\~english

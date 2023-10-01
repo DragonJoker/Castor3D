@@ -183,8 +183,7 @@ namespace castor3d
 				, { false, false, false } } );
 	}
 
-	TextureSourceInfo MaterialImporter::loadTexture( castor3d::SamplerObs sampler
-		, castor::Path const & path
+	TextureSourceInfo MaterialImporter::loadTexture( castor::Path const & path
 		, TextureConfiguration const & config )const
 	{
 		auto image = loadImage( path );
@@ -195,14 +194,14 @@ namespace castor3d
 		}
 
 		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
-		return TextureSourceInfo{ sampler
+		return TextureSourceInfo{ image->getPath().getFileName( true )
+			, config
 			, image->getPath().getPath()
 			, image->getPath().getFileName( true )
 			, { allowCompression, true, true } };
 	}
 
-	TextureSourceInfo MaterialImporter::loadTexture( castor3d::SamplerObs sampler
-		, castor::String name
+	TextureSourceInfo MaterialImporter::loadTexture( castor::String name
 		, castor::String type
 		, castor::ByteArray data
 		, TextureConfiguration const & config )const
@@ -215,22 +214,22 @@ namespace castor3d
 		}
 
 		bool allowCompression = !checkFlag( config.textureSpace, TextureSpace::eTangentSpace );
-		return TextureSourceInfo{ sampler
-			, std::move( name )
+		return TextureSourceInfo{ std::move( name )
+			, config
 			, std::move( type )
 			, std::move( data )
 			, { allowCompression, true, true } };
 	}
 
-	void MaterialImporter::loadTexture( castor3d::SamplerObs sampler
-		, castor::Path const & path
-		, PassTextureConfig const & config
+	void MaterialImporter::loadTexture( castor::Path const & path
+		, TextureConfiguration const & config
+		, PassTextureConfig const & passConfig
 		, Pass & pass )const
 	{
 		try
 		{
-			pass.registerTexture( loadTexture( sampler, path, config.config )
-				, config );
+			pass.registerTexture( loadTexture( path, config )
+				, passConfig );
 		}
 		catch ( std::exception & exc )
 		{
@@ -238,21 +237,20 @@ namespace castor3d
 		}
 	}
 
-	void MaterialImporter::loadTexture( castor3d::SamplerObs sampler
-		, castor::String name
+	void MaterialImporter::loadTexture( castor::String name
 		, castor::String type
 		, castor::ByteArray data
-		, PassTextureConfig const & config
+		, TextureConfiguration const & config
+		, PassTextureConfig const & passConfig
 		, Pass & pass )const
 	{
 		try
 		{
-			pass.registerTexture( loadTexture( sampler
-					, std::move( name )
+			pass.registerTexture( loadTexture( std::move( name )
 					, std::move( type )
 					, std::move( data )
-					, config.config )
-				, config );
+					, config )
+				, passConfig );
 		}
 		catch ( std::exception & exc )
 		{

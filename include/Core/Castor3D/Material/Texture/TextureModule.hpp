@@ -226,9 +226,10 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, TextureData, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureLayout, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureSource, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureSourceInfo, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureUnit, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureView, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TextureUnitData, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TextureView, C3D_API );
 
 	//! TextureUnit array
 	CU_DeclareVector( TextureUnit, TextureUnit );

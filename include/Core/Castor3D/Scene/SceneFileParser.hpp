@@ -97,6 +97,7 @@ namespace castor3d
 		eTextureRemapChannel = CU_MakeSectionName( 'T', 'X', 'R', 'C' ),
 		eTextureRemap = CU_MakeSectionName( 'T', 'X', 'R', 'P' ),
 		eClusters = CU_MakeSectionName( 'C', 'L', 'S', 'T' ),
+		eTexture = CU_MakeSectionName( 'T', 'X', 'U', 'R' ),
 	};
 
 	class SceneFileContext
@@ -151,6 +152,15 @@ namespace castor3d
 			castor::Point3f scale{ 1.0f, 1.0f, 1.0f };
 		};
 
+		struct TextureConfig
+		{
+			castor::Path folder{};
+			castor::Path relative{};
+			castor::ImageRPtr image{};
+			TextureConfiguration configuration{};
+			RenderTargetRPtr renderTarget{};
+		};
+
 		castor::LoggerInstance * logger{};
 		castor::PathArray files;
 		castor::PathArray csnaFiles;
@@ -178,25 +188,13 @@ namespace castor3d
 		SamplerPtr ownSampler{};
 		TargetType targetType{};
 		RenderTargetRPtr renderTarget{};
-		RenderTargetRPtr textureRenderTarget{};
 		PassRPtr pass{};
 		PassComponent * passComponent{};
 		bool createPass{ true };
+		uint32_t mipLevels{};
 		uint32_t unitIndex{};
-		ashes::ImageCreateInfo imageInfo{ 0u
-			, VK_IMAGE_TYPE_2D
-			, VK_FORMAT_UNDEFINED
-			, { 1u, 1u, 1u }
-			, 0u
-			, 1u
-			, VK_SAMPLE_COUNT_1_BIT
-			, VK_IMAGE_TILING_OPTIMAL
-			, VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_TRANSFER_DST_BIT };
 		ShaderProgramRPtr shaderProgram{};
 		castor::PxBufferBaseUPtr buffer{};
-		castor::Path folder{};
-		castor::Path relative{};
-		castor::ImageRPtr image{};
 		VkShaderStageFlagBits shaderStage{};
 		UniformBufferBaseUPtr uniformBuffer{};
 		struct OverlayPtr
@@ -240,7 +238,6 @@ namespace castor3d
 		SsaoConfig ssaoConfig{};
 		SubsurfaceScatteringUPtr subsurfaceScattering{};
 		SkyboxBackgroundUPtr skybox{};
-		TextureConfiguration textureConfiguration{};
 		TextureTransform textureTransform{};
 		uint32_t texcoordSet{};
 		SceneImportConfig sceneImportConfig;
@@ -248,6 +245,8 @@ namespace castor3d
 		ClustersConfigUPtr clustersConfig;
 		HdrConfig hdrConfig;
 		ShadowConfigUPtr shadowConfig;
+		TextureConfig texture;
+		std::map< castor::String, TextureSourceInfoUPtr > sourceInfos{};
 	};
 
 	C3D_API SceneFileContext & getSceneParserContext( castor::FileParserContext & context );

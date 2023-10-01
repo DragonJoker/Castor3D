@@ -62,10 +62,16 @@ namespace castor3d
 			{
 				CU_ParsingError( cuT( "Missing parameter." ) );
 			}
+			else if ( !parsingContext.pass )
+			{
+				auto & plugin = parsingContext.parser->getEngine()->getPassComponentsRegister().getPlugin( ClearcoatNormalMapComponent::TypeName );
+				plugin.fillTextureConfiguration( parsingContext.texture.configuration
+					, params[0]->get< uint32_t >() );
+			}
 			else
 			{
 				auto & plugin = parsingContext.pass->getComponentPlugin( ClearcoatNormalMapComponent::TypeName );
-				plugin.fillTextureConfiguration( parsingContext.textureConfiguration
+				plugin.fillTextureConfiguration( parsingContext.texture.configuration
 					, params[0]->get< uint32_t >() );
 			}
 		}
@@ -131,9 +137,15 @@ namespace castor3d
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< ClearcoatNormalMapComponent >( parsingContext );
-				component.fillChannel( parsingContext.textureConfiguration
+				component.fillChannel( parsingContext.texture.configuration
 					, 0x00FFFFFFu );
 			} } );
+
+		castor::addParserT( parsers
+			, CSCNSection::eTexture
+			, cuT( "clearcoat_normal_mask" )
+			, trscmp::parserUnitClearcoatNormalMask
+			, { castor::makeParameter< castor::ParameterType::eUInt32 >() } );
 
 		castor::addParserT( parsers
 			, CSCNSection::eTextureUnit

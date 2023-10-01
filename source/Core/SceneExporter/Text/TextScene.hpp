@@ -18,6 +18,7 @@ namespace castor
 		struct Options
 		{
 			Options( Path prootFolder = {}
+				, Path psceneTexturesFile = {}
 				, Path psceneSamplersFile = {}
 				, Path pglobalSamplersFile = {}
 				, Path psceneMaterialsFile = {}
@@ -38,7 +39,8 @@ namespace castor
 				, String psubfolder = {}
 				, float pscale = 1.0f )
 				: rootFolder{ std::move( prootFolder ) }
-				, sceneSamplersFile{ std::move( psceneMaterialsFile ) }
+				, sceneTexturesFile{ std::move( psceneTexturesFile ) }
+				, sceneSamplersFile{ std::move( psceneSamplersFile ) }
 				, globalSamplersFile{ std::move( pglobalSamplersFile ) }
 				, sceneMaterialsFile{ std::move( psceneMaterialsFile ) }
 				, globalMaterialsFile{ std::move( pglobalMaterialsFile ) }
@@ -61,6 +63,7 @@ namespace castor
 			}
 
 			Path rootFolder;
+			Path sceneTexturesFile;
 			Path sceneSamplersFile;
 			Path globalSamplersFile;
 			Path sceneMaterialsFile;

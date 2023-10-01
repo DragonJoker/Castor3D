@@ -477,7 +477,7 @@ namespace castor3d
 			, name
 			, true );
 		castor::ImageLayout layout{ lines.getLayout().type, *buffer };
-		log::info << "Loaded image [" << name << "] (" << layout << ")" << std::endl;
+		log::info << "Loaded skybox image [" << name << "] (" << layout << ")" << std::endl;
 		return castor::makeUnique< castor::Image >( lines.getName()
 			, lines.getPath()
 			, layout
