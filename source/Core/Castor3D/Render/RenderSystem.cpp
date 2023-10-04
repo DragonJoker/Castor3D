@@ -608,6 +608,7 @@ namespace castor3d
 
 			if ( device.gpu.getProperties().apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
 			{
+				result.insert( spirv::KHR_shader_ballot );
 				result.insert( spirv::KHR_shader_subgroup );
 			}
 
