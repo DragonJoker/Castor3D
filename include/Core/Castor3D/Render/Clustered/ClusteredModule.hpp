@@ -15,6 +15,15 @@ namespace castor3d
 	/**@name Clustered */
 	//@{
 
+	enum class ClusterSplitScheme
+	{
+		eExponentialBase,
+		eExponentialBiased,
+		eLinear,
+		eExponentialLinearHybrid,
+		CU_ScopedEnumBounds( eExponentialBase )
+	};
+	C3D_API castor::String getName( ClusterSplitScheme value );
 	/**
 	*\~english
 	*\brief

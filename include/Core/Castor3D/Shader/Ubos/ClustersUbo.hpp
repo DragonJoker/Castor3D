@@ -22,13 +22,17 @@ namespace castor3d
 			: public sdw::StructInstanceHelperT< "C3D_ClustersData"
 				, sdw::type::MemoryLayout::eStd140
 				, sdw::U32Vec3Field< "dimensions" >
-				, sdw::FloatField< "pad0" >
+				, sdw::UIntField< "splitScheme" >
 				, sdw::U32Vec2Field< "clusterSize" >
 				, sdw::Vec2Field< "viewNearFar" >
 				, sdw::UIntField< "pointLightLevels" >
 				, sdw::UIntField< "spotLightLevels" >
 				, sdw::UIntField< "pointLightCount" >
-				, sdw::UIntField< "spotLightCount" > >
+				, sdw::UIntField< "spotLightCount" >
+				, sdw::FloatField< "bias" >
+				, sdw::FloatField< "pad0" >
+				, sdw::FloatField< "pad1" >
+				, sdw::FloatField< "pad2" > >
 		{
 			ClustersData( sdw::ShaderWriter & writer
 				, ast::expr::ExprPtr expr
@@ -50,6 +54,8 @@ namespace castor3d
 			auto spotLightLevels()const { return getMember< "spotLightLevels" >(); }
 			auto pointLightCount()const { return getMember< "pointLightCount" >(); }
 			auto spotLightCount()const { return getMember< "spotLightCount" >(); }
+			auto splitScheme()const { return getMember< "splitScheme" >(); }
+			auto bias()const { return getMember< "bias" >(); }
 
 			C3D_API sdw::RetU32Vec3 computeClusterIndex3D( sdw::UInt32 const index );
 			C3D_API sdw::RetU32Vec3 computeClusterIndex3D( sdw::Vec2 const screenPos
@@ -107,7 +113,9 @@ namespace castor3d
 			, float viewNear
 			, float viewFar
 			, uint32_t pointLightsCount
-			, uint32_t spotLightsCount );
+			, uint32_t spotLightsCount
+			, ClusterSplitScheme splitScheme
+			, float bias );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const

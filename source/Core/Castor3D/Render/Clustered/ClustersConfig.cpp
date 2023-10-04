@@ -9,6 +9,21 @@
 
 CU_ImplementSmartPtr( castor3d, ClustersConfig )
 
+namespace castor
+{
+	template<>
+	struct ParserEnumTraits< castor3d::ClusterSplitScheme >
+	{
+		static inline xchar const * const Name = cuT( "ClusterSplitScheme" );
+		static inline UInt32StrMap const Values = []()
+		{
+			UInt32StrMap result;
+			result = castor3d::getEnumMapT< castor3d::ClusterSplitScheme >();
+			return result;
+		}();
+	};
+}
+
 namespace castor3d
 {
 	namespace clscfg
@@ -199,6 +214,44 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
+		static CU_ImplementAttributeParser( parserClustersSplitScheme )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !parsingContext.clustersConfig )
+			{
+				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
+			}
+			else
+			{
+				parsingContext.clustersConfig->splitScheme = ClusterSplitScheme( params[0]->get< uint32_t >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserClustersBias )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else if ( !parsingContext.clustersConfig )
+			{
+				CU_ParsingError( cuT( "Clusters configuration not initialised." ) );
+			}
+			else
+			{
+				params[0]->get( parsingContext.clustersConfig->bias );
+			}
+		}
+		CU_EndAttribute()
+
 		static CU_ImplementAttributeParser( parserClustersEnd )
 		{
 			auto & parsingContext = getParserContext( context );
@@ -226,6 +279,8 @@ namespace castor3d
 		, useSpotTightBoundingBox{ true }
 		, enableReduceWarpOptimisation{ false }
 		, enableBVHWarpOptimisation{ true }
+		, splitScheme{ ClusterSplitScheme::eExponentialBase }
+		, bias{ 1.0f }
 	{
 	}
 
@@ -233,6 +288,11 @@ namespace castor3d
 	{
 		if ( enabled )
 		{
+			static castor::StringArray names{ cuT( "Exponential" )
+				, cuT( "Biased Exponential" )
+				, cuT( "Linear" )
+				, cuT( "Hybrid" ) };
+
 			visitor.visit( cuT( "Clusters" ) );
 			visitor.visit( cuT( "Use BVH" ), useLightsBVH );
 			visitor.visit( cuT( "Sort Lights" ), sortLights );
@@ -242,6 +302,14 @@ namespace castor3d
 			visitor.visit( cuT( "Use Spot Tight Bounding Box" ), useSpotTightBoundingBox );
 			visitor.visit( cuT( "Enable Reduce Warp Optimisation" ), enableReduceWarpOptimisation );
 			visitor.visit( cuT( "Enable BVH Warp Optimisation" ), enableBVHWarpOptimisation );
+			visitor.visit( cuT( "Split Scheme" )
+				, splitScheme
+				, names
+				, ConfigurationVisitorBase::OnEnumValueChangeT< ClusterSplitScheme >( [this]( ClusterSplitScheme oldV, ClusterSplitScheme newV )
+					{
+						splitScheme = newV;
+					} ) );
+			visitor.visit( cuT( "Biased Exponential Bias" ), bias );
 		}
 	}
 
@@ -258,6 +326,23 @@ namespace castor3d
 		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "use_spot_tight_aabb" ), clscfg::parserClustersSpotTightAABB, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "enable_reduce_warp_optimisation" ), clscfg::parserClustersReduceWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "enable_bvh_warp_optimisation" ), clscfg::parserClustersBVHWarpOptimisation, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "split_scheme" ), clscfg::parserClustersSplitScheme, { makeParameter< ParameterType::eCheckedText, ClusterSplitScheme >() } );
+		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "bias" ), clscfg::parserClustersBias, { makeDefaultedParameter< ParameterType::eFloat >( 1.0f ) } );
 		addParser( result, uint32_t( CSCNSection::eClusters ), cuT( "}" ), clscfg::parserClustersEnd );
+	}
+
+	bool operator==( ClustersConfig const & lhs, ClustersConfig const & rhs )
+	{
+		return lhs.enabled == rhs.enabled
+			&& lhs.useLightsBVH == rhs.useLightsBVH
+			&& lhs.sortLights == rhs.sortLights
+			&& lhs.parseDepthBuffer == rhs.parseDepthBuffer
+			&& lhs.limitClustersToLightsAABB == rhs.limitClustersToLightsAABB
+			&& lhs.useSpotBoundingCone == rhs.useSpotBoundingCone
+			&& lhs.useSpotTightBoundingBox == rhs.useSpotTightBoundingBox
+			&& lhs.enableReduceWarpOptimisation == rhs.enableReduceWarpOptimisation
+			&& lhs.enableBVHWarpOptimisation == rhs.enableBVHWarpOptimisation
+			&& lhs.splitScheme == rhs.splitScheme
+			&& lhs.bias == rhs.bias;
 	}
 }

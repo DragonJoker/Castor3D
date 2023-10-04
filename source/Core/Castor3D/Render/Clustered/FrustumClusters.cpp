@@ -177,7 +177,9 @@ namespace castor3d
 			, m_camera.getNear()
 			, m_camera.getFar()
 			, lightCache.getLightsBufferCount( LightType::ePoint )
-			, lightCache.getLightsBufferCount( LightType::eSpot ) );
+			, lightCache.getLightsBufferCount( LightType::eSpot )
+			, m_config.splitScheme
+			, m_config.bias );
 		auto it = updater.dirtyScenes.find( scene );
 		m_lightsDirty = lightCache.hasClusteredLights()
 			&& ( m_clustersDirty

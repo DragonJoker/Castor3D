@@ -75,7 +75,7 @@ namespace castor
 
 			if ( result && target.getFrustumClusters() )
 			{
-				result = writeSub( file, target.getFrustumClusters()->getConfig() );
+				result = writeSubOpt( file, target.getFrustumClusters()->getConfig(), ClustersConfig{} );
 			}
 		}
 

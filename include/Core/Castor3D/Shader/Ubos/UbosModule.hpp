@@ -230,7 +230,8 @@ namespace castor3d
 	{
 		// The 3D dimensions of the cluster grid.
 		castor::Point3ui gridDim;
-		float pad0;
+		// The clusters Z split scheme.
+		uint32_t splitScheme;
 		// The size of a cluster in screen space (pixels).
 		castor::Point2ui clusterSize;
 		// The distance to the near and far clipping plane. (Used for computing the index in the cluster grid)
@@ -243,6 +244,9 @@ namespace castor3d
 		uint32_t pointLightsCount;
 		// The number of spot lights.
 		uint32_t spotLightsCount;
+		// The biased exponential split scheme bias.
+		float bias;
+		float pad0, pad1, pad2;
 	};
 	/**
 	*\~english
