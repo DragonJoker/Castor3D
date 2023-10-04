@@ -239,6 +239,15 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Base class for external camera import.
+	*\~french
+	*\brief
+	*	Classe de base pour l'import de caméras externes.
+	*/
+	class CameraImporter;
+	/**
+	*\~english
+	*\brief
 	*	Fog implementation.
 	*\~french
 	*\brief
@@ -246,9 +255,6 @@ namespace castor3d
 	*/
 	class Fog;
 	/**
-	\author 	Sylvain DOREMUS
-	\date 		09/02/2010
-	\version	0.1
 	\~english
 	\brief		Geometry handler class
 	\~french
@@ -354,6 +360,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, BillboardBase, C3D_API );
 	CU_DeclareSmartPtr( castor3d, BillboardList, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Camera, C3D_API );
+	CU_DeclareSmartPtr( castor3d, CameraImporter, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Geometry, C3D_API );
 	CU_DeclareSmartPtr( castor3d, MovableObject, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SceneFileContext, C3D_API );

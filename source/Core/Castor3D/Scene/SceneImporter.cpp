@@ -12,6 +12,7 @@
 #include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
 #include "Castor3D/Model/Skeleton/Animation/SkeletonAnimation.hpp"
 #include "Castor3D/Scene/Camera.hpp"
+#include "Castor3D/Scene/CameraImporter.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneNode.hpp"
@@ -59,6 +60,7 @@ namespace castor3d
 		auto meshes = doImportMeshes( scene, skeletons );
 		auto nodes = doImportNodes( scene );
 		doImportLights( scene );
+		doImportCameras( scene );
 		doCreateGeometries( scene, meshes, nodes );
 		importAnimations( scene, file, parameters );
 		doTransformScene( scene, parameters, nodes );
@@ -236,6 +238,10 @@ namespace castor3d
 						{
 							node->attachTo( *parent );
 						}
+						else if ( data.isCamera )
+						{
+							node->attachTo( *scene.getCameraRootNode() );
+						}
 						else
 						{
 							node->attachTo( *scene.getObjectRootNode() );
@@ -270,6 +276,28 @@ namespace castor3d
 					, emptyParams ) )
 				{
 					scene.addLight( data.name, light, true );
+				}
+			}
+		}
+	}
+
+	void SceneImporter::doImportCameras( Scene & scene )
+	{
+		Parameters emptyParams;
+
+		if ( auto cameraImporter = m_file->createCameraImporter() )
+		{
+			for ( auto & data : m_file->listCameras() )
+			{
+				auto camera = scene.createCamera( data.name
+					, scene
+					, *scene.getCameraRootNode() );
+
+				if ( cameraImporter->import( *camera
+					, m_file
+					, emptyParams ) )
+				{
+					scene.addCamera( data.name, camera, true );
 				}
 			}
 		}

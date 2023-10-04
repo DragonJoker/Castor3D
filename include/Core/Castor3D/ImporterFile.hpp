@@ -7,12 +7,14 @@ See LICENSE file in root folder
 #include "Castor3D/Castor3DModule.hpp"
 #include "Castor3D/Animation/AnimationModule.hpp"
 #include "Castor3D/Material/MaterialModule.hpp"
-#include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
+#include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
+
+#include "Castor3D/Miscellaneous/Parameter.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 #include <CastorUtils/Math/Point.hpp>
@@ -33,14 +35,17 @@ namespace castor3d
 		struct NodeData
 		{
 			NodeData( castor::String pparent
-				, castor::String pname )
+				, castor::String pname
+				, bool pisCamera )
 				: parent{ std::move( pparent ) }
 				, name{ std::move( pname ) }
+				, isCamera{ pisCamera }
 			{
 			}
 
 			castor::String parent{};
 			castor::String name{};
+			bool isCamera{};
 		};
 
 		struct GeometryData
@@ -85,6 +90,19 @@ namespace castor3d
 			LightType type;
 		};
 
+		struct CameraData
+		{
+			CameraData( castor::String pname
+				, ViewportType ptype )
+				: name{ std::move( pname ) }
+				, type{ ptype }
+			{
+			}
+
+			castor::String name;
+			ViewportType type;
+		};
+
 	protected:
 		C3D_API ImporterFile( Engine & engine
 			, Scene * scene
@@ -100,6 +118,7 @@ namespace castor3d
 		C3D_API virtual std::vector< NodeData > listSceneNodes() = 0;
 		C3D_API virtual std::vector< GeometryData > listGeometries() = 0;
 		C3D_API virtual std::vector< LightData > listLights() = 0;
+		C3D_API virtual std::vector< CameraData > listCameras() = 0;
 		C3D_API virtual std::vector< castor::String > listMeshAnimations( Mesh const & mesh ) = 0;
 		C3D_API virtual std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton ) = 0;
 		C3D_API virtual std::vector< castor::String > listSceneNodeAnimations( SceneNode const & node ) = 0;
@@ -110,6 +129,7 @@ namespace castor3d
 		C3D_API virtual MeshImporterUPtr createMeshImporter() = 0;
 		C3D_API virtual SceneNodeImporterUPtr createSceneNodeImporter() = 0;
 		C3D_API virtual LightImporterUPtr createLightImporter() = 0;
+		C3D_API virtual CameraImporterUPtr createCameraImporter() = 0;
 
 		castor::String const & getExtension()const
 		{

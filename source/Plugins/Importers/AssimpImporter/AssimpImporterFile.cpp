@@ -1,6 +1,7 @@
 #include "AssimpImporter/AssimpImporterFile.hpp"
 
 #include "AssimpImporter/AssimpAnimationImporter.hpp"
+#include "AssimpImporter/AssimpCameraImporter.hpp"
 #include "AssimpImporter/AssimpLightImporter.hpp"
 #include "AssimpImporter/AssimpMaterialImporter.hpp"
 #include "AssimpImporter/AssimpMeshImporter.hpp"
@@ -408,6 +409,7 @@ namespace c3d_assimp
 			std::map< aiNode const *, castor::Matrix4x4f > cumulativeTransforms;
 			doPrelistSceneNodes( *m_aiScene->mRootNode, processed, cumulativeTransforms );
 			doPrelistLights();
+			doPrelistCameras();
 		}
 	}
 
@@ -520,7 +522,7 @@ namespace c3d_assimp
 
 		for ( auto & node : m_sceneData.nodes )
 		{
-			result.emplace_back( node.parent, node.name );
+			result.emplace_back( node.parent, node.name, node.isCamera );
 		}
 
 		return result;
@@ -564,6 +566,21 @@ namespace c3d_assimp
 					: node.name + meshName;
 				result.emplace_back( name, node.name, it->first );
 			}
+		}
+
+		return result;
+	}
+
+	std::vector< castor3d::ImporterFile::CameraData > AssimpImporterFile::listCameras()
+	{
+		std::vector< CameraData > result;
+
+		for ( auto & camera : m_sceneData.cameras )
+		{
+			result.emplace_back( camera.first
+				, ( camera.second->mOrthographicWidth != 0.0f
+					? castor3d::ViewportType::eOrtho
+					: castor3d::ViewportType::ePerspective ) );
 		}
 
 		return result;
@@ -662,6 +679,11 @@ namespace c3d_assimp
 	castor3d::LightImporterUPtr AssimpImporterFile::createLightImporter()
 	{
 		return castor::makeUniqueDerived< castor3d::LightImporter, AssimpLightImporter >( *getOwner() );
+	}
+
+	castor3d::CameraImporterUPtr AssimpImporterFile::createCameraImporter()
+	{
+		return castor::makeUniqueDerived< castor3d::CameraImporter, AssimpCameraImporter >( *getOwner() );
 	}
 
 	castor3d::ImporterFileUPtr AssimpImporterFile::create( castor3d::Engine & engine
@@ -846,6 +868,7 @@ namespace c3d_assimp
 		auto nodeName = getInternalName( aiNodeName );
 		AssimpNodeData nodeData{ parentName
 			, nodeName
+			, false
 			, &node
 			, fromAssimp( translate )
 			, fromAssimp( rotate )
@@ -978,6 +1001,7 @@ namespace c3d_assimp
 					castor::matrix::decompose( transform, translate, scale, rotate );
 					m_sceneData.nodes.push_back( AssimpNodeData{ castor::String{}
 						, name
+						, false
 						, nullptr
 						, translate
 						, rotate
@@ -990,6 +1014,61 @@ namespace c3d_assimp
 					matrix *= transform;
 					castor::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 				}
+			}
+		}
+	}
+
+	void AssimpImporterFile::doPrelistCameras()
+	{
+		for ( auto aiCamera : castor::makeArrayView( m_aiScene->mCameras, m_aiScene->mNumCameras ) )
+		{
+			castor::String name = getInternalName( aiCamera->mName );
+			m_sceneData.cameras.emplace( name, aiCamera );
+
+			auto position = castor::Point3f{};
+			auto orientation = castor::Quaternion::identity();
+			auto direction = castor::point::getNormalised( fromAssimp( aiCamera->mLookAt ) );
+			auto up = castor::point::getNormalised( fromAssimp( aiCamera->mUp ) );
+			position = fromAssimp( aiCamera->mPosition );
+			orientation = castor::Quaternion::fromMatrix( fromAssimp( direction, up ) );
+
+			auto transform = castor::Matrix4x4f{ 1.0f };
+			castor::matrix::setTransform( transform
+				, position
+				, castor::Point3f{ 1.0, 1.0, 1.0 }
+				, orientation );
+			auto it = std::find_if( m_sceneData.nodes.begin()
+				, m_sceneData.nodes.end()
+				, [&name]( AssimpNodeData const & lookup )
+				{
+					return lookup.name == name;
+				} );
+
+			if ( it == m_sceneData.nodes.end() )
+			{
+				file::accumulateTransforms( *this
+					, name
+					, *m_aiScene->mRootNode
+					, m_sceneData.nodes
+					, transform );
+				castor::Point3f translate;
+				castor::Point3f scale;
+				castor::Quaternion rotate;
+				castor::matrix::decompose( transform, translate, scale, rotate );
+				m_sceneData.nodes.push_back( AssimpNodeData{ castor::String{}
+					, name
+					, false
+					, nullptr
+					, translate
+					, rotate
+					, scale } );
+			}
+			else
+			{
+				castor::Matrix4x4f matrix;
+				castor::matrix::setTransform( matrix, it->translate, it->scale, it->rotate );
+				matrix *= transform;
+				castor::matrix::decompose( matrix, it->translate, it->scale, it->rotate );
 			}
 		}
 	}

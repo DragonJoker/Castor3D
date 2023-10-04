@@ -30,6 +30,7 @@ if( fastgltf_FOUND )
 	)
 	set( ${PROJECT_NAME}_HDR_FILES
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfAnimationImporter.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfCameraImporter.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfImporterFile.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfLightImporter.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfMaterialImporter.hpp
@@ -39,6 +40,7 @@ if( fastgltf_FOUND )
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfAnimationImporter.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfCameraImporter.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfImporterFile.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfImporterPlugin.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Importers/${FOLDER_NAME}/GltfLightImporter.cpp

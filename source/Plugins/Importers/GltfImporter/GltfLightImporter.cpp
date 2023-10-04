@@ -20,21 +20,47 @@ namespace c3d_gltf
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 		auto name = light.getName();
-		uint32_t index{};
-		auto it = std::find_if( impAsset.lights.begin()
+		uint32_t lightIndex{};
+		auto lightIt = std::find_if( impAsset.lights.begin()
 			, impAsset.lights.end()
-			, [&name, &file, &index]( fastgltf::Light const & lookup )
+			, [&name, &file, &lightIndex]( fastgltf::Light const & lookup )
 			{
-				return name == file.getLightName( index++ );
+				return name == file.getLightName( lightIndex++ );
 			} );
 
-		if ( it == impAsset.lights.end() )
+		if ( lightIt == impAsset.lights.end() )
 		{
 			return false;
 		}
 
 		castor3d::log::info << cuT( "  Light found: [" ) << name << cuT( "]" ) << std::endl;
-		fastgltf::Light const & impLight = *it;
+		fastgltf::Light const & impLight = *lightIt;
+		--lightIndex;
+		uint32_t nodeIndex{};
+
+		auto nodeIt = std::find_if( impAsset.nodes.begin()
+			, impAsset.nodes.end()
+			, [&lightIndex, &nodeIndex]( fastgltf::Node const & lookup )
+			{
+				++nodeIndex;
+				return lookup.lightIndex
+					&& *lookup.lightIndex == lightIndex;
+			} );
+		--nodeIndex;
+		auto nodeName = file.getNodeName( nodeIndex, 0u );
+		auto & scene = *light.getScene();
+		castor3d::SceneNodeRPtr node{};
+
+		if ( scene.hasSceneNode( nodeName ) )
+		{
+			node = scene.findSceneNode( nodeName );
+		}
+		else
+		{
+			auto ownNode = scene.createSceneNode( nodeName, scene );
+			ownNode->attachTo( *scene.getObjectRootNode() );
+			node = scene.addSceneNode( nodeName, ownNode );
+		}
 
 		if ( impLight.type == fastgltf::LightType::Point )
 		{
@@ -76,6 +102,7 @@ namespace c3d_gltf
 		light.setColour( castor::RgbColour::fromComponents( impLight.color[0], impLight.color[1], impLight.color[2] ) );
 		light.setDiffuseIntensity( impLight.intensity );
 		light.setSpecularIntensity( impLight.intensity );
+		node->attachObject( light );
 
 		return true;
 	}

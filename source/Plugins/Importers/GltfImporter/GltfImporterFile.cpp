@@ -1,6 +1,7 @@
 #include "GltfImporter/GltfImporterFile.hpp"
 
 #include "GltfImporter/GltfAnimationImporter.hpp"
+#include "GltfImporter/GltfCameraImporter.hpp"
 #include "GltfImporter/GltfLightImporter.hpp"
 #include "GltfImporter/GltfMaterialImporter.hpp"
 #include "GltfImporter/GltfMeshImporter.hpp"
@@ -11,6 +12,7 @@
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Skeleton/Skeleton.hpp>
+#include <Castor3D/Scene/Camera.hpp>
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Scene/SceneNode.hpp>
 #include <Castor3D/Scene/Light/Light.hpp>
@@ -522,9 +524,9 @@ namespace c3d_gltf
 		if ( transform.index() == 0u )
 		{
 			fastgltf::Node::TRS const & trs = std::get< 0 >( transform );
-			return { castor::Point3f{ trs.translation[0], trs.translation[1], trs.translation[2] }
-			, castor::Point3f{ trs.scale[0], trs.scale[1], trs.scale[2] }
-				, castor::Quaternion::fromComponents( trs.rotation[0], trs.rotation[1], trs.rotation[2], trs.rotation[3] ) };
+			return { convert( trs.translation )
+				, convert( trs.scale )
+				, convert( trs.rotation ) };
 		}
 
 		std::array< float, 3u > translation;
@@ -605,6 +607,10 @@ namespace c3d_gltf
 					{
 						m_lightNames.emplace_back( ~0ull, element.getName() );
 					} );
+				scene->getCameraCache().forEach( [this]( castor3d::Camera const & element )
+					{
+						m_cameraNames.emplace_back( ~0ull, element.getName() );
+					} );
 			}
 
 			doPrelistMeshes();
@@ -642,6 +648,11 @@ namespace c3d_gltf
 	castor::String GltfImporterFile::getLightName( size_t index )const
 	{
 		return getInternalName( file::getElementName( m_asset->lights, index, getName(), m_lightNames ) );
+	}
+
+	castor::String GltfImporterFile::getCameraName( size_t index )const
+	{
+		return getInternalName( file::getElementName( m_asset->cameras, index, getName(), m_cameraNames ) );
 	}
 
 	castor::String GltfImporterFile::getSamplerName( size_t index )const
@@ -894,6 +905,28 @@ namespace c3d_gltf
 		return result;
 	}
 
+	std::vector< castor3d::ImporterFile::CameraData > GltfImporterFile::listCameras()
+	{
+		std::vector< CameraData > result;
+
+		if ( isValid() )
+		{
+			size_t idx{};
+
+			for ( auto & camera : m_asset->cameras )
+			{
+				result.emplace_back( getCameraName( idx++ )
+					, ( camera.camera.index() == 1u
+						? castor3d::ViewportType::eOrtho
+						: ( std::get< 0u >( camera.camera ).zfar
+							? castor3d::ViewportType::ePerspective
+							: castor3d::ViewportType::eInfinitePerspective ) ) );
+			}
+		}
+
+		return result;
+	}
+
 	std::vector< castor::String > GltfImporterFile::listMeshAnimations( castor3d::Mesh const & mesh )
 	{
 		std::set< castor::String > result;
@@ -994,6 +1027,11 @@ namespace c3d_gltf
 		return castor::makeUniqueDerived< castor3d::LightImporter, GltfLightImporter >( *getOwner() );
 	}
 
+	castor3d::CameraImporterUPtr GltfImporterFile::createCameraImporter()
+	{
+		return castor::makeUniqueDerived< castor3d::CameraImporter, GltfCameraImporter >( *getOwner() );
+	}
+
 	castor3d::ImporterFileUPtr GltfImporterFile::create( castor3d::Engine & engine
 		, castor3d::Scene * scene
 		, castor::Path const & path
@@ -1014,8 +1052,15 @@ namespace c3d_gltf
 				, [this, &processedMeshes, &cumulativeTransforms]( fastgltf::Node const & node, size_t nodeIndex, size_t parentIndex, size_t parentInstanceCount, bool isParentSkeletonNode )
 				{
 					auto transform = convert( node.transform );
+
+					if ( node.cameraIndex )
+					{
+						transform.rotate *= castor::Quaternion::fromAxisAngle( castor::Point3f{ 0.0f, 1.0f, 0.0f }, castor::Angle::fromDegrees( 180.0f ) );
+					}
+
 					GltfNodeData nodeData{ parentIndex < m_asset->nodes.size() ? getNodeName( parentIndex, 0u ) : std::string{}
 						, getNodeName( nodeIndex, 0u )
+						, node.cameraIndex.has_value()
 						, nodeIndex
 						, 0u
 						, 1u
@@ -1025,7 +1070,9 @@ namespace c3d_gltf
 					auto matrix = itTransform != cumulativeTransforms.end()
 						? itTransform->second
 						: castor::Matrix4x4f{ 1.0f };
+
 					castor::matrix::transform( matrix, transform.translate, transform.scale, transform.rotate );
+
 					cumulativeTransforms.emplace( nodeIndex, matrix );
 					bool isSkeletonNode = isParentSkeletonNode
 						|| file::isSkeletonNode( *m_asset, m_asset->skins, nodeData.index );
@@ -1044,7 +1091,8 @@ namespace c3d_gltf
 					}
 
 					file::addNode( *this, std::move( nodeData ), isSkeletonNode, parentIndex
-						, parentInstanceCount, m_sceneData.nodes, m_sceneData.skeletonNodes );
+						, parentInstanceCount
+						, m_sceneData.nodes, m_sceneData.skeletonNodes );
 					return std::make_tuple( parentInstanceCount, true, isSkeletonNode );
 				} );
 		}
