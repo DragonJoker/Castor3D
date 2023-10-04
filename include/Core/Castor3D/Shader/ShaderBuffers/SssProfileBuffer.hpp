@@ -34,14 +34,19 @@ namespace castor3d
 		};
 		struct SssProfileData
 		{
-			Data sssInfo;
+			uint32_t transmittanceProfileSize;
+			float gaussianWidth;
+			float subsurfaceScatteringStrength;
+			float pad;
 			std::array< Data, TransmittanceProfileSize > transmittanceProfile;
 		};
 		using SssProfilesData = castor::ArrayView< SssProfileData >;
 
 		struct SssProfileDataPtr
 		{
-			Data * sssInfo;
+			uint32_t * transmittanceProfileSize;
+			float * gaussianWidth;
+			float * subsurfaceScatteringStrength;
 			std::array< Data, TransmittanceProfileSize > * transmittanceProfile;
 		};
 

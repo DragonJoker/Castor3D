@@ -21,26 +21,35 @@ namespace castor3d
 				, ShadowOptions shadowOptions
 				, SssProfiles const & sssProfiles );
 
-			C3D_API sdw::Vec3 compute( BlendComponents const & components
+			C3D_API sdw::Vec3 compute( DebugOutput & debugOutput
+				, BlendComponents const & components
 				, shader::DirectionalLight const & light
 				, DirectionalShadowData const & shadow
 				, LightSurface const & lightSurface );
-			C3D_API sdw::Vec3 compute( BlendComponents const & components
+			C3D_API sdw::Vec3 compute( DebugOutput & debugOutput
+				, BlendComponents const & components
 				, shader::PointLight const & light
 				, PointShadowData const & shadow
 				, LightSurface const & lightSurface );
-			C3D_API sdw::Vec3 compute( BlendComponents const & components
+			C3D_API sdw::Vec3 compute( DebugOutput & debugOutput
+				, BlendComponents const & components
 				, shader::SpotLight const & light
 				, SpotShadowData const & shadow
 				, LightSurface const & lightSurface );
 
 		private:
-			void doDeclare();
+			sdw::Vec3 doCompute( DebugOutput & debugOutput
+				, sdw::Float const & lightSpaceDepth
+				, sdw::Float const & shadowDepth
+				, sdw::UInt const & sssProfileIndex
+				, sdw::Vec3 const & worldNormal
+				, sdw::Float const & translucency
+				, sdw::Vec3 const & lightToVertex );
 
 			sdw::ShaderWriter & m_writer;
 			SssProfiles const & m_sssProfiles;
 
-			bool m_shadowMap;
+			SceneFlags m_shadows;
 
 			sdw::Function< sdw::Vec3
 				, sdw::InFloat

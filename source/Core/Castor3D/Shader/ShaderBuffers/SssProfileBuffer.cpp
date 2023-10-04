@@ -131,7 +131,9 @@ namespace castor3d
 		SssProfileDataPtr result{};
 
 		auto & data = m_data[index];
-		result.sssInfo = &data.sssInfo;
+		result.transmittanceProfileSize = &data.transmittanceProfileSize;
+		result.gaussianWidth = &data.gaussianWidth;
+		result.subsurfaceScatteringStrength = &data.subsurfaceScatteringStrength;
 		result.transmittanceProfile = &data.transmittanceProfile;
 
 		return result;

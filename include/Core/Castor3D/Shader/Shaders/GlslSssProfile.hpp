@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_GlslSssProfile_H___
@@ -17,7 +17,7 @@ namespace castor3d::shader
 	struct SssProfile
 		: public sdw::StructInstanceHelperT< "C3D_SssProfile"
 			, sdw::type::MemoryLayout::eStd140
-			, sdw::IntField< "transmittanceProfileSize" >
+			, sdw::UIntField< "transmittanceProfileSize" >
 			, sdw::FloatField< "gaussianWidth" >
 			, sdw::FloatField< "subsurfaceScatteringStrength" >
 			, sdw::FloatField< "pad" >

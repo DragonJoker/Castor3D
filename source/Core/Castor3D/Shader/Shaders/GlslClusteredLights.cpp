@@ -98,7 +98,8 @@ namespace castor3d::shader
 				auto lightOffset = m_writer.declLocale( "lightOffset"
 					, lights.getDirectionalsEnd() + ( *m_pointLightIndices )[pointStartOffset + i] * castor3d::PointLight::LightDataComponents );
 				auto light = m_writer.declLocale( "point", lights.getPointLight( lightOffset ) );
-				lightingModel.compute( light
+				lightingModel.compute( debugOutput
+					, light
 					, components
 					, lightSurface
 					, receivesShadows
@@ -116,7 +117,8 @@ namespace castor3d::shader
 				auto lightOffset = m_writer.declLocale( "lightOffset"
 					, lights.getPointsEnd() + ( *m_spotLightIndices )[spotStartOffset + i] * castor3d::SpotLight::LightDataComponents );
 				auto light = m_writer.declLocale( "spot", lights.getSpotLight( lightOffset ) );
-				lightingModel.compute( light
+				lightingModel.compute( debugOutput
+					, light
 					, components
 					, lightSurface
 					, receivesShadows
@@ -146,7 +148,8 @@ namespace castor3d::shader
 				{
 					pointLightOffset++;
 					auto light = m_writer.declLocale( "point", lights.getPointLight( minLightOffset ) );
-					lightingModel.compute( light
+					lightingModel.compute( debugOutput
+						, light
 						, components
 						, lightSurface
 						, receivesShadows
@@ -174,7 +177,8 @@ namespace castor3d::shader
 				{
 					spotLightOffset++;
 					auto light = m_writer.declLocale( "spot", lights.getSpotLight( minLightOffset ) );
-					lightingModel.compute( light
+					lightingModel.compute( debugOutput
+						, light
 						, components
 						, lightSurface
 						, receivesShadows
@@ -229,7 +233,8 @@ namespace castor3d::shader
 				auto lightOffset = m_writer.declLocale( "lightOffset"
 					, lights.getDirectionalsEnd() + ( *m_pointLightIndices )[pointStartOffset + i] * castor3d::PointLight::LightDataComponents );
 				auto light = m_writer.declLocale( "point", lights.getPointLight( lightOffset ) );
-				lightingModel.computeAllButDiffuse( light
+				lightingModel.computeAllButDiffuse( debugOutput
+					, light
 					, components
 					, lightSurface
 					, receivesShadows
@@ -247,7 +252,8 @@ namespace castor3d::shader
 				auto lightOffset = m_writer.declLocale( "lightOffset"
 					, lights.getPointsEnd() + ( *m_spotLightIndices )[spotStartOffset + i] * castor3d::SpotLight::LightDataComponents );
 				auto light = m_writer.declLocale( "spot", lights.getSpotLight( lightOffset ) );
-				lightingModel.computeAllButDiffuse( light
+				lightingModel.computeAllButDiffuse( debugOutput
+					, light
 					, components
 					, lightSurface
 					, receivesShadows
@@ -277,7 +283,8 @@ namespace castor3d::shader
 				{
 					pointLightOffset++;
 					auto light = m_writer.declLocale( "point", lights.getPointLight( minLightOffset ) );
-					lightingModel.computeAllButDiffuse( light
+					lightingModel.computeAllButDiffuse( debugOutput
+						, light
 						, components
 						, lightSurface
 						, receivesShadows
@@ -305,7 +312,8 @@ namespace castor3d::shader
 				{
 					spotLightOffset++;
 					auto light = m_writer.declLocale( "spot", lights.getSpotLight( minLightOffset ) );
-					lightingModel.computeAllButDiffuse( light
+					lightingModel.computeAllButDiffuse( debugOutput
+						, light
 						, components
 						, lightSurface
 						, receivesShadows
@@ -327,6 +335,7 @@ namespace castor3d::shader
 		, sdw::UInt const receivesShadows
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
+		, DebugOutput & debugOutput
 		, sdw::Vec3 & output )
 	{
 		if ( !m_enabled )
@@ -359,7 +368,8 @@ namespace castor3d::shader
 				auto lightOffset = m_writer.declLocale( "lightOffset"
 					, lights.getDirectionalsEnd() + ( *m_pointLightIndices )[pointStartOffset + i] * castor3d::PointLight::LightDataComponents );
 				auto light = m_writer.declLocale( "point", lights.getPointLight( lightOffset ) );
-				output += lightingModel.computeDiffuse( light
+				output += lightingModel.computeDiffuse( debugOutput
+					, light
 					, components
 					, lightSurface
 					, receivesShadows );
@@ -376,7 +386,8 @@ namespace castor3d::shader
 				auto lightOffset = m_writer.declLocale( "lightOffset"
 					, lights.getPointsEnd() + ( *m_spotLightIndices )[spotStartOffset + i] * castor3d::SpotLight::LightDataComponents );
 				auto light = m_writer.declLocale( "spot", lights.getSpotLight( lightOffset ) );
-				output += lightingModel.computeDiffuse( light
+				output += lightingModel.computeDiffuse( debugOutput
+					, light
 					, components
 					, lightSurface
 					, receivesShadows );
@@ -403,7 +414,8 @@ namespace castor3d::shader
 				{
 					pointLightOffset++;
 					auto light = m_writer.declLocale( "point", lights.getPointLight( minLightOffset ) );
-					output += lightingModel.computeDiffuse( light
+					output += lightingModel.computeDiffuse( debugOutput
+						, light
 						, components
 						, lightSurface
 						, receivesShadows );
@@ -430,7 +442,8 @@ namespace castor3d::shader
 				{
 					spotLightOffset++;
 					auto light = m_writer.declLocale( "spot", lights.getSpotLight( minLightOffset ) );
-					output += lightingModel.computeDiffuse( light
+					output += lightingModel.computeDiffuse( debugOutput
+						, light
 						, components
 						, lightSurface
 						, receivesShadows );

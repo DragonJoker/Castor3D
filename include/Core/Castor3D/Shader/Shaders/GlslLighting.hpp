@@ -100,18 +100,21 @@ namespace castor3d::shader
 		*	Diffuse + Specular
 		*/
 		//\{
-		C3D_API void compute( DirectionalLight const & light
+		C3D_API void compute( DebugOutput & debugOutput
+			, DirectionalLight const & light
 			, BlendComponents const & components
 			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
-		C3D_API void compute( PointLight const & light
+		C3D_API void compute( DebugOutput & debugOutput
+			, PointLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
-		C3D_API void compute( SpotLight const & light
+		C3D_API void compute( DebugOutput & debugOutput
+			, SpotLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
@@ -122,16 +125,19 @@ namespace castor3d::shader
 		*	Diffuse only
 		*/
 		//\{
-		C3D_API sdw::Vec3 computeDiffuse( DirectionalLight const & light
+		C3D_API sdw::Vec3 computeDiffuse( DebugOutput & debugOutput
+			, DirectionalLight const & light
 			, BlendComponents const & components
 			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows );
-		C3D_API sdw::Vec3 computeDiffuse( PointLight const & light
+		C3D_API sdw::Vec3 computeDiffuse( DebugOutput & debugOutput
+			, PointLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows );
-		C3D_API sdw::Vec3 computeDiffuse( SpotLight const & light
+		C3D_API sdw::Vec3 computeDiffuse( DebugOutput & debugOutput
+			, SpotLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows );
@@ -141,18 +147,21 @@ namespace castor3d::shader
 		*	All but diffuse
 		*/
 		//\{
-		C3D_API void computeAllButDiffuse( DirectionalLight const & light
+		C3D_API void computeAllButDiffuse( DebugOutput & debugOutput
+			, DirectionalLight const & light
 			, BlendComponents const & components
 			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
-		C3D_API void computeAllButDiffuse( PointLight const & light
+		C3D_API void computeAllButDiffuse( DebugOutput & debugOutput
+			, PointLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
 			, OutputComponents & output );
-		C3D_API void computeAllButDiffuse( SpotLight const & light
+		C3D_API void computeAllButDiffuse( DebugOutput & debugOutput
+			, SpotLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows

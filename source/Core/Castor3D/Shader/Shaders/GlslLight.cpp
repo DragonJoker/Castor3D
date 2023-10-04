@@ -14,6 +14,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 
 #include <ShaderWriter/Source.hpp>
@@ -217,7 +218,7 @@ namespace castor3d::shader
 		, m_utils{ utils }
 		, m_enableVolumetric{ enableVolumetric }
 		, m_shadowModel{ castor::makeUnique< Shadow >( shadowOptions, m_writer ) }
-		, m_sssTransmittance{ ( sssProfiles
+		, m_sssTransmittance{ ( ( sssProfiles && sssProfiles->isEnabled() )
 			? castor::makeUnique< SssTransmittance >( m_writer
 				, std::move( shadowOptions )
 				, *sssProfiles )
@@ -320,7 +321,8 @@ namespace castor3d::shader
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				lightingModel->compute( directionalLight
+				lightingModel->compute( debugOutput
+					, directionalLight
 					, components
 					, backgroundModel
 					, lightSurface
@@ -350,7 +352,8 @@ namespace castor3d::shader
 				{
 					auto pointLight = m_writer.declLocale( "pointLight"
 						, getPointLight( cur ) );
-					lightingModel->compute( pointLight
+					lightingModel->compute( debugOutput
+						, pointLight
 						, components
 						, lightSurface
 						, receivesShadows
@@ -365,7 +368,8 @@ namespace castor3d::shader
 				{
 					auto spotLight = m_writer.declLocale( "spotLight"
 						, getSpotLight( cur ) );
-					lightingModel->compute( spotLight
+					lightingModel->compute( debugOutput
+						, spotLight
 						, components
 						, lightSurface
 						, receivesShadows
@@ -408,7 +412,8 @@ namespace castor3d::shader
 				{
 					auto directionalLight = m_writer.declLocale( "directionalLight"
 						, getDirectionalLight( cur ) );
-					lightingModel->computeAllButDiffuse( directionalLight
+					lightingModel->computeAllButDiffuse( debugOutput
+						, directionalLight
 						, components
 						, backgroundModel
 						, lightSurface
@@ -470,7 +475,8 @@ namespace castor3d::shader
 				{
 					auto directionalLight = m_writer.declLocale( "directionalLight"
 						, getDirectionalLight( cur ) );
-					output += lightingModel->computeDiffuse( directionalLight
+					output += lightingModel->computeDiffuse( debugOutput
+						, directionalLight
 						, components
 						, backgroundModel
 						, lightSurface
@@ -486,6 +492,7 @@ namespace castor3d::shader
 					, receivesShadows
 					, screenPosition
 					, viewDepth
+					, debugOutput
 					, output );
 			}
 			else
@@ -522,7 +529,8 @@ namespace castor3d::shader
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				lightingModel->computeAllButDiffuse( directionalLight
+				lightingModel->computeAllButDiffuse( debugOutput
+					, directionalLight
 					, components
 					, backgroundModel
 					, lightSurface
@@ -538,7 +546,8 @@ namespace castor3d::shader
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				lightingModel->computeAllButDiffuse( pointLight
+				lightingModel->computeAllButDiffuse( debugOutput
+					, pointLight
 					, components
 					, lightSurface
 					, receivesShadows
@@ -553,7 +562,8 @@ namespace castor3d::shader
 			{
 				auto spotLight = m_writer.declLocale( "spotLight"
 					, getSpotLight( cur ) );
-				lightingModel->computeAllButDiffuse( spotLight
+				lightingModel->computeAllButDiffuse( debugOutput
+					, spotLight
 					, components
 					, lightSurface
 					, receivesShadows
@@ -582,7 +592,8 @@ namespace castor3d::shader
 			{
 				auto directionalLight = m_writer.declLocale( "directionalLight"
 					, getDirectionalLight( cur ) );
-				output += lightingModel->computeDiffuse( directionalLight
+				output += lightingModel->computeDiffuse( debugOutput
+					, directionalLight
 					, components
 					, backgroundModel
 					, lightSurface
@@ -597,7 +608,8 @@ namespace castor3d::shader
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				lightingModel->computeDiffuse( pointLight
+				lightingModel->computeDiffuse( debugOutput
+					, pointLight
 					, components
 					, lightSurface
 					, receivesShadows );
@@ -611,7 +623,8 @@ namespace castor3d::shader
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				lightingModel->computeDiffuse( pointLight
+				lightingModel->computeDiffuse( debugOutput
+					, pointLight
 					, components
 					, lightSurface
 					, receivesShadows );
@@ -621,6 +634,45 @@ namespace castor3d::shader
 
 			debugOutput.registerOutput( "Lighting", "Diffuse", output );
 		}
+	}
+
+	sdw::Vec3 Lights::computeSssTransmittance( DebugOutput & debugOutput
+		, BlendComponents const & components
+		, DirectionalLight const & directionalLight
+		, DirectionalShadowData const & directionalShadows
+		, LightSurface const & lightSurface )
+	{
+		return m_sssTransmittance->compute( debugOutput
+				, components
+			, directionalLight
+			, directionalShadows
+			, lightSurface );
+	}
+
+	sdw::Vec3 Lights::computeSssTransmittance( DebugOutput & debugOutput
+		, BlendComponents const & components
+		, PointLight const & pointLight
+		, PointShadowData const & pointShadows
+		, LightSurface const & lightSurface )
+	{
+		return m_sssTransmittance->compute( debugOutput
+				, components
+			, pointLight
+			, pointShadows
+			, lightSurface );
+	}
+
+	sdw::Vec3 Lights::computeSssTransmittance( DebugOutput & debugOutput
+		, BlendComponents const & components
+		, SpotLight const & spotLight
+		, SpotShadowData const & spotShadows
+		, LightSurface const & lightSurface )
+	{
+		return m_sssTransmittance->compute( debugOutput
+				, components
+			, spotLight
+			, spotShadows
+			, lightSurface );
 	}
 
 	sdw::Float Lights::getFinalTransmission( BlendComponents const & components

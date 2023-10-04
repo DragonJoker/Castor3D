@@ -349,11 +349,10 @@ namespace castor3d
 		if ( hasSubsurfaceScattering() )
 		{
 			auto & subsurfaceScattering = getSubsurfaceScattering();
-			data.sssInfo->x = float( subsurfaceScattering.getProfileSize() );
-			data.sssInfo->y = subsurfaceScattering.getGaussianWidth();
-			data.sssInfo->z = subsurfaceScattering.getStrength();
-			data.sssInfo->w = 0.0f;
-
+			*data.transmittanceProfileSize = subsurfaceScattering.getProfileSize();
+			*data.gaussianWidth = subsurfaceScattering.getGaussianWidth();
+			*data.subsurfaceScatteringStrength = subsurfaceScattering.getStrength();
+			
 			auto i = 0u;
 			auto & transmittanceProfile = *data.transmittanceProfile;
 
@@ -368,10 +367,9 @@ namespace castor3d
 		}
 		else
 		{
-			data.sssInfo->x = 0.0f;
-			data.sssInfo->y = 0.0f;
-			data.sssInfo->z = 0.0f;
-			data.sssInfo->w = 0.0f;
+			*data.transmittanceProfileSize = 0u;
+			*data.gaussianWidth = 0.0f;
+			*data.subsurfaceScatteringStrength = 0.0f;
 		}
 	}
 
