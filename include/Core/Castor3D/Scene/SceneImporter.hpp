@@ -111,6 +111,7 @@ namespace castor3d
 			, std::map< castor::String, SkeletonRPtr > const & skeletons );
 		std::map< castor::String, SceneNodeRPtr > doImportNodes( Scene & scene );
 		void doImportLights( Scene & scene );
+		void doImportCameras( Scene & scene );
 		void doCreateGeometries( Scene & scene
 			, std::map< castor::String, MeshResPtr > const & meshes
 			, std::map< castor::String, SceneNodeRPtr > const & nodes );

@@ -95,6 +95,11 @@ namespace castor3d
 		return std::vector< GeometryData >{};
 	}
 
+	std::vector< ImporterFile::CameraData > CmshImporterFile::listCameras()
+	{
+		return std::vector< CameraData >{};
+	}
+
 	std::vector< castor::String > CmshImporterFile::listMeshAnimations( Mesh const & mesh )
 	{
 		std::vector< castor::String > result;
@@ -178,6 +183,11 @@ namespace castor3d
 	}
 
 	LightImporterUPtr CmshImporterFile::createLightImporter()
+	{
+		return nullptr;
+	}
+
+	CameraImporterUPtr CmshImporterFile::createCameraImporter()
 	{
 		return nullptr;
 	}

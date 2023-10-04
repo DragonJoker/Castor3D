@@ -32,6 +32,7 @@ namespace castor3d
 		std::vector< NodeData > listSceneNodes()override;
 		std::vector< LightData > listLights()override;
 		std::vector< GeometryData > listGeometries()override;
+		std::vector< CameraData > listCameras()override;
 		std::vector< castor::String > listMeshAnimations( Mesh const & mesh )override;
 		std::vector< castor::String > listSkeletonAnimations( Skeleton const & skeleton )override;
 		std::vector< castor::String > listSceneNodeAnimations( SceneNode const & node )override;
@@ -42,6 +43,7 @@ namespace castor3d
 		MeshImporterUPtr createMeshImporter()override;
 		SceneNodeImporterUPtr createSceneNodeImporter()override;
 		LightImporterUPtr createLightImporter()override;
+		CameraImporterUPtr createCameraImporter()override;
 
 		static ImporterFileUPtr create( Engine & engine
 			, Scene * scene

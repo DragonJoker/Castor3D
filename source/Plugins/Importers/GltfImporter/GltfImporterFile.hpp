@@ -105,13 +105,15 @@ namespace c3d_gltf
 	{
 		GltfNodeData( castor::String pparent
 			, castor::String pname
+			, bool pisCamera
 			, size_t pindex
 			, size_t pinstance
 			, size_t pinstanceCount
 			, castor3d::NodeTransform ptransform
 			, fastgltf::Node const * pnode )
 			: NodeData{ std::move( pparent )
-				, std::move( pname ) }
+				, std::move( pname )
+				, pisCamera }
 			, index{ pindex }
 			, instance{ pinstance }
 			, instanceCount{ pinstanceCount }
@@ -164,6 +166,7 @@ namespace c3d_gltf
 		castor::String getNodeName( size_t index, size_t instance )const;
 		castor::String getSkinName( size_t index )const;
 		castor::String getLightName( size_t index )const;
+		castor::String getCameraName( size_t index )const;
 		castor::String getSamplerName( size_t index )const;
 		castor::String getGeometryName( size_t nodeIndex, size_t meshIndex, size_t instance )const;
 		castor::String getAnimationName( size_t index )const;
@@ -184,6 +187,7 @@ namespace c3d_gltf
 		std::vector< NodeData > listSceneNodes()override;
 		std::vector< LightData > listLights()override;
 		std::vector< GeometryData > listGeometries()override;
+		std::vector< CameraData > listCameras()override;
 		std::vector< castor::String > listMeshAnimations( castor3d::Mesh const & mesh )override;
 		std::vector< castor::String > listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
 		std::vector< castor::String > listSceneNodeAnimations( castor3d::SceneNode const & node )override;
@@ -194,6 +198,7 @@ namespace c3d_gltf
 		castor3d::MeshImporterUPtr createMeshImporter()override;
 		castor3d::SceneNodeImporterUPtr createSceneNodeImporter()override;
 		castor3d::LightImporterUPtr createLightImporter()override;
+		castor3d::CameraImporterUPtr createCameraImporter()override;
 
 		std::vector< GltfNodeData > const & getNodes()const noexcept
 		{
@@ -236,6 +241,7 @@ namespace c3d_gltf
 		mutable NameContainer m_nodeNames;
 		mutable NameContainer m_skinNames;
 		mutable NameContainer m_lightNames;
+		mutable NameContainer m_cameraNames;
 		mutable NameContainer m_samplerNames;
 		mutable NameContainer m_animationNames;
 	};

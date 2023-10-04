@@ -221,33 +221,21 @@ namespace CastorViewer
 		{
 			m_cubeManager = std::make_unique< GuiCommon::CubeBoxManager >( *scene );
 
-			if ( auto camera = target->getCamera() )
+			if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
 			{
-				if ( scene->hasSceneNode( cuT( "PointLightsNode" ) ) )
-				{
-					m_lightsNode = scene->findSceneNode( cuT( "PointLightsNode" ) );
-				}
-				else if ( scene->hasSceneNode( cuT( "LightNode" ) ) )
-				{
-					m_lightsNode = scene->findSceneNode( cuT( "LightNode" ) );
-				}
-
-				if ( auto cameraNode = camera->getParent() )
-				{
-					m_currentNode = cameraNode;
-					m_currentState = &doAddNodeState( m_currentNode, true );
-
-					if ( m_3dController )
-					{
-						m_3dController->setCamera( camera );
-					}
-				}
-
-				m_renderWindow->addPickingScene( *scene );
-				m_camera = camera;
-				doStartMovement();
+				m_lightsNode = scene->findSceneNode( cuT( "PointLightsNode" ) );
+			}
+			else if ( scene->hasSceneNode( cuT( "LightNode" ) ) )
+			{
+				m_lightsNode = scene->findSceneNode( cuT( "LightNode" ) );
 			}
 
+			if ( auto camera = target->getCamera() )
+			{
+				doSetCamera( *camera );
+			}
+
+			m_renderWindow->addPickingScene( *scene );
 			m_scene = scene;
 		}
 	}
@@ -377,15 +365,7 @@ namespace CastorViewer
 				it = cache.begin();
 			}
 
-			m_camera = it->second.get();
-			m_currentNode = camera->getParent();
-			m_currentState = &doAddNodeState( m_currentNode, true );
-			m_renderWindow->setCamera( *m_camera );
-
-			if ( m_3dController )
-			{
-				m_3dController->setCamera( m_camera );
-			}
+			doSetCamera( *it->second );
 		}
 	}
 
@@ -524,6 +504,29 @@ namespace CastorViewer
 		{
 			m_3dController->setSpeedFactor( doGetRealSpeed() );
 		}
+	}
+
+	void RenderPanel::doSetCamera( castor3d::Camera & camera )
+	{
+		if ( m_camera )
+		{
+			doStopMovement();
+		}
+
+		if ( auto cameraNode = camera.getParent() )
+		{
+			m_currentNode = cameraNode;
+			m_currentState = &doAddNodeState( m_currentNode, true );
+
+			if ( m_3dController )
+			{
+				m_3dController->setCamera( &camera );
+			}
+		}
+
+		m_camera = &camera;
+		m_renderWindow->setCamera( *m_camera );
+		doStartMovement();
 	}
 
 #pragma GCC diagnostic push

@@ -370,6 +370,10 @@ if ( CASTOR_GUICOMMON_NEEDS_HLSL )
 	)
 endif ()
 if ( TDxWare_SDK_FOUND )
+	target_include_directories( ${PROJECT_NAME} SYSTEM
+		PRIVATE
+			${TDxWare_INCLUDE_DIRS}
+	)
 	target_compile_definitions( ${PROJECT_NAME}
 		PRIVATE
 			GC_HasSpaceMouseSDK

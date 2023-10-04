@@ -97,6 +97,7 @@ namespace CastorViewer
 		GuiCommon::NodeState & doAddNodeState( castor3d::SceneNodeRPtr node
 			, bool camera );
 		void doUpdateSpeed( float factor = 1.0f );
+		void doSetCamera( castor3d::Camera & camera );
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"

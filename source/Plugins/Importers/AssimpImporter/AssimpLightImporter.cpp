@@ -28,8 +28,8 @@ namespace c3d_assimp
 
 		auto & aiLight = *it->second;
 		auto & scene = *light.getScene();
-		castor3d::SceneNodeRPtr node{};
 		castor3d::log::info << cuT( "  Light found: [" ) << name << cuT( "]" ) << std::endl;
+		castor3d::SceneNodeRPtr node{};
 
 		if ( scene.hasSceneNode( name ) )
 		{

@@ -62,12 +62,14 @@ namespace c3d_assimp
 	{
 		AssimpNodeData( castor::String pparent
 			, castor::String pname
+			, bool pisCamera
 			, aiNode const * pnode
 			, castor::Point3f ptranslate
 			, castor::Quaternion protate
 			, castor::Point3f pscale )
 			: NodeData{ std::move( pparent )
-				, std::move( pname ) }
+				, std::move( pname )
+				, pisCamera }
 			, node{ pnode }
 			, translate{ std::move( ptranslate ) }
 			, rotate{ std::move( protate ) }
@@ -90,6 +92,7 @@ namespace c3d_assimp
 		std::map< castor::String, AssimpMeshData > meshes;
 		std::map< castor::String, AssimpSkeletonData > skeletons;
 		std::map< castor::String, aiLight const * > lights;
+		std::map< castor::String, aiCamera const * > cameras;
 	};
 
 	class AssimpImporterFile
@@ -114,6 +117,7 @@ namespace c3d_assimp
 		std::vector< NodeData > listSceneNodes()override;
 		std::vector< LightData > listLights()override;
 		std::vector< GeometryData > listGeometries()override;
+		std::vector< CameraData > listCameras()override;
 		std::vector< castor::String > listMeshAnimations( castor3d::Mesh const & mesh )override;
 		std::vector< castor::String > listSkeletonAnimations( castor3d::Skeleton const & skeleton )override;
 		std::vector< castor::String > listSceneNodeAnimations( castor3d::SceneNode const & node )override;
@@ -124,6 +128,7 @@ namespace c3d_assimp
 		castor3d::MeshImporterUPtr createMeshImporter()override;
 		castor3d::SceneNodeImporterUPtr createSceneNodeImporter()override;
 		castor3d::LightImporterUPtr createLightImporter()override;
+		castor3d::CameraImporterUPtr createCameraImporter()override;
 
 		castor::String getMaterialName( uint32_t materialIndex )const;
 		NodeAnimations const & getNodesAnimations( castor3d::SceneNode const & node )const;
@@ -145,6 +150,11 @@ namespace c3d_assimp
 		auto const & getLights()const
 		{
 			return m_sceneData.lights;
+		}
+
+		auto const & getCameras()const
+		{
+			return m_sceneData.cameras;
 		}
 
 		auto const & getNodes()const
@@ -195,6 +205,7 @@ namespace c3d_assimp
 			, castor::String parentName = castor::String{}
 			, castor::Matrix4x4f transform = castor::Matrix4x4f{ 1.0f } );
 		void doPrelistLights();
+		void doPrelistCameras();
 
 	private:
 		Assimp::Importer m_importer;
