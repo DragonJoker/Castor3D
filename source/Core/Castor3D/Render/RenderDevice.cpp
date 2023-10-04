@@ -338,20 +338,41 @@ namespace castor3d
 		bool hasFeatures11 = false;
 		bool hasFeatures2 = false;
 		bool hasVulkan1_1 = false;
+		bool hasVulkan1_2 = false;
+		bool hasVulkan1_3 = false;
 		bool hasFloatControls = false;
 		bool hasSpirv1_4 = false;
 		bool hasDeviceFault = false;
+		bool hasDescriptorIndexing = false;
+		bool hasDeviceAddress = false;
 
+#if VK_VERSION_1_3
+		if ( apiVersion >= ashes::makeVersion( 1, 3, 0 ) )
+		{
+			m_hasFeatures13 = true;
+			hasVulkan1_3 = true;
+			hasDescriptorIndexing = true;
+			hasDeviceAddress = true;
+			m_deviceExtensions.addFeature( &m_features13 );
+			m_deviceExtensions.addProperty( &m_properties13 );
+		}
+#endif
 #if VK_VERSION_1_2
 		if ( apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
 		{
 			hasFeatures2 = true;
 			hasFeatures11 = true;
+			m_hasFeatures12 = true;
 			hasVulkan1_1 = true;
+			hasVulkan1_2 = true;
 			hasFloatControls = true;
 			hasSpirv1_4 = true;
+			hasDescriptorIndexing = true;
+			hasDeviceAddress = true;
 			m_deviceExtensions.addFeature( &m_features11 );
 			m_deviceExtensions.addProperty( &m_properties11 );
+			m_deviceExtensions.addFeature( &m_features12 );
+			m_deviceExtensions.addProperty( &m_properties12 );
 		}
 		else
 #endif
@@ -399,43 +420,58 @@ namespace castor3d
 #if VK_NV_mesh_shader
 			doTryAddExtension( VK_NV_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeatures, &m_meshShaderProperties );
 #endif
+
+			if ( !m_hasFeatures13 )
+			{
 #if VK_KHR_shader_terminate_invocation
-			doTryAddExtension( VK_KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME, &m_terminateInvocationFeatures );
+				doTryAddExtension( VK_KHR_SHADER_TERMINATE_INVOCATION_EXTENSION_NAME, &m_terminateInvocationFeatures );
 #endif
 #if VK_EXT_shader_demote_to_helper_invocation
-			doTryAddExtension( VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME, &m_demoteToHelperInvocationFeatures );
+				doTryAddExtension( VK_EXT_SHADER_DEMOTE_TO_HELPER_INVOCATION_EXTENSION_NAME, &m_demoteToHelperInvocationFeatures );
 #endif
-#if VK_EXT_descriptor_indexing
-			if ( doTryAddExtension( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME, &m_descriptorIndexingFeatures, &m_descriptorIndexingProperties ) )
+			}
+
+			if ( !m_hasFeatures12 )
 			{
-#	if VK_KHR_buffer_device_address
-				if ( doTryAddExtension( VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME, &m_bufferDeviceAddressFeatures ) )
+#if VK_EXT_descriptor_indexing
+				hasDescriptorIndexing = doTryAddExtension( VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME, &m_descriptorIndexingFeatures, &m_descriptorIndexingProperties );
+#endif
+#if VK_KHR_buffer_device_address
+				hasDeviceAddress = doTryAddExtension( VK_KHR_BUFFER_DEVICE_ADDRESS_EXTENSION_NAME, &m_bufferDeviceAddressFeatures );
+#endif
+#if VK_KHR_8bit_storage
+				doTryAddExtension( VK_KHR_8BIT_STORAGE_EXTENSION_NAME, &m_8bitFeatures );
+#endif
+#if VK_KHR_shader_float16_int8
+				doTryAddExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME, &m_f16i8bitFeatures );
+#endif
+			}
+
+#if VK_EXT_shader_subgroup_ballot
+			doTryAddExtension( VK_EXT_SHADER_SUBGROUP_BALLOT_EXTENSION_NAME );
+#endif
+			if ( hasDescriptorIndexing )
+			{
+				if ( hasDeviceAddress )
 				{
-#		if VK_KHR_acceleration_structure
+#if VK_KHR_acceleration_structure
 					if ( doTryAddExtension( VK_KHR_ACCELERATION_STRUCTURE_EXTENSION_NAME, &m_accelFeatures, &m_accelProperties )
 						&& hasSpirv1_4 )
 					{
-#			if VK_KHR_ray_tracing_pipeline
+#	if VK_KHR_ray_tracing_pipeline
 						doTryAddExtension( VK_KHR_RAY_TRACING_PIPELINE_EXTENSION_NAME, &m_rtPipelineFeatures, &m_rtPipelineProperties );
-#			endif
-					}
-#		endif
-				}
 #	endif
-			}
+					}
 #endif
+				}
+			}
+
 			if ( !hasFeatures11 )
 			{
 #if VK_KHR_16bit_storage
 				doTryAddExtension( VK_KHR_16BIT_STORAGE_EXTENSION_NAME, &m_16bitFeatures );
 #endif
 			}
-#if VK_KHR_8bit_storage
-			doTryAddExtension( VK_KHR_8BIT_STORAGE_EXTENSION_NAME, &m_8bitFeatures );
-#endif
-#if VK_KHR_shader_float16_int8
-			doTryAddExtension( VK_KHR_SHADER_FLOAT16_INT8_EXTENSION_NAME, &m_f16i8bitFeatures );
-#endif
 #if VK_KHR_synchronization2
 			doTryAddExtension( VK_KHR_SYNCHRONIZATION_2_EXTENSION_NAME );
 #endif
@@ -707,6 +743,12 @@ namespace castor3d
 
 	bool RenderDevice::hasTerminateInvocation()const
 	{
+#if VK_VERSION_1_3
+		if ( m_hasFeatures13 )
+		{
+			return m_features13.shaderTerminateInvocation == VK_TRUE;
+		}
+#endif
 #if VK_KHR_shader_terminate_invocation
 		return m_terminateInvocationFeatures.shaderTerminateInvocation == VK_TRUE;
 #else
@@ -716,6 +758,12 @@ namespace castor3d
 
 	bool RenderDevice::hasDemoteToHelperInvocation()const
 	{
+#if VK_VERSION_1_3
+		if ( m_hasFeatures13 )
+		{
+			return m_features13.shaderDemoteToHelperInvocation == VK_TRUE;
+		}
+#endif
 #if VK_EXT_shader_demote_to_helper_invocation
 		return m_demoteToHelperInvocationFeatures.shaderDemoteToHelperInvocation == VK_TRUE;
 #else
@@ -758,6 +806,12 @@ namespace castor3d
 
 	bool RenderDevice::hasBufferDeviceAddress()const
 	{
+#if VK_VERSION_1_2
+		if ( m_hasFeatures12 )
+		{
+			return m_features12.bufferDeviceAddress == VK_TRUE;
+		}
+#endif
 #if VK_EXT_buffer_device_address
 		return m_bufferDeviceAddressFeatures.bufferDeviceAddress == VK_TRUE;
 #else
@@ -777,6 +831,12 @@ namespace castor3d
 
 	uint32_t RenderDevice::getMaxBindlessSampled()const
 	{
+#if VK_VERSION_1_2
+		if ( m_hasFeatures12 )
+		{
+			return std::min( MaxBindlessResources, m_properties12.maxDescriptorSetUpdateAfterBindSampledImages );
+		}
+#endif
 #if VK_EXT_descriptor_indexing
 		return std::min( MaxBindlessResources, m_descriptorIndexingProperties.maxDescriptorSetUpdateAfterBindSampledImages );
 #else
@@ -786,6 +846,12 @@ namespace castor3d
 
 	uint32_t RenderDevice::getMaxBindlessStorage()const
 	{
+#if VK_VERSION_1_2
+		if ( m_hasFeatures12 )
+		{
+			return std::min( MaxBindlessResources, m_properties12.maxDescriptorSetUpdateAfterBindStorageBuffers );
+		}
+#endif
 #if VK_EXT_descriptor_indexing
 		return std::min( MaxBindlessResources, m_descriptorIndexingProperties.maxDescriptorSetUpdateAfterBindStorageBuffers );
 #else
@@ -795,6 +861,14 @@ namespace castor3d
 
 	bool RenderDevice::hasBindless()const
 	{
+#if VK_VERSION_1_2
+		if ( m_hasFeatures12 )
+		{
+			return m_features12.descriptorBindingPartiallyBound == VK_TRUE
+				&& m_features12.descriptorBindingSampledImageUpdateAfterBind == VK_TRUE
+				&& m_features12.runtimeDescriptorArray == VK_TRUE;
+		}
+#endif
 #if VK_EXT_descriptor_indexing
 		return m_descriptorIndexingFeatures.descriptorBindingPartiallyBound == VK_TRUE
 			&& m_descriptorIndexingFeatures.descriptorBindingSampledImageUpdateAfterBind == VK_TRUE

@@ -382,11 +382,25 @@ namespace castor3d
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wmissing-field-initializers"
+#if VK_VERSION_1_3
+		VkPhysicalDeviceVulkan13Features m_features13{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_FEATURES
+			, nullptr
+			, {} };
+		VkPhysicalDeviceVulkan13Properties m_properties13{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_3_PROPERTIES
+			, nullptr
+			, {} };
+#endif
 #if VK_VERSION_1_2
 		VkPhysicalDeviceVulkan11Features m_features11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES
 			, nullptr
 			, {} };
 		VkPhysicalDeviceVulkan11Properties m_properties11{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_PROPERTIES
+			, nullptr
+			, {} };
+		VkPhysicalDeviceVulkan12Features m_features12{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES
+			, nullptr
+			, {} };
+		VkPhysicalDeviceVulkan12Properties m_properties12{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES
 			, nullptr
 			, {} };
 #endif
@@ -469,6 +483,8 @@ namespace castor3d
 		QueuesData * m_preferredGraphicsQueue{};
 		QueuesData * m_preferredComputeQueue{};
 		QueuesData * m_preferredTransferQueue{};
+		bool m_hasFeatures12{};
+		bool m_hasFeatures13{};
 
 		using GraphContextPtr = std::unique_ptr< crg::GraphContext >;
 		using ThreadGraphContexts = std::map< std::thread::id, GraphContextPtr >;
