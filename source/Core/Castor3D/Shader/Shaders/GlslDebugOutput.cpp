@@ -6,30 +6,6 @@
 
 namespace castor3d::shader
 {
-	namespace debug
-	{
-		static castor::String normaliseName( castor::String const & name )
-		{
-			auto result = name;
-			castor::string::replace( result, "\\", "" );
-			castor::string::replace( result, "/", "" );
-			castor::string::replace( result, ":", "" );
-			castor::string::replace( result, "*", "" );
-			castor::string::replace( result, "?", "" );
-			castor::string::replace( result, "\"", "" );
-			castor::string::replace( result, "<", "" );
-			castor::string::replace( result, ">", "" );
-			castor::string::replace( result, "|", "" );
-			castor::string::replace( result, ".", "" );
-			castor::string::replace( result, ",", "" );
-			castor::string::replace( result, "\t", "" );
-			castor::string::replace( result, "\r", "" );
-			castor::string::replace( result, "\n", "" );
-			castor::string::replace( result, " ", "" );
-			return result;
-		}
-	}
-
 	DebugOutput::DebugOutput( DebugConfig & config
 		, castor::String category
 		, sdw::UInt const index
@@ -40,6 +16,7 @@ namespace castor3d::shader
 		, m_index{ index }
 		, m_output{ output }
 		, m_enable{ enable }
+		, m_values{ sdw::findWriterMandat( m_index, m_output ).declGlobalArray< sdw::Vec3 >( "c3d_debugValue", 512u, m_enable ) }
 	{
 	}
 
@@ -47,16 +24,14 @@ namespace castor3d::shader
 	{
 		if ( m_enable )
 		{
-			auto & writer = sdw::findWriterMandat( m_index );
+			auto & writer = sdw::findWriterMandat( m_index, m_output );
 
-			for ( auto & entry : m_values )
+			IF( writer, m_index != 0_u )
 			{
-				IF( writer, m_index == sdw::UInt( entry.first ) )
-				{
-					m_output.xyz() = entry.second.xyz();
-				}
-				FI;
+				auto value = writer.declLocale( "debugValue", m_values[m_index] );
+				m_output.xyz() = value;
 			}
+			FI;
 		}
 	}
 
@@ -64,18 +39,15 @@ namespace castor3d::shader
 		, castor::String name
 		, sdw::Vec4 const value )
 	{
-		auto & writer = sdw::findWriterMandat( value );
-		auto index = m_config.registerValue( category, name );
-		m_values.emplace_back( index
-			, writer.declLocale( "debug" + castor::string::toString( index ) + debug::normaliseName( name )
-				, value ) );
+		registerOutput( category, name, value.xyz() );
 	}
 
 	void DebugOutput::registerOutput( castor::String category
 		, castor::String name
 		, sdw::Vec3 const value )
 	{
-		registerOutput( category, name, vec4( value, 1.0_f ) );
+		auto index = m_config.registerValue( category, name );
+		m_values[index] = value;
 	}
 
 	void DebugOutput::registerOutput( castor::String category

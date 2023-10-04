@@ -55,7 +55,7 @@ namespace castor3d::shader
 		sdw::UInt m_index;
 		sdw::Vec4 m_output;
 		bool m_enable;
-		std::vector< std::pair< uint32_t, sdw::Vec4 > > m_values;
+		sdw::Vec3Array m_values;
 	};
 }
 
