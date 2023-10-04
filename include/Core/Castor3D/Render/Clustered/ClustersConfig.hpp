@@ -45,7 +45,15 @@ namespace castor3d
 		//!\~english	Enable use of warp optimisation in the build BVH pass.
 		//!\~french		Autoriser l'utilisation de l'optimisation des warps dans la passe de construction du BVH.
 		bool enableBVHWarpOptimisation{ true };
+		//!\~english	The clusters Z split scheme.
+		//!\~french		Le mode découpage en Z des clusters.
+		ClusterSplitScheme splitScheme{ ClusterSplitScheme::eExponentialBase };
+		//!\~english	The biased exponential split scheme bias.
+		//!\~french		Le décalage en mode de découpage exponentiel décalé.
+		float bias{ 1.0f };
 	};
+
+	C3D_API bool operator==( ClustersConfig const & lhs, ClustersConfig const & rhs );
 }
 
 #endif
