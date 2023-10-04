@@ -27,6 +27,7 @@
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -220,6 +221,9 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers
 			, index };
+		shader::SssProfiles sssProfiles{ writer
+			, uint32_t( GlobalBuffersIdx::eSssProfiles )
+			, RenderPipeline::eBuffers };
 		shader::TextureConfigurations textureConfigs{ writer
 			, uint32_t( GlobalBuffersIdx::eTexConfigs )
 			, RenderPipeline::eBuffers
@@ -243,7 +247,7 @@ namespace castor3d
 			, brdf
 			, utils
 			, shader::ShadowOptions{ flags.getShadowFlags(), true, false }
-			, nullptr
+			, &sssProfiles
 			, lightsIndex /* lightBinding */
 			, RenderPipeline::eBuffers /* lightSet */
 			, index /* shadowMapBinding */

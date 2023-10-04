@@ -21,6 +21,7 @@
 #include "Castor3D/Scene/Background/Background.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
+#include "Castor3D/Shader/ShaderBuffers/SssProfileBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureAnimationBuffer.hpp"
 #include "Castor3D/Shader/ShaderBuffers/TextureConfigurationBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBackground.hpp"
@@ -36,6 +37,7 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
+#include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -87,6 +89,7 @@ namespace castor3d
 			eModels,
 			eBillboards,
 			eMaterials,
+			eSssProfiles,
 			eTexConfigs,
 			eTexAnims,
 			eInData,
@@ -959,6 +962,9 @@ namespace castor3d
 				, InOutBindings::eMaterials
 				, Sets::eInOuts
 				, index };
+			shader::SssProfiles sssProfiles{ writer
+				, InOutBindings::eSssProfiles
+				, Sets::eInOuts };
 			shader::TextureConfigurations textureConfigs{ writer
 				, InOutBindings::eTexConfigs
 				, Sets::eInOuts };
@@ -987,7 +993,7 @@ namespace castor3d
 				, brdf
 				, utils
 				, shader::ShadowOptions{ flags.getShadowFlags(), true /* vsm */, false /* rsm */, technique.hasShadowBuffer() /* reserveIds */ }
-				, nullptr
+				, &sssProfiles
 				, lightsIndex /* lightBinding */
 				, Sets::eInOuts /* lightSet */
 				, index /* shadowMapBinding */
@@ -1480,6 +1486,8 @@ namespace castor3d
 				, stages ) );
 			bindings.emplace_back( matCache.getPassBuffer().createLayoutBinding( InOutBindings::eMaterials
 				, stages ) );
+			bindings.emplace_back( matCache.getSssProfileBuffer().createLayoutBinding( InOutBindings::eSssProfiles
+				, stages ) );
 			bindings.emplace_back( matCache.getTexConfigBuffer().createLayoutBinding( InOutBindings::eTexConfigs
 				, stages ) );
 			bindings.emplace_back( matCache.getTexAnimBuffer().createLayoutBinding( InOutBindings::eTexAnims
@@ -1593,6 +1601,7 @@ namespace castor3d
 				, 0u
 				, scene.getBillboardsBuffer().getCount() ) );
 			writes.push_back( matCache.getPassBuffer().getBinding( InOutBindings::eMaterials ) );
+			writes.push_back( matCache.getSssProfileBuffer().getBinding( InOutBindings::eSssProfiles ) );
 			writes.push_back( matCache.getTexConfigBuffer().getBinding( InOutBindings::eTexConfigs ) );
 			writes.push_back( matCache.getTexAnimBuffer().getBinding( InOutBindings::eTexAnims ) );
 			auto & visibilityPassResult = technique.getVisibilityResult();

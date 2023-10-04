@@ -55,7 +55,7 @@ namespace castor
 
 				if ( result
 					&& unit.getTextureMipmapCount() > 1
-					&& unit.getTextureMipmapCount() != castor::getMipLevels( dimensions, format ) )
+					&& unit.getTextureMipmapCount() < castor::getMipLevels( dimensions, format ) )
 				{
 					result = write( file, cuT( "levels_count" ), unit.getTextureMipmapCount() );
 				}

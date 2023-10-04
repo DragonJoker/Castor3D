@@ -55,6 +55,7 @@ namespace castor3d::shader
 			, sdw::UInt const receivesShadows
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
+			, DebugOutput & debugOutput
 			, sdw::Vec3 & output );
 
 		bool isEnabled()const noexcept

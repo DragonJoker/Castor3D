@@ -207,7 +207,7 @@ namespace castor3d
 		}
 		CU_EndAttribute()
 
-		static CU_ImplementAttributeParser( parserEnd )
+		static CU_ImplementAttributeParser( parserTextureEnd )
 		{
 			auto & parsingContext = getParserContext( context );
 			parsingContext.texture.configuration.transform = parsingContext.textureTransform;
@@ -374,6 +374,7 @@ namespace castor3d
 					ownSourceInfoPtr = getSourceInfo( context, getTextureName( parsingContext.texture ), parsingContext.texture );
 					sourceInfoPtr = ownSourceInfoPtr.get();
 					parsingContext.texture = {};
+					parsingContext.strName = {};
 				}
 
 				if ( sourceInfoPtr )
@@ -393,8 +394,12 @@ namespace castor3d
 						, std::move( parsingContext.textureAnimation ) );
 				}
 
+				parsingContext.sampler = {};
 				parsingContext.texcoordSet = {};
 				parsingContext.passComponent = {};
+				parsingContext.textureTransform = {};
+				parsingContext.textureAnimation = {};
+				parsingContext.mipLevels = ashes::RemainingArrayLayers;
 			}
 			else
 			{
@@ -405,11 +410,6 @@ namespace castor3d
 
 		static CU_ImplementAttributeParser( parserTransform )
 		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( parsingContext.pass )
-			{
-			}
 		}
 		CU_EndAttributePush( CSCNSection::eTextureTransform )
 
@@ -713,7 +713,7 @@ namespace castor3d
 		addParser( result, uint32_t( CSCNSection::eTexture ), cuT( "invert_y" ), texunit::parserInvertY, { makeParameter< ParameterType::eBool >() } );
 		addParser( result, uint32_t( CSCNSection::eTexture ), cuT( "tileset" ), texunit::parserTileSet, { makeParameter< ParameterType::ePoint2I >() } );
 		addParser( result, uint32_t( CSCNSection::eTexture ), cuT( "tiles" ), texunit::parserTiles, { makeParameter< ParameterType::eUInt32 >() } );
-		addParser( result, uint32_t( CSCNSection::eTexture ), cuT( "}" ), texunit::parserEnd );
+		addParser( result, uint32_t( CSCNSection::eTexture ), cuT( "}" ), texunit::parserTextureEnd );
 
 		addParser( result, uint32_t( CSCNSection::ePass ), cuT( "texture_unit" ), texunit::parserTextureUnit );
 		addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "image" ), texunit::parserImage, { makeParameter< ParameterType::ePath >() } );

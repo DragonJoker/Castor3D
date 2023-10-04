@@ -530,6 +530,27 @@ namespace castor3d::shader
 		//\}
 		/**
 		*\name
+		*	Backlit transmittance.
+		*/
+		//\{
+		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutput & debugOutput
+			, BlendComponents const & components
+			, DirectionalLight const & directionalLight
+			, DirectionalShadowData const & directionalShadows
+			, LightSurface const & lightSurface );
+		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutput & debugOutput
+			, BlendComponents const & components
+			, PointLight const & pointLight
+			, PointShadowData const & pointShadows
+			, LightSurface const & lightSurface );
+		C3D_API sdw::Vec3 computeSssTransmittance( DebugOutput & debugOutput
+			, BlendComponents const & components
+			, SpotLight const & spotLight
+			, SpotShadowData const & spotShadows
+			, LightSurface const & lightSurface );
+		//\}
+		/**
+		*\name
 		*	Utils
 		*/
 		//\{
@@ -579,6 +600,11 @@ namespace castor3d::shader
 		{
 			CU_Require( m_lightsBuffer );
 			return m_lightsBuffer->getClusteredGridScale();
+		}
+
+		bool hasSssTransmittance()const noexcept
+		{
+			return m_sssTransmittance != nullptr;
 		}
 
 	private:
