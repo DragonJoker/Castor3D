@@ -60,14 +60,64 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct EngineConfig
+	{
+		/**
+		*\~english
+		*	The user application name.
+		*\~french
+		*	Le nom de l'application.
+		*/
+		castor::String appName;
+		/**
+		*\~english
+		*	The user application version.
+		*\~french
+		*	La version de l'application.
+		*/
+		Version appVersion;
+		/**
+		*\~english
+		*	\p true to enable rendering API validation.
+		*\~french
+		*	\p true pour activer la validation via l'API de rendu.
+		*/
+		bool enableValidation{ false };
+		/**
+		*\~english
+		*	\p true to generate random seeds at each run.
+		*\~french
+		*	\p true pour générer des random seeds à chaque lancement.
+		*/
+		bool enableRandom{ true };
+		/**
+		*\~english
+		*	\p true to enable update optimisations (to prevent running passes for which data haven't changed).
+		*\~french
+		*	\p true pour activer les optimisations de mise à jour (pour éviter de lancer les passes pour lesquelles les données n'ont pas changé).
+		*/
+		bool enableUpdateOptimisations{ true };
+		/**
+		*\~english
+		*	\p true to enable shaders validation through glslang.
+		*\~french
+		*	\p true pour activer la validation des shaders via glslang.
+		*/
+		bool enableShaderValidation{ false };
+		/**
+		*\~english
+		*	\p true to enable rendering API trace.
+		*\~french
+		*	\p true pour activer les traces via l'API de rendu.
+		*/
+		bool enableApiTrace{ false };
+	};
+
 	class Engine
 		: public castor::Unique< Engine >
 	{
 	private:
-		Engine( castor::String const & appName
-			, Version const & appVersion
-			, bool enableValidation
-			, bool enableRandom
+		Engine( EngineConfig config
 			, castor::LoggerInstancePtr ownedLogger
 			, castor::LoggerInstance * logger );
 
@@ -86,10 +136,7 @@ namespace castor3d
 		 *\param[in]	enableValidation	\p true pour activer la validation via l'API de rendu.
 		 *\param[in]	enableRandom		\p true pour générer des random seeds à chaque lancement.
 		 */
-		C3D_API Engine( castor::String const & appName
-			, Version const & appVersion
-			, bool enableValidation
-			, bool enableRandom );
+		C3D_API Engine( EngineConfig config );
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -106,10 +153,7 @@ namespace castor3d
 		 *\param[in]	enableRandom		\p true pour générer des random seeds à chaque lancement.
 		 *\param[in]	logger				L'instance de logger.
 		 */
-		C3D_API Engine( castor::String const & appName
-			, Version const & appVersion
-			, bool enableValidation
-			, bool enableRandom
+		C3D_API Engine( EngineConfig config
 			, castor::LoggerInstance & logger );
 		/**
 		 *\~english
@@ -692,12 +736,37 @@ namespace castor3d
 
 		castor::String const & getAppName()const noexcept
 		{
-			return m_appName;
+			return m_config.appName;
 		}
 		
 		Version const & getAppVersion()const noexcept
 		{
-			return m_appVersion;
+			return m_config.appVersion;
+		}
+
+		bool isShaderValidationEnabled()const noexcept
+		{
+			return m_config.enableShaderValidation;
+		}
+
+		bool isValidationEnabled()const noexcept
+		{
+			return m_config.enableValidation;
+		}
+
+		bool areUpdateOptimisationsEnabled()const noexcept
+		{
+			return m_config.enableUpdateOptimisations;
+		}
+
+		bool isRandomisationEnabled()const noexcept
+		{
+			return m_config.enableRandom;
+		}
+
+		bool isApiTraceEnabled()const noexcept
+		{
+			return m_config.enableApiTrace;
 		}
 		
 		castor::ImageCache const & getImageCache()const noexcept
@@ -748,36 +817,6 @@ namespace castor3d
 		Version const & getVersion()const noexcept
 		{
 			return m_version;
-		}
-
-		bool isShaderValidationEnabled()const noexcept
-		{
-			return m_enableShaderValidation;
-		}
-
-		bool isValidationEnabled()const noexcept
-		{
-			return m_enableValidation;
-		}
-
-		void enableUpdateOptimisations( bool value )noexcept
-		{
-			m_enableUpdateOptimisations = value;
-		}
-
-		bool areUpdateOptimisationsEnabled()const noexcept
-		{
-			return m_enableUpdateOptimisations;
-		}
-
-		bool isRandomisationEnabled()const noexcept
-		{
-			return m_enableRandom;
-		}
-
-		bool isApiTraceEnabled()const noexcept
-		{
-			return m_enableApiTrace;
 		}
 
 		bool hasRenderLoop()const noexcept
@@ -1071,8 +1110,7 @@ namespace castor3d
 	private:
 		castor::LoggerInstancePtr m_ownedLogger;
 		castor::LoggerInstance * m_logger;
-		castor::String const m_appName;
-		Version const m_appVersion;
+		EngineConfig const m_config;
 		RenderLoopUPtr m_renderLoop;
 		Version m_version;
 		ashes::RendererList m_rendererList;
@@ -1107,11 +1145,6 @@ namespace castor3d
 		PassComponentRegisterUPtr m_passComponents;
 		castor::CpuInformations m_cpuInformations;
 		LightingModelID m_lightingModelId{};
-		bool m_enableValidation{ false };
-		bool m_enableShaderValidation{ false };
-		bool m_enableApiTrace{ false };
-		bool m_enableUpdateOptimisations{ true };
-		bool m_enableRandom{ true };
 		uint32_t m_lpvGridSize{ 32u };
 		uint32_t m_maxImageSize{ 0xFFFFFFFF };
 		castor::AsyncJobQueue m_cpuJobs;

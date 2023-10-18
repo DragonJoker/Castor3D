@@ -362,10 +362,11 @@ int main( int argc, char * argv[] )
 
 		castor::Logger::setFileName( castor::File::getExecutableDirectory() / cuT( "CastorMeshConverter.log" ) );
 		{
-			castor3d::Engine engine{ cuT( "CastorMeshConverter" )
+			castor3d::EngineConfig config{ cuT( "CastorMeshConverter" )
 				, castor3d::Version{ CastorMeshConverter_VERSION_MAJOR, CastorMeshConverter_VERSION_MINOR, CastorMeshConverter_VERSION_BUILD }
 				, false
 				, false };
+			castor3d::Engine engine{ std::move( config ) };
 
 			if ( convert::initialiseEngine( engine ) )
 			{

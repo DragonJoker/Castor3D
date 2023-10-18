@@ -189,10 +189,12 @@ namespace test_launcher
 			castor::File::directoryCreate( castor3d::Engine::getEngineDirectory() );
 		}
 
-		auto castor = castor::makeUnique< castor3d::Engine >( cuT( "CastorTestLauncher" )
+		castor3d::EngineConfig config{ cuT( "CastorTestLauncher" )
 			, castor3d::Version{ CastorTestLauncher_VERSION_MAJOR, CastorTestLauncher_VERSION_MINOR, CastorTestLauncher_VERSION_BUILD }
 			, m_config.validate
 			, !m_config.disableRandom
+			, !m_config.disableUpdateOptimisations };
+		auto castor = castor::makeUnique< castor3d::Engine >( std::move( config )
 			, * castor::Logger::getSingleton().getInstance() );
 		castor::PathArray arrayFiles;
 		castor::File::listDirectoryFiles( castor3d::Engine::getPluginsDirectory(), arrayFiles );
@@ -238,7 +240,6 @@ namespace test_launcher
 			{
 				if ( auto engine = doInitialiseCastor() )
 				{
-					engine->enableUpdateOptimisations( !m_config.disableUpdateOptimisations );
 					MainFrame * mainFrame{ new MainFrame{ *engine, m_config.maxFrameCount } };
 
 					try

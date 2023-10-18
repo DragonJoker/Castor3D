@@ -978,10 +978,11 @@ namespace castor3d
 		auto availableExtensions = rendsys::listSpirVExtensions( *m_device );
 		spirv::SpirVConfig spirvConfig{ rendsys::getSpirVVersion( m_properties.apiVersion )
 			, &availableExtensions };
-		auto & shaderAllocator = doGetShaderAllocator();
-		spirvConfig.allocator = &shaderAllocator;
 		log::debug << " SPV ...";
-		result.spirv = spirv::serialiseSpirv( shader, spirvConfig );
+		auto & shaderAllocator = doGetShaderAllocator();
+		auto allocator = shaderAllocator.getBlock();
+		auto module = spirv::compileSpirV( *allocator, shader, spirvConfig );
+		result.spirv = spirv::serialiseModule( *module );
 		std::string glsl;
 
 		if ( getEngine()->isShaderValidationEnabled() )
@@ -1033,7 +1034,7 @@ namespace castor3d
 		}
 #if !defined( NDEBUG )
 #	if C3D_HasGLSL
-		else
+		else if ( spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
 		{
 			log::debug << " GLSL ...";
 			glsl::GlslConfig config{ shader.getType()
@@ -1048,10 +1049,16 @@ namespace castor3d
 			glsl = glsl::compileGlsl( shader
 				, ast::SpecialisationInfo{}
 				, config );
+			glsl += "\n";
 		}
 #	endif
 
-		result.text = glsl + "\n" + spirv::writeSpirv( shader, spirvConfig );
+		result.text = spirv::writeModule( *module );
+
+		if ( spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
+		{
+			result.text = glsl + "\n" + result.text;
+		}
 		//log::trace << result.text << std::endl;
 
 #	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
