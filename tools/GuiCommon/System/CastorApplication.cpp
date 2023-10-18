@@ -124,6 +124,7 @@ namespace GuiCommon
 				static const wxString DisUpdOptim{ wxT( "disable_update_optim" ) };
 				static const wxString DisRandom{ wxT( "disable_random" ) };
 				static const wxString MaxImgSize{ wxT( "max_image_size" ) };
+				static const wxString WaitDebugger{ wxT( "wait_debugger" ) };
 			}
 
 			namespace st
@@ -139,6 +140,7 @@ namespace GuiCommon
 				static const wxString DisUpdOptim{ wxT( "d" ) };
 				static const wxString DisRandom{ wxT( "r" ) };
 				static const wxString MaxImgSize{ wxT( "i" ) };
+				static const wxString WaitDebugger{ wxT( "w" ) };
 			}
 		}
 
@@ -164,6 +166,7 @@ namespace GuiCommon
 				static const wxString DisRandom{ _( "Disable full random in random buffer." ) };
 				static const wxString MaxImgSize{ _( "The maximum material images size." ) };
 				static const wxString SceneFile{ _( "The initial scene file." ) };
+				static const wxString WaitDebugger{ _( "Wait for debugger at startup." ) };
 
 				parser.AddSwitch( option::st::Help, option::lg::Help, Help, wxCMD_LINE_OPTION_HELP );
 				parser.AddOption( option::st::Config, option::lg::Config, Config, wxCMD_LINE_VAL_STRING, 0 );
@@ -176,6 +179,7 @@ namespace GuiCommon
 				parser.AddSwitch( option::st::DisUpdOptim, option::lg::DisUpdOptim, DisUpdOptim );
 				parser.AddSwitch( option::st::DisRandom, option::lg::DisRandom, DisRandom );
 				parser.AddOption( option::st::MaxImgSize, option::lg::MaxImgSize, MaxImgSize, wxCMD_LINE_VAL_NUMBER );
+				parser.AddSwitch( option::st::WaitDebugger, option::lg::WaitDebugger, WaitDebugger );
 				parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 
 				for ( auto & plugin : list )
@@ -237,6 +241,16 @@ namespace GuiCommon
 
 			void read( CastorApplication::Config & config )
 			{
+#if defined( _MSC_VER )
+				if ( has( option::st::WaitDebugger ) )
+				{
+					while ( !::IsDebuggerPresent() )
+					{
+						std::this_thread::sleep_for( 1_ms );
+					}
+				}
+#endif
+
 				config.log = getLong( option::st::LogLevel, DefaultLogType );
 				config.validate = has( option::st::Validate );
 				config.syncRender = has( option::st::SyncRender );
@@ -300,6 +314,7 @@ namespace GuiCommon
 		, m_splashScreen{ nullptr }
 		, m_version{ std::move( version ) }
 		, m_config{ DefaultValidation
+			, false
 			, false
 			, DefaultLogType
 			, wantedFPS
@@ -480,10 +495,12 @@ namespace GuiCommon
 		castor::Logger::setFileName( castor3d::Engine::getEngineDirectory() / ( m_internalName + cuT( ".log" ) ) );
 		castor::Logger::logInfo( m_internalName + cuT( " - Start" ) );
 
-		m_castor = castor::makeUnique< castor3d::Engine >( m_internalName
+		castor3d::EngineConfig config{ m_internalName
 			, m_version
 			, m_config.validate
-			, !m_config.disableRandom );
+			, !m_config.disableRandom
+			, !m_config.disableUpdateOptimisations };
+		m_castor = castor::makeUnique< castor3d::Engine >( std::move( config ) );
 		doloadPlugins( splashScreen );
 
 		splashScreen.Step( _( "Initialising Castor3D" ), 1 );
@@ -521,8 +538,6 @@ namespace GuiCommon
 		{
 			CU_Exception( "Renderer plugin " + m_config.rendererName + " not found" );
 		}
-
-		m_castor->enableUpdateOptimisations( !m_config.disableUpdateOptimisations );
 
 		if ( !isUnlimitedFps() )
 		{

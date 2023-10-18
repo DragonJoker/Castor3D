@@ -146,25 +146,18 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	Engine::Engine( castor::String const & appName
-		, Version const & appVersion
-		, bool enableValidation
-		, bool enableRandom
+	Engine::Engine( EngineConfig config
 		, castor::LoggerInstancePtr ownedLogger
 		, castor::LoggerInstance * logger )
 		: Unique< Engine >( this )
 		, m_ownedLogger{ std::move( ownedLogger ) }
 		, m_logger{ log::initialise( *( logger ? logger : m_ownedLogger.get() ) ) }
-		, m_appName{ appName }
-		, m_appVersion{ appVersion }
+		, m_config{ std::move( config ) }
 		, m_fontCache{ *m_logger }
 		, m_imageCache{ *m_logger, m_imageLoader }
 		, m_meshFactory{ castor::makeUnique< MeshFactory >() }
 		, m_importerFileFactory{ castor::makeUnique< ImporterFileFactory >() }
 		, m_particleFactory{ castor::makeUnique< ParticleFactory >() }
-		, m_enableValidation{ enableValidation }
-		, m_enableApiTrace{ eng::C3D_EnableAPITrace }
-		, m_enableRandom{ enableRandom }
 		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
 		, m_resources{ m_resourceHandler }
 	{
@@ -238,14 +231,8 @@ namespace castor3d
 		log::info << m_cpuInformations << std::endl;
 	}
 
-	Engine::Engine( castor::String const & appName
-		, Version const & appVersion
-		, bool enableValidation
-		, bool enableRandom )
-		: Engine{ appName
-			, appVersion
-			, enableValidation
-			, enableRandom
+	Engine::Engine( EngineConfig config )
+		: Engine{ std::move( config )
 			, eng::createLogger( castor::Logger::getLevel()
 				, getEngineDirectory() / cuT( "Castor3D.log" )
 				, getEngineDirectory() / cuT( "Castor3D-Debug.log" ) )
@@ -253,15 +240,9 @@ namespace castor3d
 	{
 	}
 	
-	Engine::Engine( castor::String const & appName
-		, Version const & appVersion
-		, bool enableValidation
-		, bool enableRandom
+	Engine::Engine( EngineConfig config
 		, castor::LoggerInstance & logger )
-		: Engine{ appName
-			, appVersion
-			, enableValidation
-			, enableRandom
+		: Engine{ std::move( config )
 			, nullptr
 			, &logger }
 	{
