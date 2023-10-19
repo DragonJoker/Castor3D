@@ -85,15 +85,14 @@ namespace castor3d::shader
 		}
 
 		static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
+			, sdw::EntryPoint entryPoint
 			, bool hasPosition
 			, bool isTextOverlay
 			, bool hasTextures
 			, bool isTransition )
 		{
-			auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
-				, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
-					? std::string{ "Out" }
-					: std::string{ "In" } ) + "OverlaySurface"
+			auto result = cache.getIOStruct( "C3D_OverlaySurface"
+				, entryPoint
 				, FlagT );
 
 			if ( result->empty() )

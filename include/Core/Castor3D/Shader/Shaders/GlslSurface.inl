@@ -35,12 +35,11 @@ namespace castor3d::shader
 
 	template< ast::var::Flag FlagT >
 	ast::type::IOStructPtr VertexSurfaceT< FlagT >::makeIOType( ast::type::TypesCache & cache
+		, sdw::EntryPoint entryPoint
 		, PipelineFlags const & flags )
 	{
-		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
-			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
-				? std::string{ "Output" }
-				: std::string{ "Input" } ) + "VertexSurface"
+		auto result = cache.getIOStruct( "C3D_VertexSurface"
+			, entryPoint
 			, FlagT );
 
 		if ( result->empty() )
@@ -208,13 +207,12 @@ namespace castor3d::shader
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
 	ast::type::IOStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeIOType( ast::type::TypesCache & cache
+		, sdw::EntryPoint entryPoint
 		, PassShaders const & shaders
 		, PipelineFlags const & flags )
 	{
-		auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
-			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
-				? std::string{ "Output" }
-				: std::string{ "Input" } ) + "RasterizerSurface"
+		auto result = cache.getIOStruct( "C3D_RasterizerSurface"
+			, entryPoint
 			, FlagT );
 
 		if ( result->empty() )
@@ -313,12 +311,11 @@ namespace castor3d::shader
 
 	template< sdw::var::Flag FlagT >
 	sdw::type::IOStructPtr VoxelSurfaceT< FlagT >::makeIOType( sdw::type::TypesCache & cache
+		, sdw::EntryPoint entryPoint
 		, PipelineFlags const & flags )
 	{
-		auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
-			, "C3D_" + ( FlagT == sdw::var::Flag::eShaderOutput
-				? std::string{ "Output" }
-				: std::string{ "Input" } ) + "VoxelSurface"
+		auto result = cache.getIOStruct( "C3D_VoxelSurface"
+			, entryPoint
 			, FlagT );
 
 		if ( result->empty() )

@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include <ashespp/Core/WindowHandle.hpp>
 
 #include <ShaderAST/ShaderAllocator.hpp>
+#include <ShaderAST/Visitors/SelectEntryPoint.hpp>
 
 #include <stack>
 
@@ -139,7 +140,8 @@ namespace castor3d
 		 */
 		C3D_API SpirVShader compileShader( VkShaderStageFlagBits stage
 			, castor::String const & name
-			, ast::Shader const & shader );
+			, ast::Shader const & shader
+			, ast::EntryPointConfig const & entryPoint );
 		/**
 		 *\~english
 		 *\brief		Compiles a shader module to the necessary shader language.
@@ -168,6 +170,18 @@ namespace castor3d
 		 *\return		Le shader compilé.
 		 */
 		C3D_API SpirVShader const & compileShader( ShaderModule & module );
+		/**
+		 *\~english
+		 *\brief		Compiles a shader module to the necessary shader language.
+		 *\param[in]	module	The shader to compile.
+		 *\return		The compiled shader.
+		 *\~french
+		 *\brief		Compile un shader dans le langage shader nécessaire.
+		 *\param[in]	module	Le shader à compiler.
+		 *\return		Le shader compilé.
+		 */
+		C3D_API SpirVShader const & compileShader( ProgramModule & module
+			, ast::EntryPointConfig const & entryPoint );
 		/**
 		*\~english
 		*\brief

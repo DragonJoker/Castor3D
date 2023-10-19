@@ -163,4 +163,82 @@ namespace castor3d
 	{
 		return compileShader( device.renderSystem, module );
 	}
+
+	SpirVShader const & compileShader( RenderSystem & renderSystem
+		, ProgramModule & module
+		, ast::EntryPointConfig const & entryPoint )
+	{
+		return renderSystem.compileShader( module
+			, entryPoint );
+	}
+
+	SpirVShader const & compileShader( RenderDevice const & device
+		, ProgramModule & module
+		, ast::EntryPointConfig const & entryPoint )
+	{
+		return compileShader( device.renderSystem, module, entryPoint );
+	}
+
+	ashes::PipelineShaderStageCreateInfoArray makeProgramStates( RenderDevice const & device
+		, ProgramModule & programModule
+		, ashes::Optional< ashes::SpecializationInfo > specialization )
+	{
+		ashes::PipelineShaderStageCreateInfoArray result;
+		auto entryPoints = ast::listEntryPoints( programModule.shader->getContainer() );
+
+		for ( auto entryPoint : entryPoints )
+		{
+			result.push_back( makeShaderState( *device
+				, getShaderStage( entryPoint.stage )
+				, compileShader( device, programModule, entryPoint )
+				, programModule.name
+				, "main"
+				, std::move( specialization ) ) );
+		}
+
+		programModule.shader.reset();
+		return result;
+	}
+
+	VkShaderStageFlagBits getShaderStage( sdw::ShaderStage value )
+	{
+		switch ( value )
+		{
+		case ast::ShaderStage::eVertex:
+			return VK_SHADER_STAGE_VERTEX_BIT;
+		case ast::ShaderStage::eTessellationControl:
+			return VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
+		case ast::ShaderStage::eTessellationEvaluation:
+			return VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
+		case ast::ShaderStage::eGeometry:
+			return VK_SHADER_STAGE_GEOMETRY_BIT;
+		case ast::ShaderStage::eMeshNV:
+			return VK_SHADER_STAGE_MESH_BIT_NV;
+		case ast::ShaderStage::eTaskNV:
+			return VK_SHADER_STAGE_TASK_BIT_NV;
+		case ast::ShaderStage::eMesh:
+			return VK_SHADER_STAGE_MESH_BIT_EXT;
+		case ast::ShaderStage::eTask:
+			return VK_SHADER_STAGE_TASK_BIT_EXT;
+		case ast::ShaderStage::eFragment:
+			return VK_SHADER_STAGE_FRAGMENT_BIT;
+		case ast::ShaderStage::eRayGeneration:
+			return VK_SHADER_STAGE_RAYGEN_BIT_KHR;
+		case ast::ShaderStage::eRayAnyHit:
+			return VK_SHADER_STAGE_ANY_HIT_BIT_KHR;
+		case ast::ShaderStage::eRayClosestHit:
+			return VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR;
+		case ast::ShaderStage::eRayMiss:
+			return VK_SHADER_STAGE_MISS_BIT_KHR;
+		case ast::ShaderStage::eRayIntersection:
+			return VK_SHADER_STAGE_INTERSECTION_BIT_KHR;
+		case ast::ShaderStage::eCallable:
+			return VK_SHADER_STAGE_CALLABLE_BIT_KHR;
+		case ast::ShaderStage::eCompute:
+			return VK_SHADER_STAGE_COMPUTE_BIT;
+		default:
+			CU_Failure( "Unsupported ShaderStage" );
+			return VK_SHADER_STAGE_COMPUTE_BIT;
+		}
+	}
 }

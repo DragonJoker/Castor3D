@@ -59,6 +59,34 @@ namespace castor3d
 
 	//*************************************************************************
 
+	ProgramModule::ProgramModule( ProgramModule && rhs )noexcept
+		: name{ std::move( rhs.name ) }
+		, shader{ std::move( rhs.shader ) }
+	{
+	}
+
+	ProgramModule & ProgramModule::operator=( ProgramModule && rhs )noexcept
+	{
+		name = std::move( rhs.name );
+		shader = std::move( rhs.shader );
+
+		return *this;
+	}
+
+	ProgramModule::ProgramModule( std::string const & pname )
+		: name{ pname }
+	{
+	}
+
+	ProgramModule::ProgramModule( std::string const & pname
+		, ShaderPtr pshader )
+		: name{ pname }
+		, shader{ std::move( pshader ) }
+	{
+	}
+
+	//*************************************************************************
+
 	namespace shader
 	{
 		uint32_t getSpotShadowMapCount()

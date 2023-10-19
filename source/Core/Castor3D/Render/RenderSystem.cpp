@@ -6,6 +6,7 @@
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Shader/GlslToSpv.hpp"
+#include "Castor3D/Shader/Program.hpp"
 
 #include <CastorUtils/Data/BinaryFile.hpp>
 #include <CastorUtils/Math/Angle.hpp>
@@ -541,7 +542,8 @@ namespace castor3d
 			return result;
 		}
 
-		static spirv::SpirVExtensionSet listSpirVExtensions( RenderDevice const & device )
+		static spirv::SpirVExtensionSet listSpirVExtensions( RenderDevice const & device
+			, uint32_t shaderDebugLevel )
 		{
 			spirv::SpirVExtensionSet result;
 
@@ -610,6 +612,11 @@ namespace castor3d
 			{
 				result.insert( spirv::KHR_shader_ballot );
 				result.insert( spirv::KHR_shader_subgroup );
+			}
+
+			if ( shaderDebugLevel == 2u )
+			{
+				result.insert( spirv::KHR_non_semantic_info );
 			}
 
 			return result;
@@ -953,7 +960,8 @@ namespace castor3d
 		{
 			result = compileShader( module.stage
 				, module.name
-				, *module.shader );
+				, *module.shader
+				, ast::EntryPointConfig{ module.shader->getType(), "main" } );
 			module.shader.reset();
 			module.compiled = result;
 		}
@@ -969,19 +977,39 @@ namespace castor3d
 		return module.compiled;
 	}
 
+	SpirVShader const & RenderSystem::compileShader( ProgramModule & module
+		, ast::EntryPointConfig const & entryPoint )
+	{
+		auto ires = module.compiled.emplace( entryPoint.stage, SpirVShader{} );
+
+		if ( ires.second )
+		{
+			auto result = compileShader( getShaderStage( entryPoint.stage )
+				, module.name
+				, *module.shader
+				, entryPoint );
+			ires.first->second = result;
+		}
+
+		return ires.first->second;
+	}
+
 	SpirVShader RenderSystem::compileShader( VkShaderStageFlagBits stage
 		, castor::String const & name
-		, ast::Shader const & shader )
+		, ast::Shader const & shader
+		, ast::EntryPointConfig const & entryPoint )
 	{
 		log::debug << "Compiling " << ashes::getName( stage ) << " shader [" << name << "] ...";
 		SpirVShader result;
-		auto availableExtensions = rendsys::listSpirVExtensions( *m_device );
+		auto availableExtensions = rendsys::listSpirVExtensions( *m_device, getEngine()->getShaderDebugLevel() );
 		spirv::SpirVConfig spirvConfig{ rendsys::getSpirVVersion( m_properties.apiVersion )
 			, &availableExtensions };
+		spirvConfig.debugLevel = spirv::DebugLevel( getEngine()->getShaderDebugLevel() );
 		log::debug << " SPV ...";
 		auto & shaderAllocator = doGetShaderAllocator();
 		auto allocator = shaderAllocator.getBlock();
-		auto module = spirv::compileSpirV( *allocator, shader, spirvConfig );
+		auto statements = ast::selectEntryPoint( shader.getStmtCache(), shader.getExprCache(), entryPoint, shader.getStatements() );
+		auto module = spirv::compileSpirV( *allocator, shader, statements.get(), entryPoint.stage, spirvConfig );
 		result.spirv = spirv::serialiseModule( *module );
 		std::string glsl;
 
@@ -1012,7 +1040,7 @@ namespace castor3d
 				}
 
 				log::debug << " GLSL ...";
-				glsl::GlslConfig config{ shader.getType()
+				glsl::GlslConfig config{ entryPoint.stage
 					, glsl::v4_6
 					, rendsys::getGLSLExtensions( glsl::v4_6 )
 					, true
@@ -1023,6 +1051,8 @@ namespace castor3d
 					, true };
 				config.allocator = &shaderAllocator;
 				glsl = glsl::compileGlsl( shader
+					, statements.get()
+					, entryPoint.stage
 					, ast::SpecialisationInfo{}
 					, config );
 				castor::BinaryFile glslFile{ shadersDir / cuT( "GLSL" ) / ( fileBaseName + ".glsl" )
@@ -1037,7 +1067,7 @@ namespace castor3d
 		else if ( spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
 		{
 			log::debug << " GLSL ...";
-			glsl::GlslConfig config{ shader.getType()
+			glsl::GlslConfig config{ entryPoint.stage
 				, glsl::v4_6
 				, rendsys::getGLSLExtensions( glsl::v4_6 )
 				, true
@@ -1047,6 +1077,8 @@ namespace castor3d
 				, true
 				, true };
 			glsl = glsl::compileGlsl( shader
+				, statements.get()
+				, entryPoint.stage
 				, ast::SpecialisationInfo{}
 				, config );
 			glsl += "\n";

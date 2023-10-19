@@ -1643,7 +1643,7 @@ namespace castor3d
 
 				IF( writer, render )
 				{
-					payload.meshletIndices[idxOffset] = meshletId;
+					payload.meshletIndices()[idxOffset] = meshletId;
 				}
 				FI;
 
@@ -1889,7 +1889,7 @@ namespace castor3d
 				{
 					auto baseId = writer.declLocale( "baseId"
 						, in.workGroupID );
-					meshShader( payload.meshletIndices[baseId], in, vtxOut, primOut );
+					meshShader( payload.meshletIndices()[baseId], in, vtxOut, primOut );
 				} );
 		}
 		else

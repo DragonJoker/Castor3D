@@ -7,30 +7,32 @@ See LICENSE file in root folder
 #include "SdwModule.hpp"
 
 #include <ShaderWriter/BaseTypes/UInt.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
 
 namespace castor3d
 {
 	namespace shader
 	{
 		template< sdw::var::Flag FlagT >
+		using PayloadStructT = sdw::IOStructInstanceHelperT< FlagT
+			, "C3D_Payload"
+			, sdw::IOUIntArrayField< "meshletIndices", ast::type::Struct::InvalidLocation, 32u > >;
+
+		template< sdw::var::Flag FlagT >
 		struct PayloadT
-			: public sdw::StructInstance
+			: public PayloadStructT< FlagT >
 		{
 			PayloadT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
-				, bool enabled = true );
+				, bool enabled = true )
+				: PayloadStructT< FlagT >{ writer, std::move( expr ), enabled }
+			{
+			}
 
-			SDW_DeclStructInstance( , PayloadT );
-
-			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache );
-			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
-
-			sdw::Array< sdw::UInt > meshletIndices;
+			auto meshletIndices()const { return this->template getMember< "meshletIndices" >(); }
 		};
 	}
 }
-
-#include "GlslTaskPayload.inl"
 
 #endif

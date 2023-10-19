@@ -117,6 +117,7 @@ namespace GuiCommon
 				static const wxString Config{ wxT( "config" ) };
 				static const wxString LogLevel{ wxT( "log" ) };
 				static const wxString Validate{ wxT( "validate" ) };
+				static const wxString ShaderDebugLevel{ wxT( "shader_debug_level" ) };
 				static const wxString SyncRender{ wxT( "sync" ) };
 				static const wxString UnlimFPS{ wxT( "unlimited" ) };
 				static const wxString FixedFPS{ wxT( "fps" ) };
@@ -133,6 +134,7 @@ namespace GuiCommon
 				static const wxString Config{ wxT( "c" ) };
 				static const wxString LogLevel{ wxT( "l" ) };
 				static const wxString Validate{ wxT( "a" ) };
+				static const wxString ShaderDebugLevel{ wxT( "e" ) };
 				static const wxString SyncRender{ wxT( "s" ) };
 				static const wxString UnlimFPS{ wxT( "u" ) };
 				static const wxString FixedFPS{ wxT( "f" ) };
@@ -158,6 +160,7 @@ namespace GuiCommon
 				static const wxString Config{ _( "Specifies the configuration file." ) };
 				static const wxString LogLevel{ _( "Defines log level (from 0=trace to 4=error)." ) };
 				static const wxString Validate{ _( "Enables rendering API validation." ) };
+				static const wxString ShaderDebugLevel{ _( "Defines the shader debug level on compilation (0=none, 1=names, 2=full." ) };
 				static const wxString SyncRender{ _( "Sets the rendering to synchronous (render loop is user triggered)." ) };
 				static const wxString UnlimFPS{ _( "Disables FPS limit (has no effect if '" ) + option::lg::SyncRender + _( "' option is specified)." ) };
 				static const wxString FixedFPS{ _( "Defines wanted FPS (has no effect if '" ) + option::lg::UnlimFPS + _( "' option is specified)." ) };
@@ -172,6 +175,7 @@ namespace GuiCommon
 				parser.AddOption( option::st::Config, option::lg::Config, Config, wxCMD_LINE_VAL_STRING, 0 );
 				parser.AddOption( option::st::LogLevel, option::lg::LogLevel, LogLevel, wxCMD_LINE_VAL_NUMBER );
 				parser.AddSwitch( option::st::Validate, option::lg::Validate, Validate );
+				parser.AddOption( option::st::ShaderDebugLevel, option::lg::ShaderDebugLevel, ShaderDebugLevel, wxCMD_LINE_VAL_NUMBER );
 				parser.AddSwitch( option::st::SyncRender, option::lg::SyncRender, SyncRender );
 				parser.AddSwitch( option::st::UnlimFPS, option::lg::UnlimFPS, UnlimFPS );
 				parser.AddOption( option::st::FixedFPS, option::lg::FixedFPS, FixedFPS, wxCMD_LINE_VAL_NUMBER );
@@ -253,6 +257,7 @@ namespace GuiCommon
 
 				config.log = getLong( option::st::LogLevel, DefaultLogType );
 				config.validate = has( option::st::Validate );
+				config.shaderDebugLevel = getLong( option::st::ShaderDebugLevel, 0u );
 				config.syncRender = has( option::st::SyncRender );
 				config.disableUpdateOptimisations = has( option::st::DisUpdOptim );
 				config.disableRandom = has( option::st::DisRandom );
@@ -499,7 +504,8 @@ namespace GuiCommon
 			, m_version
 			, m_config.validate
 			, !m_config.disableRandom
-			, !m_config.disableUpdateOptimisations };
+			, !m_config.disableUpdateOptimisations
+			, m_config.shaderDebugLevel };
 		m_castor = castor::makeUnique< castor3d::Engine >( std::move( config ) );
 		doloadPlugins( splashScreen );
 

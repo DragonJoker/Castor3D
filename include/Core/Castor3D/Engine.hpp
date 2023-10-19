@@ -99,6 +99,13 @@ namespace castor3d
 		bool enableUpdateOptimisations{ true };
 		/**
 		*\~english
+		*	The debug shader level.
+		*\~french
+		*	Le niveau de débogage lors de la compilation des shaders.
+		*/
+		uint32_t shaderDebugLevel{ 0u };
+		/**
+		*\~english
 		*	\p true to enable shaders validation through glslang.
 		*\~french
 		*	\p true pour activer la validation des shaders via glslang.
@@ -752,6 +759,11 @@ namespace castor3d
 		bool isValidationEnabled()const noexcept
 		{
 			return m_config.enableValidation;
+		}
+
+		uint32_t getShaderDebugLevel()const noexcept
+		{
+			return m_config.shaderDebugLevel;
 		}
 
 		bool areUpdateOptimisationsEnabled()const noexcept

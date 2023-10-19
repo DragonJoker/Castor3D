@@ -114,12 +114,11 @@ namespace ocean_fft
 			SDW_DeclStructInstance( , PatchT );
 
 			static ast::type::IOStructPtr makeIOType( ast::type::TypesCache & cache
+				, sdw::EntryPoint entryPoint
 				, castor3d::PipelineFlags flags )
 			{
-				auto result = cache.getIOStruct( ast::type::MemoryLayout::eC
-					, "C3DORFFT_" + ( FlagT == sdw::var::Flag::eShaderOutput
-						? std::string{ "Output" }
-						: std::string{ "Input" } ) + "Patch"
+				auto result = cache.getIOStruct( "C3DORFFT_Patch"
+					, entryPoint
 					, FlagT );
 
 				if ( result->empty() )

@@ -50,6 +50,7 @@ namespace GuiCommon
 		struct Config
 		{
 			bool validate{ false };
+			uint32_t shaderDebugLevel{ 0u };
 			bool unlimFPS{ false };
 			castor::LogType log{ castor::LogType::eInfo };
 			uint32_t fixedFPS{ 60u };
