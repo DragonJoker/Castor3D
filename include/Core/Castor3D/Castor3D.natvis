@@ -632,6 +632,7 @@
 			<Item Name="transformations">m_transformations</Item>
 			<Item Name="gpuImage">m_gpuImage</Item>
 			<Item Name="texture">m_texture</Item>
+			<Item Name="sampler">m_sampler</Item>
 			<Item Name="descriptor">m_descriptor</Item>
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="animated">m_animated</Item>

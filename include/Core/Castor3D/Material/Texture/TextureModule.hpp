@@ -293,6 +293,19 @@ namespace castor3d
 		return !( lhs == rhs );
 	}
 
+	struct PassTextureConfigHasher
+	{
+		C3D_API size_t operator()( PassTextureConfig const & value )const noexcept;
+	};
+
+	C3D_API bool operator==( PassTextureConfig const & lhs
+		, PassTextureConfig const & rhs )noexcept;
+	inline bool operator!=( PassTextureConfig const & lhs
+		, PassTextureConfig const & rhs )noexcept
+	{
+		return !( lhs == rhs );
+	}
+
 	C3D_API castor::Image & getBufferImage( Engine & engine
 		, castor::String const & name
 		, castor::String const & type

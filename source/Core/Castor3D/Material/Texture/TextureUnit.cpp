@@ -725,6 +725,7 @@ namespace castor3d
 		addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "levels_count" ), texunit::parserLevelsCount, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "texcoord_set" ), texunit::parserTexcoordSet, { makeParameter< ParameterType::eUInt32 >() } );
 		addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "texture" ), texunit::parserUnitTexture, { makeParameter< ParameterType::eName >() } );
+		addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), texunit::parserSampler, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "animation" ), texunit::parserAnimation );
 		addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "}" ), texunit::parserUnitEnd );
 
@@ -734,7 +735,6 @@ namespace castor3d
 		addParser( result, uint32_t( CSCNSection::eTextureTransform ), cuT( "scale" ), texunit::parserTransformScale, { makeParameter< ParameterType::ePoint2F >() } );
 		addParser( result, uint32_t( CSCNSection::eTextureTransform ), cuT( "tile" ), texunit::parserTile, { makeParameter< ParameterType::ePoint2I >() } );
 
-		addParser( result, uint32_t( CSCNSection::eTextureUnit ), cuT( "sampler" ), texunit::parserSampler, { makeParameter< ParameterType::eName >() } );
 		addParser( result, uint32_t( CSCNSection::eTextureAnimation ), cuT( "rotate" ), texunit::parserAnimRotate, { makeParameter< ParameterType::eFloat >() } );
 		addParser( result, uint32_t( CSCNSection::eTextureAnimation ), cuT( "translate" ), texunit::parserAnimTranslate, { makeParameter< ParameterType::ePoint2F >() } );
 		addParser( result, uint32_t( CSCNSection::eTextureAnimation ), cuT( "scale" ), texunit::parserAnimScale, { makeParameter< ParameterType::ePoint2F >() } );
