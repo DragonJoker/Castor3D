@@ -333,13 +333,20 @@ namespace castor3d
 			return TextureSourceInfoHasher{}( sourceInfo );
 		}
 
+		static size_t makeHash( TextureSourceInfo const & sourceInfo
+			, PassTextureConfig const & passConfig )
+		{
+			auto result = TextureSourceInfoHasher{}( sourceInfo );
+			return castor::hashCombine( result, PassTextureConfigHasher{}( passConfig ) );
+		}
+
 		static bool findUnit( Engine & engine
 			, castor::CheckedMutex & loadMtx
 			, std::unordered_map< size_t, TextureUnitUPtr > & loaded
 			, TextureUnitData & data
 			, TextureUnitRPtr & result )
 		{
-			auto hash = makeHash( data.base->sourceInfo );
+			auto hash = makeHash( data.base->sourceInfo, data.passConfig );
 			auto lock( makeUniqueLock( loadMtx ) );
 			auto ires = loaded.emplace( hash, nullptr );
 			auto it = ires.first;
@@ -761,7 +768,7 @@ namespace castor3d
 		, TextureAnimationUPtr animation )
 	{
 		auto & sourceData = getSourceData( sourceInfo );
-		auto hash = cachetex::makeHash( sourceInfo );
+		auto hash = cachetex::makeHash( sourceInfo, passConfig );
 		auto ires = m_unitDatas.emplace( hash, nullptr );
 
 		if ( ires.second )

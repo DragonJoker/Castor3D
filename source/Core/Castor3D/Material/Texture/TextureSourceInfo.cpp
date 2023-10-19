@@ -137,4 +137,19 @@ namespace castor3d
 	}
 
 	//************************************************************************************************
+
+	size_t PassTextureConfigHasher::operator()( PassTextureConfig const & value )const noexcept
+	{
+		auto result = std::hash< uint32_t >{}( value.texcoordSet );
+		return castor::hashCombinePtr( result, *value.sampler );
+	}
+
+	bool operator==( PassTextureConfig const & lhs
+		, PassTextureConfig const & rhs )noexcept
+	{
+		return lhs.sampler == rhs.sampler
+			&& lhs.texcoordSet == rhs.texcoordSet;
+	}
+
+	//************************************************************************************************
 }
