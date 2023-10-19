@@ -18,6 +18,9 @@
 #include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
 
 #include <RenderGraph/ResourceHandler.hpp>
 
@@ -77,72 +80,75 @@ namespace castor3d
 			return result;
 		}
 
+		template< sdw::var::Flag FlagT >
+		using PosColStructT = sdw::IOStructInstanceHelperT< FlagT
+			, "PosCol"
+			, sdw::IOVec4Field< "value", 0u > >;
+
+		template< sdw::var::Flag FlagT >
+		struct PosColT
+			: public PosColStructT< FlagT >
+		{
+			PosColT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: PosColStructT< FlagT >{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto position()const { return this->template getMember< "value" >(); }
+			auto colour()const { return this->template getMember< "value" >(); }
+		};
+
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device
 			, VkExtent2D const & size
 			, uint32_t mipLevel
 			, bool isCharlie )
 		{
 			std::string prefix = isCharlie ? std::string{ "Sheen" } : std::string{};
-			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, prefix + "EnvironmentPrefilter" };
+			ProgramModule program{ prefix + "EnvironmentPrefilter" };
 			{
-				using namespace sdw;
-				VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+				sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-				// Inputs
-				auto position = writer.declInput< Vec3 >( "position", 0u );
-				UniformBuffer matrix{ writer, "Matrix", 0u, 0u };
-				auto c3d_viewProjection = matrix.declMember< Mat4 >( "c3d_viewProjection" );
-				matrix.end();
-
-				// Outputs
-				auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", 0u );
-
-				writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-					, VertexOut out )
-					{
-						vtx_worldPosition = position;
-						out.vtx.position = ( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
-					} );
-				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-			}
-
-			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, prefix + "EnvironmentPrefilter" };
-			{
-				using namespace sdw;
-				FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 				shader::BRDFHelpers brdf{ writer };
 
-				// Inputs
-				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
+				auto matrix = writer.declUniformBuffer( "Matrix", { 0u, 0u } );
+				auto c3d_viewProjection = matrix.declMember< sdw::Mat4 >( "c3d_viewProjection" );
+				matrix.end();
+
 				auto c3d_mapEnvironment = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
-				auto c3d_roughness = writer.declConstant< Float >( "c3d_roughness"
-					, writer.cast< Float >( float( mipLevel ) / float( MaxIblReflectionLod ) ) );
 
-				// Outputs
-				auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+				auto c3d_roughness = writer.declConstant< sdw::Float >( "c3d_roughness"
+					, writer.cast< sdw::Float >( float( mipLevel ) / float( MaxIblReflectionLod ) ) );
+				auto c3d_sampleCount = writer.declConstant( "sampleCount"
+					, 1024_u );
 
-				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-					, FragmentOut out )
+				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::VertexInT< PosColT > in
+					, sdw::VertexOutT< PosColT > out )
+					{
+						out.position() = in.position();
+						out.vtx.position = ( c3d_viewProjection * vec4( in.position().xyz(), 1.0_f ) ).xyww();
+					} );
+
+				writer.implementEntryPointT< PosColT, PosColT >( [&]( sdw::FragmentInT< PosColT > in
+					, sdw::FragmentOutT< PosColT > out )
 					{
 						// From https://learnopengl.com/#!PBR/Lighting
 						auto N = writer.declLocale( "N"
-							, normalize( vtx_worldPosition ) );
+							, normalize( in.position().xyz() ) );
 						auto R = writer.declLocale( "R"
 							, N );
 						auto V = writer.declLocale( "V"
 							, R );
-
-						auto sampleCount = writer.declLocale( "sampleCount"
-							, 1024_u );
 						auto totalWeight = writer.declLocale( "totalWeight"
 							, 0.0_f );
 						auto prefilteredColor = writer.declLocale( "prefilteredColor"
 							, vec3( 0.0_f ) );
 
-						FOR( writer, UInt, i, 0_u, i < sampleCount, ++i )
+						FOR( writer, sdw::UInt, i, 0_u, i < c3d_sampleCount, ++i )
 						{
 							auto xi = writer.declLocale( "xi"
-								, brdf.hammersley( i, sampleCount ) );
+								, brdf.hammersley( i, c3d_sampleCount ) );
 							auto importanceSample = writer.declLocale( "importanceSample"
 								, ( isCharlie
 									? brdf.getImportanceSample( brdf.importanceSampleCharlie( xi, c3d_roughness ), N )
@@ -159,11 +165,11 @@ namespace castor3d
 							{
 								auto pdf = writer.declLocale( "pdf"
 									, importanceSample.w() );
-								auto resolution = Float{ float( size.width ) };
+								auto resolution = sdw::Float{ float( size.width ) };
 								auto omegaP = writer.declLocale( "omegaP"
 									, ( 4.0f * castor::Pi< float > ) / ( 6.0_f * resolution * resolution ) );
 								auto omegaS = writer.declLocale( "omegaS"
-									, 1.0_f / ( writer.cast< Float >( sampleCount ) * pdf + 0.0001_f ) );
+									, 1.0_f / ( writer.cast< sdw::Float >( c3d_sampleCount ) * pdf + 0.0001_f ) );
 								auto lod = writer.declLocale( "lod"
 									, writer.ternary( c3d_roughness == 0.0_f
 										, 0.0_f
@@ -182,21 +188,17 @@ namespace castor3d
 						}
 						ELSE
 						{
-							prefilteredColor /= writer.cast< sdw::Float >( sampleCount );
+							prefilteredColor /= writer.cast< sdw::Float >( c3d_sampleCount );
 						}
 						FI;
 
-						outColour = vec4( prefilteredColor, 1.0_f );
+						out.colour() = vec4( prefilteredColor, 1.0_f );
 					} );
 
-				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+				program.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
-			return ashes::PipelineShaderStageCreateInfoArray
-			{
-				makeShaderState( device, vtx ),
-				makeShaderState( device, pxl ),
-			};
+			return makeProgramStates( device, program );
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device

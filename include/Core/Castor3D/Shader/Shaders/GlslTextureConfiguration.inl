@@ -51,16 +51,17 @@ namespace castor3d
 							IF( m_writer, id > 0_u )
 							{
 								auto config = m_writer.declLocale( "c3d_config"
-									, getTextureConfiguration( id ) );
+									, getTextureConfiguration( nonuniform( id ) ) );
 								auto anim = m_writer.declLocale( "c3d_anim"
-									, textureAnims.getTextureAnimation( id ) );
+									, textureAnims.getTextureAnimation( nonuniform( id ) ) );
 								auto texCoords = m_writer.declLocale( "c3d_tex"
 									, TextureConfigurations::getTexcoord( config
 										, texCoords0
 										, texCoords1
 										, texCoords2
 										, texCoords3 ) );
-								auto & writer = findWriterMandat( config, anim, maps[id - 1_u] );
+								auto map = maps[nonuniform( id - 1_u )];
+								auto & writer = findWriterMandat( config, anim, maps );
 								auto texCoord = writer.declLocale( "c3d_texCoord"
 									, config.toUv( texCoords ) );
 								config.transformUV( passShaders.getUtils(), anim, texCoord );
@@ -79,7 +80,7 @@ namespace castor3d
 											passShaders.computeTexcoord( flags
 												, config
 												, component
-												, maps[id - 1_u]
+												, map
 												, texCoords
 												, texCoord
 												, components );
@@ -90,7 +91,7 @@ namespace castor3d
 								}
 
 								auto sampled = writer.declLocale( "c3d_sampled"
-									, passShaders.sampleMap( flags, maps[id - 1_u], texCoords, components ) );
+									, passShaders.sampleMap( flags, map, texCoords, components ) );
 
 								FOR( m_writer, sdw::UInt, comp, 0u, comp < config.componentCount(), ++comp )
 								{

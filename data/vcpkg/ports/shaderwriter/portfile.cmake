@@ -1,15 +1,17 @@
+vcpkg_minimum_required(VERSION 2022-10-12) # for ${VERSION}
+
 vcpkg_from_github(OUT_SOURCE_PATH SOURCE_PATH
     REPO DragonJoker/ShaderWriter
-    REF d4b86ef16274b7c0e660722b6b0f84bb4b0f36c9
+    REF v${VERSION}
     HEAD_REF development
-    SHA512 9efc7951114682483c9d6cf8a8108ce64fa3485088d73896847b9900a3d8eaf547a50b7a5b9c22e96f17fa95cbfcff311d987ac10bc6591f1c1f0454e53e5844
+    SHA512 58a9d5ca857a21283d359a3028d52a93dfa8161d2ba8052f674ecbab22750eebc0006d240d5f12779475ff5a2f8550f1c53a32e3a50ea2346ed8212e3c5775b2
 )
 
 vcpkg_from_github(OUT_SOURCE_PATH CMAKE_SOURCE_PATH
     REPO DragonJoker/CMakeUtils
-    REF 4e0292ed50d76dab5fc8c81840ae0e021dc60c2a
+    REF 7d355194fa795c437ce970cecf00e23ae10fc686
     HEAD_REF master
-    SHA512 c79c6a5ef2e059b56d4de20cc73e74386bf8b6acea2f6b76fd9949a6a2760f82302c90419e4a753f50c30d01cc4f3a039e04b585f5c0d4461cce3464d9fb9c95
+    SHA512 ca25b19bdeb3e8fda7abc32f8548731f0ba1cd09889a70f6f287ad76d2fdfa0fedbb7f6f65b26d356ea51543bed8926c6bb463f8e8461b7d51d3b7b33134374c
 )
 
 file(REMOVE_RECURSE "${SOURCE_PATH}/CMake")
@@ -39,6 +41,6 @@ vcpkg_cmake_configure(
 
 vcpkg_copy_pdbs()
 vcpkg_cmake_install()
-vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/shaderwriter)
+vcpkg_cmake_config_fixup(PACKAGE_NAME ShaderWriter CONFIG_PATH lib/cmake/shaderwriter)
 
 file(INSTALL ${SOURCE_PATH}/LICENSE DESTINATION ${CURRENT_PACKAGES_DIR}/share/${PORT} RENAME copyright)

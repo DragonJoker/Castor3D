@@ -66,6 +66,32 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	A non compiled shader module, with its source.
+	*\~french
+	*\brief
+	*	Un module shader non compilé, avec sa source.
+	*/
+	struct ProgramModule
+	{
+		ProgramModule( ProgramModule const & ) = delete;
+		ProgramModule & operator=( ProgramModule const & ) = delete;
+
+		C3D_API ProgramModule( ProgramModule && rhs )noexcept;
+		C3D_API ProgramModule & operator=( ProgramModule && rhs )noexcept;
+
+		C3D_API ProgramModule() = default;
+
+		C3D_API ProgramModule( std::string const & name );
+		C3D_API ProgramModule( std::string const & name
+			, ShaderPtr shader );
+
+		std::string name{};
+		ShaderPtr shader{};
+		std::map< ast::ShaderStage, SpirVShader > compiled;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Flags to use when looking for an automatically generated program
 	*\~french
 	*\brief

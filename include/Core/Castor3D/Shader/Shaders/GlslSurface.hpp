@@ -172,6 +172,7 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( , VertexSurfaceT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+			, sdw::EntryPoint entryPoint
 			, PipelineFlags const & flags );
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
 
@@ -211,6 +212,7 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( , RasterizerSurfaceT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+			, sdw::EntryPoint entryPoint
 			, PassShaders const & shaders
 			, PipelineFlags const & flags );
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
@@ -236,6 +238,7 @@ namespace castor3d::shader
 		SDW_DeclStructInstance( , VoxelSurfaceT );
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+			, sdw::EntryPoint entryPoint
 			, PipelineFlags const & flags );
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
 			, PipelineFlags const & flags );

@@ -14,6 +14,7 @@ See LICENSE file in root folder
 #include <CastorUtils/Design/Named.hpp>
 
 #include <ShaderAST/Shader.hpp>
+#include <ShaderAST/Visitors/SelectEntryPoint.hpp>
 
 #include <ashespp/Core/Device.hpp>
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
@@ -157,6 +158,16 @@ namespace castor3d
 		, ShaderModule & module );
 	C3D_API SpirVShader const & compileShader( RenderSystem & renderSystem
 		, ShaderModule & module );
+	C3D_API SpirVShader const & compileShader( RenderDevice const & device
+		, ProgramModule & module
+		, ast::EntryPointConfig const & entryPoint );
+	C3D_API SpirVShader const & compileShader( RenderSystem & renderSystem
+		, ProgramModule & module
+		, ast::EntryPointConfig const & entryPoint );
+	C3D_API ashes::PipelineShaderStageCreateInfoArray makeProgramStates( RenderDevice const & device
+		, ProgramModule & programModule
+		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt );
+	C3D_API VkShaderStageFlagBits getShaderStage( ast::ShaderStage value );
 
 	inline ashes::PipelineShaderStageCreateInfo makeShaderState( ashes::Device const & device
 		, VkShaderStageFlagBits stage

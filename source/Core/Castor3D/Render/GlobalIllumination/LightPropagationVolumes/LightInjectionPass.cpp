@@ -64,12 +64,11 @@ namespace castor3d
 			SDW_DeclStructInstance( , SurfaceT );
 
 			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+				, sdw::EntryPoint entryPoint
 				, bool isFragment = false )
 			{
-				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
-					, ( FlagT == sdw::var::Flag::eShaderOutput
-						? std::string{ "Output" }
-						: std::string{ "Input" } ) + "LgtInjSurface"
+				auto result = cache.getIOStruct( "C3D_LgtInjSurface"
+					, entryPoint
 					, FlagT );
 
 				if ( result->empty() )

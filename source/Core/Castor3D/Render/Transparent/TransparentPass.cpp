@@ -438,7 +438,11 @@ namespace castor3d
 									, length( lightIndirectDiffuse.xyz() )
 									, lightSurface.difF() )
 								: vec3( 0.0_f ) ) );
-						components.emissiveFactor *= components.opacity;
+
+						if ( components.emissiveFactor )
+						{
+							components.emissiveFactor *= components.opacity;
+						}
 
 						output.registerOutput( "Lighting", "Ambient", directAmbient );
 						output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );

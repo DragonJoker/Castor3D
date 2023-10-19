@@ -14,6 +14,8 @@
 
 #include <ShaderWriter/Source.hpp>
 
+#define C3D_UseWaveIntrinsics 0
+
 namespace castor3d::shader
 {
 	ClusteredLights::ClusteredLights( sdw::ShaderWriter & writer
@@ -79,6 +81,8 @@ namespace castor3d::shader
 				, *m_clustersLightsData ) );
 		auto clusterIndex1D = m_writer.declLocale( "clusterIndex1D"
 			, m_clusterData->computeClusterIndex1D( clusterIndex3D ) );
+
+#if C3D_UseWaveIntrinsics
 		auto firstClusterIndex1D = m_writer.declLocale( "firstClusterIndex1D"
 			, sdw::readFirstInvocation( clusterIndex1D ) );
 		auto laneMask = m_writer.declLocale( "laneMask"
@@ -191,6 +195,47 @@ namespace castor3d::shader
 			doPrintDebug( debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
 		}
 		FI;
+#else
+		auto pointStartOffset = m_writer.declLocale( "pointStartOffset"
+			, ( *m_pointLightClusters )[clusterIndex1D].x() );
+		auto pointLightCount = m_writer.declLocale( "pointLightCount"
+			, ( *m_pointLightClusters )[clusterIndex1D].y() );
+
+		FOR( m_writer, sdw::UInt, i, 0_u, i < pointLightCount, ++i )
+		{
+			auto lightOffset = m_writer.declLocale( "lightOffset"
+				, lights.getDirectionalsEnd() + ( *m_pointLightIndices )[pointStartOffset + i] * castor3d::PointLight::LightDataComponents );
+			auto light = m_writer.declLocale( "point", lights.getPointLight( lightOffset ) );
+			lightingModel.compute( debugOutput
+				, light
+				, components
+				, lightSurface
+				, receivesShadows
+				, output );
+		}
+		ROF;
+
+		auto spotStartOffset = m_writer.declLocale( "spotStartOffset"
+			, ( *m_spotLightClusters )[clusterIndex1D].x() );
+		auto spotLightCount = m_writer.declLocale( "spotLightCount"
+			, ( *m_spotLightClusters )[clusterIndex1D].y() );
+
+		FOR( m_writer, sdw::UInt, i, 0_u, i < spotLightCount, ++i )
+		{
+			auto lightOffset = m_writer.declLocale( "lightOffset"
+				, lights.getPointsEnd() + ( *m_spotLightIndices )[spotStartOffset + i] * castor3d::SpotLight::LightDataComponents );
+			auto light = m_writer.declLocale( "spot", lights.getSpotLight( lightOffset ) );
+			lightingModel.compute( debugOutput
+				, light
+				, components
+				, lightSurface
+				, receivesShadows
+				, output );
+		}
+		ROF;
+
+		doPrintDebug( debugOutput, clusterIndex3D, pointLightCount, spotLightCount );
+#endif
 	}
 
 	void ClusteredLights::computeCombinedAllButDif( shader::Lights & lights

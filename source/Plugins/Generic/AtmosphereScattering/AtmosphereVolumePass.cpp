@@ -42,12 +42,11 @@ namespace atmosphere_scattering
 
 			SDW_DeclStructInstance( , SurfaceT );
 
-			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache )
+			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+				, sdw::EntryPoint entryPoint )
 			{
-				auto result = cache.getIOStruct( sdw::type::MemoryLayout::eStd430
-					, ( FlagT == sdw::var::Flag::eShaderOutput
-						? std::string{ "Output" }
-						: std::string{ "Input" } ) + "AtmosphereSurface"
+				auto result = cache.getIOStruct( "C3D_AtmosphereSurface"
+					, entryPoint
 					, FlagT );
 
 				if ( result->empty() )
@@ -65,7 +64,7 @@ namespace atmosphere_scattering
 			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
 			{
 				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-					, "AtmosphereSurface" );
+					, "C3D_AtmosphereSurface" );
 
 				if ( result->empty() )
 				{
