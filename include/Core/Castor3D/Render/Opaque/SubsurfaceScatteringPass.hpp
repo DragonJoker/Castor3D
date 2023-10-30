@@ -114,14 +114,11 @@ namespace castor3d
 		Texture m_result;
 		UniformBufferOffsetT< BlurConfiguration > m_blurCfgUbo;
 		UniformBufferOffsetT< BlurWeights > m_blurWgtUbo;
-		ShaderModule m_blurHorizVertexShader;
-		ShaderModule m_blurHorizPixelShader;
+		ProgramModule m_blurHorizProgram;
 		ashes::PipelineShaderStageCreateInfoArray m_blurXShader;
-		ShaderModule m_blurVerticVertexShader;
-		ShaderModule m_blurVerticPixelShader;
+		ProgramModule m_blurVerticProgram;
 		ashes::PipelineShaderStageCreateInfoArray m_blurYShader;
-		ShaderModule m_combineVertexShader;
-		ShaderModule m_combinePixelShader;
+		ProgramModule m_combineProgram;
 		ashes::PipelineShaderStageCreateInfoArray m_combineShader;
 		crg::FramePass const * m_lastPass{};
 	};

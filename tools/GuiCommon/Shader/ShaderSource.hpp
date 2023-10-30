@@ -372,10 +372,17 @@ namespace GuiCommon
 		std::vector< std::unique_ptr< UniformValueBase > > uniforms;
 	};
 
+	struct ShaderEntryPoint
+	{
+		ast::Shader * shader;
+		castor3d::SpirVShader source;
+		ast::EntryPoint entryPoint;
+	};
+
 	struct ShaderSource
 	{
 		explicit ShaderSource( castor::String pname
-			, std::map< VkShaderStageFlagBits, castor3d::ShaderModule const * > psources = {}
+			, std::vector< ShaderEntryPoint > psources = {}
 			, std::vector< UniformBufferValues > pubos = {} )
 			: name{ std::move( pname ) }
 			, sources{ std::move( psources ) }
@@ -389,7 +396,7 @@ namespace GuiCommon
 		ShaderSource & operator=( ShaderSource && ) = default;
 
 		castor::String name;
-		std::map< VkShaderStageFlagBits, castor3d::ShaderModule const * > sources;
+		std::vector< ShaderEntryPoint > sources;
 		std::vector< UniformBufferValues > ubos;
 	};
 

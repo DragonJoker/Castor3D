@@ -37,7 +37,7 @@ namespace GuiCommon
 #pragma clang diagnostic pop
 		void onClose( wxCloseEvent & event );
 		void onMenuClose( wxCommandEvent & event );
-#if C3D_HasGLSL
+#if GC_HasGLSL
 		void onMenuLanguageGLSL( wxCommandEvent & event );
 #endif
 #if GC_HasHLSL

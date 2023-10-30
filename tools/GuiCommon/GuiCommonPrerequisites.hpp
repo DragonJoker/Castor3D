@@ -96,7 +96,7 @@ namespace GuiCommon
 	enum class ShaderLanguage
 	{
 		SPIRV,
-#if C3D_HasGLSL
+#if GC_HasGLSL
 		GLSL,
 #endif
 #if GC_HasHLSL

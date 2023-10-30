@@ -438,6 +438,8 @@ namespace ocean_fft
 			visitor.visit( cuT( "Water density" ), m_configuration.density );
 
 			m_oceanFFT->accept( visitor );
+
+			doAccept( visitor );
 		}
 	}
 

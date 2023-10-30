@@ -144,6 +144,9 @@ namespace castor3d
 		/**@{*/
 		C3D_API virtual void visit( ShaderModule const & shader
 			, bool forceProgramsVisit ) = 0;
+		C3D_API virtual void visit( ProgramModule const & shader
+			, ast::EntryPoint entryPoint
+			, bool forceProgramsVisit ) = 0;
 
 		void visit( ShaderModule const & shader )
 		{
@@ -152,7 +155,49 @@ namespace castor3d
 				return;
 			}
 
+			if ( !shader.shader
+				&& shader.source.empty()
+				&& shader.compiled.spirv.empty()
+				&& shader.compiled.text.empty() )
+			{
+				return;
+			}
+
 			visit( shader, config.allowProgramsVisit );
+		}
+
+		void visit( ProgramModule const & shader
+			, ast::EntryPoint entryPoint )
+		{
+			if ( !config.allowProgramsVisit )
+			{
+				return;
+			}
+
+			auto it = shader.compiled.find( getShaderStage( entryPoint ) );
+
+			if ( !shader.shader
+				&& ( it == shader.compiled.end()
+					|| ( it->second.text.empty()
+						&& it->second.spirv.empty() ) ) )
+			{
+				return;
+			}
+
+			visit( shader, entryPoint, config.allowProgramsVisit );
+		}
+
+		void visit( ProgramModule const & shader )
+		{
+			if ( !config.allowProgramsVisit )
+			{
+				return;
+			}
+
+			for ( auto & [stage, compiled] : shader.compiled )
+			{
+				visit( shader, getEntryPointType( stage ), config.allowProgramsVisit );
+			}
 		}
 		/**@}*/
 		/**
@@ -522,6 +567,12 @@ namespace castor3d
 		**/
 		/**@{*/
 		void visit( ShaderModule const & value
+			, bool forceProgramsVisit )override
+		{
+		}
+
+		void visit( ProgramModule const & shader
+			, ast::EntryPoint entryPoint
 			, bool forceProgramsVisit )override
 		{
 		}

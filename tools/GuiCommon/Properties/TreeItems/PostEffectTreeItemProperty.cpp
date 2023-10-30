@@ -8,6 +8,7 @@
 
 #include <Castor3D/Render/PostEffect/PostEffect.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Shader/Program.hpp>
 
 #include <ShaderAST/Shader.hpp>
 
@@ -37,9 +38,38 @@ namespace GuiCommon
 			}
 
 			void visit( castor3d::ShaderModule const & module
-				, bool forceShaderVisit )override
+				, bool forceProgramsVisit )override
 			{
-				doGetSource( module.name ).sources[module.stage] = &module;
+				if ( !module.shader
+					&& module.source.empty()
+					&& module.compiled.spirv.empty()
+					&& module.compiled.text.empty() )
+				{
+					return;
+				}
+
+				doGetSource( module.name ).sources.push_back( { module.shader.get()
+					, module.compiled
+					, castor3d::getEntryPointType( module.stage ) } );
+			}
+
+			void visit( castor3d::ProgramModule const & module
+				, ast::EntryPoint entryPoint
+				, bool forceProgramsVisit )override
+			{
+				auto it = module.compiled.find( getShaderStage( entryPoint ) );
+
+				if ( !module.shader
+					&& ( it == module.compiled.end()
+						|| ( it->second.text.empty()
+							&& it->second.spirv.empty() ) ) )
+				{
+					return;
+				}
+
+				doGetSource( module.name ).sources.push_back( { module.shader.get()
+					, it->second
+					, entryPoint } );
 			}
 
 		private:

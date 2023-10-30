@@ -281,7 +281,7 @@ namespace GuiCommon
 			}
 			else
 			{
-				SetLexer( wxSTC_LEX_ASM );
+				SetLexer( wxSTC_LEX_A68K );
 			}
 
 			auto defaultFgColour = m_language->getStyle( wxSTC_C_DEFAULT ).foreground;
@@ -439,18 +439,30 @@ namespace GuiCommon
 		StyleSetBackground( wxSTC_STYLE_CALLTIP, bgColour );
 		StyleSetBackground( wxSTC_STYLE_LASTPREDEFINED, bgColour );
 
-		StyleSetBackground( wxSTC_C_DEFAULT, bgColour );
-		StyleSetForeground( wxSTC_C_DEFAULT, fgColour );
-		StyleSetBackground( wxSTC_C_COMMENT, bgColour );
-		StyleSetBackground( wxSTC_C_COMMENTLINE, bgColour );
-		StyleSetBackground( wxSTC_C_COMMENTDOC, bgColour );
-		StyleSetBackground( wxSTC_C_COMMENTLINEDOC, bgColour );
-		StyleSetBackground( wxSTC_C_COMMENTDOCKEYWORD, bgColour );
-		StyleSetBackground( wxSTC_C_COMMENTDOCKEYWORDERROR, bgColour );
-		StyleSetBackground( wxSTC_C_PREPROCESSORCOMMENT, bgColour );
+		if ( m_language->isCLike )
+		{
+			StyleSetBackground( wxSTC_C_DEFAULT, bgColour );
+			StyleSetForeground( wxSTC_C_DEFAULT, fgColour );
+			StyleSetBackground( wxSTC_C_COMMENT, bgColour );
+			StyleSetBackground( wxSTC_C_COMMENTLINE, bgColour );
+			StyleSetBackground( wxSTC_C_COMMENTDOC, bgColour );
+			StyleSetBackground( wxSTC_C_COMMENTLINEDOC, bgColour );
+			StyleSetBackground( wxSTC_C_COMMENTDOCKEYWORD, bgColour );
+			StyleSetBackground( wxSTC_C_COMMENTDOCKEYWORDERROR, bgColour );
+			StyleSetBackground( wxSTC_C_PREPROCESSORCOMMENT, bgColour );
 #if wxCHECK_VERSION( 3, 1, 0 )
-		StyleSetBackground( wxSTC_C_PREPROCESSORCOMMENTDOC, bgColour );
+			StyleSetBackground( wxSTC_C_PREPROCESSORCOMMENTDOC, bgColour );
 #endif
+		}
+		else
+		{
+			StyleSetForeground( wxSTC_A68K_DEFAULT, fgColour );
+			StyleSetBackground( wxSTC_A68K_DEFAULT, bgColour );
+			StyleSetBackground( wxSTC_A68K_COMMENT, bgColour );
+			StyleSetBackground( wxSTC_A68K_COMMENT_DOXYGEN, bgColour );
+			StyleSetBackground( wxSTC_A68K_COMMENT_SPECIAL, bgColour );
+			StyleSetBackground( wxSTC_A68K_COMMENT_WORD, bgColour );
+		}
 	}
 
 #pragma GCC diagnostic push

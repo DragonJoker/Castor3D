@@ -20,7 +20,7 @@ namespace GuiCommon
 			eID_MENU_QUIT,
 			eID_MENU_PREFS,
 			eID_MENU_LANG,
-#if C3D_HasGLSL
+#if GC_HasGLSL
 			eID_MENU_LANG_GLSL,
 #endif
 #if GC_HasHLSL
@@ -109,7 +109,7 @@ namespace GuiCommon
 				, true
 				, *m_stcContext
 				, sources
-#if C3D_HasGLSL
+#if GC_HasGLSL
 				, ShaderLanguage::GLSL
 #elif GC_HasHLSL
 				, ShaderLanguage::HLSL
@@ -135,7 +135,7 @@ namespace GuiCommon
 		menu->Append( dialg::eID_MENU_QUIT, _( "&Quit\tCTRL+Q" ) );
 		menuBar->Append( menu, _T( "&File" ) );
 		menu = new wxMenu;
-#if C3D_HasGLSL
+#if GC_HasGLSL
 		m_glslRadio = menu->AppendRadioItem( dialg::eID_MENU_LANG_GLSL, wxT( "GLSL" ), _( "Use GLSL to display shaders" ) );
 #endif
 #if GC_HasHLSL
@@ -159,7 +159,7 @@ namespace GuiCommon
 	BEGIN_EVENT_TABLE( ShaderDialog, wxFrame )
 		EVT_CLOSE( ShaderDialog::onClose )
 		EVT_MENU( dialg::eID_MENU_QUIT, ShaderDialog::onMenuClose )
-#if C3D_HasGLSL
+#if GC_HasGLSL
 		EVT_MENU( dialg::eID_MENU_LANG_GLSL, ShaderDialog::onMenuLanguageGLSL )
 #endif
 #if GC_HasHLSL
@@ -182,7 +182,7 @@ namespace GuiCommon
 		event.Skip();
 	}
 
-#if C3D_HasGLSL
+#if GC_HasGLSL
 	void ShaderDialog::onMenuLanguageGLSL( wxCommandEvent & event )
 	{
 		if ( !m_glslRadio->IsCheck() )

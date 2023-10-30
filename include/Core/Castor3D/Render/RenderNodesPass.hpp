@@ -414,6 +414,15 @@ namespace castor3d
 		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
 		 *\param[in]	flags	Les flags.
 		 */
+		C3D_API void forceAdjustFlags( PipelineFlags & flags )const;
+		/**
+		 *\~english
+		 *\brief		Adjusts given flags to match the render pass requirements.
+		 *\param[in]	flags	The flags.
+		 *\~french
+		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
+		 *\param[in]	flags	Les flags.
+		 */
 		C3D_API SubmeshFlags adjustFlags( SubmeshFlags flags )const;
 		/**
 		 *\~english
@@ -903,6 +912,10 @@ namespace castor3d
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
 		C3D_API ShaderProgramRPtr doGetProgram( PipelineFlags const & flags
 			, VkCullModeFlags cullMode = VK_CULL_MODE_NONE );
+		/**
+		 *\copydoc	castor3d::RenderTechniquePass::doAccept
+		 */
+		C3D_API void doAccept( castor3d::RenderTechniqueVisitor & visitor );
 		C3D_API void doUpdateFlags( PipelineFlags & flags )const;
 		C3D_API void doAddShadowBindings( Scene const & scene
 			, PipelineFlags const & flags

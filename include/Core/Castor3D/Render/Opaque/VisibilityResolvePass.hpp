@@ -173,6 +173,7 @@ namespace castor3d
 		using PipelineContainer = std::vector< PipelinePtr >;
 
 	private:
+		void doAccept( castor3d::RenderTechniqueVisitor & visitor )override;
 		bool doIsEnabled()const;
 		void doRecordInto( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer

@@ -118,6 +118,101 @@ namespace GuiCommon
 		}
 		CU_EndAttributePush( LANGSection::eKeywords )
 
+		CU_ImplementAttributeParser( Language_CPrimaryKeywords )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 1;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_CSecondaryKeywords )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 2;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_CDocumentationKeywords )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 3;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_CGlobalClasses )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 4;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_CPreprocessorDefinitions )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 5;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_CTaskErrorMarkers )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 6;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_AsmCpuInstructions )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 1;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_AsmRegisters )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 2;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_AsmDirectives )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 3;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Language_AsmExtInstructions )
+		{
+			auto & langContext = getParserContext( context );
+			langContext.keywords.clear();
+			langContext.index = 4;
+		}
+		CU_EndAttributePush( LANGSection::eKeywords )
+
+		CU_ImplementAttributeParser( Keywords_Add )
+		{
+			auto & langContext = getParserContext( context );
+
+			if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				langContext.keywords.push_back( params[0]->get< castor::String >() );
+			}
+		}
+		CU_EndAttribute()
+
 		CU_ImplementAttributeParser( Language_Style )
 		{
 		}
@@ -164,6 +259,7 @@ namespace GuiCommon
 			else
 			{
 				params[0]->get( langContext.currentLanguage->isCLike );
+				langContext.currentLanguage->updateStyles();
 			}
 		}
 		CU_EndAttribute()
@@ -290,7 +386,27 @@ namespace GuiCommon
 				mapTypes[cuT( "identifier" )] = uint32_t( wxSTC_C_IDENTIFIER );
 				mapTypes[cuT( "number" )] = uint32_t( wxSTC_C_NUMBER );
 				mapTypes[cuT( "preprocessor" )] = uint32_t( wxSTC_C_PREPROCESSOR );
+
+				mapTypes[cuT( "asm_comment" )] = uint32_t( wxSTC_A68K_COMMENT );
+				mapTypes[cuT( "asm_dec_number" )] = uint32_t( wxSTC_A68K_NUMBER_DEC );
+				mapTypes[cuT( "asm_bin_number" )] = uint32_t( wxSTC_A68K_NUMBER_BIN );
+				mapTypes[cuT( "asm_hex_number" )] = uint32_t( wxSTC_A68K_NUMBER_HEX );
+				mapTypes[cuT( "asm_string1" )] = uint32_t( wxSTC_A68K_STRING1 );
+				mapTypes[cuT( "asm_operator" )] = uint32_t( wxSTC_A68K_OPERATOR );
+				mapTypes[cuT( "asm_cpuinstruction" )] = uint32_t( wxSTC_A68K_CPUINSTRUCTION );
+				mapTypes[cuT( "asm_extinstruction" )] = uint32_t( wxSTC_A68K_EXTINSTRUCTION );
+				mapTypes[cuT( "asm_register" )] = uint32_t( wxSTC_A68K_REGISTER );
+				mapTypes[cuT( "asm_directive" )] = uint32_t( wxSTC_A68K_DIRECTIVE );
+				mapTypes[cuT( "asm_macroarg" )] = uint32_t( wxSTC_A68K_MACRO_ARG );
+				mapTypes[cuT( "asm_label" )] = uint32_t( wxSTC_A68K_LABEL );
+				mapTypes[cuT( "asm_string2" )] = uint32_t( wxSTC_A68K_STRING2 );
+				mapTypes[cuT( "asm_identifier" )] = uint32_t( wxSTC_A68K_IDENTIFIER );
+				mapTypes[cuT( "asm_macro_declaration" )] = uint32_t( wxSTC_A68K_MACRO_DECLARATION );
+				mapTypes[cuT( "asm_comment_word" )] =  uint32_t( wxSTC_A68K_COMMENT_WORD );
+				mapTypes[cuT( "asm_comment_special" )] =  uint32_t( wxSTC_A68K_COMMENT_SPECIAL );
+				mapTypes[cuT( "asm_comment_doxygen" )] =  uint32_t( wxSTC_A68K_COMMENT_DOXYGEN );
 			}
+
 
 			castor::AttributeParsers result;
 
@@ -298,6 +414,16 @@ namespace GuiCommon
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "pattern" ), Language_Pattern, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "fold_flags" ), Language_FoldFlags, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "keywords" ), Language_Keywords, { makeParameter< ParameterType::eUInt32 >() } );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "c_primarykeywords" ), Language_CPrimaryKeywords );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "c_secondarykeywords" ), Language_CSecondaryKeywords );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "c_documentationkeywords" ), Language_CDocumentationKeywords );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "c_globalclasses" ), Language_CGlobalClasses );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "c_preprocessordefinitions" ), Language_CPreprocessorDefinitions );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "c_taskerrormarkers" ), Language_CTaskErrorMarkers );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "asm_cpuinstructions" ), Language_AsmCpuInstructions );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "asm_registers" ), Language_AsmRegisters );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "asm_directives" ), Language_AsmDirectives );
+			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "asm_extinstructions" ), Language_AsmExtInstructions );
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "font_name" ), Language_FontName, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "font_size" ), Language_FontSize, { makeParameter< ParameterType::eInt32 >() } );
 			addParser( result, uint32_t( LANGSection::eLanguage ), cuT( "is_c_like" ), Language_CLike, { makeParameter< ParameterType::eBool >() } );
@@ -306,6 +432,7 @@ namespace GuiCommon
 			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "fg_colour" ), Style_FgColour, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "bg_colour" ), Style_BgColour, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( LANGSection::eStyle ), cuT( "font_style" ), Style_FontStyle, { makeParameter< ParameterType::eText >() } );
+			addParser( result, uint32_t( LANGSection::eKeywords ), cuT( "keyword" ), Keywords_Add, { makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( LANGSection::eKeywords ), cuT( "}" ), Keywords_End );
 
 			return result;
@@ -346,25 +473,6 @@ namespace GuiCommon
 	void LanguageFileParser::doCleanupParser( castor::PreprocessedFile & preprocessed )
 	{
 		getParserContext( preprocessed.getContext() ).currentLanguage.reset();
-	}
-
-	bool LanguageFileParser::doDiscardParser( castor::PreprocessedFile & preprocessed
-		, castor::String const & line )
-	{
-		auto & context = preprocessed.getContext();
-
-		if ( context.sections.empty()
-			|| context.sections.back() != uint32_t( LANGSection::eKeywords ) )
-		{
-			return castor::FileParser::doDiscardParser( preprocessed, line );
-		}
-
-		castor::String strWords( line );
-		castor::string::replace( strWords, cuT( "\\" ), cuT( "" ) );
-		auto arrayWords = castor::string::split( castor::string::trim( strWords ), cuT( "\t " ), 1000, false );
-		auto & langContext = getParserContext( context );
-		langContext.keywords.insert( langContext.keywords.end(), arrayWords.begin(), arrayWords.end() );
-		return true;
 	}
 
 	void LanguageFileParser::doValidate( castor::PreprocessedFile & preprocessed )

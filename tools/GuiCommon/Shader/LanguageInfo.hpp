@@ -30,6 +30,7 @@ namespace GuiCommon
 
 		void setKeywords( uint32_t index
 			, castor::StringArray const & keywords );
+		void updateStyles();
 
 		inline castor::String const & getKeywords( uint32_t index )const
 		{
