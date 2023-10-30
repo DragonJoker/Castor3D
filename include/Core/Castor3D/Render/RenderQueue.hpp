@@ -200,6 +200,7 @@ namespace castor3d
 		PassData m_pass;
 		bool m_culledChanged{};
 		bool m_commandsChanged{};
+		std::atomic_bool m_invalidated{};
 		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;
 		castor::GroupChangeTracked< ashes::Optional< VkRect2D > > m_scissor;
 		uint32_t m_drawCalls{};
