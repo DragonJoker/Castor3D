@@ -19,6 +19,7 @@ namespace castor3d
 		, name{ std::move( rhs.name ) }
 		, source{ std::move( rhs.source ) }
 		, shader{ std::move( rhs.shader ) }
+		, compiled{ std::move( rhs.compiled ) }
 	{
 	}
 
@@ -28,6 +29,7 @@ namespace castor3d
 		name = std::move( rhs.name );
 		source = std::move( rhs.source );
 		shader = std::move( rhs.shader );
+		compiled = std::move( rhs.compiled );
 
 		return *this;
 	}
@@ -62,6 +64,7 @@ namespace castor3d
 	ProgramModule::ProgramModule( ProgramModule && rhs )noexcept
 		: name{ std::move( rhs.name ) }
 		, shader{ std::move( rhs.shader ) }
+		, compiled{ std::move( rhs.compiled ) }
 	{
 	}
 
@@ -69,6 +72,7 @@ namespace castor3d
 	{
 		name = std::move( rhs.name );
 		shader = std::move( rhs.shader );
+		compiled = std::move( rhs.compiled );
 
 		return *this;
 	}

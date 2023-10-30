@@ -145,19 +145,29 @@ namespace castor3d
 	public:
 		C3D_API virtual ~RenderTechniquePass() = default;
 		/**
-		 *\copydoc	RenderTechniqueNodesPass::accept
-		 */
+		*\~english
+		*\brief
+		*	Visitor acceptance function.
+		*\param visitor
+		*	The ... visitor.
+		*\~french
+		*\brief
+		*	Fonction d'acceptation de visiteur.
+		*\param visitor
+		*	Le ... visiteur.
+		*/
 		C3D_API virtual void accept( RenderTechniqueVisitor & visitor )
 		{
+			doAccept( visitor );
 		}
 		/**
-		 *\copydoc	RenderNodesPass::update
+		 *\copydoc	castor3d::RenderNodesPass::update
 		 */
 		C3D_API virtual void update( CpuUpdater & updater )
 		{
 		}
 		/**
-		 *\copydoc	RenderNodesPass::createPipelineFlags
+		 *\copydoc	castor3d::RenderNodesPass::createPipelineFlags
 		 */
 		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
@@ -176,19 +186,19 @@ namespace castor3d
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const = 0;
 		/**
-		 *\copydoc	RenderNodesPass::areValidPassFlags
+		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
 		 */
 		C3D_API virtual bool areValidPassFlags( PassComponentCombine const & passFlags )const = 0;
 		/**
-		 *\copydoc	RenderNodesPass::getShaderFlags
+		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
 		 */
 		C3D_API virtual ShaderFlags getShaderFlags()const = 0;
 		/**
-		 *\copydoc	RenderNodesPass::countNodes
+		 *\copydoc	castor3d::RenderNodesPass::countNodes
 		 */
 		C3D_API virtual void countNodes( RenderInfo & info )const = 0;
 		/**
-		 *\copydoc	RenderNodesPass::isPassEnabled
+		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
 		 */
 		C3D_API virtual bool isPassEnabled()const = 0;
 		/**
@@ -222,6 +232,12 @@ namespace castor3d
 			return *m_parent;
 		}
 		/**@}*/
+
+	protected:
+		/**
+		 *\copydoc		castor3d::RenderTechniquePass::accept
+		 */
+		C3D_API virtual void doAccept( castor3d::RenderTechniqueVisitor & visitor ) = 0;
 
 	protected:
 		RenderTechnique * m_parent{};
@@ -274,24 +290,15 @@ namespace castor3d
 
 	public:
 		/**
-		*\~english
-		*\brief
-		*	Visitor acceptance function.
-		*\param visitor
-		*	The ... visitor.
-		*\~french
-		*\brief
-		*	Fonction d'acceptation de visiteur.
-		*\param visitor
-		*	Le ... visiteur.
-		*/
+		 *\copydoc	castor3d::RenderTechniquePass::accept
+		 */
 		C3D_API void accept( RenderTechniqueVisitor & visitor )override;
 		/**
-		 *\copydoc	RenderNodesPass::update
+		 *\copydoc	castor3d::RenderNodesPass::update
 		 */
 		C3D_API void update( CpuUpdater & updater )override;
 		/**
-		 *\copydoc	RenderNodesPass::createPipelineFlags
+		 *\copydoc	castor3d::RenderNodesPass::createPipelineFlags
 		 */
 		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
 			, BlendMode colourBlendMode
@@ -310,28 +317,28 @@ namespace castor3d
 			, uint32_t passLayerIndex
 			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const override;
 		/**
-		 *\copydoc	RenderNodesPass::getShaderFlags
+		 *\copydoc	castor3d::RenderNodesPass::getShaderFlags
 		 */
 		C3D_API ShaderFlags getShaderFlags()const override
 		{
 			return m_shaderFlags;
 		}
 		/**
-		 *\copydoc	RenderNodesPass::countNodes
+		 *\copydoc	castor3d::RenderNodesPass::countNodes
 		 */
 		C3D_API void countNodes( RenderInfo & info )const override
 		{
 			RenderNodesPass::countNodes( info );
 		}
 		/**
-		 *\copydoc	RenderNodesPass::areValidPassFlags
+		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
 		 */
 		C3D_API bool areValidPassFlags( PassComponentCombine const & passFlags )const override
 		{
 			return RenderNodesPass::areValidPassFlags( passFlags );
 		}
 		/**
-		 *\copydoc	RenderNodesPass::isPassEnabled
+		 *\copydoc	castor3d::RenderNodesPass::isPassEnabled
 		 */
 		C3D_API bool isPassEnabled()const override
 		{
@@ -383,6 +390,7 @@ namespace castor3d
 		/**@}*/
 
 	protected:
+		C3D_API void doAccept( castor3d::RenderTechniqueVisitor & visitor )override;
 		C3D_API ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		C3D_API SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		C3D_API void doAddEnvBindings( PipelineFlags const & flags

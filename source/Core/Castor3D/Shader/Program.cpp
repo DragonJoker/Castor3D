@@ -190,7 +190,7 @@ namespace castor3d
 			for ( auto entryPoint : entryPoints )
 			{
 				result.push_back( makeShaderState( *device
-					, getShaderStage( entryPoint.stage )
+					, getVkShaderStage( entryPoint.stage )
 					, compileShader( device, programModule, entryPoint )
 					, programModule.name
 					, "main"
@@ -202,7 +202,7 @@ namespace castor3d
 		return result;
 	}
 
-	VkShaderStageFlagBits getShaderStage( sdw::ShaderStage value )
+	VkShaderStageFlagBits getVkShaderStage( sdw::ShaderStage value )
 	{
 		switch ( value )
 		{
@@ -241,6 +241,49 @@ namespace castor3d
 		default:
 			CU_Failure( "Unsupported ShaderStage" );
 			return VK_SHADER_STAGE_COMPUTE_BIT;
+		}
+	}
+
+	VkShaderStageFlagBits getVkShaderStage( sdw::EntryPoint value )
+	{
+		return getVkShaderStage( getShaderStage( value ) );
+	}
+
+	ast::EntryPoint getEntryPointType( VkShaderStageFlagBits value )
+	{
+		switch ( value )
+		{
+		case  VK_SHADER_STAGE_VERTEX_BIT:
+			return ast::EntryPoint::eVertex;
+		case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
+			return ast::EntryPoint::eTessellationControl;
+		case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
+			return ast::EntryPoint::eTessellationEvaluation;
+		case VK_SHADER_STAGE_GEOMETRY_BIT:
+			return ast::EntryPoint::eGeometry;
+		case VK_SHADER_STAGE_MESH_BIT_EXT:
+			return ast::EntryPoint::eMesh;
+		case VK_SHADER_STAGE_TASK_BIT_EXT:
+			return ast::EntryPoint::eTask;
+		case VK_SHADER_STAGE_FRAGMENT_BIT:
+			return ast::EntryPoint::eFragment;
+		case VK_SHADER_STAGE_RAYGEN_BIT_KHR:
+			return ast::EntryPoint::eRayGeneration;
+		case VK_SHADER_STAGE_ANY_HIT_BIT_KHR:
+			return ast::EntryPoint::eRayAnyHit;
+		case VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR:
+			return ast::EntryPoint::eRayClosestHit;
+		case VK_SHADER_STAGE_MISS_BIT_KHR:
+			return ast::EntryPoint::eRayMiss;
+		case VK_SHADER_STAGE_INTERSECTION_BIT_KHR:
+			return ast::EntryPoint::eRayIntersection;
+		case VK_SHADER_STAGE_CALLABLE_BIT_KHR:
+			return ast::EntryPoint::eCallable;
+		case VK_SHADER_STAGE_COMPUTE_BIT:
+			return ast::EntryPoint::eCompute;
+		default:
+			CU_Failure( "Unsupported VkShaderStageFlagBits" );
+			return ast::EntryPoint::eCompute;
 		}
 	}
 }

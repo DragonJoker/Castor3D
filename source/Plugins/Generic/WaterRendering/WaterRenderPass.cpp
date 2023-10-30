@@ -320,6 +320,8 @@ namespace water
 			visitor.visit( cuT( "SSR forward steps count" ), m_configuration.ssrForwardStepsCount );
 			visitor.visit( cuT( "SSR backward steps count" ), m_configuration.ssrBackwardStepsCount );
 			visitor.visit( cuT( "SSR depth mult." ), m_configuration.ssrDepthMult );
+
+			doAccept( visitor );
 		}
 	}
 

@@ -31,6 +31,9 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
@@ -67,32 +70,49 @@ namespace castor3d
 			CombLgtDiffImgId,
 		};
 
-		static ShaderPtr getVertexProgram( Engine & engine )
+		template< typename sdw::var::Flag FlagT >
+		using VertexStructT = sdw::IOStructInstanceHelperT< FlagT
+			, "Vertex"
+			, sdw::IOVec2Field< "position", 0u >
+			, sdw::IOVec2Field< "texcoord", 1u > >;
+		template< typename sdw::var::Flag FlagT >
+		using ColourStructT = sdw::IOStructInstanceHelperT< FlagT
+			, "Colour"
+			, sdw::IOVec4Field< "colour", 0u > >;
+
+		template< typename sdw::var::Flag FlagT >
+		struct VertexT
+			: public VertexStructT< FlagT >
 		{
-			using namespace sdw;
-			VertexWriter writer{ &engine.getShaderAllocator() };
+			VertexT( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled = true )
+				: VertexStructT< FlagT >{ writer, std::move( expr ), enabled }
+			{
+			}
 
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			auto position()const { return this->template getMember< "position" >(); }
+			auto texcoord()const { return this->template getMember< "texcoord" >(); }
+		};
 
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+		template< typename sdw::var::Flag FlagT >
+		struct ColourT
+			: public ColourStructT< FlagT >
+		{
+			ColourT( sdw::ShaderWriter & writer
+				, ast::expr::ExprPtr expr
+				, bool enabled = true )
+				: ColourStructT< FlagT >{ writer, std::move( expr ), enabled }
+			{
+			}
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
+			auto colour()const { return this->template getMember< "colour" >(); }
+		};
 
 		static ShaderPtr getBlurProgram( Engine & engine
 			, bool isVertic )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			shader::Utils utils{ writer };
@@ -104,23 +124,25 @@ namespace castor3d
 			shader::SssProfiles sssProfiles{ writer, BlurSssProfilesUboId, 0u };
 			C3D_ModelsData( writer, BlurModelsUboId, 0u );
 			C3D_Camera( writer, BlurCameraUboId, 0u );
-			UniformBuffer config{ writer, SubsurfaceScatteringPass::Config, BlurSssUboId, 0u };
-			auto c3d_pixelSize = config.declMember< Vec2 >( SubsurfaceScatteringPass::PixelSize );
-			auto c3d_correction = config.declMember< Float >( SubsurfaceScatteringPass::Correction );
+			auto config = writer.declUniformBuffer( SubsurfaceScatteringPass::Config, BlurSssUboId, 0u );
+			auto c3d_pixelSize = config.declMember< sdw::Vec2 >( SubsurfaceScatteringPass::PixelSize );
+			auto c3d_correction = config.declMember< sdw::Float >( SubsurfaceScatteringPass::Correction );
 			config.end();
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", BlurDepthObjImgId, 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", BlurLgtDiffImgId, 0u );
 
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			writer.implementEntryPointT< VertexT, VertexT >( [&]( sdw::VertexInT< VertexT > in
+				, sdw::VertexOutT< VertexT > out )
+				{
+					out.texcoord() = in.texcoord();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< VertexT, ColourT >( [&]( sdw::FragmentInT< VertexT > in
+				, sdw::FragmentOutT< ColourT > out )
 				{
 					auto depthObj = writer.declLocale( "depthObj"
-						, c3d_mapDepthObj.lod( vtx_texture, 0.0_f ) );
+						, c3d_mapDepthObj.lod( in.texcoord(), 0.0_f ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
@@ -148,14 +170,14 @@ namespace castor3d
 
 					// Fetch color and linear depth for current pixel:
 					auto colorM = writer.declLocale( "colorM"
-						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
+						, c3d_mapLightDiffuse.lod( in.texcoord(), 0.0_f ) );
 					auto depthM = writer.declLocale( "depthM"
 						, depthObj.x() );
-					depthM = c3d_cameraData.projToView( utils, vtx_texture, depthM ).z();
+					depthM = c3d_cameraData.projToView( utils, in.texcoord(), depthM ).z();
 
 					// Accumulate center sample, multiplying it with its gaussian weight:
-					outColour = vec4( colorM.rgb(), 1.0_f );
-					outColour.rgb() *= 0.382_f;
+					out.colour() = vec4( colorM.rgb(), 1.0_f );
+					out.colour().rgb() *= 0.382_f;
 
 					if ( isVertic )
 					{
@@ -168,7 +190,7 @@ namespace castor3d
 							, c3d_pixelSize * vec2( 1.0_f, 0.0_f ) );
 					}
 
-					auto step = writer.getVariable< Vec2 >( "step" );
+					auto step = writer.getVariable< sdw::Vec2 >( "step" );
 
 					// Calculate the step that we will use to fetch the surrounding pixels,
 					// where "step" is:
@@ -180,46 +202,45 @@ namespace castor3d
 					auto finalStep = writer.declLocale( "finalStep"
 						, translucency * step * sssProfile.subsurfaceScatteringStrength() * sssProfile.gaussianWidth() / depthM );
 
-					auto offset = writer.declLocale< Vec2 >( "offset" );
-					auto color = writer.declLocale< Vec3 >( "color" );
-					auto depth = writer.declLocale< Float >( "depth" );
-					auto s = writer.declLocale< Float >( "s" );
+					auto offset = writer.declLocale< sdw::Vec2 >( "offset" );
+					auto color = writer.declLocale< sdw::Vec3 >( "color" );
+					auto depth = writer.declLocale< sdw::Float >( "depth" );
+					auto s = writer.declLocale< sdw::Float >( "s" );
 
 					// Gaussian weights for the six samples around the current pixel:
 					//   -3 -2 -1 +1 +2 +3
 					auto w = writer.declLocaleArray( "w"
 						, 6u
-						, std::vector< Float >{ { 0.006_f, 0.061_f, 0.242_f, 0.242_f, 0.061_f, 0.006_f } } );
+						, std::vector< sdw::Float >{ { 0.006_f, 0.061_f, 0.242_f, 0.242_f, 0.061_f, 0.006_f } } );
 					auto o = writer.declLocaleArray( "o"
 						, 6u
-						, std::vector< Float >{ { -1.0_f, -0.666666667_f, -0.333333333_f, 0.333333333_f, 0.666666667_f, 1.0_f } } );
+						, std::vector< sdw::Float >{ { -1.0_f, -0.666666667_f, -0.333333333_f, 0.333333333_f, 0.666666667_f, 1.0_f } } );
 
 					// Accumulate the other samples:
-					FOR( writer, Int, i, 0_i, i < 6_i, ++i )
+					FOR( writer, sdw::Int, i, 0_i, i < 6_i, ++i )
 					{
 						// Fetch color and depth for current sample:
-						offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
+						offset = sdw::fma( vec2( o[i] ), finalStep, in.texcoord() );
 						color = c3d_mapLightDiffuse.lod( offset, 0.0_f ).rgb();
-						offset = sdw::fma( vec2( o[i] ), finalStep, vtx_texture );
+						offset = sdw::fma( vec2( o[i] ), finalStep, in.texcoord() );
 						depth = c3d_mapDepthObj.lod( offset, 0.0_f ).x();
-						depth = c3d_cameraData.projToView( utils, vtx_texture, depth ).z();
+						depth = c3d_cameraData.projToView( utils, in.texcoord(), depth ).z();
 
 						// If the difference in depth is huge, we lerp color back to "colorM":
 						s = min( 0.0125_f * c3d_correction * abs( depthM - depth ), 1.0_f );
 						color = mix( color, colorM.rgb(), vec3( s ) );
 
 						// Accumulate:
-						outColour.rgb() += w[i] * color;
+						out.colour().rgb() += w[i] * color;
 					}
 					ROF;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static ShaderPtr getCombineProgram( Engine & engine )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
 			// Shader inputs
 			shader::Utils utils{ writer };
@@ -236,16 +257,18 @@ namespace castor3d
 			auto c3d_mapBlur3 = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBlur3", CombBlur3ImgId, 0u );
 			auto c3d_mapLightDiffuse = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLightDiffuse", CombLgtDiffImgId, 0u );
 
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
+			writer.implementEntryPointT< VertexT, VertexT >( [&]( sdw::VertexInT< VertexT > in
+				, sdw::VertexOutT< VertexT > out )
+				{
+					out.texcoord() = in.texcoord();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< VertexT, ColourT >( [&]( sdw::FragmentInT< VertexT > in
+				, sdw::FragmentOutT< ColourT > out )
 				{
 					auto depthObj = writer.declLocale( "depthObj"
-						, c3d_mapDepthObj.lod( vtx_texture, 0.0_f ) );
+						, c3d_mapDepthObj.lod( in.texcoord(), 0.0_f ) );
 					auto nodeId = writer.declLocale( "nodeId"
 						, writer.cast< sdw::UInt >( depthObj.z() ) );
 
@@ -258,7 +281,7 @@ namespace castor3d
 					auto modelData = writer.declLocale( "modelData"
 						, c3d_modelsData[writer.cast< sdw::UInt >( nodeId ) - 1u] );
 					auto original = writer.declLocale( "original"
-						, c3d_mapLightDiffuse.lod( vtx_texture, 0.0_f ) );
+						, c3d_mapLightDiffuse.lod( in.texcoord(), 0.0_f ) );
 					auto materialId = writer.declLocale( "materialId"
 						, modelData.getMaterialId() );
 					auto material = materials.getMaterial( materialId );
@@ -266,20 +289,20 @@ namespace castor3d
 
 					IF( writer, sssProfileIndex == 0_u )
 					{
-						outColour = vec4( original.rgb(), 1.0_f );
+						out.colour() = vec4( original.rgb(), 1.0_f );
 					}
 					ELSE
 					{
-						auto originalWeight = writer.declLocale< Vec4 >( "originalWeight"
+						auto originalWeight = writer.declLocale< sdw::Vec4 >( "originalWeight"
 							, vec4( 0.2406_f, 0.4475_f, 0.6159_f, 0.25_f ) );
-						auto blurWeights = writer.declLocaleArray< Vec4 >( "blurWeights"
+						auto blurWeights = writer.declLocaleArray< sdw::Vec4 >( "blurWeights"
 							, 3u
 							, {
 								vec4( 0.1158_f, 0.3661_f, 0.3439_f, 0.25_f ),
 								vec4( 0.1836_f, 0.1864_f, 0.0_f, 0.25_f ),
 								vec4( 0.46_f, 0.0_f, 0.0402_f, 0.25_f )
 							} );
-						auto blurVariances = writer.declLocaleArray< Float >( "blurVariances"
+						auto blurVariances = writer.declLocaleArray< sdw::Float >( "blurVariances"
 							, 3u
 							, {
 								0.0516_f,
@@ -287,15 +310,15 @@ namespace castor3d
 								2.0062_f
 							} );
 						auto blur1 = writer.declLocale( "blur1"
-							, c3d_mapBlur1.lod( vtx_texture, 0.0_f ) );
+							, c3d_mapBlur1.lod( in.texcoord(), 0.0_f ) );
 						auto blur2 = writer.declLocale( "blur2"
-							, c3d_mapBlur2.lod( vtx_texture, 0.0_f ) );
+							, c3d_mapBlur2.lod( in.texcoord(), 0.0_f ) );
 						auto blur3 = writer.declLocale( "blur3"
-							, c3d_mapBlur3.lod( vtx_texture, 0.0_f ) );
+							, c3d_mapBlur3.lod( in.texcoord(), 0.0_f ) );
 						auto translucency = writer.declLocale( "translucency"
 							, original.a() );
 						original.a() = 1.0_f;
-						outColour = original * originalWeight
+						out.colour() = original * originalWeight
 							+ blur1 * blurWeights[0]
 							+ blur2 * blurWeights[1]
 							+ blur3 * blurWeights[2];
@@ -373,18 +396,12 @@ namespace castor3d
 		, m_result{ sssss::doCreateImage( *depthObj.resources, m_device, m_size, m_intermediate.getFormat(), "SSSResult" ) }
 		, m_blurCfgUbo{ m_device.uboPool->getBuffer< BlurConfiguration >( 0u ) }
 		, m_blurWgtUbo{ m_device.uboPool->getBuffer< BlurWeights >( 0u ) }
-		, m_blurHorizVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurX", sssss::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_blurHorizPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurX", sssss::getBlurProgram( *device.renderSystem.getEngine(), false ) }
-		, m_blurXShader{ makeShaderState( m_device, m_blurHorizVertexShader )
-			, makeShaderState( m_device, m_blurHorizPixelShader ) }
-		, m_blurVerticVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSBlurY", sssss::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_blurVerticPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSBlurY", sssss::getBlurProgram( *device.renderSystem.getEngine(), true ) }
-		, m_blurYShader{ makeShaderState( m_device, m_blurVerticVertexShader )
-			, makeShaderState( m_device, m_blurVerticPixelShader ) }
-		, m_combineVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SSSCombine", sssss::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_combinePixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SSSCombine", sssss::getCombineProgram( *device.renderSystem.getEngine() ) }
-		, m_combineShader{ makeShaderState( m_device, m_combineVertexShader )
-			, makeShaderState( m_device, m_combinePixelShader ) }
+		, m_blurHorizProgram{ "SSSBlurX", sssss::getBlurProgram( *device.renderSystem.getEngine(), false ) }
+		, m_blurXShader{ makeProgramStates( m_device, m_blurHorizProgram ) }
+		, m_blurVerticProgram{ "SSSBlurY", sssss::getBlurProgram( *device.renderSystem.getEngine(), true ) }
+		, m_blurYShader{ makeProgramStates( m_device, m_blurVerticProgram ) }
+		, m_combineProgram{ "SSSCombine", sssss::getCombineProgram( *device.renderSystem.getEngine() ) }
+		, m_combineShader{ makeProgramStates( m_device, m_combineProgram ) }
 		, m_lastPass{ &previousPass }
 	{
 		auto & configuration = m_blurCfgUbo.getData();
@@ -560,13 +577,13 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 
-		visitor.visit( m_blurHorizVertexShader );
-		visitor.visit( m_blurHorizPixelShader );
+		visitor.visit( m_blurHorizProgram, ast::EntryPoint::eVertex );
+		visitor.visit( m_blurHorizProgram, ast::EntryPoint::eFragment );
 
-		visitor.visit( m_blurVerticVertexShader );
-		visitor.visit( m_blurVerticPixelShader );
+		visitor.visit( m_blurVerticProgram, ast::EntryPoint::eVertex );
+		visitor.visit( m_blurVerticProgram, ast::EntryPoint::eFragment );
 
-		visitor.visit( m_combineVertexShader );
-		visitor.visit( m_combinePixelShader );
+		visitor.visit( m_combineProgram, ast::EntryPoint::eVertex );
+		visitor.visit( m_combineProgram, ast::EntryPoint::eFragment );
 	}
 }

@@ -28,20 +28,6 @@ namespace castor3d
 		/**
 		*\~english
 		*name
-		*	Shader source.
-		*\~french
-		*name
-		*	Source de shader.
-		**/
-		/**@{*/
-		void visit( ShaderModule const & shader
-			, bool forceProgramsVisit )override
-		{
-		}
-		/**@}*/
-		/**
-		*\~english
-		*name
 		*	Getters.
 		*\~french
 		*name

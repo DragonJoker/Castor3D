@@ -74,30 +74,40 @@ namespace GuiCommon
 
 	void ShaderProgramPage::doLoadPages( ShaderLanguage language )
 	{
-		std::map< VkShaderStageFlagBits, wxString > const texts
+		std::map< ast::EntryPoint, wxString > const texts
 		{
-			{ VK_SHADER_STAGE_VERTEX_BIT, _( "Vertex" ) },
-			{ VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT, _( "Tessellation Control" ) },
-			{ VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT, _( "Tessellation Evaluation" ) },
-			{ VK_SHADER_STAGE_GEOMETRY_BIT, _( "Geometry" ) },
-			{ VK_SHADER_STAGE_FRAGMENT_BIT, _( "Fragment" ) },
-			{ VK_SHADER_STAGE_COMPUTE_BIT, _( "Compute" ) },
+			{ ast::EntryPoint::eVertex, _( "Vertex" ) },
+			{ ast::EntryPoint::eTessellationControl, _( "Tessellation Control" ) },
+			{ ast::EntryPoint::eTessellationEvaluation, _( "Tessellation Evaluation" ) },
+			{ ast::EntryPoint::eGeometry, _( "Geometry" ) },
+			{ ast::EntryPoint::eFragment, _( "Fragment" ) },
+			{ ast::EntryPoint::eCompute, _( "Compute" ) },
+			{ ast::EntryPoint::eMesh, _( "Mesh" ) },
+			{ ast::EntryPoint::eTask, _( "Task" ) },
+			{ ast::EntryPoint::eMeshNV, _( "Mesh" ) },
+			{ ast::EntryPoint::eTaskNV, _( "Task" ) },
+			{ ast::EntryPoint::eCallable, _( "Callable" ) },
+			{ ast::EntryPoint::eRayAnyHit, _( "Ray Any Hit" ) },
+			{ ast::EntryPoint::eRayClosestHit, _( "Ray Closest Hit" ) },
+			{ ast::EntryPoint::eRayGeneration, _( "Ray Generation" ) },
+			{ ast::EntryPoint::eRayIntersection, _( "Ray Intersection" ) },
+			{ ast::EntryPoint::eRayMiss, _( "Ray Miss" ) },
 		};
 
 		for ( auto & source : m_source.sources )
 		{
 			// The editor page
-			m_pages.push_back( new ShaderEditor( m_engine
+			m_pages.push_back( new ShaderEditor{ m_engine
 				, m_canEdit
 				, m_stcContext
-				, *source.second
+				, source
 				, m_source.ubos
 				, language
-				, m_editors ) );
+				, m_editors } );
 			auto & page = *m_pages.back();
 			page.SetBackgroundColour( PANEL_BACKGROUND_COLOUR );
 			page.SetForegroundColour( PANEL_FOREGROUND_COLOUR );
-			m_editors->AddPage( &page, texts.at( source.first ), true );
+			m_editors->AddPage( &page, texts.at( source.entryPoint ), true );
 			page.SetSize( 0, 22, m_editors->GetClientSize().x, m_editors->GetClientSize().y - 22 );
 		}
 	}

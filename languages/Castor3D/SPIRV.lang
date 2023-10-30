@@ -5,128 +5,333 @@ language "spirv"
 	font_name Consolas
 	font_size 10
 	is_c_like false
-	keywords 1
+	asm_cpuinstructions
 	{
-		OPCapability
-		OPSource
-		OPName
-		OPDecorate
-		OPVariable
-		OPConstant
-		OPConstantComposite
-		OPTypeVoid
-		OPTypeBool
-		OPTypeInt
-		OPTypeFunction
-		OPTypeImage
-		OPTypeSampledImage
-		OPTypeFloat
-		OPTypePointer
-		OPTypeVector
-		OPExtInstImport
-		OPMemoryModel
-		OPEntryPoint
-		OPExecutionMode
-		OPFunction
-		OPFunctionParameter
-		OPLabel
-		OPLoad
-		OPCompositeExtract
-		OPSelectionMerge
-		OPBranchConditional
-		OPAccessChain
-		OPBranch
-		OPStore
-		OPReturn
-		OPFunctionEnd
-		OPVectorShuffle
-		OPFunctionCall
-		OPImageSampleImplicitLod
-		OPFConvert
-		OPCompositeConstruct
-		OPDot
-		OPFOrdLessThan
-		OPImageSampleExplicitLod
-		OPReturnValue
-		OPExtInst
-		OPFOrdGreaterThan
-		OPFDiv
-		OPFNegate
-		OPVectorTimesScalar
-		OPFAdd
-		OPUndef
-		OPTypeArray
-		OPFSub
-		OPFOrdEqual
-		OPKill
-		OPFMul
-		OPMemberName
-		OPMemberDecorate
-		OPTypeStruct
-		OPSwitch
+		keyword Capability
+		keyword Source
+		keyword Name
+		keyword Decorate
+		keyword Variable
+		keyword Constant
+		keyword ConstantComposite
+		keyword TypeVoid
+		keyword TypeBool
+		keyword TypeInt
+		keyword TypeFunction
+		keyword TypeImage
+		keyword TypeSampledImage
+		keyword TypeFloat
+		keyword TypePointer
+		keyword TypeVector
+		keyword ExtInstImport
+		keyword MemoryModel
+		keyword EntryPoint
+		keyword ExecutionMode
+		keyword Function
+		keyword FunctionParameter
+		keyword Label
+		keyword Load
+		keyword CompositeExtract
+		keyword SelectionMerge
+		keyword BranchConditional
+		keyword AccessChain
+		keyword Branch
+		keyword Store
+		keyword Return
+		keyword FunctionEnd
+		keyword VectorShuffle
+		keyword FunctionCall
+		keyword ImageSampleImplicitLod
+		keyword FConvert
+		keyword CompositeConstruct
+		keyword Dot
+		keyword FOrdLessThan
+		keyword ImageSampleExplicitLod
+		keyword ReturnValue
+		keyword ExtInst
+		keyword FOrdGreaterThan
+		keyword FDiv
+		keyword FNegate
+		keyword VectorTimesScalar
+		keyword FAdd
+		keyword Undef
+		keyword TypeArray
+		keyword FSub
+		keyword FOrdEqual
+		keyword Kill
+		keyword FMul
+		keyword MemberName
+		keyword MemberDecorate
+		keyword TypeStruct
+		keyword Switch
+		keyword Extension
+		keyword TypeMatrix
+		keyword TypeAccelerationStructureKHR
+		keyword UniformConstantPtr
+		keyword TypeRuntimeArray
+		keyword TypeForwardPointer
+		keyword MatrixTimesVector
+		keyword Bitcast
+		keyword ConvertUToPtr
+		keyword ReportIntersectionKHR
+		keyword SMod
+		keyword IEqual
+		keyword Select
+		keyword TraceRayKHR
+		keyword CopyObject
+		keyword SGreaterThanEqual
+		keyword IAdd
+		keyword ExecuteCallableKHR
+		keyword VectorTimesMatrix
+		keyword SLessThan
+		keyword ConstantTrue
+		keyword ImageWrite
+		keyword ConvertSToF
+		keyword ShiftRightLogical
+		keyword BitwiseAnd
+		keyword ISub
+		keyword UMod
+		keyword UDiv
+		keyword IMul
+		keyword ConvertFToU
+		keyword ULessThan
+		keyword LoopMerge
+		keyword LogicalAnd
+		keyword LogicalOr
+		keyword FOrdGreaterThanEqual
+		keyword LogicalNot
+		keyword IgnoreIntersectionKHR
+		keyword ConvertUToF
+		keyword INotEqual
+		keyword SDiv
+		keyword ConvertFToS
+		keyword Image
+		keyword ImageFetch
+		keyword ConstantFalse
+		keyword FOrdLessThanEqual
+		keyword GroupNonUniformInverseBallot
+		keyword GroupNonUniformBallotBitExtract
+		keyword GroupNonUniformBallotBitCount
+		keyword GroupNonUniformBallotFindLSB
+		keyword GroupNonUniformBallotFindMSB
+		keyword GroupNonUniformShuffle
+		keyword GroupNonUniformShuffleXor
+		keyword GroupNonUniformShuffleUp
+		keyword GroupNonUniformShuffleDown
+		keyword GroupNonUniformFAdd
+		keyword GroupNonUniformIAdd
+		keyword GroupNonUniformFMul
+		keyword GroupNonUniformIMuld
+		keyword GroupNonUniformFMin
+		keyword GroupNonUniformSMin
+		keyword GroupNonUniformSMin
+		keyword GroupNonUniformFMax
+		keyword GroupNonUniformSMax
+		keyword GroupNonUniformSMax
+		keyword GroupNonUniformBitwiseAnd
+		keyword GroupNonUniformLogicalAnd
+		keyword GroupNonUniformBitwiseOr
+		keyword GroupNonUniformLogicalOr
+		keyword GroupNonUniformBitwiseXor
+		keyword GroupNonUniformLogicalXor
+		keyword GroupNonUniformElect
+		keyword GroupNonUniformAll
+		keyword GroupNonUniformAny
+		keyword GroupNonUniformAllEqual
+		keyword GroupNonUniformBroadcast
+		keyword GroupNonUniformBroadcastFirst
+		keyword GroupNonUniformQuadBroadcast
+		keyword GroupNonUniformQuadSwap
+		keyword ShiftLeftLogical
+		keyword BitwiseOr
+		keyword UConvert
+		keyword ImageRead
+		keyword All
+		keyword UGreaterThan
+		keyword FOrdNotEqual
+		keyword ImageSampleDrefExplicitLod
+		keyword ImageSampleDrefImplicitLod
+		keyword Transpose
+		keyword SourceExtension
+		keyword String
+		keyword FunctionPtr
+		keyword InputPtr
+		keyword OutputPtr
+		keyword UniformPtr
+		keyword UniformConstantPtr
 	}
-	keywords 2
+	asm_registers
 	{
-		Lod
-		Shader
-		Float64
-		Logical
-		OriginLowerLeft
-		OriginUpperLeft
-		Fragment
-		GLCompute
-		LocalSize
-		GLSL
-		Magic
-		Version
-		Generator
-		Bound
-		Schema
-		GLSL450
-		Location
-		Binding
-		DescriptorSet
-		Input
-		Output
-		Dim2D
-		UniformConstant
-		R32i
-		Rgba32f
-		Function
-		FMax
-		Fma
-		BuiltIn
-		2D
-		sampled
-		None
-		Step
-		FAbs
-		ArrayStride
-		Block
-		Vertex
-		FClamp
-		Pow
-		FMin
-		Sqrt
-		Normalize
-		FMix
-		Dim1D
-		Image
-		Flat
-		Uniform
+		keyword Lod
+		keyword Cos
+		keyword Sin
+		keyword Tan
+		keyword Shader
+		keyword Float64
+		keyword Logical
+		keyword OriginLowerLeft
+		keyword OriginUpperLeft
+		keyword Fragment
+		keyword GLCompute
+		keyword LocalSize
+		keyword GLSL
+		keyword Magic
+		keyword Version
+		keyword Generator
+		keyword Bound
+		keyword Schema
+		keyword GLSL450
+		keyword Location
+		keyword Binding
+		keyword DescriptorSet
+		keyword Input
+		keyword Output
+		keyword Dim2D
+		keyword Dim3D
+		keyword UniformConstant
+		keyword Rgba32f
+		keyword Function
+		keyword FMax
+		keyword Fma
+		keyword BuiltIn
+		keyword 2D
+		keyword sampled
+		keyword None
+		keyword Step
+		keyword FAbs
+		keyword ArrayStride
+		keyword Block
+		keyword Vertex
+		keyword FClamp
+		keyword Pow
+		keyword FMin
+		keyword Sqrt
+		keyword ClosestHit
+		keyword LanguageGLSL
+		keyword RayTracingKHR
+		keyword Geometry
+		keyword Int64
+		keyword PhysicalStorageBufferAddresses
+		keyword InputPtr
+		keyword StorageBuffer
+		keyword PhysicalStorageBuffer
+		keyword HitAttribute
+		keyword IncomingRayPayload
+		keyword AliasedPointer
+		keyword RuntimeDescriptorArray
+		keyword PhysicalStorageBuffer64
+		keyword ShaderNonUniform
+		keyword ModeLocalSize
+		keyword SampledImageArrayNonUniformIndexing
+		keyword NonUniform
+		keyword Intersection
+		keyword Callable
+		keyword PushConstant
+		keyword IncomingCallableData
+		keyword Normalize
+		keyword RayPayload
+		keyword Flat
+		keyword Uniform
+		keyword ModeOutputTrianglesNV
+		keyword ModeOutputVertices
+		keyword ModeOutputPrimitivesNV
+		keyword MeshNV
+		keyword TaskNV
+		keyword MeshShadingNV
+		keyword BufferBlock
+		keyword ColMajor
+		keyword MatrixStride
+		keyword Offset
+		keyword SubgroupSize
+		keyword NumSubgroups
+		keyword SubgroupID
+		keyword SubgroupLocalInvocationID
+		keyword SubgroupEqMask
+		keyword SubgroupGeMask
+		keyword SubgroupGtMask
+		keyword SubgroupLeMask
+		keyword SubgroupLtMask
+		keyword DrawParameters
+		keyword Int8
+		keyword PerTaskNV
+		keyword StorageImageExtendedFormats
+		keyword DemoteToHelperInvocation
+		keyword ModeOriginUpperLeft
+		keyword UClamp
+		keyword Exp
+		keyword SubgroupBallotKHR
+		keyword GroupNonUniformArithmetic
+		keyword GroupNonUniformBallot
+		keyword SampledCubeArray
+		keyword GroupNonUniform
+		keyword RuntimeDescriptorArrayEXT
+		keyword FMix
+		keyword Reflect
+		keyword Refract
+		keyword Log
+		keyword Length
+		keyword Reduce
+		keyword DebugTypeBasic
+		keyword DebugTypeVector
+		keyword DebugTypeMatrix
+		keyword DebugTypeArray
+		keyword DebugTypePointer
+		keyword DebugTypeQualifier
+		keyword DebugTypeTypedef
+		keyword DebugTypeFunction
+		keyword DebugTypeEnum
+		keyword DebugTypeComposite
+		keyword DebugTypeMember
+		keyword DebugTypeInheritance
+		keyword DebugTypePtrToMember
+		keyword DebugInfoNone
+		keyword DebugExpression
+		keyword DebugSource
+		keyword DebugCompilationUnit
+		keyword DebugFunctionDeclaration
+		keyword DebugFunction
+		keyword DebugFunctionDefinition
+		keyword DebugLexicalBlock
+		keyword DebugLocalVariable
+		keyword DebugGlobalVariable
+		keyword DebugScope
+		keyword DebugNoScope
+		keyword DebugLine
+		keyword DebugDeclare
+		keyword DebugValue
+		keyword DebugEntryPoint
+		keyword Private
+		keyword MeshShadingEXT
+		keyword StorageBuffer8BitAccess
+		keyword MeshEXT
+		keyword TaskPayloadWorkgroupEXT
+		keyword TaskEXT
 	}
-	keywords 5
+	asm_directives
 	{
-		None
-		WorkgroupSize
-		Offset
-		MatrixStride
-		ColMajor
-		InstanceIndex
-		Position
-		PointSize
-		ClipDistance
-		CullDistance
+		keyword WorkgroupSize
+		keyword InstanceCustomIndex
+		keyword PrimitiveId
+		keyword ObjectToWorld
+		keyword Position
+		keyword PointSize
+		keyword ClipDistance
+		keyword CullDistance
+		keyword WorldRayOrigin
+		keyword WorldRayDirection
+		keyword WorldToObject
+		keyword RayTmax
+		keyword RayTmin
+		keyword GlobalInvocationId
+		keyword WorkgroupId
+		keyword LocalInvocationIndex
+		keyword PrimitiveCountNV
+		keyword PrimitiveIndicesNV
+		keyword DrawIndex
+		keyword LocalInvocationId
+		keyword TaskCountNV
+		keyword FragCoord
+		keyword PrimitiveTriangleIndicesEXT
 	}
 	style
 	{
@@ -136,74 +341,110 @@ language "spirv"
 	}
 	style
 	{
-		type		word1
+		type		asm_identifier
+		fg_colour	#DCDCDC
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		asm_cpuinstruction
 		fg_colour	#569CD6
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		word2
-		fg_colour	#FF8000
+		type		asm_extinstruction
+		fg_colour	#569CD6
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		comment
+		type		asm_register
+		fg_colour	#4EC9B0
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		asm_directive
+		fg_colour	#BEB7FF
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		asm_comment
 		fg_colour	#608B4E
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		comment_doc
+		type		asm_comment_word
 		fg_colour	#608B4E
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		comment_line
+		type		asm_comment_special
 		fg_colour	#608B4E
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		comment_line_doc
+		type		asm_comment_doxygen
 		fg_colour	#608B4E
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		comment_doc_keyword
-		fg_colour	#608B4E
+		type		asm_dec_number
+		fg_colour	#B8D7A3
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		comment_doc_keyword_error
-		fg_colour	#608B4E
+		type		asm_bin_number
+		fg_colour	#B8D7A3
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		number
-		fg_colour	#B5CEA8
+		type		asm_hex_number
+		fg_colour	#B8D7A3
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		operator
-		fg_colour	#B4B4B4
+		type		asm_operator
+		fg_colour	#F4B25B
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		preprocessor
-		fg_colour	#BD63C5
+		type		asm_string1
+		fg_colour	#D69D85
 		bg_colour	#1E1E1E
 	}
 	style
 	{
-		type		identifier
-		fg_colour	#DCDCDC
+		type		asm_string2
+		fg_colour	#D69D85
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		asm_macroarg
+		fg_colour	#BEB7FF
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		asm_label
+		fg_colour	#BEB7FF
+		bg_colour	#1E1E1E
+	}
+	style
+	{
+		type		asm_macro_declaration
+		fg_colour	#BEB7FF
 		bg_colour	#1E1E1E
 	}
 }

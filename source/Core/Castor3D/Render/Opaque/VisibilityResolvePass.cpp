@@ -2133,6 +2133,7 @@ namespace castor3d
 
 	void VisibilityResolvePass::accept( RenderTechniqueVisitor & visitor )
 	{
+		doAccept( visitor );
 	}
 
 	void VisibilityResolvePass::update( CpuUpdater & updater )
@@ -2325,6 +2326,43 @@ namespace castor3d
 			| ComponentModeFlag::eNormals
 			| ComponentModeFlag::eGeometry
 			| ComponentModeFlag::eOcclusion );
+	}
+
+	void VisibilityResolvePass::doAccept( castor3d::RenderTechniqueVisitor & visitor )
+	{
+		if ( visitor.getFlags().renderPassType == m_nodesPass.getTypeID()
+			&& visitor.config.allowProgramsVisit )
+		{
+			auto pipelineFlags = visitor.getFlags();
+			m_nodesPass.forceAdjustFlags( pipelineFlags );
+
+			if ( pipelineFlags.components.hasParallaxOcclusionMappingOneFlag
+				|| pipelineFlags.components.hasParallaxOcclusionMappingRepeatFlag
+				|| ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly
+					&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag ) )
+			{
+				return;
+			}
+
+			ShaderModule module{ ( useCompute ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_FRAGMENT_BIT )
+				, getName()
+				, visres::getProgram( m_device
+					, getScene()
+					, *m_parent
+					, m_parent->getNormal().getExtent()
+					, visitor.getFlags()
+					, &getIndirectLighting()
+					, getDebugConfig()
+					, 0u
+					, false
+					, hasSsao()
+					, *getClustersConfig()
+					, m_outputScattering
+					, m_deferredLightingFilter
+					, areDebugTargetsEnabled() ) };
+			makeShaderState( m_device, module );
+			visitor.visit( module );
+		}
 	}
 
 	bool VisibilityResolvePass::doIsEnabled()const

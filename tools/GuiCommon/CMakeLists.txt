@@ -388,6 +388,10 @@ if ( TDxWare_SDK_FOUND )
 	)
 endif ()
 if ( CASTOR_C3D_NEEDS_GLSL )
+	target_compile_definitions( ${PROJECT_NAME}
+		PUBLIC
+			GC_HasGLSL
+	)
 	target_link_libraries( ${PROJECT_NAME}
 		PRIVATE
 			sdw::CompilerGlsl

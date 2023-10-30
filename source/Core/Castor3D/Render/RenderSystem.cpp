@@ -984,7 +984,7 @@ namespace castor3d
 
 		if ( ires.second )
 		{
-			auto result = compileShader( getShaderStage( entryPoint.stage )
+			auto result = compileShader( getVkShaderStage( entryPoint.stage )
 				, module.name
 				, *module.shader
 				, entryPoint );
@@ -1008,7 +1008,9 @@ namespace castor3d
 		log::debug << " SPV ...";
 		auto & shaderAllocator = doGetShaderAllocator();
 		auto allocator = shaderAllocator.getBlock();
-		auto statements = ast::selectEntryPoint( shader.getStmtCache(), shader.getExprCache(), entryPoint, shader.getStatements() );
+		ast::stmt::StmtCache compileStmtCache{ *allocator };
+		ast::expr::ExprCache compileExprCache{ *allocator };
+		auto statements = ast::selectEntryPoint( compileStmtCache, compileExprCache, entryPoint, shader.getStatements() );
 		auto module = spirv::compileSpirV( *allocator, shader, statements.get(), entryPoint.stage, spirvConfig );
 		result.spirv = spirv::serialiseModule( *module );
 		std::string glsl;
@@ -1076,6 +1078,7 @@ namespace castor3d
 				, true
 				, true
 				, true };
+			config.allocator = &shaderAllocator;
 			glsl = glsl::compileGlsl( shader
 				, statements.get()
 				, entryPoint.stage

@@ -210,6 +210,7 @@ namespace castor3d
 
 	void RenderTechniqueNodesPass::accept( RenderTechniqueVisitor & visitor )
 	{
+		doAccept( visitor );
 	}
 
 	void RenderTechniqueNodesPass::update( CpuUpdater & updater )
@@ -250,6 +251,11 @@ namespace castor3d
 			, isFrontCulled
 			, passLayerIndex
 			, morphTargets );
+	}
+
+	void RenderTechniqueNodesPass::doAccept( RenderTechniqueVisitor & visitor )
+	{
+		RenderNodesPass::doAccept( visitor );
 	}
 
 	ProgramFlags RenderTechniqueNodesPass::doAdjustProgramFlags( ProgramFlags flags )const

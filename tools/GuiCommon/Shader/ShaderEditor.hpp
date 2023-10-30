@@ -18,7 +18,7 @@ namespace GuiCommon
 		ShaderEditor( castor3d::Engine * engine
 			, bool canEdit
 			, StcContext & stcContext
-			, castor3d::ShaderModule const & module
+			, ShaderEntryPoint const & shader
 			, std::vector< UniformBufferValues > & ubos
 			, ShaderLanguage language
 			, wxWindow * parent
@@ -31,6 +31,7 @@ namespace GuiCommon
 	private:
 		void doInitialiseLayout( castor3d::Engine * engine );
 		void doCleanup();
+		void doListAvailableLanguages();
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wmissing-override"
@@ -44,8 +45,9 @@ namespace GuiCommon
 		StcTextEditor * m_editor;
 		FrameVariablesList * m_frameVariablesList;
 		PropertiesContainer * m_frameVariablesProperties;
-		castor3d::ShaderModule const & m_module;
+		ShaderEntryPoint const & m_shader;
 		std::vector< UniformBufferValues > & m_ubos;
+		std::map< ShaderLanguage, wxString > m_sources;
 		bool m_canEdit;
 	};
 }

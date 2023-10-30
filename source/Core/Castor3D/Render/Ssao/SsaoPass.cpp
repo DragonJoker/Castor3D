@@ -101,6 +101,11 @@ namespace castor3d
 
 	void SsaoPass::accept( ConfigurationVisitorBase & visitor )
 	{
+		if ( !m_ssaoConfig.enabled )
+		{
+			return;
+		}
+
 		m_linearisePass->accept( visitor );
 		m_rawAoPass->accept( m_ssaoConfig, visitor );
 

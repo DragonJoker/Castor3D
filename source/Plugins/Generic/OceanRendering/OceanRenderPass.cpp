@@ -387,6 +387,8 @@ namespace ocean
 				visitor.visit( prefix + cuT( " amplitude" ), wave.amplitude );
 				visitor.visit( prefix + cuT( " speed" ), wave.speed );
 			}
+
+			doAccept( visitor );
 		}
 	}
 

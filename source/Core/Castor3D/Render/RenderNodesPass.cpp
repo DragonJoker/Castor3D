@@ -22,6 +22,7 @@
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
+#include "Castor3D/Render/RenderTechniqueVisitor.hpp"
 #include "Castor3D/Render/Clustered/FrustumClusters.hpp"
 #include "Castor3D/Render/Culling/SceneCuller.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
@@ -261,6 +262,15 @@ namespace castor3d
 	ShaderPtr RenderNodesPass::getPixelShaderSource( PipelineFlags const & flags )const
 	{
 		return doGetPixelShaderSource( flags );
+	}
+
+	void RenderNodesPass::forceAdjustFlags( PipelineFlags & flags )const
+	{
+		doUpdateFlags( flags );
+		flags.components = adjustFlags( flags.components );
+		flags.textures = adjustFlags( flags.textures );
+		flags.m_shaderFlags = getShaderFlags();
+		flags.isStatic = filtersNonStatic();
 	}
 
 	SubmeshFlags RenderNodesPass::adjustFlags( SubmeshFlags flags )const
@@ -1272,8 +1282,28 @@ namespace castor3d
 		return getEngine()->getShaderProgramCache().getAutomaticProgram( *this, flags );
 	}
 
+	void RenderNodesPass::doAccept( castor3d::RenderTechniqueVisitor & visitor )
+	{
+		if ( visitor.getFlags().renderPassType == m_typeID
+			&& visitor.config.allowProgramsVisit )
+		{
+			auto flags = visitor.getFlags();
+			forceAdjustFlags( flags );
+			auto shaderProgram = doGetProgram( flags );
+
+			for ( auto & state : shaderProgram->getStates() )
+			{
+				visitor.visit( shaderProgram->getSource( state->stage ) );
+			}
+		}
+	}
+
 	void RenderNodesPass::doUpdateFlags( PipelineFlags & flags )const
 	{
+		flags.m_submeshFlags = adjustFlags( flags.m_submeshFlags );
+		flags.m_programFlags = adjustFlags( flags.m_programFlags );
+		flags.m_sceneFlags = adjustFlags( flags.m_sceneFlags );
+
 		if ( checkFlag( m_filters, RenderFilter::eAlphaTest ) )
 		{
 			flags.alphaFunc = VK_COMPARE_OP_ALWAYS;
@@ -1295,10 +1325,6 @@ namespace castor3d
 		{
 			addFlag( flags.m_shaderFlags, ShaderFlag::eOpacity );
 		}
-
-		flags.m_submeshFlags = adjustFlags( flags.m_submeshFlags );
-		flags.m_programFlags = adjustFlags( flags.m_programFlags );
-		flags.m_sceneFlags = adjustFlags( flags.m_sceneFlags );
 
 		if ( flags.textures.configCount == 0
 			&& !flags.forceTexCoords() )

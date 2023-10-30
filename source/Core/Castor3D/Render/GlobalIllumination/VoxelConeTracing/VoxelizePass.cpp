@@ -109,16 +109,7 @@ namespace castor3d
 
 	void VoxelizePass::accept( RenderTechniqueVisitor & visitor )
 	{
-		if ( visitor.getFlags().renderPassType == m_typeID
-			&& visitor.config.allowProgramsVisit )
-		{
-			auto flags = visitor.getFlags();
-			doUpdateFlags( flags );
-			auto shaderProgram = doGetProgram( flags );
-			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_VERTEX_BIT ) );
-			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_GEOMETRY_BIT ) );
-			visitor.visit( shaderProgram->getSource( VK_SHADER_STAGE_FRAGMENT_BIT ) );
-		}
+		doAccept( visitor );
 	}
 
 	void VoxelizePass::update( CpuUpdater & updater )

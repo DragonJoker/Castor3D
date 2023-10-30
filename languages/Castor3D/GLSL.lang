@@ -4,725 +4,725 @@ language "glsl"
 	fold_flags	compact
 	font_name Consolas
 	font_size 10
-	keywords 1
+	c_primarykeywords
 	{
-		attribute
-		const
-		uniform
-		varying
-		buffer
-		shared
-		coherent
-		volatile
-		restrict
-		readonly
-		writeonly
-		atomic_uint
-		layout
-		centroid
-		flat
-		smooth
-		noperspective
-		patch
-		sample
-		break
-		continue
-		do
-		for
-		while
-		switch
-		case
-		default
-		if
-		else
-		subroutine
-		in
-		out
-		inout
-		float
-		double
-		int
-		void
-		bool
-		true
-		false
-		invariant
-		precise
-		discard
-		return
-		mat2
-		mat3
-		mat4
-		dmat2
-		dmat3
-		dmat4
-		mat2x2
-		mat2x3
-		mat2x4
-		dmat2x2
-		dmat2x3
-		dmat2x4
-		mat3x2
-		mat3x3
-		mat3x4
-		dmat3x2
-		dmat3x3
-		dmat3x4
-		mat4x2
-		mat4x3
-		mat4x4
-		dmat4x2
-		dmat4x3
-		dmat4x4
-		vec2
-		vec3
-		vec4
-		ivec2
-		ivec3
-		ivec4
-		bvec2
-		bvec3
-		bvec4
-		dvec2
-		dvec3
-		dvec4
-		uint
-		uvec2
-		uvec3
-		uvec4
-		lowp
-		mediump
-		highp
-		precision
-		sampler1D
-		sampler2D
-		sampler3D
-		samplerCube
-		sampler1DShadow
-		sampler2DShadow
-		samplerCubeShadow
-		sampler1DArray
-		sampler2DArray
-		sampler1DArrayShadow
-		sampler2DArrayShadow
-		isampler1D
-		isampler2D
-		isampler3D
-		isamplerCube
-		isampler1DArray
-		isampler2DArray
-		usampler1D
-		usampler2D
-		usampler3D
-		usamplerCube
-		usampler1DArray
-		usampler2DArray
-		sampler2DRect
-		sampler2DRectShadow
-		isampler2DRect
-		usampler2DRect
-		samplerBuffer
-		isamplerBuffer
-		usamplerBuffer
-		sampler2DMS
-		isampler2DMS
-		usampler2DMS
-		sampler2DMSArray
-		isampler2DMSArray
-		usampler2DMSArray
-		samplerCubeArray
-		samplerCubeArrayShadow
-		isamplerCubeArray
-		usamplerCubeArray
-		image1D
-		iimage1D
-		uimage1D
-		image2D
-		iimage2D
-		uimage2D
-		image3D
-		iimage3D
-		uimage3D
-		image2DRect
-		iimage2DRect
-		uimage2DRect
-		imageCube
-		iimageCube
-		uimageCube
-		imageBuffer
-		iimageBuffer
-		uimageBuffer
-		image1DArray
-		iimage1DArray
-		uimage1DArray
-		image2DArray
-		iimage2DArray
-		uimage2DArray
-		imageCubeArray
-		iimageCubeArray
-		uimageCubeArray
-		image2DMS
-		iimage2DMS
-		uimage2DMS
-		image2DMSArray
-		iimage2DMSArray
-		uimage2DMSArray
-		struct
-		std140
-		std430
-		row_major
-		column_major
-		binding
-		set
-		align
-		location
-		component
-		triangles
-		quads
-		isolines
-		equal_spacing
-		fractional_even_spacing
-		fractional_odd_spacing
-		cw
-		ccw
-		point_mode
-		points
-		lines
-		lines_adjacency
-		triangles
-		triangles_adjacency
-		invocations
-		origin_upper_left
-		pixel_center_integer
-		early_fragment_tests
-		local_size_x
-		local_size_y
-		local_size_z
-		xfb_buffer
-		xfb_stride
-		xfb_offset
-		vertices
-		line_strip
-		triangle_strip
-		max_vertices
-		stream
-		depth_any
-		depth_greater
-		depth_less
-		depth_unchanged
-		smooth
-		flat
-		noperspective
-		rgba32f
-		rgba16f
-		rg32f
-		rg16f
-		r11f_g11f_b10f
-		r32f
-		r16f
-		rgba16
-		rgb10_a2
-		rgba8
-		rg16
-		rg8
-		r16
-		r8
-		rgba16_snorm
-		rgba8_snorm
-		rg16_snorm
-		rg8_snorm
-		r16_snorm
-		rgba32i
-		rgba16i
-		rgba8i
-		rg32i
-		rg16i
-		rg8i
-		r32i
-		r16i
-		r8i
-		rgba32ui
-		rgba16ui
-		rgb10_a2ui
-		rgba8ui
-		rg32ui
-		rg16ui
-		rg8ui
-		r32ui
-		r16ui
-		r8ui
-		common
-		partition
-		active
-		asm
-		class
-		union
-		enum
-		typedef
-		template
-		this
-		packed
-		resource
-		goto
-		inline
-		noinline
-		public
-		static
-		extern
-		external
-		interface
-		long
-		short
-		half
-		fixed
-		unsigned
-		superp
-		input
-		output
-		hvec2
-		hvec3
-		hvec4
-		dvec2
-		dvec3
-		dvec4
-		fvec2
-		fvec3
-		fvec4
-		sampler3DRect
-		sizeof
-		cast
-		namespace
-		using
-		filter
-		Light
-		DirectionalLight
-		PointLight
-		SpotLight
-		LegacyMaterial
-		MetallicRoughnessMaterial
-		SpecularGlossinessMaterial
+		keyword attribute
+		keyword const
+		keyword uniform
+		keyword varying
+		keyword buffer
+		keyword shared
+		keyword coherent
+		keyword volatile
+		keyword restrict
+		keyword readonly
+		keyword writeonly
+		keyword atomic_uint
+		keyword layout
+		keyword centroid
+		keyword flat
+		keyword smooth
+		keyword noperspective
+		keyword patch
+		keyword sample
+		keyword break
+		keyword continue
+		keyword do
+		keyword for
+		keyword while
+		keyword switch
+		keyword case
+		keyword default
+		keyword if
+		keyword else
+		keyword subroutine
+		keyword in
+		keyword out
+		keyword inout
+		keyword float
+		keyword double
+		keyword int
+		keyword void
+		keyword bool
+		keyword true
+		keyword false
+		keyword invariant
+		keyword precise
+		keyword discard
+		keyword return
+		keyword mat2
+		keyword mat3
+		keyword mat4
+		keyword dmat2
+		keyword dmat3
+		keyword dmat4
+		keyword mat2x2
+		keyword mat2x3
+		keyword mat2x4
+		keyword dmat2x2
+		keyword dmat2x3
+		keyword dmat2x4
+		keyword mat3x2
+		keyword mat3x3
+		keyword mat3x4
+		keyword dmat3x2
+		keyword dmat3x3
+		keyword dmat3x4
+		keyword mat4x2
+		keyword mat4x3
+		keyword mat4x4
+		keyword dmat4x2
+		keyword dmat4x3
+		keyword dmat4x4
+		keyword vec2
+		keyword vec3
+		keyword vec4
+		keyword ivec2
+		keyword ivec3
+		keyword ivec4
+		keyword bvec2
+		keyword bvec3
+		keyword bvec4
+		keyword dvec2
+		keyword dvec3
+		keyword dvec4
+		keyword uint
+		keyword uvec2
+		keyword uvec3
+		keyword uvec4
+		keyword lowp
+		keyword mediump
+		keyword highp
+		keyword precision
+		keyword sampler1D
+		keyword sampler2D
+		keyword sampler3D
+		keyword samplerCube
+		keyword sampler1DShadow
+		keyword sampler2DShadow
+		keyword samplerCubeShadow
+		keyword sampler1DArray
+		keyword sampler2DArray
+		keyword sampler1DArrayShadow
+		keyword sampler2DArrayShadow
+		keyword isampler1D
+		keyword isampler2D
+		keyword isampler3D
+		keyword isamplerCube
+		keyword isampler1DArray
+		keyword isampler2DArray
+		keyword usampler1D
+		keyword usampler2D
+		keyword usampler3D
+		keyword usamplerCube
+		keyword usampler1DArray
+		keyword usampler2DArray
+		keyword sampler2DRect
+		keyword sampler2DRectShadow
+		keyword isampler2DRect
+		keyword usampler2DRect
+		keyword samplerBuffer
+		keyword isamplerBuffer
+		keyword usamplerBuffer
+		keyword sampler2DMS
+		keyword isampler2DMS
+		keyword usampler2DMS
+		keyword sampler2DMSArray
+		keyword isampler2DMSArray
+		keyword usampler2DMSArray
+		keyword samplerCubeArray
+		keyword samplerCubeArrayShadow
+		keyword isamplerCubeArray
+		keyword usamplerCubeArray
+		keyword image1D
+		keyword iimage1D
+		keyword uimage1D
+		keyword image2D
+		keyword iimage2D
+		keyword uimage2D
+		keyword image3D
+		keyword iimage3D
+		keyword uimage3D
+		keyword image2DRect
+		keyword iimage2DRect
+		keyword uimage2DRect
+		keyword imageCube
+		keyword iimageCube
+		keyword uimageCube
+		keyword imageBuffer
+		keyword iimageBuffer
+		keyword uimageBuffer
+		keyword image1DArray
+		keyword iimage1DArray
+		keyword uimage1DArray
+		keyword image2DArray
+		keyword iimage2DArray
+		keyword uimage2DArray
+		keyword imageCubeArray
+		keyword iimageCubeArray
+		keyword uimageCubeArray
+		keyword image2DMS
+		keyword iimage2DMS
+		keyword uimage2DMS
+		keyword image2DMSArray
+		keyword iimage2DMSArray
+		keyword uimage2DMSArray
+		keyword struct
+		keyword std140
+		keyword std430
+		keyword row_major
+		keyword column_major
+		keyword binding
+		keyword set
+		keyword align
+		keyword location
+		keyword component
+		keyword triangles
+		keyword quads
+		keyword isolines
+		keyword equal_spacing
+		keyword fractional_even_spacing
+		keyword fractional_odd_spacing
+		keyword cw
+		keyword ccw
+		keyword point_mode
+		keyword points
+		keyword lines
+		keyword lines_adjacency
+		keyword triangles
+		keyword triangles_adjacency
+		keyword invocations
+		keyword origin_upper_left
+		keyword pixel_center_integer
+		keyword early_fragment_tests
+		keyword local_size_x
+		keyword local_size_y
+		keyword local_size_z
+		keyword xfb_buffer
+		keyword xfb_stride
+		keyword xfb_offset
+		keyword vertices
+		keyword line_strip
+		keyword triangle_strip
+		keyword max_vertices
+		keyword stream
+		keyword depth_any
+		keyword depth_greater
+		keyword depth_less
+		keyword depth_unchanged
+		keyword smooth
+		keyword flat
+		keyword noperspective
+		keyword rgba32f
+		keyword rgba16f
+		keyword rg32f
+		keyword rg16f
+		keyword r11f_g11f_b10f
+		keyword r32f
+		keyword r16f
+		keyword rgba16
+		keyword rgb10_a2
+		keyword rgba8
+		keyword rg16
+		keyword rg8
+		keyword r16
+		keyword r8
+		keyword rgba16_snorm
+		keyword rgba8_snorm
+		keyword rg16_snorm
+		keyword rg8_snorm
+		keyword r16_snorm
+		keyword rgba32i
+		keyword rgba16i
+		keyword rgba8i
+		keyword rg32i
+		keyword rg16i
+		keyword rg8i
+		keyword r32i
+		keyword r16i
+		keyword r8i
+		keyword rgba32ui
+		keyword rgba16ui
+		keyword rgb10_a2ui
+		keyword rgba8ui
+		keyword rg32ui
+		keyword rg16ui
+		keyword rg8ui
+		keyword r32ui
+		keyword r16ui
+		keyword r8ui
+		keyword common
+		keyword partition
+		keyword active
+		keyword asm
+		keyword class
+		keyword union
+		keyword enum
+		keyword typedef
+		keyword template
+		keyword this
+		keyword packed
+		keyword resource
+		keyword goto
+		keyword inline
+		keyword noinline
+		keyword public
+		keyword static
+		keyword extern
+		keyword external
+		keyword interface
+		keyword long
+		keyword short
+		keyword half
+		keyword fixed
+		keyword unsigned
+		keyword superp
+		keyword input
+		keyword output
+		keyword hvec2
+		keyword hvec3
+		keyword hvec4
+		keyword dvec2
+		keyword dvec3
+		keyword dvec4
+		keyword fvec2
+		keyword fvec3
+		keyword fvec4
+		keyword sampler3DRect
+		keyword sizeof
+		keyword cast
+		keyword namespace
+		keyword using
+		keyword filter
+		keyword Light
+		keyword DirectionalLight
+		keyword PointLight
+		keyword SpotLight
+		keyword LegacyMaterial
+		keyword MetallicRoughnessMaterial
+		keyword SpecularGlossinessMaterial
 	}
-	keywords 2
+	c_secondarykeywords
 	{
-		radians
-		degrees
-		sin
-		cos
-		tan
-		asin
-		acos
-		atan
-		sinh
-		cosh
-		tanh
-		asinh
-		acosh
-		atanh
-		pow
-		exp
-		log
-		exp2
-		log2
-		sqrt
-		inversesqrt
-		abs
-		sign
-		floor
-		trunc
-		round
-		roundEven
-		ceil
-		fract
-		mod
-		modf
-		min
-		max
-		clamp
-		mix
-		step
-		smoothstep
-		isnan
-		isinf
-		floatBitsToInt
-		floatBitsToUInt
-		intBitsToFloat
-		uintBitsToFloat
-		fma
-		frexp
-		ldexp
-		packUnorm2x16
-		packSnorm2x16
-		packUnorm4x8
-		packSnorm4x8
-		unpackUnorm2x16
-		unpackSnorm2x16
-		unpackUnorm4x8
-		packDouble2x32
-		unpackDouble2x32
-		packHalf2x16
-		unpackHalf2x16
-		length
-		distance
-		dot
-		cross
-		normalize
-		faceforward
-		reflect
-		refract
-		matrixCompMult
-		outerProduct
-		transpose
-		determinant
-		inverse
-		lessThan
-		lessThanEqual
-		greaterThan
-		greaterThanEqual
-		equal
-		notEqual
-		any
-		all
-		not
-		uaddCarry
-		usubBorrow
-		umulExtended
-		imulExtended
-		bitfieldExtract
-		bitfieldExtract
-		bitfieldInsert
-		bitfieldReverse
-		bitCount
-		findLSB
-		findMSB
-		textureSize
-		textureQueryLod
-		textureQueryLevels
-		texture
-		textureProj
-		textureLod
-		textureOffset
-		texelFetch
-		texelFetchOffset
-		textureProjOffset
-		textureLodOffset
-		textureProjLod
-		textureProjLodOffset
-		textureGrad
-		textureGradOffset
-		textureProjGrad
-		textureProjGradOffset
-		textureGather
-		textureGatherOffset
-		textureGatherOffsets
-		atomicCounterIncrement
-		atomicCounterDecrement
-		atomicCounter
-		atomicAdd
-		atomicMin
-		atomicMax
-		atomicAnd
-		atomicOr
-		atomicXor
-		atomicExchange
-		atomicCompSwap
-		imageSize
-		imageLoad
-		imageStore
-		imageAtomicAdd
-		imageAtomicMin
-		imageAtomicMax
-		imageAtomicAnd
-		imageAtomicOr
-		imageAtomicXor
-		imageAtomicExchange
-		imageAtomicCompSwap
-		dFdx
-		dFdy
-		fwidth
-		interpolateAtCentroid
-		interpolateAtSample
-		interpolateAtOffset
-		noise1
-		noise2
-		noise3
-		noise4
-		EmitStreamVertex
-		EndStreamPrimitive
-		EmitVertex
-		EndPrimitive
-		barrier
-		memoryBarrier
-		memoryBarrierAtomicCounter
-		memoryBarrierBuffer
-		memoryBarrierShared
-		memoryBarrierImage
-		groupMemoryBarrier
-		ftransform
-		texture1D
-		texture1DProj
-		texture1DLod
-		texture1DProjLod
-		texture2D
-		texture2DProj
-		texture2DLod
-		texture2DProjLod
-		texture3D
-		texture3DProj
-		texture3DLod
-		texture3DProjLod
-		textureCube
-		textureCubeLod
-		shadow1D
-		shadow2D
-		shadow1DProj
-		shadow2DProj
-		shadow1DLod
-		shadow2DLod
-		shadow1DProjLod
-		shadow2DProjLod
-		GetLight
+		keyword radians
+		keyword degrees
+		keyword sin
+		keyword cos
+		keyword tan
+		keyword asin
+		keyword acos
+		keyword atan
+		keyword sinh
+		keyword cosh
+		keyword tanh
+		keyword asinh
+		keyword acosh
+		keyword atanh
+		keyword pow
+		keyword exp
+		keyword log
+		keyword exp2
+		keyword log2
+		keyword sqrt
+		keyword inversesqrt
+		keyword abs
+		keyword sign
+		keyword floor
+		keyword trunc
+		keyword round
+		keyword roundEven
+		keyword ceil
+		keyword fract
+		keyword mod
+		keyword modf
+		keyword min
+		keyword max
+		keyword clamp
+		keyword mix
+		keyword step
+		keyword smoothstep
+		keyword isnan
+		keyword isinf
+		keyword floatBitsToInt
+		keyword floatBitsToUInt
+		keyword intBitsToFloat
+		keyword uintBitsToFloat
+		keyword fma
+		keyword frexp
+		keyword ldexp
+		keyword packUnorm2x16
+		keyword packSnorm2x16
+		keyword packUnorm4x8
+		keyword packSnorm4x8
+		keyword unpackUnorm2x16
+		keyword unpackSnorm2x16
+		keyword unpackUnorm4x8
+		keyword packDouble2x32
+		keyword unpackDouble2x32
+		keyword packHalf2x16
+		keyword unpackHalf2x16
+		keyword length
+		keyword distance
+		keyword dot
+		keyword cross
+		keyword normalize
+		keyword faceforward
+		keyword reflect
+		keyword refract
+		keyword matrixCompMult
+		keyword outerProduct
+		keyword transpose
+		keyword determinant
+		keyword inverse
+		keyword lessThan
+		keyword lessThanEqual
+		keyword greaterThan
+		keyword greaterThanEqual
+		keyword equal
+		keyword notEqual
+		keyword any
+		keyword all
+		keyword not
+		keyword uaddCarry
+		keyword usubBorrow
+		keyword umulExtended
+		keyword imulExtended
+		keyword bitfieldExtract
+		keyword bitfieldExtract
+		keyword bitfieldInsert
+		keyword bitfieldReverse
+		keyword bitCount
+		keyword findLSB
+		keyword findMSB
+		keyword textureSize
+		keyword textureQueryLod
+		keyword textureQueryLevels
+		keyword texture
+		keyword textureProj
+		keyword textureLod
+		keyword textureOffset
+		keyword texelFetch
+		keyword texelFetchOffset
+		keyword textureProjOffset
+		keyword textureLodOffset
+		keyword textureProjLod
+		keyword textureProjLodOffset
+		keyword textureGrad
+		keyword textureGradOffset
+		keyword textureProjGrad
+		keyword textureProjGradOffset
+		keyword textureGather
+		keyword textureGatherOffset
+		keyword textureGatherOffsets
+		keyword atomicCounterIncrement
+		keyword atomicCounterDecrement
+		keyword atomicCounter
+		keyword atomicAdd
+		keyword atomicMin
+		keyword atomicMax
+		keyword atomicAnd
+		keyword atomicOr
+		keyword atomicXor
+		keyword atomicExchange
+		keyword atomicCompSwap
+		keyword imageSize
+		keyword imageLoad
+		keyword imageStore
+		keyword imageAtomicAdd
+		keyword imageAtomicMin
+		keyword imageAtomicMax
+		keyword imageAtomicAnd
+		keyword imageAtomicOr
+		keyword imageAtomicXor
+		keyword imageAtomicExchange
+		keyword imageAtomicCompSwap
+		keyword dFdx
+		keyword dFdy
+		keyword fwidth
+		keyword interpolateAtCentroid
+		keyword interpolateAtSample
+		keyword interpolateAtOffset
+		keyword noise1
+		keyword noise2
+		keyword noise3
+		keyword noise4
+		keyword EmitStreamVertex
+		keyword EndStreamPrimitive
+		keyword EmitVertex
+		keyword EndPrimitive
+		keyword barrier
+		keyword memoryBarrier
+		keyword memoryBarrierAtomicCounter
+		keyword memoryBarrierBuffer
+		keyword memoryBarrierShared
+		keyword memoryBarrierImage
+		keyword groupMemoryBarrier
+		keyword ftransform
+		keyword texture1D
+		keyword texture1DProj
+		keyword texture1DLod
+		keyword texture1DProjLod
+		keyword texture2D
+		keyword texture2DProj
+		keyword texture2DLod
+		keyword texture2DProjLod
+		keyword texture3D
+		keyword texture3DProj
+		keyword texture3DLod
+		keyword texture3DProjLod
+		keyword textureCube
+		keyword textureCubeLod
+		keyword shadow1D
+		keyword shadow2D
+		keyword shadow1DProj
+		keyword shadow2DProj
+		keyword shadow1DLod
+		keyword shadow2DLod
+		keyword shadow1DProjLod
+		keyword shadow2DProjLod
+		keyword GetLight
 	}
-	keywords 5
+	c_preprocessordefinitions
 	{
-		__LINE__
-		__FILE__
-		__VERSION__
-		STDGL
-		optimize
-		debug
-		on
-		off
-		GL_core_profile
-		GL_compatibility_profile
-		GL_es_profile
-		all
-		require
-		enable
-		warn
-		disable
-		GL_FRAGMENT_PRECISION_HIGH
-		gl_FrontColor
-		gl_BackColor
-		gl_FrontSecondaryColor
-		gl_BackSecondaryColor
-		gl_Color
-		gl_SecondaryColor
-		gl_NumWorkGroups
-		gl_WorkGroupSize
-		gl_WorkGroupID
-		gl_LocalInvocationID
-		gl_GlobalInvocationID
-		gl_LocalInvocationIndex
-		gl_VertexID
-		gl_InstanceID
-		gl_PerVertex
-		gl_Position
-		gl_PointSize
-		gl_ClipDistance
-		gl_PrimitiveIDIn
-		gl_InvocationID
-		gl_PrimitiveID
-		gl_Layer
-		gl_ViewportIndex
-		gl_in
-		gl_PatchVerticesIn
-		gl_out
-		gl_TessLevelOuter
-		gl_TessLevelInner
-		gl_PatchVerticesIn
-		gl_TessCoord
-		gl_FragColor
-		gl_FragCoord
-		gl_FrontFacing
-		gl_PointCoord
-		gl_SampleID
-		gl_SamplePosition
-		gl_SampleMaskIn
-		gl_FragDepth
-		gl_SampleMask
-		gl_DepthRangeParameters
-		gl_DepthRange
-		gl_NumSamples
-		gl_MaxTessControlInputComponents
-		gl_MaxTessControlOutputComponents
-		gl_MaxTessControlTextureImageUnits
-		gl_MaxTessControlUniformComponents
-		gl_MaxTessControlTotalOutputComponents
-		gl_MaxTessEvaluationInputComponents
-		gl_MaxTessEvaluationOutputComponents
-		gl_MaxTessEvaluationTextureImageUnits
-		gl_MaxTessEvaluationUniformComponents
-		gl_MaxTessPatchComponents
-		gl_MaxPatchVertices
-		gl_MaxTessGenLevel
-		gl_MaxViewports
-		gl_MaxVertexUniformVectors
-		gl_MaxFragmentUniformVectors
-		gl_MaxVaryingVectors
-		gl_MaxVertexAtomicCounters
-		gl_MaxTessControlAtomicCounters
-		gl_MaxTessEvaluationAtomicCounters
-		gl_MaxGeometryAtomicCounters
-		gl_MaxFragmentAtomicCounters
-		gl_MaxCombinedAtomicCounters
-		gl_MaxAtomicCounterBindings
-		gl_MaxVertexAtomicCounterBuffers
-		gl_MaxTessControlAtomicCounterBuffers
-		gl_MaxTessEvaluationAtomicCounterBuffers
-		gl_MaxGeometryAtomicCounterBuffers
-		gl_MaxFragmentAtomicCounterBuffers
-		gl_MaxCombinedAtomicCounterBuffers
-		gl_MaxAtomicCounterBufferSize
-		gl_MinProgramTexelOffset
-		gl_MaxProgramTexelOffset
-		gl_MaxTransformFeedbackBuffers
-		gl_MaxTransformFeedbackInterleavedComponents
-		gl_ClipVertex
-		gl_TexCoord
-		gl_FogFragCoord
-		gl_FragColor
-		gl_FragData
-		gl_Normal
-		gl_Vertex
-		gl_MultiTexCoord0
-		gl_MultiTexCoord1
-		gl_MultiTexCoord2
-		gl_MultiTexCoord3
-		gl_MultiTexCoord4
-		gl_MultiTexCoord5
-		gl_MultiTexCoord6
-		gl_MultiTexCoord7
-		gl_FogCoord
-		gl_MaxTextureUnits
-		gl_MaxTextureCoords
-		gl_MaxClipPlanes
-		gl_MaxVaryingFloats
-		gl_ModelViewMatrix
-		gl_ProjectionMatrix
-		gl_ModelViewProjectionMatrix
-		gl_TextureMatrix
-		gl_NormalMatrix
-		gl_ModelViewMatrixInverse
-		gl_ProjectionMatrixInverse
-		gl_ModelViewProjectionMatrixInverse
-		gl_TextureMatrixInverse
-		gl_ModelViewMatrixTranspose
-		gl_ProjectionMatrixTranspose
-		gl_ModelViewProjectionMatrixTranspose
-		gl_TextureMatrixTranspose
-		gl_ModelViewMatrixInverseTranspose
-		gl_ProjectionMatrixInverseTranspose
-		gl_ModelViewProjectionMatrixInverseTranspose
-		gl_TextureMatrixInverseTranspose
-		gl_NormalScale
-		gl_ClipPlane
-		gl_PointParameters
-		gl_Point
-		gl_MaterialParameters
-		gl_FrontMaterial
-		gl_BackMaterial
-		gl_LightSourceParameters
-		gl_LightSource
-		gl_LightModelParameters
-		gl_LightModel
-		gl_LightModelProducts
-		gl_FrontLightModelProduct
-		gl_BackLightModelProduct
-		gl_LightProducts
-		gl_FrontLightProduct
-		gl_BackLightProduct
-		gl_TextureEnvColor
-		gl_EyePlaneS
-		gl_EyePlaneT
-		gl_EyePlaneR
-		gl_EyePlaneQ
-		gl_ObjectPlaneS
-		gl_ObjectPlaneT
-		gl_ObjectPlaneR
-		gl_ObjectPlaneQ
-		gl_FogParameters
-		gl_Fog
-		c3d_mapColour
-		c3d_mapAmbient
-		c3d_mapDiffuse
-		c3d_mapSpecular
-		c3d_mapEmissive
-		c3d_mapNormal
-		c3d_mapOpacity
-		c3d_mapHeight
-		c3d_mapGloss
-		c3d_mapText
-		c3d_mapPosition
-		c3d_mapNormals
-		c3d_mapTangent
-		c3d_mapBitangent
-		c3d_v3CameraPosition
-		c3d_v4AmbientLight
-		c3d_v4BackgroundColour
-		c3d_v4MatAmbient
-		c3d_v4MatDiffuse
-		c3d_v4MatSpecular
-		c3d_v4MatEmissive
-		c3d_fMatShininess
-		c3d_fMatOpacity
-		c3d_sLights
-		c3d_iLightsCount
-		c3d_fCameraFarPlane
-		c3d_iFogType
-		c3d_fFogDensity
-		c3d_shadowReceiver
-		c3d_materialIndex
-		c3d_envMapIndex
-		c3d_mtxProjection
-		c3d_mtxModel
-		c3d_mtxView
-		c3d_mtxNormal
-		c3d_mtxModelView
-		c3d_mtxProjectionModelView
-		c3d_mtxProjectionView
-		c3d_mtxTexture0
-		c3d_mtxTexture1
-		c3d_mtxTexture1
-		c3d_mtxTexture2
-		c3d_mtxTexture3
-		c3d_mtxBones
-		c3d_v4Camera
-		c3d_materials
-		position
-		normal
-		bitangent
-		tangent
-		texture
-		colour
-		bone_ids0
-		bone_ids1
-		weights0
-		weights1
-		transform
-		vtx_position
-		vtx_tangentSpaceFragPosition
-		vtx_tangentSpaceViewPosition
-		vtx_normal
-		vtx_tangent
-		vtx_bitangent
-		vtx_texture
-		vtx_mtxModelView
-		vtx_mtxView
-		vtx_eyeVec
-		vtx_mtxTBN
-		vtx_instance
-		vtx_material
-		out_v4Position
-		out_v4Diffuse
-		out_v4Normals
-		out_v4Tangent
-		out_v4Bitangent
-		out_v4Specular
-		out_FragColor
-		out_c3dNormal
-		out_c3dDiffuse
-		out_c3dSpecular
-		out_c3dEmissive
+		keyword __LINE__
+		keyword __FILE__
+		keyword __VERSION__
+		keyword STDGL
+		keyword optimize
+		keyword debug
+		keyword on
+		keyword off
+		keyword GL_core_profile
+		keyword GL_compatibility_profile
+		keyword GL_es_profile
+		keyword all
+		keyword require
+		keyword enable
+		keyword warn
+		keyword disable
+		keyword GL_FRAGMENT_PRECISION_HIGH
+		keyword gl_FrontColor
+		keyword gl_BackColor
+		keyword gl_FrontSecondaryColor
+		keyword gl_BackSecondaryColor
+		keyword gl_Color
+		keyword gl_SecondaryColor
+		keyword gl_NumWorkGroups
+		keyword gl_WorkGroupSize
+		keyword gl_WorkGroupID
+		keyword gl_LocalInvocationID
+		keyword gl_GlobalInvocationID
+		keyword gl_LocalInvocationIndex
+		keyword gl_VertexID
+		keyword gl_InstanceID
+		keyword gl_PerVertex
+		keyword gl_Position
+		keyword gl_PointSize
+		keyword gl_ClipDistance
+		keyword gl_PrimitiveIDIn
+		keyword gl_InvocationID
+		keyword gl_PrimitiveID
+		keyword gl_Layer
+		keyword gl_ViewportIndex
+		keyword gl_in
+		keyword gl_PatchVerticesIn
+		keyword gl_out
+		keyword gl_TessLevelOuter
+		keyword gl_TessLevelInner
+		keyword gl_PatchVerticesIn
+		keyword gl_TessCoord
+		keyword gl_FragColor
+		keyword gl_FragCoord
+		keyword gl_FrontFacing
+		keyword gl_PointCoord
+		keyword gl_SampleID
+		keyword gl_SamplePosition
+		keyword gl_SampleMaskIn
+		keyword gl_FragDepth
+		keyword gl_SampleMask
+		keyword gl_DepthRangeParameters
+		keyword gl_DepthRange
+		keyword gl_NumSamples
+		keyword gl_MaxTessControlInputComponents
+		keyword gl_MaxTessControlOutputComponents
+		keyword gl_MaxTessControlTextureImageUnits
+		keyword gl_MaxTessControlUniformComponents
+		keyword gl_MaxTessControlTotalOutputComponents
+		keyword gl_MaxTessEvaluationInputComponents
+		keyword gl_MaxTessEvaluationOutputComponents
+		keyword gl_MaxTessEvaluationTextureImageUnits
+		keyword gl_MaxTessEvaluationUniformComponents
+		keyword gl_MaxTessPatchComponents
+		keyword gl_MaxPatchVertices
+		keyword gl_MaxTessGenLevel
+		keyword gl_MaxViewports
+		keyword gl_MaxVertexUniformVectors
+		keyword gl_MaxFragmentUniformVectors
+		keyword gl_MaxVaryingVectors
+		keyword gl_MaxVertexAtomicCounters
+		keyword gl_MaxTessControlAtomicCounters
+		keyword gl_MaxTessEvaluationAtomicCounters
+		keyword gl_MaxGeometryAtomicCounters
+		keyword gl_MaxFragmentAtomicCounters
+		keyword gl_MaxCombinedAtomicCounters
+		keyword gl_MaxAtomicCounterBindings
+		keyword gl_MaxVertexAtomicCounterBuffers
+		keyword gl_MaxTessControlAtomicCounterBuffers
+		keyword gl_MaxTessEvaluationAtomicCounterBuffers
+		keyword gl_MaxGeometryAtomicCounterBuffers
+		keyword gl_MaxFragmentAtomicCounterBuffers
+		keyword gl_MaxCombinedAtomicCounterBuffers
+		keyword gl_MaxAtomicCounterBufferSize
+		keyword gl_MinProgramTexelOffset
+		keyword gl_MaxProgramTexelOffset
+		keyword gl_MaxTransformFeedbackBuffers
+		keyword gl_MaxTransformFeedbackInterleavedComponents
+		keyword gl_ClipVertex
+		keyword gl_TexCoord
+		keyword gl_FogFragCoord
+		keyword gl_FragColor
+		keyword gl_FragData
+		keyword gl_Normal
+		keyword gl_Vertex
+		keyword gl_MultiTexCoord0
+		keyword gl_MultiTexCoord1
+		keyword gl_MultiTexCoord2
+		keyword gl_MultiTexCoord3
+		keyword gl_MultiTexCoord4
+		keyword gl_MultiTexCoord5
+		keyword gl_MultiTexCoord6
+		keyword gl_MultiTexCoord7
+		keyword gl_FogCoord
+		keyword gl_MaxTextureUnits
+		keyword gl_MaxTextureCoords
+		keyword gl_MaxClipPlanes
+		keyword gl_MaxVaryingFloats
+		keyword gl_ModelViewMatrix
+		keyword gl_ProjectionMatrix
+		keyword gl_ModelViewProjectionMatrix
+		keyword gl_TextureMatrix
+		keyword gl_NormalMatrix
+		keyword gl_ModelViewMatrixInverse
+		keyword gl_ProjectionMatrixInverse
+		keyword gl_ModelViewProjectionMatrixInverse
+		keyword gl_TextureMatrixInverse
+		keyword gl_ModelViewMatrixTranspose
+		keyword gl_ProjectionMatrixTranspose
+		keyword gl_ModelViewProjectionMatrixTranspose
+		keyword gl_TextureMatrixTranspose
+		keyword gl_ModelViewMatrixInverseTranspose
+		keyword gl_ProjectionMatrixInverseTranspose
+		keyword gl_ModelViewProjectionMatrixInverseTranspose
+		keyword gl_TextureMatrixInverseTranspose
+		keyword gl_NormalScale
+		keyword gl_ClipPlane
+		keyword gl_PointParameters
+		keyword gl_Point
+		keyword gl_MaterialParameters
+		keyword gl_FrontMaterial
+		keyword gl_BackMaterial
+		keyword gl_LightSourceParameters
+		keyword gl_LightSource
+		keyword gl_LightModelParameters
+		keyword gl_LightModel
+		keyword gl_LightModelProducts
+		keyword gl_FrontLightModelProduct
+		keyword gl_BackLightModelProduct
+		keyword gl_LightProducts
+		keyword gl_FrontLightProduct
+		keyword gl_BackLightProduct
+		keyword gl_TextureEnvColor
+		keyword gl_EyePlaneS
+		keyword gl_EyePlaneT
+		keyword gl_EyePlaneR
+		keyword gl_EyePlaneQ
+		keyword gl_ObjectPlaneS
+		keyword gl_ObjectPlaneT
+		keyword gl_ObjectPlaneR
+		keyword gl_ObjectPlaneQ
+		keyword gl_FogParameters
+		keyword gl_Fog
+		keyword c3d_mapColour
+		keyword c3d_mapAmbient
+		keyword c3d_mapDiffuse
+		keyword c3d_mapSpecular
+		keyword c3d_mapEmissive
+		keyword c3d_mapNormal
+		keyword c3d_mapOpacity
+		keyword c3d_mapHeight
+		keyword c3d_mapGloss
+		keyword c3d_mapText
+		keyword c3d_mapPosition
+		keyword c3d_mapNormals
+		keyword c3d_mapTangent
+		keyword c3d_mapBitangent
+		keyword c3d_v3CameraPosition
+		keyword c3d_v4AmbientLight
+		keyword c3d_v4BackgroundColour
+		keyword c3d_v4MatAmbient
+		keyword c3d_v4MatDiffuse
+		keyword c3d_v4MatSpecular
+		keyword c3d_v4MatEmissive
+		keyword c3d_fMatShininess
+		keyword c3d_fMatOpacity
+		keyword c3d_sLights
+		keyword c3d_iLightsCount
+		keyword c3d_fCameraFarPlane
+		keyword c3d_iFogType
+		keyword c3d_fFogDensity
+		keyword c3d_shadowReceiver
+		keyword c3d_materialIndex
+		keyword c3d_envMapIndex
+		keyword c3d_mtxProjection
+		keyword c3d_mtxModel
+		keyword c3d_mtxView
+		keyword c3d_mtxNormal
+		keyword c3d_mtxModelView
+		keyword c3d_mtxProjectionModelView
+		keyword c3d_mtxProjectionView
+		keyword c3d_mtxTexture0
+		keyword c3d_mtxTexture1
+		keyword c3d_mtxTexture1
+		keyword c3d_mtxTexture2
+		keyword c3d_mtxTexture3
+		keyword c3d_mtxBones
+		keyword c3d_v4Camera
+		keyword c3d_materials
+		keyword position
+		keyword normal
+		keyword bitangent
+		keyword tangent
+		keyword texture
+		keyword colour
+		keyword bone_ids0
+		keyword bone_ids1
+		keyword weights0
+		keyword weights1
+		keyword transform
+		keyword vtx_position
+		keyword vtx_tangentSpaceFragPosition
+		keyword vtx_tangentSpaceViewPosition
+		keyword vtx_normal
+		keyword vtx_tangent
+		keyword vtx_bitangent
+		keyword vtx_texture
+		keyword vtx_mtxModelView
+		keyword vtx_mtxView
+		keyword vtx_eyeVec
+		keyword vtx_mtxTBN
+		keyword vtx_instance
+		keyword vtx_material
+		keyword out_v4Position
+		keyword out_v4Diffuse
+		keyword out_v4Normals
+		keyword out_v4Tangent
+		keyword out_v4Bitangent
+		keyword out_v4Specular
+		keyword out_FragColor
+		keyword out_c3dNormal
+		keyword out_c3dDiffuse
+		keyword out_c3dSpecular
+		keyword out_c3dEmissive
 	}
 	style
 	{

@@ -16,7 +16,9 @@
 #include <Castor3D/Render/RenderTechnique.hpp>
 #include <Castor3D/Render/RenderTechniquePass.hpp>
 
-#if C3D_HasGLSL
+#include <ShaderAST/Visitors/SelectEntryPoint.hpp>
+
+#if GC_HasGLSL
 #	include <CompilerGlsl/compileGlsl.hpp>
 #endif
 #if GC_HasHLSL
@@ -24,11 +26,125 @@
 #endif
 #include <CompilerSpirV/compileSpirV.hpp>
 
+#if GC_HasSPIRVCross
+#	include "spirv_cpp.hpp"
+#	include "spirv_cross_util.hpp"
+#	include "spirv_glsl.hpp"
+#	if !defined( NDEBUG )
+#		define GC_DebugSpirV 0
+#	endif
+#endif
+
 namespace GuiCommon
 {
-	namespace
+	namespace shdedt
 	{
-#if C3D_HasGLSL
+#if GC_HasSPIRVCross
+
+		struct BlockLocale
+		{
+			BlockLocale()
+				: m_prvLoc{ std::locale( "" ) }
+			{
+				if ( m_prvLoc.name() != "C" )
+				{
+					std::locale::global( std::locale{ "C" } );
+				}
+			}
+
+			~BlockLocale()
+			{
+				if ( m_prvLoc.name() != "C" )
+				{
+					std::locale::global( m_prvLoc );
+				}
+			}
+
+		private:
+			std::locale m_prvLoc;
+		};
+
+		static spv::ExecutionModel getExecutionModel( VkShaderStageFlagBits stage )
+		{
+			spv::ExecutionModel result{};
+
+			switch ( stage )
+			{
+			case VK_SHADER_STAGE_VERTEX_BIT:
+				result = spv::ExecutionModelVertex;
+				break;
+			case VK_SHADER_STAGE_GEOMETRY_BIT:
+				result = spv::ExecutionModelGeometry;
+				break;
+			case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
+				result = spv::ExecutionModelTessellationControl;
+				break;
+			case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
+				result = spv::ExecutionModelTessellationEvaluation;
+				break;
+			case VK_SHADER_STAGE_FRAGMENT_BIT:
+				result = spv::ExecutionModelFragment;
+				break;
+			case VK_SHADER_STAGE_COMPUTE_BIT:
+				result = spv::ExecutionModelGLCompute;
+				break;
+			default:
+				assert( false && "Unsupported shader stage flag" );
+				break;
+			}
+
+			return result;
+		}
+
+		static void doSetEntryPoint( VkShaderStageFlagBits stage
+			, spirv_cross::CompilerGLSL & compiler )
+		{
+			auto model = getExecutionModel( stage );
+			std::string entryPoint;
+
+			for ( auto & e : compiler.get_entry_points_and_stages() )
+			{
+				if ( entryPoint.empty() && e.execution_model == model )
+				{
+					entryPoint = e.name;
+				}
+			}
+
+			if ( entryPoint.empty() )
+			{
+				throw std::runtime_error{ "Could not find an entry point with stage: " + ashes::getName( stage ) };
+			}
+
+			compiler.set_entry_point( entryPoint, model );
+		}
+
+		static void doSetupOptions( castor3d::RenderDevice const & device
+			, spirv_cross::CompilerGLSL & compiler )
+		{
+			auto options = compiler.get_common_options();
+			options.version = device->getShaderVersion();
+			options.es = false;
+			options.separate_shader_objects = true;
+			options.enable_420pack_extension = true;
+			options.vertex.fixup_clipspace = false;
+			options.vertex.flip_vert_y = true;
+			options.vertex.support_nonzero_base_instance = true;
+			compiler.set_common_options( options );
+		}
+
+		static std::string compileSpvToGlsl( castor3d::RenderDevice const & device
+			, ashes::UInt32Array const & spv
+			, VkShaderStageFlagBits stage )
+		{
+			BlockLocale guard;
+			auto compiler = std::make_unique< spirv_cross::CompilerGLSL >( spv );
+			doSetEntryPoint( stage, *compiler );
+			doSetupOptions( device, *compiler );
+			return compiler->compile();
+		}
+
+#endif
+#if GC_HasGLSL
 		glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
 		{
 			glsl::GlslExtensionSet result;
@@ -106,7 +222,7 @@ namespace GuiCommon
 	ShaderEditor::ShaderEditor( castor3d::Engine * engine
 		, bool canEdit
 		, StcContext & stcContext
-		, castor3d::ShaderModule const & module
+		, ShaderEntryPoint const & shader
 		, std::vector< UniformBufferValues > & ubos
 		, ShaderLanguage language
 		, wxWindow * parent
@@ -115,13 +231,14 @@ namespace GuiCommon
 		: wxPanel( parent, wxID_ANY, position, size )
 		, m_auiManager( this, wxAUI_MGR_ALLOW_FLOATING | wxAUI_MGR_TRANSPARENT_HINT | wxAUI_MGR_HINT_FADE | wxAUI_MGR_VENETIAN_BLINDS_HINT | wxAUI_MGR_LIVE_RESIZE )
 		, m_stcContext( stcContext )
-		, m_module( module )
+		, m_shader( shader )
 		, m_ubos( ubos )
 		, m_canEdit( canEdit )
 	{
+		doListAvailableLanguages();
 		doInitialiseLayout( engine );
 		loadLanguage( language );
-		m_frameVariablesList->loadVariables( m_module.stage, m_ubos );
+		m_frameVariablesList->loadVariables( castor3d::getVkShaderStage( m_shader.entryPoint ), m_ubos );
 	}
 
 	ShaderEditor::~ShaderEditor()
@@ -208,50 +325,46 @@ namespace GuiCommon
 
 	void ShaderEditor::loadLanguage( ShaderLanguage language )
 	{
+		if ( m_sources.empty() )
+		{
+			return;
+		}
+
 		wxString extension;
 		wxString source;
-		spirv::SpirVConfig spvConfig{ spirv::v1_5 };
+		auto it = m_sources.find( language );
 
-		switch ( language )
+		if ( it == m_sources.end() )
 		{
-		case GuiCommon::ShaderLanguage::SPIRV:
-			extension = wxT( ".spirv" );
-			source = make_wxString( spirv::writeSpirv( *m_module.shader
-				, spvConfig
-				, true ) );
-			break;
-#if C3D_HasGLSL
-		case GuiCommon::ShaderLanguage::GLSL:
+			language = ShaderLanguage::SPIRV;
+			it = m_sources.find( language );
+		}
+
+		if ( it != m_sources.end() )
+		{
+			source = it->second;
+
+			switch ( language )
 			{
+			case ShaderLanguage::SPIRV:
+				extension = wxT( ".spirv" );
+				break;
+#if GC_HasGLSL
+			case ShaderLanguage::GLSL:
 				extension = wxT( ".glsl" );
-				glsl::GlslConfig config{ m_module.shader->getType()
-					, glsl::v4_6
-					, getGLSLExtensions( glsl::v4_6 )
-					, false
-					, false
-					, true
-					, true
-					, true
-					, true };
-				source = make_wxString( glsl::compileGlsl( *m_module.shader
-					, {}
-					, config ) );
-			}
-			break;
+				break;
 #endif
 #if GC_HasHLSL
-		case GuiCommon::ShaderLanguage::HLSL:
-			{
+			case ShaderLanguage::HLSL:
 				extension = wxT( ".hlsl" );
-				hlsl::HlslConfig config{ hlsl::v6_6
-					, m_module.shader->getType()
-					, false };
-				source = make_wxString( hlsl::compileHlsl( *m_module.shader
-					, {}
-					, config ) );
-			}
-			break;
+				break;
 #endif
+			}
+		}
+		else
+		{
+			source = make_wxString( m_shader.source.text );
+			extension = wxT( ".spirv" );
 		}
 
 		m_editor->setText( source );
@@ -262,6 +375,104 @@ namespace GuiCommon
 	void ShaderEditor::doCleanup()
 	{
 		m_auiManager.DetachPane( m_editor );
+	}
+
+	void ShaderEditor::doListAvailableLanguages()
+	{
+		if ( m_shader.shader )
+		{
+			auto stage = getShaderStage( m_shader.entryPoint );
+			auto entryPoints = ast::listEntryPoints( m_shader.shader->getContainer() );
+			auto it = std::find_if( entryPoints.begin()
+				, entryPoints.end()
+				, [stage]( ast::EntryPointConfig const & lookup )
+				{
+					return lookup.stage == stage;
+				} );
+
+			if ( it == entryPoints.end() )
+			{
+				return;
+			}
+
+			ast::ShaderAllocator shaderAllocator{ ast::AllocationMode::eIncremental };
+			auto allocator = shaderAllocator.getBlock();
+			ast::stmt::StmtCache compileStmtCache{ *allocator };
+			ast::expr::ExprCache compileExprCache{ *allocator };
+			auto statements = ast::selectEntryPoint( compileStmtCache
+				, compileExprCache
+				, *it
+				, m_shader.shader->getContainer() );
+			{
+				spirv::SpirVConfig spvConfig{ spirv::v1_5 };
+				spvConfig.allocator = &shaderAllocator;
+				m_sources.emplace( ShaderLanguage::SPIRV
+					, make_wxString( spirv::writeSpirv( *m_shader.shader
+						, statements.get()
+						, stage
+						, spvConfig
+						, true ) ) );
+			}
+#if GC_HasGLSL
+			{
+				glsl::GlslConfig config{ stage
+					, glsl::v4_6
+					, shdedt::getGLSLExtensions( glsl::v4_6 )
+					, false
+					, false
+					, true
+					, true
+					, true
+					, true };
+				config.allocator = &shaderAllocator;
+				m_sources.emplace( ShaderLanguage::GLSL
+					, make_wxString( glsl::compileGlsl( *m_shader.shader
+						, statements.get()
+						, stage
+						, {}
+						, config ) ) );
+			}
+#endif
+#if GC_HasHLSL
+			{
+				hlsl::HlslConfig config{ hlsl::v6_6
+					, stage
+					, false };
+				config.allocator = &shaderAllocator;
+				m_sources.emplace( ShaderLanguage::HLSL
+					, make_wxString( hlsl::compileHlsl( *m_shader.shader
+						, statements.get()
+						, stage
+						, {}
+						, config ) ) );
+			}
+#endif
+			return;
+		}
+
+		auto glslIndex = m_shader.source.text.find( '#' );
+		auto spirvIndex = m_shader.source.text.find( "; Magic:" );
+
+		if ( glslIndex == 0u
+			&& spirvIndex != std::string::npos
+			&& spirvIndex > glslIndex )
+		{
+#if GC_HasGLSL
+			m_sources.emplace( ShaderLanguage::GLSL
+				, make_wxString( m_shader.source.text.substr( 0u, spirvIndex ) ) );
+#endif
+			m_sources.emplace( ShaderLanguage::SPIRV
+				, make_wxString( m_shader.source.text.substr( spirvIndex ) ) );
+			return;
+		}
+
+		spirv::SpirVConfig spvConfig{ spirv::v1_5 };
+		ast::ShaderAllocator shaderAllocator{ ast::AllocationMode::eIncremental };
+		auto allocator = shaderAllocator.getBlock();
+		spvConfig.allocator = &shaderAllocator;
+		m_sources.emplace( ShaderLanguage::SPIRV
+			, make_wxString( spirv::displaySpirv( *allocator
+				, m_shader.source.spirv ) ) );
 	}
 
 #pragma GCC diagnostic push
