@@ -394,6 +394,12 @@ namespace castor3d
 			, VK_CULL_MODE_FRONT_BIT );
 	}
 
+	void RenderNodesPass::clearPipelines()
+	{
+		m_backPipelines.clear();
+		m_frontPipelines.clear();
+	}
+
 	ashes::PipelineColorBlendStateCreateInfo RenderNodesPass::createBlendState( BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, uint32_t attachesCount )
@@ -1129,10 +1135,6 @@ namespace castor3d
 		{
 			m_renderQueue->invalidate();
 		}
-
-		m_renderQueue->getRenderNodes().clear();
-		m_backPipelines.clear();
-		m_frontPipelines.clear();
 	}
 
 	void RenderNodesPass::doSubRecordInto( crg::RecordContext & context

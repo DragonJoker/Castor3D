@@ -70,8 +70,7 @@ namespace castor3d
 
 	void RenderQueue::invalidate()
 	{
-		m_culledChanged = true;
-		m_commandsChanged = true;
+		m_invalidated = true;
 	}
 
 	void RenderQueue::cleanup()
@@ -91,6 +90,7 @@ namespace castor3d
 				CU_Require( m_renderNodes );
 				m_renderNodes->sortNodes( shadowMaps, shadowBuffer );
 				m_culledChanged = false;
+				m_commandsChanged = true;
 			}
 
 			if ( m_commandsChanged )
@@ -205,11 +205,33 @@ namespace castor3d
 	{
 		getOwner()->resetCommandBuffer( 0u );
 		auto & pass = m_pass;
-		CU_Require( pass.commandBuffer );
-		CU_Require( m_renderNodes );
-		pass.commandBuffer->reset();
-		m_drawCalls = m_renderNodes->prepareCommandBuffers( m_viewport.value()
-			, m_scissor.value() );
+
+		if ( m_invalidated.exchange( false ) )
+		{
+			// Do this here to prevent use of deleted data in command buffer.
+			getRenderNodes().clear();
+			getOwner()->clearPipelines();
+			pass.commandBuffer->reset();
+			pass.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+				, makeVkStruct< VkCommandBufferInheritanceInfo >( pass.renderPassAtInit
+					, 0u
+					, VkFramebuffer( nullptr )
+					, VK_FALSE
+					, 0u
+					, 0u ) );
+			pass.commandBuffer->end();
+			m_culledChanged = true;
+			m_commandsChanged = true;
+		}
+		else
+		{
+			CU_Require( pass.commandBuffer );
+			CU_Require( m_renderNodes );
+			pass.commandBuffer->reset();
+			m_drawCalls = m_renderNodes->prepareCommandBuffers( m_viewport.value()
+				, m_scissor.value() );
+		}
+
 		getOwner()->reRecordCurrent();
 	}
 
