@@ -51,7 +51,11 @@ namespace castor3d
 		m_graph.addGroupOutput( getOwner()->getTargetDepth().front() );
 		m_graph.addGroupOutput( getOwner()->getTargetDepth().back() );
 		m_graph.addGroupOutput( m_result[PpTexture::eDepthObj].wholeViewId );
-		m_graph.addGroupOutput( m_result[PpTexture::eVisibility].wholeViewId );
+
+		if ( hasVisibility() )
+		{
+			m_graph.addGroupOutput( m_result[PpTexture::eVisibility].wholeViewId );
+		}
 	}
 
 	PrepassRendering::~PrepassRendering()
