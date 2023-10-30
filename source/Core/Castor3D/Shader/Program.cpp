@@ -184,16 +184,18 @@ namespace castor3d
 		, ashes::Optional< ashes::SpecializationInfo > specialization )
 	{
 		ashes::PipelineShaderStageCreateInfoArray result;
-		auto entryPoints = ast::listEntryPoints( programModule.shader->getContainer() );
-
-		for ( auto entryPoint : entryPoints )
 		{
-			result.push_back( makeShaderState( *device
-				, getShaderStage( entryPoint.stage )
-				, compileShader( device, programModule, entryPoint )
-				, programModule.name
-				, "main"
-				, std::move( specialization ) ) );
+			auto entryPoints = ast::listEntryPoints( programModule.shader->getContainer() );
+
+			for ( auto entryPoint : entryPoints )
+			{
+				result.push_back( makeShaderState( *device
+					, getShaderStage( entryPoint.stage )
+					, compileShader( device, programModule, entryPoint )
+					, programModule.name
+					, "main"
+					, std::move( specialization ) ) );
+			}
 		}
 
 		programModule.shader.reset();
