@@ -3,6 +3,7 @@
 #include "Castor3D/Render/RenderModule.hpp"
 
 #include <CastorUtils/Graphics/PixelFormat.hpp>
+#include <CastorUtils/Miscellaneous/Hash.hpp>
 
 namespace castor3d
 {

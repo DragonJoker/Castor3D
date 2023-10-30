@@ -9,6 +9,8 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"
 
+#include <CastorUtils/FileParser/ParserParameter.hpp>
+
 CU_ImplementSmartPtr( castor3d, Material )
 
 namespace castor3d

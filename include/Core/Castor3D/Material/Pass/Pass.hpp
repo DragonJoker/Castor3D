@@ -41,6 +41,7 @@ namespace castor3d
 	public:
 		using UnitArray = std::vector< TextureUnitRPtr >;
 		using PassTextureSource = std::pair< TextureSourceInfo, PassTextureConfig >;
+		using TextureSourceArray = std::vector< PassTextureSource >;
 		using UnitDataSources = std::map< TextureUnitDataRPtr, std::vector< TextureSourceInfo > >;
 		/**
 		 *\~english
@@ -517,7 +518,7 @@ namespace castor3d
 		TextureCombine m_textureCombine;
 		uint32_t m_index;
 		PassComponentMap m_components;
-		TextureSourceMap m_sources;
+		TextureSourceArray m_sources;
 		TextureUnitDataRefs m_prepared;
 		std::unordered_map< TextureSourceInfo, TextureAnimationUPtr, TextureSourceInfoHasher > m_animations;
 		uint32_t m_maxTexcoordSet{};

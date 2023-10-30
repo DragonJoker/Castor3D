@@ -20,6 +20,25 @@ namespace c3d_gltf
 
 	private:
 		bool doImportMaterial( castor3d::Material & material )override;
+
+		void doImportSpecularData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
+		void doImportIridescenceData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
+		void doImportVolumeData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
+		void doImportTransmissionData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
+		void doImportClearcoatData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
+		void doImportSheenData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
+		void doImportEmissiveData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
+		void doImportAlphaModeData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
+		void doImportIorData( fastgltf::Material const & impMaterial
+			, castor3d::Pass & pass );
 	};
 }
 

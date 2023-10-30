@@ -54,7 +54,7 @@ namespace castor3d
 		using SortedTextureSources = std::map< PassComponentTextureFlag
 			, Pass::PassTextureSource >;
 
-		static SortedTextureSources sortSources( TextureSourceMap const & sources )
+		static SortedTextureSources sortSources( Pass::TextureSourceArray const & sources )
 		{
 			SortedTextureSources result;
 
@@ -67,10 +67,10 @@ namespace castor3d
 			return result;
 		}
 
-		TextureSourceMap::iterator removeConfiguration( PassComponentTextureFlag flag
+		Pass::TextureSourceArray::iterator removeConfiguration( PassComponentTextureFlag flag
 			, TextureConfiguration config
-			, TextureSourceMap::iterator it
-			, TextureSourceMap & map )
+			, Pass::TextureSourceArray::iterator it
+			, Pass::TextureSourceArray & map )
 		{
 			if ( removeFlag( config, flag ) )
 			{
@@ -80,7 +80,7 @@ namespace castor3d
 				}
 
 				auto passConfig = it->second;
-				map.emplace( TextureSourceInfo{ it->first, config }, passConfig );
+				map.emplace_back( TextureSourceInfo{ it->first, config }, passConfig );
 				return map.begin();
 			}
 
@@ -363,15 +363,34 @@ namespace castor3d
 	void Pass::registerTexture( TextureSourceInfo sourceInfo
 		, PassTextureConfig configuration )
 	{
-		auto it = m_sources.find( sourceInfo );
+		auto it = std::find_if( m_sources.begin()
+			, m_sources.end()
+			, [&sourceInfo]( PassTextureSource const & lookup )
+			{
+				return sourceInfo == lookup.first;
+			} );
 
 		if ( it == m_sources.end() )
 		{
-			m_maxTexcoordSet = std::max( m_maxTexcoordSet, configuration.texcoordSet );
-			m_sources.emplace( std::move( sourceInfo )
+			m_sources.emplace_back( std::move( sourceInfo )
 				, std::move( configuration ) );
 		}
+		else
+		{
+			auto resConfig = it->first.textureConfig();
 
+			for ( auto & flagConfig : sourceInfo.textureConfig().components )
+			{
+				if ( flagConfig.flag )
+				{
+					addFlagConfiguration( resConfig, flagConfig );
+				}
+			}
+
+			it->first = TextureSourceInfo{ it->first, resConfig };
+		}
+
+		m_maxTexcoordSet = std::max( m_maxTexcoordSet, configuration.texcoordSet );
 		doUpdateTextureFlags();
 	}
 
@@ -387,7 +406,12 @@ namespace castor3d
 
 	void Pass::unregisterTexture( TextureSourceInfo sourceInfo )
 	{
-		auto it = m_sources.find( sourceInfo );
+		auto it = std::find_if( m_sources.begin()
+			, m_sources.end()
+			, [&sourceInfo]( PassTextureSource const & lookup )
+			{
+				return sourceInfo == lookup.first;
+			} );
 
 		if ( it != m_sources.end() )
 		{
@@ -401,22 +425,18 @@ namespace castor3d
 	void Pass::resetTexture( TextureSourceInfo const & srcSourceInfo
 		, TextureSourceInfo dstSourceInfo )
 	{
-		auto it = m_sources.find( srcSourceInfo );
+		auto it = std::find_if( m_sources.begin()
+			, m_sources.end()
+			, [&srcSourceInfo]( PassTextureSource const & lookup )
+			{
+				return srcSourceInfo == lookup.first;
+			} );
 
 		if ( it != m_sources.end() )
 		{
 			auto configuration = it->second;
 			m_sources.erase( it );
-
-			it = m_sources.find( dstSourceInfo );
-
-			if ( it == m_sources.end() )
-			{
-				it = m_sources.emplace( std::move( dstSourceInfo )
-					, std::move( configuration ) ).first;
-			}
-			
-			doUpdateTextureFlags();
+			registerTexture( dstSourceInfo, configuration );
 		}
 	}
 
