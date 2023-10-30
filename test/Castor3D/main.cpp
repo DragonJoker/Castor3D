@@ -100,10 +100,9 @@ namespace
 			File::directoryCreate( Engine::getEngineDirectory() );
 		}
 
-		std::unique_ptr< Engine > result = std::make_unique< Engine >( cuT( "Castor3DTest" )
-			, Version{ Castor3DTest_VERSION_MAJOR, Castor3DTest_VERSION_MINOR, Castor3DTest_VERSION_BUILD }
-			, true
-			, true );
+		castor3d::EngineConfig config{ cuT( "Castor3DTest" )
+			, Version{ Castor3DTest_VERSION_MAJOR, Castor3DTest_VERSION_MINOR, Castor3DTest_VERSION_BUILD } };
+		std::unique_ptr< Engine > result = std::make_unique< Engine >( std::move( config ) );
 		loadPlugins( *result );
 
 		auto & renderers = result->getRenderersList();
