@@ -146,8 +146,16 @@ namespace castor3d
 		, VkDeviceSize dstOffset )
 	{
 		uint32_t const align = m_device.renderSystem.getValue( GpuMin::eBufferMapSize );
-		CU_Require( size == ashes::WholeSize
-			|| dstOffset + size <= dstBuffer.getSize() );
+
+		if ( size != ashes::WholeSize
+			&& dstOffset + size > dstBuffer.getSize() )
+		{
+			log::error << "StagedUpload: Trying to copy more than there can be in dst [" << dstBuffer.getName()
+				<< "] buffer: dstOffset = " << dstOffset
+				<< ", size = " << size << std::endl;
+			CU_Failure( "Trying to copy more than there can be in dst buffer" );
+		}
+
 		bool isFullSizeMap = ( size == ashes::WholeSize
 			|| ( dstOffset == 0u && size >= dstBuffer.getSize() ) );
 		auto alignedOffset = isFullSizeMap
@@ -160,18 +168,49 @@ namespace castor3d
 			? 0u
 			: align );
 		auto mappedOffset = alignedOffset - offsetAlignment;
-		CU_Require( dstOffset >= mappedOffset );
-		uint32_t offsetDiff = uint32_t( dstOffset - mappedOffset );
+
+		if ( dstOffset < mappedOffset )
+		{
+			log::error << "StagedUpload: Mapped offset " << mappedOffset
+				<< " and destination offset " << dstOffset
+				<< " are invalid." << std::endl;
+			CU_Failure( "Invalid offsets for upload" );
+		}
+
+		uint32_t offsetDiff = uint32_t( std::max( 0ll, int64_t( dstOffset ) - int64_t( mappedOffset ) ) );
 		auto mappedSize = ( ( alignedSize == alignedOffset ) ? 0u : offsetAlignment ) // If offset and size are in the same aligned range, don't add the offset alignment
 			+ ( isFullSizeMap
 				? ashes::WholeSize
 				: ashes::getAlignedSize( size, align ) );
-		CU_Require( mappedSize == ashes::WholeSize
-			|| mappedSize == ashes::getAlignedSize( mappedSize, align ) );
-		CU_Require( mappedOffset == 0u
-			|| mappedOffset == ashes::getAlignedSize( mappedOffset, align ) );
-		CU_Require( isFullSizeMap
-			|| mappedOffset + mappedSize <= dstBuffer.getSize() );
+
+		if ( mappedSize != ashes::WholeSize
+			&& mappedSize != ashes::getAlignedSize( mappedSize, align ) )
+		{
+			log::error << "StagedUpload: Invalid mapped size alignment: "
+				<< "] mappedSize = " << mappedSize
+				<< ", align = " << align << std::endl;
+			CU_Failure( "Invalid mapped size alignment" );
+		}
+
+		if ( mappedOffset != 0u
+			&& mappedOffset != ashes::getAlignedSize( mappedOffset, align ) )
+		{
+			log::error << "StagedUpload: Invalid mapped offset alignment: "
+				<< "] mappedOffset = " << mappedOffset
+				<< ", align = " << align << std::endl;
+			CU_Failure( "Invalid mapped offset alignment" );
+		}
+
+		if ( !isFullSizeMap
+			&& mappedOffset + mappedSize > dstBuffer.getSize() )
+		{
+			log::error << "StagedUpload: Mapped destination is bigger that buffer [" << dstBuffer.getName()
+				<< "] size, mappedOffset = " << mappedOffset
+				<< ", mappedSize = " << mappedSize
+				<< ", buffer size = " << dstBuffer.getSize() << std::endl;
+			CU_Failure( "Trying to copy more than there can be in dst buffer" );
+		}
+
 		size = std::min( dstBuffer.getSize(), size );
 		auto dst = dstBuffer.lock( mappedOffset, mappedSize, 0u );
 

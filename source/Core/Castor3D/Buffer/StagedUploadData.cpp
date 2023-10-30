@@ -81,19 +81,46 @@ namespace castor3d
 		{
 			auto & offset = m_cpuBuffers->bufferOffsets.emplace( &pending
 				, doGetBuffer( m_cpuBuffers->pool, pending.srcSize ) ).first->second;
-			CU_Require( ( offset.getAllocSize() == ashes::getAlignedSize( offset.getAllocSize(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
-				&& "Chunk size should be aligned" );
-			CU_Require( ( offset.getOffset() == ashes::getAlignedSize( offset.getOffset(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
-				&& "Chunk offset should be aligned" );
+
+			if ( offset.getAllocSize() != ashes::getAlignedSize( offset.getAllocSize(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			{
+				log::error << "StagedUploadBuffer: Chunk size should be aligned"
+					<< ": size = " << offset.getAllocSize()
+					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+				CU_Failure( "Chunk size should be aligned" );
+			}
+
+			if ( offset.getOffset() != ashes::getAlignedSize( offset.getOffset(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			{
+				log::error << "StagedUploadBuffer: Chunk offset should be aligned"
+					<< ": offset = " << offset.getOffset()
+					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+				CU_Failure( "Chunk offset should be aligned" );
+			}
+
 			auto & res = m_cpuBuffers->buffers.emplace( offset.buffer, BufferRange{} ).first->second;
 			res.offset = std::min( res.offset, offset.getOffset() );
-			CU_Require( ( res.offset == ashes::getAlignedSize( res.offset, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
-				&& "Offset should be aligned" );
+
+			if ( res.offset != ashes::getAlignedSize( res.offset, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			{
+				log::error << "StagedUploadBuffer: Offset should be aligned"
+					<< ": offset = " << res.offset
+					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+				CU_Failure( "Offset should be aligned" );
+			}
+
 			res.range = std::max( res.range
 				, std::min( offset.getOffset() + offset.getAllocSize()
 					, offset.buffer->getSize() ) );
-			CU_Require( ( res.range == ashes::getAlignedSize( res.range, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
-				&& "Range should be aligned" );
+
+			if ( res.range != ashes::getAlignedSize( res.range, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			{
+				log::error << "StagedUploadBuffer: Range should be aligned"
+					<< ": range = " << res.range
+					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+				CU_Failure( "Range should be aligned" );
+			}
+
 			m_cpuBuffers->currentSize += pending.srcSize;
 			auto ires = m_wholeBuffers.emplace( offset.buffer, nullptr );
 
@@ -109,19 +136,45 @@ namespace castor3d
 		{
 			auto & offset = m_cpuBuffers->imageOffsets.emplace( &pending
 				, doGetBuffer( m_cpuBuffers->pool, pending.srcSize ) ).first->second;
-			CU_Require( ( offset.getAllocSize() == ashes::getAlignedSize( offset.getAllocSize(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
-				&& "Chunk size should be aligned" );
-			CU_Require( ( offset.getOffset() == ashes::getAlignedSize( offset.getOffset(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
-				&& "Chunk offset should be aligned" );
+
+			if ( offset.getAllocSize() != ashes::getAlignedSize( offset.getAllocSize(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			{
+				log::error << "StagedUploadBuffer: Chunk size should be aligned"
+					<< ": size = " << offset.getAllocSize()
+					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+				CU_Failure( "Chunk size should be aligned" );
+			}
+
+			if ( offset.getOffset() != ashes::getAlignedSize( offset.getOffset(), m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			{
+				log::error << "StagedUploadBuffer: Chunk offset should be aligned"
+					<< ": offset = " << offset.getOffset()
+					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+				CU_Failure( "Chunk offset should be aligned" );
+			}
+
 			auto & res = m_cpuBuffers->buffers.emplace( offset.buffer, BufferRange{} ).first->second;
 			res.offset = std::min( res.offset, offset.getOffset() );
-			CU_Require( ( res.offset == ashes::getAlignedSize( res.offset, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
-				&& "Offset should be aligned" );
+
+			if ( res.offset != ashes::getAlignedSize( res.offset, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			{
+				log::error << "StagedUploadBuffer: Offset should be aligned"
+					<< ": offset = " << res.offset
+					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+				CU_Failure( "Offset should be aligned" );
+			}
+
 			res.range = std::max( res.range
 				, std::min( offset.getOffset() + offset.getAllocSize()
 					, offset.buffer->getSize() ) );
-			CU_Require( ( res.range == ashes::getAlignedSize( res.range, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
-				&& "Range should be aligned" );
+
+			if ( res.range != ashes::getAlignedSize( res.range, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) )
+			{
+				log::error << "StagedUploadBuffer: Range should be aligned"
+					<< ": range = " << res.range
+					<< ", align = " << m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) << std::endl;
+				CU_Failure( "Range should be aligned" );
+			}
 
 			m_cpuBuffers->currentSize += pending.srcSize;
 			auto ires = m_wholeBuffers.emplace( offset.buffer, nullptr );
