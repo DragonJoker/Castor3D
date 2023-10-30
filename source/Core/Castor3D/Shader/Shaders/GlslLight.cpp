@@ -608,7 +608,7 @@ namespace castor3d::shader
 			{
 				auto pointLight = m_writer.declLocale( "pointLight"
 					, getPointLight( cur ) );
-				lightingModel->computeDiffuse( debugOutput
+				output += lightingModel->computeDiffuse( debugOutput
 					, pointLight
 					, components
 					, lightSurface
@@ -621,10 +621,10 @@ namespace castor3d::shader
 
 			WHILE( m_writer, cur < end )
 			{
-				auto pointLight = m_writer.declLocale( "pointLight"
-					, getPointLight( cur ) );
-				lightingModel->computeDiffuse( debugOutput
-					, pointLight
+				auto spotLight = m_writer.declLocale( "spotLight"
+					, getSpotLight( cur ) );
+				output += lightingModel->computeDiffuse( debugOutput
+					, spotLight
 					, components
 					, lightSurface
 					, receivesShadows );

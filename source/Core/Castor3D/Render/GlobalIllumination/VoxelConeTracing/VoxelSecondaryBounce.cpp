@@ -168,14 +168,10 @@ namespace castor3d
 						// to world
 						position *= c3d_voxelData.gridToWorld;
 
-						auto lightSurface = shader::LightSurface::create( writer
-							, "lightSurface"
-							, position
-							, clip
-							, normal );
 						auto radiance = writer.declLocale( "radiance"
 							, indirect.traceConeRadiance( firstBounce
-								, lightSurface
+								, normal
+								, position
 								, c3d_voxelData ) );
 						output.store( coord, vec4( color.rgb() + radiance.rgb(), color.a() ) );
 					}
