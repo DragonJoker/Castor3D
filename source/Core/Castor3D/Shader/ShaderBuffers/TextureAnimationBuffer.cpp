@@ -66,6 +66,7 @@ namespace castor3d
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			auto buffer = m_data.begin();
+			uint32_t count = 0u;
 
 			for ( auto anim : castor::makeArrayView( std::next( m_animations.begin() ), m_animations.end() ) )
 			{
@@ -78,13 +79,16 @@ namespace castor3d
 				if ( anim )
 				{
 					anim->fillBuffer( buffer );
+					count = uint32_t( std::distance( m_data.begin(), buffer ) ) + 2u;
 				}
 
 				++buffer;
 			}
 
 			m_buffer.setCount( uint32_t( std::min( m_data.size(), m_animations.size() ) ) );
-			m_buffer.upload( uploader );
+			m_buffer.upload( uploader
+				, 0u
+				, VkDeviceSize( sizeof( TextureAnimationData ) * count ) );
 		}
 	}
 

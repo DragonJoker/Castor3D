@@ -1,5 +1,6 @@
 #include "Castor3D/Buffer/DirectUploadData.hpp"
 
+#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -11,6 +12,13 @@
 #include <ashespp/Command/CommandPool.hpp>
 #include <ashespp/Sync/Fence.hpp>
 #include <ashespp/Sync/Queue.hpp>
+
+#if C3D_DebugUpload
+#	define traceUpload( x )\
+	log::debug << x
+#else
+#	define traceUpload( x )
+#endif
 
 namespace castor3d
 {
@@ -43,11 +51,11 @@ namespace castor3d
 
 	VkDeviceSize DirectUploadData::doUpload( ImageDataRange & data )
 	{
-		log::debug << "    Registering image upload commands: [" << data.dstImage->getName()
+		traceUpload( "    Registering image upload commands: [" << data.dstImage->getName()
 			<< "], Layout: [" << data.dstLayout
 			<< "], Range: [" << data.dstRange
 			<< ", Upload Size: " << data.srcSize
-			<< std::endl;
+			<< std::endl );
 		auto mappedSize = ashes::getAlignedSize( data.srcSize
 			, m_device.renderSystem.getValue( GpuMin::eBufferMapSize ) );
 		auto & buffer = *m_buffers.emplace_back( makeBufferBase( m_device
