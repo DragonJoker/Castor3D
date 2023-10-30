@@ -327,6 +327,11 @@ namespace castor3d
 					, modelData.getMaterialId()
 					, in.passMultipliers
 					, components );
+				output.registerOutput( "Surface", "Normal", fma( components.normal, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( "Surface", "Tangent", fma( in.tangent.xyz(), vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( "Surface", "Bitangent", fma( in.bitangent, vec3( 0.5_f ), vec3( 0.5_f ) ) );
+				output.registerOutput( "Surface", "World Position", in.worldPosition );
+				output.registerOutput( "Surface", "View Position", in.viewPosition );
 
 				if ( components.occlusion )
 				{
