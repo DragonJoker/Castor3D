@@ -729,6 +729,9 @@ namespace c3d_assimp
 					try
 					{
 						std::unique_ptr< castor3d::TextureSourceInfo > sourceInfo;
+						texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
+							, castor::Angle::fromRadians( info.transform.mRotation )
+							, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
 
 						if ( info.name[0] == '*' )
 						{
@@ -766,9 +769,6 @@ namespace c3d_assimp
 						if ( sourceInfo )
 						{
 							auto & image = loadImage( *sourceInfo );
-							texConfig.transform = castor3d::TextureTransform{ { info.transform.mTranslation.x, info.transform.mTranslation.y, 0.0f }
-								, castor::Angle::fromRadians( info.transform.mRotation )
-								, { info.transform.mScaling.x, info.transform.mScaling.y, 1.0f } };
 							auto texFlags = getFlags( texConfig );
 
 							if ( getComponentsMask( texConfig, m_opacityMapFlags )
@@ -784,6 +784,7 @@ namespace c3d_assimp
 								if ( !hasAlphaChannel( image ) )
 								{
 									addFlagConfiguration( texConfig, { m_opacityMapFlags, 0x00FF0000 } );
+									*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
 								}
 							}
 							else if ( !hasOpacity
@@ -798,6 +799,7 @@ namespace c3d_assimp
 								}
 
 								addFlagConfiguration( texConfig, { m_opacityMapFlags, 0xFF000000 } );
+								*sourceInfo = castor3d::TextureSourceInfo{ *sourceInfo, texConfig };
 							}
 
 							m_result.registerTexture( std::move( *sourceInfo )

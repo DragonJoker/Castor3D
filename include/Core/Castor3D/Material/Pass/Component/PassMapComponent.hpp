@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_PassMapComponent_H___
@@ -13,10 +13,6 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using TextureSourceMap = std::unordered_map< TextureSourceInfo
-		, PassTextureConfig
-		, TextureSourceInfoHasher >;
-	using TextureSourceMapVT = TextureSourceMap::value_type;
 	using TextureSourceSet = std::unordered_set< TextureSourceInfo, TextureSourceInfoHasher >;
 
 	class PassMapComponentPlugin
