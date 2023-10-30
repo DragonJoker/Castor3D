@@ -191,7 +191,8 @@ namespace castor3d
 		}
 
 		sdw::Vec4 GlobalIllumination::traceConeRadiance( sdw::CombinedImage3DRgba32 const & pvoxels
-			, LightSurface plightSurface
+			, sdw::Vec3 const & pwsNormal
+			, sdw::Vec3 const & pwsPosition
 			, VoxelData const & pvoxelData )
 		{
 			if ( !m_traceConeRadiance )
@@ -254,9 +255,19 @@ namespace castor3d
 			}
 
 			return m_traceConeRadiance( pvoxels
-				, plightSurface.N()
-				, plightSurface.worldPosition()
+				, pwsNormal
+				, pwsPosition
 				, pvoxelData );
+		}
+
+		sdw::Vec4 GlobalIllumination::traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
+			, LightSurface lightSurface
+			, VoxelData const & voxelData )
+		{
+			return traceConeRadiance( voxels
+				, lightSurface.N()
+				, lightSurface.worldPosition()
+				, voxelData );
 		}
 
 		void GlobalIllumination::declareVct( uint32_t & uboBindingIndex

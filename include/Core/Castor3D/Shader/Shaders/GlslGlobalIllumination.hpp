@@ -48,6 +48,10 @@ namespace castor3d
 			C3D_API sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
 				, LightSurface lightSurface
 				, VoxelData const & voxelData );
+			C3D_API sdw::Vec4 traceConeRadiance( sdw::CombinedImage3DRgba32 const & voxels
+				, sdw::Vec3 const & wsNormal
+				, sdw::Vec3 const & wsPosition
+				, VoxelData const & voxelData );
 
 		private:
 			void declareVct( uint32_t & uboBindingIndex

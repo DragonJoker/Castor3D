@@ -221,8 +221,8 @@ namespace castor3d
 		visitor.visit( "Enable VCT", enabled );
 		visitor.visit( "Conservative Rasterization", enableConservativeRasterization );
 		visitor.visit( "Occlusion", enableOcclusion );
-		visitor.visit( "Temporal Smoothing", enableSecondaryBounce );
-		visitor.visit( "Secondary Bounce", enableTemporalSmoothing );
+		visitor.visit( "Temporal Smoothing", enableTemporalSmoothing );
+		visitor.visit( "Secondary Bounce", enableSecondaryBounce );
 		visitor.visit( "Num. Cones", numCones );
 		visitor.visit( "Max. Distance", maxDistance );
 		visitor.visit( "Ray Step Size", rayStepSize );

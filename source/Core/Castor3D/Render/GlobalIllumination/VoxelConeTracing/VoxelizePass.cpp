@@ -149,7 +149,8 @@ namespace castor3d
 			RenderNodesPass::update( updater );
 			m_outOfDate = m_outOfDate
 				//|| filtersStatic()
-				|| getCuller().areAnyChanged();
+				|| getCuller().areAnyChanged()
+				|| !getEngine()->areUpdateOptimisationsEnabled();
 		}
 	}
 
@@ -172,7 +173,8 @@ namespace castor3d
 
 	void VoxelizePass::setUpToDate()
 	{
-		m_outOfDate = m_renderQueue->isOutOfDate();
+		m_outOfDate = m_renderQueue->isOutOfDate()
+			&& getEngine()->areUpdateOptimisationsEnabled();
 	}
 
 	SubmeshFlags VoxelizePass::doAdjustSubmeshFlags( SubmeshFlags flags )const
@@ -589,7 +591,7 @@ namespace castor3d
 						, cuT( "Default" )
 						, c3d_cameraData.debugIndex()
 						, color
-						, areDebugTargetsEnabled() };
+						, false };
 
 					IF( writer, material.lighting != 0_u )
 					{
