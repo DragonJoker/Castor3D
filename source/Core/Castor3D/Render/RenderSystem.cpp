@@ -25,18 +25,8 @@
 #	include <CompilerGlsl/compileGlsl.hpp>
 #endif
 
-#if C3D_HasSPIRVCross
-#	include "spirv_cpp.hpp"
-#	include "spirv_cross_util.hpp"
-#	include "spirv_glsl.hpp"
-#endif
-
 #include <atomic>
 #include <random>
-
-#if !defined( NDEBUG )
-#	define C3D_DebugSpirV 0
-#endif
 
 CU_ImplementSmartPtr( castor3d, RenderSystem )
 
@@ -48,111 +38,6 @@ namespace castor3d
 
 	namespace rendsys
 	{
-#if C3D_HasSPIRVCross
-
-		struct BlockLocale
-		{
-			BlockLocale()
-				: m_prvLoc{ std::locale( "" ) }
-			{
-				if ( m_prvLoc.name() != "C" )
-				{
-					std::locale::global( std::locale{ "C" } );
-				}
-			}
-
-			~BlockLocale()
-			{
-				if ( m_prvLoc.name() != "C" )
-				{
-					std::locale::global( m_prvLoc );
-				}
-			}
-
-		private:
-			std::locale m_prvLoc;
-		};
-
-		static spv::ExecutionModel getExecutionModel( VkShaderStageFlagBits stage )
-		{
-			spv::ExecutionModel result{};
-
-			switch ( stage )
-			{
-			case VK_SHADER_STAGE_VERTEX_BIT:
-				result = spv::ExecutionModelVertex;
-				break;
-			case VK_SHADER_STAGE_GEOMETRY_BIT:
-				result = spv::ExecutionModelGeometry;
-				break;
-			case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
-				result = spv::ExecutionModelTessellationControl;
-				break;
-			case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
-				result = spv::ExecutionModelTessellationEvaluation;
-				break;
-			case VK_SHADER_STAGE_FRAGMENT_BIT:
-				result = spv::ExecutionModelFragment;
-				break;
-			case VK_SHADER_STAGE_COMPUTE_BIT:
-				result = spv::ExecutionModelGLCompute;
-				break;
-			default:
-				assert( false && "Unsupported shader stage flag" );
-				break;
-			}
-
-			return result;
-		}
-
-		static void doSetEntryPoint( VkShaderStageFlagBits stage
-			, spirv_cross::CompilerGLSL & compiler )
-		{
-			auto model = getExecutionModel( stage );
-			std::string entryPoint;
-
-			for ( auto & e : compiler.get_entry_points_and_stages() )
-			{
-				if ( entryPoint.empty() && e.execution_model == model )
-				{
-					entryPoint = e.name;
-				}
-			}
-
-			if ( entryPoint.empty() )
-			{
-				throw std::runtime_error{ "Could not find an entry point with stage: " + ashes::getName( stage ) };
-			}
-
-			compiler.set_entry_point( entryPoint, model );
-		}
-
-		static void doSetupOptions( castor3d::RenderDevice const & device
-			, spirv_cross::CompilerGLSL & compiler )
-		{
-			auto options = compiler.get_common_options();
-			options.version = device->getShaderVersion();
-			options.es = false;
-			options.separate_shader_objects = true;
-			options.enable_420pack_extension = true;
-			options.vertex.fixup_clipspace = false;
-			options.vertex.flip_vert_y = true;
-			options.vertex.support_nonzero_base_instance = true;
-			compiler.set_common_options( options );
-		}
-
-		static std::string compileSpvToGlsl( castor3d::RenderDevice const & device
-			, ashes::UInt32Array const & spv
-			, VkShaderStageFlagBits stage )
-		{
-			BlockLocale guard;
-			auto compiler = std::make_unique< spirv_cross::CompilerGLSL >( spv );
-			doSetEntryPoint( stage, *compiler );
-			doSetupOptions( device, *compiler );
-			return compiler->compile();
-		}
-
-#endif
 #if C3D_HasGLSL
 
 		static glsl::GlslExtensionSet getGLSLExtensions( uint32_t glslVersion )
@@ -964,6 +849,7 @@ namespace castor3d
 				, ast::EntryPointConfig{ module.shader->getType(), "main" } );
 			module.shader.reset();
 			module.compiled = result;
+			CU_Require( !module.compiled.spirv.empty() );
 		}
 		else if ( !module.source.empty() )
 		{
@@ -972,6 +858,7 @@ namespace castor3d
 				, module.source );
 			module.source.clear();
 			module.compiled = result;
+			CU_Require( !module.compiled.spirv.empty() );
 		}
 
 		return module.compiled;
@@ -1015,58 +902,9 @@ namespace castor3d
 		result.spirv = spirv::serialiseModule( *module );
 		std::string glsl;
 
-		if ( getEngine()->isShaderValidationEnabled() )
-		{
-			auto shadersDir = Engine::getEngineDirectory() / cuT( "Shaders" );
-			auto fileBaseName = castor::File::normaliseFileName( name + "_" + ashes::getName( stage ) );
-
-			if ( !castor::File::directoryExists( shadersDir ) )
-			{
-				castor::File::directoryCreate( shadersDir );
-			}
-
-			if ( !castor::File::directoryExists( shadersDir / cuT( "SPV" ) ) )
-			{
-				castor::File::directoryCreate( shadersDir / cuT( "SPV" ) );
-			}
-
-			castor::BinaryFile file{ shadersDir / cuT( "SPV" ) / ( fileBaseName + ".spirv" )
-				, castor::File::OpenMode::eWrite };
-			file.writeArray( result.spirv.data()
-				, result.spirv.size() );
 #if C3D_HasGLSL
-			{
-				if ( !castor::File::directoryExists( shadersDir / cuT( "GLSL" ) ) )
-				{
-					castor::File::directoryCreate( shadersDir / cuT( "GLSL" ) );
-				}
-
-				log::debug << " GLSL ...";
-				glsl::GlslConfig config{ entryPoint.stage
-					, glsl::v4_6
-					, rendsys::getGLSLExtensions( glsl::v4_6 )
-					, true
-					, false
-					, true
-					, true
-					, true
-					, true };
-				config.allocator = &shaderAllocator;
-				glsl = glsl::compileGlsl( shader
-					, statements.get()
-					, entryPoint.stage
-					, ast::SpecialisationInfo{}
-					, config );
-				castor::BinaryFile glslFile{ shadersDir / cuT( "GLSL" ) / ( fileBaseName + ".glsl" )
-					, castor::File::OpenMode::eWrite };
-				glslFile.writeArray( glsl.data()
-					, glsl.size() );
-			}
-#endif
-		}
-#if !defined( NDEBUG )
-#	if C3D_HasGLSL
-		else if ( spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
+		if ( ( getEngine()->areTextShadersKept() && spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
+			|| getEngine()->isShaderValidationEnabled() )
 		{
 			log::debug << " GLSL ...";
 			glsl::GlslConfig config{ entryPoint.stage
@@ -1084,52 +922,56 @@ namespace castor3d
 				, entryPoint.stage
 				, ast::SpecialisationInfo{}
 				, config );
-			glsl += "\n";
 		}
-#	endif
+#endif
 
-		result.text = spirv::writeModule( *module );
-
-		if ( spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
+		if ( getEngine()->isShaderValidationEnabled() )
 		{
-			result.text = glsl + "\n" + result.text;
-		}
-		//log::trace << result.text << std::endl;
+			auto shadersDir = Engine::getEngineDirectory() / cuT( "Shaders" );
+			auto fileBaseName = castor::File::normaliseFileName( name + "_" + ashes::getName( stage ) );
 
-#	if C3D_HasSPIRVCross && C3D_DebugSpirV && C3D_HasGlslang
-
-		try
-		{
-			log::debug << " Validation ...";
-			auto glslFromSpv = rendsys::compileSpvToGlsl( getRenderDevice()
-				, result.spirv
-				, stage );
-			const_cast< castor3d::ShaderModule & >( module ).source += "\n" + glslFromSpv;
-		}
-		catch ( std::exception & exc )
-		{
-			log::error << result.text << std::endl;
-			log::error << exc.what() << std::endl;
+			if ( !castor::File::directoryExists( shadersDir ) )
 			{
-				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( fileBaseName + "_sdw.spv" )
+				castor::File::directoryCreate( shadersDir );
+			}
+
+			{
+				if ( !castor::File::directoryExists( shadersDir / cuT( "SPV" ) ) )
+				{
+					castor::File::directoryCreate( shadersDir / cuT( "SPV" ) );
+				}
+
+				castor::BinaryFile file{ shadersDir / cuT( "SPV" ) / ( fileBaseName + ".spirv" )
 					, castor::File::OpenMode::eWrite };
 				file.writeArray( result.spirv.data()
 					, result.spirv.size() );
 			}
-
-			auto ref = castor3d::compileGlslToSpv( getRenderDevice()
-				, stage
-				, glsl );
+#if C3D_HasGLSL
 			{
-				castor::BinaryFile file{ castor::File::getExecutableDirectory() / ( fileBaseName + "_glslang.spv" )
+				if ( !castor::File::directoryExists( shadersDir / cuT( "GLSL" ) ) )
+				{
+					castor::File::directoryCreate( shadersDir / cuT( "GLSL" ) );
+				}
+
+				castor::BinaryFile glslFile{ shadersDir / cuT( "GLSL" ) / ( fileBaseName + ".glsl" )
 					, castor::File::OpenMode::eWrite };
-				file.writeArray( ref.data()
-					, ref.size() );
+				glslFile.writeArray( glsl.data()
+					, glsl.size() );
 			}
+#endif
 		}
 
-#	endif
+		if ( getEngine()->areTextShadersKept() )
+		{
+			log::debug << " Text SPIRV ...";
+			result.text = spirv::writeModule( *module );
+#if C3D_HasGLSL
+			if ( spirvConfig.debugLevel != spirv::DebugLevel::eDebugInfo )
+			{
+				result.text = glsl + "\n" + result.text;
+			}
 #endif
+		}
 
 		log::debug << " Done." << std::endl;
 		return result;

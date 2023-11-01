@@ -118,6 +118,13 @@ namespace castor3d
 		*	\p true pour activer les traces via l'API de rendu.
 		*/
 		bool enableApiTrace{ false };
+		/**
+		*\~english
+		*	\p true to keep the text version for shaders.
+		*\~french
+		*	\p true pour garder la version texte des shaders.
+		*/
+		bool keepTextShaders{ false };
 	};
 
 	class Engine
@@ -779,6 +786,11 @@ namespace castor3d
 		bool isApiTraceEnabled()const noexcept
 		{
 			return m_config.enableApiTrace;
+		}
+
+		bool areTextShadersKept()const noexcept
+		{
+			return m_config.keepTextShaders;
 		}
 		
 		castor::ImageCache const & getImageCache()const noexcept

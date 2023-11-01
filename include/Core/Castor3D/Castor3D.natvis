@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
 
+	<Type Name="spirv::Op::OpData">
+		<Expand>
+			<Item Name="op">(spv::Op)opCode</Item>
+			<Item Name="count">opCount</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="spirv::Op">
+		<DisplayString>{opData}</DisplayString>
+		<Expand>
+			<Item Name="op">(spv::Op)opData.opCode</Item>
+			<Item Name="count">opData.opCount</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::AnimableT&lt;*&gt;">
 		<Expand>
 			<Item Name="owner">m_owner</Item>
