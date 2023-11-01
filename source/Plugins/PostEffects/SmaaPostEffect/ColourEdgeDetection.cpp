@@ -6,6 +6,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -16,6 +17,7 @@
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <numeric>
 
@@ -23,48 +25,45 @@ namespace smaa
 {
 	namespace coled
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			ColorTexIdx = SmaaUboIdx + 1,
 			PredicationTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFPPredication( castor3d::RenderDevice const & device )
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
+			, bool predication )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
-			auto c3d_predicationTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_predicationTex", PredicationTexIdx, 0u );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+			auto c3d_predicationTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_predicationTex", PredicationTexIdx, 0u, predication );
 
 			/**
 			 * Gathers current pixel, and the top-left neighbors.
 			 */
-			auto SMAAGatherNeighbours = writer.implementFunction< Vec3 >( "SMAAGatherNeighbours"
-				, [&]( Vec2 const & texcoord
-					, Array< Vec4 > const & offset
-					, CombinedImage2DRgba32 const & predicationTex )
+			auto SMAAGatherNeighbours = writer.implementFunction< sdw::Vec3 >( "SMAAGatherNeighbours"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::Vec4Array const & offset
+					, sdw::CombinedImage2DRgba32 const & predicationTex )
 				{
 					writer.returnStmt( predicationTex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
-				, InVec2{ writer, "texcoord" }
-				, InVec4Array{ writer, "offset", 3u }
-				, InCombinedImage2DRgba32{ writer, "predicationTex" } );
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec4Array{ writer, "offset", 3u }
+				, sdw::InCombinedImage2DRgba32{ writer, "predicationTex" } );
 
 			/**
 			 * Adjusts the threshold by means of predication.
 			 */
-			auto SMAACalculatePredicatedThreshold = writer.implementFunction< Vec2 >( "SMAACalculatePredicatedThreshold"
-				, [&]( Vec2 const & texcoord
-					, Array< Vec4 > const & offset
-					, CombinedImage2DRgba32 const & predicationTex )
+			auto SMAACalculatePredicatedThreshold = writer.implementFunction< sdw::Vec2 >( "SMAACalculatePredicatedThreshold"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::Vec4Array const & offset
+					, sdw::CombinedImage2DRgba32 const & predicationTex )
 				{
 					auto neighbours = writer.declLocale( "neighbours"
 						, SMAAGatherNeighbours( texcoord, offset, predicationTex ) );
@@ -74,9 +73,9 @@ namespace smaa
 						, step( vec2( c3d_smaaData.predicationThreshold ), delta ) );
 					writer.returnStmt( c3d_smaaData.predicationScale * c3d_smaaData.threshold * ( 1.0_f - c3d_smaaData.predicationStrength * edges ) );
 				}
-				, InVec2{ writer, "texcoord" }
-				, InVec4Array{ writer, "offset", 3u }
-				, InCombinedImage2DRgba32{ writer, "predicationTex" } );
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec4Array{ writer, "offset", 3u }
+				, sdw::InCombinedImage2DRgba32{ writer, "predicationTex" } );
 
 			/**
 			 * Color Edge Detection
@@ -84,16 +83,18 @@ namespace smaa
 			 * IMPORTANT NOTICE: color edge detection requires gamma-corrected colors, and
 			 * thus 'colorTex' should be a non-sRGB texture.
 			 */
-			auto SMAAColorEdgeDetectionPS = writer.implementFunction< Vec2 >( "SMAAColorEdgeDetectionPS"
-				, [&]( Vec2 const & texcoord
-					, Array< Vec4 > const & offset )
+			auto SMAAColorEdgeDetectionPS = writer.implementFunction< sdw::Vec2 >( "SMAAColorEdgeDetectionPS"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::Vec4Array const & offset )
 				{
 					// Calculate the threshold:
-					auto threshold = writer.declLocale< Vec2 >( "threshold" );
-					threshold = SMAACalculatePredicatedThreshold( texcoord, offset, c3d_predicationTex );
+					auto threshold = writer.declLocale( "threshold"
+						, ( predication
+							? SMAACalculatePredicatedThreshold( texcoord, offset, c3d_predicationTex )
+							: vec2( c3d_smaaData.threshold, c3d_smaaData.threshold ) ) );
 
 					// Calculate color deltas:
-					auto delta = writer.declLocale< Vec4 >( "delta" );
+					auto delta = writer.declLocale< sdw::Vec4 >( "delta" );
 					auto C = writer.declLocale( "C"
 						, c3d_colourTex.sample( texcoord ).rgb() );
 
@@ -155,117 +156,16 @@ namespace smaa
 
 					writer.returnStmt( edges );
 				}
-				, InVec2{ writer, "texcoord" }
-				, InVec4Array{ writer, "offset", 3u } );
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec4Array{ writer, "offset", 3u } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			EdgeDetection::getVertexProgram( writer, c3d_smaaData );
+
+			writer.implementEntryPointT< EDVertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
-					outColour = vec4( 0.0_f );
-					outColour.xy() = SMAAColorEdgeDetectionPS( vtx_texture, vtx_offset );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFPNoPredication( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
-			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
-
-			/**
-			 * Color Edge Detection
-			 *
-			 * IMPORTANT NOTICE: color edge detection requires gamma-corrected colors, and
-			 * thus 'colorTex' should be a non-sRGB texture.
-			 */
-			auto SMAAColorEdgeDetectionPS = writer.implementFunction< Vec2 >( "SMAAColorEdgeDetectionPS"
-				, [&]( Vec2 const & texcoord
-					, Array< Vec4 > const & offset )
-				{
-					// Calculate the threshold:
-					auto threshold = writer.declLocale< Vec2 >( "threshold"
-						, vec2( c3d_smaaData.threshold, c3d_smaaData.threshold ) );
-
-					// Calculate color deltas:
-					auto delta = writer.declLocale< Vec4 >( "delta" );
-					auto C = writer.declLocale( "C"
-						, c3d_colourTex.sample( texcoord ).rgb() );
-
-					auto Cleft = writer.declLocale( "Cleft"
-						, c3d_colourTex.sample( offset[0].xy() ).rgb() );
-					auto t = writer.declLocale( "t"
-						, abs( C - Cleft ) );
-					delta.x() = max( max( t.r(), t.g() ), t.b() );
-
-					auto Ctop = writer.declLocale( "Ctop"
-						, c3d_colourTex.sample( offset[0].zw() ).rgb() );
-					t = abs( C - Ctop );
-					delta.y() = max( max( t.r(), t.g() ), t.b() );
-
-					// We do the usual threshold:
-					auto edges = writer.declLocale( "edges"
-						, step( threshold, delta.xy() ) );
-
-					// Then discard if there is no edge:
-					IF( writer, dot( edges, vec2( 1.0_f, 1.0_f ) ) == 0.0_f )
-					{
-						writer.demote();
-					}
-					FI;
-
-					// Calculate right and bottom deltas:
-					auto Cright = writer.declLocale( "Cright"
-						, c3d_colourTex.sample( offset[1].xy() ).rgb() );
-					t = abs( C - Cright );
-					delta.z() = max( max( t.r(), t.g() ), t.b() );
-
-					auto Cbottom = writer.declLocale( "Cbottom"
-						, c3d_colourTex.sample( offset[1].zw() ).rgb() );
-					t = abs( C - Cbottom );
-					delta.w() = max( max( t.r(), t.g() ), t.b() );
-
-					// Calculate the maximum delta in the direct neighborhood:
-					auto maxDelta = writer.declLocale( "maxDelta"
-						, max( delta.xy(), delta.zw() ) );
-
-					// Calculate left-left and top-top deltas:
-					auto Cleftleft = writer.declLocale( "Cleftleft"
-						, c3d_colourTex.sample( offset[2].xy() ).rgb() );
-					t = abs( C - Cleftleft );
-					delta.z() = max( max( t.r(), t.g() ), t.b() );
-
-					auto Ctoptop = writer.declLocale( "Ctoptop"
-						, c3d_colourTex.sample( offset[2].zw() ).rgb() );
-					t = abs( C - Ctoptop );
-					delta.w() = max( max( t.r(), t.g() ), t.b() );
-
-					// Calculate the final maximum delta:
-					maxDelta = max( maxDelta.xy(), delta.zw() );
-					auto finalDelta = writer.declLocale( "finalDelta"
-						, max( maxDelta.x(), maxDelta.y() ) );
-
-					// Local contrast adaptation:
-					edges.xy() *= step( vec2( finalDelta ), c3d_smaaData.localContrastAdaptationFactor * delta.xy() );
-
-					writer.returnStmt( edges );
-				}
-				, InVec2{ writer, "texcoord" }
-				, InVec4Array{ writer, "offset", 3u } );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
-				{
-					outColour = vec4( 0.0_f );
-					outColour.xy() = SMAAColorEdgeDetectionPS( vtx_texture, vtx_offset );
+					out.colour() = vec4( 0.0_f );
+					out.colour().xy() = SMAAColorEdgeDetectionPS( in.texcoord(), in.offset() );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -299,9 +199,7 @@ namespace smaa
 			, device
 			, ubo
 			, config
-			, ( predication
-				? coled::doGetEdgeDetectionFPPredication( device )
-				: coled::doGetEdgeDetectionFPNoPredication( device ) )
+			, coled::getProgram( device, predication != nullptr )
 			, enabled
 			, passIndex
 			, uint32_t( colourView.size() ) }

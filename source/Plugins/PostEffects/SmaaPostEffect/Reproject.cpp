@@ -5,8 +5,8 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
-#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -18,6 +18,7 @@
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -27,6 +28,8 @@ namespace smaa
 {
 	namespace reproj
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			CurColTexIdx = SmaaUboIdx + 1,
@@ -34,47 +37,20 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > doGetReprojectVP( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-					vtx_texture = uv;
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > doGetReprojectFP( castor3d::RenderDevice const & device
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
 			, bool reprojection )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_currentColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_currentColourTex", CurColTexIdx, 0u );
 			auto c3d_previousColourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_previousColourTex", PrvColTexIdx, 0u );
 			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRg32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
-
-			auto SMAAResolvePS = writer.implementFunction< Vec4 >( "SMAAResolvePS"
-				, [&]( Vec2 const & texcoord
-					, CombinedImage2DRgba32 const & currentColorTex
-					, CombinedImage2DRgba32 const & previousColorTex )
+			auto SMAAResolvePS = writer.implementFunction< sdw::Vec4 >( "SMAAResolvePS"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::CombinedImage2DRgba32 const & currentColorTex
+					, sdw::CombinedImage2DRgba32 const & previousColorTex )
 				{
 					IF( writer, c3d_smaaData.enableReprojection != 0 )
 					{
@@ -111,14 +87,21 @@ namespace smaa
 					}
 					FI;
 				}
-				, InVec2{ writer, "texcoord" }
-				, InCombinedImage2DRgba32{ writer, "currentColorTex" }
-				, InCombinedImage2DRgba32{ writer, "previousColorTex" } );
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InCombinedImage2DRgba32{ writer, "currentColorTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "previousColorTex" } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
 				{
-					outColour = SMAAResolvePS( vtx_texture, c3d_currentColourTex, c3d_previousColourTex );
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
+
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
+				{
+					out.colour() = SMAAResolvePS( in.uv(), c3d_currentColourTex, c3d_previousColourTex );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -142,10 +125,8 @@ namespace smaa
 		, m_previousColourViews{ previousColourViews }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaReproject", reproj::doGetReprojectVP( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaReproject", reproj::doGetReprojectFP( device, velocityView != nullptr ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "SmaaReproject", reproj::getProgram( device, velocityView != nullptr ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ m_device
 			, renderTarget.getResources()
 			, "SMRpRes"
@@ -236,8 +217,7 @@ namespace smaa
 
 	void Reproject::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 		visitor.visit( "SMAA Reprojection Result"
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout

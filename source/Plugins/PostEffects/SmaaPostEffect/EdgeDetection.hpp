@@ -11,10 +11,35 @@ See LICENSE file in root folder
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderAST/Shader.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
 
 namespace smaa
 {
 	class SmaaUbo;
+	struct SmaaData;
+
+	template< sdw::var::Flag FlagT >
+	using EDVertexStructT = sdw::IOStructInstanceHelperT< FlagT
+		, "SMAAED_Vertex"
+		, sdw::IOVec2Field< "texcoord", 0u >
+		, sdw::IOVec4ArrayField< "offset", 1u, 3u > >;
+
+	template< sdw::var::Flag FlagT >
+	struct EDVertexT
+		: public EDVertexStructT< FlagT >
+	{
+		EDVertexT( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled )
+			: EDVertexStructT< FlagT >{ writer, std::move( expr ), enabled }
+		{
+		}
+
+		auto texcoord()const{ return this->template getMember< "texcoord" >(); }
+		auto offset()const{ return this->template getMember< "offset" >(); }
+	};
 
 	class EdgeDetection
 	{
@@ -25,13 +50,16 @@ namespace smaa
 			, castor3d::RenderDevice const & device
 			, SmaaUbo const & ubo
 			, SmaaConfig const & config
-			, std::unique_ptr< ast::Shader > pixelShader
+			, castor3d::ShaderPtr shader
 			, bool const * enabled
 			, uint32_t const * passIndex
 			, uint32_t passCount );
 		~EdgeDetection();
 
 		void accept( castor3d::ConfigurationVisitorBase & visitor );
+
+		static void getVertexProgram( sdw::TraditionalGraphicsWriter & writer
+			, SmaaData const & smaaData );
 
 		crg::ImageViewId const & getColourResult()const
 		{
@@ -56,8 +84,7 @@ namespace smaa
 		castor3d::Texture m_outColour;
 		castor3d::Texture m_outDepth;
 		crg::ImageViewId m_outDepthStencilView;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_pass;
 	};

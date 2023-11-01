@@ -97,8 +97,7 @@ namespace castor3d
 		bool & m_enabled;
 		TransparentPassResult const & m_transparentPassResult;
 		castor::Size m_size;
-		ShaderModule m_vertexShader;
-		ShaderModule m_pixelShader;
+		ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_finalCombinePassDesc;
 	};

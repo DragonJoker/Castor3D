@@ -420,6 +420,9 @@ namespace castor3d
 #if VK_NV_mesh_shader
 			doTryAddExtension( VK_NV_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeatures, &m_meshShaderProperties );
 #endif
+#if VK_NV_compute_shader_derivatives
+			doTryAddExtension( VK_NV_COMPUTE_SHADER_DERIVATIVES_EXTENSION_NAME, &m_computeDerivativesFeatures, nullptr );
+#endif
 
 			if ( !m_hasFeatures13 )
 			{

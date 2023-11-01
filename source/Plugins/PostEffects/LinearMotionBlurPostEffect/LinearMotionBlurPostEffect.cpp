@@ -18,6 +18,7 @@
 #include <Castor3D/Scene/ParticleSystem/ParticleDeclaration.hpp>
 #include <Castor3D/Scene/ParticleSystem/ParticleElementDeclaration.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -29,6 +30,7 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -36,8 +38,10 @@
 
 namespace motion_blur
 {
-	namespace
+	namespace postfx
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			BlurCfgUboIdx,
@@ -45,62 +49,42 @@ namespace motion_blur
 			ColorTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			UniformBuffer configuration{ writer, "Configuration", BlurCfgUboIdx, 0u };
-			auto c3d_samplesCount = configuration.declMember< UInt >( "c3d_samplesCount" );
-			auto c3d_vectorDivider = configuration.declMember< Float >( "c3d_vectorDivider" );
-			auto c3d_blurScale = configuration.declMember< Float >( "c3d_blurScale" );
+			auto configuration = writer.declUniformBuffer( "Configuration", BlurCfgUboIdx, 0u );
+			auto c3d_samplesCount = configuration.declMember< sdw::UInt >( "c3d_samplesCount" );
+			auto c3d_vectorDivider = configuration.declMember< sdw::Float >( "c3d_vectorDivider" );
+			auto c3d_blurScale = configuration.declMember< sdw::Float >( "c3d_blurScale" );
 			configuration.end();
 			auto c3d_mapVelocity = writer.declCombinedImg< FImg2DRg32 >( "c3d_mapVelocity", VelocityTexIdx, 0u );
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					auto blurVector = writer.declLocale( "blurVector"
-						, ( c3d_mapVelocity.sample( vtx_texture ) / c3d_vectorDivider ) * c3d_blurScale );
+						, ( c3d_mapVelocity.sample( in.uv() ) / c3d_vectorDivider ) * c3d_blurScale );
 					blurVector.y() = -blurVector.y();
-					outColour = c3d_mapColor.sample( vtx_texture );
+					out.colour() = c3d_mapColor.sample( in.uv() );
 
-					FOR( writer, UInt, i, 0u, i < c3d_samplesCount, ++i )
+					FOR( writer, sdw::UInt, i, 0u, i < c3d_samplesCount, ++i )
 					{
 						auto offset = writer.declLocale( "offset"
-							, blurVector * ( writer.cast< Float >( i ) / writer.cast< Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
-						outColour += c3d_mapColor.sample( vtx_texture + offset );
+							, blurVector * ( writer.cast< sdw::Float >( i ) / writer.cast< sdw::Float >( c3d_samplesCount - 1_u ) - 0.5f ) );
+						out.colour() += c3d_mapColor.sample( in.uv() + offset );
 					}
 					ROF;
 
-					outColour /= writer.cast< Float >( c3d_samplesCount );
+					out.colour() /= writer.cast< sdw::Float >( c3d_samplesCount );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -122,10 +106,8 @@ namespace motion_blur
 			, parameters
 			, 1u }
 		, m_ubo{ renderSystem.getRenderDevice().uboPool->getBuffer< Configuration >( 0u ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LinearMotionBlur", getVertexProgram( renderSystem.getRenderDevice() ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LinearMotionBlur", getFragmentProgram( renderSystem.getRenderDevice() ) }
-		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
-			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
+		, m_shader{ "LinearMotionBlur", postfx::getProgram( renderSystem.getRenderDevice() ) }
+		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
 		setParameters( parameters );
 	}
@@ -144,8 +126,7 @@ namespace motion_blur
 
 	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 
 	void PostEffect::setParameters( castor3d::Parameters parameters )
@@ -184,11 +165,11 @@ namespace motion_blur
 		m_pass->addDependency( previousPass );
 		m_ubo.createPassBinding( *m_pass
 			, "BlurCfg"
-			, BlurCfgUboIdx );
+			, postfx::BlurCfgUboIdx );
 		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, ColorTexIdx );
+			, postfx::ColorTexIdx );
 		m_pass->addSampledView( m_renderTarget.getVelocity().sampledViewId
-			, VelocityTexIdx );
+			, postfx::VelocityTexIdx );
 		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
 		m_saved = Clock::now();
 		return true;

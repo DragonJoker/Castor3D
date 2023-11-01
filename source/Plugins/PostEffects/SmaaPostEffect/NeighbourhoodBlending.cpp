@@ -6,6 +6,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -17,6 +18,7 @@
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <numeric>
 
@@ -24,6 +26,8 @@ namespace smaa
 {
 	namespace neighblend
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			ColorTexIdx = SmaaUboIdx + 1,
@@ -31,64 +35,55 @@ namespace smaa
 			VelocityTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingVP( castor3d::RenderDevice const & device )
+		template< sdw::var::Flag FlagT >
+		using VertexStructT = sdw::IOStructInstanceHelperT< FlagT
+			, "SMAANB_Vertex"
+			, sdw::IOVec2Field< "texcoord", 0u >
+			, sdw::IOVec4Field< "offset", 1u > >;
+
+		template< sdw::var::Flag FlagT >
+		struct VertexT
+			: public VertexStructT< FlagT >
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			VertexT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled )
+				: VertexStructT< FlagT >{ writer, std::move( expr ), enabled }
+			{
+			}
 
-			// Shader constants
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
+			auto texcoord()const { return this->template getMember< "texcoord" >(); }
+			auto offset()const { return this->template getMember< "offset" >(); }
+		};
 
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_offset = writer.declOutput< Vec4 >( "vtx_offset", 1u );
-
-			auto SMAANeighborhoodBlendingVS = writer.implementFunction< sdw::Void >( "SMAANeighborhoodBlendingVS"
-				, [&]( Vec2 const & texcoord
-					, Vec4 offset )
-				{
-					offset = fma( c3d_smaaData.rtMetrics.xyxy()
-						, vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f )
-						, vec4( texcoord.xy(), texcoord.xy() ) );
-				}
-				, InVec2{ writer, "texcoord" }
-				, OutVec4{ writer, "offset" } );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-					vtx_texture = uv;
-					vtx_offset = vec4( 0.0_f );
-					SMAANeighborhoodBlendingVS( vtx_texture, vtx_offset );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > doGetNeighbourhoodBlendingFP( castor3d::RenderDevice const & device
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
 			, bool reprojection )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_offset = writer.declInput< Vec4 >( "vtx_offset", 1u );
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_colourTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_colourTex", ColorTexIdx, 0u );
 			auto c3d_blendTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_blendTex", BlendTexIdx, 0u );
 			auto c3d_velocityTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_velocityTex", VelocityTexIdx, 0u, reprojection );
 
+			auto SMAANeighborhoodBlendingVS = writer.implementFunction< sdw::Void >( "SMAANeighborhoodBlendingVS"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::Vec4 offset )
+				{
+					offset = fma( c3d_smaaData.rtMetrics.xyxy()
+						, vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f )
+						, vec4( texcoord.xy(), texcoord.xy() ) );
+				}
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::OutVec4{ writer, "offset" } );
+
 			/**
 			 * Conditional move:
 			 */
 			auto SMAAMovc2 = writer.implementFunction< sdw::Void >( "SMAAMovc2"
-				, [&]( BVec2 const & cond
-					, Vec2 variable
-					, Vec2 const & value )
+				, [&]( sdw::BVec2 const & cond
+					, sdw::Vec2 variable
+					, sdw::Vec2 const & value )
 				{
 					IF( writer, cond.x() )
 					{
@@ -102,30 +97,30 @@ namespace smaa
 					}
 					FI;
 				}
-				, InBVec2{ writer, "cond" }
-				, InOutVec2{ writer, "variable" }
-				, InVec2{ writer, "value" } );
+				, sdw::InBVec2{ writer, "cond" }
+				, sdw::InOutVec2{ writer, "variable" }
+				, sdw::InVec2{ writer, "value" } );
 
 			auto SMAAMovc4 = writer.implementFunction< sdw::Void >( "SMAAMovc4"
-				, [&]( BVec4 const & cond
-					, Vec4 variable
-					, Vec4 const & value )
+				, [&]( sdw::BVec4 const & cond
+					, sdw::Vec4 variable
+					, sdw::Vec4 const & value )
 				{
 					SMAAMovc2( cond.xy(), variable.xy(), value.xy() );
 					SMAAMovc2( cond.zw(), variable.zw(), value.zw() );
 				}
-				, InBVec4{ writer, "cond" }
-				, InOutVec4{ writer, "variable" }
-				, InVec4{ writer, "value" } );
+				, sdw::InBVec4{ writer, "cond" }
+				, sdw::InOutVec4{ writer, "variable" }
+				, sdw::InVec4{ writer, "value" } );
 
-			auto SMAANeighborhoodBlendingPS = writer.implementFunction< Vec4 >( "SMAANeighborhoodBlendingPS"
-				, [&]( Vec2 const & texcoord
-					, Vec4 const & offset
-					, CombinedImage2DRgba32 const & colorTex
-					, CombinedImage2DRgba32 const & blendTex )
+			auto SMAANeighborhoodBlendingPS = writer.implementFunction< sdw::Vec4 >( "SMAANeighborhoodBlendingPS"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::Vec4 const & offset
+					, sdw::CombinedImage2DRgba32 const & colorTex
+					, sdw::CombinedImage2DRgba32 const & blendTex )
 				{
 					// Fetch the blending weights for current pixel:
-					auto a = writer.declLocale< Vec4 >( "a" );
+					auto a = writer.declLocale< sdw::Vec4 >( "a" );
 					a.x() = blendTex.sample( offset.xy() ).a(); // Right
 					a.y() = blendTex.sample( offset.zw() ).g(); // Top
 					a.wz() = blendTex.sample( texcoord ).xz(); // Bottom / Left
@@ -188,18 +183,24 @@ namespace smaa
 					}
 					FI;
 				}
-				, InVec2{ writer, "texcoord" }
-				, InVec4{ writer, "offset" }
-				, InCombinedImage2DRgba32{ writer, "colourTex" }
-				, InCombinedImage2DRgba32{ writer, "blendTex" } );
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec4{ writer, "offset" }
+				, sdw::InCombinedImage2DRgba32{ writer, "colourTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "blendTex" } );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< VertexT > out )
 				{
-					outColour = SMAANeighborhoodBlendingPS( vtx_texture, vtx_offset, c3d_colourTex, c3d_blendTex );
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+					out.texcoord() = in.uv();
+					out.offset() = vec4( 0.0_f );
+					SMAANeighborhoodBlendingVS( out.texcoord(), out.offset() );
+				} );
+
+			writer.implementEntryPointT< VertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
+				{
+					out.colour() = SMAANeighborhoodBlendingPS( in.texcoord(), in.offset(), c3d_colourTex, c3d_blendTex );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -223,10 +224,8 @@ namespace smaa
 		, m_blendView{ blendView }
 		, m_velocityView{ velocityView }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaNeighbourhood", neighblend::doGetNeighbourhoodBlendingVP( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaNeighbourhood", neighblend::doGetNeighbourhoodBlendingFP( device, velocityView != nullptr ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "SmaaNeighbourhood", neighblend::getProgram( device, velocityView != nullptr ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "NeighbourhoodBlending"
 			, [this, &device, &config, enabled, passIndex]( crg::FramePass const & pass
 				, crg::GraphContext & context
@@ -313,8 +312,7 @@ namespace smaa
 
 	void NeighbourhoodBlending::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 
 		for ( uint32_t i = 0; i < m_images.size(); ++i )
 		{

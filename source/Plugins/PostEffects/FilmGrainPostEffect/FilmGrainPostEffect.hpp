@@ -81,8 +81,7 @@ namespace film_grain
 
 	private:
 		castor::PreciseTimer m_timer;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		castor::Milliseconds m_time{ 0ull };
 		uint32_t m_timeIndex{ 0u };

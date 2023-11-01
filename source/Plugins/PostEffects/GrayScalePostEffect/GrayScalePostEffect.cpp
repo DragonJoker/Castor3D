@@ -14,6 +14,7 @@
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/Viewport.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -26,6 +27,7 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -33,56 +35,38 @@
 
 namespace grayscale
 {
-	namespace
+	namespace postfx
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			GrayCfgUboIdx,
 			ColorTexIdx,
 		};
 
-		std::unique_ptr< ast::Shader > getVertexProgram( castor3d::Engine & engine )
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine & engine )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
-
-			// Shader inputs
-			auto configUbo = UniformBuffer{ writer, "Configuration", GrayCfgUboIdx, 0u };
-			auto c3d_factors = configUbo.declMember< Vec3 >( "c3d_factors" );
+			auto configUbo = writer.declUniformBuffer( "Configuration", GrayCfgUboIdx, 0u );
+			auto c3d_factors = configUbo.declMember< sdw::Vec3 >( "c3d_factors" );
 			configUbo.end();
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					auto colour = writer.declLocale( "colour"
-						, c3d_mapColor.sample( vtx_texture ).xyz() );
-					outColour = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
+						, c3d_mapColor.sample( in.uv() ).xyz() );
+					out.colour() = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -103,10 +87,8 @@ namespace grayscale
 			, renderSystem
 			, params }
 		, m_configUbo{ renderSystem.getRenderDevice().uboPool->getBuffer< castor::Point3f >( 0u ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "GrayScale", getVertexProgram( *renderTarget.getEngine() ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "GrayScale", getFragmentProgram( *renderTarget.getEngine() ) }
-		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
-			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
+		, m_shader{ "GrayScale", postfx::getProgram( *renderTarget.getEngine() ) }
+		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
 		setParameters( params );
 	}
@@ -127,8 +109,7 @@ namespace grayscale
 
 	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 		visitor.visit( cuT( "Factors" )
 			, m_factors );
 	}
@@ -166,9 +147,9 @@ namespace grayscale
 		m_pass->addDependency( previousPass );
 		m_configUbo.createPassBinding( *m_pass
 			, "GrayCfg"
-			, GrayCfgUboIdx );
+			, postfx::GrayCfgUboIdx );
 		m_pass->addSampledView( crg::ImageViewIdArray{ source.sampledViewId, target.sampledViewId }
-			, ColorTexIdx );
+			, postfx::ColorTexIdx );
 		m_pass->addOutputColourView( crg::ImageViewIdArray{ target.targetViewId, source.targetViewId } );
 		return true;
 	}

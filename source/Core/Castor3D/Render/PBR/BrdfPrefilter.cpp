@@ -24,6 +24,7 @@
 #include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 namespace castor3d
 {
@@ -185,42 +186,24 @@ namespace castor3d
 
 	ashes::PipelineShaderStageCreateInfoArray BrdfPrefilter::doCreateProgram()
 	{
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "BRDFPrefilter" };
+		ProgramModule module{ "BRDFPrefilter" };
 		{
-			using namespace sdw;
-			VertexWriter writer{ &m_renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &m_renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			auto inPosition = writer.declInput< sdw::Vec2 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
+			auto inUv = writer.declInput< sdw::Vec2 >( "inUv", sdw::EntryPoint::eVertex, 1u );
+			auto inTexture = writer.declInput< sdw::Vec2 >( "vtx_texture", sdw::EntryPoint::eFragment, 0u );
 
 			// Outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto outTexture = writer.declOutput< sdw::Vec2 >( "outTexture", sdw::EntryPoint::eVertex, 0u );
+			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "BRDFPrefilter" };
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &m_renderSystem.getEngine()->getShaderAllocator() };
 			shader::BRDFHelpers brdf{ writer };
 
-			// Inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			// Outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
-
-			auto integrateBRDF = writer.implementFunction< Vec3 >( "c3d_integrateBRDF"
-				, [&]( Float const & NdotV
-					, Float const & roughness )
+			auto integrateBRDF = writer.implementFunction< sdw::Vec3 >( "c3d_integrateBRDF"
+				, [&]( sdw::Float const & NdotV
+					, sdw::Float const & roughness )
 				{
 					// Compute spherical view vector: (sin(phi), 0, cos(phi))
 					auto V = writer.declLocale( "V"
@@ -240,7 +223,7 @@ namespace castor3d
 					auto sampleCount = writer.declLocale( "sampleCount"
 						, 1024_u );
 
-					FOR( writer, UInt, i, 0_u, i < sampleCount, ++i )
+					FOR( writer, sdw::UInt, i, 0_u, i < sampleCount, ++i )
 					{
 						auto xi = writer.declLocale( "xi"
 							, brdf.hammersley( i, sampleCount ) );
@@ -250,7 +233,7 @@ namespace castor3d
 							auto importanceSample = writer.declLocale( "importanceSample"
 								, brdf.getImportanceSample( brdf.importanceSampleGGX( xi, roughness ), N ) );
 							auto H = writer.declLocale( "H"
-								,importanceSample.xyz() );
+								, importanceSample.xyz() );
 							auto L = writer.declLocale( "L"
 								, normalize( vec3( 2.0_f ) * dot( V, H ) * H - V ) );
 
@@ -303,27 +286,30 @@ namespace castor3d
 					}
 					ROF;
 
-					A /= writer.cast< Float >( sampleCount );
-					B /= writer.cast< Float >( sampleCount );
-					C /= writer.cast< Float >( sampleCount );
+					A /= writer.cast< sdw::Float >( sampleCount );
+					B /= writer.cast< sdw::Float >( sampleCount );
+					C /= writer.cast< sdw::Float >( sampleCount );
 					writer.returnStmt( vec3( A, B, C ) );
 				}
-				, InFloat( writer, "NdotV" )
-				, InFloat( writer, "roughness" ) );
+				, sdw::InFloat( writer, "NdotV" )
+				, sdw::InFloat( writer, "roughness" ) );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+				, sdw::VertexOut out )
 				{
-					outColour = vec4( integrateBRDF( vtx_texture.x(), vtx_texture.y() ), 1.0_f );
+					outTexture = inUv;
+					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
-			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOut out )
+				{
+					outColour = vec4( integrateBRDF( inTexture.x(), inTexture.y() ), 1.0_f );
+				} );
+
+			module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		return ashes::PipelineShaderStageCreateInfoArray
-		{
-			makeShaderState( m_device, vtx ),
-			makeShaderState( m_device, pxl ),
-		};
+		return makeProgramStates( m_device, module );
 	}
 }

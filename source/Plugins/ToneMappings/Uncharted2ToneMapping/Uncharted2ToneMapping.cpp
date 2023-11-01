@@ -3,28 +3,24 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
-#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 namespace Uncharted2
 {
+	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "uncharted2" );
 	castor::String ToneMapping::Name = cuT( "Uncharted 2 Tone Mapping" );
 
 	castor3d::ShaderPtr ToneMapping::create( castor3d::Engine & engine )
 	{
-		using namespace sdw;
-		FragmentWriter writer{ &engine.getShaderAllocator() };
+		sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-		// Shader inputs
 		C3D_HdrConfig( writer, 0u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHdr", 1u, 0u );
-		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-		// Shader outputs
-		auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
 
 		auto ShoulderStrength = writer.declConstant( "ShoulderStrength", 0.15_f );
 		auto LinearStrength = writer.declConstant( "LinearStrength", 0.50_f );
@@ -35,8 +31,8 @@ namespace Uncharted2
 		auto LinearWhitePointValue = writer.declConstant( "LinearWhitePointValue", 11.2_f );
 		auto ExposureBias = writer.declConstant( "ExposureBias", 2.0_f );
 
-		auto uncharted2ToneMap = writer.implementFunction< Vec3 >( "uncharted2ToneMap"
-			, [&]( Vec3 const & x )
+		auto uncharted2ToneMap = writer.implementFunction< sdw::Vec3 >( "uncharted2ToneMap"
+			, [&]( sdw::Vec3 const & x )
 			{
 				writer.returnStmt( (
 						(
@@ -49,13 +45,15 @@ namespace Uncharted2
 							+ ToeStrength * ToeDenominator ) )
 					- ToeNumerator / ToeDenominator );
 			}
-			, InVec3{ writer, "x" } );
+			, sdw::InVec3{ writer, "x" } );
 
-		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-			, FragmentOut out )
+		castor3d::ToneMapping::getVertexProgram( writer );
+
+		writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+			, sdw::FragmentOutT< c3d::Colour4FT > out )
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
-					, c3d_mapHdr.sample( vtx_texture ).rgb() );
+					, c3d_mapHdr.sample( in.uv() ).rgb() );
 				hdrColor *= vec3( ExposureBias ); // Hardcoded Exposure Adjustment.
 
 				auto current = writer.declLocale( "current"
@@ -66,7 +64,7 @@ namespace Uncharted2
 				auto colour = writer.declLocale( "colour"
 					, current * whiteScale );
 
-				outColour = vec4( c3d_hdrConfigData.applyGamma( colour ), 1.0_f );
+				out.colour() = vec4( c3d_hdrConfigData.applyGamma( colour ), 1.0_f );
 			} );
 
 		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );

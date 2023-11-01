@@ -6,6 +6,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
@@ -16,6 +17,7 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -25,6 +27,8 @@ namespace fxaa
 {
 	namespace postfx
 	{
+		namespace c3d = castor3d::shader;
+
 		static castor::String const PosPos = cuT( "vtx_posPos" );
 
 		enum Idx : uint32_t
@@ -33,60 +37,37 @@ namespace fxaa
 			ColorTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::Engine & engine )
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-			// Shader inputs
-			C3D_Fxaa( writer, 0u, 0u );
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			sdw::Float fxaaReduceMin{ 1.0_f / 128.0_f };
 
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_posPos = writer.declOutput< Vec4 >( PosPos, 1u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
-					vtx_posPos.xy() = position.xy();
-					vtx_posPos.zw() = position.xy() - ( c3d_fxaaData.pixelSize * ( 0.5_f + c3d_fxaaData.subpixShift ) );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine & engine )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
-
-			// Shader inputs
 			C3D_Fxaa( writer, FxaaCfgUboIdx, 0u );
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", ColorTexIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_posPos = writer.declInput< Vec4 >( PosPos, 1u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::PosUv4FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::PosUv4FT > out )
+				{
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position().xy(), 0.0_f, 1.0_f );
+					out.position().xy() = in.position().xy();
+					out.position().zw() = in.position().xy() - ( c3d_fxaaData.pixelSize * ( 0.5_f + c3d_fxaaData.subpixShift ) );
+				} );
 
-#define FXAA_REDUCE_MIN	Float{ 1.0 / 128.0 }
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::PosUv4FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::PosUv4FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					auto rgbNW = writer.declLocale( "rgbNW"
-						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
+						, c3d_mapColor.lod( in.uv(), 0.0_f, ivec2( -1_i, -1_i ) ).rgb() );
 					auto rgbNE = writer.declLocale( "rgbNE"
-						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( 1_i, -1_i ) ).rgb() );
+						, c3d_mapColor.lod( in.uv(), 0.0_f, ivec2( 1_i, -1_i ) ).rgb() );
 					auto rgbSW = writer.declLocale( "rgbSW"
-						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( -1_i, 1_i ) ).rgb() );
+						, c3d_mapColor.lod( in.uv(), 0.0_f, ivec2( -1_i, 1_i ) ).rgb() );
 					auto rgbSE = writer.declLocale( "rgbSE"
-						, c3d_mapColor.lod( vtx_texture, 0.0_f, ivec2( 1_i, 1_i ) ).rgb() );
+						, c3d_mapColor.lod( in.uv(), 0.0_f, ivec2( 1_i, 1_i ) ).rgb() );
 					auto rgbM = writer.declLocale( "rgbM"
-						, c3d_mapColor.sample( vtx_texture, 0.0_f ).rgb() );
+						, c3d_mapColor.sample( in.uv(), 0.0_f ).rgb() );
 
 					auto luma = writer.declLocale( "luma"
 						, vec3( 0.299_f, 0.587_f, 0.114_f ) );
@@ -111,7 +92,7 @@ namespace fxaa
 							, ( ( lumaNW + lumaSW ) - ( lumaNE + lumaSE ) ) ) );
 
 					auto dirReduce = writer.declLocale( "dirReduce"
-						, max( ( lumaNW + lumaNE + lumaSW + lumaSE ) * ( 0.25_f * c3d_fxaaData.reduceMul ), FXAA_REDUCE_MIN ) );
+						, max( ( lumaNW + lumaNE + lumaSW + lumaSE ) * ( 0.25_f * c3d_fxaaData.reduceMul ), fxaaReduceMin ) );
 					auto rcpDirMin = writer.declLocale( "rcpDirMin"
 						, 1.0_f / ( min( abs( dir.x() ), abs( dir.y() ) ) + dirReduce ) );
 					dir = min( vec2( c3d_fxaaData.spanMax, c3d_fxaaData.spanMax )
@@ -119,17 +100,17 @@ namespace fxaa
 							, dir * rcpDirMin ) ) * c3d_fxaaData.pixelSize;
 
 					auto texcoord0 = writer.declLocale( "texture0"
-						, vtx_texture + dir * ( 1.0_f / 3.0_f - 0.5_f ) );
+						, in.uv() + dir * ( 1.0_f / 3.0_f - 0.5_f ) );
 					auto texcoord1 = writer.declLocale( "texture1"
-						, vtx_texture + dir * ( 2.0_f / 3.0_f - 0.5_f ) );
+						, in.uv() + dir * ( 2.0_f / 3.0_f - 0.5_f ) );
 
 					auto rgbA = writer.declLocale( "rgbA"
 						, ( c3d_mapColor.sample( texcoord0, 0.0_f ).rgb()
 								+ c3d_mapColor.sample( texcoord1, 0.0_f ).rgb() )
 							* ( 1.0_f / 2.0_f ) );
 
-					texcoord0 = vtx_texture + dir * ( 0.0_f / 3.0_f - 0.5_f );
-					texcoord1 = vtx_texture + dir * ( 3.0_f / 3.0_f - 0.5_f );
+					texcoord0 = in.uv() + dir * ( 0.0_f / 3.0_f - 0.5_f );
+					texcoord1 = in.uv() + dir * ( 3.0_f / 3.0_f - 0.5_f );
 
 					auto rgbB = writer.declLocale( "rgbB"
 						, ( rgbA * 1.0_f / 2.0_f )
@@ -139,7 +120,7 @@ namespace fxaa
 					auto lumaB = writer.declLocale( "lumaB"
 						, dot( rgbB, luma ) );
 
-					outColour = vec4( writer.ternary( lumaB < lumaMin || lumaB > lumaMax, rgbA, rgbB )
+					out.colour() = vec4( writer.ternary( lumaB < lumaMin || lumaB > lumaMax, rgbA, rgbB )
 						, 1.0_f );
 				} );
 
@@ -162,10 +143,8 @@ namespace fxaa
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "Fxaa", postfx::getVertexProgram( *renderTarget.getEngine() ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "Fxaa", postfx::getFragmentProgram( *renderTarget.getEngine() ) }
-		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
-			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
+		, m_shader{ "Fxaa", postfx::getProgram( *renderTarget.getEngine() ) }
+		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 		, m_fxaaUbo{ renderSystem.getRenderDevice(), m_renderTarget.getSize() }
 	{
 		setParameters( parameters );
@@ -186,8 +165,7 @@ namespace fxaa
 
 	void PostEffect::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 		visitor.visit( cuT( "Sub-pixel shift" )
 			, m_subpixShift );
 		visitor.visit( cuT( "Span max." )

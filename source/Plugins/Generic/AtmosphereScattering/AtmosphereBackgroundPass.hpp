@@ -17,8 +17,7 @@ namespace atmosphere_scattering
 {
 	struct Shaders
 	{
-		castor3d::ShaderModule vertexShader;
-		castor3d::ShaderModule pixelShader;
+		castor3d::ProgramModule shader;
 		ashes::PipelineShaderStageCreateInfoArray stages;
 	};
 

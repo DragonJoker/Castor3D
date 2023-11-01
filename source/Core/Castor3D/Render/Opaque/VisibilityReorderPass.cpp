@@ -154,7 +154,7 @@ namespace castor3d
 						}
 						ROF;
 
-						indirectCounts[pipelineId] = uvec3( writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 64.0_f ) ), 1u, 1u );
+						indirectCounts[pipelineId] = uvec3( writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 16.0_f ) ), 1u, 1u );
 						materialStarts[pipelineId] = result;
 					}
 					FI;

@@ -493,6 +493,12 @@ namespace castor3d
 				result.insert( spirv::KHR_ray_tracing );
 			}
 
+			if ( device.hasExtension( VK_NV_COMPUTE_SHADER_DERIVATIVES_EXTENSION_NAME )
+				&& device.hasComputeShaderDerivatives() )
+			{
+				result.insert( spirv::NV_compute_shader_derivatives );
+			}
+
 			if ( device.gpu.getProperties().apiVersion >= ashes::makeVersion( 1, 2, 0 ) )
 			{
 				result.insert( spirv::KHR_shader_ballot );

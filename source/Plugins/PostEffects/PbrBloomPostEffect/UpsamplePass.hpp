@@ -38,8 +38,7 @@ namespace PbrBloom
 
 	private:
 		crg::FramePassGroup & m_graph;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::ImageViewIdArray m_resultViews;
 		std::vector< crg::FramePass * > m_passes;

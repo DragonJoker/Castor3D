@@ -7,6 +7,7 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
@@ -21,6 +22,7 @@
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <numeric>
 
@@ -28,41 +30,19 @@ namespace draw_edges
 {
 	namespace dned
 	{
-		static std::unique_ptr< ast::Shader > getVertexShader( castor3d::RenderDevice const & device
-			, VkExtent3D const & size )
-		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+		namespace c3d = castor3d::shader;
 
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-					vtx_texture = uv;
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine & engine
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
 			, VkExtent3D const & extent )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
+			auto & engine = *device.renderSystem.getEngine();
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+
 			castor3d::shader::Utils utils{ writer };
 			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, castor3d::TextureCombine{}
 				, castor3d::ComponentModeFlag::eNone
 				, utils };
-
-			// Inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
 			auto specifics = uint32_t( DepthNormalEdgeDetection::eSpecifics );
 			castor3d::shader::Materials materials{ engine, writer, passShaders, DepthNormalEdgeDetection::eMaterials, 0u, specifics };
@@ -73,8 +53,7 @@ namespace draw_edges
 			auto minmax = depthRangeBuffer.declMember< sdw::Int >( "minmax", 2u );
 			depthRangeBuffer.end();
 
-			// Outputs
-			auto output( writer.declOutput< sdw::Float >( "output", 0u ) );
+			auto output( writer.declOutput< sdw::Float >( "output", sdw::EntryPoint::eFragment, 0u ) );
 
 			auto Fdepth = writer.implementFunction< sdw::Float >( "Fdepth"
 				, [&]( sdw::Float const & z
@@ -153,13 +132,20 @@ namespace draw_edges
 				, sdw::InFloat{ writer, "depthFactor" }
 				, sdw::InFloat{ writer, "normalFactor" } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+					out.uv() = in.uv();
+				} );
+
+			writer.implementEntryPointT< c3d::Uv2FT, sdw::VoidT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOut out )
 				{
 					auto size = writer.declLocale( "size"
 						, ivec2( sdw::Int{ int( extent.width ) }, sdw::Int{ int( extent.height ) } ) );
 					auto texelCoord = writer.declLocale( "texelCoord"
-						, ivec2( vec2( size ) * vtx_texture ) );
+						, ivec2( vec2( size ) * in.uv() ) );
 
 					auto X = writer.declLocale( "X"
 						, depthObj.fetch( texelCoord, 0_i ) );
@@ -227,11 +213,8 @@ namespace draw_edges
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DNEdgesDetection", dned::getVertexShader( device, m_extent ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DNEdgesDetection", dned::getFragmentProgram( *renderTarget.getEngine()
-			, m_extent ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "DNEdgesDetection", dned::getProgram( device, m_extent ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "EdgesDetection"
 			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -279,8 +262,7 @@ namespace draw_edges
 
 	void DepthNormalEdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 		visitor.visit( "Depth Normal Edge Detection Result"
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout

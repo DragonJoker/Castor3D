@@ -517,8 +517,6 @@ namespace castor3d
 		FramePassTimerUPtr m_overlaysTimer;
 		FramePassTimerUPtr m_cpuUpdateTimer;
 		FramePassTimerUPtr m_gpuUpdateTimer;
-		ShaderModule m_combineVtx{ VK_SHADER_STAGE_VERTEX_BIT, "Target - Combine" };
-		ShaderModule m_combinePxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Target - Combine" };
 		ashes::PipelineShaderStageCreateInfoArray m_combineStages;
 		SsaoConfig m_ssaoConfig;
 		castor::Point2f m_jitter;

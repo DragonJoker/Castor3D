@@ -68,8 +68,7 @@ namespace grayscale
 	private:
 		castor3d::UniformBufferOffsetT< castor::Point3f > m_configUbo;
 		castor::ChangeTracked< castor::Point3f > m_factors{ castor::Point3f{ 0.2126f, 0.7152f, 0.0722f } };
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass * m_pass{};
 	};

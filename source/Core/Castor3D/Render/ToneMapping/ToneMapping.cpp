@@ -6,6 +6,7 @@
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/ImageData.hpp>
@@ -15,6 +16,7 @@
 #include <CastorUtils/Graphics/Size.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( castor3d, ToneMapping )
 
@@ -39,8 +41,7 @@ namespace castor3d
 		: OwnedBy< Engine >{ engine }
 		, m_name{ cuT( "linear" ) }
 		, m_hdrConfigUbo{ hdrConfigUbo }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "ToneMapping" }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "ToneMapping" }
+		, m_shader{ "ToneMapping" }
 		, m_source{ source.front() }
 		, m_pass{ &doCreatePass( size, graph, source, target, previousPass, progress ) }
 	{
@@ -77,8 +78,7 @@ namespace castor3d
 
 	void ToneMapping::accept( ToneMappingVisitor & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 
 	crg::FramePass & ToneMapping::doCreatePass( castor::Size const & size
@@ -115,36 +115,22 @@ namespace castor3d
 		return result;
 	}
 
+	void ToneMapping::getVertexProgram( sdw::TraditionalGraphicsWriter & writer )
+	{
+		writer.implementEntryPointT< shader::PosUv2FT, shader::Uv2FT >( [&]( sdw::VertexInT< shader::PosUv2FT > in
+			, sdw::VertexOutT< shader::Uv2FT > out )
+			{
+				out.uv() = in.uv();
+				out.vtx.position = vec4( in.position().x(), in.position().y(), 0.0_f, 1.0_f );
+			} );
+	}
+
 	void ToneMapping::doCreate( castor::String const & name )
 	{
 		m_name = name;
-		{
-			sdw::VertexWriter writer{ &getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			auto position = writer.declInput< sdw::Vec2 >( "position", 0u );
-			auto uv = writer.declInput< sdw::Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< sdw::Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
-				, sdw::VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position.x(), position.y(), 0.0_f, 1.0_f );
-				} );
-
-			m_vertexShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		m_pixelShader.shader = getEngine()->getToneMappingFactory().create( name, *getEngine() );
+		m_shader.shader = getEngine()->getToneMappingFactory().create( name, *getEngine() );
 		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
-		m_program =
-		{
-			makeShaderState( device, m_vertexShader ),
-			makeShaderState( device, m_pixelShader ),
-		};
+		m_program = makeProgramStates( device, m_shader );
 	}
 
 	void ToneMapping::doUpdatePassIndex( crg::ImageViewId const & source )

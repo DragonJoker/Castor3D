@@ -5,10 +5,12 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -18,62 +20,45 @@ namespace Bloom
 {
 	namespace blur
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx
 		{
 			GaussCfgUboIdx,
 			DifImgIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = ( position + 1.0_f ) / 2.0_f;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			UniformBuffer config{ writer, castor3d::GaussianBlur::Config, GaussCfgUboIdx, 0u };
-			auto c3d_pixelSize = config.declMember< Vec2 >( castor3d::GaussianBlur::TextureSize );
-			auto c3d_coefficientsCount = config.declMember< UInt >( castor3d::GaussianBlur::CoefficientsCount );
-			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< Vec4 >( castor3d::GaussianBlur::Coefficients, castor3d::GaussianBlur::MaxCoefficients / 4u );
+			auto config = writer.declUniformBuffer( castor3d::GaussianBlur::Config, GaussCfgUboIdx, 0u );
+			auto c3d_pixelSize = config.declMember< sdw::Vec2 >( castor3d::GaussianBlur::TextureSize );
+			auto c3d_coefficientsCount = config.declMember< sdw::UInt >( castor3d::GaussianBlur::CoefficientsCount );
+			auto c3d_dump = config.declMember< sdw::UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
+			auto c3d_coefficients = config.declMember< sdw::Vec4 >( castor3d::GaussianBlur::Coefficients, castor3d::GaussianBlur::MaxCoefficients / 4u );
 			config.end();
 			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
+			writer.implementEntryPointT< c3d::Position2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.uv() = ( in.position() + 1.0_f ) / 2.0_f;
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					auto offset = writer.declLocale( "offset"
 						, vec2( 0.0_f, 0.0_f ) );
-					outColour = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
+					out.colour() = c3d_mapSource.sample( in.uv() ) * c3d_coefficients[0_u][0_u];
 
-					FOR( writer, UInt, i, 1u, i < c3d_coefficientsCount, ++i )
+					FOR( writer, sdw::UInt, i, 1u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += c3d_pixelSize;
-						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
-						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
+						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.uv() - offset );
+						out.colour() += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.uv() + offset );
 					}
 					ROF;
 				} );
@@ -252,10 +237,8 @@ namespace Bloom
 		: m_device{ device }
 		, m_blurPassesCount{ blurPassesCount }
 		, m_blurUbo{ blur::doCreateUbo( m_device, dimensions, blurKernelSize, m_blurPassesCount, isVertical ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomBlurPass", blur::getVertexProgram( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomBlurPass", blur::getPixelProgram( device ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "BloomBlurPass", blur::getProgram( device ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_passes{ previousPasses }
 		, m_subpasses{ blur::doCreateSubpasses( graph
 			, m_passes
@@ -308,7 +291,6 @@ namespace Bloom
 
 	void BlurPass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 }

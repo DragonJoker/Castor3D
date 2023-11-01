@@ -42,6 +42,7 @@
 #include <CastorUtils/Miscellaneous/PreciseTimer.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( castor3d, RenderTarget )
 
@@ -1180,79 +1181,67 @@ namespace castor3d
 			, float( 1.0 - 2.0 * bandRatioU )
 			, float( 1.0 - 2.0 * bandRatioV ) };
 
+		ProgramModule module{ getName() + "/Combine" };
 		{
-			using namespace sdw;
-			VertexWriter writer{ &getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &getEngine()->getShaderAllocator() };
+
+			auto c3d_mapLhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLhs", rendtgt::CombineLhsIdx, 0u );
+			auto c3d_mapRhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapRhs", rendtgt::CombineRhsIdx, 0u );
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			auto inPosition = writer.declInput< sdw::Vec2 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
+			auto inUv = writer.declInput< sdw::Vec2 >( "inUv", sdw::EntryPoint::eVertex, 1u );
+			auto inTextureLhs = writer.declInput< sdw::Vec2 >( "inTextureLhs", sdw::EntryPoint::eFragment, rendtgt::CombineLhsIdx );
+			auto inTextureRhs = writer.declInput< sdw::Vec2 >( "inTextureRhs", sdw::EntryPoint::eFragment, rendtgt::CombineRhsIdx );
 
 			// Shader outputs
-			auto vtx_textureLhs = writer.declOutput< Vec2 >( "vtx_textureLhs", rendtgt::CombineLhsIdx );
-			auto vtx_textureRhs = writer.declOutput< Vec2 >( "vtx_textureRhs", rendtgt::CombineRhsIdx );
+			auto outTextureLhs = writer.declOutput< sdw::Vec2 >( "outTextureLhs", sdw::EntryPoint::eVertex, rendtgt::CombineLhsIdx );
+			auto outTextureRhs = writer.declOutput< sdw::Vec2 >( "outTextureRhs", sdw::EntryPoint::eVertex, rendtgt::CombineRhsIdx );
+			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0 );
 
 			shader::Utils utils{ writer };
 
-			auto getSafeBandedCoord = [&]( Vec2 const & texcoord )
+			auto getSafeBandedCoord = [&]( sdw::Vec2 const & texcoord )
 			{
 				return vec2( texcoord.x() * velocityMetrics->z + velocityMetrics->x
 					, texcoord.y() * velocityMetrics->w + velocityMetrics->y );
 			};
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
+			writer.implementEntryPoint( [&]( sdw::VertexIn in
+				, sdw::VertexOut out )
 				{
-					vtx_textureLhs = utils.topDownToBottomUp( uv );
-					vtx_textureRhs = uv;
+					outTextureLhs = utils.topDownToBottomUp( inUv );
+					outTextureRhs = inUv;
 
 					if ( getTargetType() != TargetType::eWindow )
 					{
-						vtx_textureLhs.y() = 1.0_f - vtx_textureLhs.y();
-						vtx_textureRhs.y() = 1.0_f - vtx_textureRhs.y();
+						outTextureLhs.y() = 1.0_f - outTextureLhs.y();
+						outTextureRhs.y() = 1.0_f - outTextureRhs.y();
 					}
 
-					vtx_textureLhs = getSafeBandedCoord( vtx_textureLhs );
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
+					outTextureLhs = getSafeBandedCoord( outTextureLhs );
+					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
-			m_combineVtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			auto c3d_mapLhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLhs", rendtgt::CombineLhsIdx, 0u );
-			auto c3d_mapRhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapRhs", rendtgt::CombineRhsIdx, 0u );
-
-			auto vtx_textureLhs = writer.declInput< Vec2 >( "vtx_textureLhs", rendtgt::CombineLhsIdx );
-			auto vtx_textureRhs = writer.declInput< Vec2 >( "vtx_textureRhs", rendtgt::CombineRhsIdx );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPoint( [&]( sdw::FragmentIn in
+				, sdw::FragmentOut out )
 				{
 					auto lhsColor = writer.declLocale( "lhsColor"
-						, c3d_mapLhs.lod( vtx_textureLhs, 0.0_f ) );
+						, c3d_mapLhs.lod( inTextureLhs, 0.0_f ) );
 					auto rhsColor = writer.declLocale( "rhsColor"
-						, c3d_mapRhs.lod( vtx_textureRhs, 0.0_f ) );
+						, c3d_mapRhs.lod( inTextureRhs, 0.0_f ) );
 					lhsColor.rgb() *= 1.0_f - rhsColor.a();
 					outColour = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );
-			m_combinePxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combineVtx ) );
-		m_combineStages.push_back( makeShaderState( renderSystem.getRenderDevice(), m_combinePxl ) );
+		m_combineStages = makeProgramStates( renderSystem.getRenderDevice(), module );
 	}
 
 	void RenderTarget::doCleanupCombineProgram()
 	{
 		m_combineStages.clear();
-		m_combinePxl.shader.reset();
-		m_combineVtx.shader.reset();
 	}
 
 	Texture const & RenderTarget::doUpdatePostEffects( CpuUpdater & updater

@@ -123,6 +123,14 @@ namespace castor3d::shader
 	struct VoxelSurfaceT;
 	template< ast::var::Flag FlagT >
 	struct OverlaySurfaceT;
+	template< typename ColTypeT, sdw::var::Flag FlagT >
+	struct ColourT;
+	template< typename PosTypeT, sdw::var::Flag FlagT >
+	struct PositionT;
+	template< typename PosTypeT, sdw::var::Flag FlagT >
+	struct PosUvT;
+	template< typename UvTypeT, sdw::var::Flag FlagT >
+	struct UvT;
 
 	template< ast::var::Flag FlagT >
 	using FragmentSurfaceT = RasterizerSurfaceT< sdw::Vec3, FlagT >;
@@ -135,6 +143,27 @@ namespace castor3d::shader
 	using VertexSurface = VertexSurfaceT< sdw::var::Flag::eNone >;
 	using VoxelSurface = VoxelSurfaceT< sdw::var::Flag::eNone >;
 	using OverlaySurface = OverlaySurfaceT< sdw::var::Flag::eNone >;
+
+	template< sdw::var::Flag FlagT >
+	using Colour3FT = ColourT< sdw::Vec3, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using Colour4FT = ColourT< sdw::Vec4, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using Position2FT = PositionT< sdw::Vec2, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using Position3FT = PositionT< sdw::Vec3, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using Position4FT = PositionT< sdw::Vec4, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using PosUv2FT = PosUvT< sdw::Vec2, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using PosUv3FT = PosUvT< sdw::Vec3, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using PosUv4FT = PosUvT< sdw::Vec4, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using Uv2FT = UvT< sdw::Vec2, FlagT >;
+	template< sdw::var::Flag FlagT >
+	using Uv3FT = UvT< sdw::Vec3, FlagT >;
 
 	class BackgroundModel;
 	class BufferBase;

@@ -141,7 +141,7 @@ namespace castor3d
 		{
 			struct ShaderStages
 			{
-				ShaderModule shader;
+				ProgramModule shader;
 				ashes::PipelinePtr pipeline{};
 			};
 
@@ -205,7 +205,6 @@ namespace castor3d
 		ParallaxOcclusionFilter m_parallaxOcclusionFilter;
 		PassSortNodesSignalConnection m_onNodesPassSort;
 		bool m_commandsChanged{};
-		ShaderModule m_vertexShader;
 		ashes::RenderPassPtr m_firstRenderPass;
 		ashes::FrameBufferPtr m_firstFramebuffer;
 		ashes::RenderPassPtr m_blendRenderPass;

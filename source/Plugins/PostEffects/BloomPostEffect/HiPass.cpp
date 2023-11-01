@@ -6,10 +6,12 @@
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -19,6 +21,8 @@ namespace Bloom
 {
 	namespace hi
 	{
+		namespace c3d = castor3d::shader;
+
 		template< typename T >
 		inline constexpr T getSubresourceDimension( T const & extent
 			, uint32_t mipLevel )noexcept
@@ -190,50 +194,30 @@ namespace Bloom
 #endif
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
 				{
-					outColour = vec4( c3d_mapColor.sample( vtx_texture, 0.0_f ).xyz(), 1.0_f );
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
+
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
+				{
+					out.colour() = vec4( c3d_mapColor.sample( in.uv(), 0.0_f ).xyz(), 1.0_f );
 					auto maxComponent = writer.declLocale( "maxComponent"
-						, max( outColour.r(), outColour.g() ) );
-					maxComponent = max( maxComponent, outColour.b() );
+						, max( out.colour().r(), out.colour().g() ) );
+					maxComponent = max( maxComponent, out.colour().b() );
 
 					IF( writer, maxComponent <= 1.0_f )
 					{
-						outColour.xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
+						out.colour().xyz() = vec3( 0.0_f, 0.0_f, 0.0_f );
 					}
 					FI;
 				} );
@@ -252,10 +236,8 @@ namespace Bloom
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_graph{ graph }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "BloomHiPass", hi::getVertexProgram( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "BloomHiPass", hi::getPixelProgram( device ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "BloomHiPass", hi::getProgram( device ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 #if !Bloom_DebugHiPass
 		, m_resultImg{ graph.createImage( crg::ImageData{ "BLHi"
 			, 0u
@@ -311,8 +293,7 @@ namespace Bloom
 
 	void HiPass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 
 		for ( auto & view : m_resultViews )
 		{

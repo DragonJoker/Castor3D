@@ -8,6 +8,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
 #include <Castor3D/Shader/Ubos/SceneUbo.hpp>
 
@@ -15,6 +16,7 @@
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 namespace atmosphere_scattering
 {
@@ -24,26 +26,11 @@ namespace atmosphere_scattering
 	{
 		castor::String const Name{ "Atmosphere" };
 
-		static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
-		{
-			sdw::VertexWriter writer{ &engine.getShaderAllocator() };
-			sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
-
-			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
-				, sdw::VertexOut{ writer }
-				, [&]( sdw::VertexIn in
-					, sdw::VertexOut out )
-				{
-					out.vtx.position = vec4( position, 1.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine & engine
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
 			, VkExtent2D const & renderSize
 			, bool isVisible )
 		{
-			sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
 			C3D_Scene( writer, AtmosphereBackgroundPass::eScene, 0u );
 			C3D_HdrConfig( writer, AtmosphereBackgroundPass::eHdrConfig, 0u );
@@ -51,23 +38,24 @@ namespace atmosphere_scattering
 				, uint32_t( AtmosphereBackgroundPass::eClouds )
 				, 0u );
 
-			// Fragment Outputs
-			auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0u ) );
+			writer.implementEntryPointT< c3d::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+				, sdw::VertexOut out )
+				{
+					out.vtx.position = vec4( in.position(), 1.0_f, 1.0_f );
+				} );
 
-			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
-				, sdw::FragmentOut{ writer }
-				, [&]( sdw::FragmentIn in
-					, sdw::FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					if ( isVisible )
 					{
 						auto targetSize = writer.declLocale( "targetSize"
 							, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
-						outColour = cloudsMap.sample( in.fragCoord.xy() / targetSize );
+						out.colour() = cloudsMap.sample( in.fragCoord.xy() / targetSize );
 					}
 					else
 					{
-						outColour = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
+						out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 					}
 				} );
 
@@ -121,17 +109,9 @@ namespace atmosphere_scattering
 		, uint32_t passIndex )
 	{
 		auto & engine = *device.renderSystem.getEngine();
-		castor::DataHolderT< Shaders >::getData().vertexShader = { VK_SHADER_STAGE_VERTEX_BIT
-			, atmos::Name
-			, atmos::getVertexProgram( engine ) };
-		castor::DataHolderT< Shaders >::getData().pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT
-			, atmos::Name
-			, atmos::getPixelProgram( engine, size, passIndex == 0u ) };
-		castor::DataHolderT< Shaders >::getData().stages =
-		{
-			makeShaderState( device, castor::DataHolderT< Shaders >::getData().vertexShader ),
-			makeShaderState( device, castor::DataHolderT< Shaders >::getData().pixelShader ),
-		};
+		castor::DataHolderT< Shaders >::getData().shader = { atmos::Name
+			, atmos::getProgram( engine, size, passIndex == 0u ) };
+		castor::DataHolderT< Shaders >::getData().stages = castor3d::makeProgramStates( device, castor::DataHolderT< Shaders >::getData().shader );
 		return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( castor::DataHolderT< Shaders >::getData().stages );
 	}
 

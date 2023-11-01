@@ -3,37 +3,36 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Ubos/HdrConfigUbo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 namespace HejlBurgessDawson
 {
+	namespace c3d = castor3d::shader;
 	castor::String ToneMapping::Type = cuT( "hejl" );
 	castor::String ToneMapping::Name = cuT( "Hejl Burgess Dawson Tone Mapping" );
 
 	castor3d::ShaderPtr ToneMapping::create( castor3d::Engine & engine )
 	{
-		using namespace sdw;
-		FragmentWriter writer{ &engine.getShaderAllocator() };
+		sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-		// Shader inputs
 		C3D_HdrConfig( writer, 0u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHdr", 1u, 0u );
-		auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-		// Shader outputs
-		auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
+		castor3d::ToneMapping::getVertexProgram( writer );
 
-		writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-			, FragmentOut out )
+		writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+			, sdw::FragmentOutT< c3d::Colour4FT > out )
 			{
 				auto hdrColor = writer.declLocale( "hdrColor"
-					, c3d_mapHdr.sample( vtx_texture ).rgb() );
+					, c3d_mapHdr.sample( in.uv() ).rgb() );
 				hdrColor *= vec3( c3d_hdrConfigData.getExposure() );
 				auto x = writer.declLocale( "x"
 					, max( hdrColor - 0.004_f, vec3( 0.0_f ) ) );
-				outColour = vec4( ( x * ( 6.2f * x + 0.5f ) )
+				out.colour() = vec4( ( x * ( 6.2f * x + 0.5f ) )
 					/ ( x * ( 6.2f * x + 1.7f ) + 0.06f ), 1.0_f );
 			} );
 

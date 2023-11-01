@@ -318,6 +318,14 @@ namespace castor3d
 			return m_meshShaderProperties;
 		}
 #endif
+		bool hasComputeShaderDerivatives()const noexcept
+		{
+#if VK_NV_compute_shader_derivatives
+			return m_computeDerivativesFeatures.computeDerivativeGroupQuads == VK_TRUE;
+#else
+			return false;
+#endif
+		}
 
 		ashes::Device const * operator->()const
 		{
@@ -463,6 +471,11 @@ namespace castor3d
 			, nullptr
 			, {} };
 		VkPhysicalDeviceMeshShaderPropertiesNV m_meshShaderProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV
+			, nullptr
+			, {} };
+#endif
+#if VK_NV_compute_shader_derivatives
+		VkPhysicalDeviceComputeShaderDerivativesFeaturesNV m_computeDerivativesFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_COMPUTE_SHADER_DERIVATIVES_FEATURES_NV
 			, nullptr
 			, {} };
 #endif

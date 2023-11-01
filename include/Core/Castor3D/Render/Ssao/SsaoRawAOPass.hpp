@@ -121,8 +121,7 @@ namespace castor3d
 				, bool useNormalsBuffer
 				, castor::String const & prefix );
 
-			ShaderModule vertexShader;
-			ShaderModule pixelShader;
+			ProgramModule shader;
 			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
 

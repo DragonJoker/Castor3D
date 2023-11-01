@@ -9,11 +9,13 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 namespace atmosphere_scattering
 {
@@ -28,26 +30,11 @@ namespace atmosphere_scattering
 			eTransmittance,
 		};
 
-		static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
-		{
-			sdw::VertexWriter writer{ &engine.getShaderAllocator() };
-			sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
-
-			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
-				, sdw::VertexOut{ writer }
-				, [&]( sdw::VertexIn in
-					, sdw::VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine & engine
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
 			, VkExtent3D const & renderSize
 			, VkExtent3D const & transmittanceExtent )
 		{
-			sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
 			ATM_Camera( writer
 				, Bindings::eCamera
@@ -66,8 +53,11 @@ namespace atmosphere_scattering
 			auto planetRadiusOffset = writer.declConstant( "planetRadiusOffset"
 				, 0.01_f );
 
-			// Fragment Outputs
-			auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0u ) );
+			writer.implementEntryPointT< c3d::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+				, sdw::VertexOut out )
+				{
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
@@ -78,10 +68,8 @@ namespace atmosphere_scattering
 				, { transmittanceExtent.width, transmittanceExtent.height } };
 			atmosphere.setTransmittanceMap( transmittanceMap );
 
-			writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::FragmentIn{ writer }
-				, sdw::FragmentOut{ writer }
-				, [&]( sdw::FragmentIn in
-					, sdw::FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					auto targetSize = writer.declLocale( "targetSize"
 						, vec2( sdw::Float{ float( renderSize.width + 1u ) }, float( renderSize.height + 1u ) ) );
@@ -124,7 +112,7 @@ namespace atmosphere_scattering
 					IF( writer, !atmosphere.moveToTopAtmosphere( ray ) )
 					{
 						// Ray is not intersecting the atmosphere
-						outColour = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
+						out.colour() = vec4( 0.0_f, 0.0_f, 0.0_f, 1.0_f );
 					}
 					ELSE
 					{
@@ -134,7 +122,7 @@ namespace atmosphere_scattering
 							, sunDir
 							, sampleCountIni
 							, depthBufferValue ) );
-						outColour = vec4( ss.luminance(), 1.0_f );
+						out.colour() = vec4( ss.luminance(), 1.0_f );
 					}
 					FI;
 				} );
@@ -155,10 +143,8 @@ namespace atmosphere_scattering
 		, uint32_t index
 		, bool const & enabled )
 		: castor::Named{ "SkyViewPass" + castor::string::toString( index ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), skyview::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), skyview::getPixelProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ getName(), skyview::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
 		auto & pass = graph.createPass( getName()
@@ -192,8 +178,7 @@ namespace atmosphere_scattering
 
 	void AtmosphereSkyViewPass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 
 	//************************************************************************************************

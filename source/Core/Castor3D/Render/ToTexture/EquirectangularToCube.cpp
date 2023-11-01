@@ -5,6 +5,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Material/Texture/TextureLayout.hpp"
 
 #include <CastorUtils/Graphics/Position.hpp>
@@ -22,6 +23,7 @@
 #include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( castor3d, EquirectangularToCube )
 
@@ -35,41 +37,17 @@ namespace castor3d
 			, VkFormat format )
 		{
 			auto & engine = *device.renderSystem.getEngine();
-			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "EquirectangularToCube" };
+			ProgramModule module{ "EquirectangularToCube" };
 			{
-				sdw::VertexWriter writer{ &engine.getShaderAllocator() };
+				sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-				// Inputs
-				auto position = writer.declInput< sdw::Vec4 >( "position", 0u );
+				shader::Utils utils{ writer };
+
 				auto matrixUbo = sdw::UniformBuffer{ writer, "Matrix", 0u, 0u };
 				auto mtxViewProjection = matrixUbo.declMember< sdw::Mat4 >( "mtxViewProjection" );
 				matrixUbo.end();
-
-				// Outputs
-				auto vtx_position = writer.declOutput< sdw::Vec3 >( "vtx_position", 0u );
-
-				writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
-					, sdw::VertexOut out )
-					{
-						vtx_position = position.xyz();
-						out.vtx.position = mtxViewProjection * position;
-					} );
-				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-			}
-
-			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "EquirectangularToCube" };
-			{
-				sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
-
-				// Inputs
 				auto mapColour = writer.declCombinedImg< FImg2DRgba32 >( "mapColour", 1u, 0u );
-				auto vtx_position = writer.declInput< sdw::Vec3 >( "vtx_position", 0u );
 
-				// Outputs
-				auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", 0u );
-
-				shader::Utils utils{ writer };
-				
 				auto sampleSphericalMap = writer.implementFunction< sdw::Vec2 >( "sampleSphericalMap"
 					, [&]( sdw::Vec3 const & v )
 					{
@@ -79,23 +57,26 @@ namespace castor3d
 						uv += 0.5_f;
 						writer.returnStmt( uv );
 					}
-					, sdw::InVec3{ writer, "v" } );
+				, sdw::InVec3{ writer, "v" } );
 
-				writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
-					, sdw::FragmentOut out )
+				writer.implementEntryPointT< shader::Position4FT, shader::Position3FT>( [&]( sdw::VertexInT< shader::Position4FT > in
+					, sdw::VertexOutT< shader::Position3FT > out )
+					{
+						out.position() = in.position().xyz();
+						out.vtx.position = mtxViewProjection * in.position();
+					} );
+
+				writer.implementEntryPointT< shader::Position3FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Position3FT > in
+					, sdw::FragmentOutT< shader::Colour4FT > out )
 					{
 						auto uv = writer.declLocale( "uv"
-							, sampleSphericalMap( normalize( vtx_position ) ) );
-						outColour = vec4( mapColour.sample( utils.topDownToBottomUp( uv ) ).rgb(), 1.0_f );
+							, sampleSphericalMap( normalize( in.position() ) ) );
+						out.colour() = vec4( mapColour.sample( utils.topDownToBottomUp( uv ) ).rgb(), 1.0_f );
 					} );
-				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+				module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
-			return ashes::PipelineShaderStageCreateInfoArray
-			{
-				makeShaderState( device, vtx ),
-				makeShaderState( device, pxl ),
-			};
+			return makeProgramStates( device, module );
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device

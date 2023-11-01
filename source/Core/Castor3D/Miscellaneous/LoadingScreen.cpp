@@ -26,6 +26,7 @@
 #include <RenderGraph/RunnableGraph.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( castor3d, LoadingScreen )
 
@@ -120,38 +121,27 @@ namespace castor3d
 			return SceneUbo{ device };
 		}
 
-		static ShaderPtr getVertexProgram( Engine & engine )
+		static ShaderPtr getProgram( Engine & engine )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", 0u, 0u );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-					, VertexOut out )
+			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
+			auto fragColor = writer.declOutput< sdw::Vec4 >( "fragColor", sdw::EntryPoint::eFragment, 0 );
+
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+					, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
 
-		static ShaderPtr getPixelProgram( Engine & engine )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
-
-			// Shader inputs
-			auto c3d_source = writer.declCombinedImg< FImg2DRgba32 >( "c3d_source", 0u, 0u );
-
-			// Shader outputs
-			auto fragColor = writer.declOutput< Vec4 >( "fragColor", 0 );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOut out )
 				{
 					fragColor = c3d_source.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 				} );
+
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
@@ -188,10 +178,8 @@ namespace castor3d
 			, { 1u, true } }
 		, m_renderSize{ renderSize }
 		, m_renderPass{ renderPass }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, SceneName, loadscreen::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, SceneName, loadscreen::getPixelProgram( *device.renderSystem.getEngine() ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ SceneName, loadscreen::getProgram( *device.renderSystem.getEngine() ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_renderQuad{ pass
 			, context
 			, graph

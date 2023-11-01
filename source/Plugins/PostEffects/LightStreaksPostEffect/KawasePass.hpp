@@ -54,8 +54,7 @@ namespace light_streaks
 	private:
 		castor3d::RenderDevice const & m_device;
 		KawaseUbo & m_kawaseUbo;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePassArray m_lastPasses;
 		std::vector< Subpass > m_subpasses;

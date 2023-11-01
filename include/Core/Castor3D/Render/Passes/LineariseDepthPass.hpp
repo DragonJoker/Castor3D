@@ -121,8 +121,7 @@ namespace castor3d
 		*	Linearisation.
 		*/
 		/**@{*/
-		ShaderModule m_extractVertexShader;
-		ShaderModule m_extractPixelShader;
+		ProgramModule m_extractShader;
 		ashes::PipelineShaderStageCreateInfoArray m_extractStages;
 		crg::FramePass const & m_extractPass;
 		/**@}*/
@@ -132,8 +131,7 @@ namespace castor3d
 		*/
 		/**@{*/
 		std::vector< UniformBufferOffsetT< castor::Point2i > > m_previousLevel;
-		ShaderModule m_minifyVertexShader;
-		ShaderModule m_minifyPixelShader;
+		ProgramModule m_minifyShader;
 		ashes::PipelineShaderStageCreateInfoArray m_minifyStages;
 		/**@}*/
 

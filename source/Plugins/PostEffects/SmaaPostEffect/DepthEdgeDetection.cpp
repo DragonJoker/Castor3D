@@ -7,6 +7,7 @@
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/RgbaColour.hpp>
 
@@ -17,6 +18,7 @@
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <numeric>
 
@@ -24,47 +26,43 @@ namespace smaa
 {
 	namespace dpthed
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			DepthTexIdx = SmaaUboIdx + 1,
 		};
 
-		static std::unique_ptr< ast::Shader > doGetEdgeDetectionFP( castor3d::Engine & engine )
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
-			castor3d::shader::Utils utils{ writer };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			c3d::Utils utils{ writer };
 
 			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 1u, 3u );
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_depthObjTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObjTex", DepthTexIdx, 0u );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
 
 			/**
 			 * Gathers current pixel, and the top-left neighbors.
 			 */
-			auto SMAAGatherNeighbours = writer.implementFunction< Vec3 >( "SMAAGatherNeighbours"
-				, [&]( Vec2 const & texcoord
-					, Array< Vec4 > const & offset
-					, CombinedImage2DRgba32 const & depthObjTex )
+			auto SMAAGatherNeighbours = writer.implementFunction< sdw::Vec3 >( "SMAAGatherNeighbours"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::Vec4Array const & offset
+					, sdw::CombinedImage2DRgba32 const & depthObjTex )
 				{
 					writer.returnStmt( depthObjTex.gather( texcoord + c3d_smaaData.rtMetrics.xy() * vec2( -0.5_f, -0.5_f ), 0_i ).grb() );
 				}
-				, InVec2{ writer, "texcoord" }
-				, InVec4Array{ writer, "offset", 3u }
-				, InCombinedImage2DRgba32{ writer, "depthObjTex" } );
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec4Array{ writer, "offset", 3u }
+				, sdw::InCombinedImage2DRgba32{ writer, "depthObjTex" } );
 
 			/**
 			 * Depth Edge Detection
 			 */
-			auto SMAADepthEdgeDetectionPS = writer.implementFunction< Vec2 >( "SMAADepthEdgeDetectionPS"
-				, [&]( Vec2 const & texcoord
-					, Array< Vec4 > const & offset
-					, CombinedImage2DRgba32 const & depthTex )
+			auto SMAADepthEdgeDetectionPS = writer.implementFunction< sdw::Vec2 >( "SMAADepthEdgeDetectionPS"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::Vec4Array const & offset
+					, sdw::CombinedImage2DRgba32 const & depthTex )
 				{
 					auto neighbours = writer.declLocale( "neighbours"
 						, SMAAGatherNeighbours( texcoord, offset, depthTex ) );
@@ -81,15 +79,17 @@ namespace smaa
 
 					writer.returnStmt( edges );
 				}
-				, InVec2{ writer, "texcoord" }
-				, InVec4Array{ writer, "offset", 3u }
-				, InCombinedImage2DRgba32{ writer, "depthTex" } );
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec4Array{ writer, "offset", 3u }
+				, sdw::InCombinedImage2DRgba32{ writer, "depthTex" } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			EdgeDetection::getVertexProgram( writer, c3d_smaaData );
+
+			writer.implementEntryPointT< EDVertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< EDVertexT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
-					outColour = vec4( 0.0_f );
-					outColour.xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( vtx_texture ), vtx_offset, c3d_depthObjTex );
+					out.colour() = vec4( 0.0_f );
+					out.colour().xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( in.texcoord() ), in.offset(), c3d_depthObjTex );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -111,7 +111,7 @@ namespace smaa
 			, device
 			, ubo
 			, config
-			, dpthed::doGetEdgeDetectionFP( *renderTarget.getEngine() )
+			, dpthed::getProgram( device )
 			, enabled
 			, nullptr
 			, 1u }
