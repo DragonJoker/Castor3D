@@ -18,6 +18,7 @@
 #include <ashespp/Sync/Fence.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/ResourceHandler.hpp>
 
@@ -77,48 +78,37 @@ namespace castor3d
 
 		static ashes::PipelineShaderStageCreateInfoArray doCreateProgram( RenderDevice const & device )
 		{
-			ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "RadianceCompute" };
+			ProgramModule module{ "RadianceCompute" };
 			{
-				using namespace sdw;
-				VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+				sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-				// Inputs
-				auto position = writer.declInput< Vec3 >( "position", 0u );
-				UniformBuffer matrix{ writer, "Matrix", 0u, 0u };
-				auto c3d_viewProjection = matrix.declMember< Mat4 >( "c3d_viewProjection" );
+				auto matrix = writer.declUniformBuffer( "Matrix", 0u, 0u );
+				auto c3d_viewProjection = matrix.declMember< sdw::Mat4 >( "c3d_viewProjection" );
 				matrix.end();
-
-				// Outputs
-				auto vtx_worldPosition = writer.declOutput< Vec3 >( "vtx_worldPosition", 0u );
-
-				writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-					, VertexOut out )
-					{
-						vtx_worldPosition = position;
-						out.vtx.position = ( c3d_viewProjection * vec4( position, 1.0_f ) ).xyww();
-					} );
-				vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-			}
-
-			ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "RadianceCompute" };
-			{
-				using namespace sdw;
-				FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-				// Inputs
-				auto vtx_worldPosition = writer.declInput< Vec3 >( "vtx_worldPosition", 0u );
 				auto c3d_mapEnvironment = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapEnvironment", 1u, 0u );
 
-				// Outputs
-				auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+				// Inputs
+				auto inPosition = writer.declInput< sdw::Vec3 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
+				auto inWorldPosition = writer.declInput< sdw::Vec3 >( "inWorldPosition", sdw::EntryPoint::eFragment, 0u );
 
-				writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-					, FragmentOut out )
+				// Outputs
+				auto outWorldPosition = writer.declOutput< sdw::Vec3 >( "outWorldPosition", sdw::EntryPoint::eVertex, 0u );
+				auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0u );
+
+				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+					, sdw::VertexOut out )
+					{
+						outWorldPosition = inPosition;
+						out.vtx.position = ( c3d_viewProjection * vec4( inPosition, 1.0_f ) ).xyww();
+					} );
+
+				writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+					, sdw::FragmentOut out )
 					{
 						// From https://learnopengl.com/#!PBR/Lighting
 						// the sample direction equals the hemisphere's orientation 
 						auto normal = writer.declLocale( "normal"
-							, normalize( vtx_worldPosition ) );
+							, normalize( inWorldPosition ) );
 
 						auto irradiance = writer.declLocale( "irradiance"
 							, vec3( 0.0_f ) );
@@ -134,9 +124,9 @@ namespace castor3d
 						auto nrSamples = writer.declLocale( "nrSamples"
 							, 0_i );
 
-						FOR( writer, Float, phi, 0.0_f, phi < Float{ castor::PiMult2< float > }, phi += sampleDelta )
+						FOR( writer, sdw::Float, phi, 0.0_f, phi < sdw::Float{ castor::PiMult2< float > }, phi += sampleDelta )
 						{
-							FOR( writer, Float, theta, 0.0_f, theta < Float{ castor::PiDiv2< float > }, theta += sampleDelta )
+							FOR( writer, sdw::Float, theta, 0.0_f, theta < sdw::Float{ castor::PiDiv2< float > }, theta += sampleDelta )
 							{
 								// spherical to cartesian (in tangent space)
 								auto tangentSample = writer.declLocale( "tangentSample"
@@ -152,18 +142,14 @@ namespace castor3d
 						}
 						ROF;
 
-						irradiance = irradiance * Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< Float >( nrSamples ) );
+						irradiance = irradiance * sdw::Float{ castor::Pi< float > } * ( 1.0_f / writer.cast< sdw::Float >( nrSamples ) );
 						outColour = vec4( irradiance, 1.0_f );
 					} );
 
-				pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+				module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 			}
 
-			return ashes::PipelineShaderStageCreateInfoArray
-			{
-				makeShaderState( device, vtx ),
-				makeShaderState( device, pxl ),
-			};
+			return makeProgramStates( device, module );
 		}
 
 		static ashes::RenderPassPtr doCreateRenderPass( RenderDevice const & device

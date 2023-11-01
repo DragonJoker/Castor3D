@@ -5,10 +5,12 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/UniformBufferPool.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -18,61 +20,43 @@ namespace light_streaks
 {
 	namespace kawase
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx
 		{
 			KawaseUboIdx,
 			DifImgIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
 			C3D_Kawase( writer, KawaseUboIdx, 0u );
 			auto c3d_mapHiPass = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHiPass", DifImgIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					auto colour = writer.declLocale( "colour"
 						, vec3( 0.0_f ) );
 					auto b = writer.declLocale( "b"
-						, pow( writer.cast< Float >( c3d_kawaseData.samples ), writer.cast< Float >( c3d_kawaseData.pass ) ) );
+						, pow( writer.cast< sdw::Float >( c3d_kawaseData.samples ), writer.cast< sdw::Float >( c3d_kawaseData.pass ) ) );
 					auto texcoords = writer.declLocale( "texcoords"
-						, vtx_texture );
+						, in.uv() );
 
-					FOR( writer, Int, s, 0, s < c3d_kawaseData.samples, ++s )
+					FOR( writer, sdw::Int, s, 0, s < c3d_kawaseData.samples, ++s )
 					{
 						// Weight = a^(b*s)
 						auto weight = writer.declLocale( "weight"
-							, pow( c3d_kawaseData.attenuation, b * writer.cast< Float >( s ) ) );
+							, pow( c3d_kawaseData.attenuation, b * writer.cast< sdw::Float >( s ) ) );
 						// Streak direction is a 2D vector in image space
 						auto sampleCoord = writer.declLocale( "sampleCoord"
 							, texcoords + ( c3d_kawaseData.direction * b * vec2( s, s ) * c3d_kawaseData.pixelSize ) );
@@ -81,7 +65,7 @@ namespace light_streaks
 					}
 					ROF;
 
-					outColour = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
+					out.colour() = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -201,10 +185,8 @@ namespace light_streaks
 		, bool const * enabled )
 		: m_device{ device }
 		, m_kawaseUbo{ kawaseUbo }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "LightStreaksKawasePass", kawase::getVertexProgram( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "LightStreaksKawasePass", kawase::getPixelProgram( device ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "LightStreaksKawasePass", kawase::getProgram( device ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_subpasses{ kawase::doCreateSubpasses( graph
 			, previousPasses
 			, m_device
@@ -220,7 +202,6 @@ namespace light_streaks
 
 	void KawasePass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 }

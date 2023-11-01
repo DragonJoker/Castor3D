@@ -16,6 +16,7 @@
 #include "Castor3D/Scene/Background/Shaders/GlslIblBackground.hpp"
 #include "Castor3D/Scene/Background/Shaders/GlslNoIblBackground.hpp"
 #include "Castor3D/Shader/Program.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
@@ -30,6 +31,7 @@
 #include <RenderGraph/FramePassGroup.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( castor3d, SceneBackground )
 
@@ -50,8 +52,7 @@ namespace castor3d
 
 		struct Shaders
 		{
-			castor3d::ShaderModule vertexShader;
-			castor3d::ShaderModule pixelShader;
+			castor3d::ProgramModule shader;
 			ashes::PipelineShaderStageCreateInfoArray stages;
 		};
 
@@ -215,44 +216,26 @@ namespace castor3d
 				if ( program.stages.empty() )
 				{
 					auto & engine = *device.renderSystem.getEngine();
-					program.vertexShader = { VK_SHADER_STAGE_VERTEX_BIT, "Background" };
+					program.shader = { "Background" };
 					{
-						sdw::VertexWriter writer{ &engine.getShaderAllocator() };
-
-						// Inputs
-						auto position = writer.declInput< sdw::Vec3 >( "position", 0u );
-						C3D_Camera( writer, Bindings::eMatrix, 0u );
-						C3D_ModelData( writer, Bindings::eModel, 0u );
-
-						// Outputs
-						auto vtx_texture = writer.declOutput< sdw::Vec3 >( "vtx_texture", 0u, programIndex == SceneBackground::VisiblePassIndex );
-
-						writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
-							, sdw::VertexOut out )
-							{
-								out.vtx.position = c3d_cameraData.worldToCurProj( c3d_modelData.modelToWorld( vec4( position, 1.0_f ) ) ).xyww();
-								vtx_texture = position;
-							} );
-
-						program.vertexShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-					}
-
-					program.pixelShader = { VK_SHADER_STAGE_FRAGMENT_BIT, "Background" };
-					{
-						sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
-
-						// Inputs
-						C3D_Scene( writer, Bindings::eScene, 0u );
-						C3D_HdrConfig( writer, Bindings::eHdrConfig, 0u );
-						auto vtx_texture = writer.declInput< sdw::Vec3 >( "vtx_texture", 0u, programIndex == 0u );
-						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", Bindings::eSkybox, 0u, programIndex == 0u );
+						sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 						shader::Utils utils{ writer };
 
-						// Outputs
-						auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", 0u );
+						C3D_Camera( writer, Bindings::eMatrix, 0u );
+						C3D_ModelData( writer, Bindings::eModel, 0u );
+						C3D_HdrConfig( writer, Bindings::eHdrConfig, 0u );
+						C3D_Scene( writer, Bindings::eScene, 0u );
+						auto c3d_mapSkybox = writer.declCombinedImg< FImgCubeRgba32 >( "c3d_mapSkybox", Bindings::eSkybox, 0u, programIndex == 0u );
 
-						writer.implementMainT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
-							, sdw::FragmentOut out )
+						writer.implementEntryPointT< shader::Position3FT, shader::Uv3FT >( [&]( sdw::VertexInT< shader::Position3FT > in
+							, sdw::VertexOutT< shader::Uv3FT > out )
+							{
+								out.vtx.position = c3d_cameraData.worldToCurProj( c3d_modelData.modelToWorld( vec4( in.position(), 1.0_f ) ) ).xyww();
+								out.uv() = in.position();
+							} );
+
+						writer.implementEntryPointT< shader::Uv3FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Uv3FT >  in
+							, sdw::FragmentOutT< shader::Colour4FT > out )
 							{
 								if ( programIndex == SceneBackground::VisiblePassIndex )
 								{
@@ -260,36 +243,32 @@ namespace castor3d
 										&& c3d_sceneData.fogType() == sdw::UInt( uint32_t( FogType::eDisabled ) ) )
 									{
 										auto colour = writer.declLocale( "colour"
-											, c3d_mapSkybox.sample( vtx_texture ) );
+											, c3d_mapSkybox.sample( in.uv() ) );
 
 										if ( !m_background->isHdr() && !m_background->isSRGB() )
 										{
-											outColour = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
+											out.colour() = vec4( c3d_hdrConfigData.removeGamma( colour.xyz() ), colour.w() );
 										}
 										else
 										{
-											outColour = vec4( colour.xyz(), colour.w() );
+											out.colour() = vec4( colour.xyz(), colour.w() );
 										}
 									}
 									ELSE
 									{
-										outColour = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
+										out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 									}
 									FI;
 								}
 								else
 								{
-									outColour = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
+									out.colour() = vec4( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData ).xyz(), 1.0_f );
 								}
 							} );
-						program.pixelShader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+						program.shader.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 					}
 
-					program.stages =
-					{
-						makeShaderState( device, program.vertexShader ),
-						makeShaderState( device, program.pixelShader ),
-					};
+					program.stages = makeProgramStates( device, program.shader );
 				}
 
 				return ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( program.stages );

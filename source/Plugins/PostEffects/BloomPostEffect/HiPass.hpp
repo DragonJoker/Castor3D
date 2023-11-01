@@ -35,8 +35,7 @@ namespace Bloom
 
 	private:
 		crg::FramePassGroup & m_graph;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::ImageId m_resultImg;
 		crg::ImageViewId m_resultView;

@@ -162,9 +162,7 @@ namespace castor3d
 		RenderDevice const & m_device;
 		uint32_t m_rsmSize;
 		GpuBufferOffsetT< NonTexturedQuad::Vertex > m_vertexBuffer;
-		ShaderModule m_vertexShader;
-		ShaderModule m_geometryShader;
-		ShaderModule m_pixelShader;
+		ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		PipelineHolder m_holder;
 	};

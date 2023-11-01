@@ -15,6 +15,9 @@
 #include <ashespp/Sync/Semaphore.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructHelper.hpp>
+#include <ShaderWriter/CompositeTypes/IOStructInstanceHelper.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -33,100 +36,65 @@ namespace castor3d
 			DifImgIdx,
 		};
 
-		static ShaderPtr getVertexProgram( Engine & engine )
+		template< sdw::var::Flag FlagT >
+		using TexcoordStructT = sdw::IOStructInstanceHelperT< FlagT
+			, "Texcoord"
+			, sdw::IOStructFieldT< sdw::Vec2, "texcoord", 0u > >;
+
+		template< sdw::var::Flag FlagT >
+		struct TexcoordT
+			: public TexcoordStructT< FlagT >
 		{
-			using namespace sdw;
-			VertexWriter writer{ &engine.getShaderAllocator() };
+			TexcoordT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled = true )
+				: TexcoordStructT< FlagT >{ writer, std::move( expr ), enabled }
+			{
+			}
+
+			auto texcoord()const{ return this->template getMember< "texcoord" >(); }
+		};
+
+		static ShaderPtr getProgram( Engine & engine
+			, bool isDepth
+			, bool isVertical )
+		{
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
+
+			auto config = writer.declUniformBuffer( GaussianBlur::Config, GaussCfgIdx, 0u );
+			auto c3d_textureSize = config.declMember< sdw::Vec2 >( GaussianBlur::TextureSize );
+			auto c3d_coefficientsCount = config.declMember< sdw::UInt >( GaussianBlur::CoefficientsCount );
+			auto c3d_dump = config.declMember< sdw::UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
+			auto c3d_coefficients = config.declMember< sdw::Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
+			config.end();
+			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
 
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
+			auto uv = writer.declInput< sdw::Vec2 >( "uv", sdw::EntryPoint::eVertex, 1u );
 
 			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
+			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
+			writer.implementEntryPointT< sdw::VoidT, TexcoordT >( [&]( sdw::VertexIn in
+				, sdw::VertexOutT< TexcoordT > out )
 				{
-					vtx_texture = uv;
+					out.texcoord() = uv;
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
 
-		static ShaderPtr getBlurXProgram( Engine & engine
-			, bool isDepth )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
-
-			// Shader inputs
-			UniformBuffer config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
-			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
-			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
-			auto c3d_dump = config.declMember< UInt >( "c3d_dump" ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
-			config.end();
-			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< TexcoordT, sdw::VoidT >( [&]( sdw::FragmentInT< TexcoordT > in
+				, sdw::FragmentOut out )
 				{
-					auto base = writer.declLocale( "base", vec2( 1.0_f, 0.0_f ) / c3d_textureSize );
+					auto base = writer.declLocale( "base", vec2( isVertical ? 0.0_f : 1.0_f, isVertical ? 1.0_f : 0.0_f ) / c3d_textureSize );
 					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					outColour = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
+					outColour = c3d_mapSource.sample( in.texcoord() ) * c3d_coefficients[0_u][0_u];
 
-					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
+					FOR( writer, sdw::UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
 					{
 						offset += base;
-						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
-						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
-					}
-					ROF;
-
-					if ( isDepth )
-					{
-						out.fragDepth = outColour.r();
-					}
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static ShaderPtr getBlurYProgram( Engine & engine
-			, bool isDepth )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
-
-			// Shader inputs
-			UniformBuffer config{ writer, GaussianBlur::Config, GaussCfgIdx, 0u };
-			auto c3d_textureSize = config.declMember< Vec2 >( GaussianBlur::TextureSize );
-			auto c3d_coefficientsCount = config.declMember< UInt >( GaussianBlur::CoefficientsCount );
-			auto c3d_dump = config.declMember< UInt >( cuT( "c3d_dump" ) ); // to keep a 16 byte alignment.
-			auto c3d_coefficients = config.declMember< Vec4 >( GaussianBlur::Coefficients, GaussianBlur::MaxCoefficients / 4u );
-			config.end();
-			auto c3d_mapSource = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapSource", DifImgIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
-				{
-					auto base = writer.declLocale( "base", vec2( 0.0_f, 1.0_f ) / c3d_textureSize );
-					auto offset = writer.declLocale( "offset", vec2( 0.0_f, 0.0_f ) );
-					outColour = c3d_mapSource.sample( vtx_texture ) * c3d_coefficients[0_u][0_u];
-
-					FOR( writer, UInt, i, 1_u, i < c3d_coefficientsCount, ++i )
-					{
-						offset += base;
-						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture - offset );
-						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( vtx_texture + offset );
+						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() - offset );
+						outColour += c3d_coefficients[i / 4_u][i % 4_u] * c3d_mapSource.sample( in.texcoord() + offset );
 					}
 					ROF;
 
@@ -276,11 +244,10 @@ namespace castor3d
 		, m_intermediateView{ intermediateView }
 		, m_blurUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_kernel{ passgauss::getHalfPascal( kernelSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + cuT( "GB" ), passgauss::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_pixelShaderX{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBX" ), passgauss::getBlurXProgram( *device.renderSystem.getEngine(), ashes::isDepthFormat( m_format ) ) }
-		, m_pixelShaderY{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + cuT( "GBY" ), passgauss::getBlurYProgram( *device.renderSystem.getEngine(), ashes::isDepthFormat( m_format ) ) }
-		, m_stagesX{ makeShaderState( device, m_vertexShader ), makeShaderState( device, m_pixelShaderX ) }
-		, m_stagesY{ makeShaderState( device, m_vertexShader ), makeShaderState( device, m_pixelShaderY ) }
+		, m_shaderX{ m_prefix + cuT( "GBX" ), passgauss::getProgram( *device.renderSystem.getEngine(), ashes::isDepthFormat( m_format ), false ) }
+		, m_shaderY{ m_prefix + cuT( "GBY" ), passgauss::getProgram( *device.renderSystem.getEngine(), ashes::isDepthFormat( m_format ), true ) }
+		, m_stagesX{ makeProgramStates( device, m_shaderX ) }
+		, m_stagesY{ makeProgramStates( device, m_shaderY ) }
 	{
 		CU_Require( kernelSize < MaxCoefficients );
 		auto & data = m_blurUbo.getData();
@@ -415,10 +382,7 @@ namespace castor3d
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, TextureFactors{}.invert( true ) );
 
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShaderX );
-
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShaderY );
+		visitor.visit( m_shaderX );
+		visitor.visit( m_shaderY );
 	}
 }

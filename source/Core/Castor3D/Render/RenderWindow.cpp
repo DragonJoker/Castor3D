@@ -43,6 +43,7 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <CastorUtils/Design/BlockGuard.hpp>
 
@@ -1037,34 +1038,10 @@ namespace castor3d
 
 	void RenderWindow::doCreateProgram()
 	{
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, getName() };
+		ProgramModule module{ getName() };
 		{
-			using namespace sdw;
-			VertexWriter writer{ &getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, getName() };
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 			auto c3d_mapResult = writer.declCombinedImg< UImg2DRgba32 >( "c3d_mapResult", 0u, 0u );
 #else
@@ -1076,17 +1053,30 @@ namespace castor3d
 			auto c3d_data = c3d_config.declMember< sdw::Vec4 >( "c3d_data" );
 			c3d_config.end();
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
+			// Shader inputs
+			auto inPosition = writer.declInput< sdw::Vec2 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
+			auto inUv = writer.declInput< sdw::Vec2 >( "inUv", sdw::EntryPoint::eVertex, 1u );
+			auto inTexture = writer.declInput< sdw::Vec2 >( "inTexture", sdw::EntryPoint::eFragment, 0u );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			// Shader outputs
+			auto outTexture = writer.declOutput< sdw::Vec2 >( "outTexture", sdw::EntryPoint::eVertex, 0u );
+			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0 );
+
+			writer.implementEntryPoint( [&]( sdw::VertexIn in
+				, sdw::VertexOut out )
+				{
+					outTexture = inUv;
+					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
+				} );
+
+			writer.implementEntryPoint( [&]( sdw::FragmentIn in
+				, sdw::FragmentOut out )
 				{
 #if C3D_DebugPicking || C3D_DebugBackgroundPicking
 					outColour = vec4( vec3( c3d_mapResult.sample( vtx_texture ).xyz() ), 1.0_f );
 #else
 					auto sampled = writer.declLocale( "sampled"
-						, c3d_mapResult.sample( vtx_texture ) );
+						, c3d_mapResult.sample( inTexture ) );
 
 					IF( writer, c3d_data.x() == 1.0_f )
 					{
@@ -1101,14 +1091,10 @@ namespace castor3d
 					FI;
 #endif
 				} );
-			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		m_program = ashes::PipelineShaderStageCreateInfoArray
-		{
-			makeShaderState( getDevice(), vtx ),
-			makeShaderState( getDevice(), pxl ),
-		};
+		m_program = makeProgramStates( getDevice(), module );
 	}
 
 	void RenderWindow::doDestroyProgram()

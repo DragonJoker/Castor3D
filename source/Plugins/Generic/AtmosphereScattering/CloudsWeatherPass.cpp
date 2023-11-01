@@ -5,12 +5,14 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/ComputePass.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <ashespp/Buffer/Buffer.hpp>
 
@@ -20,6 +22,13 @@ namespace atmosphere_scattering
 
 	namespace weather
 	{
+		enum Bindings : uint32_t
+		{
+			eWeather,
+			eOutput,
+			eCount,
+		};
+
 		static constexpr bool useCompute = true;
 
 		template< bool ComputeT >
@@ -28,32 +37,23 @@ namespace atmosphere_scattering
 		template<>
 		struct ShaderWriter< false >
 		{
-			using Type = sdw::FragmentWriter;
-
-			static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
-			{
-				sdw::VertexWriter writer{ &engine.getShaderAllocator() };
-				sdw::Vec2 position = writer.declInput< sdw::Vec2 >( "position", 0u );
-
-				writer.implementMainT< sdw::VoidT, sdw::VoidT >( sdw::VertexIn{ writer }
-					, sdw::VertexOut{ writer }
-					, [&]( sdw::VertexIn in
-						, sdw::VertexOut out )
-					{
-						out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-					} );
-				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-			}
+			using Type = sdw::TraditionalGraphicsWriter;
 
 			template< typename FuncT >
 			static void implementMain( Type & writer, FuncT func )
 			{
-				writer.implementMain( [&]( sdw::FragmentIn in
-					, sdw::FragmentOut out )
+				writer.implementEntryPointT< c3d::Position2FT, sdw::VoidT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+						, sdw::VertexOut out )
+					{
+						out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+					} );
+
+				writer.implementEntryPointT< sdw::VoidT, c3d::Colour4FT >( [&]( sdw::FragmentIn in
+					, sdw::FragmentOutT< c3d::Colour4FT > out )
 					{
 						auto fragCoord = writer.declLocale( "fragCoord"
 							, ivec2( in.fragCoord.xy() ) );
-						func( fragCoord );
+						out.colour() = func( fragCoord );
 					} );
 			}
 		};
@@ -66,21 +66,18 @@ namespace atmosphere_scattering
 			template< typename FuncT >
 			static void implementMain( Type & writer, FuncT func )
 			{
+				auto outputTexture = writer.declStorageImg< sdw::WImage2DRg32 >( "outputTexture"
+					, uint32_t( Bindings::eOutput )
+					, 0u );
+
 				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 8u, 8u, 1u }
 					, [&]( sdw::ComputeIn in )
 					{
 						auto fragCoord = writer.declLocale( "fragCoord"
 							, ivec2( in.globalInvocationID.xy() ) );
-						func( fragCoord );
+						outputTexture.store( fragCoord, func( fragCoord ) );
 					} );
 			}
-		};
-
-		enum Bindings : uint32_t
-		{
-			eWeather,
-			eOutput,
-			eCount,
 		};
 
 		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
@@ -164,7 +161,7 @@ namespace atmosphere_scattering
 				, sdw::InFloat{ writer, "amplitude" }
 				, sdw::InUInt{ writer, "octaves" } );
 
-			auto computeWeather = writer.implementFunction< sdw::Vec2 >( "computeWeather"
+			ShaderWriter< useCompute >::implementMain( writer
 				, [&]( sdw::IVec2 const & pixel )
 				{
 					auto uv = writer.declLocale( "uv"
@@ -186,32 +183,8 @@ namespace atmosphere_scattering
 							, c3d_weatherData.perlinFrequency()
 							, c3d_weatherData.perlinAmplitude()
 							, c3d_weatherData.perlinOctaves() ) );
-					writer.returnStmt( vec2( clamp( coverage, 0.0_f, 1.0_f ), cloudType ) );
-				}
-				, sdw::InIVec2{ writer, "pixel" } );
-
-			if constexpr ( useCompute )
-			{
-				auto outputTexture = writer.declStorageImg< sdw::WImage2DRg32 >( "outputTexture"
-					, uint32_t( Bindings::eOutput )
-					, 0u );
-
-				ShaderWriter< useCompute >::implementMain( writer
-					, [&]( sdw::IVec2 const & pixel )
-					{
-						outputTexture.store( pixel, computeWeather( pixel ) );
-					} );
-			}
-			else
-			{
-				auto outColour = writer.declOutput< sdw::Vec2 >( "outColour", 0u );
-
-				ShaderWriter< useCompute >::implementMain( writer
-					, [&]( sdw::IVec2 const & pixel )
-					{
-						outColour = computeWeather( pixel );
-					} );
-			}
+					return vec2( clamp( coverage, 0.0_f, 1.0_f ), cloudType );
+				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -225,25 +198,8 @@ namespace atmosphere_scattering
 		, WeatherUbo const & weatherUbo
 		, crg::ImageViewId const & resultView
 		, bool const & enabled )
-		: m_computeShader{ VK_SHADER_STAGE_COMPUTE_BIT
-			, "Clouds/WeatherPass"
-			, ( weather::useCompute
-				? weather::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width )
-				: nullptr ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, "Clouds/WeatherPass"
-			, ( weather::useCompute
-				? nullptr
-				: weather::ShaderWriter< false >::getVertexProgram( *device.renderSystem.getEngine() ) ) }
-		, m_fragmentShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, "Clouds/WeatherPass"
-			, ( weather::useCompute
-				? nullptr
-				: weather::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width ) ) }
-		, m_stages{ ( weather::useCompute
-			? ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_computeShader ) }
-			: ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, m_vertexShader )
-				, makeShaderState( device, m_fragmentShader ) } ) }
+		: m_shader{ "Clouds/WeatherPass", weather::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ).width ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
 		auto & pass = graph.createPass( "Clouds/WeatherPass"
@@ -297,7 +253,7 @@ namespace atmosphere_scattering
 
 	void CloudsWeatherPass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_computeShader );
+		visitor.visit( m_shader );
 	}
 
 	//************************************************************************************************

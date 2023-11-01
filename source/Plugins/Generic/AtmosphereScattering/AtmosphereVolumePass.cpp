@@ -9,11 +9,13 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTechniqueVisitor.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <RenderGraph/RunnableGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 namespace atmosphere_scattering
 {
@@ -79,51 +81,11 @@ namespace atmosphere_scattering
 			sdw::Int sliceId;
 		};
 
-		static castor3d::ShaderPtr getVertexProgram( castor3d::Engine & engine )
-		{
-			sdw::VertexWriter writer{ &engine.getShaderAllocator() };
-
-			auto inPosition = writer.declInput< sdw::Vec4 >( "inPosition", 0u );
-
-			writer.implementMainT< sdw::VoidT, SurfaceT >( sdw::VertexIn{ writer }
-				, sdw::VertexOutT< SurfaceT >{ writer }
-				, [&]( sdw::VertexIn in
-					, sdw::VertexOutT< SurfaceT > out )
-				{
-					out.vtx.position = vec4( inPosition.xy(), 0.9999999, 1.0 );
-					out.sliceId = in.instanceIndex;
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static castor3d::ShaderPtr getGeometryProgram( castor3d::Engine & engine )
-		{
-			sdw::GeometryWriter writer{ &engine.getShaderAllocator() };
-			writer.implementMainT< sdw::TriangleListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( sdw::TriangleListT< SurfaceT >{ writer }
-			, sdw::TriangleStreamT< SurfaceT >{ writer, 3u }
-			, [&]( sdw::GeometryIn in
-				, sdw::TriangleListT< SurfaceT > list
-				, sdw::TriangleStreamT< SurfaceT > out )
-			{
-				FOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
-				{
-					out.sliceId = list[0].sliceId;
-					out.vtx.position = list[i].vtx.position;
-					out.layer = list[0].sliceId;
-					out.append();
-				}
-				ROF;
-
-				out.restartStrip();
-			} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static castor3d::ShaderPtr getPixelProgram( castor3d::Engine & engine
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
 			, VkExtent3D const & renderSize
 			, VkExtent3D const & transmittanceExtent )
 		{
-			sdw::FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
 			ATM_Camera( writer
 				, Bindings::eCamera
@@ -141,9 +103,6 @@ namespace atmosphere_scattering
 				, 0.01_f );
 			auto apSliceCount = writer.declConstant( "apSliceCount"
 				, 32.0_f );
-
-			// Fragment Outputs
-			auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0 ) );
 
 			AtmosphereModel atmosphere{ writer
 				, c3d_atmosphereData
@@ -248,12 +207,35 @@ namespace atmosphere_scattering
 				, sdw::InVec2{ writer, "pixPos" }
 				, sdw::InInt{ writer, "sliceId" } );
 
-			writer.implementMainT< SurfaceT, sdw::VoidT >( sdw::FragmentInT< SurfaceT >{ writer }
-				, sdw::FragmentOut{ writer }
-				, [&]( sdw::FragmentInT< SurfaceT > in
-					, sdw::FragmentOut out )
+			writer.implementEntryPointT< c3d::Position4FT, SurfaceT >( [&]( sdw::VertexInT< c3d::Position4FT > in
+				, sdw::VertexOutT< SurfaceT > out )
 				{
-					outColour = process( in.fragCoord.xy(), in.sliceId );
+					out.vtx.position = vec4( in.position().xy(), 0.9999999, 1.0 );
+					out.sliceId = in.instanceIndex;
+				} );
+
+			writer.implementEntryPointT< sdw::TriangleListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( sdw::TriangleListT< SurfaceT >{ writer }
+				, sdw::TriangleStreamT< SurfaceT >{ writer, 3u }
+				, [&]( sdw::GeometryIn in
+					, sdw::TriangleListT< SurfaceT > list
+					, sdw::TriangleStreamT< SurfaceT > out )
+			{
+				FOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
+				{
+					out.sliceId = list[0].sliceId;
+					out.vtx.position = list[i].vtx.position;
+					out.layer = list[0].sliceId;
+					out.append();
+				}
+				ROF;
+
+				out.restartStrip();
+			} );
+
+			writer.implementEntryPointT< SurfaceT, c3d::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
+				{
+					out.colour() = process( in.fragCoord.xy(), in.sliceId );
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -272,12 +254,8 @@ namespace atmosphere_scattering
 		, uint32_t index
 		, bool const & enabled )
 		: castor::Named{ "CameraVolumePass" + castor::string::toString( index ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), volume::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), volume::getGeometryProgram( *device.renderSystem.getEngine() ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), volume::getPixelProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_geometryShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ getName(), volume::getProgram( *device.renderSystem.getEngine(), getExtent( resultView ), getExtent( transmittanceView ) ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 	{
 		auto renderSize = getExtent( resultView );
 		auto & pass = graph.createPass( getName()
@@ -311,9 +289,7 @@ namespace atmosphere_scattering
 
 	void AtmosphereVolumePass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_geometryShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 
 	//************************************************************************************************

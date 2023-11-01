@@ -8,12 +8,14 @@
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslFog.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/SceneUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
@@ -36,29 +38,13 @@ namespace castor3d
 			RevealTexIndex,
 		};
 
-		static ShaderPtr getVertexProgram( RenderDevice const & device )
+		static ShaderPtr getProgram( RenderDevice const & device )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			shader::Utils utils{ writer };
+			shader::Fog fog{ writer };
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static ShaderPtr getPixelProgram( RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
 			C3D_Camera( writer, CameraUboIndex, 0u );
 			C3D_Scene( writer, SceneUboIndex, 0u );
 			C3D_HdrConfig( writer, HdrUboIndex, 0u );
@@ -66,21 +52,21 @@ namespace castor3d
 			auto c3d_mapAccumulation = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eAccumulation ), uint32_t( AccumTexIndex ), 0u );
 			auto c3d_mapRevealage = writer.declCombinedImg< FImg2DRgba32 >( getTextureName( WbTexture::eRevealage ), uint32_t( RevealTexIndex ), 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+			writer.implementEntryPointT< shader::PosUv2FT, sdw::VoidT >( [&]( sdw::VertexInT< shader::PosUv2FT > in
+				, sdw::VertexOut out )
+				{
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			shader::Utils utils{ writer };
-			shader::Fog fog{ writer };
-
-			auto maxComponent = writer.implementFunction< Float >( "maxComponent"
-				, [&]( Vec3 const & v )
+			auto maxComponent = writer.implementFunction< sdw::Float >( "maxComponent"
+				, [&]( sdw::Vec3 const & v )
 				{
 					writer.returnStmt( max( max( v.x(), v.y() ), v.z() ) );
 				}
-				, InVec3{ writer, "v" } );
+				, sdw::InVec3{ writer, "v" } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, shader::Colour4FT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOutT< shader::Colour4FT > out )
 				{
 					auto coord = writer.declLocale( "coord"
 						, ivec2( in.fragCoord.xy() ) );
@@ -107,9 +93,9 @@ namespace castor3d
 					auto averageColor = writer.declLocale( "averageColor"
 						, accum.rgb() / max( accum.a(), 0.00001_f ) );
 
-					outColour = vec4( averageColor.rgb(), 1.0_f - revealage );
+					out.colour() = vec4( averageColor.rgb(), 1.0_f - revealage );
 
-					IF( writer, c3d_sceneData.fogType() != UInt( uint32_t( FogType::eDisabled ) ) )
+					IF( writer, c3d_sceneData.fogType() != sdw::UInt( uint32_t( FogType::eDisabled ) ) )
 					{
 						auto texCoord = writer.declLocale( "texCoord"
 							, in.fragCoord.xy() );
@@ -117,8 +103,8 @@ namespace castor3d
 							, c3d_cameraData.curProjToWorld( utils
 								, texCoord
 								, c3d_mapDepth.sample( texCoord ).r() ) );
-						outColour = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
-							, outColour
+						out.colour() = fog.apply( c3d_sceneData.getBackgroundColour( c3d_hdrConfigData )
+							, out.colour()
 							, position
 							, c3d_cameraData.position()
 							, c3d_sceneData );
@@ -148,10 +134,8 @@ namespace castor3d
 		, m_enabled{ enabled }
 		, m_transparentPassResult{ transparentPassResult }
 		, m_size{ size }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "TransparentCombine", wboit::getVertexProgram( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "TransparentCombine", wboit::getPixelProgram( device ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "TransparentCombine", wboit::getProgram( device ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_finalCombinePassDesc{ doCreateFinalCombine( graph
 			, transparentPassDesc
 			, depthObj.sampledViewId
@@ -173,8 +157,7 @@ namespace castor3d
 			, m_transparentPassResult[WbTexture::eRevealage]
 			, m_graph.getFinalLayoutState( m_transparentPassResult[WbTexture::eRevealage].sampledViewId ).layout
 			, TextureFactors{}.invert( true ) );
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 
 	crg::FramePass & WeightedBlendRendering::doCreateFinalCombine( crg::FramePassGroup & graph

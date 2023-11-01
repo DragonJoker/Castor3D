@@ -8,6 +8,7 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/ShaderBuffer.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 
@@ -31,6 +32,9 @@
 #include <ashespp/RenderPass/RenderPass.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
+#include <ShaderWriter/CompositeTypes/MixedStructHelper.hpp>
+#include <ShaderWriter/CompositeTypes/MixedStructInstanceHelper.hpp>
 
 #include <algorithm>
 
@@ -240,18 +244,13 @@ namespace castor3d
 				, ashes::DescriptorSetLayoutCRefArray{ std::ref( dslayout ) } );
 		}
 
-		static ashes::GraphicsPipelinePtr createPipeline( RenderDevice const & device
+		static ashes::GraphicsPipelinePtr createPipelineVolume( RenderDevice const & device
 			, ashes::PipelineLayout const & layout
 			, ashes::RenderPass const & renderPass
-			, ShaderModule & vertexShader
-			, ShaderModule & geometryShader
-			, ShaderModule & pixelShader
+			, ProgramModule & shader
 			, Texture const & target )
 		{
-			ashes::PipelineShaderStageCreateInfoArray program;
-			program.push_back( makeShaderState( device, vertexShader ) );
-			program.push_back( makeShaderState( device, geometryShader ) );
-			program.push_back( makeShaderState( device, pixelShader ) );
+			auto program = makeProgramStates( device, shader );
 			// Initialise the pipeline.
 			VkViewport viewport{ 0.0f, 0.0f, float( target.getExtent().width ), float( target.getExtent().height ), 0.0f, 1.0f };
 			VkRect2D scissor{ 0, 0, target.getExtent().width, target.getExtent().height };
@@ -271,16 +270,13 @@ namespace castor3d
 					, static_cast< VkRenderPass const & >( renderPass ) ) );
 		}
 
-		static ashes::GraphicsPipelinePtr createPipeline( RenderDevice const & device
+		static ashes::GraphicsPipelinePtr createPipelineSlice( RenderDevice const & device
 			, ashes::PipelineLayout const & layout
 			, ashes::RenderPass const & renderPass
-			, ShaderModule & vertexShader
-			, ShaderModule & pixelShader
+			, ProgramModule & shader
 			, Texture const & target )
 		{
-			ashes::PipelineShaderStageCreateInfoArray program;
-			program.push_back( makeShaderState( device, vertexShader ) );
-			program.push_back( makeShaderState( device, pixelShader ) );
+			auto program = makeProgramStates( device, shader );
 			// Initialise the pipeline.
 			VkViewport viewport{ 0.0f, 0.0f, float( target.getExtent().width ), float( target.getExtent().height ), 0.0f, 1.0f };
 			VkRect2D scissor{ 0, 0, target.getExtent().width, target.getExtent().height };
@@ -395,94 +391,38 @@ namespace castor3d
 		}
 
 		template< sdw::var::Flag FlagT >
+		using SurfaceStrucT = sdw::MixedStructInstanceHelperT < FlagT
+			, "C3D_T3DT3DSurface"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::IOVec4Field< "voxelColour", 0u > >;
+
+		template< sdw::var::Flag FlagT >
 		struct SurfaceT
-			: sdw::StructInstance
+			: SurfaceStrucT< FlagT >
 		{
 			SurfaceT( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
 				, bool enabled = true )
-				: sdw::StructInstance{ writer, std::move( expr ), enabled }
-				, voxelColour{ getMember< sdw::Vec4 >( "voxelColour" ) }
+				: SurfaceStrucT< FlagT >{ writer, std::move( expr ), enabled }
 			{
 			}
 
-			SDW_DeclStructInstance( , SurfaceT );
-
-			static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
-				, sdw::EntryPoint entryPoint )
-			{
-				auto result = cache.getIOStruct( "C3D_T3DTo3DSurface"
-					, entryPoint
-					, FlagT );
-
-				if ( result->empty() )
-				{
-					uint32_t index = 0u;
-					result->declMember( "voxelColour"
-						, sdw::type::Kind::eVec4F
-						, sdw::type::NotArray
-						, index++ );
-				}
-
-				return result;
-			}
-
-			static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache )
-			{
-				auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-					, "C3D_T3DTo3DSurface" );
-
-				if ( result->empty() )
-				{
-					result->declMember( "voxelColour"
-						, sdw::type::Kind::eVec4F
-						, sdw::type::NotArray );
-				}
-
-				return result;
-			}
-
-			sdw::Vec4 voxelColour;
+			auto voxelColour()const { return this->template getMember< "voxelColour" >(); }
 		};
 
-		static ShaderPtr getVertexProgramVolume( RenderSystem const & renderSystem )
+		static ShaderPtr getProgramVolume( RenderSystem const & renderSystem )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			UBO_GRID( writer, eGridUbo );
-			auto inSource( writer.declStorageImg< RWFImg3DRgba32 >( "inSource"
-				, eSource
-				, 0u ) );
+			sdw::TraditionalGraphicsWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			shader::Utils utils{ writer };
 
-			writer.implementMainT< VoidT, SurfaceT >( [&]( VertexIn in
-				, VertexOutT< SurfaceT > out )
-				{
-					auto coord = writer.declLocale( "coord"
-						, utils.unflatten( writer.cast< UInt >( in.vertexIndex )
-							, uvec3( gridSize ) ) );
-					out.vtx.position = vec4( vec3( coord ), 1.0f );
-
-					out.voxelColour = inSource.load( ivec3( coord ) );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static ShaderPtr getGeometryProgramVolume( RenderSystem const & renderSystem )
-		{
-			using namespace sdw;
-			GeometryWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
 			C3D_Camera( writer, eCameraUbo, 0u );
+			auto inSource( writer.declStorageImg< RWFImg3DRgba32 >( "inSource", eSource, 0u ) );
 
 			// Creates a unit cube triangle strip from just vertex ID (14 vertices)
-			auto createCube = writer.implementFunction< Vec3 >( "createCube"
-				, [&]( UInt const vertexID )
+			auto createCube = writer.implementFunction< sdw::Vec3 >( "createCube"
+				, [&]( sdw::UInt const vertexID )
 				{
 					auto b = writer.declLocale( "b"
 						, 1_u << vertexID );
@@ -490,15 +430,26 @@ namespace castor3d
 						, writer.ternary( ( 0x02af_u & b ) != 0u, 1.0_f, 0.0_f )
 						, writer.ternary( ( 0x31e3_u & b ) != 0u, 1.0_f, 0.0_f ) ) );
 				}
-				, InUInt{ writer, "vertexID" } );
+				, sdw::InUInt{ writer, "vertexID" } );
 
-			writer.implementMainT< 14u, PointListT< SurfaceT >, TriangleStreamT< SurfaceT > >( [&]( GeometryIn in
-				, PointListT< SurfaceT > list
-				, TriangleStreamT< SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, SurfaceT >( [&]( sdw::VertexIn in
+				, sdw::VertexOutT< SurfaceT > out )
 				{
-					IF( writer, list[0].voxelColour.a() > 0.0f )
+					auto coord = writer.declLocale( "coord"
+						, utils.unflatten( writer.cast< sdw::UInt >( in.vertexIndex )
+							, uvec3( gridSize ) ) );
+					out.vtx.position = vec4( vec3( coord ), 1.0f );
+
+					out.voxelColour() = inSource.load( ivec3( coord ) );
+				} );
+
+			writer.implementEntryPointT< 14u, sdw::PointListT< SurfaceT >, sdw::TriangleStreamT< SurfaceT > >( [&]( sdw::GeometryIn in
+				, sdw::PointListT< SurfaceT > list
+				, sdw::TriangleStreamT< SurfaceT > out )
+				{
+					IF( writer, list[0].voxelColour().a() > 0.0f )
 					{
-						FOR( writer, UInt, i, 0_u, i < 14_u, ++i )
+						FOR( writer, sdw::UInt, i, 0_u, i < 14_u, ++i )
 						{
 							// [0, 1] => [0, 2] (y => [-1, 1])
 							auto cubeVtxPos = writer.declLocale( "cubeVtxPos"
@@ -508,15 +459,15 @@ namespace castor3d
 							auto pos = writer.declLocale( "pos"
 								, list[0].vtx.position.xyz() );
 							// [0, gridSize] => [0, 1] => [-1, 1]
-							pos = pos / writer.cast< Float >( gridSize ) * 2.0f - 1.0f;
+							pos = pos / writer.cast< sdw::Float >( gridSize ) * 2.0f - 1.0f;
 							pos.y() = -pos.y();
 							// [-1, 1] => [-gridSize, gridSize]
-							pos *= writer.cast< Float >( gridSize );
+							pos *= writer.cast< sdw::Float >( gridSize );
 							// Offset by cube position
 							pos += cubeVtxPos;
-							pos *= ( writer.cast< Float >( gridSize ) * ( 1.0_f / cellSize ) ) / writer.cast< Float >( gridSize );
+							pos *= ( writer.cast< sdw::Float >( gridSize ) * ( 1.0_f / cellSize ) ) / writer.cast< sdw::Float >( gridSize );
 
-							out.voxelColour = list[0].voxelColour;
+							out.voxelColour() = list[0].voxelColour();
 							out.vtx.position = c3d_cameraData.worldToCurProj( vec4( pos, 1.0f ) );
 
 							out.append();
@@ -527,71 +478,41 @@ namespace castor3d
 					}
 					FI;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
 
-		static ShaderPtr getPixelProgramVolume( RenderSystem const & renderSystem )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
-
-			writer.implementMainT< SurfaceT, VoidT >( [&]( FragmentInT< SurfaceT > in
-				, FragmentOut out )
+			writer.implementEntryPointT< SurfaceT, shader::Colour4FT >( [&]( sdw::FragmentInT< SurfaceT > in
+				, sdw::FragmentOutT< shader::Colour4FT > out )
 				{
-					IF( writer, in.voxelColour.a() > 0.0_f )
-					{
-						outColour = in.voxelColour;
-					}
-					ELSE
+					IF( writer, in.voxelColour().a() > 0.0_f )
 					{
 						writer.demote();
 					}
 					FI;
+
+					out.colour() = in.voxelColour();
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getVertexProgramSlice( RenderSystem const & renderSystem )
+		static ShaderPtr getProgramSlice( RenderSystem const & renderSystem )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader outputs
-			auto outUV = writer.declOutput< sdw::Vec2 >( "outUV", 0u );
+			sdw::TraditionalGraphicsWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			shader::Utils utils{ writer };
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					outUV = vec2( ( in.vertexIndex << 1 ) & 2, in.vertexIndex & 2 );
-					out.vtx.position = vec4( outUV * 2.0f - 1.0f, 0.0f, 1.0f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static ShaderPtr getPixelProgramSlice( RenderSystem const & renderSystem )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
 			UBO_GRID( writer, eGridUbo );
-			auto inSource( writer.declCombinedImg< FImg3DRgba32 >( "inSource"
-				, eSource
-				, 0u ) );
-			auto inUV = writer.declInput< sdw::Vec2 >( "inUV", 0u );
+			auto inSource( writer.declCombinedImg< FImg3DRgba32 >( "inSource", eSource, 0u ) );
 
-			// Shader outputs
-			auto outFragColor = writer.declOutput< Vec4 >( "outFragColor", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, shader::Uv2FT >( [&]( sdw::VertexIn in
+				, sdw::VertexOutT< shader::Uv2FT > out )
 				{
-					outFragColor = inSource.lod( vec3( inUV, sliceIndex / maxSlice ), 0.0_f );
+					out.uv() = vec2( ( in.vertexIndex << 1 ) & 2, in.vertexIndex & 2 );
+					out.vtx.position = vec4( out.uv() * 2.0f - 1.0f, 0.0f, 1.0f );
+				} );
+
+			writer.implementEntryPointT< shader::Uv2FT, shader::Colour4FT >( [&]( sdw::FragmentInT< shader::Uv2FT > in
+				, sdw::FragmentOutT< shader::Colour4FT > out )
+				{
+					out.colour() = inSource.lod( vec3( in.uv(), sliceIndex / maxSlice ), 0.0_f );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -653,16 +574,13 @@ namespace castor3d
 
 		, m_descriptorSetLayoutVolume{ t3dto2d::createDescriptorLayout( device, false ) }
 		, m_pipelineLayoutVolume{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutVolume ) }
-		, m_vertexShaderVolume{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", t3dto2d::getVertexProgramVolume( device.renderSystem ) }
-		, m_geometryShaderVolume{ VK_SHADER_STAGE_GEOMETRY_BIT, "Texture3DTo2D", t3dto2d::getGeometryProgramVolume( device.renderSystem ) }
-		, m_pixelShaderVolume{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgramVolume( device.renderSystem ) }
-		, m_pipelineVolume{ t3dto2d::createPipeline( device, *m_pipelineLayoutVolume, *m_renderPass, m_vertexShaderVolume, m_geometryShaderVolume, m_pixelShaderVolume, m_target ) }
+		, m_shaderVolume{ "Texture3DTo2D", t3dto2d::getProgramVolume( device.renderSystem ) }
+		, m_pipelineVolume{ t3dto2d::createPipelineVolume( device, *m_pipelineLayoutVolume, *m_renderPass, m_shaderVolume, m_target ) }
 
 		, m_descriptorSetLayoutSlice{ t3dto2d::createDescriptorLayout( device, true ) }
 		, m_pipelineLayoutSlice{ t3dto2d::createPipelineLayout( device, *m_descriptorSetLayoutSlice ) }
-		, m_vertexShaderSlice{ VK_SHADER_STAGE_VERTEX_BIT, "Texture3DTo2D", t3dto2d::getVertexProgramSlice( device.renderSystem ) }
-		, m_pixelShaderSlice{ VK_SHADER_STAGE_FRAGMENT_BIT, "Texture3DTo2D", t3dto2d::getPixelProgramSlice( device.renderSystem ) }
-		, m_pipelineSlice{ t3dto2d::createPipeline( device, *m_pipelineLayoutSlice, *m_renderPass, m_vertexShaderSlice, m_pixelShaderSlice, m_target ) }
+		, m_shaderSlice{ "Texture3DTo2D", t3dto2d::getProgramSlice( device.renderSystem ) }
+		, m_pipelineSlice{ t3dto2d::createPipelineSlice( device, *m_pipelineLayoutSlice, *m_renderPass, m_shaderSlice, m_target ) }
 	{
 		m_sampler->initialise( device );
 	}

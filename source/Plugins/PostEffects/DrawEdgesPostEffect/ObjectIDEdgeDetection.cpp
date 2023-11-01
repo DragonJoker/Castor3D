@@ -6,6 +6,7 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include <Castor3D/Shader/Shaders/GlslPassShaders.hpp>
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
@@ -23,6 +24,7 @@
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <numeric>
 
@@ -30,6 +32,8 @@ namespace draw_edges
 {
 	namespace oied
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			eMaterials,
@@ -38,50 +42,24 @@ namespace draw_edges
 			eSpecifics,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexShader( castor3d::Engine & engine
-			, VkExtent3D const & size )
-		{
-			using namespace sdw;
-			VertexWriter writer{ &engine.getShaderAllocator() };
-
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-					vtx_texture = uv;
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getPixelShader( castor3d::Engine & engine
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
 			, VkExtent3D const & extent
 			, int contourMethod )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
+
 			castor3d::shader::Utils utils{ writer };
 			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, castor3d::TextureCombine{}
 				, castor3d::ComponentModeFlag::eNone
 				, utils };
 
-			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
 			auto specifics = uint32_t( eSpecifics );
 			castor3d::shader::Materials materials{ engine, writer, passShaders, eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, eModels, 0u );
 			auto c3d_depthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_depthObj", eDepthObj, 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Float >( "outColour", 0u );
+			auto outColour = writer.declOutput< sdw::Float >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
 			auto computeContour = writer.implementFunction< sdw::Float >( "c3d_computeContour"
 				, [&]( sdw::IVec2 const & texelCoord
@@ -142,13 +120,20 @@ namespace draw_edges
 				, sdw::InInt{ writer, "X" }
 				, sdw::InFloat{ writer, "edgeWidth" } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+					out.uv() = in.uv();
+				} );
+
+			writer.implementEntryPointT< c3d::Uv2FT, sdw::VoidT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOut out )
 				{
 					auto size = writer.declLocale( "size"
 						, ivec2( sdw::Int{ int( extent.width ) }, sdw::Int{ int( extent.height ) } ) );
 					auto texelCoord = writer.declLocale( "texelCoord"
-						, ivec2( vec2( size ) * vtx_texture ) );
+						, ivec2( vec2( size ) * in.uv() ) );
 					auto X = writer.declLocale( "X"
 						, c3d_depthObj.fetch( texelCoord, 0_i ) );
 					auto nodeId = writer.declLocale( "nodeId"
@@ -193,12 +178,8 @@ namespace draw_edges
 		: m_device{ device }
 		, m_graph{ graph }
 		, m_extent{ castor3d::getSafeBandedExtent3D( renderTarget.getSize() ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DEObjDetection", oied::getVertexShader( *renderTarget.getEngine(), m_extent ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DEObjDetection", oied::getPixelShader( *renderTarget.getEngine()
-			, m_extent
-			, 1 ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "DEObjDetection", oied::getProgram( *renderTarget.getEngine(), m_extent, 1 ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_result{ m_device
 			, renderTarget.getResources()
 			, "DEObjDet"
@@ -250,8 +231,7 @@ namespace draw_edges
 
 	void ObjectIDEdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 		visitor.visit( "Object ID Edge Detection"
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout

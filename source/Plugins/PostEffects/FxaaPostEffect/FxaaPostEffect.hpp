@@ -72,8 +72,7 @@ namespace fxaa
 		castor::ChangeTracked< float > m_subpixShift{ { 1.0f / 4.0f } };
 		castor::ChangeTracked< float > m_spanMax{ { 8.0f } };
 		castor::ChangeTracked< float > m_reduceMul{ { 1.0f / 8.0f } };
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		FxaaUbo m_fxaaUbo;
 		crg::FramePass * m_pass{};

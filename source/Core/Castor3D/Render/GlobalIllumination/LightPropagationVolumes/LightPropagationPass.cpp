@@ -22,6 +22,7 @@
 #include <CastorUtils/Design/ResourceCache.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/GraphContext.hpp>
 
@@ -87,72 +88,29 @@ namespace castor3d
 			sdw::IVec3 cellIndex;
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram( RenderSystem const & renderSystem )
-		{
-			using namespace sdw;
-			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
-			auto inPosition = writer.declInput< Vec3 >( "inPosition", 0u );
-
-			C3D_LpvGridConfig( writer, LightPropagationPass::LpvGridUboIdx, 0u, true );
-
-			writer.implementMainT< VoidT, lpvprop::SurfaceT >( [&]( VertexIn in
-				, VertexOutT< lpvprop::SurfaceT > out )
-				{
-					out.cellIndex = ivec3( inPosition );
-					auto screenPos = writer.declLocale( "screenPos"
-						, c3d_lpvGridData.gridToScreen( out.cellIndex.xy() ) );
-					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getGeometryProgram( RenderSystem const & renderSystem )
-		{
-			using namespace sdw;
-			GeometryWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
-			writer.implementMainT< 1u, PointListT< lpvprop::SurfaceT >, PointStreamT< lpvprop::SurfaceT > >( [&]( GeometryIn in
-				, PointListT< lpvprop::SurfaceT > list
-				, PointStreamT< lpvprop::SurfaceT > out )
-				{
-					out.vtx.position = list[0].vtx.position;
-					out.vtx.pointSize = 1.0f;
-					out.layer = list[0].cellIndex.z();
-
-					out.cellIndex = list[0].cellIndex;
-
-					out.append();
-					out.restartStrip();
-				} );
-
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static ShaderPtr getPixelProgram( RenderSystem const & renderSystem
+		static ShaderPtr getProgram( RenderSystem const & renderSystem
 			, bool occlusion )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			/*Spherical harmonics coefficients - precomputed*/
 			auto SH_C0 = writer.declConstant( "SH_C0"
-				, Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
+				, sdw::Float{ 1.0f / float( 2.0f * sqrt( castor::Pi< float > ) ) } );
 			auto SH_C1 = writer.declConstant( "SH_C1"
-				, Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
+				, sdw::Float{ float( sqrt( 3.0f / castor::Pi< float > ) / 2.0f ) } );
 
 			/*Cosine lobe coeff*/
 			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
-				, Float{ float( sqrt( castor::Pi< float > ) / 2.0f ) } );
+				, sdw::Float{ float( sqrt( castor::Pi< float > ) / 2.0f ) } );
 			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
-				, Float{ float( sqrt( castor::Pi< float > ) / 3.0f ) } );
+				, sdw::Float{ float( sqrt( castor::Pi< float > ) / 3.0f ) } );
 
 			auto directFaceSubtendedSolidAngle = writer.declConstant( "directFaceSubtendedSolidAngle"
-				, Float{ 0.4006696846f / castor::Pi< float > } );
+				, sdw::Float{ 0.4006696846f / castor::Pi< float > } );
 			auto sideFaceSubtendedSolidAngle = writer.declConstant( "sideFaceSubtendedSolidAngle"
-				, Float{ 0.4234413544f / castor::Pi< float > } );
+				, sdw::Float{ 0.4234413544f / castor::Pi< float > } );
 			auto propDirections = writer.declConstantArray( "propDirections"
-				, std::vector< IVec3 >
+				, std::vector< sdw::IVec3 >
 				{
 					//+Z
 					ivec3( 0_i, 0_i, 1_i ),
@@ -170,7 +128,7 @@ namespace castor3d
 
 			//Sides of the cell - right, top, left, bottom
 			auto cellSides = writer.declConstantArray( "cellSides"
-				, std::vector< IVec2 >
+				, std::vector< sdw::IVec2 >
 				{
 					ivec2( 1_i, 0_i ),
 					ivec2( 0_i, 1_i ),
@@ -184,72 +142,74 @@ namespace castor3d
 			auto c3d_lpvGridB = writer.declCombinedImg< FImg3DRgba16 >( getTextureName( LpvTexture::eB, "Grid" ), LightPropagationPass::BLpvGridIdx, 0u );
 			auto c3d_geometryVolume = writer.declCombinedImg< FImg3DRgba16 >( "c3d_geometryVolume", LightPropagationPass::GpGridIdx, 0u, occlusion );
 
-			auto outLpvAccumulatorR = writer.declOutput< Vec4 >( "outLpvAccumulatorR", LightPropagationPass::RLpvAccumulatorIdx );
-			auto outLpvAccumulatorG = writer.declOutput< Vec4 >( "outLpvAccumulatorG", LightPropagationPass::GLpvAccumulatorIdx );
-			auto outLpvAccumulatorB = writer.declOutput< Vec4 >( "outLpvAccumulatorB", LightPropagationPass::BLpvAccumulatorIdx );
-			auto outLpvNextStepR = writer.declOutput< Vec4 >( "outLpvNextStepR", LightPropagationPass::RLpvNextStepIdx );
-			auto outLpvNextStepG = writer.declOutput< Vec4 >( "outLpvNextStepG", LightPropagationPass::GLpvNextStepIdx );
-			auto outLpvNextStepB = writer.declOutput< Vec4 >( "outLpvNextStepB", LightPropagationPass::BLpvNextStepIdx );
+			auto inPosition = writer.declInput< sdw::Vec3 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
+
+			auto outLpvAccumulatorR = writer.declOutput< sdw::Vec4 >( "outLpvAccumulatorR", sdw::EntryPoint::eFragment, LightPropagationPass::RLpvAccumulatorIdx );
+			auto outLpvAccumulatorG = writer.declOutput< sdw::Vec4 >( "outLpvAccumulatorG", sdw::EntryPoint::eFragment, LightPropagationPass::GLpvAccumulatorIdx );
+			auto outLpvAccumulatorB = writer.declOutput< sdw::Vec4 >( "outLpvAccumulatorB", sdw::EntryPoint::eFragment, LightPropagationPass::BLpvAccumulatorIdx );
+			auto outLpvNextStepR = writer.declOutput< sdw::Vec4 >( "outLpvNextStepR", sdw::EntryPoint::eFragment, LightPropagationPass::RLpvNextStepIdx );
+			auto outLpvNextStepG = writer.declOutput< sdw::Vec4 >( "outLpvNextStepG", sdw::EntryPoint::eFragment, LightPropagationPass::GLpvNextStepIdx );
+			auto outLpvNextStepB = writer.declOutput< sdw::Vec4 >( "outLpvNextStepB", sdw::EntryPoint::eFragment, LightPropagationPass::BLpvNextStepIdx );
 
 			// no normalization
-			auto evalSH_direct = writer.implementFunction< Vec4 >( "evalSH_direct"
-				, [&]( Vec3 direction )
+			auto evalSH_direct = writer.implementFunction< sdw::Vec4 >( "evalSH_direct"
+				, [&]( sdw::Vec3 direction )
 				{
 					writer.returnStmt( vec4( SH_C0
 						, -SH_C1 * direction.y()
 						, SH_C1 * direction.z()
 						, -SH_C1 * direction.x() ) );
 				}
-				, InVec3{ writer, "direction" } );
+				, sdw::InVec3{ writer, "direction" } );
 
 			// no normalization
-			auto evalCosineLobeToDir_direct = writer.implementFunction< Vec4 >( "evalCosineLobeToDir_direct"
-				, [&]( Vec3 direction )
+			auto evalCosineLobeToDir_direct = writer.implementFunction< sdw::Vec4 >( "evalCosineLobeToDir_direct"
+				, [&]( sdw::Vec3 direction )
 				{
 					writer.returnStmt( vec4( SH_cosLobe_C0
 						, -SH_cosLobe_C1 * direction.y()
 						, SH_cosLobe_C1 * direction.z()
 						, -SH_cosLobe_C1 * direction.x() ) );
 				}
-				, InVec3{ writer, "direction" } );
+				, sdw::InVec3{ writer, "direction" } );
 
 			//Get side direction
-			auto getEvalSideDirection = writer.implementFunction< Vec3 >( "getEvalSideDirection"
-				, [&]( Int index
-					, IVec3 orientation )
+			auto getEvalSideDirection = writer.implementFunction< sdw::Vec3 >( "getEvalSideDirection"
+				, [&]( sdw::Int index
+					, sdw::IVec3 orientation )
 				{
 					const float smallComponent = float( 1.0f / sqrt( 5.0f ) );
 					const float bigComponent = float( 2.0f / sqrt( 5.0f ) );
 
 					auto tmp = writer.declLocale( "tmp"
-						, vec3( writer.cast< Float >( cellSides[index].x() ) * smallComponent
-							, writer.cast< Float >( cellSides[index].y() ) * smallComponent
+						, vec3( writer.cast< sdw::Float >( cellSides[index].x() ) * smallComponent
+							, writer.cast< sdw::Float >( cellSides[index].y() ) * smallComponent
 							, bigComponent ) );
 					writer.returnStmt( vec3( orientation ) * tmp );
 				}
-				, InInt{ writer, "index" }
-				, InIVec3{ writer, "orientation" } );
+				, sdw::InInt{ writer, "index" }
+				, sdw::InIVec3{ writer, "orientation" } );
 
-			auto getReprojSideDirection = writer.implementFunction< Vec3 >( "getReprojSideDirection"
-				, [&]( Int index
-					, IVec3 orientation )
+			auto getReprojSideDirection = writer.implementFunction< sdw::Vec3 >( "getReprojSideDirection"
+				, [&]( sdw::Int index
+					, sdw::IVec3 orientation )
 				{
 					writer.returnStmt( vec3( orientation.x() * cellSides[index].x()
 						, orientation.y() * cellSides[index].y()
 						, 0 ) );
 				}
-				, InInt{ writer, "index" }
-				, InIVec3{ writer, "orientation" } );
+				, sdw::InInt{ writer, "index" }
+				, sdw::InIVec3{ writer, "orientation" } );
 
 			float occlusionAmplifier = 1.0f;
 
-			auto propagate = writer.implementFunction< Void >( "propagate"
-				, [&]( IVec3 cellIndex
-					, Vec4 shR
-					, Vec4 shG
-					, Vec4 shB )
+			auto propagate = writer.implementFunction< sdw::Void >( "propagate"
+				, [&]( sdw::IVec3 cellIndex
+					, sdw::Vec4 shR
+					, sdw::Vec4 shG
+					, sdw::Vec4 shB )
 				{
-					FOR( writer, Int, neighbour, 0, neighbour < 6, neighbour++ )
+					FOR( writer, sdw::Int, neighbour, 0, neighbour < 6, neighbour++ )
 					{
 						auto RSHcoeffsNeighbour = writer.declLocale( "RSHcoeffsNeighbour"
 							, vec4( 0.0_f ) );
@@ -293,7 +253,7 @@ namespace castor3d
 
 						//Now we have contribution for the neighbour's cell in the main direction -> need to do reprojection 
 						//Reprojection will be made only onto 4 faces (acctually we need to take into account 5 faces but we already have the one in the main direction)
-						FOR( writer, Int, face, 0, face < 4, face++ )
+						FOR( writer, sdw::Int, face, 0, face < 4, face++ )
 						{
 							//Get the direction to the face
 							auto evalDirection = writer.declLocale( "evalDirection"
@@ -328,13 +288,36 @@ namespace castor3d
 					}
 					ROF;
 				}
-				, InIVec3{ writer, "cellIndex" }
-				, OutVec4{ writer, "shR" }
-				, OutVec4{ writer, "shG" }
-				, OutVec4{ writer, "shB" } );
+				, sdw::InIVec3{ writer, "cellIndex" }
+				, sdw::OutVec4{ writer, "shR" }
+				, sdw::OutVec4{ writer, "shG" }
+				, sdw::OutVec4{ writer, "shB" } );
 
-			writer.implementMainT< lpvprop::SurfaceT, VoidT >( [&]( FragmentInT< lpvprop::SurfaceT > in
-				, FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, lpvprop::SurfaceT >( [&]( sdw::VertexIn in
+				, sdw::VertexOutT< lpvprop::SurfaceT > out )
+				{
+					out.cellIndex = ivec3( inPosition );
+					auto screenPos = writer.declLocale( "screenPos"
+						, c3d_lpvGridData.gridToScreen( out.cellIndex.xy() ) );
+					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
+				} );
+
+			writer.implementEntryPointT< 1u, sdw::PointListT< lpvprop::SurfaceT >, sdw::PointStreamT< lpvprop::SurfaceT > >( [&]( sdw::GeometryIn in
+				, sdw::PointListT< lpvprop::SurfaceT > list
+				, sdw::PointStreamT< lpvprop::SurfaceT > out )
+				{
+					out.vtx.position = list[0].vtx.position;
+					out.vtx.pointSize = 1.0f;
+					out.layer = list[0].cellIndex.z();
+
+					out.cellIndex = list[0].cellIndex;
+
+					out.append();
+					out.restartStrip();
+				} );
+
+			writer.implementEntryPointT< lpvprop::SurfaceT, sdw::VoidT >( [&]( sdw::FragmentInT< lpvprop::SurfaceT > in
+				, sdw::FragmentOut out )
 				{
 					auto shR = writer.declLocale( "shR"
 						, vec4( 0.0_f ) );
@@ -509,18 +492,8 @@ namespace castor3d
 			, { gridSize, gridSize } }
 		, m_gridSize{ gridSize }
 		, m_vertexBuffer{ lpvprop::createVertexBuffer( device, getName(), m_gridSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, getName()
-			, lpvprop::getVertexProgram( device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT
-			, getName()
-			, lpvprop::getGeometryProgram( device.renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, getName()
-			, lpvprop::getPixelProgram( device.renderSystem, occlusion ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_geometryShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ getName(), lpvprop::getProgram( device.renderSystem, occlusion ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_holder{ pass
 			, context
 			, graph
@@ -550,8 +523,6 @@ namespace castor3d
 
 	void LightPropagationPass::accept( ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_geometryShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 }

@@ -6,10 +6,12 @@
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -19,45 +21,26 @@ namespace PbrBloom
 {
 	namespace down
 	{
-		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
+		namespace c3d = castor3d::shader;
+
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-			Vec2 uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			auto constants = writer.declPushConstantsBuffer<>( "constants" );
 			auto srcTexelSize = constants.declMember< sdw::Vec2 >( "srcTexelSize" );
 			constants.end();
-
-			// Shader inputs
 			auto c3d_mapColor = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapColor", 0u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec3 >( "outColour", 0 );
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour3FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour3FT > out )
 				{
 					auto x = writer.declLocale( "x"
 						, srcTexelSize.x() );
@@ -73,34 +56,34 @@ namespace PbrBloom
 					// g - h - i
 					// === ('e' is the current texel) ===
 					auto a = writer.declLocale( "a"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() - 2.0f * x, vtx_texture.y() + 2.0f * y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() - 2.0f * x, in.uv().y() + 2.0f * y ) ).rgb() );
 					auto b = writer.declLocale( "b"
-						, c3d_mapColor.sample( vec2( vtx_texture.x(), vtx_texture.y() + 2.0f * y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x(), in.uv().y() + 2.0f * y ) ).rgb() );
 					auto c = writer.declLocale( "c"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() + 2.0f * x, vtx_texture.y() + 2.0f * y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() + 2.0f * x, in.uv().y() + 2.0f * y ) ).rgb() );
 
 					auto d = writer.declLocale( "d"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() - 2.0f * x, vtx_texture.y() ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() - 2.0f * x, in.uv().y() ) ).rgb() );
 					auto e = writer.declLocale( "e"
-						, c3d_mapColor.sample( vec2( vtx_texture.x(), vtx_texture.y() ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x(), in.uv().y() ) ).rgb() );
 					auto f = writer.declLocale( "f"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() + 2.0f * x, vtx_texture.y() ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() + 2.0f * x, in.uv().y() ) ).rgb() );
 
 					auto g = writer.declLocale( "g"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() - 2.0f * x, vtx_texture.y() - 2.0f * y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() - 2.0f * x, in.uv().y() - 2.0f * y ) ).rgb() );
 					auto h = writer.declLocale( "h"
-						, c3d_mapColor.sample( vec2( vtx_texture.x(), vtx_texture.y() - 2.0f * y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x(), in.uv().y() - 2.0f * y ) ).rgb() );
 					auto i = writer.declLocale( "i"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() + 2.0f * x, vtx_texture.y() - 2.0f * y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() + 2.0f * x, in.uv().y() - 2.0f * y ) ).rgb() );
 
 					auto j = writer.declLocale( "j"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() - x, vtx_texture.y() + y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() - x, in.uv().y() + y ) ).rgb() );
 					auto k = writer.declLocale( "k"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() + x, vtx_texture.y() + y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() + x, in.uv().y() + y ) ).rgb() );
 					auto l = writer.declLocale( "l"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() - x, vtx_texture.y() - y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() - x, in.uv().y() - y ) ).rgb() );
 					auto m = writer.declLocale( "m"
-						, c3d_mapColor.sample( vec2( vtx_texture.x() + x, vtx_texture.y() - y ) ).rgb() );
+						, c3d_mapColor.sample( vec2( in.uv().x() + x, in.uv().y() - y ) ).rgb() );
 
 					// Apply weighted distribution:
 					// 0.5 + 0.125 + 0.125 + 0.125 + 0.125 = 1
@@ -115,11 +98,11 @@ namespace PbrBloom
 					// contribute 0.5 to the final color output. The code below is written
 					// to effectively yield this sum. We get:
 					// 0.125*5 + 0.03125*4 + 0.0625*4 = 1
-					outColour = e * 0.125f;
-					outColour += ( a + c + g + i ) * 0.03125f;
-					outColour += ( b + d + f + h ) * 0.0625f;
-					outColour += ( j + k + l + m ) * 0.125f;
-					outColour = max( outColour, vec3( 0.0001_f ) );
+					out.colour() = e * 0.125f;
+					out.colour() += ( a + c + g + i ) * 0.03125f;
+					out.colour() += ( b + d + f + h ) * 0.0625f;
+					out.colour() += ( j + k + l + m ) * 0.125f;
+					out.colour() = max( out.colour(), vec3( 0.0001_f ) );
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -136,10 +119,8 @@ namespace PbrBloom
 		, bool const * enabled
 		, uint32_t const * passIndex )
 		: m_graph{ graph }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "PbrBloomDownsample", down::getVertexProgram( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "PbrBloomDownsample", down::getPixelProgram( device ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "PbrBloomDownsample", down::getProgram( device ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_resultViews{ doCreateResultViews( graph, resultImg, passesCount ) }
 		, m_passes{ doCreatePasses( graph, previousPass, device, sceneView, passesCount, enabled, passIndex ) }
 	{
@@ -148,8 +129,7 @@ namespace PbrBloom
 
 	void DownsamplePass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 
 		for ( auto & view : m_resultViews )
 		{

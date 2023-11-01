@@ -6,11 +6,12 @@
 #include <Castor3D/Render/RenderDevice.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Shader/Program.hpp>
-#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/Image.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -20,49 +21,31 @@ namespace PbrBloom
 {
 	namespace combine
 	{
-		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::RenderDevice const & device )
+		namespace c3d = castor3d::shader;
+
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			Vec2 position = writer.declInput< Vec2 >( "position", 0u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = ( position + 1.0_f ) / 2.0_f;
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getPixelProgram( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
 			auto c3d_mapPasses = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapPasses, 0u, 0u );
 			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( CombinePass::CombineMapScene, 1u, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
 			auto constants = writer.declUniformBuffer( "Constants", 2u, 0u );
 			auto filterRadius = constants.declMember< sdw::Float >( "filterRadius" );
 			auto bloomStrength = constants.declMember< sdw::Float >( "bloomStrength" );
 			constants.end();
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::Position2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::Position2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
 				{
-					outColour = vec4( mix( c3d_mapScene.sample( vtx_texture ).rgb()
-							, c3d_mapPasses.sample( vtx_texture ).rgb()
+					out.uv() = ( in.position() + 1.0_f ) / 2.0_f;
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
+
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
+				{
+					out.colour() = vec4( mix( c3d_mapScene.sample( in.uv() ).rgb()
+							, c3d_mapPasses.sample( in.uv() ).rgb()
 							, vec3( bloomStrength ) )
 						, 1.0f );
 				} );
@@ -84,10 +67,8 @@ namespace PbrBloom
 		, castor3d::UniformBufferOffsetT< castor::Point2f > const & ubo
 		, bool const * enabled
 		, uint32_t const * passIndex )
-		: m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "PbrBloomCombine", combine::getVertexProgram( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "PbrBloomCombine", combine::getPixelProgram( device ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		: m_shader{ "PbrBloomCombine", combine::getProgram( device ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ graph.createPass( "Combine"
 			, [this, &device, lhs, enabled, passIndex]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -129,7 +110,6 @@ namespace PbrBloom
 
 	void CombinePass::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 }

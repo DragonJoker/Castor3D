@@ -20,6 +20,7 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 
@@ -39,35 +40,18 @@ namespace castor3d
 			BntImgIdx,
 		};
 
-		static ShaderPtr getVertexProgram( RenderDevice const & device )
-		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-		
-		static ShaderPtr getPixelProgram( RenderDevice const & device
+		static ShaderPtr getProgram( RenderDevice const & device
 			, bool useNormalsBuffer )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			C3D_SsaoConfig( writer, SsaoCfgUboIdx, 0u );
 			C3D_Camera( writer, CameraUboIdx, 0u );
-			UniformBuffer configuration{ writer, "BlurConfiguration", BlurCfgUboIdx, 0u };
+			auto configuration = writer.declUniformBuffer( "BlurConfiguration", BlurCfgUboIdx, 0u );
 			/** (1, 0) or (0, 1)*/
-			auto c3d_axis = configuration.declMember< IVec2 >( "c3d_axis" );
-			auto c3d_dummy = configuration.declMember< IVec2 >( "c3d_dummy" );
-			auto c3d_gaussian = configuration.declMember< Vec4 >( "c3d_gaussian", 2u );
+			auto c3d_axis = configuration.declMember< sdw::IVec2 >( "c3d_axis" );
+			auto c3d_dummy = configuration.declMember< sdw::IVec2 >( "c3d_dummy" );
+			auto c3d_gaussian = configuration.declMember< sdw::Vec4 >( "c3d_gaussian", 2u );
 			configuration.end();
 			auto c3d_mapNormal = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormal", NmlImgIdx, 0u, useNormalsBuffer );
 			auto c3d_mapInput = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapInput", InpImgIdx, 0u );
@@ -77,41 +61,44 @@ namespace castor3d
 			auto c3d_readMultiplyFirst = writer.declConstant( "c3d_readMultiplyFirst", vec3( 2.0_f ) );
 			auto c3d_readAddSecond = writer.declConstant( "c3d_readAddSecond", vec3( 1.0_f ) );
 
+			// Shader inputs
+			auto inPosition = writer.declInput< sdw::Vec2 >( "in¨Position", sdw::EntryPoint::eVertex, 0u );
+
 			// Shader outputs
-			auto outColour = writer.declOutput< Vec3 >( "outColour", 0u );
-			auto outBentNormal = writer.declOutput< Vec3 >( "outBentNormal", 1u );
+			auto outColour = writer.declOutput< sdw::Vec3 >( "outColour", sdw::EntryPoint::eFragment, 0u );
+			auto outBentNormal = writer.declOutput< sdw::Vec3 >( "outBentNormal", sdw::EntryPoint::eFragment, 1u );
 
 #define result outColour.r()
 #define keyPassThrough outColour.g()
 
 			/** Returns a number on (0, 1) */
-			auto unpackKey = writer.implementFunction< Float >( "unpackKey"
-				, [&]( Float const & p )
+			auto unpackKey = writer.implementFunction< sdw::Float >( "unpackKey"
+				, [&]( sdw::Float const & p )
 				{
 					writer.returnStmt( p );
 				}
-				, InFloat{ writer, "p" } );
+				, sdw::InFloat{ writer, "p" } );
 
 			// Reconstruct camera-space P.xyz from screen-space S = (x, y) in
 			// pixels and camera-space z < 0.  Assumes that the upper-left pixel center
 			// is at (0.5, 0.5) [but that need not be the location at which the sample tap
 			// was placed!]
 			// Costs 3 MADD.  Error is on the order of 10^3 at the far plane, partly due to z precision.
-			auto reconstructCSPosition = writer.implementFunction< Vec3 >( "reconstructCSPosition"
-				, [&]( Vec2 const & S
-					, Float const & z
-					, Vec4 const & projInfo )
+			auto reconstructCSPosition = writer.implementFunction< sdw::Vec3 >( "reconstructCSPosition"
+				, [&]( sdw::Vec2 const & S
+					, sdw::Float const & z
+					, sdw::Vec4 const & projInfo )
 				{
 					writer.returnStmt( vec3( sdw::fma( S.xy(), projInfo.xy(), projInfo.zw() ) * z, z ) );
 				}
-				, InVec2{ writer, "S" }
-				, InFloat{ writer, "z" }
-				, InVec4{ writer, "projInfo" } );
+				, sdw::InVec2{ writer, "S" }
+				, sdw::InFloat{ writer, "z" }
+				, sdw::InVec4{ writer, "projInfo" } );
 
-			auto positionFromKey = writer.implementFunction< Vec3 >( "positionFromKey"
-				, [&]( Float const & key
-					, IVec2 const & ssCenter
-					, Vec4 const & projInfo )
+			auto positionFromKey = writer.implementFunction< sdw::Vec3 >( "positionFromKey"
+				, [&]( sdw::Float const & key
+					, sdw::IVec2 const & ssCenter
+					, sdw::Vec4 const & projInfo )
 				{
 					auto z = writer.declLocale( "z"
 						, key * c3d_ssaoConfigData.farPlaneZ );
@@ -121,15 +108,15 @@ namespace castor3d
 							, projInfo ) );
 					writer.returnStmt( position );
 				}
-				, InFloat{ writer, "key" }
-				, InIVec2{ writer, "ssCenter" }
-				, InVec4{ writer, "projInfo" } );
+				, sdw::InFloat{ writer, "key" }
+				, sdw::InIVec2{ writer, "ssCenter" }
+				, sdw::InVec4{ writer, "projInfo" } );
 
-			auto getTapInformation = writer.implementFunction< Vec3 >( "getTapInformation"
-				, [&]( IVec2 const & tapLoc
-					, Float tapKey
-					, Float value
-					, Vec3 bent )
+			auto getTapInformation = writer.implementFunction< sdw::Vec3 >( "getTapInformation"
+				, [&]( sdw::IVec2 const & tapLoc
+					, sdw::Float tapKey
+					, sdw::Float value
+					, sdw::Vec3 bent )
 				{
 					auto temp = writer.declLocale( "temp"
 						, c3d_mapInput.fetch( tapLoc, 0_i ).rgb() );
@@ -149,25 +136,25 @@ namespace castor3d
 					bent = vec3( 0.0_f );
 					writer.returnStmt( temp );
 				}
-				, InIVec2{ writer, "tapLoc" }
-				, OutFloat{ writer, "tapKey" }
-				, OutFloat{ writer, "value" }
-				, OutVec3{ writer, "bent" } );
+				, sdw::InIVec2{ writer, "tapLoc" }
+				, sdw::OutFloat{ writer, "tapKey" }
+				, sdw::OutFloat{ writer, "value" }
+				, sdw::OutVec3{ writer, "bent" } );
 
-			auto square = writer.implementFunction< Float >( "square"
-				, [&]( Float const & x )
+			auto square = writer.implementFunction< sdw::Float >( "square"
+				, [&]( sdw::Float const & x )
 				{
 					writer.returnStmt( x * x );
 				}
-				, InFloat{ writer, "x" } );
+				, sdw::InFloat{ writer, "x" } );
 
-			auto calculateBilateralWeight = writer.implementFunction< Float >( "calculateBilateralWeight"
-				, [&]( Float const & key
-					, Float const & tapKey
-					, IVec2 const & tapLoc
-					, Vec3 const & normal
-					, Vec3 const & tapNormal
-					, Vec3 const & position )
+			auto calculateBilateralWeight = writer.implementFunction< sdw::Float >( "calculateBilateralWeight"
+				, [&]( sdw::Float const & key
+					, sdw::Float const & tapKey
+					, sdw::IVec2 const & tapLoc
+					, sdw::Vec3 const & normal
+					, sdw::Vec3 const & tapNormal
+					, sdw::Vec3 const & position )
 				{
 					auto scale = writer.declLocale( "scale"
 						, 1.5_f * c3d_ssaoConfigData.invRadius );
@@ -229,7 +216,7 @@ namespace castor3d
 							// Minimum distance threshold must be scale-invariant, so factor in the radius
 							planeWeight = writer.ternary( distance2 * square( scale ) < lowDistanceThreshold2
 								, 1.0_f
-								, Float{ pow( max( 0.0_f
+								, sdw::Float{ pow( max( 0.0_f
 										, 1.0_f - c3d_ssaoConfigData.edgeSharpness * 2.0f * k_plane * planeError / sqrt( distance2 ) )
 									, 2.0_f ) } );
 						}
@@ -238,15 +225,21 @@ namespace castor3d
 
 					writer.returnStmt( depthWeight * normalWeight * planeWeight );
 				}
-				, InFloat{ writer, "key" }
-				, InFloat{ writer, "tapKey" }
-				, InIVec2{ writer, "tapLoc" }
-				, InVec3{ writer, "normal" }
-				, InVec3{ writer, "tapNormal" }
-				, InVec3{ writer, "position" } );
+				, sdw::InFloat{ writer, "key" }
+				, sdw::InFloat{ writer, "tapKey" }
+				, sdw::InIVec2{ writer, "tapLoc" }
+				, sdw::InVec3{ writer, "normal" }
+				, sdw::InVec3{ writer, "tapNormal" }
+				, sdw::InVec3{ writer, "position" } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPoint( [&]( sdw::VertexIn in
+				, sdw::VertexOut out )
+				{
+					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
+				} );
+
+			writer.implementEntryPoint( [&]( sdw::FragmentIn in
+				, sdw::FragmentOut out )
 				{
 					auto ssCenter = writer.declLocale( "ssCenter"
 						, ivec2( in.fragCoord.xy() ) );
@@ -290,7 +283,7 @@ namespace castor3d
 					auto position = writer.declLocale( "position"
 						, positionFromKey( key, ssCenter, c3d_ssaoConfigData.projInfo ) );
 
-					FOR( writer, Int, r, -c3d_ssaoConfigData.blurRadius, r <= c3d_ssaoConfigData.blurRadius, ++r )
+					FOR( writer, sdw::Int, r, -c3d_ssaoConfigData.blurRadius, r <= c3d_ssaoConfigData.blurRadius, ++r )
 					{
 						// We already handled the zero case above.  This loop should be unrolled and the static branch optimized out,
 						// so the IF statement has no runtime cost
@@ -301,12 +294,12 @@ namespace castor3d
 
 							// spatial domain: offset gaussian tap
 							auto absR = writer.declLocale( "absR"
-								, writer.cast< UInt >( abs( r ) ) );
+								, writer.cast< sdw::UInt >( abs( r ) ) );
 							auto weight = writer.declLocale( "weight"
 								, 0.3_f + c3d_gaussian[absR % 2_u][absR / 2_u] );
 
-							auto tapKey = writer.declLocale< Float >( "tapKey" );
-							auto value = writer.declLocale< Float >( "value" );
+							auto tapKey = writer.declLocale< sdw::Float >( "tapKey" );
+							auto value = writer.declLocale< sdw::Float >( "value" );
 							auto bent = writer.declLocale( "bent"
 								, vec3( 0.0_f ) );
 							auto tapNormal = writer.declLocale( "tapNormal"
@@ -427,14 +420,8 @@ namespace castor3d
 	SsaoBlurPass::Program::Program( RenderDevice const & device
 		, bool useNormalsBuffer
 		, castor::String const & prefix )
-		: vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, prefix + ssaoblr::getName( useNormalsBuffer )
-			, ssaoblr::getVertexProgram( device ) }
-		, pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT
-			, prefix + ssaoblr::getName( useNormalsBuffer )
-			, ssaoblr::getPixelProgram( device, useNormalsBuffer ) }
-		, stages{ makeShaderState( device, vertexShader )
-			, makeShaderState( device, pixelShader ) }
+		: shader{ prefix + ssaoblr::getName( useNormalsBuffer ), ssaoblr::getProgram( device, useNormalsBuffer ) }
+		, stages{ makeProgramStates( device, shader ) }
 	{
 	}
 
@@ -600,13 +587,11 @@ namespace castor3d
 
 		if ( m_config.useNormalsBuffer )
 		{
-			visitor.visit( m_programs[1].vertexShader );
-			visitor.visit( m_programs[1].pixelShader );
+			visitor.visit( m_programs[1].shader );
 		}
 		else
 		{
-			visitor.visit( m_programs[0].vertexShader );
-			visitor.visit( m_programs[0].pixelShader );
+			visitor.visit( m_programs[0].shader );
 		}
 
 		config.accept( visitor );

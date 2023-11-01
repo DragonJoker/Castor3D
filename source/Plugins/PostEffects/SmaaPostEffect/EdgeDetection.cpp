@@ -6,6 +6,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <ashespp/Image/Image.hpp>
 #include <ashespp/Image/ImageView.hpp>
@@ -14,64 +15,19 @@
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <numeric>
 
 namespace smaa
 {
-	namespace ed
-	{
-		static std::unique_ptr< ast::Shader > doGetEdgeDetectionVP( SmaaConfig const & config )
-		{
-			using namespace sdw;
-			VertexWriter writer;
-
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_offset = writer.declOutputArray< Vec4 >( "vtx_offset", 1u, 3u );
-
-			/**
-			 * Edge Detection Vertex Shader
-			 */
-			auto SMAAEdgeDetectionVS = writer.implementFunction< sdw::Void >( "SMAAEdgeDetectionVS"
-				, [&]( Vec2 const & texCoord
-					, Array< Vec4 > offset )
-				{
-					offset[0] = fma( c3d_smaaData.rtMetrics.xyxy(), vec4( Float{ -1.0f }, 0.0_f, 0.0_f, Float{ -1.0f } ), vec4( texCoord.xy(), texCoord.xy() ) );
-					offset[1] = fma( c3d_smaaData.rtMetrics.xyxy(), vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f ), vec4( texCoord.xy(), texCoord.xy() ) );
-					offset[2] = fma( c3d_smaaData.rtMetrics.xyxy(), vec4( Float{ -2.0f }, 0.0_f, 0.0_f, Float{ -2.0f } ), vec4( texCoord.xy(), texCoord.xy() ) );
-				}
-				, InVec2{ writer, "texCoord" }
-				, OutVec4Array{ writer, "offset", 3u } );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-					vtx_texture = uv;
-					vtx_offset[0] = vec4( 0.0_f );
-					vtx_offset[1] = vec4( 0.0_f );
-					vtx_offset[2] = vec4( 0.0_f );
-					SMAAEdgeDetectionVS( vtx_texture, vtx_offset );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-	}
-
-	//*********************************************************************************************
-
 	EdgeDetection::EdgeDetection( crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, castor3d::RenderTarget & renderTarget
 		, castor3d::RenderDevice const & device
 		, SmaaUbo const & ubo
 		, SmaaConfig const & config
-		, std::unique_ptr< ast::Shader > pixelShader
+		, castor3d::ShaderPtr shader
 		, bool const * enabled
 		, uint32_t const * passIndex
 		, uint32_t passCount )
@@ -107,10 +63,8 @@ namespace smaa
 			, VK_IMAGE_VIEW_TYPE_2D
 			, m_outDepth.imageId.data->info.format
 			, { VK_IMAGE_ASPECT_STENCIL_BIT, 0u, 1u, 0u, 1u } } ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaEdge", ed::doGetEdgeDetectionVP( m_config ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaEdge", std::move( pixelShader ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ "SmaaEdge", std::move( shader ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_pass{ m_graph.createPass( "EdgeDetection"
 			, [this, &device, passIndex, enabled, passCount]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -162,11 +116,38 @@ namespace smaa
 
 	void EdgeDetection::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 		visitor.visit( "SMAA EdgeDetection Colour Result"
 			, m_outColour
 			, m_graph.getFinalLayoutState( m_outColour.sampledViewId ).layout
 			, castor3d::TextureFactors{}.invert( true ) );
+	}
+
+	void EdgeDetection::getVertexProgram( sdw::TraditionalGraphicsWriter & writer
+		, SmaaData const & smaaData )
+	{
+		namespace c3d = castor3d::shader;
+
+		auto SMAAEdgeDetectionVS = writer.implementFunction< sdw::Void >( "SMAAEdgeDetectionVS"
+			, [&]( sdw::Vec2 const & texCoord
+				, sdw::Vec4Array offset )
+			{
+				offset[0] = fma( smaaData.rtMetrics.xyxy(), vec4( sdw::Float{ -1.0f }, 0.0_f, 0.0_f, sdw::Float{ -1.0f } ), vec4( texCoord.xy(), texCoord.xy() ) );
+				offset[1] = fma( smaaData.rtMetrics.xyxy(), vec4( 1.0_f, 0.0_f, 0.0_f, 1.0_f ), vec4( texCoord.xy(), texCoord.xy() ) );
+				offset[2] = fma( smaaData.rtMetrics.xyxy(), vec4( sdw::Float{ -2.0f }, 0.0_f, 0.0_f, sdw::Float{ -2.0f } ), vec4( texCoord.xy(), texCoord.xy() ) );
+			}
+			, sdw::InVec2{ writer, "texCoord" }
+			, sdw::OutVec4Array{ writer, "offset", 3u } );
+
+		writer.implementEntryPointT< c3d::PosUv2FT, EDVertexT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+			, sdw::VertexOutT< EDVertexT > out )
+			{
+				out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				out.texcoord() = in.uv();
+				out.offset()[0] = vec4( 0.0_f );
+				out.offset()[1] = vec4( 0.0_f );
+				out.offset()[2] = vec4( 0.0_f );
+				SMAAEdgeDetectionVS( out.texcoord(), out.offset() );
+			} );
 	}
 }

@@ -198,9 +198,8 @@ namespace castor3d
 		crg::ImageViewId m_intermediateView;
 		UniformBufferOffsetT< Configuration > m_blurUbo;
 		std::vector< float > m_kernel;
-		ShaderModule m_vertexShader;
-		ShaderModule m_pixelShaderX;
-		ShaderModule m_pixelShaderY;
+		ProgramModule m_shaderX;
+		ProgramModule m_shaderY;
 		ashes::PipelineShaderStageCreateInfoArray m_stagesX;
 		ashes::PipelineShaderStageCreateInfoArray m_stagesY;
 	};

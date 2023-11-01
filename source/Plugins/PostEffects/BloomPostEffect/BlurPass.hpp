@@ -68,8 +68,7 @@ namespace Bloom
 		castor3d::RenderDevice const & m_device;
 		uint32_t m_blurPassesCount;
 		UboOffsetArray m_blurUbo;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePassArray m_passes;
 		std::vector< Subpass > m_subpasses;

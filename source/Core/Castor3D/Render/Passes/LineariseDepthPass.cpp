@@ -38,6 +38,7 @@
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnablePasses/ImageCopy.hpp>
@@ -55,40 +56,37 @@ namespace castor3d
 		static uint32_t constexpr ClipInfoUboIdx = 1u;
 		static uint32_t constexpr PrevLvlUboIdx = 1u;
 
-		static ShaderPtr getVertexProgram( Engine & engine )
+		static void getVertexProgram( Engine & engine
+			, sdw::TraditionalGraphicsWriter & writer )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &engine.getShaderAllocator() };
-
 			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
+			auto position = writer.declInput< sdw::Vec2 >( "position", sdw::EntryPoint::eVertex, 0u );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::VertexIn in
+				, sdw::VertexOut out )
 				{
 					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getLinearisePixelProgram( Engine & engine )
+		static ShaderPtr getLineariseProgram( Engine & engine )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
+			getVertexProgram( engine, writer );
 
 			shader::Utils utils{ writer };
 
 			// Shader inputs
-			UniformBuffer clipInfo{ writer, "ClipInfo", ClipInfoUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
-			auto c3d_clipInfo = clipInfo.declMember< Vec3 >( "c3d_clipInfo" );
+			auto clipInfo = writer.declUniformBuffer( "ClipInfo", ClipInfoUboIdx, 0u, ast::type::MemoryLayout::eStd140 );
+			auto c3d_clipInfo = clipInfo.declMember< sdw::Vec3 >( "c3d_clipInfo" );
 			clipInfo.end();
 			auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj", DepthImgIdx, 0u );
 
 			// Shader outputs
-			auto outColour = writer.declOutput< Float >( "outColour", 0u );
+			auto outColour = writer.declOutput< sdw::Float >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOut out )
 				{
 					auto ssPosition = writer.declLocale( "ssPosition"
 						, ivec2( in.fragCoord.xy() ) );
@@ -99,22 +97,22 @@ namespace castor3d
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getMinifyPixelProgram( Engine & engine )
+		static ShaderPtr getMinifyProgram( Engine & engine )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
+			getVertexProgram( engine, writer );
 
 			// Shader inputs
-			UniformBuffer previousLevel{ writer, "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 };
-			auto c3d_textureSize = previousLevel.declMember< IVec2 >( "c3d_textureSize" );
+			auto previousLevel = writer.declUniformBuffer( "PreviousLevel", PrevLvlUboIdx, 0u, ast::type::MemoryLayout::eStd140 );
+			auto c3d_textureSize = previousLevel.declMember< sdw::IVec2 >( "c3d_textureSize" );
 			previousLevel.end();
 			auto c3d_mapDepth = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepth", DepthImgIdx, 0u );
 
 			// Shader outputs
-			auto outColour = writer.declOutput< Float >( "outColour", 0u );
+			auto outColour = writer.declOutput< sdw::Float >( "outColour", sdw::EntryPoint::eFragment, 0u );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< sdw::VoidT, sdw::VoidT >( [&]( sdw::FragmentIn in
+				, sdw::FragmentOut out )
 				{
 					auto ssPosition = writer.declLocale( "ssPosition"
 						, ivec2( in.fragCoord.xy() ) );
@@ -167,15 +165,11 @@ namespace castor3d
 		, m_size{ size }
 		, m_result{ passlindpth::doCreateTexture( m_device, resources, m_size, m_prefix ) }
 		, m_clipInfo{ m_device.uboPool->getBuffer< castor::Point3f >( 0u ) }
-		, m_extractVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "ExtractDepth", passlindpth::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_extractPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "ExtractDepth", passlindpth::getLinearisePixelProgram( *device.renderSystem.getEngine() ) }
-		, m_extractStages{ makeShaderState( m_device, m_extractVertexShader )
-			, makeShaderState( m_device, m_extractPixelShader ) }
+		, m_extractShader{ m_prefix + "ExtractDepth", passlindpth::getLineariseProgram( *device.renderSystem.getEngine() ) }
+		, m_extractStages{ makeProgramStates( m_device, m_extractShader ) }
 		, m_extractPass{ doInitialiseExtractPass( progress, previousPasses, depthObj ) }
-		, m_minifyVertexShader{ VK_SHADER_STAGE_VERTEX_BIT, m_prefix + "MinifyDepth", passlindpth::getVertexProgram( *device.renderSystem.getEngine() ) }
-		, m_minifyPixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, m_prefix + "MinifyDepth", passlindpth::getMinifyPixelProgram( *device.renderSystem.getEngine() ) }
-		, m_minifyStages{ makeShaderState( m_device, m_minifyVertexShader )
-			, makeShaderState( m_device, m_minifyPixelShader ) }
+		, m_minifyShader{ m_prefix + "MinifyDepth", passlindpth::getMinifyProgram( *device.renderSystem.getEngine() ) }
+		, m_minifyStages{ makeProgramStates( m_device, m_minifyShader ) }
 	{
 		doInitialiseMinifyPass( progress );
 	}
@@ -227,10 +221,8 @@ namespace castor3d
 				, TextureFactors{}.invert( true ) );
 		}
 
-		visitor.visit( m_extractVertexShader );
-		visitor.visit( m_extractPixelShader );
-		visitor.visit( m_minifyVertexShader );
-		visitor.visit( m_minifyPixelShader );
+		visitor.visit( m_extractShader );
+		visitor.visit( m_minifyShader );
 	}
 
 	crg::FramePass const & LineariseDepthPass::doInitialiseExtractPass( ProgressBar * progress

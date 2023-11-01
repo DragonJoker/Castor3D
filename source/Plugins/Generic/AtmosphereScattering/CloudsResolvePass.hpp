@@ -37,8 +37,7 @@ namespace atmosphere_scattering
 		}
 
 	private:
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass const * m_lastPass;
 	};

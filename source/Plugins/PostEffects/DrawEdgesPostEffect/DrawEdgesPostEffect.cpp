@@ -8,6 +8,7 @@
 #include <Castor3D/Scene/Scene.hpp>
 #include <Castor3D/Shader/Program.hpp>
 #include <Castor3D/Shader/ShaderBuffers/PassBuffer.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
@@ -16,6 +17,7 @@
 #include <Shaders/GlslToonProfile.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -25,6 +27,8 @@ namespace draw_edges
 {
 	namespace px
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			eMaterials,
@@ -38,39 +42,17 @@ namespace draw_edges
 			eSpecifics,
 		};
 
-		static std::unique_ptr< ast::Shader > getVertexProgram( castor3d::Engine & engine )
-		{
-			using namespace sdw;
-			VertexWriter writer{ &engine.getShaderAllocator() };
-
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					vtx_texture = uv;
-					out.vtx.position = vec4( position.xy(), 0.0_f, 1.0_f );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > getFragmentProgram( castor3d::Engine & engine
+		static castor3d::ShaderPtr getProgram( castor3d::Engine & engine
 			, VkExtent3D const & extent )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
+
 			castor3d::shader::Utils utils{ writer };
 			castor3d::shader::PassShaders passShaders{ engine.getPassComponentsRegister()
 				, castor3d::TextureCombine{}
 				, castor3d::ComponentModeFlag::eNone
 				, utils };
 
-			// Shader inputs
 			auto specifics = uint32_t( eSpecifics );
 			castor3d::shader::Materials materials{ engine, writer, passShaders, eMaterials, 0u, specifics };
 			C3D_ModelsData( writer, eModels, 0u );
@@ -80,11 +62,6 @@ namespace draw_edges
 			auto c3d_edgeDN = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeDN", eEdgeDN, 0u );
 			auto c3d_edgeO = writer.declCombinedImg< FImg2DR32 >( "c3d_edgeO", eEdgeO, 0u );
 			C3D_DrawEdges( writer, eDrawEdges, 0u );
-
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-
-			// Shader outputs
-			auto fragColor = writer.declOutput< Vec4 >( "fragColor", 0 );
 
 			auto getEdge = writer.implementFunction< sdw::Float >( "getEdge"
 				, [&]( sdw::CombinedImage2DR32 const & tex
@@ -121,16 +98,23 @@ namespace draw_edges
 				, sdw::InIVec2{ writer, "texCoord" }
 				, sdw::InInt{ writer, "width" } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position().xy(), 0.0_f, 1.0_f );
+				} );
+
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					auto colour = writer.declLocale( "colour"
-						, c3d_source.sample( vtx_texture ) );
+						, c3d_source.sample( in.uv() ) );
 
 					auto size = writer.declLocale( "size"
 						, ivec2( sdw::Int{ int( extent.width ) }, sdw::Int{ int( extent.height ) } ) );
 					auto texelCoord = writer.declLocale( "texelCoord"
-						, ivec2( vec2( size ) * vtx_texture ) );
+						, ivec2( vec2( size ) * in.uv() ) );
 
 					auto depthObj = writer.declLocale( "depthObj"
 						, c3d_depthObj.fetch( texelCoord, 0_i ) );
@@ -169,7 +153,7 @@ namespace draw_edges
 					}
 					FI;
 
-					fragColor = colour;
+					out.colour() = colour;
 				} );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -193,11 +177,9 @@ namespace draw_edges
 			, renderSystem
 			, parameters
 			, 1u }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "DECombine", px::getVertexProgram( *renderTarget.getEngine() ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "DECombine", px::getFragmentProgram( *renderTarget.getEngine()
+		, m_shader{ "DECombine", px::getProgram( *renderTarget.getEngine()
 			, castor3d::getSafeBandedExtent3D( m_renderTarget.getSize() ) ) }
-		, m_stages{ makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
-			, makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
+		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 		, m_ubo{ renderSystem.getRenderDevice() }
 	{
 		setParameters( parameters );
@@ -228,8 +210,7 @@ namespace draw_edges
 			m_objectID->accept( visitor );
 		}
 
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 		visitor.visit( cuT( "NormalDepthWidth" )
 			, m_config.normalDepthWidth );
 		visitor.visit( cuT( "ObjectWidth" )

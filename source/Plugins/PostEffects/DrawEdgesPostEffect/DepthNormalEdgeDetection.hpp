@@ -57,8 +57,7 @@ namespace draw_edges
 		crg::FramePassGroup & m_graph;
 		VkExtent3D m_extent;
 		castor3d::Texture m_result;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		crg::FramePass & m_pass;
 	};

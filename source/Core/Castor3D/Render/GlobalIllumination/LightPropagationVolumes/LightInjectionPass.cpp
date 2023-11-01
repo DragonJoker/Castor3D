@@ -33,6 +33,7 @@
 #include <ashespp/Pipeline/PipelineVertexInputStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/GraphContext.hpp>
 
@@ -127,12 +128,10 @@ namespace castor3d
 			sdw::Vec3 rsmFlux;
 		};
 
-		static std::unique_ptr< ast::Shader > getDirectionalVertexProgram( uint32_t rsmTexSize
-			, RenderSystem const & renderSystem )
+		static void getDirectionalVertexProgram( uint32_t rsmTexSize
+			, RenderSystem const & renderSystem
+			, sdw::TraditionalGraphicsWriter & writer )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
 			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eDirectional, SmTexture::eNormal )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -166,13 +165,13 @@ namespace castor3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
-				, VertexOutT< lpvlgt::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn in
+				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lights.getDirectionalLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
+						, lights.getDirectionalLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
 					auto cascadeIndex = writer.declLocale( "cascadeIndex"
-						, writer.cast< Int >( max( 1_u, light.cascadeCount() - 1_u ) ) );
+						, writer.cast< sdw::Int >( max( 1_u, light.cascadeCount() - 1_u ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
@@ -192,17 +191,13 @@ namespace castor3d
 					out.vtx.position = vec4( screenPos, 0.0, 1.0 );
 					out.vtx.pointSize = 1.0f;
 				} );
-
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getPointVertexProgram( CubeMapFace face
+		static void getPointVertexProgram( CubeMapFace face
 			, uint32_t rsmTexSize
-			, RenderSystem const & renderSystem )
+			, RenderSystem const & renderSystem
+			, sdw::TraditionalGraphicsWriter & writer )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
 			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::ePoint, SmTexture::eNormal )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -236,11 +231,11 @@ namespace castor3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
-				, VertexOutT< lpvlgt::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn in
+				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lights.getPointLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
+						, lights.getPointLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
@@ -259,15 +254,12 @@ namespace castor3d
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
 					out.vtx.pointSize = 1.0f;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static std::unique_ptr< ast::Shader > getSpotVertexProgram( uint32_t rsmTexSize
-			, RenderSystem const & renderSystem )
+		static void getSpotVertexProgram( uint32_t rsmTexSize
+			, RenderSystem const & renderSystem
+			, sdw::TraditionalGraphicsWriter & writer )
 		{
-			using namespace sdw;
-			VertexWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
 			auto c3d_rsmNormalMap = writer.declCombinedImg< FImg2DArrayRgba32 >( getTextureName( LightType::eSpot, SmTexture::eNormal )
 				, LightInjectionPass::RsmNormalsIdx
 				, 0u );
@@ -301,11 +293,11 @@ namespace castor3d
 				, index /* shadowMapBinding */
 				, 1u /* shadowMapSet */ };
 
-			writer.implementMainT< VoidT, lpvlgt::SurfaceT >( [&]( VertexIn in
-				, VertexOutT< lpvlgt::SurfaceT > out )
+			writer.implementEntryPointT< sdw::VoidT, lpvlgt::SurfaceT >( [&]( sdw::VertexIn in
+				, sdw::VertexOutT< lpvlgt::SurfaceT > out )
 				{
 					auto light = writer.declLocale( "light"
-						, lights.getSpotLight( writer.cast< UInt >( c3d_lpvLightData.lightOffset() ) ) );
+						, lights.getSpotLight( writer.cast< sdw::UInt >( c3d_lpvLightData.lightOffset() ) ) );
 					auto rsmCoords = writer.declLocale( "rsmCoords"
 						, ivec3( in.vertexIndex % int32_t( rsmTexSize )
 							, in.vertexIndex / int32_t( rsmTexSize )
@@ -324,35 +316,61 @@ namespace castor3d
 					out.vtx.position = vec4( screenPos, 0.0_f, 1.0_f );
 					out.vtx.pointSize = 1.0f;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
 
-		static ShaderPtr getVertexProgram( LightType lightType
+		static void getVertexProgram( LightType lightType
 			, uint32_t rsmTexSize
-			, RenderSystem const & renderSystem )
+			, RenderSystem const & renderSystem
+			, sdw::TraditionalGraphicsWriter & writer )
 		{
 			switch ( lightType )
 			{
 			case castor3d::LightType::eDirectional:
-				return getDirectionalVertexProgram( rsmTexSize, renderSystem );
+				getDirectionalVertexProgram( rsmTexSize, renderSystem, writer );
+				break;
 			case castor3d::LightType::eSpot:
-				return getSpotVertexProgram( rsmTexSize, renderSystem );
+				getSpotVertexProgram( rsmTexSize, renderSystem, writer );
+				break;
 			default:
 				CU_Failure( "Unsupported light type" );
-				return nullptr;
+				break;
 			}
 		}
 
-		static std::unique_ptr< ast::Shader > getGeometryProgram( RenderSystem const & renderSystem )
+		static void getGeomFragProgram( RenderSystem const & renderSystem
+			, sdw::TraditionalGraphicsWriter & writer )
 		{
-			using namespace sdw;
-			GeometryWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
+			/*Cosine lobe coeff*/
+			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
+				, sdw::Float{ float( sqrt( castor::Pi< float > ) / 2.0f ) } );
+			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
+				, sdw::Float{ float( sqrt( castor::Pi< float > ) / 3.0f ) } );
 
-			writer.implementMainT< PointListT< lpvlgt::SurfaceT >, PointStreamT< lpvlgt::SurfaceT > >( PointListT< lpvlgt::SurfaceT >{ writer, false }
-				, PointStreamT< lpvlgt::SurfaceT >{ writer, 1u, true }
-				, [&]( GeometryIn in
-					, PointListT< lpvlgt::SurfaceT > list
-					, PointStreamT< lpvlgt::SurfaceT > out )
+			// SH_C0 * SH_cosLobe_C0 = 0.25000000007f
+			// SH_C1 * SH_cosLobe_C1 = 0.5000000011f
+
+			auto outLpvGridR = writer.declOutput< sdw::Vec4 >( "outLpvGridR", sdw::EntryPoint::eFragment, 0u );
+			auto outLpvGridG = writer.declOutput< sdw::Vec4 >( "outLpvGridG", sdw::EntryPoint::eFragment, 1u );
+			auto outLpvGridB = writer.declOutput< sdw::Vec4 >( "outLpvGridB", sdw::EntryPoint::eFragment, 2u );
+
+			//Should I normalize the dir vector?
+			auto evalCosineLobeToDir = writer.implementFunction< sdw::Vec4 >( "evalCosineLobeToDir"
+				, [&]( sdw::Vec3 dir )
+				{
+					dir = normalize( dir );
+					//f00, f-11, f01, f11
+					writer.returnStmt( vec4( SH_cosLobe_C0
+						, -SH_cosLobe_C1 * dir.y()
+						, SH_cosLobe_C1 * dir.z()
+						, -SH_cosLobe_C1 * dir.x() ) );
+				}
+				, sdw::InVec3{ writer, "dir" } );
+
+			writer.implementEntryPointT< sdw::PointListT< lpvlgt::SurfaceT >, sdw::PointStreamT< lpvlgt::SurfaceT > >( sdw::PointListT< lpvlgt::SurfaceT >{ writer, false }
+				, sdw::PointStreamT< lpvlgt::SurfaceT >{ writer, 1u, true }
+				, [&]( sdw::GeometryIn in
+					, sdw::PointListT< lpvlgt::SurfaceT > list
+					, sdw::PointStreamT< lpvlgt::SurfaceT > out )
 				{
 					out.vtx.position = list[0].vtx.position;
 					out.layer = list[0].layer;
@@ -365,63 +383,44 @@ namespace castor3d
 					out.restartStrip();
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static ShaderPtr getPixelProgram( RenderSystem const & renderSystem )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
-
-			/*Cosine lobe coeff*/
-			auto SH_cosLobe_C0 = writer.declConstant( "SH_cosLobe_C0"
-				, Float{ float( sqrt( castor::Pi< float > ) / 2.0f ) } );
-			auto SH_cosLobe_C1 = writer.declConstant( "SH_cosLobe_C1"
-				, Float{ float( sqrt( castor::Pi< float > ) / 3.0f ) } );
-
-			// SH_C0 * SH_cosLobe_C0 = 0.25000000007f
-			// SH_C1 * SH_cosLobe_C1 = 0.5000000011f
-
-			auto outLpvGridR = writer.declOutput< Vec4 >( "outLpvGridR", 0u );
-			auto outLpvGridG = writer.declOutput< Vec4 >( "outLpvGridG", 1u );
-			auto outLpvGridB = writer.declOutput< Vec4 >( "outLpvGridB", 2u );
-
-			//layout( early_fragment_tests )in;//turn on early depth tests
-			C3D_LpvLightConfig( writer, LightInjectionPass::LpvLightUboIdx, 0u );
-
-			//Should I normalize the dir vector?
-			auto evalCosineLobeToDir = writer.implementFunction< Vec4 >( "evalCosineLobeToDir"
-				, [&]( Vec3 dir )
-				{
-					dir = normalize( dir );
-					//f00, f-11, f01, f11
-					writer.returnStmt( vec4( SH_cosLobe_C0
-						, -SH_cosLobe_C1 * dir.y()
-						, SH_cosLobe_C1 * dir.z()
-						, -SH_cosLobe_C1 * dir.x() ) );
-				}
-				, InVec3{ writer, "dir" } );
-
-			writer.implementMainT< lpvlgt::SurfaceT, VoidT >( FragmentInT< lpvlgt::SurfaceT >{ writer, true }
-				, FragmentOut{ writer }
-				, [&]( FragmentInT< lpvlgt::SurfaceT > in
-					, FragmentOut out )
+			writer.implementEntryPointT< lpvlgt::SurfaceT, sdw::VoidT >( sdw::FragmentInT< lpvlgt::SurfaceT >{ writer, true }
+				, sdw::FragmentOut{ writer }
+				, [&]( sdw::FragmentInT< lpvlgt::SurfaceT > in
+					, sdw::FragmentOut out )
 				{
 					auto lobeDir = writer.declLocale( "lobeDir"
 						, evalCosineLobeToDir( in.rsmNormal ) );
 					auto SHCoeffsR = writer.declLocale( "SHCoeffsR"
-						, lobeDir / Float{ castor::Pi< float > } * in.rsmFlux.r() );
+						, lobeDir / sdw::Float{ castor::Pi< float > } * in.rsmFlux.r() );
 					auto SHCoeffsG = writer.declLocale( "SHCoeffsG"
-						, lobeDir / Float{ castor::Pi< float > } * in.rsmFlux.g() );
+						, lobeDir / sdw::Float{ castor::Pi< float > } * in.rsmFlux.g() );
 					auto SHCoeffsB = writer.declLocale( "SHCoeffsB"
-						, lobeDir / Float{ castor::Pi< float > } * in.rsmFlux.b() );
+						, lobeDir / sdw::Float{ castor::Pi< float > } * in.rsmFlux.b() );
 
 					outLpvGridR = SHCoeffsR;
 					outLpvGridG = SHCoeffsG;
 					outLpvGridB = SHCoeffsB;
 				} );
+		}
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+		static ShaderPtr getProgram( LightType lightType
+			, uint32_t rsmTexSize
+			, RenderSystem const & renderSystem )
+		{
+			sdw::TraditionalGraphicsWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
+			getVertexProgram( lightType, rsmTexSize, renderSystem, writer );
+			getGeomFragProgram( renderSystem, writer );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
+		}
+
+		static ShaderPtr getProgram( CubeMapFace face
+			, uint32_t rsmTexSize
+			, RenderSystem const & renderSystem )
+		{
+			sdw::TraditionalGraphicsWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
+			getPointVertexProgram( face, rsmTexSize, renderSystem, writer );
+			getGeomFragProgram( renderSystem, writer );
+			return std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
 
 		static GpuBufferOffsetT< NonTexturedQuad::Vertex > createVertexBuffer( castor::String const & name
@@ -566,12 +565,8 @@ namespace castor3d
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ lpvlgt::createVertexBuffer( getName(), m_device, m_rsmSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), lpvlgt::getVertexProgram( lightType, m_rsmSize, device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), lpvlgt::getGeometryProgram( device.renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), lpvlgt::getPixelProgram( device.renderSystem ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_geometryShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ getName(), lpvlgt::getProgram( lightType, m_rsmSize, device.renderSystem ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_holder{ pass
 			, context
 			, graph
@@ -598,12 +593,8 @@ namespace castor3d
 		, m_device{ device }
 		, m_rsmSize{ rsmSize }
 		, m_vertexBuffer{ lpvlgt::createVertexBuffer( getName(), m_device, m_rsmSize ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, getName(), lpvlgt::getPointVertexProgram( face, m_rsmSize, device.renderSystem ) }
-		, m_geometryShader{ VK_SHADER_STAGE_GEOMETRY_BIT, getName(), lpvlgt::getGeometryProgram( device.renderSystem ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, getName(), lpvlgt::getPixelProgram( device.renderSystem ) }
-		, m_stages{ makeShaderState( device, m_vertexShader )
-			, makeShaderState( device, m_geometryShader )
-			, makeShaderState( device, m_pixelShader ) }
+		, m_shader{ getName(), lpvlgt::getProgram( face, m_rsmSize, device.renderSystem ) }
+		, m_stages{ makeProgramStates( device, m_shader ) }
 		, m_holder{ pass
 			, context
 			, graph
@@ -632,8 +623,6 @@ namespace castor3d
 
 	void LightInjectionPass::accept( ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_geometryShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 	}
 }

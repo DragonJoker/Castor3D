@@ -9,6 +9,7 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Graphics/PixelBufferBase.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -19,6 +20,7 @@
 #include <ashespp/Pipeline/PipelineDepthStencilStateCreateInfo.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -28,6 +30,8 @@ namespace smaa
 {
 	namespace bwcalc
 	{
+		namespace c3d = castor3d::shader;
+
 		enum Idx : uint32_t
 		{
 			AreaTexIdx = SmaaUboIdx + 1,
@@ -35,28 +39,45 @@ namespace smaa
 			EdgesTexIdx,
 		};
 
-		static std::unique_ptr< ast::Shader > doBlendingWeightCalculationVP( castor3d::RenderDevice const & device )
+		template< sdw::var::Flag FlagT >
+		using VertexStructT = sdw::IOStructInstanceHelperT< FlagT
+			, "SMAABW_Vertex"
+			, sdw::IOVec2Field< "texcoord", 0u >
+			, sdw::IOVec2Field< "pixcoord", 1u >
+			, sdw::IOVec4ArrayField< "offset", 2u, 3u > >;
+
+		template< sdw::var::Flag FlagT >
+		struct VertexT
+			: public VertexStructT< FlagT >
 		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			VertexT( sdw::ShaderWriter & writer
+				, sdw::expr::ExprPtr expr
+				, bool enabled )
+				: VertexStructT< FlagT >{ writer, std::move( expr ), enabled }
+			{
+			}
 
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
+			auto texcoord()const { return this->template getMember< "texcoord" >(); }
+			auto pixcoord()const { return this->template getMember< "pixcoord" >(); }
+			auto offset()const { return this->template getMember< "offset" >(); }
+		};
+
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device )
+		{
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_pixcoord = writer.declOutput< Vec2 >( "vtx_pixcoord", 1u );
-			auto vtx_offset = writer.declOutputArray< Vec4 >( "vtx_offset", 2u, 3u );
+			auto c3d_areaTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_areaTex", AreaTexIdx, 0u );
+			auto c3d_searchTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_searchTex", SearchTexIdx, 0u );
+			auto c3d_edgesTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_edgesTex", EdgesTexIdx, 0u );
 
 			/**
 			 * Blend Weight Calculation Vertex Shader
 			 */
 			auto SMAABlendingWeightCalculationVS = writer.implementFunction< sdw::Void >( "SMAABlendingWeightCalculationVS"
-				, [&]( Vec2 const & texCoord
-					, Vec2 pixcoord
-					, Array< Vec4 > offset )
+				, [&]( sdw::Vec2 const & texCoord
+					, sdw::Vec2 pixcoord
+					, sdw::Vec4Array offset )
 				{
 					pixcoord = texCoord * c3d_smaaData.rtMetrics.zw();
 
@@ -66,50 +87,20 @@ namespace smaa
 
 					// And these for the searches, they indicate the ends of the loops:
 					offset[2] = fma( c3d_smaaData.rtMetrics.xxyy()
-						, vec4( -2.0_f, 2.0_f, -2.0_f, 2.0_f ) * writer.cast< Float >( c3d_smaaData.maxSearchSteps )
+						, vec4( -2.0_f, 2.0_f, -2.0_f, 2.0_f ) * writer.cast< sdw::Float >( c3d_smaaData.maxSearchSteps )
 						, vec4( offset[0].xz(), offset[1].yw() ) );
 				}
-				, InVec2{ writer, "texCoord" }
-				, OutVec2{ writer, "pixcoord" }
-				, OutVec4Array{ writer, "offset", 3u } );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-					vtx_texture = uv;
-					vtx_offset[0] = vec4( 0.0_f );
-					vtx_offset[1] = vec4( 0.0_f );
-					vtx_offset[2] = vec4( 0.0_f );
-					SMAABlendingWeightCalculationVS( vtx_texture, vtx_pixcoord, vtx_offset );
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		static std::unique_ptr< ast::Shader > doBlendingWeightCalculationFP( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
-
-			// Shader inputs
-			C3D_Smaa( writer, SmaaUboIdx, 0u );
-			auto c3d_areaTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_areaTex", AreaTexIdx, 0u );
-			auto c3d_searchTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_searchTex", SearchTexIdx, 0u );
-			auto c3d_edgesTex = writer.declCombinedImg< FImg2DRgba32 >( "c3d_edgesTex", EdgesTexIdx, 0u );
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
-			auto vtx_pixcoord = writer.declInput< Vec2 >( "vtx_pixcoord", 1u );
-			auto vtx_offset = writer.declInputArray< Vec4 >( "vtx_offset", 2u, 3u );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+				, sdw::InVec2{ writer, "texCoord" }
+				, sdw::OutVec2{ writer, "pixcoord" }
+				, sdw::OutVec4Array{ writer, "offset", 3u } );
 
 			/**
 			 * Conditional move:
 			 */
 			auto SMAAMovc = writer.implementFunction< sdw::Void >( "SMAAMovc"
-				, [&]( BVec2 const & cond
-					, Vec2 variable
-					, Vec2 const & value )
+				, [&]( sdw::BVec2 const & cond
+					, sdw::Vec2 variable
+					, sdw::Vec2 const & value )
 				{
 					IF( writer, cond.x() )
 					{
@@ -123,15 +114,15 @@ namespace smaa
 					}
 					FI;
 				}
-				, InBVec2{ writer, "cond" }
-				, InOutVec2{ writer, "variable" }
-				, InVec2{ writer, "value" } );
+				, sdw::InBVec2{ writer, "cond" }
+				, sdw::InOutVec2{ writer, "variable" }
+				, sdw::InVec2{ writer, "value" } );
 
 			/**
 			 * Allows to decode two binary values from a bilinear-filtered access.
 			 */
-			auto SMAADecodeDiagBilinearAccess2 = writer.implementFunction< Vec2 >( "SMAADecodeDiagBilinearAccess2"
-				, [&]( Vec2 const & e )
+			auto SMAADecodeDiagBilinearAccess2 = writer.implementFunction< sdw::Vec2 >( "SMAADecodeDiagBilinearAccess2"
+				, [&]( sdw::Vec2 const & e )
 				{
 					// Bilinear access for fetching 'e' have a 0.25 offset, and we are
 					// interested in the R and G edges:
@@ -149,31 +140,31 @@ namespace smaa
 					e.r() = e.r() * abs( 5.0_f * e.r() - 5.0_f * 0.75_f );
 					writer.returnStmt( round( e ) );
 				}
-				, InVec2{ writer, "e" } );
+				, sdw::InVec2{ writer, "e" } );
 
-			auto SMAADecodeDiagBilinearAccess4 = writer.implementFunction< Vec4 >( "SMAADecodeDiagBilinearAccess4"
-				, [&]( Vec4 const & e )
+			auto SMAADecodeDiagBilinearAccess4 = writer.implementFunction< sdw::Vec4 >( "SMAADecodeDiagBilinearAccess4"
+				, [&]( sdw::Vec4 const & e )
 				{
 					e.rb() = e.rb() * abs( 5.0_f * e.rb() - vec2( 5.0_f * 0.75_f ) );
 					writer.returnStmt( round( e ) );
 				}
-				, InVec4{ writer, "e" } );
+				, sdw::InVec4{ writer, "e" } );
 
 			/**
 			 * These functions allows to perform diagonal pattern searches.
 			 */
-			auto SMAASearchDiag1 = writer.implementFunction< Vec2 >( "SMAASearchDiag1"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, Vec2 const & texcoord
-					, Vec2 const & dir
-					, Vec2 e )
+			auto SMAASearchDiag1 = writer.implementFunction< sdw::Vec2 >( "SMAASearchDiag1"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::Vec2 const & texcoord
+					, sdw::Vec2 const & dir
+					, sdw::Vec2 e )
 				{
 					auto coord = writer.declLocale( "coord"
 						, vec4( texcoord, -1.0_f, 1.0_f ) );
 					auto t = writer.declLocale( "t"
 						, vec3( c3d_smaaData.rtMetrics.xy(), 1.0_f ) );
 
-					WHILE( writer, coord.z() < writer.cast< Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
+					WHILE( writer, coord.z() < writer.cast< sdw::Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
 						&& coord.w() > 0.9_f )
 					{
 						coord.xyz() = fma( t, vec3( dir, 1.0_f ), coord.xyz() );
@@ -184,16 +175,16 @@ namespace smaa
 
 					writer.returnStmt( coord.zw() );
 				}
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InVec2{ writer, "texcoord" }
-				, InVec2{ writer, "dir" }
-				, OutVec2{ writer, "e" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec2{ writer, "dir" }
+				, sdw::OutVec2{ writer, "e" } );
 
-			auto SMAASearchDiag2 = writer.implementFunction< Vec2 >( "SMAASearchDiag2"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, Vec2 const & texcoord
-					, Vec2 const & dir
-					, Vec2 e )
+			auto SMAASearchDiag2 = writer.implementFunction< sdw::Vec2 >( "SMAASearchDiag2"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::Vec2 const & texcoord
+					, sdw::Vec2 const & dir
+					, sdw::Vec2 e )
 				{
 					auto coord = writer.declLocale( "coord"
 						, vec4( texcoord, -1.0_f, 1.0_f ) );
@@ -201,7 +192,7 @@ namespace smaa
 					auto t = writer.declLocale( "t"
 						, vec3( c3d_smaaData.rtMetrics.xy(), 1.0_f ) );
 
-					WHILE( writer, coord.z() < writer.cast< Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
+					WHILE( writer, coord.z() < writer.cast< sdw::Float >( c3d_smaaData.maxSearchStepsDiag - 1 )
 						&& coord.w() > 0.9_f )
 					{
 						coord.xyz() = fma( t, vec3( dir, 1.0_f ), coord.xyz() );
@@ -221,20 +212,20 @@ namespace smaa
 
 					writer.returnStmt( coord.zw() );
 				}
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InVec2{ writer, "texcoord" }
-				, InVec2{ writer, "dir" }
-				, OutVec2{ writer, "e" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec2{ writer, "dir" }
+				, sdw::OutVec2{ writer, "e" } );
 
 			/**
 			 * Similar to SMAAArea, this calculates the area corresponding to a certain
 			 * diagonal distance and crossing edges 'e'.
 			 */
-			auto SMAAAreaDiag = writer.implementFunction< Vec2 >( "SMAAAreaDiag"
-				, [&]( CombinedImage2DRgba32 const & areaTex
-					, Vec2 const & dist
-					, Vec2 const & e
-					, Float const & offset )
+			auto SMAAAreaDiag = writer.implementFunction< sdw::Vec2 >( "SMAAAreaDiag"
+				, [&]( sdw::CombinedImage2DRgba32 const & areaTex
+					, sdw::Vec2 const & dist
+					, sdw::Vec2 const & e
+					, sdw::Float const & offset )
 				{
 					auto texcoord = writer.declLocale( "texcoord"
 						, fma( vec2( c3d_smaaData.areaTexMaxDistanceDiag, c3d_smaaData.areaTexMaxDistanceDiag ), e, dist ) );
@@ -251,26 +242,26 @@ namespace smaa
 					// Do it!
 					writer.returnStmt( areaTex.lod( texcoord, 0.0_f ).rg() );
 				}
-				, InCombinedImage2DRgba32{ writer, "areaTex" }
-				, InVec2{ writer, "dist" }
-				, InVec2{ writer, "e" }
-				, InFloat{ writer, "offset" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "areaTex" }
+				, sdw::InVec2{ writer, "dist" }
+				, sdw::InVec2{ writer, "e" }
+				, sdw::InFloat{ writer, "offset" } );
 
 			/**
 			 * This searches for diagonal patterns and returns the corresponding weights.
 			 */
-			auto SMAACalculateDiagWeights = writer.implementFunction< Vec2 >( "SMAACalculateDiagWeights"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, CombinedImage2DRgba32 const & areaTex
-					, Vec2 const & texcoord
-					, Vec2 const & e
-					, Vec4 const & subsampleIndices )
+			auto SMAACalculateDiagWeights = writer.implementFunction< sdw::Vec2 >( "SMAACalculateDiagWeights"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::CombinedImage2DRgba32 const & areaTex
+					, sdw::Vec2 const & texcoord
+					, sdw::Vec2 const & e
+					, sdw::Vec4 const & subsampleIndices )
 				{
 					auto weights = writer.declLocale( "weights"
 						, vec2( 0.0_f, 0.0_f ) );
 
 					// Search for the line ends:
-					auto d = writer.declLocale< Vec4 >( "d"
+					auto d = writer.declLocale< sdw::Vec4 >( "d"
 						, vec4( 0.0_f ) );
 					auto end = writer.declLocale( "end"
 						, vec2( 0.0_f ) );
@@ -296,7 +287,7 @@ namespace smaa
 							, fma( vec4( -d.x() + 0.25_f, d.x(), d.y(), -d.y() - 0.25_f )
 								, c3d_smaaData.rtMetrics.xyxy()
 								, vec4( texcoord.xy(), texcoord.xy() ) ) );
-						auto c = writer.declLocale< Vec4 >( "c" );
+						auto c = writer.declLocale< sdw::Vec4 >( "c" );
 						c.xy() = edgesTex.lod( coords.xy(), 0.0_f, ivec2( -1_i, 0_i ) ).rg();
 						c.zw() = edgesTex.lod( coords.zw(), 0.0_f, ivec2( 1_i, 0_i ) ).rg();
 						c.yxwz() = SMAADecodeDiagBilinearAccess4( c.xyzw() );
@@ -343,7 +334,7 @@ namespace smaa
 							, fma( vec4( -d.x(), -d.x(), d.y(), d.y() )
 								, c3d_smaaData.rtMetrics.xyxy()
 								, vec4( texcoord.xy(), texcoord.xy() ) ) );
-						auto c = writer.declLocale< Vec4 >( "c" );
+						auto c = writer.declLocale< sdw::Vec4 >( "c" );
 						c.x() = edgesTex.lod( coords.xy(), 0.0_f, ivec2( -1_i, 0_i ) ).g();
 						c.y() = edgesTex.lod( coords.xy(), 0.0_f, ivec2( 0_i, -1_i ) ).r();
 						c.zw() = edgesTex.lod( coords.zw(), 0.0_f, ivec2( 1_i, 0_i ) ).gr();
@@ -360,11 +351,11 @@ namespace smaa
 
 					writer.returnStmt( weights );
 				}
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InCombinedImage2DRgba32{ writer, "areaTex" }
-				, InVec2{ writer, "texcoord" }
-				, InVec2{ writer, "e" }
-				, InVec4{ writer, "subsampleIndices" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "areaTex" }
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec2{ writer, "e" }
+				, sdw::InVec4{ writer, "subsampleIndices" } );
 
 			//-----------------------------------------------------------------------------
 			// Horizontal/Vertical Search Functions
@@ -375,10 +366,10 @@ namespace smaa
 			 * @PSEUDO_GATHER4), and adds 0, 1 or 2, depending on which edges and
 			 * crossing edges are active.
 			 */
-			auto SMAASearchLength = writer.implementFunction< Float >( "SMAASearchLength"
-				, [&]( CombinedImage2DRgba32 const & searchTex
-					, Vec2 const & e
-					, Float const & offset )
+			auto SMAASearchLength = writer.implementFunction< sdw::Float >( "SMAASearchLength"
+				, [&]( sdw::CombinedImage2DRgba32 const & searchTex
+					, sdw::Vec2 const & e
+					, sdw::Float const & offset )
 				{
 					// The texture is flipped vertically, with left and right cases taking half
 					// of the space horizontally:
@@ -399,18 +390,18 @@ namespace smaa
 					// Lookup the search texture:
 					writer.returnStmt( searchTex.lod( fma( scale, e, bias ), 0.0_f ).r() );
 				}
-				, InCombinedImage2DRgba32{ writer, "searchTex" }
-				, InVec2{ writer, "e" }
-				, InFloat{ writer, "offset" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "searchTex" }
+				, sdw::InVec2{ writer, "e" }
+				, sdw::InFloat{ writer, "offset" } );
 
 			/**
 			 * Horizontal/vertical search functions for the 2nd pass.
 			 */
-			auto SMAASearchXLeft = writer.implementFunction< Float >( "SMAASearchXLeft"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, CombinedImage2DRgba32 const & searchTex
-					, Vec2 texcoord
-					, Float end )
+			auto SMAASearchXLeft = writer.implementFunction< sdw::Float >( "SMAASearchXLeft"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::CombinedImage2DRgba32 const & searchTex
+					, sdw::Vec2 texcoord
+					, sdw::Float end )
 				{
 					/**
 					 * @PSEUDO_GATHER4
@@ -447,16 +438,16 @@ namespace smaa
 					// texcoord.x -= SMAA_RT_METRICS.x * (255.0 / 127.0) * SMAASearchLength(searchTex, e, 0.0);
 					// return fma(SMAA_RT_METRICS.x, offset, texcoord.x);
 				}
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InCombinedImage2DRgba32{ writer, "searchTex" }
-				, PVec2{ writer, "texcoord" }
-				, PFloat{ writer, "end" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "searchTex" }
+				, sdw::PVec2{ writer, "texcoord" }
+				, sdw::PFloat{ writer, "end" } );
 
-			auto SMAASearchXRight = writer.implementFunction< Float >( "SMAASearchXRight"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, CombinedImage2DRgba32 const & searchTex
-					, Vec2 texcoord
-					, Float end )
+			auto SMAASearchXRight = writer.implementFunction< sdw::Float >( "SMAASearchXRight"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::CombinedImage2DRgba32 const & searchTex
+					, sdw::Vec2 texcoord
+					, sdw::Float end )
 				 {
 					 auto e = writer.declLocale( "e"
 						 , vec2( 0.0_f, 1.0_f ) );
@@ -473,16 +464,16 @@ namespace smaa
 						 , fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e, 0.5_f ), 3.25_f ) );
 					 writer.returnStmt( fma( -c3d_smaaData.rtMetrics.x(), offset, texcoord.x() ) );
 				 }
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InCombinedImage2DRgba32{ writer, "searchTex" }
-				, PVec2{ writer, "texcoord" }
-				, PFloat{ writer, "end" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "searchTex" }
+				, sdw::PVec2{ writer, "texcoord" }
+				, sdw::PFloat{ writer, "end" } );
 
-			auto SMAASearchYUp = writer.implementFunction< Float >( "SMAASearchYUp"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, CombinedImage2DRgba32 const & searchTex
-					, Vec2 texcoord
-					, Float end )
+			auto SMAASearchYUp = writer.implementFunction< sdw::Float >( "SMAASearchYUp"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::CombinedImage2DRgba32 const & searchTex
+					, sdw::Vec2 texcoord
+					, sdw::Float end )
 				{
 					auto e = writer.declLocale( "e"
 						 , vec2( 1.0_f, 0.0_f ) );
@@ -499,16 +490,16 @@ namespace smaa
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.0_f ), 3.25_f ) );
 					writer.returnStmt( fma( c3d_smaaData.rtMetrics.y(), offset, texcoord.y() ) );
 				}
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InCombinedImage2DRgba32{ writer, "searchTex" }
-				, PVec2{ writer, "texcoord" }
-				, PFloat{ writer, "end" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "searchTex" }
+				, sdw::PVec2{ writer, "texcoord" }
+				, sdw::PFloat{ writer, "end" } );
 
-			auto SMAASearchYDown = writer.implementFunction< Float >( "SMAASearchYDown"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, CombinedImage2DRgba32 const & searchTex
-					, Vec2 texcoord
-					, Float end )
+			auto SMAASearchYDown = writer.implementFunction< sdw::Float >( "SMAASearchYDown"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::CombinedImage2DRgba32 const & searchTex
+					, sdw::Vec2 texcoord
+					, sdw::Float end )
 				{
 					auto e = writer.declLocale( "e"
 						 , vec2( 1.0_f, 0.0_f ) );
@@ -525,21 +516,21 @@ namespace smaa
 						, fma( -( 255.0_f / 127.0_f ), SMAASearchLength( searchTex, e.gr(), 0.5_f ), 3.25_f ) );
 					writer.returnStmt( fma( -c3d_smaaData.rtMetrics.y(), offset, texcoord.y() ) );
 				}
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InCombinedImage2DRgba32{ writer, "searchTex" }
-				, PVec2{ writer, "texcoord" }
-				, PFloat{ writer, "end" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "searchTex" }
+				, sdw::PVec2{ writer, "texcoord" }
+				, sdw::PFloat{ writer, "end" } );
 
 			 /**
 			  * Ok, we have the distance and both crossing edges. So, what are the areas
 			  * at each side of current edge?
 			  */
-			auto SMAAArea = writer.implementFunction< Vec2 >( "SMAAArea"
-				, [&]( CombinedImage2DRgba32 const & areaTex
-					, Vec2 const & dist
-					, Float const & e1
-					, Float const & e2
-					, Float const & offset )
+			auto SMAAArea = writer.implementFunction< sdw::Vec2 >( "SMAAArea"
+				, [&]( sdw::CombinedImage2DRgba32 const & areaTex
+					, sdw::Vec2 const & dist
+					, sdw::Float const & e1
+					, sdw::Float const & e2
+					, sdw::Float const & offset )
 				{
 					// Rounding prevents precision errors of bilinear filtering:
 					auto texcoord = writer.declLocale( "texcoord"
@@ -554,20 +545,20 @@ namespace smaa
 					// Do it!
 					writer.returnStmt( areaTex.lod( texcoord, 0.0_f ).rg() );
 				}
-				, InCombinedImage2DRgba32{ writer, "areaTex" }
-				, InVec2{ writer, "dist" }
-				, InFloat{ writer, "e1" }
-				, InFloat{ writer, "e2" }
-				, InFloat{ writer, "offset" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "areaTex" }
+				, sdw::InVec2{ writer, "dist" }
+				, sdw::InFloat{ writer, "e1" }
+				, sdw::InFloat{ writer, "e2" }
+				, sdw::InFloat{ writer, "offset" } );
 
 			//-----------------------------------------------------------------------------
 			// Corner Detection Functions
 
-			auto SMAADetectHorizontalCornerPattern = writer.implementFunction< Void >( "SMAADetectHorizontalCornerPattern"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, Vec2 weights
-					, Vec4 const & texcoord
-					, Vec2 const & d )
+			auto SMAADetectHorizontalCornerPattern = writer.implementFunction< sdw::Void >( "SMAADetectHorizontalCornerPattern"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::Vec2 weights
+					, sdw::Vec4 const & texcoord
+					, sdw::Vec2 const & d )
 				{
 					IF( writer, c3d_smaaData.disableCornerDetection == 0 )
 					{
@@ -589,16 +580,16 @@ namespace smaa
 					}
 					FI;
 				}
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InOutVec2{ writer, "weights" }
-				, InVec4{ writer, "texcoord" }
-				, InVec2{ writer, "d" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InOutVec2{ writer, "weights" }
+				, sdw::InVec4{ writer, "texcoord" }
+				, sdw::InVec2{ writer, "d" } );
 
-			auto SMAADetectVerticalCornerPattern = writer.implementFunction< Void >( "SMAADetectVerticalCornerPattern"
-				, [&]( CombinedImage2DRgba32 const & edgesTex
-					, Vec2 weights
-					, Vec4 const & texcoord
-					, Vec2 const & d )
+			auto SMAADetectVerticalCornerPattern = writer.implementFunction< sdw::Void >( "SMAADetectVerticalCornerPattern"
+				, [&]( sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::Vec2 weights
+					, sdw::Vec4 const & texcoord
+					, sdw::Vec2 const & d )
 				{
 					IF( writer, c3d_smaaData.disableCornerDetection == 0 )
 					{
@@ -620,19 +611,19 @@ namespace smaa
 					}
 					FI;
 				}
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InOutVec2{ writer, "weights" }
-				, InVec4{ writer, "texcoord" }
-				, InVec2{ writer, "d" } );
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InOutVec2{ writer, "weights" }
+				, sdw::InVec4{ writer, "texcoord" }
+				, sdw::InVec2{ writer, "d" } );
 
-			auto SMAABlendingWeightCalculationPS = writer.implementFunction< Vec4 >( "SMAABlendingWeightCalculationPS"
-				, [&]( Vec2 const & texcoord
-					, Vec2 const & pixcoord
-					, Array< Vec4 > const & offset
-					, CombinedImage2DRgba32 const & edgesTex
-					, CombinedImage2DRgba32 const & areaTex
-					, CombinedImage2DRgba32 const & searchTex
-					, Vec4 const & subsampleIndices )
+			auto SMAABlendingWeightCalculationPS = writer.implementFunction< sdw::Vec4 >( "SMAABlendingWeightCalculationPS"
+				, [&]( sdw::Vec2 const & texcoord
+					, sdw::Vec2 const & pixcoord
+					, sdw::Vec4Array const & offset
+					, sdw::CombinedImage2DRgba32 const & edgesTex
+					, sdw::CombinedImage2DRgba32 const & areaTex
+					, sdw::CombinedImage2DRgba32 const & searchTex
+					, sdw::Vec4 const & subsampleIndices )
 				{ // Just pass zero for SMAA 1x, see @SUBSAMPLE_INDICES.
 					auto weights = writer.declLocale( "weights"
 						, vec4( 0.0_f, 0.0_f, 0.0_f, 0.0_f ) );
@@ -651,10 +642,10 @@ namespace smaa
 							// horizontal/vertical processing.
 							IF( writer, weights.r() == -weights.g() )
 							{ // weights.r + weights.g == 0.0
-								auto d = writer.declLocale< Vec2 >( "d" );
+								auto d = writer.declLocale< sdw::Vec2 >( "d" );
 
 								// Find the distance to the left:
-								auto coords = writer.declLocale< Vec3 >( "coords" );
+								auto coords = writer.declLocale< sdw::Vec3 >( "coords" );
 								coords.x() = SMAASearchXLeft( edgesTex, searchTex, offset[0].xy(), offset[2].x() );
 								coords.y() = offset[1].y(); // offset[1].y() = texcoord.y() - 0.25 * c3d_smaaData.rtMetrics.y() (@CROSSING_OFFSET)
 								d.x() = coords.x();
@@ -698,10 +689,10 @@ namespace smaa
 						}
 						ELSE
 						{
-							auto d = writer.declLocale< Vec2 >( "d" );
+							auto d = writer.declLocale< sdw::Vec2 >( "d" );
 
 							// Find the distance to the left:
-							auto coords = writer.declLocale< Vec3 >( "coords" );
+							auto coords = writer.declLocale< sdw::Vec3 >( "coords" );
 							coords.x() = SMAASearchXLeft( edgesTex, searchTex, offset[0].xy(), offset[2].x() );
 							coords.y() = offset[1].y(); // offset[1].y() = texcoord.y() - 0.25 * c3d_smaaData.rtMetrics.y() (@CROSSING_OFFSET)
 							d.x() = coords.x();
@@ -743,10 +734,10 @@ namespace smaa
 
 					IF( writer, e.r() > 0.0_f )
 					{ // Edge at west
-						auto d = writer.declLocale< Vec2 >( "d" );
+						auto d = writer.declLocale< sdw::Vec2 >( "d" );
 
 						// Find the distance to the top:
-						auto coords = writer.declLocale< Vec3 >( "coords" );
+						auto coords = writer.declLocale< sdw::Vec3 >( "coords" );
 						coords.y() = SMAASearchYUp( edgesTex, searchTex, offset[1].xy(), offset[2].z() );
 						coords.x() = offset[0].x(); // offset[1].x() = texcoord.x() - 0.25 * c3d_smaaData.rtMetrics.x();
 						d.x() = coords.y();
@@ -782,20 +773,31 @@ namespace smaa
 
 					writer.returnStmt( weights );
 				}
-				, InVec2{ writer, "texcoord" }
-				, InVec2{ writer, "pixcoord" }
-				, InVec4Array{ writer, "offset", 3u }
-				, InCombinedImage2DRgba32{ writer, "edgesTex" }
-				, InCombinedImage2DRgba32{ writer, "areaTex" }
-				, InCombinedImage2DRgba32{ writer, "searchTex" }
-				, InVec4{ writer, "subsampleIndices" } );
+				, sdw::InVec2{ writer, "texcoord" }
+				, sdw::InVec2{ writer, "pixcoord" }
+				, sdw::InVec4Array{ writer, "offset", 3u }
+				, sdw::InCombinedImage2DRgba32{ writer, "edgesTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "areaTex" }
+				, sdw::InCombinedImage2DRgba32{ writer, "searchTex" }
+				, sdw::InVec4{ writer, "subsampleIndices" } );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::PosUv2FT, VertexT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< VertexT > out )
 				{
-					outColour = SMAABlendingWeightCalculationPS( vtx_texture
-						, vtx_pixcoord
-						, vtx_offset
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+					out.texcoord() = in.uv();
+					out.offset()[0] = vec4( 0.0_f );
+					out.offset()[1] = vec4( 0.0_f );
+					out.offset()[2] = vec4( 0.0_f );
+					SMAABlendingWeightCalculationVS( out.texcoord(), out.pixcoord(), out.offset() );
+				} );
+
+			writer.implementEntryPointT< VertexT, c3d::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
+				{
+					out.colour() = SMAABlendingWeightCalculationPS( in.texcoord()
+						, in.pixcoord()
+						, in.offset()
 						, c3d_edgesTex
 						, c3d_areaTex
 						, c3d_searchTex
@@ -889,10 +891,8 @@ namespace smaa
 			, ( VK_IMAGE_USAGE_SAMPLED_BIT
 				| VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 				| VK_IMAGE_USAGE_TRANSFER_SRC_BIT ) }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationVP( device ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaBlendingWeight", bwcalc::doBlendingWeightCalculationFP( device ) }
-		, m_stages{ makeShaderState( m_device, m_vertexShader )
-			, makeShaderState( m_device, m_pixelShader ) }
+		, m_shader{ "SmaaBlendingWeight", bwcalc::getProgram( device ) }
+		, m_stages{ makeProgramStates( m_device, m_shader ) }
 		, m_pass{ m_graph.createPass( "BlendingWeight"
 			, [this, &device, enabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
@@ -954,8 +954,7 @@ namespace smaa
 
 	void BlendingWeightCalculation::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
-		visitor.visit( m_vertexShader );
-		visitor.visit( m_pixelShader );
+		visitor.visit( m_shader );
 		visitor.visit( "SMAA BlendingWeight Result"
 			, m_result
 			, m_graph.getFinalLayoutState( m_result.sampledViewId ).layout

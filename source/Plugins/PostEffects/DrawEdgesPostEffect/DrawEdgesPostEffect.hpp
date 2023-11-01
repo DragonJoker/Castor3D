@@ -73,8 +73,7 @@ namespace draw_edges
 		static const castor::String ObjectWidth;
 
 	private:
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		ashes::PipelineShaderStageCreateInfoArray m_stages;
 		std::unique_ptr< DepthNormalEdgeDetection > m_depthNormal;
 		std::unique_ptr< ObjectIDEdgeDetection > m_objectID;

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_LoadingScreen_H___
@@ -192,8 +192,7 @@ namespace castor3d
 		private:
 			VkExtent2D m_renderSize;
 			VkRenderPass m_renderPass{};
-			ShaderModule m_vertexShader;
-			ShaderModule m_pixelShader;
+			ProgramModule m_shader;
 			ashes::PipelineShaderStageCreateInfoArray m_stages;
 			crg::RenderQuadHolder m_renderQuad;
 			VkFramebuffer m_framebuffer{};

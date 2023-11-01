@@ -5,11 +5,14 @@ See LICENSE file in root folder
 #define ___C3DAS_AtmosphereScatteringPrerequisites_H___
 
 #include <Castor3D/Castor3DModule.hpp>
+#include <Castor3D/Shader/Shaders/SdwModule.hpp>
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <RenderGraph/FrameGraphPrerequisites.hpp>
 
 namespace atmosphere_scattering
 {
+	namespace c3d = castor3d::shader;
+
 	class AtmosphereBackground;
 	class AtmosphereBackgroundModel;
 	class AtmosphereScatteringUbo;

@@ -50,6 +50,7 @@
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <ashespp/RenderPass/RenderPassCreateInfo.hpp>
 
@@ -127,32 +128,81 @@ namespace castor3d
 		template< bool ComputeT >
 		struct ShaderWriter;
 
+		static uint32_t constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
+		static uint32_t constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
+		using ShadeFunc = sdw::Function< sdw::Boolean
+			, sdw::InIVec2
+			, sdw::InUInt
+			, sdw::InUInt
+			, sdw::InUInt
+			, sdw::OutVec4
+			, sdw::InOutVec4
+			, sdw::OutVec4 >;
+
 		template<>
 		struct ShaderWriter< false >
 		{
-			using Type = sdw::FragmentWriter;
+			using Type = sdw::TraditionalGraphicsWriter;
 
-			static castor3d::ShaderPtr getVertexProgram( Engine & engine )
+			static void implementMain( Type & writer
+				, PipelineFlags const & flags
+				, bool isDeferredLighting
+				, bool outputScattering
+				, uint32_t stride
+				, sdw::RUImage2DRg32 c3d_imgData
+				, sdw::RWImage2DRgba32 c3d_imgDiffuse
+				, sdw::UInt pipelineId
+				, sdw::UInt billboardNodeId
+				, ShadeFunc const & shade )
 			{
-				sdw::VertexWriter writer{ &engine.getShaderAllocator() };
+				uint32_t idx = 0u;
+				auto c3d_imgOutResult = writer.declOutput< sdw::Vec4 >( "c3d_imgOutResult", sdw::EntryPoint::eFragment, idx++ );
+				auto c3d_imgOutScattering = writer.declOutput< sdw::Vec4 >( "c3d_imgOutScattering", sdw::EntryPoint::eFragment, idx++, outputScattering );
 
-				writer.implementMain( [&]( sdw::VertexIn in
+				writer.implementEntryPoint( [&]( sdw::VertexIn in
 					, sdw::VertexOut out )
 					{
 						auto position = writer.declLocale( "position"
 							, vec2( ( in.vertexIndex << 1 ) & 2, in.vertexIndex & 2 ) );
 						out.vtx.position = vec4( position * 2.0_f - 1.0_f, 0.0_f, 1.0_f );
 					} );
-				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-			}
 
-			template< typename FuncT >
-			static void implementMain( Type & writer, FuncT func )
-			{
-				writer.implementMain( [&]( sdw::FragmentIn in
+				writer.implementEntryPoint( [&]( sdw::FragmentIn in
 					, sdw::FragmentOut out )
 					{
-						func( ivec2( in.fragCoord.xy() ) );
+						auto pos = ivec2( in.fragCoord.xy() );
+						auto indata = writer.declLocale( "indata"
+							, c3d_imgData.load( pos ) );
+						auto nodePipelineId = writer.declLocale( "nodePipelineId"
+							, indata.x() );
+						auto nodeId = writer.declLocale( "nodeId"
+							, nodePipelineId >> maxPipelinesSize );
+						auto pipeline = writer.declLocale( "pipeline"
+							, nodePipelineId & maxPipelinesMask );
+						auto primitiveId = writer.declLocale( "primitiveId"
+							, indata.y() );
+						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
+						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
+						auto diffuse = writer.declLocale( "diffuse"
+							, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
+								? c3d_imgDiffuse.load( pos )
+								: vec4( 0.0_f ) ) );
+
+						IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
+							|| !shade( pos, nodeId, pipeline, primitiveId, result, diffuse, scattering ) )
+						{
+							writer.demote();
+						}
+						FI;
+
+						c3d_imgOutResult = result;
+						c3d_imgOutScattering = scattering;
+
+						if ( flags.components.hasDeferredDiffuseLightingFlag
+							&& !isDeferredLighting )
+						{
+							c3d_imgDiffuse.store( pos, diffuse );
+						}
 					} );
 			}
 		};
@@ -162,13 +212,78 @@ namespace castor3d
 		{
 			using Type = sdw::ComputeWriter;
 
-			template< typename FuncT >
-			static void implementMain( Type & writer, FuncT func )
+			static void implementMain( Type & writer
+				, PipelineFlags const & flags
+				, bool isDeferredLighting
+				, bool outputScattering
+				, uint32_t stride
+				, sdw::RUImage2DRg32 c3d_imgData
+				, sdw::RWImage2DRgba32 c3d_imgDiffuse
+				, sdw::UInt pipelineId
+				, sdw::UInt billboardNodeId
+				, ShadeFunc const & shade )
 			{
-				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 64u, 1u, 1u }
+				auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", InOutBindings::eMaterialsCounts, Sets::eInOuts );
+				auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
+				MaterialsCounts.end();
+
+				auto MaterialsStarts = writer.declStorageBuffer<>( "MaterialsStarts", InOutBindings::eMaterialsStarts, Sets::eInOuts );
+				auto materialsStarts = MaterialsStarts.declMemberArray< sdw::UInt >( "materialsStarts" );
+				MaterialsStarts.end();
+
+				auto PixelsXY = writer.declStorageBuffer<>( "PixelsXY", InOutBindings::ePixelsXY, Sets::eInOuts );
+				auto pixelsXY = PixelsXY.declMemberArray< sdw::UVec2 >( "pixelsXY" );
+				PixelsXY.end();
+
+				auto c3d_imgOutResult = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutResult", uint32_t( InOutBindings::eOutResult ), Sets::eInOuts );
+				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
+
+				writer.implementMainT< sdw::VoidT >( sdw::ComputeIn{ writer, 16u, 4u, 1u }
 					, [&]( sdw::ComputeIn in )
 					{
-						func( in.globalInvocationID.xy() );
+						auto pos = in.globalInvocationID.xy();
+						auto index = pos.y() * ( in.numWorkGroups.x() * in.workGroupSize.x() ) + pos.x();
+						auto materialsStart = writer.declLocale( "materialsStart"
+							, materialsStarts[pipelineId] );
+
+						IF( writer, index < materialsCounts[pipelineId] )
+						{
+							auto pixelIndex = writer.declLocale( "pixelIndex"
+								, materialsStart + pos.x() );
+							auto pixel = writer.declLocale( "pixel"
+								, pixelsXY[pixelIndex] );
+							auto ipixel = writer.declLocale( "ipixel"
+								, ivec2( pixel ) );
+							auto indata = writer.declLocale( "indata"
+								, c3d_imgData.load( ipixel ) );
+							auto nodePipelineId = writer.declLocale( "nodePipelineId"
+								, indata.x() );
+							auto nodeId = writer.declLocale( "nodeId"
+								, nodePipelineId >> maxPipelinesSize );
+							auto primitiveId = writer.declLocale( "primitiveId"
+								, indata.y() );
+							auto result = writer.declLocale( "result", vec4( 0.0_f ) );
+							auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
+							auto diffuse = writer.declLocale( "diffuse"
+								, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
+									? c3d_imgDiffuse.load( ipixel )
+									: vec4( 0.0_f ) ) );
+
+							IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
+								&& shade( ipixel, nodeId, pipelineId, primitiveId, result, diffuse, scattering ) )
+							{
+								c3d_imgOutResult.store( ipixel, result );
+								c3d_imgOutScattering.store( ipixel, scattering );
+
+								if ( flags.components.hasDeferredDiffuseLightingFlag
+									&& !isDeferredLighting )
+								{
+									c3d_imgDiffuse.store( ipixel, diffuse );
+								}
+							}
+							FI;
+						}
+						FI;
 					} );
 			}
 		};
@@ -1022,9 +1137,6 @@ namespace castor3d
 				, Sets::eInOuts
 				, &clustersConfig };
 
-			auto constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
-			auto constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
-
 			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps", TexBindings::eTextures, Sets::eTex ) );
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
@@ -1353,112 +1465,16 @@ namespace castor3d
 				, sdw::InOutVec4{ writer, "inoutDiffuse" }
 				, sdw::OutVec4{ writer, "outScattering" } );
 
-			if constexpr ( VisibilityResolvePass::useCompute )
-			{
-				auto MaterialsCounts = writer.declStorageBuffer<>( "MaterialsCounts", InOutBindings::eMaterialsCounts, Sets::eInOuts );
-				auto materialsCounts = MaterialsCounts.declMemberArray< sdw::UInt >( "materialsCounts" );
-				MaterialsCounts.end();
-
-				auto MaterialsStarts = writer.declStorageBuffer<>( "MaterialsStarts", InOutBindings::eMaterialsStarts, Sets::eInOuts );
-				auto materialsStarts = MaterialsStarts.declMemberArray< sdw::UInt >( "materialsStarts" );
-				MaterialsStarts.end();
-
-				auto PixelsXY = writer.declStorageBuffer<>( "PixelsXY", InOutBindings::ePixelsXY, Sets::eInOuts );
-				auto pixelsXY = PixelsXY.declMemberArray< sdw::UVec2 >( "pixelsXY" );
-				PixelsXY.end();
-
-				auto c3d_imgOutResult = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutResult", uint32_t( InOutBindings::eOutResult ), Sets::eInOuts );
-				auto c3d_imgOutScattering = writer.declStorageImg< sdw::WImage2DRgba32 >( "c3d_imgOutScattering", uint32_t( InOutBindings::eOutScattering ), Sets::eInOuts, outputScattering );
-
-				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
-					, [&]( sdw::UVec2 const & pos )
-					{
-						auto materialsStart = writer.declLocale( "materialsStart"
-							, materialsStarts[pipelineId] );
-
-						IF( writer, pos.x() < materialsCounts[pipelineId] )
-						{
-							auto pixelIndex = writer.declLocale( "pixelIndex"
-								, materialsStart + pos.x() );
-							auto pixel = writer.declLocale( "pixel"
-								, pixelsXY[pixelIndex] );
-							auto ipixel = writer.declLocale( "ipixel"
-								, ivec2( pixel ) );
-							auto indata = writer.declLocale( "indata"
-								, c3d_imgData.load( ipixel ) );
-							auto nodePipelineId = writer.declLocale( "nodePipelineId"
-								, indata.x() );
-							auto nodeId = writer.declLocale( "nodeId"
-								, nodePipelineId >> maxPipelinesSize );
-							auto primitiveId = writer.declLocale( "primitiveId"
-								, indata.y() );
-							auto result = writer.declLocale( "result", vec4( 0.0_f ) );
-							auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
-							auto diffuse = writer.declLocale( "diffuse"
-								, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
-									? c3d_imgDiffuse.load( ipixel )
-									: vec4( 0.0_f ) ) );
-
-							IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
-								&& shade( ipixel, nodeId, pipelineId, primitiveId, result, diffuse, scattering ) )
-							{
-								c3d_imgOutResult.store( ipixel, result );
-								c3d_imgOutScattering.store( ipixel, scattering );
-
-								if ( flags.components.hasDeferredDiffuseLightingFlag
-									&& !isDeferredLighting )
-								{
-									c3d_imgDiffuse.store( ipixel, diffuse );
-								}
-							}
-							FI;
-						}
-						FI;
-					} );
-			}
-			else
-			{
-				uint32_t idx = 0u;
-				auto c3d_imgOutResult = writer.declOutput< sdw::Vec4 >( "c3d_imgOutResult", idx++ );
-				auto c3d_imgOutScattering = writer.declOutput< sdw::Vec4 >( "c3d_imgOutScattering", idx++, outputScattering );
-
-				ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
-					, [&]( sdw::IVec2 const & pos )
-					{
-						auto indata = writer.declLocale( "indata"
-							, c3d_imgData.load( pos ) );
-						auto nodePipelineId = writer.declLocale( "nodePipelineId"
-							, indata.x() );
-						auto nodeId = writer.declLocale( "nodeId"
-							, nodePipelineId >> maxPipelinesSize );
-						auto pipeline = writer.declLocale( "pipeline"
-							, nodePipelineId & maxPipelinesMask );
-						auto primitiveId = writer.declLocale( "primitiveId"
-							, indata.y() );
-						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
-						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
-						auto diffuse = writer.declLocale( "diffuse"
-							, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
-								? c3d_imgDiffuse.load( pos )
-								: vec4( 0.0_f ) ) );
-
-						IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
-							|| !shade( pos, nodeId, pipeline, primitiveId, result, diffuse, scattering ) )
-						{
-							writer.demote();
-						}
-						FI;
-
-						c3d_imgOutResult = result;
-						c3d_imgOutScattering = scattering;
-
-						if ( flags.components.hasDeferredDiffuseLightingFlag
-							&& !isDeferredLighting )
-						{
-							c3d_imgDiffuse.store( pos, diffuse );
-						}
-					} );
-			}
+			ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
+				, flags
+				, isDeferredLighting
+				, outputScattering
+				, stride
+				, c3d_imgData
+				, c3d_imgDiffuse
+				, pipelineId
+				, billboardNodeId
+				, shade );
 
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 		}
@@ -2109,11 +2125,6 @@ namespace castor3d
 		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }
 		, m_parallaxOcclusionFilter{ renderPassDesc.m_parallaxOcclusionFilter }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT
-			, getName()
-			, ( useCompute
-				? nullptr
-				: visres::ShaderWriter< false >::getVertexProgram( *getEngine() ) ) }
 		, m_firstRenderPass{ ( useCompute
 			? nullptr
 			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
@@ -2652,28 +2663,26 @@ namespace castor3d
 				, { *result->ioDescriptorLayout, *result->vtxDescriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
-			result->shaders[0].shader = ShaderModule{ stageBit
-				, getName()
+			result->shaders[0].shader = ProgramModule{ getName()
 				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter, areDebugTargetsEnabled() ) };
-			result->shaders[1].shader = ShaderModule{ stageBit
-				, getName()
+			result->shaders[1].shader = ProgramModule{ getName()
 				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter, areDebugTargetsEnabled() ) };
 
 			if constexpr ( useCompute )
 			{
-				ashes::PipelineShaderStageCreateInfo stage{ makeShaderState( m_device, result->shaders[0].shader ) };
+				auto stages{ makeProgramStates( m_device, result->shaders[0].shader ) };
 				result->shaders[0].pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
-					, std::move( stage )
+					, std::move( stages.front() )
 					, *result->pipelineLayout } );
-				stage = makeShaderState( m_device, result->shaders[1].shader );
+
+				stages = makeProgramStates( m_device, result->shaders[1].shader );
 				result->shaders[1].pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
-					, std::move( stage )
+					, std::move( stages.front() )
 					, *result->pipelineLayout } );
 			}
 			else
 			{
-				ashes::PipelineShaderStageCreateInfoArray stages{ makeShaderState( m_device, m_vertexShader ) };
-				stages.push_back( makeShaderState( m_device, result->shaders[0].shader ) );
+				auto stages = makeProgramStates( m_device, result->shaders[0].shader );
 				result->shaders[0].pipeline = visres::createPipeline( m_device
 					, extent
 					, std::move( stages )
@@ -2682,8 +2691,8 @@ namespace castor3d
 					, m_targetImage
 					, m_outputScattering ? &getTechnique().getScattering() : nullptr
 					, false );
-				stages.push_back( makeShaderState( m_device, m_vertexShader ) );
-				stages.push_back( makeShaderState( m_device, result->shaders[1].shader ) );
+
+				stages = makeProgramStates( m_device, result->shaders[1].shader );
 				result->shaders[1].pipeline = visres::createPipeline( m_device
 					, extent
 					, std::move( stages )

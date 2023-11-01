@@ -38,6 +38,7 @@ See LICENSE file in root folder
 #include <RenderGraph/RecordContext.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( castor3d, OverlayRenderer )
 
@@ -841,16 +842,31 @@ namespace castor3d
 		, bool borderOverlay
 		, bool textOverlay )
 	{
-		using namespace sdw;
-		using namespace shader;
 		auto & engine = *device.renderSystem.getEngine();
 		bool hasTexture = texturesFlags.configCount != 0u;
-
-		// Vertex shader
-		ShaderModule vtx{ VK_SHADER_STAGE_VERTEX_BIT, "Overlay" };
+		ProgramModule module{ "Overlay" };
 		{
-			VertexWriter writer{ &engine.getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 
+			shader::Utils utils{ writer };
+			shader::PassShaders passShaders{ engine.getPassComponentsRegister()
+				, texturesFlags
+				, ( ComponentModeFlag::eOpacity
+					| ComponentModeFlag::eColour )
+				, utils
+				, true };
+			shader::Materials materials{ writer
+				, passShaders
+				, uint32_t( OverlayBindingId::eMaterials )
+				, 0u };
+			shader::TextureConfigurations textureConfigs{ writer
+				, uint32_t( OverlayBindingId::eTexConfigs )
+				, 0u
+				, hasTexture };
+			shader::TextureAnimations textureAnims{ writer
+				, uint32_t( OverlayBindingId::eTexAnims )
+				, 0u
+				, hasTexture };
 			C3D_Camera( writer
 				, OverlayBindingId::eCamera
 				, 0u );
@@ -865,15 +881,26 @@ namespace castor3d
 				, 0u
 				, textOverlay
 				, true  /* hasTextures */ );
+			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
+				, 0u
+				, 1u
+				, hasTexture ) );
+			auto c3d_mapText = writer.declCombinedImg< FImg2DR32 >( "c3d_mapText"
+				, 0u
+				, 2u
+				, textOverlay );
+
+			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0 );
 
 			sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 			auto pipelineBaseIndex = pcb.declMember< sdw::UInt >( "pipelineBaseIndex" );
 			pcb.end();
 
-			writer.implementMainT< sdw::VoidT, shader::OverlaySurfaceT >( sdw::VertexIn{ writer }
-				, VertexOutT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
+			// Vertex shader
+			writer.implementEntryPointT< sdw::VoidT, shader::OverlaySurfaceT >( sdw::VertexIn{ writer }
+				, sdw::VertexOutT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
 				, [&]( sdw::VertexIn in
-					, VertexOutT< shader::OverlaySurfaceT > out )
+					, sdw::VertexOutT< shader::OverlaySurfaceT > out )
 				{
 					auto overlaySubID = writer.declLocale( "overlaySubID"
 						, pipelineBaseIndex + ( writer.cast< sdw::UInt >( in.drawID ) ) );
@@ -903,51 +930,11 @@ namespace castor3d
 					out.materialId = overlay.materialId();
 				} );
 
-			vtx.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		// Pixel shader
-		ShaderModule pxl{ VK_SHADER_STAGE_FRAGMENT_BIT, "Overlay" };
-		{
-			FragmentWriter writer{ &engine.getShaderAllocator() };
-
-			shader::Utils utils{ writer };
-			shader::PassShaders passShaders{ engine.getPassComponentsRegister()
-				, texturesFlags
-				, ( ComponentModeFlag::eOpacity
-					| ComponentModeFlag::eColour )
-				, utils
-				, true };
-			shader::Materials materials{ writer
-				, passShaders
-				, uint32_t( OverlayBindingId::eMaterials )
-				, 0u };
-			shader::TextureConfigurations textureConfigs{ writer
-				, uint32_t( OverlayBindingId::eTexConfigs )
-				, 0u
-				, hasTexture };
-			shader::TextureAnimations textureAnims{ writer
-				, uint32_t( OverlayBindingId::eTexAnims )
-				, 0u
-				, hasTexture };
-
-			auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
-				, 0u
-				, 1u
-				, hasTexture ) );
-
-			auto c3d_mapText = writer.declCombinedImg< FImg2DR32 >( "c3d_mapText"
-				, 0u
-				, 2u
-				, textOverlay );
-
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0 );
-
-			writer.implementMainT< shader::OverlaySurfaceT, VoidT >( FragmentInT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
-				, FragmentOut{ writer }
-					, [&]( FragmentInT< shader::OverlaySurfaceT > in
-						, FragmentOut out )
+			// Pixel shader
+			writer.implementEntryPointT< shader::OverlaySurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::OverlaySurfaceT >{ writer, false, textOverlay, hasTexture, true }
+				, sdw::FragmentOut{ writer }
+					, [&]( sdw::FragmentInT< shader::OverlaySurfaceT > in
+						, sdw::FragmentOut out )
 				{
 					auto material = writer.declLocale( "material"
 						, materials.getMaterial( in.materialId ) );
@@ -975,14 +962,9 @@ namespace castor3d
 					outColour = vec4( outComponents.colour, outComponents.opacity );
 				} );
 
-			pxl.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			module.shader = std::make_unique< sdw::Shader >( std::move( writer.getShader() ) );
 		}
-
-		return ashes::PipelineShaderStageCreateInfoArray
-		{
-			makeShaderState( device, vtx ),
-			makeShaderState( device, pxl ),
-		};
+		return makeProgramStates( device, module );
 	}
 
 	//*********************************************************************************************

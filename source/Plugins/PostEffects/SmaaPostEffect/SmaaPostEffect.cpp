@@ -10,8 +10,8 @@
 #include <Castor3D/Render/RenderSystem.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderTechnique.hpp>
-#include <Castor3D/Shader/GlslToSpv.hpp>
 #include <Castor3D/Shader/Program.hpp>
+#include <Castor3D/Shader/Shaders/GlslBaseIO.hpp>
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 #include <CastorUtils/Graphics/RgbaColour.hpp>
@@ -19,6 +19,7 @@
 #include <ashespp/Buffer/UniformBuffer.hpp>
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #include <RenderGraph/RunnablePasses/RenderQuad.hpp>
 
@@ -33,62 +34,44 @@ namespace smaa
 
 	//*********************************************************************************************
 
-	namespace
+	namespace copy
 	{
-		castor3d::ShaderPtr doGetCopyVertexShader( castor3d::RenderDevice const & device )
-		{
-			using namespace sdw;
-			VertexWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+		namespace c3d = castor3d::shader;
 
-			// Shader inputs
-			auto position = writer.declInput< Vec2 >( "position", 0u );
-			auto uv = writer.declInput< Vec2 >( "uv", 1u );
-
-			// Shader outputs
-			auto vtx_texture = writer.declOutput< Vec2 >( "vtx_texture", 0u );
-
-			writer.implementMainT< VoidT, VoidT >( [&]( VertexIn in
-				, VertexOut out )
-				{
-					out.vtx.position = vec4( position, 0.0_f, 1.0_f );
-					vtx_texture = uv;
-				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
-		}
-
-		castor3d::ShaderPtr doGetCopyPixelShader( castor3d::RenderDevice const & device
+		static castor3d::ShaderPtr getProgram( castor3d::RenderDevice const & device
 			, SmaaConfig const & config )
 		{
-			using namespace sdw;
-			FragmentWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::TraditionalGraphicsWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
-			// Shader inputs
-			auto vtx_texture = writer.declInput< Vec2 >( "vtx_texture", 0u );
 			C3D_Smaa( writer, SmaaUboIdx, 0u );
 			auto c3d_map = writer.declCombinedImg< FImg2DRgba32 >( "c3d_map", SmaaUboIdx + 1, 0u );
 
-			// Shader outputs
-			auto outColour = writer.declOutput< Vec4 >( "outColour", 0u );
+			writer.implementEntryPointT< c3d::PosUv2FT, c3d::Uv2FT >( [&]( sdw::VertexInT< c3d::PosUv2FT > in
+				, sdw::VertexOutT< c3d::Uv2FT > out )
+				{
+					out.uv() = in.uv();
+					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
+				} );
 
-			writer.implementMainT< VoidT, VoidT >( [&]( FragmentIn in
-				, FragmentOut out )
+			writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
+				, sdw::FragmentOutT< c3d::Colour4FT > out )
 				{
 					if ( config.data.mode == Mode::eT2X
 						&& C3D_DebugVelocity )
 					{
 						IF( writer, c3d_smaaData.enableReprojection != 0 )
 						{
-							outColour = vec4( c3d_map.sample( vtx_texture ).xy(), 0.0_f, 1.0_f );
+							out.colour() = vec4( c3d_map.sample( in.uv() ).xy(), 0.0_f, 1.0_f );
 						}
 						ELSE
 						{
-							outColour = c3d_map.sample( vtx_texture );
+							out.colour() = c3d_map.sample( in.uv() );
 						}
 						FI;
 					}
 					else
 					{
-						outColour = c3d_map.sample( vtx_texture );
+						out.colour() = c3d_map.sample( in.uv() );
 					}
 				} );
 			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
@@ -193,10 +176,8 @@ namespace smaa
 			, Kind::eSRGB }
 		, m_config{ parameters }
 		, m_ubo{ renderSystem.getRenderDevice() }
-		, m_vertexShader{ VK_SHADER_STAGE_VERTEX_BIT, "SmaaCopy", doGetCopyVertexShader( renderSystem.getRenderDevice() ) }
-		, m_pixelShader{ VK_SHADER_STAGE_FRAGMENT_BIT, "SmaaCopy", doGetCopyPixelShader( renderSystem.getRenderDevice(), m_config ) }
-		, m_stages{ castor3d::makeShaderState( renderSystem.getRenderDevice(), m_vertexShader )
-			, castor3d::makeShaderState( renderSystem.getRenderDevice(), m_pixelShader ) }
+		, m_shader{ "SmaaCopy", copy::getProgram( renderSystem.getRenderDevice(), m_config ) }
+		, m_stages{ makeProgramStates( renderSystem.getRenderDevice(), m_shader ) }
 	{
 		if ( m_config.data.mode == Mode::eT2X )
 		{

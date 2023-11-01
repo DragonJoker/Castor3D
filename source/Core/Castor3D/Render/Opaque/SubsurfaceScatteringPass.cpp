@@ -18,6 +18,7 @@
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslBaseIO.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/ModelDataUbo.hpp"
@@ -75,10 +76,6 @@ namespace castor3d
 			, "Vertex"
 			, sdw::IOVec2Field< "position", 0u >
 			, sdw::IOVec2Field< "texcoord", 1u > >;
-		template< typename sdw::var::Flag FlagT >
-		using ColourStructT = sdw::IOStructInstanceHelperT< FlagT
-			, "Colour"
-			, sdw::IOVec4Field< "colour", 0u > >;
 
 		template< typename sdw::var::Flag FlagT >
 		struct VertexT
@@ -93,20 +90,6 @@ namespace castor3d
 
 			auto position()const { return this->template getMember< "position" >(); }
 			auto texcoord()const { return this->template getMember< "texcoord" >(); }
-		};
-
-		template< typename sdw::var::Flag FlagT >
-		struct ColourT
-			: public ColourStructT< FlagT >
-		{
-			ColourT( sdw::ShaderWriter & writer
-				, ast::expr::ExprPtr expr
-				, bool enabled = true )
-				: ColourStructT< FlagT >{ writer, std::move( expr ), enabled }
-			{
-			}
-
-			auto colour()const { return this->template getMember< "colour" >(); }
 		};
 
 		static ShaderPtr getBlurProgram( Engine & engine
@@ -138,8 +121,8 @@ namespace castor3d
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< VertexT, ColourT >( [&]( sdw::FragmentInT< VertexT > in
-				, sdw::FragmentOutT< ColourT > out )
+			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
+				, sdw::FragmentOutT< shader::Colour4FT > out )
 				{
 					auto depthObj = writer.declLocale( "depthObj"
 						, c3d_mapDepthObj.lod( in.texcoord(), 0.0_f ) );
@@ -264,8 +247,8 @@ namespace castor3d
 					out.vtx.position = vec4( in.position(), 0.0_f, 1.0_f );
 				} );
 
-			writer.implementEntryPointT< VertexT, ColourT >( [&]( sdw::FragmentInT< VertexT > in
-				, sdw::FragmentOutT< ColourT > out )
+			writer.implementEntryPointT< VertexT, shader::Colour4FT >( [&]( sdw::FragmentInT< VertexT > in
+				, sdw::FragmentOutT< shader::Colour4FT > out )
 				{
 					auto depthObj = writer.declLocale( "depthObj"
 						, c3d_mapDepthObj.lod( in.texcoord(), 0.0_f ) );

@@ -15,6 +15,11 @@ See LICENSE file in root folder
 
 #include <ashespp/Sync/Semaphore.hpp>
 
+namespace sdw
+{
+	class TraditionalGraphicsWriter;
+}
+
 namespace castor3d
 {
 	class ToneMapping
@@ -98,6 +103,13 @@ namespace castor3d
 		 */
 		C3D_API void accept( ToneMappingVisitor & visitor );
 		/**
+		 *\~english
+		 *\return		The vertex shader for tone mapping.
+		 *\~french
+		 *\return		Le vertex shader pour le tone mapping.
+		 */
+		C3D_API static void getVertexProgram( sdw::TraditionalGraphicsWriter & writer );
+		/**
 		*\~english
 		*name
 		*	Getters.
@@ -132,8 +144,7 @@ namespace castor3d
 	protected:
 		castor::String m_name;
 		HdrConfigUbo & m_hdrConfigUbo;
-		castor3d::ShaderModule m_vertexShader;
-		castor3d::ShaderModule m_pixelShader;
+		castor3d::ProgramModule m_shader;
 		crg::ImageViewId m_source;
 		ashes::PipelineShaderStageCreateInfoArray m_program;
 		crg::FramePass * m_pass{};

@@ -64,16 +64,13 @@ namespace castor3d
 
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayoutVolume;
 		ashes::PipelineLayoutPtr m_pipelineLayoutVolume;
-		ShaderModule m_vertexShaderVolume;
-		ShaderModule m_geometryShaderVolume;
-		ShaderModule m_pixelShaderVolume;
+		ProgramModule m_shaderVolume;
 		ashes::GraphicsPipelinePtr m_pipelineVolume;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPoolVolume;
 
 		ashes::DescriptorSetLayoutPtr m_descriptorSetLayoutSlice;
 		ashes::PipelineLayoutPtr m_pipelineLayoutSlice;
-		ShaderModule m_vertexShaderSlice;
-		ShaderModule m_pixelShaderSlice;
+		ProgramModule m_shaderSlice;
 		ashes::GraphicsPipelinePtr m_pipelineSlice;
 		ashes::DescriptorSetPoolPtr m_descriptorSetPoolSlice;
 
