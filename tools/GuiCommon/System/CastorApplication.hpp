@@ -59,6 +59,9 @@ namespace GuiCommon
 			uint32_t gpuIndex{ 0u };
 			bool disableUpdateOptimisations{ false };
 			bool disableRandom{ false };
+			bool enableShaderValidation{ false };
+			bool enableApiTrace{ false };
+			bool keepTextShaders{ false };
 			uint32_t maxImageSize{ 0u };
 			castor::String fileName;
 		};
