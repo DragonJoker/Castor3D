@@ -121,6 +121,9 @@ namespace castor3d
 
 		if ( dispatch->x )
 		{
+			auto align = device.renderSystem.getValue( GpuMin::eBufferMapSize );
+			auto size = ashes::getAlignedSize( m_parent.getMaxParticlesCount() * m_inputs.stride(), align );
+
 			m_commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_ONE_TIME_SUBMIT_BIT );
 			updater.timer->beginPass( *m_commandBuffer );
 
@@ -171,9 +174,9 @@ namespace castor3d
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeTransferDestination() );
 			m_commandBuffer->copyBuffer( m_particlesStorages[m_out]->getBuffer()
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer()
-				, m_parent.getMaxParticlesCount() * m_inputs.stride()
+				, size
 				, 0u
-				, 0u );
+				, m_parent.getBillboards()->getVertexBuffer().getOffset() );
 			m_commandBuffer->memoryBarrier( VK_PIPELINE_STAGE_TRANSFER_BIT
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT
 				, m_parent.getBillboards()->getVertexBuffer().getBuffer().getBuffer().makeVertexShaderInputResource() );
@@ -220,10 +223,10 @@ namespace castor3d
 
 	bool ComputeParticleSystem::doInitialiseParticleStorage( RenderDevice const & device )
 	{
-		auto size = m_parent.getMaxParticlesCount() * m_inputs.stride();
+		auto align = device.renderSystem.getValue( GpuMin::eBufferMapSize );
+		auto size = ashes::getAlignedSize( m_parent.getMaxParticlesCount() * m_inputs.stride(), align );
 		m_generatedCountBuffer = makeBuffer< uint32_t >( device
-			, ashes::getAlignedSize( 2u * sizeof( uint32_t )
-				, device.renderSystem.getValue( GpuMin::eBufferMapSize ) ) / sizeof( uint32_t )
+			, ashes::getAlignedSize( 2u * sizeof( uint32_t ), align ) / sizeof( uint32_t )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT
 			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
 			, "ComputeParticleSystemCountBuffer" );

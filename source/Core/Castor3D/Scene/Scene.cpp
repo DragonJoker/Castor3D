@@ -905,7 +905,10 @@ namespace castor3d
 				markDirty( *static_cast< BillboardBase * >( static_cast< BillboardList * >( movable ) ) );
 				break;
 			case MovableType::eParticleEmitter:
-				markDirty( *static_cast< ParticleSystem & >( *movable ).getBillboards() );
+				if ( auto billboards = static_cast< ParticleSystem & >( *movable ).getBillboards() )
+				{
+					markDirty( *billboards );
+				}
 				break;
 			case MovableType::eLight:
 				sceneObjs.dirtyLights.emplace_back( static_cast< Light * >( movable ) );

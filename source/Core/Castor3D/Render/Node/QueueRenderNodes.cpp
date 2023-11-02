@@ -993,6 +993,9 @@ namespace castor3d
 	void QueueRenderNodes::clear()
 	{
 		m_pipelines.clear();
+		m_submeshNodes.clear();
+		m_instancedSubmeshNodes.clear();
+		m_billboardNodes.clear();
 	}
 
 	void QueueRenderNodes::checkEmpty()

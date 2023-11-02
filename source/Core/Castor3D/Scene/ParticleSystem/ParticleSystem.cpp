@@ -144,14 +144,14 @@ namespace castor3d
 			stride += uint32_t( getSize( attribute.m_dataType ) );
 		}
 
+		auto align = device.renderSystem.getValue( GpuMin::eBufferMapSize );
+		auto size = ashes::getAlignedSize( getMaxParticlesCount() * m_inputs.stride(), align );
 		m_particlesBillboard = castor::makeUnique< BillboardBase >( *getScene()
 			, getScene()->getObjectRootNode()
-			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u
-				, bindings
-				, attributes )
+			, std::make_unique< ashes::PipelineVertexInputStateCreateInfo >( 0u, bindings, attributes )
 			, stride
 			, device.bufferPool->getBuffer< uint8_t >( VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, VkDeviceSize( stride ) * m_particlesCount
+				, size
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) );
 		m_particlesBillboard->setBillboardType( BillboardType::eSpherical );
 		m_particlesBillboard->setDimensions( m_dimensions );
@@ -195,7 +195,11 @@ namespace castor3d
 
 	void ParticleSystem::update( CpuUpdater & updater )
 	{
-		CU_Require( m_impl );
+		if ( !m_impl )
+		{
+			return;
+		}
+
 		auto time = std::chrono::duration_cast< castor::Milliseconds >( m_timer.getElapsed() );
 
 		if ( m_firstUpdate )
@@ -215,7 +219,11 @@ namespace castor3d
 
 	void ParticleSystem::update( GpuUpdater & updater )
 	{
-		CU_Require( m_impl );
+		if ( !m_impl )
+		{
+			return;
+		}
+
 		updater.time = m_time;
 		updater.total = m_totalTime;
 		m_activeParticlesCount = m_impl->update( updater );
