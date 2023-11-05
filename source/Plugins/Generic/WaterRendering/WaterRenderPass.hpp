@@ -76,7 +76,8 @@ namespace water
 			, castor3d::ShadowBuffer const * shadowBuffer )override;
 		castor3d::SubmeshFlags doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const override;
 		castor3d::ProgramFlags doAdjustProgramFlags( castor3d::ProgramFlags flags )const override;
-		castor3d::ShaderPtr doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const override;
+		void doGetPixelShaderSource( castor3d::PipelineFlags const & flags
+			, ast::ShaderBuilder & builder )const override;
 
 	private:
 		castor3d::IsRenderPassEnabledUPtr m_isEnabled;

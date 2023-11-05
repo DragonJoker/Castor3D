@@ -167,7 +167,7 @@ namespace smaa
 					out.colour() = vec4( 0.0_f );
 					out.colour().xy() = SMAAColorEdgeDetectionPS( in.texcoord(), in.offset() );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static crg::ImageViewData doCreatePredicationView( crg::ImageViewId const & pred )

@@ -382,7 +382,7 @@ namespace GuiCommon
 		if ( m_shader.shader )
 		{
 			auto stage = getShaderStage( m_shader.entryPoint );
-			auto entryPoints = ast::listEntryPoints( m_shader.shader->getContainer() );
+			auto entryPoints = ast::listEntryPoints( m_shader.shader->getStatements() );
 			auto it = std::find_if( entryPoints.begin()
 				, entryPoints.end()
 				, [stage]( ast::EntryPointConfig const & lookup )
@@ -402,7 +402,7 @@ namespace GuiCommon
 			auto statements = ast::selectEntryPoint( compileStmtCache
 				, compileExprCache
 				, *it
-				, m_shader.shader->getContainer() );
+				, m_shader.shader->getStatements() );
 			{
 				spirv::SpirVConfig spvConfig{ spirv::v1_5 };
 				spvConfig.allocator = &shaderAllocator;

@@ -100,10 +100,14 @@ namespace castor3d
 		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
-		ShaderPtr doGetVertexShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetBillboardShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
+		void doGetVertexShaderSource( PipelineFlags const & flags
+			, ast::ShaderBuilder & builder )const override;
+		void doGetBillboardShaderSource( PipelineFlags const & flags
+			, ast::ShaderBuilder & builder )const override;
+		void doGetGeometryShaderSource( PipelineFlags const & flags
+			, ast::ShaderBuilder & builder )const override;
+		void doGetPixelShaderSource( PipelineFlags const & flags
+			, ast::ShaderBuilder & builder )const override;
 
 	public:
 		C3D_API static castor::String const Type;

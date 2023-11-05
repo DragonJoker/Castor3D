@@ -131,10 +131,10 @@ namespace castor3d
 		return RenderNodesPass::createBlendState( BlendMode::eNoBlend, BlendMode::eNoBlend, 1u );
 	}
 
-	ShaderPtr PickingPass::doGetPixelShaderSource( PipelineFlags const & flags )const
+	void PickingPass::doGetPixelShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::FragmentWriter writer{ builder };
 		bool enableTextures = flags.enableTextures();
 
 		shader::Utils utils{ writer };
@@ -170,14 +170,14 @@ namespace castor3d
 		pcb.end();
 
 		// Fragment Outputs
-		auto outColour( writer.declOutput< UVec4 >( "outColour", 0 ) );
+		auto outColour( writer.declOutput< sdw::UVec4 >( "outColour", 0 ) );
 
-		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+		writer.implementMainT< shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
-			, FragmentOut{ writer }
-			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-				, FragmentOut out )
+			, sdw::FragmentOut{ writer }
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+				, sdw::FragmentOut out )
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
@@ -200,7 +200,5 @@ namespace castor3d
 					, writer.cast< sdw::UInt >( in.primitiveID )
 					, 0_u );
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

@@ -379,7 +379,7 @@ namespace atmosphere_scattering
 					outputTexture.store( pixel, stackable3DNoise( pixel ) );
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

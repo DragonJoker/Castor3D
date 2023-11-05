@@ -15,9 +15,9 @@ namespace HaarmPieterDuiker
 	castor::String ToneMapping::Type = cuT( "haarm" );
 	castor::String ToneMapping::Name = cuT( "Haarm Pieter Duiker Tone Mapping" );
 
-	castor3d::ShaderPtr ToneMapping::create( castor3d::Engine & engine )
+	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{
-		sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
+		sdw::TraditionalGraphicsWriter writer{ builder };
 
 		C3D_HdrConfig( writer, 0u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHdr", 1u, 0u );
@@ -28,8 +28,6 @@ namespace HaarmPieterDuiker
 				writer.returnStmt( log2( v ) / log2( 10.0_f ) );
 			}
 			, sdw::InVec3{ writer, "v" } );
-
-		castor3d::ToneMapping::getVertexProgram( writer );
 
 		writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
 			, sdw::FragmentOutT< c3d::Colour4FT > out )
@@ -60,7 +58,5 @@ namespace HaarmPieterDuiker
 				out.colour().b() = mix( padding, 1.0f - padding, logColor.b() );
 				out.colour().a() = 1.0f;
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

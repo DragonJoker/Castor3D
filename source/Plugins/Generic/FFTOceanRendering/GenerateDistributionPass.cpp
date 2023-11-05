@@ -174,7 +174,7 @@ namespace ocean_fft
 							* sqrt( vec2( 0.5_f ) * phillips( k, c3d_oceanData.maxWaveLength, c3d_oceanData.windDirection, c3d_oceanData.L ) );
 					}
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

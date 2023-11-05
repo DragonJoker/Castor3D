@@ -306,6 +306,11 @@ language "spirv"
 		keyword MeshEXT
 		keyword TaskPayloadWorkgroupEXT
 		keyword TaskEXT
+		keyword TessellationEvaluation
+		keyword ModeSpacingEqual
+		keyword ModeVertexOrderCcw
+		keyword ModeTriangles
+		keyword Patch
 	}
 	asm_directives
 	{
@@ -332,6 +337,7 @@ language "spirv"
 		keyword TaskCountNV
 		keyword FragCoord
 		keyword PrimitiveTriangleIndicesEXT
+		keyword TessCoord
 	}
 	style
 	{

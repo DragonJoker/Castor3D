@@ -94,7 +94,7 @@ namespace castor3d
 					outColour = utils.reconstructCSZ( c3d_mapDepthObj.fetch( ssPosition, 0_i ).r()
 						, c3d_clipInfo );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static ShaderPtr getMinifyProgram( Engine & engine )
@@ -123,7 +123,7 @@ namespace castor3d
 							, c3d_textureSize - ivec2( 1_i, 1_i ) )
 						, 0_i ).r();
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static Texture doCreateTexture( RenderDevice const & device

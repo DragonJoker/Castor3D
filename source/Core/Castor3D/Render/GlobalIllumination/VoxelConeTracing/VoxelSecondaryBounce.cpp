@@ -122,8 +122,7 @@ namespace castor3d
 		static ShaderPtr createShader( uint32_t voxelGridSize
 			, RenderSystem const & renderSystem )
 		{
-			using namespace sdw;
-			ComputeWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			auto voxels( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
@@ -142,11 +141,11 @@ namespace castor3d
 			shader::Utils utils{ writer };
 			shader::GlobalIllumination indirect{ writer, utils };
 
-			writer.implementMainT< VoidT >( 64u, [&]( ComputeIn in )
+			writer.implementMainT< sdw::VoidT >( 64u, [&]( sdw::ComputeIn in )
 				{
 					auto coord = writer.declLocale( "coord"
 						, ivec3( utils.unflatten( in.globalInvocationID.x()
-							, uvec3( UInt{ voxelGridSize } ) ) ) );
+							, uvec3( sdw::UInt{ voxelGridSize } ) ) ) );
 					auto clip = writer.declLocale( "clip"
 						, vec3( c3d_voxelData.gridToClip ) * vec3( coord ) );
 					auto color = writer.declLocale( "color"
@@ -183,7 +182,7 @@ namespace castor3d
 
 					voxels[in.globalInvocationID.x()].normalMask = 0_u;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

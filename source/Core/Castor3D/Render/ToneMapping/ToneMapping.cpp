@@ -16,7 +16,6 @@
 #include <CastorUtils/Graphics/Size.hpp>
 
 #include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 CU_ImplementSmartPtr( castor3d, ToneMapping )
 
@@ -115,9 +114,10 @@ namespace castor3d
 		return result;
 	}
 
-	void ToneMapping::getVertexProgram( sdw::TraditionalGraphicsWriter & writer )
+	void ToneMapping::getVertexProgram( ast::ShaderBuilder & builder )
 	{
-		writer.implementEntryPointT< shader::PosUv2FT, shader::Uv2FT >( [&]( sdw::VertexInT< shader::PosUv2FT > in
+		sdw::VertexWriter writer{ builder };
+		writer.implementMainT< shader::PosUv2FT, shader::Uv2FT >( [&]( sdw::VertexInT< shader::PosUv2FT > in
 			, sdw::VertexOutT< shader::Uv2FT > out )
 			{
 				out.uv() = in.uv();
@@ -128,7 +128,11 @@ namespace castor3d
 	void ToneMapping::doCreate( castor::String const & name )
 	{
 		m_name = name;
-		m_shader.shader = getEngine()->getToneMappingFactory().create( name, *getEngine() );
+		ast::ShaderBuilder builder{ ast::ShaderStage::eTraditionalGraphics
+			, &getEngine()->getShaderAllocator() };
+		castor3d::ToneMapping::getVertexProgram( builder );
+		getEngine()->getToneMappingFactory().create( name, builder );
+		m_shader.shader = builder.releaseShader();
 		auto & device = getEngine()->getRenderSystem()->getRenderDevice();
 		m_program = makeProgramStates( device, m_shader );
 	}

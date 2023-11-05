@@ -162,6 +162,26 @@ namespace castor3d::shader
 	};
 
 	template< sdw::var::Flag FlagT >
+	struct BillboardSurfaceT
+		: public sdw::StructInstance
+	{
+		BillboardSurfaceT( sdw::ShaderWriter & writer
+			, sdw::expr::ExprPtr expr
+			, bool enabled );
+
+		SDW_DeclStructInstance( , BillboardSurfaceT );
+
+		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
+			, sdw::EntryPoint entryPoint
+			, PipelineFlags const & flags );
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
+
+		sdw::Vec4 position;
+		sdw::Vec2 texture0;
+		sdw::Vec3 center;
+	};
+
+	template< sdw::var::Flag FlagT >
 	struct VertexSurfaceT
 		: public sdw::StructInstance
 	{

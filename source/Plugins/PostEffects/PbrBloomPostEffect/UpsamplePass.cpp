@@ -85,7 +85,7 @@ namespace PbrBloom
 					out.colour() += ( a + c + g + i );
 					out.colour() *= 1.0_f / 16.0f;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

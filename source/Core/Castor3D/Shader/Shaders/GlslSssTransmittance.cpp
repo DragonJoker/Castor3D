@@ -32,7 +32,7 @@ namespace castor3d::shader
 		, LightSurface const & plightSurface )
 	{
 		if ( !checkFlag( m_shadows, SceneFlag::eShadowDirectional )
-			|| !m_writer.hasVariable( Shadow::MapDepthDirectional ) )
+			|| !m_writer.hasGlobalVariable( Shadow::MapDepthDirectional ) )
 		{
 			return vec3( 0.0_f );
 		}
@@ -96,7 +96,7 @@ namespace castor3d::shader
 		, LightSurface const & plightSurface )
 	{
 		if ( !checkFlag( m_shadows, SceneFlag::eShadowPoint )
-			|| !m_writer.hasVariable( Shadow::MapDepthPoint ) )
+			|| !m_writer.hasGlobalVariable( Shadow::MapDepthPoint ) )
 		{
 			return vec3( 0.0_f );
 		}
@@ -156,7 +156,7 @@ namespace castor3d::shader
 		, LightSurface const & plightSurface )
 	{
 		if ( !checkFlag( m_shadows, SceneFlag::eShadowSpot )
-			|| !m_writer.hasVariable( Shadow::MapDepthSpot ) )
+			|| !m_writer.hasGlobalVariable( Shadow::MapDepthSpot ) )
 		{
 			return vec3( 0.0_f );
 		}

@@ -223,7 +223,7 @@ namespace ocean_fft
 					// Read by fragment shader.
 					gradJacobian.store( i, vec4( grad, j, 0.0 ) );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

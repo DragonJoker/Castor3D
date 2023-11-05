@@ -44,19 +44,18 @@ namespace castor3d
 		, sdw::Vec4 const & boneWeights0
 		, sdw::Vec4 const & boneWeights1 )
 	{
-		using namespace sdw;
-		auto mtxBoneTransform = writer.declLocale< Mat4 >( "mtxBoneTransform" );
+		auto mtxBoneTransform = writer.declLocale< sdw::Mat4 >( "mtxBoneTransform" );
 		auto mtxInstanceOffset = writer.declLocale( "mtxInstanceOffset", skinningId * MaxBonesCount );
 
 		auto & ssbo = *data.transforms;
-		mtxBoneTransform = ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[0_i] )] * boneWeights0[0_i];
-		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[1_i] )] * boneWeights0[1_i];
-		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[2_i] )] * boneWeights0[2_i];
-		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds0[3_i] )] * boneWeights0[3_i];
-		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds1[0_i] )] * boneWeights1[0_i];
-		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds1[1_i] )] * boneWeights1[1_i];
-		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds1[2_i] )] * boneWeights1[2_i];
-		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< UInt >( boneIds1[3_i] )] * boneWeights1[3_i];
+		mtxBoneTransform = ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[0_i] )] * boneWeights0[0_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[1_i] )] * boneWeights0[1_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[2_i] )] * boneWeights0[2_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds0[3_i] )] * boneWeights0[3_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds1[0_i] )] * boneWeights1[0_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds1[1_i] )] * boneWeights1[1_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds1[2_i] )] * boneWeights1[2_i];
+		mtxBoneTransform += ssbo[mtxInstanceOffset + writer.cast< sdw::UInt >( boneIds1[3_i] )] * boneWeights1[3_i];
 		mtxBoneTransform = transform * mtxBoneTransform;
 
 		return mtxBoneTransform;

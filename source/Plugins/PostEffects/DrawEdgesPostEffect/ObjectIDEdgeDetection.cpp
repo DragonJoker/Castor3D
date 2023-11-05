@@ -162,7 +162,7 @@ namespace draw_edges
 						, toonProfile.edgeWidth() );
 
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

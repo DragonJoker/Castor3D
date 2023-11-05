@@ -29,8 +29,8 @@ namespace castor3d
 	{
 		if ( !type.hasMember( "textures" ) )
 		{
-			auto t = type.declMember( "textures", ast::type::Kind::eUInt, MaxPassTextures ).type;
-			inits.emplace_back( sdw::makeAggrInit( t
+			auto [t, added] = type.declMember( "textures", ast::type::Kind::eUInt, MaxPassTextures );
+			inits.emplace_back( sdw::makeAggrInit( t.type
 				, []()
 				{
 					sdw::expr::ExprList result;

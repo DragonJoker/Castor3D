@@ -314,7 +314,6 @@ namespace GuiCommon
 	}
 
 	ashes::WindowHandle makeWindowHandle( wxWindow * window );
-	ast::ShaderStage convert( VkShaderStageFlagBits stage );
 
 #if wxVERSION_NUMBER >= 2900
 #	define	wxIMAGE_QUALITY_HIGHEST wxIMAGE_QUALITY_BICUBIC

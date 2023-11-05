@@ -100,7 +100,7 @@ namespace atmosphere_scattering
 					outputTexture.store( pixel, curl( vec2( pixel ) ) );
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

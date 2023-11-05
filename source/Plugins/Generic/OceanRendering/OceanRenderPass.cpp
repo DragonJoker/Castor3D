@@ -532,11 +532,11 @@ namespace ocean
 #endif
 	}
 
-	castor3d::ShaderPtr OceanRenderPass::doGetVertexShaderSource( castor3d::PipelineFlags const & flags )const
+	void OceanRenderPass::doGetVertexShaderSource( castor3d::PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
 		using namespace castor3d;
-		VertexWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::VertexWriter writer{ builder };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -564,65 +564,59 @@ namespace ocean
 			, sdw::VertexOutT< rdpass::PatchT >{ writer
 				, passShaders
 				, flags }
-			, [&]( VertexInT< castor3d::shader::VertexSurfaceT > in
-				, VertexOutT< rdpass::PatchT > out )
-		{
-			out.vtx.position = in.position;
-			out.texture0 = in.texture0;
-			out.texture1 = in.texture1;
-			out.colour = in.colour;
-			auto nodeId = writer.declLocale( "nodeId"
-				, shader::getNodeId( c3d_objectIdsData
-					, in
-					, pipelineID
-					, writer.cast< sdw::UInt >( in.drawID )
-					, flags ) );
-			out.nodeId = writer.cast< sdw::Int >( nodeId );
+			, [&]( sdw::VertexInT< castor3d::shader::VertexSurfaceT > in
+				, sdw::VertexOutT< rdpass::PatchT > out )
+			{
+				out.vtx.position = in.position;
+				out.texture0 = in.texture0;
+				out.texture1 = in.texture1;
+				out.colour = in.colour;
+				auto nodeId = writer.declLocale( "nodeId"
+					, shader::getNodeId( c3d_objectIdsData
+						, in
+						, pipelineID
+						, writer.cast< sdw::UInt >( in.drawID )
+						, flags ) );
+				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 #if Ocean_DebugPixelShader
-			auto modelData = writer.declLocale( "modelData"
-				, c3d_modelsData[nodeId - 1u] );
-			auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
-				, c3d_modelData.getCurModelMtx( flags.programFlags
-					, skinningData
-					, in.boneIds0
-					, in.boneIds1
-					, in.boneWeights0
-					, in.boneWeights1
-					, in.transform ) );
-			out.worldPosition = curMtxModel * out.vtx.position;
-			out.viewPosition = c3d_cameraData.worldToCurView( out.worldPosition );
-			out.vtx.position = c3d_cameraData.viewToProj( out.viewPosition );
-			auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
-				, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
-			out.computeTangentSpace( flags.submeshFlags
-				, flags.programFlags
-				, c3d_cameraData.position()
-				, out.worldPosition.xyz()
-				, mtxNormal
-				, v4Normal
-				, v4Tangent );
+				auto modelData = writer.declLocale( "modelData"
+					, c3d_modelsData[nodeId - 1u] );
+				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+					, c3d_modelData.getCurModelMtx( flags.programFlags
+						, skinningData
+						, in.boneIds0
+						, in.boneIds1
+						, in.boneWeights0
+						, in.boneWeights1
+						, in.transform ) );
+				out.worldPosition = curMtxModel * out.vtx.position;
+				out.viewPosition = c3d_cameraData.worldToCurView( out.worldPosition );
+				out.vtx.position = c3d_cameraData.viewToProj( out.viewPosition );
+				auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+					, c3d_modelData.getNormalMtx( flags.programFlags, curMtxModel ) );
+				out.computeTangentSpace( flags.submeshFlags
+					, flags.programFlags
+					, c3d_cameraData.position()
+					, out.worldPosition.xyz()
+					, mtxNormal
+					, v4Normal
+					, v4Tangent );
 #endif
-		} );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			} );
 	}
 
-	castor3d::ShaderPtr OceanRenderPass::doGetBillboardShaderSource( castor3d::PipelineFlags const & flags )const
+	void OceanRenderPass::doGetBillboardShaderSource( castor3d::PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
 		using namespace castor3d;
-		VertexWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::VertexWriter writer{ builder };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
 			, getComponentsMask()
 			, utils };
-
-		// Shader inputs
-		auto position = writer.declInput< Vec4 >( "position", 0u );
-		auto uv = writer.declInput< Vec2 >( "uv", 1u );
-		auto center = writer.declInput< Vec3 >( "center", 2u );
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
@@ -642,12 +636,10 @@ namespace ocean
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< VoidT, rdpass::PatchT >( sdw::VertexInT< sdw::VoidT >{ writer }
-			, sdw::VertexOutT< rdpass::PatchT >{ writer
-				, passShaders
-				, flags }
-			, [&]( VertexInT< VoidT > in
-				, VertexOutT< rdpass::PatchT > out )
+		writer.implementMainT< shader::BillboardSurfaceT, rdpass::PatchT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
+			, sdw::VertexOutT< rdpass::PatchT >{ writer, passShaders, flags }
+			, [&]( sdw::VertexInT< shader::BillboardSurfaceT > in
+				, sdw::VertexOutT< rdpass::PatchT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -658,9 +650,9 @@ namespace ocean
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
+					, modelData.modelToCurWorld( vec4( in.center, 1.0_f ) ).xyz() );
 				auto prvBbcenter = writer.declLocale( "prvBbcenter"
-					, modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
+					, modelData.modelToPrvWorld( vec4( in.center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_cameraData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
@@ -677,28 +669,24 @@ namespace ocean
 				auto height = writer.declLocale( "height"
 					, billboardData.getHeight( c3d_cameraData ) );
 				auto scaledRight = writer.declLocale( "scaledRight"
-					, right * position.x() * width );
+					, right * in.position.x() * width );
 				auto scaledUp = writer.declLocale( "scaledUp"
-					, up * position.y() * height );
+					, up * in.position.y() * height );
 				auto worldPos = writer.declLocale( "worldPos"
 					, ( curBbcenter + scaledRight + scaledUp ) );
-				out.texture0 = vec3( uv, 1.0_f );
-				out.texture1 = vec3( uv * 50.0_f, 1.0_f );
+				out.texture0 = vec3( in.texture0, 1.0_f );
+				out.texture1 = vec3( in.texture0 * 50.0_f, 1.0_f );
 				out.colour = vec3( 1.0_f );
 				out.vtx.position = modelData.worldToModel( vec4( worldPos, 1.0_f ) );
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	castor3d::ShaderPtr OceanRenderPass::doGetHullShaderSource( castor3d::PipelineFlags const & flags )const
+	void OceanRenderPass::doGetHullShaderSource( castor3d::PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-#if Ocean_DebugPixelShader
-		return nullptr;
-#else
-		using namespace sdw;
+#if !Ocean_DebugPixelShader
 		using namespace castor3d;
-		TessellationControlWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::TessellationControlWriter writer{ builder };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -712,11 +700,11 @@ namespace ocean
 			, index
 			, RenderPipeline::eBuffers );
 
-		writer.implementPatchRoutineT< rdpass::PatchT, rdpass::OutputVertices, VoidT >( TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
+		writer.implementPatchRoutineT< rdpass::PatchT, rdpass::OutputVertices, sdw::VoidT >( sdw::TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, false
 				, passShaders
 				, flags }
-			, TrianglesTessPatchOutT< VoidT >{ writer, 9u }
+			, sdw::TrianglesTessPatchOutT< sdw::VoidT >{ writer, 9u }
 			, [&]( sdw::TessControlPatchRoutineIn in
 				, sdw::TessControlListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
 				, sdw::TrianglesTessPatchOut patchOut )
@@ -728,20 +716,20 @@ namespace ocean
 				patchOut.tessLevelInner[0] = c3d_oceanData.tessellationFactor();
 			} );
 
-		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, rdpass::PatchT >( TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
+		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, rdpass::PatchT >( sdw::TessControlListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, true
 				, passShaders
 				, flags }
-			, TrianglesTessControlListOutT< rdpass::PatchT >{ writer
+			, sdw::TrianglesTessControlListOutT< rdpass::PatchT >{ writer
 				, ast::type::Partitioning::eFractionalEven
 				, ast::type::OutputTopology::eTriangle
 				, ast::type::PrimitiveOrdering::eCCW
 				, rdpass::OutputVertices
 				, passShaders
 				, flags }
-			, [&]( TessControlMainIn in
-				, TessControlListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
-				, TrianglesTessControlListOutT< rdpass::PatchT > listOut )
+			, [&]( sdw::TessControlMainIn in
+				, sdw::TessControlListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
+				, sdw::TrianglesTessControlListOutT< rdpass::PatchT > listOut )
 			{
 				listOut.vtx.position = listIn[in.invocationID].vtx.position;
 				listOut.nodeId = listIn[in.invocationID].nodeId;
@@ -749,19 +737,15 @@ namespace ocean
 				listOut.texture1 = listIn[in.invocationID].texture1;
 				listOut.colour = listIn[in.invocationID].colour;
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 #endif
 	}
 
-	castor3d::ShaderPtr OceanRenderPass::doGetDomainShaderSource( castor3d::PipelineFlags const & flags )const
+	void OceanRenderPass::doGetDomainShaderSource( castor3d::PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-#if Ocean_DebugPixelShader
-		return nullptr;
-#else
-		using namespace sdw;
+#if !Ocean_DebugPixelShader
 		using namespace castor3d;
-		TessellationEvaluationWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::TessellationEvaluationWriter writer{ builder };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -783,10 +767,10 @@ namespace ocean
 
 		auto calculateWave = writer.implementFunction< rdpass::WaveResult >( "calculateWave"
 			, [&]( Wave wave
-				, Vec3 wavePosition
-				, Float edgeDampen
-				, UInt numWaves
-				, Float timeIndex )
+				, sdw::Vec3 wavePosition
+				, sdw::Float edgeDampen
+				, sdw::UInt numWaves
+				, sdw::Float timeIndex )
 			{
 				auto result = writer.declLocale< rdpass::WaveResult >( "result" );
 
@@ -840,20 +824,20 @@ namespace ocean
 			, sdw::InUInt{ writer, "numWaves" }
 			, sdw::InFloat{ writer, "timeIndex" } );
 
-		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, VoidT, castor3d::shader::FragmentSurfaceT >( TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
+		writer.implementMainT< rdpass::PatchT, rdpass::OutputVertices, sdw::VoidT, castor3d::shader::FragmentSurfaceT >( sdw::TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices >{ writer
 				, ast::type::PatchDomain::eTriangles
-				, type::Partitioning::eFractionalEven
-				, type::PrimitiveOrdering::eCCW
+				, ast::type::Partitioning::eFractionalEven
+				, ast::type::PrimitiveOrdering::eCCW
 				, passShaders
 				, flags }
-			, TrianglesTessPatchInT< VoidT >{ writer, 9u }
-			, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
+			, sdw::TrianglesTessPatchInT< sdw::VoidT >{ writer, 9u }
+			, sdw::TessEvalDataOutT< castor3d::shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
-			, [&]( TessEvalMainIn mainIn
-				, TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
-				, TrianglesTessPatchInT< VoidT > patchIn
-				, TessEvalDataOutT< castor3d::shader::FragmentSurfaceT > out )
+			, [&]( sdw::TessEvalMainIn mainIn
+				, sdw::TessEvalListInT< rdpass::PatchT, rdpass::OutputVertices > listIn
+				, sdw::TrianglesTessPatchInT< sdw::VoidT > patchIn
+				, sdw::TessEvalDataOutT< castor3d::shader::FragmentSurfaceT > out )
 			{
 				auto position = writer.declLocale( "position"
 					, patchIn.tessCoord.x() * listIn[0].vtx.position
@@ -881,7 +865,7 @@ namespace ocean
 
 				IF( writer, numWaves > 0_u )
 				{
-					FOR( writer, UInt, waveId, 0_u, waveId < numWaves, waveId++ )
+					FOR( writer, sdw::UInt, waveId, 0_u, waveId < numWaves, waveId++ )
 					{
 						auto waveResult = writer.declLocale( "waveResult"
 							, calculateWave( c3d_oceanData.waves()[waveId]
@@ -935,16 +919,14 @@ namespace ocean
 				out.worldPosition.w() = height;
 				out.vtx.position = c3d_cameraData.viewToProj( out.viewPosition );
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 #endif
 	}
 
-	castor3d::ShaderPtr OceanRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const
+	void OceanRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
 		using namespace castor3d;
-		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::FragmentWriter writer{ builder };
 
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 
@@ -1036,14 +1018,14 @@ namespace ocean
 			, getClustersConfig() };
 
 		// Fragment Outputs
-		auto outColour( writer.declOutput< Vec4 >( "outColour", 0 ) );
+		auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", 0 ) );
 
-		writer.implementMainT< castor3d::shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
+		writer.implementMainT< castor3d::shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
-			, FragmentOut{ writer }
-			, [&]( FragmentInT< castor3d::shader::FragmentSurfaceT > in
-				, FragmentOut out )
+			, sdw::FragmentOut{ writer }
+			, [&]( sdw::FragmentInT< castor3d::shader::FragmentSurfaceT > in
+				, sdw::FragmentOut out )
 			{
 				shader::DebugOutput output{ getDebugConfig()
 					, cuT( "Waves" )
@@ -1293,7 +1275,5 @@ namespace ocean
 					, c3d_cameraData.depthPlanes()
 					, outColour );
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

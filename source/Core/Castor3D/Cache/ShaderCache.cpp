@@ -5,7 +5,9 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
+#define SDW_PreferredMeshShadingExtension SDW_MeshShadingNV
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/ModernGraphicsWriter.hpp>
 
 #include <ashespp/Core/Device.hpp>
 
@@ -77,57 +79,32 @@ namespace castor3d
 	ShaderProgramUPtr ShaderProgramCache::doCreateAutomaticProgram( RenderNodesPass const & renderPass
 		, PipelineFlags const & flags )const
 	{
-		auto result = castor::makeUnique< ShaderProgram >( renderPass.getName(), *getEngine()->getRenderSystem() );
+		auto builderType = ( ( getEngine()->hasMeshShaders() && flags.usesMesh() )
+			? sdw::ModernGraphicsStage
+			: ast::ShaderStage::eTraditionalGraphics );
+		ast::ShaderBuilder builder{ builderType, & getEngine()->getShaderAllocator() };
 
 		if ( getEngine()->hasMeshShaders()
 			&& flags.usesMesh() )
 		{
 			if ( flags.usesTask() )
 			{
-				auto task = renderPass.getTaskShaderSource( flags );
-
-				if ( task )
-				{
-					result->setSource( VK_SHADER_STAGE_TASK_BIT_NV
-						, std::move( task ) );
-				}
+				renderPass.getTaskShaderSource( flags, builder );
 			}
 
-			result->setSource( VK_SHADER_STAGE_MESH_BIT_NV
-				, renderPass.getMeshShaderSource( flags ) );
+			renderPass.getMeshShaderSource( flags, builder );
 		}
 		else
 		{
-			result->setSource( VK_SHADER_STAGE_VERTEX_BIT
-				, renderPass.getVertexShaderSource( flags ) );
-
-			auto hull = renderPass.getHullShaderSource( flags );
-
-			if ( hull )
-			{
-				result->setSource( VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT
-					, std::move( hull ) );
-			}
-
-			auto domain = renderPass.getDomainShaderSource( flags );
-
-			if ( domain )
-			{
-				result->setSource( VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT
-					, std::move( domain ) );
-			}
-
-			auto geometry = renderPass.getGeometryShaderSource( flags );
-
-			if ( geometry )
-			{
-				result->setSource( VK_SHADER_STAGE_GEOMETRY_BIT
-					, std::move( geometry ) );
-			}
+			renderPass.getVertexShaderSource( flags, builder );
+			renderPass.getHullShaderSource( flags, builder );
+			renderPass.getDomainShaderSource( flags, builder );
+			renderPass.getGeometryShaderSource( flags, builder );
 		}
 
-		result->setSource( VK_SHADER_STAGE_FRAGMENT_BIT
-			, renderPass.getPixelShaderSource( flags ) );
+		renderPass.getPixelShaderSource( flags, builder );
+		auto result = castor::makeUnique< ShaderProgram >( renderPass.getName(), *getEngine()->getRenderSystem() );
+		result->setSource( builder.releaseShader() );
 		return result;
 	}
 

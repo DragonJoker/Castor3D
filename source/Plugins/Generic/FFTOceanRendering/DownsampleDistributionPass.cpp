@@ -142,7 +142,7 @@ namespace ocean_fft
 
 					downsampled[i.y() * outN.x() + i.x()] = distribution[writer.cast< sdw::UInt >( aliased.y() ) * inN.x() + writer.cast< sdw::UInt >( aliased.x() )];
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

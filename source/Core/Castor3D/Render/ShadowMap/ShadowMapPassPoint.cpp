@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputs.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
@@ -134,10 +135,10 @@ namespace castor3d
 		return flags;
 	}
 
-	ShaderPtr ShadowMapPassPoint::doGetVertexShaderSource( PipelineFlags const & flags )const
+	void ShadowMapPassPoint::doGetVertexShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		VertexWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::VertexWriter writer{ builder };
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -169,8 +170,8 @@ namespace castor3d
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
-			, [&]( VertexInT< shader::VertexSurfaceT > in
-			, VertexOutT< shader::FragmentSurfaceT > out )
+			, [&]( sdw::VertexInT< shader::VertexSurfaceT > in
+				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -200,7 +201,7 @@ namespace castor3d
 					, out.passMultipliers );
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
-				auto mtxModel = writer.declLocale< Mat4 >( "mtxModel"
+				auto mtxModel = writer.declLocale< sdw::Mat4 >( "mtxModel"
 					, modelData.getModelMtx() );
 
 				if ( flags.hasWorldPosInputs() )
@@ -218,7 +219,7 @@ namespace castor3d
 				{
 					auto worldPos = writer.declLocale( "worldPos"
 						, mtxModel * curPosition );
-					auto mtxNormal = writer.declLocale< Mat3 >( "mtxNormal"
+					auto mtxNormal = writer.declLocale< sdw::Mat3 >( "mtxNormal"
 						, modelData.getNormalMtx( flags, mtxModel ) );
 					out.computeTangentSpace( flags
 						, c3d_cameraData.getCurViewCenter()
@@ -233,13 +234,12 @@ namespace castor3d
 				out.worldPosition = worldPos;
 				out.vtx.position = c3d_cameraData.worldToCurProj( worldPos );
 			} );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr ShadowMapPassPoint::doGetPixelShaderSource( PipelineFlags const & flags )const
+	void ShadowMapPassPoint::doGetPixelShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::FragmentWriter writer{ builder };
 		bool enableTextures = flags.enableTextures();
 		auto needsVsm = flags.writeShadowVSM();
 		auto needsRsm = flags.writeShadowRSM();
@@ -295,28 +295,12 @@ namespace castor3d
 		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
-
-		// Fragment Outputs
-		uint32_t outIndex{};
-		auto outLinear( writer.declOutput< Float >( "outLinear", outIndex++ ) );
-		auto outVariance( writer.declOutput< Vec2 >( "outVariance", needsVsm ? outIndex++ : 0u, needsVsm ) );
-		auto outNormal( writer.declOutput< Vec4 >( "outNormal", needsRsm ? outIndex++ : 0u, needsRsm ) );
-		auto outPosition( writer.declOutput< Vec4 >( "outPosition", needsRsm ? outIndex++ : 0u, needsRsm ) );
-		auto outFlux( writer.declOutput< Vec4 >( "outFlux", needsRsm ? outIndex++ : 0u, needsRsm ) );
-
-		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-				, passShaders
-				, flags }
-			, FragmentOut{ writer }
-			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-				, FragmentOut out )
+		
+		writer.implementMainT< shader::FragmentSurfaceT, shader::ShadowsOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+			, sdw::FragmentOutT< shader::ShadowsOutputT >{ writer, needsVsm, needsRsm }
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+				, sdw::FragmentOutT< shader::ShadowsOutputT > out )
 			{
-				outLinear = 0.0_f;
-				outVariance = vec2( 0.0_f );
-				outNormal = vec4( 0.0_f );
-				outPosition = vec4( 0.0_f );
-				outFlux = vec4( 0.0_f );
-
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
 				auto material = writer.declLocale( "material"
@@ -335,22 +319,25 @@ namespace castor3d
 					, components );
 				auto depth = writer.declLocale( "depth"
 					, c3d_shadowMapData.getNormalisedDepth( in.worldPosition.xyz() ) );
-				outLinear = depth;
+				out.linear = depth;
 
 				if ( needsVsm )
 				{
-					outVariance.x() = depth;
-					outVariance.y() = depth * depth;
+					out.variance.x() = depth;
+					out.variance.y() = depth * depth;
 
 					auto dx = writer.declLocale( "dx"
 						, dFdx( depth ) );
 					auto dy = writer.declLocale( "dy"
 						, dFdy( depth ) );
-					outVariance.y() += 0.25_f * ( dx * dx + dy * dy );
+					out.variance.y() += 0.25_f * ( dx * dx + dy * dy );
 				}
 
 				if ( needsRsm )
 				{
+					out.normal = vec4( 0.0_f );
+					out.position = vec4( 0.0_f );
+					out.flux = vec4( 0.0_f );
 					auto light = writer.declLocale( "light"
 						, c3d_shadowMapData.getPointLight( lights ) );
 					auto lightToVertex = writer.declLocale( "lightToVertex"
@@ -360,15 +347,14 @@ namespace castor3d
 					auto attenuation = writer.declLocale( "attenuation", 1.0_f );
 					light.getAttenuationFactor( distance, attenuation );
 					components.colour *= in.colour;
-					outFlux.rgb() = ( components.colour
+					out.flux.rgb() = ( components.colour
 							* light.base().colour()
 							* light.base().intensity().x()
 							* clamp( dot( lightToVertex / distance, components.normal ), 0.0_f, 1.0_f ) )
 						* attenuation;
-					outNormal.xyz() = components.normal;
-					outPosition.xyz() = in.worldPosition.xyz();
+					out.normal.xyz() = components.normal;
+					out.position.xyz() = in.worldPosition.xyz();
 				}
 			} );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

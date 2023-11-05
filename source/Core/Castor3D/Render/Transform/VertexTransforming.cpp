@@ -304,9 +304,7 @@ namespace castor3d
 		static ShaderPtr getShaderSource( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
-			using namespace sdw;
-
-			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Common
 			auto objectIDs = writer.declPushConstantsBuffer<>( "ObjectIDs" );
@@ -484,7 +482,7 @@ namespace castor3d
 					, c3d_inBones[index] );
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[c3d_objectIDs.nodeId] );
-				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+				auto curMtxModel = writer.declLocale< sdw::Mat4 >( "curMtxModel"
 					, modelData.getCurModelMtx( skinningData
 						, c3d_objectIDs.skinningId
 						, skin.boneIds0
@@ -495,20 +493,19 @@ namespace castor3d
 				c3d_outPosition[index] = position;
 				c3d_outVelocity[index].xyz() = oldPosition.xyz() - position.xyz();
 
-				auto curMtxNormal = writer.declLocale< Mat3 >( "curMtxNormal"
+				auto curMtxNormal = writer.declLocale< sdw::Mat3 >( "curMtxNormal"
 					, modelData.getNormalMtx( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ), curMtxModel ) );
 				c3d_outNormal[index].xyz() = normalize( curMtxNormal * normal.xyz() );
 				c3d_outTangent[index] = vec4( normalize( curMtxNormal * tangent.xyz() ), tangent.w() );
 				c3d_outBitangent[index].xyz() = normalize( curMtxNormal * bitangent.xyz() );
 			} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static ShaderPtr getShaderSource( RenderDevice const & device
 			, BoundsTransformPipeline const & pipeline )
 		{
-			using namespace sdw;
-			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 			bool computeCones = pipeline.normals;
 
 			// Inputs
@@ -686,7 +683,7 @@ namespace castor3d
 					}
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

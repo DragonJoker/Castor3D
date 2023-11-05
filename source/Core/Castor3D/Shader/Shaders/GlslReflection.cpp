@@ -1181,7 +1181,7 @@ namespace castor3d::shader
 						auto attenuatedColor = m_writer.declLocale( "attenuatedColor"
 							, exp( -attnCoefficient * thicknessFactor ) );
 
-						if ( m_writer.hasVariable( "c3d_mapBrdf" ) )
+						if ( m_writer.hasGlobalVariable( "c3d_mapBrdf" ) )
 						{
 							auto brdfMap = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 

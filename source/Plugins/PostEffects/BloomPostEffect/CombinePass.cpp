@@ -49,7 +49,7 @@ namespace Bloom
 						out.colour() += c3d_mapPasses.sample( in.uv(), sdw::Float( float( i ) ) );
 					}
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

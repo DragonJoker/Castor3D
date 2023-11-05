@@ -490,7 +490,7 @@ namespace castor3d
 
 					out.colour() = in.voxelColour();
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static ShaderPtr getProgramSlice( RenderSystem const & renderSystem )
@@ -514,7 +514,7 @@ namespace castor3d
 				{
 					out.colour() = inSource.lod( vec3( in.uv(), sliceIndex / maxSlice ), 0.0_f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

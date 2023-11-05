@@ -184,7 +184,7 @@ namespace draw_edges
 						, toonProfile.depthFactor()
 						, toonProfile.normalFactor() );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

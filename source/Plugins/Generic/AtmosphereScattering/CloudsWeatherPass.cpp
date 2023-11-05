@@ -186,7 +186,7 @@ namespace atmosphere_scattering
 					return vec2( clamp( coverage, 0.0_f, 1.0_f ), cloudType );
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

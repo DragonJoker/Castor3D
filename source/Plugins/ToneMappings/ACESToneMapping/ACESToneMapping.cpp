@@ -15,9 +15,9 @@ namespace aces
 	castor::String ToneMapping::Type = cuT( "aces" );
 	castor::String ToneMapping::Name = cuT( "ACES Tone Mapping" );
 
-	castor3d::ShaderPtr ToneMapping::create( castor3d::Engine & engine )
+	void ToneMapping::create( ast::ShaderBuilder & builder )
 	{
-		sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
+		sdw::TraditionalGraphicsWriter writer{ builder };
 
 		C3D_HdrConfig( writer, 0u, 0u );
 		auto c3d_mapHdr = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapHdr", 1u, 0u );
@@ -34,8 +34,6 @@ namespace aces
 			}
 			, sdw::InVec3{ writer, "x" } );
 
-		castor3d::ToneMapping::getVertexProgram( writer );
-
 		writer.implementEntryPointT< c3d::Uv2FT, c3d::Colour4FT >( [&]( sdw::FragmentInT< c3d::Uv2FT > in
 			, sdw::FragmentOutT< c3d::Colour4FT > out )
 			{
@@ -46,7 +44,5 @@ namespace aces
 
 				out.colour() = vec4( c3d_hdrConfigData.applyGamma( current ), 1.0_f );
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

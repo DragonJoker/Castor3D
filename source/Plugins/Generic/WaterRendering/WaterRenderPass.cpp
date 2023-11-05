@@ -454,10 +454,11 @@ namespace water
 		return flags;
 	}
 
-	castor3d::ShaderPtr WaterRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags )const
+	void WaterRenderPass::doGetPixelShaderSource( castor3d::PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
 		using namespace castor3d;
-		sdw::FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::FragmentWriter writer{ builder };
 
 		bool enableTextures = flags.enableTextures();
 		bool hasDiffuseGI = flags.hasDiffuseGI();
@@ -804,7 +805,5 @@ namespace water
 					, c3d_cameraData.depthPlanes()
 					, outColour );
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

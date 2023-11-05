@@ -18,7 +18,7 @@ namespace Reinhard
 	{
 		static castor::String Type;
 		static castor::String Name;
-		static castor3d::ShaderPtr create( castor3d::Engine & engine );
+		static void create( ast::ShaderBuilder & builder );
 	};
 }
 

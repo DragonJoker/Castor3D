@@ -479,7 +479,7 @@ namespace castor3d
 							, 0.0_f
 							, 1.0_f ) );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static Texture doCreateTexture( crg::ResourcesCache & resources

@@ -185,9 +185,9 @@ namespace castor3d
 			&& ( m_clustersDirty
 				|| lightCache.isDirty()
 				|| ( it != updater.dirtyScenes.end() && !it->second.isEmpty() ) );
-		//m_first = m_camera.getEngine()->areUpdateOptimisationsEnabled()
-		//	? std::max( 0, m_first - 1 )
-		//	: 5;
+		m_first = m_camera.getEngine()->areUpdateOptimisationsEnabled()
+			? std::max( 0, m_first - 1 )
+			: 5;
 	}
 
 	crg::FramePass const & FrustumClusters::createFramePasses( crg::FramePassGroup & parentGraph

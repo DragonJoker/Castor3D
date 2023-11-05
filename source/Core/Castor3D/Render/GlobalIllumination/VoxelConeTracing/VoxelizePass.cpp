@@ -139,7 +139,6 @@ namespace castor3d
 
 			RenderNodesPass::update( updater );
 			m_outOfDate = m_outOfDate
-				//|| filtersStatic()
 				|| getCuller().areAnyChanged()
 				|| !getEngine()->areUpdateOptimisationsEnabled();
 		}
@@ -232,10 +231,10 @@ namespace castor3d
 		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
 	}
 
-	ShaderPtr VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags )const
+	void VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		VertexWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::VertexWriter writer{ builder };
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
@@ -265,8 +264,8 @@ namespace castor3d
 				, flags }
 			, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer
 				, flags }
-			, [&]( VertexInT< shader::VertexSurfaceT > in
-				, VertexOutT< shader::VoxelSurfaceT > out )
+			, [&]( sdw::VertexInT< shader::VertexSurfaceT > in
+				, sdw::VertexOutT< shader::VoxelSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -290,7 +289,7 @@ namespace castor3d
 				material.getPassMultipliers( flags
 					, in.passMasks
 					, out.passMultipliers );
-				auto modelMtx = writer.declLocale< Mat4 >( "modelMtx"
+				auto modelMtx = writer.declLocale< sdw::Mat4 >( "modelMtx"
 					, modelData.getModelMtx() );
 
 				if ( flags.hasWorldPosInputs() )
@@ -307,18 +306,12 @@ namespace castor3d
 				out.worldPosition = out.vtx.position;
 				out.viewPosition = c3d_cameraData.worldToCurView( out.vtx.position );
 			} );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr VoxelizePass::doGetBillboardShaderSource( PipelineFlags const & flags )const
+	void VoxelizePass::doGetBillboardShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		VertexWriter writer{ &getEngine()->getShaderAllocator() };
-
-		// Shader inputs
-		auto inPosition = writer.declInput< Vec4 >( "inPosition", 0u );
-		auto inTexcoord = writer.declInput< Vec2 >( "inTexcoord", 1u, flags.enableTexcoords() );
-		auto inCenter = writer.declInput< Vec3 >( "inCenter", 2u );
+		sdw::VertexWriter writer{ builder };
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
@@ -338,11 +331,10 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< VoidT, shader::VoxelSurfaceT >( sdw::VertexInT< VoidT >{ writer }
-			, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer
-				, flags }
-			,[&]( VertexIn in
-			, VertexOutT< shader::VoxelSurfaceT > out )
+		writer.implementMainT< shader::BillboardSurfaceT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
+			, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
+			,[&]( sdw::VertexInT< shader::BillboardSurfaceT > in
+			, sdw::VertexOutT< shader::VoxelSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -353,7 +345,7 @@ namespace castor3d
 				out.nodeId = writer.cast< sdw::Int >( nodeId );
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, modelData.modelToCurWorld( vec4( inCenter, 1.0_f ) ).xyz() );
+					, modelData.modelToCurWorld( vec4( in.center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_cameraData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
@@ -370,10 +362,10 @@ namespace castor3d
 				auto height = writer.declLocale( "height"
 					, billboardData.getHeight( c3d_cameraData ) );
 
-				out.texture0 = vec3( inTexcoord, 0.0_f );
+				out.texture0 = vec3( in.texture0, 0.0_f );
 				out.vtx.position = vec4( curBbcenter
-					+ right * inPosition.x() * width
-					+ up * inPosition.y() * height
+					+ right * in.position.x() * width
+					+ up * in.position.y() * height
 					, 1.0_f );
 				out.worldPosition = out.vtx.position;
 				auto viewPosition = writer.declLocale( "viewPosition"
@@ -389,37 +381,35 @@ namespace castor3d
 				out.passMultipliers[2] = passMultipliers[2];
 				out.passMultipliers[3] = passMultipliers[3];
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr VoxelizePass::doGetGeometryShaderSource( PipelineFlags const & flags )const
+	void VoxelizePass::doGetGeometryShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		GeometryWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::GeometryWriter writer{ builder };
 
 		C3D_Voxelizer( writer
 			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
 			, RenderPipeline::eBuffers
 			, true );
 
-		writer.implementMainT< TriangleListT< shader::VoxelSurfaceT >, TriangleStreamT< shader::VoxelSurfaceT > >( TriangleListT< shader::VoxelSurfaceT >{ writer
+		writer.implementMainT< sdw::TriangleListT< shader::VoxelSurfaceT >, sdw::TriangleStreamT< shader::VoxelSurfaceT > >( sdw::TriangleListT< shader::VoxelSurfaceT >{ writer
 				, flags }
-			, TriangleStreamT< shader::VoxelSurfaceT >{ writer
+			, sdw::TriangleStreamT< shader::VoxelSurfaceT >{ writer
 				, 3u
 				, flags }
-			, [&]( GeometryIn in
-				, TriangleListT< shader::VoxelSurfaceT > list
-				, TriangleStreamT< shader::VoxelSurfaceT > out )
+			, [&]( sdw::GeometryIn in
+				, sdw::TriangleListT< shader::VoxelSurfaceT > list
+				, sdw::TriangleStreamT< shader::VoxelSurfaceT > out )
 			{
 				auto facenormal = writer.declLocale( "facenormal"
 					, abs( list[0].normal + list[1].normal + list[2].normal ) );
 				auto maxi = writer.declLocale( "maxi"
 					, writer.ternary( facenormal[1] > facenormal[0], 1_u, 0_u ) );
 				maxi = writer.ternary( facenormal[2] > facenormal[maxi], 2_u, maxi );
-				auto positions = writer.declLocaleArray< Vec3 >( "positions", 3u );
+				auto positions = writer.declLocaleArray< sdw::Vec3 >( "positions", 3u );
 
-				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
+				FOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
 				{
 					positions[i] = list[i].worldPosition.xyz() * c3d_voxelData.worldToGrid;
 
@@ -454,7 +444,7 @@ namespace castor3d
 				FI;
 
 				// Output
-				FOR( writer, UInt, i, 0_u, i < 3_u, ++i )
+				FOR( writer, sdw::UInt, i, 0_u, i < 3_u, ++i )
 				{
 					out.worldPosition = list[i].vtx.position;
 					out.viewPosition = list[i].viewPosition;
@@ -473,14 +463,12 @@ namespace castor3d
 
 				out.restartStrip();
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr VoxelizePass::doGetPixelShaderSource( PipelineFlags const & flags )const
+	void VoxelizePass::doGetPixelShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::FragmentWriter writer{ builder };
 		bool enableTextures = flags.enableTextures();
 		shader::Utils utils{ writer };
 		shader::BRDFHelpers brdf{ writer };
@@ -542,13 +530,13 @@ namespace castor3d
 			, RenderPipeline::eTextures
 			, enableTextures ) );
 
-		writer.implementMainT< shader::VoxelSurfaceT, VoidT >( FragmentInT< shader::VoxelSurfaceT >{ writer
-				, FragmentOrigin::eUpperLeft
-				, FragmentCenter::eHalfPixel
+		writer.implementMainT< shader::VoxelSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::VoxelSurfaceT >{ writer
+				, sdw::FragmentOrigin::eUpperLeft
+				, sdw::FragmentCenter::eHalfPixel
 				, flags }
-			, FragmentOutT< VoidT >{ writer }
-			, [&]( FragmentInT< shader::VoxelSurfaceT > in
-				, FragmentOut out )
+			, sdw::FragmentOut{ writer }
+			, [&]( sdw::FragmentInT< shader::VoxelSurfaceT > in
+				, sdw::FragmentOut out )
 			{
 				auto diff = writer.declLocale( "diff"
 					, c3d_voxelData.worldToClip( in.worldPosition.xyz() ) );
@@ -624,8 +612,6 @@ namespace castor3d
 				}
 				FI;
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
 	//*********************************************************************************************

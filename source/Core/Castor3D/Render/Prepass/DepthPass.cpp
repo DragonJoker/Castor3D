@@ -11,6 +11,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslOutputs.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -108,15 +109,15 @@ namespace castor3d
 	{
 	}
 
-	ShaderPtr DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
+	void DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		return ShaderPtr{};
 	}
 
-	ShaderPtr DepthPass::doGetPixelShaderSource( PipelineFlags const & flags )const
+	void DepthPass::doGetPixelShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::FragmentWriter writer{ builder };
 		bool enableTextures = flags.enableTextures();
 
 		shader::Utils utils{ writer };
@@ -154,11 +155,6 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		// Outputs
-		auto depthObj = writer.declOutput< Vec4 >( "depthObj", 0u );
-		auto velocity = writer.declOutput< Vec2 >( "velocity", 1u );
-		auto nmlOcc = writer.declOutput< Vec4 >( "nmlOcc", 2u );
-
 		shader::Lights lights{ *getEngine()
 			, flags.lightingModelId
 			, flags.backgroundModelId
@@ -168,12 +164,10 @@ namespace castor3d
 			, {}
 			, nullptr };
 
-		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
-				, passShaders
-				, flags }
-			, FragmentOut{ writer }
-			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-				, FragmentOut out )
+		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+			, sdw::FragmentOutT< shader::PrepassOutputT >{ writer, flags }
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+				, sdw::FragmentOutT< shader::PrepassOutputT > out )
 			{
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[in.nodeId - 1u] );
@@ -204,14 +198,12 @@ namespace castor3d
 					FI;
 				}
 
-				depthObj = vec4( in.fragCoord.z()
+				out.depthObj = vec4( in.fragCoord.z()
 					, length( in.worldPosition.xyz() - c3d_cameraData.position() )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, writer.cast< sdw::Float >( material.lightingModel ) );
-				velocity = in.getVelocity();
-				nmlOcc = vec4( components.normal, components.occlusion );
+				out.velocity = in.getVelocity();
+				out.nmlOcc = vec4( components.normal, components.occlusion );
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

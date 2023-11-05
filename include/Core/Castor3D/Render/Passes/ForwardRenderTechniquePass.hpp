@@ -79,7 +79,8 @@ namespace castor3d
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, castor3d::ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer )override;
-		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
+		void doGetPixelShaderSource( PipelineFlags const & flags
+			, ast::ShaderBuilder & builder )const override;
 
 	private:
 		Texture const * m_mippedColour;

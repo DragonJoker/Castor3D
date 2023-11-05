@@ -52,7 +52,7 @@ namespace light_streaks
 					out.colour() += c3d_mapKawase.sample( vec3( in.uv(), 2.0f ) );
 					out.colour() += c3d_mapKawase.sample( vec3( in.uv(), 3.0f ) );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

@@ -106,7 +106,7 @@ namespace castor3d
 					c3d_overlaysSurfaces[offset + index] = rb; ++index;
 					c3d_overlaysSurfaces[offset + index] = rt; ++index;
 				} );
-			comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			comp.shader = writer.getBuilder().releaseShader();
 		}
 		return makeShaderState( device, comp );
 	}

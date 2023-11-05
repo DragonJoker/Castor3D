@@ -49,7 +49,7 @@ namespace PbrBloom
 							, vec3( bloomStrength ) )
 						, 1.0f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

@@ -261,7 +261,7 @@ namespace castor3d
 					}
 					FI;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static u32 computeThreadGroupsCount( LightCache const & cache )

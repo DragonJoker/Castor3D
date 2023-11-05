@@ -11,6 +11,64 @@ namespace castor3d::shader
 	//*****************************************************************************************
 
 	template< ast::var::Flag FlagT >
+	BillboardSurfaceT< FlagT >::BillboardSurfaceT( sdw::ShaderWriter & writer
+		, sdw::expr::ExprPtr expr
+		, bool enabled )
+		: StructInstance{ writer, std::move( expr ), enabled }
+		, position{ this->getMember< sdw::Vec4 >( "position" ) }
+		, texture0{ this->getMember< sdw::Vec2 >( "texture0", true ) }
+		, center{ this->getMember< sdw::Vec3 >( "center" ) }
+	{
+	}
+
+	template< ast::var::Flag FlagT >
+	ast::type::IOStructPtr BillboardSurfaceT< FlagT >::makeIOType( ast::type::TypesCache & cache
+		, sdw::EntryPoint entryPoint
+		, PipelineFlags const & flags )
+	{
+		auto result = cache.getIOStruct( "C3D_BillboardSurface"
+			, entryPoint
+			, FlagT );
+
+		if ( result->empty() )
+		{
+			uint32_t index = 0u;
+			result->declMember( "position", ast::type::Kind::eVec4F
+				, ast::type::NotArray
+				, index++ );
+			result->declMember( "texture0", ast::type::Kind::eVec2F
+				, ast::type::NotArray
+				, ( flags.enableTexcoords() ? index++ : 0 )
+				, flags.enableTexcoords() );
+			result->declMember( "center", ast::type::Kind::eVec3F
+				, ast::type::NotArray
+				, index++ );
+		}
+
+		return result;
+	}
+
+	template< ast::var::Flag FlagT >
+	ast::type::BaseStructPtr BillboardSurfaceT< FlagT >::makeType( ast::type::TypesCache & cache )
+	{
+		auto result = cache.getStruct( ast::type::MemoryLayout::eC, "C3D_BillboardSurface" );
+
+		if ( result->empty() )
+		{
+			result->declMember( "position", ast::type::Kind::eVec4F
+				, ast::type::NotArray );
+			result->declMember( "texture0", ast::type::Kind::eVec2F
+				, ast::type::NotArray );
+			result->declMember( "center", ast::type::Kind::eVec3F
+				, ast::type::NotArray );
+		}
+
+		return result;
+	}
+
+	//*****************************************************************************************
+
+	template< ast::var::Flag FlagT >
 	VertexSurfaceT< FlagT >::VertexSurfaceT( sdw::ShaderWriter & writer
 		, sdw::expr::ExprPtr expr
 		, bool enabled )

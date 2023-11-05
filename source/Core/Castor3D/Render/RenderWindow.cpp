@@ -1091,7 +1091,7 @@ namespace castor3d
 					FI;
 #endif
 				} );
-			module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			module.shader = writer.getBuilder().releaseShader();
 		}
 
 		m_program = makeProgramStates( getDevice(), module );

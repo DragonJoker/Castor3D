@@ -137,15 +137,15 @@ namespace castor3d
 					, ashes::VkPipelineColorBlendAttachmentStateArray{} };
 			}
 
-			ShaderPtr doGetGeometryShaderSource( PipelineFlags const & flags )const override
+			void doGetGeometryShaderSource( PipelineFlags const & flags
+				, ast::ShaderBuilder & builder )const override
 			{
-				return ShaderPtr{};
 			}
 
-			ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override
+			void doGetPixelShaderSource( PipelineFlags const & flags
+				, ast::ShaderBuilder & builder )const override
 			{
-				using namespace sdw;
-				FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+				sdw::FragmentWriter writer{ builder };
 				bool enableTextures = flags.enableTextures();
 
 				shader::Utils utils{ writer };
@@ -190,12 +190,12 @@ namespace castor3d
 				auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 				pcb.end();
 
-				writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				writer.implementMainT< shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 						, passShaders
 						, flags }
-					, FragmentOut{ writer }
-					, [&]( FragmentInT< shader::FragmentSurfaceT > in
-						, FragmentOut out )
+					, sdw::FragmentOut{ writer }
+					, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+						, sdw::FragmentOut out )
 					{
 						auto modelData = writer.declLocale( "modelData"
 							, c3d_modelsData[in.nodeId - 1u] );
@@ -221,8 +221,7 @@ namespace castor3d
 							, c3d_clustersData.computeClusterIndex1D( clusterIndex3D ) );
 						c3d_clusterFlags[clusterIndex1D] = 1_u;
 					} );
-
-				return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );}
+			}
 		};
 	}
 

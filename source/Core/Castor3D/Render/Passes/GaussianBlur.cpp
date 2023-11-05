@@ -103,7 +103,7 @@ namespace castor3d
 						out.fragDepth = outColour.r();
 					}
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static std::vector< float > getHalfPascal( uint32_t height )
