@@ -1147,6 +1147,7 @@ namespace castor3d
 		else
 		{
 			m_renderQueue->invalidate();
+			onInvalidate( *this );
 		}
 	}
 

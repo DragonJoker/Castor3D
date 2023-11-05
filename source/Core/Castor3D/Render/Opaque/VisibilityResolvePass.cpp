@@ -2125,6 +2125,7 @@ namespace castor3d
 		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }
 		, m_parallaxOcclusionFilter{ renderPassDesc.m_parallaxOcclusionFilter }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
+		, m_onNodesPassInvalidate( m_nodesPass.onInvalidate.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
 		, m_firstRenderPass{ ( useCompute
 			? nullptr
 			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
@@ -2435,7 +2436,7 @@ namespace castor3d
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
-				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point4ui ) );
+				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point3ui ) );
 				++m_drawCalls;
 				first = false;
 			}
@@ -2469,7 +2470,7 @@ namespace castor3d
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
-				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point4ui ) );
+				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point3ui ) );
 				++m_drawCalls;
 				first = false;
 			}

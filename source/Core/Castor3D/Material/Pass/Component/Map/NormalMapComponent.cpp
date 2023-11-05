@@ -94,7 +94,6 @@ namespace castor3d
 			}
 			else
 			{
-				getPassComponent< NormalMapComponent >( parsingContext );
 				params[0]->get( parsingContext.texture.configuration.normalFactor );
 			}
 		}
@@ -110,7 +109,6 @@ namespace castor3d
 			}
 			else
 			{
-				getPassComponent< NormalMapComponent >( parsingContext );
 				params[0]->get( parsingContext.texture.configuration.normalDirectX );
 			}
 		}
@@ -126,7 +124,6 @@ namespace castor3d
 			}
 			else
 			{
-				getPassComponent< NormalMapComponent >( parsingContext );
 				params[0]->get( parsingContext.texture.configuration.normal2Channels );
 			}
 		}
