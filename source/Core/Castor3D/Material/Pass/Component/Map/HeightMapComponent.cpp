@@ -91,7 +91,6 @@ namespace castor3d
 			}
 			else
 			{
-				getPassComponent< HeightMapComponent >( parsingContext );
 				params[0]->get( parsingContext.texture.configuration.heightFactor );
 			}
 		}

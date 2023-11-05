@@ -71,6 +71,7 @@ namespace castor3d
 	void RenderQueue::invalidate()
 	{
 		m_invalidated = true;
+		m_commandsChanged = true;
 	}
 
 	void RenderQueue::cleanup()
