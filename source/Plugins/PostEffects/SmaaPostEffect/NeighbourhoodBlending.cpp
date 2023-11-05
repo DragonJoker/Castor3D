@@ -202,7 +202,7 @@ namespace smaa
 				{
 					out.colour() = SMAANeighborhoodBlendingPS( in.texcoord(), in.offset(), c3d_colourTex, c3d_blendTex );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

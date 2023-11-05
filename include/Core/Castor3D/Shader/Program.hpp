@@ -29,13 +29,6 @@ namespace castor3d
 		friend class castor::TextWriter< castor3d::ShaderProgram >;
 
 	public:
-		struct CompiledShader
-		{
-			castor::String name;
-			SpirVShader const * shader;
-		};
-
-	public:
 		/**
 		 *\~english
 		 *\brief		Constructor
@@ -68,28 +61,6 @@ namespace castor3d
 		C3D_API void setFile( VkShaderStageFlagBits target, castor::Path const & pathFile );
 		/**
 		 *\~english
-		 *\brief		Retrieves the shader file.
-		 *\param[in]	target	The shader object concerned.
-		 *\return		The file name.
-		 *\~french
-		 *\brief		Récupère le fichier du shader.
-		 *\param[in]	target	Le shader object concerné.
-		 *\return		Le nom du fichier.
-		 */
-		C3D_API castor::Path getFile( VkShaderStageFlagBits target )const;
-		/**
-		 *\~english
-		 *\brief		Tells if the shader object has a source file.
-		 *\param[in]	target	The shader object concerned.
-		 *\return		\p true if the shader object has a source file.
-		 *\~french
-		 *\brief		Dit si le shader a un fichier source.
-		 *\param[in]	target	Le shader object concerné.
-		 *\return		\p true si le shader a un fichier source.
-		 */
-		C3D_API bool hasFile( VkShaderStageFlagBits target )const;
-		/**
-		 *\~english
 		 *\brief		Sets the shader source.
 		 *\param[in]	target	The shader object concerned.
 		 *\param[in]	source	The source code.
@@ -112,26 +83,22 @@ namespace castor3d
 		C3D_API void setSource( VkShaderStageFlagBits target, ShaderPtr shader );
 		/**
 		 *\~english
-		 *\brief		Retrieves the shader source.
-		 *\param[in]	target	The shader object concerned.
-		 *\return		The source code.
+		 *\brief		Sets the program source.
+		 *\param[in]	shader	The source shader.
 		 *\~french
-		 *\brief		Récupère la source du shader.
-		 *\param[in]	target	Le shader object concerné.
-		 *\return		Le code de la source.
+		 *\brief		Définit la source du programme.
+		 *\param[in]	shader	Le shader de la source.
 		 */
-		C3D_API ShaderModule const & getSource( VkShaderStageFlagBits target )const;
+		C3D_API void setSource( ShaderPtr shader );
 		/**
 		 *\~english
-		 *\brief		Tells if the shader object has a source code.
-		 *\param[in]	target	The shader object concerned.
-		 *\return		\p true if the shader object has a source code.
+		 *\param[in]	stage	The shader stage.
+		 *\return		\p true if the shader program has a source for given shader stage.
 		 *\~french
-		 *\brief		Dit si le shader a un code source.
-		 *\param[in]	target	Le shader object concerné.
-		 *\return		\p true si le shader a un code source.
+		 *\param[in]	stage	Le shader stage.
+		 *\return		\p true si le shader a une source pour le shader stage donné.
 		 */
-		C3D_API bool hasSource( VkShaderStageFlagBits target )const;
+		C3D_API bool hasSource( ast::ShaderStage stage )const;
 		/**
 		*\~english
 		*name
@@ -141,7 +108,12 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		inline ashes::PipelineShaderStageCreateInfoArray const & getStates()const
+		ProgramModule const & getModule()const noexcept
+		{
+			return m_module;
+		}
+
+		ashes::PipelineShaderStageCreateInfoArray const & getStates()const noexcept
 		{
 			return m_states;
 		}
@@ -149,8 +121,7 @@ namespace castor3d
 
 	protected:
 		std::map< VkShaderStageFlagBits, castor::Path > m_files;
-		std::map< VkShaderStageFlagBits, ShaderModule > m_modules;
-		std::map< VkShaderStageFlagBits, CompiledShader > m_compiled;
+		ProgramModule m_module;
 		ashes::PipelineShaderStageCreateInfoArray m_states;
 	};
 
@@ -167,6 +138,7 @@ namespace castor3d
 	C3D_API ashes::PipelineShaderStageCreateInfoArray makeProgramStates( RenderDevice const & device
 		, ProgramModule & programModule
 		, ashes::Optional< ashes::SpecializationInfo > specialization = ashes::nullopt );
+	C3D_API ast::ShaderStage getShaderStage( VkShaderStageFlagBits value );
 	C3D_API VkShaderStageFlagBits getVkShaderStage( ast::ShaderStage value );
 	C3D_API VkShaderStageFlagBits getVkShaderStage( ast::EntryPoint value );
 	C3D_API ast::EntryPoint getEntryPointType( VkShaderStageFlagBits value );

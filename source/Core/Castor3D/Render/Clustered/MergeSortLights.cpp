@@ -320,7 +320,7 @@ namespace castor3d
 						serialMerge( mergedPath, numA, numA + diag - mergedPath, numA + numB, diag0 + diag, numValues, chunkOffsetA0 );
 					}
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		class FramePass

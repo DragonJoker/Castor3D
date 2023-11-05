@@ -238,7 +238,7 @@ namespace atmosphere_scattering
 						, vec4( c3d_atmosphereData.multipleScatteringFactor() * L, 1.0_f ) );
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

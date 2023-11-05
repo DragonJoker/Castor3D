@@ -134,7 +134,7 @@ namespace ocean_fft
 
 					outImg.store( ivec2( in.globalInvocationID.xy() ), filtered );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

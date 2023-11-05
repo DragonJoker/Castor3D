@@ -124,7 +124,7 @@ namespace fxaa
 						, 1.0_f );
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

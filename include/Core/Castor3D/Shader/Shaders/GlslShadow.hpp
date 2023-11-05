@@ -329,7 +329,6 @@ namespace castor3d::shader
 			, sdw::InUInt
 			, sdw::InUInt
 			, sdw::InFloat > m_computeVolumetric;
-
 	};
 }
 

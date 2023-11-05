@@ -93,8 +93,7 @@ namespace castor3d
 			, bool temporalSmoothing
 			, uint32_t voxelGridSize )
 		{
-			using namespace sdw;
-			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			auto voxels( writer.declArrayStorageBuffer< shader::Voxel >( "voxels"
@@ -108,8 +107,8 @@ namespace castor3d
 
 			shader::Utils utils{ writer };
 
-			writer.implementMainT< VoidT >( 256u
-				, [&]( ComputeIn in )
+			writer.implementMainT< sdw::VoidT >( 256u
+				, [&]( sdw::ComputeIn in )
 				{
 					auto color = writer.declLocale( "color"
 						, utils.decodeColor( voxels[in.globalInvocationID.x()].colorMask ) );
@@ -118,7 +117,7 @@ namespace castor3d
 					{
 						auto coord = writer.declLocale( "coord"
 							, ivec3( utils.unflatten( in.globalInvocationID.x()
-								, uvec3( UInt{ voxelGridSize } ) ) ) );
+								, uvec3( sdw::UInt{ voxelGridSize } ) ) ) );
 
 						if ( temporalSmoothing )
 						{
@@ -135,7 +134,7 @@ namespace castor3d
 					// delete emission data, but keep normals (no need to delete, we will only read normal values of filled voxels)
 					voxels[in.globalInvocationID.x()].colorMask = 0_u;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static VoxelBufferToTexture::Pipeline createPipeline( RenderDevice const & device

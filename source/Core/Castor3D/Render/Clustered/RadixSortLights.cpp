@@ -186,7 +186,7 @@ namespace castor3d
 					c3d_outputKeys[threadIndex] = gsKeys[groupIndex];
 					c3d_outputValues[threadIndex] = gsValues[groupIndex];
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		class FramePass

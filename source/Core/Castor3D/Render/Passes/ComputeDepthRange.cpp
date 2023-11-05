@@ -83,8 +83,7 @@ namespace castor3d
 
 		static ShaderPtr createShader( RenderDevice const & device )
 		{
-			using namespace sdw;
-			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			auto input( writer.declStorageImg< RFImg2DRgba32 >( "input"
@@ -100,7 +99,7 @@ namespace castor3d
 
 			shader::Utils utils{ writer };
 
-			writer.implementMainT< VoidT >( 32u, 32u, [&]( ComputeIn in )
+			writer.implementMainT< sdw::VoidT >( 32u, 32u, [&]( sdw::ComputeIn in )
 				{
 					auto size = writer.declLocale( "size"
 						, uvec2( input.getSize() ) );
@@ -122,7 +121,7 @@ namespace castor3d
 					}
 					FI;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 	

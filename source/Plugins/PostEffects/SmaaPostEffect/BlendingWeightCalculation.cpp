@@ -803,7 +803,7 @@ namespace smaa
 						, c3d_searchTex
 						, c3d_smaaData.subsampleIndices );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static crg::ImageViewId createImage( crg::FramePassGroup & graph

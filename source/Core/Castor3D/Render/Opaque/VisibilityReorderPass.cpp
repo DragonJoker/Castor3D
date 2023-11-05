@@ -64,7 +64,7 @@ namespace castor3d
 					FI;
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static crg::FramePass const & createPass( castor::String const & name
@@ -160,7 +160,7 @@ namespace castor3d
 					FI;
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static crg::FramePass const & createPass( castor::String const & name
@@ -268,7 +268,7 @@ namespace castor3d
 					FI;
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static crg::FramePass const & createPass( castor::String const & name

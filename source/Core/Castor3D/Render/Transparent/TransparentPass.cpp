@@ -182,10 +182,10 @@ namespace castor3d
 			, index );
 	}
 
-	ShaderPtr TransparentPass::doGetPixelShaderSource( PipelineFlags const & flags )const
+	void TransparentPass::doGetPixelShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::FragmentWriter writer{ builder };
 		bool enableTextures = flags.enableTextures();
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 
@@ -282,15 +282,15 @@ namespace castor3d
 		pcb.end();
 
 		// Fragment Outputs
-		auto outAccumulation( writer.declOutput< Vec4 >( "outAccumulation", 0 ) );
-		auto outRevealage( writer.declOutput< Float >( "outRevealage", 1 ) );
+		auto outAccumulation( writer.declOutput< sdw::Vec4 >( "outAccumulation", 0 ) );
+		auto outRevealage( writer.declOutput< sdw::Float >( "outRevealage", 1 ) );
 
-		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+		writer.implementMainT< shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
-			, FragmentOut{ writer }
-			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-				, FragmentOut out )
+			, sdw::FragmentOut{ writer }
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+				, sdw::FragmentOut out )
 			{
 				shader::DebugOutput output{ getDebugConfig()
 					, cuT( "Default" )
@@ -486,7 +486,5 @@ namespace castor3d
 					, components.bwAccumulationOperator );
 				outRevealage = components.opacity;
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

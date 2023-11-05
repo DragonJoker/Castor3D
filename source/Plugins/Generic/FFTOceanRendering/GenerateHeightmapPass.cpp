@@ -167,7 +167,7 @@ namespace ocean_fft
 						, a + b ); // Sum up forward and backwards travelling waves.
 					heights[i.y() * N.x() + i.x()] = res;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

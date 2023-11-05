@@ -104,7 +104,7 @@ namespace PbrBloom
 					out.colour() += ( j + k + l + m ) * 0.125f;
 					out.colour() = max( out.colour(), vec3( 0.0001_f ) );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

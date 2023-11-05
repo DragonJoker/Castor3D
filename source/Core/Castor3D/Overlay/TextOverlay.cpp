@@ -363,7 +363,7 @@ namespace castor3d
 					FI;
 				} );
 
-			comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			comp.shader = writer.getBuilder().releaseShader();
 		}
 		return makeShaderState( device, comp );
 	}

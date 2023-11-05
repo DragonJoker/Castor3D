@@ -1476,7 +1476,7 @@ namespace castor3d
 				, billboardNodeId
 				, shade );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static ashes::DescriptorSetLayoutPtr createInDescriptorLayout( RenderDevice const & device

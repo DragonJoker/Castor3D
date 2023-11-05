@@ -25,29 +25,78 @@ namespace castor3d
 			return stream;
 		}
 
-		static bool doAddModule( VkShaderStageFlagBits stage
-			, std::string const & name
-			, std::map< VkShaderStageFlagBits, ShaderModule > & modules )
+		static std::string getName( VkShaderStageFlagBits value )
 		{
-			bool added = false;
-
-			if ( modules.find( stage ) == modules.end() )
+			switch ( value )
 			{
-				modules.emplace( stage, ShaderModule{ stage, name } );
-				added = true;
+			case VK_SHADER_STAGE_VERTEX_BIT:
+				return "Vert";
+			case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
+				return "Tesc";
+			case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
+				return "Tese";
+			case VK_SHADER_STAGE_GEOMETRY_BIT:
+				return "Geom";
+			case VK_SHADER_STAGE_FRAGMENT_BIT:
+				return "Frag";
+			case VK_SHADER_STAGE_COMPUTE_BIT:
+				return "Comp";
+#ifdef VK_NV_ray_tracing
+			case VK_SHADER_STAGE_RAYGEN_BIT_NV:
+				return "Rgen";
+			case VK_SHADER_STAGE_ANY_HIT_BIT_NV:
+				return "Ahit";
+			case VK_SHADER_STAGE_CLOSEST_HIT_BIT_NV:
+				return "Chit";
+			case VK_SHADER_STAGE_MISS_BIT_NV:
+				return "Rmis";
+			case VK_SHADER_STAGE_INTERSECTION_BIT_NV:
+				return "Rint";
+			case VK_SHADER_STAGE_CALLABLE_BIT_NV:
+				return "Call";
+#endif
+#ifdef VK_EXT_mesh_shader
+			case VK_SHADER_STAGE_TASK_BIT_EXT:
+				return "Task";
+			case VK_SHADER_STAGE_MESH_BIT_EXT:
+				return "Mesh";
+#elif defined( VK_NV_mesh_shader )
+			case VK_SHADER_STAGE_TASK_BIT_NV:
+				return "Task";
+			case VK_SHADER_STAGE_MESH_BIT_NV:
+				return "Mesh";
+#endif
+			default:
+				assert( false && "Unsupported VkShaderStageFlagBits." );
+				return "Unsupported VkShaderStageFlagBits";
 			}
-
-			return added;
 		}
 
-		static ashes::PipelineShaderStageCreateInfo loadShader( RenderDevice const & device
-			, ShaderProgram::CompiledShader const & compiled
-			, VkShaderStageFlagBits stage )
+		void eraseFile( VkShaderStageFlagBits target
+			, std::map< VkShaderStageFlagBits, castor::Path > & files )
 		{
-			return makeShaderState( *device
-				, stage
-				, *compiled.shader
-				, compiled.name );
+			auto it = files.find( target );
+
+			if ( it != files.end() )
+			{
+				files.erase( it );
+			}
+		}
+
+		void eraseStage( VkShaderStageFlagBits target
+			, ashes::PipelineShaderStageCreateInfoArray & states )
+		{
+			auto it = std::find_if( states.begin()
+				, states.end()
+				, [target]( ashes::PipelineShaderStageCreateInfo const & lookup )
+				{
+					return lookup->stage == target;
+				} );
+
+			if ( it != states.end() )
+			{
+				states.erase( it );
+			}
 		}
 	}
 
@@ -55,8 +104,9 @@ namespace castor3d
 
 	ShaderProgram::ShaderProgram( castor::String const & name
 		, RenderSystem & renderSystem )
-		: castor::Named( name )
-		, OwnedBy< RenderSystem >( renderSystem )
+		: castor::Named{ name }
+		, OwnedBy< RenderSystem >{ renderSystem }
+		, m_module{ name }
 	{
 	}
 
@@ -66,90 +116,51 @@ namespace castor3d
 
 	void ShaderProgram::setFile( VkShaderStageFlagBits target, castor::Path const & pathFile )
 	{
-		m_files[target] = pathFile;
-		castor::TextFile file{ pathFile, castor::File::OpenMode::eRead };
 		castor::String source;
-		file.copyToString( source );
-		auto added = shdprog::doAddModule( target, getName(), m_modules );
-
-		if ( added )
 		{
-			auto & renderSystem = *getRenderSystem();
-			auto it = m_modules.find( target );
-			it->second.source = source;
-			m_compiled.emplace( target
-				, CompiledShader{ getName()
-					, &renderSystem.compileShader( it->second ) } );
-			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
-				, m_compiled[target]
-				, target ) );
+			castor::TextFile file{ pathFile, castor::File::OpenMode::eRead };
+			file.copyToString( source );
 		}
-	}
-
-	castor::Path ShaderProgram::getFile( VkShaderStageFlagBits target )const
-	{
-		auto it = m_files.find( target );
-		CU_Require( it != m_files.end() );
-		return it->second;
-	}
-
-	bool ShaderProgram::hasFile( VkShaderStageFlagBits target )const
-	{
-		auto it = m_files.find( target );
-		return it != m_files.end()
-			&& !it->second.empty();
+		setSource( target, source );
+		m_files[target] = pathFile;
 	}
 
 	void ShaderProgram::setSource( VkShaderStageFlagBits target, castor::String const & source )
 	{
-		m_files[target].clear();
-		auto added = shdprog::doAddModule( target, getName(), m_modules );
-
-		if ( added )
-		{
-			auto & renderSystem = *getRenderSystem();
-			auto it = m_modules.find( target );
-			it->second.source = source;
-			m_compiled.emplace( target
-				, CompiledShader{ getName()
-					, &renderSystem.compileShader( it->second ) } );
-			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
-				, m_compiled[target]
-				, target ) );
-		}
+		shdprog::eraseFile( target, m_files );
+		shdprog::eraseStage( target, m_states );
+		auto & renderSystem = *getRenderSystem();
+		auto & device = renderSystem.getRenderDevice();
+		auto & spirvShader = m_module.compiled.emplace( getShaderStage( target )
+			, renderSystem.compileShader( target, getName(), source ) ).first->second;
+		m_states.push_back( makeShaderState( *device, target, spirvShader, getName() + shdprog::getName( target ) ) );
 	}
 
 	void ShaderProgram::setSource( VkShaderStageFlagBits target, ShaderPtr shader )
 	{
-		m_files[target].clear();
-		auto added = shdprog::doAddModule( target, getName(), m_modules );
-
-		if ( added )
-		{
-			auto & renderSystem = *getRenderSystem();
-			auto it = m_modules.find( target );
-			it->second.shader = std::move( shader );
-			m_compiled.emplace( target
-				, CompiledShader{ getName()
-					, &renderSystem.compileShader( it->second ) } );
-			m_states.push_back( shdprog::loadShader( renderSystem.getRenderDevice()
-				, m_compiled[target]
-				, target ) );
-		}
+		shdprog::eraseFile( target, m_files );
+		shdprog::eraseStage( target, m_states );
+		auto & renderSystem = *getRenderSystem();
+		auto & device = renderSystem.getRenderDevice();
+		ast::EntryPointConfig entryPoint{ getShaderStage( target ), "main" };
+		auto & spirvShader = m_module.compiled.emplace( getShaderStage( target )
+			, renderSystem.compileShader( target, getName(), *shader, entryPoint ) ).first->second;
+		m_states.push_back( makeShaderState( *device, target, spirvShader, getName() + shdprog::getName( target ) ) );
 	}
 
-	ShaderModule const & ShaderProgram::getSource( VkShaderStageFlagBits target )const
+	void ShaderProgram::setSource( ShaderPtr shader )
 	{
-		auto it = m_modules.find( target );
-		CU_Require( it != m_modules.end() );
-		return it->second;
+		m_files.clear();
+		m_module.compiled.clear();
+		m_module.shader = std::move( shader );
+		m_states = makeProgramStates( getRenderSystem()->getRenderDevice(), m_module );
 	}
 
-	bool ShaderProgram::hasSource( VkShaderStageFlagBits target )const
+	bool ShaderProgram::hasSource( ast::ShaderStage stage )const
 	{
-		auto it = m_compiled.find( target );
-		return it != m_compiled.end()
-			&& !it->second.shader->spirv.empty();
+		auto it = m_module.compiled.find( stage );
+		return it != m_module.compiled.end()
+			&& !it->second.spirv.empty();
 	}
 
 	SpirVShader const & compileShader( RenderSystem & renderSystem
@@ -185,7 +196,7 @@ namespace castor3d
 	{
 		ashes::PipelineShaderStageCreateInfoArray result;
 		{
-			auto entryPoints = ast::listEntryPoints( programModule.shader->getContainer() );
+			auto entryPoints = ast::listEntryPoints( programModule.shader->getStatements() );
 
 			for ( auto entryPoint : entryPoints )
 			{
@@ -200,6 +211,51 @@ namespace castor3d
 
 		programModule.shader.reset();
 		return result;
+	}
+
+	ast::ShaderStage getShaderStage( VkShaderStageFlagBits value )
+	{
+		switch ( value )
+		{
+		case VK_SHADER_STAGE_VERTEX_BIT:
+			return ast::ShaderStage::eVertex;
+		case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
+			return ast::ShaderStage::eTessellationControl;
+		case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
+			return ast::ShaderStage::eTessellationEvaluation;
+		case VK_SHADER_STAGE_GEOMETRY_BIT:
+			return ast::ShaderStage::eGeometry;
+#ifdef VK_EXT_mesh_shader
+		case VK_SHADER_STAGE_MESH_BIT_EXT:
+			return ast::ShaderStage::eMesh;
+		case VK_SHADER_STAGE_TASK_BIT_EXT:
+			return ast::ShaderStage::eTask;
+#elif defined( VK_NV_mesh_shader )
+		case VK_SHADER_STAGE_MESH_BIT_NV:
+			return ast::ShaderStage::eMeshNV;
+		case VK_SHADER_STAGE_TASK_BIT_NV:
+			return ast::ShaderStage::eTaskNV;
+#endif
+		case VK_SHADER_STAGE_FRAGMENT_BIT:
+			return ast::ShaderStage::eFragment;
+		case VK_SHADER_STAGE_RAYGEN_BIT_KHR:
+			return ast::ShaderStage::eRayGeneration;
+		case VK_SHADER_STAGE_ANY_HIT_BIT_KHR:
+			return ast::ShaderStage::eRayAnyHit;
+		case VK_SHADER_STAGE_CLOSEST_HIT_BIT_KHR:
+			return ast::ShaderStage::eRayClosestHit;
+		case VK_SHADER_STAGE_MISS_BIT_KHR:
+			return ast::ShaderStage::eRayMiss;
+		case VK_SHADER_STAGE_INTERSECTION_BIT_KHR:
+			return ast::ShaderStage::eRayIntersection;
+		case VK_SHADER_STAGE_CALLABLE_BIT_KHR:
+			return ast::ShaderStage::eCallable;
+		case VK_SHADER_STAGE_COMPUTE_BIT:
+			return ast::ShaderStage::eCompute;
+		default:
+			CU_Failure( "Unsupported ShaderStage" );
+			return ast::ShaderStage::eCompute;
+		}
 	}
 
 	VkShaderStageFlagBits getVkShaderStage( sdw::ShaderStage value )
@@ -261,10 +317,17 @@ namespace castor3d
 			return ast::EntryPoint::eTessellationEvaluation;
 		case VK_SHADER_STAGE_GEOMETRY_BIT:
 			return ast::EntryPoint::eGeometry;
+#ifdef VK_EXT_mesh_shader
 		case VK_SHADER_STAGE_MESH_BIT_EXT:
 			return ast::EntryPoint::eMesh;
 		case VK_SHADER_STAGE_TASK_BIT_EXT:
 			return ast::EntryPoint::eTask;
+#elif defined( VK_NV_mesh_shader )
+		case VK_SHADER_STAGE_MESH_BIT_NV:
+			return ast::EntryPoint::eMesh;
+		case VK_SHADER_STAGE_TASK_BIT_NV:
+			return ast::EntryPoint::eTask;
+#endif
 		case VK_SHADER_STAGE_FRAGMENT_BIT:
 			return ast::EntryPoint::eFragment;
 		case VK_SHADER_STAGE_RAYGEN_BIT_KHR:

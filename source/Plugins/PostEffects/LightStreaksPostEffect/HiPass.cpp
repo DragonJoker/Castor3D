@@ -62,7 +62,7 @@ namespace light_streaks
 					}
 					FI;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

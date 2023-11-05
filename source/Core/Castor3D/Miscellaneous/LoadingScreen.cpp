@@ -142,7 +142,7 @@ namespace castor3d
 					fragColor = c3d_source.fetch( ivec2( in.fragCoord.xy() ), 0_i );
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static crg::RunnableGraphPtr createRunnableGraph( crg::FrameGraph & graph

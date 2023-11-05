@@ -195,7 +195,7 @@ namespace castor3d
 						out.colour() = vec4( prefilteredColor, 1.0_f );
 					} );
 
-				program.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+				program.shader = writer.getBuilder().releaseShader(); 
 			}
 
 			return makeProgramStates( device, program );

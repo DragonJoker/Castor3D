@@ -499,26 +499,4 @@ namespace GuiCommon
 		return wxSize( int( value.getWidth() )
 			, int( value.getHeight() ) );
 	}
-
-	ast::ShaderStage convert( VkShaderStageFlagBits stage )
-	{
-		switch ( stage )
-		{
-		case VK_SHADER_STAGE_VERTEX_BIT:
-			return ast::ShaderStage::eVertex;
-		case VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT:
-			return ast::ShaderStage::eTessellationControl;
-		case VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT:
-			return ast::ShaderStage::eTessellationEvaluation;
-		case VK_SHADER_STAGE_GEOMETRY_BIT:
-			return ast::ShaderStage::eGeometry;
-		case VK_SHADER_STAGE_FRAGMENT_BIT:
-			return ast::ShaderStage::eFragment;
-		case VK_SHADER_STAGE_COMPUTE_BIT:
-			return ast::ShaderStage::eCompute;
-		default:
-			assert( false && "Unsupported VkShaderStageFlagBits" );
-			return ast::ShaderStage::eVertex;
-		}
-	}
 }

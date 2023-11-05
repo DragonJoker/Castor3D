@@ -73,7 +73,7 @@ namespace castor3d
 							, sampleSphericalMap( normalize( in.position() ) ) );
 						out.colour() = vec4( mapColour.sample( utils.topDownToBottomUp( uv ) ).rgb(), 1.0_f );
 					} );
-				module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+				module.shader = writer.getBuilder().releaseShader();
 			}
 
 			return makeProgramStates( device, module );

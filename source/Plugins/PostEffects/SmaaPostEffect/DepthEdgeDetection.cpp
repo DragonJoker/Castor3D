@@ -91,7 +91,7 @@ namespace smaa
 					out.colour() = vec4( 0.0_f );
 					out.colour().xy() = SMAADepthEdgeDetectionPS( utils.topDownToBottomUp( in.texcoord() ), in.offset(), c3d_depthObjTex );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

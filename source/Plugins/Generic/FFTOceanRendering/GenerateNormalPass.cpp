@@ -170,7 +170,7 @@ namespace ocean_fft
 						//, cmul( res, vec2( -k.y(), k.x() ) ) );
 					normals[i.y() * N.x() + i.x()] = grad;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

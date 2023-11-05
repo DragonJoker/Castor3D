@@ -67,7 +67,7 @@ namespace light_streaks
 
 					out.colour() = vec4( clamp( colour, vec3( 0.0_f ), vec3( 1.0_f ) ), 1.0_f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static std::vector< KawasePass::Subpass > doCreateSubpasses( crg::FramePassGroup & graph

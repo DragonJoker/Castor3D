@@ -265,7 +265,7 @@ namespace castor3d
 						writeToGlobalMemory( c3d_childLevel, c3d_childLevel );
 					}
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		class FramePass

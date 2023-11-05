@@ -232,7 +232,7 @@ namespace atmosphere_scattering
 					return ifragCoord;
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

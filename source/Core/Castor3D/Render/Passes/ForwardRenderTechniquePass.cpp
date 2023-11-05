@@ -187,10 +187,10 @@ namespace castor3d
 		}
 	}
 
-	ShaderPtr ForwardRenderTechniquePass::doGetPixelShaderSource( PipelineFlags const & flags )const
+	void ForwardRenderTechniquePass::doGetPixelShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		FragmentWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::FragmentWriter writer{ builder };
 		bool enableTextures = flags.enableTextures();
 		bool hasDiffuseGI = flags.hasDiffuseGI();
 
@@ -296,17 +296,17 @@ namespace castor3d
 
 		// Fragment Outputs
 		uint32_t outIndex{};
-		auto outColour( writer.declOutput< Vec4 >( "outColour", outIndex++ ) );
-		auto outVelocity( writer.declOutput< Vec4 >( "outVelocity", ( flags.writeVelocity() ? outIndex++ : 0u ), flags.writeVelocity() ) );
-		auto outScattering( writer.declOutput< Vec4 >( "outScattering", ( m_outputScattering ? outIndex++ : 0u ), m_outputScattering ) );
-		auto outDiffuse( writer.declOutput< Vec4 >( "outDiffuse", ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ? outIndex++ : 0u ), m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ) );
+		auto outColour( writer.declOutput< sdw::Vec4 >( "outColour", outIndex++ ) );
+		auto outVelocity( writer.declOutput< sdw::Vec4 >( "outVelocity", ( flags.writeVelocity() ? outIndex++ : 0u ), flags.writeVelocity() ) );
+		auto outScattering( writer.declOutput< sdw::Vec4 >( "outScattering", ( m_outputScattering ? outIndex++ : 0u ), m_outputScattering ) );
+		auto outDiffuse( writer.declOutput< sdw::Vec4 >( "outDiffuse", ( m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ? outIndex++ : 0u ), m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting ) );
 
-		writer.implementMainT< shader::FragmentSurfaceT, VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+		writer.implementMainT< shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
-			, FragmentOut{ writer }
-			, [&]( FragmentInT< shader::FragmentSurfaceT > in
-				, FragmentOut out )
+			, sdw::FragmentOut{ writer }
+			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
+				, sdw::FragmentOut out )
 			{
 				shader::DebugOutput output{ getDebugConfig()
 					, m_groupName
@@ -621,7 +621,5 @@ namespace castor3d
 					outVelocity.xy() = in.getVelocity();
 				}
 			} );
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 }

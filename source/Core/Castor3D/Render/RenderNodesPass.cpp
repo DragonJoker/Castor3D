@@ -218,50 +218,53 @@ namespace castor3d
 		m_isDirty = false;
 	}
 
-	ShaderPtr RenderNodesPass::getTaskShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::getTaskShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		return doGetTaskShaderSource( flags );
+		doGetTaskShaderSource( flags, builder );
 	}
 
-	ShaderPtr RenderNodesPass::getMeshShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::getMeshShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		return doGetMeshShaderSource( flags );
+		doGetMeshShaderSource( flags, builder );
 	}
 
-	ShaderPtr RenderNodesPass::getVertexShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::getVertexShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		ShaderPtr result;
-
 		if ( flags.isBillboard() )
 		{
-			result = doGetBillboardShaderSource( flags );
+			doGetBillboardShaderSource( flags, builder );
 		}
 		else
 		{
-			result = doGetVertexShaderSource( flags );
+			doGetVertexShaderSource( flags, builder );
 		}
-
-		return result;
 	}
 
-	ShaderPtr RenderNodesPass::getHullShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::getHullShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		return doGetHullShaderSource( flags );
+		doGetHullShaderSource( flags, builder );
 	}
 
-	ShaderPtr RenderNodesPass::getDomainShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::getDomainShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		return doGetDomainShaderSource( flags );
+		doGetDomainShaderSource( flags, builder );
 	}
 
-	ShaderPtr RenderNodesPass::getGeometryShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::getGeometryShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		return doGetGeometryShaderSource( flags );
+		doGetGeometryShaderSource( flags, builder );
 	}
 
-	ShaderPtr RenderNodesPass::getPixelShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::getPixelShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		return doGetPixelShaderSource( flags );
+		doGetPixelShaderSource( flags, builder );
 	}
 
 	void RenderNodesPass::forceAdjustFlags( PipelineFlags & flags )const
@@ -1290,11 +1293,7 @@ namespace castor3d
 			auto flags = visitor.getFlags();
 			forceAdjustFlags( flags );
 			auto shaderProgram = doGetProgram( flags );
-
-			for ( auto & state : shaderProgram->getStates() )
-			{
-				visitor.visit( shaderProgram->getSource( state->stage ) );
-			}
+			visitor.visit( shaderProgram->getModule() );
 		}
 	}
 
@@ -1517,9 +1516,10 @@ namespace castor3d
 	{
 	}
 
-	ShaderPtr RenderNodesPass::doGetTaskShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::doGetTaskShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		sdw::TaskWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::TaskWriter writer{ builder };
 		bool checkCones = flags.isFrontCulled()
 			&& flags.hasSubmeshData( SubmeshFlag::eNormals )
 			&& !flags.hasWorldPosInputs();
@@ -1680,14 +1680,13 @@ namespace castor3d
 					payload.dispatchMesh( SDW_TaskLocalSize( tasks, 1_u, 1_u ) );
 				}
 				FI;
-
 			} );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr RenderNodesPass::doGetMeshShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::doGetMeshShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		sdw::MeshWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::MeshWriter writer{ builder };
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -1940,14 +1939,12 @@ namespace castor3d
 					meshShader( baseId, in, vtxOut, primOut );
 				} );
 		}
-
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr RenderNodesPass::doGetVertexShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::doGetVertexShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		using namespace sdw;
-		VertexWriter writer{ &getEngine()->getShaderAllocator() };
+		sdw::VertexWriter writer{ builder };
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -1979,8 +1976,8 @@ namespace castor3d
 			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
 				, passShaders
 				, flags }
-			, [&]( VertexInT< shader::VertexSurfaceT > in
-				, VertexOutT< shader::FragmentSurfaceT > out )
+			, [&]( sdw::VertexInT< shader::VertexSurfaceT > in
+				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					, shader::getNodeId( c3d_objectIdsData
@@ -2010,7 +2007,7 @@ namespace castor3d
 					, in.passMasks
 					, out.passMultipliers );
 
-				auto curMtxModel = writer.declLocale< Mat4 >( "curMtxModel"
+				auto curMtxModel = writer.declLocale< sdw::Mat4 >( "curMtxModel"
 					, modelData.getModelMtx() );
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, curPosition );
@@ -2056,40 +2053,18 @@ namespace castor3d
 				out.vtx.position = curPosition;
 
 			} );
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
 	}
 
-	ShaderPtr RenderNodesPass::doGetHullShaderSource( PipelineFlags const & flags )const
+	void RenderNodesPass::doGetBillboardShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
 	{
-		return nullptr;
-	}
-
-	ShaderPtr RenderNodesPass::doGetDomainShaderSource( PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
-	ShaderPtr RenderNodesPass::doGetGeometryShaderSource( PipelineFlags const & flags )const
-	{
-		return nullptr;
-	}
-
-	ShaderPtr RenderNodesPass::doGetBillboardShaderSource( PipelineFlags const & flags )const
-	{
-		using namespace sdw;
-		VertexWriter writer{ &getEngine()->getShaderAllocator() };
-		bool enableTexcoords = flags.enableTexcoords();
+		sdw::VertexWriter writer{ builder };
 
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
 			, getComponentsMask()
 			, utils };
-
-		// Shader inputs
-		auto position = writer.declInput< Vec4 >( "position", 0u );
-		auto uv = writer.declInput< Vec2 >( "uv", 1u, enableTexcoords );
-		auto center = writer.declInput< Vec3 >( "center", 2u );
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
@@ -2109,12 +2084,10 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< VoidT, shader::FragmentSurfaceT >( sdw::VertexInT< sdw::VoidT >{ writer }
-			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
-				, passShaders
-				, flags }
-			, [&]( VertexInT< VoidT > in
-				, VertexOutT< shader::FragmentSurfaceT > out )
+		writer.implementMainT< shader::BillboardSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+			, [&]( sdw::VertexInT< shader::BillboardSurfaceT > in
+				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"
 					,  shader::getNodeId( c3d_objectIdsData
@@ -2133,9 +2106,9 @@ namespace castor3d
 				out.nodeId = nodeId;
 
 				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, modelData.modelToCurWorld( vec4( center, 1.0_f ) ).xyz() );
+					, modelData.modelToCurWorld( vec4( in.center, 1.0_f ) ).xyz() );
 				auto prvBbcenter = writer.declLocale( "prvBbcenter"
-					, modelData.modelToPrvWorld( vec4( center, 1.0_f ) ).xyz() );
+					, modelData.modelToPrvWorld( vec4( in.center, 1.0_f ) ).xyz() );
 				auto curToCamera = writer.declLocale( "curToCamera"
 					, c3d_cameraData.getPosToCamera( curBbcenter ) );
 				curToCamera.y() = 0.0_f;
@@ -2152,13 +2125,13 @@ namespace castor3d
 				auto height = writer.declLocale( "height"
 					, billboardData.getHeight( c3d_cameraData ) );
 				auto scaledRight = writer.declLocale( "scaledRight"
-					, right * position.x() * width );
+					, right * in.position.x() * width );
 				auto scaledUp = writer.declLocale( "scaledUp"
-					, up * position.y() * height );
+					, up * in.position.y() * height );
 				auto worldPos = writer.declLocale( "worldPos"
 					, vec4( ( curBbcenter + scaledRight + scaledUp ), 1.0_f ) );
 				out.worldPosition = worldPos;
-				out.texture0 = vec3( uv, 0.0_f );
+				out.texture0 = vec3( in.texture0, 0.0_f );
 
 				auto prvPosition = writer.declLocale( "prvPosition"
 					, c3d_cameraData.worldToPrvProj( vec4( prvBbcenter + scaledRight + scaledUp, 1.0_f ) ) );
@@ -2177,7 +2150,20 @@ namespace castor3d
 					, vec4( up, 0.0_f )
 					, right );
 			} );
+	}
 
-		return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+	void RenderNodesPass::doGetHullShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
+	{
+	}
+
+	void RenderNodesPass::doGetDomainShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
+	{
+	}
+
+	void RenderNodesPass::doGetGeometryShaderSource( PipelineFlags const & flags
+		, ast::ShaderBuilder & builder )const
+	{
 	}
 }

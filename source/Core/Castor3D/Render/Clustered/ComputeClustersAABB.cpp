@@ -34,8 +34,7 @@ namespace castor3d
 		static ShaderPtr createShader( RenderDevice const & device
 			, ClustersConfig const & config )
 		{
-			using namespace sdw;
-			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			C3D_Camera( writer
@@ -86,8 +85,8 @@ namespace castor3d
 				, sdw::InVec3{ writer, "b" }
 				, sdw::InFloat{ writer, "d" } );
 
-			writer.implementMainT< VoidT >( 1u, 1u, 1u
-				, [&]( ComputeIn in )
+			writer.implementMainT< sdw::VoidT >( 1u, 1u, 1u
+				, [&]( sdw::ComputeIn in )
 				{
 					auto clusterIndex3D = in.globalInvocationID;
 					auto clusterIndex1D = writer.declLocale( "clusterIndex1D"
@@ -134,7 +133,7 @@ namespace castor3d
 						, vec4( aabbMax, 1.0f ) };
 
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		class FramePass

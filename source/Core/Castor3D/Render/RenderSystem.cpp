@@ -989,10 +989,15 @@ namespace castor3d
 	{
 		SpirVShader result;
 		CU_Require( !glsl.empty() );
-		result.text = glsl;
-		result.spirv = castor3d::compileGlslToSpv( getRenderDevice()
-			, stage
-			, glsl );
+
+		if ( getEngine()->areTextShadersKept() )
+		{
+			result.text = glsl;
+		}
+
+		log::debug << "Compiling " << ashes::getName( stage ) << " shader [" << name << "] ... SPV ...";
+		result.spirv = castor3d::compileGlslToSpv( getRenderDevice(), stage, glsl );
+		log::debug << " Done." << std::endl;
 		return result;
 	}
 

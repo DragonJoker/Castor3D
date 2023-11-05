@@ -100,7 +100,8 @@ namespace castor3d
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		ShaderPtr doGetPixelShaderSource( PipelineFlags const & flags )const override;
+		void doGetPixelShaderSource( PipelineFlags const & flags
+			, ast::ShaderBuilder & builder )const override;
 
 	public:
 		C3D_API static castor::String const Type;

@@ -328,7 +328,7 @@ namespace castor3d
 					bentNormal /= ( totalWeight + epsilon );
 					outBentNormal = c3d_cameraData.writeNormal( bentNormal );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 
 #undef result
 #undef keyPassThrough

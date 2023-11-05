@@ -307,7 +307,7 @@ namespace castor3d
 					outColour = vec4( integrateBRDF( inTexture.x(), inTexture.y() ), 1.0_f );
 				} );
 
-			module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			module.shader = writer.getBuilder().releaseShader();
 		}
 
 		return makeProgramStates( m_device, module );

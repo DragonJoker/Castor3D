@@ -86,7 +86,7 @@ namespace motion_blur
 
 					out.colour() /= writer.cast< sdw::Float >( c3d_samplesCount );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

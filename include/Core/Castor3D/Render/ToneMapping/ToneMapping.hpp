@@ -108,7 +108,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le vertex shader pour le tone mapping.
 		 */
-		C3D_API static void getVertexProgram( sdw::TraditionalGraphicsWriter & writer );
+		C3D_API static void getVertexProgram( ast::ShaderBuilder & builder );
 		/**
 		*\~english
 		*name

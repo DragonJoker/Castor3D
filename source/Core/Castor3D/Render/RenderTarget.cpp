@@ -1233,7 +1233,7 @@ namespace castor3d
 					lhsColor.rgb() *= 1.0_f - rhsColor.a();
 					outColour = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
 				} );
-			module.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			module.shader = writer.getBuilder().releaseShader();
 		}
 
 		m_combineStages = makeProgramStates( renderSystem.getRenderDevice(), module );

@@ -244,7 +244,7 @@ namespace castor3d
 					c3d_overlaysSurfaces[offset + index].set( vec2( ssOuterZ, ssOuterW ), vec2( outerUvZ, outerUvW ) ); ++index;
 					c3d_overlaysSurfaces[offset + index].set( vec2( ssOuterZ, ssInnerW ), vec2( outerUvZ, innerUvW ) ); ++index;
 				} );
-			comp.shader = std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			comp.shader = writer.getBuilder().releaseShader();
 		}
 		return makeShaderState( device, comp );
 	}

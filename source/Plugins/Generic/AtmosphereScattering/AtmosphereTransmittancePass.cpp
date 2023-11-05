@@ -86,7 +86,7 @@ namespace atmosphere_scattering
 					out.colour() = vec4( transmittance, 1.0f );
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

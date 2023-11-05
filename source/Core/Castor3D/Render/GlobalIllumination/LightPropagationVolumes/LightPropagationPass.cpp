@@ -337,7 +337,7 @@ namespace castor3d
 					outLpvNextStepB = shB;
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static GpuBufferOffsetT< castor::Point3f > createVertexBuffer( RenderDevice const & device

@@ -68,7 +68,7 @@ namespace grayscale
 						, c3d_mapColor.sample( in.uv() ).xyz() );
 					out.colour() = vec4( vec3( dot( c3d_factors, colour ) ), 1.0_f );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

@@ -39,8 +39,7 @@ namespace castor3d
 		static ShaderPtr createShader( RenderDevice const & device
 			, ClustersConfig const & config )
 		{
-			using namespace sdw;
-			ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
+			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Inputs
 			C3D_Camera( writer
@@ -147,8 +146,8 @@ namespace castor3d
 				}
 				, sdw::InUInt{ writer, "lightIndex" } );
 
-			writer.implementMainT< VoidT >( 1024u, 1u, 1u
-				, [&]( ComputeIn in )
+			writer.implementMainT< sdw::VoidT >( 1024u, 1u, 1u
+				, [&]( sdw::ComputeIn in )
 				{
 					// First compute point lights AABB.
 					IF( writer, in.globalInvocationID.x() < c3d_clustersData.pointLightCount() )
@@ -168,7 +167,7 @@ namespace castor3d
 					}
 					FI;
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		class FramePass

@@ -238,7 +238,7 @@ namespace atmosphere_scattering
 					out.colour() = process( in.fragCoord.xy(), in.sliceId );
 				} );
 
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 

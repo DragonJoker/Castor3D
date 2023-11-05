@@ -78,7 +78,7 @@ namespace castor3d
 		bool m_castsShadows{ true };
 		bool m_receivesShadows{ true };
 		bool m_cullable{ true };
-		bool m_firstUpdate{ true };
+		uint32_t m_firstUpdate{ 5u };
 		std::unordered_map< uint32_t, std::pair< ModelBufferConfiguration *, Offsets > > m_modelsDataOffsets{};
 	};
 }

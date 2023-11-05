@@ -124,7 +124,7 @@ namespace film_grain
 					colour = addNoise( colour, in.uv() );
 					out.colour() = vec4( colour, 1.0 );
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 
 		static std::array< castor::Image, PostEffect::NoiseMapCount > loadImages( castor3d::Engine const & engine )

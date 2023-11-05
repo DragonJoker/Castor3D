@@ -74,7 +74,7 @@ namespace smaa
 						out.colour() = c3d_map.sample( in.uv() );
 					}
 				} );
-			return std::make_unique< ast::Shader >( std::move( writer.getShader() ) );
+			return writer.getBuilder().releaseShader();
 		}
 	}
 
