@@ -93,14 +93,11 @@ namespace castor3d
 	void ShadowMapPassPoint::doUpdateUbos( CpuUpdater & updater )
 	{
 		auto & light = *updater.light;
-		auto & aabb = light.getScene()->getBoundingBox();
 		auto farPlane = light.getFarPlane();
 		m_shadowMapUbo.update( light, updater.index );
 		m_projection = m_device.renderSystem.getPerspective( 90.0_degrees
 			, 1.0f
-			, ( std::min( double( farPlane ), castor::point::length( aabb.getDimensions() ) ) > 1000.0
-				? 1.0f
-				: 0.1f )
+			, 0.1f
 			, farPlane );
 	}
 

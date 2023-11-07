@@ -186,9 +186,7 @@ namespace castor3d
 		lightCamera.attachTo( *node );
 		lightCamera.getViewport().setPerspective( getOuterCutOff() * 2.0f
 			, lightCamera.getRatio()
-			, ( m_farPlane >= 1000.0f
-				? 1.0f
-				: m_farPlane / 1000.0f )
+			, 0.1f
 			, m_farPlane );
 		lightCamera.update();
 		m_lightView = lightCamera.getView();
