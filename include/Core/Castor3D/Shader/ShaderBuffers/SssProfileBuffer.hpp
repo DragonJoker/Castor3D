@@ -37,7 +37,7 @@ namespace castor3d
 			uint32_t transmittanceProfileSize;
 			float gaussianWidth;
 			float subsurfaceScatteringStrength;
-			float pad;
+			float thicknessScale;
 			std::array< Data, TransmittanceProfileSize > transmittanceProfile;
 		};
 		using SssProfilesData = castor::ArrayView< SssProfileData >;
@@ -47,6 +47,7 @@ namespace castor3d
 			uint32_t * transmittanceProfileSize;
 			float * gaussianWidth;
 			float * subsurfaceScatteringStrength;
+			float * thicknessScale;
 			std::array< Data, TransmittanceProfileSize > * transmittanceProfile;
 		};
 

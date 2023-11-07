@@ -40,13 +40,14 @@ namespace castor
 				if ( auto block{ beginBlock( file, "subsurface_scattering" ) } )
 				{
 					result = write( file, cuT( "strength" ), sss.getStrength() )
-						&& write( file, cuT( "gaussian_width" ), sss.getGaussianWidth() );
+						&& write( file, cuT( "gaussian_width" ), sss.getGaussianWidth() )
+						&& write( file, cuT( "thickness_scale" ), sss.getThicknessScale() );
 
 					if ( auto profBlock{ beginBlock( file, cuT( "transmittance_profile" ) ) } )
 					{
 						for ( auto & factor : sss )
 						{
-							result = result && writeNamedSub( file, cuT( "factor" ), factor );
+							result = result && writeNamedSub( file, cuT( "factor" ), factor.value() );
 						}
 					}
 				}
@@ -99,9 +100,7 @@ namespace castor3d
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				parsingContext.subsurfaceScattering->setStrength( value );
+				parsingContext.subsurfaceScattering->setStrength( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
@@ -120,9 +119,26 @@ namespace castor3d
 			}
 			else
 			{
-				float value;
-				params[0]->get( value );
-				parsingContext.subsurfaceScattering->setGaussianWidth( value );
+				parsingContext.subsurfaceScattering->setGaussianWidth( params[0]->get< float >() );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserSubsurfaceScatteringThicknessScale )
+		{
+			auto & parsingContext = getParserContext( context );
+
+			if ( !parsingContext.subsurfaceScattering )
+			{
+				CU_ParsingError( cuT( "No SubsurfaceScattering initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( cuT( "Missing parameter." ) );
+			}
+			else
+			{
+				parsingContext.subsurfaceScattering->setThicknessScale( params[0]->get< float >() );
 			}
 		}
 		CU_EndAttribute()
@@ -268,6 +284,11 @@ namespace castor3d
 			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers
 			, sss::Section::eSubsurfaceScattering
+			, cuT( "thickness_scale" )
+			, sss::parserSubsurfaceScatteringThicknessScale
+			, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, sss::Section::eSubsurfaceScattering
 			, cuT( "transmittance_profile" )
 			, sss::parserSubsurfaceScatteringTransmittanceProfile );
 		castor::addParserT( parsers
@@ -352,16 +373,17 @@ namespace castor3d
 			*data.transmittanceProfileSize = subsurfaceScattering.getProfileSize();
 			*data.gaussianWidth = subsurfaceScattering.getGaussianWidth();
 			*data.subsurfaceScatteringStrength = subsurfaceScattering.getStrength();
+			*data.thicknessScale = subsurfaceScattering.getThicknessScale();
 			
 			auto i = 0u;
 			auto & transmittanceProfile = *data.transmittanceProfile;
 
 			for ( auto & factor : subsurfaceScattering )
 			{
-				transmittanceProfile[i].x = factor[0];
-				transmittanceProfile[i].y = factor[1];
-				transmittanceProfile[i].z = factor[2];
-				transmittanceProfile[i].w = factor[3];
+				transmittanceProfile[i].x = factor.value()[0];
+				transmittanceProfile[i].y = factor.value()[1];
+				transmittanceProfile[i].z = factor.value()[2];
+				transmittanceProfile[i].w = factor.value()[3];
 				++i;
 			}
 		}
@@ -370,6 +392,7 @@ namespace castor3d
 			*data.transmittanceProfileSize = 0u;
 			*data.gaussianWidth = 0.0f;
 			*data.subsurfaceScatteringStrength = 0.0f;
+			*data.thicknessScale = 0.0f;
 		}
 	}
 
@@ -380,6 +403,7 @@ namespace castor3d
 		sss->setGaussianWidth( subsurfaceScattering.getGaussianWidth() );
 		sss->setStrength( subsurfaceScattering.getStrength() );
 		sss->setSubsurfaceRadius( subsurfaceScattering.getSubsurfaceRadius() );
+		sss->setThicknessScale( subsurfaceScattering.getThicknessScale() );
 
 		auto result = castor::makeUnique< SubsurfaceScatteringComponent >( pass );
 		result->setSubsurfaceScattering( std::move( sss ) );

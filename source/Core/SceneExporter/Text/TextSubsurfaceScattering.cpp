@@ -22,13 +22,14 @@ namespace castor
 		if ( auto block{ beginBlock( file, "subsurface_scattering" ) } )
 		{
 			result = write( file, cuT( "strength" ), obj.getStrength() )
-				&& write( file, cuT( "gaussian_width" ), obj.getGaussianWidth() );
+				&& write( file, cuT( "gaussian_width" ), obj.getGaussianWidth() )
+				&& write( file, cuT( "thickness_scale" ), obj.getThicknessScale() );
 
 			if ( auto profBlock{ beginBlock( file, cuT( "transmittance_profile" ) ) } )
 			{
 				for ( auto & factor : obj )
 				{
-					result = result && writeNamedSub( file, cuT( "factor" ), factor );
+					result = result && writeNamedSub( file, cuT( "factor" ), factor.value() );
 				}
 			}
 		}
