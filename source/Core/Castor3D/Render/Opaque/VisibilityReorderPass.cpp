@@ -131,7 +131,7 @@ namespace castor3d
 			MaterialsCounts.end();
 
 			auto IndirectCounts = writer.declStorageBuffer<>( "IndirectCounts", Bindings::eIndirectCounts, 0u );
-			auto indirectCounts = IndirectCounts.declMemberArray< sdw::UVec3 >( "indirectCounts" );
+			auto indirectCounts = IndirectCounts.declMemberArray< sdw::UInt >( "indirectCounts" );
 			IndirectCounts.end();
 
 			auto MaterialsStarts = writer.declStorageBuffer<>( "MaterialsStarts", Bindings::eMaterialsStarts, 0u );
@@ -154,7 +154,9 @@ namespace castor3d
 						}
 						ROF;
 
-						indirectCounts[pipelineId] = uvec3( writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 16.0_f ) ), 1u, 1u );
+						indirectCounts[pipelineId * 3u + 0u] = writer.cast< sdw::UInt >( ceil( writer.cast< sdw::Float >( materialsCounts[pipelineId] ) / 16.0_f ) );
+						indirectCounts[pipelineId * 3u + 1u] = 1u;
+						indirectCounts[pipelineId * 3u + 2u] = 1u;
 						materialStarts[pipelineId] = result;
 					}
 					FI;
