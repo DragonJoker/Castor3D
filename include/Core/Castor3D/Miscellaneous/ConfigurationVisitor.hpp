@@ -26,8 +26,9 @@ namespace castor3d
 			bool allowProgramsVisit{};
 		};
 
+		using Callback = std::function< void() >;
 		template< typename ControlT >
-		using ControlsListT = std::vector< ControlT * >;
+		using ControlsListT = std::vector< std::pair< ControlT *, Callback > >;
 		template< typename EnumT >
 		using OnEnumValueChangeT = std::function< void( EnumT oldV, EnumT newV ) >;
 
@@ -41,7 +42,7 @@ namespace castor3d
 		static ControlsListT< ControlT > makeControlsList( ControlT * control )
 		{
 			return ( control
-				? ControlsListT< ControlT >{ control }
+				? ControlsListT< ControlT >{ { control, Callback{} } }
 				: ControlsListT< ControlT >{} );
 		}
 
@@ -517,7 +518,7 @@ namespace castor3d
 			, ParamsT && ... params )
 		{
 			ControlsListT< ControlT > controls;
-			controls.push_back( &value.control() );
+			controls.push_back( { &value.control(), value.callback() } );
 			visit( name, value.naked(), std::forward< ParamsT >( params )..., std::move( controls ) );
 		}
 
@@ -527,7 +528,7 @@ namespace castor3d
 			, ParamsT && ... params )
 		{
 			ControlsListT< ControlT > controls;
-			controls.push_back( &value.control() );
+			controls.push_back( { &value.control(), value.callback() } );
 			visit( name, value.naked(), std::forward< ParamsT >( params )..., std::move( controls ) );
 		}
 		/**@}*/

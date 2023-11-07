@@ -20,14 +20,30 @@ namespace castor
 		{
 		}
 
+		ChangeTrackedT( std::function< void() > callback )noexcept
+			: m_value{}
+			, m_dirty{ true }
+			, m_callback{ callback }
+		{
+		}
+
 		explicit ChangeTrackedT( ValueT const & rhs )noexcept
 			: m_value{ rhs }
 			, m_dirty{ true }
 		{
 		}
 
+		explicit ChangeTrackedT( ValueT const & rhs
+			, std::function< void() > callback )noexcept
+			: m_value{ rhs }
+			, m_dirty{ true }
+			, m_callback{ callback }
+		{
+		}
+
 		ChangeTrackedT( ChangeTrackedT && rhs )noexcept
 			: m_value{ std::move( rhs.m_value ) }
+			, m_callback{ rhs.m_callback }
 		{
 			this->doCopy( m_dirty, rhs.m_dirty );
 		}
@@ -35,6 +51,7 @@ namespace castor
 		ChangeTrackedT( ChangeTrackedT const & rhs )noexcept
 			: m_value{ rhs.m_value }
 			, m_dirty{ true }
+			, m_callback{ rhs.m_callback }
 		{
 		}
 
@@ -81,6 +98,11 @@ namespace castor
 			return m_dirty;
 		}
 
+		std::function< void() > callback()const noexcept
+		{
+			return m_callback;
+		}
+
 		bool isDirty()const noexcept
 		{
 			return m_dirty;
@@ -103,7 +125,7 @@ namespace castor
 
 		ValueT & operator*()noexcept
 		{
-			m_dirty = true;
+			doMakeDirty();
 			return m_value;
 		}
 
@@ -114,7 +136,7 @@ namespace castor
 
 		ValueT * operator->()noexcept
 		{
-			m_dirty = true;
+			doMakeDirty();
 			return &m_value;
 		}
 
@@ -123,17 +145,38 @@ namespace castor
 			, std::atomic_bool const & rhs )
 		{
 			lhs = rhs.load();
+
+			if ( lhs && m_callback )
+			{
+				m_callback();
+			}
 		}
 
 		void doCopy( bool & lhs
 			, bool const & rhs )
 		{
 			lhs = rhs;
+
+			if ( lhs && m_callback )
+			{
+				m_callback();
+			}
+		}
+
+		void doMakeDirty()
+		{
+			m_dirty = true;
+
+			if ( m_callback )
+			{
+				m_callback();
+			}
 		}
 
 	private:
 		ValueT m_value;
 		ControlT m_dirty{ true };
+		std::function< void() > m_callback;
 	};
 
 	template< typename ValueT, typename ControlT >

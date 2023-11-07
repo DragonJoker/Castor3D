@@ -62,9 +62,9 @@ namespace castor3d
 		, m_camera{ camera }
 		, m_config{ config }
 		, m_dimensions{ m_clustersDirty, { 32u, 16u, 64u } }
-		, m_clusterSize{ m_clustersDirty, {} }
-		, m_cameraProjection{ m_clustersDirty, {} }
-		, m_cameraView{ m_clustersDirty, {} }
+		, m_clusterSize{ m_clustersDirty, castor::Point2ui{} }
+		, m_cameraProjection{ m_clustersDirty, castor::Matrix4x4f{} }
+		, m_cameraView{ m_clustersDirty, castor::Matrix4x4f{} }
 		, m_clustersUbo{ m_device }
 		, m_clustersIndirect{ makeBuffer< VkDispatchIndirectCommand >( m_device
 			, getNumNodes( MaxLightsCount )
