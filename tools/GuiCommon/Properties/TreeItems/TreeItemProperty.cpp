@@ -279,7 +279,12 @@ namespace GuiCommon
 		{
 			for ( auto control : controls )
 			{
-				*control = true;
+				*control.first = true;
+
+				if ( control.second )
+				{
+					control.second();
+				}
 			}
 
 			handler( var );
@@ -298,7 +303,12 @@ namespace GuiCommon
 		{
 			for ( auto control : controls )
 			{
-				*control = true;
+				*control.first = true;
+
+				if ( control.second )
+				{
+					control.second();
+				}
 			}
 
 			handler( var );

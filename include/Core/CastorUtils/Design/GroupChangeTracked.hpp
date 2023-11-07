@@ -17,27 +17,34 @@ namespace castor
 		using Type = ValueT;
 
 	public:
-		explicit GroupChangeTrackedT( ControlT & dirty )noexcept
+		explicit GroupChangeTrackedT( ControlT & dirty
+			, std::function< void() > callback = {} )noexcept
 			: m_value{}
 			, m_dirty{ dirty }
+			, m_callback{ callback }
 		{
 		}
 
 		GroupChangeTrackedT( GroupChangeTrackedT && rhs )noexcept
 			: m_value{ std::move( rhs.m_value ) }
 			, m_dirty{ rhs.m_dirty }
+			, m_callback{ rhs.m_callback }
 		{
 		}
 
 		GroupChangeTrackedT( GroupChangeTrackedT const & rhs )noexcept
 			: m_value{ rhs.m_value }
 			, m_dirty{ rhs.m_dirty }
+			, m_callback{ rhs.m_callback }
 		{
 		}
 
-		GroupChangeTrackedT( ControlT & dirty, ValueT rhs )noexcept
+		GroupChangeTrackedT( ControlT & dirty
+			, ValueT rhs
+			, std::function< void() > callback = {} )noexcept
 			: m_value{ std::move( rhs ) }
 			, m_dirty{ dirty }
+			, m_callback{ callback }
 		{
 		}
 
@@ -84,6 +91,11 @@ namespace castor
 			return m_dirty;
 		}
 
+		std::function< void() > callback()const noexcept
+		{
+			return m_callback;
+		}
+
 		bool isDirty()const noexcept
 		{
 			return m_dirty;
@@ -96,7 +108,7 @@ namespace castor
 
 		operator ValueT &()noexcept
 		{
-			m_dirty = true;
+			doMakeDirty();
 			return m_value;
 		}
 
@@ -107,7 +119,7 @@ namespace castor
 
 		ValueT & operator*()noexcept
 		{
-			m_dirty = true;
+			doMakeDirty();
 			return m_value;
 		}
 
@@ -118,7 +130,7 @@ namespace castor
 
 		ValueT * operator->()noexcept
 		{
-			m_dirty = true;
+			doMakeDirty();
 			return &m_value;
 		}
 
@@ -127,17 +139,38 @@ namespace castor
 			, std::atomic_bool const & rhs )
 		{
 			lhs = rhs.load();
+
+			if (lhs && m_callback )
+			{
+				m_callback();
+			}
 		}
 
 		void doCopy( bool & lhs
 			, bool const & rhs )
 		{
 			lhs = rhs;
+
+			if ( lhs && m_callback )
+			{
+				m_callback();
+			}
+		}
+
+		void doMakeDirty()
+		{
+			m_dirty = true;
+
+			if ( m_callback )
+			{
+				m_callback();
+			}
 		}
 
 	private:
 		ValueT m_value;
 		ControlT & m_dirty;
+		std::function< void() > m_callback;
 	};
 
 	template< typename ValueT, typename ControlT >
