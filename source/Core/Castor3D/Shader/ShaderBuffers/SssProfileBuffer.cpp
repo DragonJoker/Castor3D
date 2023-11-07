@@ -135,6 +135,7 @@ namespace castor3d
 		result.gaussianWidth = &data.gaussianWidth;
 		result.subsurfaceScatteringStrength = &data.subsurfaceScatteringStrength;
 		result.transmittanceProfile = &data.transmittanceProfile;
+		result.thicknessScale = &data.thicknessScale;
 
 		return result;
 	}

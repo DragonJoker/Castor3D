@@ -20,7 +20,7 @@ namespace castor3d::shader
 			, sdw::UIntField< "transmittanceProfileSize" >
 			, sdw::FloatField< "gaussianWidth" >
 			, sdw::FloatField< "subsurfaceScatteringStrength" >
-			, sdw::FloatField< "pad" >
+			, sdw::FloatField< "thicknessScale" >
 			, sdw::Vec4ArrayField< "transmittanceProfile", TransmittanceProfileSize > >
 	{
 		inline SssProfile( sdw::ShaderWriter & writer
@@ -33,6 +33,7 @@ namespace castor3d::shader
 		auto transmittanceProfileSize()const { return getMember< "transmittanceProfileSize" >(); }
 		auto gaussianWidth()const { return getMember< "gaussianWidth" >(); }
 		auto subsurfaceScatteringStrength()const { return getMember< "subsurfaceScatteringStrength" >(); }
+		auto thicknessScale()const { return getMember< "thicknessScale" >(); }
 		auto transmittanceProfile()const { return getMember< "transmittanceProfile" >(); }
 	};
 
