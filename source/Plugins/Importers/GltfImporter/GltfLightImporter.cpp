@@ -36,17 +36,14 @@ namespace c3d_gltf
 		castor3d::log::info << cuT( "  Light found: [" ) << name << cuT( "]" ) << std::endl;
 		fastgltf::Light const & impLight = *lightIt;
 		--lightIndex;
-		uint32_t nodeIndex{};
-
 		auto nodeIt = std::find_if( impAsset.nodes.begin()
 			, impAsset.nodes.end()
-			, [&lightIndex, &nodeIndex]( fastgltf::Node const & lookup )
+			, [&lightIndex]( fastgltf::Node const & lookup )
 			{
-				++nodeIndex;
 				return lookup.lightIndex
 					&& *lookup.lightIndex == lightIndex;
 			} );
-		--nodeIndex;
+		auto nodeIndex = uint32_t( std::distance( impAsset.nodes.begin(), nodeIt ) );
 		auto nodeName = file.getNodeName( nodeIndex, 0u );
 		auto & scene = *light.getScene();
 		castor3d::SceneNodeRPtr node{};

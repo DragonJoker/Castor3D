@@ -50,15 +50,6 @@ namespace castor
 		}
 		/**
 		 *\~english
-		 *\brief		Destructor
-		 *\~french
-		 *\brief		Destructeur
-		 */
-		~Exception()noexcept override
-		{
-		}
-		/**
-		 *\~english
 		 *\brief		Retrieves the exception description
 		 *\return		The exception description
 		 *\~french

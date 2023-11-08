@@ -216,7 +216,7 @@ namespace castor3d
 				if ( program.stages.empty() )
 				{
 					auto & engine = *device.renderSystem.getEngine();
-					program.shader = { "Background" };
+					program.shader = ProgramModule{ "Background" };
 					{
 						sdw::TraditionalGraphicsWriter writer{ &engine.getShaderAllocator() };
 						shader::Utils utils{ writer };

@@ -63,7 +63,7 @@ namespace GuiCommon
 			bool enableApiTrace{ false };
 			bool keepTextShaders{ false };
 			uint32_t maxImageSize{ 0u };
-			castor::String fileName;
+			castor::String fileName{};
 		};
 
 	public:

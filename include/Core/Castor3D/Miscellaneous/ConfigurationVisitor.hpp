@@ -116,13 +116,13 @@ namespace castor3d
 		**/
 		/**@{*/
 		ConfigurationVisitorBlock visit( castor::String const & name
-			, ControlsList controls )
+			, ControlsList const & controls )
 		{
 			return doPushConfigurationBlock( name );
 		}
 
 		ConfigurationVisitorBlock visit( castor::String const & name
-			, AtomicControlsList controls )
+			, AtomicControlsList const & controls )
 		{
 			return doPushConfigurationBlock( name );
 		}

@@ -110,7 +110,7 @@ namespace fxaa
 							* ( 1.0_f / 2.0_f ) );
 
 					texcoord0 = in.uv() + dir * ( 0.0_f / 3.0_f - 0.5_f );
-					texcoord1 = in.uv() + dir * ( 3.0_f / 3.0_f - 0.5_f );
+					texcoord1 = in.uv() + dir * ( 1.0_f - 0.5_f );
 
 					auto rgbB = writer.declLocale( "rgbB"
 						, ( rgbA * 1.0_f / 2.0_f )

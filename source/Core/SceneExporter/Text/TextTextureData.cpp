@@ -77,58 +77,55 @@ namespace castor
 			{
 				auto config = sourceInfo.textureConfig();
 
-				if ( result )
+				if ( sourceInfo.isRenderTarget() )
 				{
-					if ( sourceInfo.isRenderTarget() )
+					result = writeSub( file, *sourceInfo.renderTarget() );
+				}
+				else
+				{
+					bool createImageFile = sourceInfo.isBufferImage()
+						|| ( sourceInfo.isFileImage() && txtexdata::isReworkedImage( sourceInfo.name() ) );
+					auto imageFile = sourceInfo.isFileImage()
+						? sourceInfo.relative()
+						: castor::Path{ sourceInfo.name() };
+
+					if ( createImageFile )
 					{
-						result = writeSub( file, *sourceInfo.renderTarget() );
+						log::info << tabs() << cuT( "\tCreating texture image" ) << std::endl;
+						castor::Path path{ cuT( "Textures" ) };
+
+						if ( !m_subFolder.empty() )
+						{
+							path /= m_subFolder;
+						}
+
+						if ( !File::directoryExists( m_folder / path ) )
+						{
+							File::directoryCreate( m_folder / path );
+						}
+
+						txtexdata::reworkImageFileName( sourceInfo.name(), imageFile, config.needsYInversion );
+						path /= imageFile;
+						auto & writer = m_engine.getImageWriter();
+						result = writer.write( m_folder / path, object.image->getPxBuffer() );
+						checkError( result, "Image creation" );
+
+						if ( result )
+						{
+							result = writePath( file, cuT( "image" ), path );
+						}
 					}
 					else
 					{
-						bool createImageFile = sourceInfo.isBufferImage()
-							|| ( sourceInfo.isFileImage() && txtexdata::isReworkedImage( sourceInfo.name() ) );
-						auto imageFile = sourceInfo.isFileImage()
-							? sourceInfo.relative()
-							: castor::Path{ sourceInfo.name() };
+						log::info << tabs() << cuT( "\tCopying texture image" ) << std::endl;
 
-						if ( createImageFile )
+						if ( m_subFolder.empty() )
 						{
-							log::info << tabs() << cuT( "\tCreating texture image" ) << std::endl;
-							castor::Path path{ cuT( "Textures" ) };
-
-							if ( !m_subFolder.empty() )
-							{
-								path /= m_subFolder;
-							}
-
-							if ( !File::directoryExists( m_folder / path ) )
-							{
-								File::directoryCreate( m_folder / path );
-							}
-
-							txtexdata::reworkImageFileName( sourceInfo.name(), imageFile, config.needsYInversion );
-							path /= imageFile;
-							auto & writer = m_engine.getImageWriter();
-							result = writer.write( m_folder / path, object.image->getPxBuffer() );
-							checkError( result, "Image creation" );
-
-							if ( result )
-							{
-								result = writePath( file, cuT( "image" ), path );
-							}
+							result = writeFile( file, cuT( "image" ), Path{ imageFile }, m_folder, cuT( "Textures" ) );
 						}
 						else
 						{
-							log::info << tabs() << cuT( "\tCopying texture image" ) << std::endl;
-
-							if ( m_subFolder.empty() )
-							{
-								result = writeFile( file, cuT( "image" ), Path{ imageFile }, m_folder, cuT( "Textures" ) );
-							}
-							else
-							{
-								result = writeFile( file, cuT( "image" ), Path{ imageFile }, m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
-							}
+							result = writeFile( file, cuT( "image" ), Path{ imageFile }, m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
 						}
 					}
 				}

@@ -177,7 +177,7 @@ namespace castor3d
 			CU_Failure( "Invalid offsets for upload" );
 		}
 
-		uint32_t offsetDiff = uint32_t( std::max( 0ll, int64_t( dstOffset ) - int64_t( mappedOffset ) ) );
+		uint32_t offsetDiff = uint32_t( std::max( int64_t( 0 ), int64_t( dstOffset ) - int64_t( mappedOffset ) ) );
 		auto mappedSize = ( ( alignedSize == alignedOffset ) ? 0u : offsetAlignment ) // If offset and size are in the same aligned range, don't add the offset alignment
 			+ ( isFullSizeMap
 				? ashes::WholeSize

@@ -33,17 +33,14 @@ namespace c3d_gltf
 		castor3d::log::info << cuT( "  Camera found: [" ) << name << cuT( "]" ) << std::endl;
 		fastgltf::Camera const & impCamera = *it;
 		--cameraIndex;
-		uint32_t nodeIndex{};
-
 		auto nodeIt = std::find_if( impAsset.nodes.begin()
 			, impAsset.nodes.end()
-			, [&cameraIndex, &nodeIndex]( fastgltf::Node const & lookup )
+			, [&cameraIndex]( fastgltf::Node const & lookup )
 			{
-				++nodeIndex;
 				return lookup.cameraIndex
 					&& *lookup.cameraIndex == cameraIndex;
 			} );
-		--nodeIndex;
+		auto nodeIndex = uint32_t( std::distance( impAsset.nodes.begin(), nodeIt ) );
 		auto nodeName = file.getNodeName( nodeIndex, 0u );
 		auto & scene = *camera.getScene();
 		castor3d::SceneNodeRPtr node{};

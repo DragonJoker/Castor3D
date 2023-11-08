@@ -334,17 +334,12 @@ namespace GuiCommon
 		, m_splashScreen{ nullptr }
 		, m_version{ std::move( version ) }
 		, m_config{ DefaultValidation
-			, false
+			, 0u
 			, false
 			, DefaultLogType
 			, wantedFPS
 			, !isCastorThreaded
-			, rendererType
-			, {}
-			, {}
-			, {}
-			, {}
-			, {} }
+			, rendererType }
 	{
 		wxSetAssertHandler( assertHandler );
 #if defined( __WXGTK__ )
