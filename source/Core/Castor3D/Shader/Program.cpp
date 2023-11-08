@@ -72,7 +72,7 @@ namespace castor3d
 			}
 		}
 
-		void eraseFile( VkShaderStageFlagBits target
+		static void eraseFile( VkShaderStageFlagBits target
 			, std::map< VkShaderStageFlagBits, castor::Path > & files )
 		{
 			auto it = files.find( target );
@@ -83,7 +83,7 @@ namespace castor3d
 			}
 		}
 
-		void eraseStage( VkShaderStageFlagBits target
+		static void eraseStage( VkShaderStageFlagBits target
 			, ashes::PipelineShaderStageCreateInfoArray & states )
 		{
 			auto it = std::find_if( states.begin()

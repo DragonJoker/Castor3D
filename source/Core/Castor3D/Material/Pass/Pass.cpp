@@ -67,7 +67,7 @@ namespace castor3d
 			return result;
 		}
 
-		Pass::TextureSourceArray::iterator removeConfiguration( PassComponentTextureFlag flag
+		static Pass::TextureSourceArray::iterator removeConfiguration( PassComponentTextureFlag flag
 			, TextureConfiguration config
 			, Pass::TextureSourceArray::iterator it
 			, Pass::TextureSourceArray & map )
@@ -87,7 +87,7 @@ namespace castor3d
 			return std::next( it );
 		}
 
-		TextureUnitDataRefs::iterator removeConfiguration( PassComponentTextureFlag flag
+		static TextureUnitDataRefs::iterator removeConfiguration( PassComponentTextureFlag flag
 			, TextureConfiguration config
 			, TextureUnitDataRefs::iterator it
 			, TextureUnitDataRefs & array )

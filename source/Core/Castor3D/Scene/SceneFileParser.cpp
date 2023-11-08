@@ -8,7 +8,7 @@
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LpvConfig.hpp"
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/VctConfig.hpp"
-#include "Castor3D/Render/SSAO/SsaoConfig.hpp"
+#include "Castor3D/Render/Ssao/SsaoConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Scene/SceneFileParser_Parsers.hpp"
 #include "Castor3D/Scene/Shadow.hpp"

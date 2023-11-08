@@ -81,7 +81,7 @@ namespace castor3d
 
 		C3D_API ProgramModule() = default;
 
-		C3D_API ProgramModule( std::string const & name );
+		C3D_API explicit ProgramModule( std::string const & name );
 		C3D_API ProgramModule( std::string const & name
 			, ShaderPtr shader );
 

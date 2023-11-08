@@ -68,21 +68,6 @@ namespace castor3d
 			}
 		}
 		CU_EndAttribute()
-
-		static CU_ImplementAttributeParser( parserEnd )
-		{
-			auto & parsingContext = getParserContext( context );
-
-			if ( !parsingContext.shadowConfig )
-			{
-				CU_ParsingError( cuT( "No shadow configuration initialised." ) );
-			}
-			else
-			{
-				params[0]->get( *parsingContext.shadowConfig->lpvConfig.texelAreaModifier );
-			}
-		}
-		CU_EndAttribute()
 	}
 
 	void LpvConfig::accept( ConfigurationVisitorBase & visitor )

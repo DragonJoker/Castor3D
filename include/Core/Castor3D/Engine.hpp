@@ -150,7 +150,7 @@ namespace castor3d
 		 *\param[in]	enableValidation	\p true pour activer la validation via l'API de rendu.
 		 *\param[in]	enableRandom		\p true pour générer des random seeds à chaque lancement.
 		 */
-		C3D_API Engine( EngineConfig config );
+		C3D_API explicit Engine( EngineConfig config );
 		/**
 		 *\~english
 		 *\brief		Constructor

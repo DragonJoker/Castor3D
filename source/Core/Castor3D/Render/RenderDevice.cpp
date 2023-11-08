@@ -338,11 +338,8 @@ namespace castor3d
 		bool hasFeatures11 = false;
 		bool hasFeatures2 = false;
 		bool hasVulkan1_1 = false;
-		bool hasVulkan1_2 = false;
-		bool hasVulkan1_3 = false;
 		bool hasFloatControls = false;
 		bool hasSpirv1_4 = false;
-		bool hasDeviceFault = false;
 		bool hasDescriptorIndexing = false;
 		bool hasDeviceAddress = false;
 
@@ -350,7 +347,6 @@ namespace castor3d
 		if ( apiVersion >= ashes::makeVersion( 1, 3, 0 ) )
 		{
 			m_hasFeatures13 = true;
-			hasVulkan1_3 = true;
 			hasDescriptorIndexing = true;
 			hasDeviceAddress = true;
 			m_deviceExtensions.addFeature( &m_features13 );
@@ -364,7 +360,6 @@ namespace castor3d
 			hasFeatures11 = true;
 			m_hasFeatures12 = true;
 			hasVulkan1_1 = true;
-			hasVulkan1_2 = true;
 			hasFloatControls = true;
 			hasSpirv1_4 = true;
 			hasDescriptorIndexing = true;
@@ -403,10 +398,7 @@ namespace castor3d
 			}
 #endif
 #if VK_EXT_device_fault
-			if ( !hasDeviceFault )
-			{
-				hasDeviceFault = doTryAddExtension( VK_EXT_DEVICE_FAULT_EXTENSION_NAME );
-			}
+			doTryAddExtension( VK_EXT_DEVICE_FAULT_EXTENSION_NAME );
 #endif
 #if VK_KHR_spirv_1_4
 			if ( !hasSpirv1_4 && hasVulkan1_1 && hasFloatControls )

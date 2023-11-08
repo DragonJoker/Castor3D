@@ -20,7 +20,7 @@ namespace castor
 		{
 		}
 
-		ChangeTrackedT( std::function< void() > callback )noexcept
+		explicit ChangeTrackedT( std::function< void() > callback )noexcept
 			: m_value{}
 			, m_dirty{ true }
 			, m_callback{ callback }

@@ -63,7 +63,6 @@ namespace GuiCommon
 
 	private:
 		castor3d::Light & m_light;
-		wxPGProperty * m_lpvProperties{};
 	};
 }
 

@@ -139,7 +139,7 @@ namespace castor3d
 	private:
 		struct Pipeline
 		{
-			Pipeline( PipelineFlags pflags )
+			explicit Pipeline( PipelineFlags pflags )
 				: flags{ std::move( pflags ) }
 			{
 			}
