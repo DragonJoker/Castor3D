@@ -77,7 +77,7 @@ namespace castor3d
 
 	namespace visres
 	{
-		static constexpr bool useCompute{ false };
+		static constexpr bool useCompute{ true };
 
 		enum Sets : uint32_t
 		{
@@ -2202,7 +2202,8 @@ namespace castor3d
 						, indexBuffer );
 				}
 
-				it->second.emplace( ires.first->second.get(), pipelineId );
+				auto & pipelines = it->second.emplace( ires.first->second.get(), UInt32Array{} ).first->second;
+				pipelines.push_back( pipelineId );
 			}
 
 			for ( auto & itPipeline : m_nodesPass.getBillboardNodes() )
@@ -2217,12 +2218,13 @@ namespace castor3d
 					continue;
 				}
 
+				auto pipelineHash = itPipeline.first->getFlagsHash();
+
 				for ( auto & itBuffer : itPipeline.second )
 				{
 					for ( auto & culled : itBuffer.second )
 					{
 						auto & positionsBuffer = culled.node->data.getVertexBuffer();
-						auto pipelineHash = itPipeline.first->getFlagsHash();
 						auto & pipeline = doCreatePipeline( pipelineFlags
 							, culled.node->data.getVertexStride() );
 						auto it = m_activeBillboardPipelines.emplace( &pipeline
@@ -2409,13 +2411,6 @@ namespace castor3d
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
 				descriptorSets[1] = *descriptorSetIt.first;
-				pushData.pipelineId = descriptorSetIt.second;
-				context.getContext().vkCmdPushConstants( commandBuffer
-					, *pipelineIt.first->pipelineLayout
-					, VK_SHADER_STAGE_COMPUTE_BIT
-					, 0u
-					, sizeof( visres::PushData )
-					, &pushData );
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_COMPUTE
 					, *pipelineIt.first->pipelineLayout
@@ -2424,8 +2419,19 @@ namespace castor3d
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
-				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point3ui ) );
-				++m_drawCalls;
+
+				for ( auto pipelineId : descriptorSetIt.second )
+				{
+					pushData.pipelineId = pipelineId;
+					context.getContext().vkCmdPushConstants( commandBuffer
+						, *pipelineIt.first->pipelineLayout
+						, VK_SHADER_STAGE_COMPUTE_BIT
+						, 0u
+						, sizeof( visres::PushData )
+						, &pushData );
+					context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point3ui ) );
+					++m_drawCalls;
+				}
 			}
 		}
 
@@ -2496,13 +2502,6 @@ namespace castor3d
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
 				descriptorSets[1] = *descriptorSetIt.first;
-				pushData.pipelineId = descriptorSetIt.second;
-				context.getContext().vkCmdPushConstants( commandBuffer
-					, *pipelineIt.first->pipelineLayout
-					, VK_SHADER_STAGE_FRAGMENT_BIT
-					, 0u
-					, sizeof( visres::PushData )
-					, &pushData );
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_GRAPHICS
 					, *pipelineIt.first->pipelineLayout
@@ -2511,8 +2510,19 @@ namespace castor3d
 					, descriptorSets.data()
 					, 0u
 					, nullptr );
-				context.getContext().vkCmdDraw( commandBuffer, 3u, 1u, 0u, 0u );
-				++m_drawCalls;
+
+				for ( auto pipelineId : descriptorSetIt.second )
+				{
+					pushData.pipelineId = pipelineId;
+					context.getContext().vkCmdPushConstants( commandBuffer
+						, *pipelineIt.first->pipelineLayout
+						, VK_SHADER_STAGE_FRAGMENT_BIT
+						, 0u
+						, sizeof( visres::PushData )
+						, &pushData );
+					context.getContext().vkCmdDraw( commandBuffer, 3u, 1u, 0u, 0u );
+					++m_drawCalls;
+				}
 			}
 		}
 
