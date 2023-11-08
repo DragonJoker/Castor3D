@@ -161,7 +161,7 @@ namespace castor3d
 			ashes::DescriptorSet const * vtxDescriptorSet{};
 		};
 		using PipelinePtr = std::unique_ptr< Pipeline >;
-		using SubmeshPipelinesNodesDescriptors = std::map< ashes::DescriptorSet const *, uint32_t >;
+		using SubmeshPipelinesNodesDescriptors = std::map< ashes::DescriptorSet const *, UInt32Array >;
 		using SubmeshPipelinesMap = std::map< Pipeline const *, SubmeshPipelinesNodesDescriptors >;
 		using BillboardPipelinesNodesDescriptors = std::map< uint32_t, PipelineNodesDescriptors >;
 		using BillboardPipelinesMap = std::map< Pipeline const *, BillboardPipelinesNodesDescriptors >;
