@@ -365,9 +365,11 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_sources.begin()
 			, m_sources.end()
-			, [&sourceInfo]( PassTextureSource const & lookup )
+			, [&sourceInfo, &configuration]( PassTextureSource const & lookup )
 			{
-				return sourceInfo == lookup.first;
+				return sourceInfo == lookup.first
+					&& configuration.sampler == lookup.second.sampler
+					&& configuration.texcoordSet == lookup.second.texcoordSet;
 			} );
 
 		if ( it == m_sources.end() )
