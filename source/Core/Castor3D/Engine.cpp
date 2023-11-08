@@ -1084,6 +1084,11 @@ namespace castor3d
 				{
 					materialIt.second->setSerialisable( false );
 				}
+
+				for ( auto & textureIt : getTextureUnitCache() )
+				{
+					textureIt.second->sourceInfo.setSerialisable( false );
+				}
 			}
 
 			{

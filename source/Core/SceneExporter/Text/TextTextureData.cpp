@@ -66,9 +66,10 @@ namespace castor
 		auto & sourceInfo = object.sourceInfo;
 		bool result = true;
 
-		if ( sourceInfo.isFileImage()
-			|| sourceInfo.isBufferImage()
-			|| sourceInfo.isRenderTarget() )
+		if ( sourceInfo.isSerialisable()
+			&& ( sourceInfo.isFileImage()
+				|| sourceInfo.isBufferImage()
+				|| sourceInfo.isRenderTarget() ) )
 		{
 			log::info << tabs() << cuT( "Writing TextureData" ) << std::endl;
 
