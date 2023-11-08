@@ -77,6 +77,8 @@ namespace castor3d
 
 	namespace visres
 	{
+		static constexpr bool useCompute{ false };
+
 		enum Sets : uint32_t
 		{
 			eInOuts,
@@ -176,9 +178,9 @@ namespace castor3d
 							, c3d_imgData.load( pos ) );
 						auto nodePipelineId = writer.declLocale( "nodePipelineId"
 							, indata.x() );
-						auto nodeId = writer.declLocale( "nodeId"
+						auto curNodeId = writer.declLocale( "curNodeId"
 							, nodePipelineId >> maxPipelinesSize );
-						auto pipeline = writer.declLocale( "pipeline"
+						auto curPipelineId = writer.declLocale( "curPipelineId"
 							, nodePipelineId & maxPipelinesMask );
 						auto primitiveId = writer.declLocale( "primitiveId"
 							, indata.y() );
@@ -189,8 +191,8 @@ namespace castor3d
 								? c3d_imgDiffuse.load( pos )
 								: vec4( 0.0_f ) ) );
 
-						IF( writer, ( stride != 0u ? ( nodeId != billboardNodeId ) : nodeId == 0_u )
-							|| !shade( pos, nodeId, pipeline, primitiveId, result, diffuse, scattering ) )
+						IF( writer, ( stride != 0u ? ( curNodeId != billboardNodeId ) : curNodeId == 0_u )
+							|| !shade( pos, curNodeId, curPipelineId, primitiveId, result, diffuse, scattering ) )
 						{
 							writer.demote();
 						}
@@ -1038,7 +1040,6 @@ namespace castor3d
 			, IndirectLightingData const * indirectLighting
 			, DebugConfig & debugConfig
 			, uint32_t stride
-			, bool blend
 			, bool hasSsao
 			, ClustersConfig const & clustersConfig
 			, bool outputScattering
@@ -1047,7 +1048,7 @@ namespace castor3d
 		{
 			bool isDeferredLighting = ( deferredLighting == DeferredLightingFilter::eDeferredOnly );
 			auto & engine = *device.renderSystem.getEngine();
-			ShaderWriter< VisibilityResolvePass::useCompute >::Type writer{ &engine.getShaderAllocator() };
+			ShaderWriter< useCompute >::Type writer{ &engine.getShaderAllocator() };
 
 			shader::Utils utils{ writer };
 			shader::BRDFHelpers brdf{ writer };
@@ -1151,8 +1152,8 @@ namespace castor3d
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
 				, [&]( sdw::IVec2 const & ipixel
-					, sdw::UInt nodeId
-					, sdw::UInt pipeline
+					, sdw::UInt curNodeId
+					, sdw::UInt curPipelineId
 					, sdw::UInt primitiveId
 					, sdw::Vec4 outResult
 					, sdw::Vec4 inoutDiffuse
@@ -1165,9 +1166,9 @@ namespace castor3d
 							, outResult
 							, areDebugTargetsEnabled };
 
-						if ( !VisibilityResolvePass::useCompute )
+						if ( !VisibilityResolvePass::useCompute() )
 						{
-							IF( writer, pipelineId != pipeline )
+							IF( writer, pipelineId != curPipelineId )
 							{
 								writer.returnStmt( 0_b );
 							}
@@ -1175,7 +1176,7 @@ namespace castor3d
 						}
 
 						auto modelData = writer.declLocale( "modelData"
-							, c3d_modelsData[nodeId - 1u] );
+							, c3d_modelsData[curNodeId - 1u] );
 						auto material = writer.declLocale( "material"
 							, materials.getMaterial( modelData.getMaterialId() ) );
 						auto depth = writer.declLocale( "depth"
@@ -1185,7 +1186,7 @@ namespace castor3d
 								? c3d_mapOcclusion.fetch( ipixel, 0_i )
 								: 1.0_f ) );
 						auto baseSurface = writer.declLocale( "baseSurface"
-							, visHelpers.loadSurface( nodeId
+							, visHelpers.loadSurface( curNodeId
 								, primitiveId
 								, vec2( ipixel )
 								, modelData
@@ -1460,14 +1461,14 @@ namespace castor3d
 					writer.returnStmt( 1_b );
 				}
 				, sdw::InIVec2{ writer, "ipixel" }
-				, sdw::InUInt{ writer, "nodeId" }
-				, sdw::InUInt{ writer, "pipeline" }
+				, sdw::InUInt{ writer, "curNodeId" }
+				, sdw::InUInt{ writer, "curPipelineId" }
 				, sdw::InUInt{ writer, "primitiveId" }
 				, sdw::OutVec4{ writer, "outResult" }
 				, sdw::InOutVec4{ writer, "inoutDiffuse" }
 				, sdw::OutVec4{ writer, "outScattering" } );
 
-			ShaderWriter< VisibilityResolvePass::useCompute >::implementMain( writer
+			ShaderWriter< useCompute >::implementMain( writer
 				, flags
 				, isDeferredLighting
 				, outputScattering
@@ -1492,7 +1493,7 @@ namespace castor3d
 			, IndirectLightingData const * indirectLighting )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
-			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute
+			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eCamera
@@ -1525,7 +1526,7 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 				, stages ) );
 
-			if constexpr ( VisibilityResolvePass::useCompute )
+			if ( VisibilityResolvePass::useCompute() )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( InOutBindings::eMaterialsCounts
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -1646,7 +1647,7 @@ namespace castor3d
 				, *engine.getRenderSystem()->getPrefilteredBrdfTexture().sampler
 				, InOutBindings::eMapBrdf ) );
 
-			if constexpr ( VisibilityResolvePass::useCompute )
+			if ( VisibilityResolvePass::useCompute() )
 			{
 				writes.push_back( makeDescriptorWrite( technique.getMaterialsCounts()
 					, InOutBindings::eMaterialsCounts
@@ -1724,7 +1725,7 @@ namespace castor3d
 		static ashes::DescriptorSetLayoutPtr createVtxDescriptorLayout( RenderDevice const & device
 			, std::string const & name )
 		{
-			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute
+			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
@@ -1739,7 +1740,7 @@ namespace castor3d
 			, std::string const & name
 			, PipelineFlags const & flags )
 		{
-			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute
+			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
@@ -2110,11 +2111,11 @@ namespace castor3d
 			, context
 			, graph
 			, { []( uint32_t index ){}
-				, GetPipelineStateCallback( [](){ return crg::getPipelineState( useCompute ? VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT : VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT ); } )
+				, GetPipelineStateCallback( [](){ return crg::getPipelineState( useCompute() ? VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT : VK_PIPELINE_STAGE_COLOR_ATTACHMENT_OUTPUT_BIT ); } )
 				, [this]( crg::RecordContext & recContext, VkCommandBuffer cb, uint32_t i ){ doRecordInto( recContext, cb, i ); }
 				, GetPassIndexCallback( [](){ return 0u; } )
 				, IsEnabledCallback( [this](){ return doIsEnabled(); } )
-				, IsComputePassCallback( [](){ return VisibilityResolvePass::useCompute; } ) }
+				, IsComputePassCallback( [](){ return useCompute(); } ) }
 			, renderPassDesc.m_ruConfig }
 		, m_device{ device }
 		, m_nodesPass{ nodesPass }
@@ -2127,19 +2128,12 @@ namespace castor3d
 		, m_deferredLightingFilter{ renderPassDesc.m_deferredLightingFilter }
 		, m_parallaxOcclusionFilter{ renderPassDesc.m_parallaxOcclusionFilter }
 		, m_onNodesPassSort( m_nodesPass.onSortNodes.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
-		, m_onNodesPassInvalidate( m_nodesPass.onInvalidate.connect( [this]( RenderNodesPass const & pass ){ m_commandsChanged = true; } ) )
-		, m_firstRenderPass{ ( useCompute
+		, m_renderPass{ ( useCompute()
 			? nullptr
 			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, true, m_deferredLightingFilter ) ) }
-		, m_firstFramebuffer{ ( useCompute
+		, m_framebuffer{ ( useCompute()
 			? nullptr
-			: visres::createFrameBuffer( *m_firstRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
-		, m_blendRenderPass{ ( useCompute
-			? nullptr
-			: visres::createRenderPass( m_device, getName(), m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr, false, m_deferredLightingFilter ) ) }
-		, m_blendFramebuffer{ ( useCompute
-			? nullptr
-			: visres::createFrameBuffer( *m_blendRenderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
+			: visres::createFrameBuffer( *m_renderPass, getName(), *m_parent, graph, m_targetImage, m_outputScattering ? &parent->getScattering() : nullptr ) ) }
 		, m_clustersConfig{ techniquePassDesc.m_clustersConfig }
 		, m_maxPipelineId{}
 	{
@@ -2152,10 +2146,7 @@ namespace castor3d
 
 	void VisibilityResolvePass::update( CpuUpdater & updater )
 	{
-		if constexpr ( useCompute )
-		{
-			m_maxPipelineId = m_nodesPass.getMaxPipelineId();
-		}
+		m_maxPipelineId = m_nodesPass.getMaxPipelineId();
 
 		if ( m_commandsChanged || m_maxPipelineId.isDirty() )
 		{
@@ -2163,16 +2154,18 @@ namespace castor3d
 			m_activePipelines.clear();
 			m_activeBillboardPipelines.clear();
 
-			uint32_t index = 0u;
-
-			for ( auto & bufferIt : m_nodesPass.getPassPipelineNodes() )
+			for ( auto [pipelineHash, buffer] : m_nodesPass.getPassPipelineNodes() )
 			{
-				auto buffer = bufferIt.second;
-				auto pipelineHash = bufferIt.first;
-				auto pipelineId = index++;
+				auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *buffer );
 				PipelineFlags pipelineFlags{ getPipelineHiHashDetails( *this
 					, pipelineHash
 					, getShaderFlags() ) };
+
+				if ( pipelineFlags.isBillboard() )
+				{
+					continue;
+				}
+
 				getEngine()->getPassComponentsRegister().registerPassComponentCombine( pipelineFlags.components );
 				pipelineFlags.m_sceneFlags = getScene().getFlags();
 				pipelineFlags.backgroundModelId = getScene().getBackground()->getModelID();
@@ -2182,39 +2175,34 @@ namespace castor3d
 					|| ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly
 						&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag ) )
 				{
-					// Ignore nodes that don't support deferred lighting
 					continue;
 				}
 
-				if ( !pipelineFlags.isBillboard() )
+				auto & pipeline = doCreatePipeline( pipelineFlags );
+				auto it = m_activePipelines.emplace( &pipeline
+					, SubmeshPipelinesNodesDescriptors{} ).first;
+
+				auto hash = std::hash< ashes::BufferBase const * >{}( buffer );
+				auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+
+				if ( ires.second )
 				{
-					auto & pipeline = doCreatePipeline( pipelineHash, pipelineFlags );
-					auto it = m_activePipelines.emplace( &pipeline
-						, SubmeshPipelinesNodesDescriptors{} ).first;
+					auto & modelBuffers = m_device.geometryPools->getBuffers( *buffer );
+					ashes::BufferBase const * indexBuffer{};
 
-					size_t hash = 0u;
-					hash = castor::hashCombinePtr( hash, *buffer );
-					auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
-
-					if ( ires.second )
+					if ( pipelineFlags.enableIndices() )
 					{
-						auto & modelBuffers = m_device.geometryPools->getBuffers( *buffer );
-						ashes::BufferBase const * indexBuffer{};
-
-						if ( pipelineFlags.enableIndices() )
-						{
-							indexBuffer = &m_device.geometryPools->getIndexBuffer( *buffer );
-						}
-
-						ires.first->second = visres::createVtxDescriptorSet( getName()
-							, pipelineFlags
-							, *pipeline.vtxDescriptorPool
-							, modelBuffers
-							, indexBuffer );
+						indexBuffer = &m_device.geometryPools->getIndexBuffer( *buffer );
 					}
 
-					it->second.emplace( ires.first->second.get(), pipelineId );
+					ires.first->second = visres::createVtxDescriptorSet( getName()
+						, pipelineFlags
+						, *pipeline.vtxDescriptorPool
+						, modelBuffers
+						, indexBuffer );
 				}
+
+				it->second.emplace( ires.first->second.get(), pipelineId );
 			}
 
 			for ( auto & itPipeline : m_nodesPass.getBillboardNodes() )
@@ -2226,7 +2214,6 @@ namespace castor3d
 					|| ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly
 						&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag ) )
 				{
-					// Ignore nodes that don't support deferred lighting
 					continue;
 				}
 
@@ -2236,8 +2223,7 @@ namespace castor3d
 					{
 						auto & positionsBuffer = culled.node->data.getVertexBuffer();
 						auto pipelineHash = itPipeline.first->getFlagsHash();
-						auto & pipeline = doCreatePipeline( pipelineHash
-							, pipelineFlags
+						auto & pipeline = doCreatePipeline( pipelineFlags
 							, culled.node->data.getVertexStride() );
 						auto it = m_activeBillboardPipelines.emplace( &pipeline
 							, BillboardPipelinesNodesDescriptors{} ).first;
@@ -2263,7 +2249,6 @@ namespace castor3d
 			}
 
 			reRecordCurrent();
-			m_commandsChanged = false;
 		}
 	}
 
@@ -2342,6 +2327,11 @@ namespace castor3d
 			| ComponentModeFlag::eOcclusion );
 	}
 
+	bool VisibilityResolvePass::useCompute()
+	{
+		return visres::useCompute;
+	}
+
 	void VisibilityResolvePass::doAccept( castor3d::RenderTechniqueVisitor & visitor )
 	{
 		if ( visitor.getFlags().renderPassType == m_nodesPass.getTypeID()
@@ -2358,7 +2348,7 @@ namespace castor3d
 				return;
 			}
 
-			ShaderModule module{ ( useCompute ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_FRAGMENT_BIT )
+			ShaderModule module{ ( useCompute() ? VK_SHADER_STAGE_COMPUTE_BIT : VK_SHADER_STAGE_FRAGMENT_BIT )
 				, getName()
 				, visres::getProgram( m_device
 					, getScene()
@@ -2368,7 +2358,6 @@ namespace castor3d
 					, &getIndirectLighting()
 					, getDebugConfig()
 					, 0u
-					, false
 					, hasSsao()
 					, *getClustersConfig()
 					, m_outputScattering
@@ -2389,7 +2378,7 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		if constexpr ( useCompute )
+		if ( useCompute() )
 		{
 			doRecordCompute( context, commandBuffer );
 		}
@@ -2397,6 +2386,8 @@ namespace castor3d
 		{
 			doRecordGraphics( context, commandBuffer );
 		}
+
+		m_commandsChanged = false;
 	}
 
 	void VisibilityResolvePass::doRecordCompute( crg::RecordContext & context
@@ -2407,17 +2398,12 @@ namespace castor3d
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
 		visres::PushData pushData{ 0u, 0u };
-		std::vector< VkClearValue > clearValues;
-		clearValues.push_back( transparentBlackClearColor );
-		bool first = true;
 
 		for ( auto & pipelineIt : m_activePipelines )
 		{
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, ( first
-					? *pipelineIt.first->shaders[0].pipeline
-					: *pipelineIt.first->shaders[1].pipeline ) );
+				, *pipelineIt.first->pipeline );
 			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
 
 			for ( auto & descriptorSetIt : pipelineIt.second )
@@ -2440,7 +2426,6 @@ namespace castor3d
 					, nullptr );
 				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point3ui ) );
 				++m_drawCalls;
-				first = false;
 			}
 		}
 
@@ -2448,9 +2433,7 @@ namespace castor3d
 		{
 			context.getContext().vkCmdBindPipeline( commandBuffer
 				, VK_PIPELINE_BIND_POINT_COMPUTE
-				, ( first
-					? *pipelineIt.first->shaders[0].pipeline
-					: *pipelineIt.first->shaders[1].pipeline ) );
+				, *pipelineIt.first->pipeline );
 			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
 
 			for ( auto & descriptorSetIt : pipelineIt.second )
@@ -2474,7 +2457,6 @@ namespace castor3d
 					, nullptr );
 				context.getContext().vkCmdDispatchIndirect( commandBuffer, getTechnique().getMaterialsIndirectCounts(), pushData.pipelineId * sizeof( castor::Point3ui ) );
 				++m_drawCalls;
-				first = false;
 			}
 		}
 	}
@@ -2486,72 +2468,41 @@ namespace castor3d
 		std::array< VkDescriptorSet, 3u > descriptorSets{ VkDescriptorSet{}
 			, VkDescriptorSet{}
 			, *getScene().getBindlessTexDescriptorSet() };
-		bool first = true;
-		bool renderPassBound = false;
-		bool pipelineBound = false;
 		visres::PushData pushData{ 0u, 0u };
-
-		auto bind = [&]( Pipeline const & pipeline, bool billboards )
-		{
-			if ( !renderPassBound )
-			{
-				std::vector< VkClearValue > clearValues;
-				clearValues.push_back( transparentBlackClearColor );
-				clearValues.push_back( transparentBlackClearColor );
-				auto & extent = m_parent->getNormal().getExtent();
-				VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
-					, nullptr
-					, VkRenderPass{}
-					, VkFramebuffer{}
-					, VkRect2D{ { 0, 0 }, { extent.width, extent.height } }
-					, uint32_t( clearValues.size() )
-					, clearValues.data() };
-
-				if ( first )
-				{
-					beginInfo.renderPass = *m_firstRenderPass;
-					beginInfo.framebuffer = *m_firstFramebuffer;
-				}
-				else
-				{
-					beginInfo.renderPass = *m_blendRenderPass;
-					beginInfo.framebuffer = *m_blendFramebuffer;
-				}
-
-				context.getContext().vkCmdBeginRenderPass( commandBuffer
-					, &beginInfo
-					, VK_SUBPASS_CONTENTS_INLINE );
-				renderPassBound = true;
-				pipelineBound = false;
-			}
-
-			if ( !pipelineBound )
-			{
-				context.getContext().vkCmdBindPipeline( commandBuffer
-					, VK_PIPELINE_BIND_POINT_GRAPHICS
-					, ( first
-						? *pipeline.shaders[0].pipeline
-						: *pipeline.shaders[1].pipeline ) );
-				pipelineBound = true;
-			}
-
-			context.getContext().vkCmdPushConstants( commandBuffer
-				, *pipeline.pipelineLayout
-				, VK_SHADER_STAGE_FRAGMENT_BIT
-				, 0u
-				, sizeof( visres::PushData )
-				, &pushData );
-		};
+		std::vector< VkClearValue > clearValues;
+		clearValues.push_back( transparentBlackClearColor );
+		clearValues.push_back( transparentBlackClearColor );
+		auto & extent = m_parent->getNormal().getExtent();
+		VkRenderPassBeginInfo beginInfo{ VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO
+			, nullptr
+			, VkRenderPass{}
+			, VkFramebuffer{}
+			, VkRect2D{ { 0, 0 }, { extent.width, extent.height } }
+			, uint32_t( clearValues.size() )
+			, clearValues.data() };
+		beginInfo.renderPass = *m_renderPass;
+		beginInfo.framebuffer = *m_framebuffer;
+		context.getContext().vkCmdBeginRenderPass( commandBuffer
+			, &beginInfo
+			, VK_SUBPASS_CONTENTS_INLINE );
 
 		for ( auto & pipelineIt : m_activePipelines )
 		{
+			context.getContext().vkCmdBindPipeline( commandBuffer
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, *pipelineIt.first->pipeline );
 			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
 
 			for ( auto & descriptorSetIt : pipelineIt.second )
 			{
 				descriptorSets[1] = *descriptorSetIt.first;
 				pushData.pipelineId = descriptorSetIt.second;
-				bind( *pipelineIt.first, false );
+				context.getContext().vkCmdPushConstants( commandBuffer
+					, *pipelineIt.first->pipelineLayout
+					, VK_SHADER_STAGE_FRAGMENT_BIT
+					, 0u
+					, sizeof( visres::PushData )
+					, &pushData );
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_GRAPHICS
 					, *pipelineIt.first->pipelineLayout
@@ -2562,21 +2513,14 @@ namespace castor3d
 					, nullptr );
 				context.getContext().vkCmdDraw( commandBuffer, 3u, 1u, 0u, 0u );
 				++m_drawCalls;
-
-				if ( first )
-				{
-					context.getContext().vkCmdEndRenderPass( commandBuffer );
-					first = false;
-					renderPassBound = false;
-					pipelineBound = false;
-				}
 			}
-
-			pipelineBound = false;
 		}
 
 		for ( auto & pipelineIt : m_activeBillboardPipelines )
 		{
+			context.getContext().vkCmdBindPipeline( commandBuffer
+				, VK_PIPELINE_BIND_POINT_GRAPHICS
+				, *pipelineIt.first->pipeline );
 			descriptorSets[0] = *pipelineIt.first->ioDescriptorSet;
 
 			for ( auto & descriptorSetIt : pipelineIt.second )
@@ -2584,7 +2528,12 @@ namespace castor3d
 				descriptorSets[1] = *descriptorSetIt.second.vtxDescriptorSet;
 				pushData.pipelineId = descriptorSetIt.second.pipelineId;
 				pushData.billboardNodeId = descriptorSetIt.first;
-				bind( *pipelineIt.first, true );
+				context.getContext().vkCmdPushConstants( commandBuffer
+					, *pipelineIt.first->pipelineLayout
+					, VK_SHADER_STAGE_FRAGMENT_BIT
+					, 0u
+					, sizeof( visres::PushData )
+					, &pushData );
 				context.getContext().vkCmdBindDescriptorSets( commandBuffer
 					, VK_PIPELINE_BIND_POINT_GRAPHICS
 					, *pipelineIt.first->pipelineLayout
@@ -2595,62 +2544,43 @@ namespace castor3d
 					, nullptr );
 				context.getContext().vkCmdDraw( commandBuffer, 3u, 1u, 0u, 0u );
 				++m_drawCalls;
-
-				if ( first )
-				{
-					context.getContext().vkCmdEndRenderPass( commandBuffer );
-					first = false;
-					renderPassBound = false;
-					pipelineBound = false;
-				}
 			}
-
-			pipelineBound = false;
 		}
 
-		if ( renderPassBound )
-		{
-			context.getContext().vkCmdEndRenderPass( commandBuffer );
-		}
-
+		context.getContext().vkCmdEndRenderPass( commandBuffer );
 		context.setLayoutState( m_targetImage.front()
 			, crg::makeLayoutState( VK_IMAGE_LAYOUT_COLOR_ATTACHMENT_OPTIMAL ) );
 	}
 
-	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash
-		, PipelineFlags const & flags
+	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineFlags const & flags
 		, uint32_t stride )
 	{
-		return doCreatePipeline( hash
-			, flags
+		return doCreatePipeline( flags
 			, stride
 			, m_billboardPipelines );
 	}
 
-	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash
-		, PipelineFlags const & flags )
+	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineFlags const & flags )
 	{
-		return doCreatePipeline( hash
-			, flags
+		return doCreatePipeline( flags
 			, 0u
 			, m_pipelines );
 	}
 
-	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineBaseHash const & hash
-		, PipelineFlags const & flags
+	VisibilityResolvePass::Pipeline & VisibilityResolvePass::doCreatePipeline( PipelineFlags const & flags
 		, uint32_t stride
 		, PipelineContainer & pipelines )
 	{
 		auto it = std::find_if( pipelines.begin()
 			, pipelines.end()
-			, [&flags]( auto & lookup )
+			, [&flags]( PipelinePtr const & lookup )
 			{
 				return lookup->flags == flags;
 			} );
 
 		if ( it == pipelines.end() )
 		{
-			auto stageBit = VisibilityResolvePass::useCompute
+			auto stageBit = useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT;
 			auto stageFlags = VkShaderStageFlags( stageBit );
@@ -2666,44 +2596,26 @@ namespace castor3d
 				, { *result->ioDescriptorLayout, *result->vtxDescriptorLayout, *getScene().getBindlessTexDescriptorLayout() }
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
-			result->shaders[0].shader = ProgramModule{ getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, false, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter, areDebugTargetsEnabled() ) };
-			result->shaders[1].shader = ProgramModule{ getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, true, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter, areDebugTargetsEnabled() ) };
+			result->shader = ProgramModule{ getName()
+				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter, areDebugTargetsEnabled() ) };
+			auto stages = makeProgramStates( m_device, result->shader );
 
-			if constexpr ( useCompute )
+			if ( useCompute() )
 			{
-				auto stages{ makeProgramStates( m_device, result->shaders[0].shader ) };
-				result->shaders[0].pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
-					, std::move( stages.front() )
-					, *result->pipelineLayout } );
-
-				stages = makeProgramStates( m_device, result->shaders[1].shader );
-				result->shaders[1].pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
+				result->pipeline = m_device->createPipeline( ashes::ComputePipelineCreateInfo{ 0u
 					, std::move( stages.front() )
 					, *result->pipelineLayout } );
 			}
 			else
 			{
-				auto stages = makeProgramStates( m_device, result->shaders[0].shader );
-				result->shaders[0].pipeline = visres::createPipeline( m_device
+				result->pipeline = visres::createPipeline( m_device
 					, extent
 					, std::move( stages )
 					, *result->pipelineLayout
-					, *m_firstRenderPass
+					, *m_renderPass
 					, m_targetImage
 					, m_outputScattering ? &getTechnique().getScattering() : nullptr
 					, false );
-
-				stages = makeProgramStates( m_device, result->shaders[1].shader );
-				result->shaders[1].pipeline = visres::createPipeline( m_device
-					, extent
-					, std::move( stages )
-					, *result->pipelineLayout
-					, *m_blendRenderPass
-					, m_targetImage
-					, m_outputScattering ? &getTechnique().getScattering() : nullptr
-					, true );
 			}
 
 			result->vtxDescriptorPool = result->vtxDescriptorLayout->createPool( MaxPipelines );
