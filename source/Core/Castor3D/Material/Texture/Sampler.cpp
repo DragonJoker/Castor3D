@@ -13,6 +13,85 @@ CU_ImplementSmartPtr( castor3d, Sampler )
 
 namespace castor3d
 {
+	namespace sampler
+	{
+		static castor::String getName( VkCompareOp value )
+		{
+			switch ( value )
+			{
+			case VK_COMPARE_OP_NEVER:
+				return "Nev";
+			case VK_COMPARE_OP_LESS:
+				return "Lss";
+			case VK_COMPARE_OP_EQUAL:
+				return "Eq";
+			case VK_COMPARE_OP_LESS_OR_EQUAL:
+				return "LEq";
+			case VK_COMPARE_OP_GREATER:
+				return "Gtr";
+			case VK_COMPARE_OP_NOT_EQUAL:
+				return "NEq";
+			case VK_COMPARE_OP_GREATER_OR_EQUAL:
+				return "GEq";
+			case VK_COMPARE_OP_ALWAYS:
+				return "Alw";
+			default:
+				assert( false && "Unsupported VkCompareOp." );
+				return "Unsupported VkCompareOp";
+			}
+		}
+
+		static castor::String getName( VkFilter value )
+		{
+			switch ( value )
+			{
+			case VK_FILTER_NEAREST:
+				return "Near";
+			case VK_FILTER_LINEAR:
+				return "Lin";
+			case VK_FILTER_CUBIC_IMG:
+				return "Cub";
+			default:
+				assert( false && "Unsupported VkFilter." );
+				return "Unsupported VkFilter";
+			}
+		}
+
+		static castor::String getName( VkSamplerMipmapMode value )
+		{
+			switch ( value )
+			{
+			case VK_SAMPLER_MIPMAP_MODE_NEAREST:
+				return "Near";
+			case VK_SAMPLER_MIPMAP_MODE_LINEAR:
+				return "Lin";
+			default:
+				assert( false && "Unsupported VkSamplerMipmapMode." );
+				return "Unsupported VkSamplerMipmapMode";
+			}
+		}
+
+		static castor::String getName( VkSamplerAddressMode value )
+		{
+			switch ( value )
+			{
+			case VK_SAMPLER_ADDRESS_MODE_REPEAT:
+				return "Rep";
+			case VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT:
+				return "MRep";
+			case VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE:
+				return "CtE";
+			case VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_BORDER:
+				return "CtB";
+			case VK_SAMPLER_ADDRESS_MODE_MIRROR_CLAMP_TO_EDGE:
+				return "MCtE";
+			default:
+				assert( false && "Unsupported VkSamplerAddressMode." );
+				return "Unsupported VkSamplerAddressMode";
+			}
+		}
+	}
+
 	SamplerObs createSampler( Engine & engine
 		, castor::String const & baseName
 		, VkFilter filter
@@ -72,13 +151,13 @@ namespace castor3d
 		, VkSamplerAddressMode V
 		, VkSamplerAddressMode W )
 	{
-		return ashes::getName( compareOp )
-			+ ashes::getName( minFilter )
-			+ ashes::getName( magFilter )
-			+ ashes::getName( mipFilter )
-			+ ashes::getName( U )
-			+ ashes::getName( V )
-			+ ashes::getName( W );
+		return sampler::getName( compareOp )
+			+ sampler::getName( minFilter )
+			+ sampler::getName( magFilter )
+			+ sampler::getName( mipFilter )
+			+ "U" + sampler::getName( U )
+			+ "V" + sampler::getName( V )
+			+ "W" + sampler::getName( W );
 	}
 
 	//*********************************************************************************************

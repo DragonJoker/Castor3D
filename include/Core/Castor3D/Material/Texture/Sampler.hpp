@@ -15,11 +15,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	SamplerObs createSampler( Engine & engine
+	C3D_API SamplerObs createSampler( Engine & engine
 		, castor::String const & baseName
 		, VkFilter filter
 		, VkImageSubresourceRange const * range );
-	castor::String getSamplerName( VkCompareOp compareOp
+	C3D_API castor::String getSamplerName( VkCompareOp compareOp
 		, VkFilter minFilter
 		, VkFilter magFilter
 		, VkSamplerMipmapMode mipFilter
