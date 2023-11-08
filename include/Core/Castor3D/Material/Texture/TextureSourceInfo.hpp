@@ -37,6 +37,11 @@ namespace castor3d
 			, TextureConfiguration textureConfig
 			, ashes::ImageCreateInfo const & createInfo );
 
+		bool isSerialisable()const
+		{
+			return m_serialisable;
+		}
+
 		bool isRenderTarget()const
 		{
 			return m_renderTarget != nullptr;
@@ -149,9 +154,15 @@ namespace castor3d
 			m_data = std::move( data );
 		}
 
+		void setSerialisable( bool v )
+		{
+			m_serialisable = v;
+		}
+
 	private:
 		castor::String m_name{};
 		TextureConfiguration m_textureConfig{};
+		bool m_serialisable{ true };
 		// Render target mode.
 		RenderTargetRPtr m_renderTarget{};
 		// Image file mode.
