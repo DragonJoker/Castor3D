@@ -867,7 +867,6 @@ namespace castor3d
 		/**@}*/
 
 		mutable RenderNodesPassChangeSignal onSortNodes;
-		mutable RenderNodesPassChangeSignal onInvalidate;
 
 	private:
 		void doSubInitialise();

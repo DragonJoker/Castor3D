@@ -124,6 +124,8 @@ namespace castor3d
 		 */
 		C3D_API static ComponentModeFlags getComponentsMask();
 
+		C3D_API static bool useCompute();
+
 		bool hasSsao()const noexcept override
 		{
 			return m_ssao && m_ssaoConfig && m_ssaoConfig->enabled;
@@ -134,17 +136,9 @@ namespace castor3d
 			return m_clustersConfig;
 		}
 
-		static constexpr bool useCompute{ true };
-
 	private:
 		struct Pipeline
 		{
-			struct ShaderStages
-			{
-				ProgramModule shader;
-				ashes::PipelinePtr pipeline{};
-			};
-
 			Pipeline( PipelineFlags pflags )
 				: flags{ std::move( pflags ) }
 			{
@@ -156,7 +150,8 @@ namespace castor3d
 			ashes::PipelineLayoutPtr pipelineLayout{};
 			ashes::DescriptorSetPoolPtr vtxDescriptorPool{};
 			ashes::DescriptorSetPoolPtr ioDescriptorPool{};
-			std::array< ShaderStages, 2u > shaders;
+			ProgramModule shader;
+			ashes::PipelinePtr pipeline{};
 			std::unordered_map< size_t, ashes::DescriptorSetPtr > vtxDescriptorSets{};
 			ashes::DescriptorSetPtr ioDescriptorSet{};
 		};
@@ -182,13 +177,10 @@ namespace castor3d
 			, VkCommandBuffer commandBuffer );
 		void doRecordGraphics( crg::RecordContext & context
 			, VkCommandBuffer commandBuffer );
-		Pipeline & doCreatePipeline( PipelineBaseHash const & hash
-			, PipelineFlags const & flags );
-		Pipeline & doCreatePipeline( PipelineBaseHash const & hash
-			, PipelineFlags const & flags
+		Pipeline & doCreatePipeline( PipelineFlags const & flags );
+		Pipeline & doCreatePipeline( PipelineFlags const & flags
 			, uint32_t stride );
-		Pipeline & doCreatePipeline( PipelineBaseHash const & hash
-			, PipelineFlags const & flags
+		Pipeline & doCreatePipeline( PipelineFlags const & flags
 			, uint32_t stride
 			, PipelineContainer & pipelines );
 
@@ -204,12 +196,9 @@ namespace castor3d
 		DeferredLightingFilter m_deferredLightingFilter;
 		ParallaxOcclusionFilter m_parallaxOcclusionFilter;
 		RenderNodesPassChangeSignalConnection m_onNodesPassSort;
-		RenderNodesPassChangeSignalConnection m_onNodesPassInvalidate;
 		bool m_commandsChanged{};
-		ashes::RenderPassPtr m_firstRenderPass;
-		ashes::FrameBufferPtr m_firstFramebuffer;
-		ashes::RenderPassPtr m_blendRenderPass;
-		ashes::FrameBufferPtr m_blendFramebuffer;
+		ashes::RenderPassPtr m_renderPass;
+		ashes::FrameBufferPtr m_framebuffer;
 		PipelineContainer m_pipelines;
 		PipelineContainer m_billboardPipelines;
 		SubmeshPipelinesMap m_activePipelines;

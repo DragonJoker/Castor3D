@@ -331,12 +331,9 @@ namespace castor3d
 						, nidxIndex );
 					++result;
 
-					if constexpr ( VisibilityResolvePass::useCompute )
+					for ( auto & nodeIt : buffers.second )
 					{
-						for ( auto & nodeIt : buffers.second )
-						{
-							queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
-						}
+						queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
 					}
 				}
 			}
@@ -424,11 +421,7 @@ namespace castor3d
 								, mshIndex );
 							drawOffset += nodeIt.instanceCount;
 							++result;
-
-							if constexpr ( VisibilityResolvePass::useCompute )
-							{
-								queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
-							}
+							queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
 						}
 					}
 					else
@@ -443,12 +436,9 @@ namespace castor3d
 							, nidxIndex );
 						++result;
 
-						if constexpr ( VisibilityResolvePass::useCompute )
+						for ( auto & nodeIt : nodes )
 						{
-							for ( auto & nodeIt : nodes )
-							{
-								queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
-							}
+							queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
 						}
 					}
 				}
@@ -494,12 +484,9 @@ namespace castor3d
 								, viewport
 								, scissor );
 
-							if constexpr ( VisibilityResolvePass::useCompute )
+							for ( auto & nodeIt : submeshIt.second )
 							{
-								for ( auto & nodeIt : submeshIt.second )
-								{
-									queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
-								}
+								queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
 							}
 
 							auto & node = *submeshIt.second.front().node;
@@ -579,12 +566,9 @@ namespace castor3d
 								, nidxIndex );
 							++result;
 
-							if constexpr ( VisibilityResolvePass::useCompute )
+							for ( auto & nodeIt : submeshIt.second )
 							{
-								for ( auto & nodeIt : submeshIt.second )
-								{
-									queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
-								}
+								queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
 							}
 						}
 					}

@@ -45,35 +45,35 @@ namespace castor3d
 		: castor::OwnedBy< RenderTechnique >{ parent }
 		, m_device{ device }
 		, m_graph{ getOwner()->getGraph().createPassGroup( "Opaque" ) }
-		, m_materialsCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
+		, m_materialsCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
 			? makeBuffer< uint32_t >( m_device
 				, getEngine()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/MaterialsCounts1" )
 			: nullptr ) }
-		, m_materialsIndirectCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
+		, m_materialsIndirectCounts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
 			? makeBuffer< castor::Point3ui >( m_device
 				, getEngine()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/MaterialsCounts2" )
 			: nullptr ) }
-		, m_materialsStarts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
+		, m_materialsStarts{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
 			? makeBuffer< uint32_t >( m_device
 				, getEngine()->getMaxPassTypeCount()
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/MaterialsStarts" )
 			: nullptr ) }
-		, m_pixelsXY{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
+		, m_pixelsXY{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
 			? makeBuffer< castor::Point2ui >( m_device
 				, getOwner()->getTargetExtent().width * getOwner()->getTargetExtent().height
 				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/PixelsXY" )
 			: nullptr ) }
-		, m_visibilityReorder{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute )
+		, m_visibilityReorder{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
 			? castor::makeUnique< VisibilityReorderPass >( m_graph
 				, crg::FramePassArray{ &previous.getLastPass() }
 				, m_device
@@ -350,7 +350,7 @@ namespace castor3d
 				, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		}
 
-		if constexpr ( VisibilityResolvePass::useCompute )
+		if ( VisibilityResolvePass::useCompute() )
 		{
 			result.addDependency( m_visibilityReorder->getLastPass() );
 			result.addInputStorageBuffer( { m_materialsCounts->getBuffer(), "MaterialsCounts" }
