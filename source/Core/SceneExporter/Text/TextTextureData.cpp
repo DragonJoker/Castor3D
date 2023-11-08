@@ -15,8 +15,18 @@
 
 namespace castor
 {
-	namespace txtexunit
+	namespace txtexdata
 	{
+		static bool isReworkedImage( String texName )
+		{
+			return String::npos != texName.find( "/Compressed" )
+				|| String::npos != texName.find( "/Mipped" )
+				|| String::npos != texName.find( "/Tiled" )
+				|| String::npos != texName.find( "/RGBA" )
+				|| String::npos != texName.find( "/HResampled" )
+				|| String::npos != texName.find( "/WResampled" );
+		}
+
 		static void reworkImageFileName( String texName, Path & path, bool & needsYInversion )
 		{
 			if ( path.getExtension() != "dds" )
@@ -60,21 +70,12 @@ namespace castor
 			|| sourceInfo.isBufferImage()
 			|| sourceInfo.isRenderTarget() )
 		{
-			log::info << tabs() << cuT( "Writing TextureUnit" ) << std::endl;
-			bool createImageFile = false;
-			auto imageFile = sourceInfo.relative();
-			auto config = sourceInfo.textureConfig();
-
-			if ( sourceInfo.isFileImage()
-				|| ( sourceInfo.isBufferImage()
-					&& ashes::isCompressedFormat( VkFormat( object.image->getPixelFormat() ) ) ) )
-			{
-				createImageFile = true;
-				txtexunit::reworkImageFileName( sourceInfo.name(), imageFile, config.needsYInversion );
-			}
+			log::info << tabs() << cuT( "Writing TextureData" ) << std::endl;
 
 			if ( auto block{ beginBlock( file, cuT( "texture" ), sourceInfo.name() ) } )
 			{
+				auto config = sourceInfo.textureConfig();
+
 				if ( result )
 				{
 					if ( sourceInfo.isRenderTarget() )
@@ -83,6 +84,12 @@ namespace castor
 					}
 					else
 					{
+						bool createImageFile = sourceInfo.isBufferImage()
+							|| ( sourceInfo.isFileImage() && txtexdata::isReworkedImage( sourceInfo.name() ) );
+						auto imageFile = sourceInfo.isFileImage()
+							? sourceInfo.relative()
+							: castor::Path{ sourceInfo.name() };
+
 						if ( createImageFile )
 						{
 							log::info << tabs() << cuT( "\tCreating texture image" ) << std::endl;
@@ -98,6 +105,7 @@ namespace castor
 								File::directoryCreate( m_folder / path );
 							}
 
+							txtexdata::reworkImageFileName( sourceInfo.name(), imageFile, config.needsYInversion );
 							path /= imageFile;
 							auto & writer = m_engine.getImageWriter();
 							result = writer.write( m_folder / path, object.image->getPxBuffer() );
