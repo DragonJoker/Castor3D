@@ -249,47 +249,6 @@ namespace c3d_gltf
 			return nullptr;
 		}
 
-		static VkSamplerAddressMode convert( fastgltf::Wrap const & v )
-		{
-			switch ( v )
-			{
-			case fastgltf::Wrap::Repeat:
-				return VK_SAMPLER_ADDRESS_MODE_REPEAT;
-			case fastgltf::Wrap::ClampToEdge:
-				return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
-			case fastgltf::Wrap::MirroredRepeat:
-				return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
-			default:
-				return VK_SAMPLER_ADDRESS_MODE_REPEAT;
-			}
-		}
-
-		static VkFilter convert( fastgltf::Filter const & v )
-		{
-			switch ( v )
-			{
-			case fastgltf::Filter::Nearest:
-			case fastgltf::Filter::NearestMipMapNearest:
-			case fastgltf::Filter::NearestMipMapLinear:
-				return VK_FILTER_NEAREST;
-			default:
-				return VK_FILTER_LINEAR;
-			}
-		}
-
-		static VkSamplerMipmapMode getMipFilter( fastgltf::Filter const & v )
-		{
-			switch ( v )
-			{
-			case fastgltf::Filter::Nearest:
-			case fastgltf::Filter::NearestMipMapNearest:
-			case fastgltf::Filter::LinearMipMapNearest:
-				return VK_SAMPLER_MIPMAP_MODE_NEAREST;
-			default:
-				return VK_SAMPLER_MIPMAP_MODE_LINEAR;
-			}
-		}
-
 		static castor3d::SamplerRPtr loadSampler( GltfImporterFile const & file
 			, fastgltf::Asset const & impAsset
 			, fastgltf::Optional< size_t > const & samplerIndex )
@@ -300,12 +259,12 @@ namespace c3d_gltf
 				&& *samplerIndex < impAsset.samplers.size() )
 			{
 				fastgltf::Sampler const & impSampler = impAsset.samplers[*samplerIndex];
+				auto defaultSampler = engine.getDefaultSampler();
 				auto & cache = engine.getSamplerCache();
-				auto name = file.getSamplerName( *samplerIndex );
+				auto name = file.getSamplerName( impSampler );
 
 				if ( !cache.has( name ) )
 				{
-					auto defaultSampler = engine.getDefaultSampler();
 					auto sampler = engine.createSampler( name, engine );
 					sampler->setMinFilter( impSampler.minFilter ? convert( *impSampler.minFilter ) : defaultSampler->getMinFilter() );
 					sampler->setMagFilter( impSampler.magFilter ? convert( *impSampler.magFilter ) : defaultSampler->getMagFilter() );
@@ -528,6 +487,47 @@ namespace c3d_gltf
 	}
 
 	//*********************************************************************************************
+
+	VkSamplerAddressMode convert( fastgltf::Wrap const & v )
+	{
+		switch ( v )
+		{
+		case fastgltf::Wrap::Repeat:
+			return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+		case fastgltf::Wrap::ClampToEdge:
+			return VK_SAMPLER_ADDRESS_MODE_CLAMP_TO_EDGE;
+		case fastgltf::Wrap::MirroredRepeat:
+			return VK_SAMPLER_ADDRESS_MODE_MIRRORED_REPEAT;
+		default:
+			return VK_SAMPLER_ADDRESS_MODE_REPEAT;
+		}
+	}
+
+	VkFilter convert( fastgltf::Filter const & v )
+	{
+		switch ( v )
+		{
+		case fastgltf::Filter::Nearest:
+		case fastgltf::Filter::NearestMipMapNearest:
+		case fastgltf::Filter::NearestMipMapLinear:
+			return VK_FILTER_NEAREST;
+		default:
+			return VK_FILTER_LINEAR;
+		}
+	}
+
+	VkSamplerMipmapMode getMipFilter( fastgltf::Filter const & v )
+	{
+		switch ( v )
+		{
+		case fastgltf::Filter::Nearest:
+		case fastgltf::Filter::NearestMipMapNearest:
+		case fastgltf::Filter::LinearMipMapNearest:
+			return VK_SAMPLER_MIPMAP_MODE_NEAREST;
+		default:
+			return VK_SAMPLER_MIPMAP_MODE_LINEAR;
+		}
+	}
 
 	GltfMaterialImporter::GltfMaterialImporter( castor3d::Engine & engine )
 		: castor3d::MaterialImporter{ engine }

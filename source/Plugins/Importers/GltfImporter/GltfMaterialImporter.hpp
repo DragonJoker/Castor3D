@@ -10,6 +10,10 @@ See LICENSE file in root folder
 
 namespace c3d_gltf
 {
+	VkSamplerAddressMode convert( fastgltf::Wrap const & v );
+	VkFilter convert( fastgltf::Filter const & v );
+	VkSamplerMipmapMode getMipFilter( fastgltf::Filter const & v );
+
 	class GltfMaterialImporter
 		: public castor3d::MaterialImporter
 	{

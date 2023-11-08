@@ -655,9 +655,17 @@ namespace c3d_gltf
 		return getInternalName( file::getElementName( m_asset->cameras, index, getName(), m_cameraNames ) );
 	}
 
-	castor::String GltfImporterFile::getSamplerName( size_t index )const
+	castor::String GltfImporterFile::getSamplerName( fastgltf::Sampler const & impSampler )const
 	{
-		return getInternalName( file::getElementName( m_asset->samplers, index, getName(), m_samplerNames ) );
+		auto & engine = *getOwner();
+		auto & defaultSampler = *engine.getDefaultSampler();
+		return castor3d::getSamplerName( VK_COMPARE_OP_NEVER
+			, impSampler.minFilter ? convert( *impSampler.minFilter ) : defaultSampler.getMinFilter()
+			, impSampler.magFilter ? convert( *impSampler.magFilter ) : defaultSampler.getMagFilter()
+			, impSampler.minFilter ? getMipFilter( *impSampler.minFilter ) : defaultSampler.getMipFilter()
+			, convert( impSampler.wrapS )
+			, convert( impSampler.wrapT )
+			, defaultSampler.getWrapR() );
 	}
 
 	castor::String GltfImporterFile::getGeometryName( size_t nodeIndex, size_t meshIndex, size_t instance )const

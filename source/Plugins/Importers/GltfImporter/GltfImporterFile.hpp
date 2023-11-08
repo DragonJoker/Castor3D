@@ -167,7 +167,7 @@ namespace c3d_gltf
 		castor::String getSkinName( size_t index )const;
 		castor::String getLightName( size_t index )const;
 		castor::String getCameraName( size_t index )const;
-		castor::String getSamplerName( size_t index )const;
+		castor::String getSamplerName( fastgltf::Sampler const & impSampler )const;
 		castor::String getGeometryName( size_t nodeIndex, size_t meshIndex, size_t instance )const;
 		castor::String getAnimationName( size_t index )const;
 
