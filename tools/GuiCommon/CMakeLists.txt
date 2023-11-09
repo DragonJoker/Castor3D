@@ -133,6 +133,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	Properties/TreeItems/BoneTreeItemProperty.cpp
 	Properties/TreeItems/CameraTreeItemProperty.cpp
 	Properties/TreeItems/ClustersConfigTreeItemProperty.cpp
+	Properties/TreeItems/ColourGradingConfigTreeItemProperty.cpp
 	Properties/TreeItems/ControlTreeItemProperty.cpp
 	Properties/TreeItems/ExportOptionsTreeItemProperty.cpp
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.cpp
@@ -170,6 +171,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	Properties/TreeItems/BoneTreeItemProperty.hpp
 	Properties/TreeItems/CameraTreeItemProperty.hpp
 	Properties/TreeItems/ClustersConfigTreeItemProperty.hpp
+	Properties/TreeItems/ColourGradingConfigTreeItemProperty.hpp
 	Properties/TreeItems/ControlTreeItemProperty.hpp
 	Properties/TreeItems/ExportOptionsTreeItemProperty.hpp
 	Properties/TreeItems/FrameVariableBufferTreeItemProperty.hpp

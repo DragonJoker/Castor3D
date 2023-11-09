@@ -23,6 +23,12 @@ namespace castor3d
 		//!\~french		La valeur de correction gamma.
 		float gamma{ 2.2f };
 	};
+
+	inline bool operator==( HdrConfig const & lhs, HdrConfig const & rhs )
+	{
+		return lhs.exposure == rhs.exposure
+			&& lhs.gamma == rhs.gamma;
+	}
 }
 
 #endif

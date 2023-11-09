@@ -5,12 +5,13 @@ See LICENSE file in root folder
 #define ___C3D_Camera_H___
 
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
-#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 
-#include "Castor3D/Scene/MovableObject.hpp"
 #include "Castor3D/Render/Frustum.hpp"
+#include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
+#include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Render/Viewport.hpp"
+#include "Castor3D/Scene/MovableObject.hpp"
 
 #include <CastorUtils/Data/TextWriter.hpp>
 #include <CastorUtils/Graphics/Size.hpp>
@@ -214,6 +215,16 @@ namespace castor3d
 		{
 			return m_hdrConfig;
 		}
+
+		ColourGradingConfig const & getColourGradingConfig()const noexcept
+		{
+			return m_colourGradingConfig;
+		}
+
+		ColourGradingConfig & getColourGradingConfig()noexcept
+		{
+			return m_colourGradingConfig;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -254,6 +265,11 @@ namespace castor3d
 		{
 			m_hdrConfig = std::move( value );
 		}
+
+		void setColourGradingConfig( ColourGradingConfig config )noexcept
+		{
+			m_colourGradingConfig = std::move( config );
+		}
 		/**@}*/
 
 	public:
@@ -267,6 +283,7 @@ namespace castor3d
 		Frustum m_frustum;
 		castor::Matrix4x4f m_view;
 		HdrConfig m_hdrConfig;
+		ColourGradingConfig m_colourGradingConfig;
 		bool m_ownProjection{ false };
 		castor::Matrix4x4f m_projection;
 	};

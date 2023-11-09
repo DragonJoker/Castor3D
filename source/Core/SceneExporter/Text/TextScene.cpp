@@ -402,7 +402,7 @@ namespace castor
 						&& txtscn::writeInclude( file, m_options.lightsFile, *this )
 						&& writeSub( file, *scene.getBackground(), m_options.rootFolder )
 						&& writeSub( file, scene.getFog() )
-						&& writeSub( file, scene.getVoxelConeTracingConfig() )
+						&& writeSubOpt( file, scene.getVoxelConeTracingConfig(), VctConfig{} )
 						&& txtscn::writeIncludedView( file, scene.getSamplerView(), cuT( "Samplers" ), m_options.sceneMaterialsFile, *this, txtscn::writable< Sampler > )
 						&& txtscn::writeIncludedView( file, scene.getMaterialView(), cuT( "Materials" ), m_options.sceneMaterialsFile, *this, txtscn::writable< Material >, m_options.rootFolder, m_options.subfolder )
 						&& txtscn::writeCache( file, scene.getOverlayCache(), cuT( "Overlays" ), *this, txtscn::writable< Overlay > )

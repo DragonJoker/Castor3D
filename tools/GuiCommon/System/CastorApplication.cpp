@@ -31,6 +31,8 @@ namespace app
 #include "GuiCommon/xpms/camera_sel.xpm"
 #include "GuiCommon/xpms/castor_transparent.xpm"
 #include "GuiCommon/xpms/collapse_all.xpm"
+#include "GuiCommon/xpms/colour_grading.xpm"
+#include "GuiCommon/xpms/colour_grading_sel.xpm"
 #include "GuiCommon/xpms/control.xpm"
 #include "GuiCommon/xpms/control_sel.xpm"
 #include "GuiCommon/xpms/controls.xpm"
@@ -643,6 +645,8 @@ namespace GuiCommon
 		m_imagesLoader.addBitmap( eBMP_FRAME_VARIABLE_BUFFER_SEL, app::frame_variable_buffer_sel_xpm );
 		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG, app::ssao_config_xpm );
 		m_imagesLoader.addBitmap( eBMP_SSAO_CONFIG_SEL, app::ssao_config_sel_xpm );
+		m_imagesLoader.addBitmap( eBMP_COLOURGRADING_CONFIG, app::colour_grading_xpm );
+		m_imagesLoader.addBitmap( eBMP_COLOURGRADING_CONFIG_SEL, app::colour_grading_sel_xpm );
 		m_imagesLoader.addBitmap( eBMP_CLUSTERS_CONFIG, app::ssao_config_xpm );
 		m_imagesLoader.addBitmap( eBMP_CLUSTERS_CONFIG_SEL, app::ssao_config_sel_xpm );
 		m_imagesLoader.addBitmap( eBMP_VCT_CONFIG, app::ssao_config_xpm );

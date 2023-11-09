@@ -18,7 +18,7 @@ The project itself is compilable on supported platforms using CMake and vcpkg (\
 - Screen Space Ambient Occlusion (using [Scalable Ambiant Obscurance](https://casual-effects.com/research/McGuire2012SAO/index.html)).
 - Reflection/Refraction Mapping.
 - PBR rendering (Metallic and Specular workflows), and Phong/Blinn-Phong rendering.
-- HDR rendering with various tone mapping operators.
+- HDR rendering with various tone mapping operators and color grading.
 - Screen Space Subsurface Scattering (without backlit transmittance yet).
 - Volumetric Light Scattering for the directional light source, if it projects shadows.
 - Cascaded Shadow Maps for the directional light source.

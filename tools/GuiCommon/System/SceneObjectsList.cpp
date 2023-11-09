@@ -138,6 +138,8 @@ namespace GuiCommon
 			ImagesLoader::getBitmap( eBMP_BACKGROUND_SEL ),
 			ImagesLoader::getBitmap( eBMP_SSAO_CONFIG ),
 			ImagesLoader::getBitmap( eBMP_SSAO_CONFIG_SEL ),
+			ImagesLoader::getBitmap( eBMP_COLOURGRADING_CONFIG ),
+			ImagesLoader::getBitmap( eBMP_COLOURGRADING_CONFIG_SEL ),
 			ImagesLoader::getBitmap( eBMP_COLLAPSE_ALL ),
 			ImagesLoader::getBitmap( eBMP_EXPAND_ALL ),
 			ImagesLoader::getBitmap( eBMP_CONTROLS ),

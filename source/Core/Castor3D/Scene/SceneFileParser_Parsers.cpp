@@ -4633,6 +4633,7 @@ namespace castor3d
 				, *node
 				, std::move( *parsingContext.viewport.release() ) );
 			camera->setHdrConfig( std::move( parsingContext.hdrConfig ) );
+			camera->setColourGradingConfig( std::move( parsingContext.colourGradingConfig ) );
 			log::info << "Loaded camera [" << camera->getName() << "]" << std::endl;
 		}
 	}
