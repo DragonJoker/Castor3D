@@ -19,7 +19,9 @@ See LICENSE file in root folder
 #include "Castor3D/Miscellaneous/Parameter.hpp"
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
 #include "Castor3D/Render/Ssao/SsaoConfig.hpp"
+#include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
+#include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <RenderGraph/FrameGraph.hpp>
@@ -238,6 +240,8 @@ namespace castor3d
 		/**@{*/
 		C3D_API HdrConfig const & getHdrConfig()const;
 		C3D_API HdrConfig & getHdrConfig();
+		C3D_API ColourGradingConfig const & getColourGradingConfig()const;
+		C3D_API ColourGradingConfig & getColourGradingConfig();
 		C3D_API ShadowMapLightTypeArray getShadowMaps()const;
 		C3D_API ShadowBuffer * getShadowBuffer()const;
 		C3D_API TechniquePassVector getCustomRenderPasses()const;
@@ -359,6 +363,12 @@ namespace castor3d
 		{
 			CU_Require( m_hdrConfigUbo );
 			return *m_hdrConfigUbo;
+		}
+
+		ColourGradingUbo const & getColourGradingUbo()const noexcept
+		{
+			CU_Require( m_colourGradingUbo );
+			return *m_colourGradingUbo;
 		}
 
 		crg::FrameGraph & getGraph()noexcept
@@ -504,6 +514,7 @@ namespace castor3d
 		std::atomic_bool m_initialising{};
 		crg::ResourcesCache m_resources;
 		std::unique_ptr< HdrConfigUbo > m_hdrConfigUbo;
+		std::unique_ptr< ColourGradingUbo > m_colourGradingUbo;
 		RenderTechniqueUPtr m_renderTechnique;
 		SceneRPtr m_scene{};
 		CameraRPtr m_camera{};

@@ -70,7 +70,7 @@ namespace castor
 
 			if ( result )
 			{
-				result = writeSub( file, target.getSsaoConfig() );
+				result = writeSubOpt( file, target.getSsaoConfig(), SsaoConfig{} );
 			}
 
 			if ( result && target.getFrustumClusters() )

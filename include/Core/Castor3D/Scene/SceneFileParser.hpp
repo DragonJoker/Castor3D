@@ -13,6 +13,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Clustered/ClusteredModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/GlobalIlluminationModule.hpp"
+#include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
@@ -98,6 +99,7 @@ namespace castor3d
 		eTextureRemap = CU_MakeSectionName( 'T', 'X', 'R', 'P' ),
 		eClusters = CU_MakeSectionName( 'C', 'L', 'S', 'T' ),
 		eTexture = CU_MakeSectionName( 'T', 'X', 'U', 'R' ),
+		eColourGrading = CU_MakeSectionName( 'C', 'L', 'G', 'D' ),
 	};
 
 	class SceneFileContext
@@ -244,6 +246,7 @@ namespace castor3d
 		MeshImporterUPtr importer;
 		ClustersConfigUPtr clustersConfig;
 		HdrConfig hdrConfig;
+		ColourGradingConfig colourGradingConfig;
 		ShadowConfigUPtr shadowConfig;
 		TextureConfig texture;
 		std::map< castor::String, TextureSourceInfoUPtr > sourceInfos{};

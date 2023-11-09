@@ -24,7 +24,8 @@ namespace castor3d
 	namespace rendtonmap
 	{
 		static uint32_t constexpr HdrCfgUboIdx = 0u;
-		static uint32_t constexpr HdrMapIdx = 1u;
+		static uint32_t constexpr ClrGrdUboIdx = 1u;
+		static uint32_t constexpr HdrMapIdx = 2u;
 	}
 
 	ToneMapping::ToneMapping( Engine & engine
@@ -35,11 +36,13 @@ namespace castor3d
 		, crg::ImageViewId const & target
 		, crg::FramePass const & previousPass
 		, HdrConfigUbo & hdrConfigUbo
+		, ColourGradingUbo & colourGradingUbo
 		, Parameters const & parameters
 		, ProgressBar * progress )
 		: OwnedBy< Engine >{ engine }
 		, m_name{ cuT( "linear" ) }
 		, m_hdrConfigUbo{ hdrConfigUbo }
+		, m_colourGradingUbo{ colourGradingUbo }
 		, m_shader{ "ToneMapping" }
 		, m_source{ source.front() }
 		, m_pass{ &doCreatePass( size, graph, source, target, previousPass, progress ) }
@@ -108,6 +111,8 @@ namespace castor3d
 		result.addDependency( previousPass );
 		m_hdrConfigUbo.createPassBinding( result
 			, rendtonmap::HdrCfgUboIdx );
+		m_colourGradingUbo.createPassBinding( result
+			, rendtonmap::ClrGrdUboIdx );
 		result.addSampledView( source
 			, rendtonmap::HdrMapIdx );
 		result.addOutputColourView( target );

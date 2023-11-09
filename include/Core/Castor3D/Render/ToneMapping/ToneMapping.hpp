@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToneMapping/ToneMappingVisitor.hpp"
 
 #include "Castor3D/Render/Passes/RenderQuad.hpp"
+#include "Castor3D/Shader/Ubos/ColourGradingUbo.hpp"
 #include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -60,6 +61,7 @@ namespace castor3d
 			, crg::ImageViewId const & target
 			, crg::FramePass const & previousPass
 			, HdrConfigUbo & hdrConfigUbo
+			, ColourGradingUbo & colourGradingUbo
 			, Parameters const & parameters
 			, ProgressBar * progress );
 		/**
@@ -144,6 +146,7 @@ namespace castor3d
 	protected:
 		castor::String m_name;
 		HdrConfigUbo & m_hdrConfigUbo;
+		ColourGradingUbo & m_colourGradingUbo;
 		castor3d::ProgramModule m_shader;
 		crg::ImageViewId m_source;
 		ashes::PipelineShaderStageCreateInfoArray m_program;

@@ -1,5 +1,6 @@
 #include "TextCamera.hpp"
 
+#include "TextColourGradingConfig.hpp"
 #include "TextHdrConfig.hpp"
 #include "TextViewport.hpp"
 
@@ -25,7 +26,8 @@ namespace castor
 		{
 			result = writeName( file, "parent", camera.getParent()->getName() )
 				&& writeSub( file, camera.getViewport() )
-				&& writeSub( file, camera.getHdrConfig() );
+				&& writeSubOpt( file, camera.getHdrConfig(), HdrConfig{} )
+				&& writeSubOpt( file, camera.getColourGradingConfig(), ColourGradingConfig{} );
 		}
 
 		return result;

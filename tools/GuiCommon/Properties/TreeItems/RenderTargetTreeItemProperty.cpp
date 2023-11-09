@@ -2,6 +2,7 @@
 
 #include "GuiCommon/Properties/AdditionalProperties.hpp"
 #include "GuiCommon/Properties/TreeItems/ClustersConfigTreeItemProperty.hpp"
+#include "GuiCommon/Properties/TreeItems/ColourGradingConfigTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/PostEffectTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/RenderPassTreeItemProperty.hpp"
 #include "GuiCommon/Properties/TreeItems/SsaoConfigTreeItemProperty.hpp"
@@ -41,6 +42,13 @@ namespace GuiCommon
 			, new SsaoConfigTreeItemProperty{ editable
 				, target.getEngine()
 				, target.getSsaoConfig() } );
+		list->AppendItem( targetId
+			, _( "Colour Grading Configuration" )
+			, eBMP_COLOURGRADING_CONFIG
+			, eBMP_COLOURGRADING_CONFIG_SEL
+			, new ColourGradingConfigTreeItemProperty{ editable
+				, target.getEngine()
+				, target.getColourGradingConfig() } );
 		list->AppendItem( targetId
 			, _( "Clusters Configuration" )
 			, eBMP_CLUSTERS_CONFIG

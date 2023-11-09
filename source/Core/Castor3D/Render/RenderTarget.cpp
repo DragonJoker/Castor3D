@@ -594,6 +594,7 @@ namespace castor3d
 		doCleanupTechnique();
 		doCleanupCombineProgram();
 		m_culler.reset();
+		m_colourGradingUbo.reset();
 		m_hdrConfigUbo.reset();
 		m_frustumClusters.reset();
 	}
@@ -627,6 +628,7 @@ namespace castor3d
 		}
 
 		m_hdrConfigUbo->cpuUpdate( getHdrConfig() );
+		m_colourGradingUbo->cpuUpdate( getColourGradingConfig() );
 
 		auto lastTarget = &doUpdatePostEffects( updater
 			, m_hdrPostEffects
@@ -825,6 +827,16 @@ namespace castor3d
 		return getCamera()->getHdrConfig();
 	}
 
+	ColourGradingConfig const & RenderTarget::getColourGradingConfig()const
+	{
+		return getCamera()->getColourGradingConfig();
+	}
+
+	ColourGradingConfig & RenderTarget::getColourGradingConfig()
+	{
+		return getCamera()->getColourGradingConfig();
+	}
+
 	ShadowMapLightTypeArray RenderTarget::getShadowMaps()const
 	{
 		if ( m_renderTechnique )
@@ -899,6 +911,7 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
+		m_colourGradingUbo = std::make_unique< ColourGradingUbo >( device );
 		m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
 
 		if ( m_clustersConfig.enabled || isFullLoadingEnabled() )
@@ -963,6 +976,7 @@ namespace castor3d
 					, m_srgbObjects.front().wholeViewId
 					, *m_hdrLastPass
 					, *m_hdrConfigUbo
+					, *m_colourGradingUbo
 					, Parameters{}
 					, progress );
 				m_toneMapping->initialise( m_toneMappingName

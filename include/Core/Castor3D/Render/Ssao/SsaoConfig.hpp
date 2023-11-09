@@ -68,6 +68,27 @@ namespace castor3d
 		//!\~french		La taille d'un pas de ray marching pour les bent normals.
 		float bendStepSize{ 0.5f };
 	};
+
+	inline bool operator==( SsaoConfig const & lhs, SsaoConfig const & rhs )
+	{
+		return lhs.enabled == rhs.enabled
+			&& lhs.logMaxOffset == rhs.logMaxOffset
+			&& lhs.maxMipLevel == rhs.maxMipLevel
+			&& lhs.minRadius == rhs.minRadius
+			&& lhs.variation == rhs.variation
+			&& lhs.highQuality == rhs.highQuality
+			&& lhs.useNormalsBuffer == rhs.useNormalsBuffer
+			&& lhs.radius == rhs.radius
+			&& lhs.bias == rhs.bias
+			&& lhs.intensity == rhs.intensity
+			&& lhs.numSamples == rhs.numSamples
+			&& lhs.edgeSharpness == rhs.edgeSharpness
+			&& lhs.blurHighQuality == rhs.blurHighQuality
+			&& lhs.blurStepSize == rhs.blurStepSize
+			&& lhs.blurRadius == rhs.blurRadius
+			&& lhs.bendStepCount == rhs.bendStepCount
+			&& lhs.bendStepSize == rhs.bendStepSize;
+	}
 }
 
 #endif
