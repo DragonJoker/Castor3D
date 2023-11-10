@@ -15,7 +15,7 @@ namespace GuiCommon
 			eID_DELETE = 1
 		}	eID;
 	}
-	
+
 	TreeItemProperty::PropertyChangeHandler const TreeItemProperty::EmptyHandler = []( wxVariant const & ){};
 
 	TreeItemProperty::TreeItemProperty( castor3d::Engine * engine

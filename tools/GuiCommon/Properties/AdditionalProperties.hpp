@@ -7,6 +7,7 @@ See LICENSE file in root folder
 #include "GuiCommon/GuiCommonPrerequisites.hpp"
 
 #include <CastorUtils/Graphics/Image.hpp>
+#include <Castor3D/Miscellaneous/MiscellaneousModule.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>
 #include <wx/propgrid/propgrid.h>
@@ -222,6 +223,8 @@ namespace GuiCommon
 	wxStringProperty * CreateProperty( wxString const & name, wxString const & value );
 
 	wxPGProperty * addAttributes( wxPGProperty * prop );
+
+	uint32_t toBGRPacked( castor3d::ColourWrapper const & colour );
 
 	template< typename PropertyType >
 	PropertyType * CreateProperty( wxString const & name, wxVariant && value, wxString const & help )

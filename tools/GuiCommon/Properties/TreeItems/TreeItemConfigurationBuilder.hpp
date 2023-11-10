@@ -54,6 +54,21 @@ namespace GuiCommon
 			}
 		}
 
+		template< typename ControlT >
+		void doVisit( castor::String const & name
+			, castor3d::ColourWrapper value
+			, ControlT controls )
+		{
+			if ( m_subgrid )
+			{
+				m_prop.addProperty( m_subgrid, name, value, std::move( controls ) );
+			}
+			else
+			{
+				m_prop.addProperty( m_grid, name, value, std::move( controls ) );
+			}
+		}
+
 		template< typename ValueT, typename ControlT >
 		void doVisit( castor::String const & name
 			, ValueT & enumValue
@@ -136,6 +151,13 @@ namespace GuiCommon
 
 		void visit( castor::String const & name
 			, castor::Angle & value
+			, ControlsList controls )override
+		{
+			doVisit( name, value, std::move( controls ) );
+		}
+
+		void visit( castor::String const & name
+			, castor3d::ColourWrapper value
 			, ControlsList controls )override
 		{
 			doVisit( name, value, std::move( controls ) );
@@ -315,6 +337,13 @@ namespace GuiCommon
 
 		void visit( castor::String const & name
 			, castor::Angle & value
+			, AtomicControlsList controls )override
+		{
+			doVisit( name, value, std::move( controls ) );
+		}
+
+		void visit( castor::String const & name
+			, castor3d::ColourWrapper value
 			, AtomicControlsList controls )override
 		{
 			doVisit( name, value, std::move( controls ) );

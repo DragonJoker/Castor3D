@@ -15,6 +15,16 @@ namespace GuiCommon
 {
 	//************************************************************************************************
 
+	uint32_t toBGRPacked( castor3d::ColourWrapper const & colour )
+	{
+		uint32_t r = uint32_t( ( *colour.value )->x * 255.0f );
+		uint32_t g = uint32_t( ( *colour.value )->y * 255.0f );
+		uint32_t b = uint32_t( ( *colour.value )->z * 255.0f );
+		return ( r << 0 ) | ( g << 8 ) | ( b << 16 );
+	}
+
+	//************************************************************************************************
+
 	ButtonData::ButtonData( ButtonEventMethod method )
 		: m_method( method )
 	{
