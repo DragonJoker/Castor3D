@@ -164,6 +164,18 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	Wraps a point to make it considered as a colour by visitors.
+	*\~french
+	*\brief
+	*	Contient un point pour le faire considérer comme une couleur par les visiteurs.
+	*/
+	struct ColourWrapper
+	{
+		castor::Point3f * value;
+	};
+	/**
+	*\~english
+	*\brief
 	*	Wrapper around debug_utils and debug_report callbacks.
 	*\~french
 	*\brief

@@ -433,7 +433,7 @@ namespace castor3d
 		visitor.visit( cuT( "Colour Grading" ) );
 		visitor.visit( cuT( "Enabled" ), enabled );
 		visitor.visit( cuT( "Post Exposure" ), postExposure );
-		visitor.visit( cuT( "Colour Filter" ), colourFilter );
+		visitor.visit( cuT( "Colour Filter" ), ColourWrapper{ &colourFilter } );
 		visitor.visit( cuT( "Saturation" ), saturation );
 		{
 			auto block = visitor.visit( cuT( "Contrast" ) );
@@ -449,28 +449,28 @@ namespace castor3d
 		{
 			auto block = visitor.visit( cuT( "White Balance" ) );
 			block.visit( cuT( "Enable White Balance" ), enableWhiteBalance );
-			block.visit( cuT( "White Balance Value" ), whiteBalance );
+			block.visit( cuT( "White Balance Value" ), ColourWrapper{ &whiteBalance } );
 		}
 		{
 			auto block = visitor.visit( cuT( "Split Toning" ) );
 			block.visit( cuT( "Enable Split Toning" ), enableSplitToning );
-			block.visit( cuT( "Split Toning Shadows" ), splitToningShadows );
-			block.visit( cuT( "Split Toning Highlights" ), splitToningHighlights );
+			block.visit( cuT( "Split Toning Shadows" ), ColourWrapper{ &splitToningShadows } );
+			block.visit( cuT( "Split Toning Highlights" ), ColourWrapper{ &splitToningHighlights } );
 			block.visit( cuT( "Split Toning Balance" ), splitToningBalance );
 		}
 		{
 			auto block = visitor.visit( cuT( "Channel Mix" ) );
 			block.visit( cuT( "Enable Channel Mix" ), enableChannelMix );
-			block.visit( cuT( "Channel Mix Red" ), channelMixRed );
-			block.visit( cuT( "Channel Mix Green" ), channelMixGreen );
-			block.visit( cuT( "Channel Mix Blue" ), channelMixBlue );
+			block.visit( cuT( "Channel Mix Red" ), ColourWrapper{ &channelMixRed } );
+			block.visit( cuT( "Channel Mix Green" ), ColourWrapper{ &channelMixGreen } );
+			block.visit( cuT( "Channel Mix Blue" ), ColourWrapper{ &channelMixBlue } );
 		}
 		{
 			auto block = visitor.visit( cuT( "Shadow Midtone Highlights" ) );
 			block.visit( cuT( "Enable Shadow Midtone Highlights" ), enableShadowMidToneHighlight );
-			block.visit( cuT( "Shadows" ), shadows );
-			block.visit( cuT( "Midtones" ), midtones );
-			block.visit( cuT( "Highlights" ), highlights );
+			block.visit( cuT( "Shadows" ), ColourWrapper{ &shadows } );
+			block.visit( cuT( "Midtones" ), ColourWrapper{ &midtones } );
+			block.visit( cuT( "Highlights" ), ColourWrapper{ &highlights } );
 			block.visit( cuT( "Shadows Start" ), shadowsStart );
 			block.visit( cuT( "Shadows End" ), shadowsEnd );
 			block.visit( cuT( "Highlights Start" ), highlightsStart );

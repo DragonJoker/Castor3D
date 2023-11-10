@@ -137,11 +137,11 @@ namespace GuiCommon
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::RgbColour > )
 		{
-			return appendProp( parent, new wxColourProperty( name, m_prefix + name, wxColour{ toBGRPacked( value ) } ) );
+			return appendProp( parent, new wxColourProperty( name, m_prefix + name, wxColour{ castor::toBGRPacked( value ) } ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::RgbaColour > )
 		{
-			return appendProp( parent, new wxColourProperty( name, m_prefix + name, wxColour{ toBGRPacked( value ) } ) );
+			return appendProp( parent, new wxColourProperty( name, m_prefix + name, wxColour{ castor::toBGRPacked( value ) } ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::HdrRgbColour > )
 		{
@@ -150,6 +150,10 @@ namespace GuiCommon
 		else if constexpr ( std::is_same_v< ValueT, castor::HdrRgbaColour > )
 		{
 			return appendProp( parent, new HdrRgbaColourProperty( name, m_prefix + name, value ) );
+		}
+		else if constexpr ( std::is_same_v< ValueT, castor3d::ColourWrapper > )
+		{
+			return appendProp( parent, new wxColourProperty( name, m_prefix + name, wxColour{ toBGRPacked( value ) } ) );
 		}
 		else if constexpr ( std::is_same_v< ValueT, castor::Point2f > )
 		{
@@ -392,6 +396,27 @@ namespace GuiCommon
 	{
 		wxPGProperty * prop = addProperty( parent, name, value, handler );
 		prop->SetAttribute( wxPG_ATTR_SPINCTRL_STEP, getVariant< ValueT >( step ) );
+		return prop;
+	}
+
+	template< typename ParentT, typename ControlT >
+	wxPGProperty * TreeItemProperty::addProperty( ParentT * parent
+		, wxString const & name
+		, castor3d::ColourWrapper value
+		, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls )
+	{
+		wxPGProperty * prop = createProperty( parent
+			, name
+			, value
+			, [value]( wxVariant const & var )
+			{
+				wxColour col;
+				col << var;
+				( *value.value )->x = float( ( ( col.GetRGB() & 0x00FF0000 ) >> 16 ) ) / 255.0f;
+				( *value.value )->y = float( ( ( col.GetRGB() & 0x0000FF00 ) >> 8 ) ) / 255.0f;
+				( *value.value )->z = float( ( ( col.GetRGB() & 0x000000FF ) >> 0 ) ) / 255.0f;
+			}
+			, std::move( controls ) );
 		return prop;
 	}
 

@@ -88,6 +88,14 @@ namespace castor3d
 				configuration->visit( name, value, std::forward< ParamsT >( params )... );
 			}
 
+			template< typename ... ParamsT >
+			void visit( castor::String const & name
+				, ColourWrapper value
+				, ParamsT && ... params )
+			{
+				configuration->visit( name, value, std::forward< ParamsT >( params )... );
+			}
+
 			ConfigurationVisitorBase & parent;
 			castor::String category;
 			std::unique_ptr< ConfigurationVisitorBase > configuration;
@@ -292,6 +300,9 @@ namespace castor3d
 			, castor::HdrRgbaColour & value
 			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
+			, ColourWrapper value
+			, ControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point2f & value
 			, ControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
@@ -401,6 +412,9 @@ namespace castor3d
 			, castor::HdrRgbaColour & value
 			, AtomicControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
+			, ColourWrapper value
+			, AtomicControlsList controls ) = 0;
+		C3D_API virtual void visit( castor::String const & name
 			, castor::Point2f & value
 			, AtomicControlsList controls ) = 0;
 		C3D_API virtual void visit( castor::String const & name
@@ -471,6 +485,14 @@ namespace castor3d
 		template< typename ValueT, typename ControlT = bool >
 		void visit( castor::String const & name
 			, ValueT & value
+			, ControlT * control = nullptr )
+		{
+			visit( name, value, makeControlsList( control ) );
+		}
+
+		template< typename ControlT = bool >
+		void visit( castor::String const & name
+			, ColourWrapper value
 			, ControlT * control = nullptr )
 		{
 			visit( name, value, makeControlsList( control ) );
@@ -676,6 +698,12 @@ namespace castor3d
 		}
 
 		void visit( castor::String const & name
+			, ColourWrapper value
+			, ControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
 			, castor::Point2f & value
 			, ControlsList controls )override
 		{
@@ -878,6 +906,12 @@ namespace castor3d
 
 		void visit( castor::String const & name
 			, castor::HdrRgbaColour & value
+			, AtomicControlsList controls )override
+		{
+		}
+
+		void visit( castor::String const & name
+			, ColourWrapper value
 			, AtomicControlsList controls )override
 		{
 		}

@@ -37,7 +37,7 @@ namespace castor3d
 		{
 		}
 
-		sdw::Vec3 ColourGradingData::colourGrade( sdw::Vec3 const hdrColour )
+		sdw::Vec3 ColourGradingData::colourGrade( sdw::Vec3 const phdrColour )
 		{
 			auto & writer = *getWriter();
 
@@ -162,7 +162,7 @@ namespace castor3d
 					, sdw::InVec3{ writer, "hdrColour" } );
 			}
 
-			return m_colourGrade( hdrColour );
+			return m_colourGrade( phdrColour );
 		}
 
 		sdw::Float ColourGradingData::getLuminance( sdw::Vec3 const & colour )

@@ -172,6 +172,11 @@ namespace GuiCommon
 			, ValueT const & step
 			, PropertyChangeHandler handler
 			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
+		template< typename ParentT, typename ControlT = bool >
+		wxPGProperty * addProperty( ParentT * parent
+			, wxString const & name
+			, castor3d::ColourWrapper value
+			, castor3d::ConfigurationVisitorBase::ControlsListT< ControlT > controls = castor3d::ConfigurationVisitorBase::ControlsListT< ControlT >{} );
 		wxPGProperty * addProperty( wxPropertyGrid * parent
 			, wxString const & name
 			, wxPGEditor * editor
