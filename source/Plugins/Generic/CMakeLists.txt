@@ -1,5 +1,6 @@
 option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" ON )
 option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" ON )
+option( CASTOR_BUILD_GENERIC_WATERMATERIAL "Build Water Material plugin" ON )
 option( CASTOR_BUILD_GENERIC_WATERRENDERING "Build water rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_OCEANRENDERING "Build ocean rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_FFTOCEANRENDERING "Build FFT ocean rendering plugin" ON )
@@ -7,6 +8,7 @@ option( CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING "Build Atmosphere scattering p
 
 function( GenericInit )
 	set( Toon "no (Not wanted)" PARENT_SCOPE )
+	set( WatM "no (Not wanted)" PARENT_SCOPE )
 	set( Watr "no (Not wanted)" PARENT_SCOPE )
 	set( Ocen "no (Not wanted)" PARENT_SCOPE )
 	set( FftO "no (Not wanted)" PARENT_SCOPE )
@@ -20,6 +22,17 @@ function( GenericInit )
 		set( Castor3D_MATERIAL_DEPS
 			${Castor3D_MATERIAL_DEPS}
 			castor::ToonMaterial
+		)
+	endif()
+
+	if( ${CASTOR_BUILD_GENERIC_WATERMATERIAL} )
+		set( Castor3D_MATERIAL_DIRS
+			${Castor3D_MATERIAL_DIRS}
+			${CASTOR_SOURCE_DIR}/source/Plugins/Generic/WaterMaterial
+		)
+		set( Castor3D_MATERIAL_DEPS
+			${Castor3D_MATERIAL_DEPS}
+			castor::WaterMaterial
 		)
 	endif()
 
@@ -46,6 +59,12 @@ function( GenericBuild )
 			set( Build ${Toon} )
 			add_subdirectory( Plugins/Generic/ToonMaterial )
 			set( Toon ${Build} PARENT_SCOPE )
+		endif()
+
+		if( ${CASTOR_BUILD_GENERIC_WATERMATERIAL} )
+			set( Build ${WatM} )
+			add_subdirectory( Plugins/Generic/WaterMaterial )
+			set( WatM ${Build} PARENT_SCOPE )
 		endif()
 
 		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
@@ -101,6 +120,9 @@ function( GenericSummary msg )
 		if( ${CASTOR_BUILD_GENERIC_TOONMATERIAL} )
 			set( msg_tmp "${msg_tmp}\n    ToonMaterial         ${Toon}" )
 		endif ()
+		if( ${CASTOR_BUILD_GENERIC_WATERMATERIAL} )
+			set( msg_tmp "${msg_tmp}\n    WaterMaterial        ${WatM}" )
+		endif ()
 		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
 			set( msg_tmp "${msg_tmp}\n    WaterRendering       ${Watr}" )
 		endif ()
@@ -123,6 +145,14 @@ function( GenericSetup )
 			cpack_add_component( ToonMaterial
 				DISPLAY_NAME "ToonMaterial"
 				DESCRIPTION "Defines a toon material in Castor3D."
+				GROUP Plugins
+				DEPENDS Castor3D
+			)
+		endif()
+		if( ${CASTOR_BUILD_GENERIC_WATERMATERIAL} )
+			cpack_add_component( WaterMaterial
+				DISPLAY_NAME "WaterMaterial"
+				DESCRIPTION "Defines & water material in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 			)

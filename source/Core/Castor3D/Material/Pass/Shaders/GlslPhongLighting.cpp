@@ -88,7 +88,9 @@ namespace castor3d::shader
 		return refraction;
 	}
 
-	void PhongLightingModel::doFinish( BlendComponents & components )
+	void PhongLightingModel::doFinish( PassShaders const & passShaders
+		, RasterizerSurfaceBase const & surface
+		, BlendComponents & components )
 	{
 		components.f0 = components.specular;
 	}

@@ -59,7 +59,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & coatReflected
 			, sdw::Vec3 & sheenReflected
 			, DebugOutput & debugOutput );
-		C3D_API void computeCombined( BlendComponents & pcomponents
+		C3D_API void computeCombined( BlendComponents & components
 			, LightSurface const & lightSurface
 			, BackgroundModel & background
 			, sdw::UInt const & envMapIndex
@@ -191,6 +191,11 @@ namespace castor3d::shader
 			, sdw::Float maxRayTraceDistance
 			, sdw::Vec2 & hitPixel
 			, sdw::Vec3 & csHitPoint );
+
+		Utils & getUtils()const
+		{
+			return m_utils;
+		}
 
 	private:
 		sdw::RetVec3 computeSpecularReflEnvMaps( sdw::Vec3 const & fresnel

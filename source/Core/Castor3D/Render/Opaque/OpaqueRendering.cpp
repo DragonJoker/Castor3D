@@ -373,7 +373,7 @@ namespace castor3d
 			}
 			else
 			{
-				result.addOutputStorageView( getOwner()->getScattering().targetViewId, index++ );
+				result.addClearableOutputStorageView( getOwner()->getScattering().targetViewId, index++ );
 			}
 		}
 		else

@@ -273,6 +273,8 @@ namespace castor3d
 					, runnableGraph
 					, m_device
 					, m_mippedColour
+					, getOwner()->getDepthObj()
+					, getOwner()->getNormal()
 					, targetResult
 					, targetDepth
 					, RenderNodesPassDesc{ getOwner()->getTargetExtent()
@@ -307,6 +309,10 @@ namespace castor3d
 		result.addDependency( lastPass );
 		result.addInOutDepthStencilView( targetDepth );
 		result.addImplicitColourView( m_mippedColour.targetViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.addImplicitColourView( getOwner()->getDepthObj().targetViewId
+			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
+		result.addImplicitColourView( getOwner()->getNormal().targetViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );
 		result.addImplicitColourView( getOwner()->getSsaoResult().wholeViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL );

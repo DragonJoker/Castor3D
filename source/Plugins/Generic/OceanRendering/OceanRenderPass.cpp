@@ -1138,9 +1138,10 @@ namespace ocean
 						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf
 						, output );
-					auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-						, lightIndirectDiffuse.xyz()
-						, output );
+					auto indirectAmbient = writer.declLocale( "indirectAmbient"
+						, indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+							, lightIndirectDiffuse.xyz()
+							, output ) );
 					output.registerOutput( "IndirectAmbient", indirectAmbient );
 					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 						, ( hasDiffuseGI
