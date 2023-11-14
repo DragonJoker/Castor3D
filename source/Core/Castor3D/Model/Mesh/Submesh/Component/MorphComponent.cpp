@@ -48,70 +48,95 @@ namespace castor3d
 
 			buffer.boundingBox.load( min, max );
 		}
+
+		static std::pair< MorphFlags, uint32_t > computeMorphFlags( SubmeshAnimationBuffer const & buffer )
+		{
+			MorphFlags flags{};
+			uint32_t count{};
+
+			if ( !buffer.positions.empty() )
+			{
+				flags |= castor3d::MorphFlag::ePositions;
+				++count;
+			}
+
+			if ( !buffer.normals.empty() )
+			{
+				flags |= castor3d::MorphFlag::eNormals;
+				++count;
+			}
+
+			if ( !buffer.tangents.empty() )
+			{
+				flags |= castor3d::MorphFlag::eTangents;
+				++count;
+			}
+
+			if ( !buffer.bitangents.empty() )
+			{
+				flags |= castor3d::MorphFlag::eBitangents;
+				++count;
+			}
+
+			if ( !buffer.texcoords0.empty() )
+			{
+				flags |= castor3d::MorphFlag::eTexcoords0;
+				++count;
+			}
+
+			if ( !buffer.texcoords1.empty() )
+			{
+				flags |= castor3d::MorphFlag::eTexcoords1;
+				++count;
+			}
+
+			if ( !buffer.texcoords2.empty() )
+			{
+				flags |= castor3d::MorphFlag::eTexcoords2;
+				++count;
+			}
+
+			if ( !buffer.texcoords3.empty() )
+			{
+				flags |= castor3d::MorphFlag::eTexcoords3;
+				++count;
+			}
+
+			if ( !buffer.colours.empty() )
+			{
+				flags |= castor3d::MorphFlag::eColours;
+				++count;
+			}
+
+			return { flags, count };
+		}
 	}
 
-	castor::String const MorphComponent::Name = cuT( "morph" );
+	castor::String const MorphComponent::TypeName = cuT( "morph" );
 
-	MorphComponent::MorphComponent( Submesh & submesh
-		, MorphFlags flags )
-		: SubmeshComponent{ submesh, Name, uint32_t( std::hash< castor::String >{}( Name ) ) }
-		, m_flags{ flags }
+	MorphComponent::MorphComponent( Submesh & submesh )
+		: SubmeshComponent{ submesh, TypeName }
 	{
-		if ( checkFlag( m_flags, MorphFlag::ePositions ) )
-		{
-			++m_targetDataCount;
-		}
-
-		if ( checkFlag( m_flags, MorphFlag::eNormals ) )
-		{
-			++m_targetDataCount;
-		}
-
-		if ( checkFlag( m_flags, MorphFlag::eTangents ) )
-		{
-			++m_targetDataCount;
-		}
-
-		if ( checkFlag( m_flags, MorphFlag::eBitangents ) )
-		{
-			++m_targetDataCount;
-		}
-
-		if ( checkFlag( m_flags, MorphFlag::eTexcoords0 ) )
-		{
-			++m_targetDataCount;
-		}
-
-		if ( checkFlag( m_flags, MorphFlag::eTexcoords1 ) )
-		{
-			++m_targetDataCount;
-		}
-
-		if ( checkFlag( m_flags, MorphFlag::eTexcoords2 ) )
-		{
-			++m_targetDataCount;
-		}
-
-		if ( checkFlag( m_flags, MorphFlag::eTexcoords3 ) )
-		{
-			++m_targetDataCount;
-		}
-
-		if ( checkFlag( m_flags, MorphFlag::eColours ) )
-		{
-			++m_targetDataCount;
-		}
 	}
 
 	SubmeshComponentUPtr MorphComponent::clone( Submesh & submesh )const
 	{
-		auto result = castor::makeUnique< MorphComponent >( submesh, m_flags );
+		auto result = castor::makeUnique< MorphComponent >( submesh );
+		result->m_flags = m_flags;
+		result->m_targetDataCount = m_targetDataCount;
 		result->m_targets = m_targets;
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	void MorphComponent::addMorphTarget( SubmeshAnimationBuffer data )
 	{
+		if ( m_flags == MorphFlags{} )
+		{
+			auto [flags, count] = smshcompmorph::computeMorphFlags( data );
+			m_flags = flags;
+			m_targetDataCount = count;
+		}
+
 		smshcompmorph::computeBoundingBox( data );
 		m_targets.emplace_back( std::move( data ) );
 	}

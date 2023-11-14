@@ -129,8 +129,8 @@ namespace castor3d
 			auto & plugin = passComponents.getPlugin< HeightComponent >();
 			return flags.enableTangentSpace()
 				&& hasAny( flags.textures, flag )
-				&& ( hasAny( flags.components, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingRepeat ) )
-					|| hasAny( flags.components, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) ) );
+				&& ( hasAny( flags.pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingRepeat ) )
+					|| hasAny( flags.pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) ) );
 		}
 
 		static bool enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents
@@ -140,7 +140,7 @@ namespace castor3d
 			auto & plugin = passComponents.getPlugin< HeightComponent >();
 			return flags.enableTangentSpace()
 				&& hasAny( flags.textures, flag )
-				&& hasAny( flags.components, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) );
+				&& hasAny( flags.pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) );
 		}
 	}
 

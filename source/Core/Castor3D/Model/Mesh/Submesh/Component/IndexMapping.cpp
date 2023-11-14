@@ -7,7 +7,7 @@ namespace castor3d
 	IndexMapping::IndexMapping( Submesh & submesh
 		, castor::String const & type
 		, VkBufferUsageFlags bufferUsageFlags )
-		: SubmeshComponent{ submesh, type, uint32_t( std::hash< std::string >{}( type ) ) }
+		: SubmeshComponent{ submesh, type }
 		, m_bufferUsageFlags{ bufferUsageFlags }
 	{
 	}

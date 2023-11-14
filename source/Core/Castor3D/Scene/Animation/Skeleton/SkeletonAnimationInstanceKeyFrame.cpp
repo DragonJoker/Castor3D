@@ -28,7 +28,7 @@ namespace castor3d
 			castor::Point3f min{ rmax, rmax, rmax };
 			castor::Point3f max{ rmin, rmin, rmin };
 
-			if ( !submesh.hasComponent( SkinComponent::Name ) )
+			if ( !submesh.hasComponent( SkinComponent::TypeName ) )
 			{
 				min = submesh.getBoundingBox().getMin();
 				max = submesh.getBoundingBox().getMax();

@@ -71,11 +71,11 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const InstantiationComponent::Name = cuT( "instantiation" );
+	castor::String const InstantiationComponent::TypeName = cuT( "instantiation" );
 
 	InstantiationComponent::InstantiationComponent( Submesh & submesh
 		, uint32_t threshold )
-		: SubmeshComponent{ submesh, Name, uint32_t( std::hash< std::string >{}( Name ) ) }
+		: SubmeshComponent{ submesh, TypeName }
 		, m_threshold{ threshold }
 	{
 	}
@@ -209,7 +209,7 @@ namespace castor3d
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
-	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const
+	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const noexcept
 	{
 		auto it = find( material );
 		return ( it != end() && it->second.buffer && !getOwner()->isDynamic() )

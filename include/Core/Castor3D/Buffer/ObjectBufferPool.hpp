@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/GpuBufferPackedAllocator.hpp"
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
@@ -198,7 +199,7 @@ namespace castor3d
 		 */
 		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
-			, SubmeshFlags submeshFlags );
+			, SubmeshComponentCombine const & components );
 		/**
 		 *\~english
 		 *\brief		Retrieves a GPU buffer with the given size.
@@ -215,7 +216,7 @@ namespace castor3d
 		 */
 		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
 			, ashes::BufferBase const * indexBuffer
-			, SubmeshFlags submeshFlags );
+			, SubmeshComponentCombine const & components );
 		/**
 		 *\~english
 		 *\param[in]	buffer	The positions buffer.
@@ -247,7 +248,7 @@ namespace castor3d
 	private:
 		C3D_API ObjectBufferOffset doGetBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
-			, SubmeshFlags submeshFlags
+			, SubmeshComponentCombine const & components
 			, bool isGpuComputed );
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount

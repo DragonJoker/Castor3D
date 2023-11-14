@@ -233,15 +233,15 @@ namespace castor3d
 				static GpuBufferOffsetT< MorphingWeightsConfiguration > const morphingWeights{};
 				static GpuBufferOffsetT< SkinningTransformsConfiguration > const skinTransforms{};
 
-				if ( data.hasComponent( MorphComponent::Name )
-					&& data.hasComponent( SkinComponent::Name ) )
+				if ( data.hasComponent( MorphComponent::TypeName )
+					&& data.hasComponent( SkinComponent::TypeName ) )
 				{
 					m_vertexTransform->registerNode( node
 						, data.getMorphTargets()
 						, getOwner()->getAnimatedObjectGroupCache().getMorphingWeights()
 						, getOwner()->getAnimatedObjectGroupCache().getSkinningTransformsBuffer() );
 				}
-				else if ( data.hasComponent( MorphComponent::Name ) )
+				else if ( data.hasComponent( MorphComponent::TypeName ) )
 				{
 					m_vertexTransform->registerNode( node
 						, data.getMorphTargets()

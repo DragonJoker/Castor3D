@@ -126,7 +126,16 @@ namespace castor3d
 		 *\brief		Crée un sous maillage
 		 *\return		Le sous maillage créé
 		 */
-		C3D_API SubmeshRPtr createSubmesh( SubmeshFlags const & flags = SubmeshFlags{} );
+		C3D_API SubmeshRPtr createSubmesh();
+		/**
+		 *\~english
+		 *\brief		Creates a submesh with positions, normals, tangents, and texcoords0 components.
+		 *\return		The created submesh
+		 *\~french
+		 *\brief		Crée un sous maillage avec les composants positions, normals, tangents, et texcoords0.
+		 *\return		Le sous maillage créé
+		 */
+		C3D_API SubmeshRPtr createDefaultSubmesh();
 		/**
 		 *\~english
 		 *\brief		Deletes a given submesh if it is in the mesh's submeshes

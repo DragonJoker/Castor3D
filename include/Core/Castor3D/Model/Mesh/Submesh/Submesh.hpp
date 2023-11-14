@@ -56,8 +56,7 @@ namespace castor3d
 		 *\param[in]	flags	Les indicateur du sous-maillage.
 		 */
 		C3D_API explicit Submesh( Mesh & mesh
-			, uint32_t id = 1
-			, SubmeshFlags const & flags = SubmeshFlags{} );
+			, uint32_t id = 1 );
 		/**
 		 *\~english
 		 *\brief		Destructor
@@ -209,15 +208,6 @@ namespace castor3d
 		C3D_API ProgramFlags getProgramFlags( Material const & material )const;
 		/**
 		 *\~english
-		 *\return		The submesh flags.
-		 *\param[in]	pass	The pass for which we want the flags.
-		 *\~french
-		 *\return		Les indicateurs de submesh.
-		 *\param[in]	pass	La passe pour laquelle on veut les indicateurs.
-		 */
-		C3D_API SubmeshFlags getSubmeshFlags( Pass const * pass )const;
-		/**
-		 *\~english
 		 *\return		The morphing flags.
 		 *\~french
 		 *\return		Les indicateurs de morphing.
@@ -334,36 +324,44 @@ namespace castor3d
 		C3D_API VkDeviceSize getVertexOffset( Geometry const & geometry )const;
 		C3D_API VkDeviceSize getIndexOffset()const;
 		C3D_API VkDeviceSize getMeshletOffset()const;
-		inline SkeletonRPtr getSkeleton()const;
-		inline MaterialObs getDefaultMaterial()const;
-		inline castor::BoundingBox const & getBoundingBox()const;
-		inline castor::BoundingBox & getBoundingBox();
-		inline castor::BoundingSphere const & getBoundingSphere()const;
-		inline castor::BoundingSphere & getBoundingSphere();
-		inline bool isInitialised()const;
-		inline Mesh const & getParent()const;
-		inline Mesh & getParent();
-		inline uint32_t getId()const;
-		inline bool hasComponent( castor::String const & name )const;
-		inline SubmeshComponentRPtr getComponent( castor::String const & name )const;
+		C3D_API SubmeshComponentRegister & getSubmeshComponentsRegister()const;
+		C3D_API SubmeshComponentID getComponentId( castor::String const & componentType )const;
+		C3D_API SubmeshComponentPlugin const & getComponentPlugin( SubmeshComponentID componentId )const;
+		C3D_API SubmeshComponentCombineID getComponentCombineID()const;
+		inline SkeletonRPtr getSkeleton()const noexcept;
+		inline MaterialObs getDefaultMaterial()const noexcept;
+		inline castor::BoundingBox const & getBoundingBox()const noexcept;
+		inline castor::BoundingBox & getBoundingBox()noexcept;
+		inline castor::BoundingSphere const & getBoundingSphere()const noexcept;
+		inline castor::BoundingSphere & getBoundingSphere()noexcept;
+		inline bool isInitialised()const noexcept;
+		inline Mesh const & getParent()const noexcept;
+		inline Mesh & getParent()noexcept;
+		inline uint32_t getId()const noexcept;
+		inline bool hasComponent( castor::String const & name )const noexcept;
+		inline SubmeshComponentRPtr getComponent( castor::String const & name )const noexcept;
+		inline InstantiationComponent & getInstantiation()noexcept;
+		inline InstantiationComponent const & getInstantiation()const noexcept;
+		inline SubmeshComponentIDMap const & getComponents()const noexcept;
+		inline VkPrimitiveTopology getTopology()const noexcept;
+		inline SubmeshComponentCombine getComponentCombine()const noexcept;
+		inline SubmeshComponentPlugin const & getComponentPlugin( castor::String const & componentType )const;
+
 		template< typename ComponentT >
-		inline ComponentT * getComponent()const;
-		inline InstantiationComponent & getInstantiation();
-		inline InstantiationComponent const & getInstantiation()const;
-		inline SubmeshComponentIDMap const & getComponents()const;
-		inline VkPrimitiveTopology getTopology()const;
-		inline SubmeshFlags getFinalSubmeshFlags()const;
+		inline ComponentT * getComponent()const noexcept;
+		template< typename ComponentT >
+		SubmeshComponentPlugin const & getComponentPlugin()const;
 		/**@}*/
 
 	private:
 		uint32_t m_id;
+		SubmeshComponentCombine m_componentCombine;
 		MaterialObs m_defaultMaterial;
 		castor::BoundingBox m_box;
 		castor::BoundingSphere m_sphere;
 		SubmeshComponentIDMap m_components;
 		InstantiationComponentRPtr m_instantiation{};
 		IndexMappingRPtr m_indexMapping{};
-		SubmeshFlags m_submeshFlags{ 0u };
 		bool m_generated{ false };
 		bool m_initialised{ false };
 		bool m_dirty{ true };

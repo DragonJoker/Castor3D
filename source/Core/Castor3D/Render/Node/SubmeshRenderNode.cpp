@@ -49,9 +49,9 @@ namespace castor3d
 		return data.getFinalBufferOffsets( instance );
 	}
 
-	SubmeshFlags SubmeshRenderNode::getSubmeshFlags()const
+	SubmeshComponentCombineID SubmeshRenderNode::getComponentCombineID()const
 	{
-		return data.getSubmeshFlags( pass );
+		return data.getComponentCombineID();
 	}
 
 	MorphFlags SubmeshRenderNode::getMorphFlags()const

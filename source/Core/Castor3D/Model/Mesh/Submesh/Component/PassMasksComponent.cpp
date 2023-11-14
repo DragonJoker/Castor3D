@@ -60,10 +60,10 @@ namespace castor3d
 		}
 	}
 
-	castor::String const PassMasksComponent::Name = cuT( "passMasks" );
+	castor::String const PassMasksComponent::TypeName = cuT( "passMasks" );
 
 	PassMasksComponent::PassMasksComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, Id }
+		: SubmeshComponent{ submesh, TypeName }
 	{
 	}
 
@@ -129,7 +129,7 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_data.size() );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::ePassMasks );
+		auto & buffer = offsets.getBufferChunk( SubmeshData::ePassMasks );
 
 		if ( count && buffer.hasData() )
 		{

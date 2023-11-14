@@ -16,14 +16,56 @@ namespace castor3d
 	//@{
 	/**@name Component */
 	//@{
+	
+	struct SubmeshComponentCombine
+	{
+		SubmeshComponentCombineID baseId{};
+		SubmeshComponentFlagsSet flags{};
+		// Computed from \p flags
+		bool hasLineIndexFlag{};
+		bool hasTriangleIndexFlag{};
+		bool hasPositionFlag{};
+		bool hasNormalFlag{};
+		bool hasTangentFlag{};
+		bool hasBitangentFlag{};
+		bool hasTexcoord0Flag{};
+		bool hasTexcoord1Flag{};
+		bool hasTexcoord2Flag{};
+		bool hasTexcoord3Flag{};
+		bool hasColourFlag{};
+		bool hasSkinFlag{};
+		bool hasMorphFlag{};
+		bool hasPassMaskFlag{};
+		bool hasVelocityFlag{};
+	};
 
+	using SubmeshComponentCombines = std::vector< SubmeshComponentCombine >;
+
+	C3D_API bool operator==( SubmeshComponentCombine const & lhs, SubmeshComponentCombine const & rhs )noexcept;
+
+	C3D_API bool hasAny( SubmeshComponentCombine const & lhs
+		, SubmeshComponentFlag rhs )noexcept;
+	C3D_API bool hasAny( SubmeshComponentCombine const & lhs
+		, std::vector< SubmeshComponentFlag > const & rhs )noexcept;
+	C3D_API void remFlags( SubmeshComponentCombine & lhs
+		, SubmeshComponentFlag rhs )noexcept;
+	C3D_API void remFlags( SubmeshComponentCombine & lhs
+		, SubmeshComponentFlagsSet const & rhs )noexcept;
+	C3D_API void addFlags( SubmeshComponentCombine & lhs
+		, SubmeshComponentFlag rhs )noexcept;
+	C3D_API void addFlags( SubmeshComponentCombine & lhs
+		, SubmeshComponentFlagsSet const & rhs )noexcept;
+	C3D_API bool contains( SubmeshComponentCombine const & cont
+		, SubmeshComponentFlag test )noexcept;
+	C3D_API bool contains( SubmeshComponentCombine const & cont
+		, SubmeshComponentCombine const & test )noexcept;
 	/**
 	\~english
 	\brief		Submesh component holding base submesh data.
 	\~french
 	\brief		Composant de sous-maillage détenant des données basiques d'un sous-maillage.
 	*/
-	template< SubmeshFlag SubmeshFlagT, typename DataT = castor::Point3f >
+	template< SubmeshData SubmeshDataT, typename DataT = castor::Point3f >
 	class BaseDataComponentT;
 	/**
 	\~english
@@ -127,6 +169,20 @@ namespace castor3d
 	class SubmeshComponent;
 	/**
 	\~english
+	\brief		Plugin for a submesh component.
+	\~french
+	\brief		Plugin pour un composant pour un sous-maillage.
+	*/
+	class SubmeshComponentPlugin;
+	/**
+	\~english
+	\brief		Submesh components registrar.
+	\~french
+	\brief		Registre des composants de sous-maillage.
+	*/
+	class SubmeshComponentRegister;
+	/**
+	\~english
 	\brief		The submesh component for triangular faces.
 	\~french
 	\brief		Composant de sous-maillage pour les faces triangulaires.
@@ -138,63 +194,70 @@ namespace castor3d
 	\~french
 	\brief		Le composant de sous-maillage contenant les bitangentes.
 	*/
-	using BitangentsComponent = BaseDataComponentT< SubmeshFlag::eBitangents >;
+	using BitangentsComponent = BaseDataComponentT< SubmeshData::eBitangents >;
 	/**
 	\~english
 	\brief		The submesh component holding normals.
 	\~french
 	\brief		Le composant de sous-maillage contenant les normales.
 	*/
-	using NormalsComponent = BaseDataComponentT< SubmeshFlag::eNormals >;
+	using NormalsComponent = BaseDataComponentT< SubmeshData::eNormals >;
 	/**
 	\~english
 	\brief		The submesh component holding positions.
 	\~french
 	\brief		Le composant de sous-maillage contenant les positions.
 	*/
-	using PositionsComponent = BaseDataComponentT< SubmeshFlag::ePositions >;
+	using PositionsComponent = BaseDataComponentT< SubmeshData::ePositions >;
 	/**
 	\~english
 	\brief		The submesh component holding tangents.
 	\~french
 	\brief		Le composant de sous-maillage contenant les tangentes.
 	*/
-	using TangentsComponent = BaseDataComponentT< SubmeshFlag::eTangents, castor::Point4f >;
+	using TangentsComponent = BaseDataComponentT< SubmeshData::eTangents, castor::Point4f >;
 	/**
 	\~english
 	\brief		The submesh component holding texture coordinates.
 	\~french
 	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
 	*/
-	using Texcoords0Component = BaseDataComponentT< SubmeshFlag::eTexcoords0 >;
+	using Texcoords0Component = BaseDataComponentT< SubmeshData::eTexcoords0 >;
 	/**
 	\~english
 	\brief		The submesh component holding texture coordinates.
 	\~french
 	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
 	*/
-	using Texcoords1Component = BaseDataComponentT< SubmeshFlag::eTexcoords1 >;
+	using Texcoords1Component = BaseDataComponentT< SubmeshData::eTexcoords1 >;
 	/**
 	\~english
 	\brief		The submesh component holding texture coordinates.
 	\~french
 	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
 	*/
-	using Texcoords2Component = BaseDataComponentT< SubmeshFlag::eTexcoords2 >;
+	using Texcoords2Component = BaseDataComponentT< SubmeshData::eTexcoords2 >;
 	/**
 	\~english
 	\brief		The submesh component holding texture coordinates.
 	\~french
 	\brief		Le composant de sous-maillage contenant les coordonnées de texture.
 	*/
-	using Texcoords3Component = BaseDataComponentT< SubmeshFlag::eTexcoords3 >;
+	using Texcoords3Component = BaseDataComponentT< SubmeshData::eTexcoords3 >;
 	/**
 	\~english
 	\brief		The submesh component holding colours.
 	\~french
 	\brief		Le composant de sous-maillage contenant les couleurs.
 	*/
-	using ColoursComponent = BaseDataComponentT< SubmeshFlag::eColours >;
+	using ColoursComponent = BaseDataComponentT< SubmeshData::eColours >;
+	/**
+	\~english
+	\brief		The submesh component holding colours.
+	\~french
+	\brief		Le composant de sous-maillage contenant les couleurs.
+	*/
+	using VelocityComponent = BaseDataComponentT< SubmeshData::eVelocity >;
 
 	CU_DeclareSmartPtr( castor3d, IndexMapping, C3D_API );
 	CU_DeclareSmartPtr( castor3d, InstantiationComponent, C3D_API );
@@ -204,11 +267,24 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, PassMasksComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SkinComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SubmeshComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubmeshComponentPlugin, C3D_API );
+	CU_DeclareSmartPtr( castor3d, SubmeshComponentRegister, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TriFaceMapping, C3D_API );
 
 	//! Face array
 	CU_DeclareVector( Face, Face );
-	CU_DeclareMap( uint32_t, SubmeshComponentUPtr, SubmeshComponentID );
+
+	CU_DeclareMap( SubmeshComponentID, SubmeshComponentUPtr, SubmeshComponentID );
+
+	C3D_API castor::String const & getSubmeshComponentType( SubmeshComponent const & component );
+
+	using CreateSubmeshComponentPlugin = std::function< SubmeshComponentPluginUPtr( SubmeshComponentRegister const & ) >;
+
+	namespace shader
+	{
+		struct SubmeshSurfaceShader;
+		using SubmeshSurfaceShaderPtr = std::unique_ptr< SubmeshSurfaceShader >;
+	}
 
 	//@}
 	//@}
@@ -218,10 +294,10 @@ namespace castor3d
 
 namespace castor
 {
-	template< castor3d::SubmeshFlag SubmeshFlagT, typename DataT >
-	struct Deleter< castor3d::BaseDataComponentT< SubmeshFlagT, DataT > >
+	template< castor3d::SubmeshData SubmeshDataT, typename DataT >
+	struct Deleter< castor3d::BaseDataComponentT< SubmeshDataT, DataT > >
 	{
-		void operator()( castor3d::BaseDataComponentT< SubmeshFlagT, DataT > * pointer )noexcept
+		void operator()( castor3d::BaseDataComponentT< SubmeshDataT, DataT > * pointer )noexcept
 		{
 			delete pointer;
 		}
@@ -229,10 +305,10 @@ namespace castor
 }
 namespace castor3d
 {
-	template< castor3d::SubmeshFlag SubmeshFlagT, typename DataT >
-	using BaseDataComponentUPtrT = castor::UniquePtr< BaseDataComponentT< SubmeshFlagT, DataT > >;
-	template< castor3d::SubmeshFlag SubmeshFlagT, typename DataT >
-	using BaseDataComponentRPtrT = BaseDataComponentT< SubmeshFlagT, DataT > *;
+	template< castor3d::SubmeshData SubmeshDataT, typename DataT >
+	using BaseDataComponentUPtrT = castor::UniquePtr< BaseDataComponentT< SubmeshDataT, DataT > >;
+	template< castor3d::SubmeshData SubmeshDataT, typename DataT >
+	using BaseDataComponentRPtrT = BaseDataComponentT< SubmeshDataT, DataT > *;
 }
 
 #endif

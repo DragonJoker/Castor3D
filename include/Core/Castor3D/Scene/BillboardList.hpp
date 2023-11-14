@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___C3D_BillboardList_H___
 
 #include "Castor3D/Material/MaterialModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Node/RenderNodeModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
@@ -138,8 +139,12 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		C3D_API SubmeshFlags getSubmeshFlags()const;
 		C3D_API ProgramFlags getProgramFlags()const;
+
+		SubmeshComponentCombineID getComponentCombineID()const
+		{
+			return m_proxyCombine.baseId;
+		}
 
 		MaterialObs getMaterial()const
 		{
@@ -286,6 +291,7 @@ namespace castor3d
 		BillboardType m_billboardType{ BillboardType::eCylindrical };
 		BillboardSize m_billboardSize{ BillboardSize::eDynamic };
 		std::unordered_map< Pass const *, IdRenderNode > m_ids{};
+		SubmeshComponentCombine m_proxyCombine;
 	};
 
 	class BillboardList

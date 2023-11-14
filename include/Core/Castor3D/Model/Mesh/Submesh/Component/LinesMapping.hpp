@@ -13,6 +13,30 @@ namespace castor3d
 		: public IndexMapping
 	{
 	public:
+		class Plugin
+			: public SubmeshComponentPlugin
+		{
+		public:
+			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
+				: SubmeshComponentPlugin{ submeshComponents }
+			{
+			}
+
+			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
+			{
+				return castor::makeUniqueDerived< SubmeshComponent, LinesMapping >( submesh );
+			}
+
+			SubmeshComponentFlag getLineIndexFlag()const noexcept override
+			{
+				return getComponentFlags();
+			}
+		};
+
+		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
+		{
+			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+		}
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -156,7 +180,7 @@ namespace castor3d
 		void doUpload( UploadData & uploader )override;
 
 	public:
-		C3D_API static castor::String const Name;
+		C3D_API static castor::String const TypeName;
 
 	private:
 		//!\~english	The lines in the submesh.

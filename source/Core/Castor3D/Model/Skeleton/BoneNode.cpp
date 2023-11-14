@@ -29,7 +29,7 @@ namespace castor3d
 
 		for ( auto & submesh : mesh )
 		{
-			if ( submesh->hasComponent( SkinComponent::Name ) )
+			if ( submesh->hasComponent( SkinComponent::TypeName ) )
 			{
 				auto component = submesh->getComponent< SkinComponent >();
 				uint32_t i = 0u;

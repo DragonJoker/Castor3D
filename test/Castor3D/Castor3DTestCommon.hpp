@@ -326,23 +326,23 @@ namespace Testing
 	};
 
 	template<>
-	struct Stringifier< castor3d::SubmeshFlag >
+	struct Stringifier< castor3d::SubmeshData >
 	{
-		static std::string get( castor3d::SubmeshFlag const & value )
+		static std::string get( castor3d::SubmeshData const & value )
 		{
-			static std::map< castor3d::SubmeshFlag, std::string > Names
+			static std::map< castor3d::SubmeshData, std::string > Names
 			{
-				{ castor3d::SubmeshFlag::eIndex, "eIndex" },
-				{ castor3d::SubmeshFlag::ePositions, "ePositions" },
-				{ castor3d::SubmeshFlag::eNormals, "eNormals" },
-				{ castor3d::SubmeshFlag::eTangents, "eTangents" },
-				{ castor3d::SubmeshFlag::eBitangents, "eBitangents" },
-				{ castor3d::SubmeshFlag::eTexcoords0, "eTexcoords0" },
-				{ castor3d::SubmeshFlag::eTexcoords1, "eTexcoords1" },
-				{ castor3d::SubmeshFlag::eTexcoords2, "eTexcoords2" },
-				{ castor3d::SubmeshFlag::eTexcoords3, "eTexcoords3" },
-				{ castor3d::SubmeshFlag::eColours, "eColours" },
-				{ castor3d::SubmeshFlag::eSkin, "eSkin" },
+				{ castor3d::SubmeshData::eIndex, "eIndex" },
+				{ castor3d::SubmeshData::ePositions, "ePositions" },
+				{ castor3d::SubmeshData::eNormals, "eNormals" },
+				{ castor3d::SubmeshData::eTangents, "eTangents" },
+				{ castor3d::SubmeshData::eBitangents, "eBitangents" },
+				{ castor3d::SubmeshData::eTexcoords0, "eTexcoords0" },
+				{ castor3d::SubmeshData::eTexcoords1, "eTexcoords1" },
+				{ castor3d::SubmeshData::eTexcoords2, "eTexcoords2" },
+				{ castor3d::SubmeshData::eTexcoords3, "eTexcoords3" },
+				{ castor3d::SubmeshData::eColours, "eColours" },
+				{ castor3d::SubmeshData::eSkin, "eSkin" },
 			};
 			return Names[value];
 		}

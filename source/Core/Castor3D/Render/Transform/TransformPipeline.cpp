@@ -1,5 +1,8 @@
 #include "Castor3D/Render/Transform/TransformPipeline.hpp"
 
+#include "Castor3D/Engine.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
+
 #include <CastorUtils/Miscellaneous/BitSize.hpp>
 
 namespace castor3d
@@ -9,10 +12,10 @@ namespace castor3d
 	TransformPipeline::TransformPipeline( uint32_t pindex )
 		: index{ pindex }
 	{
-		constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
+		constexpr auto maxSubmeshSize = sizeof( SubmeshComponentCombineID ) * 8u;
 		constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
 		uint32_t offset = 0u;
-		submeshFlags = SubmeshFlags( ( index >> offset ) & uint32_t( SubmeshFlag::eAllBase ) );
+		combineID = SubmeshComponentCombineID( ( index >> offset ) & SubmeshComponentCombineID( 0xFFFF ) );
 		offset += maxSubmeshSize;
 		morphFlags = MorphFlags( ( index >> offset ) & uint32_t( MorphFlag::eAllBase ) );
 		offset += maxMorphSize;
@@ -21,17 +24,17 @@ namespace castor3d
 		hasMorphingWeights = ( ( index >> offset ) & 0x01 ) != 0u;
 	}
 
-	uint32_t TransformPipeline::getIndex( SubmeshFlags const & submeshFlags
+	uint32_t TransformPipeline::getIndex( SubmeshComponentCombineID combine
 		, MorphFlags const & morphFlags
 		, ProgramFlags const & programFlags
 		, bool morphingWeights )
 	{
-		constexpr auto maxSubmeshSize = castor::getBitSize( uint32_t( SubmeshFlag::eAllBase ) );
+		constexpr auto maxSubmeshSize = sizeof( SubmeshComponentCombineID ) * 8u;
 		constexpr auto maxMorphSize = castor::getBitSize( uint32_t( MorphFlag::eAllBase ) );
 		static_assert( maxSubmeshSize + maxMorphSize + 1u <= 32 );
 		auto offset = 0u;
 		uint32_t result{};
-		result = uint32_t( submeshFlags ) << offset;
+		result = uint32_t( combine ) << offset;
 		offset += maxSubmeshSize;
 		result |= uint32_t( morphFlags ) << offset;
 		offset += maxMorphSize;
@@ -41,16 +44,18 @@ namespace castor3d
 		return result;
 	}
 
-	std::string TransformPipeline::getName()const
+	std::string TransformPipeline::getName( Engine const & engine )const
 	{
-		return getName( submeshFlags, morphFlags, meshletsBounds, hasMorphingWeights );
+		return getName( engine, combineID, morphFlags, meshletsBounds, hasMorphingWeights );
 	}
 
-	std::string TransformPipeline::getName( SubmeshFlags const & submeshFlags
+	std::string TransformPipeline::getName( Engine const & engine
+		, SubmeshComponentCombineID combineID
 		, MorphFlags const & morphFlags
 		, bool meshletsBounds
 		, bool hasMorphingWeights )
 	{
+		auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( combineID );
 		std::string result = "VertexTransformPass";
 
 		if ( morphFlags != MorphFlag::eNone )
@@ -58,7 +63,7 @@ namespace castor3d
 			result += "Morph";
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eSkin ) )
+		if ( combine.hasSkinFlag )
 		{
 			result += "Skin";
 		}
@@ -85,7 +90,7 @@ namespace castor3d
 
 	std::string BoundsTransformPipeline::getName()const
 	{
-		return  getName( normals );
+		return getName( normals );
 	}
 
 	std::string BoundsTransformPipeline::getName( bool normals )

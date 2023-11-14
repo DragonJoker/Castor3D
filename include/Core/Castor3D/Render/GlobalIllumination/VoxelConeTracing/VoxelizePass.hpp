@@ -97,7 +97,7 @@ namespace castor3d
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, castor3d::ShadowBuffer const * shadowBuffer )override;
-		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
+		SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
 		void doGetVertexShaderSource( PipelineFlags const & flags

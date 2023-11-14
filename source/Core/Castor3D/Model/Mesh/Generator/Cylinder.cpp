@@ -44,11 +44,11 @@ namespace castor3d
 
 		if ( m_nbFaces >= 2 )
 		{
-			Submesh & submeshBase = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submeshBase = *mesh.createDefaultSubmesh();
 			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
-			Submesh & submeshTop = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submeshTop = *mesh.createDefaultSubmesh();
 			auto indexMappingTop = submeshTop.createComponent< TriFaceMapping >();
-			Submesh & submeshSide = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submeshSide = *mesh.createDefaultSubmesh();
 			auto indexMappingSide = submeshSide.createComponent< TriFaceMapping >();
 
 			//CALCUL DE LA POSITION DES POINTS

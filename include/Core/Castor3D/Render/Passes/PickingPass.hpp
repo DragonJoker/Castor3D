@@ -96,7 +96,7 @@ namespace castor3d
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer )override;
-		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
+		SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;

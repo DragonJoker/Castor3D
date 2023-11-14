@@ -4,6 +4,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -109,11 +110,20 @@ namespace castor3d
 		return result;
 	}
 
-	SubmeshRPtr Mesh::createSubmesh( SubmeshFlags const & flags )
+	SubmeshRPtr Mesh::createSubmesh()
 	{
 		return m_submeshes.emplace_back( castor::makeUnique< Submesh >( *this
-			, getSubmeshCount()
-			, flags ) ).get();
+			, getSubmeshCount() ) ).get();
+	}
+
+	SubmeshRPtr Mesh::createDefaultSubmesh()
+	{
+		auto result = createSubmesh();
+		result->createComponent< PositionsComponent >();
+		result->createComponent< NormalsComponent >();
+		result->createComponent< TangentsComponent >();
+		result->createComponent< Texcoords0Component >();
+		return result;
 	}
 
 	void Mesh::deleteSubmesh( SubmeshRPtr submesh )

@@ -425,12 +425,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Adjusts given flags to match the render pass requirements.
-		 *\param[in]	flags	The flags.
+		 *\param[in]	submeshCombine	The flags.
 		 *\~french
 		 *\brief		Ajuste les flags donnés pour qu'ils correspondent aux pré-requis de la passe.
-		 *\param[in]	flags	Les flags.
+		 *\param[in]	submeshCombine	Les flags.
 		 */
-		C3D_API SubmeshFlags adjustFlags( SubmeshFlags flags )const;
+		C3D_API SubmeshComponentCombine adjustFlags( SubmeshComponentCombine submeshCombine )const;
 		/**
 		 *\~english
 		 *\brief		Adjusts given flags to match the render pass requirements.
@@ -472,7 +472,8 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
-		 *\param[in]	components			The components combination.
+		 *\param[in]	passComponents		The pass components combination.
+		 *\param[in]	submeshComponents	The submesh components combination.
 		 *\param[in]	colourBlendMode		The colour blending mode.
 		 *\param[in]	alphaBlendMode		The alpha blending mode.
 		 *\param[in]	renderPassTypeId	The render pass type ID.
@@ -481,7 +482,6 @@ namespace castor3d
 		 *\param[in]	alphaFunc			The alpha comparison function (for opaque nodes).
 		 *\param[in]	blendAlphaFunc		The alpha comparison function (for transparent nodes).
 		 *\param[in]	textures			The textures configuration.
-		 *\param[in]	submeshFlags		A combination of SubmeshFlag.
 		 *\param[in]	programFlags		A combination of ProgramFlag.
 		 *\param[in]	sceneFlags			Scene related flags.
 		 *\param[in]	topology			The render topology.
@@ -490,7 +490,8 @@ namespace castor3d
 		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
-		 *\param[in]	components			La combinaison de composants.
+		 *\param[in]	passComponents		La combinaison de composants de passe.
+		 *\param[in]	submeshComponents	La combinaison de composants de submesh.
 		 *\param[in]	colourBlendMode		Le mode de mélange de couleurs.
 		 *\param[in]	alphaBlendMode		Le mode de mélange de l'alpha
 		 *\param[in]	renderPassTypeId	L'ID du type de render pass.
@@ -499,7 +500,6 @@ namespace castor3d
 		 *\param[in]	alphaFunc			La fonction de comparaison de l'alpha (pour les noeuds opaques).
 		 *\param[in]	blendAlphaFunc		La fonction de comparaison de l'alpha (pour les noeuds transparents).
 		 *\param[in]	textures			La configuration des textures.
-		 *\param[in]	submeshFlags		Une combinaison de SubmeshFlag.
 		 *\param[in]	programFlags		Une combinaison de ProgramFlag.
 		 *\param[in]	sceneFlags			Les indicateurs relatifs à la scène.
 		 *\param[in]	topology			La topologie de rendu.
@@ -507,7 +507,8 @@ namespace castor3d
 		 *\param[in]	passLayerIndex		L'indice de la couche de la passe de matériau.
 		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
+		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine passComponents
+			, SubmeshComponentCombine submeshComponents
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, RenderPassTypeID renderPassTypeId
@@ -516,7 +517,6 @@ namespace castor3d
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
 			, TextureCombine const & textures
-			, SubmeshFlags const & submeshFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
@@ -526,28 +526,28 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\brief		Creates the pipeline flags for given configuration.
-		 *\param[in]	pass			The pass for which the pipeline is created.
-		 *\param[in]	textures		The textures configuration.
-		 *\param[in]	submeshFlags	A combination of SubmeshFlag.
-		 *\param[in]	programFlags	A combination of ProgramFlag.
-		 *\param[in]	sceneFlags		Scene related flags.
-		 *\param[in]	topology		The render topology.
-		 *\param[in]	isFrontCulled	\p true for front face culling, \p false for back face culling.
-		 *\param[in]	morphTargets	The morph targets buffer.
+		 *\param[in]	pass				The pass for which the pipeline is created.
+		 *\param[in]	textures			The textures configuration.
+		 *\param[in]	submeshComponents	The submesh components combination.
+		 *\param[in]	programFlags		A combination of ProgramFlag.
+		 *\param[in]	sceneFlags			Scene related flags.
+		 *\param[in]	topology			The render topology.
+		 *\param[in]	isFrontCulled		\p true for front face culling, \p false for back face culling.
+		 *\param[in]	morphTargets		The morph targets buffer.
 		 *\~french
 		 *\brief		Crée les indicateurs de pipeline pour la configuration donnée.
-		 *\param[in]	pass			La passe pour laquelle le pipeline est créé.
-		 *\param[in]	textures		La configuration des textures.
-		 *\param[in]	submeshFlags	Une combinaison de SubmeshFlag.
-		 *\param[in]	programFlags	Une combinaison de ProgramFlag.
-		 *\param[in]	sceneFlags		Les indicateurs relatifs à la scène.
-		 *\param[in]	topology		La topologie de rendu.
-		 *\param[in]	isFrontCulled	\p true pour front face culling, \p false pour back face culling.
-		 *\param[in]	morphTargets	Le buffer de morph targets.
+		 *\param[in]	pass				La passe pour laquelle le pipeline est créé.
+		 *\param[in]	textures			La configuration des textures.
+		 *\param[in]	submeshComponents	La combinaison de composants de submesh.
+		 *\param[in]	programFlags		Une combinaison de ProgramFlag.
+		 *\param[in]	sceneFlags			Les indicateurs relatifs à la scène.
+		 *\param[in]	topology			La topologie de rendu.
+		 *\param[in]	isFrontCulled		\p true pour front face culling, \p false pour back face culling.
+		 *\param[in]	morphTargets		Le buffer de morph targets.
 		 */
 		C3D_API PipelineFlags createPipelineFlags( Pass const & pass
 			, TextureCombine const & textures
-			, SubmeshFlags const & submeshFlags
+			, SubmeshComponentCombine submeshComponents
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
@@ -914,7 +914,7 @@ namespace castor3d
 		 *\return		\p true si l'objet est rendu via cette passe de noeuds.
 		 */
 		C3D_API virtual bool doIsValidRenderable( RenderedObject const & object )const;
-		C3D_API virtual SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const;
+		C3D_API virtual SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const;
 		C3D_API virtual ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const;
 		C3D_API virtual SceneFlags doAdjustSceneFlags( SceneFlags flags )const;
 		C3D_API ShaderProgramRPtr doGetProgram( PipelineFlags const & flags

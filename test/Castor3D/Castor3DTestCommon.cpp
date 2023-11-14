@@ -504,62 +504,62 @@ namespace Testing
 
 		if ( result )
 		{
-			if ( lhs.getType() == PositionsComponent::Name )
+			if ( lhs.getType() == PositionsComponent::TypeName )
 			{
 				result = CT_EQUAL( static_cast< PositionsComponent const & >( lhs )
 					, static_cast< PositionsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == NormalsComponent::Name )
+			else if ( lhs.getType() == NormalsComponent::TypeName )
 			{
 				result = CT_EQUAL( static_cast< NormalsComponent const & >( lhs )
 					, static_cast< NormalsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == TangentsComponent::Name )
+			else if ( lhs.getType() == TangentsComponent::TypeName )
 			{
 				result = CT_EQUAL( static_cast< TangentsComponent const & >( lhs )
 					, static_cast< TangentsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == BitangentsComponent::Name )
+			else if ( lhs.getType() == BitangentsComponent::TypeName )
 			{
 				result = CT_EQUAL( static_cast< BitangentsComponent const & >( lhs )
 					, static_cast< BitangentsComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == Texcoords0Component::Name )
+			else if ( lhs.getType() == Texcoords0Component::TypeName )
 			{
 				result = CT_EQUAL( static_cast< Texcoords0Component const & >( lhs )
 					, static_cast< Texcoords0Component const & >( rhs ) );
 			}
-			else if ( lhs.getType() == Texcoords1Component::Name )
+			else if ( lhs.getType() == Texcoords1Component::TypeName )
 			{
 				result = CT_EQUAL( static_cast< Texcoords1Component const & >( lhs )
 					, static_cast< Texcoords1Component const & >( rhs ) );
 			}
-			else if ( lhs.getType() == Texcoords2Component::Name )
+			else if ( lhs.getType() == Texcoords2Component::TypeName )
 			{
 				result = CT_EQUAL( static_cast< Texcoords2Component const & >( lhs )
 					, static_cast< Texcoords2Component const & >( rhs ) );
 			}
-			else if ( lhs.getType() == Texcoords3Component::Name )
+			else if ( lhs.getType() == Texcoords3Component::TypeName )
 			{
 				result = CT_EQUAL( static_cast< Texcoords3Component const & >( lhs )
 					, static_cast< Texcoords3Component const & >( rhs ) );
 			}
-			else if ( lhs.getType() == ColoursComponent::Name )
+			else if ( lhs.getType() == ColoursComponent::TypeName )
 			{
 				result = CT_EQUAL( static_cast< ColoursComponent const & >( lhs )
 					, static_cast< ColoursComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == SkinComponent::Name )
+			else if ( lhs.getType() == SkinComponent::TypeName )
 			{
 				result = CT_EQUAL( static_cast< SkinComponent const & >( lhs )
 					, static_cast< SkinComponent const & >( rhs ) );
 			}
-			else if ( lhs.getType() == TriFaceMapping::Name )
+			else if ( lhs.getType() == TriFaceMapping::TypeName )
 			{
 				result = CT_EQUAL( static_cast< TriFaceMapping const & >( lhs )
 					, static_cast< TriFaceMapping const & >( rhs ) );
 			}
-			else if ( lhs.getType() == LinesMapping::Name )
+			else if ( lhs.getType() == LinesMapping::TypeName )
 			{
 				result = CT_EQUAL( static_cast< LinesMapping const & >( lhs )
 					, static_cast< LinesMapping const & >( rhs ) );

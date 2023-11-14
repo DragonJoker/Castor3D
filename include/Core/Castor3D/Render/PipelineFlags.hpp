@@ -9,6 +9,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 
 #include <CastorUtils/Design/DynamicBitset.hpp>
 
@@ -32,35 +33,31 @@ namespace castor3d
 
 	struct PipelineHiHashDetails
 	{
-		explicit PipelineHiHashDetails( PassComponentCombine pcomponents
+		explicit PipelineHiHashDetails( PassComponentCombine ppassComponents
+			, SubmeshComponentCombine psubmeshComponents
 			, LightingModelID plightingModelId
-			, SubmeshFlags submeshFlags = SubmeshFlag::eNone
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, TextureCombine ptextures = TextureCombine{}
 			, ShaderFlags shaderFlags = ShaderFlag::eNone
 			, VkCompareOp palphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
-			, uint32_t ppassLayerIndex = 0u
 			, bool pisStatic = false )
-			: components{ std::move( pcomponents ) }
+			: pass{ std::move( ppassComponents ) }
+			, submesh{ std::move( psubmeshComponents ) }
 			, textures{ std::move( ptextures ) }
 			, lightingModelId{ plightingModelId }
 			, alphaFunc{ palphaFunc }
-			, passLayerIndex{ ppassLayerIndex }
 			, isStatic{ pisStatic }
-			, m_submeshFlags{ submeshFlags }
 			, m_programFlags{ programFlags }
 			, m_shaderFlags{ shaderFlags }
 		{
 		}
 
-		PassComponentCombine components;
+		PassComponentCombine pass;
+		SubmeshComponentCombine submesh;
 		TextureCombine textures;
 		LightingModelID lightingModelId;
 		VkCompareOp alphaFunc;
-		uint32_t passLayerIndex;
 		bool isStatic;
-		//uint32_t maxTexcoordSet;
-		SubmeshFlags m_submeshFlags;
 		ProgramFlags m_programFlags;
 		ShaderFlags m_shaderFlags;
 	};
@@ -69,15 +66,18 @@ namespace castor3d
 
 	struct PipelineLoHashDetails
 	{
-		explicit PipelineLoHashDetails( BackgroundModelID backgroundModelId = 0u
-			, VkDeviceSize morphTargetsOffset = 0u )
-			: backgroundModelId{ backgroundModelId }
-			, morphTargetsOffset{ morphTargetsOffset }
+		explicit PipelineLoHashDetails( BackgroundModelID pbackgroundModelId = 0u
+			, VkDeviceSize pmorphTargetsOffset = 0u
+			, uint32_t ppassLayerIndex = 0u )
+			: backgroundModelId{ pbackgroundModelId }
+			, morphTargetsOffset{ pmorphTargetsOffset }
+			, passLayerIndex{ ppassLayerIndex }
 		{
 		}
 
 		BackgroundModelID backgroundModelId{};
 		VkDeviceSize morphTargetsOffset{};
+		uint32_t passLayerIndex{};
 	};
 
 	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs );
@@ -113,13 +113,13 @@ namespace castor3d
 			CU_Require( lightingModelId != 0 );
 		}
 
-		explicit PipelineFlags( PassComponentCombine pcomponents
+		explicit PipelineFlags( PassComponentCombine ppassComponents
+			, SubmeshComponentCombine psubmeshComponents
 			, LightingModelID plightingModelId
 			, BackgroundModelID pbackgroundModelId
 			, BlendMode pcolourBlendMode = BlendMode::eNoBlend
 			, BlendMode palphaBlendMode = BlendMode::eNoBlend
 			, RenderPassTypeID prenderPassType = 0u
-			, SubmeshFlags psubmeshFlags = SubmeshFlag::eIndex
 			, ProgramFlags pprogramFlags = ProgramFlag::eNone
 			, SceneFlags psceneFlags = SceneFlag::eNone
 			, ShaderFlags pshaderFlags = ShaderFlag::eNone
@@ -130,16 +130,17 @@ namespace castor3d
 			, uint32_t ppassLayerIndex = {}
 			, VkDeviceSize pmorphTargetsOffset = {}
 			, bool pisStatic = false )
-			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
+			: PipelineFlags{ PipelineHiHashDetails{ std::move( ppassComponents )
+					, std::move( psubmeshComponents )
 					, plightingModelId
-					, psubmeshFlags
 					, pprogramFlags
 					, std::move( textures )
 					, pshaderFlags
 					, palphaFunc
-					, ppassLayerIndex
 					, pisStatic }
-				, PipelineLoHashDetails{ pbackgroundModelId, pmorphTargetsOffset }
+				, PipelineLoHashDetails{ pbackgroundModelId
+					, pmorphTargetsOffset
+					, ppassLayerIndex }
 				, psceneFlags
 				, pcolourBlendMode
 				, palphaBlendMode
@@ -150,24 +151,25 @@ namespace castor3d
 			CU_Require( lightingModelId != 0 );
 		}
 
-		PipelineFlags( PassComponentCombine pcomponents
+		PipelineFlags( PassComponentCombine ppassComponents
+			, SubmeshComponentCombine psubmeshComponents
 			, LightingModelID lightingModelId
 			, BackgroundModelID pbackgroundModelId
-			, SubmeshFlags submeshFlags
 			, ProgramFlags programFlags
 			, TextureCombine textures
 			, ShaderFlags shaderFlags
 			, VkCompareOp alphaFunc
 			, uint32_t passLayerIndex = 0u )
-			: PipelineFlags{ PipelineHiHashDetails{ std::move( pcomponents )
+			: PipelineFlags{ PipelineHiHashDetails{ std::move( ppassComponents )
+					, std::move( psubmeshComponents )
 					, lightingModelId
-					, submeshFlags
 					, programFlags
 					, std::move( textures )
 					, shaderFlags
-					, alphaFunc
+					, alphaFunc }
+				, PipelineLoHashDetails{ pbackgroundModelId
+					, 0u
 					, passLayerIndex }
-				, PipelineLoHashDetails{ pbackgroundModelId, 0u }
 				, SceneFlag::eNone
 				, BlendMode::eNoBlend
 				, BlendMode::eNoBlend
@@ -180,7 +182,7 @@ namespace castor3d
 
 		/* Vertex inputs */
 		C3D_API bool enableTexcoords()const;
-		C3D_API bool enableVertexInput( SubmeshFlag data )const;
+		C3D_API bool enableVertexInput( SubmeshData data )const;
 		C3D_API bool enableIndices()const;
 		C3D_API bool enablePosition()const;
 		C3D_API bool enableNormal()const;
@@ -298,21 +300,16 @@ namespace castor3d
 			return hasAny( m_sceneFlags, SceneFlag::eGIAny );
 		}
 		//@}
-		/**@name SubmeshFlags */
+		/**@name SubmeshComponents */
 		//@{
-		bool hasSubmeshData( SubmeshFlag flag )const
-		{
-			return checkFlag( m_submeshFlags, flag );
-		}
-
 		bool hasWorldPosInputs()const
 		{
-			return hasSubmeshData( SubmeshFlag::eVelocity );
+			return submesh.hasVelocityFlag;
 		}
 
 		bool hasSkinData()const
 		{
-			return hasSubmeshData( SubmeshFlag::eSkin );
+			return submesh.hasSkinFlag;
 		}
 		//@}
 		/**@name ProgramFlags */
@@ -339,7 +336,8 @@ namespace castor3d
 		//@}
 		/**@name Components */
 		//@{
-		C3D_API bool hasFlag( PassComponentFlag flag )const;
+		C3D_API bool hasPassFlag( PassComponentFlag flag )const;
+		C3D_API bool hasSubmeshFlag( SubmeshComponentFlag flag )const;
 		//@}
 		/**@name Textures */
 		//@{
@@ -355,12 +353,14 @@ namespace castor3d
 		uint32_t patchVertices;
 
 	private:
-		bool enableTexcoord( SubmeshFlag data )const;
-		bool enableNonTexcoord( SubmeshFlag data )const;
+		bool enableTexcoord( SubmeshData data )const;
+		bool enableNonTexcoord( SubmeshData data )const;
+		bool hasSubmeshData( SubmeshData data )const;
 	};
 
 	C3D_API bool operator==( PipelineFlags const & lhs, PipelineFlags const & rhs );
 	C3D_API PipelineBaseHash getPipelineBaseHash( PassComponentRegister const & passComponents
+		, SubmeshComponentRegister const & submeshComponents
 		, PipelineFlags const & flags );
 	C3D_API PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
 		, Submesh const & data

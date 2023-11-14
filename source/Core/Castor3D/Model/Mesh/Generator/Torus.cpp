@@ -52,7 +52,7 @@ namespace castor3d
 
 		if ( m_internalNbFaces >= 3 && m_externalNbFaces >= 3 )
 		{
-			Submesh & submesh = *( mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex ) );
+			Submesh & submesh = *( mesh.createDefaultSubmesh() );
 			uint32_t uiCur = 0;
 			uint32_t uiPrv = 0;
 			uint32_t uiPCr = 0;

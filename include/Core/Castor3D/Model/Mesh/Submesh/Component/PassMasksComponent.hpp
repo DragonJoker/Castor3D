@@ -16,6 +16,30 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	public:
+		class Plugin
+			: public SubmeshComponentPlugin
+		{
+		public:
+			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
+				: SubmeshComponentPlugin{ submeshComponents }
+			{
+			}
+
+			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
+			{
+				return castor::makeUniqueDerived< SubmeshComponent, PassMasksComponent >( submesh );
+			}
+
+			SubmeshComponentFlag getPassMaskFlag()const noexcept override
+			{
+				return getComponentFlags();
+			}
+		};
+
+		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
+		{
+			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+		}
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -76,11 +100,9 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
-		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
+		SubmeshComponentFlag getSubmeshFlags()const noexcept override
 		{
-			return hasData()
-				? SubmeshFlag::ePassMasks
-				: SubmeshFlag( 0 );
+			return makeSubmeshComponentFlag( hasData() ? getId() : 0u );
 		}
 
 		bool hasData()const
@@ -109,8 +131,7 @@ namespace castor3d
 		void doUpload( UploadData & uploader )override;
 
 	public:
-		C3D_API static castor::String const Name;
-		C3D_API static uint32_t constexpr Id = getIndex( SubmeshFlag::ePassMasks ) - 1u;
+		C3D_API static castor::String const TypeName;
 
 	private:
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;

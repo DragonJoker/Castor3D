@@ -5,6 +5,7 @@
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -136,17 +137,23 @@ namespace castor3d
 	{
 		return object.isShadowCaster();
 	}
-
-	SubmeshFlags ShadowMapPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	
+	SubmeshComponentCombine ShadowMapPass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const
 	{
 		if ( !m_needsRsm )
 		{
-			remFlag( flags, SubmeshFlag::eNormals );
-			remFlag( flags, SubmeshFlag::eTangents );
-			remFlag( flags, SubmeshFlag::eBitangents );
+			auto & components = getEngine()->getSubmeshComponentsRegister();
+			remFlags( submeshCombine, components.getNormalFlag() );
+			remFlags( submeshCombine, components.getTangentFlag() );
+			remFlags( submeshCombine, components.getBitangentFlag() );
+			remFlags( submeshCombine, components.getColourFlag() );
+			submeshCombine.hasNormalFlag = false;
+			submeshCombine.hasTangentFlag = false;
+			submeshCombine.hasBitangentFlag = false;
+			submeshCombine.hasColourFlag = false;
 		}
 
-		return flags;
+		return submeshCombine;
 	}
 
 	void ShadowMapPass::doFillAdditionalBindings( PipelineFlags const & flags

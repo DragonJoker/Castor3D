@@ -19,10 +19,10 @@ CU_ImplementSmartPtr( castor3d, SkinComponent )
 
 namespace castor3d
 {
-	castor::String const SkinComponent::Name = cuT( "bones" );
+	castor::String const SkinComponent::TypeName = cuT( "skin" );
 
 	SkinComponent::SkinComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, Id }
+		: SubmeshComponent{ submesh, TypeName }
 	{
 	}
 
@@ -62,7 +62,7 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_bones.size() );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eSkin );
+		auto & buffer = offsets.getBufferChunk( SubmeshData::eSkin );
 
 		if ( count && buffer.hasData() )
 		{

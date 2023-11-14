@@ -28,10 +28,10 @@ namespace castor3d
 	}
 #endif
 
-	castor::String const MeshletComponent::Name = cuT( "meshlet" );
+	castor::String const MeshletComponent::TypeName = cuT( "meshlet" );
 
 	MeshletComponent::MeshletComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, Name, uint32_t( std::hash< castor::String >{}( Name ) ) }
+		: SubmeshComponent{ submesh, TypeName }
 	{
 	}
 
@@ -55,73 +55,73 @@ namespace castor3d
 				, RenderPipeline::eMeshBuffers );
 			ashes::WriteDescriptorSetArray writes;
 			auto & material = *geometry.getMaterial( *getOwner() );
-			auto submeshFlags = getOwner()->getFinalSubmeshFlags();
+			auto combine = getOwner()->getComponentCombine();
 			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
 			writes.push_back( getFinalCullBuffer( geometry ).getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
+			if ( combine.hasPositionFlag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::ePositions
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::ePositions
 					, uint32_t( MeshBuffersIdx::ePosition ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+			if ( combine.hasNormalFlag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eNormals
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eNormals
 					, uint32_t( MeshBuffersIdx::eNormal ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+			if ( combine.hasTangentFlag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eTangents
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTangents
 					, uint32_t( MeshBuffersIdx::eTangent ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+			if ( combine.hasBitangentFlag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eBitangents
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eBitangents
 					, uint32_t( MeshBuffersIdx::eBitangent ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
+			if ( combine.hasTexcoord0Flag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eTexcoords0
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTexcoords0
 					, uint32_t( MeshBuffersIdx::eTexcoord0 ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
+			if ( combine.hasTexcoord1Flag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eTexcoords1
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTexcoords1
 					, uint32_t( MeshBuffersIdx::eTexcoord1 ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+			if ( combine.hasTexcoord2Flag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eTexcoords2
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTexcoords2
 					, uint32_t( MeshBuffersIdx::eTexcoord2 ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+			if ( combine.hasTexcoord3Flag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eTexcoords3
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eTexcoords3
 					, uint32_t( MeshBuffersIdx::eTexcoord3 ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+			if ( combine.hasColourFlag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eColours
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eColours
 					, uint32_t( MeshBuffersIdx::eColour ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			if ( combine.hasPassMaskFlag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::ePassMasks
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::ePassMasks
 					, uint32_t( MeshBuffersIdx::ePassMasks ) ) );
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
+			if ( combine.hasVelocityFlag )
 			{
-				writes.push_back( baseBuffers.getStorageBinding( SubmeshFlag::eVelocity
+				writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eVelocity
 					, uint32_t( MeshBuffersIdx::eVelocity ) ) );
 			}
 
@@ -139,7 +139,7 @@ namespace castor3d
 #endif
 	}
 
-	ProgramFlags MeshletComponent::getProgramFlags( Material const & material )const
+	ProgramFlags MeshletComponent::getProgramFlags( Material const & material )const noexcept
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		return ProgramFlag::eHasMesh
@@ -302,79 +302,79 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eCullData )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_TASK_BIT_NV ) );
-		auto submeshFlags = getOwner()->getFinalSubmeshFlags();
+		auto combine = getOwner()->getComponentCombine();
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
+		if ( combine.hasPositionFlag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePosition )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+		if ( combine.hasNormalFlag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eNormal )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+		if ( combine.hasTangentFlag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTangent )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+		if ( combine.hasBitangentFlag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eBitangent )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
+		if ( combine.hasTexcoord0Flag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord0 )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
+		if ( combine.hasTexcoord1Flag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord1 )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+		if ( combine.hasTexcoord2Flag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord2 )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+		if ( combine.hasTexcoord3Flag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eTexcoord3 )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+		if ( combine.hasColourFlag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eColour )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+		if ( combine.hasPassMaskFlag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::ePassMasks )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		}
 
-		if ( checkFlag( submeshFlags, SubmeshFlag::eVelocity ) )
+		if ( combine.hasVelocityFlag )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eVelocity )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER

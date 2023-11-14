@@ -13,6 +13,7 @@
 #include <Castor3D/Material/Pass/Component/PassComponentRegister.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
 #include <Castor3D/Render/RenderTechnique.hpp>
@@ -392,12 +393,12 @@ namespace GuiCommon
 			{
 				ShaderSources result;
 				PassShaderGatherer vis{ castor3d::PipelineFlags{ scene.getEngine()->getPassComponentsRegister().getPassComponentCombine( pass )
+						, scene.getEngine()->getSubmeshComponentsRegister().getDefaultComponentCombine()
 						, pass.getLightingModelId()
 						, scene.getBackgroundModelId()
 						, pass.getColourBlendMode()
 						, pass.getAlphaBlendMode()
 						, ( pass.getRenderPassInfo()? pass.getRenderPassInfo()->id: castor3d::RenderPassTypeID{} )
-						, castor3d::SubmeshFlag::ePosNmlTanTex
 						, castor3d::ProgramFlag::eNone
 						, scene.getFlags()
 						, castor3d::ShaderFlag::eNone

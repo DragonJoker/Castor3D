@@ -229,58 +229,6 @@ namespace castor3d
 				}
 			}
 		}
-
-		static MorphFlags getMorphFlags( SubmeshFlags submeshFlags )
-		{
-			MorphFlags result{};
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
-			{
-				result |= MorphFlag::ePositions;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
-			{
-				result |= MorphFlag::eNormals;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
-			{
-				result |= MorphFlag::eTangents;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
-			{
-				result |= MorphFlag::eBitangents;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
-			{
-				result |= MorphFlag::eTexcoords0;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
-			{
-				result |= MorphFlag::eTexcoords1;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
-			{
-				result |= MorphFlag::eTexcoords2;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
-			{
-				result |= MorphFlag::eTexcoords3;
-			}
-
-			if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
-			{
-				result |= MorphFlag::eColours;
-			}
-
-			return result;
-		}
 	}
 
 	SceneFileContext & getParserContext( castor::FileParserContext & context )
@@ -3016,13 +2964,13 @@ namespace castor3d
 				{
 					auto id = morphSubmesh->getId();
 					auto submesh = parsingContext.mesh->getSubmesh( id );
-					auto submeshFlags = morphSubmesh->getSubmeshFlags( nullptr );
-					auto component = submesh->hasComponent( MorphComponent::Name )
+					auto combine = morphSubmesh->getComponentCombine();
+					auto component = submesh->hasComponent( MorphComponent::TypeName )
 						? submesh->getComponent< MorphComponent >()
-						: submesh->createComponent< MorphComponent >( scnprs::getMorphFlags( submeshFlags ) );
+						: submesh->createComponent< MorphComponent >();
 					castor3d::SubmeshAnimationBuffer buffer;
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
+					
+					if ( combine.hasPositionFlag )
 					{
 						buffer.positions = morphSubmesh->getPositions();
 						uint32_t index = 0u;
@@ -3032,8 +2980,8 @@ namespace castor3d
 							position -= submesh->getPositions()[index++];
 						}
 					}
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+					
+					if ( combine.hasNormalFlag )
 					{
 						buffer.normals = morphSubmesh->getNormals();
 						uint32_t index = 0u;
@@ -3043,8 +2991,8 @@ namespace castor3d
 							normal -= submesh->getNormals()[index++];
 						}
 					}
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+					
+					if ( combine.hasTangentFlag )
 					{
 						buffer.tangents = morphSubmesh->getTangents();
 						uint32_t index = 0u;
@@ -3054,8 +3002,8 @@ namespace castor3d
 							tangent -= submesh->getTangents()[index++];
 						}
 					}
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+					
+					if ( combine.hasBitangentFlag )
 					{
 						buffer.bitangents = morphSubmesh->getBitangents();
 						uint32_t index = 0u;
@@ -3065,8 +3013,8 @@ namespace castor3d
 							bitangent -= submesh->getBitangents()[index++];
 						}
 					}
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
+					
+					if ( combine.hasTexcoord0Flag )
 					{
 						buffer.texcoords0 = morphSubmesh->getTexcoords0();
 						uint32_t index = 0u;
@@ -3076,8 +3024,8 @@ namespace castor3d
 							texcoord -= submesh->getTexcoords0()[index++];
 						}
 					}
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
+					
+					if ( combine.hasTexcoord1Flag )
 					{
 						buffer.texcoords1 = morphSubmesh->getTexcoords1();
 						uint32_t index = 0u;
@@ -3087,8 +3035,8 @@ namespace castor3d
 							texcoord -= submesh->getTexcoords1()[index++];
 						}
 					}
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+					
+					if ( combine.hasTexcoord2Flag )
 					{
 						buffer.texcoords2 = morphSubmesh->getTexcoords2();
 						uint32_t index = 0u;
@@ -3098,8 +3046,8 @@ namespace castor3d
 							texcoord -= submesh->getTexcoords2()[index++];
 						}
 					}
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+					
+					if ( combine.hasTexcoord3Flag )
 					{
 						buffer.texcoords3 = morphSubmesh->getTexcoords3();
 						uint32_t index = 0u;
@@ -3109,8 +3057,8 @@ namespace castor3d
 							texcoord -= submesh->getTexcoords3()[index++];
 						}
 					}
-
-					if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+					
+					if ( combine.hasColourFlag )
 					{
 						buffer.colours = morphSubmesh->getColours();
 						uint32_t index = 0u;
@@ -3714,25 +3662,25 @@ namespace castor3d
 
 		if ( !parsingContext.vertexPos.empty() )
 		{
-			if ( !parsingContext.submesh->hasComponent( PositionsComponent::Name ) )
+			if ( !parsingContext.submesh->hasComponent( PositionsComponent::TypeName ) )
 			{
 				parsingContext.submesh->createComponent< PositionsComponent >();
 			}
 
 			if ( !parsingContext.vertexNml.empty()
-				&& !parsingContext.submesh->hasComponent( NormalsComponent::Name ) )
+				&& !parsingContext.submesh->hasComponent( NormalsComponent::TypeName ) )
 			{
 				parsingContext.submesh->createComponent< NormalsComponent >();
 			}
 
 			if ( !parsingContext.vertexTan.empty()
-				&& !parsingContext.submesh->hasComponent( TangentsComponent::Name ) )
+				&& !parsingContext.submesh->hasComponent( TangentsComponent::TypeName ) )
 			{
 				parsingContext.submesh->createComponent< TangentsComponent >();
 			}
 
 			if ( !parsingContext.vertexTex.empty()
-				&& !parsingContext.submesh->hasComponent( Texcoords0Component::Name ) )
+				&& !parsingContext.submesh->hasComponent( Texcoords0Component::TypeName ) )
 			{
 				parsingContext.submesh->createComponent< Texcoords0Component >();
 			}

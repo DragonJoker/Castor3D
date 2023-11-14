@@ -204,19 +204,19 @@ namespace castor3d
 		m_ssao->accept( visitor );
 
 		if ( m_opaquePass
-			&& m_opaquePass->areValidPassFlags( visitor.getFlags().components ) )
+			&& m_opaquePass->areValidPassFlags( visitor.getFlags().pass ) )
 		{
 			m_opaquePass->accept( visitor );
 		}
 
 		if ( m_deferredOpaquePass
-			&& m_deferredOpaquePass->areValidPassFlags( visitor.getFlags().components ) )
+			&& m_deferredOpaquePass->areValidPassFlags( visitor.getFlags().pass ) )
 		{
 			m_deferredOpaquePass->accept( visitor );
 		}
 
 		if ( m_visibilityOpaquePass
-			&& m_visibilityOpaquePass->areValidPassFlags( visitor.getFlags().components ) )
+			&& m_visibilityOpaquePass->areValidPassFlags( visitor.getFlags().pass ) )
 		{
 			m_visibilityOpaquePass->accept( visitor );
 		}

@@ -19,7 +19,7 @@ namespace castor3d
 		}
 		else
 		{
-			auto id = component->getID();
+			auto id = component->getId();
 			auto comp = component.get();
 			submesh.m_components.emplace( id
 				, castor::ptrRefCast< SubmeshComponent >( component ) );
@@ -47,60 +47,10 @@ namespace castor3d
 		addPoints( vertices.data(), vertices.data() + vertices.size() );
 	}
 
-	inline SkeletonRPtr Submesh::getSkeleton()const
-	{
-		return getParent().getSkeleton();
-	}
-
 	inline void Submesh::setDefaultMaterial( MaterialObs mat )
 	{
 		m_defaultMaterial = mat;
 		instantiate( nullptr, {}, mat, false );
-	}
-
-	inline MaterialObs Submesh::getDefaultMaterial()const
-	{
-		return m_defaultMaterial;
-	}
-
-	inline castor::BoundingBox const & Submesh::getBoundingBox()const
-	{
-		return m_box;
-	}
-
-	inline castor::BoundingBox & Submesh::getBoundingBox()
-	{
-		return m_box;
-	}
-
-	inline castor::BoundingSphere const & Submesh::getBoundingSphere()const
-	{
-		return m_sphere;
-	}
-
-	inline castor::BoundingSphere & Submesh::getBoundingSphere()
-	{
-		return m_sphere;
-	}
-
-	inline bool Submesh::isInitialised()const
-	{
-		return m_initialised;
-	}
-
-	inline Mesh const & Submesh::getParent()const
-	{
-		return *getOwner();
-	}
-
-	inline Mesh & Submesh::getParent()
-	{
-		return *getOwner();
-	}
-
-	inline uint32_t Submesh::getId()const
-	{
-		return m_id;
 	}
 
 	inline void Submesh::disableSceneUpdate()
@@ -118,28 +68,17 @@ namespace castor3d
 		if ( m_indexMapping
 			&& m_indexMapping != mapping.get() )
 		{
-			m_components.erase( m_indexMapping->getID() );
+			m_components.erase( m_indexMapping->getId() );
 		}
 
 		m_indexMapping = mapping.get();
-		auto id = mapping->getID();
+		auto id = mapping->getId();
 		m_components.emplace( id, castor::ptrRefCast< SubmeshComponent >( mapping ) );
 	}
 
 	inline IndexMappingRPtr Submesh::getIndexMapping()const
 	{
 		return m_indexMapping;
-	}
-
-	inline bool Submesh::hasComponent( castor::String const & name )const
-	{
-		auto it = std::find_if( m_components.begin()
-			, m_components.end()
-			, [&name]( SubmeshComponentIDMap::value_type const & lookup )
-			{
-				return lookup.second->getType() == name;
-			} );
-		return it != m_components.end();
 	}
 
 	template< typename ComponentT, typename ... ParamsT >
@@ -154,7 +93,7 @@ namespace castor3d
 
 	inline void Submesh::addComponent( SubmeshComponentUPtr component )
 	{
-		auto id = component->getID();
+		auto id = component->getId();
 		m_components.emplace( id, std::move( component ) );
 	}
 
@@ -164,7 +103,73 @@ namespace castor3d
 		SubmeshComponentAdder< T >::add( std::move( component ), *this );
 	}
 
-	inline SubmeshComponentRPtr Submesh::getComponent( castor::String const & name )const
+	inline void Submesh::setTopology( VkPrimitiveTopology value )
+	{
+		m_topology = value;
+	}
+
+	inline SkeletonRPtr Submesh::getSkeleton()const noexcept
+	{
+		return getParent().getSkeleton();
+	}
+
+	inline MaterialObs Submesh::getDefaultMaterial()const noexcept
+	{
+		return m_defaultMaterial;
+	}
+
+	inline castor::BoundingBox const & Submesh::getBoundingBox()const noexcept
+	{
+		return m_box;
+	}
+
+	inline castor::BoundingBox & Submesh::getBoundingBox()noexcept
+	{
+		return m_box;
+	}
+
+	inline castor::BoundingSphere const & Submesh::getBoundingSphere()const noexcept
+	{
+		return m_sphere;
+	}
+
+	inline castor::BoundingSphere & Submesh::getBoundingSphere()noexcept
+	{
+		return m_sphere;
+	}
+
+	inline bool Submesh::isInitialised()const noexcept
+	{
+		return m_initialised;
+	}
+
+	inline Mesh const & Submesh::getParent()const noexcept
+	{
+		return *getOwner();
+	}
+
+	inline Mesh & Submesh::getParent()noexcept
+	{
+		return *getOwner();
+	}
+
+	inline uint32_t Submesh::getId()const noexcept
+	{
+		return m_id;
+	}
+
+	inline bool Submesh::hasComponent( castor::String const & name )const noexcept
+	{
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, [&name]( SubmeshComponentIDMap::value_type const & lookup )
+			{
+				return lookup.second->getType() == name;
+			} );
+		return it != m_components.end();
+	}
+
+	inline SubmeshComponentRPtr Submesh::getComponent( castor::String const & name )const noexcept
 	{
 		SubmeshComponentRPtr result{};
 		auto it = std::find_if( m_components.begin()
@@ -182,51 +187,48 @@ namespace castor3d
 		return result;
 	}
 
-	template< typename T >
-	inline T * Submesh::getComponent()const
-	{
-		return &static_cast< T & >( *getComponent( T::Name ) );
-	}
-
-	inline InstantiationComponent & Submesh::getInstantiation()
+	inline InstantiationComponent & Submesh::getInstantiation()noexcept
 	{
 		CU_Require( m_instantiation );
 		return *m_instantiation;
 	}
 
-	inline InstantiationComponent const & Submesh::getInstantiation()const
+	inline InstantiationComponent const & Submesh::getInstantiation()const noexcept
 	{
 		CU_Require( m_instantiation );
 		return *m_instantiation;
 	}
 
-	inline SubmeshComponentIDMap const & Submesh::getComponents()const
+	inline SubmeshComponentIDMap const & Submesh::getComponents()const noexcept
 	{
 		return m_components;
 	}
 
-	inline VkPrimitiveTopology Submesh::getTopology()const
+	inline VkPrimitiveTopology Submesh::getTopology()const noexcept
 	{
 		return m_topology;
 	}
 
-	inline SubmeshFlags Submesh::getFinalSubmeshFlags()const
+	inline SubmeshComponentCombine Submesh::getComponentCombine()const noexcept
 	{
-		auto result = m_submeshFlags;
-		remFlag( result, SubmeshFlag::eIndex );
-
-		if ( isDynamic() )
-		{
-			remFlag( result, SubmeshFlag::eSkin );
-			addFlag( result, SubmeshFlag::eVelocity );
-		}
-
-		return result;
+		return m_componentCombine;
 	}
 
-	inline void Submesh::setTopology( VkPrimitiveTopology value )
+	inline SubmeshComponentPlugin const & Submesh::getComponentPlugin( castor::String const & componentType )const
 	{
-		m_topology = value;
+		return getComponentPlugin( getComponentId( componentType ) );
+	}
+
+	template< typename ComponentT >
+	inline ComponentT* Submesh::getComponent()const noexcept
+	{
+		return &static_cast< ComponentT & >( *getComponent( ComponentT::TypeName ) );
+	}
+
+	template< typename ComponentT >
+	SubmeshComponentPlugin const & Submesh::getComponentPlugin()const
+	{
+		return getComponentPlugin( getComponentId( ComponentT::TypeName ) );
 	}
 
 	//*********************************************************************************************

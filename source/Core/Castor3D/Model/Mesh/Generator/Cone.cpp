@@ -72,8 +72,8 @@ namespace castor3d
 			&& m_height > std::numeric_limits< float >::epsilon()
 			&& m_radius > std::numeric_limits< float >::epsilon() )
 		{
-			Submesh & submeshBase = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
-			Submesh & submeshSide = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submeshBase = *mesh.createDefaultSubmesh();
+			Submesh & submeshSide = *mesh.createDefaultSubmesh();
 			//CALCUL DE LA POSITION DES POINTS
 			float const dalpha = castor::PiMult2< float > / float( m_nbFaces );
 			uint32_t i = 0;

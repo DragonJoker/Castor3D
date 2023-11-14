@@ -1,5 +1,6 @@
 #include "Castor3D/Scene/BillboardList.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/DirectUploadData.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/InstantUploadData.hpp"
@@ -7,6 +8,7 @@
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Miscellaneous/Logger.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SceneRenderNodes.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -95,6 +97,7 @@ namespace castor3d
 		, m_vertexBuffer{ std::move( vertexBuffer ) }
 		, m_vertexLayout{ std::move( vertexLayout ) }
 		, m_vertexStride{ vertexStride }
+		, m_proxyCombine{ scene.getEngine()->getSubmeshComponentsRegister().getDefaultComponentCombine() }
 	{
 	}
 
@@ -116,7 +119,7 @@ namespace castor3d
 				BillboardVertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
 			m_geometryBuffers.bufferOffset = device.vertexPools->getBuffer< Quad >( 1u );
-			auto & vb = m_geometryBuffers.bufferOffset.getBufferChunk( SubmeshFlag::ePositions );
+			auto & vb = m_geometryBuffers.bufferOffset.getBufferChunk( SubmeshData::ePositions );
 			{
 				auto queueData = device.graphicsData();
 				InstantDirectUploadData uploader{ *queueData->queue
@@ -208,14 +211,6 @@ namespace castor3d
 				log::error << "Submesh::SortFaces - Error: " << exc.what() << std::endl;
 			}
 		}
-	}
-
-	SubmeshFlags BillboardBase::getSubmeshFlags()const
-	{
-		return SubmeshFlag::ePositions
-			| SubmeshFlag::eNormals
-			| SubmeshFlag::eTangents
-			| SubmeshFlag::eTexcoords0;
 	}
 
 	ProgramFlags BillboardBase::getProgramFlags()const

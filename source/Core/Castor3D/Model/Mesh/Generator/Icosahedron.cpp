@@ -39,7 +39,7 @@ namespace castor3d
 			m_radius = -m_radius;
 		}
 
-		auto submesh = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto submesh = mesh.createDefaultSubmesh();
 		auto normals = submesh->getComponent< NormalsComponent >();
 		auto texcoords = submesh->getComponent< Texcoords0Component >();
 

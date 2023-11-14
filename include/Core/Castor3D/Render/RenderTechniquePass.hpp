@@ -169,7 +169,8 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::createPipelineFlags
 		 */
-		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine components
+		C3D_API virtual PipelineFlags createPipelineFlags( PassComponentCombine passComponents
+			, SubmeshComponentCombine submeshComponents
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, RenderPassTypeID renderPassTypeId
@@ -178,7 +179,6 @@ namespace castor3d
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
 			, TextureCombine const & textures
-			, SubmeshFlags const & submeshFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology
@@ -300,7 +300,8 @@ namespace castor3d
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::createPipelineFlags
 		 */
-		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine components
+		C3D_API PipelineFlags createPipelineFlags( PassComponentCombine passComponents
+			, SubmeshComponentCombine submeshComponents
 			, BlendMode colourBlendMode
 			, BlendMode alphaBlendMode
 			, RenderPassTypeID renderPassTypeId
@@ -309,7 +310,6 @@ namespace castor3d
 			, VkCompareOp alphaFunc
 			, VkCompareOp blendAlphaFunc
 			, TextureCombine const & textures
-			, SubmeshFlags const & submeshFlags
 			, ProgramFlags const & programFlags
 			, SceneFlags const & sceneFlags
 			, VkPrimitiveTopology topology

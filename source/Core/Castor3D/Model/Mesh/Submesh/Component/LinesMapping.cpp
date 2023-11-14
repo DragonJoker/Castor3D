@@ -34,11 +34,11 @@ namespace castor3d
 		};
 	}
 
-	castor::String const LinesMapping::Name = "lines_mapping";
+	castor::String const LinesMapping::TypeName = "lines_mapping";
 
 	LinesMapping::LinesMapping( Submesh & submesh
 		, VkBufferUsageFlags bufferUsageFlags )
-		: IndexMapping{ submesh, Name, bufferUsageFlags }
+		: IndexMapping{ submesh, TypeName, bufferUsageFlags }
 	{
 	}
 
@@ -108,7 +108,7 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_lines.size() * 2 );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eIndex );
+		auto & buffer = offsets.getBufferChunk( SubmeshData::eIndex );
 
 		if ( count && buffer.hasData() )
 		{

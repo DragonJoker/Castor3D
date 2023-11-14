@@ -39,7 +39,7 @@ namespace castor3d
 
 		if ( m_nbFaces >= 3 )
 		{
-			Submesh & submesh = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & submesh = *mesh.createDefaultSubmesh();
 			float rAngle = castor::PiMult2< float > / float( m_nbFaces );
 			std::vector< castor::Point2f > arc( m_nbFaces + 1u );
 			float rAlpha = 0;

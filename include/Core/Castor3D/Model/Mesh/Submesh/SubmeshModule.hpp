@@ -122,93 +122,37 @@ namespace castor3d
 
 	inline constexpr uint32_t getSize( SubmeshData value )
 	{
-		constexpr std::array< size_t, size_t( SubmeshData::eCount ) > sizes = { sizeof( uint32_t ) /* SubmeshFlag::eIndex */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::ePositions */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eNormals */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eTangents */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eBitangents */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords0 */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords1 */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords2 */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eTexcoords3 */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eColours */
-			, sizeof( VertexBoneData ) /* SubmeshFlag::eSkin */
-			, sizeof( castor::Point4ui ) /* SubmeshFlag::ePassMasks */
-			, sizeof( castor::Point4f ) /* SubmeshFlag::eVelocity */ };
+		constexpr std::array< size_t, size_t( SubmeshData::eCount ) > sizes = { sizeof( uint32_t ) /* SubmeshData::eIndex */
+			, sizeof( castor::Point4f ) /* SubmeshData::ePositions */
+			, sizeof( castor::Point4f ) /* SubmeshData::eNormals */
+			, sizeof( castor::Point4f ) /* SubmeshData::eTangents */
+			, sizeof( castor::Point4f ) /* SubmeshData::eBitangents */
+			, sizeof( castor::Point4f ) /* SubmeshData::eTexcoords0 */
+			, sizeof( castor::Point4f ) /* SubmeshData::eTexcoords1 */
+			, sizeof( castor::Point4f ) /* SubmeshData::eTexcoords2 */
+			, sizeof( castor::Point4f ) /* SubmeshData::eTexcoords3 */
+			, sizeof( castor::Point4f ) /* SubmeshData::eColours */
+			, sizeof( VertexBoneData ) /* SubmeshData::eSkin */
+			, sizeof( castor::Point4ui ) /* SubmeshData::ePassMasks */
+			, sizeof( castor::Point4f ) /* SubmeshData::eVelocity */ };
 		return uint32_t( sizes[size_t( value )] );
 	}
-	/**
-	*\~english
-	*\brief
-	*	Flags to determine what a submesh is using.
-	*\~french
-	*\brief
-	*	Indicateurs pour déterminer ce qu'un submesh utilise.
-	*/
-	enum class SubmeshFlag
-		: uint16_t
-	{
-		eNone = 0x0000,
-		//!\~english	The submesh has indices (always).
-		//!\~french		Le submesh a des indices (toujours).
-		eIndex = 0x0001 << int( SubmeshData::eIndex ),
-		//!\~english	The submesh has positions.
-		//!\~french		Le submesh a des positions.
-		ePositions = 0x0001 << int( SubmeshData::ePositions ),
-		//!\~english	The submesh has normals.
-		//!\~french		Le submesh a des normales.
-		eNormals = 0x0001 << int( SubmeshData::eNormals ),
-		//!\~english	The submesh has tangents.
-		//!\~french		Le submesh a des tangentes.
-		eTangents = 0x0001 << int( SubmeshData::eTangents ),
-		//!\~english	The submesh has bitangents.
-		//!\~french		Le submesh a des bitangentes.
-		eBitangents = 0x0001 << int( SubmeshData::eBitangents ),
-		//!\~english	Submesh has texture coordinates.
-		//!\~french		Le submesh a des coordonnées de texture.
-		eTexcoords0 = 0x0001 << int( SubmeshData::eTexcoords0 ),
-		//!\~english	Submesh has a 2nd set of texture coordinates.
-		//!\~french		Le submesh a un 2e set de coordonnées de texture.
-		eTexcoords1 = 0x0001 << int( SubmeshData::eTexcoords1 ),
-		//!\~english	Submesh has a 3rd set of texture coordinates.
-		//!\~french		Le submesh a un 3e set de coordonnées de texture.
-		eTexcoords2 = 0x0001 << int( SubmeshData::eTexcoords2 ),
-		//!\~english	Submesh has a 4th set of texture coordinates.
-		//!\~french		Le submesh a un 4e set de coordonnées de texture.
-		eTexcoords3 = 0x0001 << int( SubmeshData::eTexcoords3 ),
-		//!\~english	Submesh has texture coordinates.
-		//!\~french		Le submesh a des coordonnées de texture.
-		eTexcoords = ( eTexcoords0  | eTexcoords1 | eTexcoords2 | eTexcoords3 ),
-		//!\~english	Submesh has colours.
-		//!\~french		Le submesh a des couleurs.
-		eColours = 0x0001 << int( SubmeshData::eColours ),
-		//!\~english	Base components flags.
-		//\~french		Indicateurs de composants de base.
-		ePosNmlTanTex = ePositions | eNormals | eTangents | eTexcoords0,
-		//!\~english	Submesh has bones data.
-		//!\~french		Submesh a des données d'os.
-		eSkin = 0x0001 << int( SubmeshData::eSkin ),
-		//!\~english	Submesh has velocity data.
-		//!\~french		Le submesh a des données de vélocité.
-		ePassMasks = 0x0001 << int( SubmeshData::ePassMasks ),
-		//!\~english	Submesh has velocity data.
-		//!\~french		Le submesh a des données de vélocité.
-		eVelocity = 0x0001 << int( SubmeshData::eVelocity ),
-		//!\~english	All flags used in base pipeline flags hashing.
-		//\~french		Tous les indicateurs utilisés dans le hash des indicateurs de pipeline.
-		eAllBase = ( 0x0001 << int( SubmeshData::eCount ) ) - 1,
-	};
-	CU_ImplementFlags( SubmeshFlag )
 
-	static constexpr SubmeshData getData( SubmeshFlag value )
+	using SubmeshComponentID = uint32_t;
+	using SubmeshComponentCombineID = uint16_t;
+	using SubmeshComponentFlag = uint32_t;
+
+	inline constexpr SubmeshComponentFlag makeSubmeshComponentFlag( SubmeshComponentID componentId )noexcept
 	{
-		return SubmeshData( castor::getBitSize( uint32_t( value ) ) - 1u );
+		return uint32_t( componentId );
 	}
 
-	static constexpr uint32_t getIndex( SubmeshFlag value )
+	inline constexpr SubmeshComponentID splitSubmeshComponentFlag( SubmeshComponentFlag flag )noexcept
 	{
-		return uint32_t( getData( value ) );
+		return SubmeshComponentID( flag );
 	}
+
+	using SubmeshComponentFlagsSet = std::set< SubmeshComponentFlag >;
 	/**
 	*\~english
 	*\brief

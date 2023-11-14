@@ -16,11 +16,11 @@ namespace castor3d
 			, ObjectBufferOffset const & output )
 		{
 			auto result = input.hash;
-			castor::hashCombinePtr( result, input.getBuffer( SubmeshFlag::ePositions ) );
-			castor::hashCombine( result, input.getOffset( SubmeshFlag::ePositions ) );
+			castor::hashCombinePtr( result, input.getBuffer( SubmeshData::ePositions ) );
+			castor::hashCombine( result, input.getOffset( SubmeshData::ePositions ) );
 			castor::hashCombine( result, output.hash );
-			castor::hashCombinePtr( result, output.getBuffer( SubmeshFlag::ePositions ) );
-			castor::hashCombine( result, output.getOffset( SubmeshFlag::ePositions ) );
+			castor::hashCombinePtr( result, output.getBuffer( SubmeshData::ePositions ) );
+			castor::hashCombine( result, output.getOffset( SubmeshData::ePositions ) );
 			return result;
 		}
 	}

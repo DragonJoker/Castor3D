@@ -286,53 +286,6 @@ namespace c3d_gltf
 			applyWeight( buffer.texcoords3, weight );
 			applyWeight( buffer.colours, weight );
 		}
-
-		static castor3d::MorphFlags computeMorphFlags( castor3d::SubmeshAnimationBuffer const & buffer )
-		{
-			castor3d::MorphFlags result{};
-
-			if ( !buffer.positions.empty() )
-			{
-				result |= castor3d::MorphFlag::ePositions;
-			}
-
-			if ( !buffer.normals.empty() )
-			{
-				result |= castor3d::MorphFlag::eNormals;
-			}
-
-			if ( !buffer.tangents.empty() )
-			{
-				result |= castor3d::MorphFlag::eTangents;
-			}
-
-			if ( !buffer.texcoords0.empty() )
-			{
-				result |= castor3d::MorphFlag::eTexcoords0;
-			}
-
-			if ( !buffer.texcoords1.empty() )
-			{
-				result |= castor3d::MorphFlag::eTexcoords1;
-			}
-
-			if ( !buffer.texcoords2.empty() )
-			{
-				result |= castor3d::MorphFlag::eTexcoords2;
-			}
-
-			if ( !buffer.texcoords3.empty() )
-			{
-				result |= castor3d::MorphFlag::eTexcoords3;
-			}
-
-			if ( !buffer.colours.empty() )
-			{
-				result |= castor3d::MorphFlag::eColours;
-			}
-
-			return result;
-		}
 	}
 
 	//*********************************************************************************************
@@ -829,9 +782,9 @@ namespace c3d_gltf
 		if ( !morphTargets.empty() )
 		{
 			castor3d::log::debug << cuT( "    Morph targets found: [" ) << uint32_t( morphTargets.size() ) << cuT( "]" ) << std::endl;
-			auto component = submesh.hasComponent( castor3d::MorphComponent::Name )
+			auto component = submesh.hasComponent( castor3d::MorphComponent::TypeName )
 				? submesh.getComponent< castor3d::MorphComponent >()
-				: submesh.createComponent< castor3d::MorphComponent >( meshes::computeMorphFlags( morphTargets.front() ) );
+				: submesh.createComponent< castor3d::MorphComponent >();
 
 			for ( auto & morphTarget : morphTargets )
 			{
@@ -876,13 +829,13 @@ namespace c3d_gltf
 	{
 		if ( mapping )
 		{
-			if ( !submesh.hasComponent( castor3d::NormalsComponent::Name ) )
+			if ( !submesh.hasComponent( castor3d::NormalsComponent::TypeName ) )
 			{
 				auto normals = submesh.createComponent< castor3d::NormalsComponent >();
 				normals->getData().resize( submesh.getPositions().size() );
 
-				if ( !submesh.hasComponent( castor3d::TangentsComponent::Name )
-					&& submesh.hasComponent( castor3d::Texcoords0Component::Name ) )
+				if ( !submesh.hasComponent( castor3d::TangentsComponent::TypeName )
+					&& submesh.hasComponent( castor3d::Texcoords0Component::TypeName ) )
 				{
 					auto tangents = submesh.createComponent< castor3d::TangentsComponent >();
 					tangents->getData().resize( submesh.getPositions().size() );
@@ -891,8 +844,8 @@ namespace c3d_gltf
 				mapping->computeNormals();
 				mapping->computeTangents();
 			}
-			else if ( !submesh.hasComponent( castor3d::TangentsComponent::Name )
-				&& submesh.hasComponent( castor3d::Texcoords0Component::Name ) )
+			else if ( !submesh.hasComponent( castor3d::TangentsComponent::TypeName )
+				&& submesh.hasComponent( castor3d::Texcoords0Component::TypeName ) )
 			{
 				auto tangents = submesh.createComponent< castor3d::TangentsComponent >();
 				tangents->getData().resize( submesh.getPositions().size() );
@@ -923,7 +876,7 @@ namespace c3d_gltf
 				auto submesh = mesh.getSubmesh( impMeshIndex );
 				auto matrixAcc = transformAcc;
 
-				if ( submesh->hasComponent( castor3d::SkinComponent::Name ) )
+				if ( submesh->hasComponent( castor3d::SkinComponent::TypeName ) )
 				{
 					castor::matrix::setTranslate( matrixAcc, transform.translate );
 				}

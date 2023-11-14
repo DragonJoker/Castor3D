@@ -11,6 +11,7 @@
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/Picking.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -106,14 +107,19 @@ namespace castor3d
 		, ShadowBuffer const * shadowBuffer )
 	{
 	}
-
-	SubmeshFlags PickingPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	
+	SubmeshComponentCombine PickingPass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const
 	{
-		remFlag( flags, SubmeshFlag::eNormals );
-		remFlag( flags, SubmeshFlag::eTangents );
-		remFlag( flags, SubmeshFlag::eBitangents );
-		remFlag( flags, SubmeshFlag::eColours );
-		return flags;
+		auto & components = getEngine()->getSubmeshComponentsRegister();
+		remFlags( submeshCombine, components.getNormalFlag() );
+		remFlags( submeshCombine, components.getTangentFlag() );
+		remFlags( submeshCombine, components.getBitangentFlag() );
+		remFlags( submeshCombine, components.getColourFlag() );
+		submeshCombine.hasNormalFlag = false;
+		submeshCombine.hasTangentFlag = false;
+		submeshCombine.hasBitangentFlag = false;
+		submeshCombine.hasColourFlag = false;
+		return submeshCombine;
 	}
 
 	ProgramFlags PickingPass::doAdjustProgramFlags( ProgramFlags flags )const

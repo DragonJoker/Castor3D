@@ -22,6 +22,26 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	public:
+		class Plugin
+			: public SubmeshComponentPlugin
+		{
+		public:
+			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
+				: SubmeshComponentPlugin{ submeshComponents }
+			{
+			}
+
+			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
+			{
+				return castor::makeUniqueDerived< SubmeshComponent, InstantiationComponent >( submesh );
+			}
+		};
+
+		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
+		{
+			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+		}
+
 		struct Data
 		{
 			Data( uint32_t count
@@ -122,7 +142,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		C3D_API ProgramFlags getProgramFlags( Material const & material )const override;
+		C3D_API ProgramFlags getProgramFlags( Material const & material )const noexcept override;
 		/**
 		*\~english
 		*name
@@ -170,7 +190,7 @@ namespace castor3d
 		}
 
 	public:
-		C3D_API static castor::String const Name;
+		C3D_API static castor::String const TypeName;
 
 	private:
 		InstanceDataMap m_instances;

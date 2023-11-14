@@ -17,6 +17,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
@@ -102,7 +103,7 @@ namespace castor3d
 		{
 			auto result = size_t( getRenderNodeType( flags.m_programFlags ) );
 			castor::hashCombine( result, size_t( flags.m_sceneFlags ) );
-			castor::hashCombine( result, flags.components.hasDeferredDiffuseLightingFlag );
+			castor::hashCombine( result, flags.pass.hasDeferredDiffuseLightingFlag );
 			return result;
 		}
 
@@ -270,15 +271,17 @@ namespace castor3d
 	void RenderNodesPass::forceAdjustFlags( PipelineFlags & flags )const
 	{
 		doUpdateFlags( flags );
-		flags.components = adjustFlags( flags.components );
+		flags.pass = adjustFlags( flags.pass );
 		flags.textures = adjustFlags( flags.textures );
 		flags.m_shaderFlags = getShaderFlags();
 		flags.isStatic = filtersNonStatic();
 	}
 
-	SubmeshFlags RenderNodesPass::adjustFlags( SubmeshFlags flags )const
+	SubmeshComponentCombine RenderNodesPass::adjustFlags( SubmeshComponentCombine submeshCombine )const
 	{
-		return doAdjustSubmeshFlags( flags );
+		auto combine = doAdjustSubmeshComponents( submeshCombine );
+		getEngine()->getSubmeshComponentsRegister().registerSubmeshComponentCombine( combine );
+		return combine;
 	}
 
 	PassComponentCombine RenderNodesPass::adjustFlags( PassComponentCombine combine )const
@@ -309,6 +312,7 @@ namespace castor3d
 	}
 
 	PipelineFlags RenderNodesPass::createPipelineFlags( PassComponentCombine components
+		, SubmeshComponentCombine submeshComponents
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, RenderPassTypeID renderPassTypeId
@@ -317,7 +321,6 @@ namespace castor3d
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
 		, TextureCombine const & textures
-		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
@@ -326,12 +329,12 @@ namespace castor3d
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
 		auto result = PipelineFlags{ adjustFlags( components )
+			, adjustFlags( submeshComponents )
 			, lightingModelId
 			, backgroundModelId
 			, colourBlendMode
 			, alphaBlendMode
 			, renderPassTypeId
-			, submeshFlags
 			, programFlags
 			, sceneFlags
 			, getShaderFlags()
@@ -339,7 +342,7 @@ namespace castor3d
 			, 3u
 			, alphaFunc
 			, adjustFlags( textures )
-			, checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) ? 0u : passLayerIndex
+			, submeshComponents.hasPassMaskFlag ? 0u : passLayerIndex
 			, morphTargets.getOffset()
 			, filtersNonStatic() };
 
@@ -350,7 +353,7 @@ namespace castor3d
 
 		doUpdateFlags( result );
 
-		if ( hasAny( result.components, getEngine()->getPassComponentsRegister().getAlphaBlendingFlag() ) )
+		if ( hasAny( result.pass, getEngine()->getPassComponentsRegister().getAlphaBlendingFlag() ) )
 		{
 			result.alphaFunc = blendAlphaFunc;
 		}
@@ -360,7 +363,7 @@ namespace castor3d
 
 	PipelineFlags RenderNodesPass::createPipelineFlags( Pass const & pass
 		, TextureCombine const & textures
-		, SubmeshFlags const & submeshFlags
+		, SubmeshComponentCombine submeshComponents
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
@@ -368,6 +371,7 @@ namespace castor3d
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
 		return createPipelineFlags( pass.getPassFlags()
+			, submeshComponents
 			, pass.getColourBlendMode()
 			, pass.getAlphaBlendMode()
 			, ( pass.getRenderPassInfo()
@@ -378,7 +382,6 @@ namespace castor3d
 			, pass.getAlphaFunc()
 			, pass.getBlendAlphaFunc()
 			, textures
-			, submeshFlags
 			, programFlags
 			, sceneFlags
 			, topology
@@ -1263,10 +1266,10 @@ namespace castor3d
 	{
 		return true;
 	}
-
-	SubmeshFlags RenderNodesPass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	
+	SubmeshComponentCombine RenderNodesPass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const
 	{
-		return flags;
+		return submeshCombine;
 	}
 
 	ProgramFlags RenderNodesPass::doAdjustProgramFlags( ProgramFlags flags )const
@@ -1299,7 +1302,7 @@ namespace castor3d
 
 	void RenderNodesPass::doUpdateFlags( PipelineFlags & flags )const
 	{
-		flags.m_submeshFlags = adjustFlags( flags.m_submeshFlags );
+		flags.submesh = adjustFlags( flags.submesh );
 		flags.m_programFlags = adjustFlags( flags.m_programFlags );
 		flags.m_sceneFlags = adjustFlags( flags.m_sceneFlags );
 
@@ -1328,19 +1331,22 @@ namespace castor3d
 		if ( flags.textures.configCount == 0
 			&& !flags.forceTexCoords() )
 		{
-			remFlag( flags.m_submeshFlags, SubmeshFlag::eTexcoords );
+			flags.submesh.hasTexcoord0Flag = false;
+			flags.submesh.hasTexcoord1Flag = false;
+			flags.submesh.hasTexcoord2Flag = false;
+			flags.submesh.hasTexcoord3Flag = false;
 		}
 
-		if ( checkFlag( flags.m_submeshFlags, SubmeshFlag::ePassMasks ) )
+		if ( flags.submesh.hasPassMaskFlag )
 		{
 			flags.alphaFunc = VK_COMPARE_OP_GREATER;
 		}
 
-		if ( !checkFlag( flags.m_submeshFlags, SubmeshFlag::eColours ) )
+		if ( !flags.submesh.hasColourFlag )
 		{
 			remFlag( flags.m_shaderFlags, ShaderFlag::eColour );
 		}
-
+		
 		doAdjustFlags( flags );
 	}
 
@@ -1436,7 +1442,7 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
-		CU_Require( areValidPassFlags( flags.components ) );
+		CU_Require( areValidPassFlags( flags.pass ) );
 
 		if ( !flags.isBillboard()
 			|| !flags.writeShadowMap() )
@@ -1521,7 +1527,7 @@ namespace castor3d
 	{
 		sdw::TaskWriter writer{ builder };
 		bool checkCones = flags.isFrontCulled()
-			&& flags.hasSubmeshData( SubmeshFlag::eNormals )
+			&& flags.submesh.hasNormalFlag
 			&& !flags.hasWorldPosInputs();
 
 		C3D_Camera( writer

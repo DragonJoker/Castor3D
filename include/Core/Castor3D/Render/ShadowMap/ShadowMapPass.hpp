@@ -100,7 +100,7 @@ namespace castor3d
 
 	private:
 		bool doIsValidRenderable( RenderedObject const & object )const override;
-		SubmeshFlags doAdjustSubmeshFlags( SubmeshFlags flags )const override;
+		SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const override;
 		void doFillAdditionalBindings( PipelineFlags const & flags
 			, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override;
 		void doFillAdditionalDescriptor( PipelineFlags const & flags

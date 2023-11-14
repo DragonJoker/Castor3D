@@ -66,8 +66,8 @@ namespace castor3d
 		static bool isValidComponent( PipelineFlags const & flags
 			, PassComponentID componentId )
 		{
-			return flags.components.flags.end() != std::find_if( flags.components.flags.begin()
-				, flags.components.flags.end()
+			return flags.pass.flags.end() != std::find_if( flags.pass.flags.begin()
+				, flags.pass.flags.end()
 				, [&componentId]( PassComponentFlag const & lookup )
 				{
 					auto lookupComponentId = splitPassComponentFlag( lookup ).first;
@@ -408,8 +408,8 @@ namespace castor3d
 
 	bool PassComponentRegister::hasOpacity( PipelineFlags const & flags )const
 	{
-		return ( hasAny( flags.components, getAlphaBlendingFlag() )
-			|| ( hasAny( flags.components, getAlphaTestFlag() ) && ( flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) ) );
+		return ( hasAny( flags.pass, getAlphaBlendingFlag() )
+			|| ( hasAny( flags.pass, getAlphaTestFlag() ) && ( flags.alphaFunc != VK_COMPARE_OP_ALWAYS ) ) );
 	}
 
 	bool PassComponentRegister::needsEnvironmentMapping( PassComponentCombineID combineID )const

@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MeshletComponent_H___
@@ -24,6 +24,25 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	public:
+		class Plugin
+			: public SubmeshComponentPlugin
+		{
+		public:
+			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
+				: SubmeshComponentPlugin{ submeshComponents }
+			{
+			}
+
+			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
+			{
+				return castor::makeUniqueDerived< SubmeshComponent, MeshletComponent >( submesh );
+			}
+		};
+
+		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
+		{
+			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+		}
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -52,7 +71,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		C3D_API ProgramFlags getProgramFlags( Material const & material )const override;
+		C3D_API ProgramFlags getProgramFlags( Material const & material )const noexcept override;
 
 		C3D_API void createDescriptorSet( Geometry const & geometry );
 		C3D_API ashes::DescriptorSet const & getDescriptorSet( Geometry const & geometry )const;
@@ -103,7 +122,7 @@ namespace castor3d
 		void doCreateDescriptorLayout( RenderDevice const & device );
 
 	public:
-		C3D_API static castor::String const Name;
+		C3D_API static castor::String const TypeName;
 
 	private:
 		GpuBufferOffsetT< Meshlet > m_meshletBuffer;
