@@ -30,12 +30,34 @@ namespace castor3d
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
 		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache );
+	C3D_API void fillBaseSurfaceType( SubmeshData submeshData
+		, sdw::type::IOStruct & type
+		, uint32_t & index );
+	C3D_API void fillBaseSurfaceType( SubmeshData submeshData
+		, sdw::type::BaseStruct & type );
 
 	template< SubmeshData SubmeshDataT, typename DataT >
 	class BaseDataComponentT
 		: public SubmeshComponent
 	{
 	public:
+		struct SurfaceShader
+			: public shader::SubmeshSurfaceShader
+		{
+			C3D_API void fillSurfaceType( sdw::type::Struct & type
+				, uint32_t * index )const override
+			{
+				if ( index )
+				{
+					fillBaseSurfaceType( SubmeshDataT, static_cast< sdw::type::IOStruct & >( type ), *index );
+				}
+				else
+				{
+					fillBaseSurfaceType( SubmeshDataT, static_cast< sdw::type::BaseStruct & >( type ) );
+				}
+			}
+		};
+
 		class Plugin
 			: public SubmeshComponentPlugin
 		{
@@ -98,6 +120,11 @@ namespace castor3d
 			SubmeshComponentFlag getVelocityFlag()const noexcept override
 			{
 				return SubmeshDataT == SubmeshData::eVelocity ? getComponentFlags() : 0u;
+			}
+
+			shader::SubmeshSurfaceShaderPtr createSurfaceShader()const override
+			{
+				return std::make_unique< SurfaceShader >();
 			}
 		};
 

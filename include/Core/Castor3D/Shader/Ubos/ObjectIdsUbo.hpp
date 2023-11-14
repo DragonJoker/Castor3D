@@ -60,7 +60,7 @@ namespace castor3d::shader
 
 	template< ast::var::Flag FlagT >
 	static sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
-		, shader::VertexSurfaceT< FlagT > const & surface
+		, shader::MeshVertexT< FlagT > const & surface
 		, sdw::UInt pipelineID
 		, sdw::UInt drawID
 		, PipelineFlags const & flags )

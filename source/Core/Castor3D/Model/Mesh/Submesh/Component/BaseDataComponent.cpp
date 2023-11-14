@@ -112,4 +112,85 @@ namespace castor3d
 			layouts.emplace_back( layoutIt->second );
 		}
 	}
+
+	void fillBaseSurfaceType( SubmeshData submeshData
+		, sdw::type::IOStruct & type
+		, uint32_t & index )
+	{
+		switch (submeshData)
+		{
+		case castor3d::SubmeshData::ePositions:
+			type.declMember( "position", ast::type::Kind::eVec4F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::eNormals:
+			type.declMember( "normal", ast::type::Kind::eVec3F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::eTangents:
+			type.declMember( "tangent", ast::type::Kind::eVec4F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::eBitangents:
+			type.declMember( "bitangent", ast::type::Kind::eVec3F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::eTexcoords0:
+			type.declMember( "texture0", ast::type::Kind::eVec3F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::eTexcoords1:
+			type.declMember( "texture1", ast::type::Kind::eVec3F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::eTexcoords2:
+			type.declMember( "texture2", ast::type::Kind::eVec3F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::eTexcoords3:
+			type.declMember( "texture3", ast::type::Kind::eVec3F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::eColours:
+			type.declMember( "colour", ast::type::Kind::eVec3F, ast::type::NotArray, index++ );
+			break;
+		case castor3d::SubmeshData::ePassMasks:
+			type.declMember( "passMasks", ast::type::Kind::eVec4U, ast::type::NotArray, index++ );
+			break;
+		default:
+			break;
+		}
+	}
+
+	void fillBaseSurfaceType( SubmeshData submeshData
+		, sdw::type::BaseStruct & type )
+	{
+		switch (submeshData)
+		{
+		case castor3d::SubmeshData::ePositions:
+			type.declMember( "position", ast::type::Kind::eVec4F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::eNormals:
+			type.declMember( "normal", ast::type::Kind::eVec3F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::eTangents:
+			type.declMember( "tangent", ast::type::Kind::eVec4F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::eBitangents:
+			type.declMember( "bitangent", ast::type::Kind::eVec3F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::eTexcoords0:
+			type.declMember( "texture0", ast::type::Kind::eVec3F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::eTexcoords1:
+			type.declMember( "texture1", ast::type::Kind::eVec3F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::eTexcoords2:
+			type.declMember( "texture2", ast::type::Kind::eVec3F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::eTexcoords3:
+			type.declMember( "texture3", ast::type::Kind::eVec3F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::eColours:
+			type.declMember( "colour", ast::type::Kind::eVec3F, ast::type::NotArray );
+			break;
+		case castor3d::SubmeshData::ePassMasks:
+			type.declMember( "passMasks", ast::type::Kind::eVec4U, ast::type::NotArray );
+			break;
+		default:
+			break;
+		}
+	}
 }

@@ -28,8 +28,10 @@
 #include <Castor3D/Shader/Shaders/GlslLight.hpp>
 #include <Castor3D/Shader/Shaders/GlslLightSurface.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
+#include <Castor3D/Shader/Shaders/GlslMeshVertex.hpp>
 #include <Castor3D/Shader/Shaders/GlslOutputComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslReflection.hpp>
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include <Castor3D/Shader/Shaders/GlslSurface.hpp>
 #include <Castor3D/Shader/Shaders/GlslTextureAnimation.hpp>
 #include <Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp>
@@ -541,6 +543,8 @@ namespace ocean
 	{
 		using namespace castor3d;
 		sdw::VertexWriter writer{ builder };
+		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
+			, flags };
 
 		castor3d::shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
@@ -563,12 +567,9 @@ namespace ocean
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< castor3d::shader::VertexSurfaceT, rdpass::PatchT >( sdw::VertexInT< castor3d::shader::VertexSurfaceT >{ writer
-				, flags }
-			, sdw::VertexOutT< rdpass::PatchT >{ writer
-				, passShaders
-				, flags }
-			, [&]( sdw::VertexInT< castor3d::shader::VertexSurfaceT > in
+		writer.implementMainT< castor3d::shader::MeshVertexT, rdpass::PatchT >( sdw::VertexInT< castor3d::shader::MeshVertexT >{ writer, submeshShaders }
+			, sdw::VertexOutT< rdpass::PatchT >{ writer, passShaders, flags }
+			, [&]( sdw::VertexInT< castor3d::shader::MeshVertexT > in
 				, sdw::VertexOutT< rdpass::PatchT > out )
 			{
 				out.vtx.position = in.position;

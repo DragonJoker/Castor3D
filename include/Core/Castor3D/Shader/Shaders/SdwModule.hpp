@@ -112,13 +112,11 @@ namespace castor3d::shader
 	struct SurfaceBase;
 	struct RasterizerSurfaceBase;
 
-	template< typename TexcoordT >
-	struct BlendComponentsT;
 	struct Surface;
 	template< typename TexcoordT, ast::var::Flag FlagT >
 	struct RasterizerSurfaceT;
 	template< ast::var::Flag FlagT >
-	struct VertexSurfaceT;
+	struct MeshVertexT;
 	template< sdw::var::Flag FlagT >
 	struct VoxelSurfaceT;
 	template< ast::var::Flag FlagT >
@@ -135,12 +133,10 @@ namespace castor3d::shader
 	template< ast::var::Flag FlagT >
 	using FragmentSurfaceT = RasterizerSurfaceT< sdw::Vec3, FlagT >;
 	using RasterizerSurface = RasterizerSurfaceT< sdw::Vec3, ast::var::Flag::eNone >;
-	using Vec3BlendComponents = BlendComponentsT< sdw::Vec3 >;
 	using DerivFragmentSurface = RasterizerSurfaceT< DerivTex, ast::var::Flag::eNone >;
 	template< typename TexcoordT >
 	using RasterSurfaceT = RasterizerSurfaceT< TexcoordT, ast::var::Flag::eNone >;
-	using DerivBlendComponents = BlendComponentsT< DerivTex >;
-	using VertexSurface = VertexSurfaceT< sdw::var::Flag::eNone >;
+	using MeshVertex = MeshVertexT< sdw::var::Flag::eNone >;
 	using VoxelSurface = VoxelSurfaceT< sdw::var::Flag::eNone >;
 	using OverlaySurface = OverlaySurfaceT< sdw::var::Flag::eNone >;
 
@@ -181,6 +177,7 @@ namespace castor3d::shader
 	class ShadowsBuffer;
 	class SssProfiles;
 	class SssTransmittance;
+	class SubmeshShaders;
 	class TextureAnimations;
 	class TextureConfigurations;
 	class Utils;
@@ -252,7 +249,7 @@ namespace castor3d::shader
 	Writer_Parameter( Surface );
 	Writer_Parameter( TextureAnimData );
 	Writer_Parameter( TextureConfigData );
-	Writer_Parameter( VertexSurface );
+	Writer_Parameter( MeshVertex );
 	Writer_Parameter( VoxelData );
 	Writer_Parameter( VoxelSurface );
 

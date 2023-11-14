@@ -1992,6 +1992,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslLightSurface.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslMaterial.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslMeshlet.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslMeshVertex.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputComponents.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslPassShaders.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslRay.cpp
@@ -2000,6 +2001,7 @@ set( ${PROJECT_NAME}_FOLDER_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslSheenBRDF.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslSssProfile.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslSssTransmittance.cpp
+	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslSubmeshShaders.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslSurface.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslTextureAnimation.cpp
 	${CASTOR_SOURCE_DIR}/source/Core/${PROJECT_NAME}/Shader/Shaders/GlslTextureConfiguration.cpp
@@ -2026,6 +2028,8 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslLightSurface.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslMaterial.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslMeshlet.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslMeshVertex.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslMeshVertex.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputComponents.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputs.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslOutputs.inl
@@ -2037,6 +2041,7 @@ set( ${PROJECT_NAME}_FOLDER_HDR_FILES
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslSheenBRDF.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslSssProfile.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslSssTransmittance.hpp
+	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslSubmeshShaders.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslSurface.hpp
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslSurface.inl
 	${CASTOR_SOURCE_DIR}/include/Core/${PROJECT_NAME}/Shader/Shaders/GlslTaskPayload.hpp

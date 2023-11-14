@@ -181,38 +181,6 @@ namespace castor3d::shader
 		sdw::Vec3 center;
 	};
 
-	template< sdw::var::Flag FlagT >
-	struct VertexSurfaceT
-		: public sdw::StructInstance
-	{
-		VertexSurfaceT( sdw::ShaderWriter & writer
-			, sdw::expr::ExprPtr expr
-			, bool enabled );
-
-		SDW_DeclStructInstance( , VertexSurfaceT );
-
-		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
-			, sdw::EntryPoint entryPoint
-			, PipelineFlags const & flags );
-		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
-
-		// Base
-		sdw::Vec4 position;
-		sdw::Vec3 normal;
-		sdw::Vec4 tangent;
-		sdw::Vec3 bitangent;
-		sdw::Vec3 texture0;
-		sdw::Vec3 texture1;
-		sdw::Vec3 texture2;
-		sdw::Vec3 texture3;
-		sdw::Vec3 colour;
-		sdw::UVec4 passMasks;
-		// Velocity
-		sdw::Vec3 velocity;
-		// Instantiation
-		sdw::UVec4 objectIds;
-	};
-
 	template< typename TexcoordT, sdw::var::Flag FlagT >
 	struct RasterizerSurfaceT
 		: public RasterizerSurfaceBase

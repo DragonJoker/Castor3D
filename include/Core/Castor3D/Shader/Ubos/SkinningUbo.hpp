@@ -106,7 +106,7 @@ namespace castor3d
 		 */
 		template< ast::var::Flag FlagT >
 		static sdw::Mat4 computeTransform( shader::SkinningData const & data
-			, shader::VertexSurfaceT< FlagT > const & surface
+			, shader::MeshVertexT< FlagT > const & surface
 			, sdw::ShaderWriter & writer
 			, sdw::Int const & instanceIndex
 			, sdw::UVec4 const & boneIds0

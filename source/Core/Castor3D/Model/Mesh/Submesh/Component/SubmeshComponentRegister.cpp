@@ -25,32 +25,7 @@ namespace castor3d
 			, SubmeshComponentID componentId )
 		{
 			return componentId != InvalidId
-				&& flags.submesh.flags.end() != std::find_if( flags.submesh.flags.begin()
-					, flags.submesh.flags.end()
-					, [&componentId]( SubmeshComponentFlag const & lookup )
-					{
-						auto lookupComponentId = splitSubmeshComponentFlag( lookup );
-						return lookupComponentId == componentId;
-					} );
-		}
-
-		template< typename FlagsT >
-		void getComponentShadersT( FlagsT const & flags
-			, ComponentModeFlags filter
-			, SubmeshComponentID componentId
-			, SubmeshComponentPlugin const & component
-			, std::vector< shader::SubmeshSurfaceShaderPtr > & shaders )
-		{
-			if ( isValidComponent( flags, componentId ) )
-			{
-				if ( component.isComponentNeeded( filter ) )
-				{
-					if ( auto shader = component.createSurfaceShader() )
-					{
-						shaders.push_back( std::move( shader ) );
-					}
-				}
-			}
+				&& flags.submesh.flags.end() != flags.submesh.flags.find( componentId );
 		}
 
 		static SubmeshComponentID addCombine( SubmeshComponentCombine combine
@@ -249,30 +224,19 @@ namespace castor3d
 		return SubmeshData::eCount;
 	}
 
-	std::vector< shader::SubmeshSurfaceShaderPtr > SubmeshComponentRegister::getSurfaceShaders( PipelineFlags const & flags
-		, ComponentModeFlags filter )const
+	std::vector< shader::SubmeshSurfaceShader * > SubmeshComponentRegister::getSurfaceShaders( PipelineFlags const & flags )const
 	{
-		std::vector< shader::SubmeshSurfaceShaderPtr > result;
+		std::vector< shader::SubmeshSurfaceShader * > result;
 
-		for ( auto & componentDesc : m_registered )
+		for ( auto & [componentId, surfaceShader] : m_surfaceShaders )
 		{
-			smshcompreg::getComponentShadersT( flags
-				, filter
-				, componentDesc.id
-				, *componentDesc.plugin
-				, result );
+			if ( smshcompreg::isValidComponent( flags, componentId ) )
+			{
+				result.push_back( surfaceShader.get() );
+			}
 		}
 
 		return result;
-	}
-
-	void SubmeshComponentRegister::fillSurface( sdw::type::BaseStruct & material
-		, sdw::expr::ExprList & inits )const
-	{
-		for ( auto & fill : m_fillSurface )
-		{
-			fill( material, inits );
-		}
 	}
 
 	SubmeshComponentID SubmeshComponentRegister::registerComponent( castor::String const & componentType
@@ -439,12 +403,6 @@ namespace castor3d
 
 		if ( auto shader = componentDesc.plugin->createSurfaceShader() )
 		{
-			auto pshader = shader.get();
-			m_fillSurface.push_back( [pshader]( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )
-				{
-					pshader->fillSurfaceType( type, inits );
-				} );
 			m_surfaceShaders.emplace( componentDesc.id, std::move( shader ) );
 		}
 
