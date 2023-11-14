@@ -56,10 +56,7 @@ namespace castor3d
 		 *	Gestion des composants de sortie des shaders.
 		 */
 		/**@{*/
-		C3D_API std::vector< shader::SubmeshSurfaceShaderPtr > getSurfaceShaders( PipelineFlags const & flags
-			, ComponentModeFlags filter )const;
-		C3D_API void fillSurface( sdw::type::BaseStruct & material
-			, sdw::expr::ExprList & inits )const;
+		C3D_API std::vector< shader::SubmeshSurfaceShader * > getSurfaceShaders( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\name
@@ -126,7 +123,7 @@ namespace castor3d
 
 		SubmeshComponentFlag getTangentFlag()const noexcept
 		{
-			return m_triangleIndexFlag;
+			return m_tangentFlag;
 		}
 
 		SubmeshComponentFlag getBitangentFlag()const noexcept
@@ -161,7 +158,7 @@ namespace castor3d
 
 		SubmeshComponentFlag getSkinFlag()const noexcept
 		{
-			return m_tangentFlag;
+			return m_skinFlag;
 		}
 
 		SubmeshComponentFlag getMorphFlag()const noexcept
@@ -196,14 +193,10 @@ namespace castor3d
 		void unregisterComponent( SubmeshComponentID id );
 		void fillSubmeshComponentCombine( SubmeshComponentCombine & combine );
 
-		using FillSurfaceType = std::function< void( sdw::type::BaseStruct & type
-			, sdw::expr::ExprList & inits ) >;
-
 	private:
 		Components m_registered;
 		std::map< SubmeshComponentID, shader::SubmeshSurfaceShaderPtr > m_surfaceShaders;
 		bool m_pauseOrder{ true };
-		std::vector< FillSurfaceType > m_fillSurface;
 		VkDeviceSize m_bufferStride{};
 		SubmeshComponentCombine m_defaultComponents;
 		mutable std::vector< SubmeshComponentCombine > m_componentCombines{};

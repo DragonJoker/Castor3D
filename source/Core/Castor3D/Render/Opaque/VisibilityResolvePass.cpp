@@ -35,10 +35,12 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMeshVertex.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -433,10 +435,12 @@ namespace castor3d
 		{
 			explicit VisibilityHelpers( sdw::ShaderWriter & writer
 				, shader::PassShaders & passShaders
+				, shader::SubmeshShaders & submeshShaders
 				, PipelineFlags const & flags
 				, uint32_t stride )
 				: m_writer{ writer }
 				, m_passShaders{ passShaders }
+				, m_submeshShaders{ submeshShaders }
 				, m_flags{ flags }
 				, m_stride{ stride }
 				, m_inIndices{ DeclareSsbo( c3d_inIndices
@@ -591,9 +595,9 @@ namespace castor3d
 			void loadVertices( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
 				, shader::ModelData const & pmodelData
-				, shader::VertexSurface & pv0
-				, shader::VertexSurface & pv1
-				, shader::VertexSurface & pv2 )
+				, shader::MeshVertex & pv0
+				, shader::MeshVertex & pv1
+				, shader::MeshVertex & pv2 )
 			{
 				if ( !m_loadVertices )
 				{
@@ -601,14 +605,14 @@ namespace castor3d
 						, [&]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
 							, shader::ModelData const & modelData
-							, shader::VertexSurface v0
-							, shader::VertexSurface v1
-							, shader::VertexSurface v2 )
+							, shader::MeshVertex v0
+							, shader::MeshVertex v1
+							, shader::MeshVertex v2 )
 						{
-							auto loadVertex = m_writer.implementFunction< shader::VertexSurface >( "loadVertex"
-								, [&]( sdw::UInt const & vertexId )
+							auto loadVertex = m_writer.implementFunction< sdw::Void >( "loadVertex"
+								, [&]( sdw::UInt const & vertexId
+									, shader::MeshVertex result )
 								{
-									auto result = m_writer.declLocale< shader::VertexSurface >( std::string( "result" ) );
 									result.position = m_inPosition[vertexId].position;
 									result.normal = m_inNormal[vertexId].xyz();
 									result.tangent = m_inTangent[vertexId];
@@ -620,10 +624,9 @@ namespace castor3d
 									result.colour = m_inColour[vertexId].xyz();
 									result.passMasks = m_inPassMasks[vertexId];
 									result.velocity = m_inVelocity[vertexId].xyz();
-
-									m_writer.returnStmt( result );
 								}
-							, sdw::InUInt{ m_writer, "vertexId" } );
+								, sdw::InUInt{ m_writer, "vertexId" }
+								, shader::OutMeshVertex{ m_writer, "result", m_submeshShaders } );
 
 							auto baseIndex = m_writer.declLocale( "baseIndex"
 								, modelData.getIndexOffset() + primitiveId * 3u );
@@ -633,16 +636,16 @@ namespace castor3d
 									, m_inIndices[baseIndex + 2u] ) );
 							auto baseVertex = m_writer.declLocale( "baseVertex"
 								, modelData.getVertexOffset() );
-							v0 = loadVertex( baseVertex + indices.x() );
-							v1 = loadVertex( baseVertex + indices.y() );
-							v2 = loadVertex( baseVertex + indices.z() );
+							loadVertex( baseVertex + indices.x(), v0 );
+							loadVertex( baseVertex + indices.y(), v1 );
+							loadVertex( baseVertex + indices.z(), v2 );
 						}
 						, sdw::InUInt{ m_writer, "nodeId" }
 						, sdw::InUInt{ m_writer, "primitiveId" }
 						, shader::InModelData{ m_writer, "modelData" }
-						, shader::OutVertexSurface{ m_writer, "v0" }
-						, shader::OutVertexSurface{ m_writer, "v1" }
-						, shader::OutVertexSurface{ m_writer, "v2" } );
+						, shader::OutMeshVertex{ m_writer, "v0", m_submeshShaders }
+						, shader::OutMeshVertex{ m_writer, "v1", m_submeshShaders }
+						, shader::OutMeshVertex{ m_writer, "v2", m_submeshShaders } );
 				}
 
 				m_loadVertices( pnodeId, pprimitiveId, pmodelData, pv0, pv1, pv2 );
@@ -651,9 +654,9 @@ namespace castor3d
 			void loadVertices( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
 				, shader::ModelData const & pmodelData
-				, shader::VertexSurface & pv0
-				, shader::VertexSurface & pv1
-				, shader::VertexSurface & pv2
+				, shader::MeshVertex & pv0
+				, shader::MeshVertex & pv1
+				, shader::MeshVertex & pv2
 				, shader::CameraData const & c3d_cameraData
 				, sdw::Array< shader::BillboardData > const & c3d_billboardData )
 			{
@@ -663,9 +666,9 @@ namespace castor3d
 						, [&]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
 							, shader::ModelData const & modelData
-							, shader::VertexSurface v0
-							, shader::VertexSurface v1
-							, shader::VertexSurface v2 )
+							, shader::MeshVertex v0
+							, shader::MeshVertex v1
+							, shader::MeshVertex v2 )
 						{
 							auto bbPositions = m_writer.declConstantArray( "bbPositions"
 								, std::vector< sdw::Vec3 >{ vec3( -0.5_f, -0.5_f, 1.0_f )
@@ -733,9 +736,9 @@ namespace castor3d
 						, sdw::InUInt{ m_writer, "nodeId" }
 						, sdw::InUInt{ m_writer, "primitiveId" }
 						, shader::InModelData{ m_writer, "modelData" }
-						, shader::OutVertexSurface{ m_writer, "v0" }
-						, shader::OutVertexSurface{ m_writer, "v1" }
-						, shader::OutVertexSurface{ m_writer, "v2" } );
+						, shader::OutMeshVertex{ m_writer, "v0", m_submeshShaders }
+						, shader::OutMeshVertex{ m_writer, "v1", m_submeshShaders }
+						, shader::OutMeshVertex{ m_writer, "v2", m_submeshShaders } );
 				}
 
 				m_loadVertices( pnodeId, pprimitiveId, pmodelData, pv0, pv1, pv2 );
@@ -789,9 +792,9 @@ namespace castor3d
 							auto screenCoords = m_writer.declLocale( "screenCoords"
 								, fma( hdrCoords, vec2( 2.0_f ), vec2( -1.0_f ) ) );
 
-							auto v0 = m_writer.declLocale< shader::VertexSurface >( "v0" );
-							auto v1 = m_writer.declLocale< shader::VertexSurface >( "v1" );
-							auto v2 = m_writer.declLocale< shader::VertexSurface >( "v2" );
+							auto v0 = m_writer.declLocale< shader::MeshVertex >( "v0", true, m_submeshShaders );
+							auto v1 = m_writer.declLocale< shader::MeshVertex >( "v1", true, m_submeshShaders );
+							auto v2 = m_writer.declLocale< shader::MeshVertex >( "v2", true, m_submeshShaders );
 
 							if ( m_stride == 0u )
 							{
@@ -996,6 +999,7 @@ namespace castor3d
 		private:
 			sdw::ShaderWriter & m_writer;
 			shader::PassShaders & m_passShaders;
+			shader::SubmeshShaders & m_submeshShaders;
 			PipelineFlags const & m_flags;
 			uint32_t m_stride;
 			sdw::UInt32Array m_inIndices;
@@ -1020,9 +1024,9 @@ namespace castor3d
 				, sdw::InUInt
 				, sdw::InUInt
 				, shader::InModelData
-				, shader::OutVertexSurface
-				, shader::OutVertexSurface
-				, shader::OutVertexSurface > m_loadVertices;
+				, shader::OutMeshVertex
+				, shader::OutMeshVertex
+				, shader::OutMeshVertex > m_loadVertices;
 			sdw::Function< shader::DerivFragmentSurface
 				, sdw::InUInt
 				, sdw::InUInt
@@ -1057,6 +1061,8 @@ namespace castor3d
 				, ( ComponentModeFlag::eDerivTex
 					| VisibilityResolvePass::getComponentsMask() )
 				, utils };
+			shader::SubmeshShaders submeshShaders{ engine.getSubmeshComponentsRegister()
+				, flags };
 			shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 
 			auto index = uint32_t( InOutBindings::eCount );
@@ -1148,7 +1154,7 @@ namespace castor3d
 			pcb.end();
 
 			shader::Fog fog{ writer };
-			VisibilityHelpers visHelpers{ writer, passShaders, flags, stride };
+			VisibilityHelpers visHelpers{ writer, passShaders, submeshShaders, flags, stride };
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
 				, [&]( sdw::IVec2 const & ipixel

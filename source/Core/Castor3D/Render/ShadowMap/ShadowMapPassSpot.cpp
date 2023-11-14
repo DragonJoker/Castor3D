@@ -18,8 +18,10 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include <Castor3D/Shader/Shaders/GlslMeshVertex.hpp>
 #include "Castor3D/Shader/Shaders/GlslOutputs.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -132,6 +134,8 @@ namespace castor3d
 			, flags
 			, ComponentModeFlag::eNone
 			, utils };
+		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
+			, flags };
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
@@ -152,12 +156,9 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 
-		writer.implementMainT< shader::VertexSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::VertexSurfaceT >{ writer
-				, flags }
-			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer
-				, passShaders
-				, flags }
-			, [&]( sdw::VertexInT< shader::VertexSurfaceT > in
+		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+			, [&]( sdw::VertexInT< shader::MeshVertexT > in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
 				auto nodeId = writer.declLocale( "nodeId"

@@ -31,21 +31,17 @@ namespace castor3d
 			/**
 			*\~english
 			*\brief
-			*	Fills the surface shader struct with the members provided by this component, and their initialisers.
+			*	Fills the surface shader struct with the members provided by this component.
 			*\param[in,out] type
 			*	Receives the members.
-			*\param[in] inits
-			*	Receives the members initialisers.
 			*\~french
 			*\brief
-			*	Remplit la structure shader de surface avec les membres fournis par ce composant, et leurs initialiseurs.
+			*	Remplit la structure shader de surface avec les membres fournis par ce composant.
 			*\param[in] type
 			*	Reçoit les membres.
-			*\param[in] inits
-			*	Reçoit les initialiseurs des membres.
 			*/
-			C3D_API virtual void fillSurfaceType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const
+			C3D_API virtual void fillSurfaceType( sdw::type::Struct & type
+				, uint32_t * index )const
 			{
 			}
 		};
@@ -247,26 +243,6 @@ namespace castor3d
 		*	Shader functions.
 		*/
 		/**@{*/
-		/**
-		*\~english
-		*\brief
-		*	Tells if the component's lighting shaders are needed.
-		*\param[in] textures
-		*	To check from texturing viewpoint.
-		*\param[in,out] filter
-		*	To check from render pass viewpoint.
-		*\~french
-		*\brief
-		*	Détermine si les shaders pour l'éclairage du composant sont nécessaires.
-		*\param[in] textures
-		*	Pour vérifier du point de vue des textures.
-		*\param[in,out] filter
-		*	Pour vérifier du point de vue de la passe de rendu.
-		*/
-		C3D_API virtual bool isComponentNeeded( ComponentModeFlags const & filter )const noexcept
-		{
-			return false;
-		}
 		/**
 		*\~english
 		*\brief

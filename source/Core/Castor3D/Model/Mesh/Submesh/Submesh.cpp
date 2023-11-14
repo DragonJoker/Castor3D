@@ -7,6 +7,7 @@
 #include "Castor3D/Cache/MaterialCache.hpp"
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
+#include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
@@ -231,6 +232,32 @@ namespace castor3d
 			}
 
 			m_dirty = !m_initialised;
+		}
+	}
+
+	void Submesh::accept( ConfigurationVisitorBase & vis )
+	{
+		castor::StringArray topologies;
+		topologies.push_back( cuT( "Point List" ) );
+		topologies.push_back( cuT( "Line List" ) );
+		topologies.push_back( cuT( "Line Strip" ) );
+		topologies.push_back( cuT( "Triangle List" ) );
+		topologies.push_back( cuT( "Triangle Strip" ) );
+		topologies.push_back( cuT( "Triangle Fan" ) );
+		topologies.push_back( cuT( "Line List With Adjacency" ) );
+		topologies.push_back( cuT( "Line Strip With Adjacency" ) );
+		topologies.push_back( cuT( "Triangle List With Adjacency" ) );
+		topologies.push_back( cuT( "Triangle Strip With Adjacency" ) );
+		topologies.push_back( cuT( "Patch List" ) );
+		vis.visit< VkPrimitiveTopology >( cuT( "Topology" ), m_topology, topologies
+			, [this]( int oldV, int newV )
+			{
+				m_topology = VkPrimitiveTopology( newV );
+			} );
+
+		for ( auto & component : m_components )
+		{
+			component.second->accept( vis );
 		}
 	}
 

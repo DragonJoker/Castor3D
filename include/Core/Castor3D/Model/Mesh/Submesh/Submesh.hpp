@@ -90,6 +90,15 @@ namespace castor3d
 		 */
 		C3D_API void upload( UploadData & uploader );
 		/**
+		*\~english
+		*\brief				ConfigurationVisitorBase acceptance function.
+		*\param[in,out]		vis	The ... visitor.
+		*\~french
+		*\brief				Fonction d'acceptation de ConfigurationVisitorBase.
+		*\param[in,out]		vis	Le ... visiteur.
+		*/
+		C3D_API void accept( ConfigurationVisitorBase & vis );
+		/**
 		 *\~english
 		 *\brief		Computes the containers (cube and sphere)
 		 *\~french
