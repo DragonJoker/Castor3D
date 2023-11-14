@@ -214,12 +214,45 @@ namespace castor3d
 		{
 			if ( !m_initialising.exchange( true ) )
 			{
+				UnitArray failed;
+
 				for ( auto & unit : m_textureUnits )
 				{
-					while ( !unit->isInitialised() )
+					while ( !unit->isInitialised() && !unit->failed() )
 					{
 						std::this_thread::sleep_for( 1_ms );
 					}
+
+					if ( unit->failed() )
+					{
+						failed.push_back( unit );
+					}
+				}
+
+				if ( !failed.empty() )
+				{
+					for ( auto & unit : failed )
+					{
+						auto it = std::find( m_textureUnits.begin()
+							, m_textureUnits.end()
+							, unit );
+						m_textureUnits.erase( it );
+					}
+
+					std::vector< TextureFlagConfiguration > textureConfigs;
+
+					for ( auto & unit : m_textureUnits )
+					{
+						for ( auto & component : unit->getConfiguration().components )
+						{
+							if ( component.componentsMask )
+							{
+								textureConfigs.push_back( component );
+							}
+						}
+					}
+
+					getPassComponentsRegister().updateMapComponents( textureConfigs, *this );
 				}
 
 				m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );

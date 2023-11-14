@@ -197,20 +197,10 @@ namespace castor3d
 
 	void RenderNodesPass::countNodes( RenderInfo & info )const
 	{
-		for ( auto & node : getCuller().getSubmeshes() )
-		{
-			if ( node.visibleOrFrontCulled )
-			{
-				++info.visibleObjectsCount;
-				info.visibleFaceCount += node.node->data.getFaceCount();
-				info.visibleVertexCount += node.node->data.getPointsCount();
-			}
-
-			++info.totalObjectsCount;
-			info.totalFaceCount += node.node->data.getFaceCount();
-			info.totalVertexCount += node.node->data.getPointsCount();
-		}
-
+		auto & visible = getVisibleCounts();
+		info.visible.objectCount += visible.objectCount;
+		info.visible.faceCount += visible.faceCount;
+		info.visible.vertexCount += visible.vertexCount;
 		info.drawCalls += getDrawCallsCount();
 	}
 
@@ -1069,6 +1059,11 @@ namespace castor3d
 	uint32_t RenderNodesPass::getDrawCallsCount()const
 	{
 		return m_renderQueue->getDrawCallsCount();
+	}
+
+	RenderCounts const & RenderNodesPass::getVisibleCounts()const
+	{
+		return m_renderQueue->getVisibleCounts();
 	}
 
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline

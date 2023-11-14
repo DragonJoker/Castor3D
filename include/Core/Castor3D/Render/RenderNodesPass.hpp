@@ -786,6 +786,8 @@ namespace castor3d
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
 			, ashes::BufferBase const & buffer )const;
 		C3D_API uint32_t getDrawCallsCount()const;
+		C3D_API RenderCounts const & getVisibleCounts()const;
+
 
 		ComponentModeFlags getComponentsMask()const noexcept
 		{
@@ -1141,7 +1143,7 @@ namespace castor3d
 			ashes::DescriptorSetLayoutPtr layout;
 			ashes::DescriptorSetPtr set;
 		};
-		using PassDescriptorsMap = std::map< size_t, PassDescriptors >;
+		using PassDescriptorsMap = std::unordered_map< size_t, PassDescriptors >;
 
 		PassDescriptorsMap m_additionalDescriptors;
 		std::vector< RenderPipelineUPtr > m_frontPipelines;

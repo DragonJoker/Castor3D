@@ -95,6 +95,11 @@ namespace castor3d
 		{
 			return m_culledBillboards;
 		}
+
+		RenderCounts const & getTotalCounts()const noexcept
+		{
+			return m_total;
+		}
 		/**@}*/
 
 	public:
@@ -129,7 +134,7 @@ namespace castor3d
 		FramePassTimerUPtr m_timerDirty;
 		FramePassTimerUPtr m_timerCompute;
 		std::optional< bool > m_isStatic;
-
+		RenderCounts m_total{};
 		NodeArrayT< SubmeshRenderNode > m_culledSubmeshes;
 		NodeArrayT< BillboardRenderNode > m_culledBillboards;
 	};

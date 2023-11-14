@@ -10,6 +10,9 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Named.hpp>
 
+#include <ashespp/Pipeline/Pipeline.hpp>
+#include <ashespp/Pipeline/PipelineLayout.hpp>
+
 #include <RenderGraph/RunnablePass.hpp>
 
 namespace castor3d

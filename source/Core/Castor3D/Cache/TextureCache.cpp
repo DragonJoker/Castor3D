@@ -559,8 +559,15 @@ namespace castor3d
 		{
 			doGetTexture( *unitData.base
 				, [this, &unitData, result]( TextureData const & data
-					, Texture const * texture )
+					, Texture const * texture
+					, bool isCreated )
 				{
+					if ( !isCreated )
+					{
+						result->reportFailure();
+						return;
+					}
+
 					auto config = unitData.base->sourceInfo.textureConfig();
 
 					if ( data.sourceInfo.isRenderTarget() )
@@ -639,7 +646,7 @@ namespace castor3d
 	}
 
 	Texture const * TextureUnitCache::doGetTexture( TextureData & data
-		, std::function< void( TextureData const &, Texture const * ) > onEndCpuLoad )
+		, std::function< void( TextureData const &, Texture const *, bool ) > onEndCpuLoad )
 	{
 		Texture * result{};
 		bool wasFound{};
@@ -658,7 +665,7 @@ namespace castor3d
 
 					if ( onEndCpuLoad )
 					{
-						onEndCpuLoad( data, texture );
+						onEndCpuLoad( data, texture, true );
 					}
 
 					return texture;
@@ -686,12 +693,20 @@ namespace castor3d
 
 					if ( !threadData.interrupted )
 					{
-						auto lock( castor::makeUniqueLock( m_loadMtx ) );
-						doInitTexture( threadData );
-
-						if ( onEndCpuLoad )
+						try
 						{
-							onEndCpuLoad( *threadData.data, threadData.texture );
+							auto lock( castor::makeUniqueLock( m_loadMtx ) );
+							doInitTexture( threadData );
+
+							if ( onEndCpuLoad )
+							{
+								onEndCpuLoad( *threadData.data, threadData.texture, true );
+							}
+						}
+						catch ( std::exception & exc )
+						{
+							log::error << "Exception encountered while creating a texture image: " << exc.what() << std::endl;
+							onEndCpuLoad( *threadData.data, threadData.texture, false );
 						}
 					}
 
@@ -712,7 +727,7 @@ namespace castor3d
 
 						if ( onEndCpuLoad )
 						{
-							onEndCpuLoad( data, result );
+							onEndCpuLoad( data, result, true );
 						}
 					}
 				} );

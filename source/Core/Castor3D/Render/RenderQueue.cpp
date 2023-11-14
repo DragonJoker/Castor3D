@@ -179,6 +179,11 @@ namespace castor3d
 		return getCommandBuffer();
 	}
 
+	RenderCounts const & RenderQueue::getVisibleCounts()const
+	{
+		return m_renderNodes->getVisibleCounts();
+	}
+
 	void RenderQueue::doInitialise( RenderDevice const & device
 		, QueueData const & queueData )
 	{

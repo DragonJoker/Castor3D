@@ -462,6 +462,32 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
+	*	The 3D objects counts.
+	*\~french
+	*\brief
+	*	Les comptes des objets 3D.
+	*/
+	struct RenderCounts
+	{
+		//!\~english	The vertex count.
+		//!\~french		Le nombre de sommets.
+		uint32_t vertexCount{};
+		//!\~english	The face count.
+		//!\~french		Le nombre de faces.
+		uint32_t faceCount{};
+		//!\~english	The object count.
+		//!\~french		Le nombre d'objets.
+		uint32_t objectCount{};
+		//!\~english	The billboards count.
+		//!\~french		Le nombre de billboards.
+		uint32_t billboardCount{};
+		//!\~english	The light sources count.
+		//!\~french		Le nombre de source lumineuses.
+		uint32_t lightsCount{};
+	};
+	/**
+	*\~english
+	*\brief
 	*	Implements a frustum and the checks related to frustum culling.
 	*\~french
 	*\brief

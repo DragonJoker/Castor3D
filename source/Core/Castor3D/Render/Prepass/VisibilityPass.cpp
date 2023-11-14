@@ -5,7 +5,6 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Render/RenderTechnique.hpp"
-#include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Shader/Program.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"

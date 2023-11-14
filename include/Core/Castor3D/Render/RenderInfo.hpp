@@ -10,33 +10,15 @@ namespace castor3d
 {
 	struct RenderInfo
 	{
-		//!\~english	The total vertex count.
-		//!\~french		Le nombre total de sommets.
-		uint32_t totalVertexCount{};
-		//!\~english	The total face count.
-		//!\~french		Le nombre total de faces.
-		uint32_t totalFaceCount{};
-		//!\~english	The visble objects vertex count.
-		//!\~french		Le nombre de sommets visibles.
-		uint32_t visibleVertexCount{};
-		//!\~english	The visible objects face count.
-		//!\~french		Le nombre de faces visibles.
-		uint32_t visibleFaceCount{};
-		//!\~english	The total object count.
-		//!\~french		Le nombre total d'objets.
-		uint32_t totalObjectsCount{};
-		//!\~english	The visible objects count.
-		//!\~french		Le nombre d'objets visibles.
-		uint32_t visibleObjectsCount{};
+		//!\~english	The visible objects counts.
+		//!\~french		Les comptes d'objets visibles.
+		RenderCounts visible{};
+		//!\~english	The total objects counts.
+		//!\~french		Les comptes totaux d'objets.
+		RenderCounts total{};
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
 		uint32_t particlesCount{};
-		//!\~english	The total lights count.
-		//!\~french		Le nombre total de lumières.
-		uint32_t totalLightsCount{};
-		//!\~english	The visible lights count.
-		//!\~french		Le nombre de lumières visibles.
-		uint32_t visibleLightsCount{};
 		//!\~english	The visible overlays count.
 		//!\~french		Le nombre d'incrustations visibles.
 		uint32_t visibleOverlaysCount{};

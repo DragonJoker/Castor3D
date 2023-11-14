@@ -122,6 +122,7 @@ namespace castor3d
 		C3D_API bool needsInitialise()const;
 		C3D_API RenderFilters getFilters()const;
 		C3D_API ashes::CommandBuffer const & initCommandBuffer();
+		C3D_API RenderCounts const & getVisibleCounts()const;
 
 		bool isOutOfDate()const noexcept
 		{
