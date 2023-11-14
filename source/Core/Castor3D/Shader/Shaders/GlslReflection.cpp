@@ -720,7 +720,7 @@ namespace castor3d::shader
 					auto nDotV = m_writer.declLocale( "nDotV"
 						, abs( dot( worldNormal, viewDir ) ) + epsilon );
 					auto ssrReflectionNormal = m_writer.declLocale( "ssrReflectionNormal"
-						, normalMap.sample( rayMarchTexPosition ).xyz() );
+						, normalMap.lod( rayMarchTexPosition, 0.0_f ).xyz() );
 					auto ssrDistanceFactor = m_writer.declLocale( "ssrDistanceFactor"
 						, vec2( distance( 0.5_f, texcoord.x() ), distance( 0.5_f, texcoord.y() ) ) * 2.0f );
 					auto ssrFactor = m_writer.declLocale( "ssrFactor"
@@ -731,7 +731,7 @@ namespace castor3d::shader
 							* ( 1.0f - clamp( dot( ssrReflectionNormal, worldNormal ), 0.0_f, 1.0_f ) ) );
 
 					auto reflectionColor = m_writer.declLocale( "reflectionColor"
-						, colourMap.sample( rayMarchTexPosition ).rgb() );
+						, colourMap.lod( rayMarchTexPosition, 0.0_f ).rgb() );
 
 					m_writer.returnStmt( vec4( reflectionColor, ssrFactor ) );
 				}

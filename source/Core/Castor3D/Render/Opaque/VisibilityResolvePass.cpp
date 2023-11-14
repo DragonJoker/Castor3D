@@ -1239,6 +1239,7 @@ namespace castor3d
 
 						if ( auto lightingModel = lights.getLightingModel() )
 						{
+							// Direct Lighting
 							IF( writer, material.lighting )
 							{
 								auto surface = writer.declLocale( "surface"
@@ -1248,6 +1249,7 @@ namespace castor3d
 										, normalize( components.normal ) } );
 
 								lightingModel->finish( passShaders
+									, baseSurface
 									, surface
 									, utils
 									, c3d_cameraData.position()
@@ -1258,7 +1260,7 @@ namespace castor3d
 									, surface.worldPosition.xyz()
 									, surface.viewPosition.xyz()
 									, surface.clipPosition
-									, surface.normal );
+									, components.normal );
 
 								if ( flags.pass.hasDeferredDiffuseLightingFlag
 									&& !isDeferredLighting )
@@ -1308,6 +1310,42 @@ namespace castor3d
 
 									auto directAmbient = writer.declLocale( "directAmbient"
 										, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
+									output.registerOutput( "Lighting", "Ambient", directAmbient );
+									output.registerOutput( "Lighting", "Occlusion", occlusion );
+									output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
+
+									// Indirect Lighting
+									lightSurface.updateL( utils
+										, components.normal
+										, components.f0
+										, components );
+									auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
+										, lightSurface
+										, output );
+									auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
+										, lightSurface
+										, indirectOcclusion
+										, output );
+									auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
+										, lightSurface
+										, components.roughness
+										, indirectOcclusion
+										, lightIndirectDiffuse.w()
+										, c3d_mapBrdf
+										, output );
+									auto indirectAmbient = writer.declLocale( "indirectAmbient"
+										, indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+											, lightIndirectDiffuse.xyz()
+											, output ) );
+									auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
+										, ( flags.hasDiffuseGI()
+											? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
+												, length( lightIndirectDiffuse.xyz() )
+												, lightSurface.difF() )
+											: vec3( 0.0_f ) ) );
+									output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
+
+									// Reflections/Refraction
 									auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
 										, vec3( 0.0_f ) );
 									auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
@@ -1328,9 +1366,15 @@ namespace castor3d
 										, components.normal
 										, components.f0
 										, components );
-									reflections.computeCombined( components
+									lightingModel->computeReflRefr( reflections
+										, components
 										, lightSurface
 										, *backgroundModel
+										, c3d_cameraData
+										, lighting
+										, indirectAmbient
+										, indirectDiffuse
+										, vec2( ipixel )
 										, modelData.getEnvMapIndex()
 										, components.hasReflection
 										, components.hasRefraction
@@ -1341,40 +1385,9 @@ namespace castor3d
 										, coatReflected
 										, sheenReflected
 										, output );
-									lightSurface.updateL( utils
-										, components.normal
-										, components.f0
-										, components );
-									auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
-										, lightSurface
-										, output );
-									auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-										, lightSurface
-										, indirectOcclusion
-										, output );
-									auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
-										, lightSurface
-										, components.roughness
-										, indirectOcclusion
-										, lightIndirectDiffuse.w()
-										, c3d_mapBrdf
-										, output );
-									auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-										, lightIndirectDiffuse.xyz()
-										, output );
-									auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
-										, ( flags.hasDiffuseGI()
-											? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
-												, length( lightIndirectDiffuse.xyz() )
-												, lightSurface.difF() )
-											: vec3( 0.0_f ) ) );
+									output.registerOutput( "Reflections", "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
-									output.registerOutput( "Lighting", "Ambient", directAmbient );
-									output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
-									output.registerOutput( "Lighting", "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-									output.registerOutput( "Lighting", "Occlusion", occlusion );
-									output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
-
+									// Combine
 									outResult = vec4( lightingModel->combine( output
 											, components
 											, incident

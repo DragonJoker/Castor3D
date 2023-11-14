@@ -49,6 +49,8 @@ namespace castor3d
 			, crg::RunnableGraph & graph
 			, RenderDevice const & device
 			, Texture const & sceneImage
+			, Texture const & depthObjImage
+			, Texture const & normalsImage
 			, crg::ImageViewIdArray targetImage
 			, crg::ImageViewIdArray targetDepth
 			, RenderNodesPassDesc const & renderPassDesc
@@ -90,6 +92,8 @@ namespace castor3d
 	private:
 		VkFormat m_depthFormat{};
 		Texture const & m_sceneImage;
+		Texture const & m_depthObjImage;
+		Texture const & m_normalsImage;
 		ashes::CommandBufferPtr m_nodesCommands;
 		ashes::FrameBufferPtr m_frameBuffer;
 	};

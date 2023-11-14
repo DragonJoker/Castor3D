@@ -12,6 +12,7 @@
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssTransmittance.hpp"
+#include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -49,6 +50,7 @@ namespace castor3d::shader
 	}
 
 	void LightingModel::finish( PassShaders const & passShaders
+		, RasterizerSurfaceBase const & rasterSurface
 		, SurfaceBase const & surface
 		, Utils & utils
 		, sdw::Vec3 const worldEye
@@ -58,7 +60,110 @@ namespace castor3d::shader
 			, surface
 			, utils
 			, worldEye );
-		doFinish( components );
+		doFinish( passShaders
+			, rasterSurface
+			, components );
+	}
+
+	void LightingModel::computeReflRefr( ReflectionModel & reflections
+		, BlendComponents & components
+		, LightSurface const & lightSurface
+		, sdw::Vec3 const & position
+		, BackgroundModel & backgroundModel
+		, sdw::CombinedImage2DRgba32 const & mippedScene
+		, CameraData const & camera
+		, OutputComponents const & lighting
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec2 const & sceneUv
+		, sdw::UInt const & envMapIndex
+		, sdw::UInt const & hasReflection
+		, sdw::UInt const & hasRefraction
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular
+		, sdw::Vec3 & refracted
+		, sdw::Vec3 & coatReflected
+		, sdw::Vec3 & sheenReflected
+		, DebugOutput & debugOutput )
+	{
+		if ( mippedScene.isEnabled() )
+		{
+			reflections.computeCombined( components
+				, lightSurface
+				, lightSurface.worldPosition()
+				, backgroundModel
+				, mippedScene
+				, camera
+				, sceneUv / vec2( camera.renderSize() )
+				, envMapIndex
+				, components.hasReflection
+				, components.hasRefraction
+				, components.refractionRatio
+				, reflectedDiffuse
+				, reflectedSpecular
+				, refracted
+				, coatReflected
+				, sheenReflected
+				, debugOutput );
+		}
+		else
+		{
+			computeReflRefr( reflections
+				, components
+				, lightSurface
+				, backgroundModel
+				, camera
+				, lighting
+				, indirectAmbient
+				, indirectDiffuse
+				, sceneUv
+				, envMapIndex
+				, components.hasReflection
+				, components.hasRefraction
+				, components.refractionRatio
+				, reflectedDiffuse
+				, reflectedSpecular
+				, refracted
+				, coatReflected
+				, sheenReflected
+				, debugOutput );
+		}
+	}
+
+	void LightingModel::computeReflRefr( ReflectionModel & reflections
+		, BlendComponents & components
+		, LightSurface const & lightSurface
+		, BackgroundModel & backgroundModel
+		, CameraData const & camera
+		, OutputComponents const & lighting
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec2 const & sceneUv
+		, sdw::UInt const & envMapIndex
+		, sdw::UInt const & hasReflection
+		, sdw::UInt const & hasRefraction
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular
+		, sdw::Vec3 & refracted
+		, sdw::Vec3 & coatReflected
+		, sdw::Vec3 & sheenReflected
+		, DebugOutput & debugOutput )
+	{
+		reflections.computeCombined( components
+			, lightSurface
+			, backgroundModel
+			, envMapIndex
+			, components.hasReflection
+			, components.hasRefraction
+			, components.refractionRatio
+			, reflectedDiffuse
+			, reflectedSpecular
+			, refracted
+			, coatReflected
+			, sheenReflected
+			, debugOutput );
 	}
 
 	sdw::Vec3 LightingModel::combine( DebugOutput & debugOutput

@@ -91,7 +91,9 @@ namespace castor3d::shader
 		return refraction;
 	}
 
-	void PbrLightingModel::doFinish( BlendComponents & components )
+	void PbrLightingModel::doFinish( PassShaders const & passShaders
+		, RasterizerSurfaceBase const & surface
+		, BlendComponents & components )
 	{
 		auto ior = m_writer.declLocale( "ior"
 			, m_writer.ternary( components.refractionRatio == 0.0_f

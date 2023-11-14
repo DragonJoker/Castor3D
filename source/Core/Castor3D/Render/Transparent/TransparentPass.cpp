@@ -56,6 +56,8 @@ namespace castor3d
 		, crg::RunnableGraph & graph
 		, RenderDevice const & device
 		, Texture const & sceneImage
+		, Texture const & depthObjImage
+		, Texture const & normalsImage
 		, crg::ImageViewIdArray targetImage
 		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & renderPassDesc
@@ -71,6 +73,8 @@ namespace castor3d
 			, renderPassDesc
 			, techniquePassDesc }
 		, m_sceneImage{ sceneImage }
+		, m_depthObjImage{ depthObjImage }
+		, m_normalsImage{ normalsImage }
 	{
 	}
 
@@ -148,6 +152,12 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
 			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapDepthObj
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
+			, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
+			, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapNormals
 	}
 
 	void TransparentPass::doFillAdditionalDescriptor( PipelineFlags const & flags
@@ -179,6 +189,14 @@ namespace castor3d
 
 		bindTexture( m_sceneImage.wholeView
 			, *m_sceneImage.sampler
+			, descriptorWrites
+			, index );
+		bindTexture( m_depthObjImage.wholeView
+			, *m_depthObjImage.sampler
+			, descriptorWrites
+			, index );
+		bindTexture( m_normalsImage.wholeView
+			, *m_normalsImage.sampler
 			, descriptorWrites
 			, index );
 	}
@@ -273,6 +291,12 @@ namespace castor3d
 		auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene"
 			, index++
 			, RenderPipeline::eBuffers );
+		auto c3d_mapDepthObj = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapDepthObj"
+			, index++
+			, RenderPipeline::eBuffers );
+		auto c3d_mapNormals = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapNormals"
+			, index++
+			, RenderPipeline::eBuffers );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -340,12 +364,14 @@ namespace castor3d
 					IF( writer, material.lighting )
 					{
 						shader::OutputComponents lighting{ writer, false };
+						// Direct Lighting
 						auto surface = writer.declLocale( "surface"
 							, shader::Surface{ in.fragCoord.xyz()
 								, in.viewPosition.xyz()
 								, in.worldPosition.xyz()
 								, normalize( components.normal ) } );
 						lightingModel->finish( passShaders
+							, in
 							, surface
 							, utils
 							, c3d_cameraData.position()
@@ -356,7 +382,7 @@ namespace castor3d
 							, surface.worldPosition.xyz()
 							, surface.viewPosition.xyz()
 							, surface.clipPosition
-							, surface.normal );
+							, components.normal );
 						lights.computeCombinedDifSpec( clusteredLights
 							, components
 							, *backgroundModel
@@ -368,48 +394,11 @@ namespace castor3d
 							, lighting );
 						auto directAmbient = writer.declLocale( "directAmbient"
 							, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
-						auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
-							, vec3( 0.0_f ) );
-						auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
-							, vec3( 0.0_f ) );
-						auto refracted = writer.declLocale( "refracted"
-							, vec3( 0.0_f ) );
-						auto coatReflected = writer.declLocale( "coatReflected"
-							, vec3( 0.0_f ) );
-						auto sheenReflected = writer.declLocale( "sheenReflected"
-							, vec3( 0.0_f ) );
-						auto sceneUv = writer.declLocale( "sceneUv"
-							, in.fragCoord.xy() / vec2( c3d_cameraData.renderSize() ) );
+						output.registerOutput( "Lighting", "Ambient", directAmbient );
+						output.registerOutput( "Lighting", "Occlusion", occlusion );
+						output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
 
-						if ( components.hasMember( "thicknessFactor" ) )
-						{
-							components.thicknessFactor *= length( modelData.getScale() );
-						}
-
-						auto incident = writer.declLocale( "incident"
-							, reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() ) );
-						lightSurface.updateN( utils
-							, components.normal
-							, components.f0
-							, components );
-						reflections.computeCombined( components
-							, lightSurface
-							, lightSurface.worldPosition()
-							, *backgroundModel
-							, c3d_mapScene
-							, c3d_cameraData
-							, sceneUv
-							, modelData.getEnvMapIndex()
-							, components.hasReflection
-							, components.hasRefraction
-							, components.refractionRatio
-							, reflectedDiffuse
-							, reflectedSpecular
-							, refracted
-							, coatReflected
-							, sheenReflected
-							, output );
-
+						// Indirect Lighting
 						lightSurface.updateL( utils
 							, components.normal
 							, components.f0
@@ -428,27 +417,71 @@ namespace castor3d
 							, lightIndirectDiffuse.w()
 							, c3d_mapBrdf
 							, output );
-						auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-							, lightIndirectDiffuse.xyz()
-							, output );
+						auto indirectAmbient = writer.declLocale( "indirectAmbient"
+							, indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+								, lightIndirectDiffuse.xyz()
+								, output ) );
 						auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 							, ( hasDiffuseGI
 								? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
 									, length( lightIndirectDiffuse.xyz() )
 									, lightSurface.difF() )
 								: vec3( 0.0_f ) ) );
+						output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
+
+						// Reflections/Refraction
+						auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
+							, vec3( 0.0_f ) );
+						auto reflectedSpecular = writer.declLocale( "reflectedSpecular"
+							, vec3( 0.0_f ) );
+						auto refracted = writer.declLocale( "refracted"
+							, vec3( 0.0_f ) );
+						auto coatReflected = writer.declLocale( "coatReflected"
+							, vec3( 0.0_f ) );
+						auto sheenReflected = writer.declLocale( "sheenReflected"
+							, vec3( 0.0_f ) );
+
+						if ( components.hasMember( "thicknessFactor" ) )
+						{
+							components.thicknessFactor *= length( modelData.getScale() );
+						}
+
+						auto incident = writer.declLocale( "incident"
+							, reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() ) );
+						lightSurface.updateN( utils
+							, components.normal
+							, components.f0
+							, components );
+						lightingModel->computeReflRefr( reflections
+							, components
+							, lightSurface
+							, lightSurface.worldPosition()
+							, *backgroundModel
+							, c3d_mapScene
+							, c3d_cameraData
+							, lighting
+							, indirectAmbient
+							, indirectDiffuse
+							, in.fragCoord.xy()
+							, modelData.getEnvMapIndex()
+							, components.hasReflection
+							, components.hasRefraction
+							, components.refractionRatio
+							, reflectedDiffuse
+							, reflectedSpecular
+							, refracted
+							, coatReflected
+							, sheenReflected
+							, output );
 
 						if ( components.emissiveFactor )
 						{
 							components.emissiveFactor *= components.opacity;
 						}
 
-						output.registerOutput( "Lighting", "Ambient", directAmbient );
-						output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
-						output.registerOutput( "Lighting", "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
-						output.registerOutput( "Lighting", "Occlusion", occlusion );
-						output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
+						output.registerOutput( "Reflections", "Incident", sdw::fma( incident, vec3( 0.5_f ), vec3( 0.5_f ) ) );
 
+						// Combine
 						colour = lightingModel->combine( output
 							, components
 							, incident
