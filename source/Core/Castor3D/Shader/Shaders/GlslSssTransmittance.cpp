@@ -54,13 +54,20 @@ namespace castor3d::shader
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 						, vec4( wsPosition - wsNormal * 0.005_f, 1.0_f ) );
+					debugOutput.registerOutput( "SSSTransmittance", "Shrinked Position", shrinkedPos );
 
 					auto lightSpacePosition = m_writer.declLocale( "lightSpacePosition"
 						, lightTransform * shrinkedPos );
-					lightSpacePosition.xy() /= lightSpacePosition.w();
+					debugOutput.registerOutput( "SSSTransmittance", "Raw Light Space Position", lightSpacePosition );
+					lightSpacePosition /= lightSpacePosition.w();
+					debugOutput.registerOutput( "SSSTransmittance", "Perspective Corrected Light Space Position", lightSpacePosition );
 					lightSpacePosition.xy() = sdw::fma( lightSpacePosition.xy()
 						, vec2( 0.5_f )
 						, vec2( 0.5_f ) );
+					debugOutput.registerOutput( "SSSTransmittance", "Offseted Light Space Position", lightSpacePosition );
+					auto lightToVertex = m_writer.declLocale( "lightToVertex"
+						, light.direction() );
+					debugOutput.registerOutput( "SSSTransmittance", "Raw Light To Vertex", lightToVertex );
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
 						, c3d_mapNormalDepthDirectional.lod( vec3( lightSpacePosition.xy(), 0.0_f ), 0.0_f ) );
 					m_writer.returnStmt( doCompute( debugOutput
@@ -69,7 +76,7 @@ namespace castor3d::shader
 						, sssProfileIndex
 						, wsNormal
 						, sssTransmittance
-						, -light.direction() /* vertexTolight */ ) );
+						, -lightToVertex ) );
 				}
 				, sdw::InUInt{ m_writer, "sssProfileIndex" }
 				, sdw::InFloat{ m_writer, "sssTransmittance" }
@@ -118,9 +125,11 @@ namespace castor3d::shader
 					// We shrink the position inwards the surface to avoid artifacts.
 					auto shrinkedPos = m_writer.declLocale( "shrinkedPos"
 						, wsPosition - wsNormal * 0.005_f );
+					debugOutput.registerOutput( "SSSTransmittance", "Shrinked Position", shrinkedPos );
 
 					auto lightToVertex = m_writer.declLocale( "lightToVertex"
 						, shrinkedPos - light.position() );
+					debugOutput.registerOutput( "SSSTransmittance", "Raw Light To Vertex", lightToVertex );
 					auto shadowDepth = m_writer.declLocale( "shadowDepth"
 						, c3d_mapNormalDepthPoint.lod( vec4( lightToVertex, m_writer.cast< sdw::Float >( shadowMapIndex ) ), 0.0_f ) );
 					auto vertexToLight = m_writer.declLocale( "vertexToLight"

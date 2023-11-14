@@ -79,8 +79,8 @@ namespace castor3d
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}
 
-		result.buffers[getIndex( SubmeshFlag::ePositions )].buffer = it->vertex.get();
-		result.buffers[getIndex( SubmeshFlag::ePositions )].chunk = it->vertex->allocate( size );
+		result.buffers[uint32_t( SubmeshData::ePositions )].buffer = it->vertex.get();
+		result.buffers[uint32_t( SubmeshData::ePositions )].chunk = it->vertex->allocate( size );
 		return result;
 	}
 
@@ -106,8 +106,8 @@ namespace castor3d
 				, ptrdiff_t( m_buffers.size() - 1u ) );
 		}
 
-		result.buffers[getIndex( SubmeshFlag::eIndex )].buffer = it->vertex.get();
-		result.buffers[getIndex( SubmeshFlag::eIndex )].chunk = it->vertex->allocate( size );
+		result.buffers[uint32_t( SubmeshData::eIndex )].buffer = it->vertex.get();
+		result.buffers[uint32_t( SubmeshData::eIndex )].chunk = it->vertex->allocate( size );
 		return result;
 	}
 

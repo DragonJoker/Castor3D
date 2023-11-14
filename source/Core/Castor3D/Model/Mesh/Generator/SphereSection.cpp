@@ -62,7 +62,7 @@ namespace castor3d
 			}
 
 			// Constitution de la base sphérique
-			Submesh & baseSubmesh = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & baseSubmesh = *mesh.createDefaultSubmesh();
 			auto baseIndexMapping = baseSubmesh.createComponent< TriFaceMapping >();
 
 			for ( uint32_t k = 0; k < m_nbFaces; k++ )
@@ -118,7 +118,7 @@ namespace castor3d
 			baseIndexMapping->computeTangents();
 
 			// Constitution des côtés
-			Submesh & sideSubmesh = *mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+			Submesh & sideSubmesh = *mesh.createDefaultSubmesh();
 			castor::Point2f ptA = arc[m_nbFaces];
 			rAlphaI = 0;
 

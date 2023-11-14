@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "TransformModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Shader/ShaderModule.hpp"
 
 #include <ashespp/Descriptor/DescriptorSetLayout.hpp>
@@ -19,17 +20,18 @@ namespace castor3d
 	{
 		C3D_API explicit TransformPipeline( uint32_t index );
 
-		C3D_API std::string getName()const;
-		C3D_API static std::string getName( SubmeshFlags const & submeshFlags
+		C3D_API std::string getName( Engine const & engine )const;
+		C3D_API static std::string getName( Engine const & engine
+			, SubmeshComponentCombineID combine
 			, MorphFlags const & morphFlags
 			, bool meshletsBounds
 			, bool hasMorphingWeights );
-		C3D_API static uint32_t getIndex( SubmeshFlags const & submeshFlags
+		C3D_API static uint32_t getIndex( SubmeshComponentCombineID combine
 			, MorphFlags const & morphFlags
 			, ProgramFlags const & programFlags
 			, bool morphingWeights );
 
-		SubmeshFlags submeshFlags;
+		SubmeshComponentCombineID combineID;
 		MorphFlags morphFlags;
 		bool meshletsBounds;
 		bool hasMorphingWeights;

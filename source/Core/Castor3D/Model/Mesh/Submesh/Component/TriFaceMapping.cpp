@@ -36,11 +36,11 @@ namespace castor3d
 		};
 	}
 
-	castor::String const TriFaceMapping::Name = "triface_mapping";
+	castor::String const TriFaceMapping::TypeName = "triface_mapping";
 
 	TriFaceMapping::TriFaceMapping( Submesh & submesh
 		, VkBufferUsageFlags bufferUsageFlags )
-		: IndexMapping{ submesh, Name, bufferUsageFlags }
+		: IndexMapping{ submesh, TypeName, bufferUsageFlags }
 	{
 	}
 
@@ -186,7 +186,7 @@ namespace castor3d
 	{
 		auto count = uint32_t( m_faces.size() * 3 );
 		auto & offsets = getOwner()->getSourceBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshFlag::eIndex );
+		auto & buffer = offsets.getBufferChunk( SubmeshData::eIndex );
 
 		if ( count && buffer.hasData() )
 		{

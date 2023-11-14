@@ -27,58 +27,6 @@ namespace c3d_assimp
 			return result;
 		}
 
-		static castor3d::MorphFlags computeMorphFlags( castor3d::SubmeshAnimationBuffer const & buffer )
-		{
-			castor3d::MorphFlags result{};
-
-			if ( !buffer.positions.empty() )
-			{
-				result |= castor3d::MorphFlag::ePositions;
-			}
-
-			if ( !buffer.normals.empty() )
-			{
-				result |= castor3d::MorphFlag::eNormals;
-			}
-
-			if ( !buffer.tangents.empty() )
-			{
-				result |= castor3d::MorphFlag::eTangents;
-			}
-
-			if ( !buffer.bitangents.empty() )
-			{
-				result |= castor3d::MorphFlag::eBitangents;
-			}
-
-			if ( !buffer.texcoords0.empty() )
-			{
-				result |= castor3d::MorphFlag::eTexcoords0;
-			}
-
-			if ( !buffer.texcoords1.empty() )
-			{
-				result |= castor3d::MorphFlag::eTexcoords1;
-			}
-
-			if ( !buffer.texcoords2.empty() )
-			{
-				result |= castor3d::MorphFlag::eTexcoords2;
-			}
-
-			if ( !buffer.texcoords3.empty() )
-			{
-				result |= castor3d::MorphFlag::eTexcoords3;
-			}
-
-			if ( !buffer.colours.empty() )
-			{
-				result |= castor3d::MorphFlag::eColours;
-			}
-
-			return result;
-		}
-
 		static castor3d::SkeletonRPtr findSkeletonForMesh( AssimpImporterFile const & file
 			, castor3d::Scene & scene
 			, aiNode const & sceneRootNode
@@ -320,9 +268,9 @@ namespace c3d_assimp
 		if ( !animBuffers.empty() )
 		{
 			castor3d::log::debug << cuT( "    Morph targets found: [" ) << uint32_t( animBuffers.size() ) << cuT( "]" ) << std::endl;
-			auto component = submesh.hasComponent( castor3d::MorphComponent::Name )
+			auto component = submesh.hasComponent( castor3d::MorphComponent::TypeName )
 				? submesh.getComponent< castor3d::MorphComponent >()
-				: submesh.createComponent< castor3d::MorphComponent >( meshes::computeMorphFlags( animBuffers.front() ) );
+				: submesh.createComponent< castor3d::MorphComponent >();
 
 			for ( auto & animBuffer : animBuffers )
 			{
@@ -401,7 +349,7 @@ namespace c3d_assimp
 			if ( aiMeshIndex < mesh.getSubmeshCount() )
 			{
 				auto submesh = mesh.getSubmesh( aiMeshIndex );
-				auto transform = ( submesh->hasComponent( castor3d::SkinComponent::Name )
+				auto transform = ( submesh->hasComponent( castor3d::SkinComponent::TypeName )
 					? meshes::getTranslation( transformAcc )
 					: fromAssimp( transformAcc ) );
 

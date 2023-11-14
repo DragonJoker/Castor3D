@@ -15,7 +15,6 @@ namespace castor3d
 	//@{
 	/**@name Mesh */
 	//@{
-
 	/**
 	*\~english
 	*\brief

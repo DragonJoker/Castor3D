@@ -5,6 +5,7 @@
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp>
 #include <Castor3D/Render/RenderPipeline.hpp>
 #include <Castor3D/Render/RenderQueue.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
@@ -560,14 +561,26 @@ namespace ocean_fft
 		doAddGIDescriptor( flags, descriptorWrites, index );
 		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
 	}
-
-	castor3d::SubmeshFlags OceanRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
+	
+	castor3d::SubmeshComponentCombine OceanRenderPass::doAdjustSubmeshComponents( castor3d::SubmeshComponentCombine submeshCombine )const
 	{
-		remFlag( flags, castor3d::SubmeshFlag::eNormals );
-		remFlag( flags, castor3d::SubmeshFlag::eTangents );
-		remFlag( flags, castor3d::SubmeshFlag::eBitangents );
-		remFlag( flags, castor3d::SubmeshFlag::eTexcoords );
-		return flags;
+		auto & components = getEngine()->getSubmeshComponentsRegister();
+		remFlags( submeshCombine, components.getNormalFlag() );
+		remFlags( submeshCombine, components.getTangentFlag() );
+		remFlags( submeshCombine, components.getBitangentFlag() );
+		remFlags( submeshCombine, components.getColourFlag() );
+		remFlags( submeshCombine, components.getTexcoord0Flag() );
+		remFlags( submeshCombine, components.getTexcoord1Flag() );
+		remFlags( submeshCombine, components.getTexcoord2Flag() );
+		remFlags( submeshCombine, components.getTexcoord3Flag() );
+		submeshCombine.hasNormalFlag = false;
+		submeshCombine.hasTangentFlag = false;
+		submeshCombine.hasBitangentFlag = false;
+		submeshCombine.hasTexcoord0Flag = false;
+		submeshCombine.hasTexcoord1Flag = false;
+		submeshCombine.hasTexcoord2Flag = false;
+		submeshCombine.hasTexcoord3Flag = false;
+		return submeshCombine;
 	}
 
 	castor3d::ProgramFlags OceanRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const

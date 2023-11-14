@@ -46,7 +46,9 @@ namespace castor3d
 		, m_msState{ std::move( msState ) }
 		, m_program{ std::move( program ) }
 		, m_flags{ flags }
-		, m_flagsHash{ getPipelineBaseHash( owner.getEngine()->getPassComponentsRegister(), m_flags ) }
+		, m_flagsHash{ getPipelineBaseHash( owner.getEngine()->getPassComponentsRegister()
+			, owner.getEngine()->getSubmeshComponentsRegister()
+			, m_flags ) }
 	{
 	}
 

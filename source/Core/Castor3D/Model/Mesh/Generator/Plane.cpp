@@ -65,7 +65,7 @@ namespace castor3d
 			: -depth / 2 );
 		float gapW = width / float( subDivisionsW );
 		float gapH = depth / float( subDivisionsD );
-		auto submesh = mesh.createSubmesh( SubmeshFlag::ePosNmlTanTex );
+		auto submesh = mesh.createDefaultSubmesh();
 		InterleavedVertexArray points;
 		points.reserve( size_t( nbVertexW ) * nbVertexH );
 

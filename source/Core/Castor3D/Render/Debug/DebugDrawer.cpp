@@ -198,9 +198,9 @@ namespace castor3d
 					, "RenderCube"
 					, *m_commandPool };
 				uploader->pushUpload( vertexData.data()
-					, ires.first->second->vertices.getAskedSize( SubmeshFlag::ePositions )
-					, ires.first->second->vertices.getBuffer( SubmeshFlag::ePositions )
-					, ires.first->second->vertices.getOffset( SubmeshFlag::ePositions )
+					, ires.first->second->vertices.getAskedSize( SubmeshData::ePositions )
+					, ires.first->second->vertices.getBuffer( SubmeshData::ePositions )
+					, ires.first->second->vertices.getOffset( SubmeshData::ePositions )
 					, VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
@@ -230,16 +230,16 @@ namespace castor3d
 		{
 			commands.commandBuffer->bindPipeline( *aabb.pipeline->pipeline );
 			commands.commandBuffer->bindDescriptorSet( *aabb.pipeline->descriptorSet, *aabb.pipeline->pipelineLayout );
-			commands.commandBuffer->bindVertexBuffer( 0u, aabb.pipeline->vertices.getBuffer( SubmeshFlag::ePositions ), aabb.pipeline->vertices.getOffset( SubmeshFlag::ePositions ) );
+			commands.commandBuffer->bindVertexBuffer( 0u, aabb.pipeline->vertices.getBuffer( SubmeshData::ePositions ), aabb.pipeline->vertices.getOffset( SubmeshData::ePositions ) );
 
 			if ( aabb.pipeline->indices )
 			{
-				commands.commandBuffer->bindIndexBuffer( aabb.pipeline->indices.getBuffer( SubmeshFlag::eIndex ), aabb.pipeline->indices.getOffset( SubmeshFlag::eIndex ), VK_INDEX_TYPE_UINT16 );
-				commands.commandBuffer->drawIndexed( aabb.pipeline->indices.getAskedSize( SubmeshFlag::eIndex ) / sizeof( uint16_t ), uint32_t( aabb.count ), 0u, 0u, 0u );
+				commands.commandBuffer->bindIndexBuffer( aabb.pipeline->indices.getBuffer( SubmeshData::eIndex ), aabb.pipeline->indices.getOffset( SubmeshData::eIndex ), VK_INDEX_TYPE_UINT16 );
+				commands.commandBuffer->drawIndexed( aabb.pipeline->indices.getAskedSize( SubmeshData::eIndex ) / sizeof( uint16_t ), uint32_t( aabb.count ), 0u, 0u, 0u );
 			}
 			else
 			{
-				commands.commandBuffer->draw( aabb.pipeline->indices.getAskedSize( SubmeshFlag::ePositions ) / sizeof( castor::Point4f ), uint32_t( aabb.count ), 0u, 0u );
+				commands.commandBuffer->draw( aabb.pipeline->indices.getAskedSize( SubmeshData::ePositions ) / sizeof( castor::Point4f ), uint32_t( aabb.count ), 0u, 0u );
 			}
 		}
 

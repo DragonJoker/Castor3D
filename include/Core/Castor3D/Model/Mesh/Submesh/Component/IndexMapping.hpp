@@ -73,16 +73,9 @@ namespace castor3d
 		{
 		}
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
-		 */
-		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
-		{
-			return SubmeshFlag::eIndex;
-		}
-		/**
 		 *\copydoc		castor3d::SubmeshComponent::getUsageFlags
 		 */
-		VkBufferUsageFlags getUsageFlags()const override
+		VkBufferUsageFlags getUsageFlags()const noexcept override
 		{
 			return m_bufferUsageFlags;
 		}

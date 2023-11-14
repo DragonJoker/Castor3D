@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_MorphComponent_H___
@@ -19,18 +19,39 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	public:
+		class Plugin
+			: public SubmeshComponentPlugin
+		{
+		public:
+			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
+				: SubmeshComponentPlugin{ submeshComponents }
+			{
+			}
+
+			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
+			{
+				return castor::makeUniqueDerived< SubmeshComponent, MorphComponent >( submesh );
+			}
+
+			SubmeshComponentFlag getMorphFlag()const noexcept override
+			{
+				return getComponentFlags();
+			}
+		};
+
+		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
+		{
+			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+		}
 		/**
 		 *\~english
 		 *\brief		Constructor.
 		 *\param[in]	submesh	The parent submesh.
-		 *\param[in]	flags	The flags for the affected components.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	submesh	Le sous-maillage parent.
-		 *\param[in]	flags	Les indicateurs des composants affectés.
 		 */
-		C3D_API explicit MorphComponent( Submesh & submesh
-			, MorphFlags flags );
+		C3D_API explicit MorphComponent( Submesh & submesh );
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::gather
 		 */
@@ -62,7 +83,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les indicateurs de morphing.
 		 */
-		MorphFlags getMorphFlags()const
+		MorphFlags getMorphFlags()const noexcept
 		{
 			return m_flags;
 		}
@@ -72,7 +93,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le buffer de cibles de morph.
 		 */
-		GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const
+		GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const noexcept
 		{
 			return m_buffer;
 		}
@@ -82,7 +103,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données de cibles de morph.
 		 */
-		std::vector< SubmeshAnimationBuffer > const & getMorphTargetsBuffers()const
+		std::vector< SubmeshAnimationBuffer > const & getMorphTargetsBuffers()const noexcept
 		{
 			return m_targets;
 		}
@@ -92,7 +113,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Les données de cibles de morph.
 		 */
-		std::vector< SubmeshAnimationBuffer > & getMorphTargetsBuffers()
+		std::vector< SubmeshAnimationBuffer > & getMorphTargetsBuffers()noexcept
 		{
 			return m_targets;
 		}
@@ -102,7 +123,7 @@ namespace castor3d
 		 *\~french
 		 *\return		Le nombre de cibles de morph.
 		 */
-		uint32_t getMorphTargetsCount()const
+		uint32_t getMorphTargetsCount()const noexcept
 		{
 			return uint32_t( m_targets.size() );
 		}
@@ -113,7 +134,7 @@ namespace castor3d
 		void doUpload( UploadData & uploader )override;
 
 	public:
-		C3D_API static castor::String const Name;
+		C3D_API static castor::String const TypeName;
 
 	private:
 		MorphFlags m_flags{};

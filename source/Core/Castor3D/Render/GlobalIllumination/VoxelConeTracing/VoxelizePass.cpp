@@ -5,6 +5,7 @@
 #include "Castor3D/Buffer/UniformBufferPool.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Cache/ShaderCache.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
 #include "Castor3D/Render/RenderQueue.hpp"
@@ -166,12 +167,15 @@ namespace castor3d
 		m_outOfDate = m_renderQueue->isOutOfDate()
 			&& getEngine()->areUpdateOptimisationsEnabled();
 	}
-
-	SubmeshFlags VoxelizePass::doAdjustSubmeshFlags( SubmeshFlags flags )const
+	
+	SubmeshComponentCombine VoxelizePass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const
 	{
-		remFlag( flags, SubmeshFlag::eTangents );
-		remFlag( flags, SubmeshFlag::eBitangents );
-		return flags;
+		auto & components = getEngine()->getSubmeshComponentsRegister();
+		remFlags( submeshCombine, components.getTangentFlag() );
+		remFlags( submeshCombine, components.getBitangentFlag() );
+		submeshCombine.hasTangentFlag = false;
+		submeshCombine.hasBitangentFlag = false;
+		return submeshCombine;
 	}
 
 	ProgramFlags VoxelizePass::doAdjustProgramFlags( ProgramFlags flags )const

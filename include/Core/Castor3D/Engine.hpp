@@ -20,6 +20,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Plugin/PluginModule.hpp"
@@ -620,6 +621,27 @@ namespace castor3d
 		C3D_API void unregisterPassComponent( castor::String const & type );
 		/**
 		 *\~english
+		 *\brief		Registers a pass component.
+		 *\param[in]	type			The component type name.
+		 *\param[in]	componentPlugin	The component's specific functions.
+		 *\~french
+		 *\brief		Enregistre un composant de passe.
+		 *\param[in]	type			Le nom du type de composant.
+		 *\param[in]	componentPlugin	Les fonctions spécifiques du composant.
+		 */
+		C3D_API SubmeshComponentID registerSubmeshComponent( castor::String const & type
+			, SubmeshComponentPluginUPtr componentPlugin );
+		/**
+		 *\~english
+		 *\brief		Unregisters a pass component.
+		 *\param[in]	type	The component type name.
+		 *\~french
+		 *\brief		Désenregistre un composant de passe.
+		 *\param[in]	type	Le nom du type de composant.
+		 */
+		C3D_API void unregisterSubmeshComponent( castor::String const & type );
+		/**
+		 *\~english
 		 *\brief		Registers a scene render pass type, used to render given material pass type.
 		 *\param[in]	renderPassType	The pass type name.
 		 *\param[in]	info			The pass creation informations.
@@ -873,6 +895,11 @@ namespace castor3d
 			return *m_passComponents;
 		}
 
+		SubmeshComponentRegister & getSubmeshComponentsRegister()const noexcept
+		{
+			return *m_submeshComponents;
+		}
+
 		ImporterFileFactory & getImporterFileFactory()const noexcept
 		{
 			return *m_importerFileFactory;
@@ -1010,6 +1037,13 @@ namespace castor3d
 		{
 			return registerPassComponent( ComponentT::TypeName
 				, createPlugin( *m_passComponents ) );
+		}
+
+		template< typename ComponentT >
+		SubmeshComponentID registerSubmeshComponent( CreateSubmeshComponentPlugin createPlugin = &ComponentT::createPlugin )
+		{
+			return registerSubmeshComponent( ComponentT::TypeName
+				, createPlugin( *m_submeshComponents ) );
 		}
 
 		void setLengthUnit( castor::LengthUnit value )noexcept
@@ -1167,6 +1201,7 @@ namespace castor3d
 		ParticleFactoryUPtr m_particleFactory;
 		PassFactoryUPtr m_passFactory;
 		PassComponentRegisterUPtr m_passComponents;
+		SubmeshComponentRegisterUPtr m_submeshComponents;
 		castor::CpuInformations m_cpuInformations;
 		LightingModelID m_lightingModelId{};
 		uint32_t m_lpvGridSize{ 32u };

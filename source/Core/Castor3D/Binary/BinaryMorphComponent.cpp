@@ -231,7 +231,7 @@ namespace castor3d
 		{
 			if ( auto indexMapping = obj.getOwner()->getIndexMapping() )
 			{
-				if ( indexMapping->getType() == TriFaceMapping::Name )
+				if ( indexMapping->getType() == TriFaceMapping::TypeName )
 				{
 					SubmeshUtils::computeTangentsFromNormals( buffer.positions
 						, buffer.texcoords0

@@ -6,6 +6,7 @@
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/Transform/MeshletBoundsTransformPass.hpp"
 #include "Castor3D/Render/Transform/MeshletBoundsTransformingPass.hpp"
 #include "Castor3D/Render/Transform/VertexTransformPass.hpp"
@@ -75,7 +76,7 @@ namespace castor3d
 			SDW_DeclStructInstance( , Skin );
 
 			static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache
-				, SubmeshFlags const & submeshFlags )
+				, bool hasSkin )
 			{
 				auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
 					, "C3D_Skin" );
@@ -84,16 +85,16 @@ namespace castor3d
 				{
 					result->declMember( "boneIds0", ast::type::Kind::eVec4U
 						, ast::type::NotArray
-						, checkFlag( submeshFlags, SubmeshFlag::eSkin ) );
+						, hasSkin );
 					result->declMember( "boneIds1", ast::type::Kind::eVec4U
 						, ast::type::NotArray
-						, checkFlag( submeshFlags, SubmeshFlag::eSkin ) );
+						, hasSkin );
 					result->declMember( "boneWeights0", ast::type::Kind::eVec4F
 						, ast::type::NotArray
-						, checkFlag( submeshFlags, SubmeshFlag::eSkin ) );
+						, hasSkin );
 					result->declMember( "boneWeights1", ast::type::Kind::eVec4F
 						, ast::type::NotArray
-						, checkFlag( submeshFlags, SubmeshFlag::eSkin ) );
+						, hasSkin );
 				}
 
 				return result;
@@ -113,6 +114,8 @@ namespace castor3d
 			, TransformPipeline const & pipeline )
 		{
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
+			auto & engine = *device.renderSystem.getEngine();
+			auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
 
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eModelsData
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -128,14 +131,14 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ) )
+			if ( combine.hasSkinFlag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eSkinTransforms
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::ePositions ) )
+			if ( combine.hasPositionFlag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInPosition
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -145,7 +148,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eNormals ) )
+			if ( combine.hasNormalFlag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInNormal
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -155,7 +158,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTangents ) )
+			if ( combine.hasTangentFlag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInTangent
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -165,7 +168,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eBitangents ) )
+			if ( combine.hasBitangentFlag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInBitangent
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -175,7 +178,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords0 ) )
+			if ( combine.hasTexcoord0Flag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInTexcoord0
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -185,7 +188,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords1 ) )
+			if ( combine.hasTexcoord1Flag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInTexcoord1
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -195,7 +198,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords2 ) )
+			if ( combine.hasTexcoord2Flag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInTexcoord2
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -205,7 +208,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords3 ) )
+			if ( combine.hasTexcoord3Flag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInTexcoord3
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -215,7 +218,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eColours ) )
+			if ( combine.hasColourFlag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInColour
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -225,7 +228,7 @@ namespace castor3d
 					, VK_SHADER_STAGE_COMPUTE_BIT ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ) )
+			if ( combine.hasSkinFlag )
 			{
 				bindings.emplace_back( makeDescriptorSetLayoutBinding( VertexTransformPass::eInSkin
 					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
@@ -236,7 +239,7 @@ namespace castor3d
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_COMPUTE_BIT ) );
 
-			return device->createDescriptorSetLayout( pipeline.getName()
+			return device->createDescriptorSetLayout( pipeline.getName( engine )
 				, std::move( bindings ) );
 		}
 
@@ -268,7 +271,8 @@ namespace castor3d
 		static ashes::PipelineLayoutPtr createPipelineLayout( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
-			return device->createPipelineLayout( pipeline.getName() + "/PipelineLayout"
+			auto & engine = *device.renderSystem.getEngine();
+			return device->createPipelineLayout( pipeline.getName( engine ) + "/PipelineLayout"
 				, *pipeline.descriptorSetLayout
 				, VkPushConstantRange{ VK_SHADER_STAGE_COMPUTE_BIT, 0u, sizeof( castor::Point4ui ) } );
 		}
@@ -285,7 +289,8 @@ namespace castor3d
 			, TransformPipeline & pipeline )
 		{
 			// Initialise the pipeline.
-			return device->createPipeline( pipeline.getName() + "/Pipeline"
+			auto & engine = *device.renderSystem.getEngine();
+			return device->createPipeline( pipeline.getName( engine ) + "/Pipeline"
 				, ashes::ComputePipelineCreateInfo( 0u
 					, makeShaderState( device, pipeline.shader )
 					, *pipeline.pipelineLayout ) );
@@ -304,6 +309,7 @@ namespace castor3d
 		static ShaderPtr getShaderSource( RenderDevice const & device
 			, TransformPipeline const & pipeline )
 		{
+			auto combine = device.renderSystem.getEngine()->getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
 			sdw::ComputeWriter writer{ &device.renderSystem.getEngine()->getShaderAllocator() };
 
 			// Common
@@ -327,92 +333,92 @@ namespace castor3d
 			auto skinningData = SkinningUbo::declare( writer
 				, uint32_t( VertexTransformPass::eSkinTransforms )
 				, 0u
-				, pipeline.submeshFlags );
+				, combine.hasSkinFlag );
 
 			// Inputs
 			DeclareSsbo( c3d_inPosition
 				, sdw::Vec4
 				, VertexTransformPass::eInPosition
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::ePositions ) );
+				, combine.hasPositionFlag );
 			DeclareSsbo( c3d_inNormal
 				, sdw::Vec4
 				, VertexTransformPass::eInNormal
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eNormals ) );
+				, combine.hasNormalFlag );
 			DeclareSsbo( c3d_inTangent
 				, sdw::Vec4
 				, VertexTransformPass::eInTangent
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTangents ) );
+				, combine.hasTangentFlag );
 			DeclareSsbo( c3d_inBitangent
 				, sdw::Vec4
 				, VertexTransformPass::eInBitangent
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eBitangents ) );
+				, combine.hasBitangentFlag );
 			DeclareSsbo( c3d_inTexcoord0
 				, sdw::Vec4
 				, VertexTransformPass::eInTexcoord0
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords0 ) );
+				, combine.hasTexcoord0Flag );
 			DeclareSsbo( c3d_inTexcoord1
 				, sdw::Vec4
 				, VertexTransformPass::eInTexcoord1
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+				, combine.hasTexcoord1Flag );
 			DeclareSsbo( c3d_inTexcoord2
 				, sdw::Vec4
 				, VertexTransformPass::eInTexcoord2
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+				, combine.hasTexcoord2Flag );
 			DeclareSsbo( c3d_inTexcoord3
 				, sdw::Vec4
 				, VertexTransformPass::eInTexcoord3
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords3 ) );
+				, combine.hasTexcoord3Flag );
 			DeclareSsbo( c3d_inColour
 				, sdw::Vec4
 				, VertexTransformPass::eInColour
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eColours ) );
+				, combine.hasColourFlag );
 			DeclareSsboEx( c3d_inBones
 				, Skin
 				, VertexTransformPass::eInSkin
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin )
-				, pipeline.submeshFlags );
+				, combine.hasSkinFlag
+				, combine.hasSkinFlag );
 
 			// Outputs
 			DeclareSsbo( c3d_outPosition
 				, sdw::Vec4
 				, VertexTransformPass::eOutPosition
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::ePositions ) );
+				, combine.hasPositionFlag );
 			DeclareSsbo( c3d_outNormal
 				, sdw::Vec4
 				, VertexTransformPass::eOutNormal
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eNormals ) );
+				, combine.hasNormalFlag );
 			DeclareSsbo( c3d_outTangent
 				, sdw::Vec4
 				, VertexTransformPass::eOutTangent
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTangents ) );
+				, combine.hasTangentFlag );
 			DeclareSsbo( c3d_outBitangent
 				, sdw::Vec4
 				, VertexTransformPass::eOutBitangent
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eBitangents ) );
+				, combine.hasBitangentFlag );
 			DeclareSsbo( c3d_outTexcoord0
 				, sdw::Vec4
 				, VertexTransformPass::eOutTexcoord0
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords0 ) );
+				, combine.hasTexcoord0Flag );
 			DeclareSsbo( c3d_outTexcoord1
 				, sdw::Vec4
 				, VertexTransformPass::eOutTexcoord1
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords1 ) );
+				, combine.hasTexcoord1Flag );
 			DeclareSsbo( c3d_outTexcoord2
 				, sdw::Vec4
 				, VertexTransformPass::eOutTexcoord2
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords2 ) );
+				, combine.hasTexcoord2Flag );
 			DeclareSsbo( c3d_outTexcoord3
 				, sdw::Vec4
 				, VertexTransformPass::eOutTexcoord3
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords3 ) );
+				, combine.hasTexcoord3Flag );
 			DeclareSsbo( c3d_outColour
 				, sdw::Vec4
 				, VertexTransformPass::eOutColour
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eColours ) );
+				, combine.hasColourFlag );
 			DeclareSsbo( c3d_outVelocity
 				, sdw::Vec4
 				, VertexTransformPass::eOutVelocity
-				, checkFlag( pipeline.submeshFlags, SubmeshFlag::eVelocity ) );
+				, combine.hasVelocityFlag );
 
 			auto size = uint32_t( device.properties.limits.nonCoherentAtomSize );
 			writer.implementMainT< sdw::VoidT >( sdw::ComputeInT< sdw::VoidT >{ writer, size, 1u, 1u }
@@ -494,7 +500,7 @@ namespace castor3d
 				c3d_outVelocity[index].xyz() = oldPosition.xyz() - position.xyz();
 
 				auto curMtxNormal = writer.declLocale< sdw::Mat3 >( "curMtxNormal"
-					, modelData.getNormalMtx( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ), curMtxModel ) );
+					, modelData.getNormalMtx( combine.hasSkinFlag, curMtxModel ) );
 				c3d_outNormal[index].xyz() = normalize( curMtxNormal * normal.xyz() );
 				c3d_outTangent[index] = vec4( normalize( curMtxNormal * tangent.xyz() ), tangent.w() );
 				c3d_outBitangent[index].xyz() = normalize( curMtxNormal * bitangent.xyz() );
@@ -762,7 +768,7 @@ namespace castor3d
 		else
 		{
 			static GpuBufferOffsetT< castor3d::MorphingWeightsConfiguration > const dummy{};
-			auto & pipeline = doGetPipeline( TransformPipeline::getIndex( node.getSubmeshFlags()
+			auto & pipeline = doGetPipeline( TransformPipeline::getIndex( node.getComponentCombineID()
 				, node.getMorphFlags()
 				, node.getProgramFlags()
 				, bool( morphingWeights ) && node.data.isAnimated() ) );
@@ -776,8 +782,9 @@ namespace castor3d
 
 			if ( pipeline.meshletsBounds )
 			{
+				auto combine = m_device.renderSystem.getEngine()->getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
 				m_boundsPass->registerNode( node
-					, *m_boundsPipelines[checkFlag( pipeline.submeshFlags, SubmeshFlag::eNormals ) ? 1u : 0u] );
+					, *m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] );
 			}
 		}
 	}
@@ -785,13 +792,14 @@ namespace castor3d
 	TransformPipeline const & VertexTransforming::doGetPipeline( uint32_t index )
 	{
 		auto ires = m_pipelines.emplace( index, TransformPipeline{ index } );
-		bool normals = checkFlag( ires.first->second.submeshFlags, SubmeshFlag::eNormals );
+		auto & engine = *m_device.renderSystem.getEngine();
+		auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( ires.first->second.combineID );
 
 		if ( ires.second )
 		{
 			auto & pipeline = ires.first->second;
 			pipeline.shader = { VK_SHADER_STAGE_COMPUTE_BIT
-				, pipeline.getName()
+				, pipeline.getName( engine )
 				, vtxtrsg::getShaderSource( m_device, pipeline ) };
 			pipeline.descriptorSetLayout = vtxtrsg::createDescriptorLayout( m_device, pipeline );
 			pipeline.pipelineLayout = vtxtrsg::createPipelineLayout( m_device, pipeline );
@@ -800,10 +808,10 @@ namespace castor3d
 		}
 
 		if ( ires.first->second.meshletsBounds
-			&& !m_boundsPipelines[normals ? 1u : 0u] )
+			&& !m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] )
 		{
-			m_boundsPipelines[normals ? 1u : 0u] = std::make_unique< BoundsTransformPipeline >( normals );
-			auto & pipeline = *m_boundsPipelines[normals ? 1u : 0u];
+			m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u] = std::make_unique< BoundsTransformPipeline >( combine.hasNormalFlag );
+			auto & pipeline = *m_boundsPipelines[combine.hasNormalFlag ? 1u : 0u];
 			pipeline.shader = { VK_SHADER_STAGE_COMPUTE_BIT
 				, pipeline.getName()
 				, vtxtrsg::getShaderSource( m_device, pipeline ) };

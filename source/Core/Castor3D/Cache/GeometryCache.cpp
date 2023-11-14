@@ -70,7 +70,7 @@ namespace castor3d
 							? static_cast< AnimatedSkeleton * >( findAnimatedObject( scene, element.getName() + cuT( "_Skeleton" ) ) )
 							: nullptr;
 
-						if ( submesh->hasComponent( PassMasksComponent::Name ) )
+						if ( submesh->hasComponent( PassMasksComponent::TypeName ) )
 						{
 							if ( auto pass = material->getPass( 0u ) )
 							{

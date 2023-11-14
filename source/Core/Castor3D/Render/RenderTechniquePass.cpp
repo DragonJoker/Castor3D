@@ -218,7 +218,8 @@ namespace castor3d
 		RenderNodesPass::update( updater );
 	}
 
-	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentCombine components
+	PipelineFlags RenderTechniqueNodesPass::createPipelineFlags( PassComponentCombine passComponents
+		, SubmeshComponentCombine submeshComponents
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, RenderPassTypeID renderPassTypeId
@@ -227,7 +228,6 @@ namespace castor3d
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
 		, TextureCombine const & textures
-		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
@@ -235,7 +235,8 @@ namespace castor3d
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		return RenderNodesPass::createPipelineFlags( std::move( components )
+		return RenderNodesPass::createPipelineFlags( std::move( passComponents )
+			, std::move( submeshComponents )
 			, colourBlendMode
 			, alphaBlendMode
 			, renderPassTypeId
@@ -244,7 +245,6 @@ namespace castor3d
 			, alphaFunc
 			, blendAlphaFunc
 			, textures
-			, submeshFlags
 			, programFlags
 			, sceneFlags
 			, topology

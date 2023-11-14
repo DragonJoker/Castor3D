@@ -1,6 +1,8 @@
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/VertexGroup.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -19,7 +21,7 @@ namespace castor3d
 
 	namespace objbuf
 	{
-		static castor::String getName( SubmeshFlags submeshFlags
+		static castor::String getName( SubmeshComponentCombine const & components
 			, bool isGpuComputed )
 		{
 			castor::String result;
@@ -29,62 +31,63 @@ namespace castor3d
 				result += "G";
 			}
 			
-			if ( checkFlag( submeshFlags, SubmeshFlag::eIndex ) )
+			if ( components.hasTriangleIndexFlag
+				|| components.hasLineIndexFlag )
 			{
 				result += "I";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePositions ) )
+			if ( components.hasPositionFlag )
 			{
 				result += "P";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTangents ) )
+			if ( components.hasTangentFlag )
 			{
 				result += "T";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eBitangents ) )
+			if ( components.hasBitangentFlag )
 			{
 				result += "B";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eNormals ) )
+			if ( components.hasNormalFlag )
 			{
 				result += "N";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords0 ) )
+			if ( components.hasTexcoord0Flag )
 			{
 				result += "T0";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords1 ) )
+			if ( components.hasTexcoord1Flag )
 			{
 				result += "1";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords2 ) )
+			if ( components.hasTexcoord2Flag )
 			{
 				result += "2";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eTexcoords3 ) )
+			if ( components.hasTexcoord3Flag )
 			{
 				result += "3";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eColours ) )
+			if ( components.hasColourFlag )
 			{
 				result += "C";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::eSkin ) )
+			if ( components.hasSkinFlag )
 			{
 				result += "S";
 			}
 
-			if ( checkFlag( submeshFlags, SubmeshFlag::ePassMasks ) )
+			if ( components.hasPassMaskFlag )
 			{
 				result += "M";
 			}
@@ -114,10 +117,10 @@ namespace castor3d
 			, m_buffers.end()
 			, [&bufferOffset]( ModelBuffers const & lookup )
 			{
-				return &lookup.vertex->getBuffer() == &bufferOffset.getBuffer( SubmeshFlag::ePositions );
+				return &lookup.vertex->getBuffer() == &bufferOffset.getBuffer( SubmeshData::ePositions );
 			} );
 		CU_Require( it != m_buffers.end() );
-		it->vertex->deallocate( bufferOffset.buffers[getIndex( SubmeshFlag::ePositions )].chunk );
+		it->vertex->deallocate( bufferOffset.buffers[uint32_t( SubmeshData::ePositions )].chunk );
 	}
 
 	VertexBufferPool::BufferArray::iterator VertexBufferPool::doFindBuffer( VkDeviceSize size
@@ -156,10 +159,10 @@ namespace castor3d
 			, m_buffers.end()
 			, [&bufferOffset]( ModelBuffers const & lookup )
 			{
-				return &lookup.vertex->getBuffer() == &bufferOffset.getBuffer( SubmeshFlag::eIndex );
+				return &lookup.vertex->getBuffer() == &bufferOffset.getBuffer( SubmeshData::eIndex );
 			} );
 		CU_Require( it != m_buffers.end() );
-		it->vertex->deallocate( bufferOffset.buffers[getIndex( SubmeshFlag::eIndex )].chunk );
+		it->vertex->deallocate( bufferOffset.buffers[uint32_t( SubmeshData::eIndex )].chunk );
 	}
 
 	IndexBufferPool::BufferArray::iterator IndexBufferPool::doFindBuffer( VkDeviceSize size
@@ -194,14 +197,14 @@ namespace castor3d
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount
-		, SubmeshFlags submeshFlags )
+		, SubmeshComponentCombine const & components )
 	{
-		auto result = doGetBuffer( vertexCount, indexCount, submeshFlags, false );
+		auto result = doGetBuffer( vertexCount, indexCount, components, false );
 
 		if ( indexCount && vertexCount )
 		{
-			m_indexBuffers.emplace( &result.getBuffer( SubmeshFlag::ePositions )
-				, &result.getBuffer( SubmeshFlag::eIndex ) );
+			m_indexBuffers.emplace( &result.getBuffer( SubmeshData::ePositions )
+				, &result.getBuffer( SubmeshData::eIndex ) );
 		}
 
 		return result;
@@ -209,13 +212,13 @@ namespace castor3d
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
 		, ashes::BufferBase const * indexBuffer
-		, SubmeshFlags submeshFlags )
+		, SubmeshComponentCombine const & components )
 	{
-		auto result = doGetBuffer( vertexCount, 0u, submeshFlags, true );
+		auto result = doGetBuffer( vertexCount, 0u, components, true );
 
 		if ( indexBuffer )
 		{
-			m_indexBuffers.emplace( &result.getBuffer( SubmeshFlag::ePositions )
+			m_indexBuffers.emplace( &result.getBuffer( SubmeshData::ePositions )
 				, indexBuffer );
 		}
 
@@ -299,10 +302,10 @@ namespace castor3d
 
 	ObjectBufferOffset ObjectBufferPool::doGetBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount
-		, SubmeshFlags submeshFlags
+		, SubmeshComponentCombine const & components
 		, bool isGpuComputed )
 	{
-		auto hash = std::hash< SubmeshFlags::BaseType >{}( submeshFlags.value() );
+		auto hash = std::hash< SubmeshComponentCombineID >{}(components.baseId );
 		hash = castor::hashCombine( hash, indexCount != 0u );
 		hash = castor::hashCombine( hash, vertexCount != 0u );
 		hash = castor::hashCombine( hash, isGpuComputed );
@@ -315,23 +318,20 @@ namespace castor3d
 
 		if ( it == buffers.end() )
 		{
-			auto name = objbuf::getName( submeshFlags, isGpuComputed );
+			auto & submeshComponents = getOwner()->getEngine()->getSubmeshComponentsRegister();
+			auto name = objbuf::getName( components, isGpuComputed );
 			ModelBuffers modelBuffers;
 
-			for ( uint32_t i = 0u; i < uint32_t( SubmeshData::eCount ); ++i )
+			for ( auto & flag : components.flags )
 			{
-				if ( !checkFlag( submeshFlags, SubmeshFlag( 0x0001u << i ) ) )
-				{
-					continue;
-				}
-
-				auto data = SubmeshData( i );
+				auto data = submeshComponents.getSubmeshData( flag );
+				auto index = uint32_t( data );
 
 				if ( data == SubmeshData::eIndex )
 				{
 					if ( indexCount )
 					{
-						modelBuffers.buffers[i] = details::createBaseBuffer< uint32_t >( m_device
+						modelBuffers.buffers[index] = details::createBaseBuffer< uint32_t >( m_device
 							, indexCount
 							, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -339,12 +339,12 @@ namespace castor3d
 							, align );
 					}
 				}
-				else if ( vertexCount )
+				else if ( data < SubmeshData::eCount && vertexCount )
 				{
 					switch ( data )
 					{
 					case SubmeshData::eSkin:
-						modelBuffers.buffers[i] = details::createBaseBuffer< VertexBoneData >( m_device
+						modelBuffers.buffers[index] = details::createBaseBuffer< VertexBoneData >( m_device
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -352,7 +352,7 @@ namespace castor3d
 							, align );
 						break;
 					case SubmeshData::ePassMasks:
-						modelBuffers.buffers[i] = details::createBaseBuffer< castor::Point4ui >( m_device
+						modelBuffers.buffers[index] = details::createBaseBuffer< castor::Point4ui >( m_device
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
@@ -360,7 +360,7 @@ namespace castor3d
 							, align );
 						break;
 					default:
-						modelBuffers.buffers[i] = details::createBaseBuffer< castor::Point4f >( m_device
+						modelBuffers.buffers[index] = details::createBaseBuffer< castor::Point4f >( m_device
 							, vertexCount
 							, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT

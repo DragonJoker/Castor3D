@@ -39,9 +39,9 @@ namespace castor3d
 		return data.getBufferOffsets();
 	}
 
-	SubmeshFlags BillboardRenderNode::getSubmeshFlags()const
+	SubmeshComponentCombineID BillboardRenderNode::getComponentCombineID()const
 	{
-		return data.getSubmeshFlags();
+		return data.getComponentCombineID();
 	}
 
 	MorphFlags BillboardRenderNode::getMorphFlags()const

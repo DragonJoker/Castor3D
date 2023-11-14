@@ -31,12 +31,12 @@ namespace castor3d
 			, GpuBufferOffsetT< MeshletCullData > const & output )
 		{
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( source.getStorageBinding( SubmeshFlag::ePositions
+			writes.push_back( source.getStorageBinding( SubmeshData::ePositions
 				, MeshletBoundsTransformPass::ePositions ) );
 
 			if ( pipeline.normals )
 			{
-				writes.push_back( source.getStorageBinding( SubmeshFlag::eNormals
+				writes.push_back( source.getStorageBinding( SubmeshData::eNormals
 					, MeshletBoundsTransformPass::eNormals ) );
 			}
 

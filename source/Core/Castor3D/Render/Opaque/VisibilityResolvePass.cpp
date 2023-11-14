@@ -187,7 +187,7 @@ namespace castor3d
 						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
 						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
 						auto diffuse = writer.declLocale( "diffuse"
-							, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
+							, ( ( isDeferredLighting && flags.pass.hasDeferredDiffuseLightingFlag )
 								? c3d_imgDiffuse.load( pos )
 								: vec4( 0.0_f ) ) );
 
@@ -201,7 +201,7 @@ namespace castor3d
 						c3d_imgOutResult = result;
 						c3d_imgOutScattering = scattering;
 
-						if ( flags.components.hasDeferredDiffuseLightingFlag
+						if ( flags.pass.hasDeferredDiffuseLightingFlag
 							&& !isDeferredLighting )
 						{
 							c3d_imgDiffuse.store( pos, diffuse );
@@ -268,7 +268,7 @@ namespace castor3d
 							auto result = writer.declLocale( "result", vec4( 0.0_f ) );
 							auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
 							auto diffuse = writer.declLocale( "diffuse"
-								, ( ( isDeferredLighting && flags.components.hasDeferredDiffuseLightingFlag )
+								, ( ( isDeferredLighting && flags.pass.hasDeferredDiffuseLightingFlag )
 									? c3d_imgDiffuse.load( ipixel )
 									: vec4( 0.0_f ) ) );
 
@@ -278,7 +278,7 @@ namespace castor3d
 								c3d_imgOutResult.store( ipixel, result );
 								c3d_imgOutScattering.store( ipixel, scattering );
 
-								if ( flags.components.hasDeferredDiffuseLightingFlag
+								if ( flags.pass.hasDeferredDiffuseLightingFlag
 									&& !isDeferredLighting )
 								{
 									c3d_imgDiffuse.store( ipixel, diffuse );
@@ -1095,7 +1095,7 @@ namespace castor3d
 			auto c3d_imgDiffuse = writer.declStorageImg< sdw::RWImage2DRgba32 >( "c3d_imgDiffuse"
 				, InOutBindings::eInOutDiffuse
 				, Sets::eInOuts
-				, flags.components.hasDeferredDiffuseLightingFlag );
+				, flags.pass.hasDeferredDiffuseLightingFlag );
 			auto c3d_mapBrdf = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapBrdf"
 				, InOutBindings::eMapBrdf
 				, Sets::eInOuts );
@@ -1254,7 +1254,7 @@ namespace castor3d
 									, surface.clipPosition
 									, surface.normal );
 
-								if ( flags.components.hasDeferredDiffuseLightingFlag
+								if ( flags.pass.hasDeferredDiffuseLightingFlag
 									&& !isDeferredLighting )
 								{
 									auto diffuse = writer.declLocale( "diffuse", vec3( 0.0_f ) );
@@ -1397,7 +1397,7 @@ namespace castor3d
 								outResult = vec4( components.colour, components.opacity );
 								outScattering = vec4( 0.0_f );
 
-								if ( flags.components.hasDeferredDiffuseLightingFlag
+								if ( flags.pass.hasDeferredDiffuseLightingFlag
 									&& !isDeferredLighting )
 								{
 									inoutDiffuse = vec4( 0.0_f );
@@ -1410,14 +1410,14 @@ namespace castor3d
 							outResult = vec4( components.colour, components.opacity );
 							outScattering = vec4( 0.0_f );
 
-							if ( flags.components.hasDeferredDiffuseLightingFlag
+							if ( flags.pass.hasDeferredDiffuseLightingFlag
 								&& !isDeferredLighting )
 							{
 								inoutDiffuse = vec4( 0.0_f );
 							}
 						}
 
-						if ( !flags.components.hasDeferredDiffuseLightingFlag
+						if ( !flags.pass.hasDeferredDiffuseLightingFlag
 							|| deferredLighting != DeferredLightingFilter::eDeferLighting )
 						{
 							if ( flags.hasFog() )
@@ -2166,14 +2166,14 @@ namespace castor3d
 					continue;
 				}
 
-				getEngine()->getPassComponentsRegister().registerPassComponentCombine( pipelineFlags.components );
+				getEngine()->getPassComponentsRegister().registerPassComponentCombine( pipelineFlags.pass );
 				pipelineFlags.m_sceneFlags = getScene().getFlags();
 				pipelineFlags.backgroundModelId = getScene().getBackground()->getModelID();
 
-				if ( pipelineFlags.components.hasParallaxOcclusionMappingOneFlag
-					|| pipelineFlags.components.hasParallaxOcclusionMappingRepeatFlag
+				if ( pipelineFlags.pass.hasParallaxOcclusionMappingOneFlag
+					|| pipelineFlags.pass.hasParallaxOcclusionMappingRepeatFlag
 					|| ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly
-						&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag ) )
+						&& !pipelineFlags.pass.hasDeferredDiffuseLightingFlag ) )
 				{
 					continue;
 				}
@@ -2210,10 +2210,10 @@ namespace castor3d
 			{
 				auto & pipelineFlags = itPipeline.first->getFlags();
 
-				if ( pipelineFlags.components.hasParallaxOcclusionMappingOneFlag
-					|| pipelineFlags.components.hasParallaxOcclusionMappingRepeatFlag
+				if ( pipelineFlags.pass.hasParallaxOcclusionMappingOneFlag
+					|| pipelineFlags.pass.hasParallaxOcclusionMappingRepeatFlag
 					|| ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly
-						&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag ) )
+						&& !pipelineFlags.pass.hasDeferredDiffuseLightingFlag ) )
 				{
 					continue;
 				}
@@ -2254,7 +2254,8 @@ namespace castor3d
 		}
 	}
 
-	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentCombine components
+	PipelineFlags VisibilityResolvePass::createPipelineFlags( PassComponentCombine passComponents
+		, SubmeshComponentCombine submeshComponents
 		, BlendMode colourBlendMode
 		, BlendMode alphaBlendMode
 		, RenderPassTypeID renderPassTypeId
@@ -2263,7 +2264,6 @@ namespace castor3d
 		, VkCompareOp alphaFunc
 		, VkCompareOp blendAlphaFunc
 		, TextureCombine const & textures
-		, SubmeshFlags const & submeshFlags
 		, ProgramFlags const & programFlags
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
@@ -2271,7 +2271,8 @@ namespace castor3d
 		, uint32_t passLayerIndex
 		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
 	{
-		auto result = m_nodesPass.createPipelineFlags( std::move( components )
+		auto result = m_nodesPass.createPipelineFlags( std::move( passComponents )
+			, std::move( submeshComponents )
 			, colourBlendMode
 			, alphaBlendMode
 			, renderPassTypeId
@@ -2280,7 +2281,6 @@ namespace castor3d
 			, alphaFunc
 			, blendAlphaFunc
 			, textures
-			, submeshFlags
 			, programFlags
 			, sceneFlags
 			, topology
@@ -2342,10 +2342,10 @@ namespace castor3d
 			auto pipelineFlags = visitor.getFlags();
 			m_nodesPass.forceAdjustFlags( pipelineFlags );
 
-			if ( pipelineFlags.components.hasParallaxOcclusionMappingOneFlag
-				|| pipelineFlags.components.hasParallaxOcclusionMappingRepeatFlag
+			if ( pipelineFlags.pass.hasParallaxOcclusionMappingOneFlag
+				|| pipelineFlags.pass.hasParallaxOcclusionMappingRepeatFlag
 				|| ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly
-					&& !pipelineFlags.components.hasDeferredDiffuseLightingFlag ) )
+					&& !pipelineFlags.pass.hasDeferredDiffuseLightingFlag ) )
 			{
 				return;
 			}

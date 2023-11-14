@@ -122,7 +122,7 @@ namespace castor3d
 	void TransparentRendering::accept( RenderTechniqueVisitor & visitor )
 	{
 		if ( m_transparentPass
-			&& m_transparentPass->areValidPassFlags( visitor.getFlags().components ) )
+			&& m_transparentPass->areValidPassFlags( visitor.getFlags().pass ) )
 		{
 			m_transparentPass->accept( visitor );
 

@@ -131,7 +131,7 @@ namespace castor3d
 				, VK_SHADER_STAGE_FRAGMENT_BIT ) );	// c3d_mapScene
 		}
 
-		if ( flags.components.hasDeferredDiffuseLightingFlag
+		if ( flags.pass.hasDeferredDiffuseLightingFlag
 			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -179,7 +179,7 @@ namespace castor3d
 				, index );
 		}
 
-		if ( flags.components.hasDeferredDiffuseLightingFlag
+		if ( flags.pass.hasDeferredDiffuseLightingFlag
 			&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 		{
 			bindImage( getTechnique().getSssDiffuse().targetView
@@ -281,9 +281,9 @@ namespace castor3d
 			, RenderPipeline::eBuffers
 			, m_mippedColour != nullptr );
 		auto c3d_imgDiffuse = writer.declStorageImg< sdw::RImage2DRgba32 >( "c3d_imgDiffuse"
-			, ( ( flags.components.hasDeferredDiffuseLightingFlag && ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly ) ) ? index++ : 0u )
+			, ( ( flags.pass.hasDeferredDiffuseLightingFlag && ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly ) ) ? index++ : 0u )
 			, RenderPipeline::eBuffers
-			, flags.components.hasDeferredDiffuseLightingFlag && ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly ) );
+			, flags.pass.hasDeferredDiffuseLightingFlag && ( m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly ) );
 
 		auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"
 			, 0u
@@ -386,7 +386,7 @@ namespace castor3d
 							, surface.clipPosition
 							, surface.normal );
 
-						if ( flags.components.hasDeferredDiffuseLightingFlag
+						if ( flags.pass.hasDeferredDiffuseLightingFlag
 							&& m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )
 						{
 							auto diffuse = writer.declLocale( "diffuse", vec3( 0.0_f ) );
@@ -407,7 +407,7 @@ namespace castor3d
 						{
 							shader::OutputComponents lighting{ writer, false };
 
-							if ( flags.components.hasDeferredDiffuseLightingFlag
+							if ( flags.pass.hasDeferredDiffuseLightingFlag
 								&& m_deferredLightingFilter == DeferredLightingFilter::eDeferredOnly )
 							{
 								lights.computeCombinedAllButDif( clusteredLights
@@ -582,7 +582,7 @@ namespace castor3d
 					}
 				}
 
-				if ( !flags.components.hasDeferredDiffuseLightingFlag
+				if ( !flags.pass.hasDeferredDiffuseLightingFlag
 					|| m_deferredLightingFilter != DeferredLightingFilter::eDeferLighting )
 				{
 					if ( flags.hasFog() )

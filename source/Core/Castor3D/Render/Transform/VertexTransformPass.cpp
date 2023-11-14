@@ -1,9 +1,12 @@
 #include "Castor3D/Render/Transform/VertexTransformPass.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
+#include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Transform/VertexTransforming.hpp"
 #include "Castor3D/Scene/Geometry.hpp"
@@ -24,7 +27,8 @@ namespace castor3d
 
 	namespace vtxtrs
 	{
-		static ashes::DescriptorSetPtr createDescriptorSet( TransformPipeline const & pipeline
+		static ashes::DescriptorSetPtr createDescriptorSet( Engine const & engine
+			, TransformPipeline const & pipeline
 			, ObjectBufferOffset const & input
 			, ObjectBufferOffset const & output
 			, ashes::Buffer< ModelBufferConfiguration > const & modelsBuffer
@@ -33,6 +37,7 @@ namespace castor3d
 			, GpuBufferOffsetT< SkinningTransformsConfiguration > const & skinTransforms )
 		{
 			ashes::WriteDescriptorSetArray writes;
+			auto combine = engine.getSubmeshComponentsRegister().getSubmeshComponentCombine( pipeline.combineID );
 			CU_Require( morphTargets || skinTransforms );
 			writes.push_back( ashes::WriteDescriptorSet{ VertexTransformPass::eModelsData
 				, 0u
@@ -54,88 +59,88 @@ namespace castor3d
 				writes.push_back( skinTransforms.getStorageBinding( VertexTransformPass::eSkinTransforms ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::ePositions ) )
+			if ( combine.hasPositionFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::ePositions
+				writes.push_back( input.getStorageBinding( SubmeshData::ePositions
 					, VertexTransformPass::eInPosition ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::ePositions
+				writes.push_back( output.getStorageBinding( SubmeshData::ePositions
 					, VertexTransformPass::eOutPosition ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eNormals ) )
+			if ( combine.hasNormalFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eNormals
+				writes.push_back( input.getStorageBinding( SubmeshData::eNormals
 					, VertexTransformPass::eInNormal ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::eNormals
+				writes.push_back( output.getStorageBinding( SubmeshData::eNormals
 					, VertexTransformPass::eOutNormal ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTangents ) )
+			if ( combine.hasTangentFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eTangents
+				writes.push_back( input.getStorageBinding( SubmeshData::eTangents
 					, VertexTransformPass::eInTangent ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::eTangents
+				writes.push_back( output.getStorageBinding( SubmeshData::eTangents
 					, VertexTransformPass::eOutTangent ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eBitangents ) )
+			if ( combine.hasBitangentFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eBitangents
+				writes.push_back( input.getStorageBinding( SubmeshData::eBitangents
 					, VertexTransformPass::eInBitangent ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::eBitangents
+				writes.push_back( output.getStorageBinding( SubmeshData::eBitangents
 					, VertexTransformPass::eOutBitangent ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords0 ) )
+			if ( combine.hasTexcoord0Flag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eTexcoords0
+				writes.push_back( input.getStorageBinding( SubmeshData::eTexcoords0
 					, VertexTransformPass::eInTexcoord0 ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::eTexcoords0
+				writes.push_back( output.getStorageBinding( SubmeshData::eTexcoords0
 					, VertexTransformPass::eOutTexcoord0 ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords1 ) )
+			if ( combine.hasTexcoord1Flag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eTexcoords1
+				writes.push_back( input.getStorageBinding( SubmeshData::eTexcoords1
 					, VertexTransformPass::eInTexcoord1 ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::eTexcoords1
+				writes.push_back( output.getStorageBinding( SubmeshData::eTexcoords1
 					, VertexTransformPass::eOutTexcoord1 ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords2 ) )
+			if ( combine.hasTexcoord2Flag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eTexcoords2
+				writes.push_back( input.getStorageBinding( SubmeshData::eTexcoords2
 					, VertexTransformPass::eInTexcoord2 ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::eTexcoords2
+				writes.push_back( output.getStorageBinding( SubmeshData::eTexcoords2
 					, VertexTransformPass::eOutTexcoord2 ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eTexcoords3 ) )
+			if ( combine.hasTexcoord3Flag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eTexcoords3
+				writes.push_back( input.getStorageBinding( SubmeshData::eTexcoords3
 					, VertexTransformPass::eInTexcoord3 ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::eTexcoords3
+				writes.push_back( output.getStorageBinding( SubmeshData::eTexcoords3
 					, VertexTransformPass::eOutTexcoord3 ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eColours ) )
+			if ( combine.hasColourFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eColours
+				writes.push_back( input.getStorageBinding( SubmeshData::eColours
 					, VertexTransformPass::eInColour ) );
-				writes.push_back( output.getStorageBinding( SubmeshFlag::eColours
+				writes.push_back( output.getStorageBinding( SubmeshData::eColours
 					, VertexTransformPass::eOutColour ) );
 			}
 
-			if ( checkFlag( pipeline.submeshFlags, SubmeshFlag::eSkin ) )
+			if ( combine.hasSkinFlag )
 			{
-				writes.push_back( input.getStorageBinding( SubmeshFlag::eSkin
+				writes.push_back( input.getStorageBinding( SubmeshData::eSkin
 					, VertexTransformPass::eInSkin ) );
 			}
 
-			writes.push_back( output.getStorageBinding( SubmeshFlag::eVelocity
+			writes.push_back( output.getStorageBinding( SubmeshData::eVelocity
 				, VertexTransformPass::eOutVelocity ) );
 
-			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( pipeline.getName() );
+			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( pipeline.getName( engine ) );
 			descriptorSet->setBindings( writes );
 			descriptorSet->update();
 			return descriptorSet;
@@ -160,7 +165,8 @@ namespace castor3d
 		, m_morphTargets{ morphTargets }
 		, m_morphingWeights{ morphingWeights }
 		, m_skinTransforms{ skinTransforms }
-		, m_descriptorSet{ vtxtrs::createDescriptorSet( pipeline
+		, m_descriptorSet{ vtxtrs::createDescriptorSet( *device.renderSystem.getEngine()
+			, pipeline
 			, m_input
 			, m_output
 			, modelsBuffer
@@ -257,7 +263,7 @@ namespace castor3d
 			, nullptr );
 		auto size = uint32_t( m_device.properties.limits.nonCoherentAtomSize );
 		context.getContext().vkCmdDispatch( commandBuffer
-			, uint32_t( ashes::getAlignedSize( m_input.getCount< castor::Point4f >( SubmeshFlag::ePositions ), size ) ) / size
+			, uint32_t( ashes::getAlignedSize( m_input.getCount< castor::Point4f >( SubmeshData::ePositions ), size ) ) / size
 			, 1u
 			, 1u );
 

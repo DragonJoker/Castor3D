@@ -45,7 +45,7 @@ namespace castor3d
 		// Initialise the vertex buffer.
 		auto queueData = m_device.graphicsData();
 		m_vertexBuffer = device.vertexPools->getBuffer< TexturedQuad >( 1u );
-		auto & vb = m_vertexBuffer.getBufferChunk( SubmeshFlag::ePositions );
+		auto & vb = m_vertexBuffer.getBufferChunk( SubmeshData::ePositions );
 		TexturedQuad data = { { { castor::Point2f{ -1.0, -1.0 }, castor::Point2f{ 0.0, 0.0 } }
 			, { castor::Point2f{ -1.0, +1.0 }, castor::Point2f{ 0.0, 1.0 } }
 			, { castor::Point2f{ +1.0, -1.0 }, castor::Point2f{ 1.0, 0.0 } }
@@ -171,8 +171,8 @@ namespace castor3d
 			, VK_SUBPASS_CONTENTS_INLINE );
 		cmd.bindPipeline( *m_pipeline );
 		cmd.bindVertexBuffer( 0u
-			, m_vertexBuffer.getBuffer( SubmeshFlag::ePositions )
-			, m_vertexBuffer.getOffset( SubmeshFlag::ePositions ) );
+			, m_vertexBuffer.getBuffer( SubmeshData::ePositions )
+			, m_vertexBuffer.getOffset( SubmeshData::ePositions ) );
 		cmd.draw( 6u );
 		cmd.endRenderPass();
 		cmd.endDebugBlock();

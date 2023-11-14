@@ -18,6 +18,7 @@
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/MeshFactory.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Overlay/DebugOverlays.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Plugin/Plugin.hpp"
@@ -163,6 +164,7 @@ namespace castor3d
 	{
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passComponents = castor::makeUnique< PassComponentRegister >( *this );
+		m_submeshComponents = castor::makeUnique< SubmeshComponentRegister >( *this );
 
 		auto listenerClean = []( auto & element )
 		{
@@ -272,15 +274,17 @@ namespace castor3d
 
 		// and eventually the  plug-ins.
 		m_pluginCache->clear();
-		castor::GliImageLoader::unregisterLoader( m_imageLoader );
-		castor::StbImageLoader::unregisterLoader( m_imageLoader );
-		castor::ExrImageLoader::unregisterLoader( m_imageLoader );
-		castor::XpmImageLoader::unregisterLoader( m_imageLoader );
-		castor::FreeImageLoader::unregisterLoader( m_imageLoader );
-		castor::StbImageWriter::unregisterWriter( m_imageWriter );
 		castor::GliImageWriter::unregisterWriter( m_imageWriter );
+		castor::StbImageWriter::unregisterWriter( m_imageWriter );
+		castor::FreeImageLoader::unregisterLoader( m_imageLoader );
+		castor::XpmImageLoader::unregisterLoader( m_imageLoader );
+		castor::ExrImageLoader::unregisterLoader( m_imageLoader );
+		castor::StbImageLoader::unregisterLoader( m_imageLoader );
+		castor::GliImageLoader::unregisterLoader( m_imageLoader );
+		castor::DataImageLoader::unregisterLoader( m_imageLoader );
 		cleanupGlslang();
 
+		m_submeshComponents.reset();
 		m_passComponents.reset();
 		m_passFactory.reset();
 
@@ -852,6 +856,18 @@ namespace castor3d
 	void Engine::unregisterPassComponent( castor::String const & type )
 	{
 		m_passComponents->unregisterComponent( type );
+	}
+
+	SubmeshComponentID Engine::registerSubmeshComponent( castor::String const & type
+		, SubmeshComponentPluginUPtr componentPlugin )
+	{
+		return m_submeshComponents->registerComponent( type
+			, std::move( componentPlugin ) );
+	}
+
+	void Engine::unregisterSubmeshComponent( castor::String const & type )
+	{
+		m_submeshComponents->unregisterComponent( type );
 	}
 
 	void Engine::registerRenderPassType( castor::String const & renderPassType

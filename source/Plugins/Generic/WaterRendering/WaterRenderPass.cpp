@@ -6,6 +6,7 @@
 #include <Castor3D/Cache/ShaderCache.hpp>
 #include <Castor3D/Event/Frame/GpuFunctorEvent.hpp>
 #include <Castor3D/Material/Pass/Pass.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp>
 #include <Castor3D/Render/RenderPipeline.hpp>
 #include <Castor3D/Render/RenderQueue.hpp>
 #include <Castor3D/Render/RenderSystem.hpp>
@@ -439,13 +440,17 @@ namespace water
 		doAddGIDescriptor( flags, descriptorWrites, index );
 		doAddClusteredLightingDescriptor( m_parent->getRenderTarget(), flags, descriptorWrites, index );
 	}
-
-	castor3d::SubmeshFlags WaterRenderPass::doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const
+	
+	castor3d::SubmeshComponentCombine WaterRenderPass::doAdjustSubmeshComponents( castor3d::SubmeshComponentCombine submeshCombine )const
 	{
-		remFlag( flags, castor3d::SubmeshFlag::eTexcoords1 );
-		remFlag( flags, castor3d::SubmeshFlag::eTexcoords2 );
-		remFlag( flags, castor3d::SubmeshFlag::eTexcoords3 );
-		return flags;
+		auto & components = getEngine()->getSubmeshComponentsRegister();
+		remFlags( submeshCombine, components.getTexcoord1Flag() );
+		remFlags( submeshCombine, components.getTexcoord2Flag() );
+		remFlags( submeshCombine, components.getTexcoord3Flag() );
+		submeshCombine.hasTexcoord1Flag = false;
+		submeshCombine.hasTexcoord2Flag = false;
+		submeshCombine.hasTexcoord3Flag = false;
+		return submeshCombine;
 	}
 
 	castor3d::ProgramFlags WaterRenderPass::doAdjustProgramFlags( castor3d::ProgramFlags flags )const

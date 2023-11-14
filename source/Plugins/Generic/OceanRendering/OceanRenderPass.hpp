@@ -75,7 +75,7 @@ namespace ocean
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, castor3d::ShadowMapLightTypeArray const & shadowMaps
 			, castor3d::ShadowBuffer const * shadowBuffer )override;
-		castor3d::SubmeshFlags doAdjustSubmeshFlags( castor3d::SubmeshFlags flags )const override;
+		castor3d::SubmeshComponentCombine doAdjustSubmeshComponents( castor3d::SubmeshComponentCombine submeshCombine )const override;
 		castor3d::ProgramFlags doAdjustProgramFlags( castor3d::ProgramFlags flags )const override;
 		void doAdjustFlags( castor3d::PipelineFlags & flags )const override;
 		void doGetVertexShaderSource( castor3d::PipelineFlags const & flags

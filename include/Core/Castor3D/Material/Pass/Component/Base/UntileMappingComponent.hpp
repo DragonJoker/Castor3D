@@ -33,7 +33,7 @@ namespace castor3d
 
 			bool isMapSampling( PipelineFlags const & flags )const override
 			{
-				return hasAny( flags.components
+				return hasAny( flags.pass
 					, makePassComponentFlag( getId(), eUntile ) );
 			}
 

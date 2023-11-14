@@ -12,6 +12,7 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
@@ -36,7 +37,7 @@ namespace castor3d
 				: std::hash< MaterialObs >{}( node.pass->getOwner() );
 			result = castor::hashCombine( result, flags.m_shaderFlags.value() );
 			result = castor::hashCombine( result, flags.m_programFlags.value() );
-			result = castor::hashCombine( result, flags.m_submeshFlags.value() );
+			result = castor::hashCombine( result, flags.submesh.baseId );
 			return result;
 		}
 
@@ -134,69 +135,12 @@ namespace castor3d
 	//*********************************************************************************************
 
 	Submesh::Submesh( Mesh & mesh
-		, uint32_t id
-		, SubmeshFlags const & flags )
+		, uint32_t id )
 		: OwnedBy< Mesh >{ mesh }
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
-		, m_submeshFlags{ SubmeshFlag::eIndex | flags }
 	{
 		addComponent( castor::makeUnique< InstantiationComponent >( *this, 2u ) );
-
-		if ( checkFlag( flags, SubmeshFlag::ePositions ) )
-		{
-			createComponent< PositionsComponent >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eNormals ) )
-		{
-			createComponent< NormalsComponent >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eTangents ) )
-		{
-			createComponent< TangentsComponent >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eBitangents ) )
-		{
-			createComponent< BitangentsComponent >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eTexcoords0 ) )
-		{
-			createComponent< Texcoords0Component >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eTexcoords1 ) )
-		{
-			createComponent< Texcoords1Component >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eTexcoords2 ) )
-		{
-			createComponent< Texcoords2Component >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eTexcoords3 ) )
-		{
-			createComponent< Texcoords3Component >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eColours ) )
-		{
-			createComponent< ColoursComponent >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::eSkin ) )
-		{
-			createComponent< SkinComponent >();
-		}
-
-		if ( checkFlag( flags, SubmeshFlag::ePassMasks ) )
-		{
-			createComponent< PassMasksComponent >();
-		}
 	}
 
 	Submesh::~Submesh()
@@ -209,7 +153,7 @@ namespace castor3d
 		if ( !m_generated )
 		{
 			if ( !m_sourceBufferOffset
-				|| getPointsCount() != m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshFlag::ePositions ) )
+				|| getPointsCount() != m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshData::ePositions ) )
 			{
 				for ( auto & finalBufferOffset : m_finalBufferOffsets )
 				{
@@ -234,21 +178,20 @@ namespace castor3d
 				}
 
 				if ( isDynamic()
-					&& !hasComponent( BaseDataComponentT< SubmeshFlag::eVelocity >::Name ) )
+					&& !hasComponent( BaseDataComponentT< SubmeshData::eVelocity >::TypeName ) )
 				{
-					createComponent< BaseDataComponentT< SubmeshFlag::eVelocity > >();
+					createComponent< BaseDataComponentT< SubmeshData::eVelocity > >();
 				}
 
-				for ( auto & component : m_components )
-				{
-					m_submeshFlags |= component.second->getSubmeshFlags( nullptr );
-				}
+				auto & components = getOwner()->getOwner()->getSubmeshComponentsRegister();
+				m_componentCombine = components.registerSubmeshComponentCombine( *this );
 
-				auto flags = m_submeshFlags;
-				remFlag( flags, SubmeshFlag::eVelocity );
+				auto combine = m_componentCombine;
+				remFlags( combine, components.getVelocityFlag() );
+				combine.hasVelocityFlag = false;
 				m_sourceBufferOffset = device.geometryPools->getBuffer( getPointsCount()
 					, indexCount
-					, flags );
+					, combine );
 
 				if ( isDynamic() )
 				{
@@ -256,17 +199,18 @@ namespace castor3d
 
 					if ( m_indexMapping )
 					{
-						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshFlag::eIndex );
+						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
 					}
 
-					flags = m_submeshFlags;
-					remFlag( flags, SubmeshFlag::eSkin );
+					combine = m_componentCombine;
+					remFlags( combine, components.getSkinFlag() );
+					combine.hasSkinFlag = false;
 
 					for ( auto & finalBufferOffset : m_finalBufferOffsets )
 					{
 						finalBufferOffset.second = device.geometryPools->getBuffer( getPointsCount()
 							, indexBuffer
-							, flags );
+							, combine );
 					}
 				}
 			}
@@ -313,6 +257,27 @@ namespace castor3d
 		}
 
 		return result;
+	}
+	
+	SubmeshComponentRegister & Submesh::getSubmeshComponentsRegister()const
+	{
+		return getOwner()->getEngine()->getSubmeshComponentsRegister();
+	}
+
+	SubmeshComponentID Submesh::getComponentId( castor::String const & componentType )const
+	{
+		return getSubmeshComponentsRegister().getNameId( componentType );
+	}
+
+	SubmeshComponentPlugin const & Submesh::getComponentPlugin( SubmeshComponentID componentId )const
+	{
+		return getSubmeshComponentsRegister().getPlugin( componentId );
+	}
+
+	SubmeshComponentCombineID Submesh::getComponentCombineID()const
+	{
+		CU_Require( m_componentCombine.baseId != 0 );
+		return m_componentCombine.baseId;
 	}
 
 	void Submesh::cleanup( RenderDevice const & device )
@@ -442,7 +407,7 @@ namespace castor3d
 			, smsh::getComponentCount< Texcoords2Component >( *this )
 			, smsh::getComponentCount< Texcoords3Component >( *this )
 			, smsh::getComponentCount< ColoursComponent >( *this )
-			, uint32_t( m_sourceBufferOffset ? m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshFlag::ePositions ) : 0u ) } );
+			, uint32_t( m_sourceBufferOffset ? m_sourceBufferOffset.getCount< castor::Point4f >( SubmeshData::ePositions ) : 0u ) } );
 	}
 
 	int Submesh::isInMyPoints( castor::Point3f const & vertex
@@ -537,18 +502,6 @@ namespace castor3d
 		return result;
 	}
 
-	SubmeshFlags Submesh::getSubmeshFlags( Pass const * pass )const
-	{
-		SubmeshFlags result{};
-
-		for ( auto & component : m_components )
-		{
-			result |= component.second->getSubmeshFlags( pass );
-		}
-
-		return result;
-	}
-
 	MorphFlags Submesh::getMorphFlags()const
 	{
 		MorphFlags result{};
@@ -597,15 +550,17 @@ namespace castor3d
 
 				if ( m_indexMapping )
 				{
-					indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshFlag::eIndex );
+					indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
 				}
 
-				auto flags = m_submeshFlags;
-				remFlag( flags, SubmeshFlag::eSkin );
-				RenderDevice & device = getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
+				auto combine = m_componentCombine;
+				auto & engine = *getOwner()->getEngine();
+				auto & components = engine.getSubmeshComponentsRegister();
+				remFlags( combine, components.getSkinFlag() );
+				RenderDevice & device = engine.getRenderSystem()->getRenderDevice();
 				it->second = device.geometryPools->getBuffer( getPointsCount()
 					, indexBuffer
-					, flags );
+					, combine );
 			}
 		}
 	}
@@ -636,7 +591,7 @@ namespace castor3d
 			}
 
 			GeometryBuffers result;
-			result.indexOffset = getSourceBufferOffsets().getBufferChunk( SubmeshFlag::eIndex );
+			result.indexOffset = getSourceBufferOffsets().getBufferChunk( SubmeshData::eIndex );
 			result.bufferOffset = getFinalBufferOffsets( node.instance );
 			result.layouts = layouts;
 			result.other = buffers;
@@ -1089,8 +1044,8 @@ namespace castor3d
 
 	bool Submesh::isDynamic()const
 	{
-		return hasComponent( SkinComponent::Name )
-			|| hasComponent( MorphComponent::Name );
+		return hasComponent( SkinComponent::TypeName )
+			|| hasComponent( MorphComponent::TypeName );
 	}
 
 	bool Submesh::isAnimated()const
@@ -1148,12 +1103,24 @@ namespace castor3d
 
 	bool Submesh::hasMorphComponent()const
 	{
-		return hasComponent( MorphComponent::Name );
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, []( SubmeshComponentIDMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().getMorphFlag() != 0u;
+			} );
+		return it != m_components.end();
 	}
 
 	bool Submesh::hasSkinComponent()const
 	{
-		return hasComponent( SkinComponent::Name );
+		auto it = std::find_if( m_components.begin()
+			, m_components.end()
+			, []( SubmeshComponentIDMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().getSkinFlag() != 0u;
+			} );
+		return it != m_components.end();
 	}
 
 	//*********************************************************************************************

@@ -39,10 +39,10 @@ namespace castor3d
 			if ( fileVersion < Version{ 1, 7, 0 } )
 			{
 				// From v1.7.0, tangents use Mikktspace, hence recompute them.
-				if ( submesh.hasComponent( NormalsComponent::Name )
-					&& submesh.hasComponent( Texcoords0Component::Name ) )
+				if ( submesh.hasComponent( NormalsComponent::TypeName )
+					&& submesh.hasComponent( Texcoords0Component::TypeName ) )
 				{
-					if ( !submesh.hasComponent( TangentsComponent::Name ) )
+					if ( !submesh.hasComponent( TangentsComponent::TypeName ) )
 					{
 						submesh.createComponent< TangentsComponent >();
 					}
@@ -123,63 +123,63 @@ namespace castor3d
 		bool result = doWriteChunk( count, ChunkType::eSubmeshVertexCount, m_chunk );
 
 		if ( result
-			&& obj.hasComponent( PositionsComponent::Name ) )
+			&& obj.hasComponent( PositionsComponent::TypeName ) )
 		{
 			auto & values = obj.getComponent< PositionsComponent >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshPositions, m_chunk );
 		}
 
 		if ( result
-			&& obj.hasComponent( NormalsComponent::Name ) )
+			&& obj.hasComponent( NormalsComponent::TypeName ) )
 		{
 			auto & values = obj.getComponent< NormalsComponent >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshNormals, m_chunk );
 		}
 
 		if ( result
-			&& obj.hasComponent( TangentsComponent::Name ) )
+			&& obj.hasComponent( TangentsComponent::TypeName ) )
 		{
 			auto & values = obj.getComponent< TangentsComponent >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTangentsMikkt, m_chunk );
 		}
 
 		if ( result
-			&& obj.hasComponent( BitangentsComponent::Name ) )
+			&& obj.hasComponent( BitangentsComponent::TypeName ) )
 		{
 			auto & values = obj.getComponent< BitangentsComponent >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshBitangents, m_chunk );
 		}
 
 		if ( result
-			&& obj.hasComponent( Texcoords0Component::Name ) )
+			&& obj.hasComponent( Texcoords0Component::TypeName ) )
 		{
 			auto & values = obj.getComponent< Texcoords0Component >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords0, m_chunk );
 		}
 
 		if ( result
-			&& obj.hasComponent( Texcoords1Component::Name ) )
+			&& obj.hasComponent( Texcoords1Component::TypeName ) )
 		{
 			auto & values = obj.getComponent< Texcoords1Component >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords1, m_chunk );
 		}
 
 		if ( result
-			&& obj.hasComponent( Texcoords2Component::Name ) )
+			&& obj.hasComponent( Texcoords2Component::TypeName ) )
 		{
 			auto & values = obj.getComponent< Texcoords2Component >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords2, m_chunk );
 		}
 
 		if ( result
-			&& obj.hasComponent( Texcoords3Component::Name ) )
+			&& obj.hasComponent( Texcoords3Component::TypeName ) )
 		{
 			auto & values = obj.getComponent< Texcoords3Component >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords3, m_chunk );
 		}
 
 		if ( result
-			&& obj.hasComponent( ColoursComponent::Name ) )
+			&& obj.hasComponent( ColoursComponent::TypeName ) )
 		{
 			auto & values = obj.getComponent< ColoursComponent >()->getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshColours, m_chunk );
@@ -189,7 +189,7 @@ namespace castor3d
 		{
 			count = obj.getFaceCount();
 
-			if ( obj.hasComponent( TriFaceMapping::Name ) )
+			if ( obj.hasComponent( TriFaceMapping::TypeName ) )
 			{
 				result = doWriteChunk( 3u, ChunkType::eSubmeshIndexComponentCount, m_chunk );
 
@@ -204,7 +204,7 @@ namespace castor3d
 					result = doWriteChunk( data, count, ChunkType::eSubmeshIndices, m_chunk );
 				}
 			}
-			else if ( obj.hasComponent( LinesMapping::Name ) )
+			else if ( obj.hasComponent( LinesMapping::TypeName ) )
 			{
 				result = doWriteChunk( 2u, ChunkType::eSubmeshIndexComponentCount, m_chunk );
 				count = obj.getFaceCount();
@@ -406,7 +406,7 @@ namespace castor3d
 				}
 				break;
 			case ChunkType::eMorphComponent:
-				if ( auto component = castor::makeUnique< MorphComponent >( obj, MorphFlags{} ) )
+				if ( auto component = castor::makeUnique< MorphComponent >( obj ) )
 				{
 					result = createBinaryParser< MorphComponent >().parse( *component, chunk );
 					checkError( result, "Couldn't parse morph component." );
@@ -472,13 +472,13 @@ namespace castor3d
 		}
 
 		if ( m_fileVersion < Version{ 1, 7, 0 }
-			&& obj.hasComponent( NormalsComponent::Name )
-			&& obj.hasComponent( Texcoords0Component::Name )
-			&& !obj.hasComponent( TangentsComponent::Name ) )
+			&& obj.hasComponent( NormalsComponent::TypeName )
+			&& obj.hasComponent( Texcoords0Component::TypeName )
+			&& !obj.hasComponent( TangentsComponent::TypeName ) )
 		{
 			if ( auto indexMapping = obj.getIndexMapping() )
 			{
-				if ( indexMapping->getType() == TriFaceMapping::Name )
+				if ( indexMapping->getType() == TriFaceMapping::TypeName )
 				{
 					auto component = castor::makeUnique< TangentsComponent >( obj );
 					component->getData().resize( count );

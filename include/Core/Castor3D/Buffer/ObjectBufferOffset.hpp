@@ -141,17 +141,17 @@ namespace castor3d
 
 		explicit operator bool()const
 		{
-			return hasData( SubmeshFlag::ePositions );
+			return hasData( SubmeshData::ePositions );
 		}
 
-		GpuBufferChunk & getBufferChunk( SubmeshFlag flag )
+		GpuBufferChunk & getBufferChunk( SubmeshData data )
 		{
-			return buffers[getIndex( flag )];
+			return buffers[uint32_t( data )];
 		}
 
-		GpuBufferChunk const & getBufferChunk( SubmeshFlag flag )const
+		GpuBufferChunk const & getBufferChunk( SubmeshData data )const
 		{
-			return buffers[getIndex( flag )];
+			return buffers[uint32_t( data )];
 		}
 
 		void reset()
@@ -162,100 +162,100 @@ namespace castor3d
 			}
 		}
 
-		ashes::BufferBase const & getBuffer( SubmeshFlag flag )const
+		ashes::BufferBase const & getBuffer( SubmeshData data )const
 		{
-			return getBufferChunk( flag ).getBuffer();
+			return getBufferChunk( data ).getBuffer();
 		}
 
-		bool hasData( SubmeshFlag flag )const
+		bool hasData( SubmeshData data )const
 		{
-			return getBufferChunk( flag ).hasData();
+			return getBufferChunk( data ).hasData();
 		}
 
-		uint32_t getAskedSize( SubmeshFlag flag )const
+		uint32_t getAskedSize( SubmeshData data )const
 		{
-			return getBufferChunk( flag ).getAskedSize();
-		}
-
-		template< typename DataT >
-		uint32_t getCount( SubmeshFlag flag )const
-		{
-			return getBufferChunk( flag ).getCount< DataT >();
-		}
-
-		VkDeviceSize getOffset( SubmeshFlag flag )const
-		{
-			return getBufferChunk( flag ).getOffset();
+			return getBufferChunk( data ).getAskedSize();
 		}
 
 		template< typename DataT >
-		uint32_t getFirst( SubmeshFlag flag )const
+		uint32_t getCount( SubmeshData data )const
 		{
-			return getBufferChunk( flag ).getFirst< DataT >();
+			return getBufferChunk( data ).getCount< DataT >();
+		}
+
+		VkDeviceSize getOffset( SubmeshData data )const
+		{
+			return getBufferChunk( data ).getOffset();
+		}
+
+		template< typename DataT >
+		uint32_t getFirst( SubmeshData data )const
+		{
+			return getBufferChunk( data ).getFirst< DataT >();
 		}
 
 		template< typename IndexT >
 		uint32_t getFirstIndex()const
 		{
-			return getFirst< IndexT >( SubmeshFlag::eIndex );
+			return getFirst< IndexT >( SubmeshData::eIndex );
 		}
 
 		template< typename PositionT >
 		uint32_t getFirstVertex()const
 		{
-			return getFirst< PositionT >( SubmeshFlag::ePositions );
+			return getFirst< PositionT >( SubmeshData::ePositions );
 		}
 
-		void createUniformPassBinding( SubmeshFlag flag
+		void createUniformPassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
 			, std::string const & name )const
 		{
-			getBufferChunk( flag ).createUniformPassBinding( pass
+			getBufferChunk( data ).createUniformPassBinding( pass
 				, binding
 				, name );
 		}
 
-		void createInputStoragePassBinding( SubmeshFlag flag
+		void createInputStoragePassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
 			, std::string const & name )const
 		{
-			getBufferChunk( flag ).createInputStoragePassBinding( pass
+			getBufferChunk( data ).createInputStoragePassBinding( pass
 				, binding
 				, name );
 		}
 
-		void createInOutStoragePassBinding( SubmeshFlag flag
+		void createInOutStoragePassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
 			, std::string const & name )const
 		{
-			getBufferChunk( flag ).createInOutStoragePassBinding( pass
+			getBufferChunk( data ).createInOutStoragePassBinding( pass
 				, binding
 				, name );
 		}
 
-		void createOutputStoragePassBinding( SubmeshFlag flag
+		void createOutputStoragePassBinding( SubmeshData data
 			, crg::FramePass & pass
 			, uint32_t binding
 			, std::string const & name )const
 		{
-			getBufferChunk( flag ).createOutputStoragePassBinding( pass
+			getBufferChunk( data ).createOutputStoragePassBinding( pass
 				, binding
 				, name );
 		}
 
-		ashes::WriteDescriptorSet getUniformBinding( SubmeshFlag flag
+		ashes::WriteDescriptorSet getUniformBinding( SubmeshData data
 			, uint32_t binding )const
 		{
-			return getBufferChunk( flag ).getUniformBinding( binding );
+			return getBufferChunk( data ).getUniformBinding( binding );
 		}
 
-		ashes::WriteDescriptorSet getStorageBinding( SubmeshFlag flag
+		ashes::WriteDescriptorSet getStorageBinding( SubmeshData data
 			, uint32_t binding )const
 		{
-			return getBufferChunk( flag ).getStorageBinding( binding );
+			return getBufferChunk( data ).getStorageBinding( binding );
 		}
 	};
 }

@@ -14,28 +14,97 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	C3D_API void uploadBaseData( SubmeshFlag submeshData
+	C3D_API void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
 		, castor::Point4fArray const & data
 		, castor::Point4fArray & up
 		, UploadData & uploader );
-	C3D_API void uploadBaseData( SubmeshFlag submeshData
+	C3D_API void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
 		, castor::Point3fArray const & data
 		, castor::Point4fArray & up
 		, UploadData & uploader );
-	C3D_API void gatherBaseDataBuffer( SubmeshFlag submeshData
+	C3D_API void gatherBaseDataBuffer( SubmeshData submeshData
 		, PipelineFlags const & flags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
 		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache );
 
-	template< SubmeshFlag SubmeshFlagT, typename DataT >
+	template< SubmeshData SubmeshDataT, typename DataT >
 	class BaseDataComponentT
 		: public SubmeshComponent
 	{
 	public:
+		class Plugin
+			: public SubmeshComponentPlugin
+		{
+		public:
+			explicit Plugin( SubmeshComponentRegister const & submeshComponents )
+				: SubmeshComponentPlugin{ submeshComponents }
+			{
+			}
+
+			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
+			{
+				return castor::makeUniqueDerived< SubmeshComponent, BaseDataComponentT< SubmeshDataT, DataT > >( submesh );
+			}
+
+			SubmeshComponentFlag getPositionFlag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::ePositions ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getNormalFlag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eNormals ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getTangentFlag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eTangents ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getBitangentFlag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eBitangents ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getTexcoord0Flag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eTexcoords0 ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getTexcoord1Flag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eTexcoords1 ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getTexcoord2Flag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eTexcoords2 ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getTexcoord3Flag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eTexcoords3 ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getColourFlag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eColours ? getComponentFlags() : 0u;
+			}
+
+			SubmeshComponentFlag getVelocityFlag()const noexcept override
+			{
+				return SubmeshDataT == SubmeshData::eVelocity ? getComponentFlags() : 0u;
+			}
+		};
+
+		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )
+		{
+			return castor::makeUniqueDerived< SubmeshComponentPlugin, Plugin >( submeshComponents );
+		}
 		/**
 		 *\~english
 		 *\brief		Constructor.
@@ -45,7 +114,7 @@ namespace castor3d
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
 		explicit BaseDataComponentT( Submesh & submesh )
-			: SubmeshComponent{ submesh, Name, Id }
+			: SubmeshComponent{ submesh, TypeName }
 		{
 		}
 		/**
@@ -59,7 +128,7 @@ namespace castor3d
 			, uint32_t & currentBinding
 			, uint32_t & currentLocation )override
 		{
-			gatherBaseDataBuffer( SubmeshFlagT
+			gatherBaseDataBuffer( SubmeshDataT
 				, flags
 				, layouts
 				, currentBinding
@@ -74,13 +143,6 @@ namespace castor3d
 			auto result = castor::makeUnique< BaseDataComponentT >( submesh );
 			result->m_data = m_data;
 			return castor::ptrRefCast< SubmeshComponent >( result );
-		}
-		/**
-		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
-		 */
-		SubmeshFlags getSubmeshFlags( Pass const * pass )const override
-		{
-			return SubmeshFlagT;
 		}
 
 		void setData( std::vector< DataT > const & data )
@@ -111,12 +173,11 @@ namespace castor3d
 
 		void doUpload( UploadData & uploader )override
 		{
-			uploadBaseData( SubmeshFlagT , *getOwner(), m_data, m_up, uploader );
+			uploadBaseData( SubmeshDataT , *getOwner(), m_data, m_up, uploader );
 		}
 
 	public:
-		static uint32_t constexpr Id = getIndex( SubmeshFlagT ) - 1u;
-		static castor::String const Name;
+		static castor::String const TypeName;
 
 
 	private:
@@ -125,10 +186,10 @@ namespace castor3d
 		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};
 
-	template< SubmeshFlag SubmeshFlagT, typename DataT >
-	castor::String const BaseDataComponentT< SubmeshFlagT, DataT >::Name{ []()
+	template< SubmeshData SubmeshDataT, typename DataT >
+	castor::String const BaseDataComponentT< SubmeshDataT, DataT >::TypeName{ []()
 		{
-			return castor3d::getName( castor3d::getData( SubmeshFlagT ) );
+			return castor3d::getName( SubmeshDataT );
 		}() };
 }
 

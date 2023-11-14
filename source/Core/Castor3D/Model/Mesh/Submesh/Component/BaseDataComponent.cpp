@@ -18,7 +18,7 @@ namespace castor3d
 {
 	namespace smshbase
 	{
-		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( SubmeshFlag submeshData
+		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( SubmeshData submeshData
 			, uint32_t & currentBinding
 			, uint32_t & currentLocation )
 		{
@@ -26,7 +26,7 @@ namespace castor3d
 				, sizeof( castor::Point4f ), VK_VERTEX_INPUT_RATE_VERTEX } };
 			ashes::VkVertexInputAttributeDescriptionArray attributes{ 1u, { currentLocation++
 				, currentBinding
-				, ( ( submeshData == SubmeshFlag::ePositions || submeshData == SubmeshFlag::eTangents )
+				, ( ( submeshData == SubmeshData::ePositions || submeshData == SubmeshData::eTangents )
 					? VK_FORMAT_R32G32B32A32_SFLOAT
 					: VK_FORMAT_R32G32B32_SFLOAT )
 				, 0u } };
@@ -48,7 +48,7 @@ namespace castor3d
 		}
 	}
 
-	void uploadBaseData( SubmeshFlag submeshData
+	void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
 		, castor::Point4fArray const & data
 		, castor::Point4fArray &
@@ -69,7 +69,7 @@ namespace castor3d
 		}
 	}
 
-	void uploadBaseData( SubmeshFlag submeshData
+	void uploadBaseData( SubmeshData submeshData
 		, Submesh const & submesh
 		, castor::Point3fArray const & data
 		, castor::Point4fArray & up
@@ -83,7 +83,7 @@ namespace castor3d
 			, uploader );
 	}
 
-	void gatherBaseDataBuffer( SubmeshFlag submeshData
+	void gatherBaseDataBuffer( SubmeshData submeshData
 		, PipelineFlags const & flags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding

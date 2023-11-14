@@ -11,7 +11,7 @@ namespace castor3d
 		: castor::OwnedBy< MeshAnimation >{ animation }
 		, m_submesh{ submesh }
 	{
-		CU_Require( m_submesh.hasComponent( MorphComponent::Name ) );
+		CU_Require( m_submesh.hasComponent( MorphComponent::TypeName ) );
 		m_component = m_submesh.getComponent< MorphComponent >();
 	}
 }
