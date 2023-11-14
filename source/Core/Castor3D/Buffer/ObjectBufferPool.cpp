@@ -236,7 +236,8 @@ namespace castor3d
 					, mapLookup.second.end()
 					, [&buffer]( ModelBuffers const & lookup )
 					{
-						return &lookup.buffers[size_t( SubmeshData::ePositions )]->getBuffer() == &buffer;
+						return lookup.buffers[size_t( SubmeshData::ePositions )]
+							&& &lookup.buffers[size_t( SubmeshData::ePositions )]->getBuffer() == &buffer;
 					} );
 
 				if ( bit != mapLookup.second.end() )

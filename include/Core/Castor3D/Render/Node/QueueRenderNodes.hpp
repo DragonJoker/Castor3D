@@ -84,6 +84,11 @@ namespace castor3d
 			return m_hasNodes;
 		}
 
+		RenderCounts const & getVisibleCounts()const noexcept
+		{
+			return m_visible;
+		}
+
 	private:
 		RenderPipeline & doGetPipeline( SubmeshRenderNode const & node
 			, bool frontCulled );
@@ -120,15 +125,9 @@ namespace castor3d
 		PipelineNodesBuffer m_pipelinesNodes;
 
 		PipelineMap m_pipelines;
-
-		//!\~english	The submesh render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu de submesh, triés par programme shader.
+		RenderCounts m_visible{};
 		NodePtrByPipelineMapT< SubmeshRenderNode > m_submeshNodes;
-		//!\~english	The submesh render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu de submesh, triés par programme shader.
 		ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > m_instancedSubmeshNodes;
-		//!\~english	The billboards render nodes, sorted by shader program.
-		//!\~french		Les noeuds de rendu de billboards, triés par programme shader.
 		NodePtrByPipelineMapT< BillboardRenderNode > m_billboardNodes;
 	};
 }

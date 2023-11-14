@@ -132,6 +132,11 @@ namespace castor3d::shader
 			return m_opacity;
 		}
 
+		bool isFrontCulled()const
+		{
+			return m_frontCulled;
+		}
+
 		Utils & getUtils()const
 		{
 			return m_utils;
@@ -145,6 +150,7 @@ namespace castor3d::shader
 		std::vector< PassComponentsShaderPtr > m_shaders;
 		ComponentModeFlags m_filter;
 		bool m_opacity{};
+		bool m_frontCulled{};
 		bool m_forceLod0{};
 	};
 }

@@ -560,9 +560,9 @@ namespace castor3d
 			m_signalReady.reset();
 			m_overlayPass = {};
 #if C3D_DebugTimers
-			getEngine()->unregisterTimer( cuT( "AAACPUTests" ), *m_cpuUpdateTimer );
+			getEngine()->unregisterTimer( getName() + cuT( "/CPU Update" ), *m_cpuUpdateTimer );
 			m_cpuUpdateTimer.reset();
-			getEngine()->unregisterTimer( cuT( "AAAGPUTests" ), *m_gpuUpdateTimer );
+			getEngine()->unregisterTimer( getName() + cuT( "/GPU Update" ), *m_gpuUpdateTimer );
 			m_gpuUpdateTimer.reset();
 #endif
 			getEngine()->unregisterTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
@@ -1044,10 +1044,10 @@ namespace castor3d
 		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
 		getEngine()->registerTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 #if C3D_DebugTimers
-		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAACPUTests" ) );
-		getEngine()->registerTimer( cuT( "AAACPUTests" ), *m_cpuUpdateTimer );
-		m_gpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "AAAGPUTests" ) );
-		getEngine()->registerTimer( cuT( "AAAGPUTests" ), *m_gpuUpdateTimer );
+		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/CPU Update" ) );
+		getEngine()->registerTimer( getName() + cuT( "/CPU Update" ), *m_cpuUpdateTimer );
+		m_gpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/GPU Update" ) );
+		getEngine()->registerTimer( getName() + cuT( "/GPU Update" ), *m_gpuUpdateTimer );
 #endif
 		m_signalReady = device->createSemaphore( getName() + "Ready" );
 		m_initialising = false;

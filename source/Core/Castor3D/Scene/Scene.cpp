@@ -310,7 +310,7 @@ namespace castor3d
 	void Scene::updateBoundingBox()
 	{
 #if C3D_DebugTimers
-		auto block( m_timerBoundingBox->start() );
+		auto block( m_timerBoundingBox ? std::make_unique< crg::FramePassTimerBlock >( m_timerBoundingBox->start() ) : nullptr );
 #endif
 		auto & cache = *m_geometryCache;
 		auto lock( castor::makeUniqueLock( cache ) );
@@ -330,23 +330,6 @@ namespace castor3d
 
 				if ( node && mesh )
 				{
-					for ( auto & submesh : *mesh )
-					{
-						for ( auto & pass : *geometry.getMaterial( *submesh ) )
-						{
-							if ( !pass->isInitialised() )
-							{
-								pass->prepareTextures();
-								pass->initialise();
-							}
-
-							while ( !pass->isInitialised() )
-							{
-								std::this_thread::sleep_for( 1_ms );
-							}
-						}
-					}
-
 					auto bbox = mesh->getBoundingBox().getAxisAligned( node->getDerivedTransformationMatrix() );
 
 					for ( auto i = 0u; i < 3u; ++i )
@@ -483,9 +466,9 @@ namespace castor3d
 		auto block( m_timerGpuUpdate->start() );
 #endif
 		updater.scene = this;
-		updater.info.totalLightsCount += getLightCache().getLightsBufferCount( LightType::eDirectional );
-		updater.info.totalLightsCount += getLightCache().getLightsBufferCount( LightType::eSpot );
-		updater.info.totalLightsCount += getLightCache().getLightsBufferCount( LightType::ePoint );
+		updater.info.total.lightsCount += getLightCache().getLightsBufferCount( LightType::eDirectional );
+		updater.info.total.lightsCount += getLightCache().getLightsBufferCount( LightType::eSpot );
+		updater.info.total.lightsCount += getLightCache().getLightsBufferCount( LightType::ePoint );
 		doUpdateParticles( updater );
 		m_renderNodes->update( updater );
 	}

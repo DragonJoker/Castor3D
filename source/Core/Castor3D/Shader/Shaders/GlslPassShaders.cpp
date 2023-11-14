@@ -24,6 +24,7 @@ namespace castor3d::shader
 		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents, m_finishComponents ) }
 		, m_filter{ filter }
 		, m_opacity{ hasAny( combine, m_compRegister.getOpacityMapFlags() ) }
+		, m_frontCulled{ false }
 		, m_forceLod0{ forceLod0 }
 	{
 	}
@@ -40,6 +41,7 @@ namespace castor3d::shader
 		, m_opacity{ ( flags.usesOpacity()
 			&& flags.hasMap( m_compRegister.getOpacityMapFlags() )
 			&& m_compRegister.hasOpacity( flags ) ) }
+		, m_frontCulled{ flags.isFrontCulled() }
 		, m_forceLod0{ forceLod0 }
 	{
 	}

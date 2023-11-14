@@ -527,7 +527,6 @@ namespace castor3d
 		uint32_t m_id{ 0u };
 		bool m_implicit{ false };
 		bool m_automaticShader{ true };
-		std::map< TextureUnit const *, OnTextureUnitChangedConnection > m_unitsConnections;
 		RenderPassRegisterInfo * m_renderPassInfo{};
 		bool m_initialised{ false };
 		std::atomic_bool m_initialising{ false };

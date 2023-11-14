@@ -263,6 +263,11 @@ namespace castor3d
 			CU_Require( m_gpuImage );
 			return *m_gpuImage;
 		}
+
+		bool failed()const noexcept
+		{
+			return m_failed;
+		}
 		/**@}*/
 		/**
 		*\~english
@@ -287,6 +292,11 @@ namespace castor3d
 		{
 			m_id = value;
 			onIdChanged( *this );
+		}
+
+		void reportFailure()
+		{
+			m_failed = true;
 		}
 		/**@}*/
 
@@ -316,6 +326,7 @@ namespace castor3d
 		uint32_t m_id{ 0u };
 		castor::String m_name{};
 		bool m_initialised{ false };
+		bool m_failed{ false };
 		bool m_animated{ false };
 		bool m_needsUpload{ false };
 		uint32_t m_setIndex{};

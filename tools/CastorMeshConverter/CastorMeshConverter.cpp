@@ -298,7 +298,13 @@ namespace convert
 		}
 		else
 		{
-			auto renderer = renderers.find( "vk" );
+			auto renderer = renderers.find( "test" );
+
+			if ( renderer == renderers.end() )
+			{
+				std::cout << "Couldn't find test renderer, using Vulkan." << std::endl;
+				renderer = renderers.find( "vk" );
+			}
 
 			if ( renderer != renderers.end() )
 			{
@@ -315,7 +321,7 @@ namespace convert
 			}
 			else
 			{
-				std::cerr << "Couldn't load test renderer." << std::endl;
+				std::cerr << "Couldn't find renderer." << std::endl;
 			}
 		}
 

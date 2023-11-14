@@ -1216,31 +1216,37 @@ namespace castor3d
 			, m_averageFps );
 		m_debugPanel->addCountPanel( cuT( "TotalVertexCount" )
 			, cuT( "Vertices:" )
-			, m_renderInfo.totalVertexCount );
+			, m_renderInfo.total.vertexCount );
 		m_debugPanel->addCountPanel( cuT( "TotalFaceCount" )
 			, cuT( "Faces:" )
-			, m_renderInfo.totalFaceCount );
+			, m_renderInfo.total.faceCount );
 		m_debugPanel->addCountPanel( cuT( "TotalObjectCount" )
 			, cuT( "Objects:" )
-			, m_renderInfo.totalObjectsCount );
+			, m_renderInfo.total.objectCount );
+		m_debugPanel->addCountPanel( cuT( "TotalBillboardCount" )
+			, cuT( "Billboards:" )
+			, m_renderInfo.total.billboardCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleVertexCount" )
 			, cuT( "Visible Vertices:" )
-			, m_renderInfo.visibleVertexCount );
+			, m_renderInfo.visible.vertexCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleFaceCount" )
 			, cuT( "Visible Faces:" )
-			, m_renderInfo.visibleFaceCount );
+			, m_renderInfo.visible.faceCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleObjectCount" )
 			, cuT( "Visible Objects:" )
-			, m_renderInfo.visibleObjectsCount );
+			, m_renderInfo.visible.objectCount );
+		m_debugPanel->addCountPanel( cuT( "VisibleBillboardCount" )
+			, cuT( "Visible Billboards:" )
+			, m_renderInfo.visible.billboardCount );
 		m_debugPanel->addCountPanel( cuT( "ParticlesCount" )
 			, cuT( "Particles:" )
 			, m_renderInfo.particlesCount );
 		m_debugPanel->addCountPanel( cuT( "LightCount" )
 			, cuT( "All Lights:" )
-			, m_renderInfo.totalLightsCount );
+			, m_renderInfo.total.lightsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleLightCount" )
 			, cuT( "Visible Lights:" )
-			, m_renderInfo.visibleLightsCount );
+			, m_renderInfo.visible.lightsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleOverlaysCount" )
 			, cuT( "Visible Overlays:" )
 			, m_renderInfo.visibleOverlaysCount );

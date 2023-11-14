@@ -230,6 +230,10 @@ namespace castor3d
 					, 1u
 					, isSubmeshVisible( *nodeIt.second ) } );
 			}
+
+			++m_total.objectCount;
+			m_total.faceCount += nodeIt.second->data.getFaceCount();
+			m_total.vertexCount += nodeIt.second->data.getPointsCount();
 		}
 
 		auto & billboardNodes = getScene().getRenderNodes().getBillboardNodes();
@@ -243,6 +247,8 @@ namespace castor3d
 					, 1u
 					, isBillboardVisible( *nodeIt.second ) } );
 			}
+
+			++m_total.billboardCount;
 		}
 
 		m_first = m_culledBillboards.empty()

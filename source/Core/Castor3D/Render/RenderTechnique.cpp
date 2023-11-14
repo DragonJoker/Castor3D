@@ -24,8 +24,6 @@
 #include "Castor3D/Render/GlobalIllumination/VoxelConeTracing/Voxelizer.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/Opaque/OpaqueRendering.hpp"
-#include "Castor3D/Render/Opaque/VisibilityReorderPass.hpp"
-#include "Castor3D/Render/Opaque/VisibilityResolvePass.hpp"
 #include "Castor3D/Render/Passes/BackgroundRenderer.hpp"
 #include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
 #include "Castor3D/Render/Passes/ForwardRenderTechniquePass.hpp"
