@@ -83,11 +83,9 @@ namespace castor
 				}
 				else
 				{
+					auto name = object.image ? object.image->getName() : sourceInfo.name();
 					bool createImageFile = sourceInfo.isBufferImage()
-						|| ( sourceInfo.isFileImage() && txtexdata::isReworkedImage( sourceInfo.name() ) );
-					auto imageFile = sourceInfo.isFileImage()
-						? sourceInfo.relative()
-						: castor::Path{ sourceInfo.name() };
+						|| ( sourceInfo.isFileImage() && txtexdata::isReworkedImage( name ) );
 
 					if ( createImageFile )
 					{
@@ -104,7 +102,10 @@ namespace castor
 							File::directoryCreate( m_folder / path );
 						}
 
-						txtexdata::reworkImageFileName( sourceInfo.name(), imageFile, config.needsYInversion );
+						castor::Path imageFile = sourceInfo.isFileImage()
+							? sourceInfo.relative()
+							: castor::Path{ name };
+						txtexdata::reworkImageFileName( name, imageFile, config.needsYInversion );
 						path /= imageFile;
 						auto & writer = m_engine.getImageWriter();
 						result = writer.write( m_folder / path, object.image->getPxBuffer() );
@@ -121,11 +122,11 @@ namespace castor
 
 						if ( m_subFolder.empty() )
 						{
-							result = writeFile( file, cuT( "image" ), Path{ imageFile }, m_folder, cuT( "Textures" ) );
+							result = writeFile( file, cuT( "image" ), sourceInfo.relative(), m_folder, cuT( "Textures" ) );
 						}
 						else
 						{
-							result = writeFile( file, cuT( "image" ), Path{ imageFile }, m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
+							result = writeFile( file, cuT( "image" ), sourceInfo.relative(), m_folder, String{ cuT( "Textures" ) } + Path::GenericSeparator + m_subFolder );
 						}
 					}
 				}
