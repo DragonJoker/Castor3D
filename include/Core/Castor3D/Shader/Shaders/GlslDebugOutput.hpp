@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
+#include <unordered_set>
 #include <vector>
 
 namespace castor3d::shader
@@ -56,6 +57,7 @@ namespace castor3d::shader
 		sdw::Vec4 m_output;
 		bool m_enable;
 		sdw::Vec3Array m_values;
+		sdw::UIntArray m_indices;
 	};
 }
 
