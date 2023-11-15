@@ -388,80 +388,80 @@ namespace Testing
 
 	bool C3DTestCase::compare( SkinComponent const & lhs, SkinComponent const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::PositionsComponent const & lhs, castor3d::PositionsComponent const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::NormalsComponent const & lhs, castor3d::NormalsComponent const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::TangentsComponent const & lhs, castor3d::TangentsComponent const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::BitangentsComponent const & lhs, castor3d::BitangentsComponent const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::Texcoords0Component const & lhs, castor3d::Texcoords0Component const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::Texcoords1Component const & lhs, castor3d::Texcoords1Component const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::Texcoords2Component const & lhs, castor3d::Texcoords2Component const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::Texcoords3Component const & lhs, castor3d::Texcoords3Component const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
 
 	bool C3DTestCase::compare( castor3d::ColoursComponent const & lhs, castor3d::ColoursComponent const & rhs )
 	{
-		auto lhsData = lhs.getData();
-		auto rhsData = rhs.getData();
+		auto lhsData = lhs.getData().getData();
+		auto rhsData = rhs.getData().getData();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
@@ -476,8 +476,8 @@ namespace Testing
 
 	bool C3DTestCase::compare( TriFaceMapping const & lhs, TriFaceMapping const & rhs )
 	{
-		auto lhsData = lhs.getFaces();
-		auto rhsData = rhs.getFaces();
+		auto lhsData = lhs.getData().getFaces();
+		auto rhsData = rhs.getData().getFaces();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}
@@ -491,8 +491,8 @@ namespace Testing
 
 	bool C3DTestCase::compare( LinesMapping const & lhs, LinesMapping const & rhs )
 	{
-		auto lhsData = lhs.getFaces();
-		auto rhsData = rhs.getFaces();
+		auto lhsData = lhs.getData().getFaces();
+		auto rhsData = rhs.getData().getFaces();
 		auto result = CT_EQUAL( lhsData, rhsData );
 		return result;
 	}

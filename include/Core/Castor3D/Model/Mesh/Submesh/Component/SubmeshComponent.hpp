@@ -13,20 +13,20 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	struct SubmeshSubComponent
+	{
+		SubmeshSubComponent() = default;
+		SubmeshSubComponent( SubmeshSubComponent const & ) = delete;
+		SubmeshSubComponent & operator=( SubmeshSubComponent const & ) = delete;
+		C3D_API SubmeshSubComponent( SubmeshSubComponent && )noexcept = default;
+		C3D_API SubmeshSubComponent & operator=( SubmeshSubComponent && )noexcept = default;
+		C3D_API virtual ~SubmeshSubComponent()noexcept = default;
+	};
+
 	namespace shader
 	{
-		struct SubmeshShader
-		{
-			SubmeshShader() = default;
-			SubmeshShader( SubmeshShader const & ) = delete;
-			SubmeshShader & operator=( SubmeshShader const & ) = delete;
-			C3D_API SubmeshShader( SubmeshShader && ) = default;
-			C3D_API SubmeshShader & operator=( SubmeshShader && ) = default;
-			C3D_API virtual ~SubmeshShader() = default;
-		};
-
 		struct SubmeshSurfaceShader
-			: public SubmeshShader
+			: public SubmeshSubComponent
 		{
 			/**
 			*\~english
@@ -47,7 +47,7 @@ namespace castor3d
 		};
 
 		struct SubmeshRenderShader
-			: public SubmeshShader
+			: public SubmeshSubComponent
 		{
 			/**
 			 *\~english
@@ -66,6 +66,107 @@ namespace castor3d
 				, ast::ShaderBuilder & builder )const = 0;
 		};
 	}
+
+	struct SubmeshComponentData
+		: public SubmeshSubComponent
+	{
+		C3D_API SubmeshComponentData( Submesh & submesh );
+		/**
+		 *\~english
+		 *\brief		Initialises the submesh
+		 *\~french
+		 *\brief		Initialise le sous-maillage
+		 */
+		C3D_API bool initialise( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Cleans the submesh
+		 *\~french
+		 *\brief		Nettoie le sous-maillage
+		 */
+		C3D_API void cleanup( RenderDevice const & device );
+		/**
+		 *\~english
+		 *\brief		Uploads data on VRAM.
+		 *\remarks		For host visible buffers.
+		 *\~french
+		 *\brief		Met les données en VRAM.
+		 *\remarks		Pour les buffers host visible.
+		 */
+		C3D_API void upload( UploadData & uploader );
+		/**
+		 *\~english
+		 *\brief			Gathers buffers that need to go in a vertex layout.
+		 *\param[in]		flags			The pipeline flags.
+		 *\param[in]		material		The material.
+		 *\param[in,out]	buffers			Receives the buffers.
+		 *\param[in,out]	offsets			Receives the buffers offsets.
+		 *\param[in,out]	layouts			Receives the vertex layouts.
+		 *\param[in,out]	currentBinding	The current buffer binding.
+		 *\param[in,out]	currentLocation	The current attribute location.
+		 *\~french
+		 *\brief		Récupère les tampons qui doivent aller dans un vertex layout.
+		 *\param[in]		flags			Les flags de pipeline.
+		 *\param[in]		material		Les matériau.
+		 *\param[in,out]	buffers			Reçoit les buffers.
+		 *\param[in,out]	offsets			Reçoit les offsets dans les buffers.
+		 *\param[in,out]	layouts			Reçoit les vertex layouts.
+		 *\param[in,out]	currentBinding	L'index de binging actuel des buffers.
+		 *\param[in,out]	currentLocation	La position actuelle des attributs.
+		 */
+		C3D_API virtual void gather( PipelineFlags const & flags
+			, MaterialObs material
+			, ashes::BufferCRefArray & buffers
+			, std::vector< uint64_t > & offsets
+			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+			, uint32_t & currentBinding
+			, uint32_t & currentLocation ) = 0;
+		/**
+		 *\~english
+		 *\return			Copy given component's data into this one.
+		 *\param[in,out]	data The source component's data.
+		 *\~french
+		 *\return			Copie les données du composant donné dans celui-ci.
+		 *\param[in,out]	data	Les données du composant source.
+		 */
+		C3D_API virtual void copy( SubmeshComponentDataRPtr data )const = 0;
+		/**
+		 *\~english
+		 *\return		The buffer usage flags.
+		 *\~french
+		 *\return		Les flags d'utilisation du buffer.
+		 */
+		C3D_API virtual VkBufferUsageFlags getUsageFlags()const noexcept
+		{
+			return {};
+		}
+		/**
+		*\~english
+		*\name
+		*	Getters.
+		*\~french
+		*\name
+		*	Accesseurs.
+		*/
+		/**@{*/
+		void needsUpdate()
+		{
+			m_dirty = true;
+		}
+		/**@}*/
+
+	private:
+		C3D_API virtual bool doInitialise( RenderDevice const & device ) = 0;
+		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
+		C3D_API virtual void doUpload( UploadData & uploader ) = 0;
+
+	protected:
+		Submesh & m_submesh;
+
+	private:
+		bool m_initialised{ false };
+		bool m_dirty{ true };
+	};
 
 	class SubmeshComponentPlugin
 	{
@@ -314,6 +415,7 @@ namespace castor3d
 		 */
 		C3D_API SubmeshComponent( Submesh & submesh
 			, castor::String const & type
+			, SubmeshComponentDataUPtr data = {}
 			, castor::StringArray deps = {} );
 		/**
 		 *\~english
@@ -322,29 +424,6 @@ namespace castor3d
 		 *\brief		Destructeur.
 		 */
 		C3D_API virtual ~SubmeshComponent()noexcept = default;
-		/**
-		 *\~english
-		 *\brief		Initialises the submesh
-		 *\~french
-		 *\brief		Initialise le sous-maillage
-		 */
-		C3D_API bool initialise( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Cleans the submesh
-		 *\~french
-		 *\brief		Nettoie le sous-maillage
-		 */
-		C3D_API void cleanup( RenderDevice const & device );
-		/**
-		 *\~english
-		 *\brief		Uploads data on VRAM.
-		 *\remarks		For host visible buffers.
-		 *\~french
-		 *\brief		Met les données en VRAM.
-		 *\remarks		Pour les buffers host visible.
-		 */
-		C3D_API void upload( UploadData & uploader );
 		/**
 		 *\~english
 		 *\brief			Writes the component content to text.
@@ -379,31 +458,23 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\brief			Gathers buffers that need to go in a vertex layout.
-		 *\param[in]		flags			The pipeline flags.
-		 *\param[in]		material		The material.
-		 *\param[in,out]	buffers			Receives the buffers.
-		 *\param[in,out]	offsets			Receives the buffers offsets.
-		 *\param[in,out]	layouts			Receives the vertex layouts.
-		 *\param[in,out]	currentBinding	The current buffer binding.
-		 *\param[in,out]	currentLocation	The current attribute location.
+		 *\return		The submesh flags.
 		 *\~french
-		 *\brief		Récupère les tampons qui doivent aller dans un vertex layout.
-		 *\param[in]		flags			Les flags de pipeline.
-		 *\param[in]		material		Les matériau.
-		 *\param[in,out]	buffers			Reçoit les buffers.
-		 *\param[in,out]	offsets			Reçoit les offsets dans les buffers.
-		 *\param[in,out]	layouts			Reçoit les vertex layouts.
-		 *\param[in,out]	currentBinding	L'index de binging actuel des buffers.
-		 *\param[in,out]	currentLocation	La position actuelle des attributs.
+		 *\return		Les indicateurs de submesh.
 		 */
-		C3D_API virtual void gather( PipelineFlags const & flags
-			, MaterialObs material
-			, ashes::BufferCRefArray & buffers
-			, std::vector< uint64_t > & offsets
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t & currentBinding
-			, uint32_t & currentLocation ) = 0;
+		C3D_API virtual SubmeshComponentFlag getSubmeshFlags()const noexcept
+		{
+			return makeSubmeshComponentFlag( getId() );
+		}
+		/**
+		 *\~english
+		 *\return			Clones this component into given submesh.
+		 *\param[in,out]	submesh	Receives the cloned component.
+		 *\~french
+		 *\return			Clone ce composant dans le submesh donné.
+		 *\param[in,out]	submesh	Reçoit le composant cloné.
+		 */
+		C3D_API virtual SubmeshComponentUPtr clone( Submesh & submesh )const = 0;
 		/**
 		 *\~english
 		 *\return		The program flags.
@@ -417,35 +488,6 @@ namespace castor3d
 			return ProgramFlags{};
 		}
 		/**
-		 *\~english
-		 *\return		The submesh flags.
-		 *\~french
-		 *\return		Les indicateurs de submesh.
-		 */
-		C3D_API virtual SubmeshComponentFlag getSubmeshFlags()const noexcept
-		{
-			return makeSubmeshComponentFlag( getId() );
-		}
-		/**
-		 *\~english
-		 *\return		The buffer usage flags.
-		 *\~french
-		 *\return		Les flags d'utilisation du buffer.
-		 */
-		C3D_API virtual VkBufferUsageFlags getUsageFlags()const noexcept
-		{
-			return {};
-		}
-		/**
-		 *\~english
-		 *\return			Clones this component into given submesh.
-		 *\param[in,out]	submesh	Receives the cloned component.
-		 *\~french
-		 *\return			Clone ce composant dans le submesh donné.
-		 *\param[in,out]	submesh	Reçoit le composant cloné.
-		 */
-		C3D_API virtual SubmeshComponentUPtr clone( Submesh & submesh )const = 0;
-		/**
 		*\~english
 		*\name
 		*	Getters.
@@ -457,11 +499,6 @@ namespace castor3d
 		castor::String const & getType()const noexcept
 		{
 			return m_type;
-		}
-
-		void needsUpdate()
-		{
-			m_dirty = true;
 		}
 
 		castor::StringArray const & getDependencies()const noexcept
@@ -478,20 +515,27 @@ namespace castor3d
 		{
 			return m_id;
 		}
+
+		SubmeshComponentDataRPtr getBaseData()const noexcept
+		{
+			return m_data.get();
+		}
+
+		template< typename DataT >
+		DataT * getDataT()const noexcept
+		{
+			return static_cast< DataT * >( getBaseData() );
+		}
 		/**@}*/
 
-	private:
-		C3D_API virtual bool doInitialise( RenderDevice const & device ) = 0;
-		C3D_API virtual void doCleanup( RenderDevice const & device ) = 0;
-		C3D_API virtual void doUpload( UploadData & uploader ) = 0;
+	protected:
+		SubmeshComponentDataUPtr m_data;
 
 	private:
 		castor::String m_type;
 		castor::StringArray m_dependencies;
 		SubmeshComponentID m_id;
-		SubmeshComponentPlugin const& m_plugin;
-		bool m_initialised{ false };
-		bool m_dirty{ true };
+		SubmeshComponentPlugin const & m_plugin;
 	};
 }
 

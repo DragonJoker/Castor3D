@@ -18,16 +18,14 @@ namespace castor3d
 		 *\brief		Constructor.
 		 *\param[in]	submesh				The parent submesh.
 		 *\param[in]	type				The component type.
-		 *\param[in]	bufferUsageFlags	The buffer usage flags.
 		 *\~french
 		 *\brief		Constructeur.
 		 *\param[in]	submesh				Le sous-maillage parent.
 		 *\param[in]	type				Le type de composant.
-		 *\param[in]	bufferUsageFlags	Les flags d'utilisation du buffer.
 		 */
 		C3D_API IndexMapping( Submesh & submesh
 			, castor::String const & type
-			, VkBufferUsageFlags bufferUsageFlags );
+			, SubmeshComponentDataUPtr data );
 		/**
 		 *\~english
 		 *\return		The elements count.
@@ -60,42 +58,46 @@ namespace castor3d
 		 *\remarks		Cette fonction suppose que les normales sont définies.
 		 */
 		C3D_API virtual void computeTangents() = 0;
-		/**
-		 *\copydoc		castor3d::SubmeshComponent::gather
-		 */
-		void gather( PipelineFlags const & flags
-			, MaterialObs material
-			, ashes::BufferCRefArray & buffers
-			, std::vector< uint64_t > & offsets
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t & currentBinding
-			, uint32_t & currentLocation )override
-		{
-		}
-		/**
-		 *\copydoc		castor3d::SubmeshComponent::getUsageFlags
-		 */
-		VkBufferUsageFlags getUsageFlags()const noexcept override
-		{
-			return m_bufferUsageFlags;
-		}
 
-	private:
-		bool doInitialise( RenderDevice const & device )override
+	protected:
+		struct ComponentData
+			: public SubmeshComponentData
 		{
-			return true;
-		}
+			ComponentData( Submesh & submesh
+				, VkBufferUsageFlags bufferUsageFlags )
+				: SubmeshComponentData{ submesh }
+				, m_bufferUsageFlags{ bufferUsageFlags }
+			{
+			}
+			/**
+			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 */
+			void gather( PipelineFlags const & flags
+				, MaterialObs material
+				, ashes::BufferCRefArray & buffers
+				, std::vector< uint64_t > & offsets
+				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+				, uint32_t & currentBinding
+				, uint32_t & currentLocation )override final
+			{
+			}
+			/**
+			 *\copydoc		castor3d::SubmeshComponentData::getUsageFlags
+			 */
+			VkBufferUsageFlags getUsageFlags()const noexcept override
+			{
+				return m_bufferUsageFlags;
+			}
 
-		void doCleanup( RenderDevice const & device )override
-		{
-		}
+		private:
+			bool doInitialise( RenderDevice const & device )override
+			{
+				return true;
+			}
 
-		void doUpload( UploadData & uploader )override
-		{
-		}
-
-	private:
-		VkBufferUsageFlags m_bufferUsageFlags;
+		private:
+			VkBufferUsageFlags m_bufferUsageFlags;
+		};
 	};
 }
 

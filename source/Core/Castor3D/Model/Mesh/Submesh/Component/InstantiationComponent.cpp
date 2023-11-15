@@ -71,102 +71,14 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const InstantiationComponent::TypeName = cuT( "instantiation" );
-
-	InstantiationComponent::InstantiationComponent( Submesh & submesh
+	InstantiationComponent::ComponentData::ComponentData( Submesh & submesh
 		, uint32_t threshold )
-		: SubmeshComponent{ submesh, TypeName }
+		: SubmeshComponentData{ submesh }
 		, m_threshold{ threshold }
 	{
 	}
 
-	bool InstantiationComponent::ref( MaterialObs material )
-	{
-		bool result{ false };
-		auto it = find( *material );
-
-		if ( it == m_instances.end() )
-		{
-			it = m_instances.emplace( material, Data{ 0u, GpuBufferOffsetT< InstantiationData >{} } ).first;
-		}
-
-		auto & data = it->second;
-		++data.count;
-
-		if ( doCheckInstanced( data.count ) )
-		{
-			data.data.resize( data.count );
-			result = smshcompinst::updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
-				, getOwner()->getParent().getName() + "_" + it->first->getName()
-				, data.count
-				, data.buffer );
-		}
-
-		return result;
-	}
-
-	void InstantiationComponent::unref( MaterialObs material )
-	{
-		auto it = find( *material );
-
-		if ( it != end() )
-		{
-			auto & data = it->second;
-
-			if ( data.count )
-			{
-				data.count--;
-			}
-
-			if ( !doCheckInstanced( data.count ) )
-			{
-				if ( data.buffer )
-				{
-					getOwner()->getOwner()->getEngine()->getRenderSystem()->getRenderDevice().bufferPool->putBuffer( data.buffer );
-					data.buffer = {};
-				}
-			}
-		}
-	}
-
-	uint32_t InstantiationComponent::getRefCount( MaterialObs material )const
-	{
-		uint32_t result = 0;
-		auto it = find( *material );
-
-		if ( it != end() )
-		{
-			result = it->second.count;
-		}
-
-		return result;
-	}
-
-	bool InstantiationComponent::isInstanced( MaterialObs material )const
-	{
-		return !getOwner()->isDynamic()
-			&& doCheckInstanced( getRefCount( material ) );
-	}
-
-	bool InstantiationComponent::isInstanced()const
-	{
-		return !getOwner()->isDynamic()
-			&& doCheckInstanced( getMaxRefCount() );
-	}
-
-	uint32_t InstantiationComponent::getMaxRefCount()const
-	{
-		uint32_t count = 0;
-
-		for ( auto & it : m_instances )
-		{
-			count = std::max( count, it.second.count );
-		}
-
-		return count;
-	}
-
-	void InstantiationComponent::gather( PipelineFlags const & flags
+	void InstantiationComponent::ComponentData::gather( PipelineFlags const & flags
 		, MaterialObs material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -203,32 +115,96 @@ namespace castor3d
 		}
 	}
 
-	SubmeshComponentUPtr InstantiationComponent::clone( Submesh & submesh )const
+	void InstantiationComponent::ComponentData::copy( SubmeshComponentDataRPtr data )const
 	{
-		auto result = castor::makeUnique< InstantiationComponent >( submesh, m_threshold );
-		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
-	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const noexcept
+	bool InstantiationComponent::ComponentData::ref( MaterialObs material )
 	{
-		auto it = find( material );
-		return ( it != end() && it->second.buffer && !getOwner()->isDynamic() )
-			? ProgramFlag::eInstantiation
-			: ProgramFlag{};
+		bool result{ false };
+		auto it = find( *material );
+
+		if ( it == m_instances.end() )
+		{
+			it = m_instances.emplace( material, Data{ 0u, GpuBufferOffsetT< InstantiationData >{} } ).first;
+		}
+
+		auto & data = it->second;
+		++data.count;
+
+		if ( isInstanced( data.count ) )
+		{
+			data.data.resize( data.count );
+			result = smshcompinst::updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
+				, m_submesh.getParent().getName() + "_" + it->first->getName()
+				, data.count
+				, data.buffer );
+		}
+
+		return result;
 	}
 
-	bool InstantiationComponent::doInitialise( RenderDevice const & device )
+	void InstantiationComponent::ComponentData::unref( MaterialObs material )
+	{
+		auto it = find( *material );
+
+		if ( it != end() )
+		{
+			auto & data = it->second;
+
+			if ( data.count )
+			{
+				data.count--;
+			}
+
+			if ( !isInstanced( data.count ) )
+			{
+				if ( data.buffer )
+				{
+					m_submesh.getParent().getEngine()->getRenderSystem()->getRenderDevice().bufferPool->putBuffer( data.buffer );
+					data.buffer = {};
+				}
+			}
+		}
+	}
+
+	uint32_t InstantiationComponent::ComponentData::getRefCount( MaterialObs material )const
+	{
+		uint32_t result = 0;
+		auto it = find( *material );
+
+		if ( it != end() )
+		{
+			result = it->second.count;
+		}
+
+		return result;
+	}
+
+	uint32_t InstantiationComponent::ComponentData::getMaxRefCount()const
+	{
+		uint32_t count = 0;
+
+		for ( auto & it : m_instances )
+		{
+			count = std::max( count, it.second.count );
+		}
+
+		return count;
+	}
+
+	bool InstantiationComponent::ComponentData::doInitialise( RenderDevice const & device )
 	{
 		bool result = true;
 
-		if ( doCheckInstanced( getMaxRefCount() ) )
+		if ( isInstanced( getMaxRefCount() ) )
 		{
 			for ( auto & data : m_instances )
 			{
-				if ( doCheckInstanced( data.second.count ) )
+				if ( isInstanced( data.second.count ) )
 				{
 					smshcompinst::updateBuffer( device
-						, getOwner()->getParent().getName() + "_" + data.first->getName()
+						, m_submesh.getParent().getName() + "_" + data.first->getName()
 						, data.second.count
 						, data.second.buffer );
 				}
@@ -238,7 +214,7 @@ namespace castor3d
 		return result;
 	}
 
-	void InstantiationComponent::doCleanup( RenderDevice const & device )
+	void InstantiationComponent::ComponentData::doCleanup( RenderDevice const & device )
 	{
 		for ( auto & data : m_instances )
 		{
@@ -250,7 +226,7 @@ namespace castor3d
 		}
 	}
 
-	void InstantiationComponent::doUpload( UploadData & uploader )
+	void InstantiationComponent::ComponentData::doUpload( UploadData & uploader )
 	{
 		for ( auto & data : m_instances )
 		{
@@ -263,6 +239,48 @@ namespace castor3d
 					, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 			}
 		}
+	}
+
+	//*********************************************************************************************
+
+	castor::String const InstantiationComponent::TypeName = cuT( "Instantiation" );
+
+	InstantiationComponent::InstantiationComponent( Submesh & submesh
+		, uint32_t threshold )
+		: SubmeshComponent{ submesh, TypeName
+			, std::make_unique< ComponentData >( submesh, threshold ) }
+	{
+	}
+
+	SubmeshComponentUPtr InstantiationComponent::clone( Submesh & submesh )const
+	{
+		auto data = getDataT< ComponentData >();
+		auto result = castor::makeUnique< InstantiationComponent >( submesh
+			, data->getThreshold() );
+		return castor::ptrRefCast< SubmeshComponent >( result );
+	}
+
+	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const noexcept
+	{
+		auto data = getDataT< ComponentData >();
+		auto it = data->find( material );
+		return ( it != data->end() && it->second.buffer && !getOwner()->isDynamic() )
+			? ProgramFlag::eInstantiation
+			: ProgramFlag{};
+	}
+
+	bool InstantiationComponent::isInstanced( MaterialObs material )const
+	{
+		auto data = getDataT< ComponentData >();
+		return !getOwner()->isDynamic()
+			&& data->isInstanced( data->getRefCount( material ) );
+	}
+
+	bool InstantiationComponent::isInstanced()const
+	{
+		auto data = getDataT< ComponentData >();
+		return !getOwner()->isDynamic()
+			&& data->isInstanced( data->getMaxRefCount() );
 	}
 
 	//*********************************************************************************************

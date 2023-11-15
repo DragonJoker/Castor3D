@@ -16,6 +16,93 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	public:
+		struct ComponentData
+			: public SubmeshComponentData
+		{
+			ComponentData( Submesh & submesh )
+				: SubmeshComponentData{ submesh }
+			{
+			}
+			/**
+			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 */
+			void gather( PipelineFlags const & flags
+				, MaterialObs material
+				, ashes::BufferCRefArray & buffers
+				, std::vector< uint64_t > & offsets
+				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+				, uint32_t & currentBinding
+				, uint32_t & currentLocation )override;
+			/**
+			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 */
+			void copy( SubmeshComponentDataRPtr data )const override;
+			/**
+			 *\~english
+			 *\brief		Adds bone datas.
+			 *\param[in]	begin	The bones data begin.
+			 *\param[in]	end		The bones data end.
+			 *\~french
+			 *\brief		Ajoute des données de bones.
+			 *\param[in]	begin	Le début des données de bones.
+			 *\param[in]	end		La fin des données de bones.
+			 */
+			C3D_API void addDatas( PassMasks const * const begin
+				, PassMasks const * const end );
+			/**
+			 *\~english
+			 *\brief		Adds masks datas.
+			 *\param[in]	data	The masks.
+			 *\~french
+			 *\brief		Ajoute des données de masques.
+			 *\param[in]	data	Les données de masques.
+			 */
+			C3D_API void addDatas( std::vector< PassMasks > const & data );
+			/**
+			 *\~english
+			 *\brief		Adds masks datas.
+			 *\param[in]	data	The masks datas.
+			 *\~french
+			 *\brief		Ajoute des données de masques.
+			 *\param[in]	data	Les données de masques.
+			 */
+			template< size_t Count >
+			void addDatas( std::array< PassMasks, Count > const & data )
+			{
+				addDatas( data.data(), data.data() + data.size() );
+			}
+
+			bool hasData()const
+			{
+				return !m_data.empty();
+			}
+
+			void setData( std::vector< PassMasks > data )
+			{
+				m_data = std::move( data );
+			}
+
+			std::vector< PassMasks > & getData()
+			{
+				return m_data;
+			}
+
+			std::vector< PassMasks > const & getData()const
+			{
+				return m_data;
+			}
+
+		private:
+			bool doInitialise( RenderDevice const & device )override;
+			void doCleanup( RenderDevice const & device )override;
+			void doUpload( UploadData & uploader )override;
+
+		private:
+			std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
+			std::vector< PassMasks > m_data;
+			std::vector< castor::Point4ui > m_up;
+		};
+
 		class Plugin
 			: public SubmeshComponentPlugin
 		{
@@ -50,94 +137,26 @@ namespace castor3d
 		 */
 		C3D_API explicit PassMasksComponent( Submesh & submesh );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::gather
-		 */
-		C3D_API void gather( PipelineFlags const & flags
-			, MaterialObs material
-			, ashes::BufferCRefArray & buffers
-			, std::vector< uint64_t > & offsets
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t & currentBinding
-			, uint32_t & currentLocation )override;
-		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
-		/**
-		 *\~english
-		 *\brief		Adds bone datas.
-		 *\param[in]	begin	The bones data begin.
-		 *\param[in]	end		The bones data end.
-		 *\~french
-		 *\brief		Ajoute des données de bones.
-		 *\param[in]	begin	Le début des données de bones.
-		 *\param[in]	end		La fin des données de bones.
-		 */
-		C3D_API void addDatas( PassMasks const * const begin
-			, PassMasks const * const end );
-		/**
-		 *\~english
-		 *\brief		Adds masks datas.
-		 *\param[in]	data	The masks.
-		 *\~french
-		 *\brief		Ajoute des données de masques.
-		 *\param[in]	data	Les données de masques.
-		 */
-		C3D_API void addDatas( std::vector< PassMasks > const & data );
-		/**
-		 *\~english
-		 *\brief		Adds masks datas.
-		 *\param[in]	data	The masks datas.
-		 *\~french
-		 *\brief		Ajoute des données de masques.
-		 *\param[in]	data	Les données de masques.
-		 */
-		template< size_t Count >
-		void addDatas( std::array< PassMasks, Count > const & data )
-		{
-			addDatas( data.data(), data.data() + data.size() );
-		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getSubmeshFlags
 		 */
 		SubmeshComponentFlag getSubmeshFlags()const noexcept override
 		{
-			return makeSubmeshComponentFlag( hasData() ? getId() : 0u );
+			return makeSubmeshComponentFlag( getDataT< ComponentData >()->hasData() ? getId() : 0u );
 		}
 
-		bool hasData()const
+		ComponentData & getData()const noexcept
 		{
-			return !m_data.empty();
+			return *getDataT< ComponentData >();
 		}
-
-		void setData( std::vector< PassMasks > data )
-		{
-			m_data = std::move( data );
-		}
-
-		std::vector< PassMasks > & getData()
-		{
-			return m_data;
-		}
-
-		std::vector< PassMasks > const & getData()const
-		{
-			return m_data;
-		}
-
-	private:
-		bool doInitialise( RenderDevice const & device )override;
-		void doCleanup( RenderDevice const & device )override;
-		void doUpload( UploadData & uploader )override;
 
 	public:
 		C3D_API static castor::String const TypeName;
 
 	private:
-		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
-		std::vector< PassMasks > m_data;
-		std::vector< castor::Point4ui > m_up;
-
 		friend class BinaryWriter< PassMasksComponent >;
 		friend class BinaryParser< PassMasksComponent >;
 	};

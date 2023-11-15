@@ -58,6 +58,76 @@ namespace castor3d
 			}
 		};
 
+		struct ComponentData
+			: public SubmeshComponentData
+		{
+			ComponentData( Submesh & submesh )
+				: SubmeshComponentData{ submesh }
+			{
+			}
+			/**
+			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 */
+			void gather( PipelineFlags const & flags
+				, MaterialObs material
+				, ashes::BufferCRefArray & buffers
+				, std::vector< uint64_t > & offsets
+				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+				, uint32_t & currentBinding
+				, uint32_t & currentLocation )override
+			{
+				gatherBaseDataBuffer( SubmeshDataT
+					, flags
+					, layouts
+					, currentBinding
+					, currentLocation
+					, m_layouts );
+			}
+			/**
+			 *\copydoc		castor3d::SubmeshComponentData::clone
+			 */
+			void copy( SubmeshComponentDataRPtr data )const override
+			{
+				static_cast< ComponentData * >( data )->m_data = m_data;
+			}
+
+			void setData( std::vector< DataT > const & data )
+			{
+				m_data = data;
+			}
+
+			std::vector< DataT > & getData()
+			{
+				return m_data;
+			}
+
+			std::vector< DataT > const & getData()const
+			{
+				return m_data;
+			}
+
+		private:
+			bool doInitialise( RenderDevice const & device )override
+			{
+				return true;
+			}
+
+			void doCleanup( RenderDevice const & device )override
+			{
+				m_data.clear();
+			}
+
+			void doUpload( UploadData & uploader )override
+			{
+				uploadBaseData( SubmeshDataT, m_submesh, m_data, m_up, uploader );
+			}
+
+		private:
+			std::vector< DataT > m_data;
+			castor::Point4fArray m_up;
+			std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
+		};
+
 		class Plugin
 			: public SubmeshComponentPlugin
 		{
@@ -141,26 +211,9 @@ namespace castor3d
 		 *\param[in]	submesh	Le sous-maillage parent.
 		 */
 		explicit BaseDataComponentT( Submesh & submesh )
-			: SubmeshComponent{ submesh, TypeName }
+			: SubmeshComponent{ submesh, TypeName
+				, std::make_unique< ComponentData >( submesh ) }
 		{
-		}
-		/**
-		 *\copydoc		castor3d::SubmeshComponent::gather
-		 */
-		void gather( PipelineFlags const & flags
-			, MaterialObs material
-			, ashes::BufferCRefArray & buffers
-			, std::vector< uint64_t > & offsets
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t & currentBinding
-			, uint32_t & currentLocation )override
-		{
-			gatherBaseDataBuffer( SubmeshDataT
-				, flags
-				, layouts
-				, currentBinding
-				, currentLocation
-				, m_layouts );
 		}
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
@@ -168,49 +221,17 @@ namespace castor3d
 		SubmeshComponentUPtr clone( Submesh & submesh )const override
 		{
 			auto result = castor::makeUnique< BaseDataComponentT >( submesh );
-			result->m_data = m_data;
+			result->getData().copy( &getData() );
 			return castor::ptrRefCast< SubmeshComponent >( result );
 		}
 
-		void setData( std::vector< DataT > const & data )
+		ComponentData & getData()const noexcept
 		{
-			m_data = data;
-		}
-
-		std::vector< DataT > & getData()
-		{
-			return m_data;
-		}
-
-		std::vector< DataT > const & getData()const
-		{
-			return m_data;
-		}
-
-	private:
-		bool doInitialise( RenderDevice const & device )override
-		{
-			return true;
-		}
-
-		void doCleanup( RenderDevice const & device )override
-		{
-			m_data.clear();
-		}
-
-		void doUpload( UploadData & uploader )override
-		{
-			uploadBaseData( SubmeshDataT , *getOwner(), m_data, m_up, uploader );
+			return *getDataT< ComponentData >();
 		}
 
 	public:
 		static castor::String const TypeName;
-
-
-	private:
-		std::vector< DataT > m_data;
-		castor::Point4fArray m_up;
-		std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > m_layouts;
 	};
 
 	template< SubmeshData SubmeshDataT, typename DataT >

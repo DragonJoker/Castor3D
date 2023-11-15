@@ -119,48 +119,54 @@ namespace castor3d
 		auto mapping4 = submesh4->createComponent< TriFaceMapping >();
 		auto mapping5 = submesh5->createComponent< TriFaceMapping >();
 		auto mapping6 = submesh6->createComponent< TriFaceMapping >();
+		auto & mapping1Data = mapping1->getData();
+		auto & mapping2Data = mapping2->getData();
+		auto & mapping3Data = mapping3->getData();
+		auto & mapping4Data = mapping4->getData();
+		auto & mapping5Data = mapping5->getData();
+		auto & mapping6Data = mapping6->getData();
 
 		if ( CptNegatif == 1 || CptNegatif == 3 )
 		{
 			// Faces du bas
-			mapping1->addFace( 0, 2, 1 );
-			mapping1->addFace( 2, 0, 3 );
+			mapping1Data.addFace( 0, 2, 1 );
+			mapping1Data.addFace( 2, 0, 3 );
 			// Faces du haut
-			mapping2->addFace( 0, 2, 1 );
-			mapping2->addFace( 2, 0, 3 );
+			mapping2Data.addFace( 0, 2, 1 );
+			mapping2Data.addFace( 2, 0, 3 );
 			// Faces de derrière
-			mapping3->addFace( 0, 2, 1 );
-			mapping3->addFace( 2, 0, 3 );
+			mapping3Data.addFace( 0, 2, 1 );
+			mapping3Data.addFace( 2, 0, 3 );
 			// Faces de devant
-			mapping4->addFace( 0, 2, 1 );
-			mapping4->addFace( 2, 0, 3 );
+			mapping4Data.addFace( 0, 2, 1 );
+			mapping4Data.addFace( 2, 0, 3 );
 			// Faces de droite
-			mapping5->addFace( 0, 2, 1 );
-			mapping5->addFace( 2, 0, 3 );
+			mapping5Data.addFace( 0, 2, 1 );
+			mapping5Data.addFace( 2, 0, 3 );
 			// Faces de gauche
-			mapping6->addFace( 0, 2, 1 );
-			mapping6->addFace( 2, 0, 3 );
+			mapping6Data.addFace( 0, 2, 1 );
+			mapping6Data.addFace( 2, 0, 3 );
 		}
 		else
 		{
 			// Faces du bas
-			mapping1->addFace( 3, 1, 2 );
-			mapping1->addFace( 1, 3, 0 );
+			mapping1Data.addFace( 3, 1, 2 );
+			mapping1Data.addFace( 1, 3, 0 );
 			// Faces du haut
-			mapping2->addFace( 3, 1, 2 );
-			mapping2->addFace( 1, 3, 0 );
+			mapping2Data.addFace( 3, 1, 2 );
+			mapping2Data.addFace( 1, 3, 0 );
 			// Faces de derrière
-			mapping3->addFace( 3, 1, 2 );
-			mapping3->addFace( 1, 3, 0 );
+			mapping3Data.addFace( 3, 1, 2 );
+			mapping3Data.addFace( 1, 3, 0 );
 			// Faces de devant
-			mapping4->addFace( 3, 1, 2 );
-			mapping4->addFace( 1, 3, 0 );
+			mapping4Data.addFace( 3, 1, 2 );
+			mapping4Data.addFace( 1, 3, 0 );
 			// Faces de droite
-			mapping5->addFace( 3, 1, 2 );
-			mapping5->addFace( 1, 3, 0 );
+			mapping5Data.addFace( 3, 1, 2 );
+			mapping5Data.addFace( 1, 3, 0 );
 			// Faces de gauche
-			mapping6->addFace( 3, 1, 2 );
-			mapping6->addFace( 1, 3, 0 );
+			mapping6Data.addFace( 3, 1, 2 );
+			mapping6Data.addFace( 1, 3, 0 );
 		}
 
 		mapping1->computeTangents();

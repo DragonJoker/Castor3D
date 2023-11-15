@@ -89,10 +89,11 @@ namespace castor3d
 	{
 		if ( !texcoords.empty() )
 		{
+			auto & data = triFace.getData();
 			auto * v1 = &texcoords[0];
 			auto * v2 = &texcoords[1];
 			auto * v3 = &texcoords[2];
-			triFace.addFace( 0, 1, 2 );
+			data.addFace( 0, 1, 2 );
 			*v1 = castor::Point3f{ 0.0, 0.0, 0.0 };
 			*v2 = castor::Point3f{ 0.0, 0.0, 0.0 };
 			*v3 = castor::Point3f{ 0.0, 0.0, 0.0 };
@@ -101,7 +102,7 @@ namespace castor3d
 			{
 				v2 = &texcoords[i];
 				v3 = &texcoords[i + 1];
-				triFace.addFace( 0, i, i + 1 );
+				data.addFace( 0, i, i + 1 );
 				*v2 = castor::Point3f{ 0.0, 0.0, 0.0 };
 				*v3 = castor::Point3f{ 0.0, 0.0, 0.0 };
 			}

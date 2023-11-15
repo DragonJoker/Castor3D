@@ -19,6 +19,105 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	public:
+		struct ComponentData
+			: public SubmeshComponentData
+		{
+			ComponentData( Submesh & submesh )
+				: SubmeshComponentData{ submesh }
+			{
+			}
+			/**
+			 *\copydoc		castor3d::SubmeshComponentData::gather
+			 */
+			void gather( PipelineFlags const & flags
+				, MaterialObs material
+				, ashes::BufferCRefArray & buffers
+				, std::vector< uint64_t > & offsets
+				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
+				, uint32_t & currentBinding
+				, uint32_t & currentLocation )override
+			{
+			}
+			/**
+			 *\copydoc		castor3d::SubmeshComponentData::copy
+			 */
+			void copy( SubmeshComponentDataRPtr data )const override;
+			/**
+			 *\~english
+			 *\brief		Adds a morph target.
+			 *\param[in]	data	The morph target.
+			 *\~french
+			 *\brief		Ajoute une cible de morph.
+			 *\param[in]	data	La cible de morph.
+			 */
+			C3D_API void addMorphTarget( SubmeshAnimationBuffer data );
+			/**
+			 *\~english
+			 *\return		The morphing flags.
+			 *\~french
+			 *\return		Les indicateurs de morphing.
+			 */
+			MorphFlags getMorphFlags()const noexcept
+			{
+				return m_flags;
+			}
+			/**
+			 *\~english
+			 *\return		The morph targets buffer.
+			 *\~french
+			 *\return		Le buffer de cibles de morph.
+			 */
+			GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const noexcept
+			{
+				return m_buffer;
+			}
+			/**
+			 *\~english
+			 *\return		The morph targets data.
+			 *\~french
+			 *\return		Les données de cibles de morph.
+			 */
+			std::vector< SubmeshAnimationBuffer > const & getMorphTargetsBuffers()const noexcept
+			{
+				return m_targets;
+			}
+			/**
+			 *\~english
+			 *\return		The morph targets data.
+			 *\~french
+			 *\return		Les données de cibles de morph.
+			 */
+			std::vector< SubmeshAnimationBuffer > & getMorphTargetsBuffers()noexcept
+			{
+				return m_targets;
+			}
+			/**
+			 *\~english
+			 *\return		The number of morph targets.
+			 *\~french
+			 *\return		Le nombre de cibles de morph.
+			 */
+			uint32_t getMorphTargetsCount()const noexcept
+			{
+				return uint32_t( m_targets.size() );
+			}
+
+		private:
+			bool doInitialise( RenderDevice const & device )override;
+			void doCleanup( RenderDevice const & device )override;
+			void doUpload( UploadData & uploader )override;
+
+		private:
+			MorphFlags m_flags{};
+			uint32_t m_targetDataCount{};
+			GpuBufferOffsetT< castor::Point4f > m_buffer;
+			std::vector< SubmeshAnimationBuffer > m_targets;
+
+		private:
+			friend class BinaryWriter< MorphComponent >;
+			friend class BinaryParser< MorphComponent >;
+		};
+
 		class Plugin
 			: public SubmeshComponentPlugin
 		{
@@ -53,97 +152,17 @@ namespace castor3d
 		 */
 		C3D_API explicit MorphComponent( Submesh & submesh );
 		/**
-		 *\copydoc		castor3d::SubmeshComponent::gather
-		 */
-		C3D_API void gather( PipelineFlags const & flags
-			, MaterialObs material
-			, ashes::BufferCRefArray & buffers
-			, std::vector< uint64_t > & offsets
-			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
-			, uint32_t & currentBinding
-			, uint32_t & currentLocation )override
-		{
-		}
-		/**
 		 *\copydoc		castor3d::SubmeshComponent::clone
 		 */
 		C3D_API SubmeshComponentUPtr clone( Submesh & submesh )const override;
-		/**
-		 *\~english
-		 *\brief		Adds a morph target.
-		 *\param[in]	data	The morph target.
-		 *\~french
-		 *\brief		Ajoute une cible de morph.
-		 *\param[in]	data	La cible de morph.
-		 */
-		C3D_API void addMorphTarget( SubmeshAnimationBuffer data );
-		/**
-		 *\~english
-		 *\return		The morphing flags.
-		 *\~french
-		 *\return		Les indicateurs de morphing.
-		 */
-		MorphFlags getMorphFlags()const noexcept
-		{
-			return m_flags;
-		}
-		/**
-		 *\~english
-		 *\return		The morph targets buffer.
-		 *\~french
-		 *\return		Le buffer de cibles de morph.
-		 */
-		GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const noexcept
-		{
-			return m_buffer;
-		}
-		/**
-		 *\~english
-		 *\return		The morph targets data.
-		 *\~french
-		 *\return		Les données de cibles de morph.
-		 */
-		std::vector< SubmeshAnimationBuffer > const & getMorphTargetsBuffers()const noexcept
-		{
-			return m_targets;
-		}
-		/**
-		 *\~english
-		 *\return		The morph targets data.
-		 *\~french
-		 *\return		Les données de cibles de morph.
-		 */
-		std::vector< SubmeshAnimationBuffer > & getMorphTargetsBuffers()noexcept
-		{
-			return m_targets;
-		}
-		/**
-		 *\~english
-		 *\return		The number of morph targets.
-		 *\~french
-		 *\return		Le nombre de cibles de morph.
-		 */
-		uint32_t getMorphTargetsCount()const noexcept
-		{
-			return uint32_t( m_targets.size() );
-		}
 
-	private:
-		bool doInitialise( RenderDevice const & device )override;
-		void doCleanup( RenderDevice const & device )override;
-		void doUpload( UploadData & uploader )override;
+		ComponentData & getData()const noexcept
+		{
+			return *getDataT< ComponentData >();
+		}
 
 	public:
 		C3D_API static castor::String const TypeName;
-
-	private:
-		MorphFlags m_flags{};
-		uint32_t m_targetDataCount{};
-		GpuBufferOffsetT< castor::Point4f > m_buffer;
-		std::vector< SubmeshAnimationBuffer > m_targets;
-
-		friend class BinaryWriter< MorphComponent >;
-		friend class BinaryParser< MorphComponent >;
 	};
 }
 

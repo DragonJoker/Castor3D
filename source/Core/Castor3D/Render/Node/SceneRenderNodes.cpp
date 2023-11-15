@@ -544,7 +544,7 @@ namespace castor3d
 			{
 				auto & passes = indices.emplace( &node->data, std::map< Pass const *, uint32_t >{} ).first->second;
 				auto & index = passes.emplace( node->pass, 0u ).first->second;
-				auto it = instantiation.find( *node->pass->getOwner() );
+				auto it = instantiation.getData().find( *node->pass->getOwner() );
 				CU_Require( it != instantiation.end() );
 				CU_Require( node->getId() > 0u );
 

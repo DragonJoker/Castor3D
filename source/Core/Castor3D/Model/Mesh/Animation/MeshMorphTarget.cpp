@@ -30,7 +30,7 @@ namespace castor3d
 		auto component = submesh.getComponent< MorphComponent >();
 		m_boundingBox = submesh.getBoundingBox();
 
-		for ( auto & morphTarget : component->getMorphTargetsBuffers() )
+		for ( auto & morphTarget : component->getData().getMorphTargetsBuffers() )
 		{
 			auto targetbb = morphTarget.boundingBox;
 			targetbb.load( m_boundingBox.getMin() + targetbb.getMin() * *weightIt

@@ -57,6 +57,7 @@ namespace castor3d
 			}
 
 			auto indexMapping = submesh.createComponent< TriFaceMapping >();
+			auto & indexMappingData = indexMapping->getData();
 
 			for ( uint32_t k = 0; k < m_nbFaces; k++ )
 			{
@@ -96,8 +97,8 @@ namespace castor3d
 				// Reconstition des faces
 				for ( uint32_t i = 0; i < m_nbFaces; i++ )
 				{
-					indexMapping->addFace( iCur + 0, iPrv + 0, iPrv + 1 );
-					indexMapping->addFace( iCur + 1, iCur + 0, iPrv + 1 );
+					indexMappingData.addFace( iCur + 0, iPrv + 0, iPrv + 1 );
+					indexMappingData.addFace( iCur + 1, iCur + 0, iPrv + 1 );
 					iPrv++;
 					iCur++;
 				}

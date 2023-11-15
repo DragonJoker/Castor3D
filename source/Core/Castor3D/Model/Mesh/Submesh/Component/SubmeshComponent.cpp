@@ -102,17 +102,12 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	SubmeshComponent::SubmeshComponent( Submesh & submesh
-		, castor::String const & type
-		, castor::StringArray deps )
-		: castor::OwnedBy< Submesh >{ submesh }
-		, m_type{ type }
-		, m_id{ submesh.getComponentId( m_type ) }
-		, m_plugin{ submesh.getComponentPlugin( m_id ) }
+	SubmeshComponentData::SubmeshComponentData( Submesh & submesh )
+		: m_submesh{ submesh }
 	{
 	}
 
-	bool SubmeshComponent::initialise( RenderDevice const & device )
+	bool SubmeshComponentData::initialise( RenderDevice const & device )
 	{
 		if ( !m_initialised || m_dirty )
 		{
@@ -122,7 +117,7 @@ namespace castor3d
 		return m_initialised;
 	}
 
-	void SubmeshComponent::cleanup( RenderDevice const & device )
+	void SubmeshComponentData::cleanup( RenderDevice const & device )
 	{
 		if ( m_initialised )
 		{
@@ -130,13 +125,27 @@ namespace castor3d
 		}
 	}
 
-	void SubmeshComponent::upload( UploadData & uploader )
+	void SubmeshComponentData::upload( UploadData & uploader )
 	{
 		if ( m_initialised && m_dirty )
 		{
 			doUpload( uploader );
 			m_dirty = false;
 		}
+	}
+
+	//*********************************************************************************************
+
+	SubmeshComponent::SubmeshComponent( Submesh & submesh
+		, castor::String const & type
+		, SubmeshComponentDataUPtr data
+		, castor::StringArray deps )
+		: castor::OwnedBy< Submesh >{ submesh }
+		, m_data{ std::move( data ) }
+		, m_type{ type }
+		, m_id{ submesh.getComponentId( m_type ) }
+		, m_plugin{ submesh.getComponentPlugin( m_id ) }
+	{
 	}
 
 	//*********************************************************************************************

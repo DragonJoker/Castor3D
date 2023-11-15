@@ -19,6 +19,8 @@ CU_ImplementSmartPtr( castor3d, PassMasksComponent )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace passflags
 	{
 		static ashes::PipelineVertexInputStateCreateInfo createVertexLayout( uint32_t & currentBinding
@@ -60,14 +62,15 @@ namespace castor3d
 		}
 	}
 
-	castor::String const PassMasksComponent::TypeName = cuT( "passMasks" );
+	//*********************************************************************************************
 
-	PassMasksComponent::PassMasksComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, TypeName }
+	void PassMasksComponent::ComponentData::copy( SubmeshComponentDataRPtr data )const
 	{
+		auto result = static_cast< ComponentData * >( data );
+		result->m_data = m_data;
 	}
 
-	void PassMasksComponent::gather( PipelineFlags const & flags
+	void PassMasksComponent::ComponentData::gather( PipelineFlags const & flags
 		, MaterialObs material
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
@@ -97,38 +100,31 @@ namespace castor3d
 		}
 	}
 
-	void PassMasksComponent::addDatas( PassMasks const * const begin
+	void PassMasksComponent::ComponentData::addDatas( PassMasks const * const begin
 		, PassMasks const * const end )
 	{
 		m_data.insert( m_data.end(), begin, end );
 	}
 
-	SubmeshComponentUPtr PassMasksComponent::clone( Submesh & submesh )const
-	{
-		auto result = castor::makeUnique< PassMasksComponent >( submesh );
-		result->m_data = m_data;
-		return castor::ptrRefCast< SubmeshComponent >( result );
-	}
-
-	void PassMasksComponent::addDatas( std::vector< PassMasks > const & boneData )
+	void PassMasksComponent::ComponentData::addDatas( std::vector< PassMasks > const & boneData )
 	{
 		addDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
 
-	bool PassMasksComponent::doInitialise( RenderDevice const & device )
+	bool PassMasksComponent::ComponentData::doInitialise( RenderDevice const & device )
 	{
 		return true;
 	}
 
-	void PassMasksComponent::doCleanup( RenderDevice const & device )
+	void PassMasksComponent::ComponentData::doCleanup( RenderDevice const & device )
 	{
 		m_data.clear();
 	}
 
-	void PassMasksComponent::doUpload( UploadData & uploader )
+	void PassMasksComponent::ComponentData::doUpload( UploadData & uploader )
 	{
 		auto count = uint32_t( m_data.size() );
-		auto & offsets = getOwner()->getSourceBufferOffsets();
+		auto & offsets = m_submesh.getSourceBufferOffsets();
 		auto & buffer = offsets.getBufferChunk( SubmeshData::ePassMasks );
 
 		if ( count && buffer.hasData() )
@@ -143,4 +139,23 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
+
+	//*********************************************************************************************
+
+	castor::String const PassMasksComponent::TypeName = cuT( "PassMasks" );
+
+	PassMasksComponent::PassMasksComponent( Submesh & submesh )
+		: SubmeshComponent{ submesh, TypeName
+			, std::make_unique< ComponentData >( submesh ) }
+	{
+	}
+
+	SubmeshComponentUPtr PassMasksComponent::clone( Submesh & submesh )const
+	{
+		auto result = castor::makeUnique< PassMasksComponent >( submesh );
+		result->getData().copy( &getData() );
+		return castor::ptrRefCast< SubmeshComponent >( result );
+	}
+
+	//*********************************************************************************************
 }

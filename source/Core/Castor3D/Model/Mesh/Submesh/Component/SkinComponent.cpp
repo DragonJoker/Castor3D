@@ -19,49 +19,37 @@ CU_ImplementSmartPtr( castor3d, SkinComponent )
 
 namespace castor3d
 {
-	castor::String const SkinComponent::TypeName = cuT( "skin" );
+	//*********************************************************************************************
 
-	SkinComponent::SkinComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, TypeName }
+	void SkinComponent::ComponentData::copy( SubmeshComponentDataRPtr data )const
 	{
+		static_cast< ComponentData * >( data )->m_bones = m_bones;
 	}
 
-	void SkinComponent::addDatas( VertexBoneData const * const begin
+	void SkinComponent::ComponentData::addDatas( VertexBoneData const * const begin
 		, VertexBoneData const * const end )
 	{
 		m_bones.insert( m_bones.end(), begin, end );
 	}
 
-	SkeletonRPtr SkinComponent::getSkeleton()const
-	{
-		return getOwner()->getParent().getSkeleton();
-	}
-
-	SubmeshComponentUPtr SkinComponent::clone( Submesh & submesh )const
-	{
-		auto result = castor::makeUnique< SkinComponent >( submesh );
-		result->m_bones = m_bones;
-		return castor::ptrRefCast< SubmeshComponent >( result );
-	}
-
-	void SkinComponent::addDatas( std::vector< VertexBoneData > const & boneData )
+	void SkinComponent::ComponentData::addDatas( std::vector< VertexBoneData > const & boneData )
 	{
 		addDatas( boneData.data(), boneData.data() + boneData.size() );
 	}
 
-	bool SkinComponent::doInitialise( RenderDevice const & device )
+	bool SkinComponent::ComponentData::doInitialise( RenderDevice const & device )
 	{
 		return true;
 	}
 
-	void SkinComponent::doCleanup( RenderDevice const & device )
+	void SkinComponent::ComponentData::doCleanup( RenderDevice const & device )
 	{
 	}
 
-	void SkinComponent::doUpload( UploadData & uploader )
+	void SkinComponent::ComponentData::doUpload( UploadData & uploader )
 	{
 		auto count = uint32_t( m_bones.size() );
-		auto & offsets = getOwner()->getSourceBufferOffsets();
+		auto & offsets = m_submesh.getSourceBufferOffsets();
 		auto & buffer = offsets.getBufferChunk( SubmeshData::eSkin );
 
 		if ( count && buffer.hasData() )
@@ -75,4 +63,28 @@ namespace castor3d
 				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
 		}
 	}
+
+	//*********************************************************************************************
+
+	castor::String const SkinComponent::TypeName = cuT( "Skin" );
+
+	SkinComponent::SkinComponent( Submesh & submesh )
+		: SubmeshComponent{ submesh, TypeName
+			, std::make_unique< ComponentData >( submesh ) }
+	{
+	}
+
+	SkeletonRPtr SkinComponent::getSkeleton()const
+	{
+		return getOwner()->getParent().getSkeleton();
+	}
+
+	SubmeshComponentUPtr SkinComponent::clone( Submesh & submesh )const
+	{
+		auto result = castor::makeUnique< SkinComponent >( submesh );
+		result->getData().copy( &getData() );
+		return castor::ptrRefCast< SubmeshComponent >( result );
+	}
+
+	//*********************************************************************************************
 }

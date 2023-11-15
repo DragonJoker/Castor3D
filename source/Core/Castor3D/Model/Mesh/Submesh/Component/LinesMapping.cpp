@@ -8,12 +8,12 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-//*************************************************************************************************
-
 CU_ImplementSmartPtr( castor3d, LinesMapping )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace smshcompline
 	{
 		struct LineDistance
@@ -34,18 +34,19 @@ namespace castor3d
 		};
 	}
 
-	castor::String const LinesMapping::TypeName = "lines_mapping";
+	//*********************************************************************************************
 
-	LinesMapping::LinesMapping( Submesh & submesh
-		, VkBufferUsageFlags bufferUsageFlags )
-		: IndexMapping{ submesh, TypeName, bufferUsageFlags }
+	void LinesMapping::ComponentData::copy( SubmeshComponentDataRPtr data )const
 	{
+		auto result = static_cast< ComponentData * >( data );
+		result->m_lines = m_lines;
+		result->m_cameraPosition = m_cameraPosition;
 	}
 
-	Line LinesMapping::addLine( uint32_t a, uint32_t b )
+	Line LinesMapping::ComponentData::addLine( uint32_t a, uint32_t b )
 	{
 		Line result{ a, b };
-		auto size = getOwner()->getPointsCount();
+		auto size = m_submesh.getPointsCount();
 
 		if ( a < size && b < size )
 		{
@@ -59,7 +60,7 @@ namespace castor3d
 		return result;
 	}
 
-	void LinesMapping::addLineGroup( LineIndices const * const begin
+	void LinesMapping::ComponentData::addLineGroup( LineIndices const * const begin
 		, LineIndices const * const end )
 	{
 		for ( auto & line : castor::makeArrayView( begin, end ) )
@@ -68,9 +69,42 @@ namespace castor3d
 		}
 	}
 
-	void LinesMapping::clearLines()
+	void LinesMapping::ComponentData::clearLines()
 	{
 		m_lines.clear();
+	}
+
+	void LinesMapping::ComponentData::doCleanup( RenderDevice const & device )
+	{
+		m_lines.clear();
+	}
+
+	void LinesMapping::ComponentData::doUpload( UploadData & uploader )
+	{
+		auto count = uint32_t( m_lines.size() * 2 );
+		auto & offsets = m_submesh.getSourceBufferOffsets();
+		auto & buffer = offsets.getBufferChunk( SubmeshData::eIndex );
+
+		if ( count && buffer.hasData() )
+		{
+			uploader.pushUpload( m_lines.data()
+				, m_lines.size() * sizeof( Line )
+				, buffer.getBuffer()
+				, buffer.getOffset()
+				, VK_ACCESS_INDEX_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+		}
+	}
+
+	//*********************************************************************************************
+
+	castor::String const LinesMapping::TypeName = "Lines";
+
+	LinesMapping::LinesMapping( Submesh & submesh
+		, VkBufferUsageFlags bufferUsageFlags )
+		: IndexMapping{ submesh, TypeName
+			, std::make_unique< ComponentData >( submesh, bufferUsageFlags ) }
+	{
 	}
 
 	void LinesMapping::computeNormals( bool reverted )
@@ -84,14 +118,13 @@ namespace castor3d
 	SubmeshComponentUPtr LinesMapping::clone( Submesh & submesh )const
 	{
 		auto result = castor::makeUnique< LinesMapping >( submesh );
-		result->m_lines = m_lines;
-		result->m_cameraPosition = m_cameraPosition;
+		result->getData().copy( &getData() );
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
 	uint32_t LinesMapping::getCount()const
 	{
-		return uint32_t( m_lines.size() );
+		return getDataT< ComponentData >()->getCount();
 	}
 
 	uint32_t LinesMapping::getComponentsCount()const
@@ -99,25 +132,5 @@ namespace castor3d
 		return 2u;
 	}
 
-	void LinesMapping::doCleanup( RenderDevice const & device )
-	{
-		m_lines.clear();
-	}
-
-	void LinesMapping::doUpload( UploadData & uploader )
-	{
-		auto count = uint32_t( m_lines.size() * 2 );
-		auto & offsets = getOwner()->getSourceBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshData::eIndex );
-
-		if ( count && buffer.hasData() )
-		{
-			uploader.pushUpload( m_lines.data()
-				, m_lines.size() * sizeof( Line )
-				, buffer.getBuffer()
-				, buffer.getOffset()
-				, VK_ACCESS_INDEX_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
-		}
-	}
+	//*********************************************************************************************
 }

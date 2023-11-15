@@ -123,22 +123,24 @@ namespace castor3d
 			}
 
 			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
+			auto & indexMappingBaseData = indexMappingBase->getData();
 			auto indexMappingSide = submeshSide.createComponent< TriFaceMapping >();
+			auto & indexMappingSideData = indexMappingSide->getData();
 
 			//Composition des extrémités
 			for ( i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				indexMappingBase->addFace( i + 1, i, bottomCenterIndex );
+				indexMappingBaseData.addFace( i + 1, i, bottomCenterIndex );
 			}
 
 			//Composition du bas
-			indexMappingBase->addFace( 0, m_nbFaces - 1, bottomCenterIndex );
+			indexMappingBaseData.addFace( 0, m_nbFaces - 1, bottomCenterIndex );
 
 			//Composition des côtés
 			for ( i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				indexMappingSide->addFace( i + 1, i + 0, i + 2 );
+				indexMappingSideData.addFace( i + 1, i + 0, i + 2 );
 			}
 
 			indexMappingBase->computeNormals();
@@ -147,24 +149,24 @@ namespace castor3d
 			indexMappingSide->computeTangents();
 
 			// Join the first and last edge of the cone, tangent space wise.
-			auto sideNormals = submeshSide.getComponent< NormalsComponent >();
-			auto sideTangents = submeshSide.getComponent< TangentsComponent >();
-			auto normal0Top = sideNormals->getData()[0];
-			auto normal0Base = sideNormals->getData()[1];
-			auto tangent0Top = sideTangents->getData()[0];
-			auto tangent0Base = sideTangents->getData()[1];
-			normal0Top += sideNormals->getData()[submeshSide.getPointsCount() - 2];
-			normal0Base += sideNormals->getData()[submeshSide.getPointsCount() - 1];
-			tangent0Top += sideTangents->getData()[submeshSide.getPointsCount() - 2];
-			tangent0Base += sideTangents->getData()[submeshSide.getPointsCount() - 1];
+			auto & sideNormals = submeshSide.getComponent< NormalsComponent >()->getData();
+			auto & sideTangents = submeshSide.getComponent< TangentsComponent >()->getData();
+			auto normal0Top = sideNormals.getData()[0];
+			auto normal0Base = sideNormals.getData()[1];
+			auto tangent0Top = sideTangents.getData()[0];
+			auto tangent0Base = sideTangents.getData()[1];
+			normal0Top += sideNormals.getData()[submeshSide.getPointsCount() - 2];
+			normal0Base += sideNormals.getData()[submeshSide.getPointsCount() - 1];
+			tangent0Top += sideTangents.getData()[submeshSide.getPointsCount() - 2];
+			tangent0Base += sideTangents.getData()[submeshSide.getPointsCount() - 1];
 			castor::point::normalise( normal0Top );
 			castor::point::normalise( normal0Base );
 			castor::point::normalise( tangent0Top );
 			castor::point::normalise( tangent0Base );
-			sideNormals->getData()[submeshSide.getPointsCount() - 2] = normal0Top;
-			sideNormals->getData()[submeshSide.getPointsCount() - 1] = normal0Base;
-			sideTangents->getData()[submeshSide.getPointsCount() - 2] = tangent0Top;
-			sideTangents->getData()[submeshSide.getPointsCount() - 1] = tangent0Base;
+			sideNormals.getData()[submeshSide.getPointsCount() - 2] = normal0Top;
+			sideNormals.getData()[submeshSide.getPointsCount() - 1] = normal0Base;
+			sideTangents.getData()[submeshSide.getPointsCount() - 2] = tangent0Top;
+			sideTangents.getData()[submeshSide.getPointsCount() - 1] = tangent0Base;
 		}
 	}
 }

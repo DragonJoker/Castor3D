@@ -98,11 +98,13 @@ namespace castor3d
 		static uint32_t getComponentCount( Submesh const & submesh )
 		{
 			uint32_t result{};
-			auto comp = submesh.getComponent< ComponentT >();
 
-			if ( comp )
+			if ( auto comp = submesh.getComponent< ComponentT >() )
 			{
-				result = uint32_t( comp->getData().size() );
+				if ( auto compData = comp->getBaseData() )
+				{
+					result = uint32_t( static_cast< typename ComponentT::ComponentData * >( compData )->getData().size() );
+				}
 			}
 
 			return result;
@@ -112,11 +114,12 @@ namespace castor3d
 		void addComponentData( Submesh & submesh
 			, DataT const & data )
 		{
-			auto comp = submesh.getComponent< ComponentT >();
-
-			if ( comp )
+			if ( auto comp = submesh.getComponent< ComponentT >() )
 			{
-				comp->getData().push_back( data );
+				if ( auto compData = comp->getBaseData() )
+				{
+					static_cast< typename ComponentT::ComponentData * >( compData )->getData().push_back( data );
+				}
 			}
 		}
 
@@ -124,11 +127,12 @@ namespace castor3d
 		void reserveComponentData( Submesh & submesh
 			, uint32_t size )
 		{
-			auto comp = submesh.getComponent< ComponentT >();
-
-			if ( comp )
+			if ( auto comp = submesh.getComponent< ComponentT >() )
 			{
-				comp->getData().reserve( size );
+				if ( auto compData = comp->getBaseData() )
+				{
+					static_cast< typename ComponentT::ComponentData * >( compData )->getData().reserve( size );
+				}
 			}
 		}
 	}
@@ -227,7 +231,10 @@ namespace castor3d
 			{
 				if ( m_initialised )
 				{
-					m_initialised = component.second->initialise( device );
+					if ( auto data = component.second->getBaseData() )
+					{
+						m_initialised = data->initialise( device );
+					}
 				}
 			}
 
@@ -280,7 +287,7 @@ namespace castor3d
 
 		if ( meshletComponent )
 		{
-			result = meshletComponent->getMeshletsBuffer().getOffset();
+			result = meshletComponent->getData().getMeshletsBuffer().getOffset();
 		}
 
 		return result;
@@ -313,7 +320,10 @@ namespace castor3d
 
 		for ( auto & component : m_components )
 		{
-			component.second->cleanup( device );
+			if ( auto data = component.second->getBaseData() )
+			{
+				data->cleanup( device );
+			}
 		}
 
 		for ( auto & finalBufferOffset : m_finalBufferOffsets )
@@ -334,7 +344,10 @@ namespace castor3d
 
 		for ( auto & component : m_components )
 		{
-			component.second->upload( uploader );
+			if ( auto data = component.second->getBaseData() )
+			{
+				data->upload( uploader );
+			}
 		}
 	}
 
@@ -349,7 +362,7 @@ namespace castor3d
 
 		if ( positions && getPointsCount() )
 		{
-			auto & points = positions->getData();
+			auto & points = positions->getData().getData();
 			castor::Point3f min{ points[0] };
 			castor::Point3f max{ points[0] };
 			uint32_t nbVertex = getPointsCount();
@@ -446,7 +459,7 @@ namespace castor3d
 		if ( positions )
 		{
 			int index = 0;
-			auto & points = positions->getData();
+			auto & points = positions->getData().getData();
 
 			for ( auto it = points.begin(); it != points.end() && result == -1; ++it )
 			{
@@ -535,7 +548,7 @@ namespace castor3d
 
 		if ( auto morph = getComponent< MorphComponent >() )
 		{
-			result = morph->getMorphFlags();
+			result = morph->getData().getMorphFlags();
 		}
 
 		return result;
@@ -550,9 +563,10 @@ namespace castor3d
 		{
 			if ( update && m_instantiation )
 			{
-				m_instantiation->unref( oldMaterial );
+				auto & data = m_instantiation->getData();
+				data.unref( oldMaterial );
 
-				if ( m_instantiation->ref( newMaterial ) )
+				if ( data.ref( newMaterial ) )
 				{
 					m_geometryBuffers.clear();
 				}
@@ -563,7 +577,7 @@ namespace castor3d
 		{
 			if ( auto meshletComponent = getComponent< MeshletComponent >() )
 			{
-				meshletComponent->instantiate( *geometry );
+				meshletComponent->getData().instantiate( *geometry );
 			}
 
 			auto it = m_finalBufferOffsets.emplace( geometry, ObjectBufferOffset{} ).first;
@@ -608,13 +622,16 @@ namespace castor3d
 
 			for ( auto & component : m_components )
 			{
-				component.second->gather( flags
-					, node.pass->getOwner()
-					, buffers
-					, offsets
-					, layouts
-					, currentBinding
-					, currentLocation );
+				if ( auto data = component.second->getBaseData() )
+				{
+					data->gather( flags
+						, node.pass->getOwner()
+						, buffers
+						, offsets
+						, layouts
+						, currentBinding
+						, currentLocation );
+				}
 			}
 
 			GeometryBuffers result;
@@ -740,22 +757,22 @@ namespace castor3d
 
 		if ( auto positions = getComponent< PositionsComponent >() )
 		{
-			result.pos = positions->getData()[index];
+			result.pos = positions->getData().getData()[index];
 		}
 
 		if ( auto normals = getComponent< NormalsComponent >() )
 		{
-			result.nml = normals->getData()[index];
+			result.nml = normals->getData().getData()[index];
 		}
 
 		if ( auto tangents = getComponent< TangentsComponent >() )
 		{
-			result.tan = tangents->getData()[index];
+			result.tan = tangents->getData().getData()[index];
 		}
 
 		if ( auto texcoords0 = getComponent< Texcoords0Component >() )
 		{
-			result.tex = texcoords0->getData()[index];
+			result.tex = texcoords0->getData().getData()[index];
 		}
 
 		return result;
@@ -765,7 +782,7 @@ namespace castor3d
 	{
 		if ( auto component = getComponent< PositionsComponent >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -777,14 +794,14 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< PositionsComponent >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point3fArray const & Submesh::getNormals()const
 	{
 		if ( auto component = getComponent< NormalsComponent >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -796,14 +813,14 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< NormalsComponent >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point4fArray const & Submesh::getTangents()const
 	{
 		if ( auto component = getComponent< TangentsComponent >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point4fArray const dummy;
@@ -815,14 +832,14 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< TangentsComponent >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point3fArray const & Submesh::getBitangents()const
 	{
 		if ( auto component = getComponent< BitangentsComponent >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -834,14 +851,14 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< BitangentsComponent >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point3fArray const & Submesh::getTexcoords0()const
 	{
 		if ( auto component = getComponent< Texcoords0Component >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -853,14 +870,14 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< Texcoords0Component >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point3fArray const & Submesh::getTexcoords1()const
 	{
 		if ( auto component = getComponent< Texcoords1Component >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -872,14 +889,14 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< Texcoords1Component >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point3fArray const & Submesh::getTexcoords2()const
 	{
 		if ( auto component = getComponent< Texcoords2Component >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -891,14 +908,14 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< Texcoords2Component >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point3fArray const & Submesh::getTexcoords3()const
 	{
 		if ( auto component = getComponent< Texcoords3Component >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -910,14 +927,14 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< Texcoords3Component >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point3fArray const & Submesh::getColours()const
 	{
 		if ( auto component = getComponent< ColoursComponent >() )
 		{
-			return component->getData();
+			return component->getData().getData();
 		}
 
 		static castor::Point3fArray const dummy;
@@ -929,7 +946,7 @@ namespace castor3d
 		m_dirty = true;
 		auto component = getComponent< ColoursComponent >();
 		CU_Require( component );
-		return component->getData();
+		return component->getData().getData();
 	}
 
 	castor::Point3fArray const & Submesh::getBaseData( SubmeshData submeshData )const
@@ -1018,7 +1035,7 @@ namespace castor3d
 	{
 		if ( auto component = getComponent< MorphComponent >() )
 		{
-			return component->getMorphTargets();
+			return component->getData().getMorphTargets();
 		}
 
 		static GpuBufferOffsetT< castor::Point4f > const dummy{};
@@ -1029,7 +1046,7 @@ namespace castor3d
 	{
 		if ( auto component = getComponent< MorphComponent >() )
 		{
-			return component->getMorphTargetsCount();
+			return component->getData().getMorphTargetsCount();
 		}
 
 		return 0u;
@@ -1039,7 +1056,7 @@ namespace castor3d
 	{
 		if ( auto component = getComponent< MeshletComponent >() )
 		{
-			return component->getMeshletsData();
+			return component->getData().getMeshletsData();
 		}
 
 		static std::vector< Meshlet > const dummy{};
@@ -1056,14 +1073,14 @@ namespace castor3d
 			CU_Exception( "Couldn't retrieve Meshlets component." );
 		}
 
-		return component->getMeshletsData();
+		return component->getData().getMeshletsData();
 	}
 
 	uint32_t Submesh::getMeshletsCount()const
 	{
 		if ( auto component = getComponent< MeshletComponent >() )
 		{
-			return component->getMeshletsCount();
+			return component->getData().getMeshletsCount();
 		}
 
 		return 0u;
@@ -1111,21 +1128,21 @@ namespace castor3d
 	{
 		auto meshletComponent = getComponent< MeshletComponent >();
 		CU_Require( meshletComponent );
-		return meshletComponent->getMeshletsBuffer();
+		return meshletComponent->getData().getMeshletsBuffer();
 	}
 
 	GpuBufferOffsetT< MeshletCullData > const & Submesh::getFinalMeshletsBounds( Geometry const & instance )const
 	{
 		auto meshletComponent = getComponent< MeshletComponent >();
 		CU_Require( meshletComponent );
-		return meshletComponent->getFinalCullBuffer( instance );
+		return meshletComponent->getData().getFinalCullBuffer( instance );
 	}
 
 	GpuBufferOffsetT< MeshletCullData > const & Submesh::getSourceMeshletsBounds()const
 	{
 		auto meshletComponent = getComponent< MeshletComponent >();
 		CU_Require( meshletComponent );
-		return meshletComponent->getSourceCullBuffer();
+		return meshletComponent->getData().getSourceCullBuffer();
 	}
 
 	bool Submesh::hasMorphComponent()const

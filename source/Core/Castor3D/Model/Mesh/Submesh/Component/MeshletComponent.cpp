@@ -16,46 +16,42 @@ CU_ImplementSmartPtr( castor3d, MeshletComponent )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 	namespace mshletcomp
 	{
-		static castor::String getName( MeshletComponent const & component )
+		static castor::String getName( Submesh & submesh )
 		{
-			return component.getOwner()->getOwner()->getName()
-				+ castor::string::toString( component.getOwner()->getId() )
+			return submesh.getOwner()->getName()
+				+ castor::string::toString( submesh.getId() )
 				+ "Meshlet";
 		}
 	}
 #endif
 
-	castor::String const MeshletComponent::TypeName = cuT( "meshlet" );
+	//*********************************************************************************************
 
-	MeshletComponent::MeshletComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, TypeName }
+	void MeshletComponent::ComponentData::copy( SubmeshComponentDataRPtr data )const
 	{
-	}
-
-	SubmeshComponentUPtr MeshletComponent::clone( Submesh & submesh )const
-	{
-		auto result = castor::makeUnique< MeshletComponent >( submesh );
+		auto result = static_cast< ComponentData * >( data );
 		result->m_meshlets = m_meshlets;
 		result->m_cull = m_cull;
-		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
-	void MeshletComponent::createDescriptorSet( Geometry const & geometry )
+	void MeshletComponent::ComponentData::createDescriptorSet( Geometry const & geometry )
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
-		auto & baseBuffers = getOwner()->getFinalBufferOffsets( geometry );
+		auto & baseBuffers = m_submesh.getFinalBufferOffsets( geometry );
 		auto descSetIt = m_descriptorSets.emplace( &geometry, nullptr ).first;
 
 		if ( !descSetIt->second )
 		{
-			descSetIt->second = m_descriptorPool->createDescriptorSet( mshletcomp::getName( *this )
+			descSetIt->second = m_descriptorPool->createDescriptorSet( mshletcomp::getName( m_submesh )
 				, RenderPipeline::eMeshBuffers );
 			ashes::WriteDescriptorSetArray writes;
-			auto & material = *geometry.getMaterial( *getOwner() );
-			auto combine = getOwner()->getComponentCombine();
+			auto & material = *geometry.getMaterial( m_submesh );
+			auto combine = m_submesh.getComponentCombine();
 			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
 			writes.push_back( getFinalCullBuffer( geometry ).getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
 
@@ -125,8 +121,8 @@ namespace castor3d
 					, uint32_t( MeshBuffersIdx::eVelocity ) ) );
 			}
 
-			auto bufferIt = getOwner()->getInstantiation().find( material );
-			CU_Require( bufferIt != getOwner()->getInstantiation().end() );
+			auto bufferIt = m_submesh.getInstantiation().getDataT< InstantiationComponent::ComponentData >()->find( material );
+			CU_Require( bufferIt != m_submesh.getInstantiation().end() );
 
 			if ( bufferIt->second.buffer )
 			{
@@ -139,44 +135,32 @@ namespace castor3d
 #endif
 	}
 
-	ProgramFlags MeshletComponent::getProgramFlags( Material const & material )const noexcept
-	{
-#if VK_EXT_mesh_shader || VK_NV_mesh_shader
-		return ProgramFlag::eHasMesh
-			| ( m_cull.empty()
-				? ProgramFlag::eNone
-				: ProgramFlag::eHasTask );
-#else
-		return ProgramFlag::eNone;
-#endif
-	}
-
-	ashes::DescriptorSet const & MeshletComponent::getDescriptorSet( Geometry const & geometry )const
+	ashes::DescriptorSet const & MeshletComponent::ComponentData::getDescriptorSet( Geometry const & geometry )const
 	{
 		auto it = m_descriptorSets.find( &geometry );
 		CU_Require( it != m_descriptorSets.end() );
 		return *it->second;
 	}
 
-	void MeshletComponent::instantiate( Geometry const & geometry )
+	void MeshletComponent::ComponentData::instantiate( Geometry const & geometry )
 	{
 		auto it = m_finalCullBuffers.emplace( &geometry, GpuBufferOffsetT< MeshletCullData >{} ).first;
 
-		if ( getOwner()->isInitialised()
+		if ( m_submesh.isInitialised()
 			&& !it->second )
 		{
 			// Initialise only if the submesh itself is already initialised,
 			// because if it is not, the buffers will be initialised by the call to initialise().
-			RenderDevice & device = getOwner()->getOwner()->getOwner()->getRenderSystem()->getRenderDevice();
+			RenderDevice & device = m_submesh.getParent().getEngine()->getRenderSystem()->getRenderDevice();
 			it->second = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 				, m_meshlets.size()
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 		}
 	}
 
-	GpuBufferOffsetT< MeshletCullData > const & MeshletComponent::getFinalCullBuffer( Geometry const & geometry )const
+	GpuBufferOffsetT< MeshletCullData > const & MeshletComponent::ComponentData::getFinalCullBuffer( Geometry const & geometry )const
 	{
-		if ( !getOwner()->isDynamic() )
+		if ( !m_submesh.isDynamic() )
 		{
 			CU_Require( bool( m_sourceCullBuffer ) );
 			return m_sourceCullBuffer;
@@ -194,7 +178,7 @@ namespace castor3d
 		return m_sourceCullBuffer;
 	}
 
-	bool MeshletComponent::doInitialise( RenderDevice const & device )
+	bool MeshletComponent::ComponentData::doInitialise( RenderDevice const & device )
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		if ( !m_meshlets.empty() )
@@ -222,7 +206,7 @@ namespace castor3d
 					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
 			}
 
-			if ( getOwner()->isDynamic() )
+			if ( m_submesh.isDynamic() )
 			{
 				for ( auto & finalCullBuffer : m_finalCullBuffers )
 				{
@@ -239,7 +223,7 @@ namespace castor3d
 		return true;
 	}
 
-	void MeshletComponent::doCleanup( RenderDevice const & device )
+	void MeshletComponent::ComponentData::doCleanup( RenderDevice const & device )
 	{
 		if ( m_sourceCullBuffer )
 		{
@@ -260,7 +244,7 @@ namespace castor3d
 		}
 	}
 
-	void MeshletComponent::doUpload( UploadData & uploader )
+	void MeshletComponent::ComponentData::doUpload( UploadData & uploader )
 	{
 		if ( !m_meshletBuffer )
 		{
@@ -292,7 +276,7 @@ namespace castor3d
 #endif
 	}
 
-	void MeshletComponent::doCreateDescriptorLayout( RenderDevice const & device )
+	void MeshletComponent::ComponentData::doCreateDescriptorLayout( RenderDevice const & device )
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
@@ -302,7 +286,7 @@ namespace castor3d
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eCullData )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_TASK_BIT_NV ) );
-		auto combine = getOwner()->getComponentCombine();
+		auto combine = m_submesh.getComponentCombine();
 
 		if ( combine.hasPositionFlag )
 		{
@@ -385,10 +369,39 @@ namespace castor3d
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_TASK_BIT_NV | VK_SHADER_STAGE_MESH_BIT_NV ) );
 
-		m_descriptorLayout = device->createDescriptorSetLayout( mshletcomp::getName( *this )
+		m_descriptorLayout = device->createDescriptorSetLayout( mshletcomp::getName( m_submesh )
 			, std::move( bindings ) );
-		m_descriptorPool = m_descriptorLayout->createPool( mshletcomp::getName( *this )
+		m_descriptorPool = m_descriptorLayout->createPool( mshletcomp::getName( m_submesh )
 			, MaxNodesPerPipeline );
+#endif
+	}
+
+	//*********************************************************************************************
+
+	castor::String const MeshletComponent::TypeName = cuT( "Meshlet" );
+
+	MeshletComponent::MeshletComponent( Submesh & submesh )
+		: SubmeshComponent{ submesh, TypeName
+			, std::make_unique< ComponentData >( submesh ) }
+	{
+	}
+
+	SubmeshComponentUPtr MeshletComponent::clone( Submesh & submesh )const
+	{
+		auto result = castor::makeUnique< MeshletComponent >( submesh );
+		result->getData().copy( &getData() );
+		return castor::ptrRefCast< SubmeshComponent >( result );
+	}
+
+	ProgramFlags MeshletComponent::getProgramFlags( Material const & material )const noexcept
+	{
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
+		return ProgramFlag::eHasMesh
+			| ( !getDataT< ComponentData >()->hasCullData()
+				? ProgramFlag::eNone
+				: ProgramFlag::eHasTask );
+#else
+		return ProgramFlag::eNone;
 #endif
 	}
 }

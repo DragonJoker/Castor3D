@@ -210,43 +210,43 @@ namespace c3d_assimp
 		{
 			auto tanComp = submesh.createComponent< castor3d::TangentsComponent >();
 			auto texComp = submesh.createComponent< castor3d::Texcoords0Component >();
-			tangents = &tanComp->getData();
-			texcoords0 = &texComp->getData();
+			tangents = &tanComp->getData().getData();
+			texcoords0 = &texComp->getData().getData();
 		}
 
 		if ( aiMesh.HasTextureCoords( 1u ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords1Component >();
-			texcoords1 = &texComp->getData();
+			texcoords1 = &texComp->getData().getData();
 		}
 
 		if ( aiMesh.HasTextureCoords( 2u ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords2Component >();
-			texcoords2 = &texComp->getData();
+			texcoords2 = &texComp->getData().getData();
 		}
 
 		if ( aiMesh.HasTextureCoords( 3u ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords3Component >();
-			texcoords3 = &texComp->getData();
+			texcoords3 = &texComp->getData().getData();
 		}
 
 		if ( aiMesh.HasVertexColors( 0u ) )
 		{
 			auto colComp = submesh.createComponent< castor3d::ColoursComponent >();
-			colours = &colComp->getData();
+			colours = &colComp->getData().getData();
 		}
 
 		if ( aiMesh.HasTangentsAndBitangents() )
 		{
 			auto bitComp = submesh.createComponent< castor3d::BitangentsComponent >();
-			bitangents = &bitComp->getData();
+			bitangents = &bitComp->getData().getData();
 		}
 
 		createVertexBuffer( aiMesh
-			, positions->getData()
-			, normals->getData()
+			, positions->getData().getData()
+			, normals->getData().getData()
 			, *tangents
 			, *bitangents
 			, *texcoords0
@@ -254,8 +254,8 @@ namespace c3d_assimp
 			, *texcoords2
 			, *texcoords3
 			, *colours );
-		auto animBuffers = gatherMeshAnimBuffers( positions->getData()
-			, normals->getData()
+		auto animBuffers = gatherMeshAnimBuffers( positions->getData().getData()
+			, normals->getData().getData()
 			, *tangents
 			, *bitangents
 			, *texcoords0
@@ -274,7 +274,7 @@ namespace c3d_assimp
 
 			for ( auto & animBuffer : animBuffers )
 			{
-				component->addMorphTarget( animBuffer );
+				component->getData().addMorphTarget( animBuffer );
 			}
 		}
 
@@ -308,7 +308,7 @@ namespace c3d_assimp
 				}
 
 				auto bones = submesh.createComponent< castor3d::SkinComponent >();
-				bones->addDatas( bonesData );
+				bones->getData().addDatas( bonesData );
 			}
 		}
 
@@ -319,11 +319,11 @@ namespace c3d_assimp
 		{
 			if ( face.mNumIndices == 3 )
 			{
-				mapping->addFace( face.mIndices[0], face.mIndices[2], face.mIndices[1] );
+				mapping->getData().addFace( face.mIndices[0], face.mIndices[2], face.mIndices[1] );
 			}
 			else if ( face.mNumIndices == 4 )
 			{
-				mapping->addQuadFace( face.mIndices[0], face.mIndices[2], face.mIndices[1], face.mIndices[2] );
+				mapping->getData().addQuadFace( face.mIndices[0], face.mIndices[2], face.mIndices[1], face.mIndices[2] );
 			}
 		}
 

@@ -123,6 +123,7 @@ namespace castor3d
 		if ( !sortAroundCenter )
 		{
 			auto indexMapping = submesh->createComponent< TriFaceMapping >();
+			auto & indexMappingData = indexMapping->getData();
 			std::vector< FaceIndices > faces;
 			faces.reserve( size_t( subDivisionsW ) * subDivisionsD * 2u );
 
@@ -135,14 +136,15 @@ namespace castor3d
 				}
 			}
 
-			indexMapping->addFaceGroup( faces );
+			indexMappingData.addFaceGroup( faces );
 			indexMapping->computeTangents();
 		}
 
 		if ( tileUV )
 		{
 			auto secondaryUV = submesh->createComponent< Texcoords1Component >();
-			auto & tiledUV = secondaryUV->getData();
+			auto & secondaryUVData = secondaryUV->getData();
+			auto & tiledUV = secondaryUVData.getData();
 			tiledUV.reserve( size_t( nbVertexW ) * nbVertexH );
 
 			for ( uint32_t i = 0; i < nbVertexW; i++ )

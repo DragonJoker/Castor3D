@@ -169,6 +169,13 @@ namespace castor3d
 	class SubmeshComponent;
 	/**
 	\~english
+	\brief		Submesh component data holder.
+	\~french
+	\brief		Détient les données d'un composant de sous-maillage.
+	*/
+	struct SubmeshComponentData;
+	/**
+	\~english
 	\brief		Plugin for a submesh component.
 	\~french
 	\brief		Plugin pour un composant pour un sous-maillage.
@@ -270,6 +277,9 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, SubmeshComponentPlugin, C3D_API );
 	CU_DeclareSmartPtr( castor3d, SubmeshComponentRegister, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TriFaceMapping, C3D_API );
+
+	using SubmeshComponentDataUPtr = std::unique_ptr< SubmeshComponentData >;
+	using SubmeshComponentDataRPtr = SubmeshComponentData *;
 
 	//! Face array
 	CU_DeclareVector( Face, Face );
