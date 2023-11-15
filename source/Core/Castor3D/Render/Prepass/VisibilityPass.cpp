@@ -71,7 +71,8 @@ namespace castor3d
 			| ShaderFlag::eOpacity
 			| ShaderFlag::eVelocity
 			| ShaderFlag::eVisibility
-			| ShaderFlag::eNormal;
+			| ShaderFlag::eNormal
+			| ShaderFlag::eColour;
 	}
 
 	void VisibilityPass::doFillAdditionalBindings( PipelineFlags const & flags

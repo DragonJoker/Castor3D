@@ -314,6 +314,16 @@ namespace castor3d
 		return m_componentCombine.baseId;
 	}
 
+	bool Submesh::hasRenderComponent()const
+	{
+		return std::any_of( m_components.begin()
+			, m_components.end()
+			, []( SubmeshComponentIDMap::value_type const & lookup )
+			{
+				return lookup.second->getPlugin().hasRenderShader();
+			} );
+	}
+
 	void Submesh::cleanup( RenderDevice const & device )
 	{
 		m_initialised = false;
@@ -594,7 +604,7 @@ namespace castor3d
 					indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
 				}
 
-				auto combine = m_componentCombine;
+				auto combine = getComponentCombine();
 				auto & engine = *getOwner()->getEngine();
 				auto & components = engine.getSubmeshComponentsRegister();
 				remFlags( combine, components.getSkinFlag() );

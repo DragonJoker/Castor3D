@@ -668,7 +668,7 @@ namespace water
 						, surface.worldPosition.xyz()
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
-						, components.normal );
+						, surface.normal );
 					lights.computeCombinedDifSpec( clusteredLights
 						, components
 						, *backgroundModel

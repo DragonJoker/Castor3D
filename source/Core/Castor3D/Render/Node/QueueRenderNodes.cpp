@@ -781,9 +781,10 @@ namespace castor3d
 
 			for ( auto & node : nodes )
 			{
+				++instanceCount;
+
 				if ( node.node->instance.getParent()->isVisible() )
 				{
-					++instanceCount;
 #	ifndef NDEBUG
 					checkBuffers( *nodes.front().node, *node.node );
 #	endif

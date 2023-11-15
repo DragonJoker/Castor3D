@@ -12,8 +12,9 @@
 #include <Castor3D/Material/Pass/Component/Other/ColourComponent.hpp>
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
-#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp>
 #include <Castor3D/Model/Vertex.hpp>
 #include <Castor3D/Scene/Geometry.hpp>
 #include <Castor3D/Scene/Scene.hpp>
@@ -35,6 +36,7 @@ namespace GuiCommon
 			auto result = scene.addNewMesh( name, scene );
 			result->setSerialisable( false );
 			auto submesh = result->createSubmesh();
+			submesh->createComponent< castor3d::DefaultRenderComponent >();
 			static castor::Point3fArray const vertex
 			{
 				castor::Point3f{ -1, -1, -1 },

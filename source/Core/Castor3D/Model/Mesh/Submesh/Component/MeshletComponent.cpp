@@ -121,8 +121,9 @@ namespace castor3d
 					, uint32_t( MeshBuffersIdx::eVelocity ) ) );
 			}
 
-			auto bufferIt = m_submesh.getInstantiation().getDataT< InstantiationComponent::ComponentData >()->find( material );
-			CU_Require( bufferIt != m_submesh.getInstantiation().end() );
+			auto & data = m_submesh.getInstantiation().getData();
+			auto bufferIt = data.find( material );
+			CU_Require( bufferIt != data.end() );
 
 			if ( bufferIt->second.buffer )
 			{

@@ -137,11 +137,6 @@ namespace castor3d
 					, ashes::VkPipelineColorBlendAttachmentStateArray{} };
 			}
 
-			void doGetGeometryShaderSource( PipelineFlags const & flags
-				, ast::ShaderBuilder & builder )const override
-			{
-			}
-
 			void doGetPixelShaderSource( PipelineFlags const & flags
 				, ast::ShaderBuilder & builder )const override
 			{

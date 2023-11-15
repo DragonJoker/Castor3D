@@ -133,6 +133,7 @@ namespace castor3d
 			m_targetDataCount = count;
 		}
 
+		CU_Require( smshcompmorph::computeMorphFlags( data ).first == m_flags );
 		smshcompmorph::computeBoundingBox( data );
 		m_targets.emplace_back( std::move( data ) );
 	}

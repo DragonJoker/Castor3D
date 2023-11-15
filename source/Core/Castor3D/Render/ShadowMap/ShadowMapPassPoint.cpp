@@ -134,7 +134,7 @@ namespace castor3d
 		return flags;
 	}
 
-	void ShadowMapPassPoint::doGetVertexShaderSource( PipelineFlags const & flags
+	void ShadowMapPassPoint::doGetSubmeshShaderSource( PipelineFlags const & flags
 		, ast::ShaderBuilder & builder )const
 	{
 		sdw::VertexWriter writer{ builder };

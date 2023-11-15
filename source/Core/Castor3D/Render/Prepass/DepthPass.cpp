@@ -109,11 +109,6 @@ namespace castor3d
 	{
 	}
 
-	void DepthPass::doGetGeometryShaderSource( PipelineFlags const & flags
-		, ast::ShaderBuilder & builder )const
-	{
-	}
-
 	void DepthPass::doGetPixelShaderSource( PipelineFlags const & flags
 		, ast::ShaderBuilder & builder )const
 	{

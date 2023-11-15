@@ -11,6 +11,7 @@ See LICENSE file in root folder
 #include <RenderGraph/FrameGraph.hpp>
 #include <RenderGraph/RunnableGraph.hpp>
 
+#include <CastorUtils/Design/ArrayView.hpp>
 #include <CastorUtils/Design/OwnedBy.hpp>
 
 #include <CastorUtils/Config/BeginExternHeaderGuard.hpp>

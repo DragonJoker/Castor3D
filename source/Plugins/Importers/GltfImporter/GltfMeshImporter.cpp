@@ -7,6 +7,7 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp>
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
@@ -404,6 +405,7 @@ namespace c3d_gltf
 		auto & impAsset = file.getAsset();
 		doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material );
 		submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_POINT_LIST );
+		submesh->createComponent< castor3d::DefaultRenderComponent >();
 	}
 
 	void GltfMeshImporter::doProcessLinesSubmesh( castor3d::Mesh & mesh
@@ -416,6 +418,7 @@ namespace c3d_gltf
 		auto & impAsset = file.getAsset();
 		doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material );
 		submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
+		submesh->createComponent< castor3d::DefaultRenderComponent >();
 
 		if ( impPrimitive.indicesAccessor )
 		{
@@ -457,6 +460,7 @@ namespace c3d_gltf
 		auto & impAsset = file.getAsset();
 		doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material );
 		submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
+		submesh->createComponent< castor3d::DefaultRenderComponent >();
 
 		if ( impPrimitive.indicesAccessor )
 		{
@@ -497,6 +501,7 @@ namespace c3d_gltf
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 		doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material );
+		submesh->createComponent< castor3d::DefaultRenderComponent >();
 
 		if ( impPrimitive.indicesAccessor )
 		{
@@ -560,6 +565,7 @@ namespace c3d_gltf
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 		doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material );
+		submesh->createComponent< castor3d::DefaultRenderComponent >();
 
 		if ( impPrimitive.indicesAccessor )
 		{
@@ -626,6 +632,7 @@ namespace c3d_gltf
 		auto & file = static_cast< GltfImporterFile const & >( *m_file );
 		auto & impAsset = file.getAsset();
 		doProcessMeshVertices( impAsset, impMesh, impPrimitive, mesh, *submesh, material );
+		submesh->createComponent< castor3d::DefaultRenderComponent >();
 
 		if ( impPrimitive.indicesAccessor )
 		{

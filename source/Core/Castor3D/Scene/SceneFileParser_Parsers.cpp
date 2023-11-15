@@ -30,6 +30,7 @@
 #include "Castor3D/Model/Mesh/Animation/MeshMorphTarget.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonImporter.hpp"
@@ -2853,6 +2854,7 @@ namespace castor3d
 		else
 		{
 			parsingContext.submesh = parsingContext.mesh->createSubmesh();
+			parsingContext.submesh->createComponent< DefaultRenderComponent >();
 		}
 	}
 	CU_EndAttributePush( CSCNSection::eSubmesh )
@@ -2964,13 +2966,12 @@ namespace castor3d
 				{
 					auto id = morphSubmesh->getId();
 					auto submesh = parsingContext.mesh->getSubmesh( id );
-					auto combine = morphSubmesh->getComponentCombine();
 					auto component = submesh->hasComponent( MorphComponent::TypeName )
 						? submesh->getComponent< MorphComponent >()
 						: submesh->createComponent< MorphComponent >();
 					castor3d::SubmeshAnimationBuffer buffer;
 					
-					if ( combine.hasPositionFlag )
+					if ( morphSubmesh->hasComponent( PositionsComponent::TypeName ) )
 					{
 						buffer.positions = morphSubmesh->getPositions();
 						uint32_t index = 0u;
@@ -2980,8 +2981,8 @@ namespace castor3d
 							position -= submesh->getPositions()[index++];
 						}
 					}
-					
-					if ( combine.hasNormalFlag )
+
+					if ( morphSubmesh->hasComponent( NormalsComponent::TypeName ) )
 					{
 						buffer.normals = morphSubmesh->getNormals();
 						uint32_t index = 0u;
@@ -2991,8 +2992,8 @@ namespace castor3d
 							normal -= submesh->getNormals()[index++];
 						}
 					}
-					
-					if ( combine.hasTangentFlag )
+
+					if ( morphSubmesh->hasComponent( TangentsComponent::TypeName ) )
 					{
 						buffer.tangents = morphSubmesh->getTangents();
 						uint32_t index = 0u;
@@ -3002,8 +3003,8 @@ namespace castor3d
 							tangent -= submesh->getTangents()[index++];
 						}
 					}
-					
-					if ( combine.hasBitangentFlag )
+
+					if ( morphSubmesh->hasComponent( BitangentsComponent::TypeName ) )
 					{
 						buffer.bitangents = morphSubmesh->getBitangents();
 						uint32_t index = 0u;
@@ -3013,8 +3014,8 @@ namespace castor3d
 							bitangent -= submesh->getBitangents()[index++];
 						}
 					}
-					
-					if ( combine.hasTexcoord0Flag )
+
+					if ( morphSubmesh->hasComponent( Texcoords0Component::TypeName ) )
 					{
 						buffer.texcoords0 = morphSubmesh->getTexcoords0();
 						uint32_t index = 0u;
@@ -3024,8 +3025,8 @@ namespace castor3d
 							texcoord -= submesh->getTexcoords0()[index++];
 						}
 					}
-					
-					if ( combine.hasTexcoord1Flag )
+
+					if ( morphSubmesh->hasComponent( Texcoords1Component::TypeName ) )
 					{
 						buffer.texcoords1 = morphSubmesh->getTexcoords1();
 						uint32_t index = 0u;
@@ -3035,8 +3036,8 @@ namespace castor3d
 							texcoord -= submesh->getTexcoords1()[index++];
 						}
 					}
-					
-					if ( combine.hasTexcoord2Flag )
+
+					if ( morphSubmesh->hasComponent( Texcoords2Component::TypeName ) )
 					{
 						buffer.texcoords2 = morphSubmesh->getTexcoords2();
 						uint32_t index = 0u;
@@ -3046,8 +3047,8 @@ namespace castor3d
 							texcoord -= submesh->getTexcoords2()[index++];
 						}
 					}
-					
-					if ( combine.hasTexcoord3Flag )
+
+					if ( morphSubmesh->hasComponent( Texcoords3Component::TypeName ) )
 					{
 						buffer.texcoords3 = morphSubmesh->getTexcoords3();
 						uint32_t index = 0u;
@@ -3057,8 +3058,8 @@ namespace castor3d
 							texcoord -= submesh->getTexcoords3()[index++];
 						}
 					}
-					
-					if ( combine.hasColourFlag )
+
+					if ( morphSubmesh->hasComponent( ColoursComponent::TypeName ) )
 					{
 						buffer.colours = morphSubmesh->getColours();
 						uint32_t index = 0u;
@@ -3192,6 +3193,11 @@ namespace castor3d
 
 			for ( auto & submesh : *mesh )
 			{
+				if ( !submesh->hasRenderComponent() )
+				{
+					submesh->createComponent< DefaultRenderComponent >();
+				}
+
 				mesh->getScene()->getListener().postEvent( makeGpuInitialiseEvent( *submesh ) );
 			}
 		}

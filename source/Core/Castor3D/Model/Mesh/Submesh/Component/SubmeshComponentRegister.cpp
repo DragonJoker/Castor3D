@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/InstantiationComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
@@ -27,13 +28,6 @@ namespace castor3d
 			return componentId != InvalidId
 				&& flags.submesh.flags.end() != flags.submesh.flags.find( componentId );
 		}
-
-		static SubmeshComponentID addCombine( SubmeshComponentCombine combine
-			, std::vector< SubmeshComponentCombine > & result )
-		{
-			result.push_back( std::move( combine ) );
-			return SubmeshComponentID( result.size() - 1u );
-		}
 	}
 
 	SubmeshComponentRegister::SubmeshComponentRegister( Engine & engine )
@@ -56,11 +50,13 @@ namespace castor3d
 		registerComponent< MorphComponent >();
 		registerComponent< InstantiationComponent >();
 		registerComponent< MeshletComponent >();
+		registerComponent< DefaultRenderComponent >();
 
 		addFlags( m_defaultComponents, m_positionFlag );
 		addFlags( m_defaultComponents, m_normalFlag );
 		addFlags( m_defaultComponents, m_tangentFlag );
 		addFlags( m_defaultComponents, m_texcoord0Flag );
+		addFlags( m_defaultComponents, *m_renderShaderFlags.begin() );
 		registerSubmeshComponentCombine( m_defaultComponents );
 	}
 
@@ -98,19 +94,20 @@ namespace castor3d
 			, m_componentCombines.end()
 			, [&combine]( SubmeshComponentCombine const & lookup )
 			{
-				return lookup.baseId == 0
-					&& lookup.flags == combine.flags;
+				return lookup.flags == combine.flags;
 			} );
 
 		if ( it == m_componentCombines.end() )
 		{
-			auto idx = smshcompreg::addCombine( combine, m_componentCombines );
+			m_componentCombines.push_back( combine );
+			auto idx = SubmeshComponentCombineID( m_componentCombines.size() - 1u );
 			it = std::next( m_componentCombines.begin(), idx );
+			it->baseId = idx + 1u;
 			fillSubmeshComponentCombine( *it );
 		}
 		
 		fillSubmeshComponentCombine( combine );
-		combine.baseId = SubmeshComponentCombineID( std::distance( m_componentCombines.begin(), it ) + 1 );
+		combine.baseId = it->baseId;
 		return combine.baseId;
 	}
 
@@ -237,6 +234,35 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	void SubmeshComponentRegister::getSubmeshRenderShader( PipelineFlags const & flags
+		, ComponentModeFlags const & componentsMask
+		, ast::ShaderBuilder & builder )const
+	{
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, [&flags]( Component const & lookup )
+			{
+				return hasAny( flags.submesh.flags, lookup.id )
+					&& lookup.plugin->hasRenderShader();
+			} );
+
+		if ( it == m_registered.end() )
+		{
+			CU_Failure( "Submesh doesn't contain any render shader component" );
+			throw std::logic_error{ "Submesh doesn't contain any render shader component" };
+		}
+
+		auto rit = m_renderShaders.find( it->id );
+
+		if ( rit == m_renderShaders.end() )
+		{
+			CU_Failure( "Submesh doesn't contain any render shader component" );
+			throw std::logic_error{ "Submesh doesn't contain any render shader component" };
+		}
+
+		rit->second->getShaderSource( *getOwner(), flags, componentsMask, builder );
 	}
 
 	SubmeshComponentID SubmeshComponentRegister::registerComponent( castor::String const & componentType
@@ -406,6 +432,12 @@ namespace castor3d
 			m_surfaceShaders.emplace( componentDesc.id, std::move( shader ) );
 		}
 
+		if ( auto shader = componentDesc.plugin->createRenderShader() )
+		{
+			m_renderShaders.emplace( componentDesc.id, std::move( shader ) );
+			m_renderShaderFlags.emplace_back( componentDesc.plugin->getComponentFlags() );
+		}
+
 		castor::AttributeParsers parsers;
 		componentDesc.plugin->createParsers( parsers );
 
@@ -426,11 +458,28 @@ namespace castor3d
 		{
 			auto & componentDesc = m_registered[id - 1u];
 			getEngine()->unregisterParsers( componentDesc.name );
-			auto matIt = m_surfaceShaders.find( id );
+			auto sit = m_surfaceShaders.find( id );
 
-			if ( matIt != m_surfaceShaders.end() )
+			if ( sit != m_surfaceShaders.end() )
 			{
-				m_surfaceShaders.erase( matIt );
+				m_surfaceShaders.erase( sit );
+			}
+
+			auto rit = m_renderShaders.find( id );
+
+			if ( rit != m_renderShaders.end() )
+			{
+				m_renderShaders.erase( rit );
+			}
+
+			auto flag = componentDesc.plugin->getComponentFlags();
+			auto fit = std::find( m_renderShaderFlags.begin()
+				, m_renderShaderFlags.end()
+				, flag );
+
+			if ( fit != m_renderShaderFlags.end() )
+			{
+				m_renderShaderFlags.erase( fit );
 			}
 
 			log::debug << "Unregistered component " << id << " (" << componentDesc.name << ")" << std::endl;
@@ -457,5 +506,6 @@ namespace castor3d
 		combine.hasMorphFlag = hasAny( combine, m_morphFlag );
 		combine.hasPassMaskFlag = hasAny( combine, m_passMaskFlag );
 		combine.hasVelocityFlag = hasAny( combine, m_velocityFlag );
+		combine.hasRenderFlag = hasAny( combine, m_renderShaderFlags );
 	}
 }

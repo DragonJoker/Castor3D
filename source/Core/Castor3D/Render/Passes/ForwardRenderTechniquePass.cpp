@@ -385,7 +385,7 @@ namespace castor3d
 							, surface.worldPosition.xyz()
 							, surface.viewPosition.xyz()
 							, surface.clipPosition
-							, components.normal );
+							, surface.normal );
 
 						if ( flags.pass.hasDeferredDiffuseLightingFlag
 							&& m_deferredLightingFilter == DeferredLightingFilter::eDeferLighting )

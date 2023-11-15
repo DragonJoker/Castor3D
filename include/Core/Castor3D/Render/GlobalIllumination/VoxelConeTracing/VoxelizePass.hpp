@@ -100,11 +100,7 @@ namespace castor3d
 		SubmeshComponentCombine doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const override;
 		ProgramFlags doAdjustProgramFlags( ProgramFlags flags )const override;
 		SceneFlags doAdjustSceneFlags( SceneFlags flags )const override;
-		void doGetVertexShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const override;
-		void doGetBillboardShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const override;
-		void doGetGeometryShaderSource( PipelineFlags const & flags
+		void doGetSubmeshShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const override;
 		void doGetPixelShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const override;
