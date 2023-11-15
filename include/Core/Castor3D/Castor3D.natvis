@@ -43,14 +43,21 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::BaseDataComponentT&lt;*&gt;">
-		<DisplayString>{m_id} {m_type} data={m_data}</DisplayString>
+	<Type Name="castor3d::BaseDataComponentT&lt;*&gt;::ComponentData">
+		<DisplayString>data={m_data}</DisplayString>
 		<Expand>
-			<Item Name="id">m_id</Item>
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="dirty">m_dirty</Item>
 			<Item Name="data">m_data</Item>
 			<Item Name="layouts">m_layouts</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::BaseDataComponentT&lt;*&gt;">
+		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="data">m_data</Item>
 		</Expand>
 	</Type>
 
@@ -187,15 +194,23 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::InstantiationComponent">
-		<DisplayString>{m_id} {m_type} instances={m_instances}</DisplayString>
+	<Type Name="castor3d::InstantiationComponent::ComponentData">
+		<DisplayString>instances={m_instances}</DisplayString>
 		<Expand>
-			<Item Name="id">m_id</Item>
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="dirty">m_dirty</Item>
 			<Item Name="instances">m_instances</Item>
 			<Item Name="threshold">m_threshold</Item>
 			<Item Name="layouts">m_mtxLayouts</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::InstantiationComponent">
+		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
+		<Expand>
+			<Item Name="submesh">m_owner</Item>
+			<Item Name="id">m_id</Item>
+			<Item Name="data">m_data</Item>
 		</Expand>
 	</Type>
 
@@ -206,14 +221,21 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::LinesMapping">
-		<DisplayString>{m_id} {m_type} lines={m_lines}</DisplayString>
+	<Type Name="castor3d::LinesMapping::ComponentData">
+		<DisplayString>lines={m_lines}</DisplayString>
 		<Expand>
-			<Item Name="id">m_id</Item>
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="dirty">m_dirty</Item>
 			<Item Name="lines">m_lines</Item>
 			<Item Name="cameraPosition">m_cameraPosition</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::LinesMapping">
+		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
+		<Expand>
+			<Item Name="id">m_id</Item>
+			<Item Name="data">m_data</Item>
 		</Expand>
 	</Type>
 
@@ -546,7 +568,7 @@
 			<Item Name="components">m_components</Item>
 			<Item Name="instantiation">m_instantiation</Item>
 			<Item Name="indexMapping">m_indexMapping</Item>
-			<Item Name="submeshFlags">m_submeshFlags</Item>
+			<Item Name="componentCombine">m_componentCombine</Item>
 			<Item Name="generated">m_generated</Item>
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="dirty">m_dirty</Item>
@@ -559,13 +581,20 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::SubmeshComponentData">
+		<Expand>
+			<Item Name="initialised">m_initialised</Item>
+			<Item Name="dirty">m_dirty</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::SubmeshComponent">
 		<DisplayString>{m_id} {m_type}</DisplayString>
 		<Expand>
+			<Item Name="submesh">m_owner</Item>
 			<Item Name="id">m_id</Item>
 			<Item Name="type">m_type</Item>
-			<Item Name="initialised">m_initialised</Item>
-			<Item Name="dirty">m_dirty</Item>
+			<Item Name="data">m_data</Item>
 		</Expand>
 	</Type>
 
@@ -656,15 +685,23 @@
 		</Expand>
 	</Type>
 
-	<Type Name="castor3d::TriFaceMapping">
-		<DisplayString>{m_id} {m_type} faces={m_faces}</DisplayString>
+	<Type Name="castor3d::TriFaceMapping::ComponentData">
+		<DisplayString>faces={m_faces}</DisplayString>
 		<Expand>
-			<Item Name="id">m_id</Item>
 			<Item Name="initialised">m_initialised</Item>
 			<Item Name="dirty">m_dirty</Item>
 			<Item Name="faces">m_faces</Item>
 			<Item Name="hasNormals">m_hasNormals</Item>
 			<Item Name="cameraPosition">m_cameraPosition</Item>
+		</Expand>
+	</Type>
+
+	<Type Name="castor3d::TriFaceMapping">
+		<DisplayString>{m_id} {m_type} {*m_data}</DisplayString>
+		<Expand>
+			<Item Name="submesh">m_owner</Item>
+			<Item Name="id">m_id</Item>
+			<Item Name="data">m_data</Item>
 		</Expand>
 	</Type>
 

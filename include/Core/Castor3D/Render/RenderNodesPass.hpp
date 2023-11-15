@@ -345,63 +345,13 @@ namespace castor3d
 		C3D_API virtual void update( CpuUpdater & updater );
 		/**
 		 *\~english
-		 *\brief		Retrieves the task shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du task shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API void getTaskShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the mesh shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du mesh shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API void getMeshShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API void getVertexShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the hull shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du hull shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API void getHullShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the domain shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du domain shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API void getDomainShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
 		 *\brief		Retrieves the geometry shader source matching the given flags.
 		 *\param[in]	flags	The pipeline flags.
 		 *\~french
 		 *\brief		Récupère le source du geometry shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API void getGeometryShaderSource( PipelineFlags const & flags
+		C3D_API void getSubmeshShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const;
 		/**
 		 *\~english
@@ -1037,67 +987,7 @@ namespace castor3d
 		 *\brief		Récupère le source du task shader qui correspond aux indicateurs donnés.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		 */
-		C3D_API virtual void doGetTaskShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the mesh shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du mesh shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doGetMeshShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the vertex shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du vertex shader qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doGetVertexShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the billboards' vertex shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du vertex shader de billboards qui correspond aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doGetBillboardShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the geometry shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du geometry shader correspondant aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doGetGeometryShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the hull shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du hull shader correspondant aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doGetHullShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const;
-		/**
-		 *\~english
-		 *\brief		Retrieves the domain shader source matching the given flags.
-		 *\param[in]	flags	The pipeline flags.
-		 *\~french
-		 *\brief		Récupère le source du domain shader correspondant aux indicateurs donnés.
-		 *\param[in]	flags	Les indicateurs de pipeline.
-		 */
-		C3D_API virtual void doGetDomainShaderSource( PipelineFlags const & flags
+		C3D_API virtual void doGetSubmeshShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const;
 		/**
 		 *\~english

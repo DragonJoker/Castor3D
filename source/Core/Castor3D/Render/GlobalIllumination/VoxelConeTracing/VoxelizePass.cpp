@@ -41,6 +41,7 @@
 #include "Castor3D/Shader/Ubos/VoxelizerUbo.hpp"
 
 #include <ShaderWriter/Source.hpp>
+#include <ShaderWriter/TraditionalGraphicsWriter.hpp>
 
 #pragma GCC diagnostic ignored "-Wuseless-cast"
 
@@ -237,10 +238,10 @@ namespace castor3d
 		doAddBackgroundDescriptor( m_scene, descriptorWrites, m_targetImage, index );
 	}
 
-	void VoxelizePass::doGetVertexShaderSource( PipelineFlags const & flags
+	void VoxelizePass::doGetSubmeshShaderSource( PipelineFlags const & flags
 		, ast::ShaderBuilder & builder )const
 	{
-		sdw::VertexWriter writer{ builder };
+		sdw::TraditionalGraphicsWriter writer{ builder };
 		shader::Utils utils{ writer };
 		shader::PassShaders passShaders{ getEngine()->getPassComponentsRegister()
 			, flags
@@ -263,143 +264,121 @@ namespace castor3d
 			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
-
-		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
-		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		pcb.end();
-
-		writer.implementMainT< shader::MeshVertexT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
-			, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
-			, [&]( sdw::VertexInT< shader::MeshVertexT > in
-				, sdw::VertexOutT< shader::VoxelSurfaceT > out )
-			{
-				auto nodeId = writer.declLocale( "nodeId"
-					, shader::getNodeId( c3d_objectIdsData
-						, in
-						, pipelineID
-						, writer.cast< sdw::UInt >( in.drawID )
-						, flags ) );
-				auto curPosition = writer.declLocale( "curPosition"
-					, in.position );
-				auto curNormal = writer.declLocale( "curNormal"
-					, in.normal );
-				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[nodeId - 1u] );
-				auto material = writer.declLocale( "material"
-					, materials.getMaterial( modelData.getMaterialId() ) );
-				out.nodeId = nodeId;
-				out.texture0 = in.texture0;
-				out.texture1 = in.texture1;
-				out.texture2 = in.texture2;
-				out.texture3 = in.texture3;
-				material.getPassMultipliers( flags
-					, in.passMasks
-					, out.passMultipliers );
-				auto modelMtx = writer.declLocale< sdw::Mat4 >( "modelMtx"
-					, modelData.getModelMtx() );
-
-				if ( flags.hasWorldPosInputs() )
-				{
-					out.vtx.position = curPosition;
-					out.normal = curNormal;
-				}
-				else
-				{
-					out.vtx.position = ( modelMtx * curPosition );
-					out.normal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * curNormal );
-				}
-
-				out.worldPosition = out.vtx.position;
-				out.viewPosition = c3d_cameraData.worldToCurView( out.vtx.position );
-			} );
-	}
-
-	void VoxelizePass::doGetBillboardShaderSource( PipelineFlags const & flags
-		, ast::ShaderBuilder & builder )const
-	{
-		sdw::VertexWriter writer{ builder };
-
-		C3D_Camera( writer
-			, GlobalBuffersIdx::eCamera
-			, RenderPipeline::eBuffers );
-		C3D_ObjectIdsData( writer
-			, flags
-			, GlobalBuffersIdx::eObjectsNodeID
-			, RenderPipeline::eBuffers );
-		C3D_ModelsData( writer
-			, GlobalBuffersIdx::eModelsData
-			, RenderPipeline::eBuffers );
-		C3D_Billboard( writer
-			, GlobalBuffersIdx::eBillboardsData
-			, RenderPipeline::eBuffers );
-
-		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
-		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
-		pcb.end();
-
-		writer.implementMainT< shader::BillboardSurfaceT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
-			, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
-			,[&]( sdw::VertexInT< shader::BillboardSurfaceT > in
-			, sdw::VertexOutT< shader::VoxelSurfaceT > out )
-			{
-				auto nodeId = writer.declLocale( "nodeId"
-					, shader::getNodeId( c3d_objectIdsData
-						, pipelineID
-						, writer.cast< sdw::UInt >( in.drawID ) ) );
-				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[nodeId - 1u] );
-				out.nodeId = writer.cast< sdw::Int >( nodeId );
-
-				auto curBbcenter = writer.declLocale( "curBbcenter"
-					, modelData.modelToCurWorld( vec4( in.center, 1.0_f ) ).xyz() );
-				auto curToCamera = writer.declLocale( "curToCamera"
-					, c3d_cameraData.getPosToCamera( curBbcenter ) );
-				curToCamera.y() = 0.0_f;
-				curToCamera = normalize( curToCamera );
-
-				auto billboardData = writer.declLocale( "billboardData"
-					, c3d_billboardData[nodeId - 1u] );
-				auto right = writer.declLocale( "right"
-					, billboardData.getCameraRight( c3d_cameraData ) );
-				auto up = writer.declLocale( "up"
-					, billboardData.getCameraUp( c3d_cameraData ) );
-				auto width = writer.declLocale( "width"
-					, billboardData.getWidth( c3d_cameraData ) );
-				auto height = writer.declLocale( "height"
-					, billboardData.getHeight( c3d_cameraData ) );
-
-				out.texture0 = vec3( in.texture0, 0.0_f );
-				out.vtx.position = vec4( curBbcenter
-					+ right * in.position.x() * width
-					+ up * in.position.y() * height
-					, 1.0_f );
-				out.worldPosition = out.vtx.position;
-				auto viewPosition = writer.declLocale( "viewPosition"
-					, c3d_cameraData.worldToCurView( out.vtx.position ) );
-				out.viewPosition = viewPosition;
-				out.normal = normalize( c3d_cameraData.getPosToCamera( curBbcenter ) );
-				auto passMultipliers = std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
-					, vec4( 0.0_f )
-					, vec4( 0.0_f )
-					, vec4( 0.0_f ) };
-				out.passMultipliers[0] = passMultipliers[0];
-				out.passMultipliers[1] = passMultipliers[1];
-				out.passMultipliers[2] = passMultipliers[2];
-				out.passMultipliers[3] = passMultipliers[3];
-			} );
-	}
-
-	void VoxelizePass::doGetGeometryShaderSource( PipelineFlags const & flags
-		, ast::ShaderBuilder & builder )const
-	{
-		sdw::GeometryWriter writer{ builder };
-
 		C3D_Voxelizer( writer
 			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
 			, RenderPipeline::eBuffers
 			, true );
 
-		writer.implementMainT< sdw::TriangleListT< shader::VoxelSurfaceT >, sdw::TriangleStreamT< shader::VoxelSurfaceT > >( sdw::TriangleListT< shader::VoxelSurfaceT >{ writer
+		sdw::PushConstantBuffer pcb{ writer, "C3D_DrawData", "c3d_drawData" };
+		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
+		pcb.end();
+
+		if ( flags.isBillboard() )
+		{
+			C3D_Billboard( writer
+				, GlobalBuffersIdx::eBillboardsData
+				, RenderPipeline::eBuffers );
+
+			writer.implementEntryPointT< shader::BillboardSurfaceT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
+				, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
+				,[&]( sdw::VertexInT< shader::BillboardSurfaceT > in
+				, sdw::VertexOutT< shader::VoxelSurfaceT > out )
+				{
+					auto nodeId = writer.declLocale( "nodeId"
+						, shader::getNodeId( c3d_objectIdsData
+							, pipelineID
+							, writer.cast< sdw::UInt >( in.drawID ) ) );
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[nodeId - 1u] );
+					out.nodeId = writer.cast< sdw::Int >( nodeId );
+
+					auto curBbcenter = writer.declLocale( "curBbcenter"
+						, modelData.modelToCurWorld( vec4( in.center, 1.0_f ) ).xyz() );
+					auto curToCamera = writer.declLocale( "curToCamera"
+						, c3d_cameraData.getPosToCamera( curBbcenter ) );
+					curToCamera.y() = 0.0_f;
+					curToCamera = normalize( curToCamera );
+
+					auto billboardData = writer.declLocale( "billboardData"
+						, c3d_billboardData[nodeId - 1u] );
+					auto right = writer.declLocale( "right"
+						, billboardData.getCameraRight( c3d_cameraData ) );
+					auto up = writer.declLocale( "up"
+						, billboardData.getCameraUp( c3d_cameraData ) );
+					auto width = writer.declLocale( "width"
+						, billboardData.getWidth( c3d_cameraData ) );
+					auto height = writer.declLocale( "height"
+						, billboardData.getHeight( c3d_cameraData ) );
+
+					out.texture0 = vec3( in.texture0, 0.0_f );
+					out.vtx.position = vec4( curBbcenter
+						+ right * in.position.x() * width
+						+ up * in.position.y() * height
+						, 1.0_f );
+					out.worldPosition = out.vtx.position;
+					auto viewPosition = writer.declLocale( "viewPosition"
+						, c3d_cameraData.worldToCurView( out.vtx.position ) );
+					out.viewPosition = viewPosition;
+					out.normal = normalize( c3d_cameraData.getPosToCamera( curBbcenter ) );
+					auto passMultipliers = std::vector< sdw::Vec4 >{ vec4( 1.0_f, 0.0_f, 0.0_f, 0.0_f )
+						, vec4( 0.0_f )
+						, vec4( 0.0_f )
+						, vec4( 0.0_f ) };
+					out.passMultipliers[0] = passMultipliers[0];
+					out.passMultipliers[1] = passMultipliers[1];
+					out.passMultipliers[2] = passMultipliers[2];
+					out.passMultipliers[3] = passMultipliers[3];
+				} );
+		}
+		else
+		{
+			writer.implementEntryPointT< shader::MeshVertexT, shader::VoxelSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
+				, sdw::VertexOutT< shader::VoxelSurfaceT >{ writer, flags }
+				, [&]( sdw::VertexInT< shader::MeshVertexT > in
+					, sdw::VertexOutT< shader::VoxelSurfaceT > out )
+				{
+					auto nodeId = writer.declLocale( "nodeId"
+						, shader::getNodeId( c3d_objectIdsData
+							, in
+							, pipelineID
+							, writer.cast< sdw::UInt >( in.drawID )
+							, flags ) );
+					auto curPosition = writer.declLocale( "curPosition"
+						, in.position );
+					auto curNormal = writer.declLocale( "curNormal"
+						, in.normal );
+					auto modelData = writer.declLocale( "modelData"
+						, c3d_modelsData[nodeId - 1u] );
+					auto material = writer.declLocale( "material"
+						, materials.getMaterial( modelData.getMaterialId() ) );
+					out.nodeId = nodeId;
+					out.texture0 = in.texture0;
+					out.texture1 = in.texture1;
+					out.texture2 = in.texture2;
+					out.texture3 = in.texture3;
+					material.getPassMultipliers( flags
+						, in.passMasks
+						, out.passMultipliers );
+					auto modelMtx = writer.declLocale< sdw::Mat4 >( "modelMtx"
+						, modelData.getModelMtx() );
+
+					if ( flags.hasWorldPosInputs() )
+					{
+						out.vtx.position = curPosition;
+						out.normal = curNormal;
+					}
+					else
+					{
+						out.vtx.position = ( modelMtx * curPosition );
+						out.normal = normalize( mat3( transpose( inverse( modelMtx ) ) ) * curNormal );
+					}
+
+					out.worldPosition = out.vtx.position;
+					out.viewPosition = c3d_cameraData.worldToCurView( out.vtx.position );
+				} );
+		}
+
+		writer.implementEntryPointT< sdw::TriangleListT< shader::VoxelSurfaceT >, sdw::TriangleStreamT< shader::VoxelSurfaceT > >( sdw::TriangleListT< shader::VoxelSurfaceT >{ writer
 				, flags }
 			, sdw::TriangleStreamT< shader::VoxelSurfaceT >{ writer
 				, 3u

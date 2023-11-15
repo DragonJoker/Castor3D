@@ -8,6 +8,7 @@
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/PassMasksComponent.hpp>
 #include <Castor3D/Miscellaneous/Parameter.hpp>
 
@@ -202,6 +203,7 @@ namespace diamond_square_terrain
 			submesh->createComponent< castor3d::NormalsComponent >()->getData().setData( std::move( submeshBuffers.normals ) );
 			submesh->createComponent< castor3d::TangentsComponent >()->getData().setData( std::move( submeshBuffers.tangents ) );
 			submesh->createComponent< castor3d::TriFaceMapping >()->getData().setData( std::move( faces ) );
+			submesh->createComponent< castor3d::DefaultRenderComponent >();
 
 			if ( !submeshBuffers.colours.empty() )
 			{

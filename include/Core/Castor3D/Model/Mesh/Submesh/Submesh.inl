@@ -211,6 +211,7 @@ namespace castor3d
 
 	inline SubmeshComponentCombine Submesh::getComponentCombine()const noexcept
 	{
+		CU_Require( m_componentCombine.baseId != 0 );
 		return m_componentCombine;
 	}
 

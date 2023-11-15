@@ -337,6 +337,7 @@ namespace castor3d
 		C3D_API SubmeshComponentID getComponentId( castor::String const & componentType )const;
 		C3D_API SubmeshComponentPlugin const & getComponentPlugin( SubmeshComponentID componentId )const;
 		C3D_API SubmeshComponentCombineID getComponentCombineID()const;
+		C3D_API bool hasRenderComponent()const;
 		inline SkeletonRPtr getSkeleton()const noexcept;
 		inline MaterialObs getDefaultMaterial()const noexcept;
 		inline castor::BoundingBox const & getBoundingBox()const noexcept;

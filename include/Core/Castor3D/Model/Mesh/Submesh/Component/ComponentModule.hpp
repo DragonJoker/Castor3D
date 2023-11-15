@@ -37,6 +37,7 @@ namespace castor3d
 		bool hasMorphFlag{};
 		bool hasPassMaskFlag{};
 		bool hasVelocityFlag{};
+		bool hasRenderFlag{};
 	};
 
 	using SubmeshComponentCombines = std::vector< SubmeshComponentCombine >;
@@ -67,6 +68,13 @@ namespace castor3d
 	*/
 	template< SubmeshData SubmeshDataT, typename DataT = castor::Point3f >
 	class BaseDataComponentT;
+	/**
+	\~english
+	\brief		Submesh component holding the default render shader.
+	\~french
+	\brief		Composant de sous-maillage contenant le shader de rendu par défaut.
+	*/
+	class DefaultRenderComponent;
 	/**
 	\~english
 	\brief		Submesh component holding subpasses masks.
@@ -266,6 +274,7 @@ namespace castor3d
 	*/
 	using VelocityComponent = BaseDataComponentT< SubmeshData::eVelocity >;
 
+	CU_DeclareSmartPtr( castor3d, DefaultRenderComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, IndexMapping, C3D_API );
 	CU_DeclareSmartPtr( castor3d, InstantiationComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, LinesMapping, C3D_API );
@@ -292,7 +301,10 @@ namespace castor3d
 
 	namespace shader
 	{
+		struct SubmeshRenderShader;
 		struct SubmeshSurfaceShader;
+
+		using SubmeshRenderShaderPtr = std::unique_ptr< SubmeshRenderShader >;
 		using SubmeshSurfaceShaderPtr = std::unique_ptr< SubmeshSurfaceShader >;
 	}
 

@@ -8,6 +8,7 @@
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
@@ -96,6 +97,7 @@ namespace castor3d
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			submesh->addPoints( vertex );
 			auto mapping = submesh->createComponent< LinesMapping >();
+			auto mapping = submesh->createComponent< DefaultRenderComponent >();
 			castor3d::LineIndices lines[]
 			{
 				castor3d::LineIndices{ { 0u, 1u } },

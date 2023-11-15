@@ -78,13 +78,7 @@ namespace ocean
 		castor3d::SubmeshComponentCombine doAdjustSubmeshComponents( castor3d::SubmeshComponentCombine submeshCombine )const override;
 		castor3d::ProgramFlags doAdjustProgramFlags( castor3d::ProgramFlags flags )const override;
 		void doAdjustFlags( castor3d::PipelineFlags & flags )const override;
-		void doGetVertexShaderSource( castor3d::PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const override;
-		void doGetBillboardShaderSource( castor3d::PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const override;
-		void doGetHullShaderSource( castor3d::PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const override;
-		void doGetDomainShaderSource( castor3d::PipelineFlags const & flags
+		void doGetSubmeshShaderSource( castor3d::PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const override;
 		void doGetPixelShaderSource( castor3d::PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const override;

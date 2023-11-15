@@ -6,6 +6,7 @@
 #include <Castor3D/Model/Mesh/Mesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Submesh.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp>
+#include <Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp>
 #include <Castor3D/Model/Skeleton/BoneNode.hpp>
@@ -188,6 +189,7 @@ namespace c3d_assimp
 
 		castor3d::log::info << cuT( "  Mesh found: [" ) << file.getInternalName( aiMesh.mName ) << cuT( "]" ) << std::endl;
 		submesh.setDefaultMaterial( material );
+		submesh.createComponent< castor3d::DefaultRenderComponent >();
 
 		auto positions = submesh.createComponent< castor3d::PositionsComponent >();
 		auto normals = submesh.createComponent< castor3d::NormalsComponent >();

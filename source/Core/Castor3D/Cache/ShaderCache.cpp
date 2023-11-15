@@ -83,25 +83,7 @@ namespace castor3d
 			? sdw::ModernGraphicsStage
 			: ast::ShaderStage::eTraditionalGraphics );
 		ast::ShaderBuilder builder{ builderType, & getEngine()->getShaderAllocator() };
-
-		if ( getEngine()->hasMeshShaders()
-			&& flags.usesMesh() )
-		{
-			if ( flags.usesTask() )
-			{
-				renderPass.getTaskShaderSource( flags, builder );
-			}
-
-			renderPass.getMeshShaderSource( flags, builder );
-		}
-		else
-		{
-			renderPass.getVertexShaderSource( flags, builder );
-			renderPass.getHullShaderSource( flags, builder );
-			renderPass.getDomainShaderSource( flags, builder );
-			renderPass.getGeometryShaderSource( flags, builder );
-		}
-
+		renderPass.getSubmeshShaderSource( flags, builder );
 		renderPass.getPixelShaderSource( flags, builder );
 		auto result = castor::makeUnique< ShaderProgram >( renderPass.getName(), *getEngine()->getRenderSystem() );
 		result->setSource( builder.releaseShader() );

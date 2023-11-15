@@ -5,6 +5,7 @@
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 #include "Castor3D/Model/Skeleton/Skeleton.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Scene/Scene.hpp"
@@ -123,6 +124,7 @@ namespace castor3d
 		result->createComponent< NormalsComponent >();
 		result->createComponent< TangentsComponent >();
 		result->createComponent< Texcoords0Component >();
+		result->createComponent< DefaultRenderComponent >();
 		return result;
 	}
 

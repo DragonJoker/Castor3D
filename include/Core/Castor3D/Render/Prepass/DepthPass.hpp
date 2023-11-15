@@ -60,8 +60,6 @@ namespace castor3d
 			, ShadowBuffer const * shadowBuffer )override;
 		ashes::PipelineDepthStencilStateCreateInfo doCreateDepthStencilState( PipelineFlags const & flags )const override;
 		ashes::PipelineColorBlendStateCreateInfo doCreateBlendState( PipelineFlags const & flags )const override;
-		void doGetGeometryShaderSource( PipelineFlags const & flags
-			, ast::ShaderBuilder & builder )const override;
 		void doGetPixelShaderSource( PipelineFlags const & flags
 			, ast::ShaderBuilder & builder )const override;
 

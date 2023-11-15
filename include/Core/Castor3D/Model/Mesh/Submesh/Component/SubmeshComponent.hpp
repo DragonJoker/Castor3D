@@ -61,7 +61,8 @@ namespace castor3d
 			 *\param[in]	componentsMask	Les indicateurs de composants de la passe de noeuds.
 			 *\param[in]	builder			Le shader builder.
 			 */
-			C3D_API virtual void getShaderSource( PipelineFlags const & flags
+			C3D_API virtual void getShaderSource( Engine const & engine
+				, PipelineFlags const & flags
 				, ComponentModeFlags const & componentsMask
 				, ast::ShaderBuilder & builder )const = 0;
 		};
@@ -364,9 +365,14 @@ namespace castor3d
 		*\brief
 		*	Crée le shader de rendu du composant.
 		*/
-		C3D_API virtual shader::SubmeshSurfaceShaderPtr createRenderShader()const
+		C3D_API virtual shader::SubmeshRenderShaderPtr createRenderShader()const
 		{
 			return nullptr;
+		}
+
+		C3D_API virtual bool hasRenderShader()const noexcept
+		{
+			return false;
 		}
 		/**@}*/
 		/**

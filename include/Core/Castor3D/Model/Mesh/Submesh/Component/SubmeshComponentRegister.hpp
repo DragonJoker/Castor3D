@@ -59,6 +59,21 @@ namespace castor3d
 		C3D_API std::vector< shader::SubmeshSurfaceShader * > getSurfaceShaders( PipelineFlags const & flags )const;
 		/**
 		 *\~english
+		 *\brief		Retrieves the shader source matching the given flags.
+		 *\param[in]	flags			The pipeline flags.
+		 *\param[in]	componentsMask	The nodes pass components flags.
+		 *\param[in]	builder			The shader builder.
+		 *\~french
+		 *\brief		Récupère le source du shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags			Les indicateurs de pipeline.
+		 *\param[in]	componentsMask	Les indicateurs de composants de la passe de noeuds.
+		 *\param[in]	builder			Le shader builder.
+		 */
+		C3D_API void getSubmeshRenderShader( PipelineFlags const & flags
+			, ComponentModeFlags const & componentsMask
+			, ast::ShaderBuilder & builder )const;
+		/**
+		 *\~english
 		 *\name
 		 *	Components registration.
 		 *\~french
@@ -196,6 +211,8 @@ namespace castor3d
 	private:
 		Components m_registered;
 		std::map< SubmeshComponentID, shader::SubmeshSurfaceShaderPtr > m_surfaceShaders;
+		std::map< SubmeshComponentID, shader::SubmeshRenderShaderPtr > m_renderShaders;
+		std::vector< SubmeshComponentFlag > m_renderShaderFlags;
 		bool m_pauseOrder{ true };
 		VkDeviceSize m_bufferStride{};
 		SubmeshComponentCombine m_defaultComponents;
