@@ -3069,7 +3069,7 @@ namespace castor3d
 						}
 					}
 
-					component->addMorphTarget( std::move( buffer ) );
+					component->getData().addMorphTarget( std::move( buffer ) );
 				}
 
 				mesh.cleanup();
@@ -3716,7 +3716,7 @@ namespace castor3d
 			{
 				auto indices = reinterpret_cast< FaceIndices * >( &parsingContext.faces[0] );
 				auto mapping = parsingContext.submesh->createComponent< TriFaceMapping >();
-				mapping->addFaceGroup( indices, indices + ( parsingContext.faces.size() / 3 ) );
+				mapping->getData().addFaceGroup( indices, indices + ( parsingContext.faces.size() / 3 ) );
 
 				if ( !parsingContext.vertexNml.empty() )
 				{

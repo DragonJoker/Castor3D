@@ -11,12 +11,12 @@
 
 #include <CastorUtils/Design/ArrayView.hpp>
 
-//*************************************************************************************************
-
 CU_ImplementSmartPtr( castor3d, TriFaceMapping )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace smshcomptri
 	{
 		struct FaceDistance
@@ -36,23 +36,25 @@ namespace castor3d
 		};
 	}
 
-	castor::String const TriFaceMapping::TypeName = "triface_mapping";
+	//*********************************************************************************************
 
-	TriFaceMapping::TriFaceMapping( Submesh & submesh
-		, VkBufferUsageFlags bufferUsageFlags )
-		: IndexMapping{ submesh, TypeName, bufferUsageFlags }
+	void TriFaceMapping::ComponentData::copy( SubmeshComponentDataRPtr data )const
 	{
+		auto result = static_cast< ComponentData * >( data );
+		result->m_faces = m_faces;
+		result->m_hasNormals = m_hasNormals;
+		result->m_cameraPosition = m_cameraPosition;
 	}
 
-	void TriFaceMapping::clearFaces()
+	void TriFaceMapping::ComponentData::clearFaces()
 	{
 		m_faces.clear();
 	}
 
-	Face TriFaceMapping::addFace( uint32_t a, uint32_t b, uint32_t c )
+	Face TriFaceMapping::ComponentData::addFace( uint32_t a, uint32_t b, uint32_t c )
 	{
 		Face result{ a, b, c };
-		auto size = getOwner()->getPointsCount();
+		auto size = m_submesh.getPointsCount();
 
 		if ( a < size && b < size && c < size )
 		{
@@ -67,7 +69,7 @@ namespace castor3d
 		return result;
 	}
 
-	void TriFaceMapping::addFaceGroup( FaceIndices const * const begin
+	void TriFaceMapping::ComponentData::addFaceGroup( FaceIndices const * const begin
 		, FaceIndices const * const end )
 	{
 		for ( auto & face : castor::makeArrayView( begin, end ) )
@@ -76,7 +78,7 @@ namespace castor3d
 		}
 	}
 
-	void TriFaceMapping::addQuadFace( uint32_t a
+	void TriFaceMapping::ComponentData::addQuadFace( uint32_t a
 		, uint32_t b
 		, uint32_t c
 		, uint32_t d
@@ -86,13 +88,49 @@ namespace castor3d
 		addFace( a, b, c );
 		addFace( a, c, d );
 
-		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
+		if ( auto texComp = m_submesh.getComponent< Texcoords0Component >() )
 		{
-			texComp->getData()[a] = castor::Point3f{ minUV[0], minUV[1], 0.0f };
-			texComp->getData()[b] = castor::Point3f{ maxUV[0], minUV[1], 0.0f };
-			texComp->getData()[c] = castor::Point3f{ maxUV[0], maxUV[1], 0.0f };
-			texComp->getData()[d] = castor::Point3f{ minUV[0], maxUV[1], 0.0f };
+			if ( auto texData = texComp->getDataT< Texcoords0Component::ComponentData >() )
+			{
+				texData->getData()[a] = castor::Point3f{ minUV[0], minUV[1], 0.0f };
+				texData->getData()[b] = castor::Point3f{ maxUV[0], minUV[1], 0.0f };
+				texData->getData()[c] = castor::Point3f{ maxUV[0], maxUV[1], 0.0f };
+				texData->getData()[d] = castor::Point3f{ minUV[0], maxUV[1], 0.0f };
+			}
 		}
+	}
+
+	void TriFaceMapping::ComponentData::doCleanup( RenderDevice const & device )
+	{
+		m_faces.clear();
+	}
+
+	void TriFaceMapping::ComponentData::doUpload( UploadData & uploader )
+	{
+		auto count = uint32_t( m_faces.size() * 3 );
+		auto & offsets = m_submesh.getSourceBufferOffsets();
+		auto & buffer = offsets.getBufferChunk( SubmeshData::eIndex );
+
+		if ( count && buffer.hasData() )
+		{
+			uploader.pushUpload( m_faces.data()
+				, m_faces.size() * sizeof( Face )
+				, buffer.getBuffer()
+				, buffer.getOffset()
+				, VK_ACCESS_INDEX_READ_BIT
+				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
+		}
+	}
+
+	//*********************************************************************************************
+
+	castor::String const TriFaceMapping::TypeName = "Triangles";
+
+	TriFaceMapping::TriFaceMapping( Submesh & submesh
+		, VkBufferUsageFlags bufferUsageFlags )
+		: IndexMapping{ submesh, TypeName
+			, std::make_unique< ComponentData >( submesh, bufferUsageFlags ) }
+	{
 	}
 
 	void TriFaceMapping::computeFacesFromPolygonVertex()
@@ -107,7 +145,7 @@ namespace castor3d
 	{
 		SubmeshUtils::computeNormals( positions
 			, normals
-			, getFaces()
+			, getDataT< ComponentData >()->getFaces()
 			, reverted );
 	}
 
@@ -120,12 +158,12 @@ namespace castor3d
 			, texcoords
 			, normals
 			, tangents
-			, getFaces() );
+			, getDataT< ComponentData >()->getFaces() );
 	}
 
 	uint32_t TriFaceMapping::getCount()const
 	{
-		return uint32_t( m_faces.size() );
+		return getDataT< ComponentData >()->getCount();
 	}
 
 	uint32_t TriFaceMapping::getComponentsCount()const
@@ -135,13 +173,13 @@ namespace castor3d
 
 	void TriFaceMapping::computeNormals( bool reverted )
 	{
-		if ( !m_hasNormals )
+		if ( !getDataT< ComponentData >()->hasNormals() )
 		{
 			getOwner()->getNormals().resize( getOwner()->getPositions().size() );
 			computeNormals( getOwner()->getPositions()
 				, getOwner()->getNormals()
 				, reverted );
-			m_hasNormals = true;
+			getDataT< ComponentData >()->setHasNormals();
 		}
 	}
 
@@ -154,12 +192,12 @@ namespace castor3d
 
 		if ( auto tanComp = getOwner()->getComponent< TangentsComponent >() )
 		{
-			tangents = &tanComp->getData();
+			tangents = &tanComp->getDataT< TangentsComponent::ComponentData >()->getData();
 		}
 
 		if ( auto texComp = getOwner()->getComponent< Texcoords0Component >() )
 		{
-			texcoords = &texComp->getData();
+			texcoords = &texComp->getDataT< Texcoords0Component::ComponentData >()->getData();
 		}
 
 		computeTangentsFromNormals( getOwner()->getPositions()
@@ -171,31 +209,9 @@ namespace castor3d
 	SubmeshComponentUPtr TriFaceMapping::clone( Submesh & submesh )const
 	{
 		auto result = castor::makeUnique< TriFaceMapping >( submesh );
-		result->m_faces = m_faces;
-		result->m_hasNormals = m_hasNormals;
-		result->m_cameraPosition = m_cameraPosition;
+		result->getData().copy( &getData() );
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
-	void TriFaceMapping::doCleanup( RenderDevice const & device )
-	{
-		m_faces.clear();
-	}
-
-	void TriFaceMapping::doUpload( UploadData & uploader )
-	{
-		auto count = uint32_t( m_faces.size() * 3 );
-		auto & offsets = getOwner()->getSourceBufferOffsets();
-		auto & buffer = offsets.getBufferChunk( SubmeshData::eIndex );
-
-		if ( count && buffer.hasData() )
-		{
-			uploader.pushUpload( m_faces.data()
-				, m_faces.size() * sizeof( Face )
-				, buffer.getBuffer()
-				, buffer.getOffset()
-				, VK_ACCESS_INDEX_READ_BIT
-				, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT );
-		}
-	}
+	//*********************************************************************************************
 }

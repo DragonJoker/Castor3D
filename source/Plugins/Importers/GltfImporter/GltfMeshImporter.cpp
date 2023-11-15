@@ -44,7 +44,7 @@ namespace c3d_gltf
 						indicesGroup.push_back( curIndices );
 					}
 				} );
-			mapping.addLineGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
+			mapping.getData().addLineGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
 		template< typename IndexT >
@@ -88,7 +88,7 @@ namespace c3d_gltf
 				indicesGroup.push_back( curIndices );
 			}
 
-			mapping.addLineGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
+			mapping.getData().addLineGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
 		template< typename IndexT >
@@ -117,7 +117,7 @@ namespace c3d_gltf
 						indicesGroup.push_back( curIndices );
 					}
 				} );
-			mapping.addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
+			mapping.getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
 		template< typename IndexT, bool IsStripT >
@@ -171,7 +171,7 @@ namespace c3d_gltf
 				}
 			}
 
-			mapping.addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
+			mapping.getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 		}
 
 		auto findAttribute( auto const & attributes
@@ -546,7 +546,7 @@ namespace c3d_gltf
 				indicesGroup.push_back( indices );
 			}
 
-			mapping->addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
+			mapping->getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 			doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
 		}
 	}
@@ -612,7 +612,7 @@ namespace c3d_gltf
 				indicesGroup.push_back( indices );
 			}
 
-			mapping->addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
+			mapping->getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 			doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
 		}
 	}
@@ -672,7 +672,7 @@ namespace c3d_gltf
 				indicesGroup.push_back( indices );
 			}
 
-			mapping->addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
+			mapping->getData().addFaceGroup( indicesGroup.data(), indicesGroup.data() + indicesGroup.size() );
 			doCheckNmlTan( *submesh, castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
 		}
 	}
@@ -704,48 +704,48 @@ namespace c3d_gltf
 		if ( meshes::hasAttribute( impPrimitive.attributes, "NORMAL" ) )
 		{
 			auto nmlComp = submesh.createComponent< castor3d::NormalsComponent >();
-			normals = &nmlComp->getData();
+			normals = &nmlComp->getData().getData();
 
 			if ( meshes::hasAttribute( impPrimitive.attributes, "TANGENT" ) )
 			{
 				auto tanComp = submesh.createComponent< castor3d::TangentsComponent >();
-				tangents = &tanComp->getData();
+				tangents = &tanComp->getData().getData();
 			}
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_0" ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords0Component >();
-			texcoords0 = &texComp->getData();
+			texcoords0 = &texComp->getData().getData();
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_1" ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords1Component >();
-			texcoords1 = &texComp->getData();
+			texcoords1 = &texComp->getData().getData();
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_2" ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords2Component >();
-			texcoords2 = &texComp->getData();
+			texcoords2 = &texComp->getData().getData();
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "TEXCOORD_3" ) )
 		{
 			auto texComp = submesh.createComponent< castor3d::Texcoords3Component >();
-			texcoords3 = &texComp->getData();
+			texcoords3 = &texComp->getData().getData();
 		}
 
 		if ( meshes::hasAttribute( impPrimitive.attributes, "COLOR_0" ) )
 		{
 			auto colComp = submesh.createComponent< castor3d::ColoursComponent >();
-			colours = &colComp->getData();
+			colours = &colComp->getData().getData();
 		}
 
 		meshes::createVertexBuffer( impAsset
 			, impPrimitive.attributes
-			, positions->getData()
+			, positions->getData().getData()
 			, *normals
 			, *tangents
 			, *texcoords0
@@ -788,7 +788,7 @@ namespace c3d_gltf
 
 			for ( auto & morphTarget : morphTargets )
 			{
-				component->addMorphTarget( morphTarget );
+				component->getData().addMorphTarget( morphTarget );
 			}
 		}
 
@@ -819,7 +819,7 @@ namespace c3d_gltf
 					datas.push_back( data );
 				}
 
-				submesh.createComponent< castor3d::SkinComponent >()->addDatas( datas );
+				submesh.createComponent< castor3d::SkinComponent >()->getData().addDatas( datas );
 			}
 		}
 	}
@@ -832,13 +832,13 @@ namespace c3d_gltf
 			if ( !submesh.hasComponent( castor3d::NormalsComponent::TypeName ) )
 			{
 				auto normals = submesh.createComponent< castor3d::NormalsComponent >();
-				normals->getData().resize( submesh.getPositions().size() );
+				normals->getData().getData().resize( submesh.getPositions().size() );
 
 				if ( !submesh.hasComponent( castor3d::TangentsComponent::TypeName )
 					&& submesh.hasComponent( castor3d::Texcoords0Component::TypeName ) )
 				{
 					auto tangents = submesh.createComponent< castor3d::TangentsComponent >();
-					tangents->getData().resize( submesh.getPositions().size() );
+					tangents->getData().getData().resize( submesh.getPositions().size() );
 				}
 
 				mapping->computeNormals();
@@ -848,7 +848,7 @@ namespace c3d_gltf
 				&& submesh.hasComponent( castor3d::Texcoords0Component::TypeName ) )
 			{
 				auto tangents = submesh.createComponent< castor3d::TangentsComponent >();
-				tangents->getData().resize( submesh.getPositions().size() );
+				tangents->getData().getData().resize( submesh.getPositions().size() );
 				mapping->computeTangents();
 			}
 

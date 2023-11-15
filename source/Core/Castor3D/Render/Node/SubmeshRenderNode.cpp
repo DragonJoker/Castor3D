@@ -31,7 +31,7 @@ namespace castor3d
 	uint32_t SubmeshRenderNode::getInstanceCount()const
 	{
 		auto & instantiation = data.getInstantiation();
-		return instantiation.getRefCount( pass->getOwner() );
+		return instantiation.getData().getRefCount( pass->getOwner() );
 	}
 
 	MaterialObs SubmeshRenderNode::getMaterial()const
@@ -79,7 +79,7 @@ namespace castor3d
 	{
 		if ( auto component = data.getComponent< MeshletComponent >() )
 		{
-			component->createDescriptorSet( instance );
+			component->getData().createDescriptorSet( instance );
 		}
 	}
 
@@ -92,14 +92,14 @@ namespace castor3d
 			CU_Exception( "Can't retrieve MeshletComponent" );
 		}
 
-		return component->getDescriptorSet( instance );
+		return component->getData().getDescriptorSet( instance );
 	}
 
 	ashes::DescriptorSetLayout const * SubmeshRenderNode::getMeshletDescriptorLayout()const
 	{
 		if ( auto component = data.getComponent< MeshletComponent >() )
 		{
-			return &component->getDescriptorLayout();
+			return &component->getData().getDescriptorLayout();
 		}
 
 		return nullptr;

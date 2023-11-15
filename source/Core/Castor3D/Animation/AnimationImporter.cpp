@@ -30,7 +30,7 @@ namespace castor3d
 			{
 				if ( auto component = submesh->getComponent< MorphComponent >() )
 				{
-					for ( auto & target : component->getMorphTargetsBuffers() )
+					for ( auto & target : component->getData().getMorphTargetsBuffers() )
 					{
 						for ( auto & vertex : target.positions )
 						{
@@ -39,12 +39,12 @@ namespace castor3d
 
 						SubmeshUtils::computeNormals( target.positions
 							, target.normals
-							, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getFaces() );
+							, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getData().getFaces() );
 						SubmeshUtils::computeTangentsFromNormals( target.positions
 							, target.texcoords0
 							, target.normals
 							, target.tangents
-							, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getFaces() );
+							, static_cast< TriFaceMapping const & >( *submesh->getIndexMapping() ).getData().getFaces() );
 					}
 				}
 			}

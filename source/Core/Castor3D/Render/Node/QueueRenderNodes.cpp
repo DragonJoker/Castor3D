@@ -586,7 +586,7 @@ namespace castor3d
 		static uint32_t getInstanceCount( SubmeshRenderNode const & culled )
 		{
 			auto & instantiation = culled.data.getInstantiation();
-			return instantiation.getRefCount( culled.pass->getOwner() );
+			return instantiation.getData().getRefCount( culled.pass->getOwner() );
 		}
 
 		static uint32_t getInstanceCount( BillboardRenderNode const & culled )

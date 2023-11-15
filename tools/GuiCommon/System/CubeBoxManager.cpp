@@ -48,7 +48,7 @@ namespace GuiCommon
 			};
 			submesh->setTopology( VK_PRIMITIVE_TOPOLOGY_LINE_LIST );
 			auto positions = submesh->createComponent< castor3d::PositionsComponent >();
-			positions->getData() = vertex;
+			positions->getData().getData() = vertex;
 			auto mapping = submesh->createComponent< castor3d::LinesMapping >();
 			castor3d::LineIndices lines[]
 			{
@@ -65,7 +65,7 @@ namespace GuiCommon
 				castor3d::LineIndices{ { 2u, 6u } },
 				castor3d::LineIndices{ { 3u, 7u } },
 			};
-			mapping->addLineGroup( lines );
+			mapping->getData().addLineGroup( lines );
 			castor3d::MaterialObs material{};
 			castor::String matName = cuT( "BBox_" ) + colourName;
 
@@ -304,7 +304,7 @@ namespace GuiCommon
 
 			if ( auto positions = aabbSubmesh->getComponent< castor3d::PositionsComponent >() )
 			{
-				auto & data = positions->getData();
+				auto & data = positions->getData().getData();
 				data[0u] = castor::Point3f( aabbMin->x, aabbMin->y, aabbMin->z );
 				data[1u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMin->z );
 				data[2u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMin->z );
@@ -313,7 +313,7 @@ namespace GuiCommon
 				data[5u] = castor::Point3f( aabbMin->x, aabbMax->y, aabbMax->z );
 				data[6u] = castor::Point3f( aabbMax->x, aabbMax->y, aabbMax->z );
 				data[7u] = castor::Point3f( aabbMax->x, aabbMin->y, aabbMax->z );
-				positions->needsUpdate();
+				positions->getData().needsUpdate();
 				aabbSubmesh->needsUpdate();
 			}
 

@@ -41,7 +41,9 @@ namespace castor3d
 
 		auto submesh = mesh.createDefaultSubmesh();
 		auto normals = submesh->getComponent< NormalsComponent >();
+		auto & normalsData = normals->getData();
 		auto texcoords = submesh->getComponent< Texcoords0Component >();
+		auto & texcoordsData = texcoords->getData();
 
 		// Construction de l'icosaèdre
 		std::vector< InterleavedVertex > vertices{ 12 };
@@ -115,31 +117,32 @@ namespace castor3d
 
 		// on construit toutes les faces de l'icosaèdre
 		auto indexMapping = submesh->createComponent< TriFaceMapping >();
-		indexMapping->addFace( 1, 0, 4 );
-		indexMapping->addFace( 0, 9, 4 );
-		indexMapping->addFace( 4, 9, 5 );
-		indexMapping->addFace( 8, 4, 5 );
-		indexMapping->addFace( 1, 4, 8 );
-		indexMapping->addFace( 10, 1, 8 );
-		indexMapping->addFace( 8, 3, 10 );
-		indexMapping->addFace( 5, 3, 8 );
-		indexMapping->addFace( 5, 2, 3 );
-		indexMapping->addFace( 2, 7, 3 );
-		indexMapping->addFace( 10, 3, 7 );
-		indexMapping->addFace( 7, 6, 10 );
-		indexMapping->addFace( 11, 6, 7 );
-		indexMapping->addFace( 6, 11, 0 );
-		indexMapping->addFace( 0, 1, 6 );
-		indexMapping->addFace( 6, 1, 10 );
-		indexMapping->addFace( 9, 0, 11 );
-		indexMapping->addFace( 9, 11, 2 );
-		indexMapping->addFace( 5, 9, 2 );
-		indexMapping->addFace( 7, 2, 11 );
+		auto & indexMappingData = indexMapping->getData();
+		indexMappingData.addFace( 1, 0, 4 );
+		indexMappingData.addFace( 0, 9, 4 );
+		indexMappingData.addFace( 4, 9, 5 );
+		indexMappingData.addFace( 8, 4, 5 );
+		indexMappingData.addFace( 1, 4, 8 );
+		indexMappingData.addFace( 10, 1, 8 );
+		indexMappingData.addFace( 8, 3, 10 );
+		indexMappingData.addFace( 5, 3, 8 );
+		indexMappingData.addFace( 5, 2, 3 );
+		indexMappingData.addFace( 2, 7, 3 );
+		indexMappingData.addFace( 10, 3, 7 );
+		indexMappingData.addFace( 7, 6, 10 );
+		indexMappingData.addFace( 11, 6, 7 );
+		indexMappingData.addFace( 6, 11, 0 );
+		indexMappingData.addFace( 0, 1, 6 );
+		indexMappingData.addFace( 6, 1, 10 );
+		indexMappingData.addFace( 9, 0, 11 );
+		indexMappingData.addFace( 9, 11, 2 );
+		indexMappingData.addFace( 5, 9, 2 );
+		indexMappingData.addFace( 7, 2, 11 );
 
 		for ( uint32_t i = 0u; i < submesh->getPointsCount(); ++i )
 		{
-			castor::SphericalVertex vsVertex1( castor::Point3f{ normals->getData()[i] } );
-			texcoords->getData()[i] = castor::Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
+			castor::SphericalVertex vsVertex1( castor::Point3f{ normalsData.getData()[i] } );
+			texcoordsData.getData()[i] = castor::Point3f{ vsVertex1.m_phi, vsVertex1.m_theta, 0 };
 		}
 
 		indexMapping->computeTangents();

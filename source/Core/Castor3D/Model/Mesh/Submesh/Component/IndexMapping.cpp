@@ -6,9 +6,8 @@ namespace castor3d
 {
 	IndexMapping::IndexMapping( Submesh & submesh
 		, castor::String const & type
-		, VkBufferUsageFlags bufferUsageFlags )
-		: SubmeshComponent{ submesh, type }
-		, m_bufferUsageFlags{ bufferUsageFlags }
+		, SubmeshComponentDataUPtr data )
+		: SubmeshComponent{ submesh, type, std::move( data ) }
 	{
 	}
 }

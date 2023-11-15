@@ -37,7 +37,7 @@ namespace castor3d
 			, Remapped & remapped )
 		{
 			std::vector< meshopt_Stream > result;
-			remapped.indices = triangles.getFaces();
+			remapped.indices = triangles.getData().getFaces();
 
 			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eOtherMin ); ++i )
 			{
@@ -67,17 +67,17 @@ namespace castor3d
 
 			if ( auto skin = submesh.getComponent< SkinComponent >() )
 			{
-				remapped.skin = skin->getData();
+				remapped.skin = skin->getData().getData();
 			}
 
 			if ( auto passMasks = submesh.getComponent< PassMasksComponent >() )
 			{
-				remapped.passMasks = passMasks->getData();
+				remapped.passMasks = passMasks->getData().getData();
 			}
 
 			if ( auto morph = submesh.getComponent< MorphComponent >() )
 			{
-				for ( auto & buffers : morph->getMorphTargetsBuffers() )
+				for ( auto & buffers : morph->getData().getMorphTargetsBuffers() )
 				{
 					remapped.morphTargets.push_back( buffers );
 				}
@@ -441,7 +441,7 @@ namespace castor3d
 		}
 #endif
 
-		triangles.getFaces() = std::move( remapped.indices );
+		triangles.getData().getFaces() = std::move( remapped.indices );
 
 		for ( auto & data : remapped.baseBuffers )
 		{
@@ -450,22 +450,22 @@ namespace castor3d
 
 		if ( auto tangents = submesh.getComponent< TangentsComponent >() )
 		{
-			tangents->getData() = std::move( remapped.tangentBuffer );
+			tangents->getData().getData() = std::move( remapped.tangentBuffer );
 		}
 
 		if ( auto skin = submesh.getComponent< SkinComponent >() )
 		{
-			skin->getData() = std::move( remapped.skin );
+			skin->getData().getData() = std::move( remapped.skin );
 		}
 
 		if ( auto passMasks = submesh.getComponent< PassMasksComponent >() )
 		{
-			passMasks->getData() = std::move( remapped.passMasks );
+			passMasks->getData().getData() = std::move( remapped.passMasks );
 		}
 
 		if ( auto morph = submesh.getComponent< MorphComponent >() )
 		{
-			morph->getMorphTargetsBuffers() = std::move( remapped.morphTargets );
+			morph->getData().getMorphTargetsBuffers() = std::move( remapped.morphTargets );
 		}
 
 		return true;

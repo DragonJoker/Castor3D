@@ -64,6 +64,7 @@ namespace castor3d
 			// Constitution de la base sphérique
 			Submesh & baseSubmesh = *mesh.createDefaultSubmesh();
 			auto baseIndexMapping = baseSubmesh.createComponent< TriFaceMapping >();
+			auto & baseIndexMappingData = baseIndexMapping->getData();
 
 			for ( uint32_t k = 0; k < m_nbFaces; k++ )
 			{
@@ -105,8 +106,8 @@ namespace castor3d
 				// Reconstition des faces de la base sphérique
 				for ( uint32_t i = 0; i < m_nbFaces; i++ )
 				{
-					baseIndexMapping->addFace( iCur + 0, iPrv + 0, iPrv + 1 );
-					baseIndexMapping->addFace( iCur + 1, iCur + 0, iPrv + 1 );
+					baseIndexMappingData.addFace( iCur + 0, iPrv + 0, iPrv + 1 );
+					baseIndexMappingData.addFace( iCur + 1, iCur + 0, iPrv + 1 );
 					iPrv++;
 					iCur++;
 				}
@@ -138,10 +139,11 @@ namespace castor3d
 
 			// Reconstition des faces des côtés
 			auto sideIndexMapping = sideSubmesh.createComponent< TriFaceMapping >();
+			auto & sideIndexMappingData = sideIndexMapping->getData();
 
 			for ( uint32_t i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				sideIndexMapping->addFace( i + 1, i + 0, i + 2 );
+				sideIndexMappingData.addFace( i + 1, i + 0, i + 2 );
 			}
 
 			sideIndexMapping->computeNormals();

@@ -78,6 +78,7 @@ namespace castor3d
 			// Build the torus
 			step = castor::PiMult2< float > / float( m_externalNbFaces );
 			auto indexMapping = submesh.createComponent< TriFaceMapping >();
+			auto & indexMappingData = indexMapping->getData();
 
 			for ( uint32_t i = 1; i <= uiExtMax; i++ )
 			{
@@ -96,14 +97,14 @@ namespace castor3d
 
 				for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
 				{
-					indexMapping->addFace( uiPrv + 0, uiCur + 1, uiPrv + 1 );
-					indexMapping->addFace( uiPrv + 0, uiCur + 0, uiCur + 1 );
+					indexMappingData.addFace( uiPrv + 0, uiCur + 1, uiPrv + 1 );
+					indexMappingData.addFace( uiPrv + 0, uiCur + 0, uiCur + 1 );
 					uiPrv++;
 					uiCur++;
 				}
 
-				indexMapping->addFace( uiPrv + 0, uiPCr + 0, uiPPr + 0 );
-				indexMapping->addFace( uiPrv + 0, uiCur + 0, uiPCr + 0 );
+				indexMappingData.addFace( uiPrv + 0, uiPCr + 0, uiPPr + 0 );
+				indexMappingData.addFace( uiPrv + 0, uiCur + 0, uiPCr + 0 );
 				uiPrv++;
 				uiCur++;
 			}
@@ -114,14 +115,14 @@ namespace castor3d
 
 			for ( uint32_t j = 0; j <= uiIntMax - 1; j++ )
 			{
-				indexMapping->addFace( uiPrv + 0, uiCur + 1, uiPrv + 1 );
-				indexMapping->addFace( uiPrv + 0, uiCur + 0, uiCur + 1 );
+				indexMappingData.addFace( uiPrv + 0, uiCur + 1, uiPrv + 1 );
+				indexMappingData.addFace( uiPrv + 0, uiCur + 0, uiCur + 1 );
 				uiPrv++;
 				uiCur++;
 			}
 
-			indexMapping->addFace( uiPrv + 0, uiPCr + 0, uiPPr + 0 );
-			indexMapping->addFace( uiPrv + 0, uiCur + 0, uiPCr + 0 );
+			indexMappingData.addFace( uiPrv + 0, uiPCr + 0, uiPPr + 0 );
+			indexMappingData.addFace( uiPrv + 0, uiCur + 0, uiPCr + 0 );
 
 			indexMapping->computeTangents();
 		}

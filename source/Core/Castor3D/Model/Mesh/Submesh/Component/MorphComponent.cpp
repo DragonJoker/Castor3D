@@ -19,6 +19,8 @@ CU_ImplementSmartPtr( castor3d, MorphComponent )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
 	namespace smshcompmorph
 	{
 		static void computeBoundingBox( SubmeshAnimationBuffer & buffer )
@@ -112,23 +114,17 @@ namespace castor3d
 		}
 	}
 
-	castor::String const MorphComponent::TypeName = cuT( "morph" );
+	//*********************************************************************************************
 
-	MorphComponent::MorphComponent( Submesh & submesh )
-		: SubmeshComponent{ submesh, TypeName }
+	void MorphComponent::ComponentData::copy( SubmeshComponentDataRPtr data )const
 	{
-	}
-
-	SubmeshComponentUPtr MorphComponent::clone( Submesh & submesh )const
-	{
-		auto result = castor::makeUnique< MorphComponent >( submesh );
+		auto result = static_cast< ComponentData * >( data );
 		result->m_flags = m_flags;
 		result->m_targetDataCount = m_targetDataCount;
 		result->m_targets = m_targets;
-		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
-	void MorphComponent::addMorphTarget( SubmeshAnimationBuffer data )
+	void MorphComponent::ComponentData::addMorphTarget( SubmeshAnimationBuffer data )
 	{
 		if ( m_flags == MorphFlags{} )
 		{
@@ -141,9 +137,9 @@ namespace castor3d
 		m_targets.emplace_back( std::move( data ) );
 	}
 
-	bool MorphComponent::doInitialise( RenderDevice const & device )
+	bool MorphComponent::ComponentData::doInitialise( RenderDevice const & device )
 	{
-		auto vertexCount = getOwner()->getPointsCount();
+		auto vertexCount = m_submesh.getPointsCount();
 		auto size = m_targetDataCount * vertexCount * MaxMorphTargets;
 
 		if ( !m_buffer
@@ -157,7 +153,7 @@ namespace castor3d
 		return true;
 	}
 
-	void MorphComponent::doCleanup( RenderDevice const & device )
+	void MorphComponent::ComponentData::doCleanup( RenderDevice const & device )
 	{
 		if ( m_buffer )
 		{
@@ -166,7 +162,7 @@ namespace castor3d
 		}
 	}
 
-	void MorphComponent::doUpload( UploadData & uploader )
+	void MorphComponent::ComponentData::doUpload( UploadData & uploader )
 	{
 		if ( !m_buffer )
 		{
@@ -174,7 +170,7 @@ namespace castor3d
 		}
 
 		uint32_t index{};
-		auto vertexCount = getOwner()->getPointsCount();
+		auto vertexCount = m_submesh.getPointsCount();
 		auto bufferIt = m_buffer.getData().begin();
 		auto stride = m_targetDataCount * MaxMorphTargets;
 
@@ -264,4 +260,23 @@ namespace castor3d
 		m_buffer.markDirty( VK_ACCESS_SHADER_READ_BIT
 			, VK_PIPELINE_STAGE_VERTEX_SHADER_BIT );
 	}
+
+	//*********************************************************************************************
+
+	castor::String const MorphComponent::TypeName = cuT( "Morph" );
+
+	MorphComponent::MorphComponent( Submesh & submesh )
+		: SubmeshComponent{ submesh, TypeName
+			, std::make_unique< ComponentData >( submesh ) }
+	{
+	}
+
+	SubmeshComponentUPtr MorphComponent::clone( Submesh & submesh )const
+	{
+		auto result = castor::makeUnique< MorphComponent >( submesh );
+		result->getData().copy( &getData() );
+		return castor::ptrRefCast< SubmeshComponent >( result );
+	}
+
+	//*********************************************************************************************
 }

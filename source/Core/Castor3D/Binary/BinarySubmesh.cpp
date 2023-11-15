@@ -54,7 +54,7 @@ namespace castor3d
 			{
 				auto valid = true;
 
-				for ( auto & tan : tanComp->getData() )
+				for ( auto & tan : tanComp->getData().getData() )
 				{
 					valid = valid && check( tan );
 				}
@@ -125,63 +125,63 @@ namespace castor3d
 		if ( result
 			&& obj.hasComponent( PositionsComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< PositionsComponent >()->getData();
+			auto & values = obj.getComponent< PositionsComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshPositions, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( NormalsComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< NormalsComponent >()->getData();
+			auto & values = obj.getComponent< NormalsComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshNormals, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( TangentsComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< TangentsComponent >()->getData();
+			auto & values = obj.getComponent< TangentsComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTangentsMikkt, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( BitangentsComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< BitangentsComponent >()->getData();
+			auto & values = obj.getComponent< BitangentsComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshBitangents, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords0Component::TypeName ) )
 		{
-			auto & values = obj.getComponent< Texcoords0Component >()->getData();
+			auto & values = obj.getComponent< Texcoords0Component >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords0, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords1Component::TypeName ) )
 		{
-			auto & values = obj.getComponent< Texcoords1Component >()->getData();
+			auto & values = obj.getComponent< Texcoords1Component >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords1, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords2Component::TypeName ) )
 		{
-			auto & values = obj.getComponent< Texcoords2Component >()->getData();
+			auto & values = obj.getComponent< Texcoords2Component >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords2, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( Texcoords3Component::TypeName ) )
 		{
-			auto & values = obj.getComponent< Texcoords3Component >()->getData();
+			auto & values = obj.getComponent< Texcoords3Component >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshTexcoords3, m_chunk );
 		}
 
 		if ( result
 			&& obj.hasComponent( ColoursComponent::TypeName ) )
 		{
-			auto & values = obj.getComponent< ColoursComponent >()->getData();
+			auto & values = obj.getComponent< ColoursComponent >()->getData().getData();
 			result = doWriteChunk( values, ChunkType::eSubmeshColours, m_chunk );
 		}
 
@@ -200,7 +200,7 @@ namespace castor3d
 
 				if ( result )
 				{
-					auto const * data = reinterpret_cast< FaceIndices const * >( obj.getComponent< TriFaceMapping >()->getFaces().data() );
+					auto const * data = reinterpret_cast< FaceIndices const * >( obj.getComponent< TriFaceMapping >()->getData().getFaces().data() );
 					result = doWriteChunk( data, count, ChunkType::eSubmeshIndices, m_chunk );
 				}
 			}
@@ -216,7 +216,7 @@ namespace castor3d
 
 				if ( result )
 				{
-					auto const * data = reinterpret_cast< LineIndices const * >( obj.getComponent< LinesMapping >()->getFaces().data() );
+					auto const * data = reinterpret_cast< LineIndices const * >( obj.getComponent< LinesMapping >()->getData().getFaces().data() );
 					result = doWriteChunk( data, count, ChunkType::eSubmeshIndices, m_chunk );
 				}
 			}
@@ -282,7 +282,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( values );
+						component->getData().setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -295,7 +295,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( values );
+						component->getData().setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -310,7 +310,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( tangents );
+						component->getData().setData( tangents );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -323,7 +323,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( values );
+						component->getData().setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -336,7 +336,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( values );
+						component->getData().setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -349,7 +349,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( values );
+						component->getData().setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -362,7 +362,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( values );
+						component->getData().setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -375,7 +375,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( values );
+						component->getData().setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -388,7 +388,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						component->setData( values );
+						component->getData().setData( values );
 						obj.addComponent( std::move( component ) );
 					}
 				}
@@ -449,7 +449,7 @@ namespace castor3d
 						if ( result )
 						{
 							auto indexMapping = obj.createComponent< TriFaceMapping >();
-							indexMapping->addFaceGroup( faces );
+							indexMapping->getData().addFaceGroup( faces );
 						}
 					}
 					else if ( components == 2u )
@@ -460,7 +460,7 @@ namespace castor3d
 						if ( result )
 						{
 							auto indexMapping = obj.createComponent< LinesMapping >();
-							indexMapping->addLineGroup( lines );
+							indexMapping->getData().addLineGroup( lines );
 						}
 					}
 				}
@@ -481,7 +481,7 @@ namespace castor3d
 				if ( indexMapping->getType() == TriFaceMapping::TypeName )
 				{
 					auto component = castor::makeUnique< TangentsComponent >( obj );
-					component->getData().resize( count );
+					component->getData().getData().resize( count );
 					obj.addComponent( std::move( component ) );
 					indexMapping->computeTangents();
 				}
@@ -536,9 +536,9 @@ namespace castor3d
 						auto normals = obj.createComponent< NormalsComponent >();
 						auto texcoords = obj.createComponent< Texcoords0Component >();
 						v1_5::dispatchVertices( dstbuf
-							, positions->getData()
-							, normals->getData()
-							, texcoords->getData() );
+							, positions->getData().getData()
+							, normals->getData().getData()
+							, texcoords->getData().getData() );
 					}
 					break;
 #pragma warning( push )
@@ -574,7 +574,7 @@ namespace castor3d
 							std::swap( face.m_index[1], face.m_index[2] );
 						}
 
-						indexMapping->addFaceGroup( faces );
+						indexMapping->getData().addFaceGroup( faces );
 					}
 					faceCount = 0u;
 					break;
@@ -593,7 +593,7 @@ namespace castor3d
 					if ( result && boneCount > 0 )
 					{
 						auto bonesComponent = obj.createComponent< SkinComponent >();
-						bonesComponent->addDatas( bones );
+						bonesComponent->getData().addDatas( bones );
 					}
 					boneCount = 0u;
 					break;
@@ -651,9 +651,9 @@ namespace castor3d
 							auto normals = obj.createComponent< NormalsComponent >();
 							auto texcoords = obj.createComponent< Texcoords0Component >();
 							v1_5::dispatchVertices( vertices
-								, positions->getData()
-								, normals->getData()
-								, texcoords->getData() );
+								, positions->getData().getData()
+								, normals->getData().getData()
+								, texcoords->getData().getData() );
 						}
 					}
 					break;

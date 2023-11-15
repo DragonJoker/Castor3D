@@ -14,7 +14,7 @@ namespace castor3d
 	{
 		bool result = true;
 
-		for ( auto & it : obj.getMorphTargetsBuffers() )
+		for ( auto & it : obj.getData().getMorphTargetsBuffers() )
 		{
 			if ( result )
 			{
@@ -109,7 +109,7 @@ namespace castor3d
 			case ChunkType::eMorphTargetBufferSize:
 				if ( count )
 				{
-					obj.addMorphTarget( std::move( buffer ) );
+					obj.getData().addMorphTarget( std::move( buffer ) );
 					count = 0u;
 				}
 				result = doParseChunk( count, chunk );
@@ -237,21 +237,21 @@ namespace castor3d
 						, buffer.texcoords0
 						, buffer.normals
 						, buffer.tangents
-						, static_cast< TriFaceMapping const & >( *indexMapping ).getFaces() );
+						, static_cast< TriFaceMapping const & >( *indexMapping ).getData().getFaces() );
 				}
 			}
 		}
 
-		obj.m_targetDataCount = uint32_t( flags.size() );
+		obj.getData().m_targetDataCount = uint32_t( flags.size() );
 
 		for ( auto & flag : flags )
 		{
-			obj.m_flags |= flag;
+			obj.getData().m_flags |= flag;
 		}
 
 		if ( result && count )
 		{
-			obj.addMorphTarget( std::move( buffer ) );
+			obj.getData().addMorphTarget( std::move( buffer ) );
 		}
 
 		return result;

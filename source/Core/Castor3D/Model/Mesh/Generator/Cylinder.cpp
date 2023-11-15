@@ -46,10 +46,13 @@ namespace castor3d
 		{
 			Submesh & submeshBase = *mesh.createDefaultSubmesh();
 			auto indexMappingBase = submeshBase.createComponent< TriFaceMapping >();
+			auto & indexMappingBaseData = indexMappingBase->getData();
 			Submesh & submeshTop = *mesh.createDefaultSubmesh();
 			auto indexMappingTop = submeshTop.createComponent< TriFaceMapping >();
+			auto & indexMappingTopData = indexMappingTop->getData();
 			Submesh & submeshSide = *mesh.createDefaultSubmesh();
 			auto indexMappingSide = submeshSide.createComponent< TriFaceMapping >();
+			auto & indexMappingSideData = indexMappingSide->getData();
 
 			//CALCUL DE LA POSITION DES POINTS
 			float angleRotation = castor::PiMult2< float > / float( m_nbFaces );
@@ -117,21 +120,21 @@ namespace castor3d
 			for ( uint32_t i = 0; i < m_nbFaces - 1; i++ )
 			{
 				//Composition du bas
-				indexMappingBase->addFace( i + 1, i, bottomCenterIndex );
+				indexMappingBaseData.addFace( i + 1, i, bottomCenterIndex );
 				//Composition du dessus
-				indexMappingTop->addFace( i, topCenterIndex, i + 1 );
+				indexMappingTopData.addFace( i, topCenterIndex, i + 1 );
 			}
 
 			//Composition du bas
-			indexMappingBase->addFace( 0, m_nbFaces - 1, bottomCenterIndex );
+			indexMappingBaseData.addFace( 0, m_nbFaces - 1, bottomCenterIndex );
 			//Composition du dessus
-			indexMappingTop->addFace( m_nbFaces - 1, topCenterIndex, 0 );
+			indexMappingTopData.addFace( m_nbFaces - 1, topCenterIndex, 0 );
 
 			//Composition des côtés
 			for ( uint32_t i = 0; i < 2 * m_nbFaces; i += 2 )
 			{
-				indexMappingSide->addFace( i + 1, i + 0, i + 2 );
-				indexMappingSide->addFace( i + 3, i + 1, i + 2 );
+				indexMappingSideData.addFace( i + 1, i + 0, i + 2 );
+				indexMappingSideData.addFace( i + 3, i + 1, i + 2 );
 			}
 
 			indexMappingBase->computeTangents();
