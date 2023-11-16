@@ -112,6 +112,7 @@ namespace castor3d
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
+		, sdw::Vec2 const & uv
 		, shader::BlendComponents & components )const
 	{
 		applyFloatComponent( "metalness"

@@ -1376,6 +1376,7 @@ namespace castor3d
 										, indirectDiffuse
 										, vec2( ipixel )
 										, modelData.getEnvMapIndex()
+										, incident
 										, components.hasReflection
 										, components.hasRefraction
 										, components.refractionRatio

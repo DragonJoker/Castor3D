@@ -107,6 +107,7 @@ namespace castor3d::shader
 		, TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
+		, sdw::Vec2 const & uv
 		, BlendComponents & components )const
 	{
 		for ( auto & shader : m_shaders )
@@ -115,7 +116,7 @@ namespace castor3d::shader
 
 			if ( hasAny( combine, plugin.getTextureFlags() ) )
 			{
-				shader->applyComponents( combine, nullptr, config, imgCompConfig, sampled, components );
+				shader->applyComponents( combine, nullptr, config, imgCompConfig, sampled, uv, components );
 			}
 		}
 	}
@@ -124,6 +125,7 @@ namespace castor3d::shader
 		, TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
+		, sdw::Vec2 const & uv
 		, BlendComponents & components )const
 	{
 		auto & combine = flags.textures;
@@ -134,7 +136,7 @@ namespace castor3d::shader
 
 			if ( hasAny( combine, plugin.getTextureFlags() ) )
 			{
-				shader->applyComponents( combine, &flags, config, imgCompConfig, sampled, components );
+				shader->applyComponents( combine, &flags, config, imgCompConfig, sampled, uv, components );
 			}
 		}
 	}
@@ -151,8 +153,14 @@ namespace castor3d::shader
 	}
 
 	void PassShaders::updateComponents( TextureCombine const & combine
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, BlendComponents & components )const
 	{
+		for ( auto & shader : m_shaders )
+		{
+			shader->updateComponent( combine, maps, components );
+		}
+
 		for ( auto & update : m_updateComponents )
 		{
 			update( m_compRegister, combine, components );
@@ -160,9 +168,10 @@ namespace castor3d::shader
 	}
 
 	void PassShaders::updateComponents( PipelineFlags const & flags
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, BlendComponents & components )const
 	{
-		updateComponents( flags.textures, components );
+		updateComponents( flags.textures, maps, components );
 	}
 
 	void PassShaders::finishComponents( SurfaceBase const & surface
@@ -248,6 +257,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec3 & texCoords
 		, sdw::Vec2 & texCoord
+		, sdw::UInt const & mapId
 		, BlendComponents & components )const
 	{
 		auto & writer = findWriterMandat( config, map, texCoords, texCoord, components );
@@ -257,7 +267,8 @@ namespace castor3d::shader
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( hasAny( combine, plugin.getTextureFlags() ) )
+			if ( hasAny( combine, plugin.getTextureFlags() )
+				&& plugin.hasTexcoordModif( m_compRegister, &flags ) )
 			{
 				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
 				{
@@ -267,6 +278,7 @@ namespace castor3d::shader
 						, map
 						, texCoords
 						, texCoord
+						, mapId
 						, components );
 				}
 				FI;
@@ -280,6 +292,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & map
 		, DerivTex & texCoords
 		, DerivTex & texCoord
+		, sdw::UInt const & mapId
 		, BlendComponents & components )const
 	{
 		auto & writer = findWriterMandat( config, map, texCoords, texCoord, components );
@@ -289,7 +302,8 @@ namespace castor3d::shader
 		{
 			auto & plugin = m_compRegister.getPlugin( shader->getId() );
 
-			if ( hasAny( combine, plugin.getTextureFlags() ) )
+			if ( hasAny( combine, plugin.getTextureFlags() )
+				&& plugin.hasTexcoordModif( m_compRegister, &flags ) )
 			{
 				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
 				{
@@ -299,6 +313,7 @@ namespace castor3d::shader
 						, map
 						, texCoords
 						, texCoord
+						, mapId
 						, components );
 				}
 				FI;
@@ -312,6 +327,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec3 & texCoords
 		, sdw::Vec2 & texCoord
+		, sdw::UInt const & mapId
 		, BlendComponents & components )const
 	{
 	}
@@ -322,6 +338,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & map
 		, DerivTex & texCoords
 		, DerivTex & texCoord
+		, sdw::UInt const & mapId
 		, BlendComponents & components )const
 	{
 	}

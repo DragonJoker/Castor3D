@@ -22,16 +22,47 @@ namespace water
 		struct ComponentsShader
 			: castor3d::shader::PassComponentsShader
 		{
-			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin )
-				: castor3d::shader::PassComponentsShader{ plugin }
-			{
-			}
+			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin );
 
+			void computeTexcoord( castor3d::PipelineFlags const & flags
+				, castor3d::shader::TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 & texCoords
+				, sdw::Vec2 & texCoord
+				, sdw::UInt const & mapId
+				, castor3d::shader::BlendComponents & components )const override;
+			void computeTexcoord( castor3d::PipelineFlags const & flags
+				, castor3d::shader::TextureConfigData const & config
+				, sdw::U32Vec3 const & imgCompConfig
+				, sdw::CombinedImage2DRgba32 const & map
+				, castor3d::shader::DerivTex & texCoords
+				, castor3d::shader::DerivTex & texCoord
+				, sdw::UInt const & mapId
+				, castor3d::shader::BlendComponents & components )const override;
+			void fillComponents( castor3d::ComponentModeFlags componentsMask
+				, sdw::type::BaseStruct & components
+				, castor3d::shader::Materials const & materials
+				, sdw::StructInstance const * surface )const override;
+			void fillComponentsInits( sdw::type::BaseStruct const & components
+				, castor3d::shader::Materials const & materials
+				, castor3d::shader::Material const * material
+				, sdw::StructInstance const * surface
+				, sdw::Vec4 const * clrCot
+				, sdw::expr::ExprList & inits )const override;
+			void blendComponents( castor3d::shader::Materials const & materials
+				, sdw::Float const & passMultiplier
+				, castor3d::shader::BlendComponents & res
+				, castor3d::shader::BlendComponents const & src )const override;
 			void applyComponents( castor3d::TextureCombine const & combine
 				, castor3d::PipelineFlags const * flags
 				, castor3d::shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled
+				, sdw::Vec2 const & uv
+				, castor3d::shader::BlendComponents & components )const override;
+			void updateComponent( castor3d::TextureCombine const & combine
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, castor3d::shader::BlendComponents & components )const override;
 
 			castor3d::PassComponentTextureFlag getTextureFlags()const
@@ -44,8 +75,8 @@ namespace water
 			: public castor3d::PassMapComponentPlugin
 		{
 		public:
-			explicit Plugin( castor3d::PassComponentRegister const & passComponent )
-				: castor3d::PassMapComponentPlugin{ passComponent }
+			explicit Plugin( castor3d::PassComponentRegister const & passComponents )
+				: castor3d::PassMapComponentPlugin{ passComponents }
 			{
 			}
 
@@ -60,6 +91,8 @@ namespace water
 				, castor3d::ComponentModeFlags const & filter )const override;
 			void createMapComponent( castor3d::Pass & pass
 				, std::vector< castor3d::PassComponentUPtr > & result )const override;
+			bool hasTexcoordModif( castor3d::PassComponentRegister const & passComponents
+				, castor3d::PipelineFlags const * flags )const override;
 
 			bool isMapComponent()const override
 			{
@@ -122,7 +155,7 @@ namespace water
 			, castor3d::ConfigurationVisitorBase & vis )const override;
 	};
 
-	CU_DeclareSmartPtr( water, WaterNoiseMapComponent, C3D_WaterMaterial_API );
+	CU_DeclareSmartPtr( water, WaterNoiseMapComponent, );
 }
 
 #endif

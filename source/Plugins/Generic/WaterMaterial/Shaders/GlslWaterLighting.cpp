@@ -67,8 +67,13 @@ namespace water::shader
 	sdw::Vec3 WaterLightingModel::doAdjustDirectSpecular( c3d::BlendComponents const & components
 		, sdw::Vec3 const & specular )const
 	{
-		auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
-		return specular * waterNoise;
+		if ( components.hasMember( "waterNoise" ) )
+		{
+			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
+			return specular * waterNoise;
+		}
+
+		return specular;
 	}
 
 	void WaterLightingModel::doComputeReflRefr( c3d::ReflectionModel & reflections
@@ -81,6 +86,7 @@ namespace water::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
@@ -102,6 +108,15 @@ namespace water::shader
 		auto mapDepthObj = writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapDepthObj" );
 		auto mapNormals = writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapNormals" );
 		auto mapColours = writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapScene" );
+		auto ssrStepSize = components.getMember< sdw::Float >( "ssrStepSize", true );
+		auto ssrForwardStepsCount = components.getMember< sdw::UInt32 >( "ssrForwardStepsCount", true );
+		auto ssrBackwardStepsCount = components.getMember< sdw::UInt32 >( "ssrBackwardStepsCount", true );
+		auto ssrDepthMult = components.getMember< sdw::Float >( "ssrDepthMult", true );
+		auto refractionDistortionFactor = components.getMember< sdw::Float >( "refractionDistortionFactor", true );
+		auto depthSofteningDistance = components.getMember< sdw::Float >( "depthSofteningDistance", true );
+		auto refractionHeightFactor = components.getMember< sdw::Float >( "refractionHeightFactor", true );
+		auto refractionDistanceFactor = components.getMember< sdw::Float >( "refractionDistanceFactor", true );
+
 		// Reflections
 		reflections.computeReflections( components
 			, lightSurface
@@ -111,32 +126,38 @@ namespace water::shader
 			, reflectedDiffuse
 			, reflectedSpecular
 			, debugOutput );
-		auto hdrCoords = writer.declLocale( "sceneUv"
+		auto hdrCoords = writer.declLocale( "hdrCoords"
 			, sceneUv / vec2( mapColours.getSize( 0_i ) ) );
 		auto backgroundReflection = writer.declLocale( "backgroundReflection"
 			, reflectedDiffuse + reflectedSpecular );
-		debugOutput.registerOutput( "Background Reflection", backgroundReflection );
+		debugOutput.registerOutput( "Water", "Background Reflection", backgroundReflection );
 		auto ssrResult = writer.declLocale( "ssrResult"
 			, reflections.computeScreenSpace( camera
 				, lightSurface.viewPosition()
 				, components.normal
 				, hdrCoords
-				, vec4( components.getMember< sdw::Float >( "ssrStepSize" )
-					, writer.cast< sdw::Float >( components.getMember< sdw::UInt32 >( "ssrForwardStepsCount" ) )
-					, writer.cast< sdw::Float >( components.getMember< sdw::UInt32 >( "ssrBackwardStepsCount" ) )
-					, components.getMember< sdw::Float >( "ssrDepthMult" ) )
+				, vec4( ssrStepSize
+					, writer.cast< sdw::Float >( ssrForwardStepsCount )
+					, writer.cast< sdw::Float >( ssrBackwardStepsCount )
+					, ssrDepthMult )
 				, mapDepthObj
 				, mapNormals
 				, mapColours
 				, debugOutput ) );
 		auto reflectionResult = writer.declLocale( "reflectionResult"
 			, mix( backgroundReflection, ssrResult.xyz(), ssrResult.www() ) );
-		debugOutput.registerOutput( "Reflection Result", reflectionResult );
+		debugOutput.registerOutput( "Water", "Reflection Result", reflectionResult );
+
+		if ( components.hasMember( "waterNoise" ) )
+		{
+			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
+			debugOutput.registerOutput( "Water", "Specular Noise", waterNoise );
+		}
 
 		// Refraction
 		// Wobbly refractions
 		auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
-			, ( hdrCoords + ( ( components.normal.xz() + components.normal.xy() ) * 0.5_f ) * components.getMember< sdw::Float >( "refractionDistortionFactor" ) ) );
+			, ( hdrCoords + ( ( components.normal.xz() + components.normal.xy() ) * 0.5_f ) * refractionDistortionFactor ) );
 		auto distortedDepth = writer.declLocale( "distortedDepth"
 			, mapDepthObj.lod( distortedTexCoord, 0.0_f ).r() );
 		auto distortedPosition = writer.declLocale( "distortedPosition"
@@ -144,7 +165,7 @@ namespace water::shader
 		auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 			, writer.ternary( distortedPosition.y() < lightSurface.worldPosition().y(), distortedTexCoord, hdrCoords ) );
 		refractionResult = mapColours.lod( refractionTexCoord, 0.0_f ).rgb() * components.colour;
-		debugOutput.registerOutput( "Refraction", refractionResult );
+		debugOutput.registerOutput( "Water", "Refraction", refractionResult );
 		//  Retrieve non distorted scene colour.
 		auto sceneDepth = writer.declLocale( "sceneDepth"
 			, mapDepthObj.lod( hdrCoords, 0.0_f ).r() );
@@ -152,24 +173,24 @@ namespace water::shader
 			, camera.curProjToWorld( utils, hdrCoords, sceneDepth ) );
 		// Depth softening, to fade the alpha of the water where it meets the scene geometry by some predetermined distance. 
 		auto depthSoftenedAlpha = writer.declLocale( "depthSoftenedAlpha"
-			, clamp( distance( scenePosition, lightSurface.worldPosition().xyz() ) / components.getMember< sdw::Float >( "depthSofteningDistance" ), 0.0_f, 1.0_f ) );
-		debugOutput.registerOutput( "Depth Softened Alpha", depthSoftenedAlpha );
+			, clamp( distance( scenePosition, lightSurface.worldPosition().xyz() ) / depthSofteningDistance, 0.0_f, 1.0_f ) );
+		debugOutput.registerOutput( "Water", "Depth Softened Alpha", depthSoftenedAlpha );
 		auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 			, writer.ternary( distortedPosition.y() < lightSurface.worldPosition().y(), distortedPosition, scenePosition ) );
 		auto waterTransmission = writer.declLocale( "waterTransmission"
 			, components.colour * ( indirectAmbient + indirectDiffuse ) * lighting.diffuse );
 		auto heightFactor = writer.declLocale( "heightFactor"
-			, components.getMember< sdw::Float >( "refractionHeightFactor" ) * ( camera.farPlane() - camera.nearPlane() ) );
+			, refractionHeightFactor * ( camera.farPlane() - camera.nearPlane() ) );
 		refractionResult = mix( refractionResult
 			, waterTransmission
 			, vec3( clamp( ( lightSurface.worldPosition().y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
-		debugOutput.registerOutput( "Height Mixed Refraction", refractionResult );
+		debugOutput.registerOutput( "Water", "Height Mixed Refraction", refractionResult );
 		auto distanceFactor = writer.declLocale( "distanceFactor"
-			, components.getMember< sdw::Float >( "refractionDistanceFactor" ) * ( camera.farPlane() - camera.nearPlane() ) );
+			, refractionDistanceFactor * ( camera.farPlane() - camera.nearPlane() ) );
 		refractionResult = mix( refractionResult
 			, waterTransmission
 			, utils.saturate( vec3( utils.saturate( length( lightSurface.viewPosition() ) / distanceFactor ) ) ) );
-		debugOutput.registerOutput( "Distance Mixed Refraction", refractionResult );
+		debugOutput.registerOutput( "Water", "Distance Mixed Refraction", refractionResult );
 
 		components.opacity = depthSoftenedAlpha;
 		reflectedSpecular = reflectionResult;
@@ -225,37 +246,6 @@ namespace water::shader
 			, enableVolumetric );
 	}
 
-	sdw::Vec3 WaterPhongLightingModel::combine( c3d::DebugOutput & debugOutput
-		, c3d::BlendComponents const & components
-		, sdw::Vec3 const & incident
-		, sdw::Vec3 const & directDiffuse
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & directAmbient
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 reflectedDiffuse
-		, sdw::Vec3 reflectedSpecular
-		, sdw::Vec3 refracted )
-	{
-		return c3d::PhongLightingModel::combine( debugOutput
-			, components
-			, incident
-			, directDiffuse
-			, indirectDiffuse
-			, directSpecular
-			, indirectSpecular
-			, directAmbient
-			, indirectAmbient
-			, ambientOcclusion
-			, emissive
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted );
-	}
-
 	sdw::Float WaterPhongLightingModel::getFinalTransmission( c3d::BlendComponents const & components
 		, sdw::Vec3 const & incident )
 	{
@@ -289,6 +279,7 @@ namespace water::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
@@ -309,6 +300,7 @@ namespace water::shader
 			, indirectDiffuse
 			, sceneUv
 			, envMapIndex
+			, incident
 			, components.hasReflection
 			, components.hasRefraction
 			, components.refractionRatio
@@ -330,6 +322,7 @@ namespace water::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
@@ -350,6 +343,7 @@ namespace water::shader
 			, indirectDiffuse
 			, sceneUv
 			, envMapIndex
+			, incident
 			, components.hasReflection
 			, components.hasRefraction
 			, components.refractionRatio
@@ -408,41 +402,6 @@ namespace water::shader
 			, enableVolumetric );
 	}
 
-	sdw::Vec3 WaterPbrLightingModel::combine( c3d::DebugOutput & debugOutput
-		, c3d::BlendComponents const & components
-		, sdw::Vec3 const & incident
-		, sdw::Vec3 const & directDiffuse
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & directAmbient
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Float const & ambientOcclusion
-		, sdw::Vec3 const & emissive
-		, sdw::Vec3 reflectedDiffuse
-		, sdw::Vec3 reflectedSpecular
-		, sdw::Vec3 refracted )
-	{
-		//return c3d::PbrLightingModel::combine( debugOutput
-		//	, components
-		//	, incident
-		//	, directDiffuse
-		//	, indirectDiffuse
-		//	, directSpecular
-		//	, indirectSpecular
-		//	, directAmbient
-		//	, indirectAmbient
-		//	, ambientOcclusion
-		//	, emissive
-		//	, reflectedDiffuse
-		//	, reflectedSpecular
-		//	, refracted );
-		return directSpecular + indirectSpecular
-			+ components.emissiveColour * components.emissiveFactor
-			+ ( refracted )
-			+( reflectedSpecular * indirectAmbient );
-	}
-
 	sdw::Float WaterPbrLightingModel::getFinalTransmission( c3d::BlendComponents const & components
 		, sdw::Vec3 const & incident )
 	{
@@ -476,6 +435,7 @@ namespace water::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
@@ -496,6 +456,7 @@ namespace water::shader
 			, indirectDiffuse
 			, sceneUv
 			, envMapIndex
+			, incident
 			, components.hasReflection
 			, components.hasRefraction
 			, components.refractionRatio
@@ -517,6 +478,7 @@ namespace water::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
@@ -537,6 +499,7 @@ namespace water::shader
 			, indirectDiffuse
 			, sceneUv
 			, envMapIndex
+			, incident
 			, components.hasReflection
 			, components.hasRefraction
 			, components.refractionRatio

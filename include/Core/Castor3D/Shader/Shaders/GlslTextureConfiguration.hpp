@@ -76,10 +76,10 @@ namespace castor3d
 				, TextureAnimData const & anim
 				, DerivTex & uv )const;
 
-			C3D_API sdw::Float getFloat( sdw::Vec4 const & sampled
-				, sdw::UInt const & mask )const;
-			C3D_API sdw::Vec3 getVec3( sdw::Vec4 const & sampled
-				, sdw::UInt const & mask )const;
+			C3D_API static sdw::Float getFloat( sdw::Vec4 const & sampled
+				, sdw::UInt const & mask );
+			C3D_API static sdw::Vec3 getVec3( sdw::Vec4 const & sampled
+				, sdw::UInt const & mask );
 
 			auto translate()const { return getMember< "translate" >(); }
 			auto rotateU()const { return getMember< "rotateU" >(); }

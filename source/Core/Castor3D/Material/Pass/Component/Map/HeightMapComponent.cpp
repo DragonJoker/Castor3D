@@ -152,6 +152,7 @@ namespace castor3d
 		, sdw::CombinedImage2DRgba32 const & map
 		, sdw::Vec3 & texCoords
 		, sdw::Vec2 & texCoord
+		, sdw::UInt const & mapId
 		, shader::BlendComponents & components )const
 	{
 		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), flags, getTextureFlags() )
@@ -204,6 +205,7 @@ namespace castor3d
 		, sdw::CombinedImage2DRgba32 const & map
 		, shader::DerivTex & texCoords
 		, shader::DerivTex & texCoord
+		, sdw::UInt const & mapId
 		, shader::BlendComponents & components )const
 	{
 		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), flags, getTextureFlags() )

@@ -17,15 +17,15 @@ namespace water::shader
 	namespace c3d = castor3d::shader;
 
 	struct WaterProfile
-		: public sdw::StructInstanceHelperT< "WaterData"
+		: public sdw::StructInstanceHelperT< "WaterProfile"
 			, sdw::type::MemoryLayout::eStd430
 			, sdw::FloatField< "dampeningFactor" >
 			, sdw::FloatField< "depthSofteningDistance" >
-			, sdw::FloatField< "pad0" >
-			, sdw::FloatField< "pad1" >
 			, sdw::FloatField< "refractionDistortionFactor" >
 			, sdw::FloatField< "refractionHeightFactor" >
 			, sdw::FloatField< "refractionDistanceFactor" >
+			, sdw::FloatField< "pad0" >
+			, sdw::FloatField< "pad1" >
 			, sdw::FloatField< "pad2" >
 			, sdw::FloatField< "ssrStepSize" >
 			, sdw::UIntField< "ssrForwardStepsCount" >
@@ -41,7 +41,7 @@ namespace water::shader
 
 		static std::string const & getName()
 		{
-			static std::string const name{ "C3D_WaterProfile" };
+			static std::string const name{ "WaterProfile" };
 			return name;
 		}
 

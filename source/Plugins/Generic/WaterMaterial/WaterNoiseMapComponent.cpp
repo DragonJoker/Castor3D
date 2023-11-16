@@ -108,11 +108,105 @@ namespace water
 
 	//*********************************************************************************************
 
+	WaterNoiseMapComponent::ComponentsShader::ComponentsShader( castor3d::PassComponentPlugin const & plugin )
+		: castor3d::shader::PassComponentsShader{ plugin }
+	{
+	}
+
+	void WaterNoiseMapComponent::ComponentsShader::computeTexcoord( PipelineFlags const & flags
+		, castor3d::shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
+		, sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec3 & texCoords
+		, sdw::Vec2 & texCoord
+		, sdw::UInt const & mapId
+		, castor3d::shader::BlendComponents & components )const
+	{
+		if ( !components.hasMember( "waterNoise" ) )
+		{
+			return;
+		}
+
+		texCoord *= 0.5_f;
+		config.setUv( texCoords, texCoord );
+		components.getMember< sdw::UInt >( "waterNoiseMapId" ) = mapId;
+		components.getMember< sdw::UInt >( "waterNoiseMapMask" ) = imgCompConfig.z();
+	}
+
+	void WaterNoiseMapComponent::ComponentsShader::computeTexcoord( PipelineFlags const & flags
+		, castor3d::shader::TextureConfigData const & config
+		, sdw::U32Vec3 const & imgCompConfig
+		, sdw::CombinedImage2DRgba32 const & map
+		, castor3d::shader::DerivTex & texCoords
+		, castor3d::shader::DerivTex & texCoord
+		, sdw::UInt const & mapId
+		, castor3d::shader::BlendComponents & components )const
+	{
+		if ( !components.hasMember( "waterNoise" ) )
+		{
+			return;
+		}
+
+		texCoord.uv() *= 0.5_f;
+		config.setUv( texCoords, texCoord );
+		components.getMember< sdw::UInt >( "waterNoiseMapId" ) = mapId;
+		components.getMember< sdw::UInt >( "waterNoiseMapMask" ) = imgCompConfig.z();
+	}
+
+	void WaterNoiseMapComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
+		, castor3d::shader::Materials const & materials
+		, sdw::StructInstance const * surface )const
+	{
+		if ( !WaterComponent::isComponentAvailable( componentsMask, materials ) )
+		{
+			return;
+		}
+
+		if ( !components.hasMember( "waterNoise" ) )
+		{
+			components.declMember( "waterNoise", sdw::type::Kind::eFloat );
+			components.declMember( "waterNoiseMapCoords", sdw::type::Kind::eVec2F );
+			components.declMember( "waterNoiseMapId", sdw::type::Kind::eUInt );
+			components.declMember( "waterNoiseMapMask", sdw::type::Kind::eUInt );
+		}
+	}
+
+	void WaterNoiseMapComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
+		, castor3d::shader::Materials const & materials
+		, castor3d::shader::Material const * material
+		, sdw::StructInstance const * surface
+		, sdw::Vec4 const * clrCot
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !components.hasMember( "waterNoise" ) )
+		{
+			return;
+		}
+
+		inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+		inits.emplace_back( sdw::makeExpr( vec2( 0.0_f ) ) );
+		inits.emplace_back( sdw::makeExpr( 0_u ) );
+		inits.emplace_back( sdw::makeExpr( 0_u ) );
+	}
+
+	void WaterNoiseMapComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
+		, sdw::Float const & passMultiplier
+		, castor3d::shader::BlendComponents & res
+		, castor3d::shader::BlendComponents const & src )const
+	{
+		if ( res.hasMember( "waterNoise" ) )
+		{
+			res.getMember< sdw::Float >( "waterNoise" ) += src.getMember< sdw::Float >( "waterNoise" ) * passMultiplier;
+		}
+	}
+
 	void WaterNoiseMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, c3d::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
+		, sdw::Vec2 const & uv
 		, c3d::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "waterNoise" ) )
@@ -125,9 +219,37 @@ namespace water
 		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
 		{
 			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
-			waterNoise = config.getFloat( sampled, imgCompConfig.z() );
+			waterNoise = c3d::TextureConfigData::getFloat( sampled, imgCompConfig.z() );
 		}
 		FI;
+	}
+
+	void WaterNoiseMapComponent::ComponentsShader::updateComponent( TextureCombine const & combine
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, c3d::BlendComponents & components )const
+	{
+		if ( !components.hasMember( "waterNoise" ) )
+		{
+			return;
+		}
+
+		auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
+		auto waterNoiseMapId = components.getMember< sdw::UInt >( "waterNoiseMapId" );
+		auto waterNoiseMapMask = components.getMember< sdw::UInt >( "waterNoiseMapMask" );
+
+		if ( components.hasMember( "waterNormalMapCoords1" ) )
+		{
+			auto waterNormalMapCoords1 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords1" );
+			waterNoise *= c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMapId - 1_u )].lod( waterNormalMapCoords1 * 0.5_f, 0.0_f )
+				, waterNoiseMapMask );
+		}
+
+		if ( components.hasMember( "waterNormalMapCoords2" ) )
+		{
+			auto waterNormalMapCoords2 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords2" );
+			waterNoise *= c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMapId - 1_u )].lod( waterNormalMapCoords2 * 0.5_f, 0.0_f )
+				, waterNoiseMapMask );
+		}
 	}
 
 	//*********************************************************************************************
@@ -135,7 +257,7 @@ namespace water
 	void WaterNoiseMapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "clearcoat", ChannelFiller{ getTextureFlags()
+		channelFillers.emplace( "water_noise", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< WaterNoiseMapComponent >( parsingContext );
@@ -178,6 +300,19 @@ namespace water
 		, std::vector< PassComponentUPtr > & result )const
 	{
 		result.push_back( castor::makeUniqueDerived< PassComponent, WaterNoiseMapComponent >( pass ) );
+	}
+
+	bool WaterNoiseMapComponent::Plugin::hasTexcoordModif( PassComponentRegister const & passComponents
+		, PipelineFlags const * flags )const
+	{
+		if ( !flags )
+		{
+			return false;
+		}
+
+		auto & plugin = passComponents.getPlugin< WaterNoiseMapComponent >();
+		return hasAny( flags->textures, getTextureFlags() )
+			&& hasAny( flags->pass, plugin.getComponentFlags() );
 	}
 
 	bool WaterNoiseMapComponent::Plugin::doWriteTextureConfig( TextureConfiguration const & configuration

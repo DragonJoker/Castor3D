@@ -63,10 +63,10 @@ extern "C"
 
 	C3D_WaterMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
 	{
-		engine->registerPassComponent< water::WaterComponent >();
 		engine->registerPassComponent< water::WaterNormal1MapComponent >();
 		engine->registerPassComponent< water::WaterNormal2MapComponent >();
 		engine->registerPassComponent< water::WaterNoiseMapComponent >();
+		engine->registerPassComponent< water::WaterComponent >();
 		engine->registerPassModels( { water::shader::WaterPhongLightingModel::getName()
 			, water::WaterPhongPass::create
 			, &water::shader::WaterPhongLightingModel::create
@@ -86,9 +86,9 @@ extern "C"
 		engine->unregisterSpecificsBuffer( water::shader::WaterProfile::getName() );
 		engine->unregisterPassModels( water::shader::WaterPbrLightingModel::getName() );
 		engine->unregisterPassModels( water::shader::WaterPhongLightingModel::getName() );
+		engine->unregisterPassComponent( water::WaterComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterNoiseMapComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterNormal2MapComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterNormal1MapComponent::TypeName );
-		engine->unregisterPassComponent( water::WaterComponent::TypeName );
 	}
 }

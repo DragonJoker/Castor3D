@@ -83,6 +83,7 @@ namespace castor3d
 												, map
 												, texCoords
 												, texCoord
+												, id
 												, components );
 										}
 										FI;
@@ -104,6 +105,7 @@ namespace castor3d
 											, config
 											, component
 											, sampled
+											, config.getUv( texCoords )
 											, components );
 									}
 									FI;
@@ -125,6 +127,7 @@ namespace castor3d
 			}
 
 			passShaders.updateComponents( flags
+				, maps
 				, pcomponents );
 		}
 

@@ -61,6 +61,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
@@ -80,6 +81,7 @@ namespace castor3d::shader
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
