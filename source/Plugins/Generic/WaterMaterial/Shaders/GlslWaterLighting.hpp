@@ -106,14 +106,12 @@ namespace water::shader
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		sdw::Float getFinalTransmission( c3d::BlendComponents const & components
-			, sdw::Vec3 const & incident )override;
 		sdw::Vec3 adjustDirectSpecular( c3d::BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const override;
 		void computeReflRefr( c3d::ReflectionModel & reflections
 			, c3d::BlendComponents & components
 			, c3d::LightSurface const & lightSurface
-			, sdw::Vec3 const & position
+			, sdw::Vec4 const & position
 			, c3d::BackgroundModel & background
 			, sdw::CombinedImage2DRgba32 const & mippedScene
 			, c3d::CameraData const & camera
@@ -183,14 +181,12 @@ namespace water::shader
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		sdw::Float getFinalTransmission( c3d::BlendComponents const & components
-			, sdw::Vec3 const & incident )override;
 		sdw::Vec3 adjustDirectSpecular( c3d::BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const override;
 		void computeReflRefr( c3d::ReflectionModel & reflections
 			, c3d::BlendComponents & components
 			, c3d::LightSurface const & lightSurface
-			, sdw::Vec3 const & position
+			, sdw::Vec4 const & position
 			, c3d::BackgroundModel & background
 			, sdw::CombinedImage2DRgba32 const & mippedScene
 			, c3d::CameraData const & camera

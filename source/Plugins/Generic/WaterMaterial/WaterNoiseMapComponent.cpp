@@ -108,11 +108,6 @@ namespace water
 
 	//*********************************************************************************************
 
-	WaterNoiseMapComponent::ComponentsShader::ComponentsShader( castor3d::PassComponentPlugin const & plugin )
-		: castor3d::shader::PassComponentsShader{ plugin }
-	{
-	}
-
 	void WaterNoiseMapComponent::ComponentsShader::computeTexcoord( PipelineFlags const & flags
 		, castor3d::shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
@@ -166,7 +161,6 @@ namespace water
 		if ( !components.hasMember( "waterNoise" ) )
 		{
 			components.declMember( "waterNoise", sdw::type::Kind::eFloat );
-			components.declMember( "waterNoiseMapCoords", sdw::type::Kind::eVec2F );
 			components.declMember( "waterNoiseMapId", sdw::type::Kind::eUInt );
 			components.declMember( "waterNoiseMapMask", sdw::type::Kind::eUInt );
 		}
@@ -185,7 +179,6 @@ namespace water
 		}
 
 		inits.emplace_back( sdw::makeExpr( 0.0_f ) );
-		inits.emplace_back( sdw::makeExpr( vec2( 0.0_f ) ) );
 		inits.emplace_back( sdw::makeExpr( 0_u ) );
 		inits.emplace_back( sdw::makeExpr( 0_u ) );
 	}
@@ -325,7 +318,7 @@ namespace water
 
 	//*********************************************************************************************
 
-	castor::String const WaterNoiseMapComponent::TypeName = C3D_MakePassMapComponentName( "water.noise" );
+	castor::String const WaterNoiseMapComponent::TypeName = C3D_PluginMakePassMapComponentName( "water", "noise" );
 
 	WaterNoiseMapComponent::WaterNoiseMapComponent( Pass & pass )
 		: PassMapComponent{ pass

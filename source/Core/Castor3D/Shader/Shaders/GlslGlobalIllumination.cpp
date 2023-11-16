@@ -265,7 +265,7 @@ namespace castor3d
 		{
 			return traceConeRadiance( voxels
 				, lightSurface.N()
-				, lightSurface.worldPosition()
+				, lightSurface.worldPosition().xyz()
 				, voxelData );
 		}
 
@@ -440,7 +440,7 @@ namespace castor3d
 			FI;
 
 			auto vxlPosition = m_writer.declLocale( "vxlPosition"
-				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
+				, clamp( abs( voxelData.worldToClip( lightSurface.worldPosition().xyz() ) ), vec3( -1.0_f ), vec3( 1.0_f ) ) );
 			auto vxlBlend = m_writer.declLocale( "vxlBlend"
 				, 1.0_f - pow( max( vxlPosition.x(), max( vxlPosition.y(), vxlPosition.z() ) ), 4.0_f ) );
 			return vec4( mix( vec3( 0.0_f )
@@ -485,7 +485,7 @@ namespace castor3d
 		{
 			CU_Require( m_computeLPVRadiance );
 			return m_computeLPVRadiance( lightSurface.N()
-				, lightSurface.worldPosition()
+				, lightSurface.worldPosition().xyz()
 				, lpvGridData );
 		}
 
@@ -494,7 +494,7 @@ namespace castor3d
 		{
 			CU_Require( m_computeLLPVRadiance );
 			return m_computeLLPVRadiance( lightSurface.N()
-				, lightSurface.worldPosition()
+				, lightSurface.worldPosition().xyz()
 				, llpvGridData );
 		}
 
@@ -617,7 +617,7 @@ namespace castor3d
 
 			return m_traceConeReflection( pvoxels
 				, plightSurface.N()
-				, plightSurface.worldPosition()
+				, plightSurface.worldPosition().xyz()
 				, plightSurface.V()
 				, proughness
 				, pvoxelData );
@@ -689,7 +689,7 @@ namespace castor3d
 
 			return m_traceConeOcclusion( pvoxels
 				, plightSurface.N()
-				, plightSurface.worldPosition()
+				, plightSurface.worldPosition().xyz()
 				, plightSurface.L()
 				, pvoxelData );
 		}

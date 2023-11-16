@@ -17,19 +17,6 @@
 
 namespace water::shader
 {
-	enum WaterIdx : uint32_t
-	{
-		eLightBuffer = uint32_t( castor3d::GlobalBuffersIdx::eCount ),
-		eWaterProfiles,
-		eWaterNormals1,
-		eWaterNormals2,
-		eWaterNoise,
-		eSceneNormals,
-		eSceneDepth,
-		eSceneResult,
-		eBrdf,
-	};
-
 	//*********************************************************************************************
 
 	WaterLightingModel::WaterLightingModel( sdw::ShaderWriter & writer )
@@ -148,12 +135,6 @@ namespace water::shader
 			, mix( backgroundReflection, ssrResult.xyz(), ssrResult.www() ) );
 		debugOutput.registerOutput( "Water", "Reflection Result", reflectionResult );
 
-		if ( components.hasMember( "waterNoise" ) )
-		{
-			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
-			debugOutput.registerOutput( "Water", "Specular Noise", waterNoise );
-		}
-
 		// Refraction
 		// Wobbly refractions
 		auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
@@ -181,6 +162,8 @@ namespace water::shader
 			, components.colour * ( indirectAmbient + indirectDiffuse ) * lighting.diffuse );
 		auto heightFactor = writer.declLocale( "heightFactor"
 			, refractionHeightFactor * ( camera.farPlane() - camera.nearPlane() ) );
+		auto heightDistance = writer.declLocale( "heightDistance"
+			, lightSurface.worldPosition().y() - waterSurfacePosition.y() );
 		refractionResult = mix( refractionResult
 			, waterTransmission
 			, vec3( clamp( ( lightSurface.worldPosition().y() - waterSurfacePosition.y() ) / heightFactor, 0.0_f, 1.0_f ) ) );
@@ -191,6 +174,40 @@ namespace water::shader
 			, waterTransmission
 			, utils.saturate( vec3( utils.saturate( length( lightSurface.viewPosition() ) / distanceFactor ) ) ) );
 		debugOutput.registerOutput( "Water", "Distance Mixed Refraction", refractionResult );
+
+		if ( components.hasMember( "waterNoise" ) )
+		{
+			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
+			debugOutput.registerOutput( "Water", "Specular Noise", waterNoise );
+			reflectionResult *= waterNoise;
+		}
+
+		if ( components.hasMember( "foamHeightStart" )
+			&& components.hasMember( "waterFoamNoise" ) )
+		{
+			// Now apply some foam on top of waves
+			auto foamHeightStart = components.getMember< sdw::Float >( "foamHeightStart" );
+			auto foamFadeDistance = components.getMember< sdw::Float >( "foamFadeDistance" );
+			auto foamAngleExponent = components.getMember< sdw::Float >( "foamAngleExponent" );
+			auto foamBrightness = components.getMember< sdw::Float >( "foamBrightness" );
+			auto waterFoamNoise = components.getMember< sdw::Float >( "waterFoamNoise" );
+			debugOutput.registerOutput( "Water", "Foam Noise", waterFoamNoise );
+			auto waterFoam = components.getMember< sdw::Vec3 >( "waterFoam" );
+			debugOutput.registerOutput( "Water", "Foam Colour", waterFoam );
+			// TODO: Check if use of worldPosition.w is correct here...
+			auto foamAmount = writer.declLocale( "foamAmount"
+				, utils.saturate( ( lightSurface.worldPosition().w() - foamHeightStart ) / foamFadeDistance ) * pow( utils.saturate( dot( components.normal, vec3( 0.0_f, 1.0_f, 0.0_f ) ) ), foamAngleExponent ) * waterFoamNoise );
+			debugOutput.registerOutput( "Water", "Raw Foam Amount", foamAmount );
+			foamAmount += pow( ( 1.0_f - depthSoftenedAlpha ), 3.0_f );
+			debugOutput.registerOutput( "Water", "Depth Softened Foam Amount", foamAmount );
+			auto foamResult = writer.declLocale( "foamResult"
+				, lighting.diffuse * mix( vec3( 0.0_f )
+					, waterFoam * foamBrightness
+					, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
+			debugOutput.registerOutput( "Water", "Foam Result", foamResult );
+			refractionResult += foamResult;
+			reflectionResult += foamResult;
+		}
 
 		components.opacity = depthSoftenedAlpha;
 		reflectedSpecular = reflectionResult;
@@ -270,7 +287,7 @@ namespace water::shader
 	void WaterPhongLightingModel::computeReflRefr( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
-		, sdw::Vec3 const & position
+		, sdw::Vec4 const & position
 		, c3d::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, c3d::CameraData const & camera
@@ -426,7 +443,7 @@ namespace water::shader
 	void WaterPbrLightingModel::computeReflRefr( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
-		, sdw::Vec3 const & position
+		, sdw::Vec4 const & position
 		, c3d::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, c3d::CameraData const & camera

@@ -370,8 +370,8 @@ namespace castor3d
 						// Direct Lighting
 						auto surface = writer.declLocale( "surface"
 							, shader::Surface{ in.fragCoord.xyz()
-								, in.viewPosition.xyz()
-								, in.worldPosition.xyz()
+								, in.viewPosition
+								, in.worldPosition
 								, normalize( components.normal ) } );
 						lightingModel->finish( passShaders
 							, in
@@ -382,7 +382,7 @@ namespace castor3d
 						auto lightSurface = shader::LightSurface::create( writer
 							, "lightSurface"
 							, c3d_cameraData.position()
-							, surface.worldPosition.xyz()
+							, surface.worldPosition
 							, surface.viewPosition.xyz()
 							, surface.clipPosition
 							, surface.normal );

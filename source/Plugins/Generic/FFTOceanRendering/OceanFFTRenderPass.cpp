@@ -1079,8 +1079,8 @@ namespace ocean_fft
 					, materials.getMaterial( modelData.getMaterialId() ) );
 				auto surface = writer.declLocale( "surface"
 					, shader::Surface{ in.fragCoord.xyz()
-						, in.viewPosition.xyz()
-						, in.worldPosition.xyz()
+						, in.viewPosition
+						, in.worldPosition
 						, finalNormal } );
 				auto components = writer.declLocale( "components"
 					, shader::BlendComponents{ materials
@@ -1097,7 +1097,7 @@ namespace ocean_fft
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
 						, c3d_cameraData.position()
-						, surface.worldPosition.xyz()
+						, surface.worldPosition
 						, surface.viewPosition.xyz()
 						, surface.clipPosition
 						, nml );
@@ -1198,7 +1198,7 @@ namespace ocean_fft
 					auto distortedTexCoord = writer.declLocale( "distortedTexCoord"
 						, fma( vec2( ( finalNormal.xz() + finalNormal.xy() ) * 0.5_f )
 							, vec2( c3d_oceanData.refractionDistortionFactor
-								* utils.saturate( length( scenePosition - lightSurface.worldPosition() ) * 0.5_f ) )
+								* utils.saturate( length( scenePosition - lightSurface.worldPosition().xyz() ) * 0.5_f ) )
 							, hdrCoords ) );
 					auto distortedDepth = writer.declLocale( "distortedDepth"
 						, c3d_sceneDepthObj.sample( distortedTexCoord ).r() );
@@ -1238,7 +1238,7 @@ namespace ocean_fft
 
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
-						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition(), c3d_cameraData.position() )
+						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition().xyz(), c3d_cameraData.position() )
 							, nml
 							, c3d_oceanData.refractionRatio ) ) );
 					output.registerOutput( "FresnelFactor", fresnelFactor );

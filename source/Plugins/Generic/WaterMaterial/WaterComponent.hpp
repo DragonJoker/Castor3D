@@ -27,9 +27,13 @@ namespace water
 		float refractionDistortionFactor{ 0.04f };
 		float refractionHeightFactor{ 2.5f };
 		float refractionDistanceFactor{ 15.0f };
+		float foamHeightStart{ 0.8f };
+		float foamFadeDistance{ 0.4f };
+		float foamTiling{ 2.0f };
+		float foamAngleExponent{ 80.0f };
+		float foamBrightness{ 4.0f };
+		float foamNoiseTiling{ 0.02f };
 		float pad0{};
-		float pad1{};
-		float pad2{};
 		SsrConfiguration ssr;
 	};
 
@@ -45,6 +49,12 @@ namespace water
 			, ssrForwardStepsCount{ dirty, castor::makeRangedValue( 20u, 1u, 100u ) }
 			, ssrBackwardStepsCount{ dirty, castor::makeRangedValue( 10u, 1u, 100u ) }
 			, ssrDepthMult{ dirty, castor::makeRangedValue( 20.0f, 0.0f, 100.0f ) }
+			, foamHeightStart{ dirty, castor::makeRangedValue( 0.8f, 0.0f, 10.0f ) }
+			, foamFadeDistance{ dirty, castor::makeRangedValue( 0.4f, 0.0f, 10.0f ) }
+			, foamTiling{ dirty, castor::makeRangedValue( 2.0f, 0.0f, 20.0f ) }
+			, foamAngleExponent{ dirty, castor::makeRangedValue( 80.0f, 0.0f, 100.0f ) }
+			, foamBrightness{ dirty, castor::makeRangedValue( 4.0f, 0.0f, 100.0f ) }
+			, foamNoiseTiling{ dirty, castor::makeRangedValue( 0.02f, 0.0f, 1.0f ) }
 		{
 		}
 
@@ -57,6 +67,12 @@ namespace water
 		castor::AtomicGroupChangeTracked< castor::RangedValue< uint32_t > > ssrForwardStepsCount;
 		castor::AtomicGroupChangeTracked< castor::RangedValue< uint32_t > > ssrBackwardStepsCount;
 		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > ssrDepthMult;
+		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > foamHeightStart;
+		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > foamFadeDistance;
+		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > foamTiling;
+		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > foamAngleExponent;
+		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > foamBrightness;
+		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > foamNoiseTiling;
 	};
 
 	struct WaterComponent
@@ -84,6 +100,9 @@ namespace water
 				, sdw::Float const & passMultiplier
 				, castor3d::shader::BlendComponents & res
 				, castor3d::shader::BlendComponents const & src )const override;
+			void updateComponent( castor3d::TextureCombine const & combine
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, castor3d::shader::BlendComponents & components )const override;
 		};
 
 		explicit WaterComponent( castor3d::Pass & pass );
@@ -170,6 +189,36 @@ namespace water
 			*m_value.ssrDepthMult = value;
 		}
 
+		void setFoamHeightStart( float value )
+		{
+			*m_value.foamHeightStart = value;
+		}
+
+		void setFoamFadeDistance( float value )
+		{
+			*m_value.foamFadeDistance = value;
+		}
+
+		void setFoamTiling( float value )
+		{
+			*m_value.foamTiling = value;
+		}
+
+		void setFoamNoiseTiling( float value )
+		{
+			*m_value.foamNoiseTiling = value;
+		}
+
+		void setFoamAngleExponent( float value )
+		{
+			*m_value.foamAngleExponent = value;
+		}
+
+		void setFoamBrightness( float value )
+		{
+			*m_value.foamBrightness = value;
+		}
+
 		float getDampeningFactor()const
 		{
 			return m_value.dampeningFactor.value().value();
@@ -213,6 +262,36 @@ namespace water
 		float getSsrDepthMult()const
 		{
 			return m_value.ssrDepthMult.value().value();
+		}
+
+		float getFoamHeightStart()const
+		{
+			return m_value.foamHeightStart.value().value();
+		}
+
+		float getFoamFadeDistance()const
+		{
+			return m_value.foamFadeDistance.value().value();
+		}
+
+		float getFoamTiling()const
+		{
+			return m_value.foamTiling.value().value();
+		}
+
+		float getFoamNoiseTiling()const
+		{
+			return m_value.foamNoiseTiling.value().value();
+		}
+
+		float getFoamAngleExponent()const
+		{
+			return m_value.foamAngleExponent.value().value();
+		}
+
+		float getFoamBrightness()const
+		{
+			return m_value.foamBrightness.value().value();
 		}
 
 		static castor::String const TypeName;

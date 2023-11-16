@@ -18,7 +18,7 @@ namespace castor3d::shader
 			, sdw::expr::ExprPtr expr
 			, bool enabled );
 		C3D_API LightSurface( sdw::Vec3 const eye
-			, sdw::Vec3 const world
+			, sdw::Vec4 const world
 			, sdw::Vec3 const view
 			, sdw::Vec3 const clip
 			, sdw::Vec3 const normal
@@ -36,7 +36,7 @@ namespace castor3d::shader
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, std::string const & name
 			, sdw::Vec3 const eye
-			, sdw::Vec3 const world
+			, sdw::Vec4 const world
 			, sdw::Vec3 const view
 			, sdw::Vec3 const clip
 			, sdw::Vec3 const normal
@@ -45,7 +45,7 @@ namespace castor3d::shader
 			, bool enableIridescence = true );
 		C3D_API static LightSurface create( sdw::ShaderWriter & writer
 			, std::string const & name
-			, sdw::Vec3 const world
+			, sdw::Vec4 const world
 			, sdw::Vec3 const clip
 			, sdw::Vec3 const normal
 			, bool enableDotProducts = false
@@ -55,7 +55,7 @@ namespace castor3d::shader
 			, Utils & utils
 			, std::string const & name
 			, sdw::Vec3 const eye
-			, sdw::Vec3 const world
+			, sdw::Vec4 const world
 			, sdw::Vec3 const view
 			, sdw::Vec3 const clip
 			, sdw::Vec3 const normal
@@ -97,7 +97,7 @@ namespace castor3d::shader
 
 	private:
 		sdw::Vec3 m_eyePosition;
-		sdw::Vec3 m_worldPosition;
+		sdw::Vec4 m_worldPosition;
 		sdw::Vec3 m_viewPosition;
 		sdw::Vec3 m_clipPosition;
 		sdw::Vec3 m_vertexToLight;
@@ -126,7 +126,7 @@ namespace castor3d::shader
 			, sdw::Float const & dotProduct )const;
 		C3D_API static sdw::expr::ExprPtr makeInit( sdw::type::BaseStructPtr type
 			, sdw::Vec3 const eye
-			, sdw::Vec3 const world
+			, sdw::Vec4 const world
 			, sdw::Vec3 const view
 			, sdw::Vec3 const clip
 			, sdw::Vec3 const normal

@@ -55,7 +55,7 @@ extern "C"
 
 	C3D_ToonMaterial_API void getName( char const ** name )
 	{
-		*name = "toon";
+		*name = "Toon Material";
 	}
 
 	C3D_ToonMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )

@@ -52,7 +52,7 @@ namespace castor3d::shader
 		C3D_API virtual void computeReflRefr( ReflectionModel & reflections
 			, BlendComponents & components
 			, LightSurface const & lightSurface
-			, sdw::Vec3 const & position
+			, sdw::Vec4 const & position
 			, BackgroundModel & background
 			, sdw::CombinedImage2DRgba32 const & mippedScene
 			, CameraData const & camera

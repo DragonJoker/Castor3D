@@ -17,12 +17,14 @@ set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterComponent.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterFoamMapComponent.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNormal1MapComponent.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNormal2MapComponent.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNoiseMapComponent.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterComponent.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterFoamMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNormal1MapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNormal2MapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNoiseMapComponent.cpp

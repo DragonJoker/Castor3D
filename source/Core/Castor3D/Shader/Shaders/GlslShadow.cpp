@@ -460,7 +460,7 @@ namespace castor3d::shader
 		return computeDirectional( pshadows
 			, plightSurface.vertexToLight()
 			, plightSurface.N()
-			, plightSurface.worldPosition()
+			, plightSurface.worldPosition().xyz()
 			, plightMatrix
 			, pcascadeIndex
 			, pmaxCascade );
@@ -559,7 +559,7 @@ namespace castor3d::shader
 			, pdepth
 			, plightSurface.vertexToLight()
 			, plightSurface.N()
-			, plightSurface.worldPosition()
+			, plightSurface.worldPosition().xyz()
 			, plightMatrix );
 	}
 
@@ -652,7 +652,7 @@ namespace castor3d::shader
 			, pdepth
 			, plightSurface.vertexToLight()
 			, plightSurface.N()
-			, plightSurface.worldPosition() );
+			, plightSurface.worldPosition().xyz() );
 	}
 
 	sdw::Float Shadow::computeVolumetric( shader::ShadowData const & shadows
@@ -665,7 +665,7 @@ namespace castor3d::shader
 
 		// Prepare ray
 		auto rayVector = m_writer.declLocale( "rayVector"
-			, lightSurface.worldPosition() - lightSurface.eyePosition() );
+			, lightSurface.worldPosition().xyz() - lightSurface.eyePosition() );
 		auto rayLength = m_writer.declLocale( "rayLength"
 			, length( rayVector ) );
 		auto rayDirection = m_writer.declLocale( "rayDirection"
