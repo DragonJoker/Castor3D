@@ -1057,7 +1057,7 @@
 		<Expand>
 			<Item Name="pass">m_owner</Item>
 			<Item Name="type">m_type</Item>
-			<Item Name="id">m_dependencies</Item>
+			<Item Name="id">m_id</Item>
 			<Item Name="dependencies">m_dependencies</Item>
 			<Item Name="plugin">m_plugin</Item>
 			<Item Name="dirty">m_dirty</Item>

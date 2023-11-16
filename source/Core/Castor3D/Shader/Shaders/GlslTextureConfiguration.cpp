@@ -45,13 +45,13 @@ namespace castor3d
 		}
 
 		sdw::Float TextureConfigData::getFloat( sdw::Vec4 const & sampled
-			, sdw::UInt const & mask )const
+			, sdw::UInt const & mask )
 		{
 			return sampled[mask];
 		}
 
 		sdw::Vec3 TextureConfigData::getVec3( sdw::Vec4 const & sampled
-			, sdw::UInt const & mask )const
+			, sdw::UInt const & mask )
 		{
 			return vec3( sampled[mask]
 				, sampled[mask + 1u]

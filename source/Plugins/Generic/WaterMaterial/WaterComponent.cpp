@@ -2,6 +2,10 @@
 
 #include "Shaders/GlslWaterProfile.hpp"
 
+#include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp>
+#include <Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp>
 #include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 #include <Castor3D/Scene/SceneFileParser.hpp>
@@ -277,9 +281,6 @@ namespace water
 			components.declMember( "ssrForwardStepsCount", sdw::type::Kind::eUInt32 );
 			components.declMember( "ssrBackwardStepsCount", sdw::type::Kind::eUInt32 );
 			components.declMember( "ssrDepthMult", sdw::type::Kind::eFloat );
-			components.declMember( "waterNormals1", sdw::type::Kind::eVec3F );
-			components.declMember( "waterNormals2", sdw::type::Kind::eVec3F );
-			components.declMember( "waterNoise", sdw::type::Kind::eFloat );
 		}
 	}
 
@@ -301,7 +302,6 @@ namespace water
 			auto & waterProfiles = materials.getSpecificsBuffer< shader::WaterProfile >();
 			auto waterProfile = writer.declLocale( "waterProfile"
 				, waterProfiles.getData( material->passId - 1u ) );
-			auto texture0 = components.getMember( "texture0" );
 			inits.emplace_back( sdw::makeExpr( waterProfile.dampeningFactor() ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.depthSofteningDistance() ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.refractionDistortionFactor() ) );
@@ -324,10 +324,6 @@ namespace water
 			inits.emplace_back( sdw::makeExpr( 0_u ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 		}
-
-		inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-		inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
-		inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 	}
 
 	void WaterComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
@@ -335,7 +331,7 @@ namespace water
 		, castor3d::shader::BlendComponents & res
 		, castor3d::shader::BlendComponents const & src )const
 	{
-		if ( res.hasMember( "edgeColour" ) )
+		if ( res.hasMember( "dampeningFactor" ) )
 		{
 			res.getMember< sdw::Float >( "dampeningFactor" ) += src.getMember< sdw::Float >( "dampeningFactor" ) * passMultiplier;
 			res.getMember< sdw::Float >( "depthSofteningDistance" ) += src.getMember< sdw::Float >( "depthSofteningDistance" ) * passMultiplier;
@@ -346,9 +342,6 @@ namespace water
 			res.getMember< sdw::UInt32 >( "ssrForwardStepsCount" ) = max( res.getMember< sdw::UInt32 >( "ssrForwardStepsCount" ), src.getMember< sdw::UInt32 >( "ssrForwardStepsCount" ) );
 			res.getMember< sdw::UInt32 >( "ssrBackwardStepsCount" ) = max( res.getMember< sdw::UInt32 >( "ssrBackwardStepsCount" ), src.getMember< sdw::UInt32 >( "ssrBackwardStepsCount" ) );
 			res.getMember< sdw::Float >( "ssrDepthMult" ) += src.getMember< sdw::Float >( "ssrDepthMult" ) * passMultiplier;
-			res.getMember< sdw::Float >( "waterNormals1" ) += src.getMember< sdw::Float >( "waterNormals1" ) * passMultiplier;
-			res.getMember< sdw::Float >( "waterNormals2" ) += src.getMember< sdw::Float >( "waterNormals2" ) * passMultiplier;
-			res.getMember< sdw::Float >( "waterNoise" ) += src.getMember< sdw::Float >( "waterNoise" ) * passMultiplier;
 		}
 	}
 
@@ -403,11 +396,18 @@ namespace water
 
 	//*********************************************************************************************
 
-	castor::String const WaterComponent::TypeName = C3D_PluginMakePassOtherComponentName( "water", "edges" );
+	castor::String const WaterComponent::TypeName = C3D_PluginMakePassOtherComponentName( "water", "base" );
 
 	WaterComponent::WaterComponent( castor3d::Pass & pass )
-		: BaseDataPassComponentT< WaterData >{ pass, TypeName }
+		: BaseDataPassComponentT< WaterData >{ pass, TypeName
+			, { castor3d::BlendComponent::TypeName
+				, castor3d::OpacityComponent::TypeName
+				, castor3d::TransmissionComponent::TypeName } }
 	{
+		auto blend = pass.createComponent< castor3d::BlendComponent >();
+		blend->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );
+		auto transmission = pass.createComponent< castor3d::TransmissionComponent >();
+		transmission->setTransmission( 1.0f );
 	}
 
 	void WaterComponent::accept( castor3d::ConfigurationVisitorBase & vis )
@@ -428,13 +428,25 @@ namespace water
 	{
 		data.dampeningFactor = getDampeningFactor();
 		data.depthSofteningDistance = getDepthSofteningDistance();
-		data.refraction.distortionFactor = getRefractionDistortionFactor();
-		data.refraction.heightFactor = getRefractionHeightFactor();
-		data.refraction.distanceFactor = getRefractionDistanceFactor();
+		data.refractionDistortionFactor = getRefractionDistortionFactor();
+		data.refractionHeightFactor = getRefractionHeightFactor();
+		data.refractionDistanceFactor = getRefractionDistanceFactor();
 		data.ssr.stepSize = getSsrStepSize();
 		data.ssr.forwardStepsCount = getSsrForwardStepsCount();
 		data.ssr.backwardStepsCount = getSsrBackwardStepsCount();
 		data.ssr.depthMult = getSsrDepthMult();
+	}
+
+	bool WaterComponent::isComponentAvailable( castor3d::ComponentModeFlags componentsMask
+		, castor3d::shader::Materials const & materials )
+	{
+		return materials.hasSpecificsBuffer< shader::WaterProfile >()
+			&& ( checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecifics )
+				|| checkFlag( componentsMask, castor3d::ComponentModeFlag::eDiffuseLighting )
+				|| checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecularLighting ) )
+			&& ( checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecifics )
+				|| checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eDiffuseLighting )
+				|| checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecularLighting ) );
 	}
 
 	castor3d::PassComponentUPtr WaterComponent::doClone( castor3d::Pass & pass )const

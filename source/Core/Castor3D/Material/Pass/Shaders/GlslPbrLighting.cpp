@@ -201,7 +201,7 @@ namespace castor3d::shader
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedSpecular )
 	{
-		return ( adjustDirectSpecular( components, directSpecular )
+		return ( directSpecular
 			+ ( reflectedSpecular * ambientOcclusion * directAmbient )
 			+ ( indirectSpecular * ambientOcclusion ) );
 	}

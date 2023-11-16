@@ -1,7 +1,6 @@
 option( CASTOR_BUILDGRP_GENERIC "Build Castor3D Generic plugins" ON )
 option( CASTOR_BUILD_GENERIC_TOONMATERIAL "Build Toon Material generic plugin" ON )
 option( CASTOR_BUILD_GENERIC_WATERMATERIAL "Build Water Material plugin" ON )
-option( CASTOR_BUILD_GENERIC_WATERRENDERING "Build water rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_OCEANRENDERING "Build ocean rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_FFTOCEANRENDERING "Build FFT ocean rendering plugin" ON )
 option( CASTOR_BUILD_GENERIC_ATMOSPHERESCATTERING "Build Atmosphere scattering plugin" ON )
@@ -67,12 +66,6 @@ function( GenericBuild )
 			set( WatM ${Build} PARENT_SCOPE )
 		endif()
 
-		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
-			set( Build ${Watr} )
-			add_subdirectory( Plugins/Generic/WaterRendering )
-			set( Watr ${Build} PARENT_SCOPE )
-		endif()
-
 		if( ${CASTOR_BUILD_GENERIC_OCEANRENDERING} )
 			set( Build ${Ocen} )
 			add_subdirectory( Plugins/Generic/OceanRendering )
@@ -123,9 +116,6 @@ function( GenericSummary msg )
 		if( ${CASTOR_BUILD_GENERIC_WATERMATERIAL} )
 			set( msg_tmp "${msg_tmp}\n    WaterMaterial        ${WatM}" )
 		endif ()
-		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
-			set( msg_tmp "${msg_tmp}\n    WaterRendering       ${Watr}" )
-		endif ()
 		if( ${CASTOR_BUILD_GENERIC_OCEANRENDERING} )
 			set( msg_tmp "${msg_tmp}\n    OceanRendering       ${Ocen}" )
 		endif ()
@@ -153,14 +143,6 @@ function( GenericSetup )
 			cpack_add_component( WaterMaterial
 				DISPLAY_NAME "WaterMaterial"
 				DESCRIPTION "Defines & water material in Castor3D."
-				GROUP Plugins
-				DEPENDS Castor3D
-			)
-		endif()
-		if( ${CASTOR_BUILD_GENERIC_WATERRENDERING} )
-			cpack_add_component( WaterRendering
-				DISPLAY_NAME "WaterRendering"
-				DESCRIPTION "Allows water rendering in Castor3D."
 				GROUP Plugins
 				DEPENDS Castor3D
 			)

@@ -108,11 +108,56 @@ namespace water
 
 	//*********************************************************************************************
 
+	void WaterNormal1MapComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
+		, castor3d::shader::Materials const & materials
+		, sdw::StructInstance const * surface )const
+	{
+		if ( !WaterComponent::isComponentAvailable( componentsMask, materials ) )
+		{
+			return;
+		}
+
+		if ( !components.hasMember( "waterNormalMapCoords1" ) )
+		{
+			components.declMember( "waterNormalMapCoords1", sdw::type::Kind::eVec2F );
+			components.declMember( "waterNormals1", sdw::type::Kind::eVec3F );
+		}
+	}
+
+	void WaterNormal1MapComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
+		, castor3d::shader::Materials const & materials
+		, castor3d::shader::Material const * material
+		, sdw::StructInstance const * surface
+		, sdw::Vec4 const * clrCot
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !components.hasMember( "waterNormalMapCoords1" ) )
+		{
+			return;
+		}
+
+		inits.emplace_back( sdw::makeExpr( vec2( 0.0_f ) ) );
+		inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
+	}
+
+	void WaterNormal1MapComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
+		, sdw::Float const & passMultiplier
+		, castor3d::shader::BlendComponents & res
+		, castor3d::shader::BlendComponents const & src )const
+	{
+		if ( res.hasMember( "waterNormals1" ) )
+		{
+			res.getMember< sdw::Float >( "waterNormals1" ) += src.getMember< sdw::Float >( "waterNormals1" ) * passMultiplier;
+		}
+	}
+
 	void WaterNormal1MapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, c3d::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
+		, sdw::Vec2 const & uv
 		, c3d::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "waterNormals1" ) )
@@ -126,6 +171,8 @@ namespace water
 		{
 			auto waterNormals1 = components.getMember< sdw::Vec3 >( "waterNormals1" );
 			waterNormals1 = config.getVec3( sampled, imgCompConfig.z() ) * 2.0_f - 1.0_f;
+			auto waterNormalMapCoords1 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords1" );
+			waterNormalMapCoords1 = uv;
 		}
 		FI;
 	}
@@ -135,12 +182,12 @@ namespace water
 	void WaterNormal1MapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "clearcoat", ChannelFiller{ getTextureFlags()
+		channelFillers.emplace( "water_normal1", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< WaterNormal1MapComponent >( parsingContext );
 				component.fillChannel( parsingContext.texture.configuration
-					, 0x00FF0000u );
+					, 0x00FFFFFFu );
 			} } );
 
 		castor::addParserT( parsers

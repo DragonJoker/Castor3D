@@ -30,6 +30,7 @@ namespace castor3d
 				, sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 & texCoords
 				, sdw::Vec2 & texCoord
+				, sdw::UInt const & mapId
 				, shader::BlendComponents & components )const override;
 			C3D_API void computeTexcoord( PipelineFlags const & flags
 				, shader::TextureConfigData const & config
@@ -37,6 +38,7 @@ namespace castor3d
 				, sdw::CombinedImage2DRgba32 const & map
 				, shader::DerivTex & texCoords
 				, shader::DerivTex & texCoord
+				, sdw::UInt const & mapId
 				, shader::BlendComponents & components )const override;
 
 			C3D_API void parallaxMapping( sdw::Vec2 & texCoords

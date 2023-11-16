@@ -27,11 +27,29 @@ namespace water
 			{
 			}
 
+			void fillComponents( castor3d::ComponentModeFlags componentsMask
+				, sdw::type::BaseStruct & components
+				, castor3d::shader::Materials const & materials
+				, sdw::StructInstance const * surface )const override;
+			void fillComponentsInits( sdw::type::BaseStruct const & components
+				, castor3d::shader::Materials const & materials
+				, castor3d::shader::Material const * material
+				, sdw::StructInstance const * surface
+				, sdw::Vec4 const * clrCot
+				, sdw::expr::ExprList & inits )const override;
+			void blendComponents( castor3d::shader::Materials const & materials
+				, sdw::Float const & passMultiplier
+				, castor3d::shader::BlendComponents & res
+				, castor3d::shader::BlendComponents const & src )const override;
 			void applyComponents( castor3d::TextureCombine const & combine
 				, castor3d::PipelineFlags const * flags
 				, castor3d::shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled
+				, sdw::Vec2 const & uv
+				, castor3d::shader::BlendComponents & components )const override;
+			void updateComponent( castor3d::TextureCombine const & combine
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, castor3d::shader::BlendComponents & components )const override;
 
 			castor3d::PassComponentTextureFlag getTextureFlags()const

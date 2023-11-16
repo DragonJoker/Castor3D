@@ -64,6 +64,7 @@ namespace water::shader
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
@@ -105,20 +106,6 @@ namespace water::shader
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		sdw::Vec3 combine( c3d::DebugOutput & debugOutput
-			, c3d::BlendComponents const & components
-			, sdw::Vec3 const & incident
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 reflectedDiffuse
-			, sdw::Vec3 reflectedSpecular
-			, sdw::Vec3 refracted )override;
 		sdw::Float getFinalTransmission( c3d::BlendComponents const & components
 			, sdw::Vec3 const & incident )override;
 		sdw::Vec3 adjustDirectSpecular( c3d::BlendComponents const & components
@@ -135,6 +122,7 @@ namespace water::shader
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
@@ -154,6 +142,7 @@ namespace water::shader
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
@@ -194,20 +183,6 @@ namespace water::shader
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		sdw::Vec3 combine( c3d::DebugOutput & debugOutput
-			, c3d::BlendComponents const & components
-			, sdw::Vec3 const & incident
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 reflectedDiffuse
-			, sdw::Vec3 reflectedSpecular
-			, sdw::Vec3 refracted )override;
 		sdw::Float getFinalTransmission( c3d::BlendComponents const & components
 			, sdw::Vec3 const & incident )override;
 		sdw::Vec3 adjustDirectSpecular( c3d::BlendComponents const & components
@@ -224,6 +199,7 @@ namespace water::shader
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio
@@ -243,6 +219,7 @@ namespace water::shader
 			, sdw::Vec3 const & indirectDiffuse
 			, sdw::Vec2 const & sceneUv
 			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
 			, sdw::UInt const & hasReflection
 			, sdw::UInt const & hasRefraction
 			, sdw::Float const & refractionRatio

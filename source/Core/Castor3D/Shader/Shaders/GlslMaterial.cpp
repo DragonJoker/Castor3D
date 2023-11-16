@@ -270,12 +270,12 @@ namespace castor3d::shader
 	Materials::Materials( sdw::ShaderWriter & writer
 		, PassShaders & passShaders )
 		: BufferT< Material >{ writer
-		, "C3D_Materials"
-		, "c3d_materials"
-		, 0u
-		, 0u
-		, false
-		, passShaders }
+			, "C3D_Materials"
+			, "c3d_materials"
+			, 0u
+			, 0u
+			, false
+			, passShaders }
 		, m_passShaders{ passShaders }
 	{
 	}
@@ -286,12 +286,12 @@ namespace castor3d::shader
 		, uint32_t set
 		, bool enable )
 		: BufferT< Material >{ writer
-		, "C3D_Materials"
-		, "c3d_materials"
-		, binding
-		, set
-		, enable
-		, passShaders }
+			, "C3D_Materials"
+			, "c3d_materials"
+			, binding
+			, set
+			, enable
+			, passShaders }
 		, m_passShaders{ passShaders }
 	{
 	}
@@ -304,10 +304,10 @@ namespace castor3d::shader
 		, uint32_t & specifics
 		, bool enable )
 		: Materials{ writer
-		, passShaders
-		, binding
-		, set
-		, enable }
+			, passShaders
+			, binding
+			, set
+			, enable }
 	{
 		engine.declareSpecificsShaderBuffers( writer, m_buffers, specifics, set );
 	}

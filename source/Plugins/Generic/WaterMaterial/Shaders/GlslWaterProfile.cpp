@@ -19,11 +19,11 @@ namespace water::shader
 		, uint32_t set
 		, bool enable )
 		: BufferT< WaterProfile >{ writer
-		, "C3D_WaterProfiles"
-		, "c3d_waterProfiles"
-		, binding
-		, set
-		, enable }
+			, "C3D_WaterProfiles"
+			, "c3d_waterProfiles"
+			, binding
+			, set
+			, enable }
 	{
 	}
 

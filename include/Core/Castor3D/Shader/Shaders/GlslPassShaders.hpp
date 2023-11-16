@@ -55,19 +55,23 @@ namespace castor3d::shader
 			, TextureConfigData const & config
 			, sdw::U32Vec3 const & imgCompConfig
 			, sdw::Vec4 const & sampled
+			, sdw::Vec2 const & uv
 			, BlendComponents & components )const;
 		C3D_API void applyComponents( PipelineFlags const & flags
 			, TextureConfigData const & config
 			, sdw::U32Vec3 const & imgCompConfig
 			, sdw::Vec4 const & sampled
+			, sdw::Vec2 const & uv
 			, BlendComponents & components )const;
 		C3D_API void blendComponents( Materials const & materials
 			, sdw::Float const & passMultiplier
 			, BlendComponents & res
 			, BlendComponents const & src )const;
 		C3D_API void updateComponents( PipelineFlags const & flags
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, BlendComponents & components )const;
 		C3D_API void updateComponents( TextureCombine const & combine
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 			, BlendComponents & components )const;
 		C3D_API void finishComponents( SurfaceBase const & surface
 			, sdw::Vec3 const worldEye
@@ -81,6 +85,7 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec3 & texCoords
 			, sdw::Vec2 & texCoord
+			, sdw::UInt const & mapId
 			, BlendComponents & components )const;
 		C3D_API void computeTexcoord( TextureCombine const & combine
 			, TextureConfigData const & config
@@ -88,6 +93,7 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & map
 			, DerivTex & texCoords
 			, DerivTex & texCoord
+			, sdw::UInt const & mapId
 			, BlendComponents & components )const;
 		C3D_API void computeTexcoord( PipelineFlags const & flags
 			, TextureConfigData const & config
@@ -95,6 +101,7 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & map
 			, sdw::Vec3 & texCoords
 			, sdw::Vec2 & texCoord
+			, sdw::UInt const & mapId
 			, BlendComponents & components )const;
 		C3D_API void computeTexcoord( PipelineFlags const & flags
 			, TextureConfigData const & config
@@ -102,6 +109,7 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & map
 			, DerivTex & texCoords
 			, DerivTex & texCoord
+			, sdw::UInt const & mapId
 			, BlendComponents & components )const;
 		C3D_API bool enableParallaxOcclusionMapping( PipelineFlags const & flags )const;
 		C3D_API bool enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const;

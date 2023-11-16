@@ -20,20 +20,16 @@ namespace water
 		uint32_t backwardStepsCount{ 10u };
 		float depthMult{ 20.0f };
 	};
-	struct RefractionConfiguration
-	{
-		float distortionFactor{ 0.04f };
-		float heightFactor{ 2.5f };
-		float distanceFactor{ 15.0f };
-		float pad0;
-	};
 	struct WaterProfileData
 	{
 		float dampeningFactor{ 5.0f };
 		float depthSofteningDistance{ 0.5f };
-		float pad0;
-		float pad1;
-		RefractionConfiguration refraction;
+		float refractionDistortionFactor{ 0.04f };
+		float refractionHeightFactor{ 2.5f };
+		float refractionDistanceFactor{ 15.0f };
+		float pad0{};
+		float pad1{};
+		float pad2{};
 		SsrConfiguration ssr;
 	};
 
@@ -74,23 +70,23 @@ namespace water
 			{
 			}
 
-			C3D_WaterMaterial_API void fillComponents( castor3d::ComponentModeFlags componentsMask
+			void fillComponents( castor3d::ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
 				, castor3d::shader::Materials const & materials
 				, sdw::StructInstance const * surface )const override;
-			C3D_WaterMaterial_API void fillComponentsInits( sdw::type::BaseStruct const & components
+			void fillComponentsInits( sdw::type::BaseStruct const & components
 				, castor3d::shader::Materials const & materials
 				, castor3d::shader::Material const * material
 				, sdw::StructInstance const * surface
 				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const override;
-			C3D_WaterMaterial_API void blendComponents( castor3d::shader::Materials const & materials
+			void blendComponents( castor3d::shader::Materials const & materials
 				, sdw::Float const & passMultiplier
 				, castor3d::shader::BlendComponents & res
 				, castor3d::shader::BlendComponents const & src )const override;
 		};
 
-		C3D_WaterMaterial_API explicit WaterComponent( castor3d::Pass & pass );
+		explicit WaterComponent( castor3d::Pass & pass );
 
 		class Plugin
 			: public castor3d::PassComponentPlugin
@@ -122,9 +118,12 @@ namespace water
 			return castor::makeUniqueDerived< castor3d::PassComponentPlugin, Plugin >( passComponents );
 		}
 
-		C3D_WaterMaterial_API void accept( castor3d::ConfigurationVisitorBase & vis )override;
+		static bool isComponentAvailable( castor3d::ComponentModeFlags componentsMask
+			, castor3d::shader::Materials const & materials );
 
-		C3D_WaterMaterial_API void fillProfileBuffer( WaterProfileData & buffer )const;
+		void accept( castor3d::ConfigurationVisitorBase & vis )override;
+
+		void fillProfileBuffer( WaterProfileData & buffer )const;
 
 		void setDampeningFactor( float value )
 		{
@@ -216,7 +215,7 @@ namespace water
 			return m_value.ssrDepthMult.value().value();
 		}
 
-		C3D_WaterMaterial_API static castor::String const TypeName;
+		static castor::String const TypeName;
 
 	private:
 		castor3d::PassComponentUPtr doClone( castor3d::Pass & pass )const override;
@@ -226,7 +225,7 @@ namespace water
 			, castor::StringStream & file )const override;
 	};
 
-	CU_DeclareSmartPtr( water, WaterComponent, C3D_WaterMaterial_API );
+	CU_DeclareSmartPtr( water, WaterComponent, );
 }
 
 #endif

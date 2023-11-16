@@ -464,6 +464,7 @@ namespace castor3d
 							, indirectDiffuse
 							, in.fragCoord.xy()
 							, modelData.getEnvMapIndex()
+							, incident
 							, components.hasReflection
 							, components.hasRefraction
 							, components.refractionRatio

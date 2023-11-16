@@ -154,6 +154,7 @@ namespace castor3d
 				, sdw::CombinedImage2DRgba32 const & map
 				, sdw::Vec3 & texCoords
 				, sdw::Vec2 & texCoord
+				, sdw::UInt const & mapId
 				, BlendComponents & components )const
 			{
 			}
@@ -199,6 +200,7 @@ namespace castor3d
 				, sdw::CombinedImage2DRgba32 const & map
 				, DerivTex & texCoords
 				, DerivTex & texCoord
+				, sdw::UInt const & mapId
 				, BlendComponents & components )const
 			{
 			}
@@ -216,6 +218,8 @@ namespace castor3d
 			*	The current image component(s) to use.
 			*\param[in] sampled
 			*	The data retrieved from the texture.
+			*\param[in] uv
+			*	The texture coordinates used to retrieve \p sampled.
 			*\param[in] components
 			*	Contains the component members.
 			*\~french
@@ -231,6 +235,8 @@ namespace castor3d
 			*	Les composantes de l'image à utiliser.
 			*\param[in] sampled
 			*	Les données récupérées depuis la texture.
+			*\param[in] uv
+			*	Les coordonnées de texture utilisées pour récupérer \p sampled.
 			*\param[in] components
 			*	Contient les membres du composant.
 			*/
@@ -239,6 +245,7 @@ namespace castor3d
 				, shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled
+				, sdw::Vec2 const & uv
 				, BlendComponents & components )const
 			{
 			}
@@ -287,6 +294,7 @@ namespace castor3d
 			*	Contient les membres du composant.
 			*/
 			C3D_API virtual void updateComponent( TextureCombine const & combine
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, shader::BlendComponents & components )const
 			{
 			}

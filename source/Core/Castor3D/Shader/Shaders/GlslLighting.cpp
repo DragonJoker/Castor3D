@@ -77,6 +77,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
@@ -119,6 +120,7 @@ namespace castor3d::shader
 				, indirectDiffuse
 				, sceneUv
 				, envMapIndex
+				, incident
 				, components.hasReflection
 				, components.hasRefraction
 				, components.refractionRatio
@@ -141,6 +143,7 @@ namespace castor3d::shader
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
 		, sdw::UInt const & hasReflection
 		, sdw::UInt const & hasRefraction
 		, sdw::Float const & refractionRatio
@@ -238,14 +241,16 @@ namespace castor3d::shader
 		, sdw::Vec3 reflectedSpecular
 		, sdw::Vec3 refracted )
 	{
-		auto fresnelFactor = m_writer.declLocale( "fresnelFactor"
-			, m_utils.fresnelMix( incident
-				, components.normal
-				, components.refractionRatio )
-			, ( components.hasMember( "specularFactor" )
-				|| components.hasMember( "refractionRatio" )
-				|| components.hasMember( "hasRefraction" )
-				|| components.hasMember( "hasTransmission" ) ) );
+		auto fresnelFactor = m_writer.hasVariable( "fresnelFactor", true )
+			? m_writer.getVariable< sdw::Float >( "fresnelFactor" )
+			: m_writer.declLocale( "fresnelFactor"
+				, m_utils.fresnelMix( incident
+					, components.normal
+					, components.refractionRatio )
+				, ( components.hasMember( "specularFactor" )
+					|| components.hasMember( "refractionRatio" )
+					|| components.hasMember( "hasRefraction" )
+					|| components.hasMember( "hasTransmission" ) ) );
 
 		if ( fresnelFactor.isEnabled() )
 		{
@@ -276,9 +281,12 @@ namespace castor3d::shader
 				, finalAmbient, indirectAmbient, ambientOcclusion
 				, reflectedDiffuse ) );
 		debugOutput.registerOutput( "Combine", "Diffuse BRDF", diffuseBrdf );
+		auto adjustedSpecular = m_writer.declLocale( "c3d_adjustedSpecular"
+			, adjustDirectSpecular( components, directSpecular ) );
+		debugOutput.registerOutput( "Combine", "AdjustedSpecular", adjustedSpecular );
 		auto specularBrdf = m_writer.declLocale( "c3d_specularBrdf"
 			, doGetSpecularBrdf( components
-				, directSpecular, indirectSpecular
+				, adjustedSpecular, indirectSpecular
 				, finalAmbient, indirectAmbient, ambientOcclusion
 				, reflectedSpecular ) );
 		debugOutput.registerOutput( "Combine", "Specular BRDF", specularBrdf );

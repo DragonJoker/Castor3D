@@ -109,11 +109,56 @@ namespace water
 
 	//*********************************************************************************************
 
+	void WaterNormal2MapComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
+		, sdw::type::BaseStruct & components
+		, castor3d::shader::Materials const & materials
+		, sdw::StructInstance const * surface )const
+	{
+		if ( !WaterComponent::isComponentAvailable( componentsMask, materials ) )
+		{
+			return;
+		}
+
+		if ( !components.hasMember( "waterNormalMapCoords2" ) )
+		{
+			components.declMember( "waterNormalMapCoords2", sdw::type::Kind::eVec2F );
+			components.declMember( "waterNormals2", sdw::type::Kind::eVec3F );
+		}
+	}
+
+	void WaterNormal2MapComponent::ComponentsShader::fillComponentsInits( sdw::type::BaseStruct const & components
+		, castor3d::shader::Materials const & materials
+		, castor3d::shader::Material const * material
+		, sdw::StructInstance const * surface
+		, sdw::Vec4 const * clrCot
+		, sdw::expr::ExprList & inits )const
+	{
+		if ( !components.hasMember( "waterNormalMapCoords2" ) )
+		{
+			return;
+		}
+
+		inits.emplace_back( sdw::makeExpr( vec2( 0.0_f ) ) );
+		inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
+	}
+
+	void WaterNormal2MapComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
+		, sdw::Float const & passMultiplier
+		, castor3d::shader::BlendComponents & res
+		, castor3d::shader::BlendComponents const & src )const
+	{
+		if ( res.hasMember( "waterNormals2" ) )
+		{
+			res.getMember< sdw::Float >( "waterNormals2" ) += src.getMember< sdw::Float >( "waterNormals2" ) * passMultiplier;
+		}
+	}
+
 	void WaterNormal2MapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
 		, PipelineFlags const * flags
 		, c3d::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
+		, sdw::Vec2 const & uv
 		, c3d::BlendComponents & components )const
 	{
 		if ( !components.hasMember( "waterNormals2" ) )
@@ -127,18 +172,32 @@ namespace water
 		{
 			auto waterNormals2 = components.getMember< sdw::Vec3 >( "waterNormals2" );
 			waterNormals2 = config.getVec3( sampled, imgCompConfig.z() ) * 2.0_f - 1.0_f;
-			auto & writer{ *sampled.getWriter() };
-
-			auto waterNormals1 = components.getMember< sdw::Vec3 >( "waterNormals1" );
-			auto tbn = c3d::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
-				, components.getMember< sdw::Vec4 >( "tangent" ).xyz()
-				, components.getMember< sdw::Vec3 >( "bitangent" ) );
-			auto finalNormal = writer.declLocale( "finalNormal"
-				, normalize( tbn * waterNormals1.xyz() ) );
-			finalNormal += normalize( tbn * waterNormals2.xyz() );
-			components.getMember< sdw::Vec3 >( "normal" ) = normalize( finalNormal );
+			auto waterNormalMapCoords2 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords2" );
+			waterNormalMapCoords2 = uv;
 		}
 		FI;
+	}
+
+	void WaterNormal2MapComponent::ComponentsShader::updateComponent( TextureCombine const & combine
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, c3d::BlendComponents & components )const
+	{
+		if ( !components.hasMember( "waterNormals2" )
+			|| !components.hasMember( "waterNormals1" ) )
+		{
+			return;
+		}
+
+		auto & writer{ *components.getWriter() };
+		auto waterNormals1 = components.getMember< sdw::Vec3 >( "waterNormals1" );
+		auto waterNormals2 = components.getMember< sdw::Vec3 >( "waterNormals2" );
+		auto tbn = c3d::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
+			, components.getMember< sdw::Vec4 >( "tangent" ).xyz()
+			, components.getMember< sdw::Vec3 >( "bitangent" ) );
+		auto finalNormal = writer.declLocale( "finalNormal"
+			, normalize( tbn * waterNormals1.xyz() ) );
+		finalNormal += normalize( tbn * waterNormals2.xyz() );
+		components.getMember< sdw::Vec3 >( "normal" ) = normalize( finalNormal );
 	}
 
 	//*********************************************************************************************
@@ -146,12 +205,12 @@ namespace water
 	void WaterNormal2MapComponent::Plugin::createParsers( castor::AttributeParsers & parsers
 		, ChannelFillers & channelFillers )const
 	{
-		channelFillers.emplace( "clearcoat", ChannelFiller{ getTextureFlags()
+		channelFillers.emplace( "water_normal2", ChannelFiller{ getTextureFlags()
 			, []( SceneFileContext & parsingContext )
 			{
 				auto & component = getPassComponent< WaterNormal2MapComponent >( parsingContext );
 				component.fillChannel( parsingContext.texture.configuration
-					, 0x00FF0000u );
+					, 0x00FFFFFFu );
 			} } );
 
 		castor::addParserT( parsers

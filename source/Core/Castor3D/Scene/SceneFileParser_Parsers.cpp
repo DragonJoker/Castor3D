@@ -477,6 +477,25 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserRootDebugMaxImageSize )
+	{
+#if !defined( NDEBUG )
+		auto & parsingContext = getParserContext( context );
+
+		if ( params.empty() )
+		{
+			CU_ParsingError( cuT( "Missing [count] parameter." ) );
+		}
+		else
+		{
+			uint32_t value;
+			params[0]->get( value );
+			parsingContext.parser->getEngine()->setMaxImageSize( value );
+		}
+#endif
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserRootLpvGridSize )
 	{
 		auto & parsingContext = getParserContext( context );
