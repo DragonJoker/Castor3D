@@ -237,7 +237,7 @@ namespace water
 
 	//*********************************************************************************************
 
-	castor::String const WaterNormal1MapComponent::TypeName = C3D_MakePassMapComponentName( "water.normal1" );
+	castor::String const WaterNormal1MapComponent::TypeName = C3D_PluginMakePassMapComponentName( "water", "normal1" );
 
 	WaterNormal1MapComponent::WaterNormal1MapComponent( Pass & pass )
 		: PassMapComponent{ pass

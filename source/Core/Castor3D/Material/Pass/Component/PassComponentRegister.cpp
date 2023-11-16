@@ -823,6 +823,20 @@ namespace castor3d
 				}
 			}
 
+			auto filIt = m_channelsFillers.begin();
+
+			while ( filIt != m_channelsFillers.end() )
+			{
+				if ( componentDesc.plugin->getTextureFlags() == filIt->second.first )
+				{
+					filIt = m_channelsFillers.erase( filIt );
+				}
+				else
+				{
+					++filIt;
+				}
+			}
+
 			log::debug << "Unregistered component " << id << " (" << componentDesc.name << ")" << std::endl;
 			componentDesc.name.clear();
 			componentDesc.plugin.reset();

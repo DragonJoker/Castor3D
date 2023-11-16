@@ -12,7 +12,7 @@ namespace castor3d::shader
 		, bool enabled )
 		: StructInstance{ writer, std::move( expr ), enabled }
 		, m_eyePosition{ getMember< sdw::Vec3 >( "eyePosition" ) }
-		, m_worldPosition{ getMember< sdw::Vec3 >( "worldPosition" ) }
+		, m_worldPosition{ getMember< sdw::Vec4 >( "worldPosition" ) }
 		, m_viewPosition{ getMember< sdw::Vec3 >( "viewPosition" ) }
 		, m_clipPosition{ getMember< sdw::Vec3 >( "clipPosition" ) }
 		, m_vertexToLight{ getMember< sdw::Vec3 >( "vertexToLight" ) }
@@ -33,7 +33,7 @@ namespace castor3d::shader
 	}
 
 	LightSurface::LightSurface( sdw::Vec3 const eye
-		, sdw::Vec3 const world
+		, sdw::Vec4 const world
 		, sdw::Vec3 const view
 		, sdw::Vec3 const clip
 		, sdw::Vec3 const normal
@@ -68,7 +68,7 @@ namespace castor3d::shader
 		if ( type->empty() )
 		{
 			type->declMember( "eyePosition", ast::type::Kind::eVec3F, ast::type::NotArray );
-			type->declMember( "worldPosition", ast::type::Kind::eVec3F, ast::type::NotArray );
+			type->declMember( "worldPosition", ast::type::Kind::eVec4F, ast::type::NotArray );
 			type->declMember( "viewPosition", ast::type::Kind::eVec3F, ast::type::NotArray );
 			type->declMember( "clipPosition", ast::type::Kind::eVec3F, ast::type::NotArray );
 			type->declMember( "vertexToLight", ast::type::Kind::eVec3F, ast::type::NotArray );
@@ -93,7 +93,7 @@ namespace castor3d::shader
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
 		, std::string const & name
 		, sdw::Vec3 const eye
-		, sdw::Vec3 const world
+		, sdw::Vec4 const world
 		, sdw::Vec3 const view
 		, sdw::Vec3 const clip
 		, sdw::Vec3 const normal
@@ -110,7 +110,7 @@ namespace castor3d::shader
 
 	LightSurface LightSurface::create( sdw::ShaderWriter & writer
 		, std::string const & name
-		, sdw::Vec3 const world
+		, sdw::Vec4 const world
 		, sdw::Vec3 const clip
 		, sdw::Vec3 const normal
 		, bool enableDotProducts
@@ -125,7 +125,7 @@ namespace castor3d::shader
 		, Utils & utils
 		, std::string const & name
 		, sdw::Vec3 const eye
-		, sdw::Vec3 const world
+		, sdw::Vec4 const world
 		, sdw::Vec3 const view
 		, sdw::Vec3 const clip
 		, sdw::Vec3 const normal
@@ -214,7 +214,7 @@ namespace castor3d::shader
 
 	sdw::expr::ExprPtr LightSurface::makeInit( sdw::type::BaseStructPtr type
 		, sdw::Vec3 const eye
-		, sdw::Vec3 const world
+		, sdw::Vec4 const world
 		, sdw::Vec3 const view
 		, sdw::Vec3 const clip
 		, sdw::Vec3 const normal
@@ -228,11 +228,11 @@ namespace castor3d::shader
 		inits.push_back( makeExpr( view ) ); // viewPosition
 		inits.push_back( makeExpr( clip ) ); // clipPosition
 		inits.push_back( makeExpr( vec3(  0.0_f ) ) ); // vertexToLight
-		inits.push_back( makeExpr( normalize( eye - world ) ) ); // V
+		inits.push_back( makeExpr( normalize( eye - world.xyz() ) ) ); // V
 		inits.push_back( makeExpr( normal ) ); // N
 		inits.push_back( makeExpr( vec3( 0.0_f ) ) ); // L
 		inits.push_back( makeExpr( vec3( 0.0_f ) ) ); // H
-		inits.push_back( makeExpr( length( eye - world ) ) ); // lengthV
+		inits.push_back( makeExpr( length( eye - world.xyz() ) ) ); // lengthV
 		inits.push_back( makeExpr( 0.0_f ) ); // lengthL
 		inits.push_back( makeExpr( 0.0_f ) ); // NdotV
 

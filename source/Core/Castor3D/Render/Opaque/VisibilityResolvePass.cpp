@@ -1244,8 +1244,8 @@ namespace castor3d
 							{
 								auto surface = writer.declLocale( "surface"
 									, shader::Surface{ vec3( vec2( ipixel ), depth )
-										, baseSurface.viewPosition.xyz()
-										, baseSurface.worldPosition.xyz()
+										, baseSurface.viewPosition
+										, baseSurface.worldPosition
 										, normalize( components.normal ) } );
 
 								lightingModel->finish( passShaders
@@ -1257,7 +1257,7 @@ namespace castor3d
 								auto lightSurface = shader::LightSurface::create( writer
 									, "lightSurface"
 									, c3d_cameraData.position()
-									, surface.worldPosition.xyz()
+									, surface.worldPosition
 									, surface.viewPosition.xyz()
 									, surface.clipPosition
 									, surface.normal );

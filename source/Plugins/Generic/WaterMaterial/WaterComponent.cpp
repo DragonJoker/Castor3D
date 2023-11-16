@@ -11,6 +11,7 @@
 #include <Castor3D/Scene/SceneFileParser.hpp>
 #include <Castor3D/Shader/Shaders/GlslBlendComponents.hpp>
 #include <Castor3D/Shader/Shaders/GlslMaterial.hpp>
+#include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 
 #include <CastorUtils/FileParser/ParserParameter.hpp>
 #include <CastorUtils/Data/Text/TextPoint.hpp>
@@ -250,6 +251,138 @@ namespace water
 			}
 		}
 		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserFoamHeightStart )
+		{
+			auto & parsingContext = castor3d::getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( "Missing parameter" );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
+				component.setFoamHeightStart( value );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserFoamFadeDistance )
+		{
+			auto & parsingContext = castor3d::getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( "Missing parameter" );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
+				component.setFoamFadeDistance( value );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserFoamTiling )
+		{
+			auto & parsingContext = castor3d::getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( "Missing parameter" );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
+				component.setFoamTiling( value );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserFoamNoiseTiling )
+		{
+			auto & parsingContext = castor3d::getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( "Missing parameter" );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
+				component.setFoamNoiseTiling( value );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserFoamAngleExponent )
+		{
+			auto & parsingContext = castor3d::getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( "Missing parameter" );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
+				component.setFoamAngleExponent( value );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserFoamBrightness )
+		{
+			auto & parsingContext = castor3d::getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( "Missing parameter" );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
+				component.setFoamBrightness( value );
+			}
+		}
+		CU_EndAttribute()
 	}
 
 	//*********************************************************************************************
@@ -259,13 +392,7 @@ namespace water
 		, castor3d::shader::Materials const & materials
 		, sdw::StructInstance const * surface )const
 	{
-		if ( ( !checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecifics )
-				&& !checkFlag( componentsMask, castor3d::ComponentModeFlag::eDiffuseLighting )
-				&& !checkFlag( componentsMask, castor3d::ComponentModeFlag::eSpecularLighting ) )
-			|| ( !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecifics )
-				&& !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eDiffuseLighting )
-				&& !checkFlag( materials.getFilter(), castor3d::ComponentModeFlag::eSpecularLighting ) )
-			|| !materials.hasSpecificsBuffer< shader::WaterProfile >() )
+		if ( !isComponentAvailable( componentsMask, materials ) )
 		{
 			return;
 		}
@@ -281,6 +408,12 @@ namespace water
 			components.declMember( "ssrForwardStepsCount", sdw::type::Kind::eUInt32 );
 			components.declMember( "ssrBackwardStepsCount", sdw::type::Kind::eUInt32 );
 			components.declMember( "ssrDepthMult", sdw::type::Kind::eFloat );
+			components.declMember( "foamHeightStart", sdw::type::Kind::eFloat );
+			components.declMember( "foamFadeDistance", sdw::type::Kind::eFloat );
+			components.declMember( "foamTiling", sdw::type::Kind::eFloat );
+			components.declMember( "foamNoiseTiling", sdw::type::Kind::eFloat );
+			components.declMember( "foamAngleExponent", sdw::type::Kind::eFloat );
+			components.declMember( "foamBrightness", sdw::type::Kind::eFloat );
 		}
 	}
 
@@ -311,6 +444,12 @@ namespace water
 			inits.emplace_back( sdw::makeExpr( waterProfile.ssrForwardStepsCount() ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.ssrBackwardStepsCount() ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.ssrDepthMult() ) );
+			inits.emplace_back( sdw::makeExpr( waterProfile.foamHeightStart() ) );
+			inits.emplace_back( sdw::makeExpr( waterProfile.foamFadeDistance() ) );
+			inits.emplace_back( sdw::makeExpr( waterProfile.foamTiling() ) );
+			inits.emplace_back( sdw::makeExpr( waterProfile.foamNoiseTiling() ) );
+			inits.emplace_back( sdw::makeExpr( waterProfile.foamAngleExponent() ) );
+			inits.emplace_back( sdw::makeExpr( waterProfile.foamBrightness() ) );
 		}
 		else
 		{
@@ -322,6 +461,12 @@ namespace water
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0_u ) );
 			inits.emplace_back( sdw::makeExpr( 0_u ) );
+			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 		}
 	}
@@ -342,7 +487,48 @@ namespace water
 			res.getMember< sdw::UInt32 >( "ssrForwardStepsCount" ) = max( res.getMember< sdw::UInt32 >( "ssrForwardStepsCount" ), src.getMember< sdw::UInt32 >( "ssrForwardStepsCount" ) );
 			res.getMember< sdw::UInt32 >( "ssrBackwardStepsCount" ) = max( res.getMember< sdw::UInt32 >( "ssrBackwardStepsCount" ), src.getMember< sdw::UInt32 >( "ssrBackwardStepsCount" ) );
 			res.getMember< sdw::Float >( "ssrDepthMult" ) += src.getMember< sdw::Float >( "ssrDepthMult" ) * passMultiplier;
+			res.getMember< sdw::Float >( "foamHeightStart" ) += src.getMember< sdw::Float >( "foamHeightStart" ) * passMultiplier;
+			res.getMember< sdw::Float >( "foamFadeDistance" ) += src.getMember< sdw::Float >( "foamFadeDistance" ) * passMultiplier;
+			res.getMember< sdw::Float >( "foamTiling" ) += src.getMember< sdw::Float >( "foamTiling" ) * passMultiplier;
+			res.getMember< sdw::Float >( "foamNoiseTiling" ) += src.getMember< sdw::Float >( "foamNoiseTiling" ) * passMultiplier;
+			res.getMember< sdw::Float >( "foamAngleExponent" ) += src.getMember< sdw::Float >( "foamAngleExponent" ) * passMultiplier;
+			res.getMember< sdw::Float >( "foamBrightness" ) += src.getMember< sdw::Float >( "foamBrightness" ) * passMultiplier;
 		}
+	}
+
+	void WaterComponent::ComponentsShader::updateComponent( castor3d::TextureCombine const & combine
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, castor3d::shader::BlendComponents & components )const
+	{
+		if ( !components.hasMember( "normal" )
+			|| !components.hasMember( "tangent" )
+			|| !components.hasMember( "bitangent" )
+			|| ( !components.hasMember( "waterNormals2" ) && !components.hasMember( "waterNormals1" ) ) )
+		{
+			return;
+		}
+
+		auto & writer{ *components.getWriter() };
+		auto tbn = writer.declLocale( "waterTBN"
+			, castor3d::shader::Utils::getTBN( components.normal
+				, components.getMember< sdw::Vec4 >( "tangent" ).xyz()
+				, components.getMember< sdw::Vec3 >( "bitangent" ) ) );
+		auto finalNormal = writer.declLocale( "finalNormal"
+			, vec3( 0.0_f ) );
+
+		if ( components.hasMember( "waterNormals1" ) )
+		{
+			auto waterNormals1 = components.getMember< sdw::Vec3 >( "waterNormals1" );
+			finalNormal += normalize( tbn * waterNormals1.xyz() );
+		}
+
+		if ( components.hasMember( "waterNormals2" ) )
+		{
+			auto waterNormals2 = components.getMember< sdw::Vec3 >( "waterNormals2" );
+			finalNormal += normalize( tbn * waterNormals2.xyz() );
+		}
+
+		components.normal = normalize( finalNormal );
 	}
 
 	//*********************************************************************************************
@@ -386,6 +572,30 @@ namespace water
 			, uint32_t( castor3d::CSCNSection::ePass )
 			, cuT( "ssrDepthMult" )
 			, &waterpass::parserSsrDepthMult, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, uint32_t( castor3d::CSCNSection::ePass )
+			, cuT( "foamHeightStart" )
+			, &waterpass::parserFoamHeightStart, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, uint32_t( castor3d::CSCNSection::ePass )
+			, cuT( "foamFadeDistance" )
+			, &waterpass::parserFoamFadeDistance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, uint32_t( castor3d::CSCNSection::ePass )
+			, cuT( "foamTiling" )
+			, &waterpass::parserFoamTiling, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, uint32_t( castor3d::CSCNSection::ePass )
+			, cuT( "foamNoiseTiling" )
+			, &waterpass::parserFoamNoiseTiling, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, uint32_t( castor3d::CSCNSection::ePass )
+			, cuT( "foamAngleExponent" )
+			, &waterpass::parserFoamAngleExponent, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, uint32_t( castor3d::CSCNSection::ePass )
+			, cuT( "foamBrightness" )
+			, &waterpass::parserFoamBrightness, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 	}
 
 	bool WaterComponent::Plugin::isComponentNeeded( castor3d::TextureCombine const & textures
@@ -422,6 +632,12 @@ namespace water
 		vis.visit( cuT( "SSR forward steps count" ), m_value.ssrForwardStepsCount );
 		vis.visit( cuT( "SSR backward steps count" ), m_value.ssrBackwardStepsCount );
 		vis.visit( cuT( "SSR depth mult." ), m_value.ssrDepthMult );
+		vis.visit( cuT( "Foam Height Start" ), m_value.foamHeightStart );
+		vis.visit( cuT( "Foam Fade Distance" ), m_value.foamFadeDistance );
+		vis.visit( cuT( "Foam Tiling" ), m_value.foamTiling );
+		vis.visit( cuT( "Foam Noise Tiling" ), m_value.foamNoiseTiling );
+		vis.visit( cuT( "Foam Angle Exponent" ), m_value.foamAngleExponent );
+		vis.visit( cuT( "Foam Brightness" ), m_value.foamBrightness );
 	}
 
 	void WaterComponent::fillProfileBuffer( WaterProfileData & data )const
@@ -435,6 +651,12 @@ namespace water
 		data.ssr.forwardStepsCount = getSsrForwardStepsCount();
 		data.ssr.backwardStepsCount = getSsrBackwardStepsCount();
 		data.ssr.depthMult = getSsrDepthMult();
+		data.foamHeightStart = getFoamHeightStart();
+		data.foamFadeDistance = getFoamFadeDistance();
+		data.foamTiling = getFoamTiling();
+		data.foamNoiseTiling = getFoamNoiseTiling();
+		data.foamAngleExponent = getFoamAngleExponent();
+		data.foamBrightness = getFoamBrightness();
 	}
 
 	bool WaterComponent::isComponentAvailable( castor3d::ComponentModeFlags componentsMask

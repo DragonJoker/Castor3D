@@ -24,9 +24,13 @@ namespace water::shader
 			, sdw::FloatField< "refractionDistortionFactor" >
 			, sdw::FloatField< "refractionHeightFactor" >
 			, sdw::FloatField< "refractionDistanceFactor" >
+			, sdw::FloatField< "foamHeightStart" >
+			, sdw::FloatField< "foamFadeDistance" >
+			, sdw::FloatField< "foamTiling" >
+			, sdw::FloatField< "foamAngleExponent" >
+			, sdw::FloatField< "foamBrightness" >
+			, sdw::FloatField< "foamNoiseTiling" >
 			, sdw::FloatField< "pad0" >
-			, sdw::FloatField< "pad1" >
-			, sdw::FloatField< "pad2" >
 			, sdw::FloatField< "ssrStepSize" >
 			, sdw::UIntField< "ssrForwardStepsCount" >
 			, sdw::UIntField< "ssrBackwardStepsCount" >
@@ -55,6 +59,12 @@ namespace water::shader
 		auto ssrForwardStepsCount()const { return getMember< "ssrForwardStepsCount" >(); }
 		auto ssrBackwardStepsCount()const { return getMember< "ssrBackwardStepsCount" >(); }
 		auto ssrDepthMult()const { return getMember< "ssrDepthMult" >(); }
+		auto foamHeightStart()const { return getMember< "foamHeightStart" >(); }
+		auto foamFadeDistance()const { return getMember< "foamFadeDistance" >(); }
+		auto foamTiling()const { return getMember< "foamTiling" >(); }
+		auto foamAngleExponent()const { return getMember< "foamAngleExponent" >(); }
+		auto foamBrightness()const { return getMember< "foamBrightness" >(); }
+		auto foamNoiseTiling()const { return getMember< "foamNoiseTiling" >(); }
 	};
 
 	class WaterProfiles

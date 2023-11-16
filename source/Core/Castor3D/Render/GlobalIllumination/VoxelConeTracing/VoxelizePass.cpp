@@ -565,7 +565,7 @@ namespace castor3d
 							, utils
 							, "lightSurface"
 							, c3d_cameraData.position()
-							, in.worldPosition.xyz()
+							, in.worldPosition
 							, in.worldPosition.xyz()
 							, in.fragCoord.xyz()
 							, normalize( components.normal )

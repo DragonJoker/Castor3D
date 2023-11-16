@@ -22,7 +22,10 @@ namespace water
 		struct ComponentsShader
 			: castor3d::shader::PassComponentsShader
 		{
-			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin );
+			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin )
+				: castor3d::shader::PassComponentsShader{ plugin }
+			{
+			}
 
 			void computeTexcoord( castor3d::PipelineFlags const & flags
 				, castor3d::shader::TextureConfigData const & config

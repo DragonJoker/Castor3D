@@ -1,4 +1,5 @@
 #include "WaterMaterial/WaterComponent.hpp"
+#include "WaterMaterial/WaterFoamMapComponent.hpp"
 #include "WaterMaterial/WaterNormal1MapComponent.hpp"
 #include "WaterMaterial/WaterNormal2MapComponent.hpp"
 #include "WaterMaterial/WaterNoiseMapComponent.hpp"
@@ -58,7 +59,7 @@ extern "C"
 
 	C3D_WaterMaterial_API void getName( char const ** name )
 	{
-		*name = "water";
+		*name = "Water Material";
 	}
 
 	C3D_WaterMaterial_API void OnLoad( castor3d::Engine * engine, castor3d::Plugin * plugin )
@@ -66,6 +67,7 @@ extern "C"
 		engine->registerPassComponent< water::WaterNormal1MapComponent >();
 		engine->registerPassComponent< water::WaterNormal2MapComponent >();
 		engine->registerPassComponent< water::WaterNoiseMapComponent >();
+		engine->registerPassComponent< water::WaterFoamMapComponent >();
 		engine->registerPassComponent< water::WaterComponent >();
 		engine->registerPassModels( { water::shader::WaterPhongLightingModel::getName()
 			, water::WaterPhongPass::create
@@ -87,6 +89,7 @@ extern "C"
 		engine->unregisterPassModels( water::shader::WaterPbrLightingModel::getName() );
 		engine->unregisterPassModels( water::shader::WaterPhongLightingModel::getName() );
 		engine->unregisterPassComponent( water::WaterComponent::TypeName );
+		engine->unregisterPassComponent( water::WaterFoamMapComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterNoiseMapComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterNormal2MapComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterNormal1MapComponent::TypeName );
