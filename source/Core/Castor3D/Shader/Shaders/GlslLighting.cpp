@@ -293,8 +293,13 @@ namespace castor3d::shader
 
 		IF( m_writer, components.hasTransmission )
 		{
+			if ( components.hasMember( "metalness" ) )
+			{
+				refracted *= 1.0_f - components.metalness;
+			}
+
 			auto specularBtdf = m_writer.declLocale( "c3d_specularBtdf"
-				, adjustRefraction( components, refracted ) );
+				, refracted );
 			debugOutput.registerOutput( "Combine", "Specular BTDF", specularBtdf );
 			diffuseBrdf = mix( diffuseBrdf, specularBtdf, vec3( components.transmission ) );
 			debugOutput.registerOutput( "Combine", "Transmission", components.transmission );

@@ -68,17 +68,6 @@ namespace castor3d::shader
 		return directSpecular;
 	}
 
-	sdw::Vec3 PbrLightingModel::adjustRefraction( BlendComponents const & components
-		, sdw::Vec3 const & refraction )const
-	{
-		if ( components.hasMember( "metalness" ) )
-		{
-			return refraction * ( 1.0_f - components.getMember< sdw::Float >( "metalness" ) );
-		}
-
-		return refraction;
-	}
-
 	void PbrLightingModel::doFinish( PassShaders const & passShaders
 		, RasterizerSurfaceBase const & surface
 		, BlendComponents & components )
