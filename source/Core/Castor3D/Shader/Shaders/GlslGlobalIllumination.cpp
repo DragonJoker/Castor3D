@@ -138,25 +138,26 @@ namespace castor3d
 			, sdw::Vec3 const & indirectDiffuse
 			, DebugOutput & debugOutput )
 		{
-			auto result = vec3( 1.0_f );
+			auto indirectAmbient = m_writer.declLocale( "indirectAmbient"
+				, vec3( 1.0_f ) );
 
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
-				result = indirectDiffuse;
+				indirectAmbient = indirectDiffuse;
 			}
 			else if ( checkFlag( sceneFlags, SceneFlag::eLayeredLpvGI ) )
 			{
 				auto llpvGridData = m_writer.getVariable< LayeredLpvGridData >( "c3d_llpvGridData" );
-				result = indirectDiffuse / llpvGridData.indirectAttenuation;
+				indirectAmbient = indirectDiffuse / llpvGridData.indirectAttenuation;
 			}
 			else if ( checkFlag( sceneFlags, SceneFlag::eLpvGI ) )
 			{
 				auto lpvGridData = m_writer.getVariable< LpvGridData >( "c3d_lpvGridData" );
-				result = indirectDiffuse / lpvGridData.indirectAttenuation();
+				indirectAmbient = indirectDiffuse / lpvGridData.indirectAttenuation();
 			}
 
-			debugOutput.registerOutput( "Indirect", "Ambient", result );
-			return result;
+			debugOutput.registerOutput( "Indirect", "Ambient", indirectAmbient );
+			return indirectAmbient;
 		}
 
 		sdw::Vec3 GlobalIllumination::computeSpecular( SceneFlags sceneFlags
