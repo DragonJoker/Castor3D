@@ -1,4 +1,4 @@
-set( FOLDER_NAME OceanRendering )
+set( FOLDER_NAME WavesRendering )
 project( ${FOLDER_NAME} )
 
 set( Castor3DBinsDependencies 
@@ -7,24 +7,24 @@ set( Castor3DBinsDependencies
 	PARENT_SCOPE
 )
 
-set( ${PROJECT_NAME}_DESCRIPTION "Ocean rendering for Castor3D" )
+set( ${PROJECT_NAME}_DESCRIPTION "Waves rendering for Castor3D" )
 set( ${PROJECT_NAME}_VERSION_MAJOR 0 )
-set( ${PROJECT_NAME}_VERSION_MINOR 4 )
+set( ${PROJECT_NAME}_VERSION_MINOR 1 )
 set( ${PROJECT_NAME}_VERSION_BUILD 0 )
 
 set( PROJECT_VERSION "${${PROJECT_NAME}_VERSION_MAJOR}.${${PROJECT_NAME}_VERSION_MINOR}" )
 set( PROJECT_SOVERSION "${${PROJECT_NAME}_VERSION_BUILD}" )
 
 set( ${PROJECT_NAME}_HDR_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanRenderPass.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanUbo.hpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Ocean_Parsers.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Waves_Parsers.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WavesComponent.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WavesUbo.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanRenderingPlugin.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanRenderPass.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanUbo.cpp
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Ocean_Parsers.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/Waves_Parsers.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WavesComponent.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WavesPlugin.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WavesUbo.cpp
 )
 source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
 source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
@@ -57,7 +57,6 @@ target_link_libraries( ${PROJECT_NAME}
 	PUBLIC
 		castor::Castor3D
 )
-c3d_release_pdbs( ${PROJECT_NAME} )
 set_target_properties( ${PROJECT_NAME}
 	PROPERTIES
 		VERSION ${PROJECT_VERSION}
@@ -65,6 +64,7 @@ set_target_properties( ${PROJECT_NAME}
 		PREFIX ${C3D_LIB_PREFIX}
 		FOLDER "Plugins/Generic"
 )
+c3d_release_pdbs( ${PROJECT_NAME} )
 install_target_ex( ${PROJECT_NAME}
 	Castor3D
 	Plugins
