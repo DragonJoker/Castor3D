@@ -675,15 +675,6 @@ namespace castor3d::shader
 			, lightSurface );
 	}
 
-	sdw::Float Lights::getFinalTransmission( BlendComponents const & components
-		, sdw::Vec3 const incident )
-	{
-		auto lightingModel = getLightingModel();
-		return lightingModel
-			? lightingModel->getFinalTransmission( components, incident )
-			: static_cast< sdw::Float const & >( components.transmission );
-	}
-
 	bool Lights::hasIblSupport()
 	{
 		auto lightingModel = getLightingModel();

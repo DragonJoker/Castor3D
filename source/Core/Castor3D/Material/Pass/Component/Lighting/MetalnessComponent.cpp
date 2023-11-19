@@ -117,6 +117,19 @@ namespace castor3d
 		res.getMember< sdw::Float >( "metalness", true ) += src.getMember< sdw::Float >( "metalness", true ) * passMultiplier;
 	}
 
+	void MetalnessComponent::ComponentsShader::updateComponent( TextureCombine const & combine
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::BlendComponents & components )const
+	{
+		if ( !components.hasMember( "metalness" )
+			|| !components.hasMember( "transmission" ) )
+		{
+			return;
+		}
+
+		components.transmission = mix( components.transmission, 0.0_f, components.metalness );
+	}
+
 	//*********************************************************************************************
 
 	MetalnessComponent::MaterialShader::MaterialShader()

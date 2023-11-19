@@ -528,6 +528,11 @@ namespace water
 			finalNormal += normalize( tbn * waterNormals2.xyz() );
 		}
 
+		if ( components.hasMember( "transmission" ) )
+		{
+			components.transmission = 1.0_f;
+		}
+
 		components.normal = normalize( finalNormal );
 	}
 

@@ -33,8 +33,6 @@ namespace castor3d::shader
 			, Lights & lights
 			, bool enableVolumetric );
 
-		C3D_API sdw::Float getFinalTransmission( BlendComponents const & components
-			, sdw::Vec3 const & incident )override;
 		C3D_API sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
 			, sdw::Vec3 const & directAmbient )const override;
 		C3D_API sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
