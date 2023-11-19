@@ -32,26 +32,6 @@ namespace water::shader
 	protected:
 		WaterLightingModel( sdw::ShaderWriter & writer );
 
-		sdw::Vec2 getTexture0XY( c3d::BlendComponents const & components )const;
-		void doFinish( c3d::PassShaders const & passShaders
-			, c3d::RasterizerSurfaceBase const & surface
-			, c3d::BlendComponents & components );
-		sdw::Vec3 doCombine( c3d::DebugOutput & debugOutput
-			, c3d::BlendComponents const & components
-			, sdw::Vec3 const & incident
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Float const & ambientOcclusion
-			, sdw::Vec3 const & emissive
-			, sdw::Vec3 reflectedDiffuse
-			, sdw::Vec3 reflectedSpecular
-			, sdw::Vec3 refracted );
-		sdw::Vec3 doAdjustDirectSpecular( c3d::BlendComponents const & components
-			, sdw::Vec3 const & directSpecular )const;
 		void doComputeReflRefr( c3d::ReflectionModel & reflections
 			, c3d::BlendComponents & components
 			, c3d::LightSurface const & lightSurface
@@ -104,8 +84,6 @@ namespace water::shader
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		sdw::Vec3 adjustDirectSpecular( c3d::BlendComponents const & components
-			, sdw::Vec3 const & directSpecular )const override;
 		void computeReflRefr( c3d::ReflectionModel & reflections
 			, c3d::BlendComponents & components
 			, c3d::LightSurface const & lightSurface
@@ -148,11 +126,6 @@ namespace water::shader
 			, sdw::Vec3 & coatReflected
 			, sdw::Vec3 & sheenReflected
 			, c3d::DebugOutput & debugOutput )override;
-
-	protected:
-		void doFinish( c3d::PassShaders const & passShaders
-			, c3d::RasterizerSurfaceBase const & surface
-			, c3d::BlendComponents & components )override;
 	};
 
 	class WaterPbrLightingModel
@@ -179,8 +152,6 @@ namespace water::shader
 			, c3d::Lights & lights
 			, bool enableVolumetric );
 
-		sdw::Vec3 adjustDirectSpecular( c3d::BlendComponents const & components
-			, sdw::Vec3 const & directSpecular )const override;
 		void computeReflRefr( c3d::ReflectionModel & reflections
 			, c3d::BlendComponents & components
 			, c3d::LightSurface const & lightSurface
@@ -223,11 +194,6 @@ namespace water::shader
 			, sdw::Vec3 & coatReflected
 			, sdw::Vec3 & sheenReflected
 			, c3d::DebugOutput & debugOutput )override;
-
-	protected:
-		void doFinish( c3d::PassShaders const & passShaders
-			, c3d::RasterizerSurfaceBase const & surface
-			, c3d::BlendComponents & components )override;
 	};
 }
 

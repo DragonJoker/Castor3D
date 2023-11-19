@@ -23,40 +23,6 @@ namespace water::shader
 	{
 	}
 
-	sdw::Vec2 WaterLightingModel::getTexture0XY( c3d::BlendComponents const & components )const
-	{
-		auto texType = static_cast< sdw::type::BaseStruct const & >( *components.getType() ).getMember( "texture0" ).type;
-
-		switch ( texType->getKind() )
-		{
-		case sdw::type::Kind::eVec3F:
-			return components.getMember< sdw::Vec3 >( "texture0" ).xy();
-		default:
-			return components.getMember< c3d::DerivTex >( "texture0" ).uv();
-		}
-	}
-
-	void WaterLightingModel::doFinish( c3d::PassShaders const & passShaders
-		, c3d::RasterizerSurfaceBase const & surface
-		, c3d::BlendComponents & components )
-	{
-		if ( components.hasMember( "texture0" ) )
-		{
-		}
-	}
-
-	sdw::Vec3 WaterLightingModel::doAdjustDirectSpecular( c3d::BlendComponents const & components
-		, sdw::Vec3 const & specular )const
-	{
-		if ( components.hasMember( "waterNoise" ) )
-		{
-			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
-			return specular * waterNoise;
-		}
-
-		return specular;
-	}
-
 	void WaterLightingModel::doComputeReflRefr( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
@@ -257,21 +223,6 @@ namespace water::shader
 			, enableVolumetric );
 	}
 
-	sdw::Vec3 WaterPhongLightingModel::adjustDirectSpecular( c3d::BlendComponents const & components
-		, sdw::Vec3 const & directSpecular )const
-	{
-		return doAdjustDirectSpecular( components
-			, c3d::PhongLightingModel::adjustDirectSpecular( components, directSpecular ) );
-	}
-
-	void WaterPhongLightingModel::doFinish( c3d::PassShaders const & passShaders
-		, c3d::RasterizerSurfaceBase const & surface
-		, c3d::BlendComponents & components )
-	{
-		c3d::PhongLightingModel::doFinish( passShaders, surface, components );
-		WaterLightingModel::doFinish( passShaders, surface, components );
-	}
-
 	void WaterPhongLightingModel::computeReflRefr( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
@@ -405,21 +356,6 @@ namespace water::shader
 			, shadowModel
 			, lights
 			, enableVolumetric );
-	}
-
-	sdw::Vec3 WaterPbrLightingModel::adjustDirectSpecular( c3d::BlendComponents const & components
-		, sdw::Vec3 const & directSpecular )const
-	{
-		return doAdjustDirectSpecular( components
-			, c3d::PbrLightingModel::adjustDirectSpecular( components, directSpecular ) );
-	}
-
-	void WaterPbrLightingModel::doFinish( c3d::PassShaders const & passShaders
-		, c3d::RasterizerSurfaceBase const & surface
-		, c3d::BlendComponents & components )
-	{
-		c3d::PbrLightingModel::doFinish( passShaders, surface, components );
-		WaterLightingModel::doFinish( passShaders, surface, components );
 	}
 
 	void WaterPbrLightingModel::computeReflRefr( c3d::ReflectionModel & reflections

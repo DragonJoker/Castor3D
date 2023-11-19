@@ -282,7 +282,8 @@ namespace castor3d::shader
 				, reflectedDiffuse ) );
 		debugOutput.registerOutput( "Combine", "Diffuse BRDF", diffuseBrdf );
 		auto adjustedSpecular = m_writer.declLocale( "c3d_adjustedSpecular"
-			, adjustDirectSpecular( components, directSpecular ) );
+			, directSpecular );
+		adjustedSpecular *= components.specular;
 		debugOutput.registerOutput( "Combine", "AdjustedSpecular", adjustedSpecular );
 		auto specularBrdf = m_writer.declLocale( "c3d_specularBrdf"
 			, doGetSpecularBrdf( components

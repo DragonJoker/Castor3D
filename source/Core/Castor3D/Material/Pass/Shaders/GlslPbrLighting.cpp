@@ -62,12 +62,6 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	sdw::Vec3 PbrLightingModel::adjustDirectSpecular( BlendComponents const & components
-		, sdw::Vec3 const & directSpecular )const
-	{
-		return directSpecular;
-	}
-
 	void PbrLightingModel::doFinish( PassShaders const & passShaders
 		, RasterizerSurfaceBase const & surface
 		, BlendComponents & components )
