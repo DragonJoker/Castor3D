@@ -121,13 +121,20 @@ namespace castor3d
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, shader::BlendComponents & components )const
 	{
-		if ( !components.hasMember( "metalness" )
-			|| !components.hasMember( "transmission" ) )
+		if ( !components.hasMember( "metalness" ) )
 		{
 			return;
 		}
 
-		components.transmission = mix( components.transmission, 0.0_f, components.metalness );
+		if ( components.hasMember( "transmission" ) )
+		{
+			components.transmission = mix( components.transmission, 0.0_f, components.metalness );
+		}
+
+		if ( components.hasMember( "refraction" ) )
+		{
+			components.refraction *= ( 1.0_f - components.getMember< sdw::Float >( "metalness" ) );
+		}
 	}
 
 	//*********************************************************************************************

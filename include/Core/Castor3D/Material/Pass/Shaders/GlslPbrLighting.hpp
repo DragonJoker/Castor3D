@@ -37,8 +37,6 @@ namespace castor3d::shader
 
 		C3D_API sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const override;
-		C3D_API sdw::Vec3 adjustRefraction( BlendComponents const & components
-			, sdw::Vec3 const & refraction )const override;
 
 	protected:
 		C3D_API void doFinish( PassShaders const & passShaders

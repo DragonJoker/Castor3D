@@ -70,12 +70,6 @@ namespace castor3d::shader
 		return directSpecular * specular;
 	}
 
-	sdw::Vec3 PhongLightingModel::adjustRefraction( BlendComponents const & components
-		, sdw::Vec3 const & refraction )const
-	{
-		return refraction;
-	}
-
 	void PhongLightingModel::doFinish( PassShaders const & passShaders
 		, RasterizerSurfaceBase const & surface
 		, BlendComponents & components )
