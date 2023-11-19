@@ -125,8 +125,6 @@ namespace castor3d::shader
 			, sdw::Vec3 reflectedSpecular
 			, sdw::Vec3 refracted );
 
-		C3D_API virtual sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
-			, sdw::Vec3 const & directAmbient )const = 0;
 		C3D_API virtual sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const = 0;
 		C3D_API virtual sdw::Vec3 adjustRefraction( BlendComponents const & components

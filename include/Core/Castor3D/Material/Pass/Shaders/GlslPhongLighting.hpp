@@ -33,8 +33,6 @@ namespace castor3d::shader
 			, Lights & lights
 			, bool enableVolumetric );
 
-		C3D_API sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
-			, sdw::Vec3 const & directAmbient )const override;
 		C3D_API sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const override;
 		C3D_API sdw::Vec3 adjustRefraction( BlendComponents const & components
