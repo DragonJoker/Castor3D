@@ -907,7 +907,7 @@ namespace castor3d
 
 	bool RenderNodesPass::areDebugTargetsEnabled()const noexcept
 	{
-		return C3D_EnableDebugTargets != 0;
+		return getEngine()->areDebugTargetsEnabled();
 	}
 
 	bool RenderNodesPass::isValidPass( Pass const & pass )const

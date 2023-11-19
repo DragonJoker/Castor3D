@@ -124,15 +124,16 @@ namespace GuiCommon
 
 		addProperty( grid, PROPERTY_CATEGORY_RENDER_TARGET + TARGETS[size_t( target.getTargetType() )] );
 
-#if C3D_EnableDebugTargets != 0
-		static wxString PROPERTY_RENDER_WINDOW_DEBUG_VIEW = _( "Debug View" );
-		static wxString PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE = _( "Debug Value" );
+		if ( target.areDebugTargetsEnabled() )
+		{
+			static wxString PROPERTY_RENDER_WINDOW_DEBUG_VIEW = _( "Debug View" );
+			static wxString PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE = _( "Debug Value" );
 
-		auto & targetDebugConfig = target.getDebugConfig();
-		auto & debugConfig = target.getScene()->getDebugConfig();
-		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_VIEW, make_wxArrayString( targetDebugConfig.getIntermediateImages() ), &targetDebugConfig.intermediateImageIndex );
-		addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE, make_wxArrayString( debugConfig.getIntermediateValues() ), &debugConfig.intermediateShaderValueIndex );
-#endif
+			auto & targetDebugConfig = target.getDebugConfig();
+			auto & debugConfig = target.getScene()->getDebugConfig();
+			addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_VIEW, make_wxArrayString( targetDebugConfig.getIntermediateImages() ), &targetDebugConfig.intermediateImageIndex );
+			addPropertyET( grid, PROPERTY_RENDER_WINDOW_DEBUG_SHADER_VALUE, make_wxArrayString( debugConfig.getIntermediateValues() ), &debugConfig.intermediateShaderValueIndex );
+		}
 
 		for ( auto & renderPass : target.getCustomRenderPasses() )
 		{
