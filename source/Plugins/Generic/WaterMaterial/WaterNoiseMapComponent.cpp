@@ -243,6 +243,11 @@ namespace water
 			waterNoise *= c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMapId - 1_u )].lod( waterNormalMapCoords2 * 0.5_f, 0.0_f )
 				, waterNoiseMapMask );
 		}
+
+		if ( components.hasMember( "waterNoise" ) )
+		{
+			components.specular *= waterNoise;
+		}
 	}
 
 	//*********************************************************************************************

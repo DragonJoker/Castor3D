@@ -124,9 +124,6 @@ namespace castor3d::shader
 			, sdw::Vec3 reflectedDiffuse
 			, sdw::Vec3 reflectedSpecular
 			, sdw::Vec3 refracted );
-
-		C3D_API virtual sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
-			, sdw::Vec3 const & directSpecular )const = 0;
 		/**
 		*\name
 		*	Clustered lighting

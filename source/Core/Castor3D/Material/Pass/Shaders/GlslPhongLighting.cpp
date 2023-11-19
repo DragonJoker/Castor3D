@@ -63,13 +63,6 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	sdw::Vec3 PhongLightingModel::adjustDirectSpecular( BlendComponents const & components
-		, sdw::Vec3 const & directSpecular )const
-	{
-		auto specular = components.getMember( "specular", vec3( 1.0_f ) );
-		return directSpecular * specular;
-	}
-
 	void PhongLightingModel::doFinish( PassShaders const & passShaders
 		, RasterizerSurfaceBase const & surface
 		, BlendComponents & components )
