@@ -50,8 +50,6 @@ namespace water::shader
 			, sdw::Vec3 reflectedDiffuse
 			, sdw::Vec3 reflectedSpecular
 			, sdw::Vec3 refracted );
-		sdw::Float doGetFinalTransmission( c3d::BlendComponents const & components
-			, sdw::Vec3 const & incident );
 		sdw::Vec3 doAdjustDirectSpecular( c3d::BlendComponents const & components
 			, sdw::Vec3 const & directSpecular )const;
 		void doComputeReflRefr( c3d::ReflectionModel & reflections

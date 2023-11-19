@@ -554,8 +554,6 @@ namespace castor3d::shader
 		*	Utils
 		*/
 		//\{
-		C3D_API sdw::Float getFinalTransmission( BlendComponents const & components
-			, sdw::Vec3 const incident );
 		C3D_API bool hasIblSupport();
 		C3D_API LightingModel * getLightingModel();
 		//\}

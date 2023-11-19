@@ -63,12 +63,6 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	sdw::Float PhongLightingModel::getFinalTransmission( BlendComponents const & components
-		, sdw::Vec3 const & incident )
-	{
-		return components.transmission;
-	}
-
 	sdw::Vec3 PhongLightingModel::adjustDirectAmbient( BlendComponents const & components
 		, sdw::Vec3 const & directAmbient )const
 	{

@@ -186,7 +186,7 @@ namespace castor3d
 					auto incident = writer.declLocale( "incident"
 						, normalize( in.worldPosition.xyz() - c3d_cameraData.position() ) );
 
-					IF( writer, lights.getFinalTransmission( components, incident ) >= 0.1_f )
+					IF( writer, components.transmission >= 0.1_f )
 					{
 						writer.demote();
 					}

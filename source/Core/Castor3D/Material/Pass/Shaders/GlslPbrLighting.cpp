@@ -62,12 +62,6 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	sdw::Float PbrLightingModel::getFinalTransmission( BlendComponents const & components
-		, sdw::Vec3 const & incident )
-	{
-		return mix( components.transmission, 0.0_f, components.metalness );
-	}
-
 	sdw::Vec3 PbrLightingModel::adjustDirectAmbient( BlendComponents const & components
 		, sdw::Vec3 const & directAmbient )const
 	{

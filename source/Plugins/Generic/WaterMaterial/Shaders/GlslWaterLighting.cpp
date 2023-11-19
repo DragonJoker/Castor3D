@@ -45,12 +45,6 @@ namespace water::shader
 		}
 	}
 
-	sdw::Float WaterLightingModel::doGetFinalTransmission( c3d::BlendComponents const & components
-		, sdw::Vec3 const & incident )
-	{
-		return 1.0_f;
-	}
-
 	sdw::Vec3 WaterLightingModel::doAdjustDirectSpecular( c3d::BlendComponents const & components
 		, sdw::Vec3 const & specular )const
 	{
@@ -263,12 +257,6 @@ namespace water::shader
 			, enableVolumetric );
 	}
 
-	sdw::Float WaterPhongLightingModel::getFinalTransmission( c3d::BlendComponents const & components
-		, sdw::Vec3 const & incident )
-	{
-		return doGetFinalTransmission( components, incident );
-	}
-
 	sdw::Vec3 WaterPhongLightingModel::adjustDirectSpecular( c3d::BlendComponents const & components
 		, sdw::Vec3 const & directSpecular )const
 	{
@@ -417,12 +405,6 @@ namespace water::shader
 			, shadowModel
 			, lights
 			, enableVolumetric );
-	}
-
-	sdw::Float WaterPbrLightingModel::getFinalTransmission( c3d::BlendComponents const & components
-		, sdw::Vec3 const & incident )
-	{
-		return doGetFinalTransmission( components, incident );
 	}
 
 	sdw::Vec3 WaterPbrLightingModel::adjustDirectSpecular( c3d::BlendComponents const & components

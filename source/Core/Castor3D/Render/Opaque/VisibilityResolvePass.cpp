@@ -1230,7 +1230,7 @@ namespace castor3d
 
 						if ( components.transmission )
 						{
-							IF( writer, lights.getFinalTransmission( components, incident ) >= 0.1_f )
+							IF( writer, components.transmission >= 0.1_f )
 							{
 								writer.returnStmt( 0_b );
 							}
