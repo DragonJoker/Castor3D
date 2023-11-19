@@ -5,11 +5,12 @@
 #include "Castor3D/Buffer/GeometryBuffers.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshUtils.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/BaseDataComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
-#include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/DefaultRenderComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/LinesMapping.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/MorphComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SkinComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/TriFaceMapping.hpp"
 
 namespace castor3d
 {
@@ -486,6 +487,11 @@ namespace castor3d
 					indexMapping->computeTangents();
 				}
 			}
+		}
+
+		if ( !obj.hasRenderComponent() )
+		{
+			obj.createComponent< DefaultRenderComponent >();
 		}
 
 		binsmsh::validate( m_fileVersion, obj );

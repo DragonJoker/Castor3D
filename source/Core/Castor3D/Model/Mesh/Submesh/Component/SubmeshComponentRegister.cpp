@@ -99,6 +99,17 @@ namespace castor3d
 
 		if ( it == m_componentCombines.end() )
 		{
+			if ( std::none_of( m_renderShaderFlags.begin()
+				, m_renderShaderFlags.end()
+				, [&combine]( SubmeshComponentFlag lookup )
+				{
+					return hasAny( combine, lookup );
+				} ) )
+			{
+				CU_Failure( "Submesh components combination doesn't contain any render component." );
+				CU_Exception( "Submesh components combination doesn't contain any render component." );
+			}
+
 			m_componentCombines.push_back( combine );
 			auto idx = SubmeshComponentCombineID( m_componentCombines.size() - 1u );
 			it = std::next( m_componentCombines.begin(), idx );
