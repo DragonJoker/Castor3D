@@ -272,7 +272,7 @@ namespace castor3d::shader
 		}
 
 		auto finalAmbient = m_writer.declLocale( "c3d_directAmbient"
-			, adjustDirectAmbient( components, directAmbient ) );
+			, directAmbient * components.colour );
 		debugOutput.registerOutput( "Combine", "Final Ambient", finalAmbient );
 		 // Fresnel already included in both diffuse and specular.
 		auto diffuseBrdf = m_writer.declLocale( "c3d_diffuseBrdf"

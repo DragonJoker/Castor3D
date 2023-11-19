@@ -63,12 +63,6 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	sdw::Vec3 PhongLightingModel::adjustDirectAmbient( BlendComponents const & components
-		, sdw::Vec3 const & directAmbient )const
-	{
-		return  directAmbient * components.colour;
-	}
-
 	sdw::Vec3 PhongLightingModel::adjustDirectSpecular( BlendComponents const & components
 		, sdw::Vec3 const & directSpecular )const
 	{
