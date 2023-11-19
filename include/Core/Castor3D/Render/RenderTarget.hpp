@@ -249,6 +249,7 @@ namespace castor3d
 		C3D_API SceneUbo const & getSceneUbo()const;
 		C3D_API bool hasIndirect()const noexcept;
 		C3D_API bool hasSss()const noexcept;
+		C3D_API bool areDebugTargetsEnabled()const noexcept;
 
 		SsaoConfig const & getSsaoConfig()const noexcept
 		{
@@ -410,11 +411,6 @@ namespace castor3d
 		{
 			return m_clustersConfig;
 		}
-
-		bool areDebugTargetsEnabled()const noexcept
-		{
-			return m_debugTargets;
-		}
 		/**@}*/
 		/**
 		*\~english
@@ -558,7 +554,6 @@ namespace castor3d
 		FrustumClustersUPtr m_frustumClusters;
 		bool m_enableFullLoading{ false };
 		DebugDrawerUPtr m_debugDrawer{};
-		bool m_debugTargets{};
 
 		struct StereoConfig
 		{

@@ -131,26 +131,28 @@ namespace GuiCommon
 				static const wxString KeepTextShd{ wxT( "text_shaders" ) };
 				static const wxString MaxImgSize{ wxT( "max_image_size" ) };
 				static const wxString WaitDebugger{ wxT( "wait_debugger" ) };
+				static const wxString DebugTargets{ wxT( "debug_targets" ) };
 			}
 
 			namespace st
 			{
-				static const wxString Help{ wxT( "h" ) };
-				static const wxString Config{ wxT( "c" ) };
-				static const wxString LogLevel{ wxT( "l" ) };
 				static const wxString Validate{ wxT( "a" ) };
+				static const wxString Config{ wxT( "c" ) };
+				static const wxString DisUpdOptim{ wxT( "d" ) };
 				static const wxString ShaderDebugLevel{ wxT( "e" ) };
-				static const wxString SyncRender{ wxT( "s" ) };
-				static const wxString UnlimFPS{ wxT( "u" ) };
 				static const wxString FixedFPS{ wxT( "f" ) };
 				static const wxString GpuIndex{ wxT( "g" ) };
-				static const wxString DisUpdOptim{ wxT( "d" ) };
-				static const wxString DisRandom{ wxT( "r" ) };
-				static const wxString EnShaderVal{ wxT( "v" ) };
-				static const wxString EnApiTrace{ wxT( "t" ) };
-				static const wxString KeepTextShd{ wxT( "k" ) };
+				static const wxString Help{ wxT( "h" ) };
 				static const wxString MaxImgSize{ wxT( "i" ) };
+				static const wxString KeepTextShd{ wxT( "k" ) };
+				static const wxString LogLevel{ wxT( "l" ) };
+				static const wxString DisRandom{ wxT( "r" ) };
+				static const wxString SyncRender{ wxT( "s" ) };
+				static const wxString EnApiTrace{ wxT( "t" ) };
+				static const wxString UnlimFPS{ wxT( "u" ) };
+				static const wxString EnShaderVal{ wxT( "v" ) };
 				static const wxString WaitDebugger{ wxT( "w" ) };
+				static const wxString DebugTargets{ wxT( "dt" ) };
 			}
 		}
 
@@ -177,10 +179,11 @@ namespace GuiCommon
 				static const wxString DisRandom{ _( "Disable full random in random buffer." ) };
 				static const wxString EnShaderVal{ _( "Enable Shaders Validation." ) };
 				static const wxString EnApiTrace{ _( "Enable API Trace." ) };
-				static const wxString KeepTextShd{ _( "Keep Text Shaders." ) };
+				static const wxString KeepTextShd{ _( "Keep text shaders." ) };
 				static const wxString MaxImgSize{ _( "The maximum material images size." ) };
 				static const wxString SceneFile{ _( "The initial scene file." ) };
 				static const wxString WaitDebugger{ _( "Wait for debugger at startup." ) };
+				static const wxString DebugTargets{ _( "Enable debug targets." ) };
 
 				parser.AddSwitch( option::st::Help, option::lg::Help, Help, wxCMD_LINE_OPTION_HELP );
 				parser.AddOption( option::st::Config, option::lg::Config, Config, wxCMD_LINE_VAL_STRING, 0 );
@@ -198,6 +201,7 @@ namespace GuiCommon
 				parser.AddSwitch( option::st::KeepTextShd, option::lg::KeepTextShd, KeepTextShd );
 				parser.AddOption( option::st::MaxImgSize, option::lg::MaxImgSize, MaxImgSize, wxCMD_LINE_VAL_NUMBER );
 				parser.AddSwitch( option::st::WaitDebugger, option::lg::WaitDebugger, WaitDebugger );
+				parser.AddSwitch( option::st::DebugTargets, option::lg::DebugTargets, DebugTargets );
 				parser.AddParam( SceneFile, wxCMD_LINE_VAL_STRING, wxCMD_LINE_PARAM_OPTIONAL );
 
 				for ( auto & plugin : list )
@@ -278,6 +282,7 @@ namespace GuiCommon
 				config.enableShaderValidation = has( option::st::EnShaderVal );
 				config.enableApiTrace = has( option::st::EnApiTrace );
 				config.keepTextShaders = has( option::st::KeepTextShd );
+				config.enableDebugTargets = has( option::st::DebugTargets );
 
 				if ( !config.syncRender )
 				{
@@ -520,7 +525,8 @@ namespace GuiCommon
 			, m_config.shaderDebugLevel
 			, m_config.enableShaderValidation
 			, m_config.enableApiTrace
-			, m_config.keepTextShaders };
+			, m_config.keepTextShaders
+			, m_config.enableDebugTargets };
 		m_castor = castor::makeUnique< castor3d::Engine >( std::move( config ) );
 		doloadPlugins( splashScreen );
 

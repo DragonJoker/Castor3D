@@ -62,6 +62,7 @@ namespace GuiCommon
 			bool enableShaderValidation{ false };
 			bool enableApiTrace{ false };
 			bool keepTextShaders{ false };
+			bool enableDebugTargets{ false };
 			uint32_t maxImageSize{ 0u };
 			castor::String fileName{};
 		};

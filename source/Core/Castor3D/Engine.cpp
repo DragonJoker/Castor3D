@@ -162,6 +162,9 @@ namespace castor3d
 		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
 		, m_resources{ m_resourceHandler }
 	{
+#if !C3D_EnableDebugTargets
+		m_config.enableDebugTargets = false;
+#endif
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passComponents = castor::makeUnique< PassComponentRegister >( *this );
 		m_submeshComponents = castor::makeUnique< SubmeshComponentRegister >( *this );

@@ -126,6 +126,13 @@ namespace castor3d
 		*	\p true pour garder la version texte des shaders.
 		*/
 		bool keepTextShaders{ false };
+		/**
+		*\~english
+		*	\p true to enable debug targets visualisation.
+		*\~french
+		*	\p true pour activer la visualisation des debug targets.
+		*/
+		bool enableDebugTargets{ false };
 	};
 
 	class Engine
@@ -814,6 +821,11 @@ namespace castor3d
 		{
 			return m_config.keepTextShaders;
 		}
+
+		bool areDebugTargetsEnabled()const noexcept
+		{
+			return m_config.enableDebugTargets;
+		}
 		
 		castor::ImageCache const & getImageCache()const noexcept
 		{
@@ -1168,7 +1180,7 @@ namespace castor3d
 	private:
 		castor::LoggerInstancePtr m_ownedLogger;
 		castor::LoggerInstance * m_logger;
-		EngineConfig const m_config;
+		EngineConfig m_config;
 		RenderLoopUPtr m_renderLoop;
 		Version m_version;
 		ashes::RendererList m_rendererList;

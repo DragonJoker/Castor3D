@@ -168,9 +168,7 @@ namespace castor3d
 
 	bool RenderTechniquePass::areDebugTargetsEnabled()const noexcept
 	{
-		return m_parent
-			? m_parent->areDebugTargetsEnabled()
-			: C3D_EnableDebugTargets != 0;
+		return m_scene.getEngine()->areDebugTargetsEnabled();
 	}
 
 	DebugConfig & RenderTechniquePass::getDebugConfig()const

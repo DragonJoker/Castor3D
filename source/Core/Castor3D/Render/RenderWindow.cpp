@@ -581,39 +581,44 @@ namespace castor3d
 
 			if ( m_initialised )
 			{
-#if ( C3D_EnableDebugTargets == 0 ) || C3D_DebugPicking || C3D_DebugBackgroundPicking
-				updater.combineIndex = 0u;
-				updater.cellSize = 0.0f;
-				updater.gridCenter = {};
-				auto & config = m_configUbo.getData();
-				config.multiply = castor::Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
-				config.add = castor::Point4f{};
-#else
-				auto & intermediates = target->getIntermediateViews();
-				auto & targetDebugConfig = target->getDebugConfig();
-				auto & debugConfig = target->getScene()->getDebugConfig();
-				updater.combineIndex = targetDebugConfig.intermediateImageIndex;
-				updater.debugIndex = debugConfig.intermediateShaderValueIndex;
-				auto & intermediate = intermediates[updater.combineIndex];
-
-				if ( intermediate.factors.grid )
+#if C3D_DebugPicking == 0 && C3D_DebugBackgroundPicking == 0
+				if ( getEngine()->areDebugTargetsEnabled() )
 				{
-					updater.cellSize = ( *intermediate.factors.grid )->w;
-					updater.gridCenter = castor::Point3f{ *intermediate.factors.grid };
+					auto & intermediates = target->getIntermediateViews();
+					auto & targetDebugConfig = target->getDebugConfig();
+					auto & debugConfig = target->getScene()->getDebugConfig();
+					updater.combineIndex = targetDebugConfig.intermediateImageIndex;
+					updater.debugIndex = debugConfig.intermediateShaderValueIndex;
+					auto & intermediate = intermediates[updater.combineIndex];
+
+					if ( intermediate.factors.grid )
+					{
+						updater.cellSize = ( *intermediate.factors.grid )->w;
+						updater.gridCenter = castor::Point3f{ *intermediate.factors.grid };
+					}
+					else
+					{
+						updater.cellSize = 0.0f;
+						updater.gridCenter = {};
+					}
+
+					m_texture3Dto2D->update( updater );
+					auto & config = m_configUbo.getData();
+					config.multiply = castor::Point4f{ intermediate.factors.multiply };
+					config.add = castor::Point4f{ intermediate.factors.add };
+					config.data = castor::Point4f{ intermediate.factors.isDepth ? 1.0f : 0.0f
+						, 0.0f, 0.0f, 0.0f };
 				}
 				else
+#endif
 				{
+					updater.combineIndex = 0u;
 					updater.cellSize = 0.0f;
 					updater.gridCenter = {};
+					auto & config = m_configUbo.getData();
+					config.multiply = castor::Point4f{ 1.0f, 1.0f, 1.0f, 1.0f };
+					config.add = castor::Point4f{};
 				}
-
-				m_texture3Dto2D->update( updater );
-				auto & config = m_configUbo.getData();
-				config.multiply = castor::Point4f{ intermediate.factors.multiply };
-				config.add = castor::Point4f{ intermediate.factors.add };
-				config.data = castor::Point4f{ intermediate.factors.isDepth ? 1.0f : 0.0f
-					, 0.0f, 0.0f, 0.0f };
-#endif
 			}
 		}
 	}
@@ -1458,11 +1463,9 @@ namespace castor3d
 			, m_texture3Dto2D->getTarget().sampledViewId
 			, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 			, castor3d::TextureFactors{}.invert( true ) };
-#if C3D_EnableDebugTargets != 0
-		auto intermediates = target->getIntermediateViews();
-#else
-		IntermediateViewArray intermediates{ target->getIntermediateViews()[0] };
-#endif
+		auto intermediates = getEngine()->areDebugTargetsEnabled()
+			? target->getIntermediateViews()
+			: IntermediateViewArray{ target->getIntermediateViews()[0] };
 		m_texture3Dto2D->createPasses( queueData, intermediates );
 
 		m_intermediateBarrierViews = rendwndw::doCreateBarrierViews( m_device
@@ -1833,11 +1836,12 @@ namespace castor3d
 		doRecordCommandBuffer( queueData, passIndex );
 
 #if !C3D_DebugPicking && !C3D_DebugBackgroundPicking
-#	if C3D_EnableDebugTargets != 0
-		m_texture3Dto2D->render( *queueData.queue
-			, semaphores
-			, stages );
-#	endif
+		if ( getEngine()->areDebugTargetsEnabled() )
+		{
+			m_texture3Dto2D->render( *queueData.queue
+				, semaphores
+				, stages );
+		}
 #endif
 		if ( m_toSave )
 		{
