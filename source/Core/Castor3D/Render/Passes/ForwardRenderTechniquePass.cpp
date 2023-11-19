@@ -460,10 +460,9 @@ namespace castor3d
 								, lightIndirectDiffuse.w()
 								, c3d_mapBrdf
 								, output );
-							auto indirectAmbient = writer.declLocale( "indirectAmbient"
-								, indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-									, lightIndirectDiffuse.xyz()
-									, output ) );
+							auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
+								, lightIndirectDiffuse.xyz()
+								, output );
 							auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
 								, ( hasDiffuseGI
 									? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
