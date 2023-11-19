@@ -124,7 +124,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const TriFaceMapping::TypeName = "Triangles";
+	castor::String const TriFaceMapping::TypeName = C3D_MakeSubmeshIndexComponentName( "triangles" );
 
 	TriFaceMapping::TriFaceMapping( Submesh & submesh
 		, VkBufferUsageFlags bufferUsageFlags )

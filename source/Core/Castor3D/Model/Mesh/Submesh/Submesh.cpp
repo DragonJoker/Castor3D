@@ -145,7 +145,7 @@ namespace castor3d
 		, m_id{ id }
 		, m_defaultMaterial{ mesh.getScene()->getEngine()->getMaterialCache().getDefaultMaterial() }
 	{
-		addComponent( castor::makeUnique< InstantiationComponent >( *this, 2u ) );
+		createComponent< InstantiationComponent >( 2u );
 	}
 
 	Submesh::~Submesh()
@@ -194,6 +194,7 @@ namespace castor3d
 				auto combine = m_componentCombine;
 				remFlags( combine, components.getVelocityFlag() );
 				combine.hasVelocityFlag = false;
+				components.registerSubmeshComponentCombine( combine );
 				m_sourceBufferOffset = device.geometryPools->getBuffer( getPointsCount()
 					, indexCount
 					, combine );
@@ -210,6 +211,7 @@ namespace castor3d
 					combine = m_componentCombine;
 					remFlags( combine, components.getSkinFlag() );
 					combine.hasSkinFlag = false;
+					components.registerSubmeshComponentCombine( combine );
 
 					for ( auto & finalBufferOffset : m_finalBufferOffsets )
 					{
@@ -236,92 +238,18 @@ namespace castor3d
 						m_initialised = data->initialise( device );
 					}
 				}
+
+				if ( m_initialised )
+				{
+					if ( auto data = component.second->getRenderData() )
+					{
+						m_initialised = data->initialise( device );
+					}
+				}
 			}
 
 			m_dirty = !m_initialised;
 		}
-	}
-
-	void Submesh::accept( ConfigurationVisitorBase & vis )
-	{
-		castor::StringArray topologies;
-		topologies.push_back( cuT( "Point List" ) );
-		topologies.push_back( cuT( "Line List" ) );
-		topologies.push_back( cuT( "Line Strip" ) );
-		topologies.push_back( cuT( "Triangle List" ) );
-		topologies.push_back( cuT( "Triangle Strip" ) );
-		topologies.push_back( cuT( "Triangle Fan" ) );
-		topologies.push_back( cuT( "Line List With Adjacency" ) );
-		topologies.push_back( cuT( "Line Strip With Adjacency" ) );
-		topologies.push_back( cuT( "Triangle List With Adjacency" ) );
-		topologies.push_back( cuT( "Triangle Strip With Adjacency" ) );
-		topologies.push_back( cuT( "Patch List" ) );
-		vis.visit< VkPrimitiveTopology >( cuT( "Topology" ), m_topology, topologies
-			, [this]( int oldV, int newV )
-			{
-				m_topology = VkPrimitiveTopology( newV );
-			} );
-
-		for ( auto & component : m_components )
-		{
-			component.second->accept( vis );
-		}
-	}
-
-	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry )const
-	{
-		return getFinalBufferOffsets( geometry ).getFirstVertex< castor::Point4f >();
-	}
-
-	VkDeviceSize Submesh::getIndexOffset()const
-	{
-		return m_sourceBufferOffset
-			? m_sourceBufferOffset.getFirstIndex< uint32_t >()
-			: 0u;
-	}
-
-	VkDeviceSize Submesh::getMeshletOffset()const
-	{
-		auto meshletComponent = getComponent< MeshletComponent >();
-		VkDeviceSize result{};
-
-		if ( meshletComponent )
-		{
-			result = meshletComponent->getData().getMeshletsBuffer().getOffset();
-		}
-
-		return result;
-	}
-	
-	SubmeshComponentRegister & Submesh::getSubmeshComponentsRegister()const
-	{
-		return getOwner()->getEngine()->getSubmeshComponentsRegister();
-	}
-
-	SubmeshComponentID Submesh::getComponentId( castor::String const & componentType )const
-	{
-		return getSubmeshComponentsRegister().getNameId( componentType );
-	}
-
-	SubmeshComponentPlugin const & Submesh::getComponentPlugin( SubmeshComponentID componentId )const
-	{
-		return getSubmeshComponentsRegister().getPlugin( componentId );
-	}
-
-	SubmeshComponentCombineID Submesh::getComponentCombineID()const
-	{
-		CU_Require( m_componentCombine.baseId != 0 );
-		return m_componentCombine.baseId;
-	}
-
-	bool Submesh::hasRenderComponent()const
-	{
-		return std::any_of( m_components.begin()
-			, m_components.end()
-			, []( SubmeshComponentIDMap::value_type const & lookup )
-			{
-				return lookup.second->getPlugin().hasRenderShader();
-			} );
 	}
 
 	void Submesh::cleanup( RenderDevice const & device )
@@ -330,6 +258,11 @@ namespace castor3d
 
 		for ( auto & component : m_components )
 		{
+			if ( auto data = component.second->getRenderData() )
+			{
+				data->cleanup( device );
+			}
+
 			if ( auto data = component.second->getBaseData() )
 			{
 				data->cleanup( device );
@@ -358,6 +291,43 @@ namespace castor3d
 			{
 				data->upload( uploader );
 			}
+		}
+	}
+
+	void Submesh::update( CpuUpdater & updater )
+	{
+		for ( auto & component : m_components )
+		{
+			if ( auto data = component.second->getRenderData() )
+			{
+				data->update( updater );
+			}
+		}
+	}
+
+	void Submesh::accept( ConfigurationVisitorBase & vis )
+	{
+		castor::StringArray topologies;
+		topologies.push_back( cuT( "Point List" ) );
+		topologies.push_back( cuT( "Line List" ) );
+		topologies.push_back( cuT( "Line Strip" ) );
+		topologies.push_back( cuT( "Triangle List" ) );
+		topologies.push_back( cuT( "Triangle Strip" ) );
+		topologies.push_back( cuT( "Triangle Fan" ) );
+		topologies.push_back( cuT( "Line List With Adjacency" ) );
+		topologies.push_back( cuT( "Line Strip With Adjacency" ) );
+		topologies.push_back( cuT( "Triangle List With Adjacency" ) );
+		topologies.push_back( cuT( "Triangle Strip With Adjacency" ) );
+		topologies.push_back( cuT( "Patch List" ) );
+		vis.visit< VkPrimitiveTopology >( cuT( "Topology" ), m_topology, topologies
+			, [this]( int oldV, int newV )
+			{
+				m_topology = VkPrimitiveTopology( newV );
+			} );
+
+		for ( auto & component : m_components )
+		{
+			component.second->accept( vis );
 		}
 	}
 
@@ -758,6 +728,44 @@ namespace castor3d
 			CU_Failure( "setBaseData: Unsupported SubmeshData type" );
 			break;
 		}
+	}
+
+	void Submesh::addComponent( SubmeshComponentUPtr component )
+	{
+		if ( component->getPlugin().getRenderFlag()
+			&& m_render != component.get() )
+		{
+			if ( m_render )
+			{
+				m_components.erase( m_render->getId() );
+			}
+
+			m_render = component.get();
+			m_render->initialiseRenderData();
+		}
+		else if ( component->getPlugin().getIndexFlag()
+			&& m_indexMapping != component.get() )
+		{
+			if ( m_indexMapping )
+			{
+				m_components.erase( m_indexMapping->getId() );
+			}
+
+			m_indexMapping = static_cast< IndexMappingRPtr >( component.get() );
+		}
+		else if ( component->getPlugin().getInstantiationFlag()
+			&& m_instantiation != component.get() )
+		{
+			if ( m_instantiation )
+			{
+				m_components.erase( m_instantiation->getId() );
+			}
+
+			m_instantiation = static_cast< InstantiationComponentRPtr >( component.get() );
+		}
+
+		auto id = component->getId();
+		m_components.emplace( id, std::move( component ) );
 	}
 
 	InterleavedVertex Submesh::getInterleavedPoint( uint32_t index )const
@@ -1175,6 +1183,68 @@ namespace castor3d
 				return lookup.second->getPlugin().getSkinFlag() != 0u;
 			} );
 		return it != m_components.end();
+	}
+
+	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry )const
+	{
+		return getFinalBufferOffsets( geometry ).getFirstVertex< castor::Point4f >();
+	}
+
+	VkDeviceSize Submesh::getIndexOffset()const
+	{
+		return m_sourceBufferOffset
+			? m_sourceBufferOffset.getFirstIndex< uint32_t >()
+			: 0u;
+	}
+
+	VkDeviceSize Submesh::getMeshletOffset()const
+	{
+		auto meshletComponent = getComponent< MeshletComponent >();
+		VkDeviceSize result{};
+
+		if ( meshletComponent )
+		{
+			result = meshletComponent->getData().getMeshletsBuffer().getOffset();
+		}
+
+		return result;
+	}
+
+	SubmeshComponentRegister & Submesh::getSubmeshComponentsRegister()const
+	{
+		return getOwner()->getEngine()->getSubmeshComponentsRegister();
+	}
+
+	SubmeshComponentID Submesh::getComponentId( castor::String const & componentType )const
+	{
+		return getSubmeshComponentsRegister().getNameId( componentType );
+	}
+
+	SubmeshComponentPlugin const & Submesh::getComponentPlugin( SubmeshComponentID componentId )const
+	{
+		return getSubmeshComponentsRegister().getPlugin( componentId );
+	}
+
+	SubmeshComponentCombineID Submesh::getComponentCombineID()const
+	{
+		CU_Require( m_componentCombine.baseId != 0 );
+		return m_componentCombine.baseId;
+	}
+
+	bool Submesh::hasRenderComponent()const
+	{
+		return m_render != nullptr;
+	}
+
+	SubmeshRenderData * Submesh::getRenderData()const
+	{
+		if ( m_render == nullptr )
+		{
+			CU_Failure( "Submesh doesn't contain any render shader component" );
+			throw std::logic_error{ "Submesh doesn't contain any render shader component" };
+		}
+
+		return m_render->getRenderData();
 	}
 
 	//*********************************************************************************************

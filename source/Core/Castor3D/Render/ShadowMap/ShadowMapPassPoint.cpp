@@ -265,7 +265,7 @@ namespace castor3d
 			, uint32_t( GlobalBuffersIdx::eTexAnims )
 			, RenderPipeline::eBuffers
 			, enableTextures };
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		auto lightsIndex = index++;
 		C3D_ShadowMap( writer
 			, index++

@@ -36,6 +36,12 @@ See LICENSE file in root folder
 #	endif
 #endif
 
+#define C3D_Stringify( x ) C3DX_Stringify(x)
+#define C3DX_Stringify( x ) #x
+#define C3D_Join2Strings( l, r ) l "." r
+#define C3D_Join3Strings( l, m, r ) C3D_Join2Strings(l, C3D_Join2Strings(m, r))
+#define C3D_Join4Strings( l, ml, mr, r ) C3D_Join3Strings(l, ml, C3D_Join2Strings(mr, r))
+
 namespace castor3d
 {
 	static uint32_t constexpr InvalidIndex = ~( 0u );

@@ -265,7 +265,12 @@ namespace castor3d
 				castor::String name = cuT( "Accumulation" );
 				static constexpr bool isOit = true;
 				static constexpr bool hasVelocity = false;
-				auto accumIt = std::next( framePass.images.begin() );
+				auto depthIt = framePass.images.begin();
+				auto mippedSceneIt = std::next( depthIt );
+				auto depthObjIt = std::next( mippedSceneIt );
+				auto normalIt = std::next( depthObjIt );
+				auto ssaoIt = std::next( normalIt );
+				auto accumIt = std::next( ssaoIt );
 				auto revealIt = std::next( accumIt );
 				auto res = std::make_unique< TransparentPass >( getOwner()
 					, framePass

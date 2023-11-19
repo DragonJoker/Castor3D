@@ -15,21 +15,16 @@ namespace castor3d
 	{
 	public:
 		struct RenderShader
-			: public shader::SubmeshRenderShader
+			: public SubmeshRenderShader
 		{
+			SubmeshRenderDataPtr createData( castor3d::SubmeshComponent const & component )override
+			{
+				return nullptr;
+			}
 			/**
-			 *\~english
-			 *\brief		Retrieves the shader source matching the given flags.
-			 *\param[in]	flags			The pipeline flags.
-			 *\param[in]	componentsMask	The nodes pass components flags.
-			 *\param[in]	builder			The shader builder.
-			 *\~french
-			 *\brief		Récupère le source du shader qui correspond aux indicateurs donnés.
-			 *\param[in]	flags			Les indicateurs de pipeline.
-			 *\param[in]	componentsMask	Les indicateurs de composants de la passe de noeuds.
-			 *\param[in]	builder			Le shader builder.
+			 *\copydoc	castor3d::shader::SubmeshRenderShader::getShaderSource
 			 */
-			C3D_API void getShaderSource( Engine const & engine
+			void getShaderSource( Engine const & engine
 				, PipelineFlags const & flags
 				, ComponentModeFlags const & componentsMask
 				, ast::ShaderBuilder & builder )const override;
@@ -67,14 +62,14 @@ namespace castor3d
 			/**
 			 *\copydoc		castor3d::SubmeshComponentPlugin::createRenderShader
 			*/
-			C3D_API shader::SubmeshRenderShaderPtr createRenderShader()const override
+			C3D_API SubmeshRenderShaderPtr createRenderShader()const override
 			{
 				return std::make_unique< RenderShader >();
 			}
 
-			C3D_API bool hasRenderShader()const noexcept override
+			C3D_API SubmeshComponentFlag getRenderFlag()const noexcept override
 			{
-				return true;
+				return getComponentFlags();
 			}
 		};
 

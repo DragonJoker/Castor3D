@@ -2240,32 +2240,34 @@ namespace castor3d
 
 				auto pipelineHash = itPipeline.first->getFlagsHash();
 
-				for ( auto & itBuffer : itPipeline.second )
+				for ( auto & [renderData, buffers] : itPipeline.second )
 				{
-					for ( auto & culled : itBuffer.second )
+					for ( auto & [buffer, nodes] : buffers )
 					{
-						auto & positionsBuffer = culled.node->data.getVertexBuffer();
-						auto & pipeline = doCreatePipeline( pipelineFlags
-							, culled.node->data.getVertexStride() );
-						auto it = m_activeBillboardPipelines.emplace( &pipeline
-							, BillboardPipelinesNodesDescriptors{} ).first;
-						auto hash = size_t( positionsBuffer.getOffset() );
-						hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
-						auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
-						auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash
-							, *itBuffer.first );
-
-						if ( ires.second )
+						for ( auto & culled : nodes )
 						{
-							ires.first->second = visres::createVtxDescriptorSet( getName()
-								, *pipeline.vtxDescriptorPool
-								, positionsBuffer.getBuffer().getBuffer()
-								, positionsBuffer.getOffset()
-								, positionsBuffer.getSize() );
-						}
+							auto & positionsBuffer = culled.node->data.getVertexBuffer();
+							auto & pipeline = doCreatePipeline( pipelineFlags
+								, culled.node->data.getVertexStride() );
+							auto it = m_activeBillboardPipelines.emplace( &pipeline
+								, BillboardPipelinesNodesDescriptors{} ).first;
+							auto hash = size_t( positionsBuffer.getOffset() );
+							hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
+							auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+							auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *buffer );
 
-						it->second.emplace( culled.node->getId()
-							, PipelineNodesDescriptors{ pipelineId, ires.first->second.get() } );
+							if ( ires.second )
+							{
+								ires.first->second = visres::createVtxDescriptorSet( getName()
+									, *pipeline.vtxDescriptorPool
+									, positionsBuffer.getBuffer().getBuffer()
+									, positionsBuffer.getOffset()
+									, positionsBuffer.getSize() );
+							}
+
+							it->second.emplace( culled.node->getId()
+								, PipelineNodesDescriptors{ pipelineId, ires.first->second.get() } );
+						}
 					}
 				}
 			}

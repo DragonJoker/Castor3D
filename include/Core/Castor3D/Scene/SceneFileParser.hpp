@@ -8,6 +8,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Pass/Component/ComponentModule.hpp"
 #include "Castor3D/Material/Texture/Animation/TextureAnimationModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Model/Skeleton/SkeletonModule.hpp"
 #include "Castor3D/Overlay/OverlayModule.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
@@ -16,7 +17,6 @@ See LICENSE file in root folder
 #include "Castor3D/Render/ToneMapping/ColourGradingConfig.hpp"
 #include "Castor3D/Render/ToneMapping/HdrConfig.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
-#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Scene/Background/BackgroundModule.hpp"
 #include "Castor3D/Scene/Light/LightModule.hpp"
 #include "Castor3D/Scene/ParticleSystem/ParticleModule.hpp"
@@ -25,9 +25,12 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Material.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
+#include "Castor3D/Material/Texture/Animation/TextureAnimation.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/SubsurfaceScattering.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 #include "Castor3D/Model/Mesh/MeshImporter.hpp"
 #include "Castor3D/Model/Mesh/Animation/MeshAnimation.hpp"
 #include "Castor3D/Render/RenderWindow.hpp"
@@ -192,6 +195,7 @@ namespace castor3d
 		RenderTargetRPtr renderTarget{};
 		PassRPtr pass{};
 		PassComponent * passComponent{};
+		SubmeshComponent * submeshComponent{};
 		bool createPass{ true };
 		uint32_t mipLevels{};
 		uint32_t unitIndex{};
@@ -326,6 +330,31 @@ namespace castor3d
 		}
 
 		return static_cast< ComponentT & >( *parsingContext.passComponent );
+	}
+
+	template< typename ComponentT >
+	ComponentT & getSubmeshComponent( SceneFileContext & parsingContext )
+	{
+		if ( !parsingContext.submesh )
+		{
+			parsingContext.submesh = parsingContext.mesh->createSubmesh();
+		}
+
+		if ( !parsingContext.submeshComponent
+			|| parsingContext.submeshComponent->getOwner() != parsingContext.submesh
+			|| getSubmeshComponentType( *parsingContext.submeshComponent ) != ComponentT::TypeName )
+		{
+			if ( parsingContext.submesh->template hasComponent< ComponentT >() )
+			{
+				parsingContext.submeshComponent = parsingContext.submesh->template getComponent< ComponentT >();
+			}
+			else
+			{
+				parsingContext.submeshComponent = parsingContext.submesh->template createComponent< ComponentT >();
+			}
+		}
+
+		return static_cast< ComponentT & >( *parsingContext.submeshComponent );
 	}
 
 	template< typename Type >

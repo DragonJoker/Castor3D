@@ -8,6 +8,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Buffer/BufferModule.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
@@ -39,6 +40,7 @@ namespace castor3d
 		C3D_API GeometryBuffers const & getGeometryBuffers( PipelineFlags const & flags )const;
 		C3D_API GpuBufferOffsetT< castor::Point4f > getMorphTargets()const;
 		C3D_API SceneNode & getSceneNode()const;
+		C3D_API SubmeshRenderData * getRenderData()const;
 
 		Pass * pass;
 		DataType & data;

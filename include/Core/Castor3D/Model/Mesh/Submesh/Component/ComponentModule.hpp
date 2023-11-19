@@ -6,6 +6,15 @@ See LICENSE file in root folder
 
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
 
+#define C3D_PluginMakeSubmeshComponentName( p, x ) C3D_Join3Strings( p, "submesh", x )
+#define C3D_MakeSubmeshComponentName( x ) C3D_PluginMakeSubmeshComponentName( "c3d", x )
+
+#define C3D_PluginMakeSubmeshIndexComponentName( p, x ) C3D_Join4Strings( p, "submesh", "index", x )
+#define C3D_MakeSubmeshIndexComponentName( x ) C3D_PluginMakeSubmeshIndexComponentName( "c3d", x )
+
+#define C3D_PluginMakeSubmeshRenderComponentName( p, x ) C3D_Join4Strings( p, "submesh", "render", x )
+#define C3D_MakeSubmeshRenderComponentName( x ) C3D_PluginMakeSubmeshRenderComponentName( "c3d", x )
+
 namespace castor3d
 {
 	/**@name Model */
@@ -198,6 +207,20 @@ namespace castor3d
 	class SubmeshComponentRegister;
 	/**
 	\~english
+	\brief		Submesh render component data.
+	\~french
+	\brief		Données de composant de rendu de sous-maillage.
+	*/
+	struct SubmeshRenderData;
+	/**
+	\~english
+	\brief		Submesh render component.
+	\~french
+	\brief		Composant de rendu de sous-maillage.
+	*/
+	struct SubmeshRenderShader;
+	/**
+	\~english
 	\brief		The submesh component for triangular faces.
 	\~french
 	\brief		Composant de sous-maillage pour les faces triangulaires.
@@ -289,6 +312,8 @@ namespace castor3d
 
 	using SubmeshComponentDataUPtr = std::unique_ptr< SubmeshComponentData >;
 	using SubmeshComponentDataRPtr = SubmeshComponentData *;
+	using SubmeshRenderDataPtr = std::unique_ptr< SubmeshRenderData >;
+	using SubmeshRenderShaderPtr = std::unique_ptr< SubmeshRenderShader >;
 
 	//! Face array
 	CU_DeclareVector( Face, Face );
@@ -301,10 +326,8 @@ namespace castor3d
 
 	namespace shader
 	{
-		struct SubmeshRenderShader;
 		struct SubmeshSurfaceShader;
 
-		using SubmeshRenderShaderPtr = std::unique_ptr< SubmeshRenderShader >;
 		using SubmeshSurfaceShaderPtr = std::unique_ptr< SubmeshSurfaceShader >;
 	}
 

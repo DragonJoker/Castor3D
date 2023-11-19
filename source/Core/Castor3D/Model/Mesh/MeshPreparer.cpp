@@ -43,7 +43,7 @@ namespace castor3d
 			{
 				auto submeshData = SubmeshData( i );
 
-				if ( submesh.hasComponent( getName( submeshData ) ) )
+				if ( submesh.hasComponent( getBaseDataComponentName( submeshData ) ) )
 				{
 					if ( submeshData == SubmeshData::eTangents )
 					{

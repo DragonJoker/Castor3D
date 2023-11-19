@@ -191,6 +191,11 @@ namespace castor3d
 			{
 				return getComponentFlags();
 			}
+
+			SubmeshComponentFlag getIndexFlag()const noexcept override
+			{
+				return getComponentFlags();
+			}
 		};
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )

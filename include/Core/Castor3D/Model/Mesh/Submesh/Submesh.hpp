@@ -27,20 +27,11 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename T >
-	struct SubmeshComponentAdder
-	{
-		static inline void add( castor::UniquePtr< T > component
-			, Submesh & submesh );
-	};
-
 	class Submesh
 		: public castor::OwnedBy< Mesh >
 	{
 	private:
 		CU_DeclareList( castor::ByteArray, BytePtr );
-		template< typename T >
-		friend struct SubmeshComponentAdder;
 
 	public:
 		/**
@@ -89,6 +80,13 @@ namespace castor3d
 		 *\brief		Met à jour les tampons.
 		 */
 		C3D_API void upload( UploadData & uploader );
+		/**
+		 *\~english
+		 *\brief		Updates the render components.
+		 *\~french
+		 *\brief		Met à jour les composants de rendu.
+		 */
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		*\~english
 		*\brief				ConfigurationVisitorBase acceptance function.
@@ -272,6 +270,7 @@ namespace castor3d
 		C3D_API void enableSceneUpdate( bool updateScene );
 		C3D_API void setBaseData( SubmeshData submeshData, castor::Point3fArray data );
 		C3D_API void setBaseData( SubmeshData submeshData, castor::Point4fArray data );
+		C3D_API void addComponent( SubmeshComponentUPtr component );
 		inline void disableSceneUpdate();
 		inline void needsUpdate();
 		inline void addPoints( std::vector< InterleavedVertex > const & vertices );
@@ -282,9 +281,6 @@ namespace castor3d
 		inline IndexMappingRPtr getIndexMapping()const;
 		template< typename ComponentT, typename ... ParamsT >
 		inline ComponentT * createComponent( ParamsT && ... params );
-		inline void addComponent( SubmeshComponentUPtr component );
-		template< typename ComponentT >
-		inline void addComponent( castor::UniquePtr< ComponentT > component );
 		inline void setTopology( VkPrimitiveTopology value );
 		/**
 		*\~english
@@ -338,6 +334,7 @@ namespace castor3d
 		C3D_API SubmeshComponentPlugin const & getComponentPlugin( SubmeshComponentID componentId )const;
 		C3D_API SubmeshComponentCombineID getComponentCombineID()const;
 		C3D_API bool hasRenderComponent()const;
+		C3D_API SubmeshRenderData * getRenderData()const;
 		inline SkeletonRPtr getSkeleton()const noexcept;
 		inline MaterialObs getDefaultMaterial()const noexcept;
 		inline castor::BoundingBox const & getBoundingBox()const noexcept;
@@ -361,6 +358,8 @@ namespace castor3d
 		inline ComponentT * getComponent()const noexcept;
 		template< typename ComponentT >
 		SubmeshComponentPlugin const & getComponentPlugin()const;
+		template< typename ComponentT >
+		inline bool hasComponent()const;
 		/**@}*/
 
 	private:
@@ -372,6 +371,7 @@ namespace castor3d
 		SubmeshComponentIDMap m_components;
 		InstantiationComponentRPtr m_instantiation{};
 		IndexMappingRPtr m_indexMapping{};
+		SubmeshComponentRPtr m_render{};
 		bool m_generated{ false };
 		bool m_initialised{ false };
 		bool m_dirty{ true };

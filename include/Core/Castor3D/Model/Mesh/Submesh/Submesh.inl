@@ -7,35 +7,6 @@
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-	template< typename T >
-	inline void SubmeshComponentAdder< T >::add( castor::UniquePtr< T > component
-		, Submesh & submesh )
-	{
-		if constexpr ( std::is_base_of_v< IndexMapping, T > )
-		{
-			submesh.setIndexMapping( castor::ptrRefCast< IndexMapping >( component ) );
-		}
-		else
-		{
-			auto id = component->getId();
-			auto comp = component.get();
-			submesh.m_components.emplace( id
-				, castor::ptrRefCast< SubmeshComponent >( component ) );
-
-			if constexpr ( std::is_same_v< InstantiationComponent, T > )
-			{
-				if ( submesh.m_instantiation != comp )
-				{
-					submesh.m_instantiation = comp;
-				}
-			}
-		}
-	}
-
-	//*********************************************************************************************
-
 	inline void Submesh::addPoints( std::vector< InterleavedVertex > const & vertices )
 	{
 		addPoints( vertices.data(), vertices.data() + vertices.size() );
@@ -87,20 +58,8 @@ namespace castor3d
 		auto component = castor::makeUnique< ComponentT >( *this
 			, std::forward< ParamsT >( params )... );
 		auto result = component.get();
-		addComponent( std::move( component ) );
+		addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 		return result;
-	}
-
-	inline void Submesh::addComponent( SubmeshComponentUPtr component )
-	{
-		auto id = component->getId();
-		m_components.emplace( id, std::move( component ) );
-	}
-
-	template< typename T >
-	inline void Submesh::addComponent( castor::UniquePtr< T > component )
-	{
-		SubmeshComponentAdder< T >::add( std::move( component ), *this );
 	}
 
 	inline void Submesh::setTopology( VkPrimitiveTopology value )
@@ -232,5 +191,9 @@ namespace castor3d
 		return getComponentPlugin( getComponentId( ComponentT::TypeName ) );
 	}
 
-	//*********************************************************************************************
+	template< typename ComponentT >
+	inline bool Submesh::hasComponent()const
+	{
+		return this->hasComponent( ComponentT::TypeName );
+	}
 }

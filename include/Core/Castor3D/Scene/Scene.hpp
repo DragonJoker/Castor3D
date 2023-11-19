@@ -460,6 +460,7 @@ namespace castor3d
 			, CpuUpdater::DirtyObjects & sceneObjs );
 		void doUpdateParticles( CpuUpdater & updater
 			, CpuUpdater::DirtyObjects & sceneObjs );
+		void doUpdateMeshes( CpuUpdater & updater );
 		void doUpdateParticles( GpuUpdater & updater );
 		void doUpdateMaterials();
 		bool doUpdateLightDependent( LightType lightType

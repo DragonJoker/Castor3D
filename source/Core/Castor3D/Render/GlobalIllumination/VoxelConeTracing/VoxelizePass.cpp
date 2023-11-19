@@ -199,7 +199,7 @@ namespace castor3d
 	void VoxelizePass::doFillAdditionalBindings( PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
 			, index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -230,7 +230,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer )
 	{
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 		descriptorWrites.push_back( m_voxelizerUbo.getDescriptorWrite( index++ ) );
 		bindBuffer( m_voxels.getBuffer(), descriptorWrites, index );
@@ -264,8 +264,10 @@ namespace castor3d
 			, passShaders
 			, uint32_t( GlobalBuffersIdx::eMaterials )
 			, RenderPipeline::eBuffers };
+		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
+		++index;
 		C3D_Voxelizer( writer
-			, uint32_t( GlobalBuffersIdx::eCount ) + 1u
+			, index++
 			, RenderPipeline::eBuffers
 			, true );
 
@@ -461,7 +463,7 @@ namespace castor3d
 			, flags
 			, getComponentsMask()
 			, utils };
-		auto addIndex = uint32_t( GlobalBuffersIdx::eCount );
+		auto addIndex = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera

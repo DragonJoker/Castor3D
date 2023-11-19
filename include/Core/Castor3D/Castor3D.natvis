@@ -595,6 +595,7 @@
 			<Item Name="id">m_id</Item>
 			<Item Name="type">m_type</Item>
 			<Item Name="data">m_data</Item>
+			<Item Name="render">m_renderData</Item>
 		</Expand>
 	</Type>
 

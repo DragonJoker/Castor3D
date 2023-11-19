@@ -444,7 +444,7 @@ namespace c3d_gltf
 
 			if ( mapping )
 			{
-				submesh->setIndexMapping( castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
+				submesh->addComponent( castor::ptrRefCast< castor3d::SubmeshComponent >( mapping ) );
 			}
 		}
 	}
@@ -487,7 +487,7 @@ namespace c3d_gltf
 
 			if ( mapping )
 			{
-				submesh->setIndexMapping( castor::ptrRefCast< castor3d::IndexMapping >( mapping ) );
+				submesh->addComponent( castor::ptrRefCast< castor3d::SubmeshComponent >( mapping ) );
 			}
 		}
 	}
@@ -859,7 +859,7 @@ namespace c3d_gltf
 				mapping->computeTangents();
 			}
 
-			submesh.setIndexMapping( std::move( mapping ) );
+			submesh.addComponent( castor::ptrRefCast< castor3d::SubmeshComponent >( mapping ) );
 		}
 	}
 

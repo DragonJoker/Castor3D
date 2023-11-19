@@ -283,7 +283,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -296,7 +296,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -311,7 +311,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( tangents );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -324,7 +324,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -337,7 +337,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -350,7 +350,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -363,7 +363,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -376,7 +376,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -389,7 +389,7 @@ namespace castor3d
 					if ( result )
 					{
 						component->getData().setData( values );
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -401,7 +401,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -413,7 +413,7 @@ namespace castor3d
 
 					if ( result )
 					{
-						obj.addComponent( std::move( component ) );
+						obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					}
 				}
 				break;
@@ -482,7 +482,7 @@ namespace castor3d
 				{
 					auto component = castor::makeUnique< TangentsComponent >( obj );
 					component->getData().getData().resize( count );
-					obj.addComponent( std::move( component ) );
+					obj.addComponent( castor::ptrRefCast< SubmeshComponent >( component ) );
 					indexMapping->computeTangents();
 				}
 			}

@@ -159,7 +159,7 @@ namespace castor3d
 	void ShadowMapPass::doFillAdditionalBindings( PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		bindings.emplace_back( m_shadowMap.getScene().getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
 			, index++ ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -173,7 +173,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer )
 	{
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		descriptorWrites.push_back( getCuller().getScene().getLightCache().getBinding( index++ ) );
 		descriptorWrites.push_back( m_shadowMapUbo.getDescriptorWrite( index++ ) );
 	}

@@ -653,7 +653,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const DefaultRenderComponent::TypeName = "Default";
+	castor::String const DefaultRenderComponent::TypeName = C3D_MakeSubmeshRenderComponentName( "default" );
 
 	DefaultRenderComponent::DefaultRenderComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName }

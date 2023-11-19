@@ -264,7 +264,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MorphComponent::TypeName = cuT( "Morph" );
+	castor::String const MorphComponent::TypeName = C3D_MakeSubmeshComponentName( "morph" );
 
 	MorphComponent::MorphComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName
