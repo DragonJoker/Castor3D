@@ -45,28 +45,101 @@ namespace castor3d
 			{
 			}
 		};
-
-		struct SubmeshRenderShader
-			: public SubmeshSubComponent
-		{
-			/**
-			 *\~english
-			 *\brief		Retrieves the shader source matching the given flags.
-			 *\param[in]	flags			The pipeline flags.
-			 *\param[in]	componentsMask	The nodes pass components flags.
-			 *\param[in]	builder			The shader builder.
-			 *\~french
-			 *\brief		Récupère le source du shader qui correspond aux indicateurs donnés.
-			 *\param[in]	flags			Les indicateurs de pipeline.
-			 *\param[in]	componentsMask	Les indicateurs de composants de la passe de noeuds.
-			 *\param[in]	builder			Le shader builder.
-			 */
-			C3D_API virtual void getShaderSource( Engine const & engine
-				, PipelineFlags const & flags
-				, ComponentModeFlags const & componentsMask
-				, ast::ShaderBuilder & builder )const = 0;
-		};
 	}
+
+	struct SubmeshRenderData
+		: public SubmeshSubComponent
+	{
+		/**
+		 *\~english
+		 *\brief		Initialises the submesh
+		 *\~french
+		 *\brief		Initialise le sous-maillage
+		 */
+		C3D_API virtual bool initialise( RenderDevice const & device ) = 0;
+		/**
+		 *\~english
+		 *\brief		Cleans the submesh
+		 *\~french
+		 *\brief		Nettoie le sous-maillage
+		 */
+		C3D_API virtual void cleanup( RenderDevice const & device ) = 0;
+		/**
+		 *\~english
+		 *\brief		Updates the component.
+		 *\~french
+		 *\brief		Met à jour le composant.
+		 */
+		C3D_API virtual void update( CpuUpdater & updater ) = 0;
+		/**
+		 *\~english
+		 *\return		The number of bindings in this component.
+		 *\~french
+		 *\return		Le nombre de bindings dans ce composant.
+		 */
+		C3D_API virtual uint32_t getBindingCount()const noexcept = 0;
+		/**
+		 *\~english
+		 *\return		The topology that the shader expects.
+		 *\~french
+		 *\return		La topologie que le shader attend.
+		 */
+		C3D_API virtual VkPrimitiveTopology getPrimitiveTopology()const noexcept = 0;
+		/**
+		 *\~english
+		 *\brief			Fills the descriptor layout bindings.
+		 *\param[in]		flags		The pipeline flags.
+		 *\param[in,out]	bindings	Receives the additional bindings.
+		 *\~french
+		 *\brief			Remplit les attaches de layout de descripteurs.
+		 *\param[in]		flags		Les indicateurs de pipeline.
+		 *\param[in,out]	bindings	Reçoit les attaches additionnelles.
+		 */
+		C3D_API virtual void fillBindings( PipelineFlags const & flags
+			, ashes::VkDescriptorSetLayoutBindingArray & bindings
+			, uint32_t & index )const = 0;
+		/**
+		 *\~english
+		 *\brief			Initialises the additional descriptor set.
+		 *\param[in]		flags				The pipeline flags.
+		 *\param[in,out]	descriptorWrites	Receives the descriptor writes.
+		 *\~french
+		 *\brief			Initialise l'ensemble de descripteurs additionnels.
+		 *\param[in]		flags				Les indicateurs de pipeline.
+		 *\param[in,out]	descriptorWrites	Reçoit les descriptor writes.
+		 */
+		C3D_API virtual void fillDescriptor( PipelineFlags const & flags
+			, ashes::WriteDescriptorSetArray & descriptorWrites
+			, uint32_t & index )const = 0;
+	};
+
+	struct SubmeshRenderShader
+		: public SubmeshSubComponent
+	{
+		/**
+		 *\~english
+		 *\return		The render shader's data.
+		 *\~french
+		 *\return		Les données du shader de rendu.
+		 */
+		C3D_API virtual SubmeshRenderDataPtr createData( castor3d::SubmeshComponent const & component ) = 0;
+		/**
+		 *\~english
+		 *\brief		Retrieves the shader source matching the given flags.
+		 *\param[in]	flags			The pipeline flags.
+		 *\param[in]	componentsMask	The nodes pass components flags.
+		 *\param[in]	builder			The shader builder.
+		 *\~french
+		 *\brief		Récupère le source du shader qui correspond aux indicateurs donnés.
+		 *\param[in]	flags			Les indicateurs de pipeline.
+		 *\param[in]	componentsMask	Les indicateurs de composants de la passe de noeuds.
+		 *\param[in]	builder			Le shader builder.
+		 */
+		C3D_API virtual void getShaderSource( Engine const & engine
+			, PipelineFlags const & flags
+			, ComponentModeFlags const & componentsMask
+			, ast::ShaderBuilder & builder )const = 0;
+	};
 
 	struct SubmeshComponentData
 		: public SubmeshSubComponent
@@ -190,8 +263,10 @@ namespace castor3d
 		*\param[in] submeshComponents
 		*	Le registre de composants.
 		*/
-		C3D_API explicit SubmeshComponentPlugin( SubmeshComponentRegister const & submeshComponents )
-			: m_submeshComponents{ submeshComponents }
+		C3D_API explicit SubmeshComponentPlugin( SubmeshComponentRegister const & submeshComponents
+			, castor::UserContextCreator pcreateParserContext = {} )
+			: createParserContext{ pcreateParserContext }
+			, m_submeshComponents{ submeshComponents }
 		{
 		}
 		/**@}*/
@@ -230,6 +305,8 @@ namespace castor3d
 		C3D_API virtual void createSections( castor::StrUInt32Map & sections )const
 		{
 		}
+
+		castor::UserContextCreator createParserContext;
 		/**@}*/
 		/**
 		*\~english
@@ -263,6 +340,21 @@ namespace castor3d
 		C3D_API virtual SubmeshComponentFlag getComponentFlags()const noexcept
 		{
 			return makeSubmeshComponentFlag( getId() );
+		}
+
+		C3D_API virtual SubmeshComponentFlag getIndexFlag()const noexcept
+		{
+			return 0u;
+		}
+
+		C3D_API virtual SubmeshComponentFlag getInstantiationFlag()const noexcept
+		{
+			return 0u;
+		}
+
+		C3D_API virtual SubmeshComponentFlag getRenderFlag()const noexcept
+		{
+			return 0u;
 		}
 
 		C3D_API virtual SubmeshComponentFlag getLineIndexFlag()const noexcept
@@ -365,14 +457,9 @@ namespace castor3d
 		*\brief
 		*	Crée le shader de rendu du composant.
 		*/
-		C3D_API virtual shader::SubmeshRenderShaderPtr createRenderShader()const
+		C3D_API virtual SubmeshRenderShaderPtr createRenderShader()const
 		{
 			return nullptr;
-		}
-
-		C3D_API virtual bool hasRenderShader()const noexcept
-		{
-			return false;
 		}
 		/**@}*/
 		/**
@@ -474,10 +561,10 @@ namespace castor3d
 		}
 		/**
 		 *\~english
-		 *\return			Clones this component into given submesh.
+		 *\brief			Clones this component into given submesh.
 		 *\param[in,out]	submesh	Receives the cloned component.
 		 *\~french
-		 *\return			Clone ce composant dans le submesh donné.
+		 *\brief			Clone ce composant dans le submesh donné.
 		 *\param[in,out]	submesh	Reçoit le composant cloné.
 		 */
 		C3D_API virtual SubmeshComponentUPtr clone( Submesh & submesh )const = 0;
@@ -493,6 +580,13 @@ namespace castor3d
 		{
 			return ProgramFlags{};
 		}
+		/**
+		 *\~english
+		 *\brief		Initialises the render data specific for this component's submesh.
+		 *\~french
+		 *\brief		Initialise les données de rendu spécifiques au submesh de ce composant.
+		 */
+		C3D_API void initialiseRenderData();
 		/**
 		*\~english
 		*\name
@@ -527,6 +621,11 @@ namespace castor3d
 			return m_data.get();
 		}
 
+		SubmeshRenderData * getRenderData()const noexcept
+		{
+			return m_renderData.get();
+		}
+
 		template< typename DataT >
 		DataT * getDataT()const noexcept
 		{
@@ -536,6 +635,7 @@ namespace castor3d
 
 	protected:
 		SubmeshComponentDataUPtr m_data;
+		SubmeshRenderDataPtr m_renderData;
 
 	private:
 		castor::String m_type;

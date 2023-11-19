@@ -763,7 +763,7 @@ namespace castor3d::exporter
 
 							if ( auto indexMapping = srcSubmesh->getIndexMapping() )
 							{
-								dstSubmesh->addComponent( castor::ptrCast< castor3d::IndexMapping >( indexMapping->clone( *dstSubmesh ) ) );
+								dstSubmesh->addComponent( indexMapping->clone( *dstSubmesh ) );
 							}
 
 							if ( auto bones = srcSubmesh->getComponent< castor3d::SkinComponent >() )

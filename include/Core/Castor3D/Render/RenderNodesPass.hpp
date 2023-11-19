@@ -515,9 +515,10 @@ namespace castor3d
 		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
 		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
 		 */
-		C3D_API RenderPipeline & prepareBackPipeline( PipelineFlags pipelineFlags
+		C3D_API RenderPipeline & prepareBackPipeline( PipelineFlags const & pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
+			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
+			, SubmeshRenderData * submeshData );
 		/**
 		 *\~english
 		 *\brief			Prepares the pipeline matching the given flags, for front face culling nodes.
@@ -530,9 +531,10 @@ namespace castor3d
 		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
 		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
 		 */
-		C3D_API RenderPipeline & prepareFrontPipeline( PipelineFlags pipelineFlags
+		C3D_API RenderPipeline & prepareFrontPipeline( PipelineFlags const & pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
+			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
+			, SubmeshRenderData * submeshData );
 		/**
 		 *\~english
 		 *\brief		Destroys all pipelines from the lists.
@@ -555,7 +557,8 @@ namespace castor3d
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ShadowMapLightTypeArray const & shadowMaps
 			, ShadowBuffer const * shadowBuffer
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, SubmeshRenderData * submeshData );
 		/**
 		 *\~english
 		 *\brief		Sets the node ignored node.
@@ -903,7 +906,8 @@ namespace castor3d
 			, uint32_t & index )const;
 
 	private:
-		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
+		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags
+			, SubmeshRenderData * submeshData )const;
 		std::vector< RenderPipelineUPtr > & doGetFrontPipelines();
 		std::vector< RenderPipelineUPtr > & doGetBackPipelines();
 		std::vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
@@ -911,7 +915,8 @@ namespace castor3d
 		RenderPipeline & doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 			, PipelineFlags const & flags
-			, VkCullModeFlags cullMode );
+			, VkCullModeFlags cullMode
+			, SubmeshRenderData * submeshData );
 		/**
 		 *\~english
 		 *\brief		Creates the rasterization state.

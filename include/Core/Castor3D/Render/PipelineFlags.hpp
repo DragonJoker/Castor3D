@@ -68,16 +68,19 @@ namespace castor3d
 	{
 		explicit PipelineLoHashDetails( BackgroundModelID pbackgroundModelId = 0u
 			, VkDeviceSize pmorphTargetsOffset = 0u
-			, uint32_t ppassLayerIndex = 0u )
+			, uint32_t ppassLayerIndex = 0u
+			, uint32_t psubmeshDataBindings = 0u )
 			: backgroundModelId{ pbackgroundModelId }
 			, morphTargetsOffset{ pmorphTargetsOffset }
 			, passLayerIndex{ ppassLayerIndex }
+			, submeshDataBindings{ psubmeshDataBindings }
 		{
 		}
 
 		BackgroundModelID backgroundModelId{};
 		VkDeviceSize morphTargetsOffset{};
 		uint32_t passLayerIndex{};
+		uint32_t submeshDataBindings{};
 	};
 
 	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs );

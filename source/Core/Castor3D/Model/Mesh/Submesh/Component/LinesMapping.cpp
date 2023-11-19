@@ -98,7 +98,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const LinesMapping::TypeName = "Lines";
+	castor::String const LinesMapping::TypeName = C3D_MakeSubmeshIndexComponentName( "lines" );
 
 	LinesMapping::LinesMapping( Submesh & submesh
 		, VkBufferUsageFlags bufferUsageFlags )

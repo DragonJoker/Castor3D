@@ -16,6 +16,13 @@ namespace castor3d
 		: public SubmeshComponent
 	{
 	public:
+		struct SurfaceShader
+			: public shader::SubmeshSurfaceShader
+		{
+			void fillSurfaceType( sdw::type::Struct & type
+				, uint32_t * index )const override;
+		};
+
 		struct ComponentData
 			: public SubmeshComponentData
 		{
@@ -120,6 +127,11 @@ namespace castor3d
 			SubmeshComponentFlag getPassMaskFlag()const noexcept override
 			{
 				return getComponentFlags();
+			}
+
+			shader::SubmeshSurfaceShaderPtr createSurfaceShader()const override
+			{
+				return std::make_unique< SurfaceShader >();
 			}
 		};
 

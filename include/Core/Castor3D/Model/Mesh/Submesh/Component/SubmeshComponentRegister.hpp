@@ -72,6 +72,7 @@ namespace castor3d
 		C3D_API void getSubmeshRenderShader( PipelineFlags const & flags
 			, ComponentModeFlags const & componentsMask
 			, ast::ShaderBuilder & builder )const;
+		C3D_API SubmeshRenderDataPtr createRenderData( SubmeshComponent & component );
 		/**
 		 *\~english
 		 *\name
@@ -211,7 +212,7 @@ namespace castor3d
 	private:
 		Components m_registered;
 		std::map< SubmeshComponentID, shader::SubmeshSurfaceShaderPtr > m_surfaceShaders;
-		std::map< SubmeshComponentID, shader::SubmeshRenderShaderPtr > m_renderShaders;
+		std::map< SubmeshComponentID, SubmeshRenderShaderPtr > m_renderShaders;
 		std::vector< SubmeshComponentFlag > m_renderShaderFlags;
 		bool m_pauseOrder{ true };
 		VkDeviceSize m_bufferStride{};

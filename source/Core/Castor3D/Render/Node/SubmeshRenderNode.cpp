@@ -129,4 +129,9 @@ namespace castor3d
 	{
 		return *instance.getParent();
 	}
+
+	SubmeshRenderData * SubmeshRenderNode::getRenderData()const
+	{
+		return data.getRenderData();
+	}
 }

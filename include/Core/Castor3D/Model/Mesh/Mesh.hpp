@@ -73,8 +73,27 @@ namespace castor3d
 		 *\brief		Opérateur d'affectation par copie.
 		 */
 		C3D_API Mesh & operator=( Mesh const & rhs ) = delete;
+		/**
+		 *\~english
+		 *\brief		Initialises the mesh.
+		 *\~french
+		 *\brief		Initialise le maillage.
+		 */
 		C3D_API void initialise();
+		/**
+		 *\~english
+		 *\brief		Cleans the submesh.
+		 *\~french
+		 *\brief		Nettoie le maillage.
+		 */
 		C3D_API void cleanup();
+		/**
+		 *\~english
+		 *\brief		Updates the submeshes' render components.
+		 *\~french
+		 *\brief		Met à jour les composants de rendu des sous-maiilages.
+		 */
+		C3D_API void update( CpuUpdater & updater );
 		/**
 		 *\~english
 		 *\brief		Computes the bounding box and sphere from the submeshes.

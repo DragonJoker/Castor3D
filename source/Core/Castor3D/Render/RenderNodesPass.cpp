@@ -17,6 +17,7 @@
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/MeshletComponent.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/RenderPipeline.hpp"
@@ -97,11 +98,13 @@ namespace castor3d
 				} );
 		}
 
-		static size_t makeHash( PipelineFlags const & flags )
+		static size_t makeHash( PipelineFlags const & flags
+			, SubmeshRenderData * submeshData )
 		{
 			auto result = size_t( getRenderNodeType( flags.m_programFlags ) );
 			castor::hashCombine( result, size_t( flags.m_sceneFlags ) );
 			castor::hashCombine( result, flags.pass.hasDeferredDiffuseLightingFlag );
+			castor::hashCombinePtr( result, *submeshData );
 			return result;
 		}
 
@@ -341,24 +344,28 @@ namespace castor3d
 			, morphTargets );
 	}
 
-	RenderPipeline & RenderNodesPass::prepareBackPipeline( PipelineFlags pipelineFlags
+	RenderPipeline & RenderNodesPass::prepareBackPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
+		, SubmeshRenderData * submeshData )
 	{
 		return doPreparePipeline( vertexLayouts
 			, meshletDescriptorLayout
-			, std::move( pipelineFlags )
-			, VK_CULL_MODE_BACK_BIT );
+			, pipelineFlags
+			, VK_CULL_MODE_BACK_BIT
+			, submeshData );
 	}
 
-	RenderPipeline & RenderNodesPass::prepareFrontPipeline( PipelineFlags pipelineFlags
+	RenderPipeline & RenderNodesPass::prepareFrontPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
+		, SubmeshRenderData * submeshData )
 	{
 		return doPreparePipeline( vertexLayouts
 			, meshletDescriptorLayout
-			, std::move( pipelineFlags )
-			, VK_CULL_MODE_FRONT_BIT );
+			, pipelineFlags
+			, VK_CULL_MODE_FRONT_BIT
+			, submeshData );
 	}
 
 	void RenderNodesPass::clearPipelines()
@@ -1028,9 +1035,10 @@ namespace castor3d
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, SubmeshRenderData * submeshData )
 	{
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( pipeline.getFlags() )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( pipeline.getFlags(), submeshData )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -1084,6 +1092,13 @@ namespace castor3d
 					, 0u
 					, billboardDatas.getBuffer().getSize() } );
 				descriptorWrites.push_back( write );
+			}
+
+			auto index = uint32_t( GlobalBuffersIdx::eCount );
+
+			if ( submeshData )
+			{
+				submeshData->fillDescriptor( pipeline.getFlags(), descriptorWrites, index );
 			}
 
 			doFillAdditionalDescriptor( pipeline.getFlags()
@@ -1308,37 +1323,12 @@ namespace castor3d
 			remFlag( flags.m_shaderFlags, ShaderFlag::eColour );
 		}
 
-		if ( !checkFlag( flags.m_shaderFlags, ShaderFlag::eNormal ) )
-		{
-			remFlags( flags.submesh, components.getNormalFlag() );
-			flags.submesh.hasNormalFlag = false;
-		}
-
-		if ( !checkFlag( flags.m_shaderFlags, ShaderFlag::eTangent ) )
-		{
-			remFlags( flags.submesh, components.getTangentFlag() );
-			remFlags( flags.submesh, components.getBitangentFlag() );
-			flags.submesh.hasTangentFlag = false;
-			flags.submesh.hasBitangentFlag = false;
-		}
-
-		if ( !checkFlag( flags.m_shaderFlags, ShaderFlag::eVelocity ) )
-		{
-			remFlags( flags.submesh, components.getVelocityFlag() );
-			flags.submesh.hasVelocityFlag = false;
-		}
-
-		if ( !checkFlag( flags.m_shaderFlags, ShaderFlag::eColour ) )
-		{
-			remFlags( flags.submesh, components.getColourFlag() );
-			flags.submesh.hasColourFlag = false;
-		}
-
 		components.registerSubmeshComponentCombine( flags.submesh );
 		doAdjustFlags( flags );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
+	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags
+		, SubmeshRenderData * submeshData )const
 	{
 		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
@@ -1349,18 +1339,7 @@ namespace castor3d
 		}
 		else
 		{
-			stageFlags |= VK_SHADER_STAGE_VERTEX_BIT;
-
-			if ( flags.usesGeometry() )
-			{
-				stageFlags |= VK_SHADER_STAGE_GEOMETRY_BIT;
-			}
-
-			if ( flags.usesTessellation() )
-			{
-				stageFlags |= VK_SHADER_STAGE_TESSELLATION_CONTROL_BIT;
-				stageFlags |= VK_SHADER_STAGE_TESSELLATION_EVALUATION_BIT;
-			}
+			stageFlags |= VK_SHADER_STAGE_ALL_GRAPHICS;
 		}
 
 		ashes::VkDescriptorSetLayoutBindingArray addBindings;
@@ -1398,6 +1377,13 @@ namespace castor3d
 				, stageFlags ) );
 		}
 
+		auto index = uint32_t( GlobalBuffersIdx::eCount );
+
+		if ( submeshData )
+		{
+			submeshData->fillBindings( flags, addBindings, index );
+		}
+
 		doFillAdditionalBindings( flags, addBindings );
 		return addBindings;
 	}
@@ -1425,7 +1411,8 @@ namespace castor3d
 	RenderPipeline & RenderNodesPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 		, PipelineFlags const & flags
-		, VkCullModeFlags cullMode )
+		, VkCullModeFlags cullMode
+		, SubmeshRenderData * submeshData )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
@@ -1457,13 +1444,13 @@ namespace castor3d
 					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
-				auto addDescLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags )
+				auto addDescLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags, submeshData )
 					, PassDescriptors{} ).first;
 				auto & addDescriptors = addDescLayoutIt->second;
 
 				if ( !addDescriptors.layout )
 				{
-					auto bindings = doCreateAdditionalBindings( flags );
+					auto bindings = doCreateAdditionalBindings( flags, submeshData );
 					addDescriptors.layout = device->createDescriptorSetLayout( getName() + rendndpass::Suffix
 						, std::move( bindings ) );
 					addDescriptors.pool = addDescriptors.layout->createPool( 1u );

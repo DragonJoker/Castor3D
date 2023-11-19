@@ -98,7 +98,7 @@ namespace castor3d
 	void ForwardRenderTechniquePass::doFillAdditionalBindings( PipelineFlags const & flags
 		, ashes::VkDescriptorSetLayoutBindingArray & bindings )const
 	{
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		doAddPassSpecificsBindings( flags, bindings, index );
 		bindings.emplace_back( m_scene.getLightCache().createLayoutBinding( VK_SHADER_STAGE_FRAGMENT_BIT
 			, index++ ) );
@@ -107,7 +107,7 @@ namespace castor3d
 		{
 			bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
 				, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER
-				, VK_SHADER_STAGE_FRAGMENT_BIT ) ); // c3d_mapOcclusion
+				, VK_SHADER_STAGE_ALL_GRAPHICS ) ); // c3d_mapOcclusion
 		}
 
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( index++
@@ -145,7 +145,7 @@ namespace castor3d
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer )
 	{
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 		doAddPassSpecificsDescriptor( flags, descriptorWrites, index );
 		descriptorWrites.push_back( m_scene.getLightCache().getBinding( index++ ) );
 
@@ -202,7 +202,7 @@ namespace castor3d
 			, getComponentsMask()
 			, utils };
 		shader::CookTorranceBRDF cookTorrance{ writer, brdf };
-		auto index = uint32_t( GlobalBuffersIdx::eCount );
+		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera

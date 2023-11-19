@@ -50,6 +50,14 @@ namespace castor3d
 		m_submeshes.clear();
 	}
 
+	void Mesh::update( CpuUpdater & updater )
+	{
+		for ( auto & submesh : m_submeshes )
+		{
+			submesh->update( updater );
+		}
+	}
+
 	void Mesh::updateContainers()
 	{
 		if ( !m_submeshes.empty() )

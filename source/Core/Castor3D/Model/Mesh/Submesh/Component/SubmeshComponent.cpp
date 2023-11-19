@@ -1,6 +1,8 @@
 #include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponent.hpp"
 
+#include "Castor3D/Engine.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp"
 
 CU_ImplementSmartPtr( castor3d, SubmeshComponent )
 CU_ImplementSmartPtr( castor3d, SubmeshComponentPlugin )
@@ -146,6 +148,12 @@ namespace castor3d
 		, m_id{ submesh.getComponentId( m_type ) }
 		, m_plugin{ submesh.getComponentPlugin( m_id ) }
 	{
+	}
+
+	void SubmeshComponent::initialiseRenderData()
+	{
+		auto & engine = *getOwner()->getParent().getEngine();
+		m_renderData = engine.getSubmeshComponentsRegister().createRenderData( *this );
 	}
 
 	//*********************************************************************************************

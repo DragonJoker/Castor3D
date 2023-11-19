@@ -73,4 +73,9 @@ namespace castor3d
 	{
 		return *instance.getNode();
 	}
+
+	SubmeshRenderData * BillboardRenderNode::getRenderData()const
+	{
+		return nullptr;
+	}
 }

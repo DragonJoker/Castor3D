@@ -193,4 +193,9 @@ namespace castor3d
 			break;
 		}
 	}
+
+	castor::String getBaseDataComponentName( SubmeshData submeshData )
+	{
+		return "c3d.submesh." + castor::string::lowerCase( getName( submeshData ) );
+	}
 }

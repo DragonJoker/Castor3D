@@ -10,6 +10,7 @@ See LICENSE file in root folder
 #include "Castor3D/Model/ModelModule.hpp"
 #include "Castor3D/Model/Mesh/MeshModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+#include "Castor3D/Model/Mesh/Submesh/Component/ComponentModule.hpp"
 #include "Castor3D/Scene/SceneModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
@@ -54,6 +55,7 @@ namespace castor3d
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalMeshletsBounds()const;
 		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
 		C3D_API SceneNode & getSceneNode()const;
+		C3D_API SubmeshRenderData * getRenderData()const;
 
 		Pass * pass;
 		DataType & data;

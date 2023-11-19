@@ -35,6 +35,11 @@ namespace castor3d
 			{
 				return castor::makeUniqueDerived< SubmeshComponent, InstantiationComponent >( submesh );
 			}
+
+			SubmeshComponentFlag getInstantiationFlag()const noexcept override
+			{
+				return getComponentFlags();
+			}
 		};
 
 		static SubmeshComponentPluginUPtr createPlugin( SubmeshComponentRegister const & submeshComponents )

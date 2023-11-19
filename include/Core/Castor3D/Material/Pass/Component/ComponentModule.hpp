@@ -14,12 +14,6 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/ShaderWriterPrerequisites.hpp>
 
-#define C3D_Stringify( x ) C3DX_Stringify(x)
-#define C3DX_Stringify( x ) #x
-#define C3D_Join2Strings( l, r ) l "." r
-#define C3D_Join3Strings( l, m, r ) C3D_Join2Strings(l, C3D_Join2Strings(m, r))
-#define C3D_Join4Strings( l, ml, mr, r ) C3D_Join3Strings(l, ml, C3D_Join2Strings(mr, r))
-
 #define C3D_PluginMakePassComponentName( p, x ) C3D_Join3Strings( p, "pass", x )
 #define C3D_MakePassComponentName( x ) C3D_PluginMakePassComponentName( "c3d", x )
 

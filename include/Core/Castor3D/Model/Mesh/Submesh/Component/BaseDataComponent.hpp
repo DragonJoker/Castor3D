@@ -35,6 +35,7 @@ namespace castor3d
 		, uint32_t & index );
 	C3D_API void fillBaseSurfaceType( SubmeshData submeshData
 		, sdw::type::BaseStruct & type );
+	C3D_API castor::String getBaseDataComponentName( SubmeshData submeshData );
 
 	template< SubmeshData SubmeshDataT, typename DataT >
 	class BaseDataComponentT
@@ -237,7 +238,7 @@ namespace castor3d
 	template< SubmeshData SubmeshDataT, typename DataT >
 	castor::String const BaseDataComponentT< SubmeshDataT, DataT >::TypeName{ []()
 		{
-			return castor3d::getName( SubmeshDataT );
+			return getBaseDataComponentName( SubmeshDataT );
 		}() };
 }
 

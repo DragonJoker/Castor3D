@@ -98,7 +98,7 @@ namespace castor3d
 			void doFillAdditionalBindings( PipelineFlags const & flags
 				, ashes::VkDescriptorSetLayoutBindingArray & bindings )const override
 			{
-				auto index = uint32_t( GlobalBuffersIdx::eCount );
+				auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 				auto frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
 				CU_Require( frustumClusters );
 				bindings.emplace_back( frustumClusters->getClustersUbo().createLayoutBinding( index++ // ClustersUbo
@@ -116,7 +116,7 @@ namespace castor3d
 				, ShadowMapLightTypeArray const & shadowMaps
 				, ShadowBuffer const * shadowBuffer )override
 			{
-				auto index = uint32_t( GlobalBuffersIdx::eCount );
+				auto index = uint32_t( GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 				auto frustumClusters = getTechnique().getRenderTarget().getFrustumClusters();
 				CU_Require( frustumClusters );
 				descriptorWrites.emplace_back( frustumClusters->getClustersUbo().getDescriptorWrite( index++ ) );
@@ -165,15 +165,16 @@ namespace castor3d
 					, RenderPipeline::eBuffers
 					, enableTextures };
 
+				auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 				C3D_Clusters( writer
-					, GlobalBuffersIdx::eCount
+					, index++
 					, RenderPipeline::eBuffers
 					, m_parent->getClustersConfig() );
 				C3D_ReducedLightsAABB( writer
-					, uint32_t( GlobalBuffersIdx::eCount ) + 1u
+					, index++
 					, RenderPipeline::eBuffers );
 				C3D_ClusterFlags( writer
-					, uint32_t( GlobalBuffersIdx::eCount ) + 2u
+					, index++
 					, RenderPipeline::eBuffers );
 
 				auto c3d_maps( writer.declCombinedImgArray< FImg2DRgba32 >( "c3d_maps"

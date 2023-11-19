@@ -243,7 +243,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const InstantiationComponent::TypeName = cuT( "Instantiation" );
+	castor::String const InstantiationComponent::TypeName = C3D_MakeSubmeshComponentName( "instantiation" );
 
 	InstantiationComponent::InstantiationComponent( Submesh & submesh
 		, uint32_t threshold )

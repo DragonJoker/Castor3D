@@ -64,6 +64,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
+	void PassMasksComponent::SurfaceShader::fillSurfaceType( sdw::type::Struct & type
+		, uint32_t * index )const
+	{
+		if ( index )
+		{
+			static_cast< sdw::type::IOStruct & >( type ).declMember( "passMasks", ast::type::Kind::eVec4U, ast::type::NotArray, ( *index )++ );
+		}
+		else
+		{
+			static_cast< sdw::type::BaseStruct & >( type ).declMember( "passMasks", ast::type::Kind::eVec4U, ast::type::NotArray );
+		}
+	}
+
+	//*********************************************************************************************
+
 	void PassMasksComponent::ComponentData::copy( SubmeshComponentDataRPtr data )const
 	{
 		auto result = static_cast< ComponentData * >( data );
@@ -142,7 +157,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const PassMasksComponent::TypeName = cuT( "PassMasks" );
+	castor::String const PassMasksComponent::TypeName = C3D_MakeSubmeshComponentName( "passmasks" );
 
 	PassMasksComponent::PassMasksComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName

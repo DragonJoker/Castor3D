@@ -379,7 +379,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const MeshletComponent::TypeName = cuT( "Meshlet" );
+	castor::String const MeshletComponent::TypeName = C3D_MakeSubmeshComponentName( "meshlet" );
 
 	MeshletComponent::MeshletComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName

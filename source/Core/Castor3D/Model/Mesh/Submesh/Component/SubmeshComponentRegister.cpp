@@ -244,8 +244,8 @@ namespace castor3d
 			, m_registered.end()
 			, [&flags]( Component const & lookup )
 			{
-				return hasAny( flags.submesh.flags, lookup.id )
-					&& lookup.plugin->hasRenderShader();
+				return hasAny( flags.submesh, lookup.id )
+					&& lookup.plugin->getRenderFlag() != 0u;
 			} );
 
 		if ( it == m_registered.end() )
@@ -263,6 +263,19 @@ namespace castor3d
 		}
 
 		rit->second->getShaderSource( *getOwner(), flags, componentsMask, builder );
+	}
+
+	SubmeshRenderDataPtr SubmeshComponentRegister::createRenderData( SubmeshComponent & component )
+	{
+		auto it = m_renderShaders.find( component.getId() );
+
+		if ( it == m_renderShaders.end() )
+		{
+			CU_Failure( "Submesh doesn't contain the wanted render shader component" );
+			throw std::logic_error{ "Submesh doesn't contain the wanted render shader component" };
+		}
+
+		return it->second->createData( component );
 	}
 
 	SubmeshComponentID SubmeshComponentRegister::registerComponent( castor::String const & componentType
@@ -447,7 +460,7 @@ namespace castor3d
 		getEngine()->registerParsers( componentType
 			, parsers
 			, sections
-			, nullptr );
+			, componentDesc.plugin->createParserContext );
 
 		log::debug << "Registered component ID " << componentDesc.id << " for [" << componentType << "]" << std::endl;
 	}

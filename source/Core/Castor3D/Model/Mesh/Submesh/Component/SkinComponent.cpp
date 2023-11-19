@@ -66,7 +66,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	castor::String const SkinComponent::TypeName = cuT( "Skin" );
+	castor::String const SkinComponent::TypeName = C3D_MakeSubmeshComponentName( "skin" );
 
 	SkinComponent::SkinComponent( Submesh & submesh )
 		: SubmeshComponent{ submesh, TypeName

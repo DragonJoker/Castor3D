@@ -182,6 +182,8 @@ namespace castor3d
 	static uint32_t constexpr MaxBindlessResources = 16'384u;
 	// Max supported texture coordinates sets.
 	static uint32_t constexpr MaxTextureCoordinatesSets = 4u;
+	// Max supported data bindings for submesh render data.
+	static uint32_t constexpr MaxSubmeshDataBindings = 16u;
 	//@}
 	/**
 	*\name
