@@ -12,7 +12,7 @@ namespace castor3d::shader
 		, sdw::Vec4 const output
 		, bool enable )
 		: m_config{ config }
-		, m_category{ std::move( category ) }
+		, m_categories{ std::move( category ) }
 		, m_index{ index }
 		, m_output{ output }
 		, m_enable{ enable }
@@ -65,5 +65,11 @@ namespace castor3d::shader
 		, sdw::Float const value )
 	{
 		registerOutput( category, name, vec3( value ) );
+	}
+
+	DebugOutputCategory DebugOutput::pushBlock( castor::String category )
+	{
+		m_categories.push_back( std::move( category ) );
+		return DebugOutputCategory{ *this };
 	}
 }

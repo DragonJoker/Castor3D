@@ -7,6 +7,7 @@
 #include "Castor3D/Scene/SceneFileParser.hpp"
 #include "Castor3D/Shader/ShaderBuffers/PassBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
+#include "Castor3D/Shader/Shaders/GlslDebugOutput.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
@@ -46,6 +47,7 @@ namespace castor3d
 	{
 		if ( mippedScene.isEnabled() )
 		{
+			auto debugOutputBlock = debugOutput.pushBlock( "Reflections" );
 			reflections.computeCombined( components
 				, lightSurface
 				, lightSurface.worldPosition().xyz()
@@ -62,7 +64,7 @@ namespace castor3d
 				, refracted
 				, coatReflected
 				, sheenReflected
-				, debugOutput );
+				, debugOutputBlock );
 		}
 		else
 		{
@@ -110,6 +112,7 @@ namespace castor3d
 		, sdw::Vec3 & sheenReflected
 		, shader::DebugOutput & debugOutput )const
 	{
+		auto debugOutputBlock = debugOutput.pushBlock( "Reflections" );
 		reflections.computeCombined( components
 			, lightSurface
 			, backgroundModel
@@ -122,7 +125,7 @@ namespace castor3d
 			, refracted
 			, coatReflected
 			, sheenReflected
-			, debugOutput );
+			, debugOutputBlock );
 	}
 
 	//*********************************************************************************************
