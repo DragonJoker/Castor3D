@@ -63,7 +63,7 @@ namespace castor3d
 		struct ComponentData
 			: public SubmeshComponentData
 		{
-			ComponentData( Submesh & submesh
+			explicit ComponentData( Submesh & submesh
 				, VkBufferUsageFlags bufferUsageFlags )
 				: SubmeshComponentData{ submesh }
 				, m_bufferUsageFlags{ bufferUsageFlags }

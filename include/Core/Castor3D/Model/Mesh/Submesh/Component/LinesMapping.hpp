@@ -16,7 +16,7 @@ namespace castor3d
 		struct ComponentData
 			: public IndexMapping::ComponentData
 		{
-			ComponentData( Submesh & submesh
+			explicit ComponentData( Submesh & submesh
 				, VkBufferUsageFlags bufferUsageFlags )
 				: IndexMapping::ComponentData{ submesh, bufferUsageFlags }
 			{

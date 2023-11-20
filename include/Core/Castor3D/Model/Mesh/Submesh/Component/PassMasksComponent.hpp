@@ -26,7 +26,7 @@ namespace castor3d
 		struct ComponentData
 			: public SubmeshComponentData
 		{
-			ComponentData( Submesh & submesh )
+			explicit ComponentData( Submesh & submesh )
 				: SubmeshComponentData{ submesh }
 			{
 			}
