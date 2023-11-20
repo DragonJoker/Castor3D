@@ -40,10 +40,11 @@ namespace water
 		{
 			castor3d::log::info << this->tabs() << cuT( "Writing Water data " ) << std::endl;
 			return this->writeOpt( file, "dampeningFactor", pass.getDampeningFactor(), 5.0f )
+				&& this->writeOpt( file, cuT( "depthSofteningDistance" ), pass.getDepthSofteningDistance(), 0.5f )
+				&& this->writeOpt( file, cuT( "noiseTiling" ), pass.getNoiseTiling(), 1.0f )
 				&& this->writeOpt( file, cuT( "refractionDistortionFactor" ), pass.getRefractionDistortionFactor(), 0.04f )
 				&& this->writeOpt( file, cuT( "refractionHeightFactor" ), pass.getRefractionHeightFactor(), 2.5f )
 				&& this->writeOpt( file, cuT( "refractionDistanceFactor" ), pass.getRefractionDistanceFactor(), 15.0f )
-				&& this->writeOpt( file, cuT( "depthSofteningDistance" ), pass.getDepthSofteningDistance(), 0.5f )
 				&& this->writeOpt( file, cuT( "ssrStepSize" ), pass.getSsrStepSize(), 0.5f )
 				&& this->writeOpt( file, cuT( "ssrForwardStepsCount" ), pass.getSsrForwardStepsCount(), 20u )
 				&& this->writeOpt( file, cuT( "ssrBackwardStepsCount" ), pass.getSsrBackwardStepsCount(), 10u )
@@ -95,6 +96,28 @@ namespace water
 				params[0]->get( value );
 				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
 				component.setDepthSofteningDistance( value );
+			}
+		}
+		CU_EndAttribute()
+
+		static CU_ImplementAttributeParser( parserNoiseTiling )
+		{
+			auto & parsingContext = castor3d::getParserContext( context );
+
+			if ( !parsingContext.pass )
+			{
+				CU_ParsingError( cuT( "No Pass initialised." ) );
+			}
+			else if ( params.empty() )
+			{
+				CU_ParsingError( "Missing parameter" );
+			}
+			else
+			{
+				float value;
+				params[0]->get( value );
+				auto & component = castor3d::getPassComponent< WaterComponent >( parsingContext );
+				component.setNoiseTiling( value );
 			}
 		}
 		CU_EndAttribute()
@@ -402,6 +425,7 @@ namespace water
 		{
 			components.declMember( "dampeningFactor", sdw::type::Kind::eFloat );
 			components.declMember( "depthSofteningDistance", sdw::type::Kind::eFloat );
+			components.declMember( "noiseTiling", sdw::type::Kind::eFloat );
 			components.declMember( "refractionDistortionFactor", sdw::type::Kind::eFloat );
 			components.declMember( "refractionHeightFactor", sdw::type::Kind::eFloat );
 			components.declMember( "refractionDistanceFactor", sdw::type::Kind::eFloat );
@@ -438,6 +462,7 @@ namespace water
 				, waterProfiles.getData( material->passId - 1u ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.dampeningFactor() ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.depthSofteningDistance() ) );
+			inits.emplace_back( sdw::makeExpr( waterProfile.noiseTiling() ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.refractionDistortionFactor() ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.refractionHeightFactor() ) );
 			inits.emplace_back( sdw::makeExpr( waterProfile.refractionDistanceFactor() ) );
@@ -456,6 +481,7 @@ namespace water
 		{
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
+			inits.emplace_back( sdw::makeExpr( 1.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
 			inits.emplace_back( sdw::makeExpr( 0.0_f ) );
@@ -481,6 +507,7 @@ namespace water
 		{
 			res.getMember< sdw::Float >( "dampeningFactor" ) += src.getMember< sdw::Float >( "dampeningFactor" ) * passMultiplier;
 			res.getMember< sdw::Float >( "depthSofteningDistance" ) += src.getMember< sdw::Float >( "depthSofteningDistance" ) * passMultiplier;
+			res.getMember< sdw::Float >( "noiseTiling" ) += src.getMember< sdw::Float >( "noiseTiling" ) * passMultiplier;
 			res.getMember< sdw::Float >( "refractionDistortionFactor" ) += src.getMember< sdw::Float >( "refractionDistortionFactor" ) * passMultiplier;
 			res.getMember< sdw::Float >( "refractionHeightFactor" ) += src.getMember< sdw::Float >( "refractionHeightFactor" ) * passMultiplier;
 			res.getMember< sdw::Float >( "refractionDistanceFactor" ) += src.getMember< sdw::Float >( "refractionDistanceFactor" ) * passMultiplier;
@@ -564,6 +591,10 @@ namespace water
 			, &waterpass::parserDepthSofteningDistance, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers
 			, uint32_t( castor3d::CSCNSection::ePass )
+			, cuT( "noiseTiling" )
+			, &waterpass::parserNoiseTiling, { castor::makeParameter< castor::ParameterType::eFloat >() } );
+		castor::addParserT( parsers
+			, uint32_t( castor3d::CSCNSection::ePass )
 			, cuT( "ssrStepSize" )
 			, &waterpass::parserSsrStepSize, { castor::makeParameter< castor::ParameterType::eFloat >() } );
 		castor::addParserT( parsers
@@ -632,6 +663,7 @@ namespace water
 		vis.visit( cuT( "Water" ) );
 		vis.visit( cuT( "Dampening factor" ), m_value.dampeningFactor );
 		vis.visit( cuT( "Depth softening distance" ), m_value.depthSofteningDistance );
+		vis.visit( cuT( "Noise Tiling" ), m_value.noiseTiling );
 		vis.visit( cuT( "Refraction distortion factor" ), m_value.refractionDistortionFactor );
 		vis.visit( cuT( "Refraction height factor" ), m_value.refractionHeightFactor );
 		vis.visit( cuT( "Refraction distance factor" ), m_value.refractionDistanceFactor );
@@ -651,6 +683,7 @@ namespace water
 	{
 		data.dampeningFactor = getDampeningFactor();
 		data.depthSofteningDistance = getDepthSofteningDistance();
+		data.noiseTiling = getNoiseTiling();
 		data.refractionDistortionFactor = getRefractionDistortionFactor();
 		data.refractionHeightFactor = getRefractionHeightFactor();
 		data.refractionDistanceFactor = getRefractionDistanceFactor();

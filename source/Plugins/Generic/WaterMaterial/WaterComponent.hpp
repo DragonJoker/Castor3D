@@ -13,30 +13,6 @@ See LICENSE file in root folder
 
 namespace water
 {
-	struct SsrConfiguration
-	{
-		float stepSize{ 0.5f };
-		uint32_t forwardStepsCount{ 20u };
-		uint32_t backwardStepsCount{ 10u };
-		float depthMult{ 20.0f };
-	};
-	struct WaterProfileData
-	{
-		float dampeningFactor{ 5.0f };
-		float depthSofteningDistance{ 0.5f };
-		float refractionDistortionFactor{ 0.04f };
-		float refractionHeightFactor{ 2.5f };
-		float refractionDistanceFactor{ 15.0f };
-		float foamHeightStart{ 0.8f };
-		float foamFadeDistance{ 0.4f };
-		float foamTiling{ 2.0f };
-		float foamAngleExponent{ 80.0f };
-		float foamBrightness{ 4.0f };
-		float foamNoiseTiling{ 0.02f };
-		float pad0{};
-		SsrConfiguration ssr;
-	};
-
 	struct WaterData
 	{
 		explicit WaterData( std::atomic_bool & dirty )
@@ -45,6 +21,7 @@ namespace water
 			, refractionDistortionFactor{ dirty, castor::makeRangedValue( 0.04f, 0.0f, 1.0f ) }
 			, refractionHeightFactor{ dirty, castor::makeRangedValue( 2.5f, 0.0f, 100.0f ) }
 			, refractionDistanceFactor{ dirty, castor::makeRangedValue( 15.0f, 0.0f, 100.0f ) }
+			, noiseTiling{ dirty, castor::makeRangedValue( 1.0f, 0.0001f, 10.0f ) }
 			, ssrStepSize{ dirty, castor::makeRangedValue( 0.5f, 0.0001f, 10.0f ) }
 			, ssrForwardStepsCount{ dirty, castor::makeRangedValue( 20u, 1u, 100u ) }
 			, ssrBackwardStepsCount{ dirty, castor::makeRangedValue( 10u, 1u, 100u ) }
@@ -63,6 +40,7 @@ namespace water
 		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > refractionDistortionFactor;
 		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > refractionHeightFactor;
 		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > refractionDistanceFactor;
+		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > noiseTiling;
 		castor::AtomicGroupChangeTracked< castor::RangedValue< float > > ssrStepSize;
 		castor::AtomicGroupChangeTracked< castor::RangedValue< uint32_t > > ssrForwardStepsCount;
 		castor::AtomicGroupChangeTracked< castor::RangedValue< uint32_t > > ssrBackwardStepsCount;
@@ -169,6 +147,11 @@ namespace water
 			*m_value.refractionDistanceFactor = value;
 		}
 
+		void setNoiseTiling( float value )
+		{
+			*m_value.noiseTiling = value;
+		}
+
 		void setSsrStepSize( float value )
 		{
 			*m_value.ssrStepSize = value;
@@ -242,6 +225,11 @@ namespace water
 		float getRefractionDistanceFactor()const
 		{
 			return m_value.refractionDistanceFactor.value().value();
+		}
+
+		float getNoiseTiling()const
+		{
+			return m_value.noiseTiling.value().value();
 		}
 
 		float getSsrStepSize()const
