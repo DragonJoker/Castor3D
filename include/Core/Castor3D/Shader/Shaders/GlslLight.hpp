@@ -488,7 +488,7 @@ namespace castor3d::shader
 			, sdw::Vec2 const screenPosition
 			, sdw::Float const viewDepth
 			, DebugOutput & debugOutput
-			, OutputComponents & output );
+			, DirectLighting & output );
 		C3D_API void computeCombinedAllButDif( ClusteredLights & clusteredLights
 			, BlendComponents const & components
 			, BackgroundModel & backgroundModel
@@ -498,7 +498,7 @@ namespace castor3d::shader
 			, sdw::Float const viewDepth
 			, sdw::Vec3 const diffuse
 			, DebugOutput & debugOutput
-			, OutputComponents & output );
+			, DirectLighting & output );
 		C3D_API void computeCombinedDif( ClusteredLights & clusteredLights
 			, BlendComponents const & components
 			, BackgroundModel & backgroundModel
@@ -520,7 +520,7 @@ namespace castor3d::shader
 			, sdw::UInt const receivesShadows
 			, sdw::Vec3 const diffuse
 			, DebugOutput & debugOutput
-			, OutputComponents & output );
+			, DirectLighting & output );
 		C3D_API void computeCombinedDif( BlendComponents const & components
 			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface

@@ -87,6 +87,8 @@ namespace castor3d::shader
 	struct DerivTex;
 	struct DirectionalLight;
 	struct DirectionalShadowData;
+	struct DirectLighting;
+	struct IndirectLighting;
 	struct Intersection;
 	struct Light;
 	struct LightData;
@@ -95,7 +97,6 @@ namespace castor3d::shader
 	struct LpvGridData;
 	struct LpvLightData;
 	struct Material;
-	struct OutputComponents;
 	struct Plane;
 	struct PointLight;
 	struct PointShadowData;
@@ -164,6 +165,7 @@ namespace castor3d::shader
 	class BackgroundModel;
 	class BufferBase;
 	class BRDFHelpers;
+	class CookTorranceBRDF;
 	class ClusteredLights;
 	class DebugOutput;
 	class DebugOutputCategory;
@@ -236,6 +238,7 @@ namespace castor3d::shader
 	Writer_Parameter( Intersection );
 	Writer_Parameter( LayeredLpvGridData );
 	Writer_Parameter( Light );
+	Writer_Parameter( DirectLighting );
 	Writer_Parameter( LightSurface );
 	Writer_Parameter( LpvGridData );
 	Writer_Parameter( LpvLightData );
@@ -350,15 +353,6 @@ namespace castor3d::shader
 
 	//@}
 	//@}
-}
-
-namespace sdw
-{
-	template<>
-	struct ParamTranslater< castor3d::shader::OutputComponents >
-	{
-		using Type = castor3d::shader::OutputComponents &;
-	};
 }
 
 #endif

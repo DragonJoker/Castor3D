@@ -1280,7 +1280,8 @@ namespace castor3d
 								}
 								else
 								{
-									shader::OutputComponents lighting{ writer, false };
+									auto directLighting = writer.declLocale( "directLighting"
+										, shader::DirectLighting{ writer } );
 
 									if ( isDeferredLighting )
 									{
@@ -1293,7 +1294,7 @@ namespace castor3d
 											, lightSurface.viewPosition().z()
 											, inoutDiffuse.rgb()
 											, output
-											, lighting );
+											, directLighting );
 									}
 									else
 									{
@@ -1305,12 +1306,11 @@ namespace castor3d
 											, lightSurface.clipPosition().xy()
 											, lightSurface.viewPosition().z()
 											, output
-											, lighting );
+											, directLighting );
 									}
 
-									auto directAmbient = writer.declLocale( "directAmbient"
-										, components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor );
-									output.registerOutput( "Lighting", "Ambient", directAmbient );
+									directLighting.ambient() = components.ambientColour * c3d_sceneData.ambientLight() * components.ambientFactor;
+									output.registerOutput( "Lighting", "Ambient", directLighting.ambient() );
 									output.registerOutput( "Lighting", "Occlusion", occlusion );
 									output.registerOutput( "Lighting", "Emissive", components.emissiveColour * components.emissiveFactor );
 
@@ -1319,30 +1319,16 @@ namespace castor3d
 										, components.normal
 										, components.f0
 										, components );
-									auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
-										, lightSurface
-										, output );
-									auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-										, lightSurface
-										, indirectOcclusion
-										, output );
-									auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
+									auto indirectLighting = writer.declLocale( "indirectLighting"
+										, shader::IndirectLighting{ writer } );
+									indirect.computeCombinedDifSpec( flags.getGlobalIlluminationFlags()
+										, flags.hasDiffuseGI()
+										, cookTorrance
 										, lightSurface
 										, components.roughness
-										, indirectOcclusion
-										, lightIndirectDiffuse.w()
 										, c3d_mapBrdf
+										, indirectLighting
 										, output );
-									auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-										, lightIndirectDiffuse.xyz()
-										, output );
-									auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
-										, ( flags.hasDiffuseGI()
-											? cookTorrance.computeDiffuse( normalize( lightIndirectDiffuse.xyz() )
-												, length( lightIndirectDiffuse.xyz() )
-												, lightSurface.difF() )
-											: vec3( 0.0_f ) ) );
-									output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
 
 									// Reflections/Refraction
 									auto reflectedDiffuse = writer.declLocale( "reflectedDiffuse"
@@ -1370,9 +1356,8 @@ namespace castor3d
 										, lightSurface
 										, *backgroundModel
 										, c3d_cameraData
-										, lighting
-										, indirectAmbient
-										, indirectDiffuse
+										, directLighting
+										, indirectLighting
 										, vec2( ipixel )
 										, modelData.getEnvMapIndex()
 										, incident
@@ -1391,15 +1376,8 @@ namespace castor3d
 									outResult = vec4( lightingModel->combine( output
 											, components
 											, incident
-											, lighting.diffuse
-											, indirectDiffuse
-											, lighting.specular
-											, lighting.scattering
-											, lighting.coatingSpecular
-											, lighting.sheen
-											, lightIndirectSpecular
-											, directAmbient
-											, indirectAmbient
+											, directLighting
+											, indirectLighting
 											, occlusion
 											, components.emissiveColour * components.emissiveFactor
 											, reflectedDiffuse
@@ -1408,7 +1386,7 @@ namespace castor3d
 											, coatReflected
 											, sheenReflected )
 										, components.opacity );
-									outScattering = vec4( lighting.scattering, 1.0_f );
+									outScattering = vec4( directLighting.scattering(), 1.0_f);
 								}
 							}
 							ELSE

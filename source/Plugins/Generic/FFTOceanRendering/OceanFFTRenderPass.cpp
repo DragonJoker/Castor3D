@@ -1081,7 +1081,8 @@ namespace ocean_fft
 					// Direct Lighting
 					auto nml = writer.declLocale( "nml"
 						, normalize( components.normal ) );
-					shader::OutputComponents lighting{ writer, false };
+					auto lighting = writer.declLocale( "directLighting"
+						, shader::DirectLighting{ writer } );
 					auto lightSurface = shader::LightSurface::create( writer
 						, "lightSurface"
 						, c3d_cameraData.position()
@@ -1098,46 +1099,29 @@ namespace ocean_fft
 						, lightSurface.viewPosition().z()
 						, output
 						, lighting );
-					lightingModel->adjustDirectSpecular( components
-						, lighting.specular );
+					lightingModel->adjustDirectLighting( components, lighting );
 
 					// Indirect Lighting
 					lightSurface.updateL( utils
 						, nml
 						, components.f0
 						, components );
-					auto indirectOcclusion = indirect.computeOcclusion( flags.getGlobalIlluminationFlags()
-						, lightSurface
-						, output );
-					auto lightIndirectDiffuse = indirect.computeDiffuse( flags.getGlobalIlluminationFlags()
-						, lightSurface
-						, indirectOcclusion
-						, output );
-					auto lightIndirectSpecular = indirect.computeSpecular( flags.getGlobalIlluminationFlags()
+					auto indirectLighting = writer.declLocale( "indirectLighting"
+						, shader::IndirectLighting{ writer } );
+					indirect.computeCombinedDifSpec( flags.getGlobalIlluminationFlags()
+						, hasDiffuseGI
+						, cookTorrance
 						, lightSurface
 						, components.roughness
-						, indirectOcclusion
-						, lightIndirectDiffuse.w()
 						, c3d_mapBrdf
+						, indirectLighting
 						, output );
-					auto indirectAmbient = indirect.computeAmbient( flags.getGlobalIlluminationFlags()
-						, lightIndirectDiffuse.xyz()
-						, output );
-					auto indirectDiffuse = writer.declLocale( "indirectDiffuse"
-						, ( hasDiffuseGI
-							? cookTorrance.computeDiffuse( lightIndirectDiffuse.xyz()
-								, length( lightIndirectDiffuse.xyz() )
-								, lightSurface.difF() )
-							: vec3( 0.0_f ) ) );
-					output.registerOutput( "Indirect", "Diffuse", indirectDiffuse );
-
 
 					//  Retrieve non distorted scene data.
 					auto sceneDepth = writer.declLocale( "sceneDepth"
 						, c3d_sceneDepthObj.sample( hdrCoords ).r() );
 					auto scenePosition = writer.declLocale( "scenePosition"
 						, c3d_cameraData.curProjToWorld( utils, hdrCoords, sceneDepth ) );
-
 
 					// Reflection
 					auto bgDiffuseReflection = writer.declLocale( "bgDiffuseReflection"
@@ -1176,7 +1160,6 @@ namespace ocean_fft
 						, mix( reflected, ssrResult.xyz(), ssrResult.www() ) );
 					output.registerOutput( "CombinedReflection", reflectionResult );
 
-
 					// Wobbly refractions
 					auto heightFactor = writer.declLocale( "heightFactor"
 						, c3d_oceanData.refractionHeightFactor * ( c3d_cameraData.farPlane() - c3d_cameraData.nearPlane() ) );
@@ -1203,7 +1186,7 @@ namespace ocean_fft
 							, refractionResult ) );
 					output.registerOutput( "LightAbsorbtion", lightAbsorbtion );
 					auto waterTransmission = writer.declLocale( "waterTransmission"
-						, components.colour * lightAbsorbtion * ( indirectAmbient + indirectDiffuse ) );
+						, components.colour * lightAbsorbtion * ( indirectLighting.ambient() + indirectLighting.diffuseColour() ) );
 					output.registerOutput( "WaterTransmission", waterTransmission );
 					refractionResult *= waterTransmission;
 					output.registerOutput( "RefractionResult", refractionResult );
@@ -1222,7 +1205,6 @@ namespace ocean_fft
 						, utils.saturate( vec3( utils.saturate( length( in.viewPosition.xyz() ) / distanceFactor ) ) ) );
 					output.registerOutput( "DistanceMixedRefraction", refractionResult );
 
-
 					//Combine all that
 					auto fresnelFactor = writer.declLocale( "fresnelFactor"
 						, vec3( utils.fresnelMix( reflections.computeIncident( lightSurface.worldPosition().xyz(), c3d_cameraData.position() )
@@ -1233,11 +1215,11 @@ namespace ocean_fft
 					output.registerOutput( "FinalReflection", reflectionResult );
 					refractionResult *= vec3( 1.0_f ) - fresnelFactor;
 					output.registerOutput( "FinalRefraction", refractionResult );
-					outColour = vec4( lighting.specular + lightIndirectSpecular
+					outColour = vec4( lighting.specular() + indirectLighting.specular()
 							+ components.emissiveColour * components.emissiveFactor
 							+ refractionResult * colorMod
-							+ ( reflectionResult * colorMod * indirectAmbient )
-							+ lighting.scattering
+							+ ( reflectionResult * colorMod * indirectLighting.ambient() )
+							+ lighting.scattering()
 						, depthSoftenedAlpha );
 				}
 				else

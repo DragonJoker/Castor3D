@@ -63,7 +63,7 @@ namespace atmosphere_scattering
 			, sdw::Vec2 const & lightIntensity
 			, c3d::BlendComponents const & components
 			, c3d::LightSurface const & lightSurface
-			, sdw::Vec3 & output )override;
+			, sdw::Vec3 output )override;
 	};
 
 	class AtmospherePbrLightingModel
@@ -99,7 +99,7 @@ namespace atmosphere_scattering
 			, sdw::Vec2 const & lightIntensity
 			, c3d::BlendComponents const & components
 			, c3d::LightSurface const & lightSurface
-			, sdw::Vec3 & output )override;
+			, sdw::Vec3 output )override;
 	};
  }
 

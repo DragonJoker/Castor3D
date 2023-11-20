@@ -68,7 +68,7 @@ namespace castor3d::shader
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
 		, DebugOutput & debugOutput
-		, OutputComponents & output )
+		, DirectLighting & output )
 	{
 		if ( !m_enabled )
 		{
@@ -246,7 +246,7 @@ namespace castor3d::shader
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
 		, DebugOutput & debugOutput
-		, OutputComponents & output )
+		, DirectLighting & output )
 	{
 		if ( !m_enabled )
 		{

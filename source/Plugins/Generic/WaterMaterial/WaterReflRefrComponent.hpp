@@ -32,9 +32,8 @@ namespace water
 				, castor3d::shader::BackgroundModel & background
 				, sdw::CombinedImage2DRgba32 const & mippedScene
 				, castor3d::shader::CameraData const & camera
-				, castor3d::shader::OutputComponents & lighting
-				, sdw::Vec3 const & indirectAmbient
-				, sdw::Vec3 const & indirectDiffuse
+				, castor3d::shader::DirectLighting & lighting
+				, castor3d::shader::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
@@ -52,9 +51,8 @@ namespace water
 				, castor3d::shader::LightSurface const & lightSurface
 				, castor3d::shader::BackgroundModel & background
 				, castor3d::shader::CameraData const & camera
-				, castor3d::shader::OutputComponents & lighting
-				, sdw::Vec3 const & indirectAmbient
-				, sdw::Vec3 const & indirectDiffuse
+				, castor3d::shader::DirectLighting & lighting
+				, castor3d::shader::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
