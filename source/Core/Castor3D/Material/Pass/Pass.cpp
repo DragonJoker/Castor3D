@@ -21,6 +21,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ColourComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/RefractionComponent.hpp"
@@ -255,6 +256,11 @@ namespace castor3d
 					getPassComponentsRegister().updateMapComponents( textureConfigs, *this );
 				}
 
+				if ( m_reflRefrFlag == 0 )
+				{
+					createComponent< DefaultReflRefrComponent >();
+				}
+
 				m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
 				getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 				m_initialising = false;
@@ -298,8 +304,63 @@ namespace castor3d
 			}
 		}
 
+		if ( component->getPlugin().isReflRefrComponent() )
+		{
+			// Allow only one reflection/refraction component.
+			if ( m_reflRefrFlag )
+			{
+				auto it = std::find_if( m_components.begin()
+					, m_components.end()
+					, [this]( PassComponentMap::value_type const & lookup )
+					{
+						return lookup.second->getPlugin().getComponentFlags() == m_reflRefrFlag;
+					} );
+
+				if ( it != m_components.end() )
+				{
+					m_components.erase( it );
+				}
+			}
+
+			m_reflRefrFlag = {};
+		}
+
 		// Then add the component.
 		auto id = getPassComponentsRegister().getNameId( component->getType() );
+
+		if ( component->getPlugin().isMapComponent() )
+		{
+			if ( component->getPlugin().getColourMapFlags() )
+			{
+				m_colourMapFlag = component->getPlugin().getColourMapFlags();
+			}
+
+			if ( component->getPlugin().getOpacityMapFlags() )
+			{
+				m_opacityMapFlag = component->getPlugin().getOpacityMapFlags();
+			}
+
+			if ( component->getPlugin().getNormalMapFlags() )
+			{
+				m_normalMapFlag = component->getPlugin().getNormalMapFlags();
+			}
+
+			if ( component->getPlugin().getHeightMapFlags() )
+			{
+				m_heightMapFlag = component->getPlugin().getHeightMapFlags();
+			}
+
+			if ( component->getPlugin().getHeightMapFlags() )
+			{
+				m_occlusionMapFlag = component->getPlugin().getOcclusionMapFlags();
+			}
+		}
+
+		if ( component->getPlugin().isReflRefrComponent() )
+		{
+			m_reflRefrFlag = component->getPlugin().getComponentFlags();
+		}
+
 		m_components.emplace( id, std::move( component ) );
 		m_dirty = true;
 	}
@@ -348,9 +409,39 @@ namespace castor3d
 			auto tmp = std::move( it->second );
 			m_components.erase( it );
 
+			if ( tmp->getPlugin().getComponentFlags() == m_reflRefrFlag )
+			{
+				m_reflRefrFlag = {};
+			}
+
 			if ( tmp->getPlugin().isMapComponent() )
 			{
 				doRemoveConfiguration( static_cast< PassMapComponent & >( *tmp ).getTextureFlags() );
+
+				if ( tmp->getPlugin().getTextureFlags() == m_colourMapFlag )
+				{
+					m_colourMapFlag = {};
+				}
+
+				if ( tmp->getPlugin().getTextureFlags() == m_opacityMapFlag )
+				{
+					m_opacityMapFlag = {};
+				}
+
+				if ( tmp->getPlugin().getTextureFlags() == m_normalMapFlag )
+				{
+					m_normalMapFlag = {};
+				}
+
+				if ( tmp->getPlugin().getTextureFlags() == m_heightMapFlag )
+				{
+					m_heightMapFlag = {};
+				}
+
+				if ( tmp->getPlugin().getTextureFlags() == m_occlusionMapFlag )
+				{
+					m_occlusionMapFlag = {};
+				}
 			}
 
 			result = doRemoveDependencies( name );
@@ -752,76 +843,6 @@ namespace castor3d
 	PassComponentRegister & Pass::getPassComponentsRegister()const
 	{
 		return getOwner()->getEngine()->getPassComponentsRegister();
-	}
-
-	PassComponentTextureFlag Pass::getColourMapFlags()const
-	{
-		auto it = std::find_if( m_components.begin()
-			, m_components.end()
-			, []( PassComponentMap::value_type const & lookup )
-			{
-				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getColourMapFlags() != 0u;
-			} );
-		return it == m_components.end()
-			? getPassComponentsRegister().getColourMapFlags()
-			: it->second->getPlugin().getColourMapFlags();
-	}
-
-	PassComponentTextureFlag Pass::getOpacityMapFlags()const
-	{
-		auto it = std::find_if( m_components.begin()
-			, m_components.end()
-			, []( PassComponentMap::value_type const & lookup )
-			{
-				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getOpacityMapFlags() != 0u;
-			} );
-		return it == m_components.end()
-			? getPassComponentsRegister().getOpacityMapFlags()
-			: it->second->getPlugin().getOpacityMapFlags();
-	}
-
-	PassComponentTextureFlag Pass::getNormalMapFlags()const
-	{
-		auto it = std::find_if( m_components.begin()
-			, m_components.end()
-			, []( PassComponentMap::value_type const & lookup )
-			{
-				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getNormalMapFlags() != 0u;
-			} );
-		return it == m_components.end()
-			? getPassComponentsRegister().getNormalMapFlags()
-			: it->second->getPlugin().getNormalMapFlags();
-	}
-
-	PassComponentTextureFlag Pass::getHeightMapFlags()const
-	{
-		auto it = std::find_if( m_components.begin()
-			, m_components.end()
-			, []( PassComponentMap::value_type const & lookup )
-			{
-				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getHeightMapFlags() != 0u;
-			} );
-		return it == m_components.end()
-			? getPassComponentsRegister().getHeightMapFlags()
-			: it->second->getPlugin().getHeightMapFlags();
-	}
-
-	PassComponentTextureFlag Pass::getOcclusionMapFlags()const
-	{
-		auto it = std::find_if( m_components.begin()
-			, m_components.end()
-			, []( PassComponentMap::value_type const & lookup )
-			{
-				return lookup.second->getPlugin().isMapComponent()
-					&& lookup.second->getPlugin().getOcclusionMapFlags() != 0u;
-			} );
-		return it == m_components.end()
-			? getPassComponentsRegister().getOcclusionMapFlags()
-			: it->second->getPlugin().getOcclusionMapFlags();
 	}
 
 	castor::String Pass::getTextureFlagsName( PassComponentTextureFlag flags )const

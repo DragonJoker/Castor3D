@@ -12,6 +12,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Material/Texture/TextureConfiguration.hpp"
 
@@ -383,6 +384,73 @@ namespace castor3d
 			PassComponentPlugin const & m_plugin;
 		};
 
+		struct PassReflRefrShader
+			: public PassShader
+		{
+			explicit PassReflRefrShader( PassComponentPlugin const & plugin )
+				: m_plugin{ plugin }
+			{
+			}
+
+			C3D_API virtual void computeReflRefr( ReflectionModel & reflections
+				, BlendComponents & components
+				, LightSurface const & lightSurface
+				, sdw::Vec4 const & position
+				, BackgroundModel & background
+				, sdw::CombinedImage2DRgba32 const & mippedScene
+				, CameraData const & camera
+				, OutputComponents & lighting
+				, sdw::Vec3 const & indirectAmbient
+				, sdw::Vec3 const & indirectDiffuse
+				, sdw::Vec2 const & sceneUv
+				, sdw::UInt const & envMapIndex
+				, sdw::Vec3 const & incident
+				, sdw::UInt const & hasReflection
+				, sdw::UInt const & hasRefraction
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 & reflectedDiffuse
+				, sdw::Vec3 & reflectedSpecular
+				, sdw::Vec3 & refracted
+				, sdw::Vec3 & coatReflected
+				, sdw::Vec3 & sheenReflected
+				, DebugOutput & debugOutput )const = 0;
+			C3D_API virtual void computeReflRefr( ReflectionModel & reflections
+				, BlendComponents & components
+				, LightSurface const & lightSurface
+				, BackgroundModel & background
+				, CameraData const & camera
+				, OutputComponents & lighting
+				, sdw::Vec3 const & indirectAmbient
+				, sdw::Vec3 const & indirectDiffuse
+				, sdw::Vec2 const & sceneUv
+				, sdw::UInt const & envMapIndex
+				, sdw::Vec3 const & incident
+				, sdw::UInt const & hasReflection
+				, sdw::UInt const & hasRefraction
+				, sdw::Float const & refractionRatio
+				, sdw::Vec3 & reflectedDiffuse
+				, sdw::Vec3 & reflectedSpecular
+				, sdw::Vec3 & refracted
+				, sdw::Vec3 & coatReflected
+				, sdw::Vec3 & sheenReflected
+				, DebugOutput & debugOutput )const = 0;
+			/**
+			*\name
+			*	Getters.
+			*/
+			/**@{*/
+			C3D_API PassComponentID getId()const;
+
+			PassComponentPlugin const & getPlugin()const
+			{
+				return m_plugin;
+			}
+			/**@}*/
+
+		private:
+			PassComponentPlugin const & m_plugin;
+		};
+
 		struct PassMaterialShader
 			: public PassShader
 		{
@@ -745,6 +813,18 @@ namespace castor3d
 		/**
 		*\~english
 		*\return
+		*	\p true if this component processes reflection/refraction.
+		*\~french
+		*\return
+		*	\p true si le composant traite la réflexion/réfraction.
+		*/
+		C3D_API virtual bool isReflRefrComponent()const
+		{
+			return false;
+		}
+		/**
+		*\~english
+		*\return
 		*	\p true if the component replaces regular map sampling.
 		*\~french
 		*\return
@@ -940,6 +1020,18 @@ namespace castor3d
 		*	Crée les shaders pour l'éclairage du composant.
 		*/
 		C3D_API virtual shader::PassComponentsShaderPtr createComponentsShader()const
+		{
+			return nullptr;
+		}
+		/**
+		*\~english
+		*\brief
+		*	Creates the component's reflection and refraction shader.
+		*\~french
+		*\brief
+		*	Crée les shaders pour la réflexion et réfraction du composant.
+		*/
+		C3D_API virtual shader::PassReflRefrShaderPtr createReflRefrShader()const
 		{
 			return nullptr;
 		}

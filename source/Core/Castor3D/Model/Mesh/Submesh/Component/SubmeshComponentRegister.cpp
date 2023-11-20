@@ -116,6 +116,12 @@ namespace castor3d
 			it->baseId = idx + 1u;
 			fillSubmeshComponentCombine( *it );
 		}
+
+		if ( it->baseId > MaxSubmeshCombines )
+		{
+			CU_Failure( "Overflown submesh combines count." );
+			CU_Exception( "Overflown submesh combines count." );
+		}
 		
 		fillSubmeshComponentCombine( combine );
 		combine.baseId = it->baseId;

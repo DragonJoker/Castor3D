@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_WaterComponent_H___
 #define ___C3D_WaterComponent_H___
 
-#include "Shaders/GlslWaterLighting.hpp"
+#include "Shaders/GlslWaterProfile.hpp"
 
 #include <Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp>
 

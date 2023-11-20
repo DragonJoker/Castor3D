@@ -3,7 +3,7 @@
 #include "WaterMaterial/WaterNormal1MapComponent.hpp"
 #include "WaterMaterial/WaterNormal2MapComponent.hpp"
 #include "WaterMaterial/WaterNoiseMapComponent.hpp"
-#include "WaterMaterial/Shaders/GlslWaterLighting.hpp"
+#include "WaterMaterial/WaterReflRefrComponent.hpp"
 #include "WaterMaterial/Shaders/GlslWaterProfile.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -69,14 +69,7 @@ extern "C"
 		engine->registerPassComponent< water::WaterNoiseMapComponent >();
 		engine->registerPassComponent< water::WaterFoamMapComponent >();
 		engine->registerPassComponent< water::WaterComponent >();
-		engine->registerPassModels( { water::shader::WaterPhongLightingModel::getName()
-			, water::WaterPhongPass::create
-			, &water::shader::WaterPhongLightingModel::create
-			, false } );
-		engine->registerPassModels( { water::shader::WaterPbrLightingModel::getName()
-			, water::WaterPbrPass::create
-			, &water::shader::WaterPbrLightingModel::create
-			, true } );
+		engine->registerPassComponent< water::WaterReflRefrComponent >();
 		engine->registerSpecificsBuffer( water::shader::WaterProfile::getName()
 			, { &water::shader::WaterProfiles::create
 				, &water::shader::WaterProfiles::update
@@ -86,8 +79,7 @@ extern "C"
 	C3D_WaterMaterial_API void OnUnload( castor3d::Engine * engine )
 	{
 		engine->unregisterSpecificsBuffer( water::shader::WaterProfile::getName() );
-		engine->unregisterPassModels( water::shader::WaterPbrLightingModel::getName() );
-		engine->unregisterPassModels( water::shader::WaterPhongLightingModel::getName() );
+		engine->unregisterPassComponent( water::WaterReflRefrComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterFoamMapComponent::TypeName );
 		engine->unregisterPassComponent( water::WaterNoiseMapComponent::TypeName );

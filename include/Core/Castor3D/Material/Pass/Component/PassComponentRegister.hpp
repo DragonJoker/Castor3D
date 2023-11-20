@@ -102,6 +102,17 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\name
+		 *	Shader output components handling.
+		 *\~french
+		 *\name
+		 *	Gestion des composants de sortie des shaders.
+		 */
+		/**@{*/
+		C3D_API shader::PassReflRefrShaderPtr getReflRefrShader( PassComponentCombine const & combine )const;
+		/**@}*/
+		/**
+		 *\~english
+		 *\name
 		 *	Base components handling.
 		 *\~french
 		 *\name

@@ -372,11 +372,6 @@ namespace castor3d
 		C3D_API TextureCombine getTexturesMask()const;
 		C3D_API bool hasLighting()const;
 		C3D_API PassComponentRegister & getPassComponentsRegister()const;
-		C3D_API PassComponentTextureFlag getColourMapFlags()const;
-		C3D_API PassComponentTextureFlag getOpacityMapFlags()const;
-		C3D_API PassComponentTextureFlag getNormalMapFlags()const;
-		C3D_API PassComponentTextureFlag getHeightMapFlags()const;
-		C3D_API PassComponentTextureFlag getOcclusionMapFlags()const;
 		C3D_API castor::String getTextureFlagsName( PassComponentTextureFlag flags )const;
 		C3D_API LightingModelID getLightingModelId()const;
 
@@ -418,6 +413,36 @@ namespace castor3d
 		uint32_t getMaxTexCoordSet()const
 		{
 			return m_maxTexcoordSet;
+		}
+
+		PassComponentTextureFlag getColourMapFlags()const
+		{
+			return m_colourMapFlag;
+		}
+
+		PassComponentTextureFlag getOpacityMapFlags()const
+		{
+			return m_opacityMapFlag;
+		}
+
+		PassComponentTextureFlag getNormalMapFlags()const
+		{
+			return m_normalMapFlag;
+		}
+
+		PassComponentTextureFlag getHeightMapFlags()const
+		{
+			return m_heightMapFlag;
+		}
+
+		PassComponentTextureFlag getOcclusionMapFlags()const
+		{
+			return m_occlusionMapFlag;
+		}
+
+		PassComponentTextureFlag getReflRefrFlags()const
+		{
+			return m_reflRefrFlag;
 		}
 		/**@}*/
 		/**
@@ -530,6 +555,12 @@ namespace castor3d
 		RenderPassRegisterInfo * m_renderPassInfo{};
 		bool m_initialised{ false };
 		std::atomic_bool m_initialising{ false };
+		PassComponentTextureFlag m_colourMapFlag{};
+		PassComponentTextureFlag m_opacityMapFlag{};
+		PassComponentTextureFlag m_normalMapFlag{};
+		PassComponentTextureFlag m_heightMapFlag{};
+		PassComponentTextureFlag m_occlusionMapFlag{};
+		PassComponentFlag m_reflRefrFlag{};
 	};
 }
 

@@ -20,6 +20,30 @@ namespace castor3d
 
 	namespace pipflags
 	{
+		namespace hi
+		{
+			static constexpr uint64_t maxSubmeshSize = castor::getBitSize( MaxSubmeshCombines );
+			static constexpr uint64_t maxSubmeshMask = ( 0x1ull << uint64_t( maxSubmeshSize ) ) - 1u;
+			static constexpr uint64_t maxPassSize = castor::getBitSize( MaxPassCombines );
+			static constexpr uint64_t maxPassMask = ( 0x1ull << uint64_t( maxPassSize ) ) - 1u;
+			static constexpr uint64_t maxTexturesSize = castor::getBitSize( MaxTextureCombines );
+			static constexpr uint64_t maxTexturesMask = ( 0x1ull << uint64_t( maxTexturesSize ) ) - 1u;
+			static constexpr uint64_t maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
+			static constexpr uint64_t maxProgramMask = ( 0x1ull << uint64_t( maxProgramSize ) ) - 1u;
+			static constexpr uint64_t maxLightingModelIDSize = castor::getBitSize( MaxLightingModels );
+			static constexpr uint64_t maxLightingModelIDMask = ( 0x1ull << uint64_t( maxLightingModelIDSize ) ) - 1u;
+			static constexpr uint64_t maxCompareOpSize = castor::getBitSize( uint32_t( VK_COMPARE_OP_ALWAYS + 1 ) );
+			static constexpr uint64_t maxCompareOpMask = ( 0x1ull << uint64_t( maxCompareOpSize ) ) - 1u;
+			static constexpr uint64_t maxSubmeshDataSize = castor::getBitSize( MaxSubmeshDataBindings );
+			static constexpr uint64_t maxSubmeshDataMask = ( 0x1ull << uint64_t( maxSubmeshDataSize ) ) - 1u;
+			static constexpr uint64_t maxBackgroundModelIDSize = castor::getBitSize( MaxBackgroundModels );
+			static constexpr uint64_t maxBackgroundModelIDMask = ( 0x1ull << uint64_t( maxBackgroundModelIDSize ) ) - 1u;
+			static constexpr uint64_t maxPassLayerSize = castor::getBitSize( MaxPassLayers );
+			static constexpr uint64_t maxPassLayerMask = ( 0x1ull << uint64_t( maxPassLayerSize ) ) - 1u;
+			static constexpr uint64_t maxSize = maxSubmeshSize + maxProgramSize + maxLightingModelIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + maxSubmeshDataSize + maxBackgroundModelIDSize + maxPassLayerSize + 1u;
+			static_assert( 64 >= maxSize );
+		}
+
 		static bool hasMatchingFlag( SubmeshData submeshFlag
 			, ShaderFlags const & shaderFlags )
 		{
@@ -44,37 +68,29 @@ namespace castor3d
 			, uint64_t hiHash
 			, ShaderFlags shaderFlags )
 		{
-			constexpr uint64_t maxSubmeshSize = sizeof( SubmeshComponentCombineID ) * 8u;
-			constexpr uint64_t maxSubmeshMask = ( 0x1ull << uint64_t( maxSubmeshSize ) ) - 1u;
-			constexpr uint64_t maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
-			constexpr uint64_t maxProgramMask = ( 0x1ull << uint64_t( maxProgramSize ) ) - 1u;
-			constexpr uint64_t maxLightingModelIDSize = castor::getBitSize( MaxLightingModels );
-			constexpr uint64_t maxLightingModelIDMask = ( 0x1ull << uint64_t( maxLightingModelIDSize ) ) - 1u;
-			constexpr uint64_t maxPassSize = sizeof( PassComponentCombineID ) * 8u;
-			constexpr uint64_t maxPassMask = ( 0x1ull << uint64_t( maxPassSize ) ) - 1u;
-			constexpr uint64_t maxTexturesSize = sizeof( TextureCombineID ) * 8u;
-			constexpr uint64_t maxTexturesMask = ( 0x1ull << uint64_t( maxTexturesSize ) ) - 1u;
-			constexpr uint64_t maxCompareOpSize = castor::getBitSize( uint32_t( VK_COMPARE_OP_ALWAYS + 1 ) );
-			constexpr uint64_t maxCompareOpMask = ( 0x1ull << uint64_t( maxCompareOpSize ) ) - 1u;
-			constexpr uint64_t maxSize = maxSubmeshSize + maxProgramSize + maxLightingModelIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + 1u;
-			static_assert( 64 >= maxSize );
 
-			PipelineHiHashDetails result{ {}, {}, 0u };
+			PipelineHiHashDetails result{ {}, {}, 0u, 0u };
 			result.m_shaderFlags = shaderFlags;
 
 			auto offset = 0u;
-			result.pass = passComponents.getPassComponentCombine( PassComponentCombineID( ( hiHash >> offset ) & maxPassMask ) );
-			offset += maxPassSize;
-			result.submesh = submeshComponents.getSubmeshComponentCombine(SubmeshComponentCombineID( ( hiHash >> offset ) & maxSubmeshMask ) );
-			offset += maxPassSize;
-			result.textures = passComponents.getTextureCombine( TextureCombineID( ( hiHash >> offset ) & maxTexturesMask ) );
-			offset += maxTexturesSize;
-			result.m_programFlags = ProgramFlags( ( hiHash >> offset ) & maxProgramMask );
-			offset += maxProgramSize;
-			result.lightingModelId = ( LightingModelID( ( hiHash >> offset ) & maxLightingModelIDMask ) + 1u );
-			offset += maxLightingModelIDSize;
-			result.alphaFunc = VkCompareOp( ( hiHash >> offset ) & maxCompareOpMask );
-			offset += maxCompareOpSize;
+			result.pass = passComponents.getPassComponentCombine( PassComponentCombineID( ( hiHash >> offset ) & hi::maxPassMask ) );
+			offset += hi::maxPassSize;
+			result.submesh = submeshComponents.getSubmeshComponentCombine(SubmeshComponentCombineID( ( hiHash >> offset ) & hi::maxSubmeshMask ) );
+			offset += hi::maxSubmeshSize;
+			result.textures = passComponents.getTextureCombine( TextureCombineID( ( hiHash >> offset ) & hi::maxTexturesMask ) );
+			offset += hi::maxTexturesSize;
+			result.m_programFlags = ProgramFlags( ( hiHash >> offset ) & hi::maxProgramMask );
+			offset += hi::maxProgramSize;
+			result.lightingModelId = ( LightingModelID( ( hiHash >> offset ) & hi::maxLightingModelIDMask ) + 1u );
+			offset += hi::maxLightingModelIDSize;
+			result.alphaFunc = VkCompareOp( ( hiHash >> offset ) & hi::maxCompareOpMask );
+			offset += hi::maxCompareOpSize;
+			result.backgroundModelId = BackgroundModelID( ( ( hiHash >> offset ) & hi::maxBackgroundModelIDMask ) + 1u );
+			offset += hi::maxBackgroundModelIDSize;
+			result.passLayerIndex = uint32_t( ( hiHash >> offset ) & hi::maxPassLayerMask );
+			offset += hi::maxPassLayerSize;
+			result.submeshDataBindings = uint32_t( ( hiHash >> offset ) & hi::maxSubmeshDataMask );
+			offset += hi::maxSubmeshDataSize;
 			result.isStatic = uint32_t( ( hiHash >> offset ) & 0x1u );
 
 			CU_Require( result.lightingModelId != 0 );
@@ -85,21 +101,8 @@ namespace castor3d
 			, SubmeshComponentRegister const & submeshComponents
 			, PipelineHiHashDetails const & flags )
 		{
-			constexpr uint64_t maxSubmeshSize = sizeof( SubmeshComponentCombineID ) * 8u;
-			constexpr uint64_t maxSubmeshMask = ( 0x1ull << uint64_t( maxSubmeshSize ) ) - 1u;
-			constexpr uint64_t maxProgramSize = castor::getBitSize( uint32_t( ProgramFlag::eAllBase ) );
-			constexpr uint64_t maxProgramMask = ( 0x1ull << uint64_t( maxProgramSize ) ) - 1u;
-			constexpr uint64_t maxLightingModelIDSize = castor::getBitSize( MaxLightingModels - 1u );
-			constexpr uint64_t maxLightingModelIDMask = ( 0x1ull << uint64_t( maxLightingModelIDSize ) ) - 1u;
-			constexpr uint64_t maxPassSize = sizeof( PassComponentCombineID ) * 8u;
-			constexpr uint64_t maxPassMask = ( 0x1ull << uint64_t( maxPassSize ) ) - 1u;
-			constexpr uint64_t maxTexturesSize = sizeof( TextureCombineID ) * 8u;
-			constexpr uint64_t maxTexturesMask = ( 0x1ull << uint64_t( maxTexturesSize ) ) - 1u;
-			constexpr uint64_t maxCompareOpSize = castor::getBitSize( uint32_t( VK_COMPARE_OP_ALWAYS + 1 ) );
-			constexpr uint64_t maxCompareOpMask = ( 0x1ull << uint64_t( maxCompareOpSize ) ) - 1u;
-			constexpr uint64_t maxSize = maxSubmeshSize + maxProgramSize + maxLightingModelIDSize + maxPassSize + maxTexturesSize + maxCompareOpSize + 1u;
-			static_assert( 64 >= maxSize );
 			CU_Require( flags.lightingModelId != 0 );
+			CU_Require( flags.passLayerIndex < MaxPassLayers );
 
 			auto programFlags = flags.m_programFlags;
 			remFlag( programFlags, ProgramFlag::eAllOptional );
@@ -112,18 +115,24 @@ namespace castor3d
 			auto submeshComponentsId = flags.submesh.baseId
 				? flags.submesh.baseId
 				: submeshComponents.getSubmeshComponentCombineID( flags.submesh );
-			result |= uint64_t( passComponentsId & maxPassMask ) << offset;
-			offset += maxPassSize;
-			result |= ( uint64_t( submeshComponentsId ) & maxSubmeshMask ) << offset;
-			offset += maxSubmeshSize;
-			result |= uint64_t( passComponents.getTextureCombineID( flags.textures ) & maxTexturesMask) << offset;
-			offset += maxTexturesSize;
-			result |= ( uint64_t( programFlags ) & maxProgramMask ) << offset;
-			offset += maxProgramSize;
-			result |= ( uint64_t( flags.lightingModelId - 1u ) & maxLightingModelIDMask ) << offset;
-			offset += maxLightingModelIDSize;
-			result |= uint64_t( flags.alphaFunc & maxCompareOpMask) << offset;
-			offset += maxCompareOpSize;
+			result |= uint64_t( passComponentsId & hi::maxPassMask ) << offset;
+			offset += hi::maxPassSize;
+			result |= ( uint64_t( submeshComponentsId ) & hi::maxSubmeshMask ) << offset;
+			offset += hi::maxSubmeshSize;
+			result |= uint64_t( passComponents.getTextureCombineID( flags.textures ) & hi::maxTexturesMask) << offset;
+			offset += hi::maxTexturesSize;
+			result |= ( uint64_t( programFlags ) & hi::maxProgramMask ) << offset;
+			offset += hi::maxProgramSize;
+			result |= ( uint64_t( flags.lightingModelId - 1u ) & hi::maxLightingModelIDMask ) << offset;
+			offset += hi::maxLightingModelIDSize;
+			result |= uint64_t( flags.alphaFunc & hi::maxCompareOpMask) << offset;
+			offset += hi::maxCompareOpSize;
+			result |= uint64_t( ( flags.backgroundModelId - 1u ) & hi::maxBackgroundModelIDMask ) << offset;
+			offset += hi::maxBackgroundModelIDSize;
+			result |= uint64_t( flags.passLayerIndex & hi::maxPassLayerMask ) << offset;
+			offset += hi::maxPassLayerSize;
+			result |= uint64_t( flags.submeshDataBindings & hi::maxSubmeshDataMask ) << offset;
+			offset += hi::maxSubmeshDataSize;
 			result |= ( flags.isStatic ? 1ull : 0ull ) << offset;
 
 #if !defined( NDEBUG )
@@ -145,6 +154,9 @@ namespace castor3d
 			CU_Require( contains( passCombine, details.pass ) );
 			CU_Require( contains( submeshCombine, details.submesh ) );
 			CU_Require( contains( flags.textures, details.textures ) );
+			CU_Require( flags.backgroundModelId == details.backgroundModelId );
+			CU_Require( flags.passLayerIndex == details.passLayerIndex );
+			CU_Require( flags.submeshDataBindings == details.submeshDataBindings );
 #endif
 			return result;
 		}
@@ -152,26 +164,9 @@ namespace castor3d
 #if !defined( NDEBUG )
 		static PipelineLoHashDetails getLoHashDetails( uint64_t hash )
 		{
-			constexpr uint64_t maxBackgroundModelIDSize = castor::getBitSize( MaxBackgroundModels - 1u );
-			constexpr uint64_t maxBackgroundModelIDMask = ( 0x1ull << uint64_t( maxBackgroundModelIDSize ) ) - 1u;
-			constexpr uint64_t maxPassLayerSize = castor::getBitSize( MaxPassLayers );
-			constexpr uint64_t maxPassLayerMask = ( 0x1ull << uint64_t( maxPassLayerSize ) ) - 1u;
-			constexpr uint64_t maxSubmeshDataSize = castor::getBitSize( MaxSubmeshDataBindings );
-			constexpr uint64_t maxSubmeshDataMask = ( 0x1ull << uint64_t( maxSubmeshDataSize ) ) - 1u;
-			constexpr uint64_t maxMorphTargetOffsetSize = 64u - maxBackgroundModelIDSize - maxPassLayerSize - maxSubmeshDataSize;
-			constexpr uint64_t maxMorphTargetOffsetMask = ( 0x1ull << uint64_t( maxMorphTargetOffsetSize ) ) - 1u;
-			constexpr uint64_t maxSize = maxMorphTargetOffsetSize + maxBackgroundModelIDSize + maxPassLayerSize + maxSubmeshDataSize;
-			static_assert( 64 >= maxSize );
 
 			PipelineLoHashDetails result{};
-			auto offset = 0u;
-			result.morphTargetsOffset = VkDeviceSize( ( hash >> offset ) & maxMorphTargetOffsetMask );
-			offset += maxMorphTargetOffsetSize;
-			result.backgroundModelId = BackgroundModelID( ( ( hash >> offset ) & maxBackgroundModelIDMask ) + 1u );
-			offset += maxBackgroundModelIDSize;
-			result.passLayerIndex = uint32_t( ( hash >> offset ) & maxPassLayerMask );
-			offset += maxPassLayerSize;
-			result.submeshDataBindings = uint32_t( ( hash >> offset ) & maxSubmeshDataMask );
+			result.morphTargetsOffset = VkDeviceSize( hash );
 
 			return result;
 		}
@@ -179,36 +174,12 @@ namespace castor3d
 
 		static uint64_t getLoHash( PipelineLoHashDetails const & flags )
 		{
-			constexpr uint64_t maxBackgroundModelIDSize = castor::getBitSize( MaxBackgroundModels - 1u );
-			constexpr uint64_t maxBackgroundModelIDMask = ( 0x1ull << uint64_t( maxBackgroundModelIDSize ) ) - 1u;
-			constexpr uint64_t maxPassLayerSize = castor::getBitSize( MaxPassLayers );
-			constexpr uint64_t maxPassLayerMask = ( 0x1ull << uint64_t( maxPassLayerSize ) ) - 1u;
-			constexpr uint64_t maxSubmeshDataSize = castor::getBitSize( MaxSubmeshDataBindings );
-			constexpr uint64_t maxSubmeshDataMask = ( 0x1ull << uint64_t( maxSubmeshDataSize ) ) - 1u;
-			constexpr uint64_t maxMorphTargetOffsetSize = 64u - maxBackgroundModelIDSize - maxPassLayerSize - maxSubmeshDataSize;
-			constexpr uint64_t maxMorphTargetOffsetMask = ( 0x1ull << uint64_t( maxMorphTargetOffsetSize ) ) - 1u;
-			constexpr uint64_t maxSize = maxMorphTargetOffsetSize + maxBackgroundModelIDSize + maxPassLayerSize + maxSubmeshDataSize;
-			static_assert( 64 >= maxSize );
-			CU_Require( maxMorphTargetOffsetSize == maxSize
-				|| ( flags.morphTargetsOffset >> std::min( maxMorphTargetOffsetSize, maxSize - 1 ) ) == 0 );
-			CU_Require( flags.passLayerIndex < MaxPassLayers );
-
 			uint64_t result{};
-			auto offset = 0u;
-			result |= uint64_t( flags.morphTargetsOffset & maxMorphTargetOffsetMask ) << offset;
-			offset += maxMorphTargetOffsetSize;
-			result |= uint64_t( ( flags.backgroundModelId - 1u ) & maxBackgroundModelIDMask ) << offset;
-			offset += maxBackgroundModelIDSize;
-			result |= uint64_t( flags.passLayerIndex & maxPassLayerMask ) << offset;
-			offset += maxPassLayerSize;
-			result |= uint64_t( flags.submeshDataBindings & maxSubmeshDataMask ) << offset;
+			result |= uint64_t( flags.morphTargetsOffset );
 
 #if !defined( NDEBUG )
 			auto details = getLoHashDetails( result );
 			CU_Require( flags.morphTargetsOffset == details.morphTargetsOffset );
-			CU_Require( flags.backgroundModelId == details.backgroundModelId );
-			CU_Require( flags.passLayerIndex == details.passLayerIndex );
-			CU_Require( flags.submeshDataBindings == details.submeshDataBindings );
 #endif
 			return result;
 		}
@@ -240,7 +211,10 @@ namespace castor3d
 			&& lhs.submesh == rhs.submesh
 			&& lhs.textures == rhs.textures
 			&& lhs.lightingModelId == rhs.lightingModelId
+			&& lhs.backgroundModelId == rhs.backgroundModelId
 			&& lhs.alphaFunc == rhs.alphaFunc
+			&& lhs.passLayerIndex == rhs.passLayerIndex
+			&& lhs.submeshDataBindings == rhs.submeshDataBindings
 			&& lhs.isStatic == rhs.isStatic
 			&& lhs.m_programFlags == rhs.m_programFlags
 			&& lhs.m_shaderFlags == rhs.m_shaderFlags;
@@ -250,10 +224,7 @@ namespace castor3d
 
 	bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs )
 	{
-		return lhs.backgroundModelId == rhs.backgroundModelId
-			&& lhs.morphTargetsOffset == rhs.morphTargetsOffset
-			&& lhs.passLayerIndex == rhs.passLayerIndex
-			&& lhs.submeshDataBindings == rhs.submeshDataBindings;
+		return lhs.morphTargetsOffset == rhs.morphTargetsOffset;
 	}
 
 	//*********************************************************************************************

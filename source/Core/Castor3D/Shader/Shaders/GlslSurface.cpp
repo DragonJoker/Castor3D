@@ -450,8 +450,8 @@ namespace castor3d::shader
 			, flags.enableTangentSpace() );
 		type.declMember( "bitangent", ast::type::Kind::eVec3F
 			, ast::type::NotArray
-			, ( flags.enableTangentSpace() ? index++ : 0 )
-			, flags.enableTangentSpace() );
+			, ( ( flags.enableBitangent() || flags.enableTangentSpace() ) ? index++ : 0 )
+			, ( flags.enableBitangent() || flags.enableTangentSpace() ) );
 		type.declMember( "colour", ast::type::Kind::eVec3F
 			, ast::type::NotArray
 			, ( flags.enableColours() ? index++ : 0 )
@@ -496,7 +496,7 @@ namespace castor3d::shader
 			, flags.enableTangentSpace() );
 		type.declMember( "bitangent", ast::type::Kind::eVec3F
 			, ast::type::NotArray
-			, flags.enableTangentSpace() );
+			, flags.enableBitangent() || flags.enableTangentSpace() );
 		type.declMember( "colour", ast::type::Kind::eVec3F
 			, ast::type::NotArray
 			, flags.enableColours() );

@@ -1098,7 +1098,8 @@ namespace ocean_fft
 						, lightSurface.viewPosition().z()
 						, output
 						, lighting );
-
+					lightingModel->adjustDirectSpecular( components
+						, lighting.specular );
 
 					// Indirect Lighting
 					lightSurface.updateL( utils

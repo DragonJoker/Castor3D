@@ -297,7 +297,15 @@ namespace castor3d
 			it = std::next( m_texturesCombines.begin(), idx );
 		}
 
-		return TextureCombineID( std::distance( m_texturesCombines.begin(), it ) + 1 );
+		auto result = TextureCombineID( std::distance( m_texturesCombines.begin(), it ) + 1 );
+
+		if ( result > MaxTextureCombines )
+		{
+			CU_Failure( "Overflown texture combines count." );
+			CU_Exception( "Overflown texture combines count." );
+		}
+
+		return result;
 	}
 
 	TextureCombineID TextureUnitCache::getTextureCombineID( TextureCombine const & combine )const
