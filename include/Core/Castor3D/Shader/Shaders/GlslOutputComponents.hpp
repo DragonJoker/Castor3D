@@ -28,7 +28,7 @@ namespace castor3d::shader
 		{
 		}
 
-		DirectLighting( sdw::ShaderWriter & writer )
+		explicit DirectLighting( sdw::ShaderWriter & writer )
 			: DirectLighting{ writer
 				, sdw::makeAggrInit( DirectLighting::makeType( writer.getTypesCache() ), makeZero() )
 				, true }
@@ -61,7 +61,7 @@ namespace castor3d::shader
 		{
 		}
 
-		IndirectLighting( sdw::ShaderWriter & writer )
+		explicit IndirectLighting( sdw::ShaderWriter & writer )
 			: IndirectLighting{ writer
 				, sdw::makeAggrInit( IndirectLighting::makeType( writer.getTypesCache() ), makeZero() )
 				, true }

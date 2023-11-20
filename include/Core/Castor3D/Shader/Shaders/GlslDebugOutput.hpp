@@ -75,7 +75,7 @@ namespace castor3d::shader
 		DebugOutputCategory( DebugOutputCategory const & rhs ) = delete;
 		DebugOutputCategory& operator=( DebugOutputCategory const & rhs ) = delete;
 
-		DebugOutputCategory( DebugOutput & debugOutput )noexcept
+		explicit DebugOutputCategory( DebugOutput & debugOutput )noexcept
 			: m_debugOutput{ &debugOutput }
 		{
 		}
@@ -99,6 +99,8 @@ namespace castor3d::shader
 			m_debugOutput = rhs.m_debugOutput;
 
 			rhs.m_debugOutput = {};
+
+			return *this;
 		}
 
 		template< typename ValueT >
