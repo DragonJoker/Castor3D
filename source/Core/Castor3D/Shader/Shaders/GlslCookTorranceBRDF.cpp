@@ -34,7 +34,6 @@ namespace castor3d::shader
 	{
 		if ( !m_computeCookTorranceSpecular )
 		{
-			OutputComponents outputs{ m_writer };
 			m_computeCookTorranceSpecular = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeCookTorranceSpecular"
 				, [this]( sdw::Vec3 const & radiance
 					, sdw::Float const & intensity

@@ -28,9 +28,8 @@ namespace water
 		, c3d::BackgroundModel & backgroundModel
 		, sdw::CombinedImage2DRgba32 const & mippedScene
 		, c3d::CameraData const & camera
-		, c3d::OutputComponents & lighting
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & indirectDiffuse
+		, c3d::DirectLighting & lighting
+		, c3d::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
@@ -50,8 +49,7 @@ namespace water
 			, backgroundModel
 			, camera
 			, lighting
-			, indirectAmbient
-			, indirectDiffuse
+			, indirect
 			, sceneUv
 			, envMapIndex
 			, incident
@@ -71,9 +69,8 @@ namespace water
 		, c3d::LightSurface const & lightSurface
 		, c3d::BackgroundModel & backgroundModel
 		, c3d::CameraData const & camera
-		, c3d::OutputComponents & lighting
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & indirectDiffuse
+		, c3d::DirectLighting & lighting
+		, c3d::IndirectLighting & indirect
 		, sdw::Vec2 const & sceneUv
 		, sdw::UInt const & envMapIndex
 		, sdw::Vec3 const & incident
@@ -109,18 +106,22 @@ namespace water
 		auto refractionDistanceFactor = components.getMember< sdw::Float >( "refractionDistanceFactor", true );
 
 		// Reflections
+		auto bgDiffuseReflection = writer.declLocale("bgDiffuseReflection"
+			, vec3( 0.0_f ) );
+		auto bgSpecularReflection = writer.declLocale("bgSpecularReflection"
+			, vec3( 0.0_f ) );
 		reflections.computeReflections( components
 			, lightSurface
 			, backgroundModel
 			, envMapIndex
 			, components.hasReflection
-			, reflectedDiffuse
-			, reflectedSpecular
+			, bgDiffuseReflection
+			, bgSpecularReflection
 			, debugOutputBlock );
 		auto hdrCoords = writer.declLocale( "hdrCoords"
 			, sceneUv / vec2( mapColours.getSize( 0_i ) ) );
 		auto backgroundReflection = writer.declLocale( "backgroundReflection"
-			, reflectedDiffuse + reflectedSpecular );
+			, bgDiffuseReflection + bgSpecularReflection );
 		debugOutputBlock.registerOutput( "Background Reflection", backgroundReflection );
 		auto ssrResult = writer.declLocale( "ssrResult"
 			, reflections.computeScreenSpace( camera
@@ -163,7 +164,7 @@ namespace water
 		auto waterSurfacePosition = writer.declLocale( "waterSurfacePosition"
 			, writer.ternary( distortedPosition.y() < lightSurface.worldPosition().y(), distortedPosition, scenePosition ) );
 		auto waterTransmission = writer.declLocale( "waterTransmission"
-			, components.colour * ( indirectAmbient + indirectDiffuse ) * lighting.diffuse );
+			, components.colour * ( indirect.ambient() + indirect.diffuseColour() ) * lighting.diffuse() );
 		auto heightFactor = writer.declLocale( "heightFactor"
 			, refractionHeightFactor * ( camera.farPlane() - camera.nearPlane() ) );
 		auto heightDistance = writer.declLocale( "heightDistance"
@@ -183,8 +184,7 @@ namespace water
 		{
 			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
 			debugOutputBlock.registerOutput( "Specular Noise", waterNoise );
-			reflectionResult *= waterNoise;
-			lighting.specular *= waterNoise;
+			lighting.specular() *= waterNoise;
 		}
 
 		if ( components.hasMember( "foamHeightStart" )
@@ -205,7 +205,7 @@ namespace water
 			foamAmount += pow( ( 1.0_f - depthSoftenedAlpha ), 3.0_f );
 			debugOutputBlock.registerOutput( "Depth Softened Foam Amount", foamAmount );
 			auto foamResult = writer.declLocale( "foamResult"
-				, lighting.diffuse * mix( vec3( 0.0_f )
+				, lighting.diffuse() * mix( vec3( 0.0_f )
 					, waterFoam * foamBrightness
 					, vec3( utils.saturate( foamAmount ) * depthSoftenedAlpha ) ) );
 			debugOutputBlock.registerOutput( "Foam Result", foamResult );
@@ -215,9 +215,7 @@ namespace water
 
 		components.opacity = depthSoftenedAlpha;
 		reflectedSpecular = reflectionResult;
-		reflectedDiffuse = vec3( 0.0_f );
-		coatReflected = vec3( 0.0_f );
-		sheenReflected = vec3( 0.0_f );
+		lighting.ambient() = components.ambientColour * components.ambientFactor;
 	}
 
 	//*********************************************************************************************

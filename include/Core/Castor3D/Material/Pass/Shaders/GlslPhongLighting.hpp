@@ -32,11 +32,9 @@ namespace castor3d::shader
 			, Shadow & shadowModel
 			, Lights & lights
 			, bool enableVolumetric );
-
-		C3D_API sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
-			, sdw::Vec3 const & directAmbient )const override;
-		C3D_API sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
-			, sdw::Vec3 const & directSpecular )const override;
+		
+		C3D_API void adjustDirectLighting( BlendComponents const & components
+			, DirectLighting & lighting )const override;
 
 	protected:
 		C3D_API void doFinish( PassShaders const & passShaders
@@ -47,31 +45,27 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float & isLit
-			, sdw::Vec3 & output )override;
+			, sdw::Vec3 output )override;
 		C3D_API void doComputeSpecularTerm( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
-			, sdw::Vec3 & output )override;
+			, sdw::Vec3 output )override;
 		C3D_API void doComputeCoatingTerm( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
-			, sdw::Vec3 & output )override;
+			, sdw::Vec3 output )override;
 		C3D_API sdw::Vec3 doGetDiffuseBrdf( BlendComponents const & components
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
+			, DirectLighting const & lighting
+			, IndirectLighting const & indirect
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & reflectedDiffuse )override;
 		C3D_API sdw::Vec3 doGetSpecularBrdf( BlendComponents const & components
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
+			, DirectLighting const & lighting
+			, IndirectLighting const & indirect
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & reflectedSpecular )override;
 	};

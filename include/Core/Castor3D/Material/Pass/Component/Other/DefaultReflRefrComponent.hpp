@@ -29,9 +29,8 @@ namespace castor3d
 				, shader::BackgroundModel & background
 				, sdw::CombinedImage2DRgba32 const & mippedScene
 				, shader::CameraData const & camera
-				, shader::OutputComponents & lighting
-				, sdw::Vec3 const & indirectAmbient
-				, sdw::Vec3 const & indirectDiffuse
+				, shader::DirectLighting & lighting
+				, shader::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident
@@ -49,9 +48,8 @@ namespace castor3d
 				, shader::LightSurface const & lightSurface
 				, shader::BackgroundModel & background
 				, shader::CameraData const & camera
-				, shader::OutputComponents & lighting
-				, sdw::Vec3 const & indirectAmbient
-				, sdw::Vec3 const & indirectDiffuse
+				, shader::DirectLighting & lighting
+				, shader::IndirectLighting & indirect
 				, sdw::Vec2 const & sceneUv
 				, sdw::UInt const & envMapIndex
 				, sdw::Vec3 const & incident

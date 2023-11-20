@@ -308,7 +308,7 @@ namespace castor3d::shader
 		, sdw::Vec2 const screenPosition
 		, sdw::Float const viewDepth
 		, DebugOutput & debugOutput
-		, OutputComponents & parentOutput )
+		, DirectLighting & parentOutput )
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
@@ -379,11 +379,11 @@ namespace castor3d::shader
 				ELIHW;
 			}
 
-			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse );
-			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.specular );
-			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering );
-			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular );
-			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen );
+			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse() );
+			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.specular() );
+			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering() );
+			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular() );
+			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen() );
 		}
 	}
 
@@ -396,13 +396,13 @@ namespace castor3d::shader
 		, sdw::Float const viewDepth
 		, sdw::Vec3 const diffuse
 		, DebugOutput & debugOutput
-		, OutputComponents & parentOutput )
+		, DirectLighting & parentOutput )
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
 			if ( clusteredLights.isEnabled() )
 			{
-				parentOutput.diffuse = diffuse;
+				parentOutput.diffuse() = diffuse;
 				auto cur = m_writer.declLocale( "c3d_cur"
 					, 0_u );
 				auto end = m_writer.declLocale( "c3d_end"
@@ -444,11 +444,11 @@ namespace castor3d::shader
 					, parentOutput );
 			}
 
-			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse );
-			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.specular );
-			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering );
-			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular );
-			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen );
+			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse() );
+			debugOutput.registerOutput( "Lighting", "Specular", parentOutput.specular() );
+			debugOutput.registerOutput( "Lighting", "Scattering", parentOutput.scattering() );
+			debugOutput.registerOutput( "Lighting", "CoatingSpecular", parentOutput.coatingSpecular() );
+			debugOutput.registerOutput( "Lighting", "Sheen", parentOutput.sheen() );
 		}
 	}
 
@@ -515,11 +515,11 @@ namespace castor3d::shader
 		, sdw::UInt const receivesShadows
 		, sdw::Vec3 const diffuse
 		, DebugOutput & debugOutput
-		, OutputComponents & parentOutput )
+		, DirectLighting & parentOutput )
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
-			parentOutput.diffuse = diffuse;
+			parentOutput.diffuse() = diffuse;
 			auto cur = m_writer.declLocale( "c3d_cur"
 				, 0_u );
 			auto end = m_writer.declLocale( "c3d_end"

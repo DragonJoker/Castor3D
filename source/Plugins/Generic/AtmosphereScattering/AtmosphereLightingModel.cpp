@@ -111,7 +111,7 @@ namespace atmosphere_scattering
 		, sdw::Vec2 const & lightIntensity
 		, c3d::BlendComponents const & components
 		, c3d::LightSurface const & lightSurface
-		, sdw::Vec3 & output )
+		, sdw::Vec3 output )
 	{
 		compScatteringTerm( lightSurface, output );
 		doApplyVolumetric( shadows
@@ -180,7 +180,7 @@ namespace atmosphere_scattering
 		, sdw::Vec2 const & lightIntensity
 		, c3d::BlendComponents const & components
 		, c3d::LightSurface const & lightSurface
-		, sdw::Vec3 & output )
+		, sdw::Vec3 output )
 	{
 		compScatteringTerm( lightSurface, output );
 		doApplyVolumetric( shadows

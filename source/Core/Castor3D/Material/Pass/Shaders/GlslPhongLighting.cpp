@@ -63,17 +63,11 @@ namespace castor3d::shader
 			, enableVolumetric );
 	}
 
-	sdw::Vec3 PhongLightingModel::adjustDirectAmbient( BlendComponents const & components
-		, sdw::Vec3 const & directAmbient )const
+	void PhongLightingModel::adjustDirectLighting( BlendComponents const & components
+		, DirectLighting & lighting )const
 	{
-		return  directAmbient * components.colour;
-	}
-
-	sdw::Vec3 PhongLightingModel::adjustDirectSpecular( BlendComponents const & components
-		, sdw::Vec3 const & directSpecular )const
-	{
-		auto specular = components.getMember( "specular", vec3( 1.0_f ) );
-		return directSpecular * specular;
+		lighting.ambient() *= components.colour;
+		lighting.specular() *= components.specular;
 	}
 
 	void PhongLightingModel::doFinish( PassShaders const & passShaders
@@ -88,7 +82,7 @@ namespace castor3d::shader
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Float & isLit
-		, sdw::Vec3 & output )
+		, sdw::Vec3 output )
 	{
 		isLit = 1.0_f - step( doGetNdotL( lightSurface, components ), 0.0_f );
 		auto rawDiffuse = m_writer.declLocale( "rawDiffuse"
@@ -104,7 +98,7 @@ namespace castor3d::shader
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Float const & isLit
-		, sdw::Vec3 & output )
+		, sdw::Vec3 output )
 	{
 		output = isLit
 			* radiance
@@ -118,7 +112,7 @@ namespace castor3d::shader
 		, BlendComponents const & components
 		, LightSurface const & lightSurface
 		, sdw::Float const & isLit
-		, sdw::Vec3 & output )
+		, sdw::Vec3 output )
 	{
 		IF( m_writer, components.clearcoatFactor != 0.0_f )
 		{
@@ -133,27 +127,23 @@ namespace castor3d::shader
 	}
 
 	sdw::Vec3 PhongLightingModel::doGetDiffuseBrdf( BlendComponents const & components
-		, sdw::Vec3 const & directDiffuse
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec3 const & directAmbient
-		, sdw::Vec3 const & indirectAmbient
+		, DirectLighting const & lighting
+		, IndirectLighting const & indirect
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedDiffuse )
 	{
-		return  ( components.colour * ( directDiffuse + ( ( indirectDiffuse + reflectedDiffuse ) * ambientOcclusion ) )
-			+ directAmbient * indirectAmbient * ambientOcclusion );
+		return ( components.colour * ( lighting.diffuse() + ( ( indirect.diffuseColour() + reflectedDiffuse ) * ambientOcclusion ) )
+			+ lighting.ambient() * indirect.ambient() * ambientOcclusion );
 	}
 
 	sdw::Vec3 PhongLightingModel::doGetSpecularBrdf( BlendComponents const & components
-		, sdw::Vec3 const & directSpecular
-		, sdw::Vec3 const & indirectSpecular
-		, sdw::Vec3 const & directAmbient
-		, sdw::Vec3 const & indirectAmbient
+		, DirectLighting const & lighting
+		, IndirectLighting const & indirect
 		, sdw::Float const & ambientOcclusion
 		, sdw::Vec3 const & reflectedSpecular )
 	{
-		return ( directSpecular
-			+ ( ( reflectedSpecular + indirectSpecular ) * ambientOcclusion ) );
+		return ( lighting.specular()
+			+ ( ( reflectedSpecular + indirect.specular() ) * ambientOcclusion ) );
 	}
 
 	//*********************************************************************************************

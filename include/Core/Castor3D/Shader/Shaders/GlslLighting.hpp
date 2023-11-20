@@ -52,15 +52,8 @@ namespace castor3d::shader
 		C3D_API sdw::Vec3 combine( DebugOutput & debugOutput
 			, BlendComponents const & components
 			, sdw::Vec3 const & incident
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & directScattering
-			, sdw::Vec3 const & directCoatingSpecular
-			, sdw::Vec2 const & directSheen
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
+			, DirectLighting directLighting
+			, IndirectLighting indirectLighting
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & emissive
 			, sdw::Vec3 reflectedDiffuse
@@ -71,22 +64,16 @@ namespace castor3d::shader
 		C3D_API virtual sdw::Vec3 combine( DebugOutput & debugOutput
 			, BlendComponents const & components
 			, sdw::Vec3 const & incident
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
+			, DirectLighting directLighting
+			, IndirectLighting indirectLighting
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & emissive
 			, sdw::Vec3 reflectedDiffuse
 			, sdw::Vec3 reflectedSpecular
 			, sdw::Vec3 refracted );
-
-		C3D_API virtual sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
-			, sdw::Vec3 const & directAmbient )const = 0;
-		C3D_API virtual sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
-			, sdw::Vec3 const & directSpecular )const = 0;
+		
+		C3D_API virtual void adjustDirectLighting( BlendComponents const & components
+			, DirectLighting & lighting )const = 0;
 		/**
 		*\name
 		*	Clustered lighting
@@ -103,19 +90,19 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, DirectLighting & output );
 		C3D_API void compute( DebugOutput & debugOutput
 			, PointLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, DirectLighting & output );
 		C3D_API void compute( DebugOutput & debugOutput
 			, SpotLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, DirectLighting & output );
 		//\}
 		/**
 		*\name
@@ -150,25 +137,25 @@ namespace castor3d::shader
 			, BackgroundModel & background
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, DirectLighting & output );
 		C3D_API void computeAllButDiffuse( DebugOutput & debugOutput
 			, PointLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, DirectLighting & output );
 		C3D_API void computeAllButDiffuse( DebugOutput & debugOutput
 			, SpotLight const & light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output );
+			, DirectLighting & output );
 		//\}
 		//\}
 
 	protected:
 		C3D_API void doAttenuate( sdw::Float const attenuation
-			, OutputComponents & output
+			, DirectLighting & output
 			, bool withDiffuse = true );
 		C3D_API void doApplyShadows( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex
@@ -176,7 +163,7 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output
+			, DirectLighting & output
 			, bool withDiffuse = true );
 		C3D_API void doApplyShadows( PointShadowData const & light
 			, sdw::Int const shadowMapIndex
@@ -184,7 +171,7 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output
+			, DirectLighting & output
 			, bool withDiffuse = true );
 		C3D_API void doApplyShadows( SpotShadowData const & light
 			, sdw::Int const shadowMapIndex
@@ -192,7 +179,7 @@ namespace castor3d::shader
 			, LightSurface const & lightSurface
 			, sdw::Vec3 const & radiance
 			, sdw::UInt const & receivesShadows
-			, OutputComponents & output
+			, DirectLighting & output
 			, bool withDiffuse = true );
 		C3D_API void doApplyShadowsDiffuse( DirectionalShadowData const & light
 			, sdw::Int const shadowMapIndex
@@ -218,7 +205,7 @@ namespace castor3d::shader
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec2 const & lightIntensity
 			, LightSurface const & lightSurface
-			, sdw::Vec3 & output
+			, sdw::Vec3 output
 			, bool multiply );
 
 		C3D_API virtual void doInitialiseBackground( BackgroundModel & background );
@@ -229,14 +216,14 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
-			, sdw::Vec2 & output );
+			, sdw::Vec2 output );
 		C3D_API virtual void doComputeScatteringTerm( ShadowData const & shadows
 			, sdw::Int const shadowMapIndex
 			, sdw::Vec3 const & radiance
 			, sdw::Vec2 const & lightIntensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
-			, sdw::Vec3 & output );
+			, sdw::Vec3 output );
 		C3D_API virtual void doInitLightSpecifics( LightSurface const & lightSurface
 			, BlendComponents const & components );
 		C3D_API virtual sdw::Float doGetNdotL( LightSurface const & lightSurface
@@ -252,31 +239,27 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float & isLit
-			, sdw::Vec3 & output ) = 0;
+			, sdw::Vec3 output ) = 0;
 		C3D_API virtual void doComputeSpecularTerm( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
-			, sdw::Vec3 & output ) = 0;
+			, sdw::Vec3 output ) = 0;
 		C3D_API virtual void doComputeCoatingTerm( sdw::Vec3 const & radiance
 			, sdw::Float const & intensity
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Float const & isLit
-			, sdw::Vec3 & output ) = 0;
+			, sdw::Vec3 output ) = 0;
 		C3D_API virtual sdw::Vec3 doGetDiffuseBrdf( BlendComponents const & components
-			, sdw::Vec3 const & directDiffuse
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
+			, DirectLighting const & lighting
+			, IndirectLighting const & indirect
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & reflectedDiffuse ) = 0;
 		C3D_API virtual sdw::Vec3 doGetSpecularBrdf( BlendComponents const & components
-			, sdw::Vec3 const & directSpecular
-			, sdw::Vec3 const & indirectSpecular
-			, sdw::Vec3 const & directAmbient
-			, sdw::Vec3 const & indirectAmbient
+			, DirectLighting const & lighting
+			, IndirectLighting const & indirect
 			, sdw::Float const & ambientOcclusion
 			, sdw::Vec3 const & reflectedSpecular ) = 0;
 
@@ -285,7 +268,7 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 & radiance
-			, OutputComponents & output );
+			, DirectLighting & output );
 		C3D_API virtual sdw::Vec3 doComputeLightDiffuse( Light light
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
@@ -294,7 +277,7 @@ namespace castor3d::shader
 			, BlendComponents const & components
 			, LightSurface const & lightSurface
 			, sdw::Vec3 & radiance
-			, OutputComponents & output );
+			, DirectLighting & output );
 
 	protected:
 		LightingModelID m_lightingModelId;
@@ -315,19 +298,19 @@ namespace castor3d::shader
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
-			, OutputComponents & > m_computeDirectional;
+			, InOutDirectLighting > m_computeDirectional;
 		sdw::Function< sdw::Void
 			, PPointLight
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
-			, OutputComponents & > m_computePoint;
+			, InOutDirectLighting > m_computePoint;
 		sdw::Function< sdw::Void
 			, PSpotLight
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
-			, OutputComponents & > m_computeSpot;
+			, InOutDirectLighting > m_computeSpot;
 		sdw::Function< sdw::Vec3
 			, InOutDirectionalLight
 			, InBlendComponents
@@ -348,19 +331,19 @@ namespace castor3d::shader
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
-			, OutputComponents & > m_computeDirectionalAllButDiffuse;
+			, InOutDirectLighting > m_computeDirectionalAllButDiffuse;
 		sdw::Function< sdw::Void
 			, PPointLight
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
-			, OutputComponents & > m_computePointAllButDiffuse;
+			, InOutDirectLighting > m_computePointAllButDiffuse;
 		sdw::Function< sdw::Void
 			, PSpotLight
 			, InBlendComponents
 			, InLightSurface
 			, sdw::InUInt
-			, OutputComponents & > m_computeSpotAllButDiffuse;
+			, InOutDirectLighting > m_computeSpotAllButDiffuse;
 	};
 }
 
