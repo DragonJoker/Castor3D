@@ -42,7 +42,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & refracted
 		, sdw::Vec3 & coatReflected
 		, sdw::Vec3 & sheenReflected
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		computeCombined( components
 			, lightSurface.N()
@@ -87,7 +87,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & prefracted
 		, sdw::Vec3 & pcoatReflected
 		, sdw::Vec3 & psheenReflected
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeSceneReflRefr )
 		{
@@ -217,11 +217,11 @@ namespace castor3d::shader
 			, prefracted
 			, pcoatReflected
 			, psheenReflected );
-		debugOutput.registerOutput( "Reflections", "Refl. Diffuse", preflectedDiffuse );
-		debugOutput.registerOutput( "Reflections", "Refl. Specular", preflectedSpecular );
-		debugOutput.registerOutput( "Reflections", "Refracted", prefracted );
-		debugOutput.registerOutput( "Reflections", "Coating", pcoatReflected );
-		debugOutput.registerOutput( "Reflections", "Sheen", psheenReflected );
+		debugOutput.registerOutput( "Refl. Diffuse", preflectedDiffuse );
+		debugOutput.registerOutput( "Refl. Specular", preflectedSpecular );
+		debugOutput.registerOutput( "Refracted", prefracted );
+		debugOutput.registerOutput( "Coating", pcoatReflected );
+		debugOutput.registerOutput( "Sheen", psheenReflected );
 	}
 
 	void ReflectionModel::computeCombined( BlendComponents & pcomponents
@@ -236,7 +236,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & refracted
 		, sdw::Vec3& coatReflected
 		, sdw::Vec3& sheenReflected
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		computeCombined( pcomponents
 			, lightSurface.N()
@@ -273,7 +273,7 @@ namespace castor3d::shader
 		, sdw::Vec3 & prefracted
 		, sdw::Vec3 & pcoatReflected
 		, sdw::Vec3 & psheenReflected
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeEnvReflRefr )
 		{
@@ -383,11 +383,11 @@ namespace castor3d::shader
 			, prefracted
 			, pcoatReflected
 			, psheenReflected );
-		debugOutput.registerOutput( "Reflections", "Refl. Diffuse", preflectedDiffuse );
-		debugOutput.registerOutput( "Reflections", "Refl. Specular", preflectedSpecular );
-		debugOutput.registerOutput( "Reflections", "Refracted", prefracted );
-		debugOutput.registerOutput( "Reflections", "Coating", pcoatReflected );
-		debugOutput.registerOutput( "Reflections", "Sheen", psheenReflected );
+		debugOutput.registerOutput( "Refl. Diffuse", preflectedDiffuse );
+		debugOutput.registerOutput( "Refl. Specular", preflectedSpecular );
+		debugOutput.registerOutput( "Refracted", prefracted );
+		debugOutput.registerOutput( "Coating", pcoatReflected );
+		debugOutput.registerOutput( "Sheen", psheenReflected );
 	}
 
 	void ReflectionModel::computeReflections( BlendComponents & components
@@ -397,7 +397,7 @@ namespace castor3d::shader
 		, sdw::UInt const & reflection
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		computeReflections( components
 			, lightSurface.N()
@@ -424,7 +424,7 @@ namespace castor3d::shader
 		, sdw::UInt const & reflection
 		, sdw::Vec3 & reflectedDiffuse
 		, sdw::Vec3 & reflectedSpecular
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		auto brdf = m_writer.getVariable< sdw::CombinedImage2DRgba32 >( "c3d_mapBrdf" );
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
@@ -445,8 +445,8 @@ namespace castor3d::shader
 			, envMapIndex
 			, reflectedDiffuse
 			, reflectedSpecular );
-		debugOutput.registerOutput( "Reflections", "Refl. Diffuse", reflectedDiffuse );
-		debugOutput.registerOutput( "Reflections", "Refl. Specular", reflectedSpecular );
+		debugOutput.registerOutput( "Refl. Diffuse", reflectedDiffuse );
+		debugOutput.registerOutput( "Refl. Specular", reflectedSpecular );
 	}
 
 	sdw::Vec3 ReflectionModel::computeRefractions( BlendComponents & components
@@ -455,7 +455,7 @@ namespace castor3d::shader
 		, sdw::UInt envMapIndex
 		, sdw::UInt const & refraction
 		, sdw::Float const & refractionRatio
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		return computeRefractions( components
 			, lightSurface.N()
@@ -472,7 +472,7 @@ namespace castor3d::shader
 		, BackgroundModel & background
 		, sdw::UInt envMapIndex
 		, sdw::Float const & refractionRatio
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		auto envMap = m_writer.getVariable< sdw::CombinedImageCubeArrayRgba32 >( "c3d_mapEnvironment" );
 		auto hasEnvMap = m_writer.declLocale( "hasEnvMap"
@@ -489,7 +489,7 @@ namespace castor3d::shader
 			, envMapIndex
 			, components
 			, refracted );
-		debugOutput.registerOutput( "Reflections", "Refracted", refracted );
+		debugOutput.registerOutput( "Refracted", refracted );
 		return refracted;
 	}
 
@@ -507,7 +507,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DR32 const & pdepthMap
 		, sdw::CombinedImage2DRgba32 const & pnormalMap
 		, sdw::CombinedImage2DRgba32 const & pcolourMap
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeScreenSpace )
 		{
@@ -623,8 +623,8 @@ namespace castor3d::shader
 				, pdepthMap
 				, pnormalMap
 				, pcolourMap ) );
-		debugOutput.registerOutput( "Reflections", "SSRResult", result.xyz() );
-		debugOutput.registerOutput( "Reflections", "SSRFactor", result.www() );
+		debugOutput.registerOutput( "SSRResult", result.xyz() );
+		debugOutput.registerOutput( "SSRFactor", result.www() );
 		return result;
 	}
 
@@ -636,7 +636,7 @@ namespace castor3d::shader
 		, sdw::CombinedImage2DRgba32 const & pdepthObjMap
 		, sdw::CombinedImage2DRgba32 const & pnormalMap
 		, sdw::CombinedImage2DRgba32 const & pcolourMap
-		, DebugOutput & debugOutput )
+		, DebugOutputCategory & debugOutput )
 	{
 		if ( !m_computeScreenSpace2 )
 		{
@@ -752,8 +752,8 @@ namespace castor3d::shader
 				, pdepthObjMap
 				, pnormalMap
 				, pcolourMap ) );
-		debugOutput.registerOutput( "Reflections", "SSRResult", result.xyz() );
-		debugOutput.registerOutput( "Reflections", "SSRFactor", result.www() );
+		debugOutput.registerOutput( "SSRResult", result.xyz() );
+		debugOutput.registerOutput( "SSRFactor", result.www() );
 		return result;
 	}
 

@@ -166,6 +166,7 @@ namespace castor3d::shader
 	class BRDFHelpers;
 	class ClusteredLights;
 	class DebugOutput;
+	class DebugOutputCategory;
 	class Fog;
 	class Lights;
 	class LightsBuffer;

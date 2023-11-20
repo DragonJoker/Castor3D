@@ -37,12 +37,13 @@ namespace castor3d::shader
 		C3D_API void registerOutput( castor::String category
 			, castor::String name
 			, sdw::Float const value );
+		C3D_API DebugOutputCategory pushBlock(castor::String category);
 
 		template< typename ValueT >
 		void registerOutput( castor::String name
 			, ValueT const value )
 		{
-			registerOutput( m_category, name, value );
+			registerOutput( m_categories.back(), name, value);
 		}
 
 		bool isEnabled()const
@@ -51,13 +52,64 @@ namespace castor3d::shader
 		}
 
 	private:
+		friend class DebugOutputCategory;
+
+		void popBlock()
+		{
+			m_categories.pop_back();
+		}
+
+	private:
 		DebugConfig & m_config;
-		castor::String m_category;
+		std::vector< castor::String > m_categories;
 		sdw::UInt m_index;
 		sdw::Vec4 m_output;
 		bool m_enable;
 		sdw::Vec3Array m_values;
 		sdw::UIntArray m_indices;
+	};
+
+	class DebugOutputCategory
+	{
+	public:
+		DebugOutputCategory( DebugOutputCategory const & rhs ) = delete;
+		DebugOutputCategory& operator=( DebugOutputCategory const & rhs ) = delete;
+
+		DebugOutputCategory( DebugOutput & debugOutput )noexcept
+			: m_debugOutput{ &debugOutput }
+		{
+		}
+
+		DebugOutputCategory( DebugOutputCategory && rhs )noexcept
+			: m_debugOutput{ rhs.m_debugOutput }
+		{
+			rhs.m_debugOutput = {};
+		}
+
+		~DebugOutputCategory()noexcept
+		{
+			if ( m_debugOutput )
+			{
+				m_debugOutput->popBlock();
+			}
+		}
+
+		DebugOutputCategory & operator=( DebugOutputCategory && rhs )noexcept
+		{
+			m_debugOutput = rhs.m_debugOutput;
+
+			rhs.m_debugOutput = {};
+		}
+
+		template< typename ValueT >
+		void registerOutput( castor::String name
+			, ValueT const value )
+		{
+			m_debugOutput->registerOutput( std::move( name ), value );
+		}
+
+	private:
+		DebugOutput * m_debugOutput;
 	};
 }
 

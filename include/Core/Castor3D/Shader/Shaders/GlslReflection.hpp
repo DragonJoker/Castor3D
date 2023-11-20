@@ -37,7 +37,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & refracted
 			, sdw::Vec3 & coatReflected
 			, sdw::Vec3 & sheenReflected
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API void computeCombined( BlendComponents & components
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & difF
@@ -58,7 +58,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & refracted
 			, sdw::Vec3 & coatReflected
 			, sdw::Vec3 & sheenReflected
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API void computeCombined( BlendComponents & components
 			, LightSurface const & lightSurface
 			, BackgroundModel & background
@@ -71,7 +71,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & refracted
 			, sdw::Vec3& coatReflected
 			, sdw::Vec3& sheenReflected
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API void computeCombined( BlendComponents & pcomponents
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & difF
@@ -88,7 +88,7 @@ namespace castor3d::shader
 			, sdw::Vec3 & refracted
 			, sdw::Vec3& coatReflected
 			, sdw::Vec3& sheenReflected
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API void computeReflections( BlendComponents & components
 			, LightSurface const & lightSurface
 			, BackgroundModel & background
@@ -96,7 +96,7 @@ namespace castor3d::shader
 			, sdw::UInt const & reflection
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API void computeReflections( BlendComponents & components
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & difF
@@ -108,21 +108,21 @@ namespace castor3d::shader
 			, sdw::UInt const & reflection
 			, sdw::Vec3 & reflectedDiffuse
 			, sdw::Vec3 & reflectedSpecular
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API sdw::Vec3 computeRefractions( BlendComponents & components
 			, LightSurface const & lightSurface
 			, BackgroundModel & background
 			, sdw::UInt envMapIndex
 			, sdw::UInt const & refraction
 			, sdw::Float const & refractionRatio
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API sdw::Vec3 computeRefractions( BlendComponents & components
 			, sdw::Vec3 const & wsNormal
 			, sdw::Vec3 const & V
 			, BackgroundModel & background
 			, sdw::UInt envMapIndex
 			, sdw::Float const & refractionRatio
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API sdw::Vec4 computeScreenSpace( CameraData const & cameraData
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldNormal
@@ -131,7 +131,7 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DR32 const & depthMap
 			, sdw::CombinedImage2DRgba32 const & normalMap
 			, sdw::CombinedImage2DRgba32 const & colourMap
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		C3D_API sdw::Vec4 computeScreenSpace( CameraData const & cameraData
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldNormal
@@ -140,7 +140,7 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & depthObjMap
 			, sdw::CombinedImage2DRgba32 const & normalMap
 			, sdw::CombinedImage2DRgba32 const & colourMap
-			, DebugOutput & debugOutput );
+			, DebugOutputCategory & debugOutput );
 		/**
 		*\param csOrigin
 		*	Camera-space ray origin, which must be within the view volume and must have z < -0.01 and project within the valid screen rectangle.

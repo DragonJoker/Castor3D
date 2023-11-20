@@ -1148,6 +1148,7 @@ namespace ocean_fft
 						, nml
 						, components.f0
 						, components );
+					auto block = output.pushBlock( "FFTOcean" );
 					reflections.computeReflections( components
 						, lightSurface
 						, *backgroundModel
@@ -1155,7 +1156,7 @@ namespace ocean_fft
 						, components.hasReflection
 						, bgDiffuseReflection
 						, bgSpecularReflection
-						, output );
+						, block );
 					auto reflected = writer.declLocale( "reflected"
 						, bgDiffuseReflection + bgSpecularReflection );
 					output.registerOutput( "RawBackgroundReflection", reflected );
@@ -1170,7 +1171,7 @@ namespace ocean_fft
 							, c3d_sceneDepthObj
 							, c3d_sceneNormals
 							, c3d_sceneColour
-							, output ) );
+							, block ) );
 					auto reflectionResult = writer.declLocale( "reflectionResult"
 						, mix( reflected, ssrResult.xyz(), ssrResult.www() ) );
 					output.registerOutput( "CombinedReflection", reflectionResult );
