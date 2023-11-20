@@ -212,10 +212,19 @@ namespace water
 			refractionResult += foamResult;
 			reflectionResult += foamResult;
 		}
+		
+		auto fresnelFactor = writer.declLocale( "fresnelFactor"
+			, utils.fresnelMix( incident
+				, components.normal
+				, components.refractionRatio ) );
+		debugOutputBlock.registerOutput( "Fresnel Factor", fresnelFactor );
+		reflectionResult *= fresnelFactor;
+		debugOutputBlock.registerOutput( "Final Reflection", reflectionResult );
+		refractionResult *= vec3( 1.0_f ) - fresnelFactor;
+		debugOutputBlock.registerOutput( "Final Refraction", refractionResult );
 
 		components.opacity = depthSoftenedAlpha;
 		reflectedSpecular = reflectionResult;
-		lighting.ambient() = components.ambientColour * components.ambientFactor;
 	}
 
 	//*********************************************************************************************

@@ -214,8 +214,6 @@ namespace castor3d
 		std::map< SubmeshComponentID, shader::SubmeshSurfaceShaderPtr > m_surfaceShaders;
 		std::map< SubmeshComponentID, SubmeshRenderShaderPtr > m_renderShaders;
 		std::vector< SubmeshComponentFlag > m_renderShaderFlags;
-		bool m_pauseOrder{ true };
-		VkDeviceSize m_bufferStride{};
 		SubmeshComponentCombine m_defaultComponents;
 		mutable std::vector< SubmeshComponentCombine > m_componentCombines{};
 		SubmeshComponentFlag m_lineIndexFlag{};

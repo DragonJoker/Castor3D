@@ -193,20 +193,17 @@ namespace castor3d
 			, IndirectLighting & indirectLighting
 			, DebugOutput & debugOutput )
 		{
-			auto indirectSpecular = m_writer.declLocale( "lightIndirectSpecular"
-				, vec3( 0.0_f ) );
-
 			if ( checkFlag( sceneFlags, SceneFlag::eVoxelConeTracing ) )
 			{
 				auto voxelData = m_writer.getVariable< VoxelData >( "c3d_voxelData" );
-				indirectSpecular = computeVCTSpecular( lightSurface
+				indirectLighting.specular() = computeVCTSpecular( lightSurface
 					, roughness
 					, indirectLighting.occlusion()
 					, indirectLighting.diffuseBlend()
 					, voxelData );
 				auto envBRDF = m_writer.declLocale( "envBRDF"
 					, brdfMap.lod( vec2( lightSurface.NdotV(), roughness ), 0.0_f ) );
-				indirectLighting.specular() *= sdw::fma( m_utils.conductorFresnel( lightSurface.NdotV(), indirectSpecular.xyz() )
+				indirectLighting.specular() *= sdw::fma( m_utils.conductorFresnel( lightSurface.NdotV(), indirectLighting.specular() )
 					, vec3( envBRDF.x() )
 					, vec3( envBRDF.y() ) );
 			}

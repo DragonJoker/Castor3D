@@ -25,6 +25,7 @@ namespace waves
 			, float pamplitude = {}
 			, float pspeed = {} )
 			: direction{ pdirection }
+			, pad0{}
 			, steepness{ psteepness }
 			, length{ plength }
 			, amplitude{ pamplitude }
