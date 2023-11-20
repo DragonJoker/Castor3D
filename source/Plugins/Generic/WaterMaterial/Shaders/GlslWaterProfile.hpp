@@ -22,6 +22,33 @@ See LICENSE file in root folder
 #	endif
 #endif
 
+namespace water
+{
+	struct SsrConfiguration
+	{
+		float stepSize{ 0.5f };
+		uint32_t forwardStepsCount{ 20u };
+		uint32_t backwardStepsCount{ 10u };
+		float depthMult{ 20.0f };
+	};
+	struct WaterProfileData
+	{
+		float dampeningFactor{ 5.0f };
+		float depthSofteningDistance{ 0.5f };
+		float refractionDistortionFactor{ 0.04f };
+		float refractionHeightFactor{ 2.5f };
+		float refractionDistanceFactor{ 15.0f };
+		float noiseTiling{ 1.0f };
+		float foamHeightStart{ 0.8f };
+		float foamFadeDistance{ 0.4f };
+		float foamTiling{ 2.0f };
+		float foamAngleExponent{ 80.0f };
+		float foamBrightness{ 4.0f };
+		float foamNoiseTiling{ 0.02f };
+		SsrConfiguration ssr;
+	};
+}
+
 namespace water::shader
 {
 	namespace c3d = castor3d::shader;
@@ -34,13 +61,13 @@ namespace water::shader
 			, sdw::FloatField< "refractionDistortionFactor" >
 			, sdw::FloatField< "refractionHeightFactor" >
 			, sdw::FloatField< "refractionDistanceFactor" >
+			, sdw::FloatField< "noiseTiling" >
 			, sdw::FloatField< "foamHeightStart" >
 			, sdw::FloatField< "foamFadeDistance" >
 			, sdw::FloatField< "foamTiling" >
 			, sdw::FloatField< "foamAngleExponent" >
 			, sdw::FloatField< "foamBrightness" >
 			, sdw::FloatField< "foamNoiseTiling" >
-			, sdw::FloatField< "pad0" >
 			, sdw::FloatField< "ssrStepSize" >
 			, sdw::UIntField< "ssrForwardStepsCount" >
 			, sdw::UIntField< "ssrBackwardStepsCount" >
@@ -65,6 +92,7 @@ namespace water::shader
 		auto refractionDistortionFactor()const { return getMember< "refractionDistortionFactor" >(); }
 		auto refractionHeightFactor()const { return getMember< "refractionHeightFactor" >(); }
 		auto refractionDistanceFactor()const { return getMember< "refractionDistanceFactor" >(); }
+		auto noiseTiling()const { return getMember< "noiseTiling" >(); }
 		auto ssrStepSize()const { return getMember< "ssrStepSize" >(); }
 		auto ssrForwardStepsCount()const { return getMember< "ssrForwardStepsCount" >(); }
 		auto ssrBackwardStepsCount()const { return getMember< "ssrBackwardStepsCount" >(); }

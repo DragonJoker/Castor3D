@@ -121,8 +121,9 @@ namespace water
 		{
 			return;
 		}
-
-		texCoord *= 0.5_f;
+		
+		auto noiseTiling = components.getMember< sdw::Float >( "noiseTiling" );
+		texCoord *= 0.5_f * noiseTiling;
 		config.setUv( texCoords, texCoord );
 		components.getMember< sdw::UInt >( "waterNoiseMapId" ) = mapId;
 		components.getMember< sdw::UInt >( "waterNoiseMapMask" ) = imgCompConfig.z();
@@ -141,8 +142,9 @@ namespace water
 		{
 			return;
 		}
-
-		texCoord.uv() *= 0.5_f;
+		
+		auto noiseTiling = components.getMember< sdw::Float >( "noiseTiling" );
+		texCoord.uv() *= 0.5_f * noiseTiling;
 		config.setUv( texCoords, texCoord );
 		components.getMember< sdw::UInt >( "waterNoiseMapId" ) = mapId;
 		components.getMember< sdw::UInt >( "waterNoiseMapMask" ) = imgCompConfig.z();
@@ -227,20 +229,21 @@ namespace water
 		}
 
 		auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
+		auto noiseTiling = components.getMember< sdw::Float >( "noiseTiling" );
 		auto waterNoiseMapId = components.getMember< sdw::UInt >( "waterNoiseMapId" );
 		auto waterNoiseMapMask = components.getMember< sdw::UInt >( "waterNoiseMapMask" );
 
 		if ( components.hasMember( "waterNormalMapCoords1" ) )
 		{
 			auto waterNormalMapCoords1 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords1" );
-			waterNoise *= c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMapId - 1_u )].lod( waterNormalMapCoords1 * 0.5_f, 0.0_f )
+			waterNoise *= c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMapId - 1_u )].lod( waterNormalMapCoords1 * noiseTiling * 0.5_f, 0.0_f )
 				, waterNoiseMapMask );
 		}
 
 		if ( components.hasMember( "waterNormalMapCoords2" ) )
 		{
 			auto waterNormalMapCoords2 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords2" );
-			waterNoise *= c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMapId - 1_u )].lod( waterNormalMapCoords2 * 0.5_f, 0.0_f )
+			waterNoise *= c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMapId - 1_u )].lod( waterNormalMapCoords2 * noiseTiling * 0.5_f, 0.0_f )
 				, waterNoiseMapMask );
 		}
 
