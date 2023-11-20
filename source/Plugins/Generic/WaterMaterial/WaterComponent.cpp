@@ -1,5 +1,6 @@
 #include "WaterComponent.hpp"
 
+#include "WaterReflRefrComponent.hpp"
 #include "Shaders/GlslWaterProfile.hpp"
 
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
@@ -617,7 +618,8 @@ namespace water
 		: BaseDataPassComponentT< WaterData >{ pass, TypeName
 			, { castor3d::BlendComponent::TypeName
 				, castor3d::OpacityComponent::TypeName
-				, castor3d::TransmissionComponent::TypeName } }
+				, castor3d::TransmissionComponent::TypeName
+				, WaterReflRefrComponent::TypeName } }
 	{
 		auto blend = pass.createComponent< castor3d::BlendComponent >();
 		blend->setAlphaBlendMode( castor3d::BlendMode::eInterpolative );

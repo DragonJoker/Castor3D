@@ -36,16 +36,22 @@ namespace castor3d
 		explicit PipelineHiHashDetails( PassComponentCombine ppassComponents
 			, SubmeshComponentCombine psubmeshComponents
 			, LightingModelID plightingModelId
+			, BackgroundModelID pbackgroundModelId
 			, ProgramFlags programFlags = ProgramFlag::eNone
 			, TextureCombine ptextures = TextureCombine{}
 			, ShaderFlags shaderFlags = ShaderFlag::eNone
 			, VkCompareOp palphaFunc = VkCompareOp::VK_COMPARE_OP_ALWAYS
+			, uint32_t ppassLayerIndex = 0u
+			, uint32_t psubmeshDataBindings = 0u
 			, bool pisStatic = false )
 			: pass{ std::move( ppassComponents ) }
 			, submesh{ std::move( psubmeshComponents ) }
 			, textures{ std::move( ptextures ) }
 			, lightingModelId{ plightingModelId }
+			, backgroundModelId{ pbackgroundModelId }
 			, alphaFunc{ palphaFunc }
+			, submeshDataBindings{ psubmeshDataBindings }
+			, passLayerIndex{ ppassLayerIndex }
 			, isStatic{ pisStatic }
 			, m_programFlags{ programFlags }
 			, m_shaderFlags{ shaderFlags }
@@ -56,7 +62,10 @@ namespace castor3d
 		SubmeshComponentCombine submesh;
 		TextureCombine textures;
 		LightingModelID lightingModelId;
+		BackgroundModelID backgroundModelId{};
 		VkCompareOp alphaFunc;
+		uint32_t submeshDataBindings{};
+		uint32_t passLayerIndex{};
 		bool isStatic;
 		ProgramFlags m_programFlags;
 		ShaderFlags m_shaderFlags;
@@ -66,21 +75,12 @@ namespace castor3d
 
 	struct PipelineLoHashDetails
 	{
-		explicit PipelineLoHashDetails( BackgroundModelID pbackgroundModelId = 0u
-			, VkDeviceSize pmorphTargetsOffset = 0u
-			, uint32_t ppassLayerIndex = 0u
-			, uint32_t psubmeshDataBindings = 0u )
-			: backgroundModelId{ pbackgroundModelId }
-			, morphTargetsOffset{ pmorphTargetsOffset }
-			, passLayerIndex{ ppassLayerIndex }
-			, submeshDataBindings{ psubmeshDataBindings }
+		explicit PipelineLoHashDetails( VkDeviceSize pmorphTargetsOffset = 0u )
+			: morphTargetsOffset{ pmorphTargetsOffset }
 		{
 		}
 
-		BackgroundModelID backgroundModelId{};
 		VkDeviceSize morphTargetsOffset{};
-		uint32_t passLayerIndex{};
-		uint32_t submeshDataBindings{};
 	};
 
 	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs );
@@ -136,14 +136,14 @@ namespace castor3d
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( ppassComponents )
 					, std::move( psubmeshComponents )
 					, plightingModelId
+					, pbackgroundModelId
 					, pprogramFlags
 					, std::move( textures )
 					, pshaderFlags
 					, palphaFunc
+					, ppassLayerIndex
 					, pisStatic }
-				, PipelineLoHashDetails{ pbackgroundModelId
-					, pmorphTargetsOffset
-					, ppassLayerIndex }
+				, PipelineLoHashDetails{ pmorphTargetsOffset }
 				, psceneFlags
 				, pcolourBlendMode
 				, palphaBlendMode
@@ -166,13 +166,13 @@ namespace castor3d
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( ppassComponents )
 					, std::move( psubmeshComponents )
 					, lightingModelId
+					, pbackgroundModelId
 					, programFlags
 					, std::move( textures )
 					, shaderFlags
-					, alphaFunc }
-				, PipelineLoHashDetails{ pbackgroundModelId
-					, 0u
+					, alphaFunc
 					, passLayerIndex }
+				, PipelineLoHashDetails{ 0u }
 				, SceneFlag::eNone
 				, BlendMode::eNoBlend
 				, BlendMode::eNoBlend

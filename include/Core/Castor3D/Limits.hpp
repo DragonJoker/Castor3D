@@ -17,6 +17,10 @@ namespace castor3d
 	static uint32_t constexpr MaxLightingModels = 63u;
 	// Maximum different background models.
 	static uint32_t constexpr MaxBackgroundModels = 63u;
+	// Maximum possible active pass combinations.
+	static uint32_t constexpr MaxPassCombines = 1023u;
+	// Maximum possible active texture combines.
+	static uint32_t constexpr MaxTextureCombines = 1023u;
 	// Maximum textures in a pass.
 	static uint32_t constexpr MaxPassTextures = 8u;
 	// Maximum passes in a material.
@@ -184,6 +188,8 @@ namespace castor3d
 	static uint32_t constexpr MaxTextureCoordinatesSets = 4u;
 	// Max supported data bindings for submesh render data.
 	static uint32_t constexpr MaxSubmeshDataBindings = 16u;
+	// Maximum possible submesh components.
+	static uint32_t constexpr MaxSubmeshCombines = 1023u;
 	//@}
 	/**
 	*\name

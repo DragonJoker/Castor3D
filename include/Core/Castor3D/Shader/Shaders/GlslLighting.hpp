@@ -49,48 +49,6 @@ namespace castor3d::shader
 			, Utils & utils
 			, sdw::Vec3 const worldEye
 			, BlendComponents & components );
-		C3D_API virtual void computeReflRefr( ReflectionModel & reflections
-			, BlendComponents & components
-			, LightSurface const & lightSurface
-			, sdw::Vec4 const & position
-			, BackgroundModel & background
-			, sdw::CombinedImage2DRgba32 const & mippedScene
-			, CameraData const & camera
-			, OutputComponents const & lighting
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec2 const & sceneUv
-			, sdw::UInt const & envMapIndex
-			, sdw::Vec3 const & incident
-			, sdw::UInt const & hasReflection
-			, sdw::UInt const & hasRefraction
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected
-			, sdw::Vec3 & sheenReflected
-			, DebugOutput & debugOutput );
-		C3D_API virtual void computeReflRefr( ReflectionModel & reflections
-			, BlendComponents & components
-			, LightSurface const & lightSurface
-			, BackgroundModel & background
-			, CameraData const & camera
-			, OutputComponents const & lighting
-			, sdw::Vec3 const & indirectAmbient
-			, sdw::Vec3 const & indirectDiffuse
-			, sdw::Vec2 const & sceneUv
-			, sdw::UInt const & envMapIndex
-			, sdw::Vec3 const & incident
-			, sdw::UInt const & hasReflection
-			, sdw::UInt const & hasRefraction
-			, sdw::Float const & refractionRatio
-			, sdw::Vec3 & reflectedDiffuse
-			, sdw::Vec3 & reflectedSpecular
-			, sdw::Vec3 & refracted
-			, sdw::Vec3 & coatReflected
-			, sdw::Vec3 & sheenReflected
-			, DebugOutput & debugOutput );
 		C3D_API sdw::Vec3 combine( DebugOutput & debugOutput
 			, BlendComponents const & components
 			, sdw::Vec3 const & incident
@@ -124,6 +82,11 @@ namespace castor3d::shader
 			, sdw::Vec3 reflectedDiffuse
 			, sdw::Vec3 reflectedSpecular
 			, sdw::Vec3 refracted );
+
+		C3D_API virtual sdw::Vec3 adjustDirectAmbient( BlendComponents const & components
+			, sdw::Vec3 const & directAmbient )const = 0;
+		C3D_API virtual sdw::Vec3 adjustDirectSpecular( BlendComponents const & components
+			, sdw::Vec3 const & directSpecular )const = 0;
 		/**
 		*\name
 		*	Clustered lighting

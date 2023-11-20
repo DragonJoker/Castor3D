@@ -129,6 +129,48 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const map
 			, DerivTex const texCoords
 			, shader::BlendComponents const & components )const;
+		C3D_API void computeReflRefr( ReflectionModel & reflections
+			, BlendComponents & components
+			, LightSurface const & lightSurface
+			, sdw::Vec4 const & position
+			, BackgroundModel & background
+			, sdw::CombinedImage2DRgba32 const & mippedScene
+			, CameraData const & camera
+			, OutputComponents & lighting
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec2 const & sceneUv
+			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
+			, sdw::UInt const & hasReflection
+			, sdw::UInt const & hasRefraction
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 & reflectedDiffuse
+			, sdw::Vec3 & reflectedSpecular
+			, sdw::Vec3 & refracted
+			, sdw::Vec3 & coatReflected
+			, sdw::Vec3 & sheenReflected
+			, DebugOutput & debugOutput )const;
+		C3D_API void computeReflRefr( ReflectionModel & reflections
+			, BlendComponents & components
+			, LightSurface const & lightSurface
+			, BackgroundModel & background
+			, CameraData const & camera
+			, OutputComponents & lighting
+			, sdw::Vec3 const & indirectAmbient
+			, sdw::Vec3 const & indirectDiffuse
+			, sdw::Vec2 const & sceneUv
+			, sdw::UInt const & envMapIndex
+			, sdw::Vec3 const & incident
+			, sdw::UInt const & hasReflection
+			, sdw::UInt const & hasRefraction
+			, sdw::Float const & refractionRatio
+			, sdw::Vec3 & reflectedDiffuse
+			, sdw::Vec3 & reflectedSpecular
+			, sdw::Vec3 & refracted
+			, sdw::Vec3 & coatReflected
+			, sdw::Vec3 & sheenReflected
+			, DebugOutput & debugOutput )const;
 
 		auto getFilter()const
 		{
@@ -156,6 +198,7 @@ namespace castor3d::shader
 		std::vector< UpdateComponent > m_updateComponents;
 		std::vector< FinishComponent > m_finishComponents;
 		std::vector< PassComponentsShaderPtr > m_shaders;
+		PassReflRefrShaderPtr m_reflRefr;
 		ComponentModeFlags m_filter;
 		bool m_opacity{};
 		bool m_frontCulled{};

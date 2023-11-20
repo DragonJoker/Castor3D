@@ -22,6 +22,7 @@ namespace castor3d::shader
 		: m_utils{ utils }
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents, m_finishComponents ) }
+		, m_reflRefr{ nullptr }
 		, m_filter{ filter }
 		, m_opacity{ hasAny( combine, m_compRegister.getOpacityMapFlags() ) }
 		, m_frontCulled{ false }
@@ -37,6 +38,7 @@ namespace castor3d::shader
 		: m_utils{ utils }
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( flags, filter, m_updateComponents, m_finishComponents ) }
+		, m_reflRefr{ m_compRegister.getReflRefrShader( flags.pass ) }
 		, m_filter{ filter }
 		, m_opacity{ ( flags.usesOpacity()
 			&& flags.hasMap( m_compRegister.getOpacityMapFlags() )
@@ -351,5 +353,105 @@ namespace castor3d::shader
 	bool PassShaders::enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const
 	{
 		return flags.enableParallaxOcclusionMappingOne( m_compRegister );
+	}
+
+	void PassShaders::computeReflRefr( ReflectionModel & reflections
+		, BlendComponents & components
+		, LightSurface const & lightSurface
+		, sdw::Vec4 const & position
+		, BackgroundModel & background
+		, sdw::CombinedImage2DRgba32 const & mippedScene
+		, CameraData const & camera
+		, OutputComponents & lighting
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec2 const & sceneUv
+		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
+		, sdw::UInt const & hasReflection
+		, sdw::UInt const & hasRefraction
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular
+		, sdw::Vec3 & refracted
+		, sdw::Vec3 & coatReflected
+		, sdw::Vec3 & sheenReflected
+		, DebugOutput & debugOutput )const
+	{
+		if ( !m_reflRefr )
+		{
+			return;
+		}
+
+		m_reflRefr->computeReflRefr( reflections
+			, components
+			, lightSurface
+			, position
+			, background
+			, mippedScene
+			, camera
+			, lighting
+			, indirectAmbient
+			, indirectDiffuse
+			, sceneUv
+			, envMapIndex
+			, incident
+			, hasReflection
+			, hasRefraction
+			, refractionRatio
+			, reflectedDiffuse
+			, reflectedSpecular
+			, refracted
+			, coatReflected
+			, sheenReflected
+			, debugOutput );
+	}
+
+	void PassShaders::computeReflRefr( ReflectionModel & reflections
+		, BlendComponents & components
+		, LightSurface const & lightSurface
+		, BackgroundModel & background
+		, CameraData const & camera
+		, OutputComponents & lighting
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec2 const & sceneUv
+		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
+		, sdw::UInt const & hasReflection
+		, sdw::UInt const & hasRefraction
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular
+		, sdw::Vec3 & refracted
+		, sdw::Vec3 & coatReflected
+		, sdw::Vec3 & sheenReflected
+		, DebugOutput & debugOutput )const
+	{
+		if ( !m_reflRefr )
+		{
+			return;
+		}
+
+		m_reflRefr->computeReflRefr( reflections
+			, components
+			, lightSurface
+			, background
+			, camera
+			, lighting
+			, indirectAmbient
+			, indirectDiffuse
+			, sceneUv
+			, envMapIndex
+			, incident
+			, hasReflection
+			, hasRefraction
+			, refractionRatio
+			, reflectedDiffuse
+			, reflectedSpecular
+			, refracted
+			, coatReflected
+			, sheenReflected
+			, debugOutput );
 	}
 }

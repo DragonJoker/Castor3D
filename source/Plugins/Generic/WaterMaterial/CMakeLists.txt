@@ -21,6 +21,7 @@ set( ${PROJECT_NAME}_HDR_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNormal1MapComponent.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNormal2MapComponent.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNoiseMapComponent.hpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterReflRefrComponent.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterComponent.cpp
@@ -29,16 +30,15 @@ set( ${PROJECT_NAME}_SRC_FILES
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNormal2MapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterNoiseMapComponent.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterMaterialPlugin.cpp
+	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/WaterReflRefrComponent.cpp
 )
 source_group( "Header Files" FILES ${${PROJECT_NAME}_HDR_FILES} )
 source_group( "Source Files" FILES ${${PROJECT_NAME}_SRC_FILES} )
 
 set( ${PROJECT_NAME}_FOLDER_SRC_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslWaterLighting.cpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslWaterProfile.cpp
 )
 set( ${PROJECT_NAME}_FOLDER_HDR_FILES
-	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslWaterLighting.hpp
 	${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${PROJECT_NAME}/Shaders/GlslWaterProfile.hpp
 )
 set( ${PROJECT_NAME}_SRC_FILES

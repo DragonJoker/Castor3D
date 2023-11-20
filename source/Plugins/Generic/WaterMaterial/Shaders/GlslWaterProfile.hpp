@@ -12,6 +12,16 @@ See LICENSE file in root folder
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
+#ifndef CU_PlatformWindows
+#	define C3D_WaterMaterial_API
+#else
+#	ifdef WaterMaterial_EXPORTS
+#		define C3D_WaterMaterial_API __declspec( dllexport )
+#	else
+#		define C3D_WaterMaterial_API __declspec( dllimport )
+#	endif
+#endif
+
 namespace water::shader
 {
 	namespace c3d = castor3d::shader;

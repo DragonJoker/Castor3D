@@ -23,6 +23,9 @@ See LICENSE file in root folder
 #define C3D_PluginMakePassLightingComponentName( p, x ) C3D_Join4Strings( p, "pass", "lighting", x )
 #define C3D_MakePassLightingComponentName( x ) C3D_PluginMakePassLightingComponentName( "c3d", x )
 
+#define C3D_PluginMakePassReflectionComponentName( p, x ) C3D_Join4Strings( p, "pass", "reflection", x )
+#define C3D_MakePassReflectionComponentName( x ) C3D_PluginMakePassReflectionComponentName( "c3d", x )
+
 #define C3D_PluginMakePassMapComponentName( p, x ) C3D_Join4Strings( p, "pass", "map", x )
 #define C3D_MakePassMapComponentName( x ) C3D_PluginMakePassMapComponentName( "c3d", x )
 
@@ -494,6 +497,13 @@ namespace castor3d
 	struct ColourComponent;
 	/**
 	\~english
+	\brief		Default reflection/refraction Component.
+	\~french
+	\brief		Composant de réflexion/réfraction par défaut.
+	*/
+	struct DefaultReflRefrComponent;
+	/**
+	\~english
 	\brief		Component holding height data.
 	\~french
 	\brief		Composant détenant les données de hauteur.
@@ -523,6 +533,7 @@ namespace castor3d
 
 	CU_DeclareSmartPtr( castor3d, AlphaTestComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ColourComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, DefaultReflRefrComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, HeightComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, OpacityComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ReflectionComponent, C3D_API );
@@ -557,6 +568,13 @@ namespace castor3d
 		struct PassComponentsShader;
 		/**
 		\~english
+		\brief		Shader for reflection/refraction components.
+		\~french
+		\brief		Shaders pour les composants de réflexion/réfraction.
+		*/
+		struct PassReflRefrShader;
+		/**
+		\~english
 		\brief		Shaders for components that need registration to castor3d::PassBuffer.
 		\remarks	Those shaders are enabled whether the component is enabled or not (for consistency with the PassBuffer).
 		\~french
@@ -573,6 +591,7 @@ namespace castor3d
 		class PassShaders;
 
 		using PassComponentsShaderPtr = std::unique_ptr< PassComponentsShader >;
+		using PassReflRefrShaderPtr = std::unique_ptr< PassReflRefrShader >;
 		using PassMaterialShaderPtr = std::unique_ptr< PassMaterialShader >;
 	}
 	//@}

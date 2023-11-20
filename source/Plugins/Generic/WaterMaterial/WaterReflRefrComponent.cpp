@@ -1,9 +1,6 @@
-#include "WaterMaterial/Shaders/GlslWaterLighting.hpp"
+#include "WaterMaterial/WaterReflRefrComponent.hpp"
 
 #include "WaterMaterial/Shaders/GlslWaterProfile.hpp"
-#include "WaterMaterial/WaterNoiseMapComponent.hpp"
-#include "WaterMaterial/WaterNormal1MapComponent.hpp"
-#include "WaterMaterial/WaterNormal2MapComponent.hpp"
 
 #include <Castor3D/Render/RenderPipeline.hpp>
 #include <Castor3D/Shader/Shaders/GlslBlendComponents.hpp>
@@ -15,20 +12,66 @@
 #include <Castor3D/Shader/Shaders/GlslUtils.hpp>
 #include <Castor3D/Shader/Shaders/GlslSurface.hpp>
 
-namespace water::shader
+CU_ImplementSmartPtr( water, WaterReflRefrComponent )
+
+namespace water
 {
+	using namespace castor3d;
+	namespace c3d = castor3d::shader;
+
 	//*********************************************************************************************
 
-	WaterLightingModel::WaterLightingModel( sdw::ShaderWriter & writer )
+	void WaterReflRefrComponent::ReflRefrShader::computeReflRefr( c3d::ReflectionModel & reflections
+		, c3d::BlendComponents & components
+		, c3d::LightSurface const & lightSurface
+		, sdw::Vec4 const & position
+		, c3d::BackgroundModel & backgroundModel
+		, sdw::CombinedImage2DRgba32 const & mippedScene
+		, c3d::CameraData const & camera
+		, c3d::OutputComponents & lighting
+		, sdw::Vec3 const & indirectAmbient
+		, sdw::Vec3 const & indirectDiffuse
+		, sdw::Vec2 const & sceneUv
+		, sdw::UInt const & envMapIndex
+		, sdw::Vec3 const & incident
+		, sdw::UInt const & hasReflection
+		, sdw::UInt const & hasRefraction
+		, sdw::Float const & refractionRatio
+		, sdw::Vec3 & reflectedDiffuse
+		, sdw::Vec3 & reflectedSpecular
+		, sdw::Vec3 & refracted
+		, sdw::Vec3 & coatReflected
+		, sdw::Vec3 & sheenReflected
+		, c3d::DebugOutput & debugOutput )const
 	{
+		computeReflRefr( reflections
+			, components
+			, lightSurface
+			, backgroundModel
+			, camera
+			, lighting
+			, indirectAmbient
+			, indirectDiffuse
+			, sceneUv
+			, envMapIndex
+			, incident
+			, components.hasReflection
+			, components.hasRefraction
+			, components.refractionRatio
+			, reflectedDiffuse
+			, reflectedSpecular
+			, refracted
+			, coatReflected
+			, sheenReflected
+			, debugOutput );
 	}
 
-	void WaterLightingModel::doComputeReflRefr( c3d::ReflectionModel & reflections
+	void WaterReflRefrComponent::ReflRefrShader::computeReflRefr( c3d::ReflectionModel & reflections
 		, c3d::BlendComponents & components
 		, c3d::LightSurface const & lightSurface
 		, c3d::BackgroundModel & backgroundModel
 		, c3d::CameraData const & camera
-		, c3d::OutputComponents const & lighting
+		, c3d::OutputComponents & lighting
 		, sdw::Vec3 const & indirectAmbient
 		, sdw::Vec3 const & indirectDiffuse
 		, sdw::Vec2 const & sceneUv
@@ -42,7 +85,7 @@ namespace water::shader
 		, sdw::Vec3 & refractionResult
 		, sdw::Vec3 & coatReflected
 		, sdw::Vec3 & sheenReflected
-		, c3d::DebugOutput & debugOutput )
+		, c3d::DebugOutput & debugOutput )const
 	{
 		auto & writer = *components.getWriter();
 
@@ -140,6 +183,7 @@ namespace water::shader
 			auto waterNoise = components.getMember< sdw::Float >( "waterNoise" );
 			debugOutput.registerOutput( "Water", "Specular Noise", waterNoise );
 			reflectionResult *= waterNoise;
+			lighting.specular *= waterNoise;
 		}
 
 		if ( components.hasMember( "foamHeightStart" )
@@ -178,272 +222,17 @@ namespace water::shader
 
 	//*********************************************************************************************
 
-	WaterPhongLightingModel::WaterPhongLightingModel( castor3d::LightingModelID lightingModelId
-		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
-		, bool enableVolumetric )
-		: c3d::PhongLightingModel{ lightingModelId
-			, writer
-			, materials
-			, utils
-			, brdf
-			, shadowModel
-			, lights
-			, enableVolumetric }
-		, WaterLightingModel{ writer }
+	castor::String const WaterReflRefrComponent::TypeName = C3D_PluginMakePassReflectionComponentName( "water", "water" );
+
+	WaterReflRefrComponent::WaterReflRefrComponent( castor3d::Pass & pass )
+		: castor3d::PassComponent{ pass, TypeName }
 	{
-		m_prefix = "water_phong_";
 	}
 
-	const castor::String WaterPhongLightingModel::getName()
+	castor3d::PassComponentUPtr WaterReflRefrComponent::doClone( castor3d::Pass & pass )const
 	{
-		return cuT( "water.phong" );
-	}
-
-	c3d::LightingModelUPtr WaterPhongLightingModel::create( castor3d::LightingModelID lightingModelId
-		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
-		, bool enableVolumetric )
-	{
-		return castor::makeUniqueDerived< c3d::LightingModel, WaterPhongLightingModel >( lightingModelId
-			, writer
-			, materials
-			, utils
-			, brdf
-			, shadowModel
-			, lights
-			, enableVolumetric );
-	}
-
-	void WaterPhongLightingModel::computeReflRefr( c3d::ReflectionModel & reflections
-		, c3d::BlendComponents & components
-		, c3d::LightSurface const & lightSurface
-		, sdw::Vec4 const & position
-		, c3d::BackgroundModel & backgroundModel
-		, sdw::CombinedImage2DRgba32 const & mippedScene
-		, c3d::CameraData const & camera
-		, c3d::OutputComponents const & lighting
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec2 const & sceneUv
-		, sdw::UInt const & envMapIndex
-		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
-		, c3d::DebugOutput & debugOutput )
-	{
-		doComputeReflRefr( reflections
-			, components
-			, lightSurface
-			, backgroundModel
-			, camera
-			, lighting
-			, indirectAmbient
-			, indirectDiffuse
-			, sceneUv
-			, envMapIndex
-			, incident
-			, components.hasReflection
-			, components.hasRefraction
-			, components.refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
-			, debugOutput );
-	}
-
-	void WaterPhongLightingModel::computeReflRefr( c3d::ReflectionModel & reflections
-		, c3d::BlendComponents & components
-		, c3d::LightSurface const & lightSurface
-		, c3d::BackgroundModel & backgroundModel
-		, c3d::CameraData const & camera
-		, c3d::OutputComponents const & lighting
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec2 const & sceneUv
-		, sdw::UInt const & envMapIndex
-		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
-		, c3d::DebugOutput & debugOutput )
-	{
-		doComputeReflRefr( reflections
-			, components
-			, lightSurface
-			, backgroundModel
-			, camera
-			, lighting
-			, indirectAmbient
-			, indirectDiffuse
-			, sceneUv
-			, envMapIndex
-			, incident
-			, components.hasReflection
-			, components.hasRefraction
-			, components.refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
-			, debugOutput );
-	}
-
-	//*********************************************************************************************
-
-	WaterPbrLightingModel::WaterPbrLightingModel( castor3d::LightingModelID lightingModelId
-		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
-		, bool enableVolumetric )
-		: c3d::PbrLightingModel{ lightingModelId
-			, writer
-			, materials
-			, utils
-			, brdf
-			, shadowModel
-			, lights
-			, enableVolumetric }
-		, WaterLightingModel{ writer }
-	{
-		m_prefix = "water_pbr_";
-	}
-
-	const castor::String WaterPbrLightingModel::getName()
-	{
-		return cuT( "water.pbr" );
-	}
-
-	c3d::LightingModelUPtr WaterPbrLightingModel::create( castor3d::LightingModelID lightingModelId
-		, sdw::ShaderWriter & writer
-		, c3d::Materials const & materials
-		, c3d::Utils & utils
-		, c3d::BRDFHelpers & brdf
-		, c3d::Shadow & shadowModel
-		, c3d::Lights & lights
-		, bool enableVolumetric )
-	{
-		return castor::makeUniqueDerived< c3d::LightingModel, WaterPbrLightingModel >( lightingModelId
-			, writer
-			, materials
-			, utils
-			, brdf
-			, shadowModel
-			, lights
-			, enableVolumetric );
-	}
-
-	void WaterPbrLightingModel::computeReflRefr( c3d::ReflectionModel & reflections
-		, c3d::BlendComponents & components
-		, c3d::LightSurface const & lightSurface
-		, sdw::Vec4 const & position
-		, c3d::BackgroundModel & backgroundModel
-		, sdw::CombinedImage2DRgba32 const & mippedScene
-		, c3d::CameraData const & camera
-		, c3d::OutputComponents const & lighting
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec2 const & sceneUv
-		, sdw::UInt const & envMapIndex
-		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
-		, c3d::DebugOutput & debugOutput )
-	{
-		doComputeReflRefr( reflections
-			, components
-			, lightSurface
-			, backgroundModel
-			, camera
-			, lighting
-			, indirectAmbient
-			, indirectDiffuse
-			, sceneUv
-			, envMapIndex
-			, incident
-			, components.hasReflection
-			, components.hasRefraction
-			, components.refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
-			, debugOutput );
-	}
-
-	void WaterPbrLightingModel::computeReflRefr( c3d::ReflectionModel & reflections
-		, c3d::BlendComponents & components
-		, c3d::LightSurface const & lightSurface
-		, c3d::BackgroundModel & backgroundModel
-		, c3d::CameraData const & camera
-		, c3d::OutputComponents const & lighting
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec2 const & sceneUv
-		, sdw::UInt const & envMapIndex
-		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
-		, c3d::DebugOutput & debugOutput )
-	{
-		doComputeReflRefr( reflections
-			, components
-			, lightSurface
-			, backgroundModel
-			, camera
-			, lighting
-			, indirectAmbient
-			, indirectDiffuse
-			, sceneUv
-			, envMapIndex
-			, incident
-			, components.hasReflection
-			, components.hasRefraction
-			, components.refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
-			, debugOutput );
+		auto result = castor::makeUnique< WaterReflRefrComponent >( pass );
+		return castor::ptrRefCast< castor3d::PassComponent >( result );
 	}
 
 	//*********************************************************************************************

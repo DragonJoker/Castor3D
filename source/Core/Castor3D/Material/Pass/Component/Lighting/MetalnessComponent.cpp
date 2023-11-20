@@ -130,11 +130,6 @@ namespace castor3d
 		{
 			components.transmission = mix( components.transmission, 0.0_f, components.metalness );
 		}
-
-		if ( components.hasMember( "refraction" ) )
-		{
-			components.refraction *= ( 1.0_f - components.getMember< sdw::Float >( "metalness" ) );
-		}
 	}
 
 	//*********************************************************************************************

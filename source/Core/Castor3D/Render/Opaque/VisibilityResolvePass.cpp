@@ -1365,7 +1365,7 @@ namespace castor3d
 										, components.normal
 										, components.f0
 										, components );
-									lightingModel->computeReflRefr( reflections
+									passShaders.computeReflRefr( reflections
 										, components
 										, lightSurface
 										, *backgroundModel

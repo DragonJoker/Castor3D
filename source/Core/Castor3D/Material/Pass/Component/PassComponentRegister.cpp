@@ -48,6 +48,7 @@
 #include "Castor3D/Material/Pass/Component/Map/TransmittanceMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/AlphaTestComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ColourComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Other/DefaultReflRefrComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/HeightComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/OpacityComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Other/ReflectionComponent.hpp"
@@ -133,13 +134,6 @@ namespace castor3d
 				}
 			}
 		}
-
-		static PassComponentID addCombine( PassComponentCombine combine
-			, std::vector< PassComponentCombine > & result )
-		{
-			result.push_back( std::move( combine ) );
-			return PassComponentID( result.size() - 1u );
-		}
 	}
 
 	PassComponentRegister::PassComponentRegister( Engine & engine )
@@ -162,6 +156,7 @@ namespace castor3d
 		registerComponent< UntileMappingComponent >();
 		registerComponent< FractalMappingComponent >();
 		registerComponent< NormalComponent >();
+		registerComponent< DefaultReflRefrComponent >();
 		// Pass shader buffer components
 		registerComponent< HeightComponent >();
 		registerComponent< OpacityComponent >();
@@ -243,19 +238,27 @@ namespace castor3d
 			, m_componentCombines.end()
 			, [&combine]( PassComponentCombine const & lookup )
 			{
-				return lookup.baseId == 0
-					&& lookup.flags == combine.flags;
+				return lookup.flags == combine.flags;
 			} );
 
 		if ( it == m_componentCombines.end() )
 		{
-			auto idx = passcompreg::addCombine( combine, m_componentCombines );
+			m_componentCombines.push_back( combine );
+			auto idx = SubmeshComponentCombineID( m_componentCombines.size() - 1u );
 			it = std::next( m_componentCombines.begin(), idx );
+			it->baseId = idx + 1u;
 			fillPassComponentCombine( *it );
 		}
 
+		if ( it->baseId > MaxPassCombines )
+		{
+			CU_Failure( "Overflown pass combines count." );
+			CU_Exception( "Overflown pass combines count." );
+		}
+
 		fillPassComponentCombine( combine );
-		return PassComponentCombineID( std::distance( m_componentCombines.begin(), it ) + 1 );
+		combine.baseId = it->baseId;
+		return combine.baseId;
 	}
 
 	PassComponentCombineID PassComponentRegister::getPassComponentCombineID( PassComponentCombine const & combine )const
@@ -391,6 +394,25 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	shader::PassReflRefrShaderPtr PassComponentRegister::getReflRefrShader( PassComponentCombine const & combine )const
+	{
+		auto it = std::find_if( m_registered.begin()
+			, m_registered.end()
+			, [&combine]( Component const & lookup )
+			{
+				return lookup.plugin->isReflRefrComponent()
+					&& hasAny( combine, lookup.plugin->getComponentFlags() );
+			} );
+
+		if ( it == m_registered.end() )
+		{
+			CU_Failure( "Pass components combination doesn't contain any reflection/refraction component" );
+			CU_Exception( "Pass components combination doesn't contain any reflection/refraction component" );
+		}
+
+		return it->plugin->createReflRefrShader();
 	}
 
 	PassComponentCombine PassComponentRegister::filterComponentFlags( ComponentModeFlags filter

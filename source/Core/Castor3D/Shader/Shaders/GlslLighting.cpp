@@ -65,110 +65,6 @@ namespace castor3d::shader
 			, components );
 	}
 
-	void LightingModel::computeReflRefr( ReflectionModel & reflections
-		, BlendComponents & components
-		, LightSurface const & lightSurface
-		, sdw::Vec4 const & position
-		, BackgroundModel & backgroundModel
-		, sdw::CombinedImage2DRgba32 const & mippedScene
-		, CameraData const & camera
-		, OutputComponents const & lighting
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec2 const & sceneUv
-		, sdw::UInt const & envMapIndex
-		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
-		, DebugOutput & debugOutput )
-	{
-		if ( mippedScene.isEnabled() )
-		{
-			reflections.computeCombined( components
-				, lightSurface
-				, lightSurface.worldPosition().xyz()
-				, backgroundModel
-				, mippedScene
-				, camera
-				, sceneUv / vec2( camera.renderSize() )
-				, envMapIndex
-				, components.hasReflection
-				, components.hasRefraction
-				, components.refractionRatio
-				, reflectedDiffuse
-				, reflectedSpecular
-				, refracted
-				, coatReflected
-				, sheenReflected
-				, debugOutput );
-		}
-		else
-		{
-			computeReflRefr( reflections
-				, components
-				, lightSurface
-				, backgroundModel
-				, camera
-				, lighting
-				, indirectAmbient
-				, indirectDiffuse
-				, sceneUv
-				, envMapIndex
-				, incident
-				, components.hasReflection
-				, components.hasRefraction
-				, components.refractionRatio
-				, reflectedDiffuse
-				, reflectedSpecular
-				, refracted
-				, coatReflected
-				, sheenReflected
-				, debugOutput );
-		}
-	}
-
-	void LightingModel::computeReflRefr( ReflectionModel & reflections
-		, BlendComponents & components
-		, LightSurface const & lightSurface
-		, BackgroundModel & backgroundModel
-		, CameraData const & camera
-		, OutputComponents const & lighting
-		, sdw::Vec3 const & indirectAmbient
-		, sdw::Vec3 const & indirectDiffuse
-		, sdw::Vec2 const & sceneUv
-		, sdw::UInt const & envMapIndex
-		, sdw::Vec3 const & incident
-		, sdw::UInt const & hasReflection
-		, sdw::UInt const & hasRefraction
-		, sdw::Float const & refractionRatio
-		, sdw::Vec3 & reflectedDiffuse
-		, sdw::Vec3 & reflectedSpecular
-		, sdw::Vec3 & refracted
-		, sdw::Vec3 & coatReflected
-		, sdw::Vec3 & sheenReflected
-		, DebugOutput & debugOutput )
-	{
-		reflections.computeCombined( components
-			, lightSurface
-			, backgroundModel
-			, envMapIndex
-			, components.hasReflection
-			, components.hasRefraction
-			, components.refractionRatio
-			, reflectedDiffuse
-			, reflectedSpecular
-			, refracted
-			, coatReflected
-			, sheenReflected
-			, debugOutput );
-	}
-
 	sdw::Vec3 LightingModel::combine( DebugOutput & debugOutput
 		, BlendComponents const & components
 		, sdw::Vec3 const & incident
@@ -272,7 +168,7 @@ namespace castor3d::shader
 		}
 
 		auto finalAmbient = m_writer.declLocale( "c3d_directAmbient"
-			, directAmbient * components.colour );
+			, adjustDirectAmbient( components, directAmbient ) );
 		debugOutput.registerOutput( "Combine", "Final Ambient", finalAmbient );
 		 // Fresnel already included in both diffuse and specular.
 		auto diffuseBrdf = m_writer.declLocale( "c3d_diffuseBrdf"
@@ -282,8 +178,7 @@ namespace castor3d::shader
 				, reflectedDiffuse ) );
 		debugOutput.registerOutput( "Combine", "Diffuse BRDF", diffuseBrdf );
 		auto adjustedSpecular = m_writer.declLocale( "c3d_adjustedSpecular"
-			, directSpecular );
-		adjustedSpecular *= components.specular;
+			, adjustDirectSpecular( components, directSpecular ) );
 		debugOutput.registerOutput( "Combine", "AdjustedSpecular", adjustedSpecular );
 		auto specularBrdf = m_writer.declLocale( "c3d_specularBrdf"
 			, doGetSpecularBrdf( components
