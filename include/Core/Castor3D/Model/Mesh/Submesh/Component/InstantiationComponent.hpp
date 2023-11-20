@@ -66,7 +66,7 @@ namespace castor3d
 		struct ComponentData
 			: public SubmeshComponentData
 		{
-			ComponentData( Submesh & submesh
+			explicit ComponentData( Submesh & submesh
 				, uint32_t threshold );
 			/**
 			 *\copydoc		castor3d::SubmeshComponentData::gather
