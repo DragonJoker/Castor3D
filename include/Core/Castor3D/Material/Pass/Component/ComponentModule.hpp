@@ -649,7 +649,8 @@ namespace castor3d
 
 	using UpdateComponent = std::function< void( PassComponentRegister const & passComponents
 		, TextureCombine const & combine
-		, shader::BlendComponents & components ) >;
+		, shader::BlendComponents & components
+		, bool isFrontCulled ) >;
 	using FinishComponent = std::function< void( shader::SurfaceBase const & surface
 		, sdw::Vec3 const worldEye
 		, shader::Utils & utils

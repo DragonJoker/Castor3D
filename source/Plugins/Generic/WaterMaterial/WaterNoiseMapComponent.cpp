@@ -221,7 +221,8 @@ namespace water
 
 	void WaterNoiseMapComponent::ComponentsShader::updateComponent( TextureCombine const & combine
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, c3d::BlendComponents & components )const
+		, c3d::BlendComponents & components
+		, bool isFrontCulled )const
 	{
 		if ( !components.hasMember( "waterNoise" ) )
 		{

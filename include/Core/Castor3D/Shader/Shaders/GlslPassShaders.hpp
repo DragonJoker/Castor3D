@@ -72,7 +72,8 @@ namespace castor3d::shader
 			, BlendComponents & components )const;
 		C3D_API void updateComponents( TextureCombine const & combine
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-			, BlendComponents & components )const;
+			, BlendComponents & components
+			, bool isFrontCulled = false )const;
 		C3D_API void finishComponents( SurfaceBase const & surface
 			, sdw::Vec3 const worldEye
 			, Utils & utils

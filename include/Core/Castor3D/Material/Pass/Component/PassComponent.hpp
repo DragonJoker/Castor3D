@@ -296,7 +296,8 @@ namespace castor3d
 			*/
 			C3D_API virtual void updateComponent( TextureCombine const & combine
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, shader::BlendComponents & components )const
+				, shader::BlendComponents & components
+				, bool isFrontCulled )const
 			{
 			}
 			/**

@@ -59,7 +59,8 @@ namespace water
 				, castor3d::shader::BlendComponents const & src )const override;
 			void updateComponent( castor3d::TextureCombine const & combine
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, castor3d::shader::BlendComponents & components )const override;
+				, castor3d::shader::BlendComponents & components
+				, bool isFrontCulled )const override;
 
 			castor3d::PassComponentTextureFlag getTextureFlags()const
 			{

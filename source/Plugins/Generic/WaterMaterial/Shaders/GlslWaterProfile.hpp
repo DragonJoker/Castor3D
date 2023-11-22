@@ -37,14 +37,17 @@ namespace water
 		float depthSofteningDistance{ 0.5f };
 		float refractionDistortionFactor{ 0.04f };
 		float refractionHeightFactor{ 2.5f };
+
 		float refractionDistanceFactor{ 15.0f };
 		float noiseTiling{ 1.0f };
 		float foamHeightStart{ 0.8f };
 		float foamFadeDistance{ 0.4f };
+
 		float foamTiling{ 2.0f };
 		float foamAngleExponent{ 80.0f };
 		float foamBrightness{ 4.0f };
 		float foamNoiseTiling{ 0.02f };
+
 		SsrConfiguration ssr;
 	};
 }

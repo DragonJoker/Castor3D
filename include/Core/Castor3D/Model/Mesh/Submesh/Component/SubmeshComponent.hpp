@@ -52,9 +52,9 @@ namespace castor3d
 	{
 		/**
 		 *\~english
-		 *\brief		Initialises the submesh
+		 *\brief		Initialises the render date
 		 *\~french
-		 *\brief		Initialise le sous-maillage
+		 *\brief		Initialise les données de rendu
 		 */
 		C3D_API virtual bool initialise( RenderDevice const & device ) = 0;
 		/**
@@ -630,6 +630,12 @@ namespace castor3d
 		DataT * getDataT()const noexcept
 		{
 			return static_cast< DataT * >( getBaseData() );
+		}
+
+		template< typename DataT >
+		DataT * getRenderDataT()const noexcept
+		{
+			return static_cast< DataT * >( getRenderData() );
 		}
 		/**@}*/
 
