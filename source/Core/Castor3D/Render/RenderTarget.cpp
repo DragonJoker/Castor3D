@@ -11,6 +11,7 @@
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
 #include "Castor3D/Material/Texture/Sampler.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
+#include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
 #include "Castor3D/Overlay/OverlayCategory.hpp"
 #include "Castor3D/Render/RenderSystem.hpp"
@@ -616,6 +617,16 @@ namespace castor3d
 		camera.resize( m_size );
 		camera.update();
 
+		auto & cache = scene.getMeshCache();
+		{
+			auto lock( castor::makeUniqueLock( cache ) );
+
+			for ( auto & mesh : cache )
+			{
+				mesh.second->update( updater );
+			}
+		}
+
 		CU_Require( m_culler );
 		m_culler->update( updater );
 		m_renderTechnique->update( updater );
@@ -924,7 +935,16 @@ namespace castor3d
 		}
 
 		doInitCombineProgram( progress );
-		auto result = doInitialiseTechnique( device, queueData, progress );
+		crg::FramePassArray passes;
+
+		for ( auto & mesh : getScene()->getMeshCache() )
+		{
+			passes = mesh.second->record( m_resources
+				, m_graph
+				, passes );
+		}
+
+		auto result = doInitialiseTechnique( device, queueData, progress, std::move( passes ) );
 
 		if ( !result )
 		{
@@ -1118,7 +1138,8 @@ namespace castor3d
 
 	bool RenderTarget::doInitialiseTechnique( RenderDevice const & device
 		, QueueData const & queueData
-		, ProgressBar * progress )
+		, ProgressBar * progress
+		, crg::FramePassArray previousPasses )
 	{
 		if ( !m_renderTechnique )
 		{
@@ -1133,6 +1154,7 @@ namespace castor3d
 					, m_hdrObjects.front()
 					, m_hdrObjects.back()
 					, m_ssaoConfig
+					, std::move( previousPasses )
 					, progress
 					, C3D_UseVisibilityBuffer != 0
 					, C3D_UseWeightedBlendedRendering != 0 );

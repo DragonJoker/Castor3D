@@ -118,7 +118,8 @@ namespace castor3d
 		, Scene & scene
 		, Camera & camera
 		, VoxelizerUbo & voxelizerUbo
-		, VctConfig const & voxelConfig )
+		, VctConfig const & voxelConfig
+		, crg::FramePassArray previousPasses )
 		: m_engine{ *device.renderSystem.getEngine() }
 		, m_device{ device }
 		, m_voxelConfig{ voxelConfig }
@@ -134,7 +135,7 @@ namespace castor3d
 		, m_staticsVoxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedStaticSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_dynamicsVoxels{ vxlsr::createSsbo( m_engine, device, "VoxelizedSceneBuffer", m_voxelConfig.gridSize.value() ) }
 		, m_voxelizerUbo{ voxelizerUbo }
-		, m_clearStatics{ doCreateClearStaticsPass( progress ) }
+		, m_clearStatics{ doCreateClearStaticsPass( previousPasses, progress ) }
 		, m_staticsVoxelizePassDesc{ doCreateVoxelizePass( { &m_clearStatics }, progress, *m_staticsVoxels, *m_staticsCuller, true ) }
 		, m_mergeStaticsDesc{ doCreateMergeStaticsPass( m_staticsVoxelizePassDesc, progress ) }
 		, m_dynamicsVoxelizePassDesc{ doCreateVoxelizePass( { &m_mergeStaticsDesc }, progress, *m_dynamicsVoxels, *m_dynamicsCuller, false ) }
@@ -328,7 +329,8 @@ namespace castor3d
 		return result;
 	}
 
-	crg::FramePass & Voxelizer::doCreateClearStaticsPass( ProgressBar * progress )
+	crg::FramePass & Voxelizer::doCreateClearStaticsPass( crg::FramePassArray const & previousPasses
+		, ProgressBar * progress )
 	{
 		stepProgressBar( progress, "Creating clear static pass" );
 		auto & result = m_graph.createPass( "StaticsClearPass"
@@ -345,6 +347,7 @@ namespace castor3d
 					, res->getTimer() );
 				return res;
 			} );
+		result.addDependencies( previousPasses );
 		result.addOutputStorageBuffer( { m_staticsVoxels->getBuffer(), "StaticsVoxels" }
 			, 0u
 			, 0u

@@ -477,7 +477,8 @@ namespace castor3d
 			, crg::ImageViewIdArray source );
 		bool doInitialiseTechnique( RenderDevice const & device
 			, QueueData const & queueData
-			, ProgressBar * progress );
+			, ProgressBar * progress
+			, crg::FramePassArray previousPasses );
 		void doCleanupTechnique();
 		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
 			, castor::String const & name

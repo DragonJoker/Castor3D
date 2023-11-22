@@ -50,6 +50,26 @@ namespace castor3d
 		m_submeshes.clear();
 	}
 
+	crg::FramePassArray Mesh::record( crg::ResourcesCache & resources
+		, crg::FrameGraph & graph
+		, crg::FramePassArray previousPasses )
+	{
+		for ( auto & submesh : *this )
+		{
+			previousPasses = submesh->record( resources, graph, std::move( previousPasses ) );
+		}
+
+		return previousPasses;
+	}
+
+	void Mesh::registerDependencies( crg::FramePass & pass )const
+	{
+		for ( auto & submesh : *this )
+		{
+			submesh->registerDependencies( pass );
+		}
+	}
+
 	void Mesh::update( CpuUpdater & updater )
 	{
 		for ( auto & submesh : m_submeshes )

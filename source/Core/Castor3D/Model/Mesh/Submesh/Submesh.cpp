@@ -305,6 +305,34 @@ namespace castor3d
 		}
 	}
 
+	crg::FramePassArray Submesh::record( crg::ResourcesCache & resources
+		, crg::FrameGraph & graph
+		, crg::FramePassArray previousPasses )
+	{
+		auto & device = *getParent().getOwner()->getRenderDevice();
+
+		for ( auto & component : m_components )
+		{
+			if( auto data = component.second->getRenderData() )
+			{
+				previousPasses = data->record( device, resources, graph, std::move( previousPasses ) );
+			}
+		}
+
+		return previousPasses;
+	}
+
+	void Submesh::registerDependencies( crg::FramePass & pass )const
+	{
+		for ( auto & component : m_components )
+		{
+			if ( auto data = component.second->getRenderData() )
+			{
+				data->registerDependencies( pass );
+			}
+		}
+	}
+
 	void Submesh::accept( ConfigurationVisitorBase & vis )
 	{
 		castor::StringArray topologies;

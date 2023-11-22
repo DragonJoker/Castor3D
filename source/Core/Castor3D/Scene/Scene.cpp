@@ -439,7 +439,6 @@ namespace castor3d
 			doUpdateMovables( updater, sceneObjs );
 			updateBoundingBox();
 			doUpdateMaterials();
-			doUpdateMeshes( updater );
 			doUpdateLights( updater, sceneObjs );
 			m_renderNodes->update( updater );
 			doUpdateParticles( updater, sceneObjs );
@@ -1063,17 +1062,6 @@ namespace castor3d
 		for ( auto & particleSystem : cache )
 		{
 			particleSystem.second->update( updater );
-		}
-	}
-
-	void Scene::doUpdateMeshes( CpuUpdater & updater )
-	{
-		auto & cache = getMeshCache();
-		auto lock( castor::makeUniqueLock( cache ) );
-
-		for ( auto & mesh : cache )
-		{
-			mesh.second->update( updater );
 		}
 	}
 

@@ -319,6 +319,7 @@ namespace castor3d
 		, Texture const & colour
 		, Texture const & intermediate
 		, SsaoConfig const & ssaoConfig
+		, crg::FramePassArray previousPasses
 		, ProgressBar * progress
 		, bool visbuffer
 		, bool weightedBlended )
@@ -409,7 +410,8 @@ namespace castor3d
 				, *m_renderTarget.getScene()
 				, *m_renderTarget.getCamera()
 				, m_vctConfigUbo
-				, m_renderTarget.getScene()->getVoxelConeTracingConfig() )
+				, m_renderTarget.getScene()->getVoxelConeTracingConfig()
+				, std::move( previousPasses ) )
 			: nullptr ) }
 		, m_lpvResult{ ( m_shadowBuffer
 			? castor::makeUnique< LightVolumePassResult >( m_renderTarget.getResources()
@@ -432,7 +434,7 @@ namespace castor3d
 		, m_prepass{ *this
 			, m_device
 			, queueData
-			, doCreateRenderPasses( progress, TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ) )
+			, doCreateRenderPasses( progress, TechniquePassEvent::eBeforeDepth, &m_renderTarget.createVertexTransformPass( m_graph ), std::move( previousPasses ) )
 			, progress
 			, visbuffer }
 		, m_lastDepthPass{ &m_prepass.getLastPass() }
@@ -848,17 +850,12 @@ namespace castor3d
 
 	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
 		, TechniquePassEvent event
-		, crg::FramePass const * previousPass )
-	{
-		return doCreateRenderPasses( progress, event, crg::FramePassArray{ previousPass } );
-	}
-
-	crg::FramePassArray RenderTechnique::doCreateRenderPasses( ProgressBar * progress
-		, TechniquePassEvent event
+		, crg::FramePass const * previousPass
 		, crg::FramePassArray previousPasses )
 	{
 		crg::FramePassArray result;
-		result.insert(result.end(), previousPasses.begin(), previousPasses.end() );
+		result.push_back( previousPass );
+		result.insert( result.end(), previousPasses.begin(), previousPasses.end() );
 
 		for ( auto renderPassInfo : getEngine()->getRenderPassInfos( event ) )
 		{
