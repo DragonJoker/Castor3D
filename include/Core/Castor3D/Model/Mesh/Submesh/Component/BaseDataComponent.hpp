@@ -43,7 +43,7 @@ namespace castor3d
 	{
 	public:
 		struct SurfaceShader
-			: public shader::SubmeshSurfaceShader
+			: public shader::SubmeshVertexSurfaceShader
 		{
 			C3D_API void fillSurfaceType( sdw::type::Struct & type
 				, uint32_t * index )const override
@@ -193,7 +193,7 @@ namespace castor3d
 				return SubmeshDataT == SubmeshData::eVelocity ? getComponentFlags() : 0u;
 			}
 
-			shader::SubmeshSurfaceShaderPtr createSurfaceShader()const override
+			shader::SubmeshVertexSurfaceShaderPtr createVertexSurfaceShader()const override
 			{
 				return std::make_unique< SurfaceShader >();
 			}

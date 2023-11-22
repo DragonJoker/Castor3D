@@ -40,7 +40,7 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
-			submeshShaders.fillSurface( *result );
+			submeshShaders.fillVertexSurface( *result );
 		}
 
 		return result;
@@ -53,7 +53,7 @@ namespace castor3d::shader
 
 		if ( result->empty() )
 		{
-			submeshShaders.fillSurface( *result );
+			submeshShaders.fillVertexSurface( *result );
 		}
 
 		return result;

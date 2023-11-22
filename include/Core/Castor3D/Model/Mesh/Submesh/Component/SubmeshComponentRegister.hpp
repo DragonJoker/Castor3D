@@ -56,7 +56,8 @@ namespace castor3d
 		 *	Gestion des composants de sortie des shaders.
 		 */
 		/**@{*/
-		C3D_API std::vector< shader::SubmeshSurfaceShader * > getSurfaceShaders( PipelineFlags const & flags )const;
+		C3D_API std::vector< shader::SubmeshVertexSurfaceShader * > getVertexSurfaceShaders( PipelineFlags const & flags )const;
+		C3D_API std::vector< shader::SubmeshRasterSurfaceShader * > getRasterSurfaceShaders( PipelineFlags const & flags )const;
 		/**
 		 *\~english
 		 *\brief		Retrieves the shader source matching the given flags.
@@ -211,7 +212,8 @@ namespace castor3d
 
 	private:
 		Components m_registered;
-		std::map< SubmeshComponentID, shader::SubmeshSurfaceShaderPtr > m_surfaceShaders;
+		std::map< SubmeshComponentID, shader::SubmeshVertexSurfaceShaderPtr > m_vertexSurfaceShaders;
+		std::map< SubmeshComponentID, shader::SubmeshRasterSurfaceShaderPtr > m_rasterSurfaceShaders;
 		std::map< SubmeshComponentID, SubmeshRenderShaderPtr > m_renderShaders;
 		std::vector< SubmeshComponentFlag > m_renderShaderFlags;
 		SubmeshComponentCombine m_defaultComponents;

@@ -17,6 +17,7 @@
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Shaders/GlslBRDFHelpers.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
@@ -121,6 +122,8 @@ namespace castor3d
 			, flags
 			, getComponentsMask()
 			, utils };
+		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
+			, flags };
 
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
@@ -159,7 +162,7 @@ namespace castor3d
 			, {}
 			, nullptr };
 
-		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, sdw::FragmentOutT< shader::PrepassOutputT >{ writer, flags }
 			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
 				, sdw::FragmentOutT< shader::PrepassOutputT > out )

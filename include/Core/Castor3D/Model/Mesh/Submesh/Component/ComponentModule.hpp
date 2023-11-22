@@ -326,9 +326,11 @@ namespace castor3d
 
 	namespace shader
 	{
-		struct SubmeshSurfaceShader;
+		struct SubmeshVertexSurfaceShader;
+		struct SubmeshRasterSurfaceShader;
 
-		using SubmeshSurfaceShaderPtr = std::unique_ptr< SubmeshSurfaceShader >;
+		using SubmeshVertexSurfaceShaderPtr = std::unique_ptr< SubmeshVertexSurfaceShader >;
+		using SubmeshRasterSurfaceShaderPtr = std::unique_ptr< SubmeshRasterSurfaceShader >;
 	}
 
 	//@}

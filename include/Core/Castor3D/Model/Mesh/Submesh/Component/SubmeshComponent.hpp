@@ -25,7 +25,28 @@ namespace castor3d
 
 	namespace shader
 	{
-		struct SubmeshSurfaceShader
+		struct SubmeshVertexSurfaceShader
+			: public SubmeshSubComponent
+		{
+			/**
+			*\~english
+			*\brief
+			*	Fills the surface shader struct with the members provided by this component.
+			*\param[in,out] type
+			*	Receives the members.
+			*\~french
+			*\brief
+			*	Remplit la structure shader de surface avec les membres fournis par ce composant.
+			*\param[in] type
+			*	Reçoit les membres.
+			*/
+			C3D_API virtual void fillSurfaceType( sdw::type::Struct & type
+				, uint32_t * index )const
+			{
+			}
+		};
+
+		struct SubmeshRasterSurfaceShader
 			: public SubmeshSubComponent
 		{
 			/**
@@ -59,9 +80,31 @@ namespace castor3d
 		C3D_API virtual bool initialise( RenderDevice const & device ) = 0;
 		/**
 		 *\~english
-		 *\brief		Cleans the submesh
+		 *\brief		Records the component's dependent passes.
 		 *\~french
-		 *\brief		Nettoie le sous-maillage
+		 *\brief		Enregistre les passes dont le composant dépend.
+		 */
+		C3D_API virtual crg::FramePassArray record( RenderDevice const & device
+			, crg::ResourcesCache & resources
+			, crg::FrameGraph & graph
+			, crg::FramePassArray previousPasses )
+		{
+			return crg::FramePassArray{};
+		}
+		/**
+		 *\~english
+		 *\brief		Records the component's dependencies.
+		 *\~french
+		 *\brief		Enregistre les ressoures dont le composant dépend.
+		 */
+		C3D_API virtual void registerDependencies( crg::FramePass & pass )const
+		{
+		}
+		/**
+		 *\~english
+		 *\brief		Cleans the render data
+		 *\~french
+		 *\brief		Nettoie les données de rendu
 		 */
 		C3D_API virtual void cleanup( RenderDevice const & device ) = 0;
 		/**
@@ -111,6 +154,16 @@ namespace castor3d
 		C3D_API virtual void fillDescriptor( PipelineFlags const & flags
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const = 0;
+		/**
+		 *\~english
+		 *\return		The render shader's patch vertices.
+		 *\~french
+		 *\return		Le nombre de sommets d'un patch du shader de rendu.
+		 */
+		C3D_API virtual uint32_t getPatchVertices()const noexcept
+		{
+			return 3u;
+		}
 	};
 
 	struct SubmeshRenderShader
@@ -440,12 +493,24 @@ namespace castor3d
 		/**
 		*\~english
 		*\brief
+		*	Creates the component's vertex surface shaders.
+		*\~french
+		*\brief
+		*	Crée les shaders pour la surface de vertex du composant.
+		*/
+		C3D_API virtual shader::SubmeshVertexSurfaceShaderPtr createVertexSurfaceShader()const
+		{
+			return nullptr;
+		}
+		/**
+		*\~english
+		*\brief
 		*	Creates the component's surface shaders.
 		*\~french
 		*\brief
 		*	Crée les shaders pour la surface du composant.
 		*/
-		C3D_API virtual shader::SubmeshSurfaceShaderPtr createSurfaceShader()const
+		C3D_API virtual shader::SubmeshRasterSurfaceShaderPtr createRasterSurfaceShader()const
 		{
 			return nullptr;
 		}

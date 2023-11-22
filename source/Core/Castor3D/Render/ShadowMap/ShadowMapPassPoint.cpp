@@ -167,7 +167,7 @@ namespace castor3d
 		pcb.end();
 
 		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
-			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, [&]( sdw::VertexInT< shader::MeshVertexT > in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
@@ -248,6 +248,8 @@ namespace castor3d
 			, flags
 			, getComponentsMask()
 			, utils };
+		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
+			, flags };
 
 		C3D_ModelsData( writer
 			, GlobalBuffersIdx::eModelsData
@@ -294,7 +296,7 @@ namespace castor3d
 		auto pipelineID = pcb.declMember< sdw::UInt >( "pipelineID" );
 		pcb.end();
 		
-		writer.implementMainT< shader::FragmentSurfaceT, shader::ShadowsOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+		writer.implementMainT< shader::FragmentSurfaceT, shader::ShadowsOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, sdw::FragmentOutT< shader::ShadowsOutputT >{ writer, needsVsm, needsRsm }
 			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
 				, sdw::FragmentOutT< shader::ShadowsOutputT > out )

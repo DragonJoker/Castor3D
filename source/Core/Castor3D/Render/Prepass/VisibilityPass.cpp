@@ -13,6 +13,7 @@
 #include "Castor3D/Shader/Shaders/GlslLighting.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputs.hpp"
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
@@ -118,6 +119,8 @@ namespace castor3d
 				| ComponentModeFlag::eNormals
 				| ComponentModeFlag::eGeometry )
 			, utils };
+		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
+			, flags };
 		C3D_Camera( writer
 			, GlobalBuffersIdx::eCamera
 			, RenderPipeline::eBuffers );
@@ -156,7 +159,7 @@ namespace castor3d
 			, {}
 			, nullptr };
 
-		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+		writer.implementMainT< shader::FragmentSurfaceT, shader::PrepassOutputT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, sdw::FragmentOutT< shader::PrepassOutputT >{ writer, flags }
 			, [&]( sdw::FragmentInT< shader::FragmentSurfaceT > in
 				, sdw::FragmentOutT< shader::PrepassOutputT > out )
