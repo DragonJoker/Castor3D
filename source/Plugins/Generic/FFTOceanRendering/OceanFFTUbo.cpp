@@ -9,71 +9,6 @@
 
 namespace ocean_fft
 {
-	//*********************************************************************************************
-
-	OceanData::OceanData( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: sdw::StructInstance{ writer, std::move( expr ), enabled }
-		, m_base{ getMember< sdw::Vec4 >( "base" ) }
-		, m_refraction{ getMember< sdw::Vec4 >( "refraction" ) }
-		, ssrSettings{ getMember< sdw::Vec4 >( "ssrSettings" ) }
-		, m_mods{ getMember< sdw::Vec4 >( "mods" ) }
-		, m_tileNormalScales{ getMember< sdw::Vec4 >( "tileNormalScales" ) }
-		, m_blockOffFftScale{ getMember< sdw::Vec4 >( "blockOffFftScale" ) }
-		, m_patchSizes{ getMember< sdw::Vec4 >( "patchSizes" ) }
-		, m_fftSizes{ getMember< sdw::Vec4 >( "fftSizes" ) }
-		, m_fftDistrib{ getMember< sdw::Vec4 >( "fftDistrib" ) }
-		, m_size{ getMember< sdw::UVec4 >( "size" ) }
-		, time{ m_base.x() }
-		, depthSofteningDistance{ m_base.y() }
-		, distanceMod{ m_base.z() }
-		, density{ m_base.w() }
-		, refractionRatio{ m_refraction.x() }
-		, refractionDistortionFactor{ m_refraction.y() }
-		, refractionHeightFactor{ m_refraction.z() }
-		, refractionDistanceFactor{ m_refraction.w() }
-		, otherMod{ m_mods.xy() }
-		, normalMod{ m_mods.zw() }
-		, tileScale{ m_tileNormalScales.xy() }
-		, normalScale{ m_tileNormalScales.zw() }
-		, blockOffset{ m_blockOffFftScale.xy() }
-		, fftScale{ m_blockOffFftScale.zw() }
-		, patchSize{ m_patchSizes.xy() }
-		, maxTessLevel{ m_patchSizes.zw() }
-		, invHeightmapSize{ m_fftSizes.xy() }
-		, windDirection{ m_fftSizes.zw() }
-		, amplitude{ m_fftDistrib.x() }
-		, maxWaveLength{ m_fftDistrib.y() }
-		, L{ m_fftDistrib.z() }
-		, size{ m_size.xy() }
-		, displacementDownsample{ writer.cast< sdw::Int >( m_size.z() ) }
-	{
-	}
-
-	ast::type::BaseStructPtr OceanData::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( sdw::type::MemoryLayout::eStd430
-			, "FFTOceanData" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "base", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "refraction", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "ssrSettings", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "mods", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "tileNormalScales", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "blockOffFftScale", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "patchSizes", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "fftSizes", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "fftDistrib", sdw::type::Kind::eVec4F, sdw::type::NotArray );
-			result->declMember( "size", sdw::type::Kind::eVec4U, sdw::type::NotArray );
-			result->end();
-		}
-
-		return result;
-	}
-
 	//************************************************************************************************
 
 	castor::String const OceanUbo::Buffer = cuT( "Ocean" );
@@ -105,9 +40,9 @@ namespace ocean_fft
 		auto & data = m_ubo.getData();
 		data = config;
 		data.patchSize = fftConfig.patchSize;
-		data.size->x = fftConfig.heightMapSamples;
-		data.size->y = fftConfig.heightMapSamples;
-		data.displacementDownsample = fftConfig.displacementDownsample;
+		data.heightMapSamples->x = fftConfig.heightMapSamples;
+		data.heightMapSamples->y = fftConfig.heightMapSamples;
+		data.displacementDownsample = int32_t( fftConfig.displacementDownsample );
 		data.otherMod = castor::Point2f{ castor::PiMult2< float >, castor::PiMult2< float > } / fftConfig.size;
 		data.normalMod = castor::Point2f{ castor::PiMult2< float >, castor::PiMult2< float > } / sizeNormal;
 		data.tileScale = tileExtent / fftConfig.size;

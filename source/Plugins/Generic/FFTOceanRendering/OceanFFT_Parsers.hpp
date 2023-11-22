@@ -14,22 +14,6 @@ See LICENSE file in root folder
 
 namespace ocean_fft
 {
-	struct ParserContext
-	{
-		castor3d::Engine * engine{ nullptr };
-		OceanUboConfiguration config{};
-		OceanFFT::Config fftConfig{};
-		castor3d::Parameters parameters;
-		std::vector< castor3d::MaterialObs > materials;
-	};
-
-	enum class OceanSection
-		: uint32_t
-	{
-		eRoot = CU_MakeSectionName( 'O', 'C', 'N', 'R' ),
-		eFFT = CU_MakeSectionName( 'O', 'F', 'F', 'T' ),
-	};
-
 	CU_DeclareAttributeParser( parserOceanRendering )
 	CU_DeclareAttributeParser( parserDepthSofteningDistance )
 	CU_DeclareAttributeParser( parserRefrRatio )

@@ -41,11 +41,10 @@ namespace ocean_fft
 		, VkExtent2D const & extent
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output
-		, castor3d::IsRenderPassEnabledRPtr isEnabled )
+		, ashes::BufferBase const & output )
 	{
 		auto & result = graph.createPass( "GenerateFrequency" + name
-			, [&device, extent, isEnabled]( crg::FramePass const & framePass
+			, [&device, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -54,7 +53,7 @@ namespace ocean_fft
 					, runnableGraph
 					, device
 					, extent
-					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
@@ -82,10 +81,9 @@ namespace ocean_fft
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
 			, VkExtent2D dimensions
-			, FFTConfig const & pfftConfig
+			, VkFFTConfig const & pfftConfig
 			, ashes::Buffer< cfloat > const & distribution
-			, FFTMode mode
-			, castor3d::IsRenderPassEnabledRPtr isEnabled )
+			, FFTMode mode )
 			: fftConfig{ pfftConfig }
 			, frequency{ castor3d::makeBuffer< cfloat >( fftConfig.device
 					, dimensions.width * dimensions.height
@@ -110,8 +108,7 @@ namespace ocean_fft
 				, dimensions
 				, ubo
 				, distribution.getBuffer()
-				, frequency->getBuffer()
-				, isEnabled ) }
+				, frequency->getBuffer() ) }
 			, processFFT( &createProcessFFTPass( name
 				, fftConfig.device
 				, graph
@@ -119,8 +116,7 @@ namespace ocean_fft
 				, dimensions
 				, fftConfig
 				, frequency->getBuffer()
-				, result
-				, isEnabled ) )
+				, result ) )
 		{
 		}
 
@@ -135,7 +131,7 @@ namespace ocean_fft
 		}
 
 	private:
-		FFTConfig const & fftConfig;
+		VkFFTConfig const & fftConfig;
 		ashes::BufferPtr< cfloat > frequency;
 		std::array< ashes::BufferBasePtr, 2u > result;
 		crg::FramePass const * generateFrequency{};
@@ -153,12 +149,12 @@ namespace ocean_fft
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
-			, castor3d::IsRenderPassEnabledRPtr isEnabled );
+			, OceanFFTConfig const & config );
 		~OceanFFT();
 		/**
 		 *\copydoc		castor3d::RenderTechniquePass::accept
 		 */
-		void accept( castor3d::RenderTechniqueVisitor & visitor );
+		void accept( castor3d::ConfigurationVisitorBase & visitor );
 
 		Config const & getConfig()const
 		{
@@ -191,12 +187,12 @@ namespace ocean_fft
 	private:
 		castor3d::RenderDevice const & m_device;
 		crg::FramePassGroup & m_group;
-		Config m_config;
+		OceanFFTConfig m_config;
 		std::default_random_engine m_engine;
 		std::normal_distribution< float > m_normDis{ 0.0f, 1.0f };
 		VkExtent2D m_heightMapSamples{ 2u, 2u };
 		uint32_t m_displacementDownsample{ 1u };
-		FFTConfig m_fftConfig;
+		VkFFTConfig m_fftConfig;
 		ashes::BufferPtr< cfloat > m_heightSeeds;
 		ashes::BufferPtr< cfloat > m_heightDistribution;
 		crg::FramePass const * m_generateHeightDistribution{};

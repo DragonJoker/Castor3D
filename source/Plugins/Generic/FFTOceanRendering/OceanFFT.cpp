@@ -2,7 +2,6 @@
 
 #include "FFTOceanRendering/BakeHeightGradientPass.hpp"
 #include "FFTOceanRendering/GenerateHeightmapPass.hpp"
-#include "FFTOceanRendering/OceanFFTRenderPass.hpp"
 
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/DirectUploadData.hpp>
@@ -29,11 +28,10 @@ namespace ocean_fft
 			, castor3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
-			, crg::ImageViewId imageView
-			, castor3d::IsRenderPassEnabledRPtr isEnabled )
+			, crg::ImageViewId imageView )
 		{
 			auto & result = graph.createPass( "GenMips" + name
-				, [&device, isEnabled]( crg::FramePass const & framePass
+				, [&device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -43,7 +41,7 @@ namespace ocean_fft
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, res->getTimer() );
 						return res;
@@ -57,11 +55,10 @@ namespace ocean_fft
 			, castor3d::RenderDevice const & device
 			, crg::FramePassGroup & graph
 			, crg::FramePass const * previousPass
-			, crg::ImageViewId imageView
-			, castor3d::IsRenderPassEnabledRPtr isEnabled )
+			, crg::ImageViewId imageView )
 		{
 			auto & result = graph.createPass( "GenMips" + name
-				, [&device, isEnabled]( crg::FramePass const & framePass
+				, [&device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -71,7 +68,7 @@ namespace ocean_fft
 							, device
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, res->getTimer() );
 						return res;
@@ -87,8 +84,7 @@ namespace ocean_fft
 			, crg::FramePassGroup & graph
 			, crg::FramePass const & previousPass
 			, ashes::BufferBase const & srcBuffer
-			, crg::ImageViewId dstImageView
-			, castor3d::IsRenderPassEnabledRPtr isEnabled )
+			, crg::ImageViewId dstImageView )
 		{
 			auto data = *dstImageView.data;
 			data.name = data.image.data->name + "_L0";
@@ -96,7 +92,7 @@ namespace ocean_fft
 			auto viewId = graph.createView( data );
 			auto extent = getExtent( viewId );
 			auto & copy = graph.createPass( "CopyTo" + name
-				, [&device, isEnabled, extent]( crg::FramePass const & framePass
+				, [&device, extent]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -107,7 +103,7 @@ namespace ocean_fft
 						, extent
 						, crg::ru::Config{}
 						, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-						, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+						, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 						, res->getTimer() );
 					return res;
@@ -117,7 +113,7 @@ namespace ocean_fft
 			copy.addTransferOutputView( dstImageView );
 
 			auto & result = graph.createPass( "GenMips" + name
-				, [&device, isEnabled]( crg::FramePass const & framePass
+				, [&device]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -127,7 +123,7 @@ namespace ocean_fft
 							, VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
 							, crg::ru::Config{}
 							, crg::RunnablePass::GetPassIndexCallback( [](){ return 0u; } )
-							, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+							, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 						device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 							, res->getTimer() );
 						return res;
@@ -165,15 +161,6 @@ namespace ocean_fft
 			return result;
 		}
 
-		OceanFFT::Config getConfig( castor3d::Engine const & engine )
-		{
-			castor3d::initialiseGlslang();
-			OceanFFT::Config config{};
-			auto params = engine.getRenderPassTypeConfiguration( OceanRenderPass::Type );
-			params.get( OceanRenderPass::ParamFFT, config );
-			return config;
-		}
-
 		std::default_random_engine createRandomEngine( bool disableRandomSeed )
 		{
 			if ( disableRandomSeed )
@@ -195,10 +182,10 @@ namespace ocean_fft
 			, crg::FramePassGroup & graph
 			, crg::FramePassArray previousPasses
 			, OceanUbo const & ubo
-			, castor3d::IsRenderPassEnabledRPtr isEnabled )
+			, OceanFFTConfig const & config )
 		: m_device{ device }
 		, m_group{ graph }
-		, m_config{ ocean_fft::getConfig( *device.renderSystem.getEngine() ) }
+		, m_config{ config }
 		, m_engine{ createRandomEngine( m_config.disableRandomSeed ) }
 		, m_heightMapSamples{ m_config.heightMapSamples, m_config.heightMapSamples }
 		, m_displacementDownsample{ m_config.displacementDownsample }
@@ -222,8 +209,7 @@ namespace ocean_fft
 			, false
 			, ubo
 			, m_heightSeeds->getBuffer()
-			, m_heightDistribution->getBuffer()
-			, isEnabled ) }
+			, m_heightDistribution->getBuffer() ) }
 		, m_height{ Name
 			, "Height"
 			, m_group
@@ -232,8 +218,7 @@ namespace ocean_fft
 			, m_heightMapSamples
 			, m_fftConfig
 			, *m_heightDistribution
-			, FFTMode::eC2R
-			, isEnabled }
+			, FFTMode::eC2R }
 		, m_displacementDistribution{ castor3d::makeBuffer< cfloat >( device
 			, ( m_heightMapSamples.width >> m_displacementDownsample ) * ( m_heightMapSamples.height >> m_displacementDownsample )
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -248,8 +233,7 @@ namespace ocean_fft
 			, m_displacementDownsample
 			, ubo
 			, m_heightDistribution->getBuffer()
-			, m_displacementDistribution->getBuffer()
-			, isEnabled ) }
+			, m_displacementDistribution->getBuffer() ) }
 		, m_displacement{ Name
 			, "Displacement"
 			, m_group
@@ -258,8 +242,7 @@ namespace ocean_fft
 			, { m_heightMapSamples.width >> m_displacementDownsample, m_heightMapSamples.height >> m_displacementDownsample }
 			, m_fftConfig
 			, *m_displacementDistribution
-			, FFTMode::eC2C
-			, isEnabled }
+			, FFTMode::eC2C }
 		, m_heightDisplacement{ createTexture( device
 				, resources
 				, m_heightMapSamples
@@ -294,20 +277,17 @@ namespace ocean_fft
 			, m_height.getResult()
 			, m_displacement.getResult()
 			, m_heightDisplacement
-			, m_gradientJacobian
-			, isEnabled ) }
+			, m_gradientJacobian ) }
 		, m_generateHeightDispMips{ &createGenerateSpecMipmapsPass( "HeightDisplacement"
 			, device
 			, m_group
 			, m_bakeHeightGradient
-			, m_heightDisplacement.front().sampledViewId
-			, isEnabled ) }
+			, m_heightDisplacement.front().sampledViewId ) }
 		, m_generateGradJacobMips{ &createGenerateMipmapsPass( "GradientJacobian"
 			, device
 			, m_group
 			, m_bakeHeightGradient
-			, m_gradientJacobian.front().sampledViewId
-			, isEnabled ) }
+			, m_gradientJacobian.front().sampledViewId ) }
 		, m_normalSeeds{ castor3d::makeBuffer< cfloat >( device
 			, m_heightMapSamples.width * m_heightMapSamples.height
 			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_SRC_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT
@@ -327,8 +307,7 @@ namespace ocean_fft
 			, true
 			, ubo
 			, m_normalSeeds->getBuffer()
-			, m_normalDistribution->getBuffer()
-			, isEnabled ) }
+			, m_normalDistribution->getBuffer() ) }
 		, m_normal{ Name
 			, "Normals"
 			, m_group
@@ -337,8 +316,7 @@ namespace ocean_fft
 			, m_heightMapSamples
 			, m_fftConfig
 			, *m_normalDistribution
-			, FFTMode::eC2C
-			, isEnabled }
+			, FFTMode::eC2C }
 		, m_normals{ createTexture( device
 			, resources
 			, m_heightMapSamples
@@ -350,11 +328,16 @@ namespace ocean_fft
 			, m_group
 			, m_normal.getLastPass()
 			, m_normal.getResult()
-			, m_normals.sampledViewId
-			, isEnabled ) }
+			, m_normals.sampledViewId ) }
 	{
 		generateDistributionSeeds( *m_heightSeeds );
 		generateDistributionSeeds( *m_normalSeeds );
+
+		m_group.addGroupOutput( m_gradientJacobian.front().sampledViewId );
+		m_group.addGroupOutput( m_gradientJacobian.back().sampledViewId );
+		m_group.addGroupOutput( m_heightDisplacement.back().sampledViewId );
+		m_group.addGroupOutput( m_heightDisplacement.back().sampledViewId );
+		m_group.addGroupOutput( m_normals.sampledViewId );
 	}
 
 	OceanFFT::~OceanFFT()
@@ -372,7 +355,7 @@ namespace ocean_fft
 		m_normals.destroy();
 	}
 
-	void OceanFFT::accept( castor3d::RenderTechniqueVisitor & visitor )
+	void OceanFFT::accept( castor3d::ConfigurationVisitorBase & visitor )
 	{
 		visitor.visit( cuT( "Tile XZ size" ), m_config.size );
 		visitor.visit( cuT( "Amplitude" ), m_config.amplitude );

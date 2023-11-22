@@ -75,8 +75,7 @@ namespace ocean_fft
 		, bool normals
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output
-		, castor3d::IsRenderPassEnabledRPtr isEnabled );
+		, ashes::BufferBase const & output );
 }
 
 #endif

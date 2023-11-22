@@ -1,7 +1,5 @@
 #include "FFTOceanRendering/ProcessFFTPass.hpp"
 
-#include "FFTOceanRendering/OceanFFTRenderPass.hpp"
-
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Buffer/GpuBuffer.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
@@ -217,7 +215,7 @@ namespace ocean_fft
 			return stream.str();
 		}
 
-		static VkFFTApplication createApp( FFTConfig const & config
+		static VkFFTApplication createApp( VkFFTConfig const & config
 			, castor3d::RenderDevice const & device
 			, VkExtent2D const & extent
 			, VkDeviceSize & inBufferSize
@@ -282,7 +280,7 @@ namespace ocean_fft
 
 	//************************************************************************************************
 
-	FFTConfig::FFTConfig( castor3d::RenderDevice const & device
+	VkFFTConfig::VkFFTConfig( castor3d::RenderDevice const & device
 			, VkExtent2D const & dimensions )
 		: device{ device }
 		, fence{ device->createFence( "OceanFFT" ) }
@@ -300,7 +298,7 @@ namespace ocean_fft
 		, crg::GraphContext & context
 		, crg::RunnableGraph & graph
 		, castor3d::RenderDevice const & device
-		, FFTConfig const & config
+		, VkFFTConfig const & config
 		, VkExtent2D const & extent
 		, ashes::BufferBase const & input
 		, std::array< ashes::BufferBasePtr, 2u > const & output
@@ -369,13 +367,12 @@ namespace ocean_fft
 		, crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, VkExtent2D const & extent
-		, FFTConfig const & config
+		, VkFFTConfig const & config
 		, ashes::BufferBase const & input
-		, std::array< ashes::BufferBasePtr, 2u > const & output
-		, castor3d::IsRenderPassEnabledRPtr isEnabled )
+		, std::array< ashes::BufferBasePtr, 2u > const & output )
 	{
 		auto & result = graph.createPass( "Process" + name
-			, [&device, extent, isEnabled, &input, &output, &config]( crg::FramePass const & framePass
+			, [&device, extent, &input, &output, &config]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -387,7 +384,7 @@ namespace ocean_fft
 					, extent
 					, input
 					, output
-					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;

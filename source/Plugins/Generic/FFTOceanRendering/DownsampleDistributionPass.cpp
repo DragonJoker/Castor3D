@@ -121,8 +121,8 @@ namespace ocean_fft
 					auto outN = writer.declLocale( "outN"
 						, in.workGroupSize.xy() * in.numWorkGroups.xy() );
 					auto inN = writer.declLocale( "inN"
-						, uvec2( outN.x() << writer.cast< sdw::UInt >( c3d_oceanData.displacementDownsample )
-							, outN.y() << writer.cast< sdw::UInt >( c3d_oceanData.displacementDownsample ) ) );
+						, uvec2( outN.x() << writer.cast< sdw::UInt >( c3d_oceanData.displacementDownsample() )
+							, outN.y() << writer.cast< sdw::UInt >( c3d_oceanData.displacementDownsample() ) ) );
 					auto i = writer.declLocale( "i"
 						, in.globalInvocationID.xy() );
 
@@ -226,11 +226,10 @@ namespace ocean_fft
 		, uint32_t downsample
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output
-		, castor3d::IsRenderPassEnabledRPtr isEnabled )
+		, ashes::BufferBase const & output )
 	{
 		auto & result = graph.createPass( "GenerateDistribution" + name
-			, [&device, downsample, extent, isEnabled]( crg::FramePass const & framePass
+			, [&device, downsample, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -240,7 +239,7 @@ namespace ocean_fft
 					, device
 					, extent
 					, downsample
-					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;

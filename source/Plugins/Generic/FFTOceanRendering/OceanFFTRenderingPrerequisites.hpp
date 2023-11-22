@@ -23,7 +23,6 @@ namespace ocean_fft
 	class GenerateNormalPass;
 	class OceanFFT;
 	class OceanUbo;
-	class OceanRenderPass;
 	class ProcessFFTPass;
 
 	template< typename DistributionPassT, typename FrequencyPassT >
@@ -31,9 +30,9 @@ namespace ocean_fft
 
 	using cfloat = std::complex< float >;
 
-	struct FFTConfig
+	struct VkFFTConfig
 	{
-		FFTConfig( castor3d::RenderDevice const & device
+		VkFFTConfig( castor3d::RenderDevice const & device
 			, VkExtent2D const & dimensions );
 
 		castor3d::RenderDevice const & device;
@@ -58,6 +57,33 @@ namespace ocean_fft
 		float windVelocity{ 340.0f };
 		float lod0Distance{ 50.0f };
 		bool disableRandomSeed{ false };
+	};
+
+	struct OceanUboConfiguration
+	{
+		float time{};
+		float distanceMod{};
+		float amplitude{};
+		float maxWaveLength{};
+
+		castor::Point2f otherMod{};
+		castor::Point2f normalMod{};
+
+		castor::Point2f tileScale{};
+		castor::Point2f normalScale{};
+
+		castor::Point2f blockOffset{};
+		castor::Point2f fftScale{};
+
+		castor::Point2f patchSize{};
+		castor::Point2f maxTessLevel{};
+
+		castor::Point2f invHeightmapSize{};
+		castor::Point2f windDirection{};
+
+		castor::Point2ui heightMapSamples{};
+		int32_t displacementDownsample{};
+		float L{};
 	};
 
 	enum class FFTMode

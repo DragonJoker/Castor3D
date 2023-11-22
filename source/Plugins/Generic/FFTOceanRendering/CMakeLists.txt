@@ -26,30 +26,30 @@ if ( CASTOR_USE_GLSLANG AND VKFFT_INCLUDE_DIRS )
 	set( ${PROJECT_NAME}_HDR_FILES
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/BakeHeightGradientPass.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/DownsampleDistributionPass.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/FFTWavesComponent.hpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/FFTWaterComponent.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateDisplacementPass.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateDistributionPass.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateHeightmapPass.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateMipmapsPass.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateNormalPass.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFT.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFT_Parsers.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFTRenderingPrerequisites.hpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFTRenderPass.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFTUbo.hpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/ProcessFFTPass.hpp
 	)
 	set( ${PROJECT_NAME}_SRC_FILES
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/BakeHeightGradientPass.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/DownsampleDistributionPass.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/FFTWavesComponent.cpp
+		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/FFTWaterComponent.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateDisplacementPass.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateDistributionPass.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateHeightmapPass.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateMipmapsPass.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/GenerateNormalPass.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFT.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFT_Parsers.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFTRenderingPlugin.cpp
-		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFTRenderPass.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/OceanFFTUbo.cpp
 		${CASTOR_SOURCE_DIR}/source/Plugins/Generic/${FOLDER_NAME}/ProcessFFTPass.cpp
 	)

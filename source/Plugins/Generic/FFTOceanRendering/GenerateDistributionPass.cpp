@@ -160,18 +160,18 @@ namespace ocean_fft
 					if ( normals )
 					{
 						auto k = writer.declLocale( "k"
-							, c3d_oceanData.normalMod * alias( vec2( i ), vec2( N ) ) );
+							, c3d_oceanData.normalMod() * alias( vec2( i ), vec2( N ) ) );
 						distribution[i.y() * N.x() + i.x()] = seed[i.y() * N.x() + i.x()]
-							* vec2( c3d_oceanData.amplitude * sqrt( c3d_oceanData.normalScale.x() * c3d_oceanData.normalScale.y() ) )
-							* sqrt( vec2( 0.5_f ) * phillips( k, c3d_oceanData.maxWaveLength, c3d_oceanData.windDirection, c3d_oceanData.L ) );
+							* vec2( c3d_oceanData.amplitude() * sqrt( c3d_oceanData.normalScale().x() * c3d_oceanData.normalScale().y() ) )
+							* sqrt( vec2( 0.5_f ) * phillips( k, c3d_oceanData.maxWaveLength(), c3d_oceanData.windDirection(), c3d_oceanData.L() ) );
 					}
 					else
 					{
 						auto k = writer.declLocale( "k"
-							, c3d_oceanData.otherMod * alias( vec2( i ), vec2( N ) ) );
+							, c3d_oceanData.otherMod() * alias( vec2( i ), vec2( N ) ) );
 						distribution[i.y() * N.x() + i.x()] = seed[i.y() * N.x() + i.x()]
-							* vec2( c3d_oceanData.amplitude )
-							* sqrt( vec2( 0.5_f ) * phillips( k, c3d_oceanData.maxWaveLength, c3d_oceanData.windDirection, c3d_oceanData.L ) );
+							* vec2( c3d_oceanData.amplitude() )
+							* sqrt( vec2( 0.5_f ) * phillips( k, c3d_oceanData.maxWaveLength(), c3d_oceanData.windDirection(), c3d_oceanData.L() ) );
 					}
 				} );
 			return writer.getBuilder().releaseShader();
@@ -258,11 +258,10 @@ namespace ocean_fft
 		, bool normals
 		, OceanUbo const & ubo
 		, ashes::BufferBase const & input
-		, ashes::BufferBase const & output
-		, castor3d::IsRenderPassEnabledRPtr isEnabled )
+		, ashes::BufferBase const & output )
 	{
 		auto & result = graph.createPass( "GenerateDistribution" + name
-			, [&device, normals, extent, isEnabled]( crg::FramePass const & framePass
+			, [&device, normals, extent]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -272,7 +271,7 @@ namespace ocean_fft
 					, device
 					, extent
 					, normals
-					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;

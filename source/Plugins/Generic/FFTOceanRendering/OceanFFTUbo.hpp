@@ -12,106 +12,57 @@ See LICENSE file in root folder
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/Int.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
 
 namespace ocean_fft
 {
-	struct OceanUboConfiguration
+	struct OceanUboData
+		: public sdw::StructInstanceHelperT< "OceanUboData"
+			, sdw::type::MemoryLayout::eStd430
+			, sdw::FloatField< "time" >
+			, sdw::FloatField< "distanceMod" >
+			, sdw::FloatField< "amplitude" >
+			, sdw::FloatField< "maxWaveLength" >
+			, sdw::Vec2Field< "otherMod" >
+			, sdw::Vec2Field< "normalMod" >
+			, sdw::Vec2Field< "tileScale" >
+			, sdw::Vec2Field< "normalScale" >
+			, sdw::Vec2Field< "blockOffset" >
+			, sdw::Vec2Field< "fftScale" >
+			, sdw::Vec2Field< "patchSize" >
+			, sdw::Vec2Field< "maxTessLevel" >
+			, sdw::Vec2Field< "invHeightmapSize" >
+			, sdw::Vec2Field< "windDirection" >
+			, sdw::U32Vec2Field< "heightMapSamples" >
+			, sdw::Int32Field< "displacementDownsample" >
+			, sdw::FloatField< "L" > >
 	{
-		float time{ 0.0f };
-		float depthSofteningDistance{ 0.5f };
-		float distanceMod{};
-		float density{ 1.0f };
-
-		float refractionRatio{ 1.2f };
-		float refractionDistortionFactor{ 0.04f };
-		float refractionHeightFactor{ 2.5f };
-		float refractionDistanceFactor{ 15.0f };
-
-		float ssrStepSize{ 0.5f };
-		float ssrForwardStepsCount{ 20.0f };
-		float ssrBackwardStepsCount{ 10.0f };
-		float ssrDepthMult{ 20.0f };
-
-		castor::Point2f otherMod{};
-		castor::Point2f normalMod{};
-
-		castor::Point2f tileScale{};
-		castor::Point2f normalScale{};
-
-		castor::Point2f blockOffset{};
-		castor::Point2f fftScale{};
-
-		castor::Point2f patchSize{};
-		castor::Point2f maxTessLevel{};
-
-		castor::Point2f invHeightmapSize{};
-		castor::Point2f windDirection{};
-
-		float amplitude{};
-		float maxWaveLength{};
-		float L{};
-		float dummy2{};
-
-		castor::Point2ui size{};
-		uint32_t displacementDownsample{};
-		uint32_t dummy3;
-	};
-
-	struct OceanData
-		: public sdw::StructInstance
-	{
-		OceanData( sdw::ShaderWriter & writer
+		OceanUboData( sdw::ShaderWriter & writer
 			, ast::expr::ExprPtr expr
-			, bool enabled );
-
-		SDW_DeclStructInstance( , OceanData );
-
-		static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	private:
-		sdw::Vec4 m_base;
-		sdw::Vec4 m_refraction;
-	public:
-		sdw::Vec4 ssrSettings;
-	private:
-		sdw::Vec4 m_mods;
-		sdw::Vec4 m_tileNormalScales;
-		sdw::Vec4 m_blockOffFftScale;
-		sdw::Vec4 m_patchSizes;
-		sdw::Vec4 m_fftSizes;
-		sdw::Vec4 m_fftDistrib;
-		sdw::UVec4 m_size;
+			, bool enabled )
+			: StructInstanceHelperT{ writer, std::move( expr ), enabled }
+		{
+		}
 
 	public:
-		sdw::Float time;
-		sdw::Float depthSofteningDistance;
-		sdw::Float distanceMod;
-		sdw::Float density;
-		sdw::Float refractionRatio;
-		sdw::Float refractionDistortionFactor;
-		sdw::Float refractionHeightFactor;
-		sdw::Float refractionDistanceFactor;
-		sdw::Vec2 otherMod;
-		sdw::Vec2 normalMod;
-		sdw::Vec2 tileScale;
-		sdw::Vec2 normalScale;
-		sdw::Vec2 blockOffset;
-		sdw::Vec2 fftScale;
-		sdw::Vec2 patchSize;
-		sdw::Vec2 maxTessLevel;
-		sdw::Vec2 invHeightmapSize;
-		sdw::Vec2 windDirection;
-		sdw::Float amplitude;
-		sdw::Float maxWaveLength;
-		sdw::Float L;
-		sdw::UVec2 size;
-		sdw::Int displacementDownsample;
+		auto time()const { return getMember< "time" >(); }
+		auto distanceMod()const { return getMember< "distanceMod" >(); }
+		auto amplitude()const { return getMember< "amplitude" >(); }
+		auto maxWaveLength()const { return getMember< "maxWaveLength" >(); }
+		auto otherMod()const { return getMember< "otherMod" >(); }
+		auto normalMod()const { return getMember< "normalMod" >(); }
+		auto tileScale()const { return getMember< "tileScale" >(); }
+		auto normalScale()const { return getMember< "normalScale" >(); }
+		auto blockOffset()const { return getMember< "blockOffset" >(); }
+		auto fftScale()const { return getMember< "fftScale" >(); }
+		auto patchSize()const { return getMember< "patchSize" >(); }
+		auto maxTessLevel()const { return getMember< "maxTessLevel" >(); }
+		auto invHeightmapSize()const { return getMember< "invHeightmapSize" >(); }
+		auto windDirection()const { return getMember< "windDirection" >(); }
+		auto heightMapSamples()const { return getMember< "heightMapSamples" >(); }
+		auto L()const { return getMember< "L" >(); }
+		auto displacementDownsample()const { return getMember< "displacementDownsample" >(); }
 	};
 
 	class OceanUbo
@@ -122,14 +73,14 @@ namespace ocean_fft
 	public:
 		explicit OceanUbo( castor3d::RenderDevice const & device );
 		~OceanUbo();
-		void cpuUpdate( OceanUboConfiguration const & config
+		void cpuUpdate( Configuration const & config
 			, OceanFFTConfig const & fftConfig
 			, castor::Point3f const & cameraPosition );
 
 		void createPassBinding( crg::FramePass & pass
 			, uint32_t binding )const
 		{
-			m_ubo.createPassBinding( pass, "OceanCfg", binding );
+			m_ubo.createPassBinding( pass, "FFTWaterCfg", binding );
 		}
 
 		void createSizedBinding( ashes::DescriptorSet & descriptorSet
@@ -166,7 +117,7 @@ namespace ocean_fft
 
 #define C3D_FftOcean( writer, binding, set )\
 	auto oceanBuffer = writer.declUniformBuffer( ocean_fft::OceanUbo::Buffer, binding, set );\
-	auto c3d_oceanData = oceanBuffer.declMember< ocean_fft::OceanData >( ocean_fft::OceanUbo::Data );\
+	auto c3d_oceanData = oceanBuffer.declMember< ocean_fft::OceanUboData >( ocean_fft::OceanUbo::Data );\
 	oceanBuffer.end()
 
 #endif
