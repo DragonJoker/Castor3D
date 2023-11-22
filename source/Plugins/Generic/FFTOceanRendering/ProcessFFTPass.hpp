@@ -37,7 +37,7 @@ namespace ocean_fft
 			, crg::GraphContext & context
 			, crg::RunnableGraph & graph
 			, castor3d::RenderDevice const & device
-			, FFTConfig const & config
+			, VkFFTConfig const & config
 			, VkExtent2D const & extent
 			, ashes::BufferBase const & input
 			, std::array< ashes::BufferBasePtr, 2u > const & output
@@ -73,10 +73,9 @@ namespace ocean_fft
 		, crg::FramePassGroup & graph
 		, crg::FramePass const & previousPass
 		, VkExtent2D const & extent
-		, FFTConfig const & config
+		, VkFFTConfig const & config
 		, ashes::BufferBase const & input
-		, std::array< ashes::BufferBasePtr, 2u > const & output
-		, castor3d::IsRenderPassEnabledRPtr isEnabled );
+		, std::array< ashes::BufferBasePtr, 2u > const & output );
 }
 
 #endif

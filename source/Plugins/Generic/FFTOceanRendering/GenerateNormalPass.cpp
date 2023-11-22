@@ -145,7 +145,7 @@ namespace ocean_fft
 					auto b = writer.declLocale( "b"
 						, distribution[wi.y() * N.x() + wi.x()] );
 					auto k = writer.declLocale( "k"
-						, c3d_oceanData.normalMod * alias( vec2( i ), vec2( N ) ) );
+						, c3d_oceanData.normalMod() * alias( vec2( i ), vec2( N ) ) );
 					auto k_len = writer.declLocale( "k_len"
 						, length( k ) );
 					// If this sample runs for hours on end, the cosines of very large numbers will eventually become unstable.
@@ -154,7 +154,7 @@ namespace ocean_fft
 					// See Tessendorf's paper for how to do it.
 					// The sqrt(G * k_len) factor represents how fast ocean waves at different frequencies propagate.
 					auto w = writer.declLocale( "w"
-						, sqrt( G * k_len ) * c3d_oceanData.time );
+						, sqrt( G * k_len ) * c3d_oceanData.time() );
 					auto cw = writer.declLocale( "cw"
 						, cos( w ) );
 					auto sw = writer.declLocale( "sw"

@@ -1,6 +1,5 @@
 #include "FFTOceanRendering/BakeHeightGradientPass.hpp"
 
-#include "FFTOceanRendering/OceanFFTRenderPass.hpp"
 #include "FFTOceanRendering/OceanFFTUbo.hpp"
 
 #include <Castor3D/Engine.hpp>
@@ -152,18 +151,18 @@ namespace ocean_fft
 			auto getHgtIndex = writer.implementFunction< sdw::Int >( "getHgtIndex"
 				, [&]( sdw::IVec2 i )
 				{
-					writer.returnStmt( normalizeCoord( i.y(), writer.cast< sdw::Int >( c3d_oceanData.size.y() ) )
-						* writer.cast< sdw::Int >( c3d_oceanData.size.x() )
-						+ normalizeCoord( i.x(), writer.cast< sdw::Int >( c3d_oceanData.size.x() ) ) );
+					writer.returnStmt( normalizeCoord( i.y(), writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().y() ) )
+						* writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().x() )
+						+ normalizeCoord( i.x(), writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().x() ) ) );
 				}
 				, sdw::InIVec2{ writer, "i" } );
 
 			auto getDspIndex = writer.implementFunction< sdw::Int >( "getDspIndex"
 				, [&]( sdw::IVec2 i )
 				{
-					writer.returnStmt( ( normalizeCoord( i.y(), writer.cast< sdw::Int >( c3d_oceanData.size.y() ) ) >> c3d_oceanData.displacementDownsample )
-						* ( writer.cast< sdw::Int >( c3d_oceanData.size.x() ) >> c3d_oceanData.displacementDownsample )
-						+ ( normalizeCoord( i.x(), writer.cast< sdw::Int >( c3d_oceanData.size.x() ) ) >> c3d_oceanData.displacementDownsample ) );
+					writer.returnStmt( ( normalizeCoord( i.y(), writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().y() ) ) >> c3d_oceanData.displacementDownsample() )
+						* ( writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().x() ) >> c3d_oceanData.displacementDownsample() )
+						+ ( normalizeCoord( i.x(), writer.cast< sdw::Int >( c3d_oceanData.heightMapSamples().x() ) ) >> c3d_oceanData.displacementDownsample() ) );
 				}
 				, sdw::InIVec2{ writer, "i" } );
 
@@ -327,11 +326,10 @@ namespace ocean_fft
 		, ashes::BufferBase const & height
 		, ashes::BufferBase const & displacement
 		, std::array< castor3d::Texture, 2u > const & heightDisp
-		, std::array< castor3d::Texture, 2u > const & gradJacob
-		, castor3d::IsRenderPassEnabledRPtr isEnabled )
+		, std::array< castor3d::Texture, 2u > const & gradJacob )
 	{
 		auto & result = graph.createPass( "BakeHeightGradient"
-			, [&device, extent, heightMapSize, displacementDownsample, isEnabled]( crg::FramePass const & framePass
+			, [&device, extent, heightMapSize, displacementDownsample]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
@@ -342,7 +340,7 @@ namespace ocean_fft
 					, extent
 					, heightMapSize
 					, displacementDownsample
-					, crg::RunnablePass::IsEnabledCallback( [isEnabled](){ return ( *isEnabled )(); } ) );
+					, crg::RunnablePass::IsEnabledCallback( [](){ return true; } ) );
 				device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
 					, res->getTimer() );
 				return res;
