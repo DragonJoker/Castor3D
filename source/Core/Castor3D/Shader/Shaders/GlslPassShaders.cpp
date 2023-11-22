@@ -156,16 +156,17 @@ namespace castor3d::shader
 
 	void PassShaders::updateComponents( TextureCombine const & combine
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, BlendComponents & components )const
+		, BlendComponents & components
+		, bool isFrontCulled )const
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->updateComponent( combine, maps, components );
+			shader->updateComponent( combine, maps, components, isFrontCulled );
 		}
 
 		for ( auto & update : m_updateComponents )
 		{
-			update( m_compRegister, combine, components );
+			update( m_compRegister, combine, components, isFrontCulled );
 		}
 	}
 
@@ -173,7 +174,7 @@ namespace castor3d::shader
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, BlendComponents & components )const
 	{
-		updateComponents( flags.textures, maps, components );
+		updateComponents( flags.textures, maps, components, flags.isFrontCulled() );
 	}
 
 	void PassShaders::finishComponents( SurfaceBase const & surface

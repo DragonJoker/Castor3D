@@ -105,7 +105,8 @@ namespace castor3d
 				, castor::StringStream & file )const override;
 			static void doUpdateComponent( PassComponentRegister const & passComponents
 				, TextureCombine const & combine
-				, shader::BlendComponents & components );
+				, shader::BlendComponents & components
+				, bool isFrontCulled );
 		};
 
 		static PassComponentPluginUPtr createPlugin( PassComponentRegister const & passComponent )

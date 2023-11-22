@@ -80,7 +80,8 @@ namespace water
 				, castor3d::shader::BlendComponents const & src )const override;
 			void updateComponent( castor3d::TextureCombine const & combine
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, castor3d::shader::BlendComponents & components )const override;
+				, castor3d::shader::BlendComponents & components
+				, bool isFrontCulled )const override;
 		};
 
 		explicit WaterComponent( castor3d::Pass & pass );
@@ -94,15 +95,15 @@ namespace water
 			{
 			}
 
-			castor3d::PassComponentUPtr createComponent( castor3d::Pass & pass )const override
-			{
-				return castor::makeUniqueDerived< castor3d::PassComponent, WaterComponent >( pass );
-			}
-
 			void createParsers( castor::AttributeParsers & parsers
 				, castor3d::ChannelFillers & channelFillers )const override;
 			bool isComponentNeeded( castor3d::TextureCombine const & textures
 				, castor3d::ComponentModeFlags const & filter )const override;
+
+			castor3d::PassComponentUPtr createComponent( castor3d::Pass & pass )const override
+			{
+				return castor::makeUniqueDerived< castor3d::PassComponent, WaterComponent >( pass );
+			}
 
 			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
 			{

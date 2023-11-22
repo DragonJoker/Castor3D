@@ -258,7 +258,6 @@ namespace castor3d
 					, curPosition
 					, prvPosition );
 				out.vtx.position = curPosition;
-
 			} );
 	}
 

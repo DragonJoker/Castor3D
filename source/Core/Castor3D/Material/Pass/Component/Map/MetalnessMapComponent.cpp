@@ -184,7 +184,8 @@ namespace castor3d
 
 	void MetalnessMapComponent::Plugin::doUpdateComponent( PassComponentRegister const & passComponents
 		, TextureCombine const & combine
-		, shader::BlendComponents & components )
+		, shader::BlendComponents & components
+		, bool isFrontCulled )
 	{
 		auto & plugin = passComponents.getPlugin< MetalnessMapComponent >();
 		auto & spcPlugin = passComponents.getPlugin< SpecularMapComponent >();

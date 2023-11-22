@@ -85,9 +85,6 @@ namespace waves
 				, castor3d::PipelineFlags const & flags
 				, castor3d::ComponentModeFlags const & componentsMask
 				, ast::ShaderBuilder & builder )const override;
-
-		private:
-			std::unique_ptr< WavesUbo > m_ubo;
 		};
 
 		class Plugin

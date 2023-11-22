@@ -38,7 +38,8 @@ namespace castor3d
 				, shader::BlendComponents const & src )const override;
 			C3D_API void updateComponent( TextureCombine const & combine
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, shader::BlendComponents & components )const override;
+				, shader::BlendComponents & components
+				, bool isFrontCulled )const override;
 		};
 
 		struct MaterialShader

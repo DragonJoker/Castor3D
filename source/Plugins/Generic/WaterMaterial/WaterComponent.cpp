@@ -526,7 +526,8 @@ namespace water
 
 	void WaterComponent::ComponentsShader::updateComponent( castor3d::TextureCombine const & combine
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-		, castor3d::shader::BlendComponents & components )const
+		, castor3d::shader::BlendComponents & components
+		, bool isFrontCulled )const
 	{
 		if ( !components.hasMember( "normal" )
 			|| !components.hasMember( "tangent" )
@@ -556,12 +557,21 @@ namespace water
 			finalNormal += normalize( tbn * waterNormals2.xyz() );
 		}
 
+		if ( components.hasMember( "waterNormals1" )
+			|| components.hasMember( "waterNormals2" ) )
+		{
+			if ( isFrontCulled )
+			{
+				finalNormal = -finalNormal;
+			}
+
+			components.normal = normalize( finalNormal );
+		}
+
 		if ( components.hasMember( "transmission" ) )
 		{
 			components.transmission = 1.0_f;
 		}
-
-		components.normal = normalize( finalNormal );
 	}
 
 	//*********************************************************************************************
