@@ -628,7 +628,7 @@ namespace castor3d::shader
 		return result;
 	}
 
-	sdw::Vec4 ReflectionModel::computeScreenSpace( CameraData const & cameraData
+	sdw::RetVec4 ReflectionModel::computeScreenSpace( CameraData const & cameraData
 		, sdw::Vec3 const & pviewPosition
 		, sdw::Vec3 const & pworldNormal
 		, sdw::Vec2 const & ptexcoord
@@ -744,17 +744,13 @@ namespace castor3d::shader
 				, sdw::InCombinedImage2DRgba32{ m_writer, "colourMap" } );
 		}
 
-		auto result = m_writer.declLocale( "c3d_ssrResult"
-			, m_computeScreenSpace2( pviewPosition
-				, pworldNormal
-				, ptexcoord
-				, pssrSettings
-				, pdepthObjMap
-				, pnormalMap
-				, pcolourMap ) );
-		debugOutput.registerOutput( "SSRResult", result.xyz() );
-		debugOutput.registerOutput( "SSRFactor", result.www() );
-		return result;
+		return m_computeScreenSpace2( pviewPosition
+			, pworldNormal
+			, ptexcoord
+			, pssrSettings
+			, pdepthObjMap
+			, pnormalMap
+			, pcolourMap );
 	}
 
 	sdw::RetBoolean ReflectionModel::traceScreenSpace( sdw::Vec3 pcsOrigin

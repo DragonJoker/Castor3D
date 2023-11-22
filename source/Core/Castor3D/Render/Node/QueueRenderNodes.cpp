@@ -921,6 +921,7 @@ namespace castor3d
 			if ( submeshData )
 			{
 				pipelineFlags.submeshDataBindings = submeshData->getBindingCount();
+				pipelineFlags.patchVertices = submeshData->getPatchVertices();
 			}
 
 			if ( it != pipelines.end()

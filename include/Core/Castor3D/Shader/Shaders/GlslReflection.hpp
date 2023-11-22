@@ -132,7 +132,7 @@ namespace castor3d::shader
 			, sdw::CombinedImage2DRgba32 const & normalMap
 			, sdw::CombinedImage2DRgba32 const & colourMap
 			, DebugOutputCategory & debugOutput );
-		C3D_API sdw::Vec4 computeScreenSpace( CameraData const & cameraData
+		C3D_API sdw::RetVec4 computeScreenSpace( CameraData const & cameraData
 			, sdw::Vec3 const & viewPosition
 			, sdw::Vec3 const & worldNormal
 			, sdw::Vec2 const & texcoord
