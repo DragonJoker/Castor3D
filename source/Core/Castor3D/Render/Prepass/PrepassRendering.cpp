@@ -11,6 +11,7 @@
 #include "Castor3D/Render/Passes/ComputeDepthRange.hpp"
 #include "Castor3D/Render/Prepass/DepthPass.hpp"
 #include "Castor3D/Render/Prepass/VisibilityPass.hpp"
+#include "Castor3D/Scene/Scene.hpp"
 
 #include <CastorUtils/Design/ResourceCache.hpp>
 
@@ -187,6 +188,12 @@ namespace castor3d
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity().targetViewId );
 		result.addOutputColourView( getOwner()->getNormal().targetViewId
 			, transparentBlackClearColor );
+
+		for ( auto & mesh : getOwner()->getRenderTarget().getScene()->getMeshCache() )
+		{
+			mesh.second->registerDependencies( result );
+		}
+
 		return result;
 	}
 
@@ -239,6 +246,12 @@ namespace castor3d
 		result.addOutputColourView( getOwner()->getRenderTarget().getVelocity().targetViewId );
 		result.addOutputColourView( getOwner()->getNormal().targetViewId
 			, transparentBlackClearColor );
+
+		for ( auto & mesh : getOwner()->getRenderTarget().getScene()->getMeshCache() )
+		{
+			mesh.second->registerDependencies( result );
+		}
+
 		return result;
 	}
 

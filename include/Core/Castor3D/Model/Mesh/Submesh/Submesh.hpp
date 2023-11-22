@@ -88,6 +88,22 @@ namespace castor3d
 		 */
 		C3D_API void update( CpuUpdater & updater );
 		/**
+		 *\~english
+		 *\brief		Records the components' dependent render passes.
+		 *\~french
+		 *\brief		Enregistre les passes de rendu des dépendances des composants.
+		 */
+		C3D_API crg::FramePassArray record( crg::ResourcesCache & resources
+			, crg::FrameGraph & graph
+			, crg::FramePassArray previousPasses );
+		/**
+		 *\~english
+		 *\brief		Records the components's dependencies.
+		 *\~french
+		 *\brief		Enregistre les ressoures dont les composants dépendent.
+		 */
+		C3D_API void registerDependencies( crg::FramePass & pass )const;
+		/**
 		*\~english
 		*\brief				ConfigurationVisitorBase acceptance function.
 		*\param[in,out]		vis	The ... visitor.

@@ -89,6 +89,22 @@ namespace castor3d
 		C3D_API void cleanup();
 		/**
 		 *\~english
+		 *\brief		Records the submeshes' dependent render passes.
+		 *\~french
+		 *\brief		Enregistre les passes de rendu des dépendances des sous-maillages.
+		 */
+		C3D_API crg::FramePassArray record( crg::ResourcesCache & resources
+			, crg::FrameGraph & graph
+			, crg::FramePassArray previousPasses );
+		/**
+		 *\~english
+		 *\brief		Records the submeshes's dependencies.
+		 *\~french
+		 *\brief		Enregistre les ressoures dont les sous-maillages dépendent.
+		 */
+		C3D_API void registerDependencies( crg::FramePass & pass )const;
+		/**
+		 *\~english
 		 *\brief		Updates the submeshes' render components.
 		 *\~french
 		 *\brief		Met à jour les composants de rendu des sous-maiilages.

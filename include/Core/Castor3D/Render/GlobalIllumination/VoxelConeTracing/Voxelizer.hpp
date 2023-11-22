@@ -49,7 +49,8 @@ namespace castor3d
 			, Scene & scene
 			, Camera & camera
 			, VoxelizerUbo & voxelizerUbo
-			, VctConfig const & voxelConfig );
+			, VctConfig const & voxelConfig
+			, crg::FramePassArray previousPasses );
 		C3D_API ~Voxelizer();
 		/**
 		 *\~english
@@ -115,7 +116,8 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		crg::FramePass & doCreateClearStaticsPass( ProgressBar * progress );
+		crg::FramePass & doCreateClearStaticsPass( crg::FramePassArray const & previousPasses
+			, ProgressBar * progress );
 		crg::FramePass & doCreateVoxelizePass( crg::FramePassArray const & previousPasses
 			, ProgressBar * progress
 			, ashes::Buffer< Voxel > const & outVoxels

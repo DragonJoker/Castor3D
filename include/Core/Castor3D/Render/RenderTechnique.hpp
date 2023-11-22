@@ -78,6 +78,7 @@ namespace castor3d
 			, Texture const & colour
 			, Texture const & intermediate
 			, SsaoConfig const & ssaoConfig
+			, crg::FramePassArray previousPasses
 			, ProgressBar * progress
 			, bool visbuffer
 			, bool weightedBlended );
@@ -397,10 +398,8 @@ namespace castor3d
 	private:
 		crg::FramePassArray doCreateRenderPasses( ProgressBar * progress
 			, TechniquePassEvent event
-			, crg::FramePass const * previousPass );
-		crg::FramePassArray doCreateRenderPasses( ProgressBar * progress
-			, TechniquePassEvent event
-			, crg::FramePassArray previousPasses );
+			, crg::FramePass const * previousPass
+			, crg::FramePassArray previousPasses = {} );
 		BackgroundRendererUPtr doCreateBackgroundPass( ProgressBar * progress );
 		void doInitialiseLpv();
 		void doUpdateShadowMaps( CpuUpdater & updater );
