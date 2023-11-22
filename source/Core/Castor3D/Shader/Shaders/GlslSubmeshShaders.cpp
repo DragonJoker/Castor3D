@@ -14,18 +14,19 @@ namespace castor3d::shader
 	SubmeshShaders::SubmeshShaders( SubmeshComponentRegister const & compRegister
 		, PipelineFlags const & flags )
 		: m_compRegister{ compRegister }
-		, m_shaders{ m_compRegister.getSurfaceShaders( flags ) }
+		, m_vertexShaders{ m_compRegister.getVertexSurfaceShaders( flags ) }
+		, m_rasterShaders{ m_compRegister.getRasterSurfaceShaders( flags ) }
 		, m_flags{ flags }
 	{
 	}
 
-	void SubmeshShaders::fillSurface( sdw::type::IOStruct & surface )const
+	void SubmeshShaders::fillVertexSurface( sdw::type::IOStruct & surface )const
 	{
 		if ( surface.empty() )
 		{
 			uint32_t index = 0u;
 
-			for ( auto & shader : m_shaders )
+			for ( auto & shader : m_vertexShaders )
 			{
 				shader->fillSurfaceType( surface, &index );
 			}
@@ -41,11 +42,11 @@ namespace castor3d::shader
 		}
 	}
 
-	void SubmeshShaders::fillSurface( sdw::type::BaseStruct & surface )const
+	void SubmeshShaders::fillVertexSurface( sdw::type::BaseStruct & surface )const
 	{
 		if ( surface.empty() )
 		{
-			for ( auto & shader : m_shaders )
+			for ( auto & shader : m_vertexShaders )
 			{
 				shader->fillSurfaceType( surface, nullptr );
 			}
@@ -56,6 +57,23 @@ namespace castor3d::shader
 			surface.declMember( "objectIds", ast::type::Kind::eVec4U
 				, ast::type::NotArray
 				, m_flags.enableInstantiation() );
+		}
+	}
+
+	void SubmeshShaders::fillRasterSurface( sdw::type::IOStruct & surface
+		, uint32_t & index )const
+	{
+		for ( auto & shader : m_rasterShaders )
+		{
+			shader->fillSurfaceType( surface, &index );
+		}
+	}
+
+	void SubmeshShaders::fillRasterSurface( sdw::type::BaseStruct & surface )const
+	{
+		for ( auto & shader : m_rasterShaders )
+		{
+			shader->fillSurfaceType( surface, nullptr );
 		}
 	}
 }

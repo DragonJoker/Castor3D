@@ -3,6 +3,7 @@
 #include "Castor3D/Render/RenderNodesPass.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/MorphingUbo.hpp"
@@ -414,6 +415,7 @@ namespace castor3d::shader
 	}
 
 	void RasterizerSurfaceBase::fillIOType( sdw::type::IOStruct & type
+		, SubmeshShaders const & submeshShaders
 		, PassShaders const & shaders
 		, PipelineFlags const & flags
 		, uint32_t & index )
@@ -465,9 +467,12 @@ namespace castor3d::shader
 		{
 			index += 4u;
 		}
+		
+		submeshShaders.fillRasterSurface( type, index );
 	}
 
 	void RasterizerSurfaceBase::fillType( sdw::type::BaseStruct & type
+		, SubmeshShaders const & submeshShaders
 		, PassShaders const & shaders
 		, PipelineFlags const & flags )
 	{
@@ -503,9 +508,11 @@ namespace castor3d::shader
 		type.declMember( "passMultipliers", ast::type::Kind::eVec4F
 			, 4u
 			, flags.enablePassMasks() );
+		submeshShaders.fillRasterSurface( type );
 	}
 
-	void RasterizerSurfaceBase::fillType( sdw::type::BaseStruct & type )
+	void RasterizerSurfaceBase::fillType( sdw::type::BaseStruct & type
+		, SubmeshShaders const & submeshShaders )
 	{
 		SurfaceBase::fillType( type );
 		type.declMember( "nodeId", ast::type::Kind::eUInt
@@ -528,6 +535,7 @@ namespace castor3d::shader
 			, ast::type::NotArray );
 		type.declMember( "passMultipliers", ast::type::Kind::eVec4F
 			, 4u );
+		submeshShaders.fillRasterSurface( type );
 	}
 
 	//*****************************************************************************************

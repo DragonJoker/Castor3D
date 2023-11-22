@@ -81,7 +81,7 @@ namespace castor3d
 		pcb.end();
 
 		writer.implementMainT< shader::BillboardSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
-			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, [&]( sdw::VertexInT< shader::BillboardSurfaceT > in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
@@ -182,7 +182,7 @@ namespace castor3d
 		pcb.end();
 
 		writer.implementMainT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
-			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+			, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 			, [&]( sdw::VertexInT< shader::MeshVertexT > in
 				, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 			{
@@ -620,7 +620,7 @@ namespace castor3d
 				} );
 			writer.implementEntryPointT< shader::PayloadT, shader::FragmentSurfaceT, sdw::VoidT >( SDW_MeshLocalSize( 32u, 1u, 1u )
 				, sdw::TaskPayloadInT< shader::PayloadT >{ writer }
-				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer, MaxMeshletVertexCount, passShaders, flags }
+				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer, MaxMeshletVertexCount, submeshShaders, passShaders, flags }
 				, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT >{ writer, MaxMeshletTriangleCount }
 				, [&]( sdw::MeshSubgroupIn in
 					, sdw::TaskPayloadInT< shader::PayloadT > payload
@@ -636,7 +636,7 @@ namespace castor3d
 		{
 			writer.implementEntryPointT< sdw::VoidT, shader::FragmentSurfaceT, sdw::VoidT >( SDW_MeshLocalSize( 32u, 1u, 1u )
 				, sdw::TaskPayloadIn{ writer }
-				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer, MaxMeshletVertexCount, passShaders, flags }
+				, sdw::MeshVertexListOutT< shader::FragmentSurfaceT >{ writer, MaxMeshletVertexCount, submeshShaders, passShaders, flags }
 				, sdw::TrianglesMeshPrimitiveListOutT< sdw::VoidT >{ writer, MaxMeshletTriangleCount }
 				, [&]( sdw::MeshSubgroupIn in
 					, sdw::TaskPayloadIn payload

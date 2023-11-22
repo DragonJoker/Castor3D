@@ -152,13 +152,16 @@ namespace castor3d::shader
 
 	protected:
 		C3D_API static void fillIOType( sdw::type::IOStruct & type
-			, PassShaders const & shaders
+			, SubmeshShaders const & submeshShaders
+			, PassShaders const & passShaders
 			, PipelineFlags const & flags
 			, uint32_t & index );
 		C3D_API static void fillType( sdw::type::BaseStruct & type
-			, PassShaders const & shaders
+			, SubmeshShaders const & submeshShaders
+			, PassShaders const & passShaders
 			, PipelineFlags const & flags );
-		C3D_API static void fillType( sdw::type::BaseStruct & type );
+		C3D_API static void fillType( sdw::type::BaseStruct & type
+			, SubmeshShaders const & submeshShaders );
 	};
 
 	template< sdw::var::Flag FlagT >
@@ -201,12 +204,15 @@ namespace castor3d::shader
 
 		static sdw::type::IOStructPtr makeIOType( sdw::type::TypesCache & cache
 			, sdw::EntryPoint entryPoint
-			, PassShaders const & shaders
+			, SubmeshShaders const & submeshShaders
+			, PassShaders const & passShaders
 			, PipelineFlags const & flags );
 		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
-			, PassShaders const & shaders
+			, SubmeshShaders const & submeshShaders
+			, PassShaders const & passShaders
 			, PipelineFlags const & flags );
-		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
+		static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache
+			, SubmeshShaders const & submeshShaders );
 
 	public:
 		TexcoordT texture0;

@@ -458,7 +458,7 @@ namespace waves
 				, RenderPipeline::eBuffers );
 			
 			writer.implementEntryPointT< shader::BillboardSurfaceT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::BillboardSurfaceT >{ writer, flags }
-				, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+				, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 				, [&]( sdw::VertexInT< shader::BillboardSurfaceT > in
 					, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 				{
@@ -504,7 +504,7 @@ namespace waves
 		else
 		{
 			writer.implementEntryPointT< shader::MeshVertexT, shader::FragmentSurfaceT >( sdw::VertexInT< shader::MeshVertexT >{ writer, submeshShaders }
-				, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, passShaders, flags }
+				, sdw::VertexOutT< shader::FragmentSurfaceT >{ writer, submeshShaders, passShaders, flags }
 				, [&]( sdw::VertexInT< shader::MeshVertexT > in
 					, sdw::VertexOutT< shader::FragmentSurfaceT > out )
 				{
@@ -536,6 +536,7 @@ namespace waves
 
 		writer.implementPatchRoutineT< shader::FragmentSurfaceT, shd::OutputVertices, sdw::VoidT >( sdw::TessControlListInT< shader::FragmentSurfaceT, shd::OutputVertices >{ writer
 				, false
+				, submeshShaders
 				, passShaders
 				, flags }
 			, sdw::TrianglesTessPatchOutT< sdw::VoidT >{ writer, 9u }
@@ -552,6 +553,7 @@ namespace waves
 
 		writer.implementEntryPointT< shader::FragmentSurfaceT, shd::OutputVertices, shader::FragmentSurfaceT >( sdw::TessControlListInT< shader::FragmentSurfaceT, shd::OutputVertices >{ writer
 				, true
+				, submeshShaders
 				, passShaders
 				, flags }
 			, sdw::TrianglesTessControlListOutT< shader::FragmentSurfaceT >{ writer
@@ -559,6 +561,7 @@ namespace waves
 				, ast::type::OutputTopology::eTriangle
 				, ast::type::PrimitiveOrdering::eCCW
 				, shd::OutputVertices
+				, submeshShaders
 				, passShaders
 				, flags }
 			, [&]( sdw::TessControlMainIn in
@@ -582,10 +585,12 @@ namespace waves
 				, ast::type::PatchDomain::eTriangles
 				, ast::type::Partitioning::eFractionalEven
 				, ast::type::PrimitiveOrdering::eCCW
+				, submeshShaders
 				, passShaders
 				, flags }
 			, sdw::TrianglesTessPatchInT< sdw::VoidT >{ writer, 9u }
 			, sdw::TessEvalDataOutT< shader::FragmentSurfaceT >{ writer
+				, submeshShaders
 				, passShaders
 				, flags }
 			, [&]( sdw::TessEvalMainIn mainIn

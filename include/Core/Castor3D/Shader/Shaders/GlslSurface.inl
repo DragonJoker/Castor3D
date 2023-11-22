@@ -95,7 +95,7 @@ namespace castor3d::shader
 					result.emplace_back( makeExpr( coord ) );
 					return result;
 				}() )
-		, true }
+			, true }
 	{
 	}
 
@@ -111,7 +111,8 @@ namespace castor3d::shader
 	template< typename TexcoordT, ast::var::Flag FlagT >
 	ast::type::IOStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeIOType( ast::type::TypesCache & cache
 		, sdw::EntryPoint entryPoint
-		, PassShaders const & shaders
+		, SubmeshShaders const & submeshShaders
+		, PassShaders const & passShaders
 		, PipelineFlags const & flags )
 	{
 		auto result = cache.getIOStruct( "C3D_RasterizerSurface"
@@ -122,7 +123,7 @@ namespace castor3d::shader
 		{
 			auto texType = TexcoordT::makeType( cache );
 			uint32_t index = 0u;
-			RasterizerSurfaceBase::fillIOType( *result, shaders, flags, index );
+			RasterizerSurfaceBase::fillIOType( *result, submeshShaders, passShaders, flags, index );
 			result->declMember( "texture0", texType
 				, ast::type::NotArray
 				, ( flags.enableTexcoord0() ? index++ : 0 )
@@ -146,7 +147,8 @@ namespace castor3d::shader
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
 	ast::type::BaseStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeType( ast::type::TypesCache & cache
-		, PassShaders const & shaders
+		, SubmeshShaders const & submeshShaders
+		, PassShaders const & passShaders
 		, PipelineFlags const & flags )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eC
@@ -155,7 +157,7 @@ namespace castor3d::shader
 		if ( result->empty() )
 		{
 			auto texType = TexcoordT::makeType( cache );
-			RasterizerSurfaceBase::fillType( *result, shaders, flags );
+			RasterizerSurfaceBase::fillType( *result, submeshShaders, passShaders, flags );
 			result->declMember( "texture0", texType
 				, ast::type::NotArray
 				, flags.enableTexcoord0() );
@@ -174,14 +176,15 @@ namespace castor3d::shader
 	}
 
 	template< typename TexcoordT, ast::var::Flag FlagT >
-	ast::type::BaseStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeType( ast::type::TypesCache & cache )
+	ast::type::BaseStructPtr RasterizerSurfaceT< TexcoordT, FlagT >::makeType( ast::type::TypesCache & cache
+		, SubmeshShaders const & submeshShaders )
 	{
 		auto result = cache.getStruct( ast::type::MemoryLayout::eC, "C3D_RasterSurface" );
 
 		if ( result->empty() )
 		{
 			auto texType = TexcoordT::makeType( cache );
-			RasterizerSurfaceBase::fillType( *result );
+			RasterizerSurfaceBase::fillType( *result, submeshShaders );
 			result->declMember( "texture0", texType
 				, ast::type::NotArray );
 			result->declMember( "texture1", texType

@@ -29,6 +29,7 @@
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslReflection.hpp"
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -214,6 +215,8 @@ namespace castor3d
 			, flags
 			, getComponentsMask()
 			, utils };
+		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
+			, flags };
 		shader::CookTorranceBRDF cookTorrance{ writer, brdf };
 		auto index = uint32_t( castor3d::GlobalBuffersIdx::eCount ) + flags.submeshDataBindings;
 
@@ -312,6 +315,7 @@ namespace castor3d
 		auto outRevealage( writer.declOutput< sdw::Float >( "outRevealage", 1 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, submeshShaders
 				, passShaders
 				, flags }
 			, sdw::FragmentOut{ writer }

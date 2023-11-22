@@ -238,11 +238,26 @@ namespace castor3d
 		return SubmeshData::eCount;
 	}
 
-	std::vector< shader::SubmeshSurfaceShader * > SubmeshComponentRegister::getSurfaceShaders( PipelineFlags const & flags )const
+	std::vector< shader::SubmeshVertexSurfaceShader * > SubmeshComponentRegister::getVertexSurfaceShaders( PipelineFlags const & flags )const
 	{
-		std::vector< shader::SubmeshSurfaceShader * > result;
+		std::vector< shader::SubmeshVertexSurfaceShader * > result;
 
-		for ( auto & [componentId, surfaceShader] : m_surfaceShaders )
+		for ( auto & [componentId, surfaceShader] : m_vertexSurfaceShaders )
+		{
+			if ( smshcompreg::isValidComponent( flags, componentId ) )
+			{
+				result.push_back( surfaceShader.get() );
+			}
+		}
+
+		return result;
+	}
+
+	std::vector< shader::SubmeshRasterSurfaceShader * > SubmeshComponentRegister::getRasterSurfaceShaders( PipelineFlags const & flags )const
+	{
+		std::vector< shader::SubmeshRasterSurfaceShader * > result;
+
+		for ( auto & [componentId, surfaceShader] : m_rasterSurfaceShaders )
 		{
 			if ( smshcompreg::isValidComponent( flags, componentId ) )
 			{
@@ -457,9 +472,14 @@ namespace castor3d
 			m_velocityFlag = componentDesc.plugin->getVelocityFlag();
 		}
 
-		if ( auto shader = componentDesc.plugin->createSurfaceShader() )
+		if ( auto shader = componentDesc.plugin->createVertexSurfaceShader() )
 		{
-			m_surfaceShaders.emplace( componentDesc.id, std::move( shader ) );
+			m_vertexSurfaceShaders.emplace( componentDesc.id, std::move( shader ) );
+		}
+
+		if ( auto shader = componentDesc.plugin->createRasterSurfaceShader() )
+		{
+			m_rasterSurfaceShaders.emplace( componentDesc.id, std::move( shader ) );
 		}
 
 		if ( auto shader = componentDesc.plugin->createRenderShader() )
@@ -488,11 +508,18 @@ namespace castor3d
 		{
 			auto & componentDesc = m_registered[id - 1u];
 			getEngine()->unregisterParsers( componentDesc.name );
-			auto sit = m_surfaceShaders.find( id );
+			auto vit = m_vertexSurfaceShaders.find( id );
 
-			if ( sit != m_surfaceShaders.end() )
+			if ( vit != m_vertexSurfaceShaders.end() )
 			{
-				m_surfaceShaders.erase( sit );
+				m_vertexSurfaceShaders.erase( vit );
+			}
+
+			auto ait = m_rasterSurfaceShaders.find( id );
+
+			if ( ait != m_rasterSurfaceShaders.end() )
+			{
+				m_rasterSurfaceShaders.erase( ait );
 			}
 
 			auto rit = m_renderShaders.find( id );

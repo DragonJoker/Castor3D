@@ -233,6 +233,7 @@ namespace castor3d::shader
 	Writer_Parameter( BlendComponents );
 	Writer_Parameter( Cone );
 	Writer_Parameter( DerivTex );
+	Writer_Parameter( DerivFragmentSurface );
 	Writer_Parameter( DirectionalLight );
 	Writer_Parameter( DirectionalShadowData );
 	Writer_Parameter( Intersection );

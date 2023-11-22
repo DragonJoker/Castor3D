@@ -28,6 +28,7 @@
 #include "Castor3D/Shader/ShaderModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
@@ -148,6 +149,8 @@ namespace castor3d
 			, TextureCombine{}
 			, getComponentsMask()
 			, utils };
+		shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
+			, flags };
 
 		// UBOs
 		C3D_ModelsData( writer
@@ -179,6 +182,7 @@ namespace castor3d
 		auto outColour( writer.declOutput< sdw::UVec4 >( "outColour", 0 ) );
 
 		writer.implementMainT< shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+				, submeshShaders
 				, passShaders
 				, flags }
 			, sdw::FragmentOut{ writer }

@@ -22,6 +22,7 @@
 #include "Castor3D/Shader/Shaders/GlslTextureAnimation.hpp"
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
+#include "Castor3D/Shader/Shaders/GlslSubmeshShaders.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/CameraUbo.hpp"
 #include "Castor3D/Shader/Ubos/BillboardUbo.hpp"
@@ -148,6 +149,8 @@ namespace castor3d
 					, flags
 					, getComponentsMask()
 					, utils };
+				shader::SubmeshShaders submeshShaders{ getEngine()->getSubmeshComponentsRegister()
+					, flags };
 
 				C3D_ModelsData( writer
 					, GlobalBuffersIdx::eModelsData
@@ -187,6 +190,7 @@ namespace castor3d
 				pcb.end();
 
 				writer.implementMainT< shader::FragmentSurfaceT, sdw::VoidT >( sdw::FragmentInT< shader::FragmentSurfaceT >{ writer
+						, submeshShaders
 						, passShaders
 						, flags }
 					, sdw::FragmentOut{ writer }

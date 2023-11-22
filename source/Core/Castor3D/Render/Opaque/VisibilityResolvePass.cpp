@@ -744,26 +744,27 @@ namespace castor3d
 				m_loadVertices( pnodeId, pprimitiveId, pmodelData, pv0, pv1, pv2 );
 			}
 
-			shader::DerivFragmentSurface loadSurface( sdw::UInt const & pnodeId
+			void loadSurface( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
 				, sdw::Vec2 const & ppixelCoord
 				, shader::ModelData const & pmodelData
 				, shader::Material const & pmaterial
 				, sdw::Float & pdepth
 				, shader::CameraData const & c3d_cameraData
-				, sdw::Array< shader::BillboardData > const & c3d_billboardData )
+				, sdw::Array< shader::BillboardData > const & c3d_billboardData
+				, shader::DerivFragmentSurface & presult )
 			{
 				if ( !m_loadSurface )
 				{
-					m_loadSurface = m_writer.implementFunction< shader::DerivFragmentSurface >( "loadSurface"
+					m_loadSurface = m_writer.implementFunction< sdw::Void >( "loadSurface"
 						, [&]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
 							, sdw::Vec2 const & pixelCoord
 							, shader::ModelData const & modelData
 							, shader::Material const & material
-							, sdw::Float depth )
+							, sdw::Float depth
+							, shader::DerivFragmentSurface result )
 						{
-							auto result = m_writer.declLocale< shader::DerivFragmentSurface >( "result" );
 							result.worldPosition = vec4( 0.0_f );
 							result.viewPosition = vec4( 0.0_f );
 							result.curPosition = vec4( 0.0_f );
@@ -982,18 +983,17 @@ namespace castor3d
 									, tangent
 									, bitangent );
 							}
-
-							m_writer.returnStmt( result );
 						}
 						, sdw::InUInt{ m_writer, "nodeId" }
 						, sdw::InUInt{ m_writer, "primitiveId" }
 						, sdw::InVec2{ m_writer, "pixelCoord" }
 						, shader::InModelData{ m_writer, "modelData" }
 						, shader::InMaterial{ m_writer, "material", m_passShaders }
-						, sdw::OutFloat{ m_writer, "depth" } );
+						, sdw::OutFloat{ m_writer, "depth" }
+						, shader::OutDerivFragmentSurface{ m_writer, "result", m_submeshShaders } );
 				}
 
-				return m_loadSurface( pnodeId, pprimitiveId, ppixelCoord, pmodelData, pmaterial, pdepth );
+				m_loadSurface( pnodeId, pprimitiveId, ppixelCoord, pmodelData, pmaterial, pdepth, presult );
 			}
 
 		private:
@@ -1027,13 +1027,14 @@ namespace castor3d
 				, shader::OutMeshVertex
 				, shader::OutMeshVertex
 				, shader::OutMeshVertex > m_loadVertices;
-			sdw::Function< shader::DerivFragmentSurface
+			sdw::Function< sdw::Void
 				, sdw::InUInt
 				, sdw::InUInt
 				, sdw::InVec2
 				, shader::InModelData
 				, shader::InMaterial
-				, sdw::OutFloat > m_loadSurface;
+				, sdw::OutFloat
+				, shader::OutDerivFragmentSurface > m_loadSurface;
 		};
 
 		static ShaderPtr getProgram( RenderDevice const & device
@@ -1191,15 +1192,18 @@ namespace castor3d
 							, ( hasSsao
 								? c3d_mapOcclusion.fetch( ipixel, 0_i )
 								: 1.0_f ) );
-						auto baseSurface = writer.declLocale( "baseSurface"
-							, visHelpers.loadSurface( curNodeId
-								, primitiveId
-								, vec2( ipixel )
-								, modelData
-								, material
-								, depth
-								, c3d_cameraData
-								, c3d_billboardData ) );
+						auto baseSurface = writer.declLocale< shader::DerivFragmentSurface >( "baseSurface"
+							, true
+							, submeshShaders );
+						visHelpers.loadSurface( curNodeId
+							, primitiveId
+							, vec2( ipixel )
+							, modelData
+							, material
+							, depth
+							, c3d_cameraData
+							, c3d_billboardData
+							, baseSurface );
 						auto components = writer.declLocale( "components"
 							, shader::BlendComponents{ materials
 								, material
