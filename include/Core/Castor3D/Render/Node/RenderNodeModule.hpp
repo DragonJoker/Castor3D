@@ -117,10 +117,7 @@ namespace castor3d
 	using NodePtrByBufferMapT = std::unordered_map< ashes::BufferBase const *, NodeArrayT< NodeT > >;
 
 	template< typename NodeT >
-	using NodePtrByRenderDataMapT = std::unordered_map< SubmeshRenderData *, NodePtrByBufferMapT< NodeT > >;
-
-	template< typename NodeT >
-	using NodePtrByPipelineMapT = std::unordered_map< RenderPipeline *, NodePtrByRenderDataMapT< NodeT > >;
+	using NodePtrByPipelineMapT = std::unordered_map< RenderPipeline *, NodePtrByBufferMapT< NodeT > >;
 
 	//@}
 	/**@name Instanced */
@@ -136,10 +133,7 @@ namespace castor3d
 	using ObjectNodesPtrByBufferMapT = std::unordered_map< ashes::BufferBase const *, ObjectNodesPtrByPassT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByRenderDataMapT = std::unordered_map< SubmeshRenderData *, ObjectNodesPtrByBufferMapT< NodeT > >;
-
-	template< typename NodeT >
-	using ObjectNodesPtrByPipelineMapT = std::unordered_map< RenderPipeline *, ObjectNodesPtrByRenderDataMapT< NodeT > >;
+	using ObjectNodesPtrByPipelineMapT = std::unordered_map< RenderPipeline *, ObjectNodesPtrByBufferMapT< NodeT > >;
 
 	//@}
 	//@}

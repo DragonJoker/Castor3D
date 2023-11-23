@@ -167,7 +167,7 @@ namespace water
 		auto refractionTexCoord = writer.declLocale( "refractionTexCoord"
 			, writer.ternary( distortedPosition.y() < lightSurface.worldPosition().y(), distortedTexCoord, hdrCoords ) );
 		refractionResult = mapColours.lod( refractionTexCoord, 0.0_f ).rgb();
-		debugOutputBlock.registerOutput( "Refraction", refractionResult );
+		debugOutputBlock.registerOutput( "Raw Refraction", refractionResult );
 		auto waterTransmission = writer.declLocale( "waterTransmission"
 			, components.colour * ( indirect.ambient() + indirect.diffuseColour() ) );
 		debugOutputBlock.registerOutput( "Raw Transmission", waterTransmission );

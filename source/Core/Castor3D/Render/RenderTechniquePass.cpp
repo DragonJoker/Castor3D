@@ -231,7 +231,8 @@ namespace castor3d
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, SubmeshRenderData * submeshData )const
 	{
 		return RenderNodesPass::createPipelineFlags( std::move( passComponents )
 			, std::move( submeshComponents )
@@ -248,7 +249,8 @@ namespace castor3d
 			, topology
 			, isFrontCulled
 			, passLayerIndex
-			, morphTargets );
+			, morphTargets
+			, submeshData );
 	}
 
 	void RenderTechniqueNodesPass::doAccept( RenderTechniqueVisitor & visitor )

@@ -91,7 +91,8 @@ namespace castor3d
 			, VkPrimitiveTopology topology
 			, bool isFrontCulled
 			, uint32_t passLayerIndex
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const override;
+			, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+			, SubmeshRenderData * submeshData )const override;
 		/**
 		 *\copydoc	castor3d::RenderNodesPass::areValidPassFlags
 		 */

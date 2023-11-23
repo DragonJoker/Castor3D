@@ -75,12 +75,15 @@ namespace castor3d
 
 	struct PipelineLoHashDetails
 	{
-		explicit PipelineLoHashDetails( VkDeviceSize pmorphTargetsOffset = 0u )
+		explicit PipelineLoHashDetails( VkDeviceSize pmorphTargetsOffset = 0u
+			, SubmeshRenderData * psubmeshData = nullptr )
 			: morphTargetsOffset{ pmorphTargetsOffset }
+			, submeshData{ psubmeshData }
 		{
 		}
 
 		VkDeviceSize morphTargetsOffset{};
+		SubmeshRenderData const * submeshData{};
 	};
 
 	C3D_API bool operator==( PipelineLoHashDetails const & lhs, PipelineLoHashDetails const & rhs );
@@ -132,6 +135,7 @@ namespace castor3d
 			, TextureCombine textures = {}
 			, uint32_t ppassLayerIndex = {}
 			, VkDeviceSize pmorphTargetsOffset = {}
+			, SubmeshRenderData * psubmeshData = {}
 			, bool pisStatic = false )
 			: PipelineFlags{ PipelineHiHashDetails{ std::move( ppassComponents )
 					, std::move( psubmeshComponents )
@@ -143,7 +147,7 @@ namespace castor3d
 					, palphaFunc
 					, ppassLayerIndex
 					, pisStatic }
-				, PipelineLoHashDetails{ pmorphTargetsOffset }
+				, PipelineLoHashDetails{ pmorphTargetsOffset, psubmeshData }
 				, psceneFlags
 				, pcolourBlendMode
 				, palphaBlendMode
@@ -172,7 +176,7 @@ namespace castor3d
 					, shaderFlags
 					, alphaFunc
 					, passLayerIndex }
-				, PipelineLoHashDetails{ 0u }
+				, PipelineLoHashDetails{ 0u, nullptr }
 				, SceneFlag::eNone
 				, BlendMode::eNoBlend
 				, BlendMode::eNoBlend
