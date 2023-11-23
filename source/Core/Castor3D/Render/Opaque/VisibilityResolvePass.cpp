@@ -17,6 +17,7 @@
 #include "Castor3D/Render/Culling/PipelineNodes.hpp"
 #include "Castor3D/Render/EnvironmentMap/EnvironmentMap.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
+#include "Castor3D/Render/Node/QueueRenderNodes.hpp"
 #include "Castor3D/Scene/BillboardList.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Background/Background.hpp"
@@ -2207,9 +2208,9 @@ namespace castor3d
 				pipelines.push_back( pipelineId );
 			}
 
-			for ( auto & itPipeline : m_nodesPass.getBillboardNodes() )
+			for ( auto & [origPipeline, buffers] : m_nodesPass.getBillboardNodes() )
 			{
-				auto & pipelineFlags = itPipeline.first->getFlags();
+				auto & pipelineFlags = origPipeline->getFlags();
 
 				if ( pipelineFlags.pass.hasParallaxOcclusionMappingOneFlag
 					|| pipelineFlags.pass.hasParallaxOcclusionMappingRepeatFlag
@@ -2219,36 +2220,33 @@ namespace castor3d
 					continue;
 				}
 
-				auto pipelineHash = itPipeline.first->getFlagsHash();
+				auto pipelineHash = origPipeline->getFlagsHash();
 
-				for ( auto & [renderData, buffers] : itPipeline.second )
+				for ( auto & [buffer, nodes] : buffers )
 				{
-					for ( auto & [buffer, nodes] : buffers )
+					for ( auto & culled : nodes )
 					{
-						for ( auto & culled : nodes )
+						auto & positionsBuffer = culled.node->data.getVertexBuffer();
+						auto & pipeline = doCreatePipeline( pipelineFlags
+							, culled.node->data.getVertexStride() );
+						auto it = m_activeBillboardPipelines.emplace( &pipeline
+							, BillboardPipelinesNodesDescriptors{} ).first;
+						auto hash = size_t( positionsBuffer.getOffset() );
+						hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
+						auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
+						auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *buffer );
+
+						if ( ires.second )
 						{
-							auto & positionsBuffer = culled.node->data.getVertexBuffer();
-							auto & pipeline = doCreatePipeline( pipelineFlags
-								, culled.node->data.getVertexStride() );
-							auto it = m_activeBillboardPipelines.emplace( &pipeline
-								, BillboardPipelinesNodesDescriptors{} ).first;
-							auto hash = size_t( positionsBuffer.getOffset() );
-							hash = castor::hashCombinePtr( hash, positionsBuffer.getBuffer().getBuffer() );
-							auto ires = pipeline.vtxDescriptorSets.emplace( hash, ashes::DescriptorSetPtr{} );
-							auto pipelineId = m_nodesPass.getPipelineNodesIndex( pipelineHash, *buffer );
-
-							if ( ires.second )
-							{
-								ires.first->second = visres::createVtxDescriptorSet( getName()
-									, *pipeline.vtxDescriptorPool
-									, positionsBuffer.getBuffer().getBuffer()
-									, positionsBuffer.getOffset()
-									, positionsBuffer.getSize() );
-							}
-
-							it->second.emplace( culled.node->getId()
-								, PipelineNodesDescriptors{ pipelineId, ires.first->second.get() } );
+							ires.first->second = visres::createVtxDescriptorSet( getName()
+								, *pipeline.vtxDescriptorPool
+								, positionsBuffer.getBuffer().getBuffer()
+								, positionsBuffer.getOffset()
+								, positionsBuffer.getSize() );
 						}
+
+						it->second.emplace( culled.node->getId()
+							, PipelineNodesDescriptors{ pipelineId, ires.first->second.get() } );
 					}
 				}
 			}
@@ -2272,7 +2270,8 @@ namespace castor3d
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, SubmeshRenderData * submeshData )const
 	{
 		auto result = m_nodesPass.createPipelineFlags( std::move( passComponents )
 			, std::move( submeshComponents )
@@ -2289,7 +2288,8 @@ namespace castor3d
 			, topology
 			, isFrontCulled
 			, passLayerIndex
-			, morphTargets );
+			, morphTargets
+			, submeshData );
 		result.m_shaderFlags = getShaderFlags();
 		return result;
 	}

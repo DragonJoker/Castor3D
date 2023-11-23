@@ -74,6 +74,8 @@ namespace castor3d
 			, ComponentModeFlags const & componentsMask
 			, ast::ShaderBuilder & builder )const;
 		C3D_API SubmeshRenderDataPtr createRenderData( SubmeshComponent & component );
+		C3D_API uint16_t getRenderDataId( SubmeshRenderData const * value )const;
+		C3D_API SubmeshRenderData const * getRenderData( uint16_t value )const;
 		/**
 		 *\~english
 		 *\name
@@ -216,6 +218,7 @@ namespace castor3d
 		std::map< SubmeshComponentID, shader::SubmeshRasterSurfaceShaderPtr > m_rasterSurfaceShaders;
 		std::map< SubmeshComponentID, SubmeshRenderShaderPtr > m_renderShaders;
 		std::vector< SubmeshComponentFlag > m_renderShaderFlags;
+		std::vector< SubmeshRenderData const * > m_renderDatas;
 		SubmeshComponentCombine m_defaultComponents;
 		mutable std::vector< SubmeshComponentCombine > m_componentCombines{};
 		SubmeshComponentFlag m_lineIndexFlag{};

@@ -98,13 +98,17 @@ namespace castor3d
 				} );
 		}
 
-		static size_t makeHash( PipelineFlags const & flags
-			, SubmeshRenderData * submeshData )
+		static size_t makeHash( PipelineFlags const & flags )
 		{
 			auto result = size_t( getRenderNodeType( flags.m_programFlags ) );
 			castor::hashCombine( result, size_t( flags.m_sceneFlags ) );
 			castor::hashCombine( result, flags.pass.hasDeferredDiffuseLightingFlag );
-			castor::hashCombinePtr( result, *submeshData );
+
+			if ( flags.submeshData )
+			{
+				castor::hashCombinePtr( result, *flags.submeshData );
+			}
+
 			return result;
 		}
 
@@ -280,7 +284,8 @@ namespace castor3d
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
 		, uint32_t passLayerIndex
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, SubmeshRenderData * submeshData )const
 	{
 		auto result = PipelineFlags{ adjustFlags( components )
 			, adjustFlags( submeshComponents )
@@ -298,6 +303,7 @@ namespace castor3d
 			, adjustFlags( textures )
 			, submeshComponents.hasPassMaskFlag ? 0u : passLayerIndex
 			, morphTargets.getOffset()
+			, submeshData
 			, filtersNonStatic() };
 
 		if ( isFrontCulled )
@@ -322,7 +328,8 @@ namespace castor3d
 		, SceneFlags const & sceneFlags
 		, VkPrimitiveTopology topology
 		, bool isFrontCulled
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )const
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
+		, SubmeshRenderData * submeshData )const
 	{
 		return createPipelineFlags( pass.getPassFlags()
 			, submeshComponents
@@ -341,31 +348,28 @@ namespace castor3d
 			, topology
 			, isFrontCulled
 			, pass.getIndex()
-			, morphTargets );
+			, morphTargets
+			, submeshData );
 	}
 
 	RenderPipeline & RenderNodesPass::prepareBackPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
-		, SubmeshRenderData * submeshData )
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
 	{
 		return doPreparePipeline( vertexLayouts
 			, meshletDescriptorLayout
 			, pipelineFlags
-			, VK_CULL_MODE_BACK_BIT
-			, submeshData );
+			, VK_CULL_MODE_BACK_BIT );
 	}
 
 	RenderPipeline & RenderNodesPass::prepareFrontPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
-		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
-		, SubmeshRenderData * submeshData )
+		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
 	{
 		return doPreparePipeline( vertexLayouts
 			, meshletDescriptorLayout
 			, pipelineFlags
-			, VK_CULL_MODE_FRONT_BIT
-			, submeshData );
+			, VK_CULL_MODE_FRONT_BIT );
 	}
 
 	void RenderNodesPass::clearPipelines()
@@ -1035,10 +1039,9 @@ namespace castor3d
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps
 		, ShadowBuffer const * shadowBuffer
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets
-		, SubmeshRenderData * submeshData )
+		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
 	{
-		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( pipeline.getFlags(), submeshData )
+		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( pipeline.getFlags() )
 			, PassDescriptors{} ).first;
 		auto & descriptors = descLayoutIt->second;
 
@@ -1096,7 +1099,7 @@ namespace castor3d
 
 			auto index = uint32_t( GlobalBuffersIdx::eCount );
 
-			if ( submeshData )
+			if ( auto submeshData = pipeline.getFlags().submeshData )
 			{
 				submeshData->fillDescriptor( pipeline.getFlags(), descriptorWrites, index );
 			}
@@ -1327,8 +1330,7 @@ namespace castor3d
 		doAdjustFlags( flags );
 	}
 
-	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags
-		, SubmeshRenderData * submeshData )const
+	ashes::VkDescriptorSetLayoutBindingArray RenderNodesPass::doCreateAdditionalBindings( PipelineFlags const & flags )const
 	{
 		VkShaderStageFlags stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT;
 
@@ -1379,7 +1381,7 @@ namespace castor3d
 
 		auto index = uint32_t( GlobalBuffersIdx::eCount );
 
-		if ( submeshData )
+		if ( auto submeshData = flags.submeshData )
 		{
 			submeshData->fillBindings( flags, addBindings, index );
 		}
@@ -1411,8 +1413,7 @@ namespace castor3d
 	RenderPipeline & RenderNodesPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 		, PipelineFlags const & flags
-		, VkCullModeFlags cullMode
-		, SubmeshRenderData * submeshData )
+		, VkCullModeFlags cullMode )
 	{
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
@@ -1444,13 +1445,13 @@ namespace castor3d
 					pipeline->setScissor( makeScissor( m_size ) );
 				}
 
-				auto addDescLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags, submeshData )
+				auto addDescLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( flags )
 					, PassDescriptors{} ).first;
 				auto & addDescriptors = addDescLayoutIt->second;
 
 				if ( !addDescriptors.layout )
 				{
-					auto bindings = doCreateAdditionalBindings( flags, submeshData );
+					auto bindings = doCreateAdditionalBindings( flags );
 					addDescriptors.layout = device->createDescriptorSetLayout( getName() + rendndpass::Suffix
 						, std::move( bindings ) );
 					addDescriptors.pool = addDescriptors.layout->createPool( 1u );

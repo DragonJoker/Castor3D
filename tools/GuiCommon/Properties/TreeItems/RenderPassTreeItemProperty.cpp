@@ -54,7 +54,8 @@ namespace GuiCommon
 						, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST
 						, false
 						, 0u
-						, {} )
+						, {}
+						, nullptr )
 					, renderPass.getScene()
 					, grid
 					, prop };

@@ -33,6 +33,8 @@ namespace castor3d
 	SubmeshComponentRegister::SubmeshComponentRegister( Engine & engine )
 		: castor::OwnedBy< Engine >{ engine }
 	{
+		m_renderDatas.push_back( nullptr );
+
 		registerComponent< LinesMapping >();
 		registerComponent< TriFaceMapping >();
 		registerComponent< PositionsComponent >();
@@ -307,7 +309,29 @@ namespace castor3d
 			throw std::logic_error{ "Submesh doesn't contain the wanted render shader component" };
 		}
 
-		return it->second->createData( component );
+		auto result = it->second->createData( component );
+		m_renderDatas.push_back( result.get() );
+		return result;
+	}
+
+	uint16_t SubmeshComponentRegister::getRenderDataId( SubmeshRenderData const * value )const
+	{
+		if ( value == nullptr )
+		{
+			return 0u;
+		}
+
+		auto it = std::find( m_renderDatas.begin()
+			, m_renderDatas.end()
+			, value );
+		CU_Require( it != m_renderDatas.end() );
+		return uint16_t( std::distance( m_renderDatas.begin(), it ) );
+	}
+
+	SubmeshRenderData const * SubmeshComponentRegister::getRenderData( uint16_t value )const
+	{
+		CU_Require( value < m_renderDatas.size() );
+		return m_renderDatas[value];
 	}
 
 	SubmeshComponentID SubmeshComponentRegister::registerComponent( castor::String const & componentType

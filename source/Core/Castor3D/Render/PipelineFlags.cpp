@@ -44,6 +44,16 @@ namespace castor3d
 			static_assert( 64 >= maxSize );
 		}
 
+		namespace lo
+		{
+			static constexpr uint64_t maxMorphTargetOffsetSize = 32u;
+			static constexpr uint64_t maxMorphTargetOffsetMask = ( 0x1ull << uint64_t( maxMorphTargetOffsetSize ) ) - 1u;
+			static constexpr uint64_t maxSubmeshDataSize = 16u;
+			static constexpr uint64_t maxSubmeshDataMask = ( 0x1ull << uint64_t( maxSubmeshDataSize ) ) - 1u;
+			static constexpr uint64_t maxSize = maxMorphTargetOffsetSize + maxSubmeshDataSize;
+			static_assert( 64 >= maxSize );
+		}
+
 		static bool hasMatchingFlag( SubmeshData submeshFlag
 			, ShaderFlags const & shaderFlags )
 		{
@@ -72,7 +82,7 @@ namespace castor3d
 			PipelineHiHashDetails result{ {}, {}, 0u, 0u };
 			result.m_shaderFlags = shaderFlags;
 
-			auto offset = 0u;
+			uint32_t offset = 0u;
 			result.pass = passComponents.getPassComponentCombine( PassComponentCombineID( ( hiHash >> offset ) & hi::maxPassMask ) );
 			offset += hi::maxPassSize;
 			result.submesh = submeshComponents.getSubmeshComponentCombine(SubmeshComponentCombineID( ( hiHash >> offset ) & hi::maxSubmeshMask ) );
@@ -107,7 +117,7 @@ namespace castor3d
 			auto programFlags = flags.m_programFlags;
 			remFlag( programFlags, ProgramFlag::eAllOptional );
 
-			auto offset = 0u;
+			uint32_t offset = 0u;
 			uint64_t result{};
 			auto passComponentsId = flags.pass.baseId
 				? flags.pass.baseId
@@ -162,24 +172,33 @@ namespace castor3d
 		}
 
 #if !defined( NDEBUG )
-		static PipelineLoHashDetails getLoHashDetails( uint64_t hash )
+		static PipelineLoHashDetails getLoHashDetails( SubmeshComponentRegister const & submeshComponents
+			, uint64_t loHash )
 		{
-
 			PipelineLoHashDetails result{};
-			result.morphTargetsOffset = VkDeviceSize( hash );
+
+			uint32_t offset = 0u;
+			result.morphTargetsOffset = VkDeviceSize( ( loHash >> offset ) & lo::maxMorphTargetOffsetSize );
+			offset += lo::maxMorphTargetOffsetSize;
+			result.submeshData = submeshComponents.getRenderData( uint16_t( ( loHash >> offset ) & lo::maxSubmeshDataMask ) );
 
 			return result;
 		}
 #endif
 
-		static uint64_t getLoHash( PipelineLoHashDetails const & flags )
+		static uint64_t getLoHash( SubmeshComponentRegister const & submeshComponents
+			, PipelineLoHashDetails const & flags )
 		{
+			uint32_t offset = 0u;
 			uint64_t result{};
-			result |= uint64_t( flags.morphTargetsOffset );
+			result |= uint64_t( flags.morphTargetsOffset & lo::maxMorphTargetOffsetSize ) << offset;
+			offset += lo::maxMorphTargetOffsetSize;
+			result |= uint64_t( uint64_t( submeshComponents.getRenderDataId( flags.submeshData ) ) & lo::maxSubmeshDataMask ) << offset;
 
 #if !defined( NDEBUG )
-			auto details = getLoHashDetails( result );
+			auto details = getLoHashDetails( submeshComponents, result );
 			CU_Require( flags.morphTargetsOffset == details.morphTargetsOffset );
+			CU_Require( flags.submeshData == details.submeshData );
 #endif
 			return result;
 		}
@@ -432,7 +451,7 @@ namespace castor3d
 	{
 		PipelineBaseHash result{};
 		result.hi = pipflags::getHiHash( passComponents, submeshComponents, flags );
-		result.lo = pipflags::getLoHash( flags );
+		result.lo = pipflags::getLoHash( submeshComponents, flags );
 		return result;
 	}
 
@@ -451,7 +470,8 @@ namespace castor3d
 				, SceneFlag::eNone
 				, data.getTopology()
 				, isFrontCulled
-				, {} ) );
+				, {}
+				, data.getRenderData() ) );
 	}
 
 	PipelineBaseHash getPipelineBaseHash( RenderNodesPass const & renderPass
@@ -469,7 +489,8 @@ namespace castor3d
 				, SceneFlag::eNone
 				, VK_PRIMITIVE_TOPOLOGY_TRIANGLE_STRIP
 				, isFrontCulled
-				, {} ) );
+				, {}
+				, nullptr ) );
 	}
 
 	PipelineHiHashDetails getPipelineHiHashDetails( RenderNodesPass const & renderPass
