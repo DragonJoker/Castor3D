@@ -76,14 +76,6 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		static VkDeviceSize compareOffsets( NodeT const & lhs
-			, NodeT const & rhs )
-		{
-			return compareOffsets( lhs.getFinalBufferOffsets()
-				, rhs.getFinalBufferOffsets() );
-		}
-
-		template< typename NodeT >
 		static bool addRenderNode( RenderPipeline & pipeline
 			, NodeT const & node
 			, uint32_t drawCount
@@ -95,18 +87,9 @@ namespace castor3d
 
 			if ( bufferChunk.buffer )
 			{
-				auto buffer = &bufferChunk.buffer->getBuffer();
-				NodePtrByBufferMapT< NodeT > & bufferMap = nodes.emplace( &pipeline, NodePtrByBufferMapT< NodeT >{} ).first->second;
-				NodeArrayT< NodeT > & objects = bufferMap.emplace( buffer, NodeArrayT< NodeT >{} ).first->second;
-				auto it = std::find_if( objects.begin()
-					, objects.end()
-					, [&node]( CountedNodeT< NodeT > const & lookup )
-					{
-						return compareOffsets( *lookup.node, node );
-					} );
-				CU_Require( buffer );
-				objects.emplace( it, CountedNodeT< NodeT >{ &node, drawCount, isFrontCulled } );
-				registerPipelineNodes( pipeline.getFlagsHash(), *buffer, nodesIds );
+				auto & buffer = bufferChunk.buffer->getBuffer();
+				nodes.emplace( pipeline, buffer, node, drawCount, isFrontCulled );
+				registerPipelineNodes( pipeline.getFlagsHash(), buffer, nodesIds );
 				return true;
 			}
 
@@ -130,14 +113,7 @@ namespace castor3d
 				ObjectNodesPtrByPassT< NodeT > & passMap = bufferMap.emplace( buffer, ObjectNodesPtrByPassT< NodeT >{} ).first->second;
 				ObjectNodesPtrMapT< NodeT > & nodeMap = passMap.emplace( node.pass, ObjectNodesPtrMapT< NodeT >{} ).first->second;
 				NodeArrayT< NodeT > & objects = nodeMap.emplace( &node.data, NodeArrayT< NodeT >{} ).first->second;
-				auto it = std::find_if( objects.begin()
-					, objects.end()
-					, [&node]( CountedNodeT< NodeT > const & lookup )
-					{
-						return compareOffsets( *lookup.node, node );
-					} );
-				CU_Require( buffer );
-				objects.emplace( it, CountedNodeT< NodeT >{ &node, drawCount, isFrontCulled } );
+				objects.push_back( CountedNodeT< NodeT >{ &node, drawCount, isFrontCulled } );
 				registerPipelineNodes( pipeline.getFlagsHash(), *buffer, nodesIds );
 				return true;
 			}
@@ -921,6 +897,22 @@ namespace castor3d
 
 	//*************************************************************************************************
 
+	VkDeviceSize compareOffsets( SubmeshRenderNode const & lhs
+		, SubmeshRenderNode const & rhs )
+	{
+		return queuerndnd::compareOffsets( lhs.getFinalBufferOffsets()
+			, rhs.getFinalBufferOffsets() );
+	}
+
+	VkDeviceSize compareOffsets( BillboardRenderNode const & lhs
+		, BillboardRenderNode const & rhs )
+	{
+		return queuerndnd::compareOffsets( lhs.getFinalBufferOffsets()
+			, rhs.getFinalBufferOffsets() );
+	}
+
+	//*************************************************************************************************
+
 	QueueRenderNodes::QueueRenderNodes( RenderQueue const & queue )
 		: castor::OwnedBy< RenderQueue const >{ queue }
 	{
@@ -1418,7 +1410,9 @@ namespace castor3d
 			, buffer );
 	}
 
-	RenderPipeline & QueueRenderNodes::doGetPipeline( SubmeshRenderNode const & node
+	RenderPipeline & QueueRenderNodes::doGetPipeline( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer
+		, SubmeshRenderNode const & node
 		, bool frontCulled )
 	{
 		auto & renderPass = *getOwner()->getOwner();
@@ -1442,12 +1436,17 @@ namespace castor3d
 					, node.getGeometryBuffers( pipelineFlags ).layouts
 					, node.getMeshletDescriptorLayout() );
 			it = m_pipelines.emplace( hash, &result ).first;
+			renderPass.initialiseAdditionalDescriptor( result
+				, shadowMaps
+				, shadowBuffer );
 		}
 
 		return *it->second;
 	}
 
-	RenderPipeline & QueueRenderNodes::doGetPipeline( BillboardRenderNode const & node )
+	RenderPipeline & QueueRenderNodes::doGetPipeline( ShadowMapLightTypeArray & shadowMaps
+		, ShadowBuffer const * shadowBuffer
+		, BillboardRenderNode const & node )
 	{
 		auto & renderPass = *getOwner()->getOwner();
 		auto [hash, it, pipelineFlags] = queuerndnd::getPipeline( renderPass
@@ -1461,6 +1460,9 @@ namespace castor3d
 				, node.getGeometryBuffers( pipelineFlags ).layouts
 				, nullptr );
 			it = m_pipelines.emplace( hash, &result ).first;
+			renderPass.initialiseAdditionalDescriptor( result
+				, shadowMaps
+				, shadowBuffer );
 		}
 
 		return *it->second;
@@ -1472,7 +1474,10 @@ namespace castor3d
 		, bool frontCulled )
 	{
 		auto & renderPass = *getOwner()->getOwner();
-		auto & pipeline = doGetPipeline( node, frontCulled );
+		auto & pipeline = doGetPipeline( shadowMaps
+			, shadowBuffer
+			, node
+			, frontCulled );
 
 		if ( queuerndnd::addRenderNode( pipeline
 			, node
@@ -1481,10 +1486,6 @@ namespace castor3d
 			, m_submeshNodes
 			, m_nodesIds ) )
 		{
-			renderPass.initialiseAdditionalDescriptor( pipeline
-				, shadowMaps
-				, shadowBuffer
-				, node.data.getMorphTargets() );
 			++m_visible.objectCount;
 			m_visible.faceCount += node.data.getFaceCount();
 			m_visible.vertexCount += node.data.getPointsCount();
@@ -1498,7 +1499,10 @@ namespace castor3d
 		, bool frontCulled )
 	{
 		auto & renderPass = *getOwner()->getOwner();
-		auto & pipeline = doGetPipeline( node, frontCulled );
+		auto & pipeline = doGetPipeline( shadowMaps
+			, shadowBuffer
+			, node
+			, frontCulled );
 
 		if ( queuerndnd::addRenderNode( pipeline
 			, node
@@ -1507,10 +1511,6 @@ namespace castor3d
 			, m_instancedSubmeshNodes
 			, m_nodesIds ) )
 		{
-			renderPass.initialiseAdditionalDescriptor( pipeline
-				, shadowMaps
-				, shadowBuffer
-				, node.data.getMorphTargets() );
 			++m_visible.objectCount;
 			m_visible.faceCount += node.data.getFaceCount();
 			m_visible.vertexCount += node.data.getPointsCount();
@@ -1523,7 +1523,9 @@ namespace castor3d
 		, BillboardRenderNode const & node )
 	{
 		auto & renderPass = *getOwner()->getOwner();
-		auto & pipeline = doGetPipeline( node );
+		auto & pipeline = doGetPipeline( shadowMaps
+			, shadowBuffer
+			, node );
 
 		if ( queuerndnd::addRenderNode( pipeline
 			, node
@@ -1532,10 +1534,6 @@ namespace castor3d
 			, m_billboardNodes
 			, m_nodesIds ) )
 		{
-			renderPass.initialiseAdditionalDescriptor( pipeline
-				, shadowMaps
-				, shadowBuffer
-				, {} );
 			m_visible.billboardCount += node.data.getCount();
 			m_hasNodes = true;
 		}
