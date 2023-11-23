@@ -114,10 +114,7 @@ namespace castor3d
 	using NodeArrayT = std::vector< CountedNodeT< NodeT > >;
 
 	template< typename NodeT >
-	using NodePtrByBufferMapT = std::unordered_map< ashes::BufferBase const *, NodeArrayT< NodeT > >;
-
-	template< typename NodeT >
-	using NodePtrByPipelineMapT = std::unordered_map< RenderPipeline *, NodePtrByBufferMapT< NodeT > >;
+	class NodePtrByPipelineMapT;
 
 	//@}
 	/**@name Instanced */

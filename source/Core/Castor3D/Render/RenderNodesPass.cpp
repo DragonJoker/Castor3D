@@ -1038,8 +1038,7 @@ namespace castor3d
 
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
 		, ShadowMapLightTypeArray const & shadowMaps
-		, ShadowBuffer const * shadowBuffer
-		, GpuBufferOffsetT< castor::Point4f > const & morphTargets )
+		, ShadowBuffer const * shadowBuffer )
 	{
 		auto descLayoutIt = m_additionalDescriptors.emplace( rendndpass::makeHash( pipeline.getFlags() )
 			, PassDescriptors{} ).first;

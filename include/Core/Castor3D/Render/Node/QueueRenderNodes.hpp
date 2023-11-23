@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_QueueRenderNodes_H___
 #define ___C3D_QueueRenderNodes_H___
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
@@ -17,6 +18,302 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
+	C3D_API VkDeviceSize compareOffsets( SubmeshRenderNode const & lhs
+		, SubmeshRenderNode const & rhs );
+	C3D_API VkDeviceSize compareOffsets( BillboardRenderNode const & lhs
+		, BillboardRenderNode const & rhs );
+
+	template< typename NodeT >
+	class NodePtrByPipelineMapT
+	{
+	public:
+		static uint64_t constexpr maxNodes = 1'024ull;
+		static uint64_t constexpr maxBuffers = 128ull;
+		static uint64_t constexpr maxPipelines = 128ull;
+
+		using CountedNode = CountedNodeT< NodeT >;
+		using NodeArray = NodeArrayT< NodeT >;
+
+		struct FilledNodes
+		{
+			explicit FilledNodes( CountedNode * data )
+				: m_nodes{ data }
+				, m_count{}
+			{
+			}
+
+			FilledNodes()
+				: FilledNodes{ nullptr }
+			{
+			}
+
+			auto emplace( NodeT const & node
+				, uint32_t drawCount
+				, bool isFrontCulled )
+			{
+				//auto it = std::find_if( begin()
+				//	, end()
+				//	, [&node]( CountedNode const & lookup )
+				//	{
+				//		return compareOffsets( *lookup.node, node );
+				//	} );
+				//auto offset = size_t( std::distance( begin(), it ) );
+
+				//while ( offset < m_count )
+				//{
+				//	m_nodes[offset + 1u] = m_nodes[offset];
+				//	++offset;
+				//}
+
+				auto it = end();
+				*it = CountedNode{ &node, drawCount, isFrontCulled };
+				++m_count;
+			}
+
+			void clear()noexcept
+			{
+				m_count = 0u;
+			}
+
+			auto begin()noexcept
+			{
+				return m_nodes;
+			}
+
+			auto begin()const noexcept
+			{
+				return m_nodes;
+			}
+
+			auto end()noexcept
+			{
+				return std::next( begin(), ptrdiff_t( m_count ) );
+			}
+
+			auto end()const noexcept
+			{
+				return std::next( begin(), ptrdiff_t( m_count ) );
+			}
+
+			auto & front()noexcept
+			{
+				return *begin();
+			}
+
+			auto & front()const noexcept
+			{
+				return *begin();
+			}
+
+			auto size()const noexcept
+			{
+				return m_count;
+			}
+
+			auto empty()const noexcept
+			{
+				return size() == 0;
+			}
+
+		private:
+			CountedNode * m_nodes;
+			size_t m_count;
+		};
+
+		struct FilledBuffers
+		{
+			struct BufferNodes
+			{
+				ashes::BufferBase const * buffer{};
+				FilledNodes nodes;
+			};
+
+			explicit FilledBuffers( CountedNode * data )
+				: m_count{}
+			{
+				if ( data )
+				{
+					for ( auto & buffer : m_buffers )
+					{
+						buffer.nodes = FilledNodes{ data };
+						data += maxNodes;
+					}
+				}
+			}
+
+			FilledBuffers()
+				: FilledBuffers{ nullptr }
+			{
+			}
+
+			auto emplace( ashes::BufferBase const & buffer )
+			{
+				auto it = std::find_if( begin()
+					, end()
+					, [&buffer]( BufferNodes const & lookup )
+					{
+						return lookup.buffer == &buffer;
+					} );
+
+				if ( it == end() )
+				{
+					it->buffer = &buffer;
+					++m_count;
+				}
+
+				return it;
+			}
+
+			void emplace( ashes::BufferBase const & buffer
+				, NodeT const & node
+				, uint32_t drawCount
+				, bool isFrontCulled )
+			{
+				auto it = emplace( buffer );
+				it->nodes.emplace( node, drawCount, isFrontCulled );
+				CU_Require( !it->nodes.empty() );
+			}
+
+			void clear()noexcept
+			{
+				for ( auto & [buffer, nodes] : m_buffers )
+				{
+					buffer = nullptr;
+					nodes.clear();
+				}
+
+				m_count = 0u;
+			}
+
+			auto begin()noexcept
+			{
+				return m_buffers.begin();
+			}
+
+			auto begin()const noexcept
+			{
+				return m_buffers.begin();
+			}
+
+			auto end()noexcept
+			{
+				return std::next( begin(), ptrdiff_t( m_count ) );
+			}
+
+			auto end()const noexcept
+			{
+				return std::next( begin(), ptrdiff_t( m_count ) );
+			}
+
+			auto size()const noexcept
+			{
+				return m_count;
+			}
+
+			auto empty()const noexcept
+			{
+				return size() == 0;
+			}
+
+		private:
+			std::array< BufferNodes, maxBuffers > m_buffers;
+			uint32_t m_count;
+		};
+
+		struct PipelineNodes
+		{
+			RenderPipeline const * pipeline{};
+			FilledBuffers buffers;
+		};
+
+		NodePtrByPipelineMapT()
+			: m_nodes{ maxNodes * maxBuffers * maxPipelines }
+			, m_count{}
+		{
+			auto data = m_nodes.data();
+
+			for ( auto & pipeline : m_pipelines )
+			{
+				pipeline.buffers = FilledBuffers{ data };
+				data += maxNodes * maxBuffers;
+			}
+		}
+
+		auto emplace( RenderPipeline & pipeline )
+		{
+			auto it = std::find_if( begin()
+				, end()
+				, [&pipeline]( PipelineNodes const & lookup )
+				{
+					return lookup.pipeline == &pipeline;
+				} );
+
+			if ( it == end() )
+			{
+				it->pipeline = &pipeline;
+				++m_count;
+			}
+
+			return it;
+		}
+
+		void emplace( RenderPipeline & pipeline
+			, ashes::BufferBase const & buffer
+			, NodeT const & node
+			, uint32_t drawCount
+			, bool isFrontCulled )
+		{
+			auto it = emplace( pipeline );
+			it->buffers.emplace( buffer, node, drawCount, isFrontCulled );
+		}
+
+		void clear()noexcept
+		{
+			for ( auto & [pipeline, buffers] : m_pipelines )
+			{
+				pipeline = nullptr;
+				buffers.clear();
+			}
+
+			m_count = 0u;
+		}
+
+		auto begin()noexcept
+		{
+			return m_pipelines.begin();
+		}
+
+		auto begin()const noexcept
+		{
+			return m_pipelines.begin();
+		}
+
+		auto end()noexcept
+		{
+			return std::next( begin(), ptrdiff_t( m_count ) );
+		}
+
+		auto end()const noexcept
+		{
+			return std::next( begin(), ptrdiff_t( m_count ) );
+		}
+
+		auto size()const noexcept
+		{
+			return m_count;
+		}
+
+		auto empty()const noexcept
+		{
+			return size() == 0;
+		}
+
+	private:
+		NodeArray m_nodes;
+		std::array< PipelineNodes, maxPipelines > m_pipelines;
+		uint32_t m_count;
+	};
+
 	struct QueueRenderNodes
 		: public castor::OwnedBy< RenderQueue const >
 	{
@@ -90,9 +387,13 @@ namespace castor3d
 		}
 
 	private:
-		RenderPipeline & doGetPipeline( SubmeshRenderNode const & node
+		RenderPipeline & doGetPipeline( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer
+			, SubmeshRenderNode const & node
 			, bool frontCulled );
-		RenderPipeline & doGetPipeline( BillboardRenderNode const & node );
+		RenderPipeline & doGetPipeline( ShadowMapLightTypeArray & shadowMaps
+			, ShadowBuffer const * shadowBuffer
+			, BillboardRenderNode const & node );
 		void doAddSubmesh( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer
 			, SubmeshRenderNode const & node

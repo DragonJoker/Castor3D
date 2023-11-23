@@ -556,8 +556,7 @@ namespace castor3d
 		 */
 		C3D_API void initialiseAdditionalDescriptor( RenderPipeline & pipeline
 			, ShadowMapLightTypeArray const & shadowMaps
-			, ShadowBuffer const * shadowBuffer
-			, GpuBufferOffsetT< castor::Point4f > const & morphTargets );
+			, ShadowBuffer const * shadowBuffer );
 		/**
 		 *\~english
 		 *\brief		Sets the node ignored node.
