@@ -20,8 +20,6 @@ namespace castor3d
 		using CountedNode = CountedNodeT< NodeT >;
 
 		explicit NodesViewT( CountedNode * data )
-			: m_nodes{ data }
-			, m_count{}
 		{
 		}
 
@@ -32,43 +30,41 @@ namespace castor3d
 
 		auto emplace( CountedNode & node )
 		{
-			CU_Assert( m_count < maxNodes
+			CU_Assert( size() < maxNodes
 				, "Too many nodes for given buffer and given pipeline" );
 #if C3D_EnsureNodesCounts
-			if ( m_count == maxNodes )
+			if ( size() == maxNodes )
 			{
 				CU_Exception( "Too many nodes for given buffer and given pipeline" );
 			}
 #endif
 
-			auto it = end();
-			*it = &node;
-			++m_count;
+			m_nodes.push_back( &node );
 		}
 
 		void clear()noexcept
 		{
-			m_count = 0u;
+			m_nodes.clear();
 		}
 
 		auto begin()noexcept
 		{
-			return m_nodes.data();
+			return m_nodes.begin();
 		}
 
 		auto begin()const noexcept
 		{
-			return m_nodes.data();
+			return m_nodes.begin();
 		}
 
 		auto end()noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_nodes.end();
 		}
 
 		auto end()const noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_nodes.end();
 		}
 
 		auto & front()noexcept
@@ -83,17 +79,16 @@ namespace castor3d
 
 		auto size()const noexcept
 		{
-			return m_count;
+			return m_nodes.size();
 		}
 
 		auto empty()const noexcept
 		{
-			return size() == 0;
+			return m_nodes.empty();
 		}
 
 	private:
-		std::array< CountedNode *, maxNodes > m_nodes;
-		size_t m_count;
+		std::vector< CountedNode * > m_nodes;
 	};
 
 	template< typename NodeT >
@@ -352,6 +347,92 @@ namespace castor3d
 		uint32_t m_nodeCount;
 		std::vector< PipelineNodes > m_pipelines;
 		std::unordered_map< NodeT const *, CountedNode * > m_countedNodes;
+	};
+
+	template< typename NodeT >
+	class PipelinesDrawnNodesT
+	{
+	public:
+		static uint64_t constexpr maxPipelines = 256ull;
+		static uint64_t constexpr maxCount = BuffersNodesViewT< NodeT >::maxCount * maxPipelines;
+
+		using CountedNode = CountedNodeT< NodeT >;
+		using BuffersNodesView = BuffersNodesViewT< NodeT >;
+		using NodeArray = NodeArrayT< NodeT >;
+
+		struct PipelineNodes
+		{
+			PipelineAndID pipeline{};
+			bool isFrontCulled{};
+			BuffersNodesView buffers;
+		};
+
+		PipelinesDrawnNodesT()
+		{
+		}
+
+		auto emplace( PipelineAndID const & pipeline
+			, bool isFrontCulled )
+		{
+			auto id = uint32_t( pipeline.id + ( isFrontCulled ? ( maxPipelines / 2u ) : 0u ) );
+			auto it = m_pipelines.find( id );
+
+			if ( it == m_pipelines.end() )
+			{
+				it = m_pipelines.emplace( id, PipelineNodes{} ).first;
+				it->second.pipeline = pipeline;
+				it->second.isFrontCulled = isFrontCulled;
+			}
+
+			return &it->second;
+		}
+
+		void emplace( PipelineAndID const & pipeline
+			, ashes::BufferBase const & buffer
+			, CountedNode const & node
+			, bool isFrontCulled )
+		{
+			auto it = emplace( pipeline, isFrontCulled );
+			it->buffers.emplace( buffer, node );
+		}
+
+		void clear()noexcept
+		{
+			m_pipelines.clear();
+		}
+
+		auto begin()noexcept
+		{
+			return m_pipelines.begin();
+		}
+
+		auto begin()const noexcept
+		{
+			return m_pipelines.begin();
+		}
+
+		auto end()noexcept
+		{
+			return m_pipelines.end();
+		}
+
+		auto end()const noexcept
+		{
+			return m_pipelines.end();
+		}
+
+		auto size()const noexcept
+		{
+			return m_pipelines.size();
+		}
+
+		auto empty()const noexcept
+		{
+			return m_pipelines.empty();
+		}
+
+	private:
+		std::map< uint32_t, PipelineNodes > m_pipelines;
 	};
 }
 

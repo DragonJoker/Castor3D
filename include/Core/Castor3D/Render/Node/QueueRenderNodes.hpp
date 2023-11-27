@@ -153,6 +153,9 @@ namespace castor3d
 		PipelinesNodesT< SubmeshRenderNode > m_submeshNodes;
 		InstantiatedPipelinesNodesT< SubmeshRenderNode > m_instancedSubmeshNodes;
 		PipelinesNodesT< BillboardRenderNode > m_billboardNodes;
+
+		PipelinesDrawnNodesT< SubmeshRenderNode > m_drawnSubmeshNodes;
+		PipelinesDrawnNodesT< BillboardRenderNode > m_drawnBillboardNodes;
 	};
 }
 
