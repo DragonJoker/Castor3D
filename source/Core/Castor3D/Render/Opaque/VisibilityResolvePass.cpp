@@ -2208,14 +2208,14 @@ namespace castor3d
 				pipelines.push_back( pipelineId );
 			}
 
-			for ( auto & [origPipeline, buffers] : m_nodesPass.getBillboardNodes() )
+			for ( auto & [origPipeline, isFrontCulled, buffers] : m_nodesPass.getBillboardNodes() )
 			{
-				if ( !origPipeline )
+				if ( !origPipeline.pipeline )
 				{
 					continue;
 				}
 
-				auto & pipelineFlags = origPipeline->getFlags();
+				auto & pipelineFlags = origPipeline.pipeline->getFlags();
 
 				if ( pipelineFlags.pass.hasParallaxOcclusionMappingOneFlag
 					|| pipelineFlags.pass.hasParallaxOcclusionMappingRepeatFlag
@@ -2225,7 +2225,7 @@ namespace castor3d
 					continue;
 				}
 
-				auto pipelineHash = origPipeline->getFlagsHash();
+				auto pipelineHash = origPipeline.pipeline->getFlagsHash();
 
 				for ( auto & [buffer, nodes] : buffers )
 				{
