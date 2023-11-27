@@ -32,20 +32,6 @@ namespace castor3d
 
 		auto emplace( CountedNode & node )
 		{
-			//auto it = std::find_if( begin()
-			//	, end()
-			//	, [&node]( CountedNode const & lookup )
-			//	{
-			//		return compareOffsets( *lookup.node, node );
-			//	} );
-			//auto offset = size_t( std::distance( begin(), it ) );
-
-			//while ( offset < m_count )
-			//{
-			//	m_nodes[offset + 1u] = m_nodes[offset];
-			//	++offset;
-			//}
-
 			CU_Assert( m_count < maxNodes
 				, "Too many nodes for given buffer and given pipeline" );
 #if C3D_EnsureNodesCounts
@@ -113,7 +99,7 @@ namespace castor3d
 	template< typename NodeT >
 	struct BuffersNodesViewT
 	{
-		static uint64_t constexpr maxBuffers = 128ull;
+		static uint64_t constexpr maxBuffers = 16ull;
 		static uint64_t constexpr maxCount = NodesViewT< NodeT >::maxCount * maxBuffers;
 
 		using CountedNode = CountedNodeT< NodeT >;
@@ -183,7 +169,7 @@ namespace castor3d
 		{
 			for ( auto & [buffer, nodes] : m_buffers )
 			{
-				buffer = nullptr;
+				buffer = {};
 				nodes.clear();
 			}
 
@@ -238,7 +224,8 @@ namespace castor3d
 
 		struct PipelineNodes
 		{
-			RenderPipeline const * pipeline{};
+			PipelineAndID pipeline{};
+			bool isFrontCulled{};
 			BuffersNodesView buffers;
 		};
 
@@ -269,7 +256,8 @@ namespace castor3d
 #endif
 
 			auto & result = m_pipelines[pipeline.id + ( isFrontCulled ? ( maxPipelines / 2u ) : 0u )];
-			result.pipeline = pipeline.pipeline;
+			result.pipeline = pipeline;
+			result.isFrontCulled = isFrontCulled;
 			return &result;
 		}
 
@@ -316,9 +304,10 @@ namespace castor3d
 
 		void clear()noexcept
 		{
-			for ( auto & [pipeline, buffers] : m_pipelines )
+			for ( auto & [pipeline, isFrontCulled, buffers] : m_pipelines )
 			{
-				pipeline = nullptr;
+				pipeline.id = {};
+				pipeline.pipeline = {};
 				buffers.clear();
 			}
 		}
