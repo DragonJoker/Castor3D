@@ -352,7 +352,7 @@ namespace castor3d
 			, submeshData );
 	}
 
-	RenderPipeline & RenderNodesPass::prepareBackPipeline( PipelineFlags const & pipelineFlags
+	PipelineAndID RenderNodesPass::prepareBackPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
 	{
@@ -362,7 +362,7 @@ namespace castor3d
 			, VK_CULL_MODE_BACK_BIT );
 	}
 
-	RenderPipeline & RenderNodesPass::prepareFrontPipeline( PipelineFlags const & pipelineFlags
+	PipelineAndID RenderNodesPass::prepareFrontPipeline( PipelineFlags const & pipelineFlags
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout )
 	{
@@ -961,36 +961,36 @@ namespace castor3d
 #endif
 	}
 
-	NodePtrByPipelineMapT< SubmeshRenderNode > const & RenderNodesPass::getSubmeshNodes()const
+	PipelinesNodesT< SubmeshRenderNode > const & RenderNodesPass::getSubmeshNodes()const
 	{
 		if ( m_renderQueue )
 		{
 			return m_renderQueue->getRenderNodes().getSubmeshNodes();
 		}
 
-		static NodePtrByPipelineMapT< SubmeshRenderNode > dummy;
+		static PipelinesNodesT< SubmeshRenderNode > dummy;
 		return dummy;
 	}
 
-	ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > const & RenderNodesPass::getInstancedSubmeshNodes()const
+	InstantiatedPipelinesNodesT< SubmeshRenderNode > const & RenderNodesPass::getInstancedSubmeshNodes()const
 	{
 		if ( m_renderQueue )
 		{
 			return m_renderQueue->getRenderNodes().getInstancedSubmeshNodes();
 		}
 
-		static ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > dummy;
+		static InstantiatedPipelinesNodesT< SubmeshRenderNode > dummy;
 		return dummy;
 	}
 
-	NodePtrByPipelineMapT< BillboardRenderNode > const & RenderNodesPass::getBillboardNodes()const
+	PipelinesNodesT< BillboardRenderNode > const & RenderNodesPass::getBillboardNodes()const
 	{
 		if ( m_renderQueue )
 		{
 			return m_renderQueue->getRenderNodes().getBillboardNodes();
 		}
 
-		static NodePtrByPipelineMapT< BillboardRenderNode > dummy;
+		static PipelinesNodesT< BillboardRenderNode > dummy;
 		return dummy;
 	}
 
@@ -1409,7 +1409,7 @@ namespace castor3d
 		return m_backPipelines;
 	}
 
-	RenderPipeline & RenderNodesPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+	PipelineAndID RenderNodesPass::doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 		, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 		, PipelineFlags const & flags
 		, VkCullModeFlags cullMode )
@@ -1417,6 +1417,7 @@ namespace castor3d
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
 		RenderPipeline * result{};
+		uint16_t id{};
 		CU_Require( areValidPassFlags( flags.pass ) );
 
 		if ( !flags.isBillboard()
@@ -1481,10 +1482,11 @@ namespace castor3d
 					, ptrdiff_t( pipelines.size() - 1u ) );
 			}
 
+			id = uint16_t( std::distance( pipelines.begin(), it ) );
 			result = it->get();
 		}
 
-		return *result;
+		return { result, id };
 	}
 
 	ashes::PipelineRasterizationStateCreateInfo RenderNodesPass::doCreateRasterizationState( PipelineFlags const & flags

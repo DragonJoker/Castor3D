@@ -50,6 +50,14 @@ namespace castor3d
 	using SceneCullerSignal = castor::SignalT< SceneCullerSignalFunction >;
 	using SceneCullerSignalConnection = castor::ConnectionT< SceneCullerSignal >;
 
+	using SceneCullerSubmeshSignalFunction = std::function< void( SceneCuller const &, CountedNodeT< SubmeshRenderNode > const &, bool ) >;
+	using SceneCullerSubmeshSignal = castor::SignalT< SceneCullerSubmeshSignalFunction >;
+	using SceneCullerSubmeshSignalConnection = castor::ConnectionT< SceneCullerSubmeshSignal >;
+
+	using SceneCullerBillboardSignalFunction = std::function< void( SceneCuller const &, CountedNodeT< BillboardRenderNode > const &, bool ) >;
+	using SceneCullerBillboardSignal = castor::SignalT< SceneCullerBillboardSignalFunction >;
+	using SceneCullerBillboardSignalConnection = castor::ConnectionT< SceneCullerBillboardSignal >;
+
 	using PipelineNodes = std::array< uint32_t, MaxNodesPerPipeline >;
 
 	//@}

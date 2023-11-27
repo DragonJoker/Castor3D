@@ -741,6 +741,24 @@ namespace castor3d
 	*	Un viewport de rendu.
 	*/
 	class Viewport;
+	/**
+	*\~english
+	*\brief
+	*	Node used to render billboards.
+	*\~french
+	*\brief
+	*	Noeud utilisé pour le dessin de billboards.
+	*/
+	struct BillboardRenderNode;
+	/**
+	*\~english
+	*\brief
+	*	Node used to render a submesh.
+	*\~french
+	*\brief
+	*	Noeud utilisé pour le dessin un submesh.
+	*/
+	struct SubmeshRenderNode;
 
 	CU_DeclareSmartPtr( castor3d, Frustum, C3D_API );
 	CU_DeclareSmartPtr( castor3d, Picking, C3D_API );
@@ -766,6 +784,20 @@ namespace castor3d
 	using ShadowMapRefArray = std::vector< ShadowMapRefIds >;
 	using ShadowMapLightTypeArray = std::array< ShadowMapRefArray, size_t( LightType::eCount ) >;
 	using LightIdArray = std::vector< std::pair< Light *, uint32_t > >;
+
+	template< typename NodeT >
+	struct CountedNodeT
+	{
+		NodeT const * node{};
+		uint32_t instanceCount{};
+		bool visible{};
+	};
+
+	struct PipelineAndID
+	{
+		RenderPipeline * pipeline;
+		uint16_t id;
+	};
 
 	struct ShadowMapLightIds
 	{
