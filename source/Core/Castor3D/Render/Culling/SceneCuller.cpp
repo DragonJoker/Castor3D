@@ -270,15 +270,25 @@ namespace castor3d
 			for ( auto & node : m_culledSubmeshes )
 			{
 				auto visible = isSubmeshVisible( *node.node );
-				m_culledChanged = m_culledChanged || node.visibleOrFrontCulled != visible;
-				node.visibleOrFrontCulled = visible;
+
+				if ( node.visible != visible )
+				{
+					m_culledChanged = true;
+					node.visible = visible;
+					onSubmeshChanged( *this, node, visible );
+				}
 			}
 
 			for ( auto & node : m_culledBillboards )
 			{
 				auto visible = isBillboardVisible( *node.node );
-				m_culledChanged = m_culledChanged || node.visibleOrFrontCulled != visible;
-				node.visibleOrFrontCulled = visible;
+
+				if ( node.visible != visible )
+				{
+					m_culledChanged = true;
+					node.visible = visible;
+					onBillboardChanged( *this, node, visible );
+				}
 			}
 		}
 	}
@@ -333,13 +343,18 @@ namespace castor3d
 
 			if ( it != m_culledSubmeshes.end() )
 			{
-				m_culledChanged = m_culledChanged || it->visibleOrFrontCulled != visible;
-				it->visibleOrFrontCulled = visible;
+				if ( it->visible != visible )
+				{
+					m_culledChanged = true;
+					it->visible = visible;
+					onSubmeshChanged( *this, *it, visible );
+				}
 			}
 			else
 			{
 				m_culledChanged = true;
 				m_culledSubmeshes.push_back( { dirty, 1u, visible } );
+				onSubmeshChanged( *this, m_culledSubmeshes.back(), visible );
 			}
 		}
 	}
@@ -359,16 +374,20 @@ namespace castor3d
 
 			if ( it != m_culledBillboards.end() )
 			{
-				m_culledChanged = m_culledChanged
-					|| it->visibleOrFrontCulled != visible
-					|| it->instanceCount != count;
-				it->visibleOrFrontCulled = visible;
-				it->instanceCount = count;
+				if ( it->visible != visible
+					|| it->instanceCount != count )
+				{
+					m_culledChanged = true;
+					it->visible = visible;
+					it->instanceCount = count;
+					onBillboardChanged( *this, *it, visible );
+				}
 			}
 			else
 			{
 				m_culledChanged = true;
 				m_culledBillboards.push_back( { dirty, count, visible } );
+				onBillboardChanged( *this, m_culledBillboards.back(), visible );
 			}
 		}
 	}

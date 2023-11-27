@@ -4,18 +4,23 @@
 
 namespace castor
 {
-	BlockTimer::BlockTimer( std::string szFunction, char const * szFile, uint32_t uiLine )
-		: m_strFile( string::stringCast< xchar >( szFile ) )
-		, m_strFunction( string::stringCast< xchar >( szFunction ) )
-		, m_uiLine( uiLine )
+	BlockTimer::BlockTimer( char const * file
+		, char const * function
+		, std::string name
+		, uint32_t line )
+		: m_file{ file }
+		, m_function{ function }
+		, m_name{ std::move( name ) }
+		, m_line{ line }
 	{
 	}
 
 	BlockTimer::~BlockTimer()
 	{
-		Logger::logInfo( makeStringStream() << cuT( "BlockTimer::Exited Block : " ) << m_strFunction
-			<< cuT( " in " ) << m_strFile
-			<< cuT( ", line " ) << m_uiLine
+		Logger::logInfo( makeStringStream() << cuT( "BlockTimer::Exited Block : " ) << m_file.substr( m_file.find_last_of( '/' ) + 1u )
+			<< cuT( " " ) << m_function
+			<< cuT( ":" ) << m_line
+			<< cuT( " - " ) << m_name
 			<< cuT( " - time: " ) << ( double( std::chrono::duration_cast< Microseconds >( m_timer.getElapsed() ).count() ) / 1000.0 ) << cuT( " ms" ) );
 	}
 }

@@ -517,7 +517,7 @@ namespace castor3d
 		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
 		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
 		 */
-		C3D_API RenderPipeline & prepareBackPipeline( PipelineFlags const & pipelineFlags
+		C3D_API PipelineAndID prepareBackPipeline( PipelineFlags const & pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
 		/**
@@ -532,7 +532,7 @@ namespace castor3d
 		 *\param[in]		vertexLayouts			Les layouts des tampons de sommets.
 		 *\param[in]		meshletDescriptorLayout	Les layouts optionnels de descripteurs de meshlets.
 		 */
-		C3D_API RenderPipeline & prepareFrontPipeline( PipelineFlags const & pipelineFlags
+		C3D_API PipelineAndID prepareFrontPipeline( PipelineFlags const & pipelineFlags
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
 		/**
@@ -729,9 +729,9 @@ namespace castor3d
 		C3D_API Scene & getScene()const;
 		C3D_API SceneNode const * getIgnoredNode()const;
 		C3D_API bool isMeshShading()const;
-		C3D_API NodePtrByPipelineMapT< SubmeshRenderNode > const & getSubmeshNodes()const;
-		C3D_API ObjectNodesPtrByPipelineMapT< SubmeshRenderNode > const & getInstancedSubmeshNodes()const;
-		C3D_API NodePtrByPipelineMapT< BillboardRenderNode > const & getBillboardNodes()const;
+		C3D_API PipelinesNodesT< SubmeshRenderNode > const & getSubmeshNodes()const;
+		C3D_API InstantiatedPipelinesNodesT< SubmeshRenderNode > const & getInstancedSubmeshNodes()const;
+		C3D_API PipelinesNodesT< BillboardRenderNode > const & getBillboardNodes()const;
 		C3D_API uint32_t getMaxPipelineId()const;
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
@@ -909,7 +909,7 @@ namespace castor3d
 		std::vector< RenderPipelineUPtr > & doGetBackPipelines();
 		std::vector< RenderPipelineUPtr > const & doGetFrontPipelines()const;
 		std::vector< RenderPipelineUPtr > const & doGetBackPipelines()const;
-		RenderPipeline & doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
+		PipelineAndID doPreparePipeline( ashes::PipelineVertexInputStateCreateInfoCRefArray const & vertexLayouts
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout
 			, PipelineFlags const & flags
 			, VkCullModeFlags cullMode );

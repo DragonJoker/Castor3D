@@ -35,24 +35,6 @@ namespace castor3d
 	/**
 	*\~english
 	*\brief
-	*	Node used to render billboards.
-	*\~french
-	*\brief
-	*	Noeud utilisé pour le dessin de billboards.
-	*/
-	struct BillboardRenderNode;
-	/**
-	*\~english
-	*\brief
-	*	Node used to render a submesh.
-	*\~french
-	*\brief
-	*	Noeud utilisé pour le dessin un submesh.
-	*/
-	struct SubmeshRenderNode;
-	/**
-	*\~english
-	*\brief
 	*	The nodes used to render a scene (unculled).
 	*\~french
 	*\brief
@@ -103,34 +85,26 @@ namespace castor3d
 	//@{
 
 	template< typename NodeT >
-	struct CountedNodeT
-	{
-		NodeT const * node{};
-		uint32_t instanceCount{};
-		bool visibleOrFrontCulled{};
-	};
-
-	template< typename NodeT >
 	using NodeArrayT = std::vector< CountedNodeT< NodeT > >;
 
 	template< typename NodeT >
-	class NodePtrByPipelineMapT;
+	class PipelinesNodesT;
 
 	//@}
 	/**@name Instanced */
 	//@{
 
 	template< typename NodeT >
-	using ObjectNodesPtrMapT = std::unordered_map< NodeObjectT< NodeT > *, NodeArrayT< NodeT > >;
+	using InstantiatedObjectsNodesT = std::unordered_map< NodeObjectT< NodeT > *, NodeArrayT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByPassT = std::unordered_map< PassRPtr, ObjectNodesPtrMapT< NodeT > >;
+	using InstantiatedPassesNodesT = std::unordered_map< PassRPtr, InstantiatedObjectsNodesT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByBufferMapT = std::unordered_map< ashes::BufferBase const *, ObjectNodesPtrByPassT< NodeT > >;
+	using InstantiatedBuffersNodesT = std::unordered_map< ashes::BufferBase const *, InstantiatedPassesNodesT< NodeT > >;
 
 	template< typename NodeT >
-	using ObjectNodesPtrByPipelineMapT = std::unordered_map< RenderPipeline *, ObjectNodesPtrByBufferMapT< NodeT > >;
+	using InstantiatedPipelinesNodesT = std::unordered_map< RenderPipeline *, InstantiatedBuffersNodesT< NodeT > >;
 
 	//@}
 	//@}

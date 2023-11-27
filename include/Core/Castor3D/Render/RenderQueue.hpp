@@ -200,6 +200,7 @@ namespace castor3d
 		QueueRenderNodesUPtr m_renderNodes;
 		PassData m_pass;
 		bool m_culledChanged{};
+		bool m_fullSort{ true };
 		bool m_commandsChanged{};
 		std::atomic_bool m_invalidated{};
 		castor::GroupChangeTracked< ashes::Optional< VkViewport > > m_viewport;

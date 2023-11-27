@@ -138,6 +138,7 @@ namespace castor3d
 
 		size_t hash{};
 		std::array< GpuBufferChunk, size_t( SubmeshData::eCount ) > buffers{};
+		uint16_t id{};
 
 		explicit operator bool()const
 		{
@@ -152,6 +153,11 @@ namespace castor3d
 		GpuBufferChunk const & getBufferChunk( SubmeshData data )const
 		{
 			return buffers[uint32_t( data )];
+		}
+
+		uint16_t getID()const
+		{
+			return id;
 		}
 
 		void reset()

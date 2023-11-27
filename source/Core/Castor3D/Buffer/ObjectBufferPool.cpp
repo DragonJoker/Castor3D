@@ -306,7 +306,7 @@ namespace castor3d
 		, SubmeshComponentCombine const & components
 		, bool isGpuComputed )
 	{
-		auto hash = std::hash< SubmeshComponentCombineID >{}(components.baseId );
+		auto hash = std::hash< SubmeshComponentCombineID >{}( components.baseId );
 		hash = castor::hashCombine( hash, indexCount != 0u );
 		hash = castor::hashCombine( hash, vertexCount != 0u );
 		hash = castor::hashCombine( hash, isGpuComputed );
@@ -396,6 +396,7 @@ namespace castor3d
 			}
 		}
 
+		result.id = uint16_t( std::distance( buffers.begin(), it ) );
 		return result;
 	}
 
