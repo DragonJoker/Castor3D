@@ -12,7 +12,7 @@ See LICENSE file in root folder
 namespace castor3d
 {
 	struct PassHeaderComponent
-		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< uint32_t > >
+		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >
 	{
 		struct MaterialShader
 			: shader::PassMaterialShader
@@ -66,12 +66,12 @@ namespace castor3d
 
 		bool isLightingEnabled()const
 		{
-			return getData() != 0u;
+			return getData();
 		}
 
 		void enableLighting( bool value )
 		{
-			setData( value ? 1u : 0u );
+			setData( value );
 		}
 
 		C3D_API static castor::String const TypeName;
