@@ -2227,7 +2227,7 @@ namespace castor3d
 				}
 
 				auto pipelineHash = origPipeline.pipeline->getFlagsHash();
-				auto & buffers = pipelinesNodes.buffers;
+				auto & buffers = pipelinesNodes.nodes;
 
 				for ( auto & [buffer, nodes] : buffers )
 				{

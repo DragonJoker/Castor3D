@@ -34,7 +34,12 @@ namespace castor
 
 #else
 
-#	define CU_Assert( pred, text ) assert( pred && text )
+#	if !defined( NDEBUG )
+#		define CU_Assert( pred, text ) assert( pred && text )
+#	else
+#		define CU_Assert( pred, text ) ( !!( pred ) )\
+			|| ( castor::cuLogError( text ), 0 )
+#	endif
 #	define CU_CheckInvariants() ((void)0)
 
 #endif
