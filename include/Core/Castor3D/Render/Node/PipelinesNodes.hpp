@@ -14,10 +14,10 @@ namespace castor3d
 	template< typename NodeT, uint64_t CountT >
 	struct NodesViewT
 	{
-		static uint64_t constexpr maxNodes = CountT;
-		static uint64_t constexpr maxCount = maxNodes;
-
 		using CountedNode = CountedNodeT< NodeT >;
+
+		static uint64_t constexpr maxNodes = CountT;
+		static uint64_t constexpr maxCount = CountT;
 
 		explicit NodesViewT( CountedNode * data )
 			: m_nodes{ data }
@@ -99,12 +99,11 @@ namespace castor3d
 	template< typename NodeT >
 	struct BuffersNodesViewT
 	{
+		using CountedNode = CountedNodeT< NodeT >;
 		using NodesView = NodesViewT< NodeT, 4096u >;
 
 		static uint64_t constexpr maxBuffers = 16ull;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxBuffers;
-
-		using CountedNode = CountedNodeT< NodeT >;
 
 		struct BufferNodes
 		{
@@ -216,18 +215,18 @@ namespace castor3d
 	class PipelinesNodesT
 	{
 	public:
-		static uint64_t constexpr maxPipelines = 256ull;
-		static uint64_t constexpr maxCount = BuffersNodesViewT< NodeT >::maxCount * maxPipelines;
-
 		using CountedNode = CountedNodeT< NodeT >;
-		using BuffersNodesView = BuffersNodesViewT< NodeT >;
 		using NodeArray = NodeArrayT< NodeT >;
+		using NodesView = BuffersNodesViewT< NodeT >;
+
+		static uint64_t constexpr maxPipelines = 256ull;
+		static uint64_t constexpr maxCount = NodesView::maxCount * maxPipelines;
 
 		struct PipelineNodes
 		{
 			PipelineAndID pipeline{};
 			bool isFrontCulled{};
-			BuffersNodesView buffers{};
+			NodesView nodes{};
 		};
 
 		PipelinesNodesT()
@@ -253,8 +252,9 @@ namespace castor3d
 				}
 #endif
 
-				auto data = m_nodes.data() + ( m_pipelines.size() * BuffersNodesView::maxCount );
-				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, isFrontCulled, BuffersNodesView{ data } } ).first;
+				auto data = m_nodes.data() + ( m_pipelines.size() * NodesView::maxCount );
+				it = m_pipelines.emplace( id
+					, PipelineNodes{ pipeline, isFrontCulled, NodesView{ data } } ).first;
 			}
 
 			return &it->second;
@@ -283,7 +283,7 @@ namespace castor3d
 				++m_nodeCount;
 
 				auto it = emplace( pipeline, isFrontCulled );
-				it->buffers.emplace( buffer, *ires.first->second );
+				it->nodes.emplace( buffer, *ires.first->second );
 			}
 			else
 			{
@@ -352,18 +352,16 @@ namespace castor3d
 	class PipelinesDrawnNodesT
 	{
 	public:
-		static uint64_t constexpr maxPipelines = 256ull;
-		static uint64_t constexpr maxCount = BuffersNodesViewT< NodeT >::maxCount * maxPipelines;
-
 		using CountedNode = CountedNodeT< NodeT >;
-		using BuffersNodesView = BuffersNodesViewT< NodeT >;
-		using NodeArray = NodeArrayT< NodeT >;
+		using NodesView = BuffersNodesViewT< NodeT >;
+
+		static uint64_t constexpr maxPipelines = 256ull;
+		static uint64_t constexpr maxCount = NodesView::maxCount * maxPipelines;
 
 		struct PipelineNodes
 		{
 			PipelineAndID pipeline{};
-			bool isFrontCulled{};
-			BuffersNodesView buffers;
+			NodesView nodes;
 		};
 
 		PipelinesDrawnNodesT()
@@ -378,7 +376,7 @@ namespace castor3d
 
 			if ( it == m_pipelines.end() )
 			{
-				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, isFrontCulled, BuffersNodesView{} } ).first;
+				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, NodesView{} } ).first;
 			}
 
 			return &it->second;

@@ -130,13 +130,6 @@ namespace castor3d
 	class IndexMapping;
 	/**
 	\~english
-	\brief		The transformation matrix and material index for one instance.
-	\~french
-	\brief		La matrice de transformation et l'index de matériau pour une instance.
-	*/
-	struct InstantiationData;
-	/**
-	\~english
 	\brief		The submesh component used for hardware instantiation.
 	\~french
 	\brief		Le composant de sous-maillage pour l'instantiation matérielle.

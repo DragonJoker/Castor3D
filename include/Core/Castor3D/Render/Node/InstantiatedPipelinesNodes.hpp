@@ -11,46 +11,22 @@ namespace castor3d
 	template< typename NodeT >
 	struct InstantiatedObjectsNodesViewT
 	{
-		using NodesView = NodesViewT< NodeT, 1024u >;
+		static uint64_t constexpr maxObjects = 64ull;
+		static uint64_t constexpr maxCount = maxObjects;
 
-		static uint64_t constexpr maxObjects = 512ull;
-		static uint64_t constexpr maxCount = NodesView::maxCount * maxObjects;
-
-		using CountedNode = CountedNodeT< NodeT >;
-		using NodeObject = NodeObjectT< NodeT >;
-
-		struct ObjectNodes
-		{
-			NodeObject const * object{};
-			NodesView nodes;
-		};
-
-		explicit InstantiatedObjectsNodesViewT( CountedNode * data )
+		explicit InstantiatedObjectsNodesViewT()
 			: m_objects{ maxObjects }
 			, m_count{}
 		{
-			if ( data )
-			{
-				for ( auto & buffer : m_objects )
-				{
-					buffer.nodes = NodesView{ data };
-					data += NodesView::maxCount;
-				}
-			}
 		}
 
-		InstantiatedObjectsNodesViewT()
-			: InstantiatedObjectsNodesViewT{ nullptr }
-		{
-		}
-
-		auto emplace( NodeObject const & object )
+		auto emplace( NodeT const & object )
 		{
 			auto it = std::find_if( begin()
 				, end()
-				, [&object]( ObjectNodes const & lookup )
+				, [&object]( NodeT const * lookup )
 				{
-					return lookup.object == &object;
+					return lookup == &object;
 				} );
 
 			if ( it == end() )
@@ -64,29 +40,15 @@ namespace castor3d
 				}
 #endif
 
-				it->object = &object;
+				*it = &object;
 				++m_count;
 			}
 
 			return it;
 		}
 
-		void emplace( NodeObject const & object
-			, CountedNode & node )
-		{
-			auto it = emplace( object );
-			it->nodes.emplace( node );
-			CU_Require( !it->nodes.empty() );
-		}
-
 		void clear()noexcept
 		{
-			for ( auto & [object, nodes] : m_objects )
-			{
-				object = {};
-				nodes.clear();
-			}
-
 			m_count = 0u;
 		}
 
@@ -121,42 +83,27 @@ namespace castor3d
 		}
 
 	private:
-		std::vector< ObjectNodes > m_objects;
+		std::vector< NodeT const * > m_objects;
 		uint32_t m_count;
 	};
 
 	template< typename NodeT >
 	struct InstantiatedPassesNodesViewT
 	{
-		static uint64_t constexpr maxPasses = 64ull;
-		static uint64_t constexpr maxCount = InstantiatedObjectsNodesViewT< NodeT >::maxCount * maxPasses;
+		using NodesView = InstantiatedObjectsNodesViewT< NodeT >;
 
-		using CountedNode = CountedNodeT< NodeT >;
-		using InstantiatedObjectsNodesView = InstantiatedObjectsNodesViewT< NodeT >;
-		using NodeObject = NodeObjectT< NodeT >;
+		static uint64_t constexpr maxPasses = 64ull;
+		static uint64_t constexpr maxCount = NodesView::maxCount * maxPasses;
 
 		struct PassNodes
 		{
 			Pass const * pass{};
-			InstantiatedObjectsNodesView objects;
+			NodesView nodes;
 		};
 
-		explicit InstantiatedPassesNodesViewT( CountedNode * data )
+		explicit InstantiatedPassesNodesViewT()
 			: m_passes{ maxPasses }
 			, m_count{}
-		{
-			if ( data )
-			{
-				for ( auto & pass : m_passes )
-				{
-					pass.objects = InstantiatedObjectsNodesView{ data };
-					data += InstantiatedObjectsNodesView::maxCount;
-				}
-			}
-		}
-
-		InstantiatedPassesNodesViewT()
-			: InstantiatedPassesNodesViewT{ nullptr }
 		{
 		}
 
@@ -188,20 +135,18 @@ namespace castor3d
 		}
 
 		void emplace( Pass const & pass
-			, NodeObject const & object
-			, CountedNode & node )
+			, NodeT const & object )
 		{
 			auto it = emplace( pass );
-			it->objects.emplace( object, node );
-			CU_Require( !it->objects.empty() );
+			it->nodes.emplace( object );
 		}
 
 		void clear()noexcept
 		{
-			for ( auto & [pass, objects] : m_passes )
+			for ( auto & [pass, nodes] : m_passes )
 			{
 				pass = {};
-				objects.clear();
+				nodes.clear();
 			}
 
 			m_count = 0u;
@@ -245,33 +190,21 @@ namespace castor3d
 	template< typename NodeT >
 	struct InstantiatedBuffersNodesViewT
 	{
-		static uint64_t constexpr maxBuffers = 16ull;
-		static uint64_t constexpr maxCount = InstantiatedObjectsNodesViewT< NodeT >::maxCount * maxBuffers;
+		using NodesView = InstantiatedPassesNodesViewT< NodeT >;
 
-		using CountedNode = CountedNodeT< NodeT >;
-		using NodeObject = NodeObjectT< NodeT >;
-		using NodeArray = NodeArrayT< NodeT >;
-		using InstantiatedObjectsNodesView = InstantiatedObjectsNodesViewT< NodeT >;
+		static uint64_t constexpr maxBuffers = 16ull;
+		static uint64_t constexpr maxCount = NodesView::maxCount * maxBuffers;
 
 		struct BufferNodes
 		{
 			ashes::BufferBase const * buffer{};
-			InstantiatedObjectsNodesView objects;
+			NodesView nodes;
 		};
 
 		explicit InstantiatedBuffersNodesViewT()
-			: m_nodes{ maxCount }
-			, m_nodeCount{}
-			, m_buffers{ maxBuffers }
+			: m_buffers{ maxBuffers }
 			, m_count{}
 		{
-			CountedNode * data = m_nodes.data();
-
-			for ( auto & buffer : m_buffers )
-			{
-				buffer.objects = InstantiatedObjectsNodesView{ data };
-				data += InstantiatedObjectsNodesView::maxCount;
-			}
 		}
 
 		auto emplace( ashes::BufferBase const & buffer )
@@ -303,53 +236,18 @@ namespace castor3d
 
 		void emplace( ashes::BufferBase const & buffer
 			, Pass const & pass
-			, NodeObject const & object
-			, CountedNode const & node
-			, uint32_t drawCount
-			, bool isFrontCulled )
+			, NodeT const & object )
 		{
-			auto ires = m_countedNodes.emplace( node.node, nullptr );
-
-			if ( ires.second )
-			{
-				CU_Assert( m_nodeCount < maxCount
-					, "Too many nodes for given pipeline and buffer" );
-#if C3D_EnsureNodesCounts
-				if ( m_nodeCount == maxCount )
-				{
-					CU_Exception( "Too many nodes for given pipeline and buffer" );
-				}
-#endif
-				m_nodes[m_nodeCount] = node;
-				ires.first->second = &m_nodes[m_nodeCount];
-				++m_nodeCount;
-
-				auto it = emplace( buffer );
-				it->objects.emplace( object, *ires.first->second );
-				CU_Require( !it->objects.empty() );
-			}
-			else
-			{
-				ires.first->second->visible = true;
-			}
-		}
-
-		void erase( NodeT const & node )noexcept
-		{
-			auto it = m_countedNodes.find( &node );
-
-			if ( it != m_countedNodes.end() )
-			{
-				it->second->visible = false;
-			}
+			auto it = emplace( buffer );
+			it->nodes.emplace( pass, object );
 		}
 
 		void clear()noexcept
 		{
-			for ( auto & [buffer, objects] : m_buffers )
+			for ( auto & [buffer, nodes] : m_buffers )
 			{
 				buffer = {};
-				objects.clear();
+				nodes.clear();
 			}
 
 			m_count = 0u;
@@ -386,9 +284,6 @@ namespace castor3d
 		}
 
 	private:
-		NodeArray m_nodes;
-		uint32_t m_nodeCount;
-		std::unordered_map< NodeT const *, CountedNode * > m_countedNodes;
 		std::vector< BufferNodes > m_buffers;
 		uint32_t m_count;
 	};
@@ -397,18 +292,16 @@ namespace castor3d
 	class InstantiatedPipelinesNodesT
 	{
 	public:
-		static uint64_t constexpr maxPipelines = 256ull;
-		static uint64_t constexpr maxCount = InstantiatedBuffersNodesViewT< NodeT >::maxCount * maxPipelines;
+		using NodesView = InstantiatedBuffersNodesViewT< NodeT >;
 
-		using CountedNode = CountedNodeT< NodeT >;
-		using NodeObject = NodeObjectT< NodeT >;
-		using InstantiatedBuffersNodesView = InstantiatedBuffersNodesViewT< NodeT >;
+		static uint64_t constexpr maxPipelines = 256ull;
+		static uint64_t constexpr maxCount = NodesView::maxCount * maxPipelines;
 
 		struct PipelineNodes
 		{
 			PipelineAndID pipeline{};
 			bool isFrontCulled{};
-			InstantiatedBuffersNodesView buffers{};
+			NodesView nodes{};
 		};
 
 		InstantiatedPipelinesNodesT()
@@ -431,8 +324,8 @@ namespace castor3d
 					CU_Exception( "Too many pipelines" );
 				}
 #endif
-
-				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, isFrontCulled, InstantiatedBuffersNodesView{} } ).first;
+				it = m_pipelines.emplace( id
+					, PipelineNodes{ pipeline, isFrontCulled, NodesView{} } ).first;
 			}
 
 			return &it->second;
@@ -441,97 +334,24 @@ namespace castor3d
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
 			, Pass const & pass
-			, NodeObject const & object
-			, CountedNode const & node
-			, uint32_t drawCount
+			, NodeT const & object
 			, bool isFrontCulled )
 		{
-			auto it = emplace( pipeline, isFrontCulled );
-			it->buffers.emplace( buffer, pass, object, node , drawCount, isFrontCulled );
-		}
+			auto ires = m_countedNodes.emplace( &object );
 
-		void clear()noexcept
-		{
-			m_pipelines.clear();
-		}
-
-		auto begin()noexcept
-		{
-			return m_pipelines.begin();
-		}
-
-		auto begin()const noexcept
-		{
-			return m_pipelines.begin();
-		}
-
-		auto end()noexcept
-		{
-			return m_pipelines.end();
-		}
-
-		auto end()const noexcept
-		{
-			return m_pipelines.end();
-		}
-
-		auto size()const noexcept
-		{
-			return m_pipelines.size();
-		}
-
-		auto empty()const noexcept
-		{
-			return m_pipelines.empty();
-		}
-
-	private:
-		std::map< uint32_t, PipelineNodes > m_pipelines;
-	};
-
-	template< typename NodeT >
-	class InstantiatedPipelinesDrawnNodesT
-	{
-	public:
-		static uint64_t constexpr maxPipelines = 256ull;
-		static uint64_t constexpr maxCount = InstantiatedBuffersNodesViewT< NodeT >::maxCount * maxPipelines;
-
-		using CountedNode = CountedNodeT< NodeT >;
-		using InstantiatedBuffersNodesView = InstantiatedBuffersNodesViewT< NodeT >;
-		using NodeArray = NodeArrayT< NodeT >;
-
-		struct PipelineNodes
-		{
-			PipelineAndID pipeline{};
-			bool isFrontCulled{};
-			InstantiatedBuffersNodesView buffers;
-		};
-
-		InstantiatedPipelinesDrawnNodesT()
-		{
-		}
-
-		auto emplace( PipelineAndID const & pipeline
-			, bool isFrontCulled )
-		{
-			auto id = uint32_t( pipeline.id + ( isFrontCulled ? ( maxPipelines / 2u ) : 0u ) );
-			auto it = m_pipelines.find( id );
-
-			if ( it == m_pipelines.end() )
+			if ( ires.second )
 			{
-				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, isFrontCulled, InstantiatedBuffersNodesView{} } ).first;
+				CU_Assert( m_countedNodes.size() < maxCount
+					, "Too many nodes" );
+#if C3D_EnsureNodesCounts
+				if ( m_countedNodes.size() == maxCount )
+				{
+					CU_Exception( "Too many nodes" );
+				}
+#endif
+				auto it = emplace( pipeline, isFrontCulled );
+				it->nodes.emplace( buffer, pass, object );
 			}
-
-			return &it->second;
-		}
-
-		void emplace( PipelineAndID const & pipeline
-			, ashes::BufferBase const & buffer
-			, CountedNode const & node
-			, bool isFrontCulled )
-		{
-			auto it = emplace( pipeline, isFrontCulled );
-			it->buffers.emplace( buffer, node );
 		}
 
 		void clear()noexcept
@@ -570,6 +390,7 @@ namespace castor3d
 		}
 
 	private:
+		std::unordered_set< NodeT const * > m_countedNodes;
 		std::map< uint32_t, PipelineNodes > m_pipelines;
 	};
 }

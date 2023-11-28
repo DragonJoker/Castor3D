@@ -52,8 +52,7 @@ namespace castor3d
 			, BillboardBase & instance );
 
 		C3D_API uint32_t getMaxPipelineId()const;
-		C3D_API void registerNodePipeline( uint32_t nodeId
-			, uint32_t pipelineId );
+		C3D_API void registerPipelineId( uint32_t pipelineId );
 		C3D_API PipelineBufferArray const & getPassPipelineNodes()const;
 		C3D_API uint32_t getPipelineNodesIndex( PipelineBaseHash const & hash
 			, ashes::BufferBase const & buffer )const;
@@ -125,7 +124,7 @@ namespace castor3d
 
 	private:
 		PipelineBufferArray m_nodesIds;
-		std::map< uint32_t, uint32_t > m_nodesPipelinesIds;
+		uint32_t m_maxPipelineId;
 		bool m_hasNodes{};
 
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
