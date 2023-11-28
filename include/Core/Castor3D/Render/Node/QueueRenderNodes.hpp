@@ -5,13 +5,13 @@ See LICENSE file in root folder
 #define ___C3D_QueueRenderNodes_H___
 
 #include "Castor3D/Limits.hpp"
-#include "Castor3D/Render/Node/PipelinesNodes.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 #include "Castor3D/Scene/Animation/AnimationModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/ShaderBuffersModule.hpp"
 #include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include "Castor3D/Buffer/UniformBufferOffset.hpp"
+#include "Castor3D/Render/Node/InstantiatedPipelinesNodes.hpp"
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 

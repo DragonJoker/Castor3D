@@ -95,16 +95,7 @@ namespace castor3d
 	//@{
 
 	template< typename NodeT >
-	using InstantiatedObjectsNodesT = std::unordered_map< NodeObjectT< NodeT > *, NodeArrayT< NodeT > >;
-
-	template< typename NodeT >
-	using InstantiatedPassesNodesT = std::unordered_map< PassRPtr, InstantiatedObjectsNodesT< NodeT > >;
-
-	template< typename NodeT >
-	using InstantiatedBuffersNodesT = std::unordered_map< ashes::BufferBase const *, InstantiatedPassesNodesT< NodeT > >;
-
-	template< typename NodeT >
-	using InstantiatedPipelinesNodesT = std::unordered_map< RenderPipeline *, InstantiatedBuffersNodesT< NodeT > >;
+	class InstantiatedPipelinesNodesT;
 
 	//@}
 	//@}

@@ -11,15 +11,17 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename NodeT >
+	template< typename NodeT, uint64_t CountT >
 	struct NodesViewT
 	{
-		static uint64_t constexpr maxNodes = 4'096ull;
+		static uint64_t constexpr maxNodes = CountT;
 		static uint64_t constexpr maxCount = maxNodes;
 
 		using CountedNode = CountedNodeT< NodeT >;
 
 		explicit NodesViewT( CountedNode * data )
+			: m_nodes{ data }
+			, m_count{}
 		{
 		}
 
@@ -39,32 +41,34 @@ namespace castor3d
 			}
 #endif
 
-			m_nodes.push_back( &node );
+			auto it = end();
+			*it = &node;
+			++m_count;
 		}
 
 		void clear()noexcept
 		{
-			m_nodes.clear();
+			m_count = 0u;
 		}
 
 		auto begin()noexcept
 		{
-			return m_nodes.begin();
+			return m_nodes.data();
 		}
 
 		auto begin()const noexcept
 		{
-			return m_nodes.begin();
+			return m_nodes.data();
 		}
 
 		auto end()noexcept
 		{
-			return m_nodes.end();
+			return std::next( begin(), ptrdiff_t( m_count ) );
 		}
 
 		auto end()const noexcept
 		{
-			return m_nodes.end();
+			return std::next( begin(), ptrdiff_t( m_count ) );
 		}
 
 		auto & front()noexcept
@@ -79,26 +83,28 @@ namespace castor3d
 
 		auto size()const noexcept
 		{
-			return m_nodes.size();
+			return m_count;
 		}
 
 		auto empty()const noexcept
 		{
-			return m_nodes.empty();
+			return size() == 0;
 		}
 
 	private:
-		std::vector< CountedNode * > m_nodes;
+		std::array< CountedNode *, maxNodes > m_nodes;
+		size_t m_count;
 	};
 
 	template< typename NodeT >
 	struct BuffersNodesViewT
 	{
+		using NodesView = NodesViewT< NodeT, 4096u >;
+
 		static uint64_t constexpr maxBuffers = 16ull;
-		static uint64_t constexpr maxCount = NodesViewT< NodeT >::maxCount * maxBuffers;
+		static uint64_t constexpr maxCount = NodesView::maxCount * maxBuffers;
 
 		using CountedNode = CountedNodeT< NodeT >;
-		using NodesView = NodesViewT< NodeT >;
 
 		struct BufferNodes
 		{
@@ -221,39 +227,37 @@ namespace castor3d
 		{
 			PipelineAndID pipeline{};
 			bool isFrontCulled{};
-			BuffersNodesView buffers;
+			BuffersNodesView buffers{};
 		};
 
 		PipelinesNodesT()
 			: m_nodes{ maxCount }
 			, m_nodeCount{}
-			, m_pipelines{ maxPipelines }
 		{
-			auto data = m_nodes.data();
-
-			for ( auto & pipeline : m_pipelines )
-			{
-				pipeline.buffers = BuffersNodesView{ data };
-				data += BuffersNodesView::maxCount;
-			}
 		}
 
 		auto emplace( PipelineAndID const & pipeline
 			, bool isFrontCulled )
 		{
-			CU_Assert( pipeline.id < maxPipelines
-				, "Too many pipelines" );
-#if C3D_EnsureNodesCounts
-			if ( pipeline.id == maxPipelines / 2u )
+			auto id = uint32_t( pipeline.id + ( isFrontCulled ? ( maxPipelines / 2u ) : 0u ) );
+			auto it = m_pipelines.find( id );
+
+			if ( it == m_pipelines.end() )
 			{
-				CU_Exception( "Too many pipelines" );
-			}
+				CU_Assert( pipeline.id < maxPipelines
+					, "Too many pipelines" );
+#if C3D_EnsureNodesCounts
+				if ( pipeline.id >= maxPipelines / 2u )
+				{
+					CU_Exception( "Too many pipelines" );
+				}
 #endif
 
-			auto & result = m_pipelines[pipeline.id + ( isFrontCulled ? ( maxPipelines / 2u ) : 0u )];
-			result.pipeline = pipeline;
-			result.isFrontCulled = isFrontCulled;
-			return &result;
+				auto data = m_nodes.data() + ( m_pipelines.size() * BuffersNodesView::maxCount );
+				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, isFrontCulled, BuffersNodesView{ data } } ).first;
+			}
+
+			return &it->second;
 		}
 
 		void emplace( PipelineAndID const & pipeline
@@ -299,12 +303,7 @@ namespace castor3d
 
 		void clear()noexcept
 		{
-			for ( auto & [pipeline, isFrontCulled, buffers] : m_pipelines )
-			{
-				pipeline.id = {};
-				pipeline.pipeline = {};
-				buffers.clear();
-			}
+			m_pipelines.clear();
 		}
 
 		auto begin()noexcept
@@ -345,7 +344,7 @@ namespace castor3d
 	private:
 		NodeArray m_nodes;
 		uint32_t m_nodeCount;
-		std::vector< PipelineNodes > m_pipelines;
+		std::map< uint32_t, PipelineNodes > m_pipelines;
 		std::unordered_map< NodeT const *, CountedNode * > m_countedNodes;
 	};
 
@@ -379,9 +378,7 @@ namespace castor3d
 
 			if ( it == m_pipelines.end() )
 			{
-				it = m_pipelines.emplace( id, PipelineNodes{} ).first;
-				it->second.pipeline = pipeline;
-				it->second.isFrontCulled = isFrontCulled;
+				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, isFrontCulled, BuffersNodesView{} } ).first;
 			}
 
 			return &it->second;

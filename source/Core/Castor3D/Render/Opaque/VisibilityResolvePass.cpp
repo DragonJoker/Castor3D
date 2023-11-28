@@ -2208,8 +2208,9 @@ namespace castor3d
 				pipelines.push_back( pipelineId );
 			}
 
-			for ( auto & [origPipeline, isFrontCulled, buffers] : m_nodesPass.getBillboardNodes() )
+			for ( auto & [_, pipelinesNodes] : m_nodesPass.getBillboardNodes() )
 			{
+				auto & origPipeline = pipelinesNodes.pipeline;
 				if ( !origPipeline.pipeline )
 				{
 					continue;
@@ -2226,6 +2227,7 @@ namespace castor3d
 				}
 
 				auto pipelineHash = origPipeline.pipeline->getFlagsHash();
+				auto & buffers = pipelinesNodes.buffers;
 
 				for ( auto & [buffer, nodes] : buffers )
 				{

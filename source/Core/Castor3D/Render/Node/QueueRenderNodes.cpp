@@ -93,7 +93,7 @@ namespace castor3d
 		}
 
 		template< typename NodeT >
-		static bool addRenderNode( RenderPipeline & pipeline
+		static bool addRenderNode( PipelineAndID & pipeline
 			, CountedNodeT< NodeT > const & culled
 			, uint32_t drawCount
 			, bool isFrontCulled
@@ -105,13 +105,9 @@ namespace castor3d
 
 			if ( bufferChunk.buffer )
 			{
-				auto buffer = &bufferChunk.buffer->getBuffer();
-				InstantiatedBuffersNodesT< NodeT > & bufferMap = nodes.emplace( &pipeline, InstantiatedBuffersNodesT< NodeT >{} ).first->second;
-				InstantiatedPassesNodesT< NodeT > & passMap = bufferMap.emplace( buffer, InstantiatedPassesNodesT< NodeT >{} ).first->second;
-				InstantiatedObjectsNodesT< NodeT > & nodeMap = passMap.emplace( node.pass, InstantiatedObjectsNodesT< NodeT >{} ).first->second;
-				NodeArrayT< NodeT > & objects = nodeMap.emplace( &node.data, NodeArrayT< NodeT >{} ).first->second;
-				objects.push_back( culled );
-				registerPipelineNodes( pipeline.getFlagsHash(), *buffer, nodesIds );
+				auto & buffer = bufferChunk.buffer->getBuffer();
+				nodes.emplace( pipeline, buffer, *node.pass, node.data, culled, drawCount, isFrontCulled );
+				registerPipelineNodes( pipeline.pipeline->getFlagsHash(), buffer, nodesIds );
 				return true;
 			}
 
@@ -120,8 +116,8 @@ namespace castor3d
 
 		//*****************************************************************************************
 
-		template< typename NodeT >
-		bool hasVisibleNode( NodesViewT< NodeT > const & nodes )
+		template< typename NodeT, uint64_t CountT >
+		bool hasVisibleNode( NodesViewT< NodeT, CountT > const & nodes )
 		{
 			return std::any_of( nodes.begin()
 				, nodes.end()
@@ -342,13 +338,15 @@ namespace castor3d
 			, uint32_t & nidxIndex )
 		{
 			uint32_t result{};
+#if C3D_DebugTimers
+			CU_TimeEx( queueNodes.getOwner()->getOwner()->getTypeName() );
+#endif
+
 
 			for ( auto & [id, pipelineNodes] : inputNodes )
 			{
-				auto & pipeline = pipelineNodes.pipeline;
-				auto & buffers = pipelineNodes.buffers;
-				result += doParsePipelineCommands( pipeline
-					, buffers
+				result += doParsePipelineCommands( pipelineNodes.pipeline
+					, pipelineNodes.buffers
 					, commandBuffer
 					, queueNodes
 					, viewport
@@ -375,22 +373,25 @@ namespace castor3d
 		{
 			uint32_t result{};
 
-			for ( auto & [pipeline, buffers] : inputNodes )
+			for ( auto & [_, pipelinesNodes] : inputNodes )
 			{
+				auto & pipeline = pipelinesNodes.pipeline;
+				auto & buffers = pipelinesNodes.buffers;
+
 				for ( auto & [buffer, passes] : buffers )
 				{
-					for ( auto & [pass, submeshes] : passes )
-					{
-						for ( auto & [_, nodes] : submeshes )
+					//for ( auto & [pass, submeshes] : passes )
+					//{
+						for ( auto & [submesh, nodes] : passes )
 						{
 							auto pipelineId = doBindPipeline( commandBuffer
 								, queueNodes
-								, *pipeline
+								, *pipeline.pipeline
 								, *buffer
 								, viewport
 								, scissor );
-							doAddGeometryNodeCommands( *pipeline
-								, *nodes.front().node
+							doAddGeometryNodeCommands( *pipeline.pipeline
+								, *nodes.front()->node
 								, commandBuffer
 								, indirectIndexedCommands
 								, indirectCommands
@@ -401,10 +402,10 @@ namespace castor3d
 
 							for ( auto & node : nodes )
 							{
-								queueNodes.registerNodePipeline( node.node->getId(), pipelineId );
+								queueNodes.registerNodePipeline( node->node->getId(), pipelineId );
 							}
 						}
-					}
+					//}
 				}
 			}
 
@@ -523,31 +524,34 @@ namespace castor3d
 		{
 			uint32_t result{};
 
-			for ( auto & [pipeline, buffers] : inputNodes )
+			for ( auto & [_, pipelinesNodes] : inputNodes )
 			{
+				auto & pipeline = pipelinesNodes.pipeline;
+				auto & buffers = pipelinesNodes.buffers;
+
 				for ( auto & [buffer, passes] : buffers )
 				{
-					for ( auto & [pass, submeshes] : passes )
-					{
-						for ( auto & [_, nodes] : submeshes )
+					//for ( auto & [pass, submeshes] : passes )
+					//{
+						for ( auto & [submesh, nodes] : passes )
 						{
 							auto pipelineId = doBindPipeline( commandBuffer
 								, queueNodes
-								, *pipeline
+								, *pipeline.pipeline
 								, *buffer
 								, viewport
 								, scissor );
 
-							for ( auto & nodeIt : nodes )
+							for ( auto & node : nodes )
 							{
-								queueNodes.registerNodePipeline( nodeIt.node->getId(), pipelineId );
+								queueNodes.registerNodePipeline( node->node->getId(), pipelineId );
 							}
 
-							auto & node = *nodes.front().node;
+							auto & node = *nodes.front()->node;
 
-							if ( pipeline->hasMeshletDescriptorSetLayout() )
+							if ( pipeline.pipeline->hasMeshletDescriptorSetLayout() )
 							{
-								doAddGeometryNodeCommands( *pipeline
+								doAddGeometryNodeCommands( *pipeline.pipeline
 									, node
 									, commandBuffer
 									, indirectMeshCommands
@@ -559,7 +563,7 @@ namespace castor3d
 							}
 							else
 							{
-								doAddGeometryNodeCommands( *pipeline
+								doAddGeometryNodeCommands( *pipeline.pipeline
 									, node
 									, commandBuffer
 									, indirectIndexedCommands
@@ -570,7 +574,7 @@ namespace castor3d
 								++result;
 							}
 						}
-					}
+					//}
 				}
 			}
 
@@ -726,7 +730,8 @@ namespace castor3d
 			}
 		}
 
-		static void fillNodeCommands( NodeArrayT< SubmeshRenderNode > const & nodes
+		template< uint64_t CountT >
+		static void fillNodeCommands( NodesViewT< SubmeshRenderNode, CountT > const & nodes
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer )
 		{
@@ -734,7 +739,7 @@ namespace castor3d
 
 			for ( auto & node : nodes )
 			{
-				if ( node.node->instance.getParent()->isVisible() )
+				if ( node->node->instance.getParent()->isVisible() )
 				{
 					++instanceCount;
 #ifndef NDEBUG
@@ -743,7 +748,7 @@ namespace castor3d
 				}
 			}
 
-			fillNodeCommands( *nodes.front().node
+			fillNodeCommands( *nodes.front()->node
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
 				, instanceCount );
@@ -816,7 +821,8 @@ namespace castor3d
 			}
 		}
 
-		static void fillNodeCommands( NodeArrayT< SubmeshRenderNode > const & nodes
+		template< uint64_t CountT >
+		static void fillNodeCommands( NodesViewT< SubmeshRenderNode, CountT > const & nodes
 			, DrawMeshTesksIndexedCommand *& indirectMeshBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer )
@@ -825,17 +831,16 @@ namespace castor3d
 
 			for ( auto & node : nodes )
 			{
-				++instanceCount;
-
-				if ( node.node->instance.getParent()->isVisible() )
+				if ( node->node->instance.getParent()->isVisible() )
 				{
+					++instanceCount;
 #	ifndef NDEBUG
 					checkBuffers( *nodes.front().node, *node.node );
 #	endif
 				}
 			}
 
-			fillNodeCommands( *nodes.front().node
+			fillNodeCommands( *nodes.front()->node
 				, indirectMeshBuffer
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
@@ -929,19 +934,57 @@ namespace castor3d
 	template< typename NodeT >
 	static std::ostream & operator<<( std::ostream & stream, PipelinesDrawnNodesT< NodeT > const & rhs )
 	{
+		stream << "    Submeshes " << rhs.size() << " pipelines\n";
 		for ( auto & [id, pipelineNodes] : rhs )
 		{
 			auto & pipeline = pipelineNodes.pipeline;
 			auto & buffers = pipelineNodes.buffers;
-			stream << "    Pipeline 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << pipeline.pipeline;
+			stream << "        Pipeline 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << pipeline.pipeline;
 			stream << ": " << std::dec << buffers.size() << " buffers\n";
 
 			for ( auto & [buffer, nodes] : buffers )
 			{
 				if ( buffer )
 				{
-					stream << "        Buffer 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << buffer;
+					stream << "            Buffer 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << buffer;
 					stream << ": " << std::dec << nodes.size() << " nodes\n";
+				}
+			}
+		}
+
+		return stream;
+	}
+
+	template< typename NodeT >
+	static std::ostream & operator<<( std::ostream & stream, InstantiatedPipelinesNodesT< NodeT > const & rhs )
+	{
+		stream << "    Instantiated Submeshes " << rhs.size() << " pipelines\n";
+		for ( auto & [id, pipelineNodes] : rhs )
+		{
+			auto & pipeline = pipelineNodes.pipeline;
+
+			if ( pipeline.pipeline )
+			{
+				auto & buffers = pipelineNodes.buffers;
+				stream << "        Pipeline 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << pipeline.pipeline;
+				stream << ": " << std::dec << buffers.size() << " buffers\n";
+
+				for ( auto & [buffer, submeshes] : buffers )
+				{
+					if ( buffer )
+					{
+						stream << "            Buffer 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << buffer;
+						stream << ": " << std::dec << submeshes.size() << " submeshes\n";
+
+						for ( auto & [submesh, nodes] : submeshes )
+						{
+							if ( buffer )
+							{
+								stream << "                Submesh 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << submesh;
+								stream << ": " << std::dec << nodes.size() << " nodes\n";
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1124,8 +1167,9 @@ namespace castor3d
 		fillIndirectBuffers();
 		renderPass.onSortNodes( renderPass );
 #if C3D_PrintNodesCounts
-		log::debug << renderPass.getName() << ": " << m_drawnSubmeshNodes.size() << " pipelines, " << m_submeshNodes.nodesCount() << " nodes\n";
+		log::debug << renderPass.getName() << ":\n";
 		log::debug << m_drawnSubmeshNodes << "\n";
+		log::debug << m_instancedSubmeshNodes << "\n";
 #endif
 	}
 
@@ -1169,8 +1213,9 @@ namespace castor3d
 		fillIndirectBuffers();
 		renderPass.onSortNodes( renderPass );
 #if C3D_PrintNodesCounts
-		log::debug << renderPass.getName() << ": " << m_drawnSubmeshNodes.size() << " pipelines, " << m_submeshNodes.nodesCount() << " nodes\n";
+		log::debug << renderPass.getName() << ":\n";
 		log::debug << m_drawnSubmeshNodes << "\n";
+		log::debug << m_instancedSubmeshNodes << "\n";
 #endif
 	}
 
@@ -1214,14 +1259,18 @@ namespace castor3d
 					: nullptr;
 				auto indirectMshBuffer = origIndirectMshBuffer;
 
-				for ( auto & [pipeline, isFrontCulled, buffers] : m_submeshNodes )
+				for ( auto & [_, pipelinesNodes] : m_submeshNodes )
 				{
+					auto & pipeline = pipelinesNodes.pipeline;
+
 					if ( !pipeline.pipeline )
 					{
 						continue;
 					}
 
-					auto dstPipelineIt = m_drawnSubmeshNodes.emplace( pipeline, isFrontCulled );
+					auto & buffers = pipelinesNodes.buffers;
+					auto dstPipelineIt = m_drawnSubmeshNodes.emplace( pipelinesNodes.pipeline
+						, pipelinesNodes.isFrontCulled );
 
 					for ( auto & [buffer, nodes] : buffers )
 					{
@@ -1259,26 +1308,29 @@ namespace castor3d
 					}
 				}
 
-				for ( auto & [pipeline, buffers] : m_instancedSubmeshNodes )
+				for ( auto & [_, pipelinesNodes] : m_instancedSubmeshNodes )
 				{
+					auto & pipeline = pipelinesNodes.pipeline;
+					auto & buffers = pipelinesNodes.buffers;
+
 					for ( auto & [buffer, passes] : buffers )
 					{
-						for ( auto & [pass, submeshes] : passes )
-						{
-							for ( auto & [submesh, nodes] : submeshes )
+						//for ( auto & [pass, submeshes] : passes )
+						//{
+							for ( auto & [submesh, nodes] : passes )
 							{
 								queuerndnd::fillNodeCommands( nodes
 									, indirectMshBuffer
 									, indirectIdxBuffer
 									, indirectNIdxBuffer );
 								++m_visible.objectCount;
-								m_visible.faceCount += uint32_t( nodes.front().node->data.getFaceCount() * nodes.size() );
-								m_visible.vertexCount += uint32_t( nodes.front().node->data.getPointsCount() * nodes.size() );
+								m_visible.faceCount += uint32_t( nodes.front()->node->data.getFaceCount() * nodes.size() );
+								m_visible.vertexCount += uint32_t( nodes.front()->node->data.getPointsCount() * nodes.size() );
 								CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= m_submeshMeshletIndirectCommands->getCount() );
 								CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= m_submeshIdxIndirectCommands->getCount() );
 								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= m_submeshNIdxIndirectCommands->getCount() );
 							}
-						}
+						//}
 					}
 				}
 
@@ -1288,14 +1340,18 @@ namespace castor3d
 			else
 #endif
 			{
-				for ( auto & [pipeline, isFrontCulled, buffers] : m_submeshNodes )
+				for ( auto & [_, pipelinesNodes] : m_submeshNodes )
 				{
+					auto & pipeline = pipelinesNodes.pipeline;
+
 					if ( !pipeline.pipeline )
 					{
 						continue;
 					}
 
-					auto dstPipelineIt = m_drawnSubmeshNodes.emplace( pipeline, isFrontCulled );
+					auto & buffers = pipelinesNodes.buffers;
+					auto dstPipelineIt = m_drawnSubmeshNodes.emplace( pipelinesNodes.pipeline
+						, pipelinesNodes.isFrontCulled );
 
 					for ( auto & [buffer, nodes] : buffers )
 					{
@@ -1331,24 +1387,27 @@ namespace castor3d
 					}
 				}
 
-				for ( auto & [pipeline, buffers] : m_instancedSubmeshNodes )
+				for ( auto & [_, pipelinesNodes] : m_instancedSubmeshNodes )
 				{
+					auto & pipeline = pipelinesNodes.pipeline;
+					auto & buffers = pipelinesNodes.buffers;
+
 					for ( auto & [buffer, passes] : buffers )
 					{
-						for ( auto & [pass, submeshes] : passes )
-						{
-							for ( auto & [submesh, nodes] : submeshes )
+						//for ( auto & [pass, submeshes] : passes )
+						//{
+							for ( auto & [submesh, nodes] : passes )
 							{
 								queuerndnd::fillNodeCommands( nodes
 									, indirectIdxBuffer
 									, indirectNIdxBuffer );
 								++m_visible.objectCount;
-								m_visible.faceCount += uint32_t( nodes.front().node->data.getFaceCount() * nodes.size() );
-								m_visible.vertexCount += uint32_t( nodes.front().node->data.getPointsCount() * nodes.size() );
+								m_visible.faceCount += uint32_t( nodes.front()->node->data.getFaceCount() * nodes.size() );
+								m_visible.vertexCount += uint32_t( nodes.front()->node->data.getPointsCount() * nodes.size() );
 								CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= m_submeshIdxIndirectCommands->getCount() );
 								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= m_submeshNIdxIndirectCommands->getCount() );
 							}
-						}
+						//}
 					}
 				}
 			}
@@ -1364,14 +1423,18 @@ namespace castor3d
 			auto origIndirectBuffer = m_billboardIndirectCommands->lock( 0u, ashes::WholeSize, 0u );
 			auto indirectBuffer = origIndirectBuffer;
 
-			for ( auto & [pipeline, isFrontCulled, buffers] : m_billboardNodes )
+			for ( auto & [_, pipelinesNodes] : m_billboardNodes )
 			{
+				auto & pipeline = pipelinesNodes.pipeline;
+
 				if ( !pipeline.pipeline )
 				{
 					continue;
 				}
 
-				auto dstPipelineIt = m_drawnBillboardNodes.emplace( pipeline, isFrontCulled );
+				auto & buffers = pipelinesNodes.buffers;
+				auto dstPipelineIt = m_drawnBillboardNodes.emplace( pipelinesNodes.pipeline
+					, pipelinesNodes.isFrontCulled );
 
 				for ( auto & [buffer, nodes] : buffers )
 				{
@@ -1739,7 +1802,7 @@ namespace castor3d
 			, node
 			, frontCulled );
 
-		if ( queuerndnd::addRenderNode( *pipelineId.pipeline
+		if ( queuerndnd::addRenderNode( pipelineId
 			, counted
 			, node.getInstanceCount()
 			, frontCulled
