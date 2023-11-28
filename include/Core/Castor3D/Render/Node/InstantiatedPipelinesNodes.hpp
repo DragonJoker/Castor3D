@@ -337,7 +337,9 @@ namespace castor3d
 			, NodeT const & object
 			, bool isFrontCulled )
 		{
-			auto ires = m_countedNodes.emplace( &object );
+			size_t hash = std::hash< NodeT const * >{}( &object );
+			hash = castor::hashCombine( hash, isFrontCulled );
+			auto ires = m_countedNodes.emplace( hash );
 
 			if ( ires.second )
 			{
@@ -390,7 +392,7 @@ namespace castor3d
 		}
 
 	private:
-		std::unordered_set< NodeT const * > m_countedNodes;
+		std::unordered_set< size_t > m_countedNodes;
 		std::map< uint32_t, PipelineNodes > m_pipelines;
 	};
 }

@@ -7,6 +7,8 @@ See LICENSE file in root folder
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 
+#include <CastorUtils/Miscellaneous/Hash.hpp>
+
 #define C3D_EnsureNodesCounts 1
 
 namespace castor3d
@@ -231,7 +233,6 @@ namespace castor3d
 
 		PipelinesNodesT()
 			: m_nodes{ maxCount }
-			, m_nodeCount{}
 		{
 		}
 
@@ -266,21 +267,22 @@ namespace castor3d
 			, uint32_t drawCount
 			, bool isFrontCulled )
 		{
-			auto ires = m_countedNodes.emplace( node.node, nullptr );
+			size_t hash = std::hash< NodeT const * >{}( node.node );
+			hash = castor::hashCombine( hash, isFrontCulled );
+			auto ires = m_countedNodes.emplace( hash, nullptr );
 
 			if ( ires.second )
 			{
-				CU_Assert( m_nodeCount < maxCount
+				CU_Assert( m_countedNodes.size() < maxCount
 					, "Too many nodes" );
 #if C3D_EnsureNodesCounts
-				if ( m_nodeCount == maxCount )
+				if ( m_countedNodes.size() >= maxCount )
 				{
 					CU_Exception( "Too many nodes" );
 				}
 #endif
-				m_nodes[m_nodeCount] = node;
-				ires.first->second = &m_nodes[m_nodeCount];
-				++m_nodeCount;
+				m_nodes[m_countedNodes.size()] = node;
+				ires.first->second = &m_nodes[m_countedNodes.size()];
 
 				auto it = emplace( pipeline, isFrontCulled );
 				it->nodes.emplace( buffer, *ires.first->second );
@@ -293,7 +295,18 @@ namespace castor3d
 
 		void erase( NodeT const & node )noexcept
 		{
-			auto it = m_countedNodes.find( &node );
+			size_t hash = std::hash< NodeT const * >{}( &node );
+			hash = castor::hashCombine( hash, true );
+			auto it = m_countedNodes.find( hash );
+
+			if ( it != m_countedNodes.end() )
+			{
+				it->second->visible = false;
+			}
+			
+			hash = std::hash< NodeT const * >{}( &node );
+			hash = castor::hashCombine( hash, false );
+			it = m_countedNodes.find( hash );
 
 			if ( it != m_countedNodes.end() )
 			{
@@ -333,7 +346,7 @@ namespace castor3d
 
 		auto nodesCount()const noexcept
 		{
-			return m_nodeCount;
+			return m_countedNodes.size();
 		}
 
 		auto empty()const noexcept
@@ -343,9 +356,8 @@ namespace castor3d
 
 	private:
 		NodeArray m_nodes;
-		uint32_t m_nodeCount;
 		std::map< uint32_t, PipelineNodes > m_pipelines;
-		std::unordered_map< NodeT const *, CountedNode * > m_countedNodes;
+		std::unordered_map< size_t, CountedNode * > m_countedNodes;
 	};
 
 	template< typename NodeT >
