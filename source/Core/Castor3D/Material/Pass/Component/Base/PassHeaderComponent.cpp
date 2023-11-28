@@ -107,9 +107,9 @@ namespace castor3d
 	castor::String const PassHeaderComponent::TypeName = C3D_MakePassBaseComponentName( "header" );
 
 	PassHeaderComponent::PassHeaderComponent( Pass & pass )
-		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< uint32_t > >{ pass, TypeName }
+		: BaseDataPassComponentT< castor::AtomicGroupChangeTracked< bool > >{ pass, TypeName }
 	{
-		m_value = 1u;
+		enableLighting( true );
 	}
 
 	void PassHeaderComponent::accept( ConfigurationVisitorBase & vis )
@@ -139,7 +139,7 @@ namespace castor3d
 			, getOwner()->getId()
 			, getOwner()->getIndex()
 			, getOwner()->getOwner()->getPassCount()
-			, getData()
+			, getData() ? 1u : 0u
 			, 0u );
 	}
 

@@ -69,6 +69,7 @@ namespace castor3d
 		void setLightingModelId( LightingModelID v )
 		{
 			setData( uint32_t( v ) );
+			m_zeroBasedValue = v - 1u;
 		}
 
 		C3D_API static castor::String const TypeName;
@@ -80,6 +81,9 @@ namespace castor3d
 			, castor::String const & subfolder
 			, castor::StringStream & file )const override;
 		void doFillBuffer( PassBuffer & buffer )const override;
+
+	private:
+		uint32_t m_zeroBasedValue;
 	};
 }
 

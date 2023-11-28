@@ -227,6 +227,34 @@ namespace GuiCommon
 			}
 
 			void visit( castor::String const & name
+				, int32_t & enumValue
+				, castor::StringArray const & enumNames
+				, castor3d::ConfigurationVisitor::OnSEnumValueChange onChange
+				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			{
+				m_result->push_back( m_properties->addPropertyET( m_compProps->container
+					, name
+					, make_wxArrayString( enumNames )
+					, &enumValue
+					, std::move( controls )
+					, onChange ) );
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & enumValue
+				, castor::StringArray const & enumNames
+				, castor3d::ConfigurationVisitor::OnUEnumValueChange onChange
+				, castor3d::ConfigurationVisitor::ControlsList controls )override
+			{
+				m_result->push_back( m_properties->addPropertyET( m_compProps->container
+					, name
+					, make_wxArrayString( enumNames )
+					, &enumValue
+					, std::move( controls )
+					, onChange ) );
+			}
+
+			void visit( castor::String const & name
 				, bool & value
 				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
@@ -336,6 +364,34 @@ namespace GuiCommon
 				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
 			{
 				m_result->push_back( m_properties->addPropertyT( m_compProps->container, name, &value, std::move( controls ) ) );
+			}
+
+			void visit( castor::String const & name
+				, int32_t & enumValue
+				, castor::StringArray const & enumNames
+				, castor3d::ConfigurationVisitor::OnSEnumValueChange onChange
+				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			{
+				m_result->push_back( m_properties->addPropertyET( m_compProps->container
+					, name
+					, make_wxArrayString( enumNames )
+					, &enumValue
+					, std::move( controls )
+					, onChange ) );
+			}
+
+			void visit( castor::String const & name
+				, uint32_t & enumValue
+				, castor::StringArray const & enumNames
+				, castor3d::ConfigurationVisitor::OnUEnumValueChange onChange
+				, castor3d::ConfigurationVisitor::AtomicControlsList controls )override
+			{
+				m_result->push_back( m_properties->addPropertyET( m_compProps->container
+					, name
+					, make_wxArrayString( enumNames )
+					, &enumValue
+					, std::move( controls )
+					, onChange ) );
 			}
 
 		private:

@@ -145,7 +145,23 @@ namespace castor3d
 
 	void LightingModelComponent::accept( ConfigurationVisitorBase & vis )
 	{
-		vis.visit( cuT( "Lighting Model" ), m_value );
+		auto types = getOwner()->getOwner()->getEngine()->getPassFactory().listRegisteredTypes();
+		castor::StringArray values;
+
+		for ( auto & entry : types )
+		{
+			values.push_back( entry.name );
+		}
+
+		vis.visit( cuT( "Lighting Model" )
+			, m_zeroBasedValue
+			, values
+			, [this]( uint32_t oldV, uint32_t newV )
+			{
+				m_zeroBasedValue = newV;
+				m_value = newV + 1u;
+			}
+			, ConfigurationVisitorBase::makeControlsList< bool >( nullptr ) );
 	}
 
 	castor::String LightingModelComponent::getLightingModelName()const
