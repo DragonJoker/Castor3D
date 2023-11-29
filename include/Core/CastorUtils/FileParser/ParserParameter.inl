@@ -2,7 +2,6 @@
 #include "CastorUtils/Log/Logger.hpp"
 #include "CastorUtils/Graphics/PixelFormat.hpp"
 #include "CastorUtils/FileParser/FileParserContext.hpp"
-#include "CastorUtils/FileParser/ParserParameterTypeException.hpp"
 #include "CastorUtils/Design/ArrayView.hpp"
 
 namespace castor
@@ -548,6 +547,11 @@ namespace castor
 			if ( params == cuT( "screen_size" ) )
 			{
 				result = castor::System::getScreenSize( 0, value );
+
+				if ( !result )
+				{
+					logger.logError( castor::System::getLastErrorText() );
+				}
 			}
 			else
 			{

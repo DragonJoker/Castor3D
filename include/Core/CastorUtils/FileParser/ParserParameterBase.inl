@@ -463,7 +463,7 @@ namespace castor
 	//*************************************************************************
 
 	template< typename T >
-	T const & ParserParameterBase::get( T & value )
+	T const & ParserParameterBase::get( T & value )const
 	{
 		getParameterValue( *this, value );
 		return value;
