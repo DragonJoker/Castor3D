@@ -31,6 +31,7 @@ namespace castor3d
 			, std::string const & debugName
 			, RenderDevice const & device
 			, CameraUbo const & cameraUbo
+			, HdrConfigUbo const & hdrConfigUbo
 			, ashes::DescriptorSetLayout const & descriptorLayout
 			, uint32_t count
 			, OverlayTextBufferPoolUPtr textBuf = nullptr );
@@ -54,6 +55,7 @@ namespace castor3d
 		Engine & engine;
 		RenderDevice const & device;
 		CameraUbo const & cameraUbo;
+		HdrConfigUbo const & hdrConfigUbo;
 		ashes::DescriptorSetLayout const & descriptorLayout;
 		std::string name;
 		ashes::BufferPtr< OverlayUboConfiguration > overlaysData;

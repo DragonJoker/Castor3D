@@ -68,6 +68,7 @@ namespace castor3d
 		, Scene const & scene
 		, VkExtent2D const & size
 		, Texture const & output
+		, HdrConfigUbo const & hdrConfigUbo
 		, bool drawGlobal )
 		: crg::RunnablePass{ pass
 			, context
@@ -83,7 +84,7 @@ namespace castor3d
 			, graph
 			, 1u
 			, size }
-		, m_renderer{ castor::makeUnique< OverlayRenderer >( device, output, m_timer, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
+		, m_renderer{ castor::makeUnique< OverlayRenderer >( device, output, hdrConfigUbo, m_timer, VK_COMMAND_BUFFER_LEVEL_SECONDARY ) }
 		, m_drawGlobal{ drawGlobal }
 	{
 	}

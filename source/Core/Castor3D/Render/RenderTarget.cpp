@@ -53,8 +53,9 @@ namespace castor3d
 	{
 		enum CombineIdx
 		{
-			CombineLhsIdx = 0u,
-			CombineRhsIdx = 1u,
+			CombineIdxScene = 0u,
+			CombineIdxOverlays = 1u,
+			CombineIdxHdrConfig = 2u,
 		};
 
 		class IntermediatesLister
@@ -1087,6 +1088,7 @@ namespace castor3d
 					, *m_scene
 					, makeExtent2D( m_overlays.getExtent() )
 					, m_overlays
+					, *m_hdrConfigUbo
 					, true );
 				m_overlayPass = result.get();
 				getOwner()->registerTimer( pass.getFullName()
@@ -1121,9 +1123,11 @@ namespace castor3d
 			} );
 		result.addDependency( m_overlayPassDesc );
 		result.addSampledView( source
-			, rendtgt::CombineLhsIdx );
+			, rendtgt::CombineIdxScene );
 		result.addSampledView( m_overlays.sampledViewId
-			, rendtgt::CombineRhsIdx );
+			, rendtgt::CombineIdxOverlays );
+		m_hdrConfigUbo->createPassBinding( result
+			, rendtgt::CombineIdxHdrConfig );
 		result.addOutputColourView( m_combined.targetViewId );
 		return result;
 	}
@@ -1217,18 +1221,19 @@ namespace castor3d
 		{
 			sdw::TraditionalGraphicsWriter writer{ &getEngine()->getShaderAllocator() };
 
-			auto c3d_mapLhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapLhs", rendtgt::CombineLhsIdx, 0u );
-			auto c3d_mapRhs = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapRhs", rendtgt::CombineRhsIdx, 0u );
+			auto c3d_mapScene = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapScene", rendtgt::CombineIdxScene, 0u );
+			auto c3d_mapOverlays = writer.declCombinedImg< FImg2DRgba32 >( "c3d_mapOverlays", rendtgt::CombineIdxOverlays, 0u );
+			C3D_HdrConfig( writer, rendtgt::CombineIdxHdrConfig, 0u );
 
 			// Shader inputs
 			auto inPosition = writer.declInput< sdw::Vec2 >( "inPosition", sdw::EntryPoint::eVertex, 0u );
 			auto inUv = writer.declInput< sdw::Vec2 >( "inUv", sdw::EntryPoint::eVertex, 1u );
-			auto inTextureLhs = writer.declInput< sdw::Vec2 >( "inTextureLhs", sdw::EntryPoint::eFragment, rendtgt::CombineLhsIdx );
-			auto inTextureRhs = writer.declInput< sdw::Vec2 >( "inTextureRhs", sdw::EntryPoint::eFragment, rendtgt::CombineRhsIdx );
+			auto inTextureScene = writer.declInput< sdw::Vec2 >( "inTextureScene", sdw::EntryPoint::eFragment, rendtgt::CombineIdxScene );
+			auto inTextureOverlays = writer.declInput< sdw::Vec2 >( "inTextureOverlays", sdw::EntryPoint::eFragment, rendtgt::CombineIdxOverlays );
 
 			// Shader outputs
-			auto outTextureLhs = writer.declOutput< sdw::Vec2 >( "outTextureLhs", sdw::EntryPoint::eVertex, rendtgt::CombineLhsIdx );
-			auto outTextureRhs = writer.declOutput< sdw::Vec2 >( "outTextureRhs", sdw::EntryPoint::eVertex, rendtgt::CombineRhsIdx );
+			auto outTextureScene = writer.declOutput< sdw::Vec2 >( "outTextureScene", sdw::EntryPoint::eVertex, rendtgt::CombineIdxScene );
+			auto outTextureOverlays = writer.declOutput< sdw::Vec2 >( "outTextureOverlays", sdw::EntryPoint::eVertex, rendtgt::CombineIdxOverlays );
 			auto outColour = writer.declOutput< sdw::Vec4 >( "outColour", sdw::EntryPoint::eFragment, 0 );
 
 			shader::Utils utils{ writer };
@@ -1242,28 +1247,29 @@ namespace castor3d
 			writer.implementEntryPoint( [&]( sdw::VertexIn in
 				, sdw::VertexOut out )
 				{
-					outTextureLhs = utils.topDownToBottomUp( inUv );
-					outTextureRhs = inUv;
+					outTextureScene = utils.topDownToBottomUp( inUv );
+					outTextureOverlays = inUv;
 
 					if ( getTargetType() != TargetType::eWindow )
 					{
-						outTextureLhs.y() = 1.0_f - outTextureLhs.y();
-						outTextureRhs.y() = 1.0_f - outTextureRhs.y();
+						outTextureScene.y() = 1.0_f - outTextureScene.y();
+						outTextureOverlays.y() = 1.0_f - outTextureOverlays.y();
 					}
 
-					outTextureLhs = getSafeBandedCoord( outTextureLhs );
+					outTextureScene = getSafeBandedCoord( outTextureScene );
 					out.vtx.position = vec4( inPosition, 0.0_f, 1.0_f );
 				} );
 
 			writer.implementEntryPoint( [&]( sdw::FragmentIn in
 				, sdw::FragmentOut out )
 				{
-					auto lhsColor = writer.declLocale( "lhsColor"
-						, c3d_mapLhs.lod( inTextureLhs, 0.0_f ) );
-					auto rhsColor = writer.declLocale( "rhsColor"
-						, c3d_mapRhs.lod( inTextureRhs, 0.0_f ) );
-					lhsColor.rgb() *= 1.0_f - rhsColor.a();
-					outColour = vec4( lhsColor.rgb() + rhsColor.rgb(), 1.0_f );
+					auto sceneColor = writer.declLocale( "sceneColor"
+						, c3d_mapScene.lod( inTextureScene, 0.0_f ).rgb() );
+					auto overlaysColor = writer.declLocale( "overlaysColor"
+						, c3d_mapOverlays.lod( inTextureOverlays, 0.0_f ) );
+
+					sceneColor *= 1.0_f - overlaysColor.a();
+					outColour = vec4( sceneColor + overlaysColor.rgb(), 1.0_f );
 				} );
 			module.shader = writer.getBuilder().releaseShader();
 		}
