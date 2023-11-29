@@ -2319,6 +2319,11 @@ namespace castor3d
 
 	void VisibilityResolvePass::countNodes( RenderInfo & info )const
 	{
+		if ( m_deferredLightingFilter != DeferredLightingFilter::eDeferredOnly )
+		{
+			m_nodesPass.countNodes( info );
+		}
+
 		info.drawCalls += m_drawCalls;
 	}
 

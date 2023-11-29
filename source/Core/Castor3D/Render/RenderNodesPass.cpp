@@ -204,6 +204,7 @@ namespace castor3d
 		info.visible.objectCount += visible.objectCount;
 		info.visible.faceCount += visible.faceCount;
 		info.visible.vertexCount += visible.vertexCount;
+		info.visible.billboardCount += visible.billboardCount;
 		info.drawCalls += getDrawCallsCount();
 	}
 

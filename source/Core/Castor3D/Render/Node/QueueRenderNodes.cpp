@@ -36,7 +36,7 @@
 
 CU_ImplementSmartPtr( castor3d, QueueRenderNodes )
 
-#define C3D_PrintNodesCounts 1
+#define C3D_PrintNodesCounts 0
 #define C3D_PrintNodesFullCounts 0
 
 using ashes::operator==;
@@ -1756,6 +1756,7 @@ namespace castor3d
 		auto pipelineId = doGetPipeline( shadowMaps
 			, shadowBuffer
 			, node );
+		m_hasNodes = true;
 
 		if ( queuerndnd::addRenderNode( pipelineId
 			, counted
@@ -1764,7 +1765,7 @@ namespace castor3d
 			, m_billboardNodes
 			, m_nodesIds ) )
 		{
-			m_hasNodes = true;
+			m_pendingBillboards.insert( &counted );
 		}
 	}
 
@@ -1779,15 +1780,16 @@ namespace castor3d
 			, shadowBuffer
 			, node
 			, frontCulled );
+		m_hasNodes = true;
 
-		if ( queuerndnd::addRenderNode( pipelineId
+		if ( !queuerndnd::addRenderNode( pipelineId
 			, counted
 			, node.getInstanceCount()
 			, frontCulled
 			, m_submeshNodes
 			, m_nodesIds ) )
 		{
-			m_hasNodes = true;
+			m_pendingSubmeshes.insert( &counted );
 		}
 	}
 
@@ -1802,15 +1804,16 @@ namespace castor3d
 			, shadowBuffer
 			, node
 			, frontCulled );
+		m_hasNodes = true;
 
-		if ( queuerndnd::addRenderNode( pipelineId
+		if ( !queuerndnd::addRenderNode( pipelineId
 			, counted
 			, node.getInstanceCount()
 			, frontCulled
 			, m_instancedSubmeshNodes
 			, m_nodesIds ) )
 		{
-			m_hasNodes = true;
+			m_pendingSubmeshes.insert( &counted );
 		}
 	}
 
