@@ -1148,7 +1148,6 @@ namespace castor3d
 	{
 		if ( !isDynamic() )
 		{
-			CU_Require( bool( m_sourceBufferOffset ) );
 			return m_sourceBufferOffset;
 		}
 
@@ -1166,7 +1165,6 @@ namespace castor3d
 
 	ObjectBufferOffset const & Submesh::getSourceBufferOffsets()const
 	{
-		CU_Require( bool( m_sourceBufferOffset ) );
 		return m_sourceBufferOffset;
 	}
 
