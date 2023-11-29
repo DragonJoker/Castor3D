@@ -548,7 +548,8 @@ namespace castor3d
 		auto & parsingContext = getParserContext( context );
 		parsingContext.targetType = TargetType::eWindow;
 		parsingContext.size = { 1u, 1u };
-		parsingContext.pixelFormat = castor::PixelFormat::eUNDEFINED;
+		parsingContext.srgbPixelFormat = castor::PixelFormat::eUNDEFINED;
+		parsingContext.hdrPixelFormat = castor::PixelFormat::eUNDEFINED;
 	}
 	CU_EndAttributePush( CSCNSection::eRenderTarget )
 
@@ -592,7 +593,7 @@ namespace castor3d
 		log::info << "Loaded window [" << parsingContext.window.name
 			<< ", HDR(" << parsingContext.window.allowHdr << ")"
 			<< ", VSYNC(" << parsingContext.window.enableVSync << ")"
-			<< ", FS" << parsingContext.window.fullscreen << ")]" << std::endl;
+			<< ", FS(" << parsingContext.window.fullscreen << ")]" << std::endl;
 	}
 	CU_EndAttributePop()
 
@@ -660,11 +661,15 @@ namespace castor3d
 		{
 			params[0]->get( parsingContext.size );
 
-			if ( parsingContext.pixelFormat != castor::PixelFormat::eUNDEFINED )
+			if ( parsingContext.srgbPixelFormat != castor::PixelFormat::eUNDEFINED
+				&& parsingContext.hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
 			{
+				bool allowHdr = parsingContext.targetType == TargetType::eWindow
+					? parsingContext.window.allowHdr
+					: true;
 				parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
 					, parsingContext.size
-					, parsingContext.pixelFormat );
+					, allowHdr ? parsingContext.hdrPixelFormat : parsingContext.srgbPixelFormat );
 				parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
 			}
 		}
@@ -677,15 +682,79 @@ namespace castor3d
 
 		if ( !params.empty() )
 		{
-			params[0]->get( parsingContext.pixelFormat );
+			params[0]->get( parsingContext.srgbPixelFormat );
+			parsingContext.hdrPixelFormat = parsingContext.srgbPixelFormat;
 
-			if ( parsingContext.pixelFormat < castor::PixelFormat::eD16_UNORM )
+			if ( parsingContext.srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
 			{
 				if ( parsingContext.size != castor::Size{ 1u, 1u } )
 				{
+					bool allowHdr = parsingContext.targetType == TargetType::eWindow
+						? parsingContext.window.allowHdr
+						: true;
 					parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
 						, parsingContext.size
-						, parsingContext.pixelFormat );
+						, allowHdr ? parsingContext.hdrPixelFormat : parsingContext.srgbPixelFormat );
+					parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Wrong format for colour" ) );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserRenderTargetSRGBFormat )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !params.empty() )
+		{
+			params[0]->get( parsingContext.srgbPixelFormat );
+
+			if ( parsingContext.srgbPixelFormat < castor::PixelFormat::eD16_UNORM )
+			{
+				if ( parsingContext.size != castor::Size{ 1u, 1u }
+					&& parsingContext.hdrPixelFormat != castor::PixelFormat::eUNDEFINED )
+				{
+					bool allowHdr = parsingContext.targetType == TargetType::eWindow
+						? parsingContext.window.allowHdr
+						: true;
+					parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
+						, parsingContext.size
+						, allowHdr ? parsingContext.hdrPixelFormat : parsingContext.srgbPixelFormat );
+					parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
+				}
+			}
+			else
+			{
+				CU_ParsingError( cuT( "Wrong format for colour" ) );
+			}
+		}
+	}
+	CU_EndAttribute()
+
+	CU_ImplementAttributeParser( parserRenderTargetHDRFormat )
+	{
+		auto & parsingContext = getParserContext( context );
+
+		if ( !params.empty() )
+		{
+			params[0]->get( parsingContext.hdrPixelFormat );
+
+			if ( parsingContext.hdrPixelFormat < castor::PixelFormat::eD16_UNORM )
+			{
+				if ( parsingContext.size != castor::Size{ 1u, 1u }
+					&& parsingContext.srgbPixelFormat != castor::PixelFormat::eUNDEFINED )
+				{
+					bool allowHdr = parsingContext.targetType == TargetType::eWindow
+						? parsingContext.window.allowHdr
+						: true;
+					parsingContext.renderTarget = parsingContext.parser->getEngine()->getRenderTargetCache().add( parsingContext.targetType
+						, parsingContext.size
+						, allowHdr ? parsingContext.hdrPixelFormat : parsingContext.srgbPixelFormat );
 					parsingContext.renderTarget->enableFullLoading( parsingContext.enableFullLoading );
 				}
 			}
@@ -822,7 +891,7 @@ namespace castor3d
 			auto target = parsingContext.renderTarget;
 			log::info << "Loaded target [" << target->getName()
 				<< ", FMT(" << ashes::getName( VkFormat( target->getPixelFormat() ) ) << ")"
-				<< ", VSYNC(" << target->getSize() << ")]" << std::endl;
+				<< ", DIM(" << target->getSize() << ")]" << std::endl;
 
 			if ( parsingContext.inWindow )
 			{

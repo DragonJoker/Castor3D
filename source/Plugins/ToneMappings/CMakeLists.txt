@@ -6,6 +6,7 @@ option( CASTOR_BUILD_TONEMAP_UNCHARTED2 "Build Uncharted 2 Tone mapping plug-in"
 option( CASTOR_BUILD_TONEMAP_ACES "Build ACES Tone mapping plug-in" TRUE )
 
 function( ToneMappingsInit )
+	set( None "no (Not wanted)" PARENT_SCOPE )
 	set( Linear "no (Not wanted)" PARENT_SCOPE )
 	set( Haarm "no (Not wanted)" PARENT_SCOPE )
 	set( Hejl "no (Not wanted)" PARENT_SCOPE )
@@ -21,6 +22,10 @@ function( ToneMappingsBuild )
 		${CASTOR_SOURCE_DIR}/source/Plugins/ToneMappings
 		${CASTOR_BINARY_DIR}/source/Plugins/ToneMappings
 	)
+
+	set( Build ${None} )
+	add_subdirectory( Plugins/ToneMappings/NoneToneMapping )
+	set( None ${Build} PARENT_SCOPE )
 
 	set( Build ${Linear} )
 	add_subdirectory( Plugins/ToneMappings/LinearToneMapping )
@@ -78,6 +83,7 @@ endfunction( ToneMappingsBuild )
 
 function( ToneMappingsSummary msg )
 	set( msg_tmp "\n\n  ToneMapping plugins :" )
+	set( msg_tmp "${msg_tmp}\n    None                 ${None}" )
 	set( msg_tmp "${msg_tmp}\n    Linear               ${Linear}" )
 	if ( ${CASTOR_BUILDGRP_TONEMAPS} )
 		if( ${CASTOR_BUILD_TONEMAP_HAARM} )
@@ -101,6 +107,13 @@ function( ToneMappingsSummary msg )
 endfunction( ToneMappingsSummary )
 
 function( ToneMappingsSetup )
+	cpack_add_component( NoneToneMapping
+		DISPLAY_NAME "No ToneMapping"
+		DESCRIPTION "Allows No Tone mapping (for HDR support)."
+		GROUP Core
+		DEPENDS Castor3D
+		INSTALL_TYPES Minimal Full
+	)
 	cpack_add_component( LinearToneMapping
 		DISPLAY_NAME "Linear ToneMapping"
 		DESCRIPTION "Allows Linear Tone mapping."

@@ -108,9 +108,18 @@ namespace castor3d
 					{
 						return allowHdr
 							? lookup.format == VK_FORMAT_R16G16B16A16_SFLOAT
-								|| lookup.format == VK_FORMAT_R8G8B8A8_UNORM
 							: lookup.format == VK_FORMAT_R8G8B8A8_UNORM;
 					} );
+
+				if ( allowHdr && it == formats.end() )
+				{
+					it = std::find_if( formats.begin()
+						, formats.end()
+						, []( VkSurfaceFormatKHR const & lookup )
+						{
+							return lookup.format == VK_FORMAT_R8G8B8A8_UNORM;
+						} );
+				}
 
 				if ( it != formats.end() )
 				{
@@ -928,7 +937,7 @@ namespace castor3d
 	void RenderWindow::createLoadingScreen()
 	{
 		doCreateLoadingScreen();
-		m_loadingScreen->setRenderPass( *m_renderPass, m_size );
+		m_loadingScreen->setRenderPass( *m_renderPass, m_size, m_swapchainFormat );
 		m_renderMutex.unlock();
 	}
 
@@ -1112,6 +1121,11 @@ namespace castor3d
 		m_swapChain = getDevice()->createSwapChain( rendwndw::getSwapChainCreateInfo( *m_surface
 			, { m_size.getWidth(), m_size.getHeight() }
 			, m_allowHdrSwapchain ) );
+		log::info << "Created SwapChain [" << getName()
+			<< ", FMT(" << ashes::getName( m_swapChain->getFormat() ) << ")"
+			<< ", IMGS(" << m_swapChain->getImageCount() << ")"
+			<< ", DIM(" << makeSize( m_swapChain->getDimensions() ) << ")"
+			<< ", MODE(" << ashes::getName( m_swapChain->getPresentMode() ) << ")]" << std::endl;
 		m_swapChainImages = m_swapChain->getImages();
 
 		if ( !m_renderPass
@@ -1145,6 +1159,7 @@ namespace castor3d
 		doDestroyRenderingResources();
 		m_swapChainImages.clear();
 		m_swapChain.reset();
+		log::info << "Destroyed SwapChain [" << getName() << "]" << std::endl;
 	}
 
 	void RenderWindow::doCreateRenderingResources( QueueData const & queueData )
