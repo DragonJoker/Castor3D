@@ -21,8 +21,8 @@ namespace castor3d
 		static uint64_t constexpr maxNodes = 1024;
 		static uint64_t constexpr maxCount = maxNodes;
 
-		explicit NodesViewT( CountedNode * data )
-			: m_nodes{ castor::makeArrayView( data, maxNodes ) }
+		explicit NodesViewT( castor::ArrayView< CountedNode > data )
+			: m_nodes{ std::move( data ) }
 			, m_count{}
 		{
 		}
@@ -45,8 +45,7 @@ namespace castor3d
 #endif
 
 			m_nodes[m_count] = std::move( node );
-			++m_count;
-			return &m_nodes[m_count];
+			return &m_nodes[m_count++];
 		}
 
 		void clear()noexcept
@@ -114,22 +113,24 @@ namespace castor3d
 			NodesView nodes;
 		};
 
-		explicit BuffersNodesViewT( CountedNode * data )
+		explicit BuffersNodesViewT( castor::ArrayView< CountedNode > data )
 			: m_buffers{ maxBuffers }
 			, m_count{}
 		{
-			if ( data )
+			if ( !data.empty() )
 			{
+				auto index = 0u;
+
 				for ( auto & buffer : m_buffers )
 				{
-					buffer.nodes = NodesView{ data };
-					data += NodesView::maxCount;
+					buffer.nodes = NodesView{ castor::makeArrayView( data.begin() + index, NodesView::maxCount ) };
+					index += NodesView::maxCount;
 				}
 			}
 		}
 
 		BuffersNodesViewT()
-			: BuffersNodesViewT{ nullptr }
+			: BuffersNodesViewT{ castor::ArrayView< CountedNode >{} }
 		{
 		}
 
@@ -258,9 +259,11 @@ namespace castor3d
 					m_nodes.resize( maxCount );
 				}
 
-				auto data = m_nodes.data() + ( m_pipelines.size() * NodesView::maxCount );
 				it = m_pipelines.emplace( id
-					, PipelineNodes{ pipeline, isFrontCulled, NodesView{ data } } ).first;
+					, PipelineNodes{ pipeline
+						, isFrontCulled
+						, NodesView{ castor::makeArrayView( m_nodes.data() + ( m_pipelines.size() * NodesView::maxCount )
+							, NodesView::maxCount ) } } ).first;
 			}
 
 			return &it->second;
@@ -401,8 +404,10 @@ namespace castor3d
 					m_nodes.resize( maxCount );
 				}
 
-				auto data = m_nodes.data() + ( m_pipelines.size() * NodesView::maxCount );
-				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, NodesView{ data } } ).first;
+				it = m_pipelines.emplace( id
+					, PipelineNodes{ pipeline
+						, NodesView{ castor::makeArrayView( m_nodes.data() + ( m_pipelines.size() * NodesView::maxCount )
+							, NodesView::maxCount ) } } ).first;
 			}
 
 			return &it->second;
@@ -420,7 +425,6 @@ namespace castor3d
 		void clear()noexcept
 		{
 			m_pipelines.clear();
-			m_nodes.clear();
 		}
 
 		auto begin()noexcept
