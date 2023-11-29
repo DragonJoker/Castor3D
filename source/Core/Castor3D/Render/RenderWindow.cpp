@@ -1549,7 +1549,7 @@ namespace castor3d
 			m_progressBar->lock();
 			doDestroySwapchain();
 			doCreateSwapchain( queueData );
-			m_loadingScreen->setRenderPass( *m_renderPass, m_size );
+			m_loadingScreen->setRenderPass( *m_renderPass, m_size, m_swapchainFormat );
 			m_progressBar->unlock();
 		}
 		else

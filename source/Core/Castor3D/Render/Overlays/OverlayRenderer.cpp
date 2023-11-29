@@ -29,6 +29,7 @@ See LICENSE file in root folder
 #include "Castor3D/Shader/Shaders/GlslTextureConfiguration.hpp"
 #include "Castor3D/Shader/Shaders/GlslUtils.hpp"
 #include "Castor3D/Shader/Ubos/OverlayUbo.hpp"
+#include "Castor3D/Shader/Ubos/HdrConfigUbo.hpp"
 
 #include <CastorUtils/Graphics/Rectangle.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
@@ -201,6 +202,9 @@ namespace castor3d
 			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eCamera )
 				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
+			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eHdrConfig )
+				, VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER
+				, VK_SHADER_STAGE_FRAGMENT_BIT ) );
 			baseBindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( OverlayBindingId::eOverlays )
 				, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 				, VK_SHADER_STAGE_VERTEX_BIT ) );
@@ -217,25 +221,29 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	OverlayRenderer::OverlaysCommonData::OverlaysCommonData( RenderDevice const & device )
+	OverlayRenderer::OverlaysCommonData::OverlaysCommonData( RenderDevice const & device
+		, HdrConfigUbo const & hdrConfigUbo )
 		: baseDescriptorLayout{ ovrlrend::createBaseDescriptorLayout( device ) }
 		, cameraUbo{ device }
 		, panelVertexBuffer{ std::make_unique< PanelVertexBufferPool >( *device.renderSystem.getEngine()
 			, "PanelOverlays"
 			, device
 			, cameraUbo
+			, hdrConfigUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer ) }
 		, borderVertexBuffer{ std::make_unique< BorderPanelVertexBufferPool >( *device.renderSystem.getEngine()
 			, "BorderOverlays"
 			, device
 			, cameraUbo
+			, hdrConfigUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer ) }
 		, textVertexBuffer{ std::make_unique< TextVertexBufferPool >( *device.renderSystem.getEngine()
 			, "TextOverlays"
 			, device
 			, cameraUbo
+			, hdrConfigUbo
 			, *baseDescriptorLayout
 			, MaxOverlaysPerBuffer
 			, castor::makeUnique< OverlayTextBufferPool >( *device.renderSystem.getEngine()
@@ -636,9 +644,11 @@ namespace castor3d
 
 	OverlayRenderer::OverlaysDrawData::OverlaysDrawData( RenderDevice const & device
 		, VkCommandBufferLevel level
-		, OverlaysCommonData & commonData )
+		, OverlaysCommonData & commonData
+		, bool isHdr )
 		: commands{ device, *device.graphicsData(), "OverlayRenderer", level }
 		, m_commonData{ commonData }
+		, m_isHdr{ isHdr }
 	{
 		std::string name = "Overlays";
 		ashes::VkDescriptorSetLayoutBindingArray textBindings;
@@ -870,6 +880,9 @@ namespace castor3d
 			C3D_Camera( writer
 				, OverlayBindingId::eCamera
 				, 0u );
+			C3D_HdrConfig( writer
+				, OverlayBindingId::eHdrConfig
+				, 0u );
 			C3D_Overlays( writer
 				, OverlayBindingId::eOverlays
 				, 0u );
@@ -959,6 +972,11 @@ namespace castor3d
 							, outComponents );
 					}
 
+					if ( m_isHdr )
+					{
+						outComponents.colour = c3d_hdrConfigData.removeGamma( outComponents.colour );
+					}
+
 					outColour = vec4( outComponents.colour, outComponents.opacity );
 				} );
 
@@ -971,14 +989,15 @@ namespace castor3d
 
 	OverlayRenderer::OverlayRenderer( RenderDevice const & device
 		, Texture const & target
+		, HdrConfigUbo const & hdrConfigUbo
 		, crg::FramePassTimer & timer
 		, VkCommandBufferLevel level )
 		: OwnedBy< RenderSystem >( device.renderSystem )
 		, m_target{ target }
 		, m_timer{ timer }
 		, m_size{ makeSize( m_target.getExtent() ) }
-		, m_common{ device }
-		, m_draw{ device, level, m_common }
+		, m_common{ device, hdrConfigUbo }
+		, m_draw{ device, level, m_common, castor::isFloatingPoint( m_target.getFormat() ) }
 		, m_compute{ device, m_common }
 	{
 		m_common.cameraUbo.cpuUpdate( getSize()

@@ -71,6 +71,7 @@ namespace castor3d
 		 */
 		C3D_API OverlayRenderer( RenderDevice const & device
 			, Texture const & target
+			, HdrConfigUbo const & hdrConfigUbo
 			, crg::FramePassTimer & timer
 			, VkCommandBufferLevel level = VK_COMMAND_BUFFER_LEVEL_PRIMARY );
 		/**
@@ -165,7 +166,8 @@ namespace castor3d
 
 		struct OverlaysCommonData
 		{
-			explicit OverlaysCommonData( RenderDevice const & device );
+			explicit OverlaysCommonData( RenderDevice const & device
+				, HdrConfigUbo const & hdrConfigUbo );
 
 			ashes::DescriptorSetLayoutPtr baseDescriptorLayout;
 
@@ -224,7 +226,8 @@ namespace castor3d
 
 			OverlaysDrawData( RenderDevice const & device
 				, VkCommandBufferLevel level
-				, OverlaysCommonData & commonData );
+				, OverlaysCommonData & commonData
+				, bool isHdr );
 
 			OverlayDrawNode & getPanelNode( RenderDevice const & device
 				, VkRenderPass renderPass
@@ -272,6 +275,7 @@ namespace castor3d
 			std::map< uint32_t, OverlayDrawPipeline > m_borderPipelines;
 			std::map< uint32_t, OverlayDrawPipeline > m_textPipelines;
 			OverlaysCommonData & m_commonData;
+			bool m_isHdr;
 		};
 
 	private:

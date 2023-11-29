@@ -6,6 +6,7 @@ See LICENSE file in root folder
 
 #include "Castor3D/Render/RenderModule.hpp"
 #include "Castor3D/Render/Overlays/OverlaysModule.hpp"
+#include "Castor3D/Shader/Ubos/UbosModule.hpp"
 
 #include <RenderGraph/RunnablePass.hpp>
 #include <RenderGraph/RunnablePasses/RenderPass.hpp>
@@ -45,6 +46,7 @@ namespace castor3d
 			, Scene const & scene
 			, VkExtent2D const & size
 			, Texture const & output
+			, HdrConfigUbo const & hdrConfigUbo
 			, bool drawGlobal = false );
 		/**
 		 *\~english

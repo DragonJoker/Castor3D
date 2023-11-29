@@ -1,4 +1,4 @@
-﻿/*
+/*
 See LICENSE file in root folder
 */
 #ifndef ___C3D_OverlaysModule_H___
@@ -31,6 +31,7 @@ namespace castor3d
 		eTexConfigs,
 		eTexAnims,
 		eCamera,
+		eHdrConfig,
 		eOverlays,
 		eOverlaysIDs,
 		eOverlaysSurfaces,

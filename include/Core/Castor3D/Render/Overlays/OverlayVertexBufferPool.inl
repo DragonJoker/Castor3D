@@ -22,12 +22,14 @@ namespace castor3d
 		, std::string const & debugName
 		, RenderDevice const & device
 		, CameraUbo const & cameraUbo
+		, HdrConfigUbo const & hdrConfigUbo
 		, ashes::DescriptorSetLayout const & descriptorLayout
 		, uint32_t count
 		, OverlayTextBufferPoolUPtr textBuf )
 		: engine{ engine }
 		, device{ device }
 		, cameraUbo{ cameraUbo }
+		, hdrConfigUbo{ hdrConfigUbo }
 		, descriptorLayout{ descriptorLayout }
 		, name{ debugName }
 		, overlaysData{ makeBuffer< OverlayUboConfiguration >( device
@@ -236,6 +238,8 @@ namespace castor3d
 			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eTexAnims ) ) );
 		cameraUbo.createSizedBinding( *result
 			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eCamera ) ) );
+		hdrConfigUbo.createSizedBinding( *result
+			, descriptorLayout.getBinding( uint32_t( OverlayBindingId::eHdrConfig ) ) );
 		result->createBinding( descriptorLayout.getBinding( uint32_t( OverlayBindingId::eOverlaysSurfaces ) )
 			, vertexBuffer.getBuffer().getBuffer()
 			, 0u

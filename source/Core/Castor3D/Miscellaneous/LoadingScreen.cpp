@@ -508,7 +508,7 @@ namespace castor3d
 					, m_device
 					, *m_scene
 					, makeExtent2D( m_colour.getExtent() )
-					, m_colour );
+					, m_colour
 					, m_hdrConfigUbo );
 				m_overlayPass = result.get();
 				return result;
