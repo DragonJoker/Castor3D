@@ -77,8 +77,11 @@ namespace castor3d
 
 	void CpuParticleSystem::onEmit( Particle const & particle )
 	{
-		m_particles[m_firstUnused++] = particle;
-		doOnEmit( particle );
+		if ( m_firstUnused < m_particles.size() )
+		{
+			m_particles[m_firstUnused++] = particle;
+			doOnEmit( particle );
+		}
 	}
 
 	ParticleEmitter * CpuParticleSystem::addEmitter( ParticleEmitterUPtr emitter )
