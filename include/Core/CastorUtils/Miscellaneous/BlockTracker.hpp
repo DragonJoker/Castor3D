@@ -41,6 +41,6 @@ namespace castor
 	};
 }
 
-#define CU_Track() castor::BlockTracker tracker##__LINE__{ __FUNCTION__, __FILE__, uint32_t( __LINE__ ) }
+#define CU_Track() castor::BlockTracker CU_Join( tracker, __LINE__ ){ __FUNCTION__, __FILE__, uint32_t( __LINE__ ) }
 
 #endif

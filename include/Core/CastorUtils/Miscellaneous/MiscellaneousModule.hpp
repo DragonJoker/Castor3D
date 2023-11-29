@@ -7,6 +7,9 @@ See LICENSE file in root folder
 
 #include "CastorUtils/CastorUtils.hpp"
 
+#define CU_Concat( x, y ) x ## y
+#define CU_Join( x, y ) CU_Concat( x, y )
+
 namespace castor
 {
 	/**@name Miscellaneous */

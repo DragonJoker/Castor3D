@@ -44,8 +44,8 @@ namespace castor
 	};
 }
 
-#define CU_TimeNoFile( Name ) castor::BlockTimer timer##__LINE__{ "", __FUNCTION__, Name, uint32_t( __LINE__ ) }
-#define CU_TimeEx( Name ) castor::BlockTimer timer##__LINE__{ __FILE__, __FUNCTION__, Name, uint32_t( __LINE__ ) }
-#define CU_Time() castor::BlockTimer timer##__LINE__{ __FILE__, __FUNCTION__, "", uint32_t( __LINE__ ) }
+#define CU_TimeNoFile( Name ) castor::BlockTimer CU_Join( timer, __LINE__ ){ "", __FUNCTION__, Name, uint32_t( __LINE__ ) }
+#define CU_TimeEx( Name ) castor::BlockTimer CU_Join( timer, __LINE__ ){ __FILE__, __FUNCTION__, Name, uint32_t( __LINE__ ) }
+#define CU_Time() castor::BlockTimer CU_Join( timer, __LINE__ ){ __FILE__, __FUNCTION__, "", uint32_t( __LINE__ ) }
 
 #endif
