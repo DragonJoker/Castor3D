@@ -39,6 +39,8 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserRenderTargetCamera )
 	CU_DeclareAttributeParser( parserRenderTargetSize )
 	CU_DeclareAttributeParser( parserRenderTargetFormat )
+	CU_DeclareAttributeParser( parserRenderTargetSRGBFormat )
+	CU_DeclareAttributeParser( parserRenderTargetHDRFormat )
 	CU_DeclareAttributeParser( parserRenderTargetStereo )
 	CU_DeclareAttributeParser( parserRenderTargetPostEffect )
 	CU_DeclareAttributeParser( parserRenderTargetToneMapping )

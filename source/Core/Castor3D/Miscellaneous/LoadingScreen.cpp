@@ -59,13 +59,14 @@ namespace castor3d
 		static Texture createColour( RenderDevice const & device
 			, crg::ResourcesCache & resources
 			, std::string const & name
-			, castor::Size const & size )
+			, castor::Size const & size
+			, VkFormat format )
 		{
 			return createTexture( device
 				, resources
 				, name + "Col"
 				, size
-				, VK_FORMAT_R8G8B8A8_UNORM
+				, format
 				, ( VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT
 					| VK_IMAGE_USAGE_SAMPLED_BIT ) );
 		}
@@ -259,19 +260,21 @@ namespace castor3d
 		, castor::Size const & size )
 		: m_device{ device }
 		, m_progressBar{ progressBar }
-		, m_graph{ resources.getHandler(), SceneName }
+		, m_graph{ std::make_unique< crg::FrameGraph >( resources.getHandler(), SceneName ) }
 		, m_scene{ std::move( scene ) }
 		, m_background{ *m_scene->getBackground() }
 		, m_renderPass{ renderPass }
+		, m_initialRenderSize{ size }
 		, m_renderSize{ size }
 		, m_camera{ loadscreen::createCamera( *m_scene, m_renderSize ) }
 		, m_culler{ castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *m_camera ) }
-		, m_colour{ loadscreen::createColour( m_device, resources, SceneName, m_renderSize ) }
-		, m_depth{ loadscreen::createDepth( m_device, resources, SceneName, m_renderSize ) }
+		, m_swapchainFormat{ VK_FORMAT_R8G8B8A8_UNORM }
+		, m_colour{ loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat ) }
+		, m_depth{ loadscreen::createDepth( m_device, resources, SceneName, m_initialRenderSize ) }
 		, m_cameraUbo{ m_device }
 		, m_hdrConfigUbo{ m_device }
 		, m_sceneUbo{ loadscreen::createSceneUbo( m_device, m_renderSize ) }
-		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph.getDefaultGroup()
+		, m_backgroundRenderer{ castor::makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
 			, nullptr
 			, m_device
 			, nullptr
@@ -285,7 +288,7 @@ namespace castor3d
 		, m_transparentPassDesc{ &doCreateTransparentPass( m_opaquePassDesc ) }
 		, m_overlayPassDesc{ &doCreateOverlayPass( m_transparentPassDesc ) }
 		, m_windowPassDesc{ &doCreateWindowPass( m_overlayPassDesc ) }
-		, m_runnable{ loadscreen::createRunnableGraph( m_graph, m_device ) }
+		, m_runnable{ loadscreen::createRunnableGraph( *m_graph, m_device ) }
 	{
 	}
 
@@ -363,17 +366,24 @@ namespace castor3d
 	}
 
 	void LoadingScreen::setRenderPass( VkRenderPass renderPass
-		, castor::Size const & renderSize )
+		, castor::Size const & renderSize
+		, VkFormat swapchainFormat )
 	{
 		m_renderPass = renderPass;
 		m_renderSize = renderSize;
 		m_camera->getViewport().resize( m_renderSize );
 		m_device.renderSystem.getEngine()->getControlsManager()->setSize( m_renderSize );
 
+		if ( m_swapchainFormat != swapchainFormat )
+		{
+			m_swapchainFormat = swapchainFormat;
+			m_needsRecreate = true;
+		}
+
 		if ( m_windowPass )
 		{
 			m_windowPass->setRenderPass( renderPass
-				,  makeExtent2D( m_renderSize ) );
+				, makeExtent2D( m_renderSize ) );
 		}
 	}
 
@@ -386,6 +396,35 @@ namespace castor3d
 
 		if ( m_enabled )
 		{
+			if ( m_needsRecreate.exchange( false ) )
+			{
+				auto & resources = *m_colour.resources;
+
+				m_runnable.reset();
+				m_backgroundRenderer.reset();
+				m_colour.destroy();
+				m_graph.reset();
+
+				m_graph = std::make_unique< crg::FrameGraph >( resources.getHandler(), SceneName );
+				m_colour = loadscreen::createColour( m_device, resources, SceneName, m_initialRenderSize, m_swapchainFormat );
+				m_colour.create();
+				m_backgroundRenderer = castor::makeUnique< BackgroundRenderer >( m_graph->getDefaultGroup()
+					, nullptr
+					, m_device
+					, nullptr
+					, SceneName
+					, *m_scene->getBackground()
+					, m_hdrConfigUbo
+					, m_sceneUbo
+					, m_colour.targetViewId
+					, true /*clearColour*/ );
+				m_opaquePassDesc = &doCreateOpaquePass( &m_backgroundRenderer->getPass() );
+				m_transparentPassDesc = &doCreateTransparentPass( m_opaquePassDesc );
+				m_overlayPassDesc = &doCreateOverlayPass( m_transparentPassDesc );
+				m_windowPassDesc = &doCreateWindowPass( m_overlayPassDesc );
+				m_runnable = loadscreen::createRunnableGraph( *m_graph, m_device );
+			}
+
 			m_windowPass->resetCommandBuffer( m_windowPass->getIndex() );
 			m_windowPass->setTarget( framebuffer
 				, { transparentBlackClearColor } );
@@ -399,7 +438,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateOpaquePass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.getDefaultGroup().createPass( "Opaque"
+		auto & result = m_graph->getDefaultGroup().createPass( "Opaque"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -429,7 +468,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateTransparentPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.getDefaultGroup().createPass( "Transparent"
+		auto & result = m_graph->getDefaultGroup().createPass( "Transparent"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -458,7 +497,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateOverlayPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.getDefaultGroup().createPass( "Overlay"
+		auto & result = m_graph->getDefaultGroup().createPass( "Overlay"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
@@ -470,6 +509,7 @@ namespace castor3d
 					, *m_scene
 					, makeExtent2D( m_colour.getExtent() )
 					, m_colour );
+					, m_hdrConfigUbo );
 				m_overlayPass = result.get();
 				return result;
 			} );
@@ -480,7 +520,7 @@ namespace castor3d
 
 	crg::FramePass & LoadingScreen::doCreateWindowPass( crg::FramePass const * previousPass )
 	{
-		auto & result = m_graph.getDefaultGroup().createPass( "Window"
+		auto & result = m_graph->getDefaultGroup().createPass( "Window"
 			, [this]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )

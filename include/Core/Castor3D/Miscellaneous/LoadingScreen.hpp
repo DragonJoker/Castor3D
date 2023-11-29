@@ -47,7 +47,8 @@ namespace castor3d
 		C3D_API void update( CpuUpdater & updater );
 		C3D_API void update( GpuUpdater & updater );
 		C3D_API void setRenderPass( VkRenderPass renderPass
-			, castor::Size const & renderSize );
+			, castor::Size const & renderSize
+			, VkFormat swapchainFormat );
 		/**
 		 *\~english
 		 *\brief		Uploads overlays GPU buffers to VRAM.
@@ -202,14 +203,17 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		ProgressBar & m_progressBar;
-		crg::FrameGraph m_graph;
+		std::unique_ptr< crg::FrameGraph > m_graph;
 		std::atomic_bool m_enabled{};
+		std::atomic_bool m_needsRecreate{};
 		SceneRPtr m_scene;
 		SceneBackground & m_background;
 		VkRenderPass m_renderPass;
+		castor::Size m_initialRenderSize;
 		castor::Size m_renderSize;
 		CameraRPtr m_camera;
 		SceneCullerUPtr m_culler;
+		VkFormat m_swapchainFormat;
 		Texture m_colour;
 		Texture m_depth;
 		CameraUbo m_cameraUbo;

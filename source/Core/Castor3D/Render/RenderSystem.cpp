@@ -741,6 +741,12 @@ namespace castor3d
 			instanceExtensions.addExtension( VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME );
 		}
 #endif
+#if defined( VK_EXT_swapchain_colorspace )
+		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME ) )
+		{
+			instanceExtensions.addExtension( VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME );
+		}
+#endif
 #if defined( VK_USE_PLATFORM_ANDROID_KHR )
 		if ( rendsys::isExtensionAvailable( globalLayerExtensions, VK_KHR_ANDROID_SURFACE_EXTENSION_NAME ) )
 		{

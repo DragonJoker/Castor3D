@@ -336,6 +336,9 @@ namespace castor3d
 		, m_camera{}
 		, m_index{ ++sm_uiCount }
 		, m_name{ cuT( "Target" ) + castor::string::toString( m_index ) }
+		, m_toneMappingName{ ( castor::isFloatingPoint( m_pixelFormat )
+			? castor::String{ cuT( "none" ) }
+			: castor::String{ cuT( "linear" ) } ) }
 		, m_graph{ m_resources.getHandler(), m_name }
 		, m_velocity{ m_device
 			, m_resources
@@ -777,24 +780,27 @@ namespace castor3d
 	void RenderTarget::setToneMappingType( castor::String const & name
 		, Parameters const & parameters )
 	{
-		m_toneMappingName = name;
-
-		if ( m_toneMapping )
+		if ( !castor::isFloatingPoint( getPixelFormat() ) )
 		{
-			getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-				, [this]( RenderDevice const & device
-					, QueueData const & queueData )
-				{
-					if ( m_initialised )
+			m_toneMappingName = name;
+
+			if ( m_toneMapping )
+			{
+				getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
+					, [this]( RenderDevice const & device
+						, QueueData const & queueData )
 					{
-						m_toneMapping->updatePipeline( m_toneMappingName );
-					}
-					else
-					{
-						m_toneMapping->initialise( m_toneMappingName
-							, m_hdrObjects.back().sampledViewId );
-					}
-				} ) );
+						if ( m_initialised )
+						{
+							m_toneMapping->updatePipeline( m_toneMappingName );
+						}
+						else
+						{
+							m_toneMapping->initialise( m_toneMappingName
+								, m_hdrObjects.back().sampledViewId );
+						}
+					} ) );
+			}
 		}
 	}
 
@@ -978,35 +984,21 @@ namespace castor3d
 		if ( result )
 		{
 			m_hdrLastPass = previousPass;
-
-			if ( castor::isFloatingPoint( getPixelFormat() ) )
-			{
-				previousPass = &doInitialiseCopyCommands( device
-					, "HdrCopy"
-					, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
-					, m_srgbObjects.front().wholeViewId
-					, *m_hdrLastPass
-					, progress );
-				m_hdrCopyPassSource = hdrSource;
-			}
-			else
-			{
-				stepProgressBar( progress, "Creating tone mapping pass" );
-				m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
-					, device
-					, m_size
-					, m_graph
-					, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
-					, m_srgbObjects.front().wholeViewId
-					, *m_hdrLastPass
-					, *m_hdrConfigUbo
-					, *m_colourGradingUbo
-					, Parameters{}
-					, progress );
-				m_toneMapping->initialise( m_toneMappingName
-					, m_hdrObjects.back().sampledViewId );
-				previousPass = &m_toneMapping->getPass();
-			}
+			stepProgressBar( progress, "Creating tone mapping pass" );
+			m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
+				, device
+				, m_size
+				, m_graph
+				, crg::ImageViewIdArray{ hdrSource->sampledViewId, hdrTarget->sampledViewId }
+				, m_srgbObjects.front().wholeViewId
+				, *m_hdrLastPass
+				, *m_hdrConfigUbo
+				, *m_colourGradingUbo
+				, Parameters{}
+				, progress );
+			m_toneMapping->initialise( m_toneMappingName
+				, m_hdrObjects.back().sampledViewId );
+			previousPass = &m_toneMapping->getPass();
 		}
 
 		auto srgbSource = &m_srgbObjects.front();

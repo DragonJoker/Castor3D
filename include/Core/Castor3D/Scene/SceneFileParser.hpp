@@ -183,7 +183,8 @@ namespace castor3d
 		SubmeshRPtr submesh{};
 		LightUPtr ownLight{};
 		LightRPtr light{};
-		castor::PixelFormat pixelFormat{};
+		castor::PixelFormat hdrPixelFormat{};
+		castor::PixelFormat srgbPixelFormat{};
 		MaterialObs material{};
 		MaterialPtr ownMaterial{};
 		bool createMaterial{ true };

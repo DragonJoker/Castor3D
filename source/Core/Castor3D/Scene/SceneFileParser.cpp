@@ -53,6 +53,7 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "vsync" ), parserWindowVSync, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "fullscreen" ), parserWindowFullscreen, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "allow_hdr" ), parserWindowAllowHdr, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParser( result, uint32_t( CSCNSection::eWindow ), cuT( "}" ), parserWindowEnd, {} );
 		}
 
 		static void addRenderTargetParsers( castor::AttributeParsers & result )
@@ -62,6 +63,8 @@ namespace castor3d
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "camera" ), parserRenderTargetCamera, { makeParameter< ParameterType::eName >() } );
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "size" ), parserRenderTargetSize, { makeParameter< ParameterType::eSize >() } );
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "format" ), parserRenderTargetFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "hdr_format" ), parserRenderTargetHDRFormat, { makeParameter< ParameterType::ePixelFormat >() } );
+			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "srgb_format" ), parserRenderTargetSRGBFormat, { makeParameter< ParameterType::ePixelFormat >() } );
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "stereo" ), parserRenderTargetStereo, { makeParameter< ParameterType::eFloat >() } );
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "postfx" ), parserRenderTargetPostEffect, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
 			addParser( result, uint32_t( CSCNSection::eRenderTarget ), cuT( "tone_mapping" ), parserRenderTargetToneMapping, { makeParameter< ParameterType::eName >(), makeParameter< ParameterType::eText >() } );
