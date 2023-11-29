@@ -624,12 +624,13 @@ namespace castor3d
 			, Scene const & scene
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, uint32_t *& pipelinesBuffer )
+			, uint32_t *& pipelinesBuffer
+			, uint32_t instanceCount )
 		{
 			fillNodeIndirectCommands( node
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
-				, getInstanceCount( node ) );
+				, instanceCount );
 			( *pipelinesBuffer ) = node.instance.getId( *node.pass, node.data );
 			++pipelinesBuffer;
 		}
@@ -692,13 +693,14 @@ namespace castor3d
 			, DrawMeshTesksIndexedCommand *& indirectMeshBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
-			, uint32_t *& pipelinesBuffer )
+			, uint32_t *& pipelinesBuffer
+			, uint32_t instanceCount )
 		{
 			fillNodeIndirectCommands( node
 				, indirectMeshBuffer
 				, indirectIdxBuffer
 				, indirectNIdxBuffer
-				, getInstanceCount( node ) );
+				, instanceCount );
 			( *pipelinesBuffer ) = node.instance.getId( *node.pass, node.data );
 			++pipelinesBuffer;
 		}
@@ -820,16 +822,20 @@ namespace castor3d
 		stream << "    Drawn " << queuerndnd::getNodesTypeName< NodeT >() << " - " << rhs.size() << " pipelines\n";
 		uint32_t maxBuffersCount{};
 		uint32_t maxNodesCount{};
+		uint32_t totalBuffersCount{};
+		uint32_t totalNodesCount{};
 
 		for ( auto & [id, pipeline] : rhs )
 		{
 			maxBuffersCount = std::max( maxBuffersCount, uint32_t( pipeline.nodes.size() ) );
+			totalBuffersCount += uint32_t( pipeline.nodes.size() );
 			stream << "        Pipeline 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << pipeline.pipeline.pipeline;
 			stream << ": " << std::dec << pipeline.nodes.size() << " buffers\n";
 
 			for ( auto & [buffer, nodes] : pipeline.nodes )
 			{
 				maxNodesCount = std::max( maxNodesCount, uint32_t( nodes.size() ) );
+				totalNodesCount += uint32_t( nodes.size() );
 				stream << "            Buffer 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << buffer;
 				stream << ": " << std::dec << nodes.size() << " nodes\n";
 			}
@@ -837,6 +843,8 @@ namespace castor3d
 
 		stream << "\n        Max. buffers per pipeline: " << maxBuffersCount;
 		stream << "\n        Max. nodes per buffer: " << maxNodesCount;
+		stream << "\n        Total buffers: " << totalBuffersCount;
+		stream << "\n        Total nodes: " << totalNodesCount;
 		stream << "\n        Occupancy: " << rhs.occupancy();
 		return stream;
 	}
@@ -849,28 +857,36 @@ namespace castor3d
 		uint32_t maxPassesCount{};
 		uint32_t maxObjectsCount{};
 		uint32_t maxNodesCount{};
+		uint32_t totalBuffersCount{};
+		uint32_t totalPassesCount{};
+		uint32_t totalObjectsCount{};
+		uint32_t totalNodesCount{};
 
 		for ( auto & [id, pipeline] : rhs )
 		{
 			maxBuffersCount = std::max( maxBuffersCount, uint32_t( pipeline.nodes.size() ) );
+			totalBuffersCount += uint32_t( pipeline.nodes.size() );
 			stream << "        Pipeline 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << pipeline.pipeline.pipeline;
 			stream << ": " << std::dec << pipeline.nodes.size() << " buffers\n";
 
 			for ( auto & [buffer, passes] : pipeline.nodes )
 			{
 				maxPassesCount = std::max( maxPassesCount, uint32_t( passes.size() ) );
+				totalPassesCount = uint32_t( passes.size() );
 				stream << "            Buffer 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << buffer;
 				stream << ": " << std::dec << passes.size() << " passes\n";
 
 				for ( auto & [pass, submeshes] : passes )
 				{
 					maxObjectsCount = std::max( maxObjectsCount, uint32_t( submeshes.size() ) );
+					totalObjectsCount += uint32_t( submeshes.size() );
 					stream << "                Pass 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << pass;
 					stream << ": " << std::dec << submeshes.size() << " submeshes\n";
 					
 					for ( auto & [submesh, node] : submeshes )
 					{
-						maxNodesCount = std::max( maxNodesCount, uint32_t( queuerndnd::getInstanceCount( *node ) ) );
+						maxNodesCount = std::max( maxNodesCount, queuerndnd::getInstanceCount( *node ) );
+						totalNodesCount += queuerndnd::getInstanceCount( *node );
 						stream << "                    Submesh 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << node;
 						stream << ": " << std::dec << queuerndnd::getInstanceCount( *node ) << "\n";
 					}
@@ -882,6 +898,10 @@ namespace castor3d
 		stream << "\n        Max.passes per buffer: " << maxPassesCount;
 		stream << "\n        Max.objects per pass: " << maxObjectsCount;
 		stream << "\n        Max.nodes per object: " << maxNodesCount;
+		stream << "\n        Total buffers: " << totalBuffersCount;
+		stream << "\n        Total passes: " << totalPassesCount;
+		stream << "\n        Total objects: " << totalObjectsCount;
+		stream << "\n        Total nodes: " << totalNodesCount;
 		stream << "\n        Occupancy: " << rhs.occupancy();
 		return stream;
 	}
@@ -917,19 +937,25 @@ namespace castor3d
 		stream << "    Drawn " << queuerndnd::getNodesTypeName< NodeT >() << " - " << rhs.size() << " pipelines";
 		uint32_t maxBuffersCount{};
 		uint32_t maxNodesCount{};
+		uint32_t totalBuffersCount{};
+		uint32_t totalNodesCount{};
 
 		for ( auto & [id, pipeline] : rhs )
 		{
 			maxBuffersCount = std::max( maxBuffersCount, uint32_t( pipeline.nodes.size() ) );
+			totalBuffersCount += uint32_t( pipeline.nodes.size() );
 
 			for ( auto & [buffer, nodes] : pipeline.nodes )
 			{
 				maxNodesCount = std::max( maxNodesCount, uint32_t( nodes.size() ) );
+				totalNodesCount += uint32_t( nodes.size() );
 			}
 		}
 
 		stream << "\n        Max. buffers per pipeline: " << maxBuffersCount;
 		stream << "\n        Max. nodes per buffer: " << maxNodesCount;
+		stream << "\n        Total buffers: " << totalBuffersCount;
+		stream << "\n        Total nodes: " << totalNodesCount;
 		stream << "\n        Occupancy: " << rhs.occupancy();
 		return stream;
 	}
@@ -942,21 +968,29 @@ namespace castor3d
 		uint32_t maxPassesCount{};
 		uint32_t maxObjectsCount{};
 		uint32_t maxNodesCount{};
+		uint32_t totalBuffersCount{};
+		uint32_t totalPassesCount{};
+		uint32_t totalObjectsCount{};
+		uint32_t totalNodesCount{};
 		for ( auto & [id, pipeline] : rhs )
 		{
 			maxBuffersCount = std::max( maxBuffersCount, uint32_t( pipeline.nodes.size() ) );
+			totalBuffersCount += uint32_t( pipeline.nodes.size() );
 
 			for ( auto & [buffer, passes] : pipeline.nodes )
 			{
 				maxPassesCount = std::max( maxPassesCount, uint32_t( passes.size() ) );
+				totalPassesCount = uint32_t( passes.size() );
 
 				for ( auto & [pass, submeshes] : passes )
 				{
 					maxObjectsCount = std::max( maxObjectsCount, uint32_t( submeshes.size() ) );
+					totalObjectsCount += uint32_t( submeshes.size() );
 
 					for ( auto & [submesh, node] : submeshes )
 					{
-						maxNodesCount = std::max( maxNodesCount, uint32_t( queuerndnd::getInstanceCount( *node ) ) );
+						maxNodesCount = std::max( maxNodesCount, queuerndnd::getInstanceCount( *node ) );
+						totalNodesCount += queuerndnd::getInstanceCount( *node );
 					}
 				}
 			}
@@ -966,6 +1000,10 @@ namespace castor3d
 		stream << "\n        Max.passes per buffer: " << maxPassesCount;
 		stream << "\n        Max.objects per pass: " << maxObjectsCount;
 		stream << "\n        Max.nodes per object: " << maxNodesCount;
+		stream << "\n        Total buffers: " << totalBuffersCount;
+		stream << "\n        Total passes: " << totalPassesCount;
+		stream << "\n        Total objects: " << totalObjectsCount;
+		stream << "\n        Total nodes: " << totalNodesCount;
 		stream << "\n        Occupancy: " << rhs.occupancy();
 		return stream;
 	}
@@ -1268,15 +1306,17 @@ namespace castor3d
 								if ( culled.visible )
 								{
 									dstBufferIt->nodes.emplace( culled );
+									auto instanceCount = queuerndnd::getInstanceCount( *culled.node );
 									queuerndnd::fillNodeIndirectCommands( *culled.node
 										, scene
 										, indirectMshBuffer
 										, indirectIdxBuffer
 										, indirectNIdxBuffer
-										, pipelinesBuffer );
-									++m_visible.objectCount;
-									m_visible.faceCount += culled.node->data.getFaceCount();
-									m_visible.vertexCount += culled.node->data.getPointsCount();
+										, pipelinesBuffer
+										, instanceCount );
+									m_visible.objectCount += instanceCount;
+									m_visible.faceCount += culled.node->data.getFaceCount() * instanceCount;
+									m_visible.vertexCount += culled.node->data.getPointsCount() * instanceCount;
 									CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= m_submeshMeshletIndirectCommands->getCount() );
 									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= m_submeshIdxIndirectCommands->getCount() );
 									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= m_submeshNIdxIndirectCommands->getCount() );
@@ -1295,14 +1335,15 @@ namespace castor3d
 						{
 							for ( auto & [submesh, node] : submeshes )
 							{
+								auto instanceCount = queuerndnd::getInstanceCount( *node );
 								queuerndnd::fillNodeIndirectCommands( *node
 									, indirectMshBuffer
 									, indirectIdxBuffer
 									, indirectNIdxBuffer
-									, queuerndnd::getInstanceCount( *node ) );
-								++m_visible.objectCount;
-								m_visible.faceCount += uint32_t( submesh->getFaceCount() * node->getInstanceCount() );
-								m_visible.vertexCount += uint32_t( submesh->getPointsCount() * node->getInstanceCount() );
+									, instanceCount );
+								m_visible.objectCount += instanceCount;
+								m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+								m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
 								CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= m_submeshMeshletIndirectCommands->getCount() );
 								CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= m_submeshIdxIndirectCommands->getCount() );
 								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= m_submeshNIdxIndirectCommands->getCount() );
@@ -1340,14 +1381,16 @@ namespace castor3d
 								if ( culled.visible )
 								{
 									dstBufferIt->nodes.emplace( culled );
+									auto instanceCount = queuerndnd::getInstanceCount( *culled.node );
 									queuerndnd::fillNodeIndirectCommands( *culled.node
 										, scene
 										, indirectIdxBuffer
 										, indirectNIdxBuffer
-										, pipelinesBuffer );
-									++m_visible.objectCount;
-									m_visible.faceCount += culled.node->data.getFaceCount();
-									m_visible.vertexCount += culled.node->data.getPointsCount();
+										, pipelinesBuffer
+										, instanceCount );
+									m_visible.objectCount += instanceCount;
+									m_visible.faceCount += culled.node->data.getFaceCount() * instanceCount;
+									m_visible.vertexCount += culled.node->data.getPointsCount() * instanceCount;
 									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= m_submeshIdxIndirectCommands->getCount() );
 									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= m_submeshNIdxIndirectCommands->getCount() );
 									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
@@ -1368,13 +1411,14 @@ namespace castor3d
 						{
 							for ( auto & [submesh, node] : submeshes )
 							{
+								auto instanceCount = queuerndnd::getInstanceCount( *node );
 								queuerndnd::fillNodeIndirectCommands( *node
 									, indirectIdxBuffer
 									, indirectNIdxBuffer
-									, queuerndnd::getInstanceCount( *node ) );
-								++m_visible.objectCount;
-								m_visible.faceCount += submesh->getFaceCount();
-								m_visible.vertexCount += submesh->getPointsCount();
+									, instanceCount );
+								m_visible.objectCount += instanceCount;
+								m_visible.faceCount += uint32_t( submesh->getFaceCount() * instanceCount );
+								m_visible.vertexCount += uint32_t( submesh->getPointsCount() * instanceCount );
 								CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= m_submeshIdxIndirectCommands->getCount() );
 								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= m_submeshNIdxIndirectCommands->getCount() );
 							}
