@@ -178,7 +178,7 @@ namespace castor3d
 			PipelineLoHashDetails result{};
 
 			uint32_t offset = 0u;
-			result.morphTargetsOffset = VkDeviceSize( ( loHash >> offset ) & lo::maxMorphTargetOffsetSize );
+			result.morphTargetsOffset = VkDeviceSize( ( loHash >> offset ) & lo::maxMorphTargetOffsetMask );
 			offset += lo::maxMorphTargetOffsetSize;
 			result.submeshData = submeshComponents.getRenderData( uint16_t( ( loHash >> offset ) & lo::maxSubmeshDataMask ) );
 
@@ -191,7 +191,7 @@ namespace castor3d
 		{
 			uint32_t offset = 0u;
 			uint64_t result{};
-			result |= uint64_t( flags.morphTargetsOffset & lo::maxMorphTargetOffsetSize ) << offset;
+			result |= uint64_t( flags.morphTargetsOffset & lo::maxMorphTargetOffsetMask ) << offset;
 			offset += lo::maxMorphTargetOffsetSize;
 			result |= uint64_t( uint64_t( submeshComponents.getRenderDataId( flags.submeshData ) ) & lo::maxSubmeshDataMask ) << offset;
 
