@@ -6,7 +6,7 @@ See LICENSE file in root folder
 
 #include "CastorUtils/Design/Signal.hpp"
 #include "CastorUtils/FileParser/AttributeParsersBySection.hpp"
-#include "CastorUtils/FileParser/ParserParameterTypeException.hpp"
+#include "CastorUtils/FileParser/ParserParameter.hpp"
 
 #include "CastorUtils/Log/LogModule.hpp"
 

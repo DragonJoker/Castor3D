@@ -91,7 +91,7 @@ namespace castor
 		 *\return		La valeur.
 		 */
 		template< typename T >
-		T const & get( T & value );
+		T const & get( T & value )const;
 		/**
 		 *\~english
 		 *\return		The parameter value.
@@ -99,7 +99,7 @@ namespace castor
 		 *\return		La valeur du paramètre.
 		 */
 		template< typename T >
-		T get()
+		T get()const
 		{
 			T result;
 			this->get( result );

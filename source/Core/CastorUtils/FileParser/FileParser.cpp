@@ -174,7 +174,7 @@ namespace castor
 					}
 					catch ( Exception & exc )
 					{
-						parseError( exc.getFullDescription() );
+						parseError( exc.getDescription() );
 					}
 				}
 			}

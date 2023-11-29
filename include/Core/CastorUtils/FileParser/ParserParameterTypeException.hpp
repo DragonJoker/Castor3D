@@ -10,7 +10,7 @@ See LICENSE file in root folder
 
 namespace castor
 {
-	template< ParameterType GivenType >
+	template< ParameterType ExpectedT >
 	class ParserParameterTypeException
 		: public castor::Exception
 	{
@@ -23,12 +23,20 @@ namespace castor
 		 *\brief		Constructeur
 		 *\param[in]	expectedType	Le type réel du paramètre.
 		 */
-		inline explicit ParserParameterTypeException( ParameterType expectedType )
-			: castor::Exception( "", "", "", 0 )
+		inline explicit ParserParameterTypeException( ParameterType givenType
+			, char const * file
+			, char const * function
+			, uint32_t line )
+			: castor::Exception{ "Wrong parameter type in parser: user gave " + getTypeName( givenType ) + " while parameter base type is " + ParserParameterHelper< ExpectedT >::StringType
+				, file
+				, function
+				, line }
 		{
-			m_description = "Wrong parameter type in parser: user gave " + string::stringCast< xchar >( ParserParameterHelper< GivenType >::StringType ) + " while parameter base type is " + string::stringCast< xchar >( getTypeName( expectedType ) );
 		}
 	};
 }
+
+#define CU_ParserParameterException( expected, given )\
+	throw castor::ParserParameterTypeException< expected >{ given, __FILE__, __FUNCTION__, uint32_t( __LINE__ ) }
 
 #endif

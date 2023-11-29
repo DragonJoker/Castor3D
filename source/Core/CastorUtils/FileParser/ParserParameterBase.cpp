@@ -11,15 +11,23 @@ namespace castor
 		void doGetParameterValue( ParserParameterBase const & parameter
 			, T & value )
 		{
-			static ParameterType constexpr given = ParserValueTyper< T >::Type;
-			auto expected = parameter.getBaseType();
+			static ParameterType constexpr expected = ParserValueTyper< T >::Type;
+			auto given = parameter.getBaseType();
 
 			if ( given != expected )
 			{
-				throw ParserParameterTypeException< given >( expected );
+				if constexpr ( expected != ParameterType::eSize )
+				{
+					CU_ParserParameterException( expected, given );
+				}
+				else if ( given != ParameterType::eText
+					|| ( given == ParameterType::eText && parameter.get< castor::String >() != "screen_size" ) )
+				{
+					CU_ParserParameterException( expected, given );
+				}
 			}
 
-			value = static_cast< ParserParameter< given > const & >( parameter ).m_value;
+			value = static_cast< ParserParameter< expected > const & >( parameter ).m_value;
 		}
 	}
 

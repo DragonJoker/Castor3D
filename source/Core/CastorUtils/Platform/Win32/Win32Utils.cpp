@@ -29,6 +29,7 @@ namespace castor
 				uint32_t wanted;
 				uint32_t current;
 				castor::Size & size;
+				bool retrieved{};
 			};
 
 			BOOL CALLBACK MonitorEnum( HMONITOR CU_UnusedParam( hMonitor )
@@ -42,9 +43,11 @@ namespace castor
 				{
 					screen->size.set( uint32_t( lprcMonitor->right - lprcMonitor->left )
 						, uint32_t( lprcMonitor->bottom - lprcMonitor->top ) );
+					screen->retrieved = true;
+					return FALSE;
 				}
 
-				return FALSE;
+				return TRUE;
 			}
 		}
 
@@ -52,7 +55,7 @@ namespace castor
 		{
 			util::stSCREEN screen{ index, 0, size };
 			BOOL bRet = ::EnumDisplayMonitors( nullptr, nullptr, util::MonitorEnum, LPARAM( &screen ) );
-			return bRet != FALSE;
+			return bRet != FALSE || screen.retrieved;
 		}
 
 		String getLastErrorText()
