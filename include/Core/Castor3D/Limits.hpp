@@ -127,7 +127,7 @@ namespace castor3d
 	// Light Buffer.
 	static uint32_t constexpr MaxLightsCount = 32'768u;
 	// Pass Buffer.
-	static uint32_t constexpr MaxMaterialsCount = 2'048u;
+	static uint32_t constexpr MaxMaterialsCount = 32'768u;
 	// SSS Profile Buffer.
 	static uint32_t constexpr MaxSssProfilesCount = 128u;
 	// Texture Configuration Buffer.

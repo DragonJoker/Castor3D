@@ -11,37 +11,33 @@ namespace castor3d
 	template< typename NodeT >
 	struct InstantiatedObjectsNodesViewT
 	{
-		static uint64_t constexpr maxObjects = 64ull;
+		using NodeObject = NodeObjectT< NodeT >;
+
+		static uint64_t constexpr maxObjects = 1024ull;
 		static uint64_t constexpr maxCount = maxObjects;
 
-		explicit InstantiatedObjectsNodesViewT()
-			: m_objects{ maxObjects }
-			, m_count{}
-		{
-		}
-
-		auto emplace( NodeT const & object )
+		auto emplace( NodeT const & node )
 		{
 			auto it = std::find_if( begin()
 				, end()
-				, [&object]( NodeT const * lookup )
+				, [&node]( std::pair< NodeObject const *, NodeT const * > const & lookup )
 				{
-					return lookup == &object;
+					return lookup.first == &node.data;
 				} );
 
 			if ( it == end() )
 			{
-				CU_Assert( m_count < maxObjects
+				CU_Assert( size() < maxObjects
 					, "Too many objects for given pass, buffer and pipeline" );
 #if C3D_EnsureNodesCounts
-				if ( m_count == maxObjects )
+				if ( size() == maxObjects )
 				{
 					CU_Exception( "Too many objects for given pass, buffer and pipeline" );
 				}
 #endif
 
-				*it = &object;
-				++m_count;
+				m_objects.emplace_back( &node.data, &node );
+				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
 			return it;
@@ -49,7 +45,7 @@ namespace castor3d
 
 		void clear()noexcept
 		{
-			m_count = 0u;
+			m_objects.clear();
 		}
 
 		auto begin()noexcept
@@ -64,27 +60,31 @@ namespace castor3d
 
 		auto end()noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_objects.end();
 		}
 
 		auto end()const noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_objects.end();
 		}
 
 		auto size()const noexcept
 		{
-			return m_count;
+			return m_objects.size();
 		}
 
 		auto empty()const noexcept
 		{
-			return size() == 0;
+			return m_objects.empty();
+		}
+
+		size_t occupancy()const noexcept
+		{
+			return size() * ( sizeof( NodeObject * ) + sizeof( NodeT * ) );
 		}
 
 	private:
-		std::vector< NodeT const * > m_objects;
-		uint32_t m_count;
+		std::vector< std::pair< NodeObject const *, NodeT const * > > m_objects;
 	};
 
 	template< typename NodeT >
@@ -92,7 +92,7 @@ namespace castor3d
 	{
 		using NodesView = InstantiatedObjectsNodesViewT< NodeT >;
 
-		static uint64_t constexpr maxPasses = 64ull;
+		static uint64_t constexpr maxPasses = 512ull;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxPasses;
 
 		struct PassNodes
@@ -100,12 +100,6 @@ namespace castor3d
 			Pass const * pass{};
 			NodesView nodes;
 		};
-
-		explicit InstantiatedPassesNodesViewT()
-			: m_passes{ maxPasses }
-			, m_count{}
-		{
-		}
 
 		auto emplace( Pass const & pass )
 		{
@@ -118,38 +112,31 @@ namespace castor3d
 
 			if ( it == end() )
 			{
-				CU_Assert( m_count < maxPasses
+				CU_Assert( size() < maxPasses
 					, "Too many passes for given buffer and pipeline" );
 #if C3D_EnsureNodesCounts
-				if ( m_count == maxPasses )
+				if ( size() == maxPasses )
 				{
 					CU_Exception( "Too many passes for given buffer and pipeline" );
 				}
 #endif
 
-				it->pass = &pass;
-				++m_count;
+				m_passes.push_back( PassNodes{ &pass, NodesView{} } );
+				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
 			return it;
 		}
 
-		void emplace( Pass const & pass
-			, NodeT const & object )
+		void emplace( NodeT const & node )
 		{
-			auto it = emplace( pass );
-			it->nodes.emplace( object );
+			auto it = emplace( *node.pass );
+			it->nodes.emplace( node );
 		}
 
 		void clear()noexcept
 		{
-			for ( auto & [pass, nodes] : m_passes )
-			{
-				pass = {};
-				nodes.clear();
-			}
-
-			m_count = 0u;
+			m_passes.clear();
 		}
 
 		auto begin()noexcept
@@ -164,27 +151,38 @@ namespace castor3d
 
 		auto end()noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_passes.end();
 		}
 
 		auto end()const noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_passes.end();
 		}
 
 		auto size()const noexcept
 		{
-			return m_count;
+			return m_passes.size();
 		}
 
 		auto empty()const noexcept
 		{
-			return size() == 0;
+			return m_passes.empty();
+		}
+
+		size_t occupancy()const noexcept
+		{
+			size_t result = size() * ( sizeof( PassNodes ) );
+
+			for ( auto & pass : m_passes )
+			{
+				result += pass.nodes.occupancy();
+			}
+
+			return result;
 		}
 
 	private:
 		std::vector< PassNodes > m_passes;
-		uint32_t m_count;
 	};
 
 	template< typename NodeT >
@@ -201,12 +199,6 @@ namespace castor3d
 			NodesView nodes;
 		};
 
-		explicit InstantiatedBuffersNodesViewT()
-			: m_buffers{ maxBuffers }
-			, m_count{}
-		{
-		}
-
 		auto emplace( ashes::BufferBase const & buffer )
 		{
 			auto it = std::find_if( begin()
@@ -218,39 +210,32 @@ namespace castor3d
 
 			if ( it == end() )
 			{
-				CU_Assert( m_count < maxBuffers
+				CU_Assert( size() < maxBuffers
 					, "Too many buffers for given pipeline" );
 #if C3D_EnsureNodesCounts
-				if ( m_count == maxBuffers )
+				if ( size() == maxBuffers )
 				{
 					CU_Exception( "Too many buffers for given pipeline" );
 				}
 #endif
 
-				it->buffer = &buffer;
-				++m_count;
+				m_buffers.push_back( BufferNodes{ &buffer, NodesView{} } );
+				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
 			return it;
 		}
 
 		void emplace( ashes::BufferBase const & buffer
-			, Pass const & pass
-			, NodeT const & object )
+			, NodeT const & node )
 		{
 			auto it = emplace( buffer );
-			it->nodes.emplace( pass, object );
+			it->nodes.emplace( node );
 		}
 
 		void clear()noexcept
 		{
-			for ( auto & [buffer, nodes] : m_buffers )
-			{
-				buffer = {};
-				nodes.clear();
-			}
-
-			m_count = 0u;
+			m_buffers.clear();
 		}
 
 		auto begin()noexcept
@@ -265,33 +250,45 @@ namespace castor3d
 
 		auto end()noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_buffers.end();
 		}
 
 		auto end()const noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_buffers.end();
 		}
 
 		auto size()const noexcept
 		{
-			return m_count;
+			return m_buffers.size();
 		}
 
 		auto empty()const noexcept
 		{
-			return size() == 0;
+			return m_buffers.empty();
+		}
+
+		size_t occupancy()const noexcept
+		{
+			size_t result = size() * ( sizeof( BufferNodes ) );
+
+			for ( auto & buffer : m_buffers )
+			{
+				result += buffer.nodes.occupancy();
+			}
+
+			return result;
 		}
 
 	private:
 		std::vector< BufferNodes > m_buffers;
-		uint32_t m_count;
 	};
 
 	template< typename NodeT >
 	class InstantiatedPipelinesNodesT
 	{
 	public:
+		using NodeObject = NodeObjectT< NodeT >;
 		using NodesView = InstantiatedBuffersNodesViewT< NodeT >;
 
 		static uint64_t constexpr maxPipelines = 256ull;
@@ -303,10 +300,6 @@ namespace castor3d
 			bool isFrontCulled{};
 			NodesView nodes{};
 		};
-
-		InstantiatedPipelinesNodesT()
-		{
-		}
 
 		auto emplace( PipelineAndID const & pipeline
 			, bool isFrontCulled )
@@ -333,11 +326,11 @@ namespace castor3d
 
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
-			, Pass const & pass
-			, NodeT const & object
+			, NodeT const & node
 			, bool isFrontCulled )
 		{
-			size_t hash = std::hash< NodeT const * >{}( &object );
+			size_t hash = std::hash< NodeObject const * >{}( &node.data );
+			hash = castor::hashCombinePtr( hash, *node.pass );
 			hash = castor::hashCombine( hash, isFrontCulled );
 			auto ires = m_countedNodes.emplace( hash );
 
@@ -352,13 +345,14 @@ namespace castor3d
 				}
 #endif
 				auto it = emplace( pipeline, isFrontCulled );
-				it->nodes.emplace( buffer, pass, object );
+				it->nodes.emplace( buffer, node );
 			}
 		}
 
 		void clear()noexcept
 		{
 			m_pipelines.clear();
+			m_countedNodes.clear();
 		}
 
 		auto begin()noexcept
@@ -389,6 +383,18 @@ namespace castor3d
 		auto empty()const noexcept
 		{
 			return m_pipelines.empty();
+		}
+
+		size_t occupancy()const noexcept
+		{
+			size_t result = m_pipelines.size() * ( sizeof( PipelineNodes ) );
+
+			for ( auto & pipeline : m_pipelines )
+			{
+				result += pipeline.second.nodes.occupancy();
+			}
+
+			return result;
 		}
 
 	private:

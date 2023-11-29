@@ -13,26 +13,27 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	template< typename NodeT, uint64_t CountT >
+	template< typename NodeT >
 	struct NodesViewT
 	{
 		using CountedNode = CountedNodeT< NodeT >;
 
-		static uint64_t constexpr maxNodes = CountT;
-		static uint64_t constexpr maxCount = CountT;
+		static uint64_t constexpr maxNodes = 1024;
+		static uint64_t constexpr maxCount = maxNodes;
 
 		explicit NodesViewT( CountedNode * data )
-			: m_nodes{ data }
+			: m_nodes{ castor::makeArrayView( data, maxNodes ) }
 			, m_count{}
 		{
 		}
 
 		NodesViewT()
-			: NodesViewT{ nullptr }
+			: m_nodes{}
+			, m_count{}
 		{
 		}
 
-		auto emplace( CountedNode & node )
+		CountedNode * emplace( CountedNode node )
 		{
 			CU_Assert( size() < maxNodes
 				, "Too many nodes for given buffer and given pipeline" );
@@ -43,9 +44,9 @@ namespace castor3d
 			}
 #endif
 
-			auto it = end();
-			*it = &node;
+			m_nodes[m_count] = std::move( node );
 			++m_count;
+			return &m_nodes[m_count];
 		}
 
 		void clear()noexcept
@@ -94,7 +95,7 @@ namespace castor3d
 		}
 
 	private:
-		std::array< CountedNode *, maxNodes > m_nodes;
+		castor::ArrayView< CountedNode > m_nodes;
 		size_t m_count;
 	};
 
@@ -102,7 +103,7 @@ namespace castor3d
 	struct BuffersNodesViewT
 	{
 		using CountedNode = CountedNodeT< NodeT >;
-		using NodesView = NodesViewT< NodeT, 4096u >;
+		using NodesView = NodesViewT< NodeT >;
 
 		static uint64_t constexpr maxBuffers = 16ull;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxBuffers;
@@ -143,10 +144,10 @@ namespace castor3d
 
 			if ( it == end() )
 			{
-				CU_Assert( m_count < maxBuffers
+				CU_Assert( size() < maxBuffers
 					, "Too many buffers for given pipeline" );
 #if C3D_EnsureNodesCounts
-				if ( m_count == maxBuffers )
+				if ( size() == maxBuffers )
 				{
 					CU_Exception( "Too many buffers for given pipeline" );
 				}
@@ -159,12 +160,11 @@ namespace castor3d
 			return it;
 		}
 
-		void emplace( ashes::BufferBase const & buffer
-			, CountedNode & node )
+		CountedNode * emplace( ashes::BufferBase const & buffer
+			, CountedNode node )
 		{
 			auto it = emplace( buffer );
-			it->nodes.emplace( node );
-			CU_Require( !it->nodes.empty() );
+			return it->nodes.emplace( std::move( node ) );
 		}
 
 		void clear()noexcept
@@ -208,6 +208,11 @@ namespace castor3d
 			return size() == 0;
 		}
 
+		static constexpr size_t occupancy()noexcept
+		{
+			return maxBuffers * sizeof( BufferNodes );
+		}
+
 	private:
 		std::vector< BufferNodes > m_buffers;
 		uint32_t m_count;
@@ -221,7 +226,7 @@ namespace castor3d
 		using NodeArray = NodeArrayT< NodeT >;
 		using NodesView = BuffersNodesViewT< NodeT >;
 
-		static uint64_t constexpr maxPipelines = 256ull;
+		static uint64_t constexpr maxPipelines = 128ull;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxPipelines;
 
 		struct PipelineNodes
@@ -230,11 +235,6 @@ namespace castor3d
 			bool isFrontCulled{};
 			NodesView nodes{};
 		};
-
-		PipelinesNodesT()
-			: m_nodes{ maxCount }
-		{
-		}
 
 		auto emplace( PipelineAndID const & pipeline
 			, bool isFrontCulled )
@@ -253,6 +253,11 @@ namespace castor3d
 				}
 #endif
 
+				if ( m_nodes.empty() )
+				{
+					m_nodes.resize( maxCount );
+				}
+
 				auto data = m_nodes.data() + ( m_pipelines.size() * NodesView::maxCount );
 				it = m_pipelines.emplace( id
 					, PipelineNodes{ pipeline, isFrontCulled, NodesView{ data } } ).first;
@@ -263,7 +268,7 @@ namespace castor3d
 
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
-			, CountedNode const & node
+			, CountedNode node
 			, uint32_t drawCount
 			, bool isFrontCulled )
 		{
@@ -273,19 +278,17 @@ namespace castor3d
 
 			if ( ires.second )
 			{
-				CU_Assert( m_countedNodes.size() < maxCount
+				CU_Assert( nodesCount() <= maxCount
 					, "Too many nodes" );
 #if C3D_EnsureNodesCounts
-				if ( m_countedNodes.size() >= maxCount )
+				if ( nodesCount() > maxCount )
 				{
 					CU_Exception( "Too many nodes" );
 				}
 #endif
-				m_nodes[m_countedNodes.size()] = node;
-				ires.first->second = &m_nodes[m_countedNodes.size()];
-
 				auto it = emplace( pipeline, isFrontCulled );
-				it->nodes.emplace( buffer, *ires.first->second );
+				node.visible = true;
+				ires.first->second = it->nodes.emplace( buffer, std::move( node ) );
 			}
 			else
 			{
@@ -317,6 +320,8 @@ namespace castor3d
 		void clear()noexcept
 		{
 			m_pipelines.clear();
+			m_countedNodes.clear();
+			m_nodes.clear();
 		}
 
 		auto begin()noexcept
@@ -354,6 +359,12 @@ namespace castor3d
 			return m_pipelines.empty();
 		}
 
+		size_t occupancy()const noexcept
+		{
+			return maxCount * sizeof( CountedNode )
+				+ m_pipelines.size() * ( sizeof( PipelineNodes ) + NodesView::occupancy() );
+		}
+
 	private:
 		NodeArray m_nodes;
 		std::map< uint32_t, PipelineNodes > m_pipelines;
@@ -365,9 +376,10 @@ namespace castor3d
 	{
 	public:
 		using CountedNode = CountedNodeT< NodeT >;
+		using NodeArray = NodeArrayT< NodeT >;
 		using NodesView = BuffersNodesViewT< NodeT >;
 
-		static uint64_t constexpr maxPipelines = 256ull;
+		static uint64_t constexpr maxPipelines = PipelinesNodesT< NodeT >::maxPipelines;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxPipelines;
 
 		struct PipelineNodes
@@ -375,10 +387,6 @@ namespace castor3d
 			PipelineAndID pipeline{};
 			NodesView nodes;
 		};
-
-		PipelinesDrawnNodesT()
-		{
-		}
 
 		auto emplace( PipelineAndID const & pipeline
 			, bool isFrontCulled )
@@ -388,7 +396,13 @@ namespace castor3d
 
 			if ( it == m_pipelines.end() )
 			{
-				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, NodesView{} } ).first;
+				if ( m_nodes.empty() )
+				{
+					m_nodes.resize( maxCount );
+				}
+
+				auto data = m_nodes.data() + ( m_pipelines.size() * NodesView::maxCount );
+				it = m_pipelines.emplace( id, PipelineNodes{ pipeline, NodesView{ data } } ).first;
 			}
 
 			return &it->second;
@@ -406,6 +420,7 @@ namespace castor3d
 		void clear()noexcept
 		{
 			m_pipelines.clear();
+			m_nodes.clear();
 		}
 
 		auto begin()noexcept
@@ -438,7 +453,14 @@ namespace castor3d
 			return m_pipelines.empty();
 		}
 
+		size_t occupancy()const noexcept
+		{
+			return maxCount * sizeof( CountedNode )
+				+ m_pipelines.size() * ( sizeof( PipelineNodes ) + NodesView::occupancy() );
+		}
+
 	private:
+		NodeArray m_nodes;
 		std::map< uint32_t, PipelineNodes > m_pipelines;
 	};
 }
