@@ -31,7 +31,7 @@ namespace castor3d
 	uint32_t SubmeshRenderNode::getInstanceCount()const
 	{
 		auto & instantiation = data.getInstantiation();
-		return instantiation.getData().getRefCount( pass->getOwner() );
+		return instantiation.getData().getRefCount( *pass );
 	}
 
 	MaterialObs SubmeshRenderNode::getMaterial()const
@@ -46,7 +46,7 @@ namespace castor3d
 
 	ObjectBufferOffset const & SubmeshRenderNode::getFinalBufferOffsets()const
 	{
-		return data.getFinalBufferOffsets( instance );
+		return data.getFinalBufferOffsets( instance, *pass );
 	}
 
 	SubmeshComponentCombineID SubmeshRenderNode::getComponentCombineID()const
@@ -61,7 +61,7 @@ namespace castor3d
 
 	ProgramFlags SubmeshRenderNode::getProgramFlags()const
 	{
-		return data.getProgramFlags( *getMaterial() );
+		return data.getProgramFlags( *pass );
 	}
 
 	VkPrimitiveTopology SubmeshRenderNode::getPrimitiveTopology()const
@@ -71,15 +71,14 @@ namespace castor3d
 
 	GeometryBuffers const & SubmeshRenderNode::getGeometryBuffers( PipelineFlags const & flags )const
 	{
-		return data.getGeometryBuffers( *this
-			, flags );
+		return data.getGeometryBuffers( instance, *pass, flags );
 	}
 
 	void SubmeshRenderNode::createMeshletDescriptorSet()const
 	{
 		if ( auto component = data.getComponent< MeshletComponent >() )
 		{
-			component->getData().createDescriptorSet( instance );
+			component->getData().createDescriptorSet( instance, *pass );
 		}
 	}
 
@@ -92,7 +91,7 @@ namespace castor3d
 			CU_Exception( "Can't retrieve MeshletComponent" );
 		}
 
-		return component->getData().getDescriptorSet( instance );
+		return component->getData().getDescriptorSet( instance, *pass );
 	}
 
 	ashes::DescriptorSetLayout const * SubmeshRenderNode::getMeshletDescriptorLayout()const
@@ -117,7 +116,7 @@ namespace castor3d
 
 	GpuBufferOffsetT< MeshletCullData > const & SubmeshRenderNode::getFinalMeshletsBounds()const
 	{
-		return data.getFinalMeshletsBounds( instance );
+		return data.getFinalMeshletsBounds( instance, *pass );
 	}
 
 	GpuBufferOffsetT< castor::Point4f > const & SubmeshRenderNode::getMorphTargets()const
@@ -133,5 +132,10 @@ namespace castor3d
 	SubmeshRenderData * SubmeshRenderNode::getRenderData()const
 	{
 		return data.getRenderData();
+	}
+
+	bool SubmeshRenderNode::isInstanced()const
+	{
+		return data.getInstantiation().isInstanced( *pass );
 	}
 }

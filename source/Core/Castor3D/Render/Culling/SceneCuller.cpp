@@ -80,7 +80,7 @@ namespace castor3d
 		return sceneNode
 			&& sceneNode->isDisplayable()
 			&& sceneNode->isVisible()
-			&& ( node.data.getInstantiation().isInstanced( node.pass->getOwner() )		// Don't cull individual instances
+			&& ( node.data.getInstantiation().isInstanced( *node.pass )		// Don't cull individual instances
 				|| ( frustum.isVisible( node.instance.getBoundingSphere( node.data )	// First test against bounding sphere
 						, sceneNode->getDerivedTransformationMatrix()
 						, sceneNode->getDerivedScale() )

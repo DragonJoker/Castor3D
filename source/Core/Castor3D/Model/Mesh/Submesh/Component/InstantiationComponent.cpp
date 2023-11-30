@@ -6,6 +6,7 @@
 #include "Castor3D/Event/Frame/FrameListener.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
 #include "Castor3D/Material/Material.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -79,7 +80,7 @@ namespace castor3d
 	}
 
 	void InstantiationComponent::ComponentData::gather( PipelineFlags const & flags
-		, MaterialObs material
+		, Pass const & pass
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -88,7 +89,7 @@ namespace castor3d
 	{
 		if ( flags.enableInstantiation() )
 		{
-			auto it = m_instances.find( material );
+			auto it = m_instances.find( pass.getHash() );
 
 			if ( it != m_instances.end()
 				&& it->second.buffer )
@@ -121,24 +122,36 @@ namespace castor3d
 
 	bool InstantiationComponent::ComponentData::ref( MaterialObs material )
 	{
-		bool result{ false };
-		auto it = find( *material );
+		bool result{ true };
 
-		if ( it == m_instances.end() )
+		if ( material )
 		{
-			it = m_instances.emplace( material, Data{ 0u, GpuBufferOffsetT< InstantiationData >{} } ).first;
-		}
+			for ( auto & pass : *material )
+			{
+				if ( !result )
+				{
+					break;
+				}
 
-		auto & data = it->second;
-		++data.count;
+				auto it = find( *pass );
 
-		if ( isInstanced( data.count ) )
-		{
-			data.data.resize( data.count );
-			result = smshcompinst::updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
-				, m_submesh.getParent().getName() + "_" + it->first->getName()
-				, data.count
-				, data.buffer );
+				if ( it == m_instances.end() )
+				{
+					it = m_instances.emplace( pass->getHash(), Data{ 0u, GpuBufferOffsetT< InstantiationData >{} } ).first;
+				}
+
+				auto & data = it->second;
+				++data.count;
+
+				if ( isInstanced( data.count ) )
+				{
+					data.data.resize( data.count );
+					result = smshcompinst::updateBuffer( material->getEngine()->getRenderSystem()->getRenderDevice()
+						, m_submesh.getParent().getName() + "_" + castor::string::toString( it->first )
+						, data.count
+						, data.buffer );
+				}
+			}
 		}
 
 		return result;
@@ -146,36 +159,47 @@ namespace castor3d
 
 	void InstantiationComponent::ComponentData::unref( MaterialObs material )
 	{
-		auto it = find( *material );
-
-		if ( it != end() )
+		if ( !material )
 		{
-			auto & data = it->second;
+			return;
+		}
 
-			if ( data.count )
-			{
-				data.count--;
-			}
+		for ( auto & pass : *material )
+		{
+			auto it = find( *pass );
 
-			if ( !isInstanced( data.count ) )
+			if ( it != end() )
 			{
-				if ( data.buffer )
+				auto & data = it->second;
+
+				if ( data.count )
 				{
-					m_submesh.getParent().getEngine()->getRenderSystem()->getRenderDevice().bufferPool->putBuffer( data.buffer );
-					data.buffer = {};
+					data.count--;
+				}
+
+				if ( !isInstanced( data.count ) )
+				{
+					if ( data.buffer )
+					{
+						m_submesh.getParent().getEngine()->getRenderSystem()->getRenderDevice().bufferPool->putBuffer( data.buffer );
+						data.buffer = {};
+					}
 				}
 			}
 		}
 	}
 
-	uint32_t InstantiationComponent::ComponentData::getRefCount( MaterialObs material )const
+	uint32_t InstantiationComponent::ComponentData::getRefCount( Pass const & pass )const
 	{
 		uint32_t result = 0;
-		auto it = find( *material );
+
+		auto it = find( pass );
 
 		if ( it != end() )
 		{
-			result = it->second.count;
+			result = m_submesh.isDynamic()
+				? 1u
+				: it->second.count;
 		}
 
 		return result;
@@ -193,6 +217,17 @@ namespace castor3d
 		return count;
 	}
 
+	InstantiationComponent::InstanceDataMap::const_iterator InstantiationComponent::ComponentData::find( Pass const & pass )const
+	{
+		return m_instances.find( pass.getHash() );
+	}
+
+	InstantiationComponent::InstanceDataMap::iterator InstantiationComponent::ComponentData::find( Pass const & pass )
+	{
+		needsUpdate();
+		return m_instances.find( pass.getHash() );
+	}
+
 	bool InstantiationComponent::ComponentData::doInitialise( RenderDevice const & device )
 	{
 		bool result = true;
@@ -204,7 +239,7 @@ namespace castor3d
 				if ( isInstanced( data.second.count ) )
 				{
 					smshcompinst::updateBuffer( device
-						, m_submesh.getParent().getName() + "_" + data.first->getName()
+						, m_submesh.getParent().getName() + "_" + castor::string::toString( data.first )
 						, data.second.count
 						, data.second.buffer );
 				}
@@ -260,20 +295,20 @@ namespace castor3d
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
-	ProgramFlags InstantiationComponent::getProgramFlags( Material const & material )const noexcept
+	ProgramFlags InstantiationComponent::getProgramFlags( Pass const & pass )const noexcept
 	{
 		auto data = getDataT< ComponentData >();
-		auto it = data->find( material );
+		auto it = data->find( pass );
 		return ( it != data->end() && it->second.buffer && !getOwner()->isDynamic() )
 			? ProgramFlag::eInstantiation
 			: ProgramFlag{};
 	}
 
-	bool InstantiationComponent::isInstanced( MaterialObs material )const
+	bool InstantiationComponent::isInstanced( Pass const & pass )const
 	{
 		auto data = getDataT< ComponentData >();
 		return !getOwner()->isDynamic()
-			&& data->isInstanced( data->getRefCount( material ) );
+			&& data->isInstanced( data->getRefCount( pass ) );
 	}
 
 	bool InstantiationComponent::isInstanced()const

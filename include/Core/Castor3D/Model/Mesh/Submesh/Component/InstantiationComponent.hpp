@@ -61,7 +61,7 @@ namespace castor3d
 			GpuBufferOffsetT< InstantiationData > buffer;
 			std::vector< InstantiationData > data;
 		};
-		using InstanceDataMap = std::map< Material const *, Data >;
+		using InstanceDataMap = std::map< uint32_t, Data >;
 
 		struct ComponentData
 			: public SubmeshComponentData
@@ -72,7 +72,7 @@ namespace castor3d
 			 *\copydoc		castor3d::SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
-				, MaterialObs material
+				, Pass const & pass
 				, ashes::BufferCRefArray & buffers
 				, std::vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -112,7 +112,7 @@ namespace castor3d
 			 *\param[in]	material	Le matériau pour lequel le compte est récupéré
 			 *\return		La valeur
 			 */
-			C3D_API uint32_t getRefCount( MaterialObs material )const;
+			C3D_API uint32_t getRefCount( Pass const & pass )const;
 			/**
 			 *\~english
 			 *\return		The maximum instances count, amongst all materials.
@@ -129,6 +129,9 @@ namespace castor3d
 			*	Accesseurs.
 			*/
 			/**@{*/
+			C3D_API InstanceDataMap::const_iterator find( Pass const & pass )const;
+			C3D_API InstanceDataMap::iterator find( Pass const & pass );
+
 			inline uint32_t getThreshold()const
 			{
 				return m_threshold;
@@ -142,17 +145,6 @@ namespace castor3d
 			inline InstanceDataMap::iterator end()
 			{
 				return m_instances.end();
-			}
-
-			inline InstanceDataMap::const_iterator find( Material const & material )const
-			{
-				return m_instances.find( &material );
-			}
-
-			inline InstanceDataMap::iterator find( Material const & material )
-			{
-				needsUpdate();
-				return m_instances.find( &material );
 			}
 
 			inline bool isInstanced( uint32_t count )const
@@ -192,16 +184,16 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		C3D_API ProgramFlags getProgramFlags( Material const & material )const noexcept override;
+		C3D_API ProgramFlags getProgramFlags( Pass const & pass )const noexcept override;
 		/**
 			*\~english
-			*\param[in]	material	The material.
+			*\param[in]	pass	The material pass.
 			*\return		\p true if the instance count for given material is greater than the threshold.
 			*\~french
-			*\param[in]	material	Le matériau.
+			*\param[in]	pass	La passe de matériau.
 			*\return		\p true si le nombre d'instances pour le matériau donné est plus grand que le seuil.
 			*/
-		C3D_API bool isInstanced( MaterialObs material )const;
+		C3D_API bool isInstanced( Pass const & pass )const;
 		/**
 			*\~english
 			*\return		\p true if the max instance count is greater than the threshold.

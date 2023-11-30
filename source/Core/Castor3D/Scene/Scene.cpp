@@ -967,7 +967,7 @@ namespace castor3d
 							, submesh.getMeshletsCount()
 							, submeshIt.second.second->modelData );
 						geometry.fillEntryOffsets( submeshIt.second.first
-							, submesh.getVertexOffset( geometry )
+							, submesh.getVertexOffset( geometry, *passIt.first )
 							, submesh.getIndexOffset()
 							, submesh.getMeshletOffset() );
 					}

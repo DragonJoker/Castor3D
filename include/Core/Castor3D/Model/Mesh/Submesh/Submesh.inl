@@ -21,7 +21,7 @@ namespace castor3d
 	inline void Submesh::setDefaultMaterial( MaterialObs mat )
 	{
 		m_defaultMaterial = mat;
-		instantiate( nullptr, {}, mat, false );
+		instantiate( {}, mat, false );
 	}
 
 	inline void Submesh::disableSceneUpdate()

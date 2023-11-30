@@ -56,6 +56,7 @@ namespace castor3d
 		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;
 		C3D_API SceneNode & getSceneNode()const;
 		C3D_API SubmeshRenderData * getRenderData()const;
+		C3D_API bool isInstanced()const;
 
 		Pass * pass;
 		DataType & data;

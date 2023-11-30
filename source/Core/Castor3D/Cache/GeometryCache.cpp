@@ -37,8 +37,7 @@ namespace castor3d
 		size_t result = std::hash< castor::String >{}( geometry.getName() );
 		castor::hashCombine( result, submesh.getOwner()->getName() );
 		castor::hashCombine( result, submesh.getId() );
-		castor::hashCombine( result, pass.getOwner()->getName() );
-		castor::hashCombine( result, pass.getIndex() );
+		castor::hashCombine( result, pass.getHash() );
 		return result;
 	}
 

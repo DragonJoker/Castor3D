@@ -27,7 +27,7 @@ namespace castor3d
 		, Pass const & pass )
 	{
 		size_t result = std::hash< BillboardBase const * >{}( &billboard );
-		castor::hashCombinePtr( result, pass );
+		castor::hashCombine( result, pass.getHash() );
 		return result;
 	}
 

@@ -97,7 +97,7 @@ namespace castor3d
 
 		struct PassNodes
 		{
-			Pass const * pass{};
+			uint32_t passId{};
 			NodesView nodes;
 		};
 
@@ -107,7 +107,7 @@ namespace castor3d
 				, end()
 				, [&pass]( PassNodes const & lookup )
 				{
-					return lookup.pass == &pass;
+					return lookup.passId == pass.getHash();
 				} );
 
 			if ( it == end() )
@@ -121,7 +121,7 @@ namespace castor3d
 				}
 #endif
 
-				m_passes.push_back( PassNodes{ &pass, NodesView{} } );
+				m_passes.push_back( PassNodes{ pass.getHash(), NodesView{} } );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
@@ -190,7 +190,7 @@ namespace castor3d
 	{
 		using NodesView = InstantiatedPassesNodesViewT< NodeT >;
 
-		static uint64_t constexpr maxBuffers = 16ull;
+		static uint64_t constexpr maxBuffers = BuffersNodesViewT< NodeT >::maxBuffers;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxBuffers;
 
 		struct BufferNodes
@@ -289,9 +289,10 @@ namespace castor3d
 	{
 	public:
 		using NodeObject = NodeObjectT< NodeT >;
+		using CountedNode = CountedNodeT< NodeT >;
 		using NodesView = InstantiatedBuffersNodesViewT< NodeT >;
 
-		static uint64_t constexpr maxPipelines = 256ull;
+		static uint64_t constexpr maxPipelines = PipelinesNodesT< NodeT >::maxPipelines;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxPipelines;
 
 		struct PipelineNodes
@@ -327,10 +328,12 @@ namespace castor3d
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
 			, NodeT const & node
+			, CountedNode culled
+			, uint32_t drawCount
 			, bool isFrontCulled )
 		{
 			size_t hash = std::hash< NodeObject const * >{}( &node.data );
-			hash = castor::hashCombinePtr( hash, *node.pass );
+			hash = castor::hashCombine( hash, node.pass->getHash() );
 			hash = castor::hashCombine( hash, isFrontCulled );
 			auto ires = m_countedNodes.emplace( hash );
 

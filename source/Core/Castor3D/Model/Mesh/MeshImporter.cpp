@@ -119,7 +119,7 @@ namespace castor3d
 		{
 			for ( auto & submesh : mesh )
 			{
-				submesh->instantiate( nullptr, {}, submesh->getDefaultMaterial(), false );
+				submesh->instantiate( {}, submesh->getDefaultMaterial(), false );
 			}
 		}
 

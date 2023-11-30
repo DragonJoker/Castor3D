@@ -86,7 +86,7 @@ namespace castor3d
 	}
 
 	void PassMasksComponent::ComponentData::gather( PipelineFlags const & flags
-		, MaterialObs material
+		, Pass const & pass
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts

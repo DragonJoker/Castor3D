@@ -30,12 +30,12 @@ namespace castor3d
 
 	namespace smsh
 	{
-		static size_t hash( SubmeshRenderNode const & node
+		static size_t hash( Submesh const & submesh
+			, Geometry const & geometry
+			, Pass const & pass
 			, PipelineFlags const & flags )
 		{
-			size_t result = node.data.isDynamic()
-				? std::hash< Geometry const * >{}( &node.instance )
-				: std::hash< MaterialObs >{}( node.pass->getOwner() );
+			size_t result = geometry.getHash( pass, submesh );
 			result = castor::hashCombine( result, flags.m_shaderFlags.value() );
 			result = castor::hashCombine( result, flags.m_programFlags.value() );
 			result = castor::hashCombine( result, flags.submesh.baseId );
@@ -538,13 +538,13 @@ namespace castor3d
 		}
 	}
 
-	ProgramFlags Submesh::getProgramFlags( Material const & material )const
+	ProgramFlags Submesh::getProgramFlags( Pass const & pass )const
 	{
 		ProgramFlags result{};
 
 		for ( auto & component : m_components )
 		{
-			result |= component.second->getProgramFlags( material );
+			result |= component.second->getProgramFlags( pass );
 		}
 
 		return result;
@@ -562,65 +562,14 @@ namespace castor3d
 		return result;
 	}
 
-	void Submesh::instantiate( Geometry const * geometry
-		, MaterialObs oldMaterial
-		, MaterialObs newMaterial
-		, bool update )
-	{
-		if ( oldMaterial != newMaterial )
-		{
-			if ( update && m_instantiation )
-			{
-				auto & data = m_instantiation->getData();
-				data.unref( oldMaterial );
-
-				if ( data.ref( newMaterial ) )
-				{
-					m_geometryBuffers.clear();
-				}
-			}
-		}
-
-		if ( geometry && isDynamic() )
-		{
-			if ( auto meshletComponent = getComponent< MeshletComponent >() )
-			{
-				meshletComponent->getData().instantiate( *geometry );
-			}
-
-			auto it = m_finalBufferOffsets.emplace( geometry, ObjectBufferOffset{} ).first;
-
-			if ( m_initialised
-				&& !it->second )
-			{
-				// Initialise only if the submesh itself is already initialised,
-				// because if it is not, the buffers will be initialised by the call to initialise().
-				ashes::BufferBase const * indexBuffer{};
-
-				if ( m_indexMapping )
-				{
-					indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
-				}
-
-				auto combine = getComponentCombine();
-				auto & engine = *getOwner()->getEngine();
-				auto & components = engine.getSubmeshComponentsRegister();
-				remFlags( combine, components.getSkinFlag() );
-				RenderDevice & device = engine.getRenderSystem()->getRenderDevice();
-				it->second = device.geometryPools->getBuffer( getPointsCount()
-					, indexBuffer
-					, combine );
-			}
-		}
-	}
-
-	GeometryBuffers const & Submesh::getGeometryBuffers( SubmeshRenderNode const & node
+	GeometryBuffers const & Submesh::getGeometryBuffers( Geometry const & geometry
+		, Pass const & pass
 		, PipelineFlags const & flags )const
 	{
-		auto key = smsh::hash( node, flags );
-		auto it = m_geometryBuffers.find( key );
+		auto key = smsh::hash( *this, geometry, pass, flags );
+		auto ires = m_geometryBuffers.emplace( key, GeometryBuffers{} );
 
-		if ( it == m_geometryBuffers.end() )
+		if ( ires.second )
 		{
 			ashes::BufferCRefArray buffers;
 			ashes::UInt64Array offsets;
@@ -633,7 +582,7 @@ namespace castor3d
 				if ( auto data = component.second->getBaseData() )
 				{
 					data->gather( flags
-						, node.pass->getOwner()
+						, pass
 						, buffers
 						, offsets
 						, layouts
@@ -642,17 +591,15 @@ namespace castor3d
 				}
 			}
 
-			GeometryBuffers result;
+			auto & result = ires.first->second;
 			result.indexOffset = getSourceBufferOffsets().getBufferChunk( SubmeshData::eIndex );
-			result.bufferOffset = getFinalBufferOffsets( node.instance );
+			result.bufferOffset = getFinalBufferOffsets( geometry, pass );
 			result.layouts = layouts;
 			result.other = buffers;
 			result.otherOffsets = offsets;
-
-			it = m_geometryBuffers.emplace( key, std::move( result ) ).first;
 		}
 
-		return it->second;
+		return ires.first->second;
 	}
 
 	void Submesh::enableSceneUpdate( bool updateScene )
@@ -1144,14 +1091,15 @@ namespace castor3d
 			&& getOwner()->hasAnimation();
 	}
 
-	ObjectBufferOffset const & Submesh::getFinalBufferOffsets( Geometry const & instance )const
+	ObjectBufferOffset const & Submesh::getFinalBufferOffsets( Geometry const & geometry
+		, Pass const & pass )const
 	{
 		if ( !isDynamic() )
 		{
 			return m_sourceBufferOffset;
 		}
 
-		auto it = m_finalBufferOffsets.find( &instance );
+		auto it = m_finalBufferOffsets.find( geometry.getHash( pass, *this ) );
 
 		if ( it != m_finalBufferOffsets.end() )
 		{
@@ -1175,11 +1123,12 @@ namespace castor3d
 		return meshletComponent->getData().getMeshletsBuffer();
 	}
 
-	GpuBufferOffsetT< MeshletCullData > const & Submesh::getFinalMeshletsBounds( Geometry const & instance )const
+	GpuBufferOffsetT< MeshletCullData > const & Submesh::getFinalMeshletsBounds( Geometry const & geometry
+		, Pass const & pass )const
 	{
 		auto meshletComponent = getComponent< MeshletComponent >();
 		CU_Require( meshletComponent );
-		return meshletComponent->getData().getFinalCullBuffer( instance );
+		return meshletComponent->getData().getFinalCullBuffer( geometry, pass );
 	}
 
 	GpuBufferOffsetT< MeshletCullData > const & Submesh::getSourceMeshletsBounds()const
@@ -1211,9 +1160,10 @@ namespace castor3d
 		return it != m_components.end();
 	}
 
-	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry )const
+	VkDeviceSize Submesh::getVertexOffset( Geometry const & geometry
+		, Pass const & pass )const
 	{
-		return getFinalBufferOffsets( geometry ).getFirstVertex< castor::Point4f >();
+		return getFinalBufferOffsets( geometry, pass ).getFirstVertex< castor::Point4f >();
 	}
 
 	VkDeviceSize Submesh::getIndexOffset()const
@@ -1271,6 +1221,67 @@ namespace castor3d
 		}
 
 		return m_render->getRenderData();
+	}
+
+	void Submesh::doInstantiate( Geometry const * geometry
+		, MaterialObs oldMaterial
+		, MaterialObs newMaterial
+		, bool update )
+	{
+		if ( newMaterial )
+		{
+			newMaterial->initialise();
+		}
+
+		if ( oldMaterial != newMaterial )
+		{
+			if ( update && m_instantiation )
+			{
+				auto & data = m_instantiation->getData();
+
+				data.unref( oldMaterial );
+
+				if ( data.ref( newMaterial ) )
+				{
+					m_geometryBuffers.clear();
+				}
+			}
+		}
+
+		if ( geometry && isDynamic() )
+		{
+			for ( auto & pass : *newMaterial )
+			{
+				if ( auto meshletComponent = getComponent< MeshletComponent >() )
+				{
+					meshletComponent->getData().instantiate( *geometry, *pass );
+				}
+
+				auto it = m_finalBufferOffsets.emplace( geometry->getHash( *pass, *this ), ObjectBufferOffset{} ).first;
+
+				if ( m_initialised
+					&& !it->second )
+				{
+					// Initialise only if the submesh itself is already initialised,
+					// because if it is not, the buffers will be initialised by the call to initialise().
+					ashes::BufferBase const * indexBuffer{};
+
+					if ( m_indexMapping )
+					{
+						indexBuffer = &m_sourceBufferOffset.getBuffer( SubmeshData::eIndex );
+					}
+
+					auto combine = getComponentCombine();
+					auto & engine = *getOwner()->getEngine();
+					auto & components = engine.getSubmeshComponentsRegister();
+					remFlags( combine, components.getSkinFlag() );
+					RenderDevice & device = engine.getRenderSystem()->getRenderDevice();
+					it->second = device.geometryPools->getBuffer( getPointsCount()
+						, indexBuffer
+						, combine );
+				}
+			}
+		}
 	}
 
 	//*********************************************************************************************
