@@ -1,6 +1,5 @@
 #include "Castor3D/Render/Clustered/ClustersConfig.hpp"
 
-#include "Castor3D/Config.hpp"
 #include "Castor3D/Miscellaneous/ConfigurationVisitor.hpp"
 #include "Castor3D/Render/RenderTarget.hpp"
 #include "Castor3D/Scene/SceneFileParser.hpp"

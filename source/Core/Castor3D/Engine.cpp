@@ -1,7 +1,5 @@
 #include "Castor3D/Engine.hpp"
 
-#include "Castor3D/Config.hpp"
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/ImporterFile.hpp"
 #include "Castor3D/Cache/ObjectCache.hpp"
 #include "Castor3D/Event/Frame/FrameListener.hpp"
@@ -58,6 +56,8 @@
 #include <string_view>
 
 CU_ImplementSmartPtr( castor3d, Engine )
+
+#define C3D_GenerateBRDFIntegration 0
 
 namespace castor3d
 {
@@ -163,9 +163,6 @@ namespace castor3d
 		, m_cpuJobs{ std::max( 8u, std::min( 4u, castor::CpuInformations{}.getCoreCount() / 2u ) ) }
 		, m_resources{ m_resourceHandler }
 	{
-#if !C3D_EnableDebugTargets
-		m_config.enableDebugTargets = false;
-#endif
 		m_passFactory = castor::makeUnique< PassFactory >( *this );
 		m_passComponents = castor::makeUnique< PassComponentRegister >( *this );
 		m_submeshComponents = castor::makeUnique< SubmeshComponentRegister >( *this );

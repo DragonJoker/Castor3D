@@ -1,6 +1,5 @@
 #include "Castor3D/Render/Transform/VertexTransforming.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/ObjectBufferOffset.hpp"

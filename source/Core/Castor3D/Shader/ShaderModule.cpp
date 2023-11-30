@@ -1,6 +1,5 @@
 #include "Castor3D/Shader/ShaderModule.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Material/Pass/PassModule.hpp"
 #include "Castor3D/Shader/ShaderBuffers/LightBuffer.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
