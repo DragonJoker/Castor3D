@@ -118,7 +118,7 @@ namespace castor3d::shader
 
 			if ( hasAny( combine, plugin.getTextureFlags() ) )
 			{
-				shader->applyComponents( combine, nullptr, config, imgCompConfig, sampled, uv, components );
+				shader->applyComponents( nullptr, config, imgCompConfig, sampled, uv, components );
 			}
 		}
 	}
@@ -138,7 +138,7 @@ namespace castor3d::shader
 
 			if ( hasAny( combine, plugin.getTextureFlags() ) )
 			{
-				shader->applyComponents( combine, &flags, config, imgCompConfig, sampled, uv, components );
+				shader->applyComponents( &flags, config, imgCompConfig, sampled, uv, components );
 			}
 		}
 	}
@@ -161,7 +161,7 @@ namespace castor3d::shader
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->updateComponent( combine, maps, components, isFrontCulled );
+			shader->updateComponent( maps, components, isFrontCulled );
 		}
 
 		for ( auto & update : m_updateComponents )

@@ -106,8 +106,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void RoughnessMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
-		, PipelineFlags const * flags
+	void RoughnessMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled

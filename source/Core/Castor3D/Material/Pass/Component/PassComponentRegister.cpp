@@ -202,6 +202,9 @@ namespace castor3d
 
 		m_pauseOrder = false;
 		reorderBuffer();
+
+		PassComponentCombine dummy{};
+		registerPassComponentCombine( dummy );
 	}
 
 	PassComponentRegister::~PassComponentRegister()
@@ -228,7 +231,7 @@ namespace castor3d
 			addFlags( result, component.second->getPassFlags() );
 		}
 
-		result.baseId = registerPassComponentCombine( result );
+		registerPassComponentCombine( result );
 		return result;
 	}
 
@@ -536,6 +539,7 @@ namespace castor3d
 		result.configCount = result.flags.empty()
 			? 0u
 			: result.configCount;
+		getEngine()->getTextureUnitCache().registerTextureCombine( result );
 		return result;
 	}
 

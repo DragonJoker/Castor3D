@@ -241,8 +241,7 @@ namespace castor3d
 			*\param[in] components
 			*	Contient les membres du composant.
 			*/
-			C3D_API virtual void applyComponents( TextureCombine const & combine
-				, PipelineFlags const * flags
+			C3D_API virtual void applyComponents( PipelineFlags const * flags
 				, shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled
@@ -294,8 +293,7 @@ namespace castor3d
 			*\param[in,out] components
 			*	Contient les membres du composant.
 			*/
-			C3D_API virtual void updateComponent( TextureCombine const & combine
-				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			C3D_API virtual void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, shader::BlendComponents & components
 				, bool isFrontCulled )const
 			{

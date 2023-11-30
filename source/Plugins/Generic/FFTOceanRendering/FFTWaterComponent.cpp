@@ -152,8 +152,7 @@ namespace ocean_fft
 		res.getMember< sdw::Float >( "waterDensity", true ) += src.getMember< sdw::Float >( "waterDensity", true ) * passMultiplier;
 	}
 
-	void FFTWaterComponent::ComponentsShader::updateComponent( TextureCombine const & combine
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+	void FFTWaterComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, c3d::BlendComponents & components
 		, bool isFrontCulled )const
 	{

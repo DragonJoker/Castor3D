@@ -105,8 +105,7 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void SheenRoughnessMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
-		, PipelineFlags const * flags
+	void SheenRoughnessMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled

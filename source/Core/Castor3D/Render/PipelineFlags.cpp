@@ -122,6 +122,9 @@ namespace castor3d
 			auto passComponentsId = flags.pass.baseId
 				? flags.pass.baseId
 				: passComponents.getPassComponentCombineID( flags.pass );
+			auto textureComponentsId = flags.textures.baseId
+				? flags.textures.baseId
+				: passComponents.getTextureCombineID( flags.textures );
 			auto submeshComponentsId = flags.submesh.baseId
 				? flags.submesh.baseId
 				: submeshComponents.getSubmeshComponentCombineID( flags.submesh );
@@ -129,7 +132,7 @@ namespace castor3d
 			offset += hi::maxPassSize;
 			result |= ( uint64_t( submeshComponentsId ) & hi::maxSubmeshMask ) << offset;
 			offset += hi::maxSubmeshSize;
-			result |= uint64_t( passComponents.getTextureCombineID( flags.textures ) & hi::maxTexturesMask) << offset;
+			result |= uint64_t( textureComponentsId & hi::maxTexturesMask ) << offset;
 			offset += hi::maxTexturesSize;
 			result |= ( uint64_t( programFlags ) & hi::maxProgramMask ) << offset;
 			offset += hi::maxProgramSize;
@@ -149,6 +152,9 @@ namespace castor3d
 			auto passCombine = flags.pass.baseId
 				? passComponents.getPassComponentCombine( flags.pass.baseId )
 				: flags.pass;
+			auto texturesCombine = flags.textures.baseId
+				? passComponents.getTextureCombine( flags.textures.baseId )
+				: flags.textures;
 			auto submeshCombine = flags.submesh.baseId
 				? submeshComponents.getSubmeshComponentCombine( flags.submesh.baseId )
 				: flags.submesh;
@@ -163,7 +169,7 @@ namespace castor3d
 			CU_Require( flags.isStatic == details.isStatic );
 			CU_Require( contains( passCombine, details.pass ) );
 			CU_Require( contains( submeshCombine, details.submesh ) );
-			CU_Require( contains( flags.textures, details.textures ) );
+			CU_Require( contains( texturesCombine, details.textures ) );
 			CU_Require( flags.backgroundModelId == details.backgroundModelId );
 			CU_Require( flags.passLayerIndex == details.passLayerIndex );
 			CU_Require( flags.submeshDataBindings == details.submeshDataBindings );
@@ -466,7 +472,7 @@ namespace castor3d
 			, renderPass.createPipelineFlags( pass
 				, pass.getTexturesMask()
 				, submeshComponents.getSubmeshComponentCombine( data.getComponentCombineID() )
-				, data.getProgramFlags( *pass.getOwner() )
+				, data.getProgramFlags( pass )
 				, SceneFlag::eNone
 				, data.getTopology()
 				, isFrontCulled

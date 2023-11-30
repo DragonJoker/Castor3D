@@ -219,11 +219,6 @@ namespace castor3d
 
 				for ( auto & unit : m_textureUnits )
 				{
-					while ( !unit->isInitialised() && !unit->failed() )
-					{
-						std::this_thread::sleep_for( 1_ms );
-					}
-
 					if ( unit->failed() )
 					{
 						failed.push_back( unit );
@@ -262,7 +257,17 @@ namespace castor3d
 				}
 
 				m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
+				m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
 				getOwner()->getOwner()->getMaterialCache().registerPass( *this );
+
+				for ( auto & unit : m_textureUnits )
+				{
+					while ( !unit->isInitialised() && !unit->failed() )
+					{
+						std::this_thread::sleep_for( 1_ms );
+					}
+				}
+
 				m_initialising = false;
 				m_initialised = true;
 			}
@@ -475,7 +480,8 @@ namespace castor3d
 
 	TextureCombineID Pass::getTextureCombineID()const
 	{
-		return getPassComponentsRegister().getTextureCombineID( m_textureCombine );
+		CU_Require( m_textureCombine.baseId != 0u );
+		return m_textureCombine.baseId;
 	}
 
 	TextureUnitRPtr Pass::getTextureUnit( uint32_t index )const

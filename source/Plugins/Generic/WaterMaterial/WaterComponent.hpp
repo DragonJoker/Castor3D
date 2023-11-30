@@ -78,8 +78,7 @@ namespace water
 				, sdw::Float const & passMultiplier
 				, castor3d::shader::BlendComponents & res
 				, castor3d::shader::BlendComponents const & src )const override;
-			void updateComponent( castor3d::TextureCombine const & combine
-				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, castor3d::shader::BlendComponents & components
 				, bool isFrontCulled )const override;
 		};

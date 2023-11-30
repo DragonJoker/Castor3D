@@ -55,7 +55,7 @@ namespace castor3d
 		 */
 		/**@{*/
 		C3D_API TextureCombine registerTextureCombine( Pass const & pass );
-		C3D_API TextureCombineID registerTextureCombine( TextureCombine combine );
+		C3D_API TextureCombineID registerTextureCombine( TextureCombine & combine );
 		C3D_API TextureCombineID getTextureCombineID( TextureCombine const & combine )const;
 		C3D_API TextureCombine getTextureCombine( TextureCombineID id )const;
 		/**@}*/

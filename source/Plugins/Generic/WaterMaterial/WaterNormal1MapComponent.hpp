@@ -41,8 +41,7 @@ namespace water
 				, sdw::Float const & passMultiplier
 				, castor3d::shader::BlendComponents & res
 				, castor3d::shader::BlendComponents const & src )const override;
-			void applyComponents( castor3d::TextureCombine const & combine
-				, castor3d::PipelineFlags const * flags
+			void applyComponents( castor3d::PipelineFlags const * flags
 				, castor3d::shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled

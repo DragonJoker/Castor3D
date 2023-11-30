@@ -147,8 +147,7 @@ namespace castor3d
 		}
 	}
 
-	void OcclusionMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
-		, PipelineFlags const * flags
+	void OcclusionMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
 		, shader::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
