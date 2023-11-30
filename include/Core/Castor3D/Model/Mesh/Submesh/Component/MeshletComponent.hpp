@@ -35,7 +35,7 @@ namespace castor3d
 			 *\copydoc		castor3d::SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
-				, MaterialObs material
+				, Pass const & pass
 				, ashes::BufferCRefArray & buffers
 				, std::vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -48,10 +48,14 @@ namespace castor3d
 			 */
 			void copy( SubmeshComponentDataRPtr data )const override;
 
-			C3D_API void createDescriptorSet( Geometry const & geometry );
-			C3D_API ashes::DescriptorSet const & getDescriptorSet( Geometry const & geometry )const;
-			C3D_API void instantiate( Geometry const & geometry );
-			C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalCullBuffer( Geometry const & geometry )const;
+			C3D_API void createDescriptorSet( Geometry const & geometry
+				, Pass const & pass );
+			C3D_API ashes::DescriptorSet const & getDescriptorSet( Geometry const & geometry
+				, Pass const & pass )const;
+			C3D_API void instantiate( Geometry const & geometry
+				, Pass const & pass );
+			C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalCullBuffer( Geometry const & geometry
+				, Pass const & pass )const;
 
 			ashes::DescriptorSetLayout const & getDescriptorLayout()const
 			{
@@ -104,12 +108,12 @@ namespace castor3d
 		private:
 			GpuBufferOffsetT< Meshlet > m_meshletBuffer;
 			GpuBufferOffsetT< MeshletCullData > m_sourceCullBuffer;
-			std::map< Geometry const *, GpuBufferOffsetT< MeshletCullData > > m_finalCullBuffers;
+			std::unordered_map< size_t, GpuBufferOffsetT< MeshletCullData > > m_finalCullBuffers;
 			std::vector< Meshlet > m_meshlets;
 			std::vector< MeshletCullData > m_cull;
 			ashes::DescriptorSetLayoutPtr m_descriptorLayout;
 			ashes::DescriptorSetPoolPtr m_descriptorPool;
-			std::map< Geometry const *, ashes::DescriptorSetPtr > m_descriptorSets;
+			std::unordered_map< size_t, ashes::DescriptorSetPtr > m_descriptorSets;
 		};
 
 		class Plugin
@@ -147,7 +151,7 @@ namespace castor3d
 		/**
 		 *\copydoc		castor3d::SubmeshComponent::getProgramFlags
 		 */
-		C3D_API ProgramFlags getProgramFlags( Material const & material )const noexcept override;
+		C3D_API ProgramFlags getProgramFlags( Pass const & pass )const noexcept override;
 
 		ComponentData & getData()const noexcept
 		{

@@ -13,7 +13,8 @@ namespace castor3d
 	namespace vtxtrsg
 	{
 		static size_t makeHash( ObjectBufferOffset const & input
-			, ObjectBufferOffset const & output )
+			, ObjectBufferOffset const & output
+			, Geometry const & geometry )
 		{
 			auto result = input.hash;
 			castor::hashCombinePtr( result, input.getBuffer( SubmeshData::ePositions ) );
@@ -21,6 +22,7 @@ namespace castor3d
 			castor::hashCombine( result, output.hash );
 			castor::hashCombinePtr( result, output.getBuffer( SubmeshData::ePositions ) );
 			castor::hashCombine( result, output.getOffset( SubmeshData::ePositions ) );
+			castor::hashCombinePtr( result, geometry );
 			return result;
 		}
 	}
@@ -55,7 +57,7 @@ namespace castor3d
 	{
 		auto & input = node.getSourceBufferOffsets();
 		auto & output = node.getFinalBufferOffsets();
-		auto hash = vtxtrsg::makeHash( input, output );
+		auto hash = vtxtrsg::makeHash( input, output, node.instance );
 		auto ires = m_passes.emplace( hash, nullptr );
 
 		if ( ires.second )
@@ -77,7 +79,7 @@ namespace castor3d
 	{
 		auto & input = node.getSourceBufferOffsets();
 		auto & output = node.getFinalBufferOffsets();
-		auto hash = vtxtrsg::makeHash( input, output );
+		auto hash = vtxtrsg::makeHash( input, output, node.instance );
 		auto it = m_passes.find( hash );
 
 		if ( it != m_passes.end() )

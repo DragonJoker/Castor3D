@@ -34,7 +34,7 @@ namespace castor3d
 			 *\copydoc		castor3d::SubmeshComponentData::gather
 			 */
 			void gather( PipelineFlags const & flags
-				, MaterialObs material
+				, Pass const & pass
 				, ashes::BufferCRefArray & buffers
 				, std::vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts

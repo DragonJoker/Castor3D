@@ -3,6 +3,7 @@
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"
@@ -39,21 +40,21 @@ namespace castor3d
 		result->m_cull = m_cull;
 	}
 
-	void MeshletComponent::ComponentData::createDescriptorSet( Geometry const & geometry )
+	void MeshletComponent::ComponentData::createDescriptorSet( Geometry const & geometry
+		, Pass const & pass )
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
-		auto & baseBuffers = m_submesh.getFinalBufferOffsets( geometry );
-		auto descSetIt = m_descriptorSets.emplace( &geometry, nullptr ).first;
+		auto & baseBuffers = m_submesh.getFinalBufferOffsets( geometry, pass );
+		auto descSetIt = m_descriptorSets.emplace( geometry.getHash( pass, m_submesh ), nullptr ).first;
 
 		if ( !descSetIt->second )
 		{
 			descSetIt->second = m_descriptorPool->createDescriptorSet( mshletcomp::getName( m_submesh )
 				, RenderPipeline::eMeshBuffers );
 			ashes::WriteDescriptorSetArray writes;
-			auto & material = *geometry.getMaterial( m_submesh );
 			auto combine = m_submesh.getComponentCombine();
 			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
-			writes.push_back( getFinalCullBuffer( geometry ).getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
+			writes.push_back( getFinalCullBuffer( geometry, pass ).getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
 
 			if ( combine.hasPositionFlag )
 			{
@@ -122,7 +123,7 @@ namespace castor3d
 			}
 
 			auto & data = m_submesh.getInstantiation().getData();
-			auto bufferIt = data.find( material );
+			auto bufferIt = data.find( pass );
 			CU_Require( bufferIt != data.end() );
 
 			if ( bufferIt->second.buffer )
@@ -136,16 +137,18 @@ namespace castor3d
 #endif
 	}
 
-	ashes::DescriptorSet const & MeshletComponent::ComponentData::getDescriptorSet( Geometry const & geometry )const
+	ashes::DescriptorSet const & MeshletComponent::ComponentData::getDescriptorSet( Geometry const & geometry
+		, Pass const & pass )const
 	{
-		auto it = m_descriptorSets.find( &geometry );
+		auto it = m_descriptorSets.find( geometry.getHash( pass, m_submesh ) );
 		CU_Require( it != m_descriptorSets.end() );
 		return *it->second;
 	}
 
-	void MeshletComponent::ComponentData::instantiate( Geometry const & geometry )
+	void MeshletComponent::ComponentData::instantiate( Geometry const & geometry
+		, Pass const & pass )
 	{
-		auto it = m_finalCullBuffers.emplace( &geometry, GpuBufferOffsetT< MeshletCullData >{} ).first;
+		auto it = m_finalCullBuffers.emplace( geometry.getHash( pass, m_submesh ), GpuBufferOffsetT< MeshletCullData >{} ).first;
 
 		if ( m_submesh.isInitialised()
 			&& !it->second )
@@ -159,7 +162,8 @@ namespace castor3d
 		}
 	}
 
-	GpuBufferOffsetT< MeshletCullData > const & MeshletComponent::ComponentData::getFinalCullBuffer( Geometry const & geometry )const
+	GpuBufferOffsetT< MeshletCullData > const & MeshletComponent::ComponentData::getFinalCullBuffer( Geometry const & geometry
+		, Pass const & pass )const
 	{
 		if ( !m_submesh.isDynamic() )
 		{
@@ -167,7 +171,7 @@ namespace castor3d
 			return m_sourceCullBuffer;
 		}
 
-		auto it = m_finalCullBuffers.find( &geometry );
+		auto it = m_finalCullBuffers.find( geometry.getHash( pass, m_submesh ) );
 
 		if ( it != m_finalCullBuffers.end() )
 		{
@@ -394,7 +398,7 @@ namespace castor3d
 		return castor::ptrRefCast< SubmeshComponent >( result );
 	}
 
-	ProgramFlags MeshletComponent::getProgramFlags( Material const & material )const noexcept
+	ProgramFlags MeshletComponent::getProgramFlags( Pass const & pass )const noexcept
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		return ProgramFlag::eHasMesh

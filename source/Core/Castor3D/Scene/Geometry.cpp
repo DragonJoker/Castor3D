@@ -114,8 +114,7 @@ namespace castor3d
 							, *this
 							, *oldMaterial
 							, *material );
-
-						submesh.instantiate( this, oldMaterial, material, true );
+						submesh.instantiate( *this, oldMaterial, material, true );
 
 						for ( auto & pass : *oldMaterial )
 						{
@@ -139,7 +138,7 @@ namespace castor3d
 					}
 					else
 					{
-						submesh.instantiate( this, oldMaterial, material, true );
+						submesh.instantiate( *this, oldMaterial, material, true );
 					}
 
 					if ( material->hasEnvironmentMapping() )
@@ -270,6 +269,14 @@ namespace castor3d
 		itPass->second[submesh.getId()] = { id, node };
 	}
 
+	size_t Geometry::getHash( Pass const & pass
+		, Submesh const & submesh )const noexcept
+	{
+		return submesh.isDynamic()
+			? std::hash< Geometry const * >{}( this )
+			: std::hash< uint32_t >{}( pass.getHash() );
+	}
+
 	void Geometry::doUpdateMesh()
 	{
 		m_submeshesMaterials.clear();
@@ -290,7 +297,7 @@ namespace castor3d
 
 				if ( material )
 				{
-					submesh->instantiate( this, {}, material, true );
+					submesh->instantiate( *this, {}, material, true );
 				}
 			}
 

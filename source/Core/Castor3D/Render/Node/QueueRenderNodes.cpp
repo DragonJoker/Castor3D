@@ -48,12 +48,12 @@ namespace castor3d
 {
 	namespace queuerndnd
 	{
-		template< typename NodeT >
+		template< typename NodeT, template< typename NodeU > typename PipelinesNodesContainerT >
 		static bool addRenderNode( PipelineAndID pipeline
 			, CountedNodeT< NodeT > const & culled
 			, uint32_t drawCount
 			, bool isFrontCulled
-			, PipelinesNodesT< NodeT > & nodes
+			, PipelinesNodesContainerT< NodeT > & nodes
 			, PipelineBufferArray & nodesIds )
 		{
 			auto & node = *culled.node;
@@ -62,29 +62,7 @@ namespace castor3d
 			if ( bufferChunk.buffer )
 			{
 				auto & buffer = bufferChunk.buffer->getBuffer();
-				nodes.emplace( pipeline, buffer, culled, drawCount, isFrontCulled );
-				registerPipelineNodes( pipeline.pipeline->getFlagsHash(), buffer, nodesIds );
-				return true;
-			}
-
-			return false;
-		}
-
-		template< typename NodeT >
-		static bool addRenderNode( PipelineAndID & pipeline
-			, CountedNodeT< NodeT > const & culled
-			, uint32_t drawCount
-			, bool isFrontCulled
-			, InstantiatedPipelinesNodesT< NodeT > & nodes
-			, PipelineBufferArray & nodesIds )
-		{
-			auto & node = *culled.node;
-			auto & bufferChunk = node.getFinalBufferOffsets().getBufferChunk( SubmeshData::ePositions );
-
-			if ( bufferChunk.buffer )
-			{
-				auto & buffer = bufferChunk.buffer->getBuffer();
-				nodes.emplace( pipeline, buffer, node, isFrontCulled );
+				nodes.emplace( pipeline, buffer, node, culled, drawCount, isFrontCulled );
 				registerPipelineNodes( pipeline.pipeline->getFlagsHash(), buffer, nodesIds );
 				return true;
 			}
@@ -93,17 +71,6 @@ namespace castor3d
 		}
 
 		//*****************************************************************************************
-
-		static uint32_t getInstanceCount( SubmeshRenderNode const & culled )
-		{
-			auto & instantiation = culled.data.getInstantiation();
-			return instantiation.getData().getRefCount( culled.pass->getOwner() );
-		}
-
-		static uint32_t getInstanceCount( BillboardRenderNode const & culled )
-		{
-			return culled.data.getCount();
-		}
 
 		template< typename NodeT >
 		bool hasVisibleNode( NodesViewT< NodeT > const & nodes )
@@ -540,7 +507,7 @@ namespace castor3d
 									, indirectMeshCommands
 									, pipelineId
 									, 0u
-									, getInstanceCount( *node )
+									, node->getInstanceCount()
 									, mshIndex );
 								++result;
 							}
@@ -599,7 +566,7 @@ namespace castor3d
 		{
 			auto & bufferOffsets = culled.getFinalBufferOffsets();
 			indirectCommands->vertexCount = bufferOffsets.getCount< BillboardVertex >( SubmeshData::ePositions );
-			indirectCommands->instanceCount = getInstanceCount( culled );
+			indirectCommands->instanceCount = culled.getInstanceCount();
 			indirectCommands->firstVertex = bufferOffsets.getFirstVertex< BillboardVertex >();
 			indirectCommands->firstInstance = 0u;
 			++indirectCommands;
@@ -713,8 +680,8 @@ namespace castor3d
 			auto & submesh = node.data;
 			auto & pass = *node.pass;
 			size_t hash = std::hash< Submesh const * >{}( &submesh );
-			hash = castor::hashCombinePtr( hash, pass );
-			hash = castor::hashCombine( hash, node.getInstanceCount() );
+			hash = castor::hashCombine( hash, pass.getHash() );
+			hash = castor::hashCombine( hash, node.isInstanced() );
 			hash = castor::hashCombine( hash, frontCulled );
 			return hash;
 		}
@@ -725,8 +692,7 @@ namespace castor3d
 			auto & billboard = node.data;
 			auto & pass = *node.pass;
 			size_t hash = std::hash< BillboardBase const * >{}( &billboard );
-			hash = castor::hashCombinePtr( hash, pass );
-			hash = castor::hashCombine( hash, node.getInstanceCount() );
+			hash = castor::hashCombine( hash, pass.getHash() );
 			return hash;
 		}
 
@@ -885,10 +851,10 @@ namespace castor3d
 					
 					for ( auto & [submesh, node] : submeshes )
 					{
-						maxNodesCount = std::max( maxNodesCount, queuerndnd::getInstanceCount( *node ) );
-						totalNodesCount += queuerndnd::getInstanceCount( *node );
+						maxNodesCount = std::max( maxNodesCount, node->getInstanceCount() );
+						totalNodesCount += node->getInstanceCount();
 						stream << "                    Submesh 0x" << std::hex << std::setw( 8 ) << std::setfill( '0' ) << node;
-						stream << ": " << std::dec << queuerndnd::getInstanceCount( *node ) << "\n";
+						stream << ": " << std::dec << node->getInstanceCount() << "\n";
 					}
 				}
 			}
@@ -989,8 +955,8 @@ namespace castor3d
 
 					for ( auto & [submesh, node] : submeshes )
 					{
-						maxNodesCount = std::max( maxNodesCount, queuerndnd::getInstanceCount( *node ) );
-						totalNodesCount += queuerndnd::getInstanceCount( *node );
+						maxNodesCount = std::max( maxNodesCount, node->getInstanceCount() );
+						totalNodesCount += node->getInstanceCount();
 					}
 				}
 			}
@@ -1121,8 +1087,7 @@ namespace castor3d
 				return renderPass.isValidPass( *node.pass )
 					&& renderPass.isValidRenderable( node.instance )
 					&& renderPass.isValidNode( *node.instance.getParent() )
-					&& ( !node.data.getInstantiation().isInstanced( node.instance.getMaterial( node.data ) )
-						|| node.instance.getParent()->isVisible() );
+					&& ( !node.isInstanced() || node.instance.getParent()->isVisible() );
 			} );
 		auto billboardsIt = std::find_if( culler.getBillboards().begin()
 			, culler.getBillboards().end()
@@ -1306,7 +1271,7 @@ namespace castor3d
 								if ( culled.visible )
 								{
 									dstBufferIt->nodes.emplace( culled );
-									auto instanceCount = queuerndnd::getInstanceCount( *culled.node );
+									auto instanceCount = culled.node->getInstanceCount();
 									queuerndnd::fillNodeIndirectCommands( *culled.node
 										, scene
 										, indirectMshBuffer
@@ -1335,7 +1300,7 @@ namespace castor3d
 						{
 							for ( auto & [submesh, node] : submeshes )
 							{
-								auto instanceCount = queuerndnd::getInstanceCount( *node );
+								auto instanceCount = node->getInstanceCount();
 								queuerndnd::fillNodeIndirectCommands( *node
 									, indirectMshBuffer
 									, indirectIdxBuffer
@@ -1381,7 +1346,7 @@ namespace castor3d
 								if ( culled.visible )
 								{
 									dstBufferIt->nodes.emplace( culled );
-									auto instanceCount = queuerndnd::getInstanceCount( *culled.node );
+									auto instanceCount = culled.node->getInstanceCount();
 									queuerndnd::fillNodeIndirectCommands( *culled.node
 										, scene
 										, indirectIdxBuffer
@@ -1411,7 +1376,7 @@ namespace castor3d
 						{
 							for ( auto & [submesh, node] : submeshes )
 							{
-								auto instanceCount = queuerndnd::getInstanceCount( *node );
+								auto instanceCount = node->getInstanceCount();
 								queuerndnd::fillNodeIndirectCommands( *node
 									, indirectIdxBuffer
 									, indirectNIdxBuffer
@@ -1710,9 +1675,8 @@ namespace castor3d
 				|| renderPass.forceTwoSided()
 				|| node.pass->isTwoSided()
 				|| passFlags.hasAlphaBlendingFlag );
-		auto & instantiation = node.data.getInstantiation();
 
-		if ( instantiation.isInstanced( node.instance.getMaterial( node.data ) ) )
+		if ( node.isInstanced() )
 		{
 			if ( node.instance.getParent()->isVisible() )
 			{

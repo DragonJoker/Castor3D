@@ -48,7 +48,7 @@ namespace castor3d
 		{
 			auto hash = std::hash< Submesh const * >{}( &data );
 			hash = castor::hashCombinePtr( hash, instance );
-			hash = castor::hashCombinePtr( hash, pass );
+			hash = castor::hashCombine( hash, pass.getHash() );
 			return hash;
 		}
 
@@ -56,7 +56,7 @@ namespace castor3d
 			, BillboardBase const & instance )
 		{
 			auto hash = std::hash< BillboardBase const * >{}( &instance );
-			hash = castor::hashCombinePtr( hash, pass );
+			hash = castor::hashCombine( hash, pass.getHash() );
 			return hash;
 		}
 
@@ -526,7 +526,7 @@ namespace castor3d
 #if C3D_DebugTimers
 		auto block( m_timerRenderNodes->start() );
 #endif
-		std::map< Submesh const *, std::map< Pass const *, uint32_t > > indices;
+		std::map< Submesh const *, std::map< uint32_t, uint32_t > > indices;
 		
 		for ( auto & nodeIt : m_submeshNodes )
 		{
@@ -542,10 +542,10 @@ namespace castor3d
 			if ( instantiation.isInstanced()
 				&& node->instance.getParent()->isVisible() )
 			{
-				auto & passes = indices.emplace( &node->data, std::map< Pass const *, uint32_t >{} ).first->second;
-				auto & index = passes.emplace( node->pass, 0u ).first->second;
+				auto & passes = indices.emplace( &node->data, std::map< uint32_t, uint32_t >{} ).first->second;
+				auto & index = passes.emplace( node->pass->getHash(), 0u ).first->second;
 				auto & data = instantiation.getData();
-				auto it = data.find( *node->pass->getOwner() );
+				auto it = data.find( *node->pass );
 				CU_Require( it != data.end() );
 				CU_Require( node->getId() > 0u );
 

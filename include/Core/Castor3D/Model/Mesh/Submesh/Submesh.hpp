@@ -228,7 +228,7 @@ namespace castor3d
 		 *\return		Les indicateurs de programme.
 		 *\param[in]	material	Le matériau pour lequel on veut les indicateurs.
 		 */
-		C3D_API ProgramFlags getProgramFlags( Material const & material )const;
+		C3D_API ProgramFlags getProgramFlags( Pass const & pass )const;
 		/**
 		 *\~english
 		 *\return		The morphing flags.
@@ -250,10 +250,20 @@ namespace castor3d
 		 *\param[in]	newMaterial	Le nouveau matériau.
 		 *\param[in]	update		Dit si le composant d'instantiation doit être mis à jour.
 		 */
-		C3D_API void instantiate( Geometry const * geometry
+		C3D_API void instantiate( MaterialObs oldMaterial
+			, MaterialObs newMaterial
+			, bool update )
+		{
+			doInstantiate( nullptr, oldMaterial, newMaterial, update );
+		}
+
+		C3D_API void instantiate( Geometry const & geometry
 			, MaterialObs oldMaterial
 			, MaterialObs newMaterial
-			, bool update );
+			, bool update )
+		{
+			doInstantiate( &geometry, oldMaterial, newMaterial, update );
+		}
 		/**
 		*\~english
 		*\return		The geometry buffers for given render node.
@@ -264,7 +274,8 @@ namespace castor3d
 		 *\param[in]	node	Le noeud de rendu utilisant ce sous-maillage.
 		 *\param[in]	flags	Les indicateurs de pipeline.
 		*/
-		C3D_API GeometryBuffers const & getGeometryBuffers( SubmeshRenderNode const & node
+		C3D_API GeometryBuffers const & getGeometryBuffers( Geometry const & geometry
+			, Pass const & pass
 			, PipelineFlags const & flags )const;
 		/**
 		*\~english
@@ -335,14 +346,17 @@ namespace castor3d
 		C3D_API uint32_t getMeshletsCount()const;
 		C3D_API bool isDynamic()const;
 		C3D_API bool isAnimated()const;
-		C3D_API ObjectBufferOffset const & getFinalBufferOffsets( Geometry const & instance )const;
+		C3D_API ObjectBufferOffset const & getFinalBufferOffsets( Geometry const & geometry
+			, Pass const & pass )const;
 		C3D_API ObjectBufferOffset const & getSourceBufferOffsets()const;
 		C3D_API GpuBufferOffsetT< Meshlet > const & getMeshletsBuffer()const;
-		C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalMeshletsBounds( Geometry const & instance )const;
+		C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalMeshletsBounds( Geometry const & geometry
+			, Pass const & pass )const;
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getSourceMeshletsBounds()const;
 		C3D_API bool hasMorphComponent()const;
 		C3D_API bool hasSkinComponent()const;
-		C3D_API VkDeviceSize getVertexOffset( Geometry const & geometry )const;
+		C3D_API VkDeviceSize getVertexOffset( Geometry const & geometry
+			, Pass const & pass )const;
 		C3D_API VkDeviceSize getIndexOffset()const;
 		C3D_API VkDeviceSize getMeshletOffset()const;
 		C3D_API SubmeshComponentRegister & getSubmeshComponentsRegister()const;
@@ -379,6 +393,12 @@ namespace castor3d
 		/**@}*/
 
 	private:
+		C3D_API void doInstantiate( Geometry const * geometry
+			, MaterialObs oldMaterial
+			, MaterialObs newMaterial
+			, bool update );
+
+	private:
 		uint32_t m_id;
 		SubmeshComponentCombine m_componentCombine;
 		MaterialObs m_defaultMaterial;
@@ -393,7 +413,7 @@ namespace castor3d
 		bool m_dirty{ true };
 		VkPrimitiveTopology m_topology{ VK_PRIMITIVE_TOPOLOGY_TRIANGLE_LIST };
 		ObjectBufferOffset m_sourceBufferOffset;
-		std::unordered_map< Geometry const *, ObjectBufferOffset > m_finalBufferOffsets;
+		std::unordered_map< size_t, ObjectBufferOffset > m_finalBufferOffsets;
 		mutable std::unordered_map< size_t, GeometryBuffers > m_geometryBuffers;
 		bool m_needsNormalsCompute{ false };
 		bool m_disableSceneUpdate{ false };

@@ -242,7 +242,7 @@ namespace castor3d
 		 *\param[in,out]	currentLocation	La position actuelle des attributs.
 		 */
 		C3D_API virtual void gather( PipelineFlags const & flags
-			, MaterialObs material
+			, Pass const & pass
 			, ashes::BufferCRefArray & buffers
 			, std::vector< uint64_t > & offsets
 			, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -636,12 +636,12 @@ namespace castor3d
 		/**
 		 *\~english
 		 *\return		The program flags.
-		 *\param[in]	material	The material.
+		 *\param[in]	pass	The material pass.
 		 *\~french
 		 *\return		Les indicateurs de programme.
-		 *\param[in]	material	Les matériau.
+		 *\param[in]	pass	La passe de matériau.
 		 */
-		C3D_API virtual ProgramFlags getProgramFlags( Material const & material )const noexcept
+		C3D_API virtual ProgramFlags getProgramFlags( Pass const & pass )const noexcept
 		{
 			return ProgramFlags{};
 		}

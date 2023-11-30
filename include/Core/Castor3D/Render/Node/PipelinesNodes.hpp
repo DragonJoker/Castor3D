@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_PipelinesNodes_H___
 #define ___C3D_PipelinesNodes_H___
 
+#include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Render/Node/BillboardRenderNode.hpp"
 #include "Castor3D/Render/Node/SubmeshRenderNode.hpp"
 
@@ -104,7 +105,7 @@ namespace castor3d
 		using CountedNode = CountedNodeT< NodeT >;
 		using NodesView = NodesViewT< NodeT >;
 
-		static uint64_t constexpr maxBuffers = 16ull;
+		static uint64_t constexpr maxBuffers = 32ull;
 		static uint64_t constexpr maxCount = NodesView::maxCount * maxBuffers;
 
 		struct BufferNodes
@@ -271,11 +272,12 @@ namespace castor3d
 
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
-			, CountedNode node
+			, NodeT const & node
+			, CountedNode culled
 			, uint32_t drawCount
 			, bool isFrontCulled )
 		{
-			size_t hash = std::hash< NodeT const * >{}( node.node );
+			size_t hash = std::hash< NodeT const * >{}( culled.node );
 			hash = castor::hashCombine( hash, isFrontCulled );
 			auto ires = m_countedNodes.emplace( hash, nullptr );
 
@@ -290,8 +292,8 @@ namespace castor3d
 				}
 #endif
 				auto it = emplace( pipeline, isFrontCulled );
-				node.visible = true;
-				ires.first->second = it->nodes.emplace( buffer, std::move( node ) );
+				culled.visible = true;
+				ires.first->second = it->nodes.emplace( buffer, std::move( culled ) );
 			}
 			else
 			{
