@@ -1,6 +1,5 @@
 #include "TextColourGradingConfig.hpp"
 
-#include <Castor3D/Config.hpp>
 #include <Castor3D/Miscellaneous/Logger.hpp>
 
 namespace castor

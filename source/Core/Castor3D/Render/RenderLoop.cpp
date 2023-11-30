@@ -1,6 +1,5 @@
 #include "Castor3D/Render/RenderLoop.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
 #include "Castor3D/Buffer/ObjectBufferPool.hpp"

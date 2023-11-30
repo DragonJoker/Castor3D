@@ -1,6 +1,5 @@
 #include "Castor3D/Render/Clustered/FindUniqueClusters.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Cache/LightCache.hpp"
 #include "Castor3D/Render/RenderDevice.hpp"

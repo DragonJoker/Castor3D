@@ -1,7 +1,5 @@
 #include "Castor3D/Shader/Shaders/GlslSssProfile.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
-
 namespace castor3d::shader
 {
 	SssProfiles::SssProfiles( sdw::ShaderWriter & writer

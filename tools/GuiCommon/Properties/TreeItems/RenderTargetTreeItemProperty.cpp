@@ -10,7 +10,6 @@
 #include "GuiCommon/Properties/TreeItems/VCTConfigTreeItemProperty.hpp"
 #include "GuiCommon/Shader/ShaderDialog.hpp"
 
-#include <Castor3D/Config.hpp>
 #include <Castor3D/Engine.hpp>
 #include <Castor3D/Plugin/ToneMappingPlugin.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>

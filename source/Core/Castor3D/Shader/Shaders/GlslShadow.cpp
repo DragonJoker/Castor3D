@@ -1,6 +1,5 @@
 #include "Castor3D/Shader/Shaders/GlslShadow.hpp"
 
-#include "Castor3D/DebugDefines.hpp"
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassDirectional.hpp"
 #include "Castor3D/Render/ShadowMap/ShadowMapPassSpot.hpp"

@@ -5,7 +5,6 @@ See LICENSE file in root folder
 #define ___C3D_DebugDefines_H___
 
 #define C3D_DisableSSSTransmittance 0
-#define C3D_GenerateBRDFIntegration 0
 #define C3D_MeasureShadowMapImpact 0
 
 #define C3D_DebugPicking 0
