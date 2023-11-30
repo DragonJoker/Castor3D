@@ -153,8 +153,7 @@ namespace water
 		}
 	}
 
-	void WaterNormal2MapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
-		, PipelineFlags const * flags
+	void WaterNormal2MapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
 		, c3d::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled

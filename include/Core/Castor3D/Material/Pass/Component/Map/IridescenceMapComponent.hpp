@@ -25,8 +25,7 @@ namespace castor3d
 			{
 			}
 
-			C3D_API void applyComponents( TextureCombine const & combine
-				, PipelineFlags const * flags
+			C3D_API void applyComponents( PipelineFlags const * flags
 				, shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled

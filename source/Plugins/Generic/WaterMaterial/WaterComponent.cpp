@@ -524,8 +524,7 @@ namespace water
 		}
 	}
 
-	void WaterComponent::ComponentsShader::updateComponent( castor3d::TextureCombine const & combine
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+	void WaterComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, castor3d::shader::BlendComponents & components
 		, bool isFrontCulled )const
 	{

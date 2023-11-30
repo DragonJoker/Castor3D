@@ -175,6 +175,7 @@ namespace castor3d
 
 	struct TextureCombine
 	{
+		TextureCombineID baseId{};
 		uint32_t configCount{};
 		TextureFlagsSet flags{};
 	};

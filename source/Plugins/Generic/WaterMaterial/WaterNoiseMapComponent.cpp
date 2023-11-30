@@ -196,8 +196,7 @@ namespace water
 		}
 	}
 
-	void WaterNoiseMapComponent::ComponentsShader::applyComponents( TextureCombine const & combine
-		, PipelineFlags const * flags
+	void WaterNoiseMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
 		, c3d::TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::Vec4 const & sampled
@@ -219,8 +218,7 @@ namespace water
 		FI;
 	}
 
-	void WaterNoiseMapComponent::ComponentsShader::updateComponent( TextureCombine const & combine
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+	void WaterNoiseMapComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, c3d::BlendComponents & components
 		, bool isFrontCulled )const
 	{

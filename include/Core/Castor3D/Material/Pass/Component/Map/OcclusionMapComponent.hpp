@@ -37,8 +37,7 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			C3D_API void applyComponents( TextureCombine const & combine
-				, PipelineFlags const * flags
+			C3D_API void applyComponents( PipelineFlags const * flags
 				, shader::TextureConfigData const & config
 				, sdw::U32Vec3 const & imgCompConfig
 				, sdw::Vec4 const & sampled

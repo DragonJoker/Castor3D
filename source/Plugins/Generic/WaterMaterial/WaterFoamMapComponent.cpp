@@ -208,8 +208,7 @@ namespace water
 		}
 	}
 
-	void WaterFoamMapComponent::ComponentsShader::updateComponent( TextureCombine const & combine
-		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+	void WaterFoamMapComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 		, c3d::BlendComponents & components
 		, bool isFrontCulled )const
 	{
@@ -285,6 +284,8 @@ namespace water
 		, ComponentModeFlags const & filter )const
 	{
 		return checkFlag( filter, ComponentModeFlag::eSpecularLighting )
+			|| checkFlag( filter, ComponentModeFlag::eDiffuseLighting )
+			|| checkFlag( filter, ComponentModeFlag::eColour )
 			|| hasAny( textures, getTextureFlags() );
 	}
 
