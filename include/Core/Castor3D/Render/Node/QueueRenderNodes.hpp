@@ -39,7 +39,6 @@ namespace castor3d
 			, ShadowBuffer const * shadowBuffer );
 		C3D_API void updateNodes( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
-		C3D_API void fillIndirectBuffers();
 		C3D_API uint32_t prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors );
 
@@ -121,6 +120,21 @@ namespace castor3d
 		void doAddBillboard( CountedNodeT< BillboardRenderNode > const & node );
 		void doRemoveSubmesh( CountedNodeT< SubmeshRenderNode > const & node );
 		void doRemoveBillboard( CountedNodeT< BillboardRenderNode > const & node );
+		uint32_t doPrepareMeshTraditionalCommandBuffers( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, PipelineNodes * nodesIdsBuffer
+			, VkDeviceSize maxNodesCount );
+		uint32_t doPrepareMeshModernCommandBuffers( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, PipelineNodes * nodesIdsBuffer
+			, VkDeviceSize maxNodesCount );
+		uint32_t doPrepareBillboardCommandBuffers( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, PipelineNodes * nodesIdsBuffer
+			, VkDeviceSize maxNodesCount );
 
 	private:
 		PipelineBufferArray m_nodesIds;
@@ -152,9 +166,6 @@ namespace castor3d
 		PipelinesNodesT< SubmeshRenderNode > m_submeshNodes;
 		InstantiatedPipelinesNodesT< SubmeshRenderNode > m_instancedSubmeshNodes;
 		PipelinesNodesT< BillboardRenderNode > m_billboardNodes;
-
-		PipelinesDrawnNodesT< SubmeshRenderNode > m_drawnSubmeshNodes;
-		PipelinesDrawnNodesT< BillboardRenderNode > m_drawnBillboardNodes;
 	};
 }
 

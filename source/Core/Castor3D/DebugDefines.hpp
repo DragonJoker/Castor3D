@@ -15,4 +15,10 @@ See LICENSE file in root folder
 #define C3D_DebugDisableSafeBands 0
 #define C3D_DebugUpload 0
 
+#if C3D_DebugTimers
+#	define C3D_DebugTime( x ) CU_TimeEx( x )
+#else
+#	define C3D_DebugTime( x )
+#endif
+
 #endif
