@@ -191,7 +191,7 @@ namespace castor3d
 	{
 	public:
 		using NodeObject = NodeObjectT< NodeT >;
-		using CountedNode = CountedNodeT< NodeT >;
+		using CulledNode = CulledNodeT< NodeT >;
 		using NodesView = InstantiatedBuffersNodesViewT< NodeT >;
 
 		static uint64_t constexpr maxPipelines = PipelinesNodesT< NodeT >::maxPipelines;
@@ -230,7 +230,7 @@ namespace castor3d
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
 			, NodeT const & node
-			, CountedNode culled
+			, CulledNode culled
 			, uint32_t drawCount
 			, bool isFrontCulled )
 		{

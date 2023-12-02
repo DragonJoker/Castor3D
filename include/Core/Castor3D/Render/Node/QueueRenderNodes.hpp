@@ -104,22 +104,22 @@ namespace castor3d
 			, BillboardRenderNode const & node );
 		void doAddSubmesh( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer
-			, CountedNodeT< SubmeshRenderNode > const & counted );
+			, CulledNodeT< SubmeshRenderNode > const & counted );
 		void doAddBillboard( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer
-			, CountedNodeT< BillboardRenderNode > const & counted );
+			, CulledNodeT< BillboardRenderNode > const & counted );
 		void doAddSingleSubmesh( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer
-			, CountedNodeT< SubmeshRenderNode > const & node
+			, CulledNodeT< SubmeshRenderNode > const & node
 			, bool frontCulled );
 		void doAddInstancedSubmesh( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer
-			, CountedNodeT< SubmeshRenderNode > const & node
+			, CulledNodeT< SubmeshRenderNode > const & node
 			, bool frontCulled );
-		void doAddSubmesh( CountedNodeT< SubmeshRenderNode > const & node );
-		void doAddBillboard( CountedNodeT< BillboardRenderNode > const & node );
-		void doRemoveSubmesh( CountedNodeT< SubmeshRenderNode > const & node );
-		void doRemoveBillboard( CountedNodeT< BillboardRenderNode > const & node );
+		void doAddSubmesh( CulledNodeT< SubmeshRenderNode > const & node );
+		void doAddBillboard( CulledNodeT< BillboardRenderNode > const & node );
+		void doRemoveSubmesh( CulledNodeT< SubmeshRenderNode > const & node );
+		void doRemoveBillboard( CulledNodeT< BillboardRenderNode > const & node );
 		uint32_t doPrepareMeshTraditionalCommandBuffers( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
@@ -158,8 +158,8 @@ namespace castor3d
 		SceneCullerSubmeshSignalConnection m_onSubmeshChanged;
 		SceneCullerBillboardSignalConnection m_onBillboardChanged;
 
-		std::unordered_set< CountedNodeT< SubmeshRenderNode > const * > m_pendingSubmeshes;
-		std::unordered_set< CountedNodeT< BillboardRenderNode > const * > m_pendingBillboards;
+		std::unordered_set< CulledNodeT< SubmeshRenderNode > const * > m_pendingSubmeshes;
+		std::unordered_set< CulledNodeT< BillboardRenderNode > const * > m_pendingBillboards;
 
 		PipelineMap m_pipelines;
 		RenderCounts m_visible{};

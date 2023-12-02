@@ -86,12 +86,12 @@ namespace castor3d
 			return m_culledChanged;
 		}
 
-		NodeArrayT< SubmeshRenderNode, CountedNodePtrT > const & getSubmeshes()const
+		NodeArrayT< SubmeshRenderNode, CulledNodePtrT > const & getSubmeshes()const
 		{
 			return m_culledSubmeshes;
 		}
 
-		NodeArrayT< BillboardRenderNode, CountedNodePtrT > const & getBillboards()const
+		NodeArrayT< BillboardRenderNode, CulledNodePtrT > const & getBillboards()const
 		{
 			return m_culledBillboards;
 		}
@@ -137,8 +137,8 @@ namespace castor3d
 		FramePassTimerUPtr m_timerCompute;
 		std::optional< bool > m_isStatic;
 		RenderCounts m_total{};
-		NodeArrayT< SubmeshRenderNode, CountedNodePtrT > m_culledSubmeshes;
-		NodeArrayT< BillboardRenderNode, CountedNodePtrT > m_culledBillboards;
+		NodeArrayT< SubmeshRenderNode, CulledNodePtrT > m_culledSubmeshes;
+		NodeArrayT< BillboardRenderNode, CulledNodePtrT > m_culledBillboards;
 	};
 }
 
