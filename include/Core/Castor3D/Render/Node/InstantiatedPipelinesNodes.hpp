@@ -12,17 +12,18 @@ namespace castor3d
 	struct InstantiatedObjectsNodesViewT
 	{
 		using NodeObject = NodeObjectT< NodeT >;
+		using CulledNode = CulledNodeT< NodeT >;
 
 		static uint64_t constexpr maxObjects = 1024ull;
 		static uint64_t constexpr maxCount = maxObjects;
 
-		auto emplace( NodeT const & node )
+		auto emplace( CulledNode const & culled )
 		{
 			auto it = std::find_if( begin()
 				, end()
-				, [&node]( std::pair< NodeObject const *, NodeT const * > const & lookup )
+				, [&culled]( std::pair< NodeObject const *, CulledNode const * > const & lookup )
 				{
-					return lookup.first == &node.data;
+					return lookup.first == &culled.node->data;
 				} );
 
 			if ( it == end() )
@@ -36,7 +37,7 @@ namespace castor3d
 				}
 #endif
 
-				m_objects.emplace_back( &node.data, &node );
+				m_objects.emplace_back( &culled.node->data, &culled );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
@@ -80,16 +81,17 @@ namespace castor3d
 
 		size_t occupancy()const noexcept
 		{
-			return size() * ( sizeof( NodeObject * ) + sizeof( NodeT * ) );
+			return size() * ( sizeof( NodeObject * ) + sizeof( CulledNode * ) );
 		}
 
 	private:
-		std::vector< std::pair< NodeObject const *, NodeT const * > > m_objects;
+		std::vector< std::pair< NodeObject const *, CulledNode const * > > m_objects;
 	};
 
 	template< typename NodeT >
 	struct InstantiatedBuffersNodesViewT
 	{
+		using CulledNode = CulledNodeT< NodeT >;
 		using NodesView = InstantiatedObjectsNodesViewT< NodeT >;
 
 		static uint64_t constexpr maxBuffers = BuffersNodesViewT< NodeT >::maxBuffers;
@@ -129,10 +131,10 @@ namespace castor3d
 		}
 
 		void emplace( ashes::BufferBase const & buffer
-			, NodeT const & node )
+			, CulledNode const & culled )
 		{
 			auto it = emplace( buffer );
-			it->nodes.emplace( node );
+			it->nodes.emplace( culled );
 		}
 
 		void clear()noexcept
@@ -230,7 +232,7 @@ namespace castor3d
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
 			, NodeT const & node
-			, CulledNode culled
+			, CulledNode const & culled
 			, uint32_t drawCount
 			, bool isFrontCulled )
 		{
@@ -250,7 +252,7 @@ namespace castor3d
 				}
 #endif
 				auto it = emplace( pipeline, isFrontCulled );
-				it->nodes.emplace( buffer, node );
+				it->nodes.emplace( buffer, culled );
 			}
 		}
 
