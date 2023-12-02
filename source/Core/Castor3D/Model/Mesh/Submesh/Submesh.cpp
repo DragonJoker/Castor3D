@@ -199,6 +199,13 @@ namespace castor3d
 					, indexCount
 					, combine );
 
+				if ( !m_sourceBufferOffset.hasData( SubmeshData::ePositions )
+					|| !m_sourceBufferOffset.getBufferChunk( SubmeshData::ePositions ).buffer )
+				{
+					CU_Failure( "No source data available for submesh" );
+					CU_Exception( "No source data available for submesh" );
+				}
+
 				if ( isDynamic() )
 				{
 					ashes::BufferBase const * indexBuffer{};
@@ -218,6 +225,13 @@ namespace castor3d
 						finalBufferOffset.second = device.geometryPools->getBuffer( getPointsCount()
 							, indexBuffer
 							, combine );
+
+						if ( !finalBufferOffset.second.hasData( SubmeshData::ePositions )
+							|| !finalBufferOffset.second.getBufferChunk( SubmeshData::ePositions ).buffer )
+						{
+							CU_Failure( "No final data available for submesh" );
+							CU_Exception( "No final data available for submesh" );
+						}
 					}
 				}
 			}
@@ -1282,6 +1296,13 @@ namespace castor3d
 					it->second = device.geometryPools->getBuffer( getPointsCount()
 						, indexBuffer
 						, combine );
+
+					if ( !it->second.hasData( SubmeshData::ePositions )
+						|| !it->second.getBufferChunk( SubmeshData::ePositions ).buffer )
+					{
+						CU_Failure( "No final data available for submesh" );
+						CU_Exception( "No final data available for submesh" );
+					}
 				}
 			}
 		}

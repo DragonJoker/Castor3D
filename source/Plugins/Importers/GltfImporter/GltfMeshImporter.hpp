@@ -46,7 +46,7 @@ namespace c3d_gltf
 			, castor3d::Material * material
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive );
-		void doProcessMeshVertices( fastgltf::Asset const & impAsset
+		bool doProcessMeshVertices( fastgltf::Asset const & impAsset
 			, fastgltf::Mesh const & impMesh
 			, fastgltf::Primitive const & impPrimitive
 			, castor3d::Mesh & mesh
