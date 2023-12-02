@@ -227,7 +227,7 @@ namespace castor3d
 				|| nodeIt.second->instance.getParent()->isStatic() == m_isStatic )
 			{
 				m_culledSubmeshes.emplace_back( std::make_unique< CulledNodeT< SubmeshRenderNode > >( nodeIt.second.get()
-					, 1u
+					, nodeIt.second->getInstanceCount()
 					, isSubmeshVisible( *nodeIt.second ) ) );
 			}
 
@@ -244,7 +244,7 @@ namespace castor3d
 				|| nodeIt.second->instance.getNode()->isStatic() == m_isStatic )
 			{
 				m_culledBillboards.emplace_back( std::make_unique< CulledNodeT< BillboardRenderNode > >( nodeIt.second.get()
-					, 1u
+					, nodeIt.second->getInstanceCount()
 					, isBillboardVisible( *nodeIt.second ) ) );
 			}
 
@@ -270,11 +270,14 @@ namespace castor3d
 			for ( auto & node : m_culledSubmeshes )
 			{
 				auto visible = isSubmeshVisible( *node->node );
+				auto count = node->node->getInstanceCount();
 
-				if ( node->visible != visible )
+				if ( node->visible != visible
+					|| node->instanceCount != count )
 				{
 					m_culledChanged = true;
 					node->visible = visible;
+					node->instanceCount = count;
 					onSubmeshChanged( *this, *node, visible );
 				}
 			}
@@ -282,11 +285,14 @@ namespace castor3d
 			for ( auto & node : m_culledBillboards )
 			{
 				auto visible = isBillboardVisible( *node->node );
+				auto count = node->node->getInstanceCount();
 
-				if ( node->visible != visible )
+				if ( node->visible != visible
+					|| node->instanceCount != count )
 				{
 					m_culledChanged = true;
 					node->visible = visible;
+					node->instanceCount = count;
 					onBillboardChanged( *this, *node, visible );
 				}
 			}
@@ -340,15 +346,18 @@ namespace castor3d
 					return lookup->node == dirty;
 				} );
 			auto visible = isSubmeshVisible( *dirty );
+			auto count = dirty->getInstanceCount();
 
 			if ( it != m_culledSubmeshes.end() )
 			{
 				auto & culled = *it;
 
-				if ( culled->visible != visible )
+				if ( culled->visible != visible
+					|| culled->instanceCount != count )
 				{
 					m_culledChanged = true;
 					culled->visible = visible;
+					culled->instanceCount = count;
 					onSubmeshChanged( *this, *culled, visible );
 				}
 			}
