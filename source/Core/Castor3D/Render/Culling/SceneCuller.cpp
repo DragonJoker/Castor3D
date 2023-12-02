@@ -173,9 +173,9 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_culledSubmeshes.begin()
 			, m_culledSubmeshes.end()
-			, [&node]( CountedNodeT< SubmeshRenderNode > const & lookup )
+			, [&node]( CountedNodePtrT< SubmeshRenderNode > const & lookup )
 			{
-				return &node == lookup.node;
+				return &node == lookup->node;
 			} );
 
 		if ( m_culledSubmeshes.end() != it )
@@ -188,9 +188,9 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_culledBillboards.begin()
 			, m_culledBillboards.end()
-			, [&node]( CountedNodeT< BillboardRenderNode > const & lookup )
+			, [&node]( CountedNodePtrT< BillboardRenderNode > const & lookup )
 			{
-				return &node == lookup.node;
+				return &node == lookup->node;
 			} );
 
 		if ( m_culledBillboards.end() != it )
@@ -226,9 +226,9 @@ namespace castor3d
 			if ( m_isStatic == std::nullopt
 				|| nodeIt.second->instance.getParent()->isStatic() == m_isStatic )
 			{
-				m_culledSubmeshes.push_back( { nodeIt.second.get()
+				m_culledSubmeshes.emplace_back( std::make_unique< CountedNodeT< SubmeshRenderNode > >( nodeIt.second.get()
 					, 1u
-					, isSubmeshVisible( *nodeIt.second ) } );
+					, isSubmeshVisible( *nodeIt.second ) ) );
 			}
 
 			++m_total.objectCount;
@@ -243,9 +243,9 @@ namespace castor3d
 			if ( m_isStatic == std::nullopt
 				|| nodeIt.second->instance.getNode()->isStatic() == m_isStatic )
 			{
-				m_culledBillboards.push_back( { nodeIt.second.get()
+				m_culledBillboards.emplace_back( std::make_unique< CountedNodeT< BillboardRenderNode > >( nodeIt.second.get()
 					, 1u
-					, isBillboardVisible( *nodeIt.second ) } );
+					, isBillboardVisible( *nodeIt.second ) ) );
 			}
 
 			++m_total.billboardCount;
@@ -269,25 +269,25 @@ namespace castor3d
 #endif
 			for ( auto & node : m_culledSubmeshes )
 			{
-				auto visible = isSubmeshVisible( *node.node );
+				auto visible = isSubmeshVisible( *node->node );
 
-				if ( node.visible != visible )
+				if ( node->visible != visible )
 				{
 					m_culledChanged = true;
-					node.visible = visible;
-					onSubmeshChanged( *this, node, visible );
+					node->visible = visible;
+					onSubmeshChanged( *this, *node, visible );
 				}
 			}
 
 			for ( auto & node : m_culledBillboards )
 			{
-				auto visible = isBillboardVisible( *node.node );
+				auto visible = isBillboardVisible( *node->node );
 
-				if ( node.visible != visible )
+				if ( node->visible != visible )
 				{
 					m_culledChanged = true;
-					node.visible = visible;
-					onBillboardChanged( *this, node, visible );
+					node->visible = visible;
+					onBillboardChanged( *this, *node, visible );
 				}
 			}
 		}
@@ -335,26 +335,28 @@ namespace castor3d
 		{
 			auto it = std::find_if( m_culledSubmeshes.begin()
 				, m_culledSubmeshes.end()
-				, [dirty]( CountedNodeT< SubmeshRenderNode > const & lookup )
+				, [dirty]( CountedNodePtrT< SubmeshRenderNode > const & lookup )
 				{
-					return lookup.node == dirty;
+					return lookup->node == dirty;
 				} );
 			auto visible = isSubmeshVisible( *dirty );
 
 			if ( it != m_culledSubmeshes.end() )
 			{
-				if ( it->visible != visible )
+				auto & culled = *it;
+
+				if ( culled->visible != visible )
 				{
 					m_culledChanged = true;
-					it->visible = visible;
-					onSubmeshChanged( *this, *it, visible );
+					culled->visible = visible;
+					onSubmeshChanged( *this, *culled, visible );
 				}
 			}
 			else
 			{
 				m_culledChanged = true;
-				m_culledSubmeshes.push_back( { dirty, 1u, visible } );
-				onSubmeshChanged( *this, m_culledSubmeshes.back(), visible );
+				m_culledSubmeshes.emplace_back( std::make_unique< CountedNodeT< SubmeshRenderNode > >( dirty, 1u, visible ) );
+				onSubmeshChanged( *this, *m_culledSubmeshes.back(), visible );
 			}
 		}
 	}
@@ -365,29 +367,31 @@ namespace castor3d
 		{
 			auto it = std::find_if( m_culledBillboards.begin()
 				, m_culledBillboards.end()
-				, [dirty]( CountedNodeT< BillboardRenderNode > const & lookup )
+				, [dirty]( CountedNodePtrT< BillboardRenderNode > const & lookup )
 				{
-					return lookup.node == dirty;
+					return lookup->node == dirty;
 				} );
 			auto visible = isBillboardVisible( *dirty );
 			auto count = dirty->getInstanceCount();
 
 			if ( it != m_culledBillboards.end() )
 			{
-				if ( it->visible != visible
-					|| it->instanceCount != count )
+				auto & culled = *it;
+
+				if ( culled->visible != visible
+					|| culled->instanceCount != count )
 				{
 					m_culledChanged = true;
-					it->visible = visible;
-					it->instanceCount = count;
-					onBillboardChanged( *this, *it, visible );
+					culled->visible = visible;
+					culled->instanceCount = count;
+					onBillboardChanged( *this, *culled, visible );
 				}
 			}
 			else
 			{
 				m_culledChanged = true;
-				m_culledBillboards.push_back( { dirty, count, visible } );
-				onBillboardChanged( *this, m_culledBillboards.back(), visible );
+				m_culledBillboards.emplace_back( std::make_unique< CountedNodeT< BillboardRenderNode > >( dirty, count, visible ) );
+				onBillboardChanged( *this, *m_culledBillboards.back(), visible );
 			}
 		}
 	}

@@ -85,9 +85,6 @@ namespace castor3d
 	//@{
 
 	template< typename NodeT >
-	using NodeArrayT = std::vector< CountedNodeT< NodeT > >;
-
-	template< typename NodeT >
 	class PipelinesNodesT;
 
 	//@}

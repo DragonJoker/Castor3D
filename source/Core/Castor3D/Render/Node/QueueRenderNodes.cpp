@@ -594,27 +594,13 @@ namespace castor3d
 				, CountedNodeT< SubmeshRenderNode > const & node
 				, bool visible )
 			{
-				if ( visible )
-				{
-					doAddSubmesh( node );
-				}
-				else
-				{
-					doRemoveSubmesh( node );
-				}
+				doAddSubmesh( node );
 			} ) }
 		, m_onBillboardChanged{ queue.getCuller().onBillboardChanged.connect( [this]( SceneCuller const &
 				, CountedNodeT< BillboardRenderNode > const & node
 				, bool visible )
 			{
-				if ( visible )
-				{
-					doAddBillboard( node );
-				}
-				else
-				{
-					doRemoveBillboard( node );
-				}
+				doAddBillboard( node );
 			} ) }
 	{
 	}
@@ -695,9 +681,9 @@ namespace castor3d
 		auto & culler = queue.getCuller();
 		auto submeshesIt = std::find_if( culler.getSubmeshes().begin()
 			, culler.getSubmeshes().end()
-			, [&renderPass]( CountedNodeT< SubmeshRenderNode > const & lookup )
+			, [&renderPass]( CountedNodePtrT< SubmeshRenderNode > const & lookup )
 			{
-				auto & node = *lookup.node;
+				auto & node = *lookup->node;
 				return renderPass.isValidPass( *node.pass )
 					&& renderPass.isValidRenderable( node.instance )
 					&& renderPass.isValidNode( *node.instance.getParent() )
@@ -705,9 +691,9 @@ namespace castor3d
 			} );
 		auto billboardsIt = std::find_if( culler.getBillboards().begin()
 			, culler.getBillboards().end()
-			, [&renderPass]( CountedNodeT< BillboardRenderNode > const & lookup )
+			, [&renderPass]( CountedNodePtrT< BillboardRenderNode > const & lookup )
 			{
-				auto & node = *lookup.node;
+				auto & node = *lookup->node;
 				return renderPass.isValidPass( *node.pass )
 					&& renderPass.isValidRenderable( node.instance )
 					&& renderPass.isValidNode( *node.instance.getNode() );
@@ -717,7 +703,7 @@ namespace castor3d
 			|| billboardsIt != culler.getBillboards().end();
 	}
 
-	void QueueRenderNodes::sortNodes( ShadowMapLightTypeArray & shadowMaps
+	bool QueueRenderNodes::sortNodes( ShadowMapLightTypeArray & shadowMaps
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto & queue = *getOwner();
@@ -737,40 +723,43 @@ namespace castor3d
 
 			for ( auto & culled : culler.getSubmeshes() )
 			{
-				auto & node = *culled.node;
+				auto & node = *culled->node;
 
 				if ( renderPass.isValidPass( *node.pass )
 					&& renderPass.isValidRenderable( node.instance )
 					&& renderPass.isValidNode( *node.instance.getParent() ) )
 				{
-					doAddSubmesh( shadowMaps, shadowBuffer, culled );
+					doAddSubmesh( shadowMaps, shadowBuffer, *culled );
 				}
 			}
 
 			for ( auto & culled : culler.getBillboards() )
 			{
-				auto & node = *culled.node;
+				auto & node = *culled->node;
 
 				if ( renderPass.isValidPass( *node.pass )
 					&& renderPass.isValidRenderable( node.instance )
 					&& renderPass.isValidNode( *node.instance.getNode() ) )
 				{
-					doAddBillboard( shadowMaps, shadowBuffer, culled );
+					doAddBillboard( shadowMaps, shadowBuffer, *culled );
 				}
 			}
 		}
 		renderPass.onSortNodes( renderPass );
+		return m_pendingSubmeshes.empty() && m_pendingBillboards.empty();
 	}
 
-	void QueueRenderNodes::updateNodes( ShadowMapLightTypeArray & shadowMaps
+	bool QueueRenderNodes::updateNodes( ShadowMapLightTypeArray & shadowMaps
 		, ShadowBuffer const * shadowBuffer )
 	{
 		auto & queue = *getOwner();
 		auto & renderPass = *queue.getOwner();
 		{
 			C3D_DebugTime( renderPass.getTypeName() );
+			auto pendingSubmeshes = std::move( m_pendingSubmeshes );
+			auto pendingBillboards = std::move( m_pendingBillboards );
 
-			for ( auto culled : m_pendingSubmeshes )
+			for ( auto culled : pendingSubmeshes )
 			{
 				auto & node = *culled->node;
 
@@ -782,7 +771,7 @@ namespace castor3d
 				}
 			}
 
-			for ( auto culled : m_pendingBillboards )
+			for ( auto culled : pendingBillboards )
 			{
 				auto & node = *culled->node;
 
@@ -793,11 +782,9 @@ namespace castor3d
 					doAddBillboard( shadowMaps, shadowBuffer, *culled );
 				}
 			}
-
-			m_pendingSubmeshes.clear();
-			m_pendingBillboards.clear();
 		}
 		renderPass.onSortNodes( renderPass );
+		return m_pendingSubmeshes.empty() && m_pendingBillboards.empty();
 	}
 
 	uint32_t QueueRenderNodes::prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
@@ -1116,11 +1103,23 @@ namespace castor3d
 	void QueueRenderNodes::doRemoveSubmesh( CountedNodeT< SubmeshRenderNode > const & node )
 	{
 		m_submeshNodes.erase( *node.node );
+		auto it = m_pendingSubmeshes.find( &node );
+
+		if ( it != m_pendingSubmeshes.end() )
+		{
+			m_pendingSubmeshes.erase( it );
+		}
 	}
 
 	void QueueRenderNodes::doRemoveBillboard( CountedNodeT< BillboardRenderNode > const & node )
 	{
 		m_billboardNodes.erase( *node.node );
+		auto it = m_pendingBillboards.find( &node );
+
+		if ( it != m_pendingBillboards.end() )
+		{
+			m_pendingBillboards.erase( it );
+		}
 	}
 
 	uint32_t QueueRenderNodes::doPrepareMeshTraditionalCommandBuffers( ashes::CommandBuffer const & commandBuffer

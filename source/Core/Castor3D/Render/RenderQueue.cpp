@@ -92,15 +92,14 @@ namespace castor3d
 
 				if ( m_fullSort )
 				{
-					m_renderNodes->sortNodes( shadowMaps, shadowBuffer );
+					m_culledChanged = !m_renderNodes->sortNodes( shadowMaps, shadowBuffer );
 					m_fullSort = false;
 				}
 				else
 				{
-					m_renderNodes->updateNodes( shadowMaps, shadowBuffer );
+					m_culledChanged = !m_renderNodes->updateNodes( shadowMaps, shadowBuffer );
 				}
 
-				m_culledChanged = false;
 				m_commandsChanged = true;
 			}
 
