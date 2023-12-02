@@ -25,7 +25,10 @@ namespace castor3d
 		, castor::Point4fArray & up
 		, UploadData & uploader );
 	C3D_API void gatherBaseDataBuffer( SubmeshData submeshData
+		, ObjectBufferOffset const & bufferOffsets
 		, PipelineFlags const & flags
+		, ashes::BufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
@@ -71,6 +74,7 @@ namespace castor3d
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
+				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
 				, std::vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
@@ -78,7 +82,10 @@ namespace castor3d
 				, uint32_t & currentLocation )override
 			{
 				gatherBaseDataBuffer( SubmeshDataT
+					, bufferOffsets
 					, flags
+					, buffers
+					, offsets
 					, layouts
 					, currentBinding
 					, currentLocation

@@ -568,6 +568,7 @@ namespace castor3d
 	{
 		auto key = smsh::hash( *this, geometry, pass, flags );
 		auto ires = m_geometryBuffers.emplace( key, GeometryBuffers{} );
+		auto & bufferOffsets = getFinalBufferOffsets( geometry, pass );
 
 		if ( ires.second )
 		{
@@ -583,20 +584,22 @@ namespace castor3d
 				{
 					data->gather( flags
 						, pass
+						, bufferOffsets
 						, buffers
 						, offsets
 						, layouts
 						, currentBinding
 						, currentLocation );
+					CU_Require( layouts.size() == buffers.size() );
+					CU_Require( offsets.size() == buffers.size() );
 				}
 			}
 
 			auto & result = ires.first->second;
 			result.indexOffset = getSourceBufferOffsets().getBufferChunk( SubmeshData::eIndex );
-			result.bufferOffset = getFinalBufferOffsets( geometry, pass );
 			result.layouts = layouts;
-			result.other = buffers;
-			result.otherOffsets = offsets;
+			result.buffers = buffers;
+			result.offsets = offsets;
 		}
 
 		return ires.first->second;

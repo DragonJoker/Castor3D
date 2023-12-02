@@ -84,13 +84,19 @@ namespace castor3d
 	}
 
 	void gatherBaseDataBuffer( SubmeshData submeshData
+		, ObjectBufferOffset const & bufferOffsets
 		, PipelineFlags const & flags
+		, ashes::BufferCRefArray & buffers
+		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation
 		, std::unordered_map< size_t, ashes::PipelineVertexInputStateCreateInfo > & cache )
 	{
-		if ( flags.enableVertexInput( submeshData ) )
+		auto & bufferChunk = bufferOffsets.getBufferChunk( submeshData );
+
+		if ( bufferChunk.hasData()
+			&& flags.enableVertexInput( submeshData ) )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );
@@ -109,6 +115,8 @@ namespace castor3d
 				currentBinding = layoutIt->second.vertexAttributeDescriptions.back().binding + 1u;
 			}
 
+			buffers.emplace_back( bufferChunk.getBuffer() );
+			offsets.emplace_back( 0u );
 			layouts.emplace_back( layoutIt->second );
 		}
 	}

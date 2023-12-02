@@ -118,8 +118,8 @@ namespace castor3d
 				BillboardVertex{ castor::Point3f{ +0.5f, -0.5f, 1.0f }, castor::Point2f{ 1.0f, 0.0f } },
 				BillboardVertex{ castor::Point3f{ +0.5f, +0.5f, 1.0f }, castor::Point2f{ 1.0f, 1.0f } },
 			};
-			m_geometryBuffers.bufferOffset = device.vertexPools->getBuffer< Quad >( 1u );
-			auto & vb = m_geometryBuffers.bufferOffset.getBufferChunk( SubmeshData::ePositions );
+			m_bufferOffsets = device.vertexPools->getBuffer< Quad >( 1u );
+			auto & vb = m_bufferOffsets.getBufferChunk( SubmeshData::ePositions );
 			{
 				auto queueData = device.graphicsData();
 				InstantDirectUploadData uploader{ *queueData->queue
@@ -144,8 +144,8 @@ namespace castor3d
 			ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 			doGatherBuffers( buffers, offsets, layouts );
 
-			m_geometryBuffers.other = buffers;
-			m_geometryBuffers.otherOffsets = offsets;
+			m_geometryBuffers.buffers = buffers;
+			m_geometryBuffers.offsets = offsets;
 			m_geometryBuffers.layouts = layouts;
 			m_initialised = true;
 		}
@@ -158,10 +158,10 @@ namespace castor3d
 		if ( m_initialised )
 		{
 			m_initialised = false;
-			device.vertexPools->putBuffer( m_geometryBuffers.bufferOffset );
-			m_geometryBuffers.bufferOffset.reset();
-			m_geometryBuffers.other.clear();
-			m_geometryBuffers.otherOffsets.clear();
+			device.vertexPools->putBuffer( m_bufferOffsets );
+			m_bufferOffsets.reset();
+			m_geometryBuffers.buffers.clear();
+			m_geometryBuffers.offsets.clear();
 			m_geometryBuffers.layouts.clear();
 			m_quadLayout.reset();
 			m_vertexLayout.reset();
@@ -290,9 +290,12 @@ namespace castor3d
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts )
 	{
 		layouts.emplace_back( *m_quadLayout );
+		buffers.emplace_back( m_bufferOffsets.getBuffer( SubmeshData::ePositions ) );
+		offsets.emplace_back( 0u );
+
+		layouts.emplace_back( *m_vertexLayout );
 		buffers.emplace_back( m_vertexBuffer.getBuffer().getBuffer() );
 		offsets.emplace_back( m_vertexBuffer.getOffset() );
-		layouts.emplace_back( *m_vertexLayout );
 	}
 
 	//*************************************************************************************************
