@@ -87,13 +87,17 @@ namespace castor3d
 
 	void PassMasksComponent::ComponentData::gather( PipelineFlags const & flags
 		, Pass const & pass
+		, ObjectBufferOffset const & bufferOffsets
 		, ashes::BufferCRefArray & buffers
 		, std::vector< uint64_t > & offsets
 		, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts
 		, uint32_t & currentBinding
 		, uint32_t & currentLocation )
 	{
-		if ( flags.enablePassMasks() )
+		auto & bufferChunk = bufferOffsets.getBufferChunk( SubmeshData::ePassMasks );
+
+		if ( bufferChunk.hasData()
+			&& flags.enablePassMasks() )
 		{
 			auto hash = std::hash< uint32_t >{}( currentBinding );
 			hash = castor::hashCombine( hash, currentLocation );
@@ -111,6 +115,8 @@ namespace castor3d
 				currentBinding = layoutIt->second.vertexAttributeDescriptions.back().binding + 1u;
 			}
 
+			buffers.emplace_back( bufferChunk.getBuffer() );
+			offsets.emplace_back( bufferChunk.getOffset() );
 			layouts.emplace_back( layoutIt->second );
 		}
 	}

@@ -35,6 +35,7 @@ namespace castor3d
 			 */
 			void gather( PipelineFlags const & flags
 				, Pass const & pass
+				, ObjectBufferOffset const & bufferOffsets
 				, ashes::BufferCRefArray & buffers
 				, std::vector< uint64_t > & offsets
 				, ashes::PipelineVertexInputStateCreateInfoCRefArray & layouts

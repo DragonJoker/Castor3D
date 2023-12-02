@@ -12,9 +12,8 @@ namespace castor3d
 	struct GeometryBuffers
 	{
 		ObjectBufferOffset::GpuBufferChunk indexOffset;
-		ObjectBufferOffset bufferOffset;
-		ashes::BufferCRefArray other;
-		ashes::UInt64Array otherOffsets;
+		ashes::BufferCRefArray buffers;
+		ashes::UInt64Array offsets;
 		ashes::PipelineVertexInputStateCreateInfoCRefArray layouts;
 	};
 }

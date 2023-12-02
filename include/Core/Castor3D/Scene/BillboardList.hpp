@@ -188,7 +188,7 @@ namespace castor3d
 
 		ObjectBufferOffset const & getBufferOffsets()const
 		{
-			return getGeometryBuffers().bufferOffset;
+			return m_bufferOffsets;
 		}
 
 		Scene const & getParentScene()const
@@ -282,6 +282,7 @@ namespace castor3d
 		ashes::PipelineVertexInputStateCreateInfoPtr m_vertexLayout;
 		uint32_t m_vertexStride;
 		ashes::PipelineVertexInputStateCreateInfoPtr m_quadLayout;
+		ObjectBufferOffset m_bufferOffsets;
 		GeometryBuffers m_geometryBuffers;
 		bool m_needUpdate{ true };
 		bool m_initialised{ false };
