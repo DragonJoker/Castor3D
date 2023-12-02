@@ -173,7 +173,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_culledSubmeshes.begin()
 			, m_culledSubmeshes.end()
-			, [&node]( CountedNodePtrT< SubmeshRenderNode > const & lookup )
+			, [&node]( CulledNodePtrT< SubmeshRenderNode > const & lookup )
 			{
 				return &node == lookup->node;
 			} );
@@ -188,7 +188,7 @@ namespace castor3d
 	{
 		auto it = std::find_if( m_culledBillboards.begin()
 			, m_culledBillboards.end()
-			, [&node]( CountedNodePtrT< BillboardRenderNode > const & lookup )
+			, [&node]( CulledNodePtrT< BillboardRenderNode > const & lookup )
 			{
 				return &node == lookup->node;
 			} );
@@ -226,7 +226,7 @@ namespace castor3d
 			if ( m_isStatic == std::nullopt
 				|| nodeIt.second->instance.getParent()->isStatic() == m_isStatic )
 			{
-				m_culledSubmeshes.emplace_back( std::make_unique< CountedNodeT< SubmeshRenderNode > >( nodeIt.second.get()
+				m_culledSubmeshes.emplace_back( std::make_unique< CulledNodeT< SubmeshRenderNode > >( nodeIt.second.get()
 					, 1u
 					, isSubmeshVisible( *nodeIt.second ) ) );
 			}
@@ -243,7 +243,7 @@ namespace castor3d
 			if ( m_isStatic == std::nullopt
 				|| nodeIt.second->instance.getNode()->isStatic() == m_isStatic )
 			{
-				m_culledBillboards.emplace_back( std::make_unique< CountedNodeT< BillboardRenderNode > >( nodeIt.second.get()
+				m_culledBillboards.emplace_back( std::make_unique< CulledNodeT< BillboardRenderNode > >( nodeIt.second.get()
 					, 1u
 					, isBillboardVisible( *nodeIt.second ) ) );
 			}
@@ -335,7 +335,7 @@ namespace castor3d
 		{
 			auto it = std::find_if( m_culledSubmeshes.begin()
 				, m_culledSubmeshes.end()
-				, [dirty]( CountedNodePtrT< SubmeshRenderNode > const & lookup )
+				, [dirty]( CulledNodePtrT< SubmeshRenderNode > const & lookup )
 				{
 					return lookup->node == dirty;
 				} );
@@ -355,7 +355,7 @@ namespace castor3d
 			else
 			{
 				m_culledChanged = true;
-				m_culledSubmeshes.emplace_back( std::make_unique< CountedNodeT< SubmeshRenderNode > >( dirty, 1u, visible ) );
+				m_culledSubmeshes.emplace_back( std::make_unique< CulledNodeT< SubmeshRenderNode > >( dirty, 1u, visible ) );
 				onSubmeshChanged( *this, *m_culledSubmeshes.back(), visible );
 			}
 		}
@@ -367,7 +367,7 @@ namespace castor3d
 		{
 			auto it = std::find_if( m_culledBillboards.begin()
 				, m_culledBillboards.end()
-				, [dirty]( CountedNodePtrT< BillboardRenderNode > const & lookup )
+				, [dirty]( CulledNodePtrT< BillboardRenderNode > const & lookup )
 				{
 					return lookup->node == dirty;
 				} );
@@ -390,7 +390,7 @@ namespace castor3d
 			else
 			{
 				m_culledChanged = true;
-				m_culledBillboards.emplace_back( std::make_unique< CountedNodeT< BillboardRenderNode > >( dirty, count, visible ) );
+				m_culledBillboards.emplace_back( std::make_unique< CulledNodeT< BillboardRenderNode > >( dirty, count, visible ) );
 				onBillboardChanged( *this, *m_culledBillboards.back(), visible );
 			}
 		}

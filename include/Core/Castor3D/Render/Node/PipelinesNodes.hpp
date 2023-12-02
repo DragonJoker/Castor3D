@@ -17,12 +17,12 @@ namespace castor3d
 	template< typename NodeT >
 	struct NodesViewT
 	{
-		using CountedNode = CountedNodeT< NodeT >;
+		using CulledNode = CulledNodeT< NodeT >;
 
-		static uint64_t constexpr maxNodes = 1024;
+		static uint64_t constexpr maxNodes = 2048;
 		static uint64_t constexpr maxCount = maxNodes;
 
-		explicit NodesViewT( castor::ArrayView< CountedNode > data )
+		explicit NodesViewT( castor::ArrayView< CulledNode > data )
 			: m_nodes{ std::move( data ) }
 			, m_count{}
 		{
@@ -34,7 +34,7 @@ namespace castor3d
 		{
 		}
 
-		CountedNode * emplace( CountedNode node )
+		CulledNode * emplace( CulledNode node )
 		{
 			CU_Assert( size() < maxNodes
 				, "Too many nodes for given buffer and given pipeline" );
@@ -95,14 +95,14 @@ namespace castor3d
 		}
 
 	private:
-		castor::ArrayView< CountedNode > m_nodes;
+		castor::ArrayView< CulledNode > m_nodes;
 		size_t m_count;
 	};
 
 	template< typename NodeT >
 	struct BuffersNodesViewT
 	{
-		using CountedNode = CountedNodeT< NodeT >;
+		using CulledNode = CulledNodeT< NodeT >;
 		using NodesView = NodesViewT< NodeT >;
 
 		static uint64_t constexpr maxBuffers = 32ull;
@@ -114,7 +114,7 @@ namespace castor3d
 			NodesView nodes;
 		};
 
-		explicit BuffersNodesViewT( castor::ArrayView< CountedNode > data )
+		explicit BuffersNodesViewT( castor::ArrayView< CulledNode > data )
 			: m_buffers{ maxBuffers }
 			, m_count{}
 		{
@@ -131,7 +131,7 @@ namespace castor3d
 		}
 
 		BuffersNodesViewT()
-			: BuffersNodesViewT{ castor::ArrayView< CountedNode >{} }
+			: BuffersNodesViewT{ castor::ArrayView< CulledNode >{} }
 		{
 		}
 
@@ -162,8 +162,8 @@ namespace castor3d
 			return it;
 		}
 
-		CountedNode * emplace( ashes::BufferBase const & buffer
-			, CountedNode node )
+		CulledNode * emplace( ashes::BufferBase const & buffer
+			, CulledNode node )
 		{
 			auto it = emplace( buffer );
 			return it->nodes.emplace( std::move( node ) );
@@ -224,7 +224,7 @@ namespace castor3d
 	class PipelinesNodesT
 	{
 	public:
-		using CountedNode = CountedNodeT< NodeT >;
+		using CulledNode = CulledNodeT< NodeT >;
 		using NodeArray = NodeArrayT< NodeT >;
 		using NodesView = BuffersNodesViewT< NodeT >;
 
@@ -273,7 +273,7 @@ namespace castor3d
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
 			, NodeT const & node
-			, CountedNode culled
+			, CulledNode culled
 			, uint32_t drawCount
 			, bool isFrontCulled )
 		{
@@ -366,14 +366,14 @@ namespace castor3d
 
 		size_t occupancy()const noexcept
 		{
-			return maxCount * sizeof( CountedNode )
+			return maxCount * sizeof( CulledNode )
 				+ m_pipelines.size() * ( sizeof( PipelineNodes ) + NodesView::occupancy() );
 		}
 
 	private:
 		NodeArray m_nodes;
 		std::map< uint32_t, PipelineNodes > m_pipelines;
-		std::unordered_map< size_t, CountedNode * > m_countedNodes;
+		std::unordered_map< size_t, CulledNode * > m_countedNodes;
 	};
 }
 

@@ -786,7 +786,7 @@ namespace castor3d
 	using LightIdArray = std::vector< std::pair< Light *, uint32_t > >;
 
 	template< typename NodeT >
-	struct CountedNodeT
+	struct CulledNodeT
 	{
 		NodeT const * node{};
 		uint32_t instanceCount{};
@@ -794,9 +794,9 @@ namespace castor3d
 	};
 
 	template< typename NodeT >
-	using CountedNodePtrT = std::unique_ptr< CountedNodeT< NodeT > >;
+	using CulledNodePtrT = std::unique_ptr< CulledNodeT< NodeT > >;
 
-	template< typename NodeT, template< typename NodeU > typename NodeWrapperT = CountedNodeT >
+	template< typename NodeT, template< typename NodeU > typename NodeWrapperT = CulledNodeT >
 	using NodeArrayT = std::vector< NodeWrapperT< NodeT > >;
 
 	struct PipelineAndID

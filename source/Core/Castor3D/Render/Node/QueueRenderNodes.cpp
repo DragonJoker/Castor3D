@@ -50,7 +50,7 @@ namespace castor3d
 	{
 		template< typename NodeT, template< typename NodeU > typename PipelinesNodesContainerT >
 		static bool addRenderNode( PipelineAndID pipeline
-			, CountedNodeT< NodeT > const & culled
+			, CulledNodeT< NodeT > const & culled
 			, uint32_t drawCount
 			, bool isFrontCulled
 			, PipelinesNodesContainerT< NodeT > & nodes
@@ -77,7 +77,7 @@ namespace castor3d
 		{
 			return std::any_of( nodes.begin()
 				, nodes.end()
-				, []( CountedNodeT< NodeT > const & node )
+				, []( CulledNodeT< NodeT > const & node )
 				{
 					return node.visible;
 				} );
@@ -591,13 +591,13 @@ namespace castor3d
 	QueueRenderNodes::QueueRenderNodes( RenderQueue const & queue )
 		: castor::OwnedBy< RenderQueue const >{ queue }
 		, m_onSubmeshChanged{ queue.getCuller().onSubmeshChanged.connect( [this]( SceneCuller const &
-				, CountedNodeT< SubmeshRenderNode > const & node
+				, CulledNodeT< SubmeshRenderNode > const & node
 				, bool visible )
 			{
 				doAddSubmesh( node );
 			} ) }
 		, m_onBillboardChanged{ queue.getCuller().onBillboardChanged.connect( [this]( SceneCuller const &
-				, CountedNodeT< BillboardRenderNode > const & node
+				, CulledNodeT< BillboardRenderNode > const & node
 				, bool visible )
 			{
 				doAddBillboard( node );
@@ -681,7 +681,7 @@ namespace castor3d
 		auto & culler = queue.getCuller();
 		auto submeshesIt = std::find_if( culler.getSubmeshes().begin()
 			, culler.getSubmeshes().end()
-			, [&renderPass]( CountedNodePtrT< SubmeshRenderNode > const & lookup )
+			, [&renderPass]( CulledNodePtrT< SubmeshRenderNode > const & lookup )
 			{
 				auto & node = *lookup->node;
 				return renderPass.isValidPass( *node.pass )
@@ -691,7 +691,7 @@ namespace castor3d
 			} );
 		auto billboardsIt = std::find_if( culler.getBillboards().begin()
 			, culler.getBillboards().end()
-			, [&renderPass]( CountedNodePtrT< BillboardRenderNode > const & lookup )
+			, [&renderPass]( CulledNodePtrT< BillboardRenderNode > const & lookup )
 			{
 				auto & node = *lookup->node;
 				return renderPass.isValidPass( *node.pass )
@@ -973,7 +973,7 @@ namespace castor3d
 
 	void QueueRenderNodes::doAddSubmesh( ShadowMapLightTypeArray & shadowMaps
 		, ShadowBuffer const * shadowBuffer
-		, CountedNodeT< SubmeshRenderNode > const & counted )
+		, CulledNodeT< SubmeshRenderNode > const & counted )
 	{
 		auto & renderPass = *getOwner()->getOwner();
 		auto & node = *counted.node;
@@ -1022,7 +1022,7 @@ namespace castor3d
 
 	void QueueRenderNodes::doAddBillboard( ShadowMapLightTypeArray & shadowMaps
 		, ShadowBuffer const * shadowBuffer
-		, CountedNodeT< BillboardRenderNode > const & counted )
+		, CulledNodeT< BillboardRenderNode > const & counted )
 	{
 		auto & renderPass = *getOwner()->getOwner();
 		auto & node = *counted.node;
@@ -1044,7 +1044,7 @@ namespace castor3d
 
 	void QueueRenderNodes::doAddSingleSubmesh( ShadowMapLightTypeArray & shadowMaps
 		, ShadowBuffer const * shadowBuffer
-		, CountedNodeT< SubmeshRenderNode > const & counted
+		, CulledNodeT< SubmeshRenderNode > const & counted
 		, bool frontCulled )
 	{
 		auto & renderPass = *getOwner()->getOwner();
@@ -1068,7 +1068,7 @@ namespace castor3d
 
 	void QueueRenderNodes::doAddInstancedSubmesh( ShadowMapLightTypeArray & shadowMaps
 		, ShadowBuffer const * shadowBuffer
-		, CountedNodeT< SubmeshRenderNode > const & counted
+		, CulledNodeT< SubmeshRenderNode > const & counted
 		, bool frontCulled )
 	{
 		auto & renderPass = *getOwner()->getOwner();
@@ -1090,17 +1090,17 @@ namespace castor3d
 		}
 	}
 
-	void QueueRenderNodes::doAddSubmesh( CountedNodeT< SubmeshRenderNode > const & node )
+	void QueueRenderNodes::doAddSubmesh( CulledNodeT< SubmeshRenderNode > const & node )
 	{
 		m_pendingSubmeshes.insert( &node );
 	}
 
-	void QueueRenderNodes::doAddBillboard( CountedNodeT< BillboardRenderNode > const & node )
+	void QueueRenderNodes::doAddBillboard( CulledNodeT< BillboardRenderNode > const & node )
 	{
 		m_pendingBillboards.insert( &node );
 	}
 
-	void QueueRenderNodes::doRemoveSubmesh( CountedNodeT< SubmeshRenderNode > const & node )
+	void QueueRenderNodes::doRemoveSubmesh( CulledNodeT< SubmeshRenderNode > const & node )
 	{
 		m_submeshNodes.erase( *node.node );
 		auto it = m_pendingSubmeshes.find( &node );
@@ -1111,7 +1111,7 @@ namespace castor3d
 		}
 	}
 
-	void QueueRenderNodes::doRemoveBillboard( CountedNodeT< BillboardRenderNode > const & node )
+	void QueueRenderNodes::doRemoveBillboard( CulledNodeT< BillboardRenderNode > const & node )
 	{
 		m_billboardNodes.erase( *node.node );
 		auto it = m_pendingBillboards.find( &node );
