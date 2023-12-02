@@ -32,9 +32,23 @@ namespace castor3d
 
 	void Mesh::initialise()
 	{
-		for ( auto & submesh : m_submeshes )
+		auto it = m_submeshes.begin();
+
+		while ( it != m_submeshes.end() )
 		{
-			submesh->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
+			auto & submesh = *it;
+
+			if ( submesh->getPointsCount() > 0
+				&& ( !submesh->getIndexMapping()
+					|| submesh->getIndexMapping()->getCount() > 0 ) )
+			{
+				submesh->initialise( getEngine()->getRenderSystem()->getRenderDevice() );
+				++it;
+			}
+			else
+			{
+				it = m_submeshes.erase( it );
+			}
 		}
 	}
 

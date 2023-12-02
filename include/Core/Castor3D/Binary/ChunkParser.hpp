@@ -73,6 +73,11 @@ namespace castor3d
 			, size_t count
 			, BinaryChunk & chunk )
 		{
+			if ( count == 0u )
+			{
+				return true;
+			}
+
 			bool result{ ChunkParserBase::parse( reinterpret_cast< uint8_t * >( values )
 				, count * sizeof( T )
 				, chunk ) };

@@ -17,7 +17,13 @@ namespace castor3d
 
 		for ( auto & submesh : obj )
 		{
-			result = result && BinaryWriter< Submesh >{}.write( *submesh, m_chunk );
+			if ( result
+				&& submesh->getPointsCount() > 0
+				&& ( !submesh->getIndexMapping()
+					|| submesh->getIndexMapping()->getCount() > 0 ) )
+			{
+				result = BinaryWriter< Submesh >{}.write( *submesh, m_chunk );
+			}
 		}
 
 		return result;
@@ -43,7 +49,10 @@ namespace castor3d
 				result = createBinaryParser< Submesh >().parse( *submesh, chunk );
 				checkError( result, "Couldn't parse submesh." );
 
-				if ( result )
+				if ( result
+					&& submesh->getPointsCount() > 0
+					&& ( !submesh->getIndexMapping()
+						|| submesh->getIndexMapping()->getCount() > 0 ) )
 				{
 					obj.m_submeshes.push_back( std::move( submesh ) );
 				}
