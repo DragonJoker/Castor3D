@@ -793,6 +793,12 @@ namespace castor3d
 		bool visible{};
 	};
 
+	template< typename NodeT >
+	using CountedNodePtrT = std::unique_ptr< CountedNodeT< NodeT > >;
+
+	template< typename NodeT, template< typename NodeU > typename NodeWrapperT = CountedNodeT >
+	using NodeArrayT = std::vector< NodeWrapperT< NodeT > >;
+
 	struct PipelineAndID
 	{
 		RenderPipeline * pipeline;

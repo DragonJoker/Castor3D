@@ -35,9 +35,9 @@ namespace castor3d
 		C3D_API void cleanup();
 		C3D_API void clear();
 		C3D_API void checkEmpty();
-		C3D_API void sortNodes( ShadowMapLightTypeArray & shadowMaps
+		C3D_API bool sortNodes( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
-		C3D_API void updateNodes( ShadowMapLightTypeArray & shadowMaps
+		C3D_API bool updateNodes( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
 		C3D_API uint32_t prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors );
