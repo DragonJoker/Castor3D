@@ -437,7 +437,13 @@ namespace castor3d
 			doUpdateSceneNodes( updater, sceneObjs );
 			m_animatedObjectGroupCache->update( updater );
 			doUpdateMovables( updater, sceneObjs );
-			updateBoundingBox();
+
+			if ( !sceneObjs.dirtyGeometries.empty()
+				|| !sceneObjs.dirtyNodes.empty() )
+			{
+				updateBoundingBox();
+			}
+
 			doUpdateMaterials();
 			doUpdateLights( updater, sceneObjs );
 			m_renderNodes->update( updater );
