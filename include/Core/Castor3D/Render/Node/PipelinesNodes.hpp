@@ -28,18 +28,13 @@ namespace castor3d
 	struct NodesViewT
 	{
 		using RenderedNode = RenderedNodeT< NodeT >;
+		using NodeArray = NodeArrayT< NodeT, RenderedNodeT >;
 
 		static uint64_t constexpr maxNodes = 1024;
 		static uint64_t constexpr maxCount = maxNodes;
 
-		explicit NodesViewT( castor::ArrayView< RenderedNode > data )
-			: m_nodes{ std::move( data ) }
-			, m_count{}
-		{
-		}
-
-		NodesViewT()
-			: m_nodes{}
+		explicit NodesViewT()
+			: m_nodes{ maxCount }
 			, m_count{}
 		{
 		}
@@ -105,7 +100,7 @@ namespace castor3d
 		}
 
 	private:
-		castor::ArrayView< RenderedNode > m_nodes;
+		NodeArray m_nodes;
 		size_t m_count;
 	};
 
@@ -121,27 +116,11 @@ namespace castor3d
 		struct BufferNodes
 		{
 			ashes::BufferBase const * buffer{};
-			NodesView nodes;
+			NodesView nodes{};
 		};
 
-		explicit BuffersNodesViewT( castor::ArrayView< RenderedNode > data )
-			: m_buffers{ maxBuffers }
-			, m_count{}
-		{
-			if ( !data.empty() )
-			{
-				auto index = 0u;
-
-				for ( auto & buffer : m_buffers )
-				{
-					buffer.nodes = NodesView{ castor::makeArrayView( data.begin() + index, NodesView::maxCount ) };
-					index += NodesView::maxCount;
-				}
-			}
-		}
-
-		BuffersNodesViewT()
-			: BuffersNodesViewT{ castor::ArrayView< RenderedNode >{} }
+		explicit BuffersNodesViewT()
+			: m_buffers{}
 		{
 		}
 
@@ -165,8 +144,8 @@ namespace castor3d
 				}
 #endif
 
-				it->buffer = &buffer;
-				++m_count;
+				m_buffers.push_back( BufferNodes{ &buffer, NodesView{} } );
+				it = std::next( m_buffers.begin(), ptrdiff_t( m_buffers.size() ) - 1 );
 			}
 
 			return it;
@@ -177,17 +156,6 @@ namespace castor3d
 		{
 			auto it = emplace( buffer );
 			return it->nodes.emplace( std::move( node ) );
-		}
-
-		void clear()noexcept
-		{
-			for ( auto & [buffer, nodes] : m_buffers )
-			{
-				buffer = {};
-				nodes.clear();
-			}
-
-			m_count = 0u;
 		}
 
 		auto begin()noexcept
@@ -202,32 +170,32 @@ namespace castor3d
 
 		auto end()noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_buffers.end();
 		}
 
 		auto end()const noexcept
 		{
-			return std::next( begin(), ptrdiff_t( m_count ) );
+			return m_buffers.end();
 		}
 
 		auto size()const noexcept
 		{
-			return m_count;
+			return m_buffers.size();
 		}
 
 		auto empty()const noexcept
 		{
-			return size() == 0;
+			return m_buffers.empty();
 		}
 
-		static constexpr size_t occupancy()noexcept
+		size_t occupancy()const noexcept
 		{
-			return maxBuffers * sizeof( BufferNodes );
+			return sizeof( *this )
+				+ m_buffers.size() * ( sizeof( BufferNodes ) + NodesView::maxCount * sizeof( RenderedNode ) );
 		}
 
 	private:
 		std::vector< BufferNodes > m_buffers;
-		uint32_t m_count;
 	};
 
 	template< typename NodeT >
@@ -236,7 +204,6 @@ namespace castor3d
 	public:
 		using CulledNode = CulledNodeT< NodeT >;
 		using RenderedNode = RenderedNodeT< NodeT >;
-		using NodeArray = NodeArrayT< NodeT, RenderedNodeT >;
 		using NodesView = BuffersNodesViewT< NodeT >;
 
 		static uint64_t constexpr maxPipelines = 128ull;
@@ -266,16 +233,10 @@ namespace castor3d
 				}
 #endif
 
-				if ( m_nodes.empty() )
-				{
-					m_nodes.resize( maxCount );
-				}
-
 				it = m_pipelines.emplace( id
 					, PipelineNodes{ pipeline
 						, isFrontCulled
-						, NodesView{ castor::makeArrayView( m_nodes.data() + ( m_pipelines.size() * NodesView::maxCount )
-							, NodesView::maxCount ) } } ).first;
+						, NodesView{} } ).first;
 			}
 
 			return &it->second;
@@ -319,7 +280,6 @@ namespace castor3d
 		{
 			m_pipelines.clear();
 			m_countedNodes.clear();
-			m_nodes.clear();
 		}
 
 		auto begin()noexcept
@@ -359,12 +319,17 @@ namespace castor3d
 
 		size_t occupancy()const noexcept
 		{
-			return maxCount * sizeof( RenderedNode )
-				+ m_pipelines.size() * ( sizeof( PipelineNodes ) + NodesView::occupancy() );
+			size_t result{ sizeof( *this ) };
+
+			for ( auto & pipeline : m_pipelines )
+			{
+				result += sizeof( PipelineNodes ) + pipeline.second.nodes.occupancy();
+			}
+
+			return result;
 		}
 
 	private:
-		NodeArray m_nodes;
 		std::map< uint32_t, PipelineNodes > m_pipelines;
 		std::unordered_map< size_t, RenderedNode * > m_countedNodes;
 	};
