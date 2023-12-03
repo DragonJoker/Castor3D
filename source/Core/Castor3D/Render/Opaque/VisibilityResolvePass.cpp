@@ -2233,9 +2233,9 @@ namespace castor3d
 				{
 					for ( auto & node : nodes )
 					{
-						auto & positionsBuffer = node.node->data.getVertexBuffer();
+						auto & positionsBuffer = node.culled->node->data.getVertexBuffer();
 						auto & pipeline = doCreatePipeline( pipelineFlags
-							, node.node->data.getVertexStride() );
+							, node.culled->node->data.getVertexStride() );
 						auto it = m_activeBillboardPipelines.emplace( &pipeline
 							, BillboardPipelinesNodesDescriptors{} ).first;
 						auto hash = size_t( positionsBuffer.getOffset() );
@@ -2252,7 +2252,7 @@ namespace castor3d
 								, positionsBuffer.getSize() );
 						}
 
-						it->second.emplace( node.node->getId()
+						it->second.emplace( node.culled->node->getId()
 							, PipelineNodesDescriptors{ pipelineId, ires.first->second.get() } );
 					}
 				}

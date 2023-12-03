@@ -12,18 +12,19 @@ namespace castor3d
 	struct InstantiatedObjectsNodesViewT
 	{
 		using NodeObject = NodeObjectT< NodeT >;
-		using CulledNode = CulledNodeT< NodeT >;
+		using RenderedNode = RenderedNodeT< NodeT >;
 
 		static uint64_t constexpr maxObjects = 1024ull;
 		static uint64_t constexpr maxCount = maxObjects;
 
-		auto emplace( CulledNode const & culled )
+		auto emplace( RenderedNode node )
 		{
+			auto data = &node.culled->node->data;
 			auto it = std::find_if( begin()
 				, end()
-				, [&culled]( std::pair< NodeObject const *, CulledNode const * > const & lookup )
+				, [&data]( std::pair< NodeObject const *, RenderedNode > const & lookup )
 				{
-					return lookup.first == &culled.node->data;
+					return lookup.first == data;
 				} );
 
 			if ( it == end() )
@@ -37,7 +38,7 @@ namespace castor3d
 				}
 #endif
 
-				m_objects.emplace_back( &culled.node->data, &culled );
+				m_objects.emplace_back( data, std::move( node ) );
 				it = std::next( begin(), ptrdiff_t( size() - 1u ) );
 			}
 
@@ -81,17 +82,17 @@ namespace castor3d
 
 		size_t occupancy()const noexcept
 		{
-			return size() * ( sizeof( NodeObject * ) + sizeof( CulledNode * ) );
+			return size() * ( sizeof( NodeObject * ) + sizeof( RenderedNode ) );
 		}
 
 	private:
-		std::vector< std::pair< NodeObject const *, CulledNode const * > > m_objects;
+		std::vector< std::pair< NodeObject const *, RenderedNode > > m_objects;
 	};
 
 	template< typename NodeT >
 	struct InstantiatedBuffersNodesViewT
 	{
-		using CulledNode = CulledNodeT< NodeT >;
+		using RenderedNode = RenderedNodeT< NodeT >;
 		using NodesView = InstantiatedObjectsNodesViewT< NodeT >;
 
 		static uint64_t constexpr maxBuffers = BuffersNodesViewT< NodeT >::maxBuffers;
@@ -131,10 +132,10 @@ namespace castor3d
 		}
 
 		void emplace( ashes::BufferBase const & buffer
-			, CulledNode const & culled )
+			, RenderedNode node )
 		{
 			auto it = emplace( buffer );
-			it->nodes.emplace( culled );
+			it->nodes.emplace( std::move( node ) );
 		}
 
 		void clear()noexcept
@@ -194,6 +195,7 @@ namespace castor3d
 	public:
 		using NodeObject = NodeObjectT< NodeT >;
 		using CulledNode = CulledNodeT< NodeT >;
+		using RenderedNode = RenderedNodeT< NodeT >;
 		using NodesView = InstantiatedBuffersNodesViewT< NodeT >;
 
 		static uint64_t constexpr maxPipelines = PipelinesNodesT< NodeT >::maxPipelines;
@@ -233,7 +235,10 @@ namespace castor3d
 			, ashes::BufferBase const & buffer
 			, NodeT const & node
 			, CulledNode const & culled
-			, uint32_t drawCount
+			, GeometryBuffers const & geometryBuffers
+			, uint32_t count
+			, uint32_t firstIndex
+			, uint32_t vertexOffset
 			, bool isFrontCulled )
 		{
 			size_t hash = std::hash< NodeObject const * >{}( &node.data );
@@ -252,7 +257,12 @@ namespace castor3d
 				}
 #endif
 				auto it = emplace( pipeline, isFrontCulled );
-				it->nodes.emplace( buffer, culled );
+				it->nodes.emplace( buffer
+					, RenderedNode{ &culled
+						, &geometryBuffers
+						, count
+						, firstIndex
+						, vertexOffset } );
 			}
 		}
 
