@@ -1218,7 +1218,7 @@ namespace castor3d
 		}
 
 		auto & manager = static_cast< ControlsManager & >( *getEngine()->getUserInputListener() );
-		auto control = manager.findControl( cuT( "C3D_Progress" ) );
+		auto control = manager.findControl( cuT( "C3D_LoadingScreen/Progress" ) );
 
 		if ( !m_progressBar )
 		{

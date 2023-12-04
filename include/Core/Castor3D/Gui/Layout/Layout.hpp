@@ -200,6 +200,13 @@ namespace castor3d
 		C3D_API Layout & operator=( Layout && )noexcept = delete;
 		C3D_API virtual ~Layout()noexcept;
 
+		/** Constructor for global layout
+		*\param[in] typeName
+		*	The layout type name.
+		*/
+		C3D_API explicit Layout( castor::String const & typeName
+			, ControlsManager & manager );
+
 		/** Constructor
 		*\param[in] typeName
 		*	The layout type name.
@@ -240,9 +247,26 @@ namespace castor3d
 
 		//@}
 
+		bool hasManager()const noexcept
+		{
+			return m_manager != nullptr;
+		}
+
+		ControlsManager & getManager()const noexcept
+		{
+			CU_Require( hasManager() );
+			return *m_manager;
+		}
+
+		bool hasContainer()const noexcept
+		{
+			return m_container != nullptr;
+		}
+
 		LayoutControl & getContainer()const noexcept
 		{
-			return m_container;
+			CU_Require( hasContainer() );
+			return *m_container;
 		}
 
 		auto begin()const noexcept
@@ -266,7 +290,8 @@ namespace castor3d
 		virtual void doUpdate() = 0;
 
 	protected:
-		LayoutControl & m_container;
+		ControlsManager * m_manager{};
+		LayoutControl * m_container{};
 		std::vector< Item > m_items;
 		std::vector< SpacerUPtr > m_spacers;
 		CpuFrameEvent * m_event{};

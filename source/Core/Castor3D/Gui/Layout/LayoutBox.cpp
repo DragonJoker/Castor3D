@@ -1,5 +1,6 @@
 #include "Castor3D/Gui/Layout/LayoutBox.hpp"
 
+#include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Controls/CtrlLayoutControl.hpp"
 
 namespace castor3d
@@ -11,6 +12,11 @@ namespace castor3d
 		{
 			return borderSize[component] + borderSize[component + 2u];
 		}
+	}
+
+	LayoutBox::LayoutBox( ControlsManager & manager )
+		: Layout{ "c3d.layout.box", manager }
+	{
 	}
 
 	LayoutBox::LayoutBox( LayoutControl & container )
@@ -34,11 +40,18 @@ namespace castor3d
 			fixedComp = 0u;
 		}
 
-		auto scrollPosition = m_container.getScrollPosition();
+		auto scrollPosition = m_container
+			? m_container->getScrollPosition()
+			: castor::Position{};
 		uint32_t controlsSep{ doComputeSeparator( advanceComp ) };
-		auto & borders = m_container.getBorderSize();
+		auto borders = m_container
+			? m_container->getBorderSize()
+			: castor::Point4ui{};
+		auto containerSize = m_container
+			? m_container->getSize()
+			: m_manager->getSize();
 		int32_t advance = int32_t( borders[advanceComp] );
-		uint32_t containerFixedCompLimit = m_container.getSize()[fixedComp] - boxlayt::getBorderDim( borders, fixedComp );
+		uint32_t containerFixedCompLimit = containerSize[fixedComp] - boxlayt::getBorderDim( borders, fixedComp );
 
 		for ( auto & item : m_items )
 		{
@@ -87,9 +100,14 @@ namespace castor3d
 
 	uint32_t LayoutBox::doComputeSeparator( uint32_t component )
 	{
-		auto & borders = m_container.getBorderSize();
+		auto borders = m_container
+			? m_container->getBorderSize()
+			: castor::Point4ui{};
+		auto containerSize = m_container
+			? m_container->getSize()
+			: m_manager->getSize();
 		uint32_t count{};
-		uint32_t maxComponentValue = m_container.getSize()[component] - boxlayt::getBorderDim( borders, component );
+		uint32_t maxComponentValue = containerSize[component] - boxlayt::getBorderDim( borders, component );
 		uint32_t accum{ std::accumulate( m_items.begin()
 			, m_items.end()
 			, uint32_t{}

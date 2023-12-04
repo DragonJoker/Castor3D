@@ -25,48 +25,116 @@ loading_screen
 		}
 	}
 
-	progress_style "C3D_LoadingProgress"
+	gui
 	{
-		background_invisible true
-		foreground_invisible true
-		title_font "Arial16"
-		title_material "Black"
-		text_font "Arial10"
-		text_material "Black"
-
-		container_style
+		theme "C3D_Invisible"
 		{
-			background_material "TransparentBlack"
-			foreground_material "Black"
+			default_font "Arial16"
+
+			panel_style "Panel"
+			{
+				background_material "TransparentBlack"
+				border_material "TransparentBlack"
+			}
 		}
 
-		bar_style
+		theme "C3D_LoadingScreen"
 		{
-			background_material "Green"
-			foreground_invisible true
+			default_font "Arial16"
+
+			panel_style "Panel"
+			{
+				background_material "C3D_PufiWalk2D"
+				foreground_invisible true
+			}
+
+			progress_style "Progress"
+			{
+				background_invisible true
+				foreground_invisible true
+				title_font "Arial16"
+				title_material "Black"
+				text_font "Arial10"
+				text_material "Black"
+
+				container_style
+				{
+					background_material "TransparentBlack"
+					foreground_material "Black"
+				}
+
+				bar_style
+				{
+					background_material "Green"
+					foreground_invisible true
+				}
+			}
 		}
-	}
 
-	panel_style "C3D_LoadingPanel"
-	{
-		background_material "C3D_PufiWalk2D"
-		foreground_invisible true
-	}
+		panel "C3D_LoadingScreen"
+		{
+			theme "C3D_Invisible"
+			pixel_size 264 264
+			pixel_position 16 16
 
-	panel "PufiWalk2D"
-	{
-		style "C3D_LoadingPanel"
-		pixel_size 128 128
-		pixel_position 84 20
-		pixel_border_size 0 0 0 0
-	}
+			panel "Panel"
+			{
+				theme "C3D_Invisible"
+				pixel_size 128 128
 
-	progress "C3D_Progress"
-	{
-		style "C3D_LoadingProgress"
-		pixel_size 264 64
-		pixel_position 16 176
-		container_border_size 4 4 4 4
-		bar_border_size 0 0 0 0
+				panel "PufiWalk2D"
+				{
+					theme "C3D_LoadingScreen"
+					pixel_size 128 128
+					pixel_border_size 0 0 0 0
+				}
+
+				box_layout
+				{
+					layout_ctrl "PufiWalk2D"
+					{
+						horizontal_align left
+						vertical_align center
+						padding 5 5 5 5
+					}
+					layout_dynspace
+				}
+			}
+
+			progress "Progress"
+			{
+				theme "C3D_LoadingScreen"
+				pixel_size 264 64
+				container_border_size 4 4 4 4
+				bar_border_size 0 0 0 0
+			}
+
+			box_layout
+			{
+				layout_ctrl "Panel"
+				{
+					horizontal_align center
+					stretch true
+					padding 5 5 5 5
+				}
+				layout_ctrl "Progress"
+				{
+					horizontal_align center
+					stretch true
+					padding 5 5 5 5
+				}
+			}
+		}
+
+		box_layout
+		{
+			layout_dynspace
+			layout_ctrl "C3D_LoadingScreen"
+			{
+				horizontal_align left
+				stretch true
+				padding 10 10 10 10
+			}
+		}
 	}
 }

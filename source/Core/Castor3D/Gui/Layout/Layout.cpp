@@ -1,6 +1,7 @@
 #include "Castor3D/Gui/Layout/Layout.hpp"
 
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
+#include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Gui/Controls/CtrlLayoutControl.hpp"
 
 CU_ImplementSmartPtr( castor3d, Layout )
@@ -27,9 +28,18 @@ namespace castor3d
 	//*************************************************************************
 
 	Layout::Layout( castor::String const & typeName
+		, ControlsManager & container )
+		: castor::Named{ typeName }
+		, m_manager{ &container }
+		, m_container{}
+	{
+	}
+
+	Layout::Layout( castor::String const & typeName
 		, LayoutControl & container )
 		: castor::Named{ typeName }
-		, m_container{ container }
+		, m_manager{ container.getControlsManager() }
+		, m_container{ &container }
 	{
 	}
 
@@ -46,7 +56,10 @@ namespace castor3d
 	{
 		if ( !m_event )
 		{
-			m_event = m_container.getEngine().postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
+			auto & engine = m_container
+				? m_container->getEngine()
+				: *m_manager->getEngine();
+			m_event = engine.postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 				, [this]()
 				{
 					m_event = nullptr;

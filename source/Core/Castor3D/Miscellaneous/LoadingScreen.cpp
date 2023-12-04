@@ -7,6 +7,7 @@
 #include "Castor3D/Cache/CacheView.hpp"
 #include "Castor3D/Event/Frame/CpuFunctorEvent.hpp"
 #include "Castor3D/Event/Frame/GpuFunctorEvent.hpp"
+#include "Castor3D/Gui/ControlsManager.hpp"
 #include "Castor3D/Miscellaneous/ProgressBar.hpp"
 #include "Castor3D/Miscellaneous/makeVkType.hpp"
 #include "Castor3D/Overlay/Overlay.hpp"
@@ -367,6 +368,7 @@ namespace castor3d
 		m_renderPass = renderPass;
 		m_renderSize = renderSize;
 		m_camera->getViewport().resize( m_renderSize );
+		m_device.renderSystem.getEngine()->getControlsManager()->setSize( m_renderSize );
 
 		if ( m_windowPass )
 		{

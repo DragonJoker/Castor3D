@@ -40,6 +40,21 @@ namespace castor3d
 		*/
 		C3D_API explicit ControlsManager( Engine & engine );
 
+		/** Sets the size.
+		 *\param[in]	value	The new value.
+		 */
+		C3D_API void setSize( castor::Size const & value );
+
+		/** Sets the layout for the elements contained in this one.
+		 *\param[in]	layout	The new value
+		 */
+		C3D_API void setLayout( LayoutUPtr layout );
+
+		castor::Size const & getSize()const noexcept
+		{
+			return m_size;
+		}
+
 		//@}
 		/**@name Style management */
 		//@{
@@ -372,6 +387,8 @@ namespace castor3d
 		std::map< Control const *, OnExpandablePanelEventConnection > m_onPanelRetracts;
 		ControlRPtr m_movedControl{};
 		ControlRPtr m_resizedControl{};
+		castor::Size m_size;
+		LayoutUPtr m_layout;
 	};
 }
 
