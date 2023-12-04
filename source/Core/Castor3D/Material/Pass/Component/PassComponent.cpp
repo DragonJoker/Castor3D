@@ -42,46 +42,78 @@ namespace castor3d
 				, texCoords.dPdy() );
 		}
 
-		void PassComponentsShader::applyFloatComponent( std::string const & name
-			, PassComponentTextureFlag flag
-			, shader::TextureConfigData const & config
-			, sdw::U32Vec3 const & imgCompConfig
-			, sdw::Vec4 const & sampled
-			, shader::BlendComponents & components )const
+		void PassComponentsShader::applyFloatComponent( std::string const & mapName
+			, std::string const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
 		{
-			if ( !components.hasMember( name ) )
+			auto textureName = mapName + "MapAndMask";
+
+			if ( !material.hasMember( textureName )
+				|| !components.hasMember( valueName ) )
 			{
 				return;
 			}
 
-			auto & writer{ *sampled.getWriter() };
+			auto & writer{ *material.getWriter() };
+			auto map = writer.declLocale( mapName + "Map"
+				, material.getMember< sdw::UInt >( textureName ) >> 16u );
+			auto mask = writer.declLocale( mapName + "Mask"
+				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+			auto value = components.getMember< sdw::Float >( valueName );
 
-			IF( writer, imgCompConfig.x() == sdw::UInt{ flag } )
-			{
-				components.getMember< sdw::Float >( name ) *= config.getFloat( sampled, imgCompConfig.z() );
-			}
-			FI;
+			auto config = writer.declLocale( valueName + "Config"
+				, textureConfigs.getTextureConfiguration( map ) );
+			auto anim = writer.declLocale( valueName + "Anim"
+				, textureAnims.getTextureAnimation( map ) );
+			passShaders.computeTexcoords( textureConfigs
+				, config
+				, anim
+				, components );
+			auto sampled = writer.declLocale( valueName + "Sampled"
+				, sampleTexture( map, config, components ) );
+			value *= shader::TextureConfigData::getFloat( sampled, mask );
 		}
 
-		void PassComponentsShader::applyVec3Component( std::string const & name
-			, PassComponentTextureFlag flag
-			, shader::TextureConfigData const & config
-			, sdw::U32Vec3 const & imgCompConfig
-			, sdw::Vec4 const & sampled
-			, shader::BlendComponents & components )const
+		void PassComponentsShader::applyVec3Component( std::string const & mapName
+			, std::string const & valueName
+			, PassShaders const & passShaders
+			, TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const
 		{
-			if ( !components.hasMember( name ) )
+			auto textureName = mapName + "MapAndMask";
+
+			if ( !material.hasMember( textureName )
+				|| !components.hasMember( valueName ) )
 			{
 				return;
 			}
 
-			auto & writer{ *sampled.getWriter() };
+			auto & writer{ *material.getWriter() };
+			auto map = writer.declLocale( mapName + "Map"
+				, material.getMember< sdw::UInt >( textureName ) >> 16u );
+			auto mask = writer.declLocale( mapName + "Mask"
+				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+			auto value = components.getMember< sdw::Vec3 >( valueName );
 
-			IF( writer, imgCompConfig.x() == sdw::UInt{ flag } )
-			{
-				components.getMember< sdw::Vec3 >( name ) *= config.getVec3( sampled, imgCompConfig.z() );
-			}
-			FI;
+			auto config = writer.declLocale( valueName + "Config"
+				, textureConfigs.getTextureConfiguration( map ) );
+			auto anim = writer.declLocale( valueName + "Anim"
+				, textureAnims.getTextureAnimation( map ) );
+			passShaders.computeTexcoords( textureConfigs
+				, config
+				, anim
+				, components );
+			auto sampled = writer.declLocale( valueName + "Sampled"
+				, sampleTexture( map, config, components ) );
+			value *= shader::TextureConfigData::getVec3( sampled, mask );
 		}
 	}
 

@@ -123,132 +123,215 @@ namespace castor3d
 		CU_EndAttribute()
 
 		static bool enableParallaxOcclusionMapping( PassComponentRegister const & passComponents
-			, PipelineFlags const & flags
-			, PassComponentTextureFlag const & flag )
+			, PassComponentCombine pass )
 		{
 			auto & plugin = passComponents.getPlugin< HeightComponent >();
-			return flags.enableTangentSpace()
-				&& hasAny( flags.textures, flag )
-				&& ( hasAny( flags.pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingRepeat ) )
-					|| hasAny( flags.pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) ) );
+			return ( hasAny( pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingRepeat ) )
+					|| hasAny( pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) ) );
 		}
 
 		static bool enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents
-			, PipelineFlags const & flags
-			, PassComponentTextureFlag const & flag )
+			, PassComponentCombine pass )
 		{
 			auto & plugin = passComponents.getPlugin< HeightComponent >();
-			return flags.enableTangentSpace()
-				&& hasAny( flags.textures, flag )
-				&& hasAny( flags.pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) );
+			return hasAny( pass, makePassComponentFlag( plugin.getId(), HeightComponent::eParallaxOcclusionMappingOne ) );
 		}
 	}
 
 	//*********************************************************************************************
 
-	void HeightMapComponent::ComponentsShader::computeTexcoord( PipelineFlags const & flags
-		, shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec3 & texCoords
-		, sdw::Vec2 & texCoord
-		, sdw::UInt const & mapId
-		, shader::BlendComponents & components )const
+	void HeightMapComponent::ComponentsShader::applyTexture( shader::PassShaders const & passShaders
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, shader::BlendComponents & components
+		, shader::SampleTexture const & sampleTexture )const
 	{
-		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), flags, getTextureFlags() )
-			&& components.hasMember( "tangentSpaceViewPosition" )
-			&& components.hasMember( "tangentSpaceFragPosition" ) )
+		std::string valueName = "height";
+		std::string mapName = "height";
+		auto textureName = mapName + "MapAndMask";
+
+		if ( !material.hasMember( textureName )
+			|| !components.hasMember( "tangentSpaceViewPosition" )
+			|| !components.hasMember( "tangentSpaceFragPosition" ) )
 		{
-			auto & writer = findWriterMandat( config, imgCompConfig, map, texCoords, texCoord, components );
+			return;
+		}
 
-			IF( writer, imgCompConfig.y() )
-			{
-				auto tangentSpaceViewPosition = components.getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true );
-				auto tangentSpaceFragPosition = components.getMember< sdw::Vec3 >( "tangentSpaceFragPosition", true );
-				parallaxMapping( texCoord
-					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-					, map
-					, config
-					, imgCompConfig );
-				config.setUv( texCoords, texCoord );
+		auto & writer{ *material.getWriter() };
+		auto map = writer.declLocale( mapName + "Map"
+			, material.getMember< sdw::UInt >( textureName ) >> 16u );
+		auto mask = writer.declLocale( mapName + "Mask"
+			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
 
-				if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), flags, getTextureFlags() ) )
-				{
-					IF( writer, config.getUv( texCoords ).x() > 1.0_f
-						|| config.getUv( texCoords ).y() > 1.0_f
-						|| config.getUv( texCoords ).x() < 0.0_f
-						|| config.getUv( texCoords ).y() < 0.0_f )
-					{
-						writer.demote();
-					}
-					FI;
-				}
+		auto config = writer.declLocale( valueName + "Config"
+			, textureConfigs.getTextureConfiguration( map ) );
+		auto anim = writer.declLocale( valueName + "Anim"
+			, textureAnims.getTextureAnimation( map ) );
+		passShaders.computeTexcoords( textureConfigs
+			, config
+			, anim
+			, components );
 
-				auto texCoords0 = components.getMember< sdw::Vec3 >( "texture0" );
-				auto texCoords1 = components.getMember< sdw::Vec3 >( "texture1", true );
-				auto texCoords2 = components.getMember< sdw::Vec3 >( "texture2", true );
-				auto texCoords3 = components.getMember< sdw::Vec3 >( "texture3", true );
-				shader::TextureConfigurations::setTexcoord( config
-					, texCoords
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
-			}
-			FI;
+		if ( checkFlag( passShaders.getFilter(), ComponentModeFlag::eDerivTex ) )
+		{
+			auto texCoords = components.getMember< shader::DerivTex >( "texCoords" );
+			doComputeTexcoord( passShaders.getPassCombine()
+				, config
+				, maps[map - 1u]
+				, texCoords
+				, mask
+				, components );
+		}
+		else if ( passShaders.getPassCombine().baseId == 0u )
+		{
+			auto texCoords = components.getMember< sdw::Vec2 >( "texCoords" );
+			doComputeTexcoord( passShaders.getPassCombine()
+				, config
+				, maps[map - 1u]
+				, texCoords
+				, mask
+				, components );
+		}
+		else
+		{
+			auto texCoords = components.getMember< sdw::Vec3 >( "texCoords" );
+			doComputeTexcoord( passShaders.getPassCombine()
+				, config
+				, maps[map - 1u]
+				, texCoords
+				, mask
+				, components );
 		}
 	}
 
-	void HeightMapComponent::ComponentsShader::computeTexcoord( PipelineFlags const & flags
+	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine pass
 		, shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
 		, sdw::CombinedImage2DRgba32 const & map
-		, shader::DerivTex & texCoords
-		, shader::DerivTex & texCoord
-		, sdw::UInt const & mapId
+		, sdw::Vec2 & texCoords
+		, sdw::UInt const & mask
 		, shader::BlendComponents & components )const
 	{
-		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), flags, getTextureFlags() )
-			&& components.hasMember( "tangentSpaceViewPosition" )
-			&& components.hasMember( "tangentSpaceFragPosition" ) )
+		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), pass ) )
 		{
-			auto & writer = findWriterMandat( config, imgCompConfig, map, texCoords, texCoord, components );
+			auto & writer = findWriterMandat( config, mask, map, texCoords, components );
+			auto tangentSpaceViewPosition = components.getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true );
+			auto tangentSpaceFragPosition = components.getMember< sdw::Vec3 >( "tangentSpaceFragPosition", true );
+			parallaxMapping( texCoords
+				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+				, map
+				, config
+				, mask );
 
-			IF( writer, imgCompConfig.y() )
+			if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), pass ) )
 			{
-				auto tangentSpaceViewPosition = components.getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true );
-				auto tangentSpaceFragPosition = components.getMember< sdw::Vec3 >( "tangentSpaceFragPosition", true );
-				parallaxMapping( texCoord
-					, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
-					, map
-					, config
-					, imgCompConfig );
-				config.setUv( texCoords, texCoord );
-
-				if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), flags, getTextureFlags() ) )
+				IF( writer, texCoords.x() > 1.0_f
+					|| texCoords.y() > 1.0_f
+					|| texCoords.x() < 0.0_f
+					|| texCoords.y() < 0.0_f )
 				{
-					IF( writer, config.getUv( texCoords ).x() > 1.0_f
-						|| config.getUv( texCoords ).y() > 1.0_f
-						|| config.getUv( texCoords ).x() < 0.0_f
-						|| config.getUv( texCoords ).y() < 0.0_f )
-					{
-						writer.demote();
-					}
-					FI;
+					writer.demote();
 				}
-
-				auto texCoords0 = components.getMember< shader::DerivTex >( "texture0" );
-				auto texCoords1 = components.getMember< shader::DerivTex >( "texture1", true );
-				auto texCoords2 = components.getMember< shader::DerivTex >( "texture2", true );
-				auto texCoords3 = components.getMember< shader::DerivTex >( "texture3", true );
-				shader::TextureConfigurations::setTexcoord( config
-					, texCoords
-					, texCoords0
-					, texCoords1
-					, texCoords2
-					, texCoords3 );
+				FI;
 			}
-			FI;
+
+			auto texCoords0 = components.getMember< sdw::Vec2 >( "texture0" );
+			auto texCoords1 = components.getMember< sdw::Vec2 >( "texture1", true );
+			auto texCoords2 = components.getMember< sdw::Vec2 >( "texture2", true );
+			auto texCoords3 = components.getMember< sdw::Vec2 >( "texture3", true );
+			shader::TextureConfigurations::setTexcoord( config
+				, texCoords
+				, texCoords0
+				, texCoords1
+				, texCoords2
+				, texCoords3 );
+		}
+	}
+
+	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine pass
+		, shader::TextureConfigData const & config
+		, sdw::CombinedImage2DRgba32 const & map
+		, sdw::Vec3 & texCoords
+		, sdw::UInt const & mask
+		, shader::BlendComponents & components )const
+	{
+		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), pass ) )
+		{
+			auto & writer = findWriterMandat( config, mask, map, texCoords, components );
+			auto tangentSpaceViewPosition = components.getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true );
+			auto tangentSpaceFragPosition = components.getMember< sdw::Vec3 >( "tangentSpaceFragPosition", true );
+			parallaxMapping( texCoords
+				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+				, map
+				, config
+				, mask );
+
+			if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), pass ) )
+			{
+				IF( writer, config.getUv( texCoords ).x() > 1.0_f
+					|| config.getUv( texCoords ).y() > 1.0_f
+					|| config.getUv( texCoords ).x() < 0.0_f
+					|| config.getUv( texCoords ).y() < 0.0_f )
+				{
+					writer.demote();
+				}
+				FI;
+			}
+
+			auto texCoords0 = components.getMember< sdw::Vec3 >( "texture0" );
+			auto texCoords1 = components.getMember< sdw::Vec3 >( "texture1", true );
+			auto texCoords2 = components.getMember< sdw::Vec3 >( "texture2", true );
+			auto texCoords3 = components.getMember< sdw::Vec3 >( "texture3", true );
+			shader::TextureConfigurations::setTexcoord( config
+				, texCoords
+				, texCoords0
+				, texCoords1
+				, texCoords2
+				, texCoords3 );
+		}
+	}
+
+	void HeightMapComponent::ComponentsShader::doComputeTexcoord( PassComponentCombine pass
+		, shader::TextureConfigData const & config
+		, sdw::CombinedImage2DRgba32 const & map
+		, shader::DerivTex & texCoords
+		, sdw::UInt const & mask
+		, shader::BlendComponents & components )const
+	{
+		if ( hgtcmp::enableParallaxOcclusionMapping( getPlugin().getRegister(), pass ) )
+		{
+			auto & writer = findWriterMandat( config, mask, map, texCoords, components );
+			auto tangentSpaceViewPosition = components.getMember< sdw::Vec3 >( "tangentSpaceViewPosition", true );
+			auto tangentSpaceFragPosition = components.getMember< sdw::Vec3 >( "tangentSpaceFragPosition", true );
+			parallaxMapping( texCoords
+				, normalize( tangentSpaceViewPosition - tangentSpaceFragPosition )
+				, map
+				, config
+				, mask );
+
+			if ( hgtcmp::enableParallaxOcclusionMappingOne( getPlugin().getRegister(), pass ) )
+			{
+				IF( writer, config.getUv( texCoords ).x() > 1.0_f
+					|| config.getUv( texCoords ).y() > 1.0_f
+					|| config.getUv( texCoords ).x() < 0.0_f
+					|| config.getUv( texCoords ).y() < 0.0_f )
+				{
+					writer.demote();
+				}
+				FI;
+			}
+
+			auto texCoords0 = components.getMember< shader::DerivTex >( "texture0" );
+			auto texCoords1 = components.getMember< shader::DerivTex >( "texture1", true );
+			auto texCoords2 = components.getMember< shader::DerivTex >( "texture2", true );
+			auto texCoords3 = components.getMember< shader::DerivTex >( "texture3", true );
+			shader::TextureConfigurations::setTexcoord( config
+				, texCoords
+				, texCoords0
+				, texCoords1
+				, texCoords2
+				, texCoords3 );
 		}
 	}
 
@@ -256,7 +339,7 @@ namespace castor3d
 		, sdw::Vec3 const & viewDir
 		, sdw::CombinedImage2DRgba32 const & heightMap
 		, shader::TextureConfigData const & textureConfig
-		, sdw::U32Vec3 const & imgCompConfig )const
+		, sdw::UInt const & mask )const
 	{
 		return parallaxMapping( texCoords
 			, dFdxCoarse( texCoords )
@@ -264,14 +347,29 @@ namespace castor3d
 			, viewDir
 			, heightMap
 			, textureConfig
-			, imgCompConfig );
+			, mask );
+	}
+
+	void HeightMapComponent::ComponentsShader::parallaxMapping( sdw::Vec3 & texCoords
+		, sdw::Vec3 const & viewDir
+		, sdw::CombinedImage2DRgba32 const & heightMap
+		, shader::TextureConfigData const & textureConfig
+		, sdw::UInt const & mask )const
+	{
+		return parallaxMapping( texCoords.xy()
+			, dFdxCoarse( texCoords.xy() )
+			, dFdyCoarse( texCoords.xy() )
+			, viewDir
+			, heightMap
+			, textureConfig
+			, mask );
 	}
 
 	void HeightMapComponent::ComponentsShader::parallaxMapping( shader::DerivTex & texCoords
 		, sdw::Vec3 const & viewDir
 		, sdw::CombinedImage2DRgba32 const & heightMap
 		, shader::TextureConfigData const & textureConfig
-		, sdw::U32Vec3 const & imgCompConfig )const
+		, sdw::UInt const & mask )const
 	{
 		parallaxMapping( texCoords.uv()
 			, texCoords.dPdx()
@@ -279,7 +377,7 @@ namespace castor3d
 			, viewDir
 			, heightMap
 			, textureConfig
-			, imgCompConfig );
+			, mask );
 	}
 
 	void HeightMapComponent::ComponentsShader::parallaxMapping( sdw::Vec2 ptexCoords
@@ -288,7 +386,7 @@ namespace castor3d
 		, sdw::Vec3 const & pviewDir
 		, sdw::CombinedImage2DRgba32 const & pheightMap
 		, shader::TextureConfigData const & ptextureConfig
-		, sdw::U32Vec3 const & pimgCompConfig )const
+		, sdw::UInt const & pmask )const
 	{
 		if ( !m_parallaxMapping )
 		{
@@ -298,7 +396,7 @@ namespace castor3d
 				, pviewDir
 				, pheightMap
 				, ptextureConfig
-				, pimgCompConfig );
+				, pmask );
 			m_parallaxMapping = writer.implementFunction< sdw::Vec2 >( "c3d_parallaxMapping",
 				[&]( sdw::Vec2 const & texCoords
 					, sdw::Vec2 const & dx
@@ -306,7 +404,7 @@ namespace castor3d
 					, sdw::Vec3 const & viewDir
 					, sdw::CombinedImage2DRgba32 const & heightMap
 					, shader::TextureConfigData const & textureConfig
-					, sdw::U32Vec3 const & imgCompConfig )
+					, sdw::UInt const & mask )
 				{
 					// number of depth layers
 					auto minLayers = writer.declLocale( "minLayers"
@@ -332,7 +430,7 @@ namespace castor3d
 					auto currentTexCoords = writer.declLocale( "currentTexCoords"
 						, texCoords );
 					auto heightIndex = writer.declLocale( "heightIndex"
-						, imgCompConfig.z() );
+						, mask );
 					auto sampled = writer.declLocale( "sampled"
 						, heightMap.grad( currentTexCoords, dx, dy ) );
 					auto currentDepthMapValue = writer.declLocale( "currentDepthMapValue"
@@ -377,7 +475,7 @@ namespace castor3d
 				, sdw::InVec3{ writer, "viewDir" }
 				, sdw::InCombinedImage2DRgba32{ writer, "heightMap" }
 				, shader::InTextureConfigData{ writer, "textureConfig" }
-				, sdw::InU32Vec3{ writer, "imgCompConfig" } );
+				, sdw::InUInt{ writer, "mask" } );
 		}
 
 		ptexCoords = m_parallaxMapping( ptexCoords
@@ -386,7 +484,7 @@ namespace castor3d
 			, pviewDir
 			, pheightMap
 			, ptextureConfig
-			, pimgCompConfig );
+			, pmask );
 	}
 
 	sdw::RetFloat HeightMapComponent::ComponentsShader::parallaxShadow( sdw::Vec3 const & plightDir
@@ -394,7 +492,7 @@ namespace castor3d
 		, sdw::Float const & pinitialHeight
 		, sdw::CombinedImage2DRgba32 const & pheightMap
 		, shader::TextureConfigData const & ptextureConfig
-		, sdw::U32Vec3 const & pimgCompConfig )
+		, sdw::UInt const & pmask )
 	{
 		if ( !m_parallaxShadow )
 		{
@@ -403,14 +501,14 @@ namespace castor3d
 				, pinitialHeight
 				, pheightMap
 				, ptextureConfig
-				, pimgCompConfig );
+				, pmask );
 			m_parallaxShadow = writer.implementFunction< sdw::Float >( "c3d_parallaxSoftShadowMultiplier"
 				, [&]( sdw::Vec3 const & lightDir
 					, sdw::Vec2 const & initialTexCoord
 					, sdw::Float const & initialHeight
 					, sdw::CombinedImage2DRgba32 const & heightMap
 					, shader::TextureConfigData const & textureConfig
-					, sdw::U32Vec3 const & imgCompConfig )
+					, sdw::UInt const & mask )
 				{
 					auto shadowMultiplier = writer.declLocale( "shadowMultiplier"
 						, 1.0_f );
@@ -441,7 +539,7 @@ namespace castor3d
 						auto currentTextureCoords = writer.declLocale( "currentTextureCoords"
 							, initialTexCoord + texStep );
 						auto heightIndex = writer.declLocale( "heightIndex"
-							, writer.cast< sdw::UInt >( imgCompConfig.z() ) );
+							, mask );
 						auto sampled = writer.declLocale( "sampled"
 							, heightMap.sample( currentTextureCoords ) );
 						auto heightFromTexture = writer.declLocale( "heightFromTexture"
@@ -493,7 +591,7 @@ namespace castor3d
 				, sdw::InFloat{ writer, "initialHeight" }
 				, sdw::InCombinedImage2DRgba32{ writer, "heightMap" }
 				, shader::InTextureConfigData{ writer, "textureConfig" }
-				, sdw::InU32Vec3{ writer, "imgCompConfig" } );
+				, sdw::InUInt{ writer, "mask" } );
 		}
 
 		return m_parallaxShadow( plightDir
@@ -501,7 +599,7 @@ namespace castor3d
 			, pinitialHeight
 			, pheightMap
 			, ptextureConfig
-			, pimgCompConfig );
+			, pmask );
 	}
 
 	//*********************************************************************************************
@@ -570,7 +668,9 @@ namespace castor3d
 		, PipelineFlags const * flags )const
 	{
 		return flags
-			? hgtcmp::enableParallaxOcclusionMapping( passComponents, *flags, getTextureFlags() )
+			? flags->enableTangentSpace()
+				&& hasAny( flags->textures, getTextureFlags() )
+				&& hgtcmp::enableParallaxOcclusionMapping( passComponents, flags->pass )
 			: false;
 	}
 

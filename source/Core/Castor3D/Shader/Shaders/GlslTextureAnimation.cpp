@@ -13,7 +13,7 @@ namespace castor3d
 			, uint32_t binding
 			, uint32_t set
 			, bool enable )
-			: BufferT< TextureAnimData >{ writer
+			: BufferT< TextureTransformData >{ writer
 				, "C3D_TextureAnimations"
 				, "c3d_textureAnimations"
 				, binding

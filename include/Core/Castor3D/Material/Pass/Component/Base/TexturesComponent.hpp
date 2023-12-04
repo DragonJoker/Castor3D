@@ -12,19 +12,9 @@ See LICENSE file in root folder
 
 namespace castor3d
 {
-	using TexturesData = std::array< uint32_t, MaxPassTextures >;
-
 	struct TexturesComponent
 		: public PassComponent
 	{
-		struct MaterialShader
-			: shader::PassMaterialShader
-		{
-			C3D_API MaterialShader();
-			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const override;
-		};
-
 		struct ComponentsShader
 			: shader::PassComponentsShader
 		{
@@ -63,20 +53,12 @@ namespace castor3d
 				return castor::makeUniqueDerived< PassComponent, TexturesComponent >( pass );
 			}
 
-			void zeroBuffer( Pass const & pass
-				, shader::PassMaterialShader const & materialShader
-				, PassBuffer & buffer )const override;
 			bool isComponentNeeded( TextureCombine const & textures
 				, ComponentModeFlags const & filter )const override;
 
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
 				return std::make_unique< ComponentsShader >( *this );
-			}
-
-			shader::PassMaterialShaderPtr createMaterialShader()const override
-			{
-				return std::make_unique< MaterialShader >();
 			}
 		};
 
@@ -91,10 +73,6 @@ namespace castor3d
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
-		void doFillBuffer( PassBuffer & buffer )const override;
-
-	private:
-		mutable TexturesData m_textures;
 	};
 }
 

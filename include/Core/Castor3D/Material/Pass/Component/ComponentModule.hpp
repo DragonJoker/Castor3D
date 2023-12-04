@@ -154,16 +154,9 @@ namespace castor3d
 	struct PickableComponent;
 	/**
 	\~english
-	\brief		Component holding textures count.
+	\brief		Component declaring textures coordinates in castor3d::shader::BlendComponents.
 	\~french
-	\brief		Composant détenant le nombre de textures.
-	*/
-	struct TextureCountComponent;
-	/**
-	\~english
-	\brief		Component holding textures.
-	\~french
-	\brief		Composant détenant les textures.
+	\brief		Composant déclarant les coordonnées de textures dans castor3d::shader::BlendComponents.
 	*/
 	struct TexturesComponent;
 	/**
@@ -186,7 +179,6 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, NormalComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PassHeaderComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, PickableComponent, C3D_API );
-	CU_DeclareSmartPtr( castor3d, TextureCountComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TexturesComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TwoSidedComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, UntileMappingComponent, C3D_API );
@@ -291,6 +283,13 @@ namespace castor3d
 	\brief		Composant détenant les données de transmission.
 	*/
 	struct TransmissionComponent;
+	/**
+	\~english
+	\brief		Component holding the transmittance factor (for subsurface scattering).
+	\~french
+	\brief		Composant détenant le facteur de transmittance (pour le subsurface scattering).
+	*/
+	struct TransmittanceComponent;
 
 	CU_DeclareSmartPtr( castor3d, AmbientComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, AttenuationComponent, C3D_API );
@@ -306,6 +305,7 @@ namespace castor3d
 	CU_DeclareSmartPtr( castor3d, SubsurfaceScatteringComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, ThicknessComponent, C3D_API );
 	CU_DeclareSmartPtr( castor3d, TransmissionComponent, C3D_API );
+	CU_DeclareSmartPtr( castor3d, TransmittanceComponent, C3D_API );
 	//@}
 	/**@name Texture Components */
 	//@{
@@ -566,6 +566,15 @@ namespace castor3d
 		\remarks	Ces shaders sont actifs si le composant est actif.
 		*/
 		struct PassComponentsShader;
+		/**
+		\~english
+		\brief		Shaders for components that go through textures and lighting (\see shader::BlendComponents).
+		\remarks	Those shaders are enabled if the component is enabled.
+		\~french
+		\brief		Shaders pour les composants allant jusqu'à l'éclairage et utilisant des textures (\see shader::BlendComponents).
+		\remarks	Ces shaders sont actifs si le composant est actif.
+		*/
+		struct PassMapComponentsShader;
 		/**
 		\~english
 		\brief		Shader for reflection/refraction components.

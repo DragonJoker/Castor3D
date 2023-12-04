@@ -18,35 +18,6 @@ namespace castor3d
 {
 	//*********************************************************************************************
 
-	TexturesComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ MaxPassTextures * sizeof( uint32_t ) }
-	{
-
-	}
-
-	void TexturesComponent::MaterialShader::fillMaterialType( sdw::type::BaseStruct & type
-		, sdw::expr::ExprList & inits )const
-	{
-		if ( !type.hasMember( "textures" ) )
-		{
-			auto [t, added] = type.declMember( "textures", ast::type::Kind::eUInt, MaxPassTextures );
-			inits.emplace_back( sdw::makeAggrInit( t.type
-				, []()
-				{
-					sdw::expr::ExprList result;
-
-					for ( uint32_t i = 0u; i < MaxPassTextures; ++i )
-					{
-						result.emplace_back( makeExpr( 0_u ) );
-					}
-
-					return result;
-				}() ) );
-		}
-	}
-
-	//*********************************************************************************************
-
 	void TexturesComponent::ComponentsShader::fillComponents( ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, shader::Materials const & materials
@@ -63,6 +34,7 @@ namespace castor3d
 
 			if ( checkFlag( materials.getFilter(), ComponentModeFlag::eDerivTex ) )
 			{
+				components.declMember( "texCoords", shader::DerivTex::makeType( cache ) );
 				components.declMember( "texture0", shader::DerivTex::makeType( cache ) );
 
 				if ( surface->hasMember( "texture1" ) )
@@ -82,6 +54,7 @@ namespace castor3d
 			}
 			else
 			{
+				components.declMember( "texCoords", sdw::type::Kind::eVec3F );
 				components.declMember( "texture0", sdw::type::Kind::eVec3F );
 
 				if ( surface->hasMember( "texture1" ) )
@@ -102,6 +75,7 @@ namespace castor3d
 		}
 		else if ( surface->hasMember( "texture" ) )
 		{
+			components.declMember( "texCoords", sdw::type::Kind::eVec2F );
 			components.declMember( "texture0", sdw::type::Kind::eVec2F );
 		}
 	}
@@ -116,6 +90,12 @@ namespace castor3d
 		if ( !components.hasMember( "texture0" ) )
 		{
 			return;
+		}
+
+		if ( components.hasMember( "texCoords" ) )
+		{
+			auto texType = components.getMember( "texCoords" ).type;
+			inits.emplace_back( sdw::getZeroValue( texType ) );
 		}
 
 		auto texType = components.getMember( "texture0" ).type;
@@ -263,16 +243,6 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void TexturesComponent::Plugin::zeroBuffer( Pass const & pass
-		, shader::PassMaterialShader const & materialShader
-		, PassBuffer & buffer )const
-	{
-		auto data = buffer.getData( pass.getId() );
-		data.write( materialShader.getMaterialChunk()
-			, TexturesData{}
-			, 0u );
-	}
-
 	bool TexturesComponent::Plugin::isComponentNeeded( TextureCombine const & textures
 		, ComponentModeFlags const & filter )const
 	{
@@ -285,39 +255,12 @@ namespace castor3d
 
 	TexturesComponent::TexturesComponent( Pass & pass )
 		: PassComponent{ pass, TypeName }
-		, m_textures{}
 	{
 	}
 
 	PassComponentUPtr TexturesComponent::doClone( Pass & pass )const
 	{
 		return castor::makeUniqueDerived< PassComponent, TexturesComponent >( pass );
-	}
-
-	void TexturesComponent::doFillBuffer( PassBuffer & buffer )const
-	{
-		uint32_t index = 0u;
-		std::map< PassComponentTextureFlag, uint32_t > idsFlags;
-
-		for ( auto & unit : *getOwner() )
-		{
-			idsFlags.emplace( *unit->getFlags().begin(), unit->getId() );
-		}
-
-		for ( auto & idFlag : idsFlags )
-		{
-			if ( index < MaxPassTextures )
-			{
-				m_textures[index] = idFlag.second;
-			}
-
-			++index;
-		}
-
-		auto data = buffer.getData( getOwner()->getId() );
-		data.write( m_materialShader->getMaterialChunk()
-			, m_textures
-			, 0u );
 	}
 
 	//*********************************************************************************************

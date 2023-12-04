@@ -16,28 +16,39 @@ namespace castor3d
 	{
 		static constexpr TextureFlag Normal = TextureFlag( 0x01u );
 
+		struct MaterialShader
+			: shader::PassMapMaterialShader
+		{
+			C3D_API MaterialShader()
+				: shader::PassMapMaterialShader{ "normal" }
+			{
+			}
+		};
+
 		struct ComponentsShader
-			: shader::PassComponentsShader
+			: shader::PassMapComponentsShader
 		{
 			explicit ComponentsShader( PassComponentPlugin const & plugin )
-				: shader::PassComponentsShader{ plugin }
+				: shader::PassMapComponentsShader{ plugin }
 			{
 			}
 
-			C3D_API void applyComponents( PipelineFlags const * flags
-				, shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::Vec4 const & sampled
-				, sdw::Vec2 const & uv
-				, shader::BlendComponents & components )const override;
+			C3D_API void applyTexture( shader::PassShaders const & passShaders
+				, shader::TextureConfigurations const & textureConfigs
+				, shader::TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, shader::Material const & material
+				, shader::BlendComponents & components
+				, shader::SampleTexture const & sampleTexture )const override;
 
 			PassComponentTextureFlag getTextureFlags()const
 			{
 				return makeTextureFlag( getId(), Normal );
 			}
 
-			C3D_API static void computeMikktNormal( shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
+			C3D_API static void computeMikktNormal( sdw::Float const & nmlGMul
+				, sdw::UInt const & nml2Chan
+				, sdw::UInt const & mask
 				, shader::BlendComponents & components
 				, sdw::Vec4 const & sampled
 				, sdw::Vec3 normal );
@@ -72,6 +83,11 @@ namespace castor3d
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
 				return std::make_unique< ComponentsShader >( *this );
+			}
+
+			shader::PassMaterialShaderPtr createMaterialShader()const override
+			{
+				return std::make_unique< MaterialShader >();
 			}
 
 			void filterTextureFlags( ComponentModeFlags filter

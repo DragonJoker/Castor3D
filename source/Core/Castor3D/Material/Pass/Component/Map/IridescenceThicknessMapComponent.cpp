@@ -105,30 +105,46 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void IridescenceThicknessMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
-		, shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::Vec4 const & sampled
-		, sdw::Vec2 const & uv
-		, shader::BlendComponents & components )const
+	void IridescenceThicknessMapComponent::ComponentsShader::applyTexture( shader::PassShaders const & passShaders
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, shader::BlendComponents & components
+		, shader::SampleTexture const & sampleTexture )const
 	{
-		if ( !components.hasMember(  "iridescenceFactor" ) )
+		std::string valueName = "iridescenceThickness";
+		std::string mapName = "iridescenceThickness";
+		auto textureName = mapName + "MapAndMask";
+
+		if ( !material.hasMember( textureName )
+			|| !components.hasMember( valueName ) )
 		{
 			return;
 		}
 
-		auto & writer{ *sampled.getWriter() };
+		auto & writer{ *material.getWriter() };
+		auto map = writer.declLocale( mapName + "Map"
+			, material.getMember< sdw::UInt >( textureName ) >> 16u );
+		auto mask = writer.declLocale( mapName + "Mask"
+			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+		auto iridescenceMinThickness = components.getMember< sdw::Float >( "iridescenceMinThickness" );
+		auto iridescenceMaxThickness = components.getMember< sdw::Float >( "iridescenceMaxThickness" );
+		auto iridescenceThickness = components.getMember< sdw::Float >( valueName );
 
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			auto iridescenceMinThickness = components.getMember< sdw::Float >( "iridescenceMinThickness" );
-			auto iridescenceMaxThickness = components.getMember< sdw::Float >( "iridescenceMaxThickness" );
-			auto iridescenceThickness = components.getMember< sdw::Float >( "iridescenceThickness" );
-			iridescenceThickness = mix( iridescenceMinThickness
-				, iridescenceMaxThickness
-				, config.getFloat( sampled, imgCompConfig.z() ) );
-		}
-		FI;
+		auto config = writer.declLocale( valueName + "Config"
+			, textureConfigs.getTextureConfiguration( map ) );
+		auto anim = writer.declLocale( valueName + "Anim"
+			, textureAnims.getTextureAnimation( map ) );
+		passShaders.computeTexcoords( textureConfigs
+			, config
+			, anim
+			, components );
+		auto sampled = writer.declLocale( valueName + "Sampled"
+			, sampleTexture( map, config, components ) );
+		iridescenceThickness = mix( iridescenceMinThickness
+			, iridescenceMaxThickness
+			, shader::TextureConfigData::getFloat( sampled, mask ) );
 	}
 
 	//*********************************************************************************************

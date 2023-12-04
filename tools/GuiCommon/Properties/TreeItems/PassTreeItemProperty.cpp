@@ -11,8 +11,6 @@
 #include <Castor3D/Material/Material.hpp>
 #include <Castor3D/Miscellaneous/ConfigurationVisitor.hpp>
 #include <Castor3D/Material/Pass/Component/PassComponentRegister.hpp>
-#include <Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp>
 #include <Castor3D/Model/Mesh/Submesh/Component/SubmeshComponentRegister.hpp>
 #include <Castor3D/Render/RenderTarget.hpp>
 #include <Castor3D/Render/RenderWindow.hpp>
@@ -48,9 +46,7 @@ namespace GuiCommon
 				for ( auto & componentDesc : compsRegister )
 				{
 					if ( componentDesc.plugin
-						&& !componentDesc.plugin->isMapComponent()
-						&& componentDesc.name != castor3d::TextureCountComponent::TypeName
-						&& componentDesc.name != castor3d::TexturesComponent::TypeName )
+						&& !componentDesc.plugin->isMapComponent() )
 					{
 						auto passCompProps = std::make_unique< PassTreeItemProperty::Properties >();
 						auto compProps = passCompProps.get();

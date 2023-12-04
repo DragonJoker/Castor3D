@@ -105,7 +105,7 @@ namespace castor3d::shader
 	struct SpotLight;
 	struct SpotShadowData;
 	struct SssProfile;
-	struct TextureAnimData;
+	struct TextureTransformData;
 	struct TextureConfigData;
 	struct VoxelData;
 
@@ -252,7 +252,7 @@ namespace castor3d::shader
 	Writer_Parameter( SpotLight );
 	Writer_Parameter( SpotShadowData );
 	Writer_Parameter( Surface );
-	Writer_Parameter( TextureAnimData );
+	Writer_Parameter( TextureTransformData );
 	Writer_Parameter( TextureConfigData );
 	Writer_Parameter( MeshVertex );
 	Writer_Parameter( VoxelData );

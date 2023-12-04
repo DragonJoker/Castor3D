@@ -16,59 +16,84 @@ namespace castor3d
 	{
 		static constexpr TextureFlag Height = TextureFlag( 0x01u );
 
+		struct MaterialShader
+			: shader::PassMapMaterialShader
+		{
+			C3D_API MaterialShader()
+				: shader::PassMapMaterialShader{ "height" }
+			{
+			}
+		};
+
 		struct ComponentsShader
-			: shader::PassComponentsShader
+			: shader::PassMapComponentsShader
 		{
 			explicit ComponentsShader( PassComponentPlugin const & plugin )
-				: shader::PassComponentsShader{ plugin }
+				: shader::PassMapComponentsShader{ plugin }
 			{
 			}
 
-			C3D_API void computeTexcoord( PipelineFlags const & flags
-				, shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::CombinedImage2DRgba32 const & map
-				, sdw::Vec3 & texCoords
-				, sdw::Vec2 & texCoord
-				, sdw::UInt const & mapId
-				, shader::BlendComponents & components )const override;
-			C3D_API void computeTexcoord( PipelineFlags const & flags
-				, shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::CombinedImage2DRgba32 const & map
-				, shader::DerivTex & texCoords
-				, shader::DerivTex & texCoord
-				, sdw::UInt const & mapId
-				, shader::BlendComponents & components )const override;
+			C3D_API void applyTexture( shader::PassShaders const & passShaders
+				, shader::TextureConfigurations const & textureConfigs
+				, shader::TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, shader::Material const & material
+				, shader::BlendComponents & components
+				, shader::SampleTexture const & sampleTexture )const override;
 
 			C3D_API void parallaxMapping( sdw::Vec2 & texCoords
 				, sdw::Vec3 const & viewDir
 				, sdw::CombinedImage2DRgba32 const & heightMap
 				, shader::TextureConfigData const & textureConfig
-				, sdw::U32Vec3 const & imgCompConfig )const;
+				, sdw::UInt const & mask )const;
+			C3D_API void parallaxMapping( sdw::Vec3 & texCoords
+				, sdw::Vec3 const & viewDir
+				, sdw::CombinedImage2DRgba32 const & heightMap
+				, shader::TextureConfigData const & textureConfig
+				, sdw::UInt const & mask )const;
 			C3D_API void parallaxMapping( shader::DerivTex & texCoords
 				, sdw::Vec3 const & viewDir
 				, sdw::CombinedImage2DRgba32 const & heightMap
 				, shader::TextureConfigData const & textureConfig
-				, sdw::U32Vec3 const & imgCompConfig )const;
+				, sdw::UInt const & mask )const;
 			C3D_API void parallaxMapping( sdw::Vec2 texCoords
 				, sdw::Vec2 const & dx
 				, sdw::Vec2 const & dy
 				, sdw::Vec3 const & viewDir
 				, sdw::CombinedImage2DRgba32 const & heightMap
 				, shader::TextureConfigData const & textureConfig
-				, sdw::U32Vec3 const & imgCompConfig )const;
+				, sdw::UInt const & mask )const;
 			C3D_API sdw::RetFloat parallaxShadow( sdw::Vec3 const & lightDir
 				, sdw::Vec2 const & initialTexCoord
 				, sdw::Float const & initialHeight
 				, sdw::CombinedImage2DRgba32 const & heightMap
 				, shader::TextureConfigData const & textureConfig
-				, sdw::U32Vec3 const & imgCompConfig );
+				, sdw::UInt const & mask );
 
 			PassComponentTextureFlag getTextureFlags()const
 			{
 				return makeTextureFlag( getId(), Height );
 			}
+
+		private:
+			void doComputeTexcoord( PassComponentCombine pass
+				, shader::TextureConfigData const & config
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec2 & texCoords
+				, sdw::UInt const & mask
+				, shader::BlendComponents & components )const;
+			void doComputeTexcoord( PassComponentCombine pass
+				, shader::TextureConfigData const & config
+				, sdw::CombinedImage2DRgba32 const & map
+				, sdw::Vec3 & texCoords
+				, sdw::UInt const & mask
+				, shader::BlendComponents & components )const;
+			void doComputeTexcoord( PassComponentCombine pass
+				, shader::TextureConfigData const & config
+				, sdw::CombinedImage2DRgba32 const & map
+				, shader::DerivTex & texCoords
+				, sdw::UInt const & mask
+				, shader::BlendComponents & components )const;
 
 		private:
 			mutable sdw::Function< sdw::Vec2
@@ -78,14 +103,14 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InCombinedImage2DRgba32
 				, shader::InTextureConfigData
-				, sdw::InU32Vec3 > m_parallaxMapping;
+				, sdw::InUInt > m_parallaxMapping;
 			mutable sdw::Function< sdw::Float
 				, sdw::InVec3
 				, sdw::InVec2
 				, sdw::InFloat
 				, sdw::InCombinedImage2DRgba32
 				, shader::InTextureConfigData
-				, sdw::InU32Vec3 > m_parallaxShadow;
+				, sdw::InUInt > m_parallaxShadow;
 		};
 
 		class Plugin
@@ -119,6 +144,11 @@ namespace castor3d
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
 				return std::make_unique< ComponentsShader >( *this );
+			}
+
+			shader::PassMaterialShaderPtr createMaterialShader()const override
+			{
+				return std::make_unique< MaterialShader >();
 			}
 
 			PassComponentTextureFlag getHeightMapFlags()const override

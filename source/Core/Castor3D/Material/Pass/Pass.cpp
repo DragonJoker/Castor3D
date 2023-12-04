@@ -14,7 +14,6 @@
 #include "Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/LightingModelComponent.hpp"
@@ -159,7 +158,6 @@ namespace castor3d
 		createComponent< TwoSidedComponent >();
 		createComponent< PickableComponent >();
 		createComponent< TexturesComponent >();
-		createComponent< TextureCountComponent >();
 		createComponent< ColourComponent >();
 		createComponent< NormalComponent >();
 	}
@@ -258,7 +256,6 @@ namespace castor3d
 
 				m_componentCombine = getOwner()->getOwner()->getPassComponentsRegister().registerPassComponentCombine( *this );
 				m_textureCombine = getOwner()->getOwner()->getTextureUnitCache().registerTextureCombine( *this );
-				getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 
 				for ( auto & unit : m_textureUnits )
 				{
@@ -268,6 +265,7 @@ namespace castor3d
 					}
 				}
 
+				getOwner()->getOwner()->getMaterialCache().registerPass( *this );
 				m_initialising = false;
 				m_initialised = true;
 			}

@@ -160,14 +160,14 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec2 Utils::transformUV( TextureConfigData const & pconfig
-		, TextureAnimData const & panim
+		, TextureTransformData const & panim
 		, sdw::Vec2 const puv )
 	{
 		if ( !m_transformUV )
 		{
 			m_transformUV = m_writer.implementFunction< sdw::Vec2 >( "transformUV"
 				, [&]( TextureConfigData const & config
-					, TextureAnimData const & anim
+					, TextureTransformData const & anim
 					, sdw::Vec2 uv )
 				{
 					uv = scaleUV( config.scale().xy()
@@ -201,7 +201,7 @@ namespace castor3d::shader
 					m_writer.returnStmt( uv );
 				}
 				, InTextureConfigData{ m_writer, "config" }
-				, InTextureAnimData{ m_writer, "anim" }
+				, InTextureTransformData{ m_writer, "anim" }
 				, sdw::InVec2{ m_writer, "uv" } );
 		}
 
@@ -209,14 +209,14 @@ namespace castor3d::shader
 	}
 
 	sdw::RetVec3 Utils::transformUVW( TextureConfigData const & pconfig
-		, TextureAnimData const & panim
+		, TextureTransformData const & panim
 		, sdw::Vec3 const puvw )
 	{
 		if ( !m_transformUVW )
 		{
 			m_transformUVW = m_writer.implementFunction< sdw::Vec3 >( "transformUVW"
 				, [&]( TextureConfigData const & config
-					, TextureAnimData const & anim
+					, TextureTransformData const & anim
 					, sdw::Vec3 uvw )
 				{
 					uvw = scaleUV( config.scale()
@@ -238,7 +238,7 @@ namespace castor3d::shader
 					m_writer.returnStmt( uvw );
 				}
 				, InTextureConfigData{ m_writer, "config" }
-				, InTextureAnimData{ m_writer, "anim" }
+				, InTextureTransformData{ m_writer, "anim" }
 				, sdw::InVec3{ m_writer, "uvw" } );
 		}
 

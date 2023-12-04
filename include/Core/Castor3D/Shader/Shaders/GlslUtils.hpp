@@ -55,10 +55,10 @@ namespace castor3d::shader
 		C3D_API sdw::Vec4 sampleMap( sdw::CombinedImage2DRgba32 const map
 			, DerivTex const texCoords );
 		C3D_API sdw::RetVec2 transformUV( TextureConfigData const & config
-			, TextureAnimData const & anim
+			, TextureTransformData const & anim
 			, sdw::Vec2 const uv );
 		C3D_API sdw::RetVec3 transformUVW( TextureConfigData const & config
-			, TextureAnimData const & anim
+			, TextureTransformData const & anim
 			, sdw::Vec3 const uv );
 
 		C3D_API void swap( sdw::Float const A, sdw::Float const & B );
@@ -243,11 +243,11 @@ namespace castor3d::shader
 			, sdw::InVec3 > m_reconstructCSZ;
 		sdw::Function< sdw::Vec2
 			, InTextureConfigData
-			, InTextureAnimData
+			, InTextureTransformData
 			, sdw::InVec2 > m_transformUV;
 		sdw::Function< sdw::Vec3
 			, InTextureConfigData
-			, InTextureAnimData
+			, InTextureTransformData
 			, sdw::InVec3 > m_transformUVW;
 		sdw::Function< sdw::Vec3
 			, sdw::InFloat

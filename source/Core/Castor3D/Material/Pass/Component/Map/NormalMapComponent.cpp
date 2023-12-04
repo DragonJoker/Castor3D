@@ -188,32 +188,47 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void NormalMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
-		, shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::Vec4 const & sampled
-		, sdw::Vec2 const & uv
-		, shader::BlendComponents & components )const
+	void NormalMapComponent::ComponentsShader::applyTexture( shader::PassShaders const & passShaders
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, shader::BlendComponents & components
+		, shader::SampleTexture const & sampleTexture )const
 	{
-		if ( !components.hasMember( "normal" )
-			|| !flags
-			|| !flags->enableTangentSpace() )
+		std::string valueName = "normal";
+		std::string mapName = "normal";
+		auto textureName = mapName + "MapAndMask";
+
+		if ( !material.hasMember( textureName )
+			|| !components.hasMember( valueName ) )
 		{
 			return;
 		}
 
-		auto & writer{ *sampled.getWriter() };
+		auto & writer{ *material.getWriter() };
+		auto map = writer.declLocale( mapName + "Map"
+			, material.getMember< sdw::UInt >( textureName ) >> 16u );
+		auto mask = writer.declLocale( mapName + "Mask"
+			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+		auto value = components.getMember< sdw::Vec3 >( valueName );
 
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			computeMikktNormal( config, imgCompConfig, components, sampled
-				, components.getMember< sdw::Vec3 >( "normal" ) );
-		}
-		FI;
+		auto config = writer.declLocale( valueName + "Config"
+			, textureConfigs.getTextureConfiguration( map ) );
+		auto anim = writer.declLocale( valueName + "Anim"
+			, textureAnims.getTextureAnimation( map ) );
+		passShaders.computeTexcoords( textureConfigs
+			, config
+			, anim
+			, components );
+		auto sampled = writer.declLocale( valueName + "Sampled"
+			, sampleTexture( map, config, components ) );
+		computeMikktNormal( config.nmlGMul(), config.nml2Chan(), mask, components, sampled, value );
 	}
 
-	void NormalMapComponent::ComponentsShader::computeMikktNormal( shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
+	void NormalMapComponent::ComponentsShader::computeMikktNormal( sdw::Float const & nmlGMul
+		, sdw::UInt const & nml2Chan
+		, sdw::UInt const & mask
 		, shader::BlendComponents & components
 		, sdw::Vec4 const & sampled
 		, sdw::Vec3 normal )
@@ -222,12 +237,12 @@ namespace castor3d
 		auto tbn = shader::Utils::getTBN( components.getMember< sdw::Vec3 >( "normal" )
 			, components.getMember< sdw::Vec4 >( "tangent" ).xyz()
 			, components.getMember< sdw::Vec3 >( "bitangent" ) );
-		sampled[imgCompConfig.z() + 1u] = config.nmlGMul() * sampled[imgCompConfig.z() + 1u];
+		sampled[mask + 1u] = nmlGMul * sampled[mask + 1u];
 		components.getMember< sdw::Vec3 >( "normal" ) = normalize( tbn
 			* fma( vec3( 2.0_f )
-				, writer.ternary( config.nml2Chan() != 0_u
-					, shader::Utils::reconstructNormal( sampled[imgCompConfig.z()], sampled[imgCompConfig.z() + 1u] )
-					, config.getVec3( sampled, imgCompConfig.z() ) )
+				, writer.ternary( nml2Chan != 0_u
+					, shader::Utils::reconstructNormal( sampled[mask], sampled[mask + 1u] )
+					, shader::TextureConfigData::getVec3( sampled, mask ) )
 				, -vec3( 1.0_f ) ) );
 	}
 

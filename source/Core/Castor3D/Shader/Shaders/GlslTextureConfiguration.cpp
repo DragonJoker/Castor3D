@@ -24,21 +24,21 @@ namespace castor3d
 		}
 
 		void TextureConfigData::transformUV( Utils & utils
-			, TextureAnimData const & anim
+			, TextureTransformData const & anim
 			, sdw::Vec2 & uv )const
 		{
 			uv = utils.transformUV( *this, anim, uv );
 		}
 
 		void TextureConfigData::transformUVW( Utils & utils
-			, TextureAnimData const & anim
+			, TextureTransformData const & anim
 			, sdw::Vec3 & uvw )const
 		{
 			uvw = utils.transformUVW( *this, anim, uvw );
 		}
 
 		void TextureConfigData::transformUV( Utils & utils
-			, TextureAnimData const & anim
+			, TextureTransformData const & anim
 			, DerivTex & uv )const
 		{
 			uv.uv() = utils.transformUV( *this, anim, uv.uv() );
@@ -118,13 +118,118 @@ namespace castor3d
 			}
 			else
 			{
-				computeMapsContributionsT< sdw::Vec3 >( passShaders
+				computeMapsContributionsT< sdw::Vec2 >( passShaders
 					, combine
 					, textureAnims
 					, maps
 					, material
 					, components );
 			}
+		}
+
+		RetDerivTex TextureConfigurations::computeTexcoordsDerivTex( PassShaders const & passShaders
+			, TextureConfigData const & pconfig
+			, TextureTransformData const & panim
+			, BlendComponents const & pcomponents )const
+		{
+			if ( !m_computeTexcoordsDerivTex )
+			{
+				m_computeTexcoordsDerivTex = m_writer.implementFunction< DerivTex >( "c3d_computeTexcoords"
+					, [&]( TextureConfigData const & config
+						, TextureTransformData const & anim
+						, BlendComponents const & components )
+					{
+						auto texCoords0 = components.getMember< DerivTex >( "texture0" );
+						auto texCoords1 = components.getMember< DerivTex >( "texture1", true );
+						auto texCoords2 = components.getMember< DerivTex >( "texture2", true );
+						auto texCoords3 = components.getMember< DerivTex >( "texture3", true );
+						auto texCoords = m_writer.declLocale( "c3d_tex"
+							, TextureConfigurations::getTexcoord( config
+								, texCoords0
+								, texCoords1
+								, texCoords2
+								, texCoords3 ) );
+						auto texCoord = m_writer.declLocale( "c3d_texCoord"
+							, config.toUv( texCoords ) );
+						config.transformUV( passShaders.getUtils(), anim, texCoord );
+						config.setUv( texCoords, texCoord );
+						m_writer.returnStmt( texCoords );
+					}
+					, InTextureConfigData{ m_writer, "config" }
+					, InTextureTransformData{ m_writer, "anim" }
+					, InBlendComponents{ m_writer, "components", pcomponents } );
+			}
+
+			return m_computeTexcoordsDerivTex( pconfig, panim, pcomponents );
+		}
+
+		sdw::RetVec3 TextureConfigurations::computeTexcoordsVec3( PassShaders const & passShaders
+			, TextureConfigData const & pconfig
+			, TextureTransformData const & panim
+			, BlendComponents const & pcomponents )const
+		{
+			if ( !m_computeTexcoordsVec3 )
+			{
+				m_computeTexcoordsVec3 = m_writer.implementFunction< sdw::Vec3 >( "c3d_computeTexcoords"
+					, [&]( TextureConfigData const & config
+						, TextureTransformData const & anim
+						, BlendComponents const & components )
+					{
+						auto texCoords0 = components.getMember< sdw::Vec3 >( "texture0" );
+						auto texCoords1 = components.getMember< sdw::Vec3 >( "texture1", true );
+						auto texCoords2 = components.getMember< sdw::Vec3 >( "texture2", true );
+						auto texCoords3 = components.getMember< sdw::Vec3 >( "texture3", true );
+						auto texCoords = m_writer.declLocale( "c3d_texCoords"
+							, TextureConfigurations::getTexcoord( config
+								, texCoords0
+								, texCoords1
+								, texCoords2
+								, texCoords3 ) );
+						auto texCoord = m_writer.declLocale( "c3d_texCoord"
+							, config.toUv( texCoords ) );
+						config.transformUV( passShaders.getUtils(), anim, texCoord );
+						config.setUv( texCoords, texCoord );
+						m_writer.returnStmt( texCoords );
+					}
+					, InTextureConfigData{ m_writer, "config" }
+					, InTextureTransformData{ m_writer, "anim" }
+					, InBlendComponents{ m_writer, "components", pcomponents } );
+			}
+
+			return m_computeTexcoordsVec3( pconfig, panim, pcomponents );
+		}
+
+		sdw::RetVec2 TextureConfigurations::computeTexcoordsVec2( PassShaders const & passShaders
+			, TextureConfigData const & pconfig
+			, TextureTransformData const & panim
+			, BlendComponents const & pcomponents )const
+		{
+			if ( !m_computeTexcoordsVec2 )
+			{
+				m_computeTexcoordsVec2 = m_writer.implementFunction< sdw::Vec2 >( "c3d_computeTexcoords"
+					, [&]( TextureConfigData const & config
+						, TextureTransformData const & anim
+						, BlendComponents const & components )
+					{
+						auto texCoords0 = components.getMember< sdw::Vec2 >( "texture0" );
+						auto texCoords1 = components.getMember< sdw::Vec2 >( "texture1", true );
+						auto texCoords2 = components.getMember< sdw::Vec2 >( "texture2", true );
+						auto texCoords3 = components.getMember< sdw::Vec2 >( "texture3", true );
+						auto texCoords = m_writer.declLocale( "c3d_texCoords"
+							, TextureConfigurations::getTexcoord( config
+								, texCoords0
+								, texCoords1
+								, texCoords2
+								, texCoords3 ) );
+						config.transformUV( passShaders.getUtils(), anim, texCoords );
+						m_writer.returnStmt( texCoords );
+					}
+					, InTextureConfigData{ m_writer, "config" }
+					, InTextureTransformData{ m_writer, "anim" }
+					, InBlendComponents{ m_writer, "components", pcomponents } );
+			}
+
+			return m_computeTexcoordsVec2( pconfig, panim, pcomponents );
 		}
 
 		//*********************************************************************************************

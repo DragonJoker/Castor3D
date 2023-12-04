@@ -112,8 +112,6 @@ namespace castor3d::shader
 		, passCount{ getMember < sdw::UInt >( "passCount" ) }
 		, lighting{ getMember < sdw::UInt >( "lighting" ) }
 		, lightingModel{ getMember < sdw::UInt >( "lightingModel" ) }
-		, textures{ getMember < sdw::Array< sdw::UInt > >( "textures" ) }
-		, texturesCount{ getMember < sdw::UInt >( "textureCount" ) }
 		, colour{ getMember< sdw::Vec3 >( "colour" ) }
 		, specular{ getMember< sdw::Vec3 >( "specular" ) }
 		, transmission{ getMember< sdw::Float >( "transmission" ) }
@@ -245,16 +243,6 @@ namespace castor3d::shader
 				break;
 			}
 		}
-	}
-
-	sdw::UInt Material::getTexture( uint32_t idx )const
-	{
-		return textures[idx % MaxPassTextures];
-	}
-
-	sdw::UInt Material::getTexture( sdw::UInt const & idx )const
-	{
-		return textures[idx % MaxPassTextures];
 	}
 
 	sdw::expr::ExprPtr Material::makeInit( sdw::ShaderWriter & writer

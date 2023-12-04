@@ -7,7 +7,6 @@
 #include "Castor3D/Material/Pass/Component/Base/NormalComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/PickableComponent.hpp"
-#include "Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Base/UntileMappingComponent.hpp"
@@ -25,6 +24,7 @@
 #include "Castor3D/Material/Pass/Component/Lighting/SubsurfaceScatteringComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/ThicknessComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Lighting/TransmissionComponent.hpp"
+#include "Castor3D/Material/Pass/Component/Lighting/TransmittanceComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/AttenuationMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatMapComponent.hpp"
 #include "Castor3D/Material/Pass/Component/Map/ClearcoatNormalMapComponent.hpp"
@@ -149,7 +149,6 @@ namespace castor3d
 		registerComponent< PassHeaderComponent >();
 		registerComponent< LightingModelComponent >();
 		registerComponent< TexturesComponent >();
-		registerComponent< TextureCountComponent >();
 		registerComponent< BlendComponent >();
 		registerComponent< TwoSidedComponent >();
 		registerComponent< PickableComponent >();
@@ -176,6 +175,7 @@ namespace castor3d
 		registerComponent< ClearcoatComponent >();
 		registerComponent< SheenComponent >();
 		registerComponent< IridescenceComponent >();
+		registerComponent< TransmittanceComponent >();
 		registerComponent< SubsurfaceScatteringComponent >();
 		// Pass shader image components
 		registerComponent< HeightMapComponent >();
@@ -874,6 +874,7 @@ namespace castor3d
 		m_bufferStride = 0u;
 		m_bufferOrder.clear();
 		m_bufferShaders.clear();
+		m_fillMaterial.clear();
 		using Chunks = std::map< PassComponentID, std::pair< std::string, MemChunk > >;
 		Chunks chunks;
 
@@ -1025,6 +1026,7 @@ namespace castor3d
 			std::pair< PassComponentID, std::pair< std::string, MemChunk > > chunk{};
 			chunk.first = passcompreg::InvalidId;
 			chunk.second.second.askedSize = 4u;
+			chunk.second.second.size = 4u;
 			chunk.second.second.offset = offset;
 			ordered.push_back( std::move( chunk ) );
 			offset += 4u;

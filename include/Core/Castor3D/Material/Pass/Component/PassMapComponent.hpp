@@ -15,6 +15,43 @@ namespace castor3d
 {
 	using TextureSourceSet = std::unordered_set< TextureSourceInfo, TextureSourceInfoHasher >;
 
+	namespace shader
+	{
+		struct PassMapMaterialShader
+			: shader::PassMaterialShader
+		{
+			C3D_API PassMapMaterialShader( std::string const & mapMemberName )
+				: shader::PassMaterialShader{ sizeof( uint32_t ) }
+				, m_mapMemberName{ mapMemberName + "MapAndMask" }
+			{
+			}
+
+			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
+				, sdw::expr::ExprList & inits )const override;
+
+		private:
+			std::string m_mapMemberName;
+		};
+
+		struct PassMapComponentsShader
+			: public PassComponentsShader
+		{
+		public:
+			C3D_API explicit PassMapComponentsShader( PassComponentPlugin const & plugin )
+				: PassComponentsShader{ plugin }
+			{
+			}
+
+			C3D_API virtual void applyTexture( PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const = 0;
+		};
+	}
+
 	class PassMapComponentPlugin
 		: public PassComponentPlugin
 	{
@@ -25,6 +62,9 @@ namespace castor3d
 		{
 		}
 
+		C3D_API void zeroBuffer( Pass const & pass
+			, shader::PassMaterialShader const & materialShader
+			, PassBuffer & buffer )const override;
 		C3D_API bool writeTextureConfig( TextureConfiguration const & configuration
 			, castor::String const & tabs
 			, castor::StringStream & file )const override;
@@ -91,7 +131,8 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		virtual void doFillConfig( TextureConfiguration & configuration
+		C3D_API void doFillBuffer( PassBuffer & buffer )const override;
+		C3D_API virtual void doFillConfig( TextureConfiguration & configuration
 			, ConfigurationVisitorBase & vis )const
 		{
 		}

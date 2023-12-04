@@ -17,47 +17,35 @@ namespace castor3d
 	{
 		static constexpr TextureFlag Transmittance = TextureFlag( 0x01u );
 
+		struct MaterialShader
+			: shader::PassMapMaterialShader
+		{
+			C3D_API MaterialShader()
+				: shader::PassMapMaterialShader{ "transmittance" }
+			{
+			}
+		};
+
 		struct ComponentsShader
-			: shader::PassComponentsShader
+			: shader::PassMapComponentsShader
 		{
 			explicit ComponentsShader( PassComponentPlugin const & plugin )
-				: shader::PassComponentsShader{ plugin }
+				: shader::PassMapComponentsShader{ plugin }
 			{
 			}
 
-			C3D_API void fillComponents( ComponentModeFlags componentsMask
-				, sdw::type::BaseStruct & components
-				, shader::Materials const & materials
-				, sdw::StructInstance const * surface )const override;
-			C3D_API void fillComponentsInits( sdw::type::BaseStruct const & components
-				, shader::Materials const & materials
-				, shader::Material const * material
-				, sdw::StructInstance const * surface
-				, sdw::Vec4 const * clrCot
-				, sdw::expr::ExprList & inits )const override;
-			C3D_API void blendComponents( shader::Materials const & materials
-				, sdw::Float const & passMultiplier
-				, shader::BlendComponents & res
-				, shader::BlendComponents const & src )const override;
-			C3D_API void applyComponents( PipelineFlags const * flags
-				, shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::Vec4 const & sampled
-				, sdw::Vec2 const & uv
-				, shader::BlendComponents & components )const override;
+			C3D_API void applyTexture( shader::PassShaders const & passShaders
+				, shader::TextureConfigurations const & textureConfigs
+				, shader::TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, shader::Material const & material
+				, shader::BlendComponents & components
+				, shader::SampleTexture const & sampleTexture )const override;
 
 			PassComponentTextureFlag getTextureFlags()const
 			{
 				return makeTextureFlag( getId(), Transmittance );
 			}
-		};
-
-		struct MaterialShader
-			: shader::PassMaterialShader
-		{
-			C3D_API MaterialShader();
-			C3D_API void fillMaterialType( sdw::type::BaseStruct & type
-				, sdw::expr::ExprList & inits )const override;
 		};
 
 		class Plugin
@@ -80,9 +68,6 @@ namespace castor3d
 				, ComponentModeFlags const & filter )const override;
 			void createMapComponent( Pass & pass
 				, std::vector< PassComponentUPtr > & result )const override;
-			void zeroBuffer( Pass const & pass
-				, shader::PassMaterialShader const & materialShader
-				, PassBuffer & buffer )const override;
 
 			bool isMapComponent()const override
 			{
@@ -145,24 +130,8 @@ namespace castor3d
 
 		C3D_API static castor::String const TypeName;
 
-		float getTransmittance()const
-		{
-			return m_transmittance;
-		}
-
-		void setTransmittance( float v )
-		{
-			m_transmittance = v;
-		}
-
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;
-		bool doWriteText( castor::String const & tabs
-			, castor::Path const & folder
-			, castor::String const & subfolder
-			, castor::StringStream & file )const override;
-		void doFillBuffer( PassBuffer & buffer )const override;
-		mutable castor::AtomicGroupChangeTracked< float > m_transmittance;
 		void doFillConfig( TextureConfiguration & configuration
 			, ConfigurationVisitorBase & vis )const override;
 	};

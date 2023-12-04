@@ -41,6 +41,7 @@ namespace ocean_fft
 				, castor3d::shader::BlendComponents & res
 				, castor3d::shader::BlendComponents const & src )const override;
 			void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, castor3d::shader::Material const & material
 				, castor3d::shader::BlendComponents & components
 				, bool isFrontCulled )const override;
 		};

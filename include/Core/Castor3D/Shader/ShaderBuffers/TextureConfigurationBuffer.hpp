@@ -105,7 +105,6 @@ namespace castor3d
 	public:
 		struct Data
 		{
-			std::array< castor::Point4ui, 4u > components;
 			castor::Point3f translate;
 			float rotateU;
 			castor::Point3f scale;
@@ -119,14 +118,12 @@ namespace castor3d
 			uint32_t isTileAnim;
 			uint32_t needsYInv;
 			uint32_t texcoordSet;
-			uint32_t componentsCount;
-			uint32_t pad[3];
 		};
 
 		using TextureConfigurationsData = castor::ArrayView< Data >;
 
 		static uint32_t constexpr DataSize = uint32_t( sizeof( Data ) );
-		static_assert( DataSize == 160u );
+		static_assert( DataSize == 80u );
 
 	private:
 		ShaderBuffer m_buffer;
