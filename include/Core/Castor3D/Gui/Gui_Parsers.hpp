@@ -114,6 +114,7 @@ namespace castor3d
 
 	CU_DeclareAttributeParser( parserGui )
 	CU_DeclareAttributeParser( parserTheme )
+	CU_DeclareAttributeParser( parserGlobalBoxLayout )
 
 	CU_DeclareAttributeParser( parserButton )
 	CU_DeclareAttributeParser( parserButtonTheme )

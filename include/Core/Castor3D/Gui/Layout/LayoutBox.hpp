@@ -15,6 +15,10 @@ namespace castor3d
 		/**@name General */
 		//@{
 
+		/** Constructor for global layout
+		*/
+		C3D_API explicit LayoutBox( ControlsManager & manager );
+
 		/** Constructor
 		*\param[in] container
 		*	The control affected by this layout.

@@ -14,6 +14,7 @@
 #include "Castor3D/Gui/Controls/CtrlScrollBar.hpp"
 #include "Castor3D/Gui/Controls/CtrlSlider.hpp"
 #include "Castor3D/Gui/Controls/CtrlStatic.hpp"
+#include "Castor3D/Gui/Layout/Layout.hpp"
 #include "Castor3D/Gui/Theme/StyleButton.hpp"
 #include "Castor3D/Gui/Theme/StyleComboBox.hpp"
 #include "Castor3D/Gui/Theme/StyleEdit.hpp"
@@ -152,6 +153,7 @@ namespace castor3d
 			createControlsParsers( result, section );
 			createStylesParsers( result, section );
 			addParserT( result, section, cuT( "theme" ), &parserTheme, { makeParameter< ParameterType::eName >() } );
+			addParserT( result, section, cuT( "box_layout" ), &parserGlobalBoxLayout );
 		}
 
 		static void createButtonParsers( castor::AttributeParsers & result )
@@ -477,6 +479,21 @@ namespace castor3d
 		: UserInputListener{ engine, Name }
 		, StylesHolder{ castor::String{}, engine }
 	{
+	}
+	
+	void ControlsManager::setSize( castor::Size const & size )
+	{
+		if ( m_layout )
+		{
+			m_layout->markDirty();
+		}
+
+		m_size = size;
+	}
+
+	void ControlsManager::setLayout( LayoutUPtr layout )
+	{
+		m_layout = std::move( layout );
 	}
 
 	ThemeRPtr ControlsManager::createTheme( castor::String const & name

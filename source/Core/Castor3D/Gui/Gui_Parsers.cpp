@@ -265,6 +265,14 @@ namespace castor3d
 	}
 	CU_EndAttributePush( GUISection::eTheme )
 
+	CU_ImplementAttributeParser( parserGlobalBoxLayout )
+	{
+		ControlsManager & ctrlsManager = guiparse::getControlsManager( context );
+		auto & guiContext = guiparse::getParserContext( context );
+		guiContext.layout = castor::makeUniqueDerived< Layout, LayoutBox >( ctrlsManager );
+	}
+	CU_EndAttributePush( GUISection::eBoxLayout )
+
 	CU_ImplementAttributeParser( parserButton )
 	{
 		auto & guiContext = guiparse::getParserContext( context );
@@ -2207,7 +2215,18 @@ namespace castor3d
 
 		if ( guiContext.layout )
 		{
-			guiContext.layout->getContainer().setLayout( std::move( guiContext.layout ) );
+			if ( guiContext.layout->hasContainer() )
+			{
+				guiContext.layout->getContainer().setLayout( std::move( guiContext.layout ) );
+			}
+			else if ( guiContext.layout->hasManager() )
+			{
+				guiContext.layout->getManager().setLayout( std::move( guiContext.layout ) );
+			}
+			else
+			{
+			CU_ParsingError( cuT( "Layout has no container." ) );
+			}
 		}
 		else
 		{
