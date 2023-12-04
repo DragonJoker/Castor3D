@@ -135,14 +135,6 @@ namespace castor3d
 					data.isTransformAnim = unit->isTransformAnimated() ? 1u : 0u;
 					data.isTileAnim = unit->isTileAnimated() ? 1u : 0u;
 					data.texcoordSet = unit->getTexcoordSet() ? 1u : 0u;
-
-					auto it = findFirstEmpty( config );
-					data.componentsCount = uint32_t( std::distance( config.components.begin(), it ) );
-
-					for ( uint32_t i = 0u; i < data.componentsCount; ++i )
-					{
-						data.components[i] = texcfgbuf::writeFlags( config.components[i] );
-					}
 				}
 			}
 

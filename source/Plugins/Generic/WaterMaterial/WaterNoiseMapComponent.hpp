@@ -19,30 +19,23 @@ namespace water
 	{
 		static constexpr castor3d::TextureFlag Noise = castor3d::TextureFlag( 0x01u );
 
+		struct MaterialShader
+			: castor3d::shader::PassMapMaterialShader
+		{
+			MaterialShader()
+				: castor3d::shader::PassMapMaterialShader{ "waterNoise" }
+			{
+			}
+		};
+
 		struct ComponentsShader
-			: castor3d::shader::PassComponentsShader
+			: castor3d::shader::PassMapComponentsShader
 		{
 			explicit ComponentsShader( castor3d::PassComponentPlugin const & plugin )
-				: castor3d::shader::PassComponentsShader{ plugin }
+				: castor3d::shader::PassMapComponentsShader{ plugin }
 			{
 			}
 
-			void computeTexcoord( castor3d::PipelineFlags const & flags
-				, castor3d::shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::CombinedImage2DRgba32 const & map
-				, sdw::Vec3 & texCoords
-				, sdw::Vec2 & texCoord
-				, sdw::UInt const & mapId
-				, castor3d::shader::BlendComponents & components )const override;
-			void computeTexcoord( castor3d::PipelineFlags const & flags
-				, castor3d::shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::CombinedImage2DRgba32 const & map
-				, castor3d::shader::DerivTex & texCoords
-				, castor3d::shader::DerivTex & texCoord
-				, sdw::UInt const & mapId
-				, castor3d::shader::BlendComponents & components )const override;
 			void fillComponents( castor3d::ComponentModeFlags componentsMask
 				, sdw::type::BaseStruct & components
 				, castor3d::shader::Materials const & materials
@@ -57,13 +50,15 @@ namespace water
 				, sdw::Float const & passMultiplier
 				, castor3d::shader::BlendComponents & res
 				, castor3d::shader::BlendComponents const & src )const override;
-			void applyComponents( castor3d::PipelineFlags const * flags
-				, castor3d::shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::Vec4 const & sampled
-				, sdw::Vec2 const & uv
-				, castor3d::shader::BlendComponents & components )const override;
+			void applyTexture( castor3d::shader::PassShaders const & passShaders
+				, castor3d::shader::TextureConfigurations const & textureConfigs
+				, castor3d::shader::TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, castor3d::shader::Material const & material
+				, castor3d::shader::BlendComponents & components
+				, castor3d::shader::SampleTexture const & sampleTexture )const override;
 			void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, castor3d::shader::Material const & material
 				, castor3d::shader::BlendComponents & components
 				, bool isFrontCulled )const override;
 
@@ -104,6 +99,11 @@ namespace water
 			castor3d::shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
 				return std::make_unique< ComponentsShader >( *this );
+			}
+
+			castor3d::shader::PassMaterialShaderPtr createMaterialShader()const override
+			{
+				return std::make_unique< MaterialShader >();
 			}
 
 			void filterTextureFlags( castor3d::ComponentModeFlags filter

@@ -112,29 +112,44 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void GlossinessMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
-		, shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::Vec4 const & sampled
-		, sdw::Vec2 const & uv
-		, shader::BlendComponents & components )const
+	void GlossinessMapComponent::ComponentsShader::applyTexture( shader::PassShaders const & passShaders
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, shader::BlendComponents & components
+		, shader::SampleTexture const & sampleTexture )const
 	{
-		if ( !components.hasMember( "roughness" ) )
+		std::string mapName = "glossiness";
+		auto textureName = mapName + "MapAndMask";
+
+		if ( !material.hasMember( textureName )
+			|| !components.hasMember( "roughness" ) )
 		{
 			return;
 		}
 
-		auto & writer{ *sampled.getWriter() };
+		auto & writer{ *material.getWriter() };
+		auto map = writer.declLocale( mapName + "Map"
+			, material.getMember< sdw::UInt >( textureName ) >> 16u );
+		auto mask = writer.declLocale( mapName + "Mask"
+			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+		auto value = components.getMember< sdw::Float >( "roughness" );
 
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			auto roughness = components.getMember< sdw::Float >( "roughness" );
-			auto gloss = writer.declLocale( "gloss"
-				, ( 1.0_f - roughness ) );
-			gloss *= config.getFloat( sampled, imgCompConfig.z() );
-			components.getMember< sdw::Float >( "roughness" ) = ( 1.0_f - gloss );
-		}
-		FI;
+		auto config = writer.declLocale( "glossinessConfig"
+			, textureConfigs.getTextureConfiguration( map ) );
+		auto anim = writer.declLocale( "glossinessAnim"
+			, textureAnims.getTextureAnimation( map ) );
+		passShaders.computeTexcoords( textureConfigs
+			, config
+			, anim
+			, components );
+		auto sampled = writer.declLocale( "glossinessSampled"
+			, sampleTexture( map, config, components ) );
+		auto gloss = writer.declLocale( "gloss"
+			, ( 1.0_f - value ) );
+		gloss *= shader::TextureConfigData::getFloat( sampled, mask );
+		value = ( 1.0_f - gloss );
 	}
 
 	//*********************************************************************************************

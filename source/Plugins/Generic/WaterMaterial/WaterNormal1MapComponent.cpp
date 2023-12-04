@@ -152,28 +152,60 @@ namespace water
 		}
 	}
 
-	void WaterNormal1MapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
-		, c3d::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::Vec4 const & sampled
-		, sdw::Vec2 const & uv
-		, c3d::BlendComponents & components )const
+	void WaterNormal1MapComponent::ComponentsShader::applyTexture( castor3d::shader::PassShaders const & passShaders
+		, castor3d::shader::TextureConfigurations const & textureConfigs
+		, castor3d::shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, castor3d::shader::Material const & material
+		, castor3d::shader::BlendComponents & components
+		, castor3d::shader::SampleTexture const & sampleTexture )const
 	{
-		if ( !components.hasMember( "waterNormals1" ) )
+		std::string valueName = "waterNormals1";
+		std::string mapName = "waterNormal1";
+		auto textureName = mapName + "MapAndMask";
+
+		if ( !material.hasMember( textureName )
+			|| !components.hasMember( valueName ) )
 		{
 			return;
 		}
 
-		auto & writer{ *sampled.getWriter() };
+		auto & writer{ *material.getWriter() };
+		auto map = writer.declLocale( mapName + "Map"
+			, material.getMember< sdw::UInt >( textureName ) >> 16u );
+		auto mask = writer.declLocale( mapName + "Mask"
+			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+		auto value = components.getMember< sdw::Vec3 >( valueName );
 
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
+		auto config = writer.declLocale( valueName + "Config"
+			, textureConfigs.getTextureConfiguration( map ) );
+		auto uv = components.getMember< sdw::Vec2 >( "waterNormalMapCoords1" );
+		auto anim = writer.declLocale( valueName + "Anim"
+			, textureAnims.getTextureAnimation( map ) );
+		passShaders.computeTexcoords( textureConfigs
+			, config
+			, anim
+			, components );
+
+		if ( checkFlag( passShaders.getFilter(), ComponentModeFlag::eDerivTex ) )
 		{
-			auto waterNormals1 = components.getMember< sdw::Vec3 >( "waterNormals1" );
-			waterNormals1 = config.getVec3( sampled, imgCompConfig.z() ) * 2.0_f - 1.0_f;
-			auto waterNormalMapCoords1 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords1" );
-			waterNormalMapCoords1 = uv;
+			auto texCoords = components.getMember< castor3d::shader::DerivTex >( "texCoords" );
+			uv = config.getUv( texCoords );
 		}
-		FI;
+		else if ( passShaders.getPassCombine().baseId == 0u )
+		{
+			auto texCoords = components.getMember< sdw::Vec2 >( "texCoords" );
+			uv = texCoords;
+		}
+		else
+		{
+			auto texCoords = components.getMember< sdw::Vec3 >( "texCoords" );
+			uv = config.getUv( texCoords );
+		}
+
+		auto sampled = writer.declLocale( valueName + "Sampled"
+			, sampleTexture( map, config, components ) );
+		value = castor3d::shader::TextureConfigData::getVec3( sampled, mask ) * 2.0_f - 1.0_f;
 	}
 
 	//*********************************************************************************************

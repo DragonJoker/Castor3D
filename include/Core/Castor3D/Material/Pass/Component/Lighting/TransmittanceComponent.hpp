@@ -1,17 +1,18 @@
 /*
 See LICENSE file in root folder
 */
-#ifndef ___C3D_MetalnessComponent_H___
-#define ___C3D_MetalnessComponent_H___
+#ifndef ___C3D_TransmittanceComponent_H___
+#define ___C3D_TransmittanceComponent_H___
 
 #include "Castor3D/Material/Pass/Component/BaseDataPassComponent.hpp"
 
 #include <CastorUtils/Design/GroupChangeTracked.hpp>
 #include <CastorUtils/FileParser/FileParserModule.hpp>
+#include <CastorUtils/Graphics/RgbColour.hpp>
 
 namespace castor3d
 {
-	struct MetalnessComponent
+	struct TransmittanceComponent
 		: public BaseDataPassComponentT< castor::AtomicGroupChangeTracked< float > >
 	{
 		struct ComponentsShader
@@ -36,10 +37,6 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			C3D_API void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
-				, shader::Material const & material
-				, shader::BlendComponents & components
-				, bool isFrontCulled )const override;
 		};
 
 		struct MaterialShader
@@ -61,7 +58,7 @@ namespace castor3d
 
 			PassComponentUPtr createComponent( Pass & pass )const override
 			{
-				return castor::makeUniqueDerived< PassComponent, MetalnessComponent >( pass );
+				return castor::makeUniqueDerived< PassComponent, TransmittanceComponent >( pass );
 			}
 
 			void createParsers( castor::AttributeParsers & parsers
@@ -88,23 +85,21 @@ namespace castor3d
 			return castor::makeUniqueDerived< PassComponentPlugin, Plugin >( passComponent );
 		}
 
-		C3D_API explicit MetalnessComponent( Pass & pass
-			, float defaultValue = Default );
+		C3D_API explicit TransmittanceComponent( Pass & pass );
 
 		C3D_API void accept( ConfigurationVisitorBase & vis )override;
 
-		float getMetalness()const
+		float const & getTransmittance()const
 		{
-			return *getData();
+			return getData();
 		}
 
-		void setMetalness( float v )
+		void setTransmittance( float v )
 		{
 			setData( v );
 		}
 
 		C3D_API static castor::String const TypeName;
-		static float constexpr Default = 0.0f;
 
 	private:
 		PassComponentUPtr doClone( Pass & pass )const override;

@@ -108,56 +108,6 @@ namespace water
 
 	//*********************************************************************************************
 
-	void WaterFoamMapComponent::ComponentsShader::computeTexcoord( PipelineFlags const & flags
-		, castor3d::shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec3 & texCoords
-		, sdw::Vec2 & texCoord
-		, sdw::UInt const & mapId
-		, castor3d::shader::BlendComponents & components )const
-	{
-		if ( !components.hasMember( "waterFoam" ) )
-		{
-			return;
-		}
-
-		components.getMember< sdw::UInt >( "waterFoamMapId" ) = mapId;
-		components.getMember< sdw::UInt >( "waterFoamMapMask" ) = imgCompConfig.z();
-		components.getMember< sdw::Vec2 >( "waterFoamNoiseUV" ) = texCoord;
-
-		if ( components.hasMember( "foamNoiseTiling" ) )
-		{
-			auto foamNoiseTiling = components.getMember< sdw::Float >( "foamNoiseTiling" );
-			components.getMember< sdw::Vec2 >( "waterFoamNoiseUV" ) *= foamNoiseTiling;
-		}
-	}
-
-	void WaterFoamMapComponent::ComponentsShader::computeTexcoord( PipelineFlags const & flags
-		, castor3d::shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::CombinedImage2DRgba32 const & map
-		, castor3d::shader::DerivTex & texCoords
-		, castor3d::shader::DerivTex & texCoord
-		, sdw::UInt const & mapId
-		, castor3d::shader::BlendComponents & components )const
-	{
-		if ( !components.hasMember( "waterFoam" ) )
-		{
-			return;
-		}
-
-		components.getMember< sdw::UInt >( "waterFoamMapId" ) = mapId;
-		components.getMember< sdw::UInt >( "waterFoamMapMask" ) = imgCompConfig.z();
-		components.getMember< sdw::Vec2 >( "waterFoamNoiseUV" ) = texCoord.uv();
-
-		if ( components.hasMember( "foamNoiseTiling" ) )
-		{
-			auto foamNoiseTiling = components.getMember< sdw::Float >( "foamNoiseTiling" );
-			components.getMember< sdw::Vec2 >( "waterFoamNoiseUV" ) *= foamNoiseTiling;
-		}
-	}
-
 	void WaterFoamMapComponent::ComponentsShader::fillComponents( castor3d::ComponentModeFlags componentsMask
 		, sdw::type::BaseStruct & components
 		, castor3d::shader::Materials const & materials
@@ -173,8 +123,6 @@ namespace water
 			components.declMember( "waterFoam", sdw::type::Kind::eVec3F );
 			components.declMember( "waterFoamNoiseUV", sdw::type::Kind::eVec2F );
 			components.declMember( "waterFoamNoise", sdw::type::Kind::eFloat );
-			components.declMember( "waterFoamMapId", sdw::type::Kind::eUInt );
-			components.declMember( "waterFoamMapMask", sdw::type::Kind::eUInt );
 		}
 	}
 
@@ -193,8 +141,6 @@ namespace water
 		inits.emplace_back( sdw::makeExpr( vec3( 0.0_f ) ) );
 		inits.emplace_back( sdw::makeExpr( vec2( 0.0_f ) ) );
 		inits.emplace_back( sdw::makeExpr( 1.0_f ) );
-		inits.emplace_back( sdw::makeExpr( 0_u ) );
-		inits.emplace_back( sdw::makeExpr( 0_u ) );
 	}
 
 	void WaterFoamMapComponent::ComponentsShader::blendComponents( castor3d::shader::Materials const & materials
@@ -208,11 +154,68 @@ namespace water
 		}
 	}
 
+	void WaterFoamMapComponent::ComponentsShader::applyTexture( castor3d::shader::PassShaders const & passShaders
+		, castor3d::shader::TextureConfigurations const & textureConfigs
+		, castor3d::shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, castor3d::shader::Material const & material
+		, castor3d::shader::BlendComponents & components
+		, castor3d::shader::SampleTexture const & sampleTexture )const
+	{
+		std::string mapName = "waterFoamMap";
+		std::string valueName = "waterFoam";
+
+		if ( !material.hasMember( mapName )
+			|| !components.hasMember( valueName ) )
+		{
+			return;
+		}
+
+		auto & writer{ *material.getWriter() };
+		auto map = material.getMember< sdw::UInt >( mapName );
+		auto value = components.getMember< sdw::Vec3 >( valueName );
+		auto waterFoamNoiseUV = components.getMember< sdw::Vec2 >( "waterFoamNoiseUV" );
+
+		auto config = writer.declLocale( valueName + "Config"
+			, textureConfigs.getTextureConfiguration( map ) );
+		auto anim = writer.declLocale( valueName + "Anim"
+			, textureAnims.getTextureAnimation( map ) );
+		passShaders.computeTexcoords( textureConfigs, config, anim, components );
+
+		if ( checkFlag( passShaders.getFilter(), ComponentModeFlag::eDerivTex ) )
+		{
+			auto texCoords = components.getMember< castor3d::shader::DerivTex >( "texCoords" );
+			waterFoamNoiseUV = texCoords.uv();
+		}
+		else if ( passShaders.getPassCombine().baseId == 0u )
+		{
+			auto texCoords = components.getMember< sdw::Vec2 >( "texCoords" );
+			waterFoamNoiseUV = texCoords;
+		}
+		else
+		{
+			auto texCoords = components.getMember< sdw::Vec3 >( "texCoords" );
+			waterFoamNoiseUV = texCoords.xy();
+		}
+
+		if ( components.hasMember( "foamNoiseTiling" ) )
+		{
+			auto foamNoiseTiling = components.getMember< sdw::Float >( "foamNoiseTiling" );
+			waterFoamNoiseUV *= foamNoiseTiling;
+		}
+	}
+
 	void WaterFoamMapComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, c3d::Material const & material
 		, c3d::BlendComponents & components
 		, bool isFrontCulled )const
 	{
-		if ( !components.hasMember( "waterFoam" )
+		std::string valueName = "waterFoam";
+		std::string mapName = "waterFoam";
+		auto textureName = mapName + "MapAndMask";
+
+		if ( !material.hasMember( textureName )
+			|| !components.hasMember( valueName )
 			|| !components.hasMember( "foamTiling" )
 			|| !components.hasMember( "waterNormalMapCoords1" )
 			|| !components.hasMember( "waterNormalMapCoords2" ) )
@@ -221,25 +224,30 @@ namespace water
 		}
 
 		auto & writer = *components.getWriter();
-		auto waterFoam = components.getMember< sdw::Vec3 >( "waterFoam" );
+		auto map = writer.declLocale( mapName + "Map"
+			, material.getMember< sdw::UInt >( textureName ) >> 16u );
+		auto mask = writer.declLocale( mapName + "Mask"
+			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+		auto value = components.getMember< sdw::Vec3 >( valueName );
 		auto waterFoamNoise = components.getMember< sdw::Float >( "waterFoamNoise" );
 		auto foamTiling = components.getMember< sdw::Float >( "foamTiling" );
-		auto waterFoamMapId = components.getMember< sdw::UInt >( "waterFoamMapId" );
-		auto waterFoamMapMask = components.getMember< sdw::UInt >( "waterFoamMapMask" );
 		auto waterNormalMapCoords1 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords1" );
 		auto waterNormalMapCoords2 = components.getMember< sdw::Vec2 >( "waterNormalMapCoords2" );
 		auto foamSampled = writer.declLocale( "foamSampled"
-			, maps[nonuniform( waterFoamMapId - 1_u )].lod( ( waterNormalMapCoords1 + waterNormalMapCoords2 ) * foamTiling, 0.0_f ) );
-		waterFoam = c3d::TextureConfigData::getVec3( foamSampled, waterFoamMapMask );
+			, maps[nonuniform( map - 1_u )].lod( ( waterNormalMapCoords1 + waterNormalMapCoords2 ) * foamTiling, 0.0_f ) );
+		value = c3d::TextureConfigData::getVec3( foamSampled, mask );
 
-		if ( components.hasMember( "waterNoiseMapId" )
-			&& components.hasMember( "waterNoiseMapMask" ) )
+		mapName = "waterNoise";
+		textureName = mapName + "MapAndMask";
+		if ( material.hasMember( textureName ) )
 		{
-			auto waterNoiseMapId = components.getMember< sdw::UInt >( "waterNoiseMapId" );
-			auto waterNoiseMapMask = components.getMember< sdw::UInt >( "waterNoiseMapMask" );
+			auto waterNoiseMap = writer.declLocale( mapName + "FoamMap"
+				, material.getMember< sdw::UInt >( textureName ) >> 16u );
+			auto waterNoiseMask = writer.declLocale( mapName + "FoamMask"
+				, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
 			auto waterFoamNoiseUV = components.getMember< sdw::Vec2 >( "waterFoamNoiseUV" );
-			waterFoamNoise = c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMapId - 1_u )].lod( waterFoamNoiseUV * foamTiling, 0.0_f )
-				, waterNoiseMapMask );
+			waterFoamNoise = c3d::TextureConfigData::getFloat( maps[nonuniform( waterNoiseMap - 1_u )].lod( waterFoamNoiseUV * foamTiling, 0.0_f )
+				, waterNoiseMask );
 		}
 	}
 

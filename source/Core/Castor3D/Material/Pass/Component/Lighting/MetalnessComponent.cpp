@@ -118,6 +118,7 @@ namespace castor3d
 	}
 
 	void MetalnessComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
 		, shader::BlendComponents & components
 		, bool isFrontCulled )const
 	{

@@ -5,6 +5,7 @@ See LICENSE file in root folder
 #define ___GLSL_TextureConfiguration_H___
 
 #include "GlslBuffer.hpp"
+#include "GlslTextureTransform.hpp"
 
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 #include <ShaderWriter/Intrinsics/Intrinsics.hpp>
@@ -42,12 +43,7 @@ namespace castor3d
 		struct TextureConfigData
 			: public sdw::StructInstanceHelperT< "C3D_TextureConfigData"
 				, ast::type::MemoryLayout::eStd430
-				, sdw::U32Vec4ArrayField< "components", 4u >
-				, sdw::Vec3Field< "translate" >
-				, sdw::FloatField< "rotateU" >
-				, sdw::Vec3Field< "scale" >
-				, sdw::FloatField< "rotateV" >
-				, sdw::Vec4Field< "tileSet" >
+				, sdw::StructFieldT< TextureTransformData, "transform" >
 				, sdw::FloatField< "nmlGMul" >
 				, sdw::FloatField< "nmlFact" >
 				, sdw::UIntField< "nml2Chan" >
@@ -55,9 +51,7 @@ namespace castor3d
 				, sdw::UIntField< "isTrnfAnim" >
 				, sdw::UIntField< "isTileAnim" >
 				, sdw::UIntField< "needsYI" >
-				, sdw::UIntField< "texSet" >
-				, sdw::UIntField< "componentCount" >
-				, sdw::UIntArrayField< "pad", 3u > >
+				, sdw::UIntField< "texSet" > >
 		{
 			friend class TextureConfigurations;
 
@@ -67,13 +61,13 @@ namespace castor3d
 				, bool enabled );
 
 			C3D_API void transformUV( Utils & utils
-				, TextureAnimData const & anim
+				, TextureTransformData const & anim
 				, sdw::Vec2 & uv )const;
 			C3D_API void transformUVW( Utils & utils
-				, TextureAnimData const & anim
+				, TextureTransformData const & anim
 				, sdw::Vec3 & uvw )const;
 			C3D_API void transformUV( Utils & utils
-				, TextureAnimData const & anim
+				, TextureTransformData const & anim
 				, DerivTex & uv )const;
 
 			C3D_API static sdw::Float getFloat( sdw::Vec4 const & sampled
@@ -81,13 +75,12 @@ namespace castor3d
 			C3D_API static sdw::Vec3 getVec3( sdw::Vec4 const & sampled
 				, sdw::UInt const & mask );
 
-			auto translate()const { return getMember< "translate" >(); }
-			auto rotateU()const { return getMember< "rotateU" >(); }
-			auto rotateV()const { return getMember< "rotateV" >(); }
-			auto scale()const { return getMember< "scale" >(); }
-			auto tileSet()const { return getMember< "tileSet" >(); }
-			auto component( sdw::UInt const & index )const { return getMember< "components" >()[index].xyz(); }
-			auto component( uint32_t index )const { return getMember< "components" >()[index].xyz(); }
+			auto transform()const { return getMember< "transform" >(); }
+			auto translate()const { return transform().translate(); }
+			auto rotateU()const { return transform().rotateU(); }
+			auto rotateV()const { return transform().rotateV(); }
+			auto scale()const { return transform().scale(); }
+			auto tileSet()const { return transform().tileSet(); }
 			auto nmlFact()const { return getMember< "nmlFact" >(); }
 			auto nmlGMul()const { return getMember< "nmlGMul" >(); }
 			auto nml2Chan()const { return getMember< "nml2Chan" >(); }
@@ -96,7 +89,6 @@ namespace castor3d
 			auto isTrnfAnim()const { return getMember< "isTrnfAnim" >() != 0_u; }
 			auto isTileAnim()const { return getMember< "isTileAnim" >() != 0_u; }
 			auto texSet()const { return getMember< "texSet" >(); }
-			auto componentCount()const { return getMember< "componentCount" >(); }
 
 			sdw::Vec2 getUv( sdw::Vec3 const & uvw )const
 			{
@@ -153,6 +145,11 @@ namespace castor3d
 				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
 				, Material const & material
 				, BlendComponents & components )const;
+			template< typename TexcoordT >
+			TexcoordT computeTexcoordsT( PassShaders const & passShaders
+				, TextureConfigData const & config
+				, TextureTransformData const & anim
+				, BlendComponents const & components )const;
 			template< typename TexcoordT, typename FlagsT >
 			void computeMapsContributionsT( PassShaders const & passShaders
 				, FlagsT const & flags
@@ -180,6 +177,20 @@ namespace castor3d
 			}
 
 		private:
+			C3D_API RetDerivTex computeTexcoordsDerivTex( PassShaders const & passShaders
+				, TextureConfigData const & config
+				, TextureTransformData const & anim
+				, BlendComponents const & components )const;
+			C3D_API sdw::RetVec3 computeTexcoordsVec3( PassShaders const & passShaders
+				, TextureConfigData const & config
+				, TextureTransformData const & anim
+				, BlendComponents const & components )const;
+			C3D_API sdw::RetVec2 computeTexcoordsVec2( PassShaders const & passShaders
+				, TextureConfigData const & config
+				, TextureTransformData const & anim
+				, BlendComponents const & components )const;
+
+		private:
 			mutable sdw::Function< sdw::Void
 				, sdw::InUInt
 				, sdw::InVec3
@@ -198,9 +209,22 @@ namespace castor3d
 				, sdw::InVec3
 				, sdw::InOutVec3
 				, sdw::InOutVec3 > m_setTexcoord2;
-			mutable sdw::Function< sdw::Void
+			mutable sdw::Function< sdw::Vec2
+				, InTextureConfigData
+				, InTextureTransformData
+				, InBlendComponents > m_computeTexcoordsVec2;
+			mutable sdw::Function< sdw::Vec3
+				, InTextureConfigData
+				, InTextureTransformData
+				, InBlendComponents > m_computeTexcoordsVec3;
+			mutable sdw::Function< DerivTex
+				, InTextureConfigData
+				, InTextureTransformData
+				, InBlendComponents > m_computeTexcoordsDerivTex;
+			mutable sdw::Function< sdw::Vec4
 				, sdw::InUInt
-				, InOutBlendComponents > m_applyTexture;
+				, InTextureConfigData
+				, InOutBlendComponents > m_sampleTexture;
 		};
 	}
 }

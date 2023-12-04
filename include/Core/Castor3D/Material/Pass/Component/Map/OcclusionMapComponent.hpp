@@ -15,11 +15,20 @@ namespace castor3d
 	{
 		static constexpr TextureFlag Occlusion = TextureFlag( 0x01u );
 
+		struct MaterialShader
+			: shader::PassMapMaterialShader
+		{
+			C3D_API MaterialShader()
+				: shader::PassMapMaterialShader{ "occlusion" }
+			{
+			}
+		};
+
 		struct ComponentsShader
-			: shader::PassComponentsShader
+			: shader::PassMapComponentsShader
 		{
 			explicit ComponentsShader( PassComponentPlugin const & plugin )
-				: shader::PassComponentsShader{ plugin }
+				: shader::PassMapComponentsShader{ plugin }
 			{
 			}
 
@@ -37,12 +46,13 @@ namespace castor3d
 				, sdw::Float const & passMultiplier
 				, shader::BlendComponents & res
 				, shader::BlendComponents const & src )const override;
-			C3D_API void applyComponents( PipelineFlags const * flags
-				, shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::Vec4 const & sampled
-				, sdw::Vec2 const & uv
-				, shader::BlendComponents & components )const override;
+			C3D_API void applyTexture( shader::PassShaders const & passShaders
+				, shader::TextureConfigurations const & textureConfigs
+				, shader::TextureAnimations const & textureAnims
+				, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, shader::Material const & material
+				, shader::BlendComponents & components
+				, shader::SampleTexture const & sampleTexture )const override;
 
 			PassComponentTextureFlag getTextureFlags()const
 			{
@@ -79,6 +89,11 @@ namespace castor3d
 			shader::PassComponentsShaderPtr createComponentsShader()const override
 			{
 				return std::make_unique< ComponentsShader >( *this );
+			}
+
+			shader::PassMaterialShaderPtr createMaterialShader()const override
+			{
+				return std::make_unique< MaterialShader >();
 			}
 
 			PassComponentTextureFlag getOcclusionMapFlags()const override

@@ -105,26 +105,21 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void TransmissionMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
-		, shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::Vec4 const & sampled
-		, sdw::Vec2 const & uv
-		, shader::BlendComponents & components )const
+	void TransmissionMapComponent::ComponentsShader::applyTexture( shader::PassShaders const & passShaders
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, shader::BlendComponents & components
+		, shader::SampleTexture const & sampleTexture )const
 	{
-		if ( !components.hasMember(  "transmission" ) )
-		{
-			return;
-		}
-
-		auto & writer{ *sampled.getWriter() };
-
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			auto transmission = components.getMember< sdw::Float >( "transmission" );
-			transmission *= config.getFloat( sampled, imgCompConfig.z() );
-		}
-		FI;
+		applyFloatComponent( "transmission"
+			, passShaders
+			, textureConfigs
+			, textureAnims
+			, material
+			, components
+			, sampleTexture );
 	}
 
 	//*********************************************************************************************

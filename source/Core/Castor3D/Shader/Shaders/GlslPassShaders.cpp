@@ -2,6 +2,7 @@
 
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Material/Pass/Component/PassComponentRegister.hpp"
+#include "Castor3D/Material/Pass/Component/PassMapComponent.hpp"
 #include "Castor3D/Shader/Shaders/GlslBlendComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
@@ -19,15 +20,23 @@ namespace castor3d::shader
 		, ComponentModeFlags filter
 		, Utils & utils
 		, bool forceLod0 )
-		: m_utils{ utils }
+		: m_texturesCombine{ combine }
+		, m_utils{ utils }
 		, m_compRegister{ compRegister }
-		, m_shaders{ m_compRegister.getComponentsShaders( combine, filter, m_updateComponents, m_finishComponents ) }
+		, m_shaders{ m_compRegister.getComponentsShaders( m_texturesCombine, filter, m_updateComponents, m_finishComponents ) }
 		, m_reflRefr{ nullptr }
 		, m_filter{ filter }
 		, m_opacity{ hasAny( combine, m_compRegister.getOpacityMapFlags() ) }
 		, m_frontCulled{ false }
 		, m_forceLod0{ forceLod0 }
 	{
+		for ( auto & shader : m_shaders )
+		{
+			if ( shader->getPlugin().isMapComponent() )
+			{
+				m_mapShaders.push_back( &static_cast< PassMapComponentsShader & >( *shader ) );
+			}
+		}
 	}
 
 	PassShaders::PassShaders( PassComponentRegister const & compRegister
@@ -35,10 +44,12 @@ namespace castor3d::shader
 		, ComponentModeFlags filter
 		, Utils & utils
 		, bool forceLod0 )
-		: m_utils{ utils }
+		: m_passCombine{ flags.pass }
+		, m_texturesCombine{ flags.textures }
+		, m_utils{ utils }
 		, m_compRegister{ compRegister }
 		, m_shaders{ m_compRegister.getComponentsShaders( flags, filter, m_updateComponents, m_finishComponents ) }
-		, m_reflRefr{ m_compRegister.getReflRefrShader( flags.pass ) }
+		, m_reflRefr{ m_compRegister.getReflRefrShader( m_passCombine ) }
 		, m_filter{ filter }
 		, m_opacity{ ( flags.usesOpacity()
 			&& flags.hasMap( m_compRegister.getOpacityMapFlags() )
@@ -46,6 +57,13 @@ namespace castor3d::shader
 		, m_frontCulled{ flags.isFrontCulled() }
 		, m_forceLod0{ forceLod0 }
 	{
+		for ( auto & shader : m_shaders )
+		{
+			if ( shader->getPlugin().isMapComponent() )
+			{
+				m_mapShaders.push_back( &static_cast< PassMapComponentsShader & >( *shader ) );
+			}
+		}
 	}
 
 	void PassShaders::fillMaterial( sdw::type::BaseStruct & material
@@ -105,6 +123,44 @@ namespace castor3d::shader
 		}
 	}
 
+	void PassShaders::computeTexcoords( TextureConfigurations const & textureConfigs
+		, TextureConfigData const & config
+		, TextureTransformData const & anim
+		, BlendComponents & components )const
+	{
+		if ( checkFlag( getFilter(), ComponentModeFlag::eDerivTex ) )
+		{
+			auto texCoords = components.getMember< shader::DerivTex >( "texCoords" );
+			texCoords = textureConfigs.computeTexcoordsT< shader::DerivTex >( *this, config, anim, components );
+		}
+		else if ( getPassCombine().baseId == 0u )
+		{
+			auto texCoords = components.getMember< sdw::Vec2 >( "texCoords" );
+			texCoords = textureConfigs.computeTexcoordsT< sdw::Vec2 >( *this, config, anim, components );
+		}
+		else
+		{
+			auto texCoords = components.getMember< sdw::Vec3 >( "texCoords" );
+			texCoords = textureConfigs.computeTexcoordsT< sdw::Vec3 >( *this, config, anim, components );
+		}
+	}
+
+	void PassShaders::applyTextures( TextureConfigurations const & textureConfigs
+		, TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, Material const & material
+		, BlendComponents & components
+		, SampleTexture const & sampleTexture )const
+	{
+		for ( auto shader : m_mapShaders )
+		{
+			if ( hasAny( m_texturesCombine.flags, shader->getPlugin().getTextureFlags() ) )
+			{
+				shader->applyTexture( *this, textureConfigs, textureAnims, maps, material, components, sampleTexture );
+			}
+		}
+	}
+
 	void PassShaders::applyComponents( TextureCombine const & combine
 		, TextureConfigData const & config
 		, sdw::U32Vec3 const & imgCompConfig
@@ -156,12 +212,13 @@ namespace castor3d::shader
 
 	void PassShaders::updateComponents( TextureCombine const & combine
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, Material const & material
 		, BlendComponents & components
 		, bool isFrontCulled )const
 	{
 		for ( auto & shader : m_shaders )
 		{
-			shader->updateComponent( maps, components, isFrontCulled );
+			shader->updateComponent( maps, material, components, isFrontCulled );
 		}
 
 		for ( auto & update : m_updateComponents )
@@ -172,9 +229,10 @@ namespace castor3d::shader
 
 	void PassShaders::updateComponents( PipelineFlags const & flags
 		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, Material const & material
 		, BlendComponents & components )const
 	{
-		updateComponents( flags.textures, maps, components, flags.isFrontCulled() );
+		updateComponents( flags.textures, maps, material, components, flags.isFrontCulled() );
 	}
 
 	void PassShaders::finishComponents( SurfaceBase const & surface
@@ -246,104 +304,20 @@ namespace castor3d::shader
 
 	sdw::Vec4 PassShaders::sampleMap( TextureCombine const & flags
 		, sdw::CombinedImage2DRgba32 const map
+		, sdw::Vec2 const texCoords
+		, shader::BlendComponents const & components )const
+	{
+		return m_utils.sampleMap( map, texCoords );
+	}
+
+	sdw::Vec4 PassShaders::sampleMap( TextureCombine const & flags
+		, sdw::CombinedImage2DRgba32 const map
 		, DerivTex const texCoords
 		, shader::BlendComponents const & components )const
 	{
 		return ( m_forceLod0
 			? m_utils.sampleMap( map, texCoords.uv(), 0.0_f )
 			: m_utils.sampleMap( map, texCoords ) );
-	}
-
-	void PassShaders::computeTexcoord( PipelineFlags const & flags
-		, TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec3 & texCoords
-		, sdw::Vec2 & texCoord
-		, sdw::UInt const & mapId
-		, BlendComponents & components )const
-	{
-		auto & writer = findWriterMandat( config, map, texCoords, texCoord, components );
-		auto & combine = flags.textures;
-
-		for ( auto & shader : m_shaders )
-		{
-			auto & plugin = m_compRegister.getPlugin( shader->getId() );
-
-			if ( hasAny( combine, plugin.getTextureFlags() )
-				&& plugin.hasTexcoordModif( m_compRegister, &flags ) )
-			{
-				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
-				{
-					shader->computeTexcoord( flags
-						, config
-						, imgCompConfig
-						, map
-						, texCoords
-						, texCoord
-						, mapId
-						, components );
-				}
-				FI;
-			}
-		}
-	}
-
-	void PassShaders::computeTexcoord( PipelineFlags const & flags
-		, TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::CombinedImage2DRgba32 const & map
-		, DerivTex & texCoords
-		, DerivTex & texCoord
-		, sdw::UInt const & mapId
-		, BlendComponents & components )const
-	{
-		auto & writer = findWriterMandat( config, map, texCoords, texCoord, components );
-		auto & combine = flags.textures;
-
-		for ( auto & shader : m_shaders )
-		{
-			auto & plugin = m_compRegister.getPlugin( shader->getId() );
-
-			if ( hasAny( combine, plugin.getTextureFlags() )
-				&& plugin.hasTexcoordModif( m_compRegister, &flags ) )
-			{
-				IF( writer, imgCompConfig.x() == sdw::UInt{ plugin.getTextureFlags() } )
-				{
-					shader->computeTexcoord( flags
-						, config
-						, imgCompConfig
-						, map
-						, texCoords
-						, texCoord
-						, mapId
-						, components );
-				}
-				FI;
-			}
-		}
-	}
-
-	void PassShaders::computeTexcoord( TextureCombine const & combine
-		, TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::CombinedImage2DRgba32 const & map
-		, sdw::Vec3 & texCoords
-		, sdw::Vec2 & texCoord
-		, sdw::UInt const & mapId
-		, BlendComponents & components )const
-	{
-	}
-
-	void PassShaders::computeTexcoord( TextureCombine const & combine
-		, TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::CombinedImage2DRgba32 const & map
-		, DerivTex & texCoords
-		, DerivTex & texCoord
-		, sdw::UInt const & mapId
-		, BlendComponents & components )const
-	{
 	}
 
 	bool PassShaders::enableParallaxOcclusionMapping( PipelineFlags const & flags )const

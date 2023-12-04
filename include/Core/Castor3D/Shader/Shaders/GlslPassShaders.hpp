@@ -21,7 +21,7 @@ namespace castor3d::shader
 	{
 	public:
 		C3D_API PassShaders( PassComponentRegister const & compRegister
-			, TextureCombine const & combine
+			, TextureCombine const & textures
 			, ComponentModeFlags filter
 			, Utils & utils
 			, bool forceLod0 = false );
@@ -51,6 +51,16 @@ namespace castor3d::shader
 			, sdw::StructInstance const & surface
 			, sdw::Vec4 const * clrCot
 			, sdw::expr::ExprList & inits )const;
+		C3D_API void computeTexcoords( TextureConfigurations const & textureConfigs
+			, TextureConfigData const & config
+			, TextureTransformData const & anim
+			, BlendComponents & components )const;
+		C3D_API void applyTextures( TextureConfigurations const & textureConfigs
+			, TextureAnimations const & textureAnims
+			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, Material const & material
+			, BlendComponents & components
+			, SampleTexture const & sampleTexture )const;
 		C3D_API void applyComponents( TextureCombine const & combine
 			, TextureConfigData const & config
 			, sdw::U32Vec3 const & imgCompConfig
@@ -69,9 +79,11 @@ namespace castor3d::shader
 			, BlendComponents const & src )const;
 		C3D_API void updateComponents( PipelineFlags const & flags
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, Material const & material
 			, BlendComponents & components )const;
 		C3D_API void updateComponents( TextureCombine const & combine
 			, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+			, Material const & material
 			, BlendComponents & components
 			, bool isFrontCulled = false )const;
 		C3D_API void finishComponents( SurfaceBase const & surface
@@ -80,38 +92,6 @@ namespace castor3d::shader
 			, BlendComponents & components )const;
 		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( PipelineFlags const & flags )const;
 		C3D_API std::map< uint32_t, PassComponentTextureFlag > getTexcoordModifs( TextureCombine const & combine )const;
-		C3D_API void computeTexcoord( TextureCombine const & combine
-			, TextureConfigData const & config
-			, sdw::U32Vec3 const & imgCompConfig
-			, sdw::CombinedImage2DRgba32 const & map
-			, sdw::Vec3 & texCoords
-			, sdw::Vec2 & texCoord
-			, sdw::UInt const & mapId
-			, BlendComponents & components )const;
-		C3D_API void computeTexcoord( TextureCombine const & combine
-			, TextureConfigData const & config
-			, sdw::U32Vec3 const & imgCompConfig
-			, sdw::CombinedImage2DRgba32 const & map
-			, DerivTex & texCoords
-			, DerivTex & texCoord
-			, sdw::UInt const & mapId
-			, BlendComponents & components )const;
-		C3D_API void computeTexcoord( PipelineFlags const & flags
-			, TextureConfigData const & config
-			, sdw::U32Vec3 const & imgCompConfig
-			, sdw::CombinedImage2DRgba32 const & map
-			, sdw::Vec3 & texCoords
-			, sdw::Vec2 & texCoord
-			, sdw::UInt const & mapId
-			, BlendComponents & components )const;
-		C3D_API void computeTexcoord( PipelineFlags const & flags
-			, TextureConfigData const & config
-			, sdw::U32Vec3 const & imgCompConfig
-			, sdw::CombinedImage2DRgba32 const & map
-			, DerivTex & texCoords
-			, DerivTex & texCoord
-			, sdw::UInt const & mapId
-			, BlendComponents & components )const;
 		C3D_API bool enableParallaxOcclusionMapping( PipelineFlags const & flags )const;
 		C3D_API bool enableParallaxOcclusionMappingOne( PipelineFlags const & flags )const;
 		C3D_API sdw::Vec4 sampleMap( PipelineFlags const & flags
@@ -125,6 +105,10 @@ namespace castor3d::shader
 		C3D_API sdw::Vec4 sampleMap( TextureCombine const & flags
 			, sdw::CombinedImage2DRgba32 const map
 			, sdw::Vec3 const texCoords
+			, shader::BlendComponents const & components )const;
+		C3D_API sdw::Vec4 sampleMap( TextureCombine const & flags
+			, sdw::CombinedImage2DRgba32 const map
+			, sdw::Vec2 const texCoords
 			, shader::BlendComponents const & components )const;
 		C3D_API sdw::Vec4 sampleMap( TextureCombine const & flags
 			, sdw::CombinedImage2DRgba32 const map
@@ -191,12 +175,25 @@ namespace castor3d::shader
 			return m_utils;
 		}
 
+		PassComponentCombine const & getPassCombine()const
+		{
+			return m_passCombine;
+		}
+
+		TextureCombine const & getTexturesCombine()const
+		{
+			return m_texturesCombine;
+		}
+
 	private:
+		PassComponentCombine m_passCombine;
+		TextureCombine m_texturesCombine;
 		Utils & m_utils;
 		PassComponentRegister const & m_compRegister;
 		std::vector< UpdateComponent > m_updateComponents;
 		std::vector< FinishComponent > m_finishComponents;
 		std::vector< PassComponentsShaderPtr > m_shaders;
+		std::vector< PassMapComponentsShader * > m_mapShaders;
 		PassReflRefrShaderPtr m_reflRefr;
 		ComponentModeFlags m_filter;
 		bool m_opacity{};

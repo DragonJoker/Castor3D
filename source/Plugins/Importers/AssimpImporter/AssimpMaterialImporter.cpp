@@ -10,8 +10,6 @@
 #include <Castor3D/Material/Pass/PbrPass.hpp>
 #include <Castor3D/Material/Pass/Component/Base/BlendComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/PassHeaderComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Base/TextureCountComponent.hpp>
-#include <Castor3D/Material/Pass/Component/Base/TexturesComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Base/TwoSidedComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/AttenuationComponent.hpp>
 #include <Castor3D/Material/Pass/Component/Lighting/ClearcoatComponent.hpp>

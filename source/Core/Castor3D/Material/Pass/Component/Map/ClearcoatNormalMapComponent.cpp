@@ -106,26 +106,42 @@ namespace castor3d
 
 	//*********************************************************************************************
 
-	void ClearcoatNormalMapComponent::ComponentsShader::applyComponents( PipelineFlags const * flags
-		, shader::TextureConfigData const & config
-		, sdw::U32Vec3 const & imgCompConfig
-		, sdw::Vec4 const & sampled
-		, sdw::Vec2 const & uv
-		, shader::BlendComponents & components )const
+	void ClearcoatNormalMapComponent::ComponentsShader::applyTexture( shader::PassShaders const & passShaders
+		, shader::TextureConfigurations const & textureConfigs
+		, shader::TextureAnimations const & textureAnims
+		, sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, shader::Material const & material
+		, shader::BlendComponents & components
+		, shader::SampleTexture const & sampleTexture )const
 	{
-		if ( !components.hasMember(  "clearcoatNormal" ) )
+		std::string valueName = "clearcoatNormal";
+		std::string mapName = "clearcoatNormal";
+		auto textureName = mapName + "MapAndMask";
+
+		if ( !material.hasMember( textureName )
+			|| !components.hasMember( valueName ) )
 		{
 			return;
 		}
 
-		auto & writer{ *sampled.getWriter() };
+		auto & writer{ *material.getWriter() };
+		auto map = writer.declLocale( mapName + "Map"
+			, material.getMember< sdw::UInt >( textureName ) >> 16u );
+		auto mask = writer.declLocale( mapName + "Mask"
+			, material.getMember< sdw::UInt >( textureName ) & 0xFFFFu );
+		auto value = components.getMember< sdw::Vec3 >( valueName );
 
-		IF( writer, imgCompConfig.x() == sdw::UInt{ getTextureFlags() } )
-		{
-			NormalMapComponent::ComponentsShader::computeMikktNormal( config, imgCompConfig, components, sampled
-				, components.clearcoatNormal );
-		}
-		FI;
+		auto config = writer.declLocale( valueName + "Config"
+			, textureConfigs.getTextureConfiguration( map ) );
+		auto anim = writer.declLocale( valueName + "Anim"
+			, textureAnims.getTextureAnimation( map ) );
+		passShaders.computeTexcoords( textureConfigs
+			, config
+			, anim
+			, components );
+		auto sampled = writer.declLocale( valueName + "Sampled"
+			, sampleTexture( map, config, components ) );
+		NormalMapComponent::ComponentsShader::computeMikktNormal( config.nmlGMul(), config.nml2Chan(), mask, components, sampled, value );
 	}
 
 	//*********************************************************************************************

@@ -153,6 +153,7 @@ namespace ocean_fft
 	}
 
 	void FFTWaterComponent::ComponentsShader::updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+		, c3d::Material const & material
 		, c3d::BlendComponents & components
 		, bool isFrontCulled )const
 	{
@@ -207,7 +208,7 @@ namespace ocean_fft
 	//*********************************************************************************************
 
 	FFTWaterComponent::MaterialShader::MaterialShader()
-		: shader::PassMaterialShader{ 4u }
+		: shader::PassMaterialShader{ sizeof( float ) }
 	{
 	}
 

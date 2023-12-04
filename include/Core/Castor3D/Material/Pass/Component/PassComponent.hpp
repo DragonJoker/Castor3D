@@ -26,6 +26,11 @@ namespace castor3d
 {
 	namespace shader
 	{
+		using SampleTexture = sdw::Function< sdw::Vec4
+			, sdw::InUInt
+			, shader::InTextureConfigData
+			, shader::InOutBlendComponents >;
+
 		struct PassShader
 		{
 			PassShader() = default;
@@ -111,98 +116,6 @@ namespace castor3d
 				, sdw::StructInstance const * surface
 				, sdw::Vec4 const * clrCot
 				, sdw::expr::ExprList & inits )const
-			{
-			}
-			/**
-			*\~english
-			*\brief
-			*	Use this component ta alter texture coordinates.
-			*\param[in] flags
-			*	Used to check if the render pass is configured so the component is usable.
-			*\param[in] config
-			*	Used to say if the texture has the needed configuration for this component.
-			*\param[in] imgCompConfig
-			*	The current image component(s) to use.
-			*\param[in] map
-			*	The texture to use.
-			*\param[in] texCoords
-			*	The 3D texture coordinates.
-			*\param[in] texCoord
-			*	The 2D texture coordinates.
-			*\param[in] components
-			*	Contains the component members.
-			*\~french
-			*\brief
-			*	Utilise ce composant pour altérer les coordonnées de texture.
-			*\param[in] flags
-			*	Utilisé pour vérifier si la passe de rendu est configurée pour que le composant soit utilisable.
-			*\param[in] config
-			*	Utilisé pour dire si la texture a la configuration pour ce composant.
-			*\param[in] imgCompConfig
-			*	Les composantes de l'image à utiliser.
-			*\param[in] map
-			*	La texture à utiliser.
-			*\param[in] texCoords
-			*	Les coordonnées de texture 3D.
-			*\param[in] texCoord
-			*	Les coordonnées de texture 2D.
-			*\param[in] components
-			*	Contient les membres du composant.
-			*/
-			C3D_API virtual void computeTexcoord( PipelineFlags const & flags
-				, TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::CombinedImage2DRgba32 const & map
-				, sdw::Vec3 & texCoords
-				, sdw::Vec2 & texCoord
-				, sdw::UInt const & mapId
-				, BlendComponents & components )const
-			{
-			}
-			/**
-			*\~english
-			*\brief
-			*	Use this component ta alter texture coordinates.
-			*\param[in] flags
-			*	Used to check if the render pass is configured so the component is usable.
-			*\param[in] config
-			*	Used to say if the texture has the needed configuration for this component.
-			*\param[in] imgCompConfig
-			*	The current image component(s) to use.
-			*\param[in] map
-			*	The texture to use.
-			*\param[in] texCoords
-			*	The 3D texture coordinates.
-			*\param[in] texCoord
-			*	The 2D texture coordinates.
-			*\param[in] components
-			*	Contains the component members.
-			*\~french
-			*\brief
-			*	Utilise ce composant pour altérer les coordonnées de texture.
-			*\param[in] flags
-			*	Utilisé pour vérifier si la passe de rendu est configurée pour que le composant soit utilisable.
-			*\param[in] config
-			*	Utilisé pour dire si la texture a la configuration pour ce composant.
-			*\param[in] imgCompConfig
-			*	Les composantes de l'image à utiliser.
-			*\param[in] map
-			*	La texture à utiliser.
-			*\param[in] texCoords
-			*	Les coordonnées de texture 3D.
-			*\param[in] texCoord
-			*	Les coordonnées de texture 2D.
-			*\param[in] components
-			*	Contient les membres du composant.
-			*/
-			C3D_API virtual void computeTexcoord( PipelineFlags const & flags
-				, TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::CombinedImage2DRgba32 const & map
-				, DerivTex & texCoords
-				, DerivTex & texCoord
-				, sdw::UInt const & mapId
-				, BlendComponents & components )const
 			{
 			}
 			/**
@@ -294,6 +207,7 @@ namespace castor3d
 			*	Contient les membres du composant.
 			*/
 			C3D_API virtual void updateComponent( sdw::Array< sdw::CombinedImage2DRgba32 > const & maps
+				, shader::Material const & material
 				, shader::BlendComponents & components
 				, bool isFrontCulled )const
 			{
@@ -366,18 +280,58 @@ namespace castor3d
 			/**@}*/
 
 		protected:
-			C3D_API void applyFloatComponent( std::string const & name
-				, PassComponentTextureFlag flag
-				, shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::Vec4 const & sampled
-				, shader::BlendComponents & components )const;
-			C3D_API void applyVec3Component( std::string const & name
-				, PassComponentTextureFlag flag
-				, shader::TextureConfigData const & config
-				, sdw::U32Vec3 const & imgCompConfig
-				, sdw::Vec4 const & sampled
-				, shader::BlendComponents & components )const;
+			C3D_API void applyFloatComponent( std::string const & mapName
+				, std::string const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+			C3D_API void applyVec3Component( std::string const & mapName
+				, std::string const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const;
+
+			void applyFloatComponent( std::string const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				applyFloatComponent( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
+
+			void applyVec3Component( std::string const & valueName
+				, PassShaders const & passShaders
+				, TextureConfigurations const & textureConfigs
+				, TextureAnimations const & textureAnims
+				, Material const & material
+				, BlendComponents & components
+				, SampleTexture const & sampleTexture )const
+			{
+				applyVec3Component( valueName
+					, valueName
+					, passShaders
+					, textureConfigs
+					, textureAnims
+					, material
+					, components
+					, sampleTexture );
+			}
 
 		private:
 			PassComponentPlugin const & m_plugin;

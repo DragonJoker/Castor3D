@@ -69,8 +69,6 @@ namespace castor3d::shader
 		sdw::UInt passCount;
 		sdw::UInt lighting;
 		sdw::UInt lightingModel;
-		sdw::Array< sdw::UInt32 > textures;
-		sdw::UInt texturesCount;
 		sdw::Vec3 colour;
 		sdw::Vec3 specular;
 		sdw::Float transmission;
