@@ -116,15 +116,11 @@ namespace castor3d
 		*\~english
 		*\brief
 		*	Cleans up the pipeline.
-		*\param[in] device
-		*	The GPU device.
 		*\~french
 		*\brief
 		*	Nettoie le pipeline.
-		*\param[in] device
-		*	Le device GPU.
 		*/
-		C3D_API void cleanup( RenderDevice const & device );
+		C3D_API void cleanup();
 		/**
 		*\~english
 		*name

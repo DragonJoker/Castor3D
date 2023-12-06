@@ -59,6 +59,11 @@ namespace castor3d
 	void RenderPipeline::initialise( RenderDevice const & device
 		, VkRenderPass renderPass )
 	{
+		if ( m_pipelineLayout || m_pipeline )
+		{
+			return;
+		}
+
 		ashes::VkVertexInputBindingDescriptionArray bindings;
 		ashes::VkVertexInputAttributeDescriptionArray attributes;
 
@@ -133,10 +138,10 @@ namespace castor3d
 			ashes::PipelineInputAssemblyStateCreateInfo{ 0u, m_flags.topology },
 			std::move( tessellationState ),
 			ashes::PipelineViewportStateCreateInfo{ 0u, 1u, std::move( viewports ), 1u, std::move( scissors ) },
-			std::move( m_rsState ),
-			std::move( m_msState ),
-			std::move( m_dsState ),
-			std::move( m_blState ),
+			m_rsState,
+			m_msState,
+			m_dsState,
+			m_blState,
 			std::move( dynamicState ),
 			*m_pipelineLayout,
 			renderPass
@@ -145,7 +150,7 @@ namespace castor3d
 			, std::move( createInfo ) );
 	}
 
-	void RenderPipeline::cleanup( RenderDevice const & device )
+	void RenderPipeline::cleanup()
 	{
 		m_pipeline.reset();
 		m_pipelineLayout.reset();

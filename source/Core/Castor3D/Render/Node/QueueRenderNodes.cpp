@@ -636,12 +636,8 @@ namespace castor3d
 				doAddBillboard( node );
 			} ) }
 	{
-	}
-
-	void QueueRenderNodes::initialise( RenderDevice const & device )
-	{
-		auto & queue = *getOwner();
 		auto & renderPass = *queue.getOwner();
+		auto & device = *renderPass.getEngine()->getRenderDevice();
 
 		if ( !m_submeshIdxIndirectCommands )
 		{
@@ -688,7 +684,7 @@ namespace castor3d
 		}
 	}
 
-	void QueueRenderNodes::cleanup()
+	QueueRenderNodes::~QueueRenderNodes()noexcept
 	{
 		m_pipelinesNodes.reset();
 		m_billboardIndirectCommands.reset();
@@ -750,6 +746,8 @@ namespace castor3d
 			m_submeshNodes.clear();
 			m_instancedSubmeshNodes.clear();
 			m_billboardNodes.clear();
+			m_pendingSubmeshes.clear();
+			m_pendingBillboards.clear();
 
 			auto count = culler.getSubmeshes().size();
 			m_nodesIds.reserve( count );
@@ -821,65 +819,63 @@ namespace castor3d
 	}
 
 	uint32_t QueueRenderNodes::prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
-		, ashes::Optional< VkRect2D > const & scissors )
+		, ashes::Optional< VkRect2D > const & scissors
+		, ashes::CommandBuffer & commandBuffer )
 	{
 		uint32_t result{};
 		m_visible = {};
 		m_maxPipelineId = {};
-
-		if ( !m_pipelinesNodes
-			|| m_nodesIds.empty() )
-		{
-			return result;
-		}
-
 		auto & queue = *getOwner();
 		auto & renderPass = *queue.getOwner();
+
+		commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass.getRenderPass( 0u )
+				, 0u
+				, VkFramebuffer( nullptr )
+				, VK_FALSE
+				, 0u
+				, 0u ) );
+
+		if ( m_pipelinesNodes
+			&& !m_nodesIds.empty() )
 		{
-			C3D_DebugTime( renderPass.getTypeName() + " - Overall" );
-			ashes::CommandBuffer const & commandBuffer = queue.getCommandBuffer();
-			commandBuffer.begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-				, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPass.getRenderPass( 0u )
-					, 0u
-					, VkFramebuffer( nullptr )
-					, VK_FALSE
-					, 0u
-					, 0u ) );
-
-			auto maxNodesCount = m_pipelinesNodes->getCount();
-			auto nodesIdsBuffer = m_pipelinesNodes->lock( 0u, ashes::WholeSize, 0u );
-
-			if ( !m_submeshNodes.empty()
-				|| !m_instancedSubmeshNodes.empty() )
 			{
+				C3D_DebugTime( renderPass.getTypeName() + " - Overall" );
+				auto maxNodesCount = m_pipelinesNodes->getCount();
+				auto nodesIdsBuffer = m_pipelinesNodes->lock( 0u, ashes::WholeSize, 0u );
+
+				if ( !m_submeshNodes.empty()
+					|| !m_instancedSubmeshNodes.empty() )
+				{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
-				if ( renderPass.isMeshShading() )
-				{
-					result += doPrepareMeshModernCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
-				}
-				else
+					if ( renderPass.isMeshShading() )
+					{
+						result += doPrepareMeshModernCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+					}
+					else
 #endif
-				{
-					result += doPrepareMeshTraditionalCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+					{
+						result += doPrepareMeshTraditionalCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+					}
 				}
+
+				if ( !m_billboardNodes.empty() )
+				{
+					result += doPrepareBillboardCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+				}
+
+				m_pipelinesNodes->flush( 0u, ashes::WholeSize );
+				m_pipelinesNodes->unlock();
 			}
-
-			if ( !m_billboardNodes.empty() )
-			{
-				result += doPrepareBillboardCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
-			}
-
-			m_pipelinesNodes->flush( 0u, ashes::WholeSize );
-			m_pipelinesNodes->unlock();
-
-			commandBuffer.end();
-		}
 #if C3D_PrintNodesCounts
-		log::debug << renderPass.getName() << ":\n";
-		log::debug << m_submeshNodes << "\n";
-		log::debug << m_instancedSubmeshNodes << "\n";
-		log::debug << m_billboardNodes << "\n";
+			log::debug << renderPass.getName() << ":\n";
+			log::debug << m_submeshNodes << "\n";
+			log::debug << m_instancedSubmeshNodes << "\n";
+			log::debug << m_billboardNodes << "\n";
 #endif
+		}
+
+		commandBuffer.end();
 		return result;
 	}
 
