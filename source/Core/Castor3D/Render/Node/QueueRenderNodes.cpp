@@ -64,29 +64,44 @@ namespace castor3d
 				auto & buffer = bufferChunk.buffer->getBuffer();
 				auto & indexOffset = node.getSourceBufferOffsets().getBufferChunk( SubmeshData::eIndex );
 
-				if ( indexOffset.hasData() )
+				if constexpr ( std::is_same_v< BillboardRenderNode, NodeT > )
 				{
 					nodes.emplace( pipeline
 						, buffer
 						, node
 						, culled
 						, node.getGeometryBuffers( pipeline.pipeline->getFlags() )
-						, indexOffset.getCount< uint32_t >()
-						, indexOffset.getFirst< uint32_t >()
-						, bufferChunk.getFirst< castor::Point4f >()
+						, bufferChunk.getCount< BillboardVertex >()
+						, 0u
+						, bufferChunk.getFirst< BillboardVertex >()
 						, isFrontCulled );
 				}
 				else
 				{
-					nodes.emplace( pipeline
-						, buffer
-						, node
-						, culled
-						, node.getGeometryBuffers( pipeline.pipeline->getFlags() )
-						, bufferChunk.getCount< castor::Point4f >()
-						, 0u
-						, bufferChunk.getFirst< castor::Point4f >()
-						, isFrontCulled );
+					if ( indexOffset.hasData() )
+					{
+						nodes.emplace( pipeline
+							, buffer
+							, node
+							, culled
+							, node.getGeometryBuffers( pipeline.pipeline->getFlags() )
+							, indexOffset.getCount< uint32_t >()
+							, indexOffset.getFirst< uint32_t >()
+							, bufferChunk.getFirst< castor::Point4f >()
+							, isFrontCulled );
+					}
+					else
+					{
+						nodes.emplace( pipeline
+							, buffer
+							, node
+							, culled
+							, node.getGeometryBuffers( pipeline.pipeline->getFlags() )
+							, bufferChunk.getCount< castor::Point4f >()
+							, 0u
+							, bufferChunk.getFirst< castor::Point4f >()
+							, isFrontCulled );
+					}
 				}
 
 				registerPipelineNodes( pipeline.pipeline->getFlagsHash(), buffer, nodesIds );
@@ -1049,7 +1064,7 @@ namespace castor3d
 			, node );
 		m_hasNodes = true;
 
-		if ( queuerndnd::addRenderNode( pipelineId
+		if ( !queuerndnd::addRenderNode( pipelineId
 			, counted
 			, node.getInstanceCount()
 			, false

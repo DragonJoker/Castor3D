@@ -248,6 +248,11 @@ namespace castor3d
 	{
 		auto oldMaterial = getMaterial();
 
+		if ( value )
+		{
+			value->initialise();
+		}
+
 		if ( oldMaterial != value )
 		{
 			if ( oldMaterial )
