@@ -537,11 +537,11 @@ namespace castor3d
 			, ashes::DescriptorSetLayout const * meshletDescriptorLayout );
 		/**
 		 *\~english
-		 *\brief		Destroys all pipelines from the lists.
+		 *\brief		Cleans up all pipelines from the lists.
 		 *\~french
-		 *\brief		Détruit tous les pipelines des listes.
+		 *\brief		Nettoie tous les pipelines des listes.
 		 */
-		C3D_API void clearPipelines();
+		C3D_API void cleanupPipelines();
 		/**
 		 *\~english
 		 *\brief		Initialises the additional descriptor set.

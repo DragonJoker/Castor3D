@@ -30,9 +30,7 @@ namespace castor3d
 
 	public:
 		C3D_API explicit QueueRenderNodes( RenderQueue const & queue );
-
-		C3D_API void initialise( RenderDevice const & device );
-		C3D_API void cleanup();
+		C3D_API ~QueueRenderNodes()noexcept;
 		C3D_API void clear();
 		C3D_API void checkEmpty();
 		C3D_API bool sortNodes( ShadowMapLightTypeArray & shadowMaps
@@ -40,7 +38,8 @@ namespace castor3d
 		C3D_API bool updateNodes( ShadowMapLightTypeArray & shadowMaps
 			, ShadowBuffer const * shadowBuffer );
 		C3D_API uint32_t prepareCommandBuffers( ashes::Optional< VkViewport > const & viewport
-			, ashes::Optional< VkRect2D > const & scissors );
+			, ashes::Optional< VkRect2D > const & scissors
+			, ashes::CommandBuffer & commandBuffer );
 
 		C3D_API SubmeshRenderNode & createNode( Pass & pass
 			, Submesh & data
@@ -138,7 +137,7 @@ namespace castor3d
 
 	private:
 		PipelineBufferArray m_nodesIds;
-		uint32_t m_maxPipelineId;
+		uint32_t m_maxPipelineId{};
 		bool m_hasNodes{};
 
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader

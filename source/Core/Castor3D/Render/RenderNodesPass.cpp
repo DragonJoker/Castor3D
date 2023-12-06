@@ -373,10 +373,17 @@ namespace castor3d
 			, VK_CULL_MODE_FRONT_BIT );
 	}
 
-	void RenderNodesPass::clearPipelines()
+	void RenderNodesPass::cleanupPipelines()
 	{
-		m_backPipelines.clear();
-		m_frontPipelines.clear();
+		for ( auto & pipeline : m_backPipelines )
+		{
+			pipeline->cleanup();
+		}
+
+		for ( auto & pipeline : m_frontPipelines )
+		{
+			pipeline->cleanup();
+		}
 	}
 
 	ashes::PipelineColorBlendStateCreateInfo RenderNodesPass::createBlendState( BlendMode colourBlendMode
@@ -1117,14 +1124,7 @@ namespace castor3d
 
 	void RenderNodesPass::doSubInitialise()
 	{
-		if ( m_renderQueue->needsInitialise() )
-		{
-			m_renderQueue->initialise();
-		}
-		else
-		{
-			m_renderQueue->invalidate();
-		}
+		m_renderQueue->invalidate();
 	}
 
 	void RenderNodesPass::doSubRecordInto( crg::RecordContext & context
@@ -1481,6 +1481,10 @@ namespace castor3d
 				pipelines.emplace_back( std::move( pipeline ) );
 				it = std::next( pipelines.begin()
 					, ptrdiff_t( pipelines.size() - 1u ) );
+			}
+			else
+			{
+				( *it )->initialise( device, getRenderPass( 0u ) );
 			}
 
 			id = uint16_t( std::distance( pipelines.begin(), it ) );

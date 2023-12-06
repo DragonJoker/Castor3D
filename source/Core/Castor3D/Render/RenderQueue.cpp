@@ -37,35 +37,10 @@ namespace castor3d
 
 	RenderQueue::~RenderQueue()
 	{
-		auto & pass = m_pass;
-		auto lock( castor::makeUniqueLock( pass.eventMutex ) );
-
-		if ( pass.initEvent )
-		{
-			pass.initEvent->skip();
-			pass.initEvent = {};
-		}
 	}
 
 	void RenderQueue::initialise()
 	{
-		if ( auto event = getOwner()->getEngine()->postEvent( makeGpuFunctorEvent( GpuEventType::ePreUpload
-			, [this]( RenderDevice const & device
-				, QueueData const & queueData )
-			{
-				auto & pass = m_pass;
-				auto lock( castor::makeUniqueLock( pass.eventMutex ) );
-
-				if ( pass.initEvent )
-				{
-					doInitialise( device, queueData );
-				}
-			} ) ) )
-		{
-			auto & pass = m_pass;
-			auto lock( castor::makeUniqueLock( pass.eventMutex ) );
-			pass.initEvent = event;
-		}
 	}
 
 	void RenderQueue::invalidate()
@@ -77,7 +52,6 @@ namespace castor3d
 	void RenderQueue::cleanup()
 	{
 		CU_Require( m_renderNodes );
-		m_renderNodes->cleanup();
 		m_pass.commandBuffer.reset();
 	}
 
@@ -212,7 +186,6 @@ namespace castor3d
 		pass.initialised = true;
 		pass.initEvent = nullptr;
 
-		m_renderNodes->initialise( device );
 		invalidate();
 	}
 
@@ -225,7 +198,7 @@ namespace castor3d
 		{
 			// Do this here to prevent use of deleted data in command buffer.
 			getRenderNodes().clear();
-			getOwner()->clearPipelines();
+			getOwner()->cleanupPipelines();
 			pass.commandBuffer->reset();
 			pass.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
 				, makeVkStruct< VkCommandBufferInheritanceInfo >( pass.renderPassAtInit
@@ -245,7 +218,8 @@ namespace castor3d
 			CU_Require( m_renderNodes );
 			pass.commandBuffer->reset();
 			m_drawCalls = m_renderNodes->prepareCommandBuffers( m_viewport.value()
-				, m_scissor.value() );
+				, m_scissor.value()
+				, *pass.commandBuffer );
 		}
 
 		getOwner()->reRecordCurrent();
