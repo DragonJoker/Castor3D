@@ -219,8 +219,22 @@
 		</Expand>
 	</Type>
 
+	<Type Name="castor3d::Camera">
+		<DisplayString>Camera {m_name}</DisplayString>
+		<Expand>
+			<Item Name="[movable]">(castor3d::MovableObject *)this,nd</Item>
+			<Item Name="viewport">m_viewport</Item>
+			<Item Name="frustum">m_frustum</Item>
+			<Item Name="view">m_view</Item>
+			<Item Name="hdrConfig">m_hdrConfig</Item>
+			<Item Name="colourGradingConfig">m_colourGradingConfig</Item>
+			<Item Name="projection">m_projection</Item>
+			<Item Name="ownsProjection">m_ownProjection</Item>
+		</Expand>
+	</Type>
+
 	<Type Name="castor3d::Geometry">
-		<DisplayString>{m_name}({m_meshName})</DisplayString>
+		<DisplayString>Object {m_name}({m_meshName})</DisplayString>
 		<Expand>
 			<Item Name="[movable]">(castor3d::MovableObject *)this,nd</Item>
 			<Item Name="ids">m_ids</Item>

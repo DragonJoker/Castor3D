@@ -83,11 +83,23 @@ namespace castor3d
 			max->y = std::max( point->y, max->y );
 			max->z = std::max( point->z, max->z );
 
-			auto invLen = float( 1.0f / sqrt( point[0] * point[0] + point[1] * point[1] + point[2] * point[2] ) );
-			point[0] *= invLen;
-			point[1] *= invLen;
-			point[2] *= invLen;
-			point[3] *= invLen;
+			auto len = sqrt( point[0] * point[0] + point[1] * point[1] + point[2] * point[2] );
+
+			if ( len != 0.0f )
+			{
+				auto invLen = float( 1.0f / len );
+				point[0] *= invLen;
+				point[1] *= invLen;
+				point[2] *= invLen;
+				point[3] *= invLen;
+			}
+			else
+			{
+				point[0] = 0.0f;
+				point[1] = 0.0f;
+				point[2] = 0.0f;
+				point[3] = 0.0f;
+			}
 		}
 
 		m_boundingBox.load( min, max );
