@@ -131,13 +131,13 @@ namespace castor3d
 
 		bool hasCommandBuffer()const noexcept
 		{
-			return m_pass.commandBuffer != nullptr;
+			return m_currentPass->commandBuffer != nullptr;
 		}
 		
 		ashes::CommandBuffer const & getCommandBuffer()const noexcept
 		{
 			CU_Require( hasCommandBuffer() );
-			return *m_pass.commandBuffer;
+			return *m_currentPass->commandBuffer;
 		}
 
 		QueueRenderNodes & getRenderNodes()const noexcept
@@ -163,12 +163,6 @@ namespace castor3d
 		/**@}*/
 
 	private:
-		void doInitialise( RenderDevice const & device
-			, QueueData const & queueData );
-		void doPrepareCommandBuffer();
-		void doOnCullerCompute( SceneCuller const & culler );
-
-	private:
 		struct PassData
 		{
 			PassData()noexcept = default;
@@ -187,6 +181,12 @@ namespace castor3d
 				rhs.renderPassAtInit = {};
 			}
 
+			~PassData()noexcept;
+			void initialise( RenderDevice const & device
+				, QueueData const & queueData
+				, castor::String const & name
+				, VkRenderPass renderPass );
+
 			mutable castor::SpinMutex eventMutex;
 			GpuFrameEvent * initEvent{};
 			bool initialised{};
@@ -194,11 +194,22 @@ namespace castor3d
 			VkRenderPass renderPassAtInit{};
 		};
 
+	private:
+		void doInitialise( RenderDevice const & device
+			, QueueData const & queueData
+			, PassData & pass );
+		void doPrepareCommandBuffer();
+		void doOnCullerCompute( SceneCuller const & culler );
+
+	private:
+
 		SceneCuller & m_culler;
 		SceneCullerSignalConnection m_onCullerCompute;
 		SceneNode const * m_ignoredNode{ nullptr };
 		QueueRenderNodesUPtr m_renderNodes;
-		PassData m_pass;
+		std::unique_ptr< PassData > m_pass;
+		PassData * m_currentPass;
+		std::unique_ptr< PassData > m_toDelete;
 		bool m_culledChanged{};
 		bool m_fullSort{ true };
 		bool m_commandsChanged{};
