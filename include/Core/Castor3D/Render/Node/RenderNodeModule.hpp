@@ -65,16 +65,20 @@ namespace castor3d
 	struct RenderNodeTraitsT
 	{
 		using Object = Submesh;
+		using Command = VkDrawIndexedIndirectCommand;
 	};
 
 	template<>
 	struct RenderNodeTraitsT< BillboardRenderNode >
 	{
 		using Object = BillboardBase;
+		using Command = VkDrawIndirectCommand;
 	};
 
 	template< typename NodeT >
 	using NodeObjectT = typename RenderNodeTraitsT< NodeT >::Object;
+	template< typename NodeT >
+	using NodeCommandT = typename RenderNodeTraitsT< NodeT >::Command;
 
 	using PipelineBufferArray = std::vector< PipelineBuffer >;
 

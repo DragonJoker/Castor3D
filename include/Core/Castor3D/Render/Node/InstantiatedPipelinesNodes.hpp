@@ -195,6 +195,7 @@ namespace castor3d
 	public:
 		using NodeObject = NodeObjectT< NodeT >;
 		using CulledNode = CulledNodeT< NodeT >;
+		using NodeCommand = NodeCommandT< NodeT >;
 		using RenderedNode = RenderedNodeT< NodeT >;
 		using NodesView = InstantiatedBuffersNodesViewT< NodeT >;
 
@@ -233,14 +234,12 @@ namespace castor3d
 
 		void emplace( PipelineAndID const & pipeline
 			, ashes::BufferBase const & buffer
-			, NodeT const & node
 			, CulledNode const & culled
 			, GeometryBuffers const & geometryBuffers
-			, uint32_t count
-			, uint32_t firstIndex
-			, uint32_t vertexOffset
+			, NodeCommand command
 			, bool isFrontCulled )
 		{
+			auto & node = *culled.node;
 			size_t hash = std::hash< NodeObject const * >{}( &node.data );
 			hash = castor::hashCombine( hash, node.pass->getHash() );
 			hash = castor::hashCombine( hash, isFrontCulled );
@@ -260,9 +259,7 @@ namespace castor3d
 				it->nodes.emplace( buffer
 					, RenderedNode{ &culled
 						, &geometryBuffers
-						, count
-						, firstIndex
-						, vertexOffset } );
+						, std::move( command ) } );
 			}
 		}
 
