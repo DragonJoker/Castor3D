@@ -20,6 +20,41 @@ CU_ImplementSmartPtr( castor3d, RenderQueue )
 
 namespace castor3d
 {
+	//*********************************************************************************************
+
+	RenderQueue::PassData::~PassData()noexcept
+	{
+		auto lock( castor::makeUniqueLock( eventMutex ) );
+
+		if ( initEvent )
+		{
+			initEvent->skip();
+			initEvent = {};
+		}
+	}
+
+	void RenderQueue::PassData::initialise( RenderDevice const & device
+		, QueueData const & queueData
+		, castor::String const & name
+		, VkRenderPass renderPass )
+	{
+		renderPassAtInit = renderPass;
+		commandBuffer = queueData.commandPool->createCommandBuffer( name
+			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
+		commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
+			, makeVkStruct< VkCommandBufferInheritanceInfo >( renderPassAtInit
+				, 0u
+				, VkFramebuffer( nullptr )
+				, VK_FALSE
+				, 0u
+				, 0u ) );
+		commandBuffer->end();
+		initialised = true;
+		initEvent = nullptr;
+	}
+
+	//*********************************************************************************************
+
 	RenderQueue::RenderQueue( RenderNodesPass & renderPass
 		, SceneNode const * ignored )
 		: OwnedBy< RenderNodesPass >{ renderPass }
@@ -30,6 +65,8 @@ namespace castor3d
 			} ) )
 		, m_ignoredNode{ ignored }
 		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this ) }
+		, m_pass{ std::make_unique< PassData >() }
+		, m_currentPass{ m_pass.get() }
 		, m_viewport{ castor::makeGroupChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
 		, m_scissor{ castor::makeGroupChangeTracked< ashes::Optional< VkRect2D > >( m_culledChanged, ashes::nullopt ) }
 	{
@@ -45,6 +82,9 @@ namespace castor3d
 
 	void RenderQueue::invalidate()
 	{
+		m_toDelete = std::move( m_pass );
+		m_pass = std::make_unique< PassData >();
+		m_currentPass = m_pass.get();
 		m_invalidated = true;
 		m_commandsChanged = true;
 	}
@@ -52,7 +92,7 @@ namespace castor3d
 	void RenderQueue::cleanup()
 	{
 		CU_Require( m_renderNodes );
-		m_pass.commandBuffer.reset();
+		m_toDelete = std::move( m_pass );
 	}
 
 	void RenderQueue::update( ShadowMapLightTypeArray & shadowMaps
@@ -60,6 +100,8 @@ namespace castor3d
 	{
 		if ( hasCommandBuffer() )
 		{
+			m_toDelete.reset();
+
 			if ( m_culledChanged )
 			{
 				CU_Require( m_renderNodes );
@@ -80,7 +122,7 @@ namespace castor3d
 			if ( m_commandsChanged )
 			{
 				doPrepareCommandBuffer();
-				m_commandsChanged = false;
+				m_commandsChanged = m_fullSort;
 			}
 		}
 		else if ( m_culledChanged )
@@ -125,7 +167,7 @@ namespace castor3d
 
 	bool RenderQueue::needsInitialise()const
 	{
-		auto & pass = m_pass;
+		auto & pass = *m_currentPass;
 		auto lock( castor::makeUniqueLock( pass.eventMutex ) );
 		return !pass.initEvent
 			&& !pass.initialised;
@@ -138,27 +180,24 @@ namespace castor3d
 
 	ashes::CommandBuffer const & RenderQueue::initCommandBuffer()
 	{
-		auto & pass = m_pass;
-
 		if ( hasCommandBuffer()
-			&& pass.renderPassAtInit == getOwner()->getRenderPass( 0u ) )
+			&& m_currentPass->renderPassAtInit == getOwner()->getRenderPass( 0u ) )
 		{
 			return getCommandBuffer();
 		}
 
+		if ( hasCommandBuffer() )
 		{
-			auto lock( castor::makeUniqueLock( pass.eventMutex ) );
-
-			if ( pass.initEvent )
-			{
-				pass.initEvent->skip();
-				pass.initEvent = nullptr;
-			}
+			m_toDelete = std::move( m_pass );
+			m_pass = std::make_unique< PassData >();
+			m_currentPass = m_pass.get();
 		}
 
-		auto & device = getOwner()->getEngine()->getRenderSystem()->getRenderDevice();
+		auto & device = *getOwner()->getEngine()->getRenderDevice();
 		auto queueData = device.graphicsData();
-		doInitialise( device, *queueData );
+		m_currentPass->initialise( device
+			, *queueData
+			, getOwner()->getName(), getOwner()->getRenderPass( 0u ) );
 		return getCommandBuffer();
 	}
 
@@ -168,52 +207,28 @@ namespace castor3d
 	}
 
 	void RenderQueue::doInitialise( RenderDevice const & device
-		, QueueData const & queueData )
+		, QueueData const & queueData
+		, PassData & pass )
 	{
-		auto & pass = m_pass;
-		pass.commandBuffer.reset();
-		pass.renderPassAtInit = getOwner()->getRenderPass( 0u );
-		pass.commandBuffer = queueData.commandPool->createCommandBuffer( getOwner()->getName()
-			, VK_COMMAND_BUFFER_LEVEL_SECONDARY );
-		pass.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-			, makeVkStruct< VkCommandBufferInheritanceInfo >( pass.renderPassAtInit
-				, 0u
-				, VkFramebuffer( nullptr )
-				, VK_FALSE
-				, 0u
-				, 0u ) );
-		pass.commandBuffer->end();
-		pass.initialised = true;
-		pass.initEvent = nullptr;
-
 		invalidate();
 	}
 
 	void RenderQueue::doPrepareCommandBuffer()
 	{
 		getOwner()->resetCommandBuffer( 0u );
-		auto & pass = m_pass;
 
 		if ( m_invalidated.exchange( false ) )
 		{
 			// Do this here to prevent use of deleted data in command buffer.
 			getRenderNodes().clear();
 			getOwner()->cleanupPipelines();
-			pass.commandBuffer->reset();
-			pass.commandBuffer->begin( VK_COMMAND_BUFFER_USAGE_SIMULTANEOUS_USE_BIT | VK_COMMAND_BUFFER_USAGE_RENDER_PASS_CONTINUE_BIT
-				, makeVkStruct< VkCommandBufferInheritanceInfo >( pass.renderPassAtInit
-					, 0u
-					, VkFramebuffer( nullptr )
-					, VK_FALSE
-					, 0u
-					, 0u ) );
-			pass.commandBuffer->end();
+			initCommandBuffer();
 			m_culledChanged = true;
 			m_fullSort = true;
-			m_commandsChanged = true;
 		}
 		else
 		{
+			auto & pass = *m_currentPass;
 			CU_Require( pass.commandBuffer );
 			CU_Require( m_renderNodes );
 			pass.commandBuffer->reset();
@@ -230,4 +245,6 @@ namespace castor3d
 		m_culledChanged = m_culledChanged || culler.areCulledChanged();
 		m_commandsChanged = m_commandsChanged || m_culledChanged;
 	}
+
+	//*********************************************************************************************
 }
