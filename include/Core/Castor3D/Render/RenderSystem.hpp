@@ -321,11 +321,6 @@ namespace castor3d
 			return *m_device;
 		}
 
-		castor::Nanoseconds const & getGpuTime()const
-		{
-			return m_gpuTime;
-		}
-
 		bool hasSsbo()const
 		{
 			return getDescription().features.hasStorageBuffers == VK_TRUE;
@@ -396,26 +391,6 @@ namespace castor3d
 			return *m_randomStorage;
 		}
 		/**@}*/
-		/**
-		*\~english
-		*name
-		*	Mutators.
-		*\~french
-		*name
-		*	Mutateurs.
-		*/
-		/**@{*/
-		template< class Rep, class Period >
-		void incGpuTime( std::chrono::duration< Rep, Period > const & time )
-		{
-			m_gpuTime += std::chrono::duration_cast< castor::Nanoseconds >( time );
-		}
-
-		void resetGpuTime()
-		{
-			m_gpuTime = castor::Nanoseconds( 0 );
-		}
-		/**@}*/
 
 	private:
 		bool doCreateRandomStorage( RenderDevice const & device );
@@ -431,7 +406,6 @@ namespace castor3d
 		VkPhysicalDeviceFeatures m_features;
 		RenderDeviceUPtr m_device;
 		std::stack< SceneRPtr > m_stackScenes;
-		castor::Nanoseconds m_gpuTime;
 		ashes::BufferPtr< castor::Point4f > m_randomStorage;
 		std::mutex m_allocMutex;
 		std::unordered_map< std::thread::id, std::unique_ptr< ast::ShaderAllocator > > m_shaderCompileAllocator;
