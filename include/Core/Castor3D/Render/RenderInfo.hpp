@@ -13,9 +13,6 @@ namespace castor3d
 		//!\~english	The visible objects counts.
 		//!\~french		Les comptes d'objets visibles.
 		RenderCounts visible{};
-		//!\~english	The total objects counts.
-		//!\~french		Les comptes totaux d'objets.
-		RenderCounts total{};
 		//!\~english	The particles count.
 		//!\~french		Le nombre de particules.
 		uint32_t particlesCount{};

@@ -74,13 +74,6 @@ namespace castor3d
 		castor::Microseconds endFrame( bool first );
 		/**
 		 *\~english
-		 *\brief		Used to add to the GPU time, the time elapsed between now and the last call of either endGpuTask or endCpuTask
-		 *\~french
-		 *\brief		Utilisé pour ajouter au temps GPU le temps écoulé entre maintenant et le dernier appel de endGpuTask ou endCpuTask
-		 */
-		void endGpuTask();
-		/**
-		 *\~english
 		 *\brief		Collects all GPU times
 		 *\~french
 		 *\brief		Collecte tous les temps GPU
@@ -417,8 +410,7 @@ namespace castor3d
 		uint64_t m_frameCount{ 0 };
 		bool m_visible{ false };
 		castor::Nanoseconds m_cpuTime{ 0 };
-		castor::Nanoseconds m_gpuClientTime{ 0 };
-		castor::Nanoseconds m_gpuTotalTime{ 0 };
+		castor::Nanoseconds m_gpuTime{ 0 };
 		castor::Nanoseconds m_totalTime{ 0 };
 		castor::Nanoseconds m_externalTime{ 0 };
 		float m_fps{ 0.0f };

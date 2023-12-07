@@ -472,9 +472,9 @@ namespace castor3d
 		auto block( m_timerGpuUpdate->start() );
 #endif
 		updater.scene = this;
-		updater.info.total.lightsCount += getLightCache().getLightsBufferCount( LightType::eDirectional );
-		updater.info.total.lightsCount += getLightCache().getLightsBufferCount( LightType::eSpot );
-		updater.info.total.lightsCount += getLightCache().getLightsBufferCount( LightType::ePoint );
+		updater.info.visible.lightsCount += getLightCache().getLightsBufferCount( LightType::eDirectional );
+		updater.info.visible.lightsCount += getLightCache().getLightsBufferCount( LightType::eSpot );
+		updater.info.visible.lightsCount += getLightCache().getLightsBufferCount( LightType::ePoint );
 		doUpdateParticles( updater );
 		m_renderNodes->update( updater );
 	}

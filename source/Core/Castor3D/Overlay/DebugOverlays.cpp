@@ -1038,8 +1038,7 @@ namespace castor3d
 		if ( m_visible )
 		{
 			m_cpuTime = 0_ns;
-			m_gpuTotalTime = 0_ns;
-			m_gpuClientTime = 0_ns;
+			m_gpuTime = 0_ns;
 			m_taskTimer.getElapsed();
 		}
 
@@ -1123,16 +1122,9 @@ namespace castor3d
 			{
 				m_debugPanel->update();
 			}
-
-			getEngine()->getRenderSystem()->resetGpuTime();
 		}
 
 		return result;
-	}
-
-	void DebugOverlays::endGpuTask()
-	{
-		m_gpuClientTime += m_taskTimer.getElapsed();
 	}
 
 	void DebugOverlays::endGpuTasks()
@@ -1141,7 +1133,6 @@ namespace castor3d
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			m_renderPasses.retrieveGpuTime();
 		}
-		endGpuTask();
 	}
 
 	void DebugOverlays::endCpuTask()
@@ -1193,12 +1184,9 @@ namespace castor3d
 		m_debugPanel->addTimePanel( cuT( "CpuTime" )
 			, cuT( "CPU:" )
 			, m_cpuTime );
-		m_debugPanel->addTimePanel( cuT( "GpuClientTime" )
-			, cuT( "GPU Client:" )
-			, m_gpuClientTime );
-		m_debugPanel->addTimePanel( cuT( "GpuServerTime" )
-			, cuT( "GPU Server:" )
-			, m_gpuTotalTime );
+		m_debugPanel->addTimePanel( cuT( "GpuTime" )
+			, cuT( "GPU:" )
+			, m_gpuTime );
 		m_debugPanel->addTimePanel( cuT( "ExternalTime" )
 			, cuT( "External:" )
 			, m_externalTime );
@@ -1214,44 +1202,29 @@ namespace castor3d
 		m_debugPanel->addFpsPanel( cuT( "AverageFPS" )
 			, cuT( "Average:" )
 			, m_averageFps );
-		m_debugPanel->addCountPanel( cuT( "TotalVertexCount" )
-			, cuT( "Vertices:" )
-			, m_renderInfo.total.vertexCount );
-		m_debugPanel->addCountPanel( cuT( "TotalFaceCount" )
-			, cuT( "Faces:" )
-			, m_renderInfo.total.faceCount );
-		m_debugPanel->addCountPanel( cuT( "TotalObjectCount" )
-			, cuT( "Objects:" )
-			, m_renderInfo.total.objectCount );
-		m_debugPanel->addCountPanel( cuT( "TotalBillboardCount" )
-			, cuT( "Billboards:" )
-			, m_renderInfo.total.billboardCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleVertexCount" )
-			, cuT( "Visible Vertices:" )
+			, cuT( "Vertices:" )
 			, m_renderInfo.visible.vertexCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleFaceCount" )
-			, cuT( "Visible Faces:" )
+			, cuT( "Faces:" )
 			, m_renderInfo.visible.faceCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleObjectCount" )
-			, cuT( "Visible Objects:" )
+			, cuT( "Objects:" )
 			, m_renderInfo.visible.objectCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleBillboardCount" )
-			, cuT( "Visible Billboards:" )
+			, cuT( "Billboards:" )
 			, m_renderInfo.visible.billboardCount );
 		m_debugPanel->addCountPanel( cuT( "ParticlesCount" )
 			, cuT( "Particles:" )
 			, m_renderInfo.particlesCount );
-		m_debugPanel->addCountPanel( cuT( "LightCount" )
-			, cuT( "All Lights:" )
-			, m_renderInfo.total.lightsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleLightCount" )
-			, cuT( "Visible Lights:" )
+			, cuT( "Lights:" )
 			, m_renderInfo.visible.lightsCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleOverlaysCount" )
-			, cuT( "Visible Overlays:" )
+			, cuT( "Overlays:" )
 			, m_renderInfo.visibleOverlaysCount );
 		m_debugPanel->addCountPanel( cuT( "VisibleOverlayQuadsCount" )
-			, cuT( "Visible 2D Quads:" )
+			, cuT( "2D Quads:" )
 			, m_renderInfo.visibleOverlayQuadsCount );
 		m_debugPanel->addCountPanel( cuT( "DrawCalls" )
 			, cuT( "Draw calls:" )
@@ -1270,8 +1243,8 @@ namespace castor3d
 		{
 			auto lock( castor::makeUniqueLock( m_mutex ) );
 			m_renderPasses.compute();
-			m_gpuTotalTime += m_renderPasses.getGpuTime();
-			m_gpuClientTime += m_renderPasses.getCpuTime();
+			m_gpuTime += m_renderPasses.getGpuTime();
+			m_cpuTime -= m_gpuTime;
 		}
 	}
 
