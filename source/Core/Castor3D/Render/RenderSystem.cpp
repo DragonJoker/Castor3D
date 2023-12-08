@@ -467,11 +467,38 @@ namespace castor3d
 				result.insert( spirv::EXT_demote_to_helper_invocation );
 			}
 
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
+#	if VK_EXT_mesh_shader && VK_NV_mesh_shader
+			if ( device.prefersMeshShaderEXT() )
+			{
+				if ( device.hasExtension( VK_EXT_MESH_SHADER_EXTENSION_NAME )
+					&& device.hasMeshAndTaskShaders() )
+				{
+					result.insert( spirv::EXT_mesh_shader );
+				}
+			}
+			else
+			{
+				if ( device.hasExtension( VK_NV_MESH_SHADER_EXTENSION_NAME )
+					&& device.hasMeshAndTaskShaders() )
+				{
+					result.insert( spirv::NV_mesh_shader );
+				}
+			}
+#	elif VK_EXT_mesh_shader
+			if ( device.hasExtension( VK_EXT_MESH_SHADER_EXTENSION_NAME )
+				&& device.hasMeshAndTaskShaders() )
+			{
+				result.insert( spirv::EXT_mesh_shader );
+			}
+#	else
 			if ( device.hasExtension( VK_NV_MESH_SHADER_EXTENSION_NAME )
 				&& device.hasMeshAndTaskShaders() )
 			{
 				result.insert( spirv::NV_mesh_shader );
 			}
+#	endif
+#endif
 
 			if ( device.hasExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME )
 				&& device.hasAtomicFloatAdd() )
@@ -650,27 +677,7 @@ namespace castor3d
 		m_gpuInformations.setValue( GpuMax::eWorkGroupSizeZ, limits.maxComputeWorkGroupSize[2] );
 		m_gpuInformations.setValue( GpuMax::eWorkGroupInvocations, limits.maxComputeWorkGroupInvocations );
 
-#if VK_NV_mesh_shader
-		if ( m_device->hasMeshShaders() )
-		{
-			auto & meshLimits = m_device->getMeshProperties();
-			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupInvocations, meshLimits.maxMeshWorkGroupInvocations );
-			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeX, meshLimits.maxMeshWorkGroupSize[0] );
-			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeY, meshLimits.maxMeshWorkGroupSize[1] );
-			m_gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeZ, meshLimits.maxMeshWorkGroupSize[2] );
-			m_gpuInformations.setValue( GpuMax::eMeshOutputVertices, meshLimits.maxMeshOutputVertices );
-			m_gpuInformations.setValue( GpuMax::eMeshOutputPrimitives, meshLimits.maxMeshOutputPrimitives );
-		}
-
-		if ( m_device->hasTaskShaders() )
-		{
-			auto & meshLimits = m_device->getMeshProperties();
-			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupInvocations, meshLimits.maxTaskWorkGroupInvocations );
-			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeX, meshLimits.maxTaskWorkGroupSize[0] );
-			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeY, meshLimits.maxTaskWorkGroupSize[1] );
-			m_gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeZ, meshLimits.maxTaskWorkGroupSize[2] );
-		}
-#endif
+		m_device->fillGPUMeshInformations( m_gpuInformations );
 
 		log::info << m_gpuInformations << std::endl;
 	}

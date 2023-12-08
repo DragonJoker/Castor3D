@@ -97,6 +97,7 @@ namespace castor3d::shader
 	struct LpvGridData;
 	struct LpvLightData;
 	struct Material;
+	struct Meshlet;
 	struct Plane;
 	struct PointLight;
 	struct PointShadowData;
@@ -244,6 +245,7 @@ namespace castor3d::shader
 	Writer_Parameter( LpvGridData );
 	Writer_Parameter( LpvLightData );
 	Writer_Parameter( Material );
+	Writer_Parameter( Meshlet );
 	Writer_Parameter( Plane );
 	Writer_Parameter( PointLight );
 	Writer_Parameter( PointShadowData );

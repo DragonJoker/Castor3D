@@ -337,6 +337,11 @@ namespace castor3d
 		return writeVisibility() && isBillboard();
 	}
 
+	bool PipelineFlags::enableMeshletID()const
+	{
+		return writeVisibility() && usesMesh() && !isBillboard();
+	}
+
 	bool PipelineFlags::enableInstantiation()const
 	{
 		return checkFlag( m_programFlags, ProgramFlag::eInstantiation );

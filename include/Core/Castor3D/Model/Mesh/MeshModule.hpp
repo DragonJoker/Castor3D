@@ -4,6 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_ModelMeshModule_H___
 #define ___C3D_ModelMeshModule_H___
 
+#include "Castor3D/Limits.hpp"
 #include "Castor3D/Cache/CacheModule.hpp"
 #include "Castor3D/Model/ModelModule.hpp"
 
@@ -88,15 +89,16 @@ namespace castor3d
 	struct Meshlet
 	{
 		// Meshlets vertices indices.
-		std::array< uint32_t, 64u > vertices;
+		std::array< uint32_t, MaxMeshletVertexCount > vertices;
 		// Meshlets triangles indices.
-		std::array< uint8_t, 128u * 3u > primitives;
+		std::array< uint8_t, MaxMeshletTriangleCount * 3u > primitives;
 		// Number of vertices used in the meshlet.
 		uint32_t vertexCount;
 		// Number of triangles used in the meshlet.
 		uint32_t triangleCount;
-		uint32_t dummy[2];
+		uint32_t pad;
 	};
+	static_assert( ( sizeof( Meshlet ) % 16u ) == 0u );
 	/**
 	*\~english
 	*\brief
@@ -122,7 +124,7 @@ namespace castor3d
 	{
 		uint32_t pipelineId;
 		uint32_t drawOffset;
-		uint32_t instanceCount;
+		uint32_t meshletOffset;
 	};
 
 	CU_DeclareSmartPtr( castor3d, Mesh, C3D_API );

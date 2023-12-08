@@ -2,7 +2,9 @@
 
 #include "Castor3D/Engine.hpp"
 #include "Castor3D/Limits.hpp"
+#include "Castor3D/Buffer/GpuBuffer.hpp"
 #include "Castor3D/Buffer/GpuBufferPool.hpp"
+#include "Castor3D/Buffer/UploadData.hpp"
 #include "Castor3D/Material/Pass/Pass.hpp"
 #include "Castor3D/Model/Mesh/Mesh.hpp"
 #include "Castor3D/Model/Mesh/Submesh/Submesh.hpp"
@@ -53,8 +55,11 @@ namespace castor3d
 				, RenderPipeline::eMeshBuffers );
 			ashes::WriteDescriptorSetArray writes;
 			auto combine = m_submesh.getComponentCombine();
-			writes.push_back( m_meshletBuffer.getStorageBinding( uint32_t( MeshBuffersIdx::eMeshlets ) ) );
+
 			writes.push_back( getFinalCullBuffer( geometry, pass ).getStorageBinding( uint32_t( MeshBuffersIdx::eCullData ) ) );
+
+			writes.push_back( baseBuffers.getStorageBinding( SubmeshData::eMeshlets
+				, uint32_t( MeshBuffersIdx::eMeshlets ) ) );
 
 			if ( combine.hasPositionFlag )
 			{
@@ -197,13 +202,6 @@ namespace castor3d
 				}
 			}
 
-			if ( !m_meshletBuffer )
-			{
-				m_meshletBuffer = device.bufferPool->getBuffer< Meshlet >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-					, m_meshlets.size()
-					, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT );
-			}
-
 			if ( !m_sourceCullBuffer )
 			{
 				m_sourceCullBuffer = device.bufferPool->getBuffer< MeshletCullData >( VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
@@ -241,31 +239,23 @@ namespace castor3d
 			device.bufferPool->putBuffer( cullBuffer );
 			cullBuffer = {};
 		}
-
-		if ( m_meshletBuffer )
-		{
-			device.bufferPool->putBuffer( m_meshletBuffer );
-			m_meshletBuffer = {};
-		}
 	}
 
 	void MeshletComponent::ComponentData::doUpload( UploadData & uploader )
 	{
-		if ( !m_meshletBuffer )
-		{
-			return;
-		}
-
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		auto count = uint32_t( m_meshlets.size() );
+		auto & offsets = m_submesh.getSourceBufferOffsets();
+		auto & buffer = offsets.getBufferChunk( SubmeshData::eMeshlets );
 
-		if ( count )
+		if ( count && buffer.hasData() )
 		{
-			std::copy( m_meshlets.begin()
-				, m_meshlets.end()
-				, m_meshletBuffer.getData().begin() );
-			m_meshletBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
-				, VK_PIPELINE_STAGE_MESH_SHADER_BIT_NV );
+			uploader.pushUpload( m_meshlets.data()
+				, m_meshlets.size() * sizeof( Meshlet )
+				, buffer.getBuffer()
+				, buffer.getOffset()
+				, VK_ACCESS_SHADER_READ_BIT
+				, VK_PIPELINE_STAGE_MESH_SHADER_BIT_EXT );
 
 			count = uint32_t( m_cull.size() );
 
@@ -274,7 +264,7 @@ namespace castor3d
 				std::copy( m_cull.begin()
 					, m_cull.end()
 					, m_sourceCullBuffer.getData().begin() );
-				m_sourceCullBuffer.markDirty( VK_ACCESS_UNIFORM_READ_BIT
+				m_sourceCullBuffer.markDirty( VK_ACCESS_SHADER_READ_BIT
 					, VK_PIPELINE_STAGE_TASK_SHADER_BIT_NV );
 			}
 		}
@@ -285,12 +275,12 @@ namespace castor3d
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 		ashes::VkDescriptorSetLayoutBindingArray bindings;
-		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eMeshlets )
-			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
-			, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eCullData )
 			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
 			, VK_SHADER_STAGE_TASK_BIT_NV ) );
+		bindings.emplace_back( makeDescriptorSetLayoutBinding( uint32_t( MeshBuffersIdx::eMeshlets )
+			, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+			, VK_SHADER_STAGE_MESH_BIT_NV ) );
 		auto combine = m_submesh.getComponentCombine();
 
 		if ( combine.hasPositionFlag )

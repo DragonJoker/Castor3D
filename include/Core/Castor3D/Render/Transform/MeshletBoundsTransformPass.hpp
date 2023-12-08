@@ -30,8 +30,6 @@ namespace castor3d
 		MeshletBoundsTransformPass( RenderDevice const & device
 			, SubmeshRenderNode const & node
 			, BoundsTransformPipeline const & pipeline
-			, ObjectBufferOffset const & source
-			, GpuBufferOffsetT< Meshlet > const & meshlets
 			, GpuBufferOffsetT< MeshletCullData > const & output );
 
 		void recordInto( crg::RecordContext & context
@@ -41,8 +39,8 @@ namespace castor3d
 	private:
 		RenderDevice const & m_device;
 		BoundsTransformPipeline const & m_pipeline;
-		ObjectBufferOffset const & m_source;
-		GpuBufferOffsetT< Meshlet > const & m_meshlets;
+		ObjectBufferOffset const & m_sourceOffsets;
+		ObjectBufferOffset const & m_finalOffsets;
 		GpuBufferOffsetT< MeshletCullData > const & m_output;
 		uint32_t m_meshletCount{};
 		ashes::DescriptorSetPtr m_descriptorSet;

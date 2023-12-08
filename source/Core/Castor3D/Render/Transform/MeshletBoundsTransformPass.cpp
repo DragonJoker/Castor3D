@@ -26,21 +26,22 @@ namespace castor3d
 	namespace vtxtrs
 	{
 		static ashes::DescriptorSetPtr createDescriptorSet( BoundsTransformPipeline const & pipeline
-			, ObjectBufferOffset const & source
-			, GpuBufferOffsetT< Meshlet > const & meshlets
+			, ObjectBufferOffset const & sourceOffsets
+			, ObjectBufferOffset const & finalOffsets
 			, GpuBufferOffsetT< MeshletCullData > const & output )
 		{
 			ashes::WriteDescriptorSetArray writes;
-			writes.push_back( source.getStorageBinding( SubmeshData::ePositions
+			writes.push_back( finalOffsets.getStorageBinding( SubmeshData::ePositions
 				, MeshletBoundsTransformPass::ePositions ) );
 
 			if ( pipeline.normals )
 			{
-				writes.push_back( source.getStorageBinding( SubmeshData::eNormals
+				writes.push_back( finalOffsets.getStorageBinding( SubmeshData::eNormals
 					, MeshletBoundsTransformPass::eNormals ) );
 			}
 
-			writes.push_back( meshlets.getStorageBinding( MeshletBoundsTransformPass::eMeshlets ) );
+			writes.push_back( sourceOffsets.getStorageBinding( SubmeshData::eMeshlets
+				, MeshletBoundsTransformPass::eMeshlets ) );
 			writes.push_back( output.getStorageBinding( MeshletBoundsTransformPass::eOutCullData ) );
 
 			auto descriptorSet = pipeline.descriptorSetPool->createDescriptorSet( pipeline.getName() );
@@ -55,18 +56,16 @@ namespace castor3d
 	MeshletBoundsTransformPass::MeshletBoundsTransformPass( RenderDevice const & device
 		, SubmeshRenderNode const & node
 		, BoundsTransformPipeline const & pipeline
-		, ObjectBufferOffset const & source
-		, GpuBufferOffsetT< Meshlet > const & meshlets
 		, GpuBufferOffsetT< MeshletCullData > const & output )
 		: m_device{ device }
 		, m_pipeline{ pipeline }
-		, m_source{ source }
-		, m_meshlets{ meshlets }
+		, m_sourceOffsets{ node.getSourceBufferOffsets() }
+		, m_finalOffsets{ node.getFinalBufferOffsets() }
 		, m_output{ output }
 		, m_meshletCount{ uint32_t( m_output.getCount() ) }
 		, m_descriptorSet{ vtxtrs::createDescriptorSet( pipeline
-			, source
-			, m_meshlets
+			, m_sourceOffsets
+			, m_finalOffsets
 			, m_output ) }
 	{
 	}
@@ -75,23 +74,13 @@ namespace castor3d
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		context.memoryBarrier( commandBuffer
-			, m_meshlets.buffer->getBuffer()
-			, { m_meshlets.chunk.offset, m_meshlets.chunk.size }
-			, VK_ACCESS_HOST_WRITE_BIT
-			, VK_PIPELINE_STAGE_HOST_BIT
-			, { VK_ACCESS_SHADER_READ_BIT
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
-
 		if ( m_output.buffer )
 		{
 			context.memoryBarrier( commandBuffer
 				, m_output.buffer->getBuffer()
 				, { m_output.chunk.offset, m_output.chunk.size }
-				, VK_ACCESS_HOST_WRITE_BIT
-				, VK_PIPELINE_STAGE_HOST_BIT
-				, { VK_ACCESS_SHADER_WRITE_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
+				, VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT
+				, { VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT } );
 		}
 
 		context.getContext().vkCmdBindPipeline( commandBuffer
@@ -123,32 +112,29 @@ namespace castor3d
 			context.memoryBarrier( commandBuffer
 				, m_output.buffer->getBuffer()
 				, { m_output.chunk.offset, m_output.chunk.size }
-				, VK_ACCESS_SHADER_WRITE_BIT
-				, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-				, { VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_MESH_SHADER_BIT_NV } );
+				, VK_ACCESS_SHADER_WRITE_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+				, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_MESH_SHADER_BIT_NV } );
 		}
 
+		auto & meshletsChunk = m_sourceOffsets.getBufferChunk( SubmeshData::eMeshlets );
 		context.memoryBarrier( commandBuffer
-			, m_meshlets.buffer->getBuffer()
-			, { m_meshlets.chunk.offset, m_meshlets.chunk.size }
-			, VK_ACCESS_SHADER_READ_BIT
-			, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-			, { VK_ACCESS_SHADER_READ_BIT
-				, VK_PIPELINE_STAGE_MESH_SHADER_BIT_NV } );
+			, meshletsChunk.buffer->getBuffer()
+			, { meshletsChunk.chunk.offset, meshletsChunk.chunk.size }
+			, VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+			, { VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_MESH_SHADER_BIT_EXT } );
 
-		for ( auto & buffer : m_source.buffers )
+		for ( auto & buffer : m_finalOffsets.buffers )
 		{
 			if ( buffer.buffer )
 			{
 				context.memoryBarrier( commandBuffer
 					, buffer.buffer->getBuffer()
 					, { buffer.chunk.offset, buffer.chunk.size }
-					, VK_ACCESS_SHADER_READ_BIT
-					, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
-					, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT
-						, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
+					, VK_ACCESS_SHADER_READ_BIT, VK_PIPELINE_STAGE_COMPUTE_SHADER_BIT
+					, { VK_ACCESS_VERTEX_ATTRIBUTE_READ_BIT, VK_PIPELINE_STAGE_VERTEX_INPUT_BIT } );
 			}
+
+			++index;
 		}
 	}
 

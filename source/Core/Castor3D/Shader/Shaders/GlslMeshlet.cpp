@@ -1,5 +1,7 @@
 #include "Castor3D/Shader/Shaders/GlslMeshlet.hpp"
 
+#include "Castor3D/Limits.hpp"
+
 #include <ShaderWriter/Source.hpp>
 
 namespace castor3d
@@ -12,9 +14,8 @@ namespace castor3d
 			: sdw::StructInstance{ writer, std::move( expr ), enabled }
 			, vertices{ getMemberArray< sdw::UInt >( "vertices" ) }
 			, indices{ getMemberArray< sdw::UInt8 >( "indices" ) }
-			, m_counts{ getMember< sdw::UVec4 >( "counts" ) }
-			, vertexCount{ m_counts.x() }
-			, triangleCount{ m_counts.y() }
+			, vertexCount{ getMember< sdw::UInt >( "vertexCount" ) }
+			, triangleCount{ getMember< sdw::UInt >( "triangleCount" ) }
 		{
 		}
 
@@ -27,12 +28,18 @@ namespace castor3d
 			{
 				result->declMember( "vertices"
 					, sdw::type::Kind::eUInt
-					, 64u );
+					, MaxMeshletVertexCount );
 				result->declMember( "indices"
 					, sdw::type::Kind::eUInt8
-					, 128u * 3u );
-				result->declMember( "counts"
-					, sdw::type::Kind::eVec4U
+					, MaxMeshletTriangleCount * 3u );
+				result->declMember( "vertexCount"
+					, sdw::type::Kind::eUInt
+					, sdw::type::NotArray );
+				result->declMember( "triangleCount"
+					, sdw::type::Kind::eUInt
+					, sdw::type::NotArray );
+				result->declMember( "pad"
+					, sdw::type::Kind::eUInt
 					, sdw::type::NotArray );
 			}
 

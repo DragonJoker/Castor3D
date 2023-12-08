@@ -21,6 +21,11 @@ See LICENSE file in root folder
 #	pragma warning( disable:4503 )
 #endif
 
+namespace crg::ru
+{
+	struct Config;
+}
+
 namespace castor3d
 {
 	class RenderQueue
@@ -38,6 +43,10 @@ namespace castor3d
 		 *\param[in]	ignored		Les géométries attachées à ce noeud seront ignorées lors du rendu.
 		 */
 		C3D_API RenderQueue( RenderNodesPass & renderPass
+			, RenderDevice const & device
+			, SceneCuller & culler
+			, castor::String const & typeName
+			, bool meshShading
 			, SceneNode const * ignored );
 		C3D_API ~RenderQueue();
 		/**
@@ -109,6 +118,13 @@ namespace castor3d
 		 *remarks		Tous les objets attachés à ce noeud seront ignorés.
 		 */
 		C3D_API void setIgnoredNode( SceneNode const & node );
+		/**
+		 *\~english
+		 *\brief		Fills the given configuration.
+		 *\~french
+		 *\brief		Remplit la configuration donnée.
+		 */
+		C3D_API void fillConfig( crg::ru::Config & config )const;
 		/**
 		*\~english
 		*name

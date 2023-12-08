@@ -10,7 +10,7 @@ See LICENSE file in root folder
 #define C3D_DebugPicking 0
 #define C3D_DebugBackgroundPicking 0
 #define C3D_DebugPickingTransfer 0
-#define C3D_DebugTimers 0
+#define C3D_DebugTimers 1
 #define C3D_DebugDisableShadowMaps 0
 #define C3D_DebugDisableSafeBands 0
 #define C3D_DebugUpload 0

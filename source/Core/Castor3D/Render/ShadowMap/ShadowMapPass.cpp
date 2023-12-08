@@ -117,7 +117,7 @@ namespace castor3d
 		if ( getEngine()->areUpdateOptimisationsEnabled() )
 		{
 			return RenderNodesPass::isPassEnabled()
-				&& ( m_renderQueue->isOutOfDate() || m_outOfDate );
+				&& ( getRenderQueue().isOutOfDate() || m_outOfDate );
 		}
 #endif
 		return RenderNodesPass::isPassEnabled();
@@ -130,7 +130,7 @@ namespace castor3d
 
 	void ShadowMapPass::setUpToDate()
 	{
-		m_outOfDate = m_renderQueue->isOutOfDate();
+		m_outOfDate = getRenderQueue().isOutOfDate();
 	}
 
 	bool ShadowMapPass::doIsValidRenderable( RenderedObject const & object )const

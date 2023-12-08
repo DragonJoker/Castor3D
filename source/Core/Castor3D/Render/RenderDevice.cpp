@@ -331,6 +331,7 @@ namespace castor3d
 		, features{ gpu.getFeatures() }
 		, properties{ gpu.getProperties() }
 		, queueFamilies{ renddvc::initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
+		, m_prefersMeshShaderEXT{ false }
 		, m_deviceExtensions{ std::move( pdeviceExtensions ) }
 		, m_availableExtensions{ gpu.enumerateExtensionProperties( std::string{} ) }
 	{
@@ -409,8 +410,31 @@ namespace castor3d
 #if VK_EXT_shader_atomic_float
 			doTryAddExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME, &m_atomicFloatAddFeatures );
 #endif
-#if VK_NV_mesh_shader
-			doTryAddExtension( VK_NV_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeatures, &m_meshShaderProperties );
+#if defined( VK_NV_mesh_shader ) || defined( VK_EXT_mesh_shader )
+#	if defined( VK_NV_mesh_shader ) && defined( VK_EXT_mesh_shader )
+			if ( prefersMeshShaderEXT() )
+			{
+				if ( !doTryAddExtension( VK_EXT_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesEXT, &m_meshShaderPropertiesEXT ) )
+				{
+					m_prefersMeshShaderEXT = false;
+					doTryAddExtension( VK_NV_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesNV, &m_meshShaderPropertiesNV );
+				}
+			}
+			else
+			{
+				if ( !doTryAddExtension( VK_NV_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesNV, &m_meshShaderPropertiesNV ) )
+				{
+					m_prefersMeshShaderEXT = true;
+					doTryAddExtension( VK_EXT_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesEXT, &m_meshShaderPropertiesEXT );
+				}
+			}
+#	elif defined( VK_EXT_mesh_shader )
+			m_prefersMeshShaderEXT = true;
+			doTryAddExtension( VK_EXT_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesEXT, &m_meshShaderPropertiesEXT );
+#	else
+			m_prefersMeshShaderEXT = false;
+			doTryAddExtension( VK_NV_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesNV, &m_meshShaderPropertiesNV );
+#	endif
 #endif
 #if VK_NV_compute_shader_derivatives
 			doTryAddExtension( VK_NV_COMPUTE_SHADER_DERIVATIVES_EXTENSION_NAME, &m_computeDerivativesFeatures, nullptr );
@@ -774,7 +798,18 @@ namespace castor3d
 	bool RenderDevice::hasMeshShaders()const
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
-		return m_meshShaderFeatures.meshShader == VK_TRUE;
+#	if VK_EXT_mesh_shader && VK_NV_mesh_shader
+		if ( prefersMeshShaderEXT() )
+		{
+			return m_meshShaderFeaturesEXT.meshShader == VK_TRUE;
+		}
+
+		return m_meshShaderFeaturesNV.meshShader == VK_TRUE;
+#	elif VK_EXT_mesh_shader
+		return m_meshShaderFeaturesEXT.meshShader == VK_TRUE;
+#	else
+		return m_meshShaderFeaturesNV.meshShader == VK_TRUE;
+#	endif
 #else
 		return false;
 #endif
@@ -783,7 +818,18 @@ namespace castor3d
 	bool RenderDevice::hasTaskShaders()const
 	{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
-		return m_meshShaderFeatures.taskShader == VK_TRUE;
+#	if VK_EXT_mesh_shader && VK_NV_mesh_shader
+		if ( prefersMeshShaderEXT() )
+		{
+			return m_meshShaderFeaturesEXT.taskShader == VK_TRUE;
+		}
+
+		return m_meshShaderFeaturesNV.taskShader == VK_TRUE;
+#	elif VK_EXT_mesh_shader
+		return m_meshShaderFeaturesEXT.taskShader == VK_TRUE;
+#	else
+		return m_meshShaderFeaturesNV.taskShader == VK_TRUE;
+#	endif
 #else
 		return false;
 #endif
@@ -870,6 +916,98 @@ namespace castor3d
 			&& m_descriptorIndexingFeatures.runtimeDescriptorArray == VK_TRUE;
 #else
 		return false;
+#endif
+	}
+
+	void RenderDevice::fillGPUMeshInformations( GpuInformations & gpuInformations )const
+	{
+#if VK_EXT_mesh_shader || VK_NV_mesh_shader
+#	if VK_EXT_mesh_shader && VK_NV_mesh_shader
+		if ( prefersMeshShaderEXT() )
+		{
+			if ( hasMeshShaders() )
+			{
+				auto & meshLimits = getMeshPropertiesEXT();
+				gpuInformations.setValue( GpuMax::eMeshWorkGroupInvocations, meshLimits.maxMeshWorkGroupInvocations );
+				gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeX, meshLimits.maxMeshWorkGroupSize[0] );
+				gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeY, meshLimits.maxMeshWorkGroupSize[1] );
+				gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeZ, meshLimits.maxMeshWorkGroupSize[2] );
+				gpuInformations.setValue( GpuMax::eMeshOutputVertices, meshLimits.maxMeshOutputVertices );
+				gpuInformations.setValue( GpuMax::eMeshOutputPrimitives, meshLimits.maxMeshOutputPrimitives );
+			}
+
+			if ( hasTaskShaders() )
+			{
+				auto & meshLimits = getMeshPropertiesEXT();
+				gpuInformations.setValue( GpuMax::eTaskWorkGroupInvocations, meshLimits.maxTaskWorkGroupInvocations );
+				gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeX, meshLimits.maxTaskWorkGroupSize[0] );
+				gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeY, meshLimits.maxTaskWorkGroupSize[1] );
+				gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeZ, meshLimits.maxTaskWorkGroupSize[2] );
+			}
+		}
+		else
+		{
+			if ( hasMeshShaders() )
+			{
+				auto & meshLimits = getMeshPropertiesNV();
+				gpuInformations.setValue( GpuMax::eMeshWorkGroupInvocations, meshLimits.maxMeshWorkGroupInvocations );
+				gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeX, meshLimits.maxMeshWorkGroupSize[0] );
+				gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeY, meshLimits.maxMeshWorkGroupSize[1] );
+				gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeZ, meshLimits.maxMeshWorkGroupSize[2] );
+				gpuInformations.setValue( GpuMax::eMeshOutputVertices, meshLimits.maxMeshOutputVertices );
+				gpuInformations.setValue( GpuMax::eMeshOutputPrimitives, meshLimits.maxMeshOutputPrimitives );
+			}
+
+			if ( hasTaskShaders() )
+			{
+				auto & meshLimits = getMeshPropertiesNV();
+				gpuInformations.setValue( GpuMax::eTaskWorkGroupInvocations, meshLimits.maxTaskWorkGroupInvocations );
+				gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeX, meshLimits.maxTaskWorkGroupSize[0] );
+				gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeY, meshLimits.maxTaskWorkGroupSize[1] );
+				gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeZ, meshLimits.maxTaskWorkGroupSize[2] );
+			}
+		}
+#	elif VK_EXT_mesh_shader
+		if ( hasMeshShaders() )
+		{
+			auto & meshLimits = getMeshPropertiesEXT();
+			gpuInformations.setValue( GpuMax::eMeshWorkGroupInvocations, meshLimits.maxMeshWorkGroupInvocations );
+			gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeX, meshLimits.maxMeshWorkGroupSize[0] );
+			gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeY, meshLimits.maxMeshWorkGroupSize[1] );
+			gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeZ, meshLimits.maxMeshWorkGroupSize[2] );
+			gpuInformations.setValue( GpuMax::eMeshOutputVertices, meshLimits.maxMeshOutputVertices );
+			gpuInformations.setValue( GpuMax::eMeshOutputPrimitives, meshLimits.maxMeshOutputPrimitives );
+		}
+
+		if ( hasTaskShaders() )
+		{
+			auto & meshLimits = getMeshPropertiesEXT();
+			gpuInformations.setValue( GpuMax::eTaskWorkGroupInvocations, meshLimits.maxTaskWorkGroupInvocations );
+			gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeX, meshLimits.maxTaskWorkGroupSize[0] );
+			gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeY, meshLimits.maxTaskWorkGroupSize[1] );
+			gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeZ, meshLimits.maxTaskWorkGroupSize[2] );
+		}
+#	else
+		if ( hasMeshShaders() )
+		{
+			auto & meshLimits = getMeshPropertiesNV();
+			gpuInformations.setValue( GpuMax::eMeshWorkGroupInvocations, meshLimits.maxMeshWorkGroupInvocations );
+			gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeX, meshLimits.maxMeshWorkGroupSize[0] );
+			gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeY, meshLimits.maxMeshWorkGroupSize[1] );
+			gpuInformations.setValue( GpuMax::eMeshWorkGroupSizeZ, meshLimits.maxMeshWorkGroupSize[2] );
+			gpuInformations.setValue( GpuMax::eMeshOutputVertices, meshLimits.maxMeshOutputVertices );
+			gpuInformations.setValue( GpuMax::eMeshOutputPrimitives, meshLimits.maxMeshOutputPrimitives );
+		}
+
+		if ( hasTaskShaders() )
+		{
+			auto & meshLimits = m_device->getMeshPropertiesNV();
+			gpuInformations.setValue( GpuMax::eTaskWorkGroupInvocations, meshLimits.maxTaskWorkGroupInvocations );
+			gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeX, meshLimits.maxTaskWorkGroupSize[0] );
+			gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeY, meshLimits.maxTaskWorkGroupSize[1] );
+			gpuInformations.setValue( GpuMax::eTaskWorkGroupSizeZ, meshLimits.maxTaskWorkGroupSize[2] );
+		}
+#	endif
 #endif
 	}
 

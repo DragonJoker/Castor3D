@@ -312,10 +312,23 @@ namespace castor3d
 		C3D_API bool hasBindless()const;
 		C3D_API uint32_t getMaxBindlessSampled()const;
 		C3D_API uint32_t getMaxBindlessStorage()const;
-#if VK_NV_mesh_shader
-		VkPhysicalDeviceMeshShaderPropertiesNV const & getMeshProperties()const noexcept
+		C3D_API void fillGPUMeshInformations( GpuInformations & gpuInformations )const;
+
+		bool prefersMeshShaderEXT()const
 		{
-			return m_meshShaderProperties;
+			return m_prefersMeshShaderEXT;
+		}
+
+#if VK_NV_mesh_shader
+		VkPhysicalDeviceMeshShaderPropertiesNV const & getMeshPropertiesNV()const noexcept
+		{
+			return m_meshShaderPropertiesNV;
+		}
+#endif
+#if VK_EXT_mesh_shader
+		VkPhysicalDeviceMeshShaderPropertiesEXT const & getMeshPropertiesEXT()const noexcept
+		{
+			return m_meshShaderPropertiesEXT;
 		}
 #endif
 		bool hasComputeShaderDerivatives()const noexcept
@@ -467,10 +480,18 @@ namespace castor3d
 			, {} };
 #endif
 #if VK_NV_mesh_shader
-		VkPhysicalDeviceMeshShaderFeaturesNV m_meshShaderFeatures{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV
+		VkPhysicalDeviceMeshShaderFeaturesNV m_meshShaderFeaturesNV{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_NV
 			, nullptr
 			, {} };
-		VkPhysicalDeviceMeshShaderPropertiesNV m_meshShaderProperties{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV
+		VkPhysicalDeviceMeshShaderPropertiesNV m_meshShaderPropertiesNV{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_NV
+			, nullptr
+			, {} };
+#endif
+#if VK_EXT_mesh_shader
+		VkPhysicalDeviceMeshShaderFeaturesEXT m_meshShaderFeaturesEXT{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_FEATURES_EXT
+			, nullptr
+			, {} };
+		VkPhysicalDeviceMeshShaderPropertiesEXT m_meshShaderPropertiesEXT{ VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_MESH_SHADER_PROPERTIES_EXT
 			, nullptr
 			, {} };
 #endif
@@ -491,6 +512,7 @@ namespace castor3d
 #endif
 #pragma GCC diagnostic pop
 
+		bool m_prefersMeshShaderEXT;
 		Extensions m_deviceExtensions;
 		ashes::VkExtensionPropertiesArray m_availableExtensions;
 		QueuesData * m_preferredGraphicsQueue{};

@@ -36,6 +36,7 @@
 #include "Castor3D/Shader/Shaders/GlslLight.hpp"
 #include "Castor3D/Shader/Shaders/GlslLightSurface.hpp"
 #include "Castor3D/Shader/Shaders/GlslMaterial.hpp"
+#include "Castor3D/Shader/Shaders/GlslMeshlet.hpp"
 #include "Castor3D/Shader/Shaders/GlslMeshVertex.hpp"
 #include "Castor3D/Shader/Shaders/GlslOutputComponents.hpp"
 #include "Castor3D/Shader/Shaders/GlslPassShaders.hpp"
@@ -60,22 +61,6 @@
 
 namespace castor3d
 {
-	//*********************************************************************************************
-
-#define DeclareSsbo( Name, Type, Binding, Enable )\
-	[this]()\
-	{\
-		sdw::StorageBuffer Name##Buffer{ m_writer\
-			, #Name + std::string{ "Buffer" }\
-			, Binding\
-			, Sets::eVtx\
-			, ast::type::MemoryLayout::eStd430\
-			, Enable };\
-		auto result = Name##Buffer.declMemberArray< Type >( #Name, Enable );\
-		Name##Buffer.end();\
-		return result;\
-	}()
-
 	//*********************************************************************************************
 
 	namespace visres
@@ -112,6 +97,7 @@ namespace castor3d
 
 		enum VtxBindings : uint32_t
 		{
+			eInMeshlets,
 			eInIndices,
 			eInPosition,
 			eInNormal,
@@ -136,8 +122,11 @@ namespace castor3d
 
 		static uint32_t constexpr maxPipelinesSize = uint32_t( castor::getBitSize( MaxPipelines ) );
 		static uint32_t constexpr maxPipelinesMask = ( 0x000000001u << maxPipelinesSize ) - 1u;
+		static uint32_t constexpr maxPrimitiveIDSize = uint32_t( castor::getBitSize( MaxMeshletTriangleCount ) );
+		static uint32_t constexpr maxPrimitiveIDMask = ( 0x000000001u << maxPrimitiveIDSize ) - 1u;
 		using ShadeFunc = sdw::Function< sdw::Boolean
 			, sdw::InIVec2
+			, sdw::InUInt
 			, sdw::InUInt
 			, sdw::InUInt
 			, sdw::InUInt
@@ -152,6 +141,7 @@ namespace castor3d
 
 			static void implementMain( Type & writer
 				, PipelineFlags const & flags
+				, bool isMeshShading
 				, bool isDeferredLighting
 				, bool outputScattering
 				, uint32_t stride
@@ -185,8 +175,10 @@ namespace castor3d
 							, nodePipelineId >> maxPipelinesSize );
 						auto curPipelineId = writer.declLocale( "curPipelineId"
 							, nodePipelineId & maxPipelinesMask );
+						auto meshletId = writer.declLocale( "meshletId"
+							, isMeshShading ? indata.y() >> maxPrimitiveIDSize : 0_u );
 						auto primitiveId = writer.declLocale( "primitiveId"
-							, indata.y() );
+							, isMeshShading ? indata.y() & maxPrimitiveIDMask : indata.y() );
 						auto result = writer.declLocale( "result", vec4( 0.0_f ) );
 						auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
 						auto diffuse = writer.declLocale( "diffuse"
@@ -195,7 +187,7 @@ namespace castor3d
 								: vec4( 0.0_f ) ) );
 
 						IF( writer, ( stride != 0u ? ( curNodeId != billboardNodeId ) : curNodeId == 0_u )
-							|| !shade( pos, curNodeId, curPipelineId, primitiveId, result, diffuse, scattering ) )
+							|| !shade( pos, curNodeId, curPipelineId, primitiveId, meshletId, result, diffuse, scattering ) )
 						{
 							writer.demote();
 						}
@@ -220,6 +212,7 @@ namespace castor3d
 
 			static void implementMain( Type & writer
 				, PipelineFlags const & flags
+				, bool isMeshShading
 				, bool isDeferredLighting
 				, bool outputScattering
 				, uint32_t stride
@@ -266,8 +259,10 @@ namespace castor3d
 								, indata.x() );
 							auto nodeId = writer.declLocale( "nodeId"
 								, nodePipelineId >> maxPipelinesSize );
+							auto meshletId = writer.declLocale( "meshletId"
+								, isMeshShading ? indata.y() >> maxPrimitiveIDSize : 0_u );
 							auto primitiveId = writer.declLocale( "primitiveId"
-								, indata.y() );
+								, isMeshShading ? indata.y() & maxPrimitiveIDMask : indata.y() );
 							auto result = writer.declLocale( "result", vec4( 0.0_f ) );
 							auto scattering = writer.declLocale( "scattering", vec4( 0.0_f ) );
 							auto diffuse = writer.declLocale( "diffuse"
@@ -276,7 +271,7 @@ namespace castor3d
 									: vec4( 0.0_f ) ) );
 
 							IF( writer, ( stride != 0u ? ( nodeId == billboardNodeId ) : nodeId != 0_u )
-								&& shade( ipixel, nodeId, pipelineId, primitiveId, result, diffuse, scattering ) )
+								&& shade( ipixel, nodeId, pipelineId, primitiveId, meshletId, result, diffuse, scattering ) )
 							{
 								c3d_imgOutResult.store( ipixel, result );
 								c3d_imgOutScattering.store( ipixel, scattering );
@@ -438,70 +433,20 @@ namespace castor3d
 				, shader::PassShaders & passShaders
 				, shader::SubmeshShaders & submeshShaders
 				, PipelineFlags const & flags
-				, uint32_t stride )
+				, uint32_t stride
+				, bool meshlets )
 				: m_writer{ writer }
 				, m_passShaders{ passShaders }
 				, m_submeshShaders{ submeshShaders }
 				, m_flags{ flags }
 				, m_stride{ stride }
-				, m_inIndices{ DeclareSsbo( c3d_inIndices
-					, sdw::UInt
-					, VtxBindings::eInIndices
-					, m_flags.enableIndices() ) }
-				, m_inPosition{ [this]()
-					{
-						sdw::StorageBuffer c3d_inPositionBuffer{ m_writer
-							, std::string{ "c3d_inPositionBuffer" }
-						, VtxBindings::eInPosition
-							, Sets::eVtx
-							, ast::type::MemoryLayout::eStd430
-							, m_flags.enablePosition() };
-						auto result = c3d_inPositionBuffer.declMemberArray< Position >( "c3d_inPosition"
-							, m_flags.enablePosition()
-							, m_stride );
-						c3d_inPositionBuffer.end();
-						return result;
-					}() }
-				, m_inNormal{ DeclareSsbo( c3d_inNormal
-					, sdw::Vec4
-					, VtxBindings::eInNormal
-					, m_flags.enableNormal() && m_stride == 0u ) }
-				, m_inTangent{ DeclareSsbo( c3d_inTangent
-					, sdw::Vec4
-					, VtxBindings::eInTangent
-					, m_flags.enableTangentSpace() && m_stride == 0u ) }
-				, m_inBitangent{ DeclareSsbo( c3d_inBitangent
-					, sdw::Vec4
-					, VtxBindings::eInBitangent
-					, m_flags.enableBitangent() && m_stride == 0u ) }
-				, m_inTexcoord0{ DeclareSsbo( c3d_inTexcoord0
-					, sdw::Vec4
-					, VtxBindings::eInTexcoord0
-					, m_flags.enableTexcoord0() && ( m_stride == 0u ) ) }
-				, m_inTexcoord1{ DeclareSsbo( c3d_inTexcoord1
-					, sdw::Vec4
-					, VtxBindings::eInTexcoord1
-					, m_flags.enableTexcoord1() && m_stride == 0u ) }
-				, m_inTexcoord2{ DeclareSsbo( c3d_inTexcoord2
-					, sdw::Vec4
-					, VtxBindings::eInTexcoord2
-					, m_flags.enableTexcoord2() && m_stride == 0u ) }
-				, m_inTexcoord3{ DeclareSsbo( c3d_inTexcoord3
-					, sdw::Vec4
-					, VtxBindings::eInTexcoord3
-					, m_flags.enableTexcoord3() && m_stride == 0u ) }
-				, m_inColour{ DeclareSsbo( c3d_inColour
-					, sdw::Vec4
-					, VtxBindings::eInColour
-					, m_flags.enableColours() && m_stride == 0u ) }
-				, m_inPassMasks{ DeclareSsbo( c3d_inPassMasks
-					, sdw::UVec4
-					, VtxBindings::eInPassMasks
-					, m_flags.enablePassMasks() && m_stride == 0u ) }
-				, m_inVelocity{ DeclareSsbo( c3d_inVelocity
-					, sdw::Vec4
-					, VtxBindings::eInVelocity
-					, m_flags.enableVelocity() && m_stride == 0u ) }
+				, m_meshlets{ meshlets }
+				, m_meshBuffers{ writer
+					, flags
+					, uint32_t( VtxBindings::eInMeshlets )
+					, uint32_t( Sets::eVtx )
+					, m_stride
+					, meshlets }
 			{
 			}
 
@@ -595,6 +540,7 @@ namespace castor3d
 
 			void loadVertices( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
+				, sdw::UInt const & pmeshletId
 				, shader::ModelData const & pmodelData
 				, shader::MeshVertex & pv0
 				, shader::MeshVertex & pv1
@@ -605,6 +551,7 @@ namespace castor3d
 					m_loadVertices = m_writer.implementFunction< sdw::Void >( "loadVertices"
 						, [&]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
+							, sdw::UInt const & meshletId
 							, shader::ModelData const & modelData
 							, shader::MeshVertex v0
 							, shader::MeshVertex v1
@@ -614,42 +561,62 @@ namespace castor3d
 								, [&]( sdw::UInt const & vertexId
 									, shader::MeshVertex result )
 								{
-									result.position = m_inPosition[vertexId].position;
-									result.normal = m_inNormal[vertexId].xyz();
-									result.tangent = m_inTangent[vertexId];
-									result.bitangent = m_inBitangent[vertexId].xyz();
-									result.texture0 = m_inTexcoord0[vertexId].xyz();
-									result.texture1 = m_inTexcoord1[vertexId].xyz();
-									result.texture2 = m_inTexcoord2[vertexId].xyz();
-									result.texture3 = m_inTexcoord3[vertexId].xyz();
-									result.colour = m_inColour[vertexId].xyz();
-									result.passMasks = m_inPassMasks[vertexId];
-									result.velocity = m_inVelocity[vertexId].xyz();
+									result.position = m_meshBuffers.positions[vertexId].position;
+									result.normal = m_meshBuffers.normals[vertexId].xyz();
+									result.tangent = m_meshBuffers.tangents[vertexId];
+									result.bitangent = m_meshBuffers.bitangents[vertexId].xyz();
+									result.texture0 = m_meshBuffers.textures0[vertexId].xyz();
+									result.texture1 = m_meshBuffers.textures1[vertexId].xyz();
+									result.texture2 = m_meshBuffers.textures2[vertexId].xyz();
+									result.texture3 = m_meshBuffers.textures3[vertexId].xyz();
+									result.colour = m_meshBuffers.colours[vertexId].xyz();
+									result.passMasks = m_meshBuffers.passMasks[vertexId];
+									result.velocity = m_meshBuffers.velocities[vertexId].xyz();
 								}
 								, sdw::InUInt{ m_writer, "vertexId" }
 								, shader::OutMeshVertex{ m_writer, "result", m_submeshShaders } );
 
-							auto baseIndex = m_writer.declLocale( "baseIndex"
-								, modelData.getIndexOffset() + primitiveId * 3u );
-							auto indices = m_writer.declLocale( "indices"
-								, uvec3( m_inIndices[baseIndex + 0u]
-									, m_inIndices[baseIndex + 1u]
-									, m_inIndices[baseIndex + 2u] ) );
-							auto baseVertex = m_writer.declLocale( "baseVertex"
-								, modelData.getVertexOffset() );
-							loadVertex( baseVertex + indices.x(), v0 );
-							loadVertex( baseVertex + indices.y(), v1 );
-							loadVertex( baseVertex + indices.z(), v2 );
+							if ( m_meshlets )
+							{
+								auto meshlet = m_writer.declLocale( "meshlet"
+									, m_meshBuffers.meshlets[meshletId] );
+								auto baseIndex = m_writer.declLocale( "baseIndex"
+									, primitiveId * 3u );
+								auto indices = m_writer.declLocale( "indices"
+									, uvec3( meshlet.vertices[m_writer.cast< sdw::UInt >( meshlet.indices[baseIndex + 0u] )]
+										, meshlet.vertices[m_writer.cast< sdw::UInt >( meshlet.indices[baseIndex + 1u] )]
+										, meshlet.vertices[m_writer.cast< sdw::UInt >( meshlet.indices[baseIndex + 2u] )] ) );
+								auto baseVertex = m_writer.declLocale( "baseVertex"
+									, modelData.getVertexOffset() );
+								loadVertex( baseVertex + indices.x(), v0 );
+								loadVertex( baseVertex + indices.y(), v1 );
+								loadVertex( baseVertex + indices.z(), v2 );
+							}
+							else
+							{
+								auto baseIndex = m_writer.declLocale( "baseIndex"
+									, modelData.getIndexOffset() + primitiveId * 3u );
+								auto indices = m_writer.declLocale( "indices"
+									, uvec3( m_meshBuffers.indices[baseIndex + 0u]
+										, m_meshBuffers.indices[baseIndex + 1u]
+										, m_meshBuffers.indices[baseIndex + 2u] ) );
+								auto baseVertex = m_writer.declLocale( "baseVertex"
+									, modelData.getVertexOffset() );
+								loadVertex( baseVertex + indices.x(), v0 );
+								loadVertex( baseVertex + indices.y(), v1 );
+								loadVertex( baseVertex + indices.z(), v2 );
+							}
 						}
 						, sdw::InUInt{ m_writer, "nodeId" }
 						, sdw::InUInt{ m_writer, "primitiveId" }
+						, sdw::InUInt{ m_writer, "meshletId" }
 						, shader::InModelData{ m_writer, "modelData" }
 						, shader::OutMeshVertex{ m_writer, "v0", m_submeshShaders }
 						, shader::OutMeshVertex{ m_writer, "v1", m_submeshShaders }
 						, shader::OutMeshVertex{ m_writer, "v2", m_submeshShaders } );
 				}
 
-				m_loadVertices( pnodeId, pprimitiveId, pmodelData, pv0, pv1, pv2 );
+				m_loadVertices( pnodeId, pprimitiveId, pmeshletId, pmodelData, pv0, pv1, pv2 );
 			}
 
 			void loadVertices( sdw::UInt const & pnodeId
@@ -666,6 +633,7 @@ namespace castor3d
 					m_loadVertices = m_writer.implementFunction< sdw::Void >( "loadVertices"
 						, [&]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
+							, sdw::UInt const & meshletId
 							, shader::ModelData const & modelData
 							, shader::MeshVertex v0
 							, shader::MeshVertex v1
@@ -687,7 +655,7 @@ namespace castor3d
 							auto firstTriangle = m_writer.declLocale( "firstTriangle"
 								, ( primitiveId % 2u ) == 0u );
 							auto center = m_writer.declLocale( "center"
-								, m_inPosition[instanceId].position );
+								, m_meshBuffers.positions[instanceId].position );
 							auto bbcenter = m_writer.declLocale( "bbcenter"
 								, modelData.modelToCurWorld( center ).xyz() );
 							auto centerToCamera = m_writer.declLocale( "centerToCamera"
@@ -736,17 +704,19 @@ namespace castor3d
 						}
 						, sdw::InUInt{ m_writer, "nodeId" }
 						, sdw::InUInt{ m_writer, "primitiveId" }
+						, sdw::InUInt{ m_writer, "meshletId" }
 						, shader::InModelData{ m_writer, "modelData" }
 						, shader::OutMeshVertex{ m_writer, "v0", m_submeshShaders }
 						, shader::OutMeshVertex{ m_writer, "v1", m_submeshShaders }
 						, shader::OutMeshVertex{ m_writer, "v2", m_submeshShaders } );
 				}
 
-				m_loadVertices( pnodeId, pprimitiveId, pmodelData, pv0, pv1, pv2 );
+				m_loadVertices( pnodeId, pprimitiveId, 0_u, pmodelData, pv0, pv1, pv2 );
 			}
 
 			void loadSurface( sdw::UInt const & pnodeId
 				, sdw::UInt const & pprimitiveId
+				, sdw::UInt const & pmeshletId
 				, sdw::Vec2 const & ppixelCoord
 				, shader::ModelData const & pmodelData
 				, shader::Material const & pmaterial
@@ -760,6 +730,7 @@ namespace castor3d
 					m_loadSurface = m_writer.implementFunction< sdw::Void >( "loadSurface"
 						, [&]( sdw::UInt const & nodeId
 							, sdw::UInt const & primitiveId
+							, sdw::UInt const & meshletId
 							, sdw::Vec2 const & pixelCoord
 							, shader::ModelData const & modelData
 							, shader::Material const & material
@@ -800,7 +771,7 @@ namespace castor3d
 
 							if ( m_stride == 0u )
 							{
-								loadVertices( nodeId, primitiveId, modelData, v0, v1, v2 );
+								loadVertices( nodeId, primitiveId, meshletId, modelData, v0, v1, v2 );
 							}
 							else
 							{
@@ -987,6 +958,7 @@ namespace castor3d
 						}
 						, sdw::InUInt{ m_writer, "nodeId" }
 						, sdw::InUInt{ m_writer, "primitiveId" }
+						, sdw::InUInt{ m_writer, "meshletId" }
 						, sdw::InVec2{ m_writer, "pixelCoord" }
 						, shader::InModelData{ m_writer, "modelData" }
 						, shader::InMaterial{ m_writer, "material", m_passShaders }
@@ -994,7 +966,7 @@ namespace castor3d
 						, shader::OutDerivFragmentSurface{ m_writer, "result", m_submeshShaders } );
 				}
 
-				m_loadSurface( pnodeId, pprimitiveId, ppixelCoord, pmodelData, pmaterial, pdepth, presult );
+				m_loadSurface( pnodeId, pprimitiveId, pmeshletId, ppixelCoord, pmodelData, pmaterial, pdepth, presult );
 			}
 
 		private:
@@ -1003,18 +975,8 @@ namespace castor3d
 			shader::SubmeshShaders & m_submeshShaders;
 			PipelineFlags const & m_flags;
 			uint32_t m_stride;
-			sdw::UInt32Array m_inIndices;
-			sdw::Array< Position > m_inPosition;
-			sdw::Vec4Array m_inNormal;
-			sdw::Vec4Array m_inTangent;
-			sdw::Vec4Array m_inBitangent;
-			sdw::Vec4Array m_inTexcoord0;
-			sdw::Vec4Array m_inTexcoord1;
-			sdw::Vec4Array m_inTexcoord2;
-			sdw::Vec4Array m_inTexcoord3;
-			sdw::Vec4Array m_inColour;
-			sdw::U32Vec4Array m_inPassMasks;
-			sdw::Vec4Array m_inVelocity;
+			bool m_meshlets;
+			shader::MeshBuffers m_meshBuffers;
 			sdw::Function< BarycentricFullDerivatives
 				, sdw::InVec4
 				, sdw::InVec4
@@ -1024,11 +986,13 @@ namespace castor3d
 			sdw::Function< sdw::Void
 				, sdw::InUInt
 				, sdw::InUInt
+				, sdw::InUInt
 				, shader::InModelData
 				, shader::OutMeshVertex
 				, shader::OutMeshVertex
 				, shader::OutMeshVertex > m_loadVertices;
 			sdw::Function< sdw::Void
+				, sdw::InUInt
 				, sdw::InUInt
 				, sdw::InUInt
 				, sdw::InVec2
@@ -1050,6 +1014,7 @@ namespace castor3d
 			, ClustersConfig const & clustersConfig
 			, bool outputScattering
 			, DeferredLightingFilter deferredLighting
+			, bool isMeshShading
 			, bool areDebugTargetsEnabled )
 		{
 			bool isDeferredLighting = ( deferredLighting == DeferredLightingFilter::eDeferredOnly );
@@ -1156,13 +1121,14 @@ namespace castor3d
 			pcb.end();
 
 			shader::Fog fog{ writer };
-			VisibilityHelpers visHelpers{ writer, passShaders, submeshShaders, flags, stride };
+			VisibilityHelpers visHelpers{ writer, passShaders, submeshShaders, flags, stride, isMeshShading };
 
 			auto shade = writer.implementFunction< sdw::Boolean >( "shade"
 				, [&]( sdw::IVec2 const & ipixel
 					, sdw::UInt curNodeId
 					, sdw::UInt curPipelineId
 					, sdw::UInt primitiveId
+					, sdw::UInt meshletId
 					, sdw::Vec4 outResult
 					, sdw::Vec4 inoutDiffuse
 					, sdw::Vec4 outScattering )
@@ -1198,6 +1164,7 @@ namespace castor3d
 							, submeshShaders );
 						visHelpers.loadSurface( curNodeId
 							, primitiveId
+							, meshletId
 							, vec2( ipixel )
 							, modelData
 							, material
@@ -1466,12 +1433,14 @@ namespace castor3d
 				, sdw::InUInt{ writer, "curNodeId" }
 				, sdw::InUInt{ writer, "curPipelineId" }
 				, sdw::InUInt{ writer, "primitiveId" }
+				, sdw::InUInt{ writer, "meshletId" }
 				, sdw::OutVec4{ writer, "outResult" }
 				, sdw::InOutVec4{ writer, "inoutDiffuse" }
 				, sdw::OutVec4{ writer, "outScattering" } );
 
 			ShaderWriter< useCompute >::implementMain( writer
 				, flags
+				, isMeshShading
 				, isDeferredLighting
 				, outputScattering
 				, stride
@@ -1740,12 +1709,20 @@ namespace castor3d
 
 		static ashes::DescriptorSetLayoutPtr createVtxDescriptorLayout( RenderDevice const & device
 			, std::string const & name
-			, PipelineFlags const & flags )
+			, PipelineFlags const & flags
+			, bool isMeshShading )
 		{
 			auto stages = VkShaderStageFlags( VisibilityResolvePass::useCompute()
 				? VK_SHADER_STAGE_COMPUTE_BIT
 				: VK_SHADER_STAGE_FRAGMENT_BIT );
 			ashes::VkDescriptorSetLayoutBindingArray bindings;
+
+			if ( isMeshShading )
+			{
+				bindings.emplace_back( makeDescriptorSetLayoutBinding( VtxBindings::eInMeshlets
+					, VK_DESCRIPTOR_TYPE_STORAGE_BUFFER
+					, stages ) );
+			}
 
 			if ( flags.enableIndices() )
 			{
@@ -1852,11 +1829,18 @@ namespace castor3d
 
 		static ashes::DescriptorSetPtr createVtxDescriptorSet( std::string const & name
 			, PipelineFlags const & flags
+			, bool isMeshShading
 			, ashes::DescriptorSetPool const & pool
 			, ObjectBufferPool::ModelBuffers const & modelBuffers
 			, ashes::BufferBase const * indexBuffer )
 		{
 			ashes::WriteDescriptorSetArray writes;
+
+			if ( isMeshShading )
+			{
+				auto & buffer = modelBuffers.buffers[size_t( SubmeshData::eMeshlets )]->getBuffer();
+				writes.emplace_back( makeDescriptorWrite( buffer, VtxBindings::eInMeshlets, 0u, buffer.getSize() ) );
+			}
 
 			if ( flags.enableIndices() )
 			{
@@ -2199,6 +2183,7 @@ namespace castor3d
 
 					ires.first->second = visres::createVtxDescriptorSet( getName()
 						, pipelineFlags
+						, m_nodesPass.isMeshShading()
 						, *pipeline.vtxDescriptorPool
 						, modelBuffers
 						, indexBuffer );
@@ -2379,6 +2364,7 @@ namespace castor3d
 					, *getClustersConfig()
 					, m_outputScattering
 					, m_deferredLightingFilter
+					, m_nodesPass.isMeshShading()
 					, areDebugTargetsEnabled() ) };
 			makeShaderState( m_device, module );
 			visitor.visit( module );
@@ -2613,7 +2599,7 @@ namespace castor3d
 			auto result = std::make_unique< Pipeline >( flags );
 			result->flags = flags;
 			result->vtxDescriptorLayout = stride == 0u
-				? visres::createVtxDescriptorLayout( m_device, getName(), flags )
+				? visres::createVtxDescriptorLayout( m_device, getName(), flags, m_nodesPass.isMeshShading() )
 				: visres::createVtxDescriptorLayout( m_device, getName() );
 			result->ioDescriptorLayout = visres::createInDescriptorLayout( m_device, getName(), getScene().getOwner()->getMaterialCache()
 				, m_targetImage, getScene(), *m_parent, getClustersConfig()->enabled, hasSsao() ? m_ssao : nullptr, &getIndirectLighting() );
@@ -2622,7 +2608,20 @@ namespace castor3d
 				, { { stageFlags, 0u, sizeof( visres::PushData ) } } );
 
 			result->shader = ProgramModule{ getName()
-				, visres::getProgram( m_device, getScene(), *m_parent, extent, flags, &getIndirectLighting(), getDebugConfig(), stride, hasSsao(), *getClustersConfig(), m_outputScattering, m_deferredLightingFilter, areDebugTargetsEnabled() ) };
+				, visres::getProgram( m_device
+					, getScene()
+					, *m_parent
+					, extent
+					, flags
+					, &getIndirectLighting()
+					, getDebugConfig()
+					, stride
+					, hasSsao()
+					, *getClustersConfig()
+					, m_outputScattering
+					, m_deferredLightingFilter
+					, m_nodesPass.isMeshShading()
+					, areDebugTargetsEnabled() ) };
 			auto stages = makeProgramStates( m_device, result->shader );
 
 			if ( useCompute() )

@@ -289,10 +289,15 @@ namespace castor3d
 		ParallaxOcclusionFilter m_parallaxOcclusionFilter{ ParallaxOcclusionFilter::eIgnore };
 	};
 
+	using SceneCullerHolder = castor::DataHolderT< SceneCuller * >;
+	using RenderQueueHolder = castor::DataHolderT< RenderQueueUPtr >;
+
 	class RenderNodesPass
 		: public castor::OwnedBy< Engine >
-		, public crg::RenderPass
 		, public castor::Named
+		, private SceneCullerHolder
+		, private RenderQueueHolder
+		, public crg::RenderPass
 	{
 	protected:
 		/**
@@ -752,7 +757,7 @@ namespace castor3d
 
 		SceneCuller & getCuller()const noexcept
 		{
-			return m_culler;
+			return *SceneCullerHolder::getData();
 		}
 
 		CameraUbo const & getMatrixUbo()const noexcept
@@ -903,6 +908,11 @@ namespace castor3d
 			, ashes::WriteDescriptorSetArray & descriptorWrites
 			, uint32_t & index )const;
 
+		RenderQueue & getRenderQueue()const
+		{
+			return *RenderQueueHolder::getData();
+		}
+
 	private:
 		ashes::VkDescriptorSetLayoutBindingArray doCreateAdditionalBindings( PipelineFlags const & flags )const;
 		std::vector< RenderPipelineUPtr > & doGetFrontPipelines();
@@ -1005,13 +1015,11 @@ namespace castor3d
 		RenderDevice const & m_device;
 		RenderSystem & m_renderSystem;
 		CameraUbo const & m_cameraUbo;
-		SceneCuller & m_culler;
 		crg::ImageViewIdArray m_targetImage;
 		crg::ImageViewIdArray m_targetDepth;
 		castor::String m_typeName;
 		RenderPassTypeID m_typeID{};
 		RenderFilters m_filters{ RenderFilter::eNone };
-		RenderQueueUPtr m_renderQueue;
 		castor::String m_category;
 		castor::Size m_size;
 		bool m_oit{ false };

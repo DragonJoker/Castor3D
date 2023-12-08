@@ -343,6 +343,9 @@ namespace Testing
 				{ castor3d::SubmeshData::eTexcoords3, "eTexcoords3" },
 				{ castor3d::SubmeshData::eColours, "eColours" },
 				{ castor3d::SubmeshData::eSkin, "eSkin" },
+				{ castor3d::SubmeshData::ePassMasks, "ePassMasks" },
+				{ castor3d::SubmeshData::eVelocity, "eVelocity" },
+				{ castor3d::SubmeshData::eMeshlets, "eMeshlets" },
 			};
 			return Names[value];
 		}

@@ -485,6 +485,11 @@ namespace castor3d
 		{
 			return 0u;
 		}
+
+		C3D_API virtual SubmeshComponentFlag getMeshletFlag()const noexcept
+		{
+			return 0u;
+		}
 		/**@}*/
 		/**
 		*\name

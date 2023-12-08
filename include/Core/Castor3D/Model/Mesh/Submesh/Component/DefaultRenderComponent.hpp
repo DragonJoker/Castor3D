@@ -38,7 +38,11 @@ namespace castor3d
 				, PipelineFlags const & flags
 				, ComponentModeFlags const & componentsMask
 				, ast::ShaderBuilder & builder )const;
-			void doGetModernShaderSource( Engine const & engine
+			void doGetModernShaderSourceEXT( Engine const & engine
+				, PipelineFlags const & flags
+				, ComponentModeFlags const & componentsMask
+				, ast::ShaderBuilder & builder )const;
+			void doGetModernShaderSourceNV( Engine const & engine
 				, PipelineFlags const & flags
 				, ComponentModeFlags const & componentsMask
 				, ast::ShaderBuilder & builder )const;

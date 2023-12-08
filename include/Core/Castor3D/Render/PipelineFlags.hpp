@@ -204,6 +204,7 @@ namespace castor3d
 		/**/
 		C3D_API bool enableTextures()const;
 		C3D_API bool enableVertexID()const;
+		C3D_API bool enableMeshletID()const;
 		C3D_API bool enableInstantiation()const;
 		C3D_API bool enableParallaxOcclusionMapping( PassComponentRegister const & passComponents )const;
 		C3D_API bool enableParallaxOcclusionMappingOne( PassComponentRegister const & passComponents )const;

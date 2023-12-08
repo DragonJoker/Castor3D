@@ -34,6 +34,9 @@
 #include <CastorUtils/Miscellaneous/BlockTimer.hpp>
 #include <CastorUtils/Miscellaneous/Hash.hpp>
 
+#include <RenderGraph/RecordContext.hpp>
+#include <RenderGraph/RunnablePass.hpp>
+
 CU_ImplementSmartPtr( castor3d, QueueRenderNodes )
 
 #define C3D_PrintNodesCounts 0
@@ -63,7 +66,7 @@ namespace castor3d
 			, CulledNodeT< SubmeshRenderNode > const & culled )
 		{
 			auto & indexOffset = bufferOffsets.getBufferChunk( SubmeshData::eIndex );
-			return VkDrawIndexedIndirectCommand{ .indexCount = indexOffset.hasData() ? indexOffset.getCount< uint32_t >() : bufferChunk.getFirst< castor::Point4f >()
+			return VkDrawIndexedIndirectCommand{ .indexCount = indexOffset.hasData() ? indexOffset.getCount< uint32_t >() : bufferChunk.getCount< castor::Point4f >()
 				, .instanceCount = culled.instanceCount
 				, .firstIndex = indexOffset.hasData() ? indexOffset.getFirst< uint32_t >() : 0u
 				, .vertexOffset = int32_t( bufferChunk.getFirst< castor::Point4f >() )
@@ -209,35 +212,60 @@ namespace castor3d
 			}
 		}
 
-#if VK_EXT_mesh_shader || VK_NV_mesh_shader
+#if VK_NV_mesh_shader
 
 		static void registerNodeCommands( RenderPipeline const & pipeline
 			, SubmeshRenderNode const & node
 			, ashes::CommandBuffer const & commandBuffer
-			, ashes::Buffer< DrawMeshTesksIndexedCommand > const & indirectMeshCommands
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandNV > const & indirectMeshCommands
 			, uint32_t pipelineId
 			, uint32_t drawOffset
 			, uint32_t drawCount
 			, uint32_t & mshIndex )
 		{
-			if ( pipeline.hasMeshletDescriptorSetLayout() )
-			{
-				commandBuffer.bindDescriptorSet( node.getMeshletDescriptorSet()
-					, pipeline.getPipelineLayout() );
-			}
-
+			commandBuffer.bindDescriptorSet( node.getMeshletDescriptorSet()
+				, pipeline.getPipelineLayout() );
 			MeshletDrawConstants constants{ pipelineId
 				, drawOffset
-				, node.getInstanceCount() };
+				, node.getSourceBufferOffsets().getFirst< Meshlet >( SubmeshData::eMeshlets ) };
 			commandBuffer.pushConstants( pipeline.getPipelineLayout()
 				, VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV |  VK_SHADER_STAGE_FRAGMENT_BIT
 				, 0u
 				, sizeof( MeshletDrawConstants )
 				, &constants );
 			commandBuffer.drawMeshTasksIndirectNV( indirectMeshCommands.getBuffer()
-				, mshIndex * sizeof( DrawMeshTesksIndexedCommand )
+				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandNV )
 				, drawCount
-				, sizeof( DrawMeshTesksIndexedCommand ) );
+				, sizeof( VkDrawMeshTasksIndirectCommandNV ) );
+			mshIndex += drawCount;
+		}
+
+#endif
+#if VK_EXT_mesh_shader
+
+		static void registerNodeCommands( RenderPipeline const & pipeline
+			, SubmeshRenderNode const & node
+			, ashes::CommandBuffer const & commandBuffer
+			, ashes::Buffer< VkDrawMeshTasksIndirectCommandEXT > const & indirectMeshCommands
+			, uint32_t pipelineId
+			, uint32_t drawOffset
+			, uint32_t drawCount
+			, uint32_t & mshIndex )
+		{
+			commandBuffer.bindDescriptorSet( node.getMeshletDescriptorSet()
+				, pipeline.getPipelineLayout() );
+			MeshletDrawConstants constants{ pipelineId
+				, drawOffset
+				, node.getSourceBufferOffsets().getFirst< Meshlet >( SubmeshData::eMeshlets ) };
+			commandBuffer.pushConstants( pipeline.getPipelineLayout()
+				, VK_SHADER_STAGE_MESH_BIT_NV | VK_SHADER_STAGE_TASK_BIT_NV |  VK_SHADER_STAGE_FRAGMENT_BIT
+				, 0u
+				, sizeof( MeshletDrawConstants )
+				, &constants );
+			commandBuffer.drawMeshTasksIndirect( indirectMeshCommands.getBuffer()
+				, mshIndex * sizeof( VkDrawMeshTasksIndirectCommandEXT )
+				, drawCount
+				, sizeof( VkDrawMeshTasksIndirectCommandEXT ) );
 			mshIndex += drawCount;
 		}
 
@@ -310,33 +338,23 @@ namespace castor3d
 			++pipelinesBuffer;
 		}
 
-#if VK_EXT_mesh_shader || VK_NV_mesh_shader
+#if VK_NV_mesh_shader
 
 		static void fillNodeIndirectCommand( RenderedNodeT< SubmeshRenderNode > const & node
-			, DrawMeshTesksIndexedCommand *& indirectMeshCommands
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshCommands
 			, uint32_t instanceCount
 			, uint32_t taskCount )
 		{
-#	if VK_EXT_mesh_shader
-			for ( uint32_t i = 0u; i < instanceCount; ++i )
-			{
-				indirectMeshCommands->groupCountX = taskCount;
-				indirectMeshCommands->groupCountY = 0u;
-				indirectMeshCommands->groupCountZ = 0u;
-				++indirectMeshCommands;
-			}
-#	else
 			for ( uint32_t i = 0u; i < instanceCount; ++i )
 			{
 				indirectMeshCommands->taskCount = taskCount;
 				indirectMeshCommands->firstTask = 0u;
 				++indirectMeshCommands;
 			}
-#	endif
 		}
 
 		static void fillNodeIndirectCommands( RenderedNodeT< SubmeshRenderNode > const & node
-			, DrawMeshTesksIndexedCommand *& indirectMeshBuffer
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
 			, uint32_t instanceCount )
@@ -364,7 +382,68 @@ namespace castor3d
 		}
 
 		static void fillNodeIndirectCommands( RenderedNodeT< SubmeshRenderNode > const & node
-			, DrawMeshTesksIndexedCommand *& indirectMeshBuffer
+			, VkDrawMeshTasksIndirectCommandNV *& indirectMeshBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, uint32_t instanceCount
+			, uint32_t *& pipelinesBuffer )
+		{
+			fillNodeIndirectCommands( node
+				, indirectMeshBuffer
+				, indirectIdxBuffer
+				, indirectNIdxBuffer
+				, instanceCount );
+			( *pipelinesBuffer ) = node.culled->node->getId();
+			++pipelinesBuffer;
+		}
+
+#endif
+#if VK_EXT_mesh_shader
+
+		static void fillNodeIndirectCommand( RenderedNodeT< SubmeshRenderNode > const & node
+			, VkDrawMeshTasksIndirectCommandEXT *& indirectMeshCommands
+			, uint32_t instanceCount
+			, uint32_t taskCount )
+		{
+			for ( uint32_t i = 0u; i < instanceCount; ++i )
+			{
+				indirectMeshCommands->groupCountX = taskCount;
+				indirectMeshCommands->groupCountY = 1u;
+				indirectMeshCommands->groupCountZ = 1u;
+				++indirectMeshCommands;
+			}
+		}
+
+		static void fillNodeIndirectCommands( RenderedNodeT< SubmeshRenderNode > const & node
+			, VkDrawMeshTasksIndirectCommandEXT *& indirectMeshBuffer
+			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
+			, VkDrawIndirectCommand *& indirectNIdxBuffer
+			, uint32_t instanceCount )
+		{
+			if ( node.culled->node->data.getMeshletsCount()
+				&& indirectMeshBuffer )
+			{
+				fillNodeIndirectCommand( node
+					, indirectMeshBuffer
+					, node.culled->node->data.isDynamic() ? 1u : instanceCount
+					, node.culled->node->data.getMeshletsCount() );
+			}
+			else if ( node.culled->node->getSourceBufferOffsets().hasData( SubmeshData::eIndex ) )
+			{
+				fillNodeIndirectCommand( node
+					, indirectIdxBuffer
+					, instanceCount );
+			}
+			else
+			{
+				fillNodeIndirectCommand( node
+					, indirectNIdxBuffer
+					, instanceCount );
+			}
+		}
+
+		static void fillNodeIndirectCommands( RenderedNodeT< SubmeshRenderNode > const & node
+			, VkDrawMeshTasksIndirectCommandEXT *& indirectMeshBuffer
 			, VkDrawIndexedIndirectCommand *& indirectIdxBuffer
 			, VkDrawIndirectCommand *& indirectNIdxBuffer
 			, uint32_t instanceCount
@@ -621,7 +700,10 @@ namespace castor3d
 
 	//*************************************************************************************************
 
-	QueueRenderNodes::QueueRenderNodes( RenderQueue const & queue )
+	QueueRenderNodes::QueueRenderNodes( RenderQueue const & queue
+		, RenderDevice const & device
+		, castor::String const & typeName
+		, bool meshShading )
 		: castor::OwnedBy< RenderQueue const >{ queue }
 		, m_onSubmeshChanged{ queue.getCuller().onSubmeshChanged.connect( [this]( SceneCuller const &
 				, CulledNodeT< SubmeshRenderNode > const & node
@@ -636,52 +718,63 @@ namespace castor3d
 				doAddBillboard( node );
 			} ) }
 	{
-		auto & renderPass = *queue.getOwner();
-		auto & device = *renderPass.getEngine()->getRenderDevice();
-
-		if ( !m_submeshIdxIndirectCommands )
-		{
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 
-			if ( renderPass.isMeshShading() )
+		if ( meshShading )
+		{
+#	if defined( VK_EXT_mesh_shader ) && defined( VK_NV_mesh_shader )
+			if ( device.prefersMeshShaderEXT() )
 			{
-				m_submeshMeshletIndirectCommands = makeBuffer< DrawMeshTesksIndexedCommand >( device
+				m_submeshMeshletIndirectCommandsEXT = makeBuffer< VkDrawMeshTasksIndirectCommandEXT >( device
 					, MaxSubmeshMeshletDrawIndirectCommand
 					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
 					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-					, renderPass.getTypeName() + "/SubmeshMeshletIndirectBuffer" );
+					, typeName + "/SubmeshMeshletIndirectBuffer" );
 			}
+			else
+			{
+				m_submeshMeshletIndirectCommandsNV = makeBuffer< VkDrawMeshTasksIndirectCommandNV >( device
+					, MaxSubmeshMeshletDrawIndirectCommand
+					, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
+					, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+					, typeName + "/SubmeshMeshletIndirectBuffer" );
+			}
+#	elif VK_EXT_mesh_shader
+			m_submeshMeshletIndirectCommandsEXT = makeBuffer< VkDrawMeshTasksIndirectCommandEXT >( device
+				, MaxSubmeshMeshletDrawIndirectCommand
+				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, typeName + "/SubmeshMeshletIndirectBuffer" );
+#	else
+			m_submeshMeshletIndirectCommandsNV = makeBuffer< VkDrawMeshTasksIndirectCommandNV >( device
+				, MaxSubmeshMeshletDrawIndirectCommand
+				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
+				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+				, typeName + "/SubmeshMeshletIndirectBuffer" );
+#	endif
+		}
 
 #endif
-			m_submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
-				, MaxSubmeshIdxDrawIndirectCommand
-				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, renderPass.getTypeName() + "/SubmeshIndexedIndirectBuffer" );
-			m_submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-				, MaxSubmeshNIdxDrawIndirectCommand
-				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, renderPass.getTypeName() + "/SubmeshIndirectBuffer" );
-		}
-
-		if ( !m_billboardIndirectCommands )
-		{
-			m_billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
-				, MaxBillboardDrawIndirectCommand
-				, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, renderPass.getTypeName() + "/BillboardIndirectBuffer" );
-		}
-
-		if ( !m_pipelinesNodes )
-		{
-			m_pipelinesNodes = makeBuffer< PipelineNodes >( device
-				, MaxPipelines
-				, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
-				, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
-				, renderPass.getTypeName() + "/NodesIDs" );
-		}
+		m_submeshIdxIndirectCommands = makeBuffer< VkDrawIndexedIndirectCommand >( device
+			, MaxSubmeshIdxDrawIndirectCommand
+			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, typeName + "/SubmeshIndexedIndirectBuffer" );
+		m_submeshNIdxIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
+			, MaxSubmeshNIdxDrawIndirectCommand
+			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, typeName + "/SubmeshIndirectBuffer" );
+		m_billboardIndirectCommands = makeBuffer< VkDrawIndirectCommand >( device
+			, MaxBillboardDrawIndirectCommand
+			, VK_BUFFER_USAGE_INDIRECT_BUFFER_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, typeName + "/BillboardIndirectBuffer" );
+		m_pipelinesNodes = makeBuffer< PipelineNodes >( device
+			, MaxPipelinesNodes
+			, VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+			, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT
+			, typeName + "/NodesIDs" );
 	}
 
 	QueueRenderNodes::~QueueRenderNodes()noexcept
@@ -690,9 +783,108 @@ namespace castor3d
 		m_billboardIndirectCommands.reset();
 		m_submeshNIdxIndirectCommands.reset();
 		m_submeshIdxIndirectCommands.reset();
-#if VK_EXT_mesh_shader || VK_NV_mesh_shader
-		m_submeshMeshletIndirectCommands.reset();
+#if VK_EXT_mesh_shader
+		m_submeshMeshletIndirectCommandsEXT.reset();
 #endif
+#if VK_NV_mesh_shader
+		m_submeshMeshletIndirectCommandsNV.reset();
+#endif
+	}
+
+	void QueueRenderNodes::fillConfig( crg::ru::Config & config )const
+	{
+		config.prePassAction( [this]( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
+			, uint32_t passIndex )
+			{
+				context.memoryBarrier( commandBuffer
+					, m_pipelinesNodes->getBuffer()
+					, crg::BufferSubresourceRange{ 0u, m_pipelinesNodes->getBuffer().getSize() }
+					, VK_ACCESS_HOST_WRITE_BIT
+					, VK_PIPELINE_STAGE_HOST_BIT
+					, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+				context.memoryBarrier( commandBuffer
+					, m_submeshIdxIndirectCommands->getBuffer()
+					, crg::BufferSubresourceRange{ 0u, m_submeshIdxIndirectCommands->getBuffer().getSize() }
+					, VK_ACCESS_HOST_WRITE_BIT
+					, VK_PIPELINE_STAGE_HOST_BIT
+					, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+				context.memoryBarrier( commandBuffer
+					, m_submeshNIdxIndirectCommands->getBuffer()
+					, crg::BufferSubresourceRange{ 0u, m_submeshNIdxIndirectCommands->getBuffer().getSize() }
+					, VK_ACCESS_HOST_WRITE_BIT
+					, VK_PIPELINE_STAGE_HOST_BIT
+					, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+				context.memoryBarrier( commandBuffer
+					, m_billboardIndirectCommands->getBuffer()
+					, crg::BufferSubresourceRange{ 0u, m_billboardIndirectCommands->getBuffer().getSize() }
+					, VK_ACCESS_HOST_WRITE_BIT
+					, VK_PIPELINE_STAGE_HOST_BIT
+					, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+
+				if ( m_submeshMeshletIndirectCommandsEXT )
+				{
+					context.memoryBarrier( commandBuffer
+						, m_submeshMeshletIndirectCommandsEXT->getBuffer()
+						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsEXT->getBuffer().getSize() }
+						, VK_ACCESS_HOST_WRITE_BIT
+						, VK_PIPELINE_STAGE_HOST_BIT
+						, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+				}
+
+				if ( m_submeshMeshletIndirectCommandsNV )
+				{
+					context.memoryBarrier( commandBuffer
+						, m_submeshMeshletIndirectCommandsNV->getBuffer()
+						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsNV->getBuffer().getSize() }
+						, VK_ACCESS_HOST_WRITE_BIT
+						, VK_PIPELINE_STAGE_HOST_BIT
+						, { VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT } );
+				}
+			} );
+		config.postPassAction( [this]( crg::RecordContext & context
+			, VkCommandBuffer commandBuffer
+			, uint32_t passIndex )
+			{
+				context.memoryBarrier( commandBuffer
+					, m_pipelinesNodes->getBuffer()
+					, crg::BufferSubresourceRange{ 0u, m_pipelinesNodes->getBuffer().getSize() }
+					, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
+					, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+				context.memoryBarrier( commandBuffer
+					, m_submeshIdxIndirectCommands->getBuffer()
+					, crg::BufferSubresourceRange{ 0u, m_submeshIdxIndirectCommands->getBuffer().getSize() }
+					, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
+					, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+				context.memoryBarrier( commandBuffer
+					, m_submeshNIdxIndirectCommands->getBuffer()
+					, crg::BufferSubresourceRange{ 0u, m_submeshNIdxIndirectCommands->getBuffer().getSize() }
+					, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
+					, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+				context.memoryBarrier( commandBuffer
+					, m_billboardIndirectCommands->getBuffer()
+					, crg::BufferSubresourceRange{ 0u, m_billboardIndirectCommands->getBuffer().getSize() }
+					, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
+					, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+
+				if ( m_submeshMeshletIndirectCommandsEXT )
+				{
+					context.memoryBarrier( commandBuffer
+						, m_submeshMeshletIndirectCommandsEXT->getBuffer()
+						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsEXT->getBuffer().getSize() }
+						, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
+						, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+				}
+
+				if ( m_submeshMeshletIndirectCommandsNV )
+				{
+					context.memoryBarrier( commandBuffer
+						, m_submeshMeshletIndirectCommandsNV->getBuffer()
+						, crg::BufferSubresourceRange{ 0u, m_submeshMeshletIndirectCommandsNV->getBuffer().getSize() }
+						, VK_ACCESS_INDIRECT_COMMAND_READ_BIT, VK_PIPELINE_STAGE_DRAW_INDIRECT_BIT
+						, { VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT } );
+				}
+			} );
 	}
 
 	void QueueRenderNodes::clear()
@@ -850,7 +1042,20 @@ namespace castor3d
 #if VK_EXT_mesh_shader || VK_NV_mesh_shader
 					if ( renderPass.isMeshShading() )
 					{
-						result += doPrepareMeshModernCommandBuffers( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+#	if defined( VK_EXT_mesh_shader ) && defined( VK_NV_mesh_shader )
+						if ( renderPass.getEngine()->getRenderDevice()->prefersMeshShaderEXT() )
+						{
+							result += doPrepareMeshModernCommandBuffersEXT( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+						}
+						else
+						{
+							result += doPrepareMeshModernCommandBuffersNV( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+						}
+#	elif defined( VK_EXT_mesh_shader )
+						result += doPrepareMeshModernCommandBuffersEXT( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+#	else
+						result += doPrepareMeshModernCommandBuffersNV( commandBuffer, viewport, scissors, nodesIdsBuffer, maxNodesCount );
+#	endif
 					}
 					else
 #endif
@@ -1277,7 +1482,8 @@ namespace castor3d
 		return result;
 	}
 
-	uint32_t QueueRenderNodes::doPrepareMeshModernCommandBuffers( ashes::CommandBuffer const & commandBuffer
+#if VK_EXT_mesh_shader
+	uint32_t QueueRenderNodes::doPrepareMeshModernCommandBuffersEXT( ashes::CommandBuffer const & commandBuffer
 		, ashes::Optional< VkViewport > const & viewport
 		, ashes::Optional< VkRect2D > const & scissors
 		, PipelineNodes * nodesIdsBuffer
@@ -1291,7 +1497,7 @@ namespace castor3d
 
 		auto & submeshIdxCommands = *m_submeshIdxIndirectCommands;
 		auto & submeshNIdxCommands = *m_submeshNIdxIndirectCommands;
-		auto & submeshMshCommands = *m_submeshMeshletIndirectCommands;
+		auto & submeshMshCommands = *m_submeshMeshletIndirectCommandsEXT;
 		auto origIndirectIdxBuffer = submeshIdxCommands.lock( 0u, ashes::WholeSize, 0u );
 		auto origIndirectNIdxBuffer = submeshNIdxCommands.lock( 0u, ashes::WholeSize, 0u );
 		auto origIndirectMshBuffer = submeshMshCommands.lock( 0u, ashes::WholeSize, 0u );
@@ -1479,6 +1685,212 @@ namespace castor3d
 
 		return result;
 	}
+#endif
+
+#if VK_NV_mesh_shader
+	uint32_t QueueRenderNodes::doPrepareMeshModernCommandBuffersNV( ashes::CommandBuffer const & commandBuffer
+		, ashes::Optional< VkViewport > const & viewport
+		, ashes::Optional< VkRect2D > const & scissors
+		, PipelineNodes * nodesIdsBuffer
+		, VkDeviceSize maxNodesCount )
+	{
+		auto & renderPass = *getOwner()->getOwner();
+		uint32_t result{};
+		uint32_t idxIndex{};
+		uint32_t nidxIndex{};
+		uint32_t mshIndex{};
+
+		auto & submeshIdxCommands = *m_submeshIdxIndirectCommands;
+		auto & submeshNIdxCommands = *m_submeshNIdxIndirectCommands;
+		auto & submeshMshCommands = *m_submeshMeshletIndirectCommandsNV;
+		auto origIndirectIdxBuffer = submeshIdxCommands.lock( 0u, ashes::WholeSize, 0u );
+		auto origIndirectNIdxBuffer = submeshNIdxCommands.lock( 0u, ashes::WholeSize, 0u );
+		auto origIndirectMshBuffer = submeshMshCommands.lock( 0u, ashes::WholeSize, 0u );
+		auto indirectIdxBuffer = origIndirectIdxBuffer;
+		auto indirectNIdxBuffer = origIndirectNIdxBuffer;
+		auto indirectMshBuffer = origIndirectMshBuffer;
+		{
+			C3D_DebugTime( renderPass.getTypeName() + " - Single" );
+			for ( auto & [_, pipelinesNodes] : m_submeshNodes )
+			{
+				auto & pipeline = pipelinesNodes.pipeline;
+
+				for ( auto & [buffer, nodes] : pipelinesNodes.nodes )
+				{
+					if ( queuerndnd::hasVisibleNode( nodes ) )
+					{
+						auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
+							, *buffer
+							, m_nodesIds
+							, nodesIdsBuffer
+							, maxNodesCount );
+						auto pipelinesBuffer = pipelineNodes.data();
+
+						auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+							, *this
+							, *pipeline.pipeline
+							, *buffer
+							, viewport
+							, scissors );
+
+						if ( pipeline.pipeline->hasMeshletDescriptorSetLayout() )
+						{
+							uint32_t drawOffset{};
+
+							for ( auto & node : nodes )
+							{
+								if ( node.culled->visible )
+								{
+									queuerndnd::fillNodeIndirectCommands( node
+										, indirectMshBuffer
+										, indirectIdxBuffer
+										, indirectNIdxBuffer
+										, node.culled->instanceCount
+										, pipelinesBuffer );
+									m_visible.objectCount += node.culled->instanceCount;
+									m_visible.faceCount += node.culled->node->data.getFaceCount() * node.culled->instanceCount;
+									m_visible.vertexCount += node.culled->node->data.getPointsCount() * node.culled->instanceCount;
+									CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
+									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+
+									queuerndnd::registerNodeCommands( *pipeline.pipeline
+										, *node.culled->node
+										, commandBuffer
+										, submeshMshCommands
+										, pipelineId
+										, drawOffset
+										, node.culled->instanceCount
+										, mshIndex );
+									drawOffset += node.culled->instanceCount;
+									++result;
+								}
+							}
+						}
+						else
+						{
+							uint32_t visibleNodesCount{};
+							RenderedNodeT< SubmeshRenderNode > const * firstVisibleNode{};
+
+							for ( auto & node : nodes )
+							{
+								if ( node.culled->visible )
+								{
+									queuerndnd::fillNodeIndirectCommands( node
+										, indirectIdxBuffer
+										, indirectNIdxBuffer
+										, node.culled->instanceCount
+										, pipelinesBuffer );
+									m_visible.objectCount += node.culled->instanceCount;
+									m_visible.faceCount += node.culled->node->data.getFaceCount() * node.culled->instanceCount;
+									m_visible.vertexCount += node.culled->node->data.getPointsCount() * node.culled->instanceCount;
+									CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
+									++visibleNodesCount;
+
+									if ( !firstVisibleNode )
+									{
+										firstVisibleNode = &node;
+									}
+								}
+							}
+
+							queuerndnd::registerNodeCommands( *pipeline.pipeline
+								, *firstVisibleNode
+								, commandBuffer
+								, &submeshIdxCommands
+								, submeshNIdxCommands
+								, visibleNodesCount
+								, idxIndex
+								, nidxIndex );
+							++result;
+						}
+					}
+				}
+			}
+		}
+		{
+			C3D_DebugTime( renderPass.getTypeName() + " - Instantiated" );
+			for ( auto & [_, pipelinesNodes] : m_instancedSubmeshNodes )
+			{
+				auto & pipeline = pipelinesNodes.pipeline;
+
+				for ( auto & [buffer, submeshes] : pipelinesNodes.nodes )
+				{
+					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						, *this
+						, *pipelinesNodes.pipeline.pipeline
+						, *buffer
+						, viewport
+						, scissors );
+
+					if ( pipeline.pipeline->hasMeshletDescriptorSetLayout() )
+					{
+						for ( auto & [submesh, node] : submeshes )
+						{
+							queuerndnd::fillNodeIndirectCommands( node
+								, indirectMshBuffer
+								, indirectIdxBuffer
+								, indirectNIdxBuffer
+								, node.culled->instanceCount );
+							m_visible.objectCount += node.culled->instanceCount;
+							m_visible.faceCount += uint32_t( submesh->getFaceCount() * node.culled->instanceCount );
+							m_visible.vertexCount += uint32_t( submesh->getPointsCount() * node.culled->instanceCount );
+							CU_Require( size_t( std::distance( origIndirectMshBuffer, indirectMshBuffer ) ) <= submeshMshCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+
+							queuerndnd::registerNodeCommands( *pipeline.pipeline
+								, *node.culled->node
+								, commandBuffer
+								, submeshMshCommands
+								, pipelineId
+								, 0u
+								, node.culled->instanceCount
+								, mshIndex );
+							++result;
+						}
+					}
+					else
+					{
+						for ( auto & [submesh, node] : submeshes )
+						{
+							queuerndnd::fillNodeIndirectCommands( node
+								, indirectIdxBuffer
+								, indirectNIdxBuffer
+								, node.culled->instanceCount );
+							m_visible.objectCount += node.culled->instanceCount;
+							m_visible.faceCount += uint32_t( submesh->getFaceCount() * node.culled->instanceCount );
+							m_visible.vertexCount += uint32_t( submesh->getPointsCount() * node.culled->instanceCount );
+							CU_Require( size_t( std::distance( origIndirectIdxBuffer, indirectIdxBuffer ) ) <= submeshIdxCommands.getCount() );
+							CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
+
+							queuerndnd::registerNodeCommands( *pipeline.pipeline
+								, node
+								, commandBuffer
+								, &submeshIdxCommands
+								, submeshNIdxCommands
+								, 1u
+								, idxIndex
+								, nidxIndex );
+							++result;
+						}
+					}
+				}
+			}
+		}
+		submeshMshCommands.flush( 0u, ashes::WholeSize );
+		submeshMshCommands.unlock();
+		submeshIdxCommands.flush( 0u, ashes::WholeSize );
+		submeshIdxCommands.unlock();
+		submeshNIdxCommands.flush( 0u, ashes::WholeSize );
+		submeshNIdxCommands.unlock();
+
+		return result;
+	}
+#endif
 
 	uint32_t QueueRenderNodes::doPrepareBillboardCommandBuffers( ashes::CommandBuffer const & commandBuffer
 		, ashes::Optional< VkViewport > const & viewport

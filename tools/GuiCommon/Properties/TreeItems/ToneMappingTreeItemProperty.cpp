@@ -23,8 +23,10 @@ namespace GuiCommon
 			: public castor3d::ToneMappingVisitor
 		{
 		private:
-			explicit ToneMappingShaderGatherer( ShaderSources & sources )
+			explicit ToneMappingShaderGatherer( castor3d::RenderDevice const & device
+				, ShaderSources & sources )
 				: castor3d::ToneMappingVisitor{ { true } }
+				, m_device{ device }
 				, m_sources{ sources }
 			{
 			}
@@ -33,7 +35,7 @@ namespace GuiCommon
 			static ShaderSources submit( castor3d::ToneMapping & toneMapping )
 			{
 				ShaderSources result;
-				ToneMappingShaderGatherer vis{ result };
+				ToneMappingShaderGatherer vis{ *toneMapping.getEngine()->getRenderDevice(), result };
 				toneMapping.accept( vis );
 				return result;
 			}
@@ -51,7 +53,7 @@ namespace GuiCommon
 
 				doGetSource( module.name ).sources.push_back( { module.shader.get()
 					, module.compiled
-					, castor3d::getEntryPointType( module.stage ) } );
+					, castor3d::getEntryPointType( m_device, module.stage ) } );
 			}
 
 			void visit( castor3d::ProgramModule const & module
@@ -87,7 +89,7 @@ namespace GuiCommon
 		private:
 			std::unique_ptr< ConfigurationVisitorBase > doGetSubConfiguration( castor::String const & category )override
 			{
-				return std::unique_ptr< ConfigurationVisitorBase >( new ToneMappingShaderGatherer{ m_sources } );
+				return std::unique_ptr< ConfigurationVisitorBase >( new ToneMappingShaderGatherer{ m_device, m_sources } );
 			}
 
 			ShaderSource & doGetSource( castor::String const & name )
@@ -110,6 +112,7 @@ namespace GuiCommon
 			}
 
 		private:
+			castor3d::RenderDevice const & m_device;
 			ShaderSources & m_sources;
 		};
 	}

@@ -433,9 +433,9 @@ namespace castor3d
 				auto meshlets = meshopt::buildMeshlets( remapped );
 #	if C3D_UseTaskShaders
 				auto cullData = meshopt::buildBoundingData( meshlets, remapped );
-				meshlet->getCullData() = std::move( cullData );
+				meshlet->getData().getCullData() = std::move( cullData );
 #	endif
-				meshlet->getMeshletsData() = std::move( meshlets );
+				meshlet->getData().getMeshletsData() = std::move( meshlets );
 			}
 		}
 #endif

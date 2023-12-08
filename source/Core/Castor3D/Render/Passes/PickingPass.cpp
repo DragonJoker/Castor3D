@@ -83,7 +83,7 @@ namespace castor3d
 	void PickingPass::updateArea( VkRect2D const & scissor )
 	{
 		ShadowMapLightTypeArray shadowMaps;
-		m_renderQueue->update( shadowMaps, nullptr, scissor );
+		getRenderQueue().update( shadowMaps, nullptr, scissor );
 	}
 
 	bool PickingPass::doIsValidPass( Pass const & pass )const
