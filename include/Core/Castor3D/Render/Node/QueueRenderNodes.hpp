@@ -15,13 +15,13 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/OwnedBy.hpp>
 
+namespace crg::ru
+{
+	struct Config;
+}
+
 namespace castor3d
 {
-#if VK_EXT_mesh_shader
-	using DrawMeshTesksIndexedCommand = VkDrawMeshTasksIndirectCommandEXT;
-#elif VK_NV_mesh_shader
-	using DrawMeshTesksIndexedCommand = VkDrawMeshTasksIndirectCommandNV;
-#endif
 	struct QueueRenderNodes
 		: public castor::OwnedBy< RenderQueue const >
 	{
@@ -29,8 +29,12 @@ namespace castor3d
 		using PipelineMap = std::unordered_map< size_t, PipelineAndID >;
 
 	public:
-		C3D_API explicit QueueRenderNodes( RenderQueue const & queue );
+		C3D_API explicit QueueRenderNodes( RenderQueue const & queue
+			, RenderDevice const & device
+			, castor::String const & typeName
+			, bool meshShading );
 		C3D_API ~QueueRenderNodes()noexcept;
+		C3D_API void fillConfig( crg::ru::Config & config )const;
 		C3D_API void clear();
 		C3D_API void checkEmpty();
 		C3D_API bool sortNodes( ShadowMapLightTypeArray & shadowMaps
@@ -124,11 +128,20 @@ namespace castor3d
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
 			, VkDeviceSize maxNodesCount );
-		uint32_t doPrepareMeshModernCommandBuffers( ashes::CommandBuffer const & commandBuffer
+#if VK_EXT_mesh_shader
+		uint32_t doPrepareMeshModernCommandBuffersEXT( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
 			, PipelineNodes * nodesIdsBuffer
 			, VkDeviceSize maxNodesCount );
+#endif
+#if VK_NV_mesh_shader
+		uint32_t doPrepareMeshModernCommandBuffersNV( ashes::CommandBuffer const & commandBuffer
+			, ashes::Optional< VkViewport > const & viewport
+			, ashes::Optional< VkRect2D > const & scissors
+			, PipelineNodes * nodesIdsBuffer
+			, VkDeviceSize maxNodesCount );
+#endif
 		uint32_t doPrepareBillboardCommandBuffers( ashes::CommandBuffer const & commandBuffer
 			, ashes::Optional< VkViewport > const & viewport
 			, ashes::Optional< VkRect2D > const & scissors
@@ -140,9 +153,13 @@ namespace castor3d
 		uint32_t m_maxPipelineId{};
 		bool m_hasNodes{};
 
-#if VK_EXT_mesh_shader || VK_NV_mesh_shader
-		using IndexedMeshDrawCommandsBuffer = ashes::BufferPtr< DrawMeshTesksIndexedCommand >;
-		IndexedMeshDrawCommandsBuffer m_submeshMeshletIndirectCommands;
+#if VK_NV_mesh_shader
+		using IndexedMeshDrawCommandsBufferNV = ashes::BufferPtr< VkDrawMeshTasksIndirectCommandNV >;
+		IndexedMeshDrawCommandsBufferNV m_submeshMeshletIndirectCommandsNV;
+#endif
+#if VK_EXT_mesh_shader
+		using IndexedMeshDrawCommandsBufferEXT = ashes::BufferPtr< VkDrawMeshTasksIndirectCommandEXT >;
+		IndexedMeshDrawCommandsBufferEXT m_submeshMeshletIndirectCommandsEXT;
 #endif
 		using IndexedDrawCommandsBuffer = ashes::BufferPtr< VkDrawIndexedIndirectCommand >;
 		IndexedDrawCommandsBuffer m_submeshIdxIndirectCommands;

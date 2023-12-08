@@ -197,10 +197,24 @@ namespace castor3d
 					, length( in.worldPosition.xyz() - c3d_cameraData.position() )
 					, writer.cast< sdw::Float >( in.nodeId )
 					, writer.cast< sdw::Float >( material.lightingModel ) );
-				out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
-					, ( flags.isBillboard()
-						? in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID )
-						: writer.cast< sdw::UInt >( in.primitiveID ) ) );
+
+				if ( flags.isBillboard() )
+				{
+					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
+						, in.vertexId * 2_u + writer.cast< sdw::UInt >( in.primitiveID ) );
+				}
+				else if ( isMeshShading() )
+				{
+					auto constexpr maxPrimitiveIDSize = uint32_t( castor::getBitSize( MaxMeshletTriangleCount ) );
+					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
+						, ( in.meshletId << maxPrimitiveIDSize ) | writer.cast< sdw::UInt >( in.primitiveID ) );
+				}
+				else
+				{
+					out.visibility = uvec2( ( in.nodeId << maxPipelinesSize ) | ( pipelineID )
+						, writer.cast< sdw::UInt >( in.primitiveID ) );
+				}
+
 				out.velocity = in.getVelocity();
 				out.nmlOcc = vec4( components.normal, components.occlusion );
 			} );

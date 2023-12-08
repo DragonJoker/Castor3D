@@ -237,6 +237,11 @@ namespace castor3d
 			return SubmeshData::eVelocity;
 		}
 
+		if ( value == m_meshletFlag )
+		{
+			return SubmeshData::eMeshlets;
+		}
+
 		return SubmeshData::eCount;
 	}
 
@@ -494,6 +499,11 @@ namespace castor3d
 		if ( componentDesc.plugin->getVelocityFlag() != 0u )
 		{
 			m_velocityFlag = componentDesc.plugin->getVelocityFlag();
+		}
+
+		if ( componentDesc.plugin->getMeshletFlag() != 0u )
+		{
+			m_meshletFlag = componentDesc.plugin->getMeshletFlag();
 		}
 
 		if ( auto shader = componentDesc.plugin->createVertexSurfaceShader() )

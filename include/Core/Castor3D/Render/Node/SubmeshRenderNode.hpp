@@ -50,7 +50,6 @@ namespace castor3d
 		C3D_API void createMeshletDescriptorSet()const;
 		C3D_API ashes::DescriptorSetLayout const * getMeshletDescriptorLayout()const;
 		C3D_API ashes::DescriptorSet const & getMeshletDescriptorSet()const;
-		C3D_API GpuBufferOffsetT< Meshlet > const & getMeshletsBuffer()const;
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getSourceMeshletsBounds()const;
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalMeshletsBounds()const;
 		C3D_API GpuBufferOffsetT< castor::Point4f > const & getMorphTargets()const;

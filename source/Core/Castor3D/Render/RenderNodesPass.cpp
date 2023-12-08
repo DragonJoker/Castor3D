@@ -134,6 +134,20 @@ namespace castor3d
 
 			return sceneFlags;
 		}
+
+		static crg::ru::Config buildRuConfig( crg::ru::Config const & config
+			, crg::ImageViewIdArray targetImage
+			, crg::ImageViewIdArray targetDepth
+			, RenderQueue const & queue )
+		{
+			crg::ru::Config result{ std::max( 1u, uint32_t( std::max( targetImage.size(), targetDepth.size() ) ) )
+				, config.resettable
+				, config.prePassActions
+				, config.postPassActions
+				, config.implicitActions };
+			queue.fillConfig( result );
+			return result;
+		}
 	}
 
 	//*********************************************************************************************
@@ -147,6 +161,9 @@ namespace castor3d
 		, crg::ImageViewIdArray targetDepth
 		, RenderNodesPassDesc const & desc )
 		: castor::OwnedBy< Engine >{ *device.renderSystem.getEngine() }
+		, castor::Named{ castor::string::stringCast< castor::xchar >( pass.getFullName() ) }
+		, SceneCullerHolder{ &desc.m_culler }
+		, RenderQueueHolder{ castor::makeUnique< RenderQueue >( *this, device, desc.m_culler, typeName, desc.m_meshShading, desc.m_ignored ) }
 		, crg::RenderPass{ pass
 			, context
 			, graph
@@ -156,20 +173,18 @@ namespace castor3d
 				, GetPassIndexCallback( [](){ return 0u; } )
 				, IsEnabledCallback( [this](){ return isPassEnabled(); } ) }
 			, makeExtent2D( desc.m_size )
-			, crg::ru::Config{ std::max( 1u, uint32_t( std::max( targetImage.size(), targetDepth.size() ) ) )
-				, desc.m_ruConfig.resettable
-				, std::move( desc.m_ruConfig.actions ) } }
-		, castor::Named{ castor::string::stringCast< castor::xchar >( pass.getFullName() ) }
+			, rendndpass::buildRuConfig( desc.m_ruConfig
+				, targetImage
+				, targetDepth
+				, getRenderQueue() ) }
 		, m_device{ device }
 		, m_renderSystem{ m_device.renderSystem }
 		, m_cameraUbo{ desc.m_cameraUbo }
-		, m_culler{ desc.m_culler }
 		, m_targetImage{ std::move( targetImage ) }
 		, m_targetDepth{ std::move( targetDepth ) }
 		, m_typeName{ typeName }
 		, m_typeID{ getEngine()->getRenderPassTypeID( m_typeName ) }
 		, m_filters{ desc.m_filters }
-		, m_renderQueue{ castor::makeUnique< RenderQueue >( *this, desc.m_ignored ) }
 		, m_category{ pass.group.getFullName() }
 		, m_size{ desc.m_size.width, desc.m_size.height }
 		, m_oit{ desc.m_oit }
@@ -188,14 +203,14 @@ namespace castor3d
 
 	RenderNodesPass::~RenderNodesPass()
 	{
-		m_renderQueue->cleanup();
+		getRenderQueue().cleanup();
 		m_backPipelines.clear();
 		m_frontPipelines.clear();
 	}
 
 	void RenderNodesPass::setIgnoredNode( SceneNode const & node )
 	{
-		m_renderQueue->setIgnoredNode( node );
+		getRenderQueue().setIgnoredNode( node );
 	}
 
 	void RenderNodesPass::countNodes( RenderInfo & info )const
@@ -210,7 +225,7 @@ namespace castor3d
 
 	void RenderNodesPass::update( CpuUpdater & updater )
 	{
-		updater.queues->emplace_back( *m_renderQueue );
+		updater.queues->emplace_back( getRenderQueue() );
 		doUpdateUbos( updater );
 		m_isDirty = false;
 	}
@@ -947,7 +962,7 @@ namespace castor3d
 
 	bool RenderNodesPass::hasNodes()const
 	{
-		return m_renderQueue->hasNodes();
+		return getRenderQueue().hasNodes();
 	}
 
 	Scene & RenderNodesPass::getScene()const
@@ -957,7 +972,7 @@ namespace castor3d
 
 	SceneNode const * RenderNodesPass::getIgnoredNode()const
 	{
-		return m_renderQueue->getIgnoredNode();
+		return getRenderQueue().getIgnoredNode();
 	}
 
 	bool RenderNodesPass::isMeshShading()const
@@ -971,77 +986,43 @@ namespace castor3d
 
 	PipelinesNodesT< SubmeshRenderNode > const & RenderNodesPass::getSubmeshNodes()const
 	{
-		if ( m_renderQueue )
-		{
-			return m_renderQueue->getRenderNodes().getSubmeshNodes();
-		}
-
-		static PipelinesNodesT< SubmeshRenderNode > dummy;
-		return dummy;
+		return getRenderQueue().getRenderNodes().getSubmeshNodes();
 	}
 
 	InstantiatedPipelinesNodesT< SubmeshRenderNode > const & RenderNodesPass::getInstancedSubmeshNodes()const
 	{
-		if ( m_renderQueue )
-		{
-			return m_renderQueue->getRenderNodes().getInstancedSubmeshNodes();
-		}
-
-		static InstantiatedPipelinesNodesT< SubmeshRenderNode > dummy;
-		return dummy;
+		return getRenderQueue().getRenderNodes().getInstancedSubmeshNodes();
 	}
 
 	PipelinesNodesT< BillboardRenderNode > const & RenderNodesPass::getBillboardNodes()const
 	{
-		if ( m_renderQueue )
-		{
-			return m_renderQueue->getRenderNodes().getBillboardNodes();
-		}
-
-		static PipelinesNodesT< BillboardRenderNode > dummy;
-		return dummy;
+		return getRenderQueue().getRenderNodes().getBillboardNodes();
 	}
 
 	uint32_t RenderNodesPass::getMaxPipelineId()const
 	{
-		if ( m_renderQueue )
-		{
-			return m_renderQueue->getRenderNodes().getMaxPipelineId();
-		}
-
-		return {};
+		return getRenderQueue().getRenderNodes().getMaxPipelineId();
 	}
 
 	PipelineBufferArray const & RenderNodesPass::getPassPipelineNodes()const
 	{
-		if ( m_renderQueue )
-		{
-			return m_renderQueue->getRenderNodes().getPassPipelineNodes();
-		}
-
-		static PipelineBufferArray dummy;
-		return dummy;
+		return getRenderQueue().getRenderNodes().getPassPipelineNodes();
 	}
 
 	uint32_t RenderNodesPass::getPipelineNodesIndex( PipelineBaseHash const & hash
 		, ashes::BufferBase const & buffer )const
 	{
-		if ( m_renderQueue )
-		{
-			return m_renderQueue->getRenderNodes().getPipelineNodesIndex( hash, buffer );
-		}
-
-		return {};
+		return getRenderQueue().getRenderNodes().getPipelineNodesIndex( hash, buffer );
 	}
 
 	uint32_t RenderNodesPass::getDrawCallsCount()const
 	{
-		return m_renderQueue->getDrawCallsCount();
+		return getRenderQueue().getDrawCallsCount();
 	}
 
 	RenderCounts const & RenderNodesPass::getVisibleCounts()const
 	{
-		return m_renderQueue->getVisibleCounts();
+		return getRenderQueue().getVisibleCounts();
 	}
 
 	void RenderNodesPass::initialiseAdditionalDescriptor( RenderPipeline & pipeline
@@ -1066,7 +1047,7 @@ namespace castor3d
 				descriptorWrites.push_back( m_sceneUbo->getDescriptorWrite( uint32_t( GlobalBuffersIdx::eScene ) ) );
 			}
 
-			auto & nodesIds = m_renderQueue->getRenderNodes().getNodesIds();
+			auto & nodesIds = getRenderQueue().getRenderNodes().getNodesIds();
 			auto nodesIdsWrite = ashes::WriteDescriptorSet{ uint32_t( GlobalBuffersIdx::eObjectsNodeID )
 				, 0u
 				, 1u
@@ -1124,14 +1105,14 @@ namespace castor3d
 
 	void RenderNodesPass::doSubInitialise()
 	{
-		m_renderQueue->invalidate();
+		getRenderQueue().invalidate();
 	}
 
 	void RenderNodesPass::doSubRecordInto( crg::RecordContext & context
 		, VkCommandBuffer commandBuffer
 		, uint32_t index )
 	{
-		VkCommandBuffer secondary = m_renderQueue->initCommandBuffer();
+		VkCommandBuffer secondary = getRenderQueue().initCommandBuffer();
 		m_context.vkCmdExecuteCommands( commandBuffer
 			, 1u
 			, &secondary );

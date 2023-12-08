@@ -188,17 +188,20 @@ namespace castor3d
 		 *\brief		Retrieves a GPU buffer with the given size.
 		 *\param[in]	vertexCount		The wanted vertex count.
 		 *\param[in]	indexCount		The wanted index count.
+		 *\param[in]	meshletCount	The wanted meshlet count.
 		 *\param[in]	submeshFlags	The components for which the result will have allocated buffers.
 		 *\return		The GPU buffer.
 		 *\~french
 		 *\brief		Récupère un tampon GPU avec la taille donnée.
 		 *\param[in]	vertexCount		Le nombre de sommets voulus.
 		 *\param[in]	indexCount		Le nombre d'indices voulus.
+		 *\param[in]	meshletCount	Le nombre de meshlets voulus.
 		 *\param[in]	submeshFlags	Les composants pour lesquels le résultat aura un buffer alloué.
 		 *\return		Le tampon GPU.
 		 */
 		C3D_API ObjectBufferOffset getBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
+			, VkDeviceSize meshletCount
 			, SubmeshComponentCombine const & components );
 		/**
 		 *\~english
@@ -248,10 +251,12 @@ namespace castor3d
 	private:
 		C3D_API ObjectBufferOffset doGetBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
+			, VkDeviceSize meshletCount
 			, SubmeshComponentCombine const & components
 			, bool isGpuComputed );
 		C3D_API BufferArray::iterator doFindBuffer( VkDeviceSize vertexCount
 			, VkDeviceSize indexCount
+			, VkDeviceSize meshletCount
 			, BufferArray & array );
 
 	private:

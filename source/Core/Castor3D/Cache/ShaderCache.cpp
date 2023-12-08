@@ -5,9 +5,8 @@
 #include "Castor3D/Render/RenderSystem.hpp"
 #include "Castor3D/Shader/Program.hpp"
 
-#define SDW_PreferredMeshShadingExtension SDW_MeshShadingNV
 #include <ShaderWriter/Source.hpp>
-#include <ShaderWriter/ModernGraphicsWriter.hpp>
+#include <ShaderWriter/GraphicsPipelineWriter.hpp>
 
 #include <ashespp/Core/Device.hpp>
 
@@ -80,7 +79,9 @@ namespace castor3d
 		, PipelineFlags const & flags )const
 	{
 		auto builderType = ( ( getEngine()->hasMeshShaders() && flags.usesMesh() )
-			? sdw::ModernGraphicsStage
+			? ( getEngine()->getRenderDevice()->prefersMeshShaderEXT()
+				? sdw::ShaderStage::eModernGraphicsEXT
+				: sdw::ShaderStage::eModernGraphicsNV )
 			: ast::ShaderStage::eTraditionalGraphics );
 		ast::ShaderBuilder builder{ builderType, & getEngine()->getShaderAllocator() };
 		renderPass.getSubmeshShaderSource( flags, builder );

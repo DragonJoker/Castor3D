@@ -4,7 +4,7 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslMeshlet_H___
 #define ___C3D_GlslMeshlet_H___
 
-#include "SdwModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/UInt.hpp>
@@ -28,16 +28,9 @@ namespace castor3d
 
 			sdw::Array< sdw::UInt > vertices;
 			sdw::Array< sdw::UInt8 > indices;
-
-		private:
-			sdw::UVec4 m_counts;
-
-		public:
 			sdw::UInt vertexCount;
 			sdw::UInt triangleCount;
 		};
-
-		Writer_Parameter( Meshlet );
 	}
 }
 

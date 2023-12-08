@@ -37,18 +37,22 @@ namespace castor3d
 	//@{
 	// Base count for objects buffers pool
 	static uint32_t constexpr BaseObjectPoolBufferCount = 1'048'576u;
+	// Maximum pipelines count.
+	static uint64_t constexpr MaxPipelines = 2'048ull;
+	// Maximum Nodes ID per pipeline.
+	static uint64_t constexpr MaxPipelinesNodes = 32'768ull;
 	// Maximum pipelines and buffer count.
-	static uint64_t constexpr MaxPipelines = 32'768ull;
+	static uint64_t constexpr MaxCommandsCount = 32'768ull;
 	// Maximum nodes per Pipeline Nodes buffer.
 	static uint64_t constexpr MaxNodesPerPipeline = 1'024ull;
 	// Maximum nodes per meshlet indirect commands buffer.
-	static uint64_t constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxPipelines;
+	static uint64_t constexpr MaxSubmeshMeshletDrawIndirectCommand = MaxCommandsCount;
 	// Maximum nodes per indexed indirect commands buffer.
-	static uint64_t constexpr MaxSubmeshIdxDrawIndirectCommand = MaxPipelines;
+	static uint64_t constexpr MaxSubmeshIdxDrawIndirectCommand = MaxCommandsCount;
 	// Maximum nodes per non-indexed indirect commands buffer.
-	static uint64_t constexpr MaxSubmeshNIdxDrawIndirectCommand = MaxPipelines;
+	static uint64_t constexpr MaxSubmeshNIdxDrawIndirectCommand = MaxCommandsCount;
 	// Maximum billboard nodes per indirect commands buffer.
-	static uint64_t constexpr MaxBillboardDrawIndirectCommand = MaxPipelines;
+	static uint64_t constexpr MaxBillboardDrawIndirectCommand = MaxCommandsCount;
 	// Maximum objects nodes count in a scene (submesh or billboards).
 	static uint64_t constexpr MaxObjectNodesCount = 262'144ull;
 	//@}

@@ -63,11 +63,6 @@ namespace castor3d
 				return *m_descriptorLayout;
 			}
 
-			GpuBufferOffsetT< Meshlet > const & getMeshletsBuffer()const
-			{
-				return m_meshletBuffer;
-			}
-
 			std::vector< Meshlet > const & getMeshletsData()const
 			{
 				return m_meshlets;
@@ -107,7 +102,6 @@ namespace castor3d
 			void doCreateDescriptorLayout( RenderDevice const & device );
 
 		private:
-			GpuBufferOffsetT< Meshlet > m_meshletBuffer;
 			GpuBufferOffsetT< MeshletCullData > m_sourceCullBuffer;
 			std::unordered_map< size_t, GpuBufferOffsetT< MeshletCullData > > m_finalCullBuffers;
 			std::vector< Meshlet > m_meshlets;
@@ -129,6 +123,11 @@ namespace castor3d
 			SubmeshComponentUPtr createComponent( Submesh & submesh )const override
 			{
 				return castor::makeUniqueDerived< SubmeshComponent, MeshletComponent >( submesh );
+			}
+
+			SubmeshComponentFlag getMeshletFlag()const noexcept override
+			{
+				return getComponentFlags();
 			}
 		};
 

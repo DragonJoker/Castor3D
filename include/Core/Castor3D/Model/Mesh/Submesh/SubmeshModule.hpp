@@ -81,6 +81,9 @@ namespace castor3d
 		//!\~english	Submesh has velocity data.
 		//!\~french		Le submesh a des données de vélocité.
 		eVelocity,
+		//!\~english	Submesh has meshlets.
+		//!\~french		Le submesh a des meshlets.
+		eMeshlets,
 		CU_ScopedEnumBounds( eIndex ),
 	};
 
@@ -114,6 +117,8 @@ namespace castor3d
 			return cuT( "PassMasks" );
 		case castor3d::SubmeshData::eVelocity:
 			return cuT( "Velocity" );
+		case castor3d::SubmeshData::eMeshlets:
+			return cuT( "Meshlets" );
 		default:
 			CU_Failure( "Unsupported SubmeshData" );
 			return cuT( "Unknown" );
@@ -134,7 +139,8 @@ namespace castor3d
 			, sizeof( castor::Point4f ) /* SubmeshData::eColours */
 			, sizeof( VertexBoneData ) /* SubmeshData::eSkin */
 			, sizeof( castor::Point4ui ) /* SubmeshData::ePassMasks */
-			, sizeof( castor::Point4f ) /* SubmeshData::eVelocity */ };
+			, sizeof( castor::Point4f ) /* SubmeshData::eVelocity */
+			, sizeof( Meshlet ) /* SubmeshData::eMeshlets */ };
 		return uint32_t( sizes[size_t( value )] );
 	}
 

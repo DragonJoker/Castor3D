@@ -487,7 +487,7 @@ namespace GuiCommon
 
 				doGetSource( module.name ).sources.push_back( { module.shader.get()
 					, module.compiled
-					, castor3d::getEntryPointType( module.stage ) } );
+					, castor3d::getEntryPointType( *getScene().getEngine()->getRenderDevice(), module.stage ) } );
 			}
 
 			void visit( castor3d::ProgramModule const & module

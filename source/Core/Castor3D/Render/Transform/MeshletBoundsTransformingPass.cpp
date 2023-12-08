@@ -52,8 +52,6 @@ namespace castor3d
 			ires.first->second = castor::makeUnique< MeshletBoundsTransformPass >( m_device
 				, node
 				, pipeline
-				, node.getFinalBufferOffsets()
-				, node.getMeshletsBuffer()
 				, output );
 			resetCommandBuffer( 0u );
 		}

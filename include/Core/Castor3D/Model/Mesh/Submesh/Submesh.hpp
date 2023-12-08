@@ -349,7 +349,6 @@ namespace castor3d
 		C3D_API ObjectBufferOffset const & getFinalBufferOffsets( Geometry const & geometry
 			, Pass const & pass )const;
 		C3D_API ObjectBufferOffset const & getSourceBufferOffsets()const;
-		C3D_API GpuBufferOffsetT< Meshlet > const & getMeshletsBuffer()const;
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getFinalMeshletsBounds( Geometry const & geometry
 			, Pass const & pass )const;
 		C3D_API GpuBufferOffsetT< MeshletCullData > const & getSourceMeshletsBounds()const;

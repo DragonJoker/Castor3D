@@ -236,6 +236,7 @@ namespace castor3d
 		SubmeshComponentFlag m_morphFlag{};
 		SubmeshComponentFlag m_passMaskFlag{};
 		SubmeshComponentFlag m_velocityFlag{};
+		SubmeshComponentFlag m_meshletFlag{};
 	};
 }
 

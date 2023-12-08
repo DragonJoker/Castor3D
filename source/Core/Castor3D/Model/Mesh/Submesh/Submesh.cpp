@@ -197,6 +197,7 @@ namespace castor3d
 				components.registerSubmeshComponentCombine( combine );
 				m_sourceBufferOffset = device.geometryPools->getBuffer( getPointsCount()
 					, indexCount
+					, getMeshletsCount()
 					, combine );
 
 				if ( !m_sourceBufferOffset.hasData( SubmeshData::ePositions )
@@ -667,6 +668,9 @@ namespace castor3d
 		case castor3d::SubmeshData::eVelocity:
 			CU_Failure( "setBaseData: Can't set velocity data this way" );
 			break;
+		case castor3d::SubmeshData::eMeshlets:
+			CU_Failure( "setBaseData: Can't set meshlets data this way" );
+			break;
 		default:
 			CU_Failure( "setBaseData: Unsupported SubmeshData type" );
 			break;
@@ -715,6 +719,9 @@ namespace castor3d
 			break;
 		case castor3d::SubmeshData::eVelocity:
 			CU_Failure( "setBaseData: Can't set velocity data this way" );
+			break;
+		case castor3d::SubmeshData::eMeshlets:
+			CU_Failure( "setBaseData: Can't set meshlets data this way" );
 			break;
 		default:
 			CU_Failure( "setBaseData: Unsupported SubmeshData type" );
@@ -991,6 +998,9 @@ namespace castor3d
 		case castor3d::SubmeshData::eVelocity:
 			CU_Failure( "getBaseData: Can't retrieve velocity data this way" );
 			break;
+		case castor3d::SubmeshData::eMeshlets:
+			CU_Failure( "getBaseData: Can't retrieve meshlets data this way" );
+			break;
 		default:
 			CU_Failure( "getBaseData: Unsupported SubmeshData type" );
 			break;
@@ -1031,6 +1041,9 @@ namespace castor3d
 			break;
 		case castor3d::SubmeshData::eVelocity:
 			CU_Failure( "getBaseData: Can't retrieve velocity data this way" );
+			break;
+		case castor3d::SubmeshData::eMeshlets:
+			CU_Failure( "getBaseData: Can't retrieve meshlets data this way" );
 			break;
 		default:
 			CU_Failure( "getBaseData: Unsupported SubmeshData type" );
@@ -1133,13 +1146,6 @@ namespace castor3d
 		return m_sourceBufferOffset;
 	}
 
-	GpuBufferOffsetT< Meshlet > const & Submesh::getMeshletsBuffer()const
-	{
-		auto meshletComponent = getComponent< MeshletComponent >();
-		CU_Require( meshletComponent );
-		return meshletComponent->getData().getMeshletsBuffer();
-	}
-
 	GpuBufferOffsetT< MeshletCullData > const & Submesh::getFinalMeshletsBounds( Geometry const & geometry
 		, Pass const & pass )const
 	{
@@ -1192,15 +1198,9 @@ namespace castor3d
 
 	VkDeviceSize Submesh::getMeshletOffset()const
 	{
-		auto meshletComponent = getComponent< MeshletComponent >();
-		VkDeviceSize result{};
-
-		if ( meshletComponent )
-		{
-			result = meshletComponent->getData().getMeshletsBuffer().getOffset();
-		}
-
-		return result;
+		return m_sourceBufferOffset
+			? m_sourceBufferOffset.getFirst< Meshlet >( SubmeshData::eMeshlets )
+			: 0u;
 	}
 
 	SubmeshComponentRegister & Submesh::getSubmeshComponentsRegister()const

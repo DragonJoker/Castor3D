@@ -257,6 +257,7 @@ namespace castor3d::shader
 		, passMultipliers{ this->getMemberArray< sdw::Vec4 >( "passMultipliers", true ) }
 		, nodeId{ this->getMember< sdw::UInt >( "nodeId", true ) }
 		, vertexId{ this->getMember< sdw::UInt >( "vertexId", true ) }
+		, meshletId{ this->getMember< sdw::UInt >( "meshletId", true ) }
 	{
 	}
 
@@ -428,6 +429,10 @@ namespace castor3d::shader
 			, ast::type::NotArray
 			, ( flags.enableVertexID() ? index++ : 0 )
 			, flags.enableVertexID() );
+		type.declMember( "meshletId", ast::type::Kind::eUInt
+			, ast::type::NotArray
+			, ( flags.enableMeshletID() ? index++ : 0 )
+			, flags.enableMeshletID() );
 		type.declMember( "curPosition", ast::type::Kind::eVec4F
 			, ast::type::NotArray
 			, ( flags.writeVelocity() ? index++ : 0 )
@@ -482,6 +487,9 @@ namespace castor3d::shader
 		type.declMember( "vertexId", ast::type::Kind::eUInt
 			, ast::type::NotArray
 			, flags.enableVertexID() );
+		type.declMember( "meshletId", ast::type::Kind::eUInt
+			, ast::type::NotArray
+			, flags.enableMeshletID() );
 		type.declMember( "curPosition", ast::type::Kind::eVec4F
 			, ast::type::NotArray
 			, flags.writeVelocity() );
@@ -518,6 +526,8 @@ namespace castor3d::shader
 		type.declMember( "nodeId", ast::type::Kind::eUInt
 			, ast::type::NotArray );
 		type.declMember( "vertexId", ast::type::Kind::eUInt
+			, ast::type::NotArray );
+		type.declMember( "meshletId", ast::type::Kind::eUInt
 			, ast::type::NotArray );
 		type.declMember( "curPosition", ast::type::Kind::eVec4F
 			, ast::type::NotArray );

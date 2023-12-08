@@ -197,9 +197,10 @@ namespace castor3d
 
 	ObjectBufferOffset ObjectBufferPool::getBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount
+		, VkDeviceSize meshletCount
 		, SubmeshComponentCombine const & components )
 	{
-		auto result = doGetBuffer( vertexCount, indexCount, components, false );
+		auto result = doGetBuffer( vertexCount, indexCount, meshletCount, components, false );
 
 		if ( indexCount && vertexCount )
 		{
@@ -214,7 +215,7 @@ namespace castor3d
 		, ashes::BufferBase const * indexBuffer
 		, SubmeshComponentCombine const & components )
 	{
-		auto result = doGetBuffer( vertexCount, 0u, components, true );
+		auto result = doGetBuffer( vertexCount, 0u, 0u, components, true );
 
 		if ( indexBuffer )
 		{
@@ -303,6 +304,7 @@ namespace castor3d
 
 	ObjectBufferOffset ObjectBufferPool::doGetBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount
+		, VkDeviceSize meshletCount
 		, SubmeshComponentCombine const & components
 		, bool isGpuComputed )
 	{
@@ -314,6 +316,7 @@ namespace castor3d
 		auto & buffers = m_buffers.emplace( hash, BufferArray{} ).first->second;
 		auto it = doFindBuffer( vertexCount
 			, indexCount
+			, meshletCount
 			, buffers );
 		auto align = uint32_t( m_device.properties.limits.nonCoherentAtomSize );
 
@@ -335,6 +338,18 @@ namespace castor3d
 						modelBuffers.buffers[index] = details::createBaseBuffer< uint32_t >( m_device
 							, indexCount
 							, VK_BUFFER_USAGE_INDEX_BUFFER_BIT | VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
+							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
+							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
+							, align );
+					}
+				}
+				else if ( data == SubmeshData::eMeshlets )
+				{
+					if ( meshletCount )
+					{
+						modelBuffers.buffers[index] = details::createBaseBuffer< Meshlet >( m_device
+							, meshletCount
+							, VK_BUFFER_USAGE_TRANSFER_DST_BIT | VK_BUFFER_USAGE_STORAGE_BUFFER_BIT
 							, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 							, m_debugName + name + getName( data ) + std::to_string( buffers.size() )
 							, align );
@@ -384,9 +399,16 @@ namespace castor3d
 			result.buffers[0u].chunk = it->buffers[0u]->allocate( getSize( SubmeshData::eIndex ) * indexCount );
 		}
 
+		if ( meshletCount )
+		{
+			auto index = uint32_t( SubmeshData::eMeshlets );
+			result.buffers[index].buffer = it->buffers[index].get();
+			result.buffers[index].chunk = it->buffers[index]->allocate( getSize( SubmeshData::eMeshlets ) * meshletCount );
+		}
+
 		if ( vertexCount )
 		{
-			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eCount ); ++i )
+			for ( uint32_t i = 1u; i < uint32_t( SubmeshData::eMeshlets ); ++i )
 			{
 				if ( it->buffers[i] )
 				{
@@ -402,26 +424,30 @@ namespace castor3d
 
 	ObjectBufferPool::BufferArray::iterator ObjectBufferPool::doFindBuffer( VkDeviceSize vertexCount
 		, VkDeviceSize indexCount
+		, VkDeviceSize meshletCount
 		, ObjectBufferPool::BufferArray & array )
 	{
 		return std::find_if( array.begin()
 			, array.end()
-			, [vertexCount, indexCount]( ModelBuffers const & lookup )
+			, [vertexCount, indexCount, meshletCount]( ModelBuffers const & lookup )
 			{
-				auto it = lookup.buffers.begin();
-				uint32_t index = 0u;
-
-				if ( ( *it )
-					&& !( *it )->hasAvailable( getSize( SubmeshData( index++ ) ) * indexCount ) )
-				{
-					return false;
-				}
-
-				++it;
-				return lookup.buffers.end() == std::find_if( it
+				uint32_t index{};
+				return lookup.buffers.end() == std::find_if( lookup.buffers.begin()
 					, lookup.buffers.end()
-					, [vertexCount, &index]( GpuPackedBaseBufferUPtr const & buffer )
+					, [vertexCount, indexCount, meshletCount, &index]( GpuPackedBaseBufferUPtr const & buffer )
 					{
+						if ( index == uint32_t( SubmeshData::eIndex ) )
+						{
+							return buffer
+								&& !buffer->hasAvailable( getSize( SubmeshData( index++ ) ) * indexCount );
+						}
+
+						if ( index == uint32_t( SubmeshData::eMeshlets ) )
+						{
+							return buffer
+								&& !buffer->hasAvailable( getSize( SubmeshData( index++ ) ) * meshletCount );
+						}
+
 						return buffer
 							&& !buffer->hasAvailable( getSize( SubmeshData( index++ ) ) * vertexCount );
 					} );

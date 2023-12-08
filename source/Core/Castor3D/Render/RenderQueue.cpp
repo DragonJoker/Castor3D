@@ -56,15 +56,19 @@ namespace castor3d
 	//*********************************************************************************************
 
 	RenderQueue::RenderQueue( RenderNodesPass & renderPass
+		, RenderDevice const & device
+		, SceneCuller & culler
+		, castor::String const & typeName
+		, bool meshShading
 		, SceneNode const * ignored )
 		: OwnedBy< RenderNodesPass >{ renderPass }
-		, m_culler{ getOwner()->getCuller() }
+		, m_culler{ culler }
 		, m_onCullerCompute( m_culler.onCompute.connect( [this]( SceneCuller const & culler )
 			{
 				doOnCullerCompute( culler );
 			} ) )
 		, m_ignoredNode{ ignored }
-		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this ) }
+		, m_renderNodes{ castor::makeUnique< QueueRenderNodes >( *this, device, typeName, meshShading ) }
 		, m_pass{ std::make_unique< PassData >() }
 		, m_currentPass{ m_pass.get() }
 		, m_viewport{ castor::makeGroupChangeTracked< ashes::Optional< VkViewport > >( m_culledChanged, ashes::nullopt ) }
@@ -156,6 +160,11 @@ namespace castor3d
 	{
 		m_culledChanged = m_culledChanged || ( m_ignoredNode != &node );
 		m_ignoredNode = &node;
+	}
+
+	void RenderQueue::fillConfig( crg::ru::Config & config )const
+	{
+		m_renderNodes->fillConfig( config );
 	}
 
 	bool RenderQueue::hasNodes()const

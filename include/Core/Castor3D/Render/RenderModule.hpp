@@ -176,8 +176,8 @@ namespace castor3d
 	enum class MeshBuffersIdx
 		: uint32_t
 	{
-		eMeshlets,
 		eCullData,
+		eMeshlets,
 		ePosition,
 		eNormal,
 		eTangent,

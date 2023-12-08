@@ -55,7 +55,7 @@ namespace castor3d
 			case VK_SHADER_STAGE_CALLABLE_BIT_NV:
 				return "Call";
 #endif
-#ifdef VK_EXT_mesh_shader
+#if defined( VK_EXT_mesh_shader )
 			case VK_SHADER_STAGE_TASK_BIT_EXT:
 				return "Task";
 			case VK_SHADER_STAGE_MESH_BIT_EXT:
@@ -64,7 +64,7 @@ namespace castor3d
 			case VK_SHADER_STAGE_TASK_BIT_NV:
 				return "Task";
 			case VK_SHADER_STAGE_MESH_BIT_NV:
-				return "Mesh";
+				return "Mesh"; 
 #endif
 			default:
 				assert( false && "Unsupported VkShaderStageFlagBits." );
@@ -131,7 +131,7 @@ namespace castor3d
 		shdprog::eraseStage( target, m_states );
 		auto & renderSystem = *getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
-		auto & spirvShader = m_module.compiled.emplace( getShaderStage( target )
+		auto & spirvShader = m_module.compiled.emplace( getShaderStage( getOwner()->getRenderDevice(), target )
 			, renderSystem.compileShader( target, getName(), source ) ).first->second;
 		m_states.push_back( makeShaderState( *device, target, spirvShader, getName() + shdprog::getName( target ) ) );
 	}
@@ -142,8 +142,8 @@ namespace castor3d
 		shdprog::eraseStage( target, m_states );
 		auto & renderSystem = *getRenderSystem();
 		auto & device = renderSystem.getRenderDevice();
-		ast::EntryPointConfig entryPoint{ getShaderStage( target ), "main" };
-		auto & spirvShader = m_module.compiled.emplace( getShaderStage( target )
+		ast::EntryPointConfig entryPoint{ getShaderStage( getOwner()->getRenderDevice(), target ), "main" };
+		auto & spirvShader = m_module.compiled.emplace( getShaderStage( getOwner()->getRenderDevice(), target )
 			, renderSystem.compileShader( target, getName(), *shader, entryPoint ) ).first->second;
 		m_states.push_back( makeShaderState( *device, target, spirvShader, getName() + shdprog::getName( target ) ) );
 	}
@@ -213,7 +213,8 @@ namespace castor3d
 		return result;
 	}
 
-	ast::ShaderStage getShaderStage( VkShaderStageFlagBits value )
+	ast::ShaderStage getShaderStage( RenderDevice const & device
+		, VkShaderStageFlagBits value )
 	{
 		switch ( value )
 		{
@@ -225,16 +226,23 @@ namespace castor3d
 			return ast::ShaderStage::eTessellationEvaluation;
 		case VK_SHADER_STAGE_GEOMETRY_BIT:
 			return ast::ShaderStage::eGeometry;
-#ifdef VK_EXT_mesh_shader
+#if defined( VK_NV_mesh_shader ) || defined( VK_EXT_mesh_shader )
+#	if defined( VK_NV_mesh_shader ) && defined( VK_EXT_mesh_shader )
+		case VK_SHADER_STAGE_MESH_BIT_EXT:
+			return device.prefersMeshShaderEXT() ? ast::ShaderStage::eMesh : ast::ShaderStage::eMeshNV;
+		case VK_SHADER_STAGE_TASK_BIT_EXT:
+			return device.prefersMeshShaderEXT() ? ast::ShaderStage::eTask : ast::ShaderStage::eTaskNV;
+#	elif defined( VK_EXT_mesh_shader )
 		case VK_SHADER_STAGE_MESH_BIT_EXT:
 			return ast::ShaderStage::eMesh;
 		case VK_SHADER_STAGE_TASK_BIT_EXT:
 			return ast::ShaderStage::eTask;
-#elif defined( VK_NV_mesh_shader )
+#	else
 		case VK_SHADER_STAGE_MESH_BIT_NV:
 			return ast::ShaderStage::eMeshNV;
 		case VK_SHADER_STAGE_TASK_BIT_NV:
 			return ast::ShaderStage::eTaskNV;
+#	endif
 #endif
 		case VK_SHADER_STAGE_FRAGMENT_BIT:
 			return ast::ShaderStage::eFragment;
@@ -305,7 +313,8 @@ namespace castor3d
 		return getVkShaderStage( getShaderStage( value ) );
 	}
 
-	ast::EntryPoint getEntryPointType( VkShaderStageFlagBits value )
+	ast::EntryPoint getEntryPointType( RenderDevice const & device
+		, VkShaderStageFlagBits value )
 	{
 		switch ( value )
 		{
@@ -317,16 +326,23 @@ namespace castor3d
 			return ast::EntryPoint::eTessellationEvaluation;
 		case VK_SHADER_STAGE_GEOMETRY_BIT:
 			return ast::EntryPoint::eGeometry;
-#ifdef VK_EXT_mesh_shader
+#if defined( VK_NV_mesh_shader ) || defined( VK_EXT_mesh_shader )
+#	if defined( VK_NV_mesh_shader ) && defined( VK_EXT_mesh_shader )
+		case VK_SHADER_STAGE_MESH_BIT_EXT:
+			return device.prefersMeshShaderEXT() ? ast::EntryPoint::eMesh : ast::EntryPoint::eMeshNV;
+		case VK_SHADER_STAGE_TASK_BIT_EXT:
+			return device.prefersMeshShaderEXT() ? ast::EntryPoint::eTask : ast::EntryPoint::eTaskNV;
+#	elif defined( VK_EXT_mesh_shader )
 		case VK_SHADER_STAGE_MESH_BIT_EXT:
 			return ast::EntryPoint::eMesh;
 		case VK_SHADER_STAGE_TASK_BIT_EXT:
 			return ast::EntryPoint::eTask;
-#elif defined( VK_NV_mesh_shader )
+#	else
 		case VK_SHADER_STAGE_MESH_BIT_NV:
-			return ast::EntryPoint::eMesh;
+			return ast::EntryPoint::eMeshNV;
 		case VK_SHADER_STAGE_TASK_BIT_NV:
-			return ast::EntryPoint::eTask;
+			return ast::EntryPoint::eTaskNV;
+#	endif
 #endif
 		case VK_SHADER_STAGE_FRAGMENT_BIT:
 			return ast::EntryPoint::eFragment;

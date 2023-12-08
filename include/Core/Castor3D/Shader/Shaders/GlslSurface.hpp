@@ -149,6 +149,7 @@ namespace castor3d::shader
 		sdw::Array< sdw::Vec4 > passMultipliers;
 		sdw::UInt nodeId;
 		sdw::UInt vertexId;
+		sdw::UInt meshletId;
 
 	protected:
 		C3D_API static void fillIOType( sdw::type::IOStruct & type

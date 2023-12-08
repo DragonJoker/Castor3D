@@ -152,7 +152,7 @@ namespace castor3d
 	{
 		return m_voxelConfig.enabled
 			&& RenderNodesPass::isPassEnabled()
-			&& ( m_renderQueue->isOutOfDate() || m_outOfDate );
+			&& ( getRenderQueue().isOutOfDate() || m_outOfDate );
 	}
 
 	ShaderFlags VoxelizePass::getShaderFlags()const
@@ -167,7 +167,7 @@ namespace castor3d
 
 	void VoxelizePass::setUpToDate()
 	{
-		m_outOfDate = m_renderQueue->isOutOfDate()
+		m_outOfDate = getRenderQueue().isOutOfDate()
 			&& getEngine()->areUpdateOptimisationsEnabled();
 	}
 	
