@@ -15,34 +15,6 @@ namespace castor3d::shader
 
 	//*********************************************************************************************
 
-	ObjectIds::ObjectIds( sdw::ShaderWriter & writer
-		, ast::expr::ExprPtr expr
-		, bool enabled )
-		: StructInstance{ writer, std::move( expr ), enabled }
-		, m_data{ getMember< sdw::UVec4 >( "data" ) }
-		, nodeId{ m_data.x() }
-		, morphingId{ m_data.y() }
-		, skinningId{ m_data.z() }
-	{
-	}
-
-	ast::type::BaseStructPtr ObjectIds::makeType( ast::type::TypesCache & cache )
-	{
-		auto result = cache.getStruct( ast::type::MemoryLayout::eStd430
-			, "C3D_ObjectIdsData" );
-
-		if ( result->empty() )
-		{
-			result->declMember( "data"
-				, ast::type::Kind::eVec4U
-				, sdw::type::NotArray );
-		}
-
-		return result;
-	}
-
-	//*********************************************************************************************
-
 	ObjectsIds::ObjectsIds( sdw::ShaderWriter & writer
 		, ast::expr::ExprPtr expr
 		, bool enabled )

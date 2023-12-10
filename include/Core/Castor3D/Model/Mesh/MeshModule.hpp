@@ -96,7 +96,8 @@ namespace castor3d
 		uint32_t vertexCount;
 		// Number of triangles used in the meshlet.
 		uint32_t triangleCount;
-		uint32_t pad;
+		// The index of the meshlet.
+		uint32_t meshletIndex;
 	};
 	static_assert( ( sizeof( Meshlet ) % 16u ) == 0u );
 	/**

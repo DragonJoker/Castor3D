@@ -98,6 +98,7 @@ namespace castor3d::shader
 	struct LpvLightData;
 	struct Material;
 	struct Meshlet;
+	struct ObjectIds;
 	struct Plane;
 	struct PointLight;
 	struct PointShadowData;

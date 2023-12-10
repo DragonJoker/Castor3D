@@ -4,8 +4,10 @@ See LICENSE file in root folder
 #ifndef ___C3D_GlslMeshVertex_H___
 #define ___C3D_GlslMeshVertex_H___
 
-#include "SdwModule.hpp"
+#include "Castor3D/Shader/Shaders/SdwModule.hpp"
 #include "Castor3D/Model/Mesh/Submesh/SubmeshModule.hpp"
+
+#include "Castor3D/Shader/Shaders/GlslObjectIds.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
@@ -165,7 +167,7 @@ namespace castor3d::shader
 			, uint32_t set );
 
 		sdw::Array< Meshlet > meshlets;
-		sdw::UVec4Array instances;
+		sdw::Array< ObjectIds > instances;
 	};
 }
 

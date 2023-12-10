@@ -1224,6 +1224,13 @@ namespace castor3d
 	
 	SubmeshComponentCombine RenderNodesPass::doAdjustSubmeshComponents( SubmeshComponentCombine submeshCombine )const
 	{
+		auto & components = getEngine()->getSubmeshComponentsRegister();
+
+		if ( !isMeshShading() )
+		{
+			remFlags( submeshCombine, components.getMeshletFlag() );
+		}
+
 		return submeshCombine;
 	}
 

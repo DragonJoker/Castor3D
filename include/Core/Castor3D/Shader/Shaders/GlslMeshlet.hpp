@@ -6,30 +6,38 @@ See LICENSE file in root folder
 
 #include "Castor3D/Shader/Shaders/SdwModule.hpp"
 
+#include "Castor3D/Limits.hpp"
+
 #include <ShaderWriter/BaseTypes/Array.hpp>
 #include <ShaderWriter/BaseTypes/UInt.hpp>
 #include <ShaderWriter/VecTypes/Vec4.hpp>
-#include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 
 namespace castor3d
 {
 	namespace shader
 	{
 		struct Meshlet
-			: public sdw::StructInstance
+			: public sdw::StructInstanceHelperT< "C3D_Meshlet"
+				, sdw::type::MemoryLayout::eStd430
+				, sdw::UIntArrayField< "vertices", MaxMeshletVertexCount >
+				, sdw::UInt8ArrayField< "indices", MaxMeshletTriangleCount * 3u >
+				, sdw::UIntField< "vertexCount" >
+				, sdw::UIntField< "triangleCount" >
+				, sdw::UIntField< "meshletIndex" > >
 		{
-			C3D_API Meshlet( sdw::ShaderWriter & writer
+			Meshlet( sdw::ShaderWriter & writer
 				, sdw::expr::ExprPtr expr
-				, bool enabled = true );
+				, bool enabled = true )
+				: StructInstanceHelperT{ writer, std::move( expr ), enabled  }
+			{
+			}
 
-			SDW_DeclStructInstance( C3D_API, Meshlet );
-
-			C3D_API static sdw::type::BaseStructPtr makeType( sdw::type::TypesCache & cache );
-
-			sdw::Array< sdw::UInt > vertices;
-			sdw::Array< sdw::UInt8 > indices;
-			sdw::UInt vertexCount;
-			sdw::UInt triangleCount;
+			auto vertices()const { return getMember< "vertices" >(); }
+			auto indices()const { return getMember< "indices" >(); }
+			auto vertexCount()const { return getMember< "vertexCount" >(); }
+			auto triangleCount()const { return getMember< "triangleCount" >(); }
+			auto meshletIndex()const { return getMember< "meshletIndex" >(); }
 		};
 	}
 }

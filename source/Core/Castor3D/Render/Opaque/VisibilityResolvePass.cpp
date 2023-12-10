@@ -583,9 +583,9 @@ namespace castor3d
 								auto baseIndex = m_writer.declLocale( "baseIndex"
 									, primitiveId * 3u );
 								auto indices = m_writer.declLocale( "indices"
-									, uvec3( meshlet.vertices[m_writer.cast< sdw::UInt >( meshlet.indices[baseIndex + 0u] )]
-										, meshlet.vertices[m_writer.cast< sdw::UInt >( meshlet.indices[baseIndex + 1u] )]
-										, meshlet.vertices[m_writer.cast< sdw::UInt >( meshlet.indices[baseIndex + 2u] )] ) );
+									, uvec3( meshlet.vertices()[m_writer.cast< sdw::UInt >( meshlet.indices()[baseIndex + 0u] )]
+										, meshlet.vertices()[m_writer.cast< sdw::UInt >( meshlet.indices()[baseIndex + 1u] )]
+										, meshlet.vertices()[m_writer.cast< sdw::UInt >( meshlet.indices()[baseIndex + 2u] )] ) );
 								auto baseVertex = m_writer.declLocale( "baseVertex"
 									, modelData.getVertexOffset() );
 								loadVertex( baseVertex + indices.x(), v0 );

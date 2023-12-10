@@ -506,6 +506,11 @@ namespace castor3d
 			m_meshletFlag = componentDesc.plugin->getMeshletFlag();
 		}
 
+		if ( componentDesc.plugin->getInstantiationFlag() != 0u )
+		{
+			m_instantiationFlag = componentDesc.plugin->getInstantiationFlag();
+		}
+
 		if ( auto shader = componentDesc.plugin->createVertexSurfaceShader() )
 		{
 			m_vertexSurfaceShaders.emplace( componentDesc.id, std::move( shader ) );

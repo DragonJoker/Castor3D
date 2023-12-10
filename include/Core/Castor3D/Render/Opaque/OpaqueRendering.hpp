@@ -181,11 +181,11 @@ namespace castor3d
 		ashes::BufferPtr< castor::Point3ui > m_materialsIndirectCounts;
 		ashes::BufferPtr< uint32_t > m_materialsStarts;
 		ashes::BufferPtr< castor::Point2ui > m_pixelsXY;
-		VisibilityReorderPassUPtr m_visibilityReorder;
-		SsaoPassUPtr m_ssao;
 		crg::RunnablePass::IsEnabledCallback m_opaquePassEnabled;
 		crg::RunnablePass::IsEnabledCallback m_deferredOpaquePassEnabled;
 		crg::RunnablePass::IsEnabledCallback m_visibilityOpaquePassEnabled;
+		VisibilityReorderPassUPtr m_visibilityReorder;
+		SsaoPassUPtr m_ssao;
 		crg::FramePass * m_visibilityResolveDesc{};
 		crg::FramePass * m_opaquePassDesc{};
 		RenderTechniquePass * m_opaquePass{};
