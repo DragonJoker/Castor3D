@@ -20,7 +20,7 @@ namespace castor3d
 		struct PassMapMaterialShader
 			: shader::PassMaterialShader
 		{
-			C3D_API PassMapMaterialShader( std::string const & mapMemberName )
+			C3D_API explicit PassMapMaterialShader( std::string const & mapMemberName )
 				: shader::PassMaterialShader{ sizeof( uint32_t ) }
 				, m_mapMemberName{ mapMemberName + "MapAndMask" }
 			{

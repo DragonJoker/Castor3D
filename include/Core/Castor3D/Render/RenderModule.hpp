@@ -788,9 +788,19 @@ namespace castor3d
 	template< typename NodeT >
 	struct CulledNodeT
 	{
-		NodeT const * node{};
-		uint32_t instanceCount{};
-		bool visible{};
+		explicit CulledNodeT( NodeT const * pnode = {}
+			, uint32_t pinstanceCount = {}
+			, bool pvisible = {} )
+			: node{ pnode }
+			, instanceCount{ pinstanceCount }
+			, visible{ pvisible }
+
+		{
+		}
+
+		NodeT const * node;
+		uint32_t instanceCount;
+		bool visible;
 	};
 
 	template< typename NodeT >
