@@ -72,13 +72,14 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
+			, crg::RunnablePass::IsEnabledCallback isEnabled
 			, crg::ImageViewId const & data
 			, ashes::Buffer< uint32_t > const & materialsCounts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/MaterialsCount"
-				, [&stages, &device, renderSize]( crg::FramePass const & framePass
+				, [&stages, &device, isEnabled, renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -87,6 +88,7 @@ namespace castor3d
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
+							.isEnabled( isEnabled )
 							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
 							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
@@ -170,13 +172,14 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
+			, crg::RunnablePass::IsEnabledCallback isEnabled
 			, ashes::Buffer< uint32_t > const & materialsCounts
 			, ashes::Buffer< castor::Point3ui > const & indirectCounts
 			, ashes::Buffer< uint32_t > const & starts
 			, ashes::PipelineShaderStageCreateInfoArray const & stages )
 		{
 			auto & pass = graph.createPass( name + "/MaterialsStart"
-				, [&stages, &device]( crg::FramePass const & framePass
+				, [&stages, &device, isEnabled]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -185,6 +188,7 @@ namespace castor3d
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
+							.isEnabled( isEnabled )
 							.groupCountX( device.renderSystem.getEngine()->getMaxPassTypeCount() / 64u )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
 					device.renderSystem.getEngine()->registerTimer( framePass.getFullName()
@@ -278,6 +282,7 @@ namespace castor3d
 			, crg::FramePassArray const & previousPasses
 			, crg::FramePass const *& previousPass
 			, RenderDevice const & device
+			, crg::RunnablePass::IsEnabledCallback isEnabled
 			, crg::ImageViewId const & data
 			, ashes::Buffer< uint32_t > const & materialsCounts
 			, ashes::Buffer< uint32_t > const & materialsStarts
@@ -286,7 +291,7 @@ namespace castor3d
 		{
 			auto renderSize = getExtent( data );
 			auto & pass = graph.createPass( name + "/PixelsXY"
-				, [&stages, &device, renderSize]( crg::FramePass const & framePass
+				, [&stages, &device, isEnabled, renderSize]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
@@ -295,6 +300,7 @@ namespace castor3d
 						, graph
 						, crg::ru::Config{}
 						, crg::cp::Config{}
+							.isEnabled( isEnabled )
 							.groupCountX( castor::divRoundUp( renderSize.width, 16u ) )
 							.groupCountY( castor::divRoundUp( renderSize.height, 16u ) )
 							.program( ashes::makeVkArray< VkPipelineShaderStageCreateInfo >( stages ) ) );
@@ -336,7 +342,8 @@ namespace castor3d
 		, ashes::Buffer< uint32_t > const & materialsCounts
 		, ashes::Buffer< castor::Point3ui > const & indirectCounts
 		, ashes::Buffer< uint32_t > const & materialsStarts
-		, ashes::Buffer< castor::Point2ui > const & pixels )
+		, ashes::Buffer< castor::Point2ui > const & pixels
+		, crg::RunnablePass::IsEnabledCallback isEnabled )
 		: castor::Named{ "VisibilityReorder" }
 		, m_computeCountsShader{ VK_SHADER_STAGE_COMPUTE_BIT
 			, getName()
@@ -357,6 +364,7 @@ namespace castor3d
 			, previousPasses
 			, previousPass
 			, device
+			, isEnabled
 			, data
 			, materialsCounts
 			, m_countsStages );
@@ -365,6 +373,7 @@ namespace castor3d
 			, previousPasses
 			, previousPass
 			, device
+			, isEnabled
 			, materialsCounts
 			, indirectCounts
 			, materialsStarts
@@ -374,6 +383,7 @@ namespace castor3d
 			, previousPasses
 			, previousPass
 			, device
+			, isEnabled
 			, data
 			, materialsCounts
 			, materialsStarts
