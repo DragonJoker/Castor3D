@@ -330,9 +330,9 @@ namespace castor3d
 			auto meshlet = writer.declLocale( "meshlet"
 				, meshlets.meshlets[meshletIndex] );
 			auto triangleCount = writer.declLocale( "triangleCount"
-				, meshlet.triangleCount );
+				, meshlet.triangleCount() );
 			auto vertexCount = writer.declLocale( "vertexCount"
-				, meshlet.vertexCount );
+				, meshlet.vertexCount() );
 
 			primOut.setMeshOutputCounts( vertexCount, triangleCount );
 			auto indexCount = writer.declLocale( "indexCount"
@@ -341,15 +341,15 @@ namespace castor3d
 			FOR( writer, sdw::UInt, i, laneId, i < indexCount, i += 32u )
 			{
 				primOut[i].primitiveID = i;
-				primOut[i].primitiveIndex = uvec3( meshlet.indices[i * 3u + 0u]
-					, meshlet.indices[i * 3u + 1u]
-					, meshlet.indices[i * 3u + 2u] );
+				primOut[i].primitiveIndex = uvec3( meshlet.indices()[i * 3u + 0u]
+					, meshlet.indices()[i * 3u + 1u]
+					, meshlet.indices()[i * 3u + 2u] );
 			}
 			ROF;
 
 			FOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
 			{
-				auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices[i] );
+				auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices()[i] );
 
 				auto curPosition = writer.declLocale( "curPosition"
 					, meshlets.positions[vertexIndex].position );
@@ -367,7 +367,7 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				vtxOut[i].nodeId = nodeId;
-				vtxOut[i].meshletId = meshletOffset + meshletIndex;
+				vtxOut[i].meshletId = meshletOffset + meshlet.meshletIndex();
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() )
 					, flags.enablePassMasks() );
@@ -661,9 +661,9 @@ namespace castor3d
 			auto meshlet = writer.declLocale( "meshlet"
 				, meshlets.meshlets[meshletIndex] );
 			auto triangleCount = writer.declLocale( "triangleCount"
-				, meshlet.triangleCount );
+				, meshlet.triangleCount() );
 			auto vertexCount = writer.declLocale( "vertexCount"
-				, meshlet.vertexCount );
+				, meshlet.vertexCount() );
 
 			primOut.setMeshOutputCounts( vertexCount, triangleCount );
 			auto indexCount = writer.declLocale( "indexCount"
@@ -672,15 +672,15 @@ namespace castor3d
 			FOR( writer, sdw::UInt, i, laneId, i < indexCount, i += 32u )
 			{
 				primOut[i].primitiveID = i;
-				primOut[i].primitiveIndex = uvec3( meshlet.indices[i * 3u + 0u]
-					, meshlet.indices[i * 3u + 1u]
-					, meshlet.indices[i * 3u + 2u] );
+				primOut[i].primitiveIndex = uvec3( meshlet.indices()[i * 3u + 0u]
+					, meshlet.indices()[i * 3u + 1u]
+					, meshlet.indices()[i * 3u + 2u] );
 			}
 			ROF;
 
 			FOR( writer, sdw::UInt, i, laneId, i < vertexCount, i += 32u )
 			{
-				auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices[i] );
+				auto vertexIndex = writer.declLocale( "vertexIndex", meshlet.vertices()[i] );
 
 				auto curPosition = writer.declLocale( "curPosition"
 					, meshlets.positions[vertexIndex].position );
@@ -698,7 +698,7 @@ namespace castor3d
 				auto modelData = writer.declLocale( "modelData"
 					, c3d_modelsData[nodeId - 1u] );
 				vtxOut[i].nodeId = nodeId;
-				vtxOut[i].meshletId = meshletOffset + meshletIndex;
+				vtxOut[i].meshletId = meshletOffset + meshlet.meshletIndex();
 				auto material = writer.declLocale( "material"
 					, materials.getMaterial( modelData.getMaterialId() )
 					, flags.enablePassMasks() );

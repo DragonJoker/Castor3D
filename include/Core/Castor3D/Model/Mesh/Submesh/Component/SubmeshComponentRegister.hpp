@@ -195,6 +195,16 @@ namespace castor3d
 			return m_velocityFlag;
 		}
 
+		SubmeshComponentFlag getMeshletFlag()const noexcept
+		{
+			return m_meshletFlag;
+		}
+
+		SubmeshComponentFlag getInstantiationFlag()const noexcept
+		{
+			return m_instantiationFlag;
+		}
+
 	private:
 		struct Component
 		{
@@ -237,6 +247,7 @@ namespace castor3d
 		SubmeshComponentFlag m_passMaskFlag{};
 		SubmeshComponentFlag m_velocityFlag{};
 		SubmeshComponentFlag m_meshletFlag{};
+		SubmeshComponentFlag m_instantiationFlag{};
 	};
 }
 

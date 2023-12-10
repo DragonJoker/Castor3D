@@ -217,7 +217,7 @@ namespace castor3d::shader
 				return result;
 			}() }
 		, instances{ DeclareSsbo( c3d_inInstances
-			, sdw::UVec4
+			, ObjectIds
 			, flags.enableInstantiation()
 			, stride ) }
 	{

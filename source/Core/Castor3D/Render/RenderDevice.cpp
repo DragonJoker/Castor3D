@@ -331,7 +331,7 @@ namespace castor3d
 		, features{ gpu.getFeatures() }
 		, properties{ gpu.getProperties() }
 		, queueFamilies{ renddvc::initialiseQueueFamilies( renderSystem.getInstance(), gpu ) }
-		, m_prefersMeshShaderEXT{ false }
+		, m_prefersMeshShaderEXT{ true }
 		, m_deviceExtensions{ std::move( pdeviceExtensions ) }
 		, m_availableExtensions{ gpu.enumerateExtensionProperties( std::string{} ) }
 	{

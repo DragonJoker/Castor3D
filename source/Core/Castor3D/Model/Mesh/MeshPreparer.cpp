@@ -343,6 +343,7 @@ namespace castor3d
 			std::vector< Meshlet > result( meshletCount );
 			auto itSrc = meshlets.begin();
 			auto itDst = result.begin();
+			uint32_t meshletIndex{};
 
 			while ( itDst != result.end() )
 			{
@@ -354,6 +355,7 @@ namespace castor3d
 					, itDst->vertices.begin() );
 				itDst->triangleCount = itSrc->triangle_count;
 				itDst->vertexCount = itSrc->vertex_count;
+				itDst->meshletIndex = meshletIndex++;
 				++itSrc;
 				++itDst;
 			}

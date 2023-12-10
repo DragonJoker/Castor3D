@@ -6,35 +6,14 @@ See LICENSE file in root folder
 
 #include "UbosModule.hpp"
 #include "Castor3D/Shader/Shaders/GlslSurface.hpp"
+#include "Castor3D/Shader/Shaders/GlslObjectIds.hpp"
 
 #include <ShaderWriter/CompositeTypes/StructInstance.hpp>
+#include <ShaderWriter/CompositeTypes/StructInstanceHelper.hpp>
 #include <ShaderWriter/MatTypes/Mat4.hpp>
 
 namespace castor3d::shader
 {
-	struct ObjectIds
-		: public sdw::StructInstance
-	{
-		C3D_API ObjectIds( sdw::ShaderWriter & writer
-			, ast::expr::ExprPtr expr
-			, bool enabled );
-		SDW_DeclStructInstance( C3D_API, ObjectIds );
-
-		C3D_API static ast::type::BaseStructPtr makeType( ast::type::TypesCache & cache );
-
-	private:
-		using sdw::StructInstance::getMember;
-		using sdw::StructInstance::getMemberArray;
-
-	private:
-		sdw::UVec4 m_data;
-
-	public:
-		sdw::UInt nodeId;
-		sdw::UInt morphingId;
-		sdw::UInt skinningId;
-	};
-
 	struct ObjectsIds
 		: public sdw::StructInstance
 	{
@@ -86,6 +65,20 @@ namespace castor3d::shader
 		if ( flags.enableInstantiation() )
 		{
 			return instances[drawID].x();
+		}
+
+		return getNodeId( data, pipelineID, drawID );
+	}
+
+	inline sdw::UInt getNodeId( sdw::Array< shader::ObjectsIds > const & data
+		, sdw::Array< shader::ObjectIds > const & instances
+		, sdw::UInt pipelineID
+		, sdw::UInt drawID
+		, PipelineFlags const & flags )
+	{
+		if ( flags.enableInstantiation() )
+		{
+			return instances[drawID].nodeId();
 		}
 
 		return getNodeId( data, pipelineID, drawID );

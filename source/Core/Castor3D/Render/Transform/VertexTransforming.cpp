@@ -449,7 +449,7 @@ namespace castor3d
 				if ( pipeline.hasMorphingWeights )
 				{
 					auto morphingWeights = writer.declLocale( "morphingWeights"
-						, c3d_morphingWeights[c3d_objectIDs.morphingId] );
+						, c3d_morphingWeights[c3d_objectIDs.morphingId()] );
 					morphingWeights.morph( c3d_morphTargets
 						, index
 						, position
@@ -486,10 +486,10 @@ namespace castor3d
 				auto skin = writer.declLocale( "skin"
 					, c3d_inBones[index] );
 				auto modelData = writer.declLocale( "modelData"
-					, c3d_modelsData[c3d_objectIDs.nodeId] );
+					, c3d_modelsData[c3d_objectIDs.nodeId()] );
 				auto curMtxModel = writer.declLocale< sdw::Mat4 >( "curMtxModel"
 					, modelData.getCurModelMtx( skinningData
-						, c3d_objectIDs.skinningId
+						, c3d_objectIDs.skinningId()
 						, skin.boneIds0
 						, skin.boneIds1
 						, skin.boneWeights0
@@ -628,21 +628,21 @@ namespace castor3d
 					auto meshlet = writer.declLocale( "meshlet"
 						, c3d_meshlets[meshletId] );
 					auto minPos = writer.declLocale( "minPos"
-						, c3d_positions[meshlet.vertices[0]].xyz() );
+						, c3d_positions[meshlet.vertices()[0]].xyz() );
 					auto maxPos = writer.declLocale( "maxPos"
 						, minPos );
 					auto normals = writer.declLocaleArray< sdw::Vec3 >( "normals"
 						, MaxMeshletVertexCount
 						, computeCones );
-					normals[0] = c3d_normals[meshlet.vertices[0]].xyz();
+					normals[0] = c3d_normals[meshlet.vertices()[0]].xyz();
 
-					FOR( writer, sdw::UInt, i, 1u, i < meshlet.vertexCount, ++i )
+					FOR( writer, sdw::UInt, i, 1u, i < meshlet.vertexCount(), ++i )
 					{
 						auto point = writer.declLocale( "point"
-							, c3d_positions[meshlet.vertices[i]].xyz() );
+							, c3d_positions[meshlet.vertices()[i]].xyz() );
 						minPos = min( minPos, point );
 						maxPos = max( maxPos, point );
-						normals[i] = c3d_normals[meshlet.vertices[i]].xyz();
+						normals[i] = c3d_normals[meshlet.vertices()[i]].xyz();
 					}
 					ROF;
 
@@ -655,14 +655,14 @@ namespace castor3d
 					if ( computeCones )
 					{
 						auto sphere = writer.declLocale( "sphere"
-							, computeSphere( normals, meshlet.vertexCount ) );
+							, computeSphere( normals, meshlet.vertexCount() ) );
 						auto axis = writer.declLocale( "axis"
 							, normalize( sphere.xyz() ) );
 						// compute a tight cone around all normals, mindp = cos(angle/2)
 						auto mindp = writer.declLocale( "mindp"
 							, 1.0_f );
 
-						FOR( writer, sdw::UInt, i, 0u, i < meshlet.vertexCount, ++i )
+						FOR( writer, sdw::UInt, i, 0u, i < meshlet.vertexCount(), ++i )
 						{
 							auto dp = writer.declLocale( "dp"
 								, dot( normals[i], axis ) );
