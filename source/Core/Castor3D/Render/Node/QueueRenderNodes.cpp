@@ -51,7 +51,7 @@ namespace castor3d
 {
 	namespace queuerndnd
 	{
-		VkDrawIndirectCommand getCommand( ObjectBufferOffset const & bufferOffsets
+		static VkDrawIndirectCommand getCommand( ObjectBufferOffset const & bufferOffsets
 			, ObjectBufferOffset::GpuBufferChunk const & bufferChunk
 			, CulledNodeT< BillboardRenderNode > const & culled )
 		{
@@ -61,7 +61,7 @@ namespace castor3d
 				, .firstInstance = 0u };
 		}
 
-		VkDrawIndexedIndirectCommand getCommand( ObjectBufferOffset const & bufferOffsets
+		static VkDrawIndexedIndirectCommand getCommand( ObjectBufferOffset const & bufferOffsets
 			, ObjectBufferOffset::GpuBufferChunk const & bufferChunk
 			, CulledNodeT< SubmeshRenderNode > const & culled )
 		{
@@ -117,14 +117,15 @@ namespace castor3d
 		//*****************************************************************************************
 
 		template< typename NodeT >
-		bool hasVisibleNode( NodesViewT< NodeT > const & nodes )
+		RenderedNodeT< NodeT > const * hasVisibleNode( NodesViewT< NodeT > const & nodes )
 		{
-			return std::any_of( nodes.begin()
+			auto it = std::find_if( nodes.begin()
 				, nodes.end()
 				, []( RenderedNodeT< NodeT > const & node )
 				{
 					return node.culled->visible;
 				} );
+			return it != nodes.end() ? &( *it ) : nullptr;
 		}
 
 		static uint32_t bindPipeline( ashes::CommandBuffer const & commandBuffer
@@ -1258,7 +1259,6 @@ namespace castor3d
 		, ShadowBuffer const * shadowBuffer
 		, CulledNodeT< BillboardRenderNode > const & counted )
 	{
-		auto & renderPass = *getOwner()->getOwner();
 		auto & node = *counted.node;
 		auto pipelineId = doGetPipeline( shadowMaps
 			, shadowBuffer
@@ -1281,7 +1281,6 @@ namespace castor3d
 		, CulledNodeT< SubmeshRenderNode > const & counted
 		, bool frontCulled )
 	{
-		auto & renderPass = *getOwner()->getOwner();
 		auto & node = *counted.node;
 		auto pipelineId = doGetPipeline( shadowMaps
 			, shadowBuffer
@@ -1305,7 +1304,6 @@ namespace castor3d
 		, CulledNodeT< SubmeshRenderNode > const & counted
 		, bool frontCulled )
 	{
-		auto & renderPass = *getOwner()->getOwner();
 		auto & node = *counted.node;
 		auto pipelineId = doGetPipeline( shadowMaps
 			, shadowBuffer
@@ -1379,7 +1377,7 @@ namespace castor3d
 
 				for ( auto & [buffer, nodes] : pipelinesNodes.nodes )
 				{
-					if ( queuerndnd::hasVisibleNode( nodes ) )
+					if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
 					{
 						auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
 							, *buffer
@@ -1388,14 +1386,13 @@ namespace castor3d
 							, maxNodesCount );
 						auto pipelinesBuffer = pipelineNodes.data();
 
-						auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+						queuerndnd::bindPipeline( commandBuffer
 							, *this
 							, *pipeline.pipeline
 							, *buffer
 							, viewport
 							, scissors );
 						uint32_t visibleNodesCount{};
-						RenderedNodeT< SubmeshRenderNode > const * firstVisibleNode{};
 
 						for ( auto & node : nodes )
 						{
@@ -1413,11 +1410,6 @@ namespace castor3d
 								CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
 								CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
 								++visibleNodesCount;
-
-								if ( !firstVisibleNode )
-								{
-									firstVisibleNode = &node;
-								}
 							}
 						}
 
@@ -1443,7 +1435,7 @@ namespace castor3d
 
 				for ( auto & [buffer, submeshes] : buffers )
 				{
-					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+					queuerndnd::bindPipeline( commandBuffer
 						, *this
 						, *pipeline.pipeline
 						, *buffer
@@ -1512,7 +1504,7 @@ namespace castor3d
 
 				for ( auto & [buffer, nodes] : pipelinesNodes.nodes )
 				{
-					if ( queuerndnd::hasVisibleNode( nodes ) )
+					if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
 					{
 						auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
 							, *buffer
@@ -1566,7 +1558,6 @@ namespace castor3d
 						else
 						{
 							uint32_t visibleNodesCount{};
-							RenderedNodeT< SubmeshRenderNode > const * firstVisibleNode{};
 
 							for ( auto & node : nodes )
 							{
@@ -1584,11 +1575,6 @@ namespace castor3d
 									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
 									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
 									++visibleNodesCount;
-
-									if ( !firstVisibleNode )
-									{
-										firstVisibleNode = &node;
-									}
 								}
 							}
 
@@ -1717,7 +1703,7 @@ namespace castor3d
 
 				for ( auto & [buffer, nodes] : pipelinesNodes.nodes )
 				{
-					if ( queuerndnd::hasVisibleNode( nodes ) )
+					if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
 					{
 						auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
 							, *buffer
@@ -1771,7 +1757,6 @@ namespace castor3d
 						else
 						{
 							uint32_t visibleNodesCount{};
-							RenderedNodeT< SubmeshRenderNode > const * firstVisibleNode{};
 
 							for ( auto & node : nodes )
 							{
@@ -1789,11 +1774,6 @@ namespace castor3d
 									CU_Require( size_t( std::distance( origIndirectNIdxBuffer, indirectNIdxBuffer ) ) <= submeshNIdxCommands.getCount() );
 									CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
 									++visibleNodesCount;
-
-									if ( !firstVisibleNode )
-									{
-										firstVisibleNode = &node;
-									}
 								}
 							}
 
@@ -1914,7 +1894,7 @@ namespace castor3d
 
 			for ( auto & [buffer, nodes] : pipelinesNodes.nodes )
 			{
-				if ( queuerndnd::hasVisibleNode( nodes ) )
+				if ( auto firstVisibleNode = queuerndnd::hasVisibleNode( nodes ) )
 				{
 					auto & pipelineNodes = getPipelineNodes( pipeline.pipeline->getFlagsHash()
 						, *buffer
@@ -1923,14 +1903,13 @@ namespace castor3d
 						, maxNodesCount );
 					auto pipelinesBuffer = pipelineNodes.data();
 
-					auto pipelineId = queuerndnd::bindPipeline( commandBuffer
+					queuerndnd::bindPipeline( commandBuffer
 						, *this
 						, *pipeline.pipeline
 						, *buffer
 						, viewport
 						, scissors );
 					uint32_t visibleNodesCount{};
-					RenderedNodeT< BillboardRenderNode > const * firstVisibleNode{};
 
 					for ( auto & node : nodes )
 					{
@@ -1944,11 +1923,6 @@ namespace castor3d
 							CU_Require( size_t( std::distance( origIndirectBuffer, indirectBuffer ) ) <= billboardCommands.getCount() );
 							CU_Require( size_t( std::distance( pipelineNodes.data(), pipelinesBuffer ) ) <= pipelineNodes.size() );
 							++visibleNodesCount;
-
-							if ( !firstVisibleNode )
-							{
-								firstVisibleNode = &node;
-							}
 						}
 					}
 

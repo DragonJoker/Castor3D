@@ -26,14 +26,6 @@ namespace castor3d
 			return castor::makeArrayView( reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer )
 				, reinterpret_cast< TextureConfigurationBuffer::Data * >( buffer ) + count );
 		}
-
-		static castor::Point4ui writeFlags( TextureFlagConfiguration const & a )
-		{
-			return castor::Point4ui{ a.flag
-				, a.componentsMask ? 1u : 0u
-				, a.startIndex
-				, 0u };
-		}
 	}
 
 	//*********************************************************************************************
