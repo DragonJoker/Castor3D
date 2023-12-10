@@ -276,8 +276,8 @@ namespace castor3d
 
 		auto renderSize = getSafeBandedSize( m_camera.getSize() );
 		auto dimensions = m_dimensions.value();
-		( *m_clusterSize )->x = castor::divRoundUp( renderSize->x, dimensions->x );
-		( *m_clusterSize )->y = castor::divRoundUp( renderSize->y, dimensions->y );
+		m_clusterSize = { castor::divRoundUp( renderSize->x, dimensions->x )
+			, castor::divRoundUp( renderSize->y, dimensions->y ) };
 		m_cameraProjection = m_camera.getProjection( true );
 		m_cameraView = m_camera.getView();
 		auto cellCount = dimensions->x * dimensions->y * dimensions->z;

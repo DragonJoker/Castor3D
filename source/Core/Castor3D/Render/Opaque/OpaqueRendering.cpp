@@ -73,6 +73,9 @@ namespace castor3d
 				, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT
 				, getOwner()->getName() + "/PixelsXY" )
 			: nullptr ) }
+		, m_opaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled(); } } }
+		, m_deferredOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsDeferredOpaquePassEnabled(); } } }
+		, m_visibilityOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsVisibilityOpaquePassEnabled(); } } }
 		, m_visibilityReorder{ ( ( previous.hasVisibility() && VisibilityResolvePass::useCompute() )
 			? castor::makeUnique< VisibilityReorderPass >( m_graph
 				, crg::FramePassArray{ &previous.getLastPass() }
@@ -81,12 +84,10 @@ namespace castor3d
 				, * m_materialsCounts
 				, * m_materialsIndirectCounts
 				, *m_materialsStarts
-				, *m_pixelsXY )
+				, *m_pixelsXY
+				, crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled() || doIsVisibilityOpaquePassEnabled(); } })
 			: nullptr ) }
 		, m_ssao{ doCreateSsaoPass( progress, previous.getLastPass(), previousPasses ) }
-		, m_opaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsOpaquePassEnabled(); } } }
-		, m_deferredOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsDeferredOpaquePassEnabled(); } } }
-		, m_visibilityOpaquePassEnabled{ crg::RunnablePass::IsEnabledCallback{ [this]() { return doIsVisibilityOpaquePassEnabled(); } } }
 		, m_visibilityResolveDesc{ ( previous.hasVisibility()
 			? &doCreateVisibilityResolve( progress, previous, { &m_ssao->getLastPass() }, false )
 			: nullptr ) }

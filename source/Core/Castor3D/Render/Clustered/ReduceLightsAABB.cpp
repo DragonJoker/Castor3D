@@ -335,7 +335,8 @@ namespace castor3d
 
 			bool doIsEnabled()const
 			{
-				return m_clusters.getConfig().enabled;
+				return m_clusters.getConfig().enabled
+					&& m_clusters.needsLightsUpdate();
 			}
 
 			uint32_t doGetPassIndex()
@@ -458,7 +459,8 @@ namespace castor3d
 
 			bool doIsEnabled()const
 			{
-				return m_clusters.getConfig().enabled;
+				return m_clusters.getConfig().enabled
+					&& m_clusters.needsLightsUpdate();
 			}
 
 			void doSubRecordInto( crg::RecordContext & context

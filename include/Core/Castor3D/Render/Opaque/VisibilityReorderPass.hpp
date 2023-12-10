@@ -11,6 +11,8 @@ See LICENSE file in root folder
 
 #include <CastorUtils/Design/Named.hpp>
 
+#include <RenderGraph/RunnablePass.hpp>
+
 #include <ashespp/Pipeline/PipelineShaderStageCreateInfo.hpp>
 
 namespace castor3d
@@ -26,7 +28,8 @@ namespace castor3d
 			, ashes::Buffer< uint32_t > const & materialsCounts
 			, ashes::Buffer< castor::Point3ui > const & indirectCounts
 			, ashes::Buffer< uint32_t > const & materialsStarts
-			, ashes::Buffer< castor::Point2ui > const & pixels );
+			, ashes::Buffer< castor::Point2ui > const & pixels
+			, crg::RunnablePass::IsEnabledCallback isEnabled );
 		void accept( ConfigurationVisitorBase & visitor );
 
 		crg::FramePass const & getLastPass()const
