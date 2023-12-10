@@ -23,6 +23,7 @@
 
 #include <RenderGraph/GraphContext.hpp>
 #include <RenderGraph/RunnablePass.hpp>
+#include <RenderGraph/RunnablePasses/ImageBlit.hpp>
 
 namespace castor3d
 {
@@ -297,7 +298,13 @@ namespace castor3d
 		: castor::Named{ "LLPV" + ( geometryVolumes ? castor::String( "G" ) : castor::String( "" ) ) }
 		, m_scene{ scene }
 		, m_device{ device }
-		, m_smResult{ smResult }
+		, m_sourceSmResult{ smResult }
+		, m_downsampledSmResult{ resources
+			, device
+			, "LPV"
+			, ( ( lightType == LightType::ePoint ) ? VkImageCreateFlags( VK_IMAGE_CREATE_CUBE_COMPATIBLE_BIT ) : VkImageCreateFlags{} )
+			, castor::Size{ 512u, 512u }
+			, smResult[SmTexture::eDepth].imageId.data->info.arrayLayers }
 		, m_lpvResult{ lpvResult }
 		, m_lpvGridConfigUbo{ lpvGridConfigUbo }
 		, m_geometryVolumes{ geometryVolumes }
@@ -307,7 +314,15 @@ namespace castor3d
 		, m_geometry{ llpvpropvol::createGeometry( resources, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount, m_geometryVolumes ) }
 		, m_propagate{ llpvpropvol::createPropagation( resources, m_device, getName(), m_scene.getLpvGridSize(), LpvMaxCascadesCount ) }
 		, m_clearInjectionPass{ doCreateClearInjectionPass() }
+		, m_downsamplePass{ doCreateDownsamplePass() }
 	{
+		m_graph.addInput( m_sourceSmResult[SmTexture::eNormal].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_graph.addInput( m_sourceSmResult[SmTexture::ePosition].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+		m_graph.addInput( m_sourceSmResult[SmTexture::eFlux].targetViewId
+			, crg::makeLayoutState( VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL ) );
+
 		for ( uint32_t cascade = 0u; cascade < LpvMaxCascadesCount; ++cascade )
 		{
 			m_lpvGridConfigUbos.emplace_back( m_device );
@@ -361,12 +376,12 @@ namespace castor3d
 		{
 			auto ires = m_lightLpvs.emplace( light
 				, LightLpv{ m_graph
-					, m_clearInjectionPass
+					, m_downsamplePass
 					, m_device
 					, this->getName() + light->getName()
 					, light->getScene()->getLightCache()
 					, m_lightType
-					, m_smResult
+					, m_downsampledSmResult
 					, m_lpvGridConfigUbos
 					, m_injection
 					, ( m_geometryVolumes
@@ -605,6 +620,37 @@ namespace castor3d
 		}
 
 		return result;
+	}
+
+	crg::FramePass & LayeredLightPropagationVolumesBase::doCreateDownsamplePass()
+	{
+		crg::FramePass * lastPass{ &m_clearInjectionPass };
+		auto extent = m_sourceSmResult[SmTexture::eNormal].getExtent();
+
+		for ( uint32_t i = uint32_t( SmTexture::eNormal ); i < uint32_t( SmTexture::eCount ); ++i )
+		{
+			auto smTexture = SmTexture( i );
+			auto & pass = m_graph.createPass( "LLpvDownsampleShadowMap/" + getTexName( smTexture )
+				, [extent]( crg::FramePass const & pass
+					, crg::GraphContext & context
+					, crg::RunnableGraph & graph )
+				{
+					return std::make_unique< crg::ImageBlit >( pass
+						, context
+						, graph
+						, VkOffset3D{}
+						, extent
+						, VkOffset3D{}
+						, VkExtent3D{ 512u, 512u, 1u }
+						, VK_FILTER_LINEAR );
+				} );
+			pass.addDependency( *lastPass );
+			pass.addTransferInputView( m_sourceSmResult[smTexture].wholeViewId );
+			pass.addTransferOutputView( m_downsampledSmResult[smTexture].wholeViewId );
+			lastPass = &pass;
+		}
+
+		return *lastPass;
 	}
 
 	crg::FramePass & LayeredLightPropagationVolumesBase::doCreatePropagationPass( std::vector< crg::FramePass const * > previousPasses

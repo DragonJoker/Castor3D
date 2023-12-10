@@ -6,15 +6,16 @@ See LICENSE file in root folder
 
 #include "LightPropagationVolumesModule.hpp"
 #include "Castor3D/Event/Frame/FrameEventModule.hpp"
+#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
 
 #include "Castor3D/Limits.hpp"
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
-#include "Castor3D/Miscellaneous/MiscellaneousModule.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/GeometryInjectionPass.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightInjectionPass.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
-#include "Castor3D/Render/ShadowMap/ShadowMapModule.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Shader/Ubos/LpvGridConfigUbo.hpp"
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
@@ -52,6 +53,7 @@ namespace castor3d
 
 	private:
 		crg::FramePass & doCreateClearInjectionPass();
+		crg::FramePass & doCreateDownsamplePass();
 		crg::FramePass & doCreatePropagationPass( std::vector< crg::FramePass const * > previousPasses
 			, std::string const & name
 			, LightVolumePassResult const & injection
@@ -64,7 +66,8 @@ namespace castor3d
 	private:
 		Scene const & m_scene;
 		RenderDevice const & m_device;
-		ShadowMapResult const & m_smResult;
+		ShadowMapResult const & m_sourceSmResult;
+		ShadowMapResult m_downsampledSmResult;
 		LightVolumePassResultArray const & m_lpvResult;
 		LayeredLpvGridConfigUbo & m_lpvGridConfigUbo;
 		std::array< castor::Grid const *, LpvMaxCascadesCount > m_grids;
@@ -121,6 +124,7 @@ namespace castor3d
 		};
 
 		crg::FramePass & m_clearInjectionPass;
+		crg::FramePass & m_downsamplePass;
 		std::unordered_map< Light *, LightLpv > m_lightLpvs;
 		std::vector< crg::FramePass * > m_lightPropagationPassesDesc;
 		std::vector< LightPropagationPass * > m_lightPropagationPasses;
