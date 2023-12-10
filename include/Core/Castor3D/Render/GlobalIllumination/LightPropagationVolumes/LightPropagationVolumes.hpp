@@ -15,6 +15,7 @@ See LICENSE file in root folder
 #include "Castor3D/Material/Texture/TextureUnit.hpp"
 #include "Castor3D/Render/GlobalIllumination/LightPropagationVolumes/LightVolumePassResult.hpp"
 #include "Castor3D/Render/Passes/CommandsSemaphore.hpp"
+#include "Castor3D/Render/ShadowMap/ShadowMapResult.hpp"
 #include "Castor3D/Shader/Ubos/LpvLightConfigUbo.hpp"
 
 #include <CastorUtils/Design/Named.hpp>
@@ -49,6 +50,7 @@ namespace castor3d
 
 	private:
 		crg::FramePass & doCreateClearPass();
+		crg::FramePass & doCreateDownsamplePass();
 		crg::FramePass & doCreatePropagationPass( std::vector< crg::FramePass const * > previousPasses
 			, std::string const & name
 			, LightVolumePassResult const & injection
@@ -60,7 +62,9 @@ namespace castor3d
 	private:
 		Scene const & m_scene;
 		RenderDevice const & m_device;
-		ShadowMapResult const & m_smResult;
+		ShadowMapResult const & m_sourceSmResult;
+		std::unique_ptr< ShadowMapResult > m_downsampledSmResult;
+		ShadowMapResult const * m_usedSmResult;
 		LightVolumePassResult const & m_lpvResult;
 		castor::Point4f m_gridsSize;
 		LpvGridConfigUbo & m_lpvGridConfigUbo;
@@ -74,7 +78,7 @@ namespace castor3d
 		struct LightLpv
 		{
 			LightLpv( crg::FrameGraph & graph
-				, crg::FramePass const & previousPass
+				, crg::FramePassArray const & previousPasses
 				, RenderDevice const & device
 				, castor::String const & name
 				, LightCache const & lightCache
@@ -89,6 +93,7 @@ namespace castor3d
 			LightCache const & lightCache;
 			std::vector< LpvLightConfigUbo > lpvLightConfigUbos;
 			crg::FramePass const * lastPass{};
+			crg::FramePassArray previousPasses{};
 			std::vector< LightInjectionPass * > lightInjectionPasses;
 			crg::FramePassArray lightInjectionPassDescs;
 			std::vector< GeometryInjectionPass * > geometryInjectionPasses;
@@ -143,6 +148,7 @@ namespace castor3d
 		using LightLpvPtr = std::unique_ptr< LightLpv >;
 
 		crg::FramePass & m_clearPass;
+		crg::FramePass * m_downsamplePass;
 		std::unordered_map< Light *, LightLpvPtr > m_lightLpvs;
 		std::vector< crg::FramePass * > m_lightPropagationPassesDesc;
 		std::vector< LightPropagationPass * > m_lightPropagationPasses;
