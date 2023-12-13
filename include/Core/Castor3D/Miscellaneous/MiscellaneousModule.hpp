@@ -300,14 +300,30 @@ namespace castor3d
 		, VkMemoryPropertyFlags flags
 		, std::string const & name );
 
-	C3D_API void setProgressBarTitle( ProgressBar * progress
+	C3D_API void initProgressBarGlobalRange( ProgressBar * progress
+		, uint32_t value );
+	C3D_API void stepProgressBarGlobal( ProgressBar * progress
+		, castor::String const & globalTitle );
+
+	C3D_API void initProgressBarLocalRange( ProgressBar * progress
+		, castor::String const & globalLabel
+		, uint32_t values );
+	C3D_API void stepProgressBarLocal( ProgressBar * progress
+		, castor::String const & localLabel );
+
+
+
+	C3D_API void setProgressBarGlobalLabel( ProgressBar * progress
 		, castor::String const & value );
-	C3D_API void setProgressBarLabel( ProgressBar * progress
+	C3D_API void stepProgressBarGlobal( ProgressBar * progress );
+
+
+	C3D_API void setProgressBarLocalTitle( ProgressBar * progress
 		, castor::String const & value );
-	C3D_API void stepProgressBar( ProgressBar * progress
-		, castor::String const & label );
-	C3D_API void stepProgressBar( ProgressBar * progress );
-	C3D_API void incProgressBarRange( ProgressBar * progress
+	C3D_API void setProgressBarLocalLabel( ProgressBar * progress
+		, castor::String const & value );
+	C3D_API void stepProgressBarLocal( ProgressBar * progress );
+	C3D_API void incProgressBarLocalRange( ProgressBar * progress
 		, int32_t value );
 
 	//@}

@@ -480,12 +480,6 @@ namespace castor3d
 			, ProgressBar * progress
 			, crg::FramePassArray previousPasses );
 		void doCleanupTechnique();
-		crg::FramePass const & doInitialiseCopyCommands( RenderDevice const & device
-			, castor::String const & name
-			, crg::ImageViewIdArray const & source
-			, crg::ImageViewId const & target
-			, crg::FramePass const & previousPass
-			, ProgressBar * progress );
 		void doCleanupCopyCommands();
 		void doInitCombineProgram( ProgressBar * progress );
 		void doCleanupCombineProgram();

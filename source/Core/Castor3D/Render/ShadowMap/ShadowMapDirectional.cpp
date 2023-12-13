@@ -204,7 +204,7 @@ namespace castor3d
 		}
 
 #endif
-		stepProgressBar( progress, "Creating ShadowMapDirectional" );
+		stepProgressBarLocal( progress, "Creating ShadowMapDirectional" );
 	}
 
 	crg::FramePassArray ShadowMapDirectional::doCreatePass( crg::FrameGraph & graph

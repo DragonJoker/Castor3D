@@ -27,7 +27,7 @@ namespace castor3d
 			, parent
 			, castor::Position{}
 			, castor::Size{}
-			, ControlFlagType( ProgressFlag::eLeftRight )
+			, ControlFlagType( ProgressFlag::eLeftRight | ProgressFlag::eHasTitle )
 			, true }
 		, m_value{ castor::makeRangedValue( 0, 0, 100 ) }
 	{
@@ -115,9 +115,12 @@ namespace castor3d
 
 	void ProgressCtrl::setTitle( castor::U32String value )
 	{
-		if ( auto title = m_title )
+		if ( hasTitle() )
 		{
-			title->setCaption( value );
+			if ( auto title = m_title )
+			{
+				title->setCaption( value );
+			}
 		}
 	}
 
@@ -185,6 +188,23 @@ namespace castor3d
 		addFlag( ProgressFlag::eBottomTop );
 	}
 
+	void ProgressCtrl::showTitle( bool show )noexcept
+	{
+		if ( show )
+		{
+			addFlag( ProgressFlag::eHasTitle );
+		}
+		else
+		{
+			removeFlag( ProgressFlag::eHasTitle );
+		}
+
+		if ( auto title = m_title )
+		{
+			title->setVisible( show );
+		}
+	}
+
 	void ProgressCtrl::doCreate()
 	{
 		CU_Require( getControlsManager() );
@@ -216,10 +236,13 @@ namespace castor3d
 		m_container->setStyle( &style.getContainerStyle() );
 		m_progress->setStyle( &style.getProgressStyle() );
 
-		if ( auto title = m_title )
+		if ( hasTitle() )
 		{
-			title->setFont( style.getTitleFontName() );
-			title->setMaterial( style.getTitleMaterial() );
+			if ( auto title = m_title )
+			{
+				title->setFont( style.getTitleFontName() );
+				title->setMaterial( style.getTitleMaterial() );
+			}
 		}
 
 		if ( auto text = m_text )
@@ -233,9 +256,12 @@ namespace castor3d
 	{
 		if ( isVertical() )
 		{
-			if ( auto title = m_title )
+			if ( hasTitle() )
 			{
-				title->setVisible( false );
+				if ( auto title = m_title )
+				{
+					title->setVisible( false );
+				}
 			}
 
 			if ( auto text = m_text )
@@ -245,12 +271,15 @@ namespace castor3d
 		}
 		else if ( isRightToLeft() )
 		{
-			if ( auto title = m_title )
+			if ( hasTitle() )
 			{
-				title->setHAlign( HAlign::eRight );
+				if ( auto title = m_title )
+				{
+					title->setHAlign( HAlign::eRight );
+				}
 			}
 		}
-		else
+		else if ( hasTitle() )
 		{
 			if ( auto title = m_title )
 			{
@@ -261,9 +290,12 @@ namespace castor3d
 
 	void ProgressCtrl::doUpdateZIndex( uint32_t & index )
 	{
-		if ( auto title = m_title )
+		if ( hasTitle() )
 		{
-			title->setOrder( index++, 0u );
+			if ( auto title = m_title )
+			{
+				title->setOrder( index++, 0u );
+			}
 		}
 
 		if ( auto text = m_text )
@@ -274,9 +306,12 @@ namespace castor3d
 
 	void ProgressCtrl::doAdjustZIndex( uint32_t offset )
 	{
-		if ( auto title = m_title )
+		if ( hasTitle() )
 		{
-			title->setOrder( title->getLevel() + offset, 0u );
+			if ( auto title = m_title )
+			{
+				title->setOrder( title->getLevel() + offset, 0u );
+			}
 		}
 
 		if ( auto text = m_text )
@@ -309,9 +344,12 @@ namespace castor3d
 
 	void ProgressCtrl::doSetVisible( bool value )
 	{
-		if ( auto title = m_title )
+		if ( hasTitle() )
 		{
-			title->setVisible( value && !isVertical() );
+			if ( auto title = m_title )
+			{
+				title->setVisible( value && !isVertical() );
+			}
 		}
 
 		if ( m_container )
@@ -339,16 +377,19 @@ namespace castor3d
 
 		if ( !isVertical() )
 		{
-			if ( auto title = m_title )
+			if ( hasTitle() )
 			{
-				auto titleHeight = ( title->getFontTexture() && title->getFontTexture()->getFont() )
-					? title->getFontTexture()->getFont()->getHeight()
-					: 0u;
-				auto titleOffset = titleHeight / 2u;
-				titleHeight += titleOffset;
-				title->setPixelPosition( clientOffset );
-				title->setPixelSize( { clientSize->x, titleHeight } );
-				top += titleHeight;
+				if ( auto title = m_title )
+				{
+					auto titleHeight = ( title->getFontTexture() && title->getFontTexture()->getFont() )
+						? title->getFontTexture()->getFont()->getHeight()
+						: 0u;
+					auto titleOffset = titleHeight / 2u;
+					titleHeight += titleOffset;
+					title->setPixelPosition( clientOffset );
+					title->setPixelSize( { clientSize->x, titleHeight } );
+					top += titleHeight;
+				}
 			}
 		}
 

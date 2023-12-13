@@ -156,6 +156,7 @@ namespace castor3d
 	CU_DeclareAttributeParser( parserProgressRightToLeft )
 	CU_DeclareAttributeParser( parserProgressTopToBottom )
 	CU_DeclareAttributeParser( parserProgressBottomToTop )
+	CU_DeclareAttributeParser( parserProgressHideTitle )
 	CU_DeclareAttributeParser( parserExpandablePanel )
 	CU_DeclareAttributeParser( parserExpandablePanelTheme )
 	CU_DeclareAttributeParser( parserExpandablePanelStyle )

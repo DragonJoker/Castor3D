@@ -459,7 +459,7 @@ namespace castor3d
 			}
 
 			auto progress = m_progressBar.get();
-			incProgressBarRange( progress
+			incProgressBarGlobalRange( progress
 				, int32_t( 6u + m_renderTarget->countInitialisationSteps() ) );
 			getEngine()->postEvent( makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 				, [this]()
@@ -467,20 +467,20 @@ namespace castor3d
 					if ( m_renderTarget )
 					{
 						auto progress = m_progressBar.get();
-						setProgressBarTitle( progress, "Initialising: Render Window" );
+						setProgressBarGlobalLabel( progress, "Initialising: Render Window" );
 						m_renderTarget->initialise( [this, progress]( RenderTarget const & rt, QueueData const & queue )
 							{
-								stepProgressBar( progress, "Loading picking" );
+								stepProgressBarLocal( progress, "Loading picking" );
 								doCreatePickingPass( queue );
-								stepProgressBar( progress, "Loading intermediate views" );
+								stepProgressBarLocal( progress, "Loading intermediate views" );
 								doCreateIntermediateViews( queue );
-								stepProgressBar( progress, "Loading combine quad" );
+								stepProgressBarLocal( progress, "Loading combine quad" );
 								doCreateRenderQuad( queue );
-								stepProgressBar( progress, "Loading command buffers" );
+								stepProgressBarLocal( progress, "Loading command buffers" );
 								doCreateCommandBuffers( queue );
-								stepProgressBar( progress, "Loading save data" );
+								stepProgressBarLocal( progress, "Loading save data" );
 								doCreateSaveData( queue );
-								stepProgressBar( progress, "Finalising..." );
+								stepProgressBarLocal( progress, "Finalising..." );
 
 								getListener()->postEvent( makeCpuFunctorEvent( CpuEventType::ePostCpuStep
 									, [this]()
@@ -1233,18 +1233,21 @@ namespace castor3d
 		}
 
 		auto & manager = static_cast< ControlsManager & >( *getEngine()->getUserInputListener() );
-		auto control = manager.findControl( cuT( "C3D_LoadingScreen/Progress" ) );
+		auto global = manager.findControl( cuT( "C3D_LoadingScreen/GlobalProgress" ) );
+		auto local = manager.findControl( cuT( "C3D_LoadingScreen/LocalProgress" ) );
 
 		if ( !m_progressBar )
 		{
 			m_progressBar = castor::makeUnique< ProgressBar >( *getEngine()
-				, static_cast< ProgressCtrl * >( control ) );
-			m_progressBar->setTitle( "Initialising..." );
-			m_progressBar->setLabel( "" );
+				, static_cast< ProgressCtrl * >( global )
+				, static_cast< ProgressCtrl * >(  local ) );
+			m_progressBar->setGlobalTitle( "Initialising..." );
+			m_progressBar->setGlobalLabel( "" );
 		}
 		else
 		{
-			m_progressBar->update( static_cast< ProgressCtrl * >( control ) );
+			m_progressBar->update( static_cast< ProgressCtrl * >( global )
+				, static_cast< ProgressCtrl * >( local ) );
 		}
 
 		m_loadingScreen = castor::makeUnique< LoadingScreen >( *m_progressBar

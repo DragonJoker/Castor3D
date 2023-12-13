@@ -453,7 +453,7 @@ namespace castor3d
 		, m_configurationUbo{ m_device.uboPool->getBuffer< Configuration >( 0u ) }
 		, m_programs{ Program{ device, false, m_graph.getName() }, Program{ device, true, m_graph.getName() } }
 	{
-		stepProgressBar( progress, "Creating " + m_graph.getName() + " SSAO " + prefix + " blur pass" );
+		stepProgressBarLocal( progress, "Creating " + m_graph.getName() + " SSAO " + prefix + " blur pass" );
 		auto & configuration = m_configurationUbo.getData();
 		configuration.axis = axis;
 		auto & pass = m_graph.createPass( "Blur" + prefix
@@ -461,7 +461,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising SSAO " + prefix + " blur pass" );
+				stepProgressBarLocal( progress, "Initialising SSAO " + prefix + " blur pass" );
 				auto bentResIt = pass.images.rbegin();
 				auto resIt = std::next( bentResIt );
 				auto result = std::make_unique< RenderQuad >( pass

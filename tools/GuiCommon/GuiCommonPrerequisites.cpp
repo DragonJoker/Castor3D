@@ -250,14 +250,17 @@ namespace GuiCommon
 
 					if ( progress )
 					{
-						progress->setTitle( "Initialising: Scene" );
-						progress->setLabel( "Loading scene..." );
-						progress->setRange( int32_t( preprocessed.getCount() ) );
+						progress->setGlobalTitle( "Initialising: Scene" );
+						progress->setGlobalLabel( "Loading scene..." );
+						progress->incGlobalRange( 1u );
+
+						progress->setLocalLabel( "Parsing scene file..." );
+						progress->setLocalRange( int32_t( preprocessed.getCount() ) );
 					}
 
 					auto connection = preprocessed.onAction.connect( [progress]( castor::PreprocessedFile::Action const & action )
 						{
-							castor3d::stepProgressBar( progress );
+							castor3d::stepProgressBarLocal( progress );
 						} );
 
 					if ( preprocessed.parse() )

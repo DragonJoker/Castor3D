@@ -346,6 +346,7 @@ namespace castor3d
 			addParserT( result, GUISection::eProgress, cuT( "right_to_left" ), &parserProgressRightToLeft, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParserT( result, GUISection::eProgress, cuT( "top_to_bottom" ), &parserProgressTopToBottom, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 			addParserT( result, GUISection::eProgress, cuT( "bottom_to_top" ), &parserProgressBottomToTop, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
+			addParserT( result, GUISection::eProgress, cuT( "hide_title" ), &parserProgressHideTitle, { makeDefaultedParameter< ParameterType::eBool >( true ) } );
 
 			createDefaultStyleParsers( result, GUISection::eProgressStyle );
 			addParserT( result, GUISection::eProgressStyle, cuT( "title_font" ), &parserStyleProgressTitleFont, { makeParameter< ParameterType::eName >() } );

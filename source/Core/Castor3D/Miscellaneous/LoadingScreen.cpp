@@ -290,6 +290,7 @@ namespace castor3d
 		, m_windowPassDesc{ &doCreateWindowPass( m_overlayPassDesc ) }
 		, m_runnable{ loadscreen::createRunnableGraph( *m_graph, m_device ) }
 	{
+		m_device.renderSystem.getEngine()->getControlsManager()->setSize( m_renderSize );
 	}
 
 	LoadingScreen::~LoadingScreen()

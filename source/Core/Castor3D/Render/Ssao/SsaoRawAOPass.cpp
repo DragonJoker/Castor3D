@@ -585,13 +585,13 @@ namespace castor3d
 		, m_programs{ Program{ device, false, m_graph.getName() }
 			, Program{ device, true, m_graph.getName() } }
 	{
-		stepProgressBar( progress, "Creating SSAO raw AO pass" );
+		stepProgressBarLocal( progress, "Creating SSAO raw AO pass" );
 		auto & pass = m_graph.createPass( "RawAO"
 			, [this, &passIndex, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising SSAO raw AO pass" );
+				stepProgressBarLocal( progress, "Initialising SSAO raw AO pass" );
 				auto result = std::make_unique< RenderQuad >( pass
 					, context
 					, graph

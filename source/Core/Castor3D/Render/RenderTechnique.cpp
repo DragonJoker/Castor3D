@@ -250,14 +250,14 @@ namespace castor3d
 				}
 			};
 
-			stepProgressBar( progress, "Creating clear LPV commands" );
+			stepProgressBarLocal( progress, "Creating clear LPV commands" );
 			crg::FrameGraph result{ resources.getHandler(), name + "/ClearLpv" };
 			auto & pass = result.createPass( name + "LpvClear"
 				, [progress]( crg::FramePass const & framePass
 					, crg::GraphContext & context
 					, crg::RunnableGraph & runnableGraph )
 				{
-					stepProgressBar( progress, "Initialising clear LPV commands" );
+					stepProgressBarLocal( progress, "Initialising clear LPV commands" );
 					return std::make_unique< LpvClear >( framePass
 						, context
 						, runnableGraph );

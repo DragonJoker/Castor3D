@@ -54,7 +54,7 @@ loading_screen
 				foreground_invisible true
 				title_font "Arial16"
 				title_material "Black"
-				text_font "Arial10"
+				text_font "Arial12"
 				text_material "Black"
 
 				container_style
@@ -81,6 +81,7 @@ loading_screen
 			{
 				theme "C3D_Invisible"
 				pixel_size 128 128
+				pixel_position 5 5
 
 				panel "PufiWalk2D"
 				{
@@ -101,10 +102,21 @@ loading_screen
 				}
 			}
 
-			progress "Progress"
+			progress "GlobalProgress"
 			{
 				theme "C3D_LoadingScreen"
 				pixel_size 264 64
+				pixel_position 5 138
+				container_border_size 4 4 4 4
+				bar_border_size 0 0 0 0
+			}
+
+			progress "LocalProgress"
+			{
+				theme "C3D_LoadingScreen"
+				hide_title true
+				pixel_size 264 44
+				pixel_position 5 207
 				container_border_size 4 4 4 4
 				bar_border_size 0 0 0 0
 			}
@@ -117,7 +129,13 @@ loading_screen
 					stretch true
 					padding 5 5 5 5
 				}
-				layout_ctrl "Progress"
+				layout_ctrl "GlobalProgress"
+				{
+					horizontal_align center
+					stretch true
+					padding 5 5 5 5
+				}
+				layout_ctrl "LocalProgress"
 				{
 					horizontal_align center
 					stretch true

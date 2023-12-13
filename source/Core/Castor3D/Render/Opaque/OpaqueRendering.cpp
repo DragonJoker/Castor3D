@@ -259,11 +259,11 @@ namespace castor3d
 	{
 		if ( isDeferredLighting )
 		{
-			stepProgressBar( progress, "Creating deferred visibility resolve pass" );
+			stepProgressBarLocal( progress, "Creating deferred visibility resolve pass" );
 		}
 		else
 		{
-			stepProgressBar( progress, "Creating visibility resolve pass" );
+			stepProgressBarLocal( progress, "Creating visibility resolve pass" );
 		}
 
 		auto targetResult = getOwner()->getTargetResult();
@@ -275,11 +275,11 @@ namespace castor3d
 			{
 				if ( isDeferredLighting )
 				{
-					stepProgressBar( progress, "Initialising deferred visibility resolve pass" );
+					stepProgressBarLocal( progress, "Initialising deferred visibility resolve pass" );
 				}
 				else
 				{
-					stepProgressBar( progress, "Initialising visibility resolve pass" );
+					stepProgressBarLocal( progress, "Initialising visibility resolve pass" );
 				}
 
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
@@ -398,7 +398,7 @@ namespace castor3d
 		, crg::FramePass const & lastPass
 		, crg::FramePassArray const & previousPasses )
 	{
-		stepProgressBar( progress, "Creating visibility opaque pass" );
+		stepProgressBarLocal( progress, "Creating visibility opaque pass" );
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "PostVisibilityNodesPass"
@@ -406,7 +406,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising visibility opaque pass" );
+				stepProgressBarLocal( progress, "Initialising visibility opaque pass" );
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };
 				RenderNodesPassDesc renderPassDesc{ getOwner()->getTargetExtent()
 					, getOwner()->getCameraUbo()
@@ -461,11 +461,11 @@ namespace castor3d
 	{
 		if ( isDeferredLighting )
 		{
-			stepProgressBar( progress, "Creating deferred opaque pass" );
+			stepProgressBarLocal( progress, "Creating deferred opaque pass" );
 		}
 		else
 		{
-			stepProgressBar( progress, "Creating opaque pass" );
+			stepProgressBarLocal( progress, "Creating opaque pass" );
 		}
 
 		auto targetResult = getOwner()->getTargetResult();
@@ -477,11 +477,11 @@ namespace castor3d
 			{
 				if ( isDeferredLighting )
 				{
-					stepProgressBar( progress, "Initialising deferred opaque pass" );
+					stepProgressBarLocal( progress, "Initialising deferred opaque pass" );
 				}
 				else
 				{
-					stepProgressBar( progress, "Initialising opaque pass" );
+					stepProgressBarLocal( progress, "Initialising opaque pass" );
 				}
 
 				RenderTechniquePassDesc techniquePassDesc{ false, getOwner()->getSsaoConfig() };

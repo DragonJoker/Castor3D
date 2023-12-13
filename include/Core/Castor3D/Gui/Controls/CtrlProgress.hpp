@@ -34,6 +34,7 @@ namespace castor3d
 		C3D_API void setRightToLeft()noexcept;
 		C3D_API void setTopToBottom()noexcept;
 		C3D_API void setBottomToTop()noexcept;
+		C3D_API void showTitle( bool show )noexcept;
 
 		castor::Range< int32_t > const & getRange()const noexcept
 		{
@@ -68,6 +69,11 @@ namespace castor3d
 		bool isBottomToTop()const noexcept
 		{
 			return castor::checkFlag( getFlags(), ProgressFlag::eBottomTop );
+		}
+
+		bool hasTitle()const noexcept
+		{
+			return castor::checkFlag( getFlags(), ProgressFlag::eHasTitle );
 		}
 
 		bool isVertical()const noexcept

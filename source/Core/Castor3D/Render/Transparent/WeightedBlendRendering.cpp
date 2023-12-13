@@ -169,13 +169,13 @@ namespace castor3d
 		, HdrConfigUbo const & hdrConfigUbo
 		, ProgressBar * progress )
 	{
-		stepProgressBar( progress, "Creating transparent resolve pass" );
+		stepProgressBarLocal( progress, "Creating transparent resolve pass" );
 		auto & result = graph.createPass( "Combine"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising transparent resolve pass" );
+				stepProgressBarLocal( progress, "Initialising transparent resolve pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_size ) )
