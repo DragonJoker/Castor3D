@@ -281,6 +281,8 @@ if ( MSVC OR NOT "${CMAKE_BUILD_TYPE}" STREQUAL "" )
 		add_subdirectory( test )
 	endif()
 
+	file( COPY_FILE ${CASTOR_EDITORCONFIG_FILE} ${CMAKE_CURRENT_BINARY_DIR}/.editorconfig )
+
 	if ( WIN32 AND VCPKG_TOOLCHAIN AND NOT VCPKG_BUILD )
 		if ( CASTOR_FORCE_VCPKG_SUBMODULES )
 			macro( install_additional_headers _FOLDER )
