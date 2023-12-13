@@ -154,13 +154,13 @@ namespace castor3d
 		}
 
 		m_mippedColour.create();
-		stepProgressBar( progress, "Creating colour copy pass" );
+		stepProgressBarLocal( progress, "Creating colour copy pass" );
 		auto & copy = m_graph.createPass( "ColCopyPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising colour copy pass" );
+				stepProgressBarLocal( progress, "Initialising colour copy pass" );
 				auto res = std::make_unique< crg::ImageCopy >( framePass
 					, context
 					, runnableGraph
@@ -181,7 +181,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising mips generation pass" );
+				stepProgressBarLocal( progress, "Initialising mips generation pass" );
 				auto res = std::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
@@ -201,7 +201,7 @@ namespace castor3d
 	crg::FramePass & TransparentRendering::doCreateForwardTransparentPass( ProgressBar * progress
 		, crg::FramePass const & lastPass )
 	{
-		stepProgressBar( progress, "Creating transparent pass" );
+		stepProgressBarLocal( progress, "Creating transparent pass" );
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
@@ -209,7 +209,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising transparent pass" );
+				stepProgressBarLocal( progress, "Initialising transparent pass" );
 				static constexpr bool isOit = false;
 				static constexpr bool hasVelocity = false;
 				auto res = std::make_unique< ForwardRenderTechniquePass >( getOwner()
@@ -252,7 +252,7 @@ namespace castor3d
 	crg::FramePass & TransparentRendering::doCreateWBTransparentPass( ProgressBar * progress
 		, crg::FramePass const & lastPass )
 	{
-		stepProgressBar( progress, "Creating transparent pass" );
+		stepProgressBarLocal( progress, "Creating transparent pass" );
 		auto targetResult = getOwner()->getTargetResult();
 		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "NodesPass"
@@ -260,7 +260,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising transparent pass" );
+				stepProgressBarLocal( progress, "Initialising transparent pass" );
 				castor::String name = cuT( "Accumulation" );
 				static constexpr bool isOit = true;
 				static constexpr bool hasVelocity = false;

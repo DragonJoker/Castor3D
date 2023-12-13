@@ -816,6 +816,19 @@ namespace castor3d
 	}
 	CU_EndAttribute()
 
+	CU_ImplementAttributeParser( parserProgressHideTitle )
+	{
+		if ( auto progress = guiparse::getParserContext( context ).progress )
+		{
+			progress->showTitle( !params[0]->get< bool >() );
+		}
+		else
+		{
+			CU_ParsingError( cuT( "No progress control initialised." ) );
+		}
+	}
+	CU_EndAttribute()
+
 	CU_ImplementAttributeParser( parserExpandablePanel )
 	{
 		auto & guiContext = guiparse::getParserContext( context );

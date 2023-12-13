@@ -398,7 +398,7 @@ namespace castor3d
 		weights.blurWeights[2] = castor::Point4f{ 0.46, 0.0, 0.0402, 0.25 };
 		weights.blurVariance = castor::Point4f{ 0.0516, 0.2719, 2.0062 };
 		auto blurXSource = &m_diffuse;
-		stepProgressBar( progress, "Creating SSSSS Blur passes" );
+		stepProgressBarLocal( progress, "Creating SSSSS Blur passes" );
 		auto & modelBuffer = scene.getModelBuffer().getBuffer();
 
 		for ( uint32_t i = 0u; i < PassCount; ++i )
@@ -477,13 +477,13 @@ namespace castor3d
 			blurXSource = blurYDestination;
 		}
 
-		stepProgressBar( progress, "Creating SSSSS combine pass" );
+		stepProgressBarLocal( progress, "Creating SSSSS combine pass" );
 		auto & pass = m_group.createPass("Combine"
 			, [this, progress, &isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising SSSSS combine pass" );
+				stepProgressBarLocal( progress, "Initialising SSSSS combine pass" );
 				auto extent = m_result.getExtent();
 				auto ruConfig = crg::ru::Config{}
 					.implicitAction( m_result.wholeViewId

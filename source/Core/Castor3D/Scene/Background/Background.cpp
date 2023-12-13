@@ -441,7 +441,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising background pass" );
+				stepProgressBarLocal( progress, "Initialising background pass" );
 				auto res = std::make_unique< back::BackgroundPass >( framePass
 					, context
 					, runnableGraph

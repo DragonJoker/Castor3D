@@ -495,16 +495,13 @@ namespace castor3d
 
 	uint32_t RenderTarget::countInitialisationSteps()const
 	{
-		uint32_t result = 0u;
-		result += 1; // combine program
-		result += RenderTechnique::countInitialisationSteps();
-		result += uint32_t( m_hdrPostEffects.size() );
-		result += 2; // HDR copy commands
-		result += 2; // tone mapping
-		result += uint32_t( m_srgbPostEffects.size() );
-		result += 2; // SRGB copy commands
-		result += 1; // compiling render graph
-		result += 1; // overlay renderer
+		uint32_t result = 1u; // render technique
+		result += 1u; // Meshes
+		result += 1u; // HDR post effects
+		result += 1u; // SRGB post effects
+		result += 1u; // compiling render graph
+		result += 1u; // overlay renderer
+		result += 1u; // other passes
 		return result;
 	}
 
@@ -932,6 +929,7 @@ namespace castor3d
 		, QueueData const & queueData
 		, ProgressBar * progress )
 	{
+		stepProgressBarGlobal( progress, "Initialising: Render Target" );
 		m_hdrConfigUbo = std::make_unique< HdrConfigUbo >( device );
 		m_colourGradingUbo = std::make_unique< ColourGradingUbo >( device );
 		m_culler = castor::makeUniqueDerived< SceneCuller, FrustumCuller >( *getScene(), *getCamera() );
@@ -944,8 +942,12 @@ namespace castor3d
 		doInitCombineProgram( progress );
 		crg::FramePassArray passes;
 
+		initProgressBarLocalRange( progress
+			, "Initialising: Meshes"
+			, getScene()->getMeshCache().getObjectCount() );
 		for ( auto & mesh : getScene()->getMeshCache() )
 		{
+			stepProgressBarLocal( progress, mesh.first );
 			passes = mesh.second->record( m_resources
 				, m_graph
 				, passes );
@@ -959,19 +961,21 @@ namespace castor3d
 			return;
 		}
 
-		setProgressBarTitle( progress, "Initialising: Render Target" );
 		auto * previousPass = &m_renderTechnique->getLastPass();
 		auto hdrSource = &m_hdrObjects.front();
 		auto hdrTarget = &m_hdrObjects.back();
 
 		if ( !m_hdrPostEffects.empty() )
 		{
+			initProgressBarLocalRange( progress
+				, "Creating: HDR Post effects"
+				, m_hdrPostEffects.size() );
 			for ( auto & effect : m_hdrPostEffects )
 			{
 				if ( result
 					&& ( isFullLoadingEnabled() || effect->isEnabled() ) )
 				{
-					stepProgressBar( progress, "Initialising post effect " + effect->getName() );
+					stepProgressBarLocal( progress, effect->getName() );
 					result = effect->initialise( device
 						, *hdrSource
 						, *hdrTarget
@@ -985,7 +989,9 @@ namespace castor3d
 		if ( result )
 		{
 			m_hdrLastPass = previousPass;
-			stepProgressBar( progress, "Creating tone mapping pass" );
+			initProgressBarLocalRange( progress
+				, "Creating: Tone Mapping"
+				, m_hdrPostEffects.size() );
 			m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
 				, device
 				, m_size
@@ -1007,12 +1013,15 @@ namespace castor3d
 
 		if ( !m_srgbPostEffects.empty() )
 		{
+			initProgressBarLocalRange( progress
+				, "Creating: SRGB Post effects"
+				, m_srgbPostEffects.size() );
 			for ( auto & effect : m_srgbPostEffects )
 			{
 				if ( result
 					&& ( isFullLoadingEnabled() || effect->isEnabled() ) )
 				{
-					stepProgressBar( progress, "Initialising post effect " + effect->getName() );
+					stepProgressBarLocal( progress, effect->getName() );
 					result = effect->initialise( device
 						, *srgbSource
 						, *srgbTarget
@@ -1023,6 +1032,10 @@ namespace castor3d
 			}
 		}
 
+		initProgressBarLocalRange( progress
+			, "Creating: Other Passes"
+			, 2u );
+
 		if ( result )
 		{
 			m_combinePassSource = srgbSource;
@@ -1030,7 +1043,7 @@ namespace castor3d
 				, crg::ImageViewIdArray{ srgbSource->sampledViewId, srgbTarget->sampledViewId } );
 			m_combinePass->addDependency( *previousPass );
 
-			stepProgressBar( progress, "Compiling render graph" );
+			stepProgressBarLocal( progress, "Compiling render graph" );
 			m_runnable = m_graph.compile( device.makeContext() );
 			getEngine()->registerTimer( m_runnable->getName() + "/Graph"
 				, m_runnable->getTimer() );
@@ -1057,7 +1070,7 @@ namespace castor3d
 			m_debugDrawer = castor::makeUnique< DebugDrawer >(*this, device, m_combined, m_renderTechnique->getDepth() );
 		}
 
-		stepProgressBar( progress, "Creating overlay renderer" );
+		stepProgressBarLocal( progress, "Creating overlay renderer" );
 		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
 		getEngine()->registerTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 #if C3D_DebugTimers
@@ -1073,14 +1086,14 @@ namespace castor3d
 	crg::FramePass & RenderTarget::doCreateOverlayPass( ProgressBar * progress
 		, RenderDevice const & device )
 	{
-		stepProgressBar( progress, "Creating overlays pass" );
+		stepProgressBarLocal( progress, "Creating overlays pass" );
 		auto & group = m_graph.createPassGroup( "Overlays" );
 		auto & result = group.createPass( "Overlays"
 			, [this, progress, &device]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising overlays pass" );
+				stepProgressBarLocal( progress, "Initialising overlays pass" );
 				auto result = std::make_unique< OverlayPass >( pass
 					, context
 					, graph
@@ -1103,13 +1116,13 @@ namespace castor3d
 	crg::FramePass & RenderTarget::doCreateCombinePass( ProgressBar * progress
 		, crg::ImageViewIdArray source )
 	{
-		stepProgressBar( progress, "Creating combine pass" );
+		stepProgressBarLocal( progress, "Creating combine pass" );
 		auto & result = m_graph.createPass( "Other/Combine"
 			, [this, progress]( crg::FramePass const & pass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising combine pass" );
+				stepProgressBarLocal( progress, "Initialising combine pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( m_combined.getExtent() ) )
@@ -1141,7 +1154,9 @@ namespace castor3d
 		{
 			try
 			{
-				setProgressBarTitle( progress, "Initialising: Render Technique" );
+				initProgressBarLocalRange( progress
+					, "Initialising: Render Technique"
+					, RenderTechnique::countInitialisationSteps() );
 				m_renderTechnique = castor::makeUnique< RenderTechnique >( getName()
 					, *this
 					, device
@@ -1170,43 +1185,12 @@ namespace castor3d
 		m_renderTechnique.reset();
 	}
 
-	crg::FramePass const & RenderTarget::doInitialiseCopyCommands( RenderDevice const & device
-		, castor::String const & name
-		, crg::ImageViewIdArray const & source
-		, crg::ImageViewId const & target
-		, crg::FramePass const & previousPass
-		, ProgressBar * progress )
-	{
-		stepProgressBar( progress, "Creating " + name + " copy commands" );
-		auto & pass = m_graph.createPass( "Other/" + name + "Copy"
-			, [this, progress, name]( crg::FramePass const & pass
-				, crg::GraphContext & context
-				, crg::RunnableGraph & graph )
-			{
-				stepProgressBar( progress, "Initialising " + name + " copy commands" );
-				auto result = std::make_unique< crg::ImageCopy >( pass
-					, context
-					, graph
-					, getSafeBandedExtent3D( m_size )
-					, crg::ru::Config{ 2u}
-					, crg::RunnablePass::GetPassIndexCallback( [this]() { return m_hdrCopyPassIndex; } ) );
-				getOwner()->registerTimer( pass.getFullName()
-					, result->getTimer() );
-				return result;
-			} );
-		pass.addDependency( previousPass );
-		pass.addTransferInputView( source );
-		pass.addTransferOutputView( target );
-		return pass;
-	}
-
 	void RenderTarget::doCleanupCopyCommands()
 	{
 	}
 
 	void RenderTarget::doInitCombineProgram( ProgressBar * progress )
 	{
-		stepProgressBar( progress, "Creating combine program" );
 		auto & renderSystem = *getEngine()->getRenderSystem();
 		auto bandSize = double( castor3d::getSafeBandSize(m_size ) );
 		auto bandedSize = castor3d::getSafeBandedExtent3D(m_size );

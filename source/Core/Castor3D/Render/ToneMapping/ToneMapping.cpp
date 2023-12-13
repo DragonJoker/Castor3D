@@ -95,7 +95,7 @@ namespace castor3d
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising tone mapping pass" );
+				stepProgressBarLocal( progress, "Initialising tone mapping pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.renderPosition( {} )
 					.renderSize( makeExtent2D( getExtent( target ) ) )

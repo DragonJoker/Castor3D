@@ -242,6 +242,8 @@ namespace castor3d
 		eTopBottom = 0x0000004000000000,
 		// The progress is shown from bottom to top.
 		eBottomTop = 0x0000008000000000,
+		// The progress has a title.
+		eHasTitle = 0x0000010000000000,
 	};
 	CU_ImplementFlags( ProgressFlag )
 	/**

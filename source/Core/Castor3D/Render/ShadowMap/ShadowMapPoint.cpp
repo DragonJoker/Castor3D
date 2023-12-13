@@ -92,7 +92,7 @@ namespace castor3d
 			, getFormat( m_blurIntermediate )
 			, { VK_IMAGE_ASPECT_COLOR_BIT, 0u, 1u, 0u, 1u } } ) }
 	{
-		stepProgressBar( progress, "Creating ShadowMapPoint" );
+		stepProgressBarLocal( progress, "Creating ShadowMapPoint" );
 	}
 
 	crg::FramePassArray ShadowMapPoint::doCreatePass( crg::FrameGraph & graph

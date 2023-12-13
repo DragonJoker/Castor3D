@@ -229,13 +229,13 @@ namespace castor3d
 		, crg::FramePassArray const & previousPasses
 		, Texture const & depthObj )
 	{
-		stepProgressBar( progress, "Creating linearised depth extraction pass" );
+		stepProgressBarLocal( progress, "Creating linearised depth extraction pass" );
 		auto & pass = m_graph.createPass( "ExtractDepth"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & graph )
 			{
-				stepProgressBar( progress, "Initialising linearised depth extraction pass" );
+				stepProgressBarLocal( progress, "Initialising linearised depth extraction pass" );
 				auto result = crg::RenderQuadBuilder{}
 					.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_extractStages ) )
 					.renderSize( m_size )
@@ -260,7 +260,7 @@ namespace castor3d
 
 		for ( auto index = 0u; index < MaxLinearizedDepthMipLevel; ++index )
 		{
-			stepProgressBar( progress, "Creating depth minify pass " + std::to_string( index ) );
+			stepProgressBarLocal( progress, "Creating depth minify pass " + std::to_string( index ) );
 			m_previousLevel.push_back( m_device.uboPool->getBuffer< castor::Point2i >( 0u ) );
 			auto & previousLevel = m_previousLevel.back();
 			auto & data = previousLevel.getData();
@@ -284,7 +284,7 @@ namespace castor3d
 					, crg::GraphContext & context
 					, crg::RunnableGraph & graph )
 				{
-					stepProgressBar( progress, "Initialising depth minify pass" );
+					stepProgressBarLocal( progress, "Initialising depth minify pass" );
 					auto result = crg::RenderQuadBuilder{}
 						.program( crg::makeVkArray< VkPipelineShaderStageCreateInfo >( m_minifyStages ) )
 						.renderSize( size )

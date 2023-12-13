@@ -137,7 +137,7 @@ namespace castor3d
 	crg::FramePass & PrepassRendering::doCreateVisibilityPass( ProgressBar * progress
 		, crg::FramePassArray const & previousPasses )
 	{
-		stepProgressBar( progress, "Creating depth/visibility pass" );
+		stepProgressBarLocal( progress, "Creating depth/visibility pass" );
 		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "VisibilityPass"
 			, [this, progress, targetDepth]( crg::FramePass const & framePass
@@ -149,7 +149,7 @@ namespace castor3d
 				auto dataIt = std::next( depthObjIt );
 				auto velocityIt = std::next( dataIt );
 				auto normalIt = std::next( velocityIt );
-				stepProgressBar( progress, "Initialising depth/visibility pass" );
+				stepProgressBarLocal( progress, "Initialising depth/visibility pass" );
 				auto res = std::make_unique< VisibilityPass >( getOwner()
 					, framePass
 					, context
@@ -200,7 +200,7 @@ namespace castor3d
 	crg::FramePass & PrepassRendering::doCreateDepthPass( ProgressBar * progress
 		, crg::FramePassArray const & previousPasses )
 	{
-		stepProgressBar( progress, "Creating forward depth pass" );
+		stepProgressBarLocal( progress, "Creating forward depth pass" );
 		auto targetDepth = getOwner()->getTargetDepth();
 		auto & result = m_graph.createPass( "Depth"
 			, [this, progress, targetDepth]( crg::FramePass const & framePass
@@ -211,7 +211,7 @@ namespace castor3d
 				auto depthObjIt = std::next( depthIt );
 				auto velocityIt = std::next( depthObjIt );
 				auto normalIt = std::next( velocityIt );
-				stepProgressBar( progress, "Initialising forward depth pass" );
+				stepProgressBarLocal( progress, "Initialising forward depth pass" );
 				auto res = std::make_unique< DepthPass >( getOwner()
 					, framePass
 					, context
@@ -257,13 +257,13 @@ namespace castor3d
 
 	crg::FramePass & PrepassRendering::doCreateComputeDepthRange( ProgressBar * progress )
 	{
-		stepProgressBar( progress, "Creating compute depth range pass" );
+		stepProgressBarLocal( progress, "Creating compute depth range pass" );
 		auto & result = m_graph.createPass( "ComputeDepthRange"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising compute depth range pass" );
+				stepProgressBarLocal( progress, "Initialising compute depth range pass" );
 				auto res = std::make_unique< ComputeDepthRange >( framePass
 					, context
 					, runnableGraph

@@ -276,13 +276,13 @@ namespace castor3d
 			name = "Static" + name;
 		}
 
-		stepProgressBar( progress, "Creating voxelize pass" );
+		stepProgressBarLocal( progress, "Creating voxelize pass" );
 		auto & result = m_graph.createPass( name
 			, [this, progress, isStatic, &outVoxels, &culler]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising voxelize pass" );
+				stepProgressBarLocal( progress, "Initialising voxelize pass" );
 				auto res = std::make_unique< VoxelizePass >( framePass
 					, context
 					, runnableGraph
@@ -332,13 +332,13 @@ namespace castor3d
 	crg::FramePass & Voxelizer::doCreateClearStaticsPass( crg::FramePassArray const & previousPasses
 		, ProgressBar * progress )
 	{
-		stepProgressBar( progress, "Creating clear static pass" );
+		stepProgressBarLocal( progress, "Creating clear static pass" );
 		auto & result = m_graph.createPass( "StaticsClearPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising clear static pass" );
+				stepProgressBarLocal( progress, "Initialising clear static pass" );
 				auto res = std::make_unique< vxlsr::VoxelsClear >( framePass
 					, context
 					, runnableGraph
@@ -358,13 +358,13 @@ namespace castor3d
 	crg::FramePass & Voxelizer::doCreateMergeStaticsPass( crg::FramePass const & previousPass
 		, ProgressBar * progress )
 	{
-		stepProgressBar( progress, "Creating copy static to dynamic pass" );
+		stepProgressBarLocal( progress, "Creating copy static to dynamic pass" );
 		auto & result = m_graph.createPass( "StaticsCopyPass"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising copy static to dynamic pass" );
+				stepProgressBarLocal( progress, "Initialising copy static to dynamic pass" );
 				auto res = std::make_unique< crg::BufferCopy >( framePass
 					, context
 					, runnableGraph
@@ -393,13 +393,13 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		m_firstBounce.create();
-		stepProgressBar( progress, "Creating voxel buffer to texture pass" );
+		stepProgressBarLocal( progress, "Creating voxel buffer to texture pass" );
 		auto & result = m_graph.createPass( "VoxelBufferToTexture"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising voxel buffer to texture pass" );
+				stepProgressBarLocal( progress, "Initialising voxel buffer to texture pass" );
 				auto res = std::make_unique< VoxelBufferToTexture >( framePass
 					, context
 					, runnableGraph
@@ -427,13 +427,13 @@ namespace castor3d
 		, crg::RunnablePass::IsEnabledCallback isEnabled
 		, ProgressBar * progress )
 	{
-		stepProgressBar( progress, "Creating voxel mipmap generation pass" );
+		stepProgressBarLocal( progress, "Creating voxel mipmap generation pass" );
 		auto & result = m_graph.createPass( name
 			, [this, progress, isEnabled]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising voxel mipmap generation pass" );
+				stepProgressBarLocal( progress, "Initialising voxel mipmap generation pass" );
 				auto res = std::make_unique< crg::GenerateMipmaps >( framePass
 					, context
 					, runnableGraph
@@ -454,13 +454,13 @@ namespace castor3d
 		, ProgressBar * progress )
 	{
 		m_secondaryBounce.create();
-		stepProgressBar( progress, "Creating voxel secondary bounce pass" );
+		stepProgressBarLocal( progress, "Creating voxel secondary bounce pass" );
 		auto & result = m_graph.createPass( "SecondaryBounce"
 			, [this, progress]( crg::FramePass const & framePass
 				, crg::GraphContext & context
 				, crg::RunnableGraph & runnableGraph )
 			{
-				stepProgressBar( progress, "Initialising voxel secondary bounce pass" );
+				stepProgressBarLocal( progress, "Initialising voxel secondary bounce pass" );
 				auto res = std::make_unique< VoxelSecondaryBounce >( framePass
 					, context
 					, runnableGraph
