@@ -24,41 +24,11 @@ namespace castor3d
 			, ProgressCtrlRPtr localProgress = nullptr );
 
 		C3D_API void initGlobalRange( uint32_t value );
+		C3D_API void stepGlobal( castor::String const & globalTitle );
 
-		void setTitle( castor::String const & value )
-		{
-			setGlobalTitle( value );
-		}
-
-		void setLabel( castor::String const & value )
-		{
-			setGlobalLabel( value );
-		}
-
-		void step( castor::String const & label )
-		{
-			stepGlobal( label );
-		}
-
-		void step()
-		{
-			stepGlobal();
-		}
-
-		void setRange( int32_t max )
-		{
-			setGlobalRange( max );
-		}
-
-		void incRange( int32_t mod )
-		{
-			incGlobalRange( mod );
-		}
-
-		int32_t getIndex()const
-		{
-			return getGlobalIndex();
-		}
+		C3D_API void initLocalRange( castor::String const & globalLabel
+			, uint32_t value );
+		C3D_API void stepLocal( castor::String const & label );
 
 		void lock()
 		{
@@ -96,24 +66,6 @@ namespace castor3d
 			void doSetLabel( castor::U32String const & value );
 			void doStep();
 		};
-
-	private:
-		C3D_API void setGlobalTitle( castor::String const & value );
-		C3D_API void setGlobalLabel( castor::String const & value );
-		C3D_API void stepGlobal( castor::String const & label );
-		C3D_API void stepGlobal();
-		C3D_API void setGlobalRange( int32_t max );
-		C3D_API void incGlobalRange( int32_t mod );
-		C3D_API int32_t getGlobalIndex()const;
-
-		C3D_API void setLocalTitle( castor::String const & value );
-		C3D_API void setLocalLabel( castor::String const & value );
-		C3D_API void stepLocal( castor::String const & label );
-		C3D_API void stepLocal();
-		C3D_API void setLocalRange( int32_t max );
-		C3D_API void incLocalRange( int32_t mod );
-		C3D_API int32_t getLocalIndex()const;
-
 
 	private:
 		FrameListenerRPtr m_listener;

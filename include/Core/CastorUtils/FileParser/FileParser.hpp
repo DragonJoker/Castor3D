@@ -137,7 +137,7 @@ namespace castor
 			return uint32_t( m_actions.size() );
 		}
 
-		using ActionFunc = std::function< void( Action const & ) >;
+		using ActionFunc = std::function< void( String const &, Action const & ) >;
 		using ActionSignal = SignalT< ActionFunc >;
 		using ActionConnection = ConnectionT< ActionSignal >;
 
@@ -388,12 +388,6 @@ namespace castor
 			m_ignored = true;
 		}
 
-		PreprocessedFile & getPreprocessed()const
-		{
-			CU_Require( m_preprocessed );
-			return *m_preprocessed;
-		}
-
 		LoggerInstance & getLogger()const
 		{
 			return m_logger;
@@ -517,9 +511,6 @@ namespace castor
 		//!\~english	The defines map.
 		//!\~french		La map de defines.
 		StrStrMap m_defines;
-		//!\~english	The parser context.
-		//!\~french		Le contexte du parseur.
-		PreprocessedFile * m_preprocessed{ nullptr };
 	};
 }
 

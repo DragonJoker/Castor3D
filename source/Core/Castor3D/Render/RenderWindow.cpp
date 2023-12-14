@@ -459,15 +459,15 @@ namespace castor3d
 			}
 
 			auto progress = m_progressBar.get();
-			incProgressBarGlobalRange( progress
-				, int32_t( 6u + m_renderTarget->countInitialisationSteps() ) );
+			initProgressBarGlobalRange( progress
+				, 6u + m_renderTarget->countInitialisationSteps() );
 			getEngine()->postEvent( makeCpuFunctorEvent( CpuEventType::ePreGpuStep
 				, [this]()
 				{
 					if ( m_renderTarget )
 					{
 						auto progress = m_progressBar.get();
-						setProgressBarGlobalLabel( progress, "Initialising: Render Window" );
+						initProgressBarLocalRange( progress, "Initialising: Render Window", 6u );
 						m_renderTarget->initialise( [this, progress]( RenderTarget const & rt, QueueData const & queue )
 							{
 								stepProgressBarLocal( progress, "Loading picking" );
@@ -1241,8 +1241,6 @@ namespace castor3d
 			m_progressBar = castor::makeUnique< ProgressBar >( *getEngine()
 				, static_cast< ProgressCtrl * >( global )
 				, static_cast< ProgressCtrl * >(  local ) );
-			m_progressBar->setGlobalTitle( "Initialising..." );
-			m_progressBar->setGlobalLabel( "" );
 		}
 		else
 		{

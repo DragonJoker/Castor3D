@@ -307,24 +307,9 @@ namespace castor3d
 
 	C3D_API void initProgressBarLocalRange( ProgressBar * progress
 		, castor::String const & globalLabel
-		, uint32_t values );
+		, uint32_t value );
 	C3D_API void stepProgressBarLocal( ProgressBar * progress
 		, castor::String const & localLabel );
-
-
-
-	C3D_API void setProgressBarGlobalLabel( ProgressBar * progress
-		, castor::String const & value );
-	C3D_API void stepProgressBarGlobal( ProgressBar * progress );
-
-
-	C3D_API void setProgressBarLocalTitle( ProgressBar * progress
-		, castor::String const & value );
-	C3D_API void setProgressBarLocalLabel( ProgressBar * progress
-		, castor::String const & value );
-	C3D_API void stepProgressBarLocal( ProgressBar * progress );
-	C3D_API void incProgressBarLocalRange( ProgressBar * progress
-		, int32_t value );
 
 	//@}
 }
