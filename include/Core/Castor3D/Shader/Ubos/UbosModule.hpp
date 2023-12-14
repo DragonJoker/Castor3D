@@ -246,7 +246,9 @@ namespace castor3d
 		uint32_t spotLightsCount;
 		// The biased exponential split scheme bias.
 		float bias;
-		float pad0, pad1, pad2;
+		// If clustered lights processing uses wave intrinsics.
+		uint32_t enableWaveIntrinsics;
+		float pad0, pad1;
 	};
 	/**
 	*\~english

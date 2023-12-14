@@ -511,9 +511,15 @@ namespace castor3d::shader
 		//\}
 		/**
 		*\name
-		*	Diffuse only.
+		*	Non clustered, all paths.
 		*/
 		//\{
+		C3D_API void computeCombinedDifSpec( BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, DebugOutput & debugOutput
+			, DirectLighting & output );
 		C3D_API void computeCombinedAllButDif( BlendComponents const & components
 			, BackgroundModel & backgroundModel
 			, LightSurface const & lightSurface
@@ -563,6 +569,9 @@ namespace castor3d::shader
 		*	Light accessors
 		*/
 		//\{
+		C3D_API DirectionalLight retrieveDirectionalLight( sdw::UInt const & index );
+		C3D_API PointLight retrievePointLight( sdw::UInt const & index );
+		C3D_API SpotLight retrieveSpotLight( sdw::UInt const & index );
 		C3D_API DirectionalLight getDirectionalLight( sdw::UInt const & offset );
 		C3D_API PointLight getPointLight( sdw::UInt const & offset );
 		C3D_API SpotLight getSpotLight( sdw::UInt const & offset );
@@ -604,6 +613,27 @@ namespace castor3d::shader
 		{
 			return m_sssTransmittance != nullptr;
 		}
+
+	private:
+		void doComputeCombinedDifSpec( BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, DebugOutput & debugOutput
+			, DirectLighting & output );
+		void doComputeCombinedAllButDif( BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, sdw::Vec3 const diffuse
+			, DebugOutput & debugOutput
+			, DirectLighting & output );
+		void doComputeCombinedDif( BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const & receivesShadows
+			, DebugOutput & debugOutput
+			, sdw::Vec3 & output );
 
 	private:
 		LightingModelID m_lightingModelId;

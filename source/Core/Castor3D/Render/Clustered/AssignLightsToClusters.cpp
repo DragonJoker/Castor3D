@@ -123,7 +123,7 @@ namespace castor3d
 			// Source: https://devblogs.nvidia.com/parallelforall/thinking-parallel-part-ii-tree-traversal-gpu/
 			// Author: Tero Karras (NVIDIA)
 			// Retrieved: September 13, 2016
-			auto gsNodeStack = writer.declSharedVariable< sdw::UInt >( "gsNodeStack", u32( MaxValues ), config.useLightsBVH );	// This should be enough to push 32 layers of nodes (32 nodes per layer).
+			auto gsNodeStack = writer.declSharedVariable< sdw::UInt >( "gsNodeStack", u32( MaxValues ), config.useLightsBVH.value() );	// This should be enough to push 32 layers of nodes (32 nodes per layer).
 			auto gsStackPtr = writer.declSharedVariable< sdw::Int >( "gsStackPtr", config.useLightsBVH );			// The current index in the node stack.
 			auto gsParentIndex = writer.declSharedVariable< sdw::UInt >( "gsParentIndex", config.useLightsBVH );	// The index of the parent node in the BVH that is currently being processed.
 

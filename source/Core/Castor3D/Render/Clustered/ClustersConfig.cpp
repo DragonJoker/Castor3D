@@ -270,16 +270,18 @@ namespace castor3d
 
 	ClustersConfig::ClustersConfig()
 		: enabled{ true }
-		, useLightsBVH{ true }
-		, sortLights{ true }
-		, parseDepthBuffer{ false }
-		, limitClustersToLightsAABB{ true }
-		, useSpotBoundingCone{ true }
-		, useSpotTightBoundingBox{ true }
-		, enableReduceWarpOptimisation{ false }
-		, enableBVHWarpOptimisation{ true }
-		, splitScheme{ ClusterSplitScheme::eExponentialBase }
-		, bias{ 1.0f }
+		, dirty{ true }
+		, useLightsBVH{ dirty, true }
+		, sortLights{ dirty, true }
+		, parseDepthBuffer{ dirty, false }
+		, limitClustersToLightsAABB{ dirty, true }
+		, useSpotBoundingCone{ dirty, true }
+		, useSpotTightBoundingBox{ dirty, true }
+		, enableReduceWarpOptimisation{ dirty, false }
+		, enableBVHWarpOptimisation{ dirty, true }
+		, enablePostAssignSort{ dirty, false }
+		, splitScheme{ dirty, ClusterSplitScheme::eExponentialLinearHybrid }
+		, bias{ dirty, 1.0f }
 	{
 	}
 
@@ -301,6 +303,7 @@ namespace castor3d
 			visitor.visit( cuT( "Use Spot Tight Bounding Box" ), useSpotTightBoundingBox );
 			visitor.visit( cuT( "Enable Reduce Warp Optimisation" ), enableReduceWarpOptimisation );
 			visitor.visit( cuT( "Enable BVH Warp Optimisation" ), enableBVHWarpOptimisation );
+			visitor.visit( cuT( "Enable Post Assignment Sort" ), enablePostAssignSort );
 			visitor.visit( cuT( "Split Scheme" )
 				, splitScheme
 				, names

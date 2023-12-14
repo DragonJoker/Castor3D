@@ -312,28 +312,28 @@ namespace castor3d::shader
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
-			auto cur = m_writer.declLocale( "c3d_cur"
-				, 0_u );
-			auto end = m_writer.declLocale( "c3d_end"
-				, m_lightsBuffer->getDirectionalsEnd() );
-
-			WHILE( m_writer, cur < end )
-			{
-				auto directionalLight = m_writer.declLocale( "directionalLight"
-					, getDirectionalLight( cur ) );
-				lightingModel->compute( debugOutput
-					, directionalLight
-					, components
-					, backgroundModel
-					, lightSurface
-					, receivesShadows
-					, parentOutput );
-				cur += castor3d::DirectionalLight::LightDataComponents;
-			}
-			ELIHW;
-
 			if ( clusteredLights.isEnabled() )
 			{
+				auto cur = m_writer.declLocale( "c3d_cur"
+					, 0_u );
+				auto end = m_writer.declLocale( "c3d_end"
+					, m_lightsBuffer->getDirectionalsEnd() );
+
+				WHILE( m_writer, cur < end )
+				{
+					auto directionalLight = m_writer.declLocale( "directionalLight"
+						, getDirectionalLight( cur ) );
+					lightingModel->compute( debugOutput
+						, directionalLight
+						, components
+						, backgroundModel
+						, lightSurface
+						, receivesShadows
+						, parentOutput );
+					cur += castor3d::DirectionalLight::LightDataComponents;
+				}
+				ELIHW;
+
 				clusteredLights.computeCombinedDifSpec( *this
 					, *lightingModel
 					, components
@@ -346,37 +346,12 @@ namespace castor3d::shader
 			}
 			else
 			{
-				end = m_lightsBuffer->getPointsEnd();
-
-				WHILE( m_writer, cur < end )
-				{
-					auto pointLight = m_writer.declLocale( "pointLight"
-						, getPointLight( cur ) );
-					lightingModel->compute( debugOutput
-						, pointLight
-						, components
-						, lightSurface
-						, receivesShadows
-						, parentOutput );
-					cur += castor3d::PointLight::LightDataComponents;
-				}
-				ELIHW;
-
-				end = m_lightsBuffer->getSpotsEnd();
-
-				WHILE( m_writer, cur < end )
-				{
-					auto spotLight = m_writer.declLocale( "spotLight"
-						, getSpotLight( cur ) );
-					lightingModel->compute( debugOutput
-						, spotLight
-						, components
-						, lightSurface
-						, receivesShadows
-						, parentOutput );
-					cur += castor3d::SpotLight::LightDataComponents;
-				}
-				ELIHW;
+				computeCombinedDifSpec( components
+					, backgroundModel
+					, lightSurface
+					, receivesShadows
+					, debugOutput
+					, parentOutput );
 			}
 
 			debugOutput.registerOutput( "Lighting", "Diffuse", parentOutput.diffuse() );
@@ -509,17 +484,80 @@ namespace castor3d::shader
 		}
 	}
 
+	void Lights::computeCombinedDifSpec( BlendComponents const & components
+			, BackgroundModel & backgroundModel
+			, LightSurface const & lightSurface
+			, sdw::UInt const receivesShadows
+			, DebugOutput & debugOutput
+			, DirectLighting & output )
+	{
+		if ( auto lightingModel = getLightingModel() )
+		{
+			auto cur = m_writer.declLocale( "c3d_cur"
+				, 0_u );
+			auto end = m_writer.declLocale( "c3d_end"
+				, m_lightsBuffer->getDirectionalsEnd() );
+
+			WHILE( m_writer, cur < end )
+			{
+				auto directionalLight = m_writer.declLocale( "directionalLight"
+					, getDirectionalLight( cur ) );
+				lightingModel->compute( debugOutput
+					, directionalLight
+					, components
+					, backgroundModel
+					, lightSurface
+					, receivesShadows
+					, output );
+				cur += castor3d::DirectionalLight::LightDataComponents;
+			}
+			ELIHW;
+
+			end = m_lightsBuffer->getPointsEnd();
+
+			WHILE( m_writer, cur < end )
+			{
+				auto pointLight = m_writer.declLocale( "pointLight"
+					, getPointLight( cur ) );
+				lightingModel->compute( debugOutput
+					, pointLight
+					, components
+					, lightSurface
+					, receivesShadows
+					, output );
+				cur += castor3d::PointLight::LightDataComponents;
+			}
+			ELIHW;
+
+			end = m_lightsBuffer->getSpotsEnd();
+
+			WHILE( m_writer, cur < end )
+			{
+				auto spotLight = m_writer.declLocale( "spotLight"
+					, getSpotLight( cur ) );
+				lightingModel->compute( debugOutput
+					, spotLight
+					, components
+					, lightSurface
+					, receivesShadows
+					, output );
+				cur += castor3d::SpotLight::LightDataComponents;
+			}
+			ELIHW;
+		}
+	}
+
 	void Lights::computeCombinedAllButDif( BlendComponents const & components
 		, BackgroundModel & backgroundModel
 		, LightSurface const & lightSurface
 		, sdw::UInt const receivesShadows
 		, sdw::Vec3 const diffuse
 		, DebugOutput & debugOutput
-		, DirectLighting & parentOutput )
+		, DirectLighting & output )
 	{
 		if ( auto lightingModel = getLightingModel() )
 		{
-			parentOutput.diffuse() = diffuse;
+			output.diffuse() = diffuse;
 			auto cur = m_writer.declLocale( "c3d_cur"
 				, 0_u );
 			auto end = m_writer.declLocale( "c3d_end"
@@ -535,7 +573,7 @@ namespace castor3d::shader
 					, backgroundModel
 					, lightSurface
 					, receivesShadows
-					, parentOutput );
+					, output );
 				cur += castor3d::DirectionalLight::LightDataComponents;
 			}
 			ELIHW;
@@ -551,7 +589,7 @@ namespace castor3d::shader
 					, components
 					, lightSurface
 					, receivesShadows
-					, parentOutput );
+					, output );
 				cur += castor3d::PointLight::LightDataComponents;
 			}
 			ELIHW;
@@ -567,7 +605,7 @@ namespace castor3d::shader
 					, components
 					, lightSurface
 					, receivesShadows
-					, parentOutput );
+					, output );
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
 			ELIHW;
@@ -631,8 +669,6 @@ namespace castor3d::shader
 				cur += castor3d::SpotLight::LightDataComponents;
 			}
 			ELIHW;
-
-			debugOutput.registerOutput( "Lighting", "Diffuse", output );
 		}
 	}
 
@@ -701,6 +737,21 @@ namespace castor3d::shader
 		}
 
 		return m_lightingModel.get();
+	}
+
+	DirectionalLight Lights::retrieveDirectionalLight( sdw::UInt const & index )
+	{
+		return getDirectionalLight( index * castor3d::DirectionalLight::LightDataComponents );
+	}
+
+	PointLight Lights::retrievePointLight( sdw::UInt const & index )
+	{
+		return getPointLight( getDirectionalsEnd() + index * castor3d::PointLight::LightDataComponents );
+	}
+
+	SpotLight Lights::retrieveSpotLight( sdw::UInt const & index )
+	{
+		return getSpotLight( getPointsEnd() + index * castor3d::SpotLight::LightDataComponents );
 	}
 
 	DirectionalLight Lights::getDirectionalLight( sdw::UInt const & offset )

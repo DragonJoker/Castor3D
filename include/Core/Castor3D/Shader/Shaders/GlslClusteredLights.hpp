@@ -64,12 +64,6 @@ namespace castor3d::shader
 		}
 
 	private:
-		void doPrintDebug( DebugOutput & debugOutput
-			, sdw::UVec3 const & clusterIndex3D
-			, sdw::UInt const & pointLightCount
-			, sdw::UInt const & spotLightCount );
-
-	private:
 		sdw::ShaderWriter & m_writer;
 		bool m_enabled;
 		ClustersDataUPtr m_clusterData;
@@ -113,6 +107,18 @@ namespace castor3d::shader
 #define C3D_SpotLightClusterGrid( writer, binding, set ) \
 	C3D_SpotLightClusterGridEx( writer, binding, set, true )
 
+#define C3D_LightClusterGridEx( writer, binding, set, enabled ) \
+	auto lightClusterGridBuffer = writer.declStorageBuffer( "c3d_lightClusterGridBuffer" \
+		, ( enabled ? uint32_t( binding ) : 0u ) \
+		, set \
+		, sdw::type::MemoryLayout::eStd430 \
+		, enabled ); \
+	auto c3d_lightClusterGrid = lightClusterGridBuffer.declMemberArray< sdw::UVec2 >( "lg", enabled ); \
+	lightClusterGridBuffer.end()
+
+#define C3D_LightClusterGrid( writer, binding, set ) \
+	C3D_LightClusterGridEx( writer, binding, set, true )
+
 
 
 #define C3D_PointLightClusterIndexEx( writer, binding, set, enabled ) \
@@ -122,7 +128,7 @@ namespace castor3d::shader
 		, sdw::type::MemoryLayout::eStd430 \
 		, enabled ); \
 	auto c3d_pointLightClusterListCount = pointLightClusterIndexBuffer.declMember< sdw::UInt >( "pc" , enabled ); \
-	auto c3d_pointLightClusterIndex = pointLightClusterIndexBuffer.declMemberArray< sdw::UInt >( "pg", enabled ); \
+	auto c3d_pointLightClusterIndex = pointLightClusterIndexBuffer.declMemberArray< sdw::UInt >( "pi", enabled ); \
 	pointLightClusterIndexBuffer.end()
 
 #define C3D_PointLightClusterIndex( writer, binding, set ) \
@@ -135,11 +141,24 @@ namespace castor3d::shader
 		, sdw::type::MemoryLayout::eStd430 \
 		, enabled ); \
 	auto c3d_spotLightClusterListCount = spotLightClusterIndexBuffer.declMember< sdw::UInt >( "sc" , enabled ); \
-	auto c3d_spotLightClusterIndex = spotLightClusterIndexBuffer.declMemberArray< sdw::UInt >( "sg", enabled ); \
+	auto c3d_spotLightClusterIndex = spotLightClusterIndexBuffer.declMemberArray< sdw::UInt >( "si", enabled ); \
 	spotLightClusterIndexBuffer.end()
 
 #define C3D_SpotLightClusterIndex( writer, binding, set ) \
 	C3D_SpotLightClusterIndexEx( writer, binding, set, true )
+
+#define C3D_LightClusterIndexEx( writer, binding, set, enabled ) \
+	auto lightClusterIndexBuffer = writer.declStorageBuffer( "c3d_lightClusterIndexBuffer" \
+		, ( enabled ? uint32_t( binding ) : 0u ) \
+		, set \
+		, sdw::type::MemoryLayout::eStd430 \
+		, enabled ); \
+	auto c3d_lightClusterListCount = lightClusterIndexBuffer.declMember< sdw::UInt >( "lc" , enabled ); \
+	auto c3d_lightClusterIndex = lightClusterIndexBuffer.declMemberArray< sdw::UInt >( "li", enabled ); \
+	lightClusterIndexBuffer.end()
+
+#define C3D_LightClusterIndex( writer, binding, set ) \
+	C3D_LightClusterIndexEx( writer, binding, set, true )
 
 
 

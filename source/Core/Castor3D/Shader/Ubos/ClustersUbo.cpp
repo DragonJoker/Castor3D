@@ -84,11 +84,11 @@ namespace castor3d
 								, clustersLightsData.x() );
 							auto farZ = writer.declLocale( "farZ"
 								, clustersLightsData.y() );
-							auto linear = writer.declLocale( "linear"
-								, floor( writer.cast< sdw::Float >( dimensions().z() ) * ( -viewZ - nearZ ) / ( farZ - nearZ ) ) );
-							auto exponential = writer.declLocale( "exponential"
-									, floor( sdw::log( -viewZ ) * clustersLightsData.z() - clustersLightsData.w() ) );
-							k = min( linear, exponential );
+							auto limZ = writer.declLocale( "limZ"
+								, max( bias(), nearZ ) );
+							auto depthBias = writer.declLocale( "depthBias"
+								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
+							k = max( 0.0_f, floor( sdw::log( -viewZ / nearZ ) * clustersLightsData.z() - writer.cast< sdw::Float >( dimensions().z() ) * depthBias ) );
 						}
 						FI;
 
@@ -168,15 +168,19 @@ namespace castor3d
 						}
 						ELSE
 						{
-							auto nearTileExp = writer.declLocale( "nearTileExp"
-								, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() ) / writer.cast< sdw::Float >( dimensions().z() ) ) );
-							auto farTileExp = writer.declLocale( "farTileExp"
-								, -nearZ * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) / writer.cast< sdw::Float >( dimensions().z() ) ) );
-							auto nearTileLin = writer.declLocale( "nearTileLin"
-								, -nearZ - writer.cast< sdw::Float >( clusterIndex3D.z() ) * ( farZ - nearZ ) / writer.cast< sdw::Float >( dimensions().z() ) );
-							auto farTileLin = writer.declLocale( "farTileLin"
-								, -nearZ - writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) * ( farZ - nearZ ) / writer.cast< sdw::Float >( dimensions().z() ) );
-							writer.returnStmt( vec2( min( nearTileExp, nearTileLin ), min( farTileExp, farTileLin ) ) );
+							auto limZ = writer.declLocale( "limZ"
+								, max( bias(), nearZ ) );
+							auto depthBias = writer.declLocale( "depthBias"
+								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
+							auto nearTile = writer.declLocale( "nearTile"
+								, writer.ternary( clusterIndex3D.z() == 0_u
+									, -nearZ
+									, -clustersLightsData.w() * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() ) / ( writer.cast< sdw::Float >( dimensions().z() ) * ( 1.0_f + depthBias ) ) ) ) );
+							auto farTile = writer.declLocale( "farTile"
+								, writer.ternary( clusterIndex3D.z() == 0_u
+									, -nearZ
+									, -clustersLightsData.w() * pow( farZ / nearZ, writer.cast< sdw::Float >( clusterIndex3D.z() + 1_u ) / ( writer.cast< sdw::Float >( dimensions().z() ) * ( 1.0_f + depthBias ) ) ) ) );
+							writer.returnStmt( vec2( nearTile, farTile ) );
 						}
 						FI;
 					}
@@ -256,11 +260,17 @@ namespace castor3d
 						}
 						ELSE
 						{
-							auto multiply = writer.declLocale( "multiply"
-								, writer.cast< sdw::Float >( dimensions().z() ) / sdw::log( farZ / nearZ ) );
-							auto add = writer.declLocale( "add"
-								, multiply * sdw::log( nearZ ) );
-							clustersLightsData = vec4( nearZ, farZ, multiply, add );
+							auto limZ = writer.declLocale( "limZ"
+								, max( bias(), nearZ ) );
+							auto depthBias = writer.declLocale( "depthBias"
+								, sdw::log( limZ / nearZ ) / sdw::log( farZ / limZ ) );
+							auto nTimesOnePlusB = writer.declLocale( "nTimesOnePlusB"
+								, ( writer.cast< sdw::Float >( dimensions().z() ) * ( 1.0f + depthBias ) ) );
+							auto d = writer.declLocale( "d"
+								, nTimesOnePlusB / sdw::log( farZ / nearZ ) );
+							auto e = writer.declLocale( "e"
+								, nearZ * pow( farZ / nearZ, depthBias / ( 1.0f + depthBias ) ) );
+							clustersLightsData = vec4( nearZ, farZ, d, e );
 						}
 						FI;
 
@@ -300,7 +310,8 @@ namespace castor3d
 		, uint32_t pointLightsCount
 		, uint32_t spotLightsCount
 		, ClusterSplitScheme splitScheme
-		, float bias )
+		, float bias
+		, bool enableWaveIntrinsics )
 	{
 		CU_Require( m_ubo );
 		auto & configuration = m_ubo.getData();
@@ -313,6 +324,7 @@ namespace castor3d
 		configuration.spotLightLevelsCount = FrustumClusters::getNumLevels( spotLightsCount );
 		configuration.splitScheme = uint32_t( splitScheme );
 		configuration.bias = bias;
+		configuration.enableWaveIntrinsics = enableWaveIntrinsics ? 1u : 0u;
 	}
 
 	//*********************************************************************************************
