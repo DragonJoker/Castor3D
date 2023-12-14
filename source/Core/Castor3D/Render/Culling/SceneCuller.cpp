@@ -122,9 +122,9 @@ namespace castor3d
 		m_scene.getRenderNodes().registerCuller( *this );
 #if C3D_DebugTimers
 		auto & device = m_scene.getEngine()->getRenderSystem()->getRenderDevice();
-		m_timer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/General" ) );
-		m_timerDirty = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Dirty" ) );
-		m_timerCompute = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Compute" ) );
+		m_timer = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/General" ), crg::TimerScope::eUpdate );
+		m_timerDirty = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Dirty" ), crg::TimerScope::eUpdate );
+		m_timerCompute = castor::makeUnique< FramePassTimer >( device.makeContext(), cuT( "Culling/Compute" ), crg::TimerScope::eUpdate );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/General" ), *m_timer );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/Dirty" ), *m_timerDirty );
 		m_scene.getEngine()->registerTimer( cuT( "Culling/Compute" ), *m_timerCompute );

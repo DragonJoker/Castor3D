@@ -134,7 +134,7 @@ namespace castor3d
 		, m_vertexTransform{ castor::makeUnique< VertexTransforming >( scene, m_device ) }
 	{
 #if C3D_DebugTimers
-		m_timerRenderNodes = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getOwner()->getName() + "/RenderNodes" );
+		m_timerRenderNodes = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getOwner()->getName() + "/RenderNodes", crg::TimerScope::eUpdate );
 		getOwner()->getEngine()->registerTimer( getOwner()->getName() + "/RenderNodes", *m_timerRenderNodes );
 #endif
 	}

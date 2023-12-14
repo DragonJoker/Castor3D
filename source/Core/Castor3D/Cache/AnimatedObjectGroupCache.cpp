@@ -76,7 +76,7 @@ namespace castor
 			, VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT ) }
 	{
 #if C3D_DebugTimers
-		m_timerAnimations = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getScene()->getName() + "/Animations" );
+		m_timerAnimations = castor::makeUnique< crg::FramePassTimer >( m_device.makeContext(), getScene()->getName() + "/Animations", crg::TimerScope::eUpdate );
 		m_engine.registerTimer( getScene()->getName() + "/Animations", *m_timerAnimations );
 #endif
 		cacheanmgrp::doInitialiseBuffer( m_skinningTransformsData );

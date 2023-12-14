@@ -26,7 +26,7 @@ namespace castor3d
 			, FrameBuffers{ device->createSemaphore( m_debugName ) } }
 		, m_cpuBuffers{ &m_buffers[0] }
 		, m_gpuBuffers{ &m_buffers[0] }
-		, m_timer{ castor::makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload" ) }
+		, m_timer{ castor::makeUnique< crg::FramePassTimer >( device.makeContext(), "Upload", crg::TimerScope::eUpdate ) }
 	{
 		m_device.renderSystem.getEngine()->registerTimer( "Upload", *m_timer );
 	}

@@ -36,12 +36,12 @@ namespace castor3d
 		, m_wantedFPS{ wantedFPS }
 		, m_frameTime{ 1000ull / wantedFPS }
 		, m_debugOverlays{ std::make_unique< DebugOverlays >( engine ) }
-		, m_timerCpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PreRender" )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/QueueRender" )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PostRender" ) }
-		, m_timerGpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PreRender" )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/QueueRender" )
-			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PostRender" ) }
+		, m_timerCpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PreRender", crg::TimerScope::eUpdate )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/QueueRender", crg::TimerScope::eUpdate )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/CPU/PostRender", crg::TimerScope::eUpdate ) }
+		, m_timerGpuEvents{ castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PreRender", crg::TimerScope::eUpdate )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/QueueRender", crg::TimerScope::eUpdate )
+			, castor::makeUnique< crg::FramePassTimer >( m_renderSystem.getRenderDevice().makeContext(), "Events/GPU/PostRender", crg::TimerScope::eUpdate ) }
 	{
 		{
 			auto lock( castor::makeUniqueLock( m_debugOverlaysMtx ) );

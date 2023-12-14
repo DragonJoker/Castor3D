@@ -1071,12 +1071,12 @@ namespace castor3d
 		}
 
 		stepProgressBarLocal( progress, "Creating overlay renderer" );
-		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ) );
+		m_overlaysTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/Overlays" ), crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/Overlays" ), *m_overlaysTimer );
 #if C3D_DebugTimers
-		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/CPU Update" ) );
+		m_cpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/CPU Update" ), crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/CPU Update" ), *m_cpuUpdateTimer );
-		m_gpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/GPU Update" ) );
+		m_gpuUpdateTimer = castor::makeUnique< FramePassTimer >( device.makeContext(), getName() + cuT( "/GPU Update" ), crg::TimerScope::eUpdate );
 		getEngine()->registerTimer( getName() + cuT( "/GPU Update" ), *m_gpuUpdateTimer );
 #endif
 		m_signalReady = device->createSemaphore( getName() + "Ready" );

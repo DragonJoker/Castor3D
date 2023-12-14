@@ -473,8 +473,12 @@ namespace castor3d
 
 		for ( auto & timer : m_timers )
 		{
-			m_cpu.time += timer.first->getCpuTime();
-			m_gpu.time += timer.first->getGpuTime();
+			if ( timer.first->getScope() != crg::TimerScope::eGraph )
+			{
+				m_cpu.time += timer.first->getCpuTime();
+				m_gpu.time += timer.first->getGpuTime();
+			}
+
 			timer.first->reset();
 		}
 	}
