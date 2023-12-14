@@ -131,7 +131,8 @@ namespace castortd
 		m_boulderMaterial = m_scene.findMaterial( cuT( "Boulder" ) );
 		m_targetNode = m_scene.findSceneNode( cuT( "Target" ) );
 		m_updateTimer = castor::makeUnique< castor3d::FramePassTimer >( m_scene.getEngine()->getRenderSystem()->getRenderDevice().makeContext()
-			, "CastorDvpTD/Update" );
+			, "CastorDvpTD/Update"
+			, crg::TimerScope::eUpdate );
 		m_scene.getEngine()->registerTimer( "CastorDvpTD/Update", *m_updateTimer );
 		m_cellDimensions[0] = m_mapCubeMesh->getBoundingBox().getMax()[0] - m_mapCubeMesh->getBoundingBox().getMin()[0];
 		m_cellDimensions[1] = m_mapCubeMesh->getBoundingBox().getMax()[1] - m_mapCubeMesh->getBoundingBox().getMin()[1];

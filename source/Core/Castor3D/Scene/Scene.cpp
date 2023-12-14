@@ -278,22 +278,22 @@ namespace castor3d
 	{
 		auto & engine = *getEngine();
 		auto & device = engine.getRenderSystem()->getRenderDevice();
-		m_timerParticlesGpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesGPU" );
+		m_timerParticlesGpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesGPU", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/ParticlesGPU", *m_timerParticlesGpu );
 #if C3D_DebugTimers
-		m_timerSceneNodes = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/SceneNodes" );
+		m_timerSceneNodes = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/SceneNodes", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/SceneNodes", *m_timerSceneNodes );
-		m_timerBoundingBox = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/BoundingBoxes" );
+		m_timerBoundingBox = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/BoundingBoxes", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/BoundingBoxes", *m_timerBoundingBox );
-		m_timerMaterials = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Materials" );
+		m_timerMaterials = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Materials", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/Materials", *m_timerMaterials );
-		m_timerLights = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Lights" );
+		m_timerLights = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Lights", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/Lights", *m_timerLights );
-		m_timerParticlesCpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesCPU" );
+		m_timerParticlesCpu = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/ParticlesCPU", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/ParticlesCPU", *m_timerParticlesCpu );
-		m_timerGpuUpdate = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/GPUUpdate" );
+		m_timerGpuUpdate = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/GPUUpdate", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/GPUUpdate", *m_timerGpuUpdate );
-		m_timerMovables = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Movables" );
+		m_timerMovables = castor::makeUnique< crg::FramePassTimer >( device.makeContext(), getName() + "/Movables", crg::TimerScope::eUpdate );
 		engine.registerTimer( getName() + "/Movables", *m_timerMovables );
 #endif
 
