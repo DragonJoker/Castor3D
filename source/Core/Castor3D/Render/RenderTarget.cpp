@@ -969,7 +969,7 @@ namespace castor3d
 		{
 			initProgressBarLocalRange( progress
 				, "Creating: HDR Post effects"
-				, m_hdrPostEffects.size() );
+				, uint32_t( m_hdrPostEffects.size() ) );
 			for ( auto & effect : m_hdrPostEffects )
 			{
 				if ( result
@@ -991,7 +991,7 @@ namespace castor3d
 			m_hdrLastPass = previousPass;
 			initProgressBarLocalRange( progress
 				, "Creating: Tone Mapping"
-				, m_hdrPostEffects.size() );
+				, uint32_t( m_hdrPostEffects.size() ) );
 			m_toneMapping = castor::makeUnique< ToneMapping >( *getEngine()
 				, device
 				, m_size
@@ -1015,7 +1015,7 @@ namespace castor3d
 		{
 			initProgressBarLocalRange( progress
 				, "Creating: SRGB Post effects"
-				, m_srgbPostEffects.size() );
+				, uint32_t( m_srgbPostEffects.size() ) );
 			for ( auto & effect : m_srgbPostEffects )
 			{
 				if ( result

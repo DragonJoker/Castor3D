@@ -118,7 +118,7 @@ namespace castor
 
 			if ( !ignoreActionSignal )
 			{
-				onAction( action );
+				onAction( m_parser.getSectionName( m_context->sections.back() ), action );
 			}
 			else
 			{
@@ -402,7 +402,6 @@ namespace castor
 	{
 		m_path = path.getPath();
 		m_fileName = path.getFileName( true );
-		m_preprocessed = &preprocessed;
 		bool isNextOpenBrace = false;
 		bool bCommented = false;
 		auto lineIndex = 0ull;
@@ -543,8 +542,6 @@ namespace castor
 				}
 			}
 		}
-
-		m_preprocessed = nullptr;
 	}
 
 	PreprocessedFile FileParser::processFile( String const & appName

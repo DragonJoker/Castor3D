@@ -165,85 +165,28 @@ namespace castor3d
 
 	void ProgressBar::initGlobalRange( uint32_t value )
 	{
-		m_global.initRange( value );
+		m_global.initRange( int32_t( value ) );
 	}
 
-	void ProgressBar::setGlobalTitle( castor::String const & value )
+	void ProgressBar::stepGlobal( castor::String const & globalTitle )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
-		m_global.setTitle( value );
-	}
-
-	void ProgressBar::setGlobalLabel( castor::String const & value )
-	{
-		auto lock( castor::makeUniqueLock( *this ) );
-		m_global.setLabel( value );
-	}
-
-	void ProgressBar::stepGlobal( castor::String const & value )
-	{
-		auto lock( castor::makeUniqueLock( *this ) );
-		m_global.step( value );
-	}
-
-	void ProgressBar::stepGlobal()
-	{
-		auto lock( castor::makeUniqueLock( *this ) );
+		m_global.setTitle( globalTitle );
 		m_global.step();
 	}
 
-	void ProgressBar::setGlobalRange( int32_t value )
-	{
-		m_global.setRange( value );
-	}
-
-	void ProgressBar::incGlobalRange( int32_t value )
-	{
-		m_global.incRange( value );
-	}
-
-	int32_t ProgressBar::getGlobalIndex()const
-	{
-		return m_global.getIndex();
-	}
-
-	void ProgressBar::setLocalTitle( castor::String const & value )
+	void ProgressBar::initLocalRange( castor::String const & globalLabel
+		, uint32_t value )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
-		m_local.setTitle( value );
+		m_global.setLabel( globalLabel );
+		m_local.initRange( int32_t( value ) );
 	}
 
-	void ProgressBar::setLocalLabel( castor::String const & value )
+	void ProgressBar::stepLocal( castor::String const & localLabel )
 	{
 		auto lock( castor::makeUniqueLock( *this ) );
-		m_local.setLabel( value );
-	}
-
-	void ProgressBar::stepLocal( castor::String const & value )
-	{
-		auto lock( castor::makeUniqueLock( *this ) );
-		m_local.step( value );
-	}
-
-	void ProgressBar::stepLocal()
-	{
-		auto lock( castor::makeUniqueLock( *this ) );
-		m_local.step();
-	}
-
-	void ProgressBar::setLocalRange( int32_t value )
-	{
-		m_local.setRange( value );
-	}
-
-	void ProgressBar::incLocalRange( int32_t value )
-	{
-		m_local.incRange( value );
-	}
-
-	int32_t ProgressBar::getLocalIndex()const
-	{
-		return m_local.getIndex();
+		m_local.step( localLabel );
 	}
 
 	//*********************************************************************************************
@@ -257,73 +200,31 @@ namespace castor3d
 		}
 	}
 
-	void setProgressBarGlobalLabel( ProgressBar * progress
-		, castor::String const & value )
-	{
-		if ( progress )
-		{
-			progress->setGlobalLabel( value );
-		}
-	}
-
 	void stepProgressBarGlobal( ProgressBar * progress
-		, castor::String const & label )
+		, castor::String const & globalTitle )
 	{
 		if ( progress )
 		{
-			progress->stepGlobal( label );
+			progress->stepGlobal( globalTitle );
 		}
 	}
 
-	void stepProgressBarGlobal( ProgressBar * progress )
+	void initProgressBarLocalRange( ProgressBar * progress
+		, castor::String const & globalLabel
+		, uint32_t value )
 	{
 		if ( progress )
 		{
-			progress->stepGlobal();
-		}
-	}
-
-	void setProgressBarLocalTitle( ProgressBar * progress
-		, castor::String const & value )
-	{
-		if ( progress )
-		{
-			progress->setLocalTitle( value );
-		}
-	}
-
-	void setProgressBarLocalLabel( ProgressBar * progress
-		, castor::String const & value )
-	{
-		if ( progress )
-		{
-			progress->setLocalLabel( value );
+			progress->initLocalRange( globalLabel, value );
 		}
 	}
 
 	void stepProgressBarLocal( ProgressBar * progress
-		, castor::String const & label )
+		, castor::String const & localLabel )
 	{
 		if ( progress )
 		{
-			progress->stepLocal( label );
-		}
-	}
-
-	void stepProgressBarLocal( ProgressBar * progress )
-	{
-		if ( progress )
-		{
-			progress->stepLocal();
-		}
-	}
-
-	void incProgressBarLocalRange( ProgressBar * progress
-		, int32_t value )
-	{
-		if ( progress )
-		{
-			progress->incLocalRange( value );
+			progress->stepLocal( localLabel );
 		}
 	}
 

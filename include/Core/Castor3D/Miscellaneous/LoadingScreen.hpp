@@ -113,19 +113,25 @@ namespace castor3d
 		*	Mutateurs.
 		*/
 		/**@{*/
-		void step( castor::String const & label )
+		void initGlobalRange( uint32_t value )
 		{
-			m_progressBar.step( label );
+			m_progressBar.initGlobalRange( value );
 		}
 
-		void setRange( int32_t max )
+		void stepGlobal( castor::String const & globalTitle )
 		{
-			m_progressBar.setRange( max );
+			m_progressBar.stepGlobal( globalTitle );
 		}
 
-		void incRange( int32_t mod )
+		void initLocalRange( castor::String const & globalLabel
+			, uint32_t value )
 		{
-			m_progressBar.incRange( mod );
+			m_progressBar.initLocalRange( globalLabel, value );
+		}
+
+		void stepLocal( castor::String const & label )
+		{
+			m_progressBar.stepLocal( label );
 		}
 		/**@}*/
 		/**
@@ -137,11 +143,6 @@ namespace castor3d
 		*	Accesseurs.
 		*/
 		/**@{*/
-		int32_t getIndex()const
-		{
-			return m_progressBar.getIndex();
-		}
-
 		bool isEnabled()const
 		{
 			return m_enabled;
