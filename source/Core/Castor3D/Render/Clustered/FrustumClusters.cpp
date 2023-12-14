@@ -14,6 +14,7 @@
 #include "Castor3D/Render/Clustered/MergeSortLights.hpp"
 #include "Castor3D/Render/Clustered/RadixSortLights.hpp"
 #include "Castor3D/Render/Clustered/ReduceLightsAABB.hpp"
+#include "Castor3D/Render/Clustered/SortAssignedLights.hpp"
 #include "Castor3D/Scene/Camera.hpp"
 #include "Castor3D/Scene/Scene.hpp"
 #include "Castor3D/Scene/Light/DirectionalLight.hpp"
@@ -169,7 +170,7 @@ namespace castor3d
 		auto scene = m_camera.getScene();
 		auto & lightCache = scene->getLightCache();
 		m_clustersDirty = lightCache.hasClusteredLights()
-			&& m_first > 0;
+			&& ( m_first > 0 || m_config.dirty );
 		doUpdate();
 		m_clustersUbo.cpuUpdate( m_dimensions.value()
 			, m_clusterSize.value()
@@ -178,12 +179,14 @@ namespace castor3d
 			, lightCache.getLightsBufferCount( LightType::ePoint )
 			, lightCache.getLightsBufferCount( LightType::eSpot )
 			, m_config.splitScheme
-			, m_config.bias );
+			, m_config.bias
+			, m_config.enablePostAssignSort );
 		auto it = updater.dirtyScenes.find( scene );
 		m_lightsDirty = lightCache.hasClusteredLights()
 			&& ( m_clustersDirty
 				|| lightCache.isDirty()
-				|| ( it != updater.dirtyScenes.end() && !it->second.isEmpty() ) );
+				|| ( it != updater.dirtyScenes.end() && !it->second.isEmpty() )
+				|| m_config.dirty );
 		m_first = m_camera.getEngine()->areUpdateOptimisationsEnabled()
 			? std::max( 0, m_first - 1 )
 			: 5;
@@ -216,8 +219,10 @@ namespace castor3d
 			, m_device, *this );
 		lastPasses = createBuildLightsBVHPass( graph, std::move( lastPasses )
 			, m_device, *this );
-		return createAssignLightsToClustersPass( graph, std::move( lastPasses )
-			, m_device, cameraUbo, *this );
+		lastPasses = { &createAssignLightsToClustersPass( graph, std::move( lastPasses )
+			, m_device, cameraUbo, *this ) };
+		return createSortAssignedLightsPass( graph, std::move( lastPasses )
+			, m_device, *this );
 	}
 
 	uint32_t FrustumClusters::getNumLevels( uint32_t numLeaves )

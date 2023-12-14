@@ -410,8 +410,9 @@ namespace castor3d
 #if VK_EXT_shader_atomic_float
 			doTryAddExtension( VK_EXT_SHADER_ATOMIC_FLOAT_EXTENSION_NAME, &m_atomicFloatAddFeatures );
 #endif
-#if defined( VK_NV_mesh_shader ) || defined( VK_EXT_mesh_shader )
-#	if defined( VK_NV_mesh_shader ) && defined( VK_EXT_mesh_shader )
+#if C3D_UseMeshShaders
+#	if defined( VK_NV_mesh_shader ) || defined( VK_EXT_mesh_shader )
+#		if defined( VK_NV_mesh_shader ) && defined( VK_EXT_mesh_shader )
 			if ( prefersMeshShaderEXT() )
 			{
 				if ( !doTryAddExtension( VK_EXT_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesEXT, &m_meshShaderPropertiesEXT ) )
@@ -428,12 +429,13 @@ namespace castor3d
 					doTryAddExtension( VK_EXT_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesEXT, &m_meshShaderPropertiesEXT );
 				}
 			}
-#	elif defined( VK_EXT_mesh_shader )
+#		elif defined( VK_EXT_mesh_shader )
 			m_prefersMeshShaderEXT = true;
 			doTryAddExtension( VK_EXT_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesEXT, &m_meshShaderPropertiesEXT );
-#	else
+#		else
 			m_prefersMeshShaderEXT = false;
 			doTryAddExtension( VK_NV_MESH_SHADER_EXTENSION_NAME, &m_meshShaderFeaturesNV, &m_meshShaderPropertiesNV );
+#		endif
 #	endif
 #endif
 #if VK_NV_compute_shader_derivatives
@@ -797,18 +799,22 @@ namespace castor3d
 
 	bool RenderDevice::hasMeshShaders()const
 	{
-#if VK_EXT_mesh_shader || VK_NV_mesh_shader
-#	if VK_EXT_mesh_shader && VK_NV_mesh_shader
+#if C3D_UseMeshShaders
+#	if VK_EXT_mesh_shader || VK_NV_mesh_shader
+#		if VK_EXT_mesh_shader && VK_NV_mesh_shader
 		if ( prefersMeshShaderEXT() )
 		{
 			return m_meshShaderFeaturesEXT.meshShader == VK_TRUE;
 		}
 
 		return m_meshShaderFeaturesNV.meshShader == VK_TRUE;
-#	elif VK_EXT_mesh_shader
+#		elif VK_EXT_mesh_shader
 		return m_meshShaderFeaturesEXT.meshShader == VK_TRUE;
-#	else
+#		else
 		return m_meshShaderFeaturesNV.meshShader == VK_TRUE;
+#		endif
+#	else
+		return false;
 #	endif
 #else
 		return false;
@@ -817,18 +823,22 @@ namespace castor3d
 
 	bool RenderDevice::hasTaskShaders()const
 	{
-#if VK_EXT_mesh_shader || VK_NV_mesh_shader
-#	if VK_EXT_mesh_shader && VK_NV_mesh_shader
+#if C3D_UseMeshShaders && C3D_UseTaskShaders
+#	if VK_EXT_mesh_shader || VK_NV_mesh_shader
+#		if VK_EXT_mesh_shader && VK_NV_mesh_shader
 		if ( prefersMeshShaderEXT() )
 		{
 			return m_meshShaderFeaturesEXT.taskShader == VK_TRUE;
 		}
 
 		return m_meshShaderFeaturesNV.taskShader == VK_TRUE;
-#	elif VK_EXT_mesh_shader
+#		elif VK_EXT_mesh_shader
 		return m_meshShaderFeaturesEXT.taskShader == VK_TRUE;
-#	else
+#		else
 		return m_meshShaderFeaturesNV.taskShader == VK_TRUE;
+#		endif
+#	else
+		return false;
 #	endif
 #else
 		return false;

@@ -153,7 +153,7 @@ namespace castor3d
 				, ClustersConfig const & clustersConfig )
 				: ShaderHolder{ ShaderModule{ VK_SHADER_STAGE_COMPUTE_BIT, "ComputeClustersAABB", createShader( device, clustersConfig ) } }
 				, CreateInfoHolder{ ashes::PipelineShaderStageCreateInfoArray{ makeShaderState( device, ShaderHolder::getData() ) } }
-				, crg::ComputePass{framePass
+				, crg::ComputePass{ framePass
 					, context
 					, graph
 					, crg::ru::Config{}
